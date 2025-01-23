@@ -14,6 +14,7 @@ import '../../domain/use_case/create_story_use_case.dart';
 abstract class StoriesRemoteDataSource {
   Future<Either<Failure, bool>> makeViews(String id);
   Future<Either<Failure, bool>> deleteStory(String id);
+  Future<Either<Failure, bool>> makeLike(String id);
   Future<Either<Failure, bool>> createStory(CreateStoryParams params);
   Future<Either<Failure, bool>> muteUserStories(String id);
   Future<Either<Failure, ViewersResponse>> getStoryViewers(String id);
@@ -45,8 +46,21 @@ class StoriesRemoteDataSourceImpl implements StoriesRemoteDataSource {
 
   @override
   Future<Either<Failure, bool>> deleteStory(String id) async {
-    final response = await _apiConsumer.post(
+    final response = await _apiConsumer.delete(
       EndPoints.deleteStory(id),
+    );
+    return response.fold(
+      (failure) => Left(failure),
+      (response) => Right(
+        response['status'],
+      ),
+    );
+  }
+
+  @override
+  Future<Either<Failure, bool>> makeLike(String id) async {
+    final response = await _apiConsumer.post(
+      EndPoints.makeLike(id),
     );
     return response.fold(
       (failure) => Left(failure),

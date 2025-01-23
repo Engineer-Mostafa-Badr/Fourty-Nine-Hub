@@ -13,6 +13,7 @@ abstract class StoriesRepository {
   Future<Either<Failure, bool>> makeViews(String id);
   Future<Either<Failure, bool>> createStory(CreateStoryParams params);
   Future<Either<Failure, bool>> deleteStory(String id);
+  Future<Either<Failure, bool>> makeLike(String id);
   Future<Either<Failure, bool>> muteUserStories(String id);
   Future<Either<Failure, ViewersResponse>> getStoryViewers(String id);
   Future<Either<Failure, ResponseModel>> getFollowers();

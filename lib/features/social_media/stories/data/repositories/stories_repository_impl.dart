@@ -27,6 +27,11 @@ class StoriesRepositoryImpl extends StoriesRepository {
   }
 
   @override
+  Future<Either<Failure, bool>> makeLike(String id){
+    return _storiesRemoteDataSource.makeLike(id);
+  }
+
+  @override
   Future<Either<Failure, bool>> createStory(CreateStoryParams params) async {
     return  await _storiesRemoteDataSource.createStory(params);
   }

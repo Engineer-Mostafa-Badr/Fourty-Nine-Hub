@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 // ignore: library_prefixes
@@ -726,23 +727,256 @@ class CameraScreenState extends State<CameraScreen> {
   }
 
   Widget _buildVideoPreview() {
-    if (_selectedFile == null) {
-      return Center(
-        child: Text(
-            context.isArabic ? 'لم يتم اختيار فيديو' : 'No video selected',
-            style: const TextStyle(color: Colors.black54)),
-      );
-    }
-
-    if (_videoPlayerController == null ||
-        !_videoPlayerController!.value.isInitialized) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
-    return AspectRatio(
-      aspectRatio: _videoPlayerController!.value.aspectRatio,
-      child: Chewie(controller: _chewieController!),
+    return Stack(
+      children: [
+        _selectedFile == null && _cameraController != null
+            ? _isCameraInitialized
+                ? SizedBox(
+                    width: double.infinity,
+                    height: double.infinity,
+                    child: CameraPreview(_cameraController!),
+                  )
+                : const Center(child: CircularProgressIndicator())
+            : _videoPlayerController != null
+                ? Center(
+                    child: AspectRatio(
+                      aspectRatio:
+                          _videoPlayerController?.value.aspectRatio ?? 1.0,
+                      child: VideoPlayer(_videoPlayerController!),
+                    ),
+                  )
+                : const SizedBox(),
+        if (_selectedFile == null &&
+            _cameraController != null &&
+            _cameraController!.value.isInitialized &&
+            !_cameraController!.value.isRecordingVideo)
+          Positioned(
+            bottom: 20,
+            left: 0,
+            right: 0,
+            child: IconButton(
+              icon: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.white, width: 4),
+                ),
+                child: const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Icon(
+                    Icons.circle,
+                    color: Colors.white,
+                    size: 42,
+                  ),
+                ),
+              ),
+              onPressed: _captureVideo,
+            ),
+          ),
+        if (_selectedFile == null &&
+            _cameraController != null &&
+            _cameraController!.value.isInitialized &&
+            !_cameraController!.value.isRecordingVideo)
+          Positioned(
+            bottom: 20,
+            right: 16,
+            child: Container(
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.black54,
+              ),
+              child: IconButton(
+                icon: const Icon(Icons.flip_camera_ios, color: Colors.white),
+                onPressed: () async {
+                  if (cameras.length > 1) {
+                    final newIndex =
+                        cameras.indexOf(_cameraController!.description) == 0
+                            ? 1
+                            : 0;
+                    _cameraController = CameraController(
+                      cameras[newIndex],
+                      ResolutionPreset.high,
+                    );
+                    await _cameraController!.initialize();
+                    setState(() {});
+                  }
+                },
+              ),
+            ),
+          ),
+        if (_selectedFile == null &&
+            _cameraController != null &&
+            _cameraController!.value.isInitialized &&
+            !_cameraController!.value.isRecordingVideo)
+          Positioned(
+            bottom: 20,
+            left: 16,
+            child: Container(
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.black54,
+              ),
+              child: IconButton(
+                icon: const Icon(Icons.image, color: Colors.white),
+                onPressed: _pickVideoFromGallery,
+              ),
+            ),
+          ),
+        if (_selectedFile == null &&
+            _cameraController != null &&
+            _cameraController!.value.isInitialized &&
+            _cameraController!.value.isRecordingVideo)
+          Positioned(
+            bottom: 20,
+            left: 0,
+            right: 0,
+            child: IconButton(
+              icon: Stack(
+                children: [
+                  const _VideoCircularIndicator(
+                    duration: Duration(
+                      seconds: 30,
+                    ),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.transparent, width: 4),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(14),
+                      child: Container(
+                        width: 42,
+                        height: 42,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: AppColors.PRIMARY_COLOR_DARK,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              onPressed: _captureVideo,
+            ),
+          ),
+        if (_selectedFile != null)
+          Positioned(
+            bottom: 0,
+            top: 0,
+            left: 0,
+            right: 0,
+            child: IconButton(
+              icon: _videoPlayerController?.value.isPlaying ?? false
+                  ? const SizedBox()
+                  : const Icon(
+                      Icons.play_arrow_rounded,
+                      color: Colors.white,
+                      size: 54,
+                    ),
+              onPressed: () {
+                setState(() {
+                  if (_videoPlayerController!.value.isPlaying) {
+                    _videoPlayerController!.pause();
+                  } else {
+                    _videoPlayerController!.play();
+                  }
+                });
+              },
+            ),
+          ),
+        if (_selectedFile != null)
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: _buildDescriptionField(),
+          )
+      ],
     );
+  }
+
+  Future<void> _captureVideo() async {
+    if (_cameraController != null && _cameraController!.value.isInitialized) {
+      if (_cameraController!.value.isRecordingVideo) {
+        final file = await _cameraController!.stopVideoRecording();
+
+        // Rename the file to add .mp4 extension
+        final directory = file.path.substring(0, file.path.lastIndexOf('/'));
+        final newFilePath =
+            '$directory/${DateTime.now().millisecondsSinceEpoch}.mp4';
+        final newFile = await File(file.path).rename(newFilePath);
+
+        setState(() {
+          _selectedFile = newFile;
+          _videoPlayerController = VideoPlayerController.file(_selectedFile!)
+            ..initialize().then((_) {
+              setState(() {});
+              // _videoPlayerController!.play();
+            });
+        });
+      } else {
+        await _cameraController!.startVideoRecording();
+        setState(() {});
+        // Stop recording automatically after 30 seconds
+        Future.delayed(const Duration(seconds: 30), () async {
+          if (_cameraController != null &&
+              _cameraController!.value.isRecordingVideo) {
+            final file = await _cameraController!.stopVideoRecording();
+
+            // Rename the file to add .mp4 extension
+            final directory =
+                file.path.substring(0, file.path.lastIndexOf('/'));
+            final newFilePath =
+                '$directory/${DateTime.now().millisecondsSinceEpoch}.mp4';
+            final newFile = await File(file.path).rename(newFilePath);
+
+            setState(() {
+              _selectedFile = newFile;
+              _videoPlayerController =
+                  VideoPlayerController.file(_selectedFile!)
+                    ..initialize().then((_) {
+                      setState(() {});
+                      // _videoPlayerController!.play();
+                    });
+            });
+          }
+        });
+      }
+    }
+  }
+
+  void _resetVideo() {
+    if (_videoPlayerController != null) {
+      _videoPlayerController!.seekTo(Duration.zero);
+      _videoPlayerController!.pause();
+    }
+  }
+
+  Future<void> _pickVideoFromGallery() async {
+    final pickedFile =
+        await ImagePicker().pickVideo(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      // Get the directory of the picked file
+      final directory =
+          pickedFile.path.substring(0, pickedFile.path.lastIndexOf('/'));
+
+      // Create a new file path with the .mp4 extension
+      final newFilePath =
+          '$directory/${DateTime.now().millisecondsSinceEpoch}.mp4';
+
+      // Rename the file to add .mp4 extension
+      final newFile = await File(pickedFile.path).copy(newFilePath);
+
+      setState(() {
+        _selectedFile = newFile;
+        _videoPlayerController = VideoPlayerController.file(_selectedFile!)
+          ..initialize().then((_) {
+            setState(() {});
+            // _videoPlayerController!.play();
+          });
+      });
+    }
   }
 
   Widget _buildDescriptionField() {
@@ -1277,6 +1511,56 @@ class _AnimatedRecordingState extends State<AnimatedRecording> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _VideoCircularIndicator extends StatefulWidget {
+  final Duration duration;
+
+  const _VideoCircularIndicator({required this.duration});
+
+  @override
+  State<_VideoCircularIndicator> createState() =>
+      __VideoCircularIndicatorState();
+}
+
+class __VideoCircularIndicatorState extends State<_VideoCircularIndicator> {
+  Timer? _timer;
+  int _time = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _startTimer();
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (timer.tick <= widget.duration.inSeconds) {
+        setState(() {
+          _time = timer.tick;
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 80,
+      width: 80,
+      child: CircularProgressIndicator(
+        value: 1 - (_time / widget.duration.inSeconds),
+        valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+        backgroundColor: AppColors.SECONDARY_COLOR,
       ),
     );
   }
