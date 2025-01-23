@@ -969,6 +969,9 @@ abstract class LocaleKeys {
   static const atLeast3atMost5items = 'atLeast3atMost5items';
   static const editPage = 'editPage';
   static const navigateBar = 'navigateBar';
+  static const navigateBarDescription = 'navigateBarDescription';
+  static const socialDescription = 'socialDescription';
+  static const favouriteDescrepion = 'favouriteDescrepion';
   static const favoriteCategory = 'favoriteCategory';
   static const customPage = 'customPage';
   static const activatePage = 'activatePage';
@@ -1244,6 +1247,7 @@ abstract class LocaleKeys {
   static const sureRecoverDeletedChats = 'sureRecoverDeletedChats';
   static const restaurantOrders = 'restaurantOrders';
   static const next = 'next';
+  static const preview = 'preview';
   static const transferTenYears = 'transferTenYears';
   static const transferFiveYears = 'transferFiveYears';
   static const marriage = 'marriage';

@@ -9,13 +9,13 @@ import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MainCategoriesFlipCardsView extends StatelessWidget {
-  const MainCategoriesFlipCardsView({super.key});
-
+  const MainCategoriesFlipCardsView({super.key, this.isAppBarShow = true});
+  final bool isAppBarShow;
   @override
   Widget build(BuildContext context) {
     print(context.read<MainCategoriesCubit>().state.data?[0].image);
     return Scaffold(
-      appBar: const BackAppBar(),
+      appBar: isAppBarShow ? const BackAppBar() : null,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

@@ -5,6 +5,9 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_states.dart';
+import 'package:fourtyninehub/features/custom_page/presentation/cubit/edit_page_cubit/edit_page_cubit.dart';
+import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../../core/messages/messages.dart';
 import '../../../../../res/style/styles.dart';
@@ -171,10 +174,6 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Text(LocaleKeys.favoriteCategory.localize),
-      ),
       body: BlocProvider<CustomPageCubit>(
         create: (BuildContext context) =>
             serviceLocator<CustomPageCubit>()..fetchFavouriteCat(),
@@ -185,33 +184,46 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
                 _categoriesMap = _initFavouriteCategories(state.favourite!);
               }
               final localizedNames = _getLocalizedNames(state.favourite!);
-              return ListView.builder(
-                itemCount: _categoriesMap.length,
-                itemBuilder: (context, index) {
-                  final categoryName = localizedNames[index];
-                  final isSelected = _categoriesMap.values.elementAt(index);
-                  return ListTile(
-                    leading: Checkbox(
-                      value: isSelected,
-                      checkColor: Theme.of(context).scaffoldBackgroundColor,
-                      activeColor: Theme.of(context).primaryColor,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          _categoriesMap[_categoriesMap.keys.elementAt(index)] =
-                              value ?? false;
-                        });
+              return Column(
+                children: [
+                  ListTile(
+                    title: Text(LocaleKeys.favoriteCategory.localize),
+                    subtitle: Text(LocaleKeys.favouriteDescrepion.localize),
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: _categoriesMap.length,
+                      itemBuilder: (context, index) {
+                        final categoryName = localizedNames[index];
+                        final isSelected =
+                            _categoriesMap.values.elementAt(index);
+                        return ListTile(
+                          leading: Checkbox(
+                            shape: const CircleBorder(),
+                            value: isSelected,
+                            checkColor:
+                                Theme.of(context).scaffoldBackgroundColor,
+                            activeColor: Theme.of(context).primaryColor,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                _categoriesMap[_categoriesMap.keys
+                                    .elementAt(index)] = value ?? false;
+                              });
+                            },
+                          ),
+                          title: Text(
+                            categoryName,
+                            style: Styles.mediumText(
+                                fontSize: 65.sp,
+                                fontWeight: FontWeight.w400,
+                                color: Theme.of(context).primaryColor),
+                          ),
+                          selected: isSelected,
+                        );
                       },
                     ),
-                    title: Text(
-                      categoryName,
-                      style: Styles.mediumText(
-                          fontSize: 65.sp,
-                          fontWeight: FontWeight.w400,
-                          color: Theme.of(context).primaryColor),
-                    ),
-                    selected: isSelected,
-                  );
-                },
+                  ),
+                ],
               );
             } else if (state.status == CustomPageStates.loading) {
               return const Center(child: CircularProgressIndicator());
@@ -229,11 +241,16 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
             if (state.status == CustomPageStates.success) {
               showSuccessMessage(
                   context, LocaleKeys.updateSuccessfully.localize);
+              BlocProvider.of<EditPageCubit>(context).changePage(
+                  BlocProvider.of<EditPageCubit>(context).currentIndex + 1);
             }
           },
           builder: (BuildContext context, Object? state) {
-            return FloatingActionButton(
-              backgroundColor: Theme.of(context).primaryColor,
+            return CustomElevatedButton(
+              child: Text(
+                LocaleKeys.next.localize,
+                style: const TextStyle(color: AppColors.whiteColor),
+              ),
               onPressed: () {
                 // Collect selected categories
                 final selectedCategories = _categoriesMap.entries
@@ -318,8 +335,6 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
                   );
                 }
               },
-              child: Icon(Icons.check,
-                  color: Theme.of(context).scaffoldBackgroundColor),
             );
           },
         ),

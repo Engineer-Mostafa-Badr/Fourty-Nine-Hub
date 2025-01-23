@@ -5,6 +5,7 @@ abstract class Routes {
 
   static const HOME = '/';
   static const CUSTOMPAGE = '/CustomPage';
+  static const editPage = '/editPage';
   static const PAGEPREVIEW = '/CustomPage/PagePreview';
   static const MAINCATEGORIESCARDS = '/MainCategoriesCards';
   static const SEARCH = '/Search';

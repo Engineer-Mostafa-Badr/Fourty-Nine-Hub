@@ -11,7 +11,8 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MainCategoriesGridView extends StatefulWidget {
-  const MainCategoriesGridView({super.key});
+  const MainCategoriesGridView({super.key, this.isAppBarShow = true});
+  final bool isAppBarShow;
 
   @override
   State<MainCategoriesGridView> createState() => _MainCategoriesGridViewState();
@@ -53,7 +54,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
   Widget build(BuildContext context) {
     final controller = context.read<MainCategoriesTapsCubit>();
     return Scaffold(
-      appBar: const BackAppBar(),
+      appBar: widget.isAppBarShow ? const BackAppBar() : null,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
         child: Column(

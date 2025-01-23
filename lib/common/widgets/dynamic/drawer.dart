@@ -13,6 +13,7 @@ import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
@@ -102,7 +103,12 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         onTap: () {
                           AdInterstitialTop.loadIntersitialAd();
                           AdInterstitialTop.showInterstitialAd();
-                          context.push(Routes.CUSTOMPAGE);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const EditPage(),
+                            ),
+                          );
                         }),
                     drawerListTile(
                         image: Assets.favorite_main_category_icon,
@@ -586,9 +592,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               title: const Text('Gallery'),
                               onTap: () async {
                                 // Navigator.pop(context);
-                                await context
-                                    .read<UserCubit>()
-                                    .uploadPhoto(isGallery: true, context: context);
+                                await context.read<UserCubit>().uploadPhoto(
+                                    isGallery: true, context: context);
                                 // Reload user data if needed
                               },
                             ),
@@ -597,9 +602,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               title: const Text('Camera'),
                               onTap: () async {
                                 // Navigator.pop(context);
-                                await context
-                                    .read<UserCubit>()
-                                    .uploadPhoto(isGallery: false, context: context);
+                                await context.read<UserCubit>().uploadPhoto(
+                                    isGallery: false, context: context);
                                 // Reload user data if needed
                               },
                             ),

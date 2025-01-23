@@ -20,9 +20,16 @@ class CodegenLoader extends AssetLoader {
     "tommorow": "غدًا",
     "meeting": "اجتماع",
     "join": "انضمام",
+    "preview": "عرض",
     "doYouWantToActivePage": "هل تريد تفعيل الصفحة",
     "previus": "السابق",
     "finish": "انهاء",
+    "navigateBarDescription":
+        "اختر المجال المناسب الذي تحب أن تراه في شريط القوائم السفلي للتطبيق",
+    "socialDescription":
+        "اختار الشكل الاجتماعي المفضل لديك يمكنك اختيار شكل واحد فقط بحدأقصى",
+    "favouriteDescrepion":
+        "اختار الاقسام الرئيسيه المفضله لديك التي تحب أن تراها يمكنك اختيار بحد أقصى ٨ اقسام",
     "schedule": "جدولة",
     "scheduleAMeeting": "جدولة اجتماع",
     "startDateBeginValidation": "يجب أن تكون تاريخ البدء قبل تاريخ الانتهاء",
@@ -1309,8 +1316,15 @@ class CodegenLoader extends AssetLoader {
     "nnew": "New",
     "today": "Today",
     "tommorow": "Tomorrow",
+    "preview": "Preview",
     "meeting": "Meeting",
     "join": "Join",
+    "navigateBarDescription":
+        "Choose the appropriate field you would like to see in the application's bottom navigation bar.",
+    "socialDescription":
+        "Choose your preferred social shape. You can select only one shape at most.",
+    "favouriteDescription":
+        "Choose your favorite main categories that you would like to see. You can select up to 8 categories at most.",
     "schedule": "Schedule",
     "scheduleAMeeting": "Schedule a Meeting",
     "doYouWantToActivePage": "do you want to active the page",
