@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/suggested_for_you_instagram_screen.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class InstagramForYouSliderWidget extends StatelessWidget {
@@ -10,7 +9,7 @@ class InstagramForYouSliderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         children: [
           Row(
@@ -20,13 +19,13 @@ class InstagramForYouSliderWidget extends StatelessWidget {
                 style: Styles.headerText(
                     fontSize: 41, fontWeight: FontWeight.bold),
               ),
-              Spacer(),
+              const Spacer(),
               GestureDetector(
                 onTap: () {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => SuggestedForYouInstagramScreen(),
+                        builder: (context) => const SuggestedForYouInstagramScreen(),
                       ));
                 },
                 child: Text(
@@ -34,12 +33,12 @@ class InstagramForYouSliderWidget extends StatelessWidget {
                   style: Styles.headerText(
                       fontSize: 40,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xff1198F8)),
+                      color: const Color(0xff1198F8)),
                 ),
               ),
             ],
           ),
-          Sizer(),
+          const Sizer(),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -48,10 +47,10 @@ class InstagramForYouSliderWidget extends StatelessWidget {
                   10,
                   (index) {
                     return Container(
-                      margin: EdgeInsets.symmetric(horizontal: 7),
+                      margin: const EdgeInsets.symmetric(horizontal: 7),
                       width: MediaQuery.of(context).size.width * 0.7,
                       // height: 350,
-                      padding: EdgeInsets.all(5),
+                      padding: const EdgeInsets.all(5),
                       decoration: BoxDecoration(
                           border: Border.all(
                               color: Colors.black.withValues(alpha: 0.2)),
@@ -59,15 +58,15 @@ class InstagramForYouSliderWidget extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          Icon(Icons.close),
-                          Sizer(),
+                          const Icon(Icons.close),
+                          const Sizer(),
                           Container(
                             width: double.infinity,
                             height: 220,
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                                 color: Colors.red, shape: BoxShape.circle),
                           ),
-                          Sizer(),
+                          const Sizer(),
                           Align(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -88,9 +87,9 @@ class InstagramForYouSliderWidget extends StatelessWidget {
                               ],
                             ),
                           ),
-                          Sizer(),
+                          const Sizer(),
                           Container(
-                            margin: EdgeInsets.symmetric(horizontal: 10),
+                            margin: const EdgeInsets.symmetric(horizontal: 10),
                             height: 40,
                             width: double.infinity,
                             decoration: BoxDecoration(
@@ -105,7 +104,7 @@ class InstagramForYouSliderWidget extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Sizer(),
+                          const Sizer(),
                         ],
                       ),
                     );

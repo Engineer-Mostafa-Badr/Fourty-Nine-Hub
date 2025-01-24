@@ -8,7 +8,7 @@ class InstagramAdSliderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         children: [
           Row(
@@ -27,17 +27,17 @@ class InstagramAdSliderWidget extends StatelessWidget {
                   ),
                 ],
               ),
-              Spacer(),
+              const Spacer(),
               Text(
                 "See all",
                 style: Styles.headerText(
                     fontSize: 41,
                     fontWeight: FontWeight.w800,
-                    color: Color(0xff1198F8)),
+                    color: const Color(0xff1198F8)),
               ),
             ],
           ),
-          Sizer(),
+          const Sizer(),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -47,7 +47,7 @@ class InstagramAdSliderWidget extends StatelessWidget {
                   (index) {
                     return Container(
                       
-                      margin: EdgeInsets.symmetric(horizontal: 7),
+                      margin: const EdgeInsets.symmetric(horizontal: 7),
                       width: MediaQuery.of(context).size.width-60,
                       height: 450,
                       decoration: BoxDecoration(
@@ -57,39 +57,39 @@ class InstagramAdSliderWidget extends StatelessWidget {
                       child: Column(
                         children: [
                           Container(
-                            padding: EdgeInsets.all(10),
+                            padding: const EdgeInsets.all(10),
                             child: Row(
                               children: [
                                 Container(
                                   width: 40,
                                   height: 40,
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                     shape: BoxShape.circle,
                                     color: Colors.red,
                                   ),
                                 ),
-                                Sizer(),
+                                const Sizer(),
                                 Text("axiombyartal", style: Styles.headerText(fontWeight: FontWeight.bold),),
-                                Spacer(),
-                                Icon(Icons.more_vert_rounded)
+                                const Spacer(),
+                                const Icon(Icons.more_vert_rounded)
                               ],
                             ),
                           ),
-                          Sizer(),
+                          const Sizer(),
                           Container(
                             width: double.infinity,
                             height: 300,
                             color: Colors.red,
                           ),
-                          Sizer(),
+                          const Sizer(),
                           Container(
-                            padding: EdgeInsets.all(10),
+                            padding: const EdgeInsets.all(10),
                             height: 50,
-                            margin: EdgeInsets.symmetric(horizontal: 10),
+                            margin: const EdgeInsets.symmetric(horizontal: 10),
                             width: double.infinity,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: Color(0xff4B5EFA)
+                              color: const Color(0xff4B5EFA)
                             ),
                             child: Center(
                               child: Text(
@@ -99,7 +99,7 @@ class InstagramAdSliderWidget extends StatelessWidget {
                   ),
                             ),
                           ),
-                          Sizer()
+                          const Sizer()
                         ],
                       ),
                     );

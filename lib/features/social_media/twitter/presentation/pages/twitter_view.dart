@@ -23,6 +23,7 @@ import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/tw
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/build_twitter_document_card.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/twitter_post_card.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/twitter_post_comments.dart';
+import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/twitter_post_widget.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -132,6 +133,7 @@ class _TwitterViewState extends State<TwitterView> {
                   },
                   itemBuilder: (context, item, index) {
                     final user = context.read<UserCubit>().state.data;
+                    return const TwitterPostWidget();
                     return Padding(
                       padding: EdgeInsets.only(bottom: 30.h),
                       child: TwitterPostCard(
@@ -307,6 +309,7 @@ class _TwitterViewState extends State<TwitterView> {
                   },
                   itemBuilder: (context, item, index) {
                     final user = context.read<UserCubit>().state.data;
+                    return const TwitterPostWidget();
                     return TwitterPostCard(
                       post: controller
                           .globalPostsPagingController.itemList![index],

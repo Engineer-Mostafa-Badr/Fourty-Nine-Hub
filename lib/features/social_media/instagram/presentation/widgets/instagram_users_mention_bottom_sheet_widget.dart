@@ -9,7 +9,7 @@ class InstagramUsersMentionBottomSheetWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -21,21 +21,21 @@ class InstagramUsersMentionBottomSheetWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(30),
             ),
           ),
-          Sizer(),
+          const Sizer(),
           Text("Collaborators", style: Styles.headerText(),),
-          Sizer(),
-          Sizer(),
+          const Sizer(),
+          const Sizer(),
           Row(
             children: [
               Container(
                 width: 80,
                 height: 80,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                   color: Colors.red,
                 ),
               ),
-              Sizer(),
+              const Sizer(),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -43,9 +43,9 @@ class InstagramUsersMentionBottomSheetWidget extends StatelessWidget {
                   Text("Edward", style: Styles.mediumText(color: Colors.grey, fontWeight: FontWeight.w300),),
                 ],
               ),
-              Spacer(),
+              const Spacer(),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
                   color: AppColors.PRIMARY_COLOR
@@ -54,18 +54,18 @@ class InstagramUsersMentionBottomSheetWidget extends StatelessWidget {
               )
             ],
           ),
-          Sizer(),
+          const Sizer(),
           Row(
             children: [
               Container(
                 width: 80,
                 height: 80,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                   color: Colors.red,
                 ),
               ),
-              Sizer(),
+              const Sizer(),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -73,9 +73,9 @@ class InstagramUsersMentionBottomSheetWidget extends StatelessWidget {
                   Text("Edward", style: Styles.mediumText(color: Colors.grey, fontWeight: FontWeight.w300),),
                 ],
               ),
-              Spacer(),
+              const Spacer(),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
                   color: AppColors.PRIMARY_COLOR

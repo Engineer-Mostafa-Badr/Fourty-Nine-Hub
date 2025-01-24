@@ -1,13 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class CreatePostDetailsInstagramScreen extends StatelessWidget {
   const CreatePostDetailsInstagramScreen({super.key, required this.images});
@@ -19,7 +17,7 @@ class CreatePostDetailsInstagramScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Sizer(),
+            const Sizer(),
             SizedBox(
               height: 300,
               child: SingleChildScrollView(
@@ -28,7 +26,7 @@ class CreatePostDetailsInstagramScreen extends StatelessWidget {
                   children: images.map(
                     (e) {
                       return Container(
-                        margin: EdgeInsets.symmetric(horizontal: 10),
+                        margin: const EdgeInsets.symmetric(horizontal: 10),
                         height: 300,
                         width: 220,
                         decoration: BoxDecoration(
@@ -43,9 +41,9 @@ class CreatePostDetailsInstagramScreen extends StatelessWidget {
                 ),
               ),
             ),
-            Sizer(),
+            const Sizer(),
             Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Column(
                   children: [
                     TextField(
@@ -61,46 +59,46 @@ class CreatePostDetailsInstagramScreen extends StatelessWidget {
                           focusedErrorBorder: InputBorder.none,
                           filled: false),
                     ),
-                    Sizer(height: 70,),
-                    Divider(),
-                    Sizer(
+                    const Sizer(height: 70,),
+                    const Divider(),
+                    const Sizer(
                       height: 8,
                     ),
                     Row(
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.person_pin_outlined,
                           size: 30,
                         ),
-                        Sizer(),
+                        const Sizer(),
                         Text(
                           "Tag people",
                           style: Styles.headerText(fontWeight: FontWeight.w400),
                         ),
-                        Spacer(),
-                        Icon(Icons.arrow_forward_ios_outlined)
+                        const Spacer(),
+                        const Icon(Icons.arrow_forward_ios_outlined)
                       ],
                     ),
-                    Sizer(
+                    const Sizer(
                       height: 8,
                     ),
-                    Divider(),
-                    Sizer(
+                    const Divider(),
+                    const Sizer(
                       height: 8,
                     ),
                     Row(
                       children: [
                         Image.asset(Assets.musicalNote),
-                        Sizer(),
+                        const Sizer(),
                         Text(
                           "Add music",
                           style: Styles.headerText(fontWeight: FontWeight.w400),
                         ),
-                        Spacer(),
-                        Icon(Icons.arrow_forward_ios_outlined)
+                        const Spacer(),
+                        const Icon(Icons.arrow_forward_ios_outlined)
                       ],
                     ),
-                    Sizer(
+                    const Sizer(
                       height: 8,
                     ),
                     SingleChildScrollView(
@@ -111,8 +109,8 @@ class CreatePostDetailsInstagramScreen extends StatelessWidget {
                             10,
                             (index) {
                               return Container(
-                                margin: EdgeInsets.symmetric(horizontal: 5),
-                                padding: EdgeInsets.symmetric(
+                                margin: const EdgeInsets.symmetric(horizontal: 5),
+                                padding: const EdgeInsets.symmetric(
                                     horizontal: 10, vertical: 5),
                                 decoration: BoxDecoration(
                                     color: Colors.grey.shade200,
@@ -123,7 +121,7 @@ class CreatePostDetailsInstagramScreen extends StatelessWidget {
                                       Assets.musicalNote,
                                       width: 15,
                                     ),
-                                    Sizer(),
+                                    const Sizer(),
                                     Text(
                                       "Music Name",
                                       style: Styles.mediumText(fontSize: 27),
@@ -136,8 +134,8 @@ class CreatePostDetailsInstagramScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    Divider(),
-                    Sizer(
+                    const Divider(),
+                    const Sizer(
                       height: 8,
                     ),
                     Row(
@@ -146,38 +144,38 @@ class CreatePostDetailsInstagramScreen extends StatelessWidget {
                           Assets.audienceIcon,
                           width: 28,
                         ),
-                        Sizer(),
+                        const Sizer(),
                         Text(
                           "Audience",
                           style: Styles.headerText(fontWeight: FontWeight.w400),
                         ),
-                        Spacer(),
-                        Icon(Icons.arrow_forward_ios_outlined)
+                        const Spacer(),
+                        const Icon(Icons.arrow_forward_ios_outlined)
                       ],
                     ),
-                    Sizer(
+                    const Sizer(
                       height: 8,
                     ),
-                    Divider(),
-                    Sizer(
+                    const Divider(),
+                    const Sizer(
                       height: 8,
                     ),
                     Row(
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.location_on_outlined,
                           size: 30,
                         ),
-                        Sizer(),
+                        const Sizer(),
                         Text(
                           "Add location",
                           style: Styles.headerText(fontWeight: FontWeight.w400),
                         ),
-                        Spacer(),
-                        Icon(Icons.arrow_forward_ios_outlined)
+                        const Spacer(),
+                        const Icon(Icons.arrow_forward_ios_outlined)
                       ],
                     ),
-                    Sizer(
+                    const Sizer(
                       height: 50,
                     ),
                     Container(

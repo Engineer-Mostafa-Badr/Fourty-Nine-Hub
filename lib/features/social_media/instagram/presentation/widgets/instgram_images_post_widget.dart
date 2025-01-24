@@ -36,7 +36,7 @@ class _InstgramImagesPostWidgetState extends State<InstgramImagesPostWidget> {
               itemBuilder: (context, index) {
                 return Container(
                   alignment: Alignment.topRight,
-                  padding: EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(8),
                   height: 400,
                   color: Colors.red,
                   child: Container(
@@ -44,14 +44,14 @@ class _InstgramImagesPostWidgetState extends State<InstgramImagesPostWidget> {
                       borderRadius: BorderRadius.circular(20),
                     color: Colors.black.withValues(alpha: 0.5),
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
                     child: Text("${currentIndex+1}/${widget.images.length}", style: Styles.mediumText(color: Colors.white, fontWeight: FontWeight.bold),),
                   ),
                 );
               },
             ),
           ),
-          Sizer(),
+          const Sizer(),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -59,8 +59,8 @@ class _InstgramImagesPostWidgetState extends State<InstgramImagesPostWidget> {
             widget.images.length,
             (index) {
               return AnimatedContainer(
-                margin: EdgeInsets.symmetric(horizontal: 2),
-                duration: Duration(milliseconds: 500),
+                margin: const EdgeInsets.symmetric(horizontal: 2),
+                duration: const Duration(milliseconds: 500),
                 width: 10,
                 height: 10,
                 decoration: BoxDecoration(

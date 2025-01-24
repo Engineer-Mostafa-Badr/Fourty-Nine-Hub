@@ -12,12 +12,12 @@ class ReelSliderWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Text("Suggested reels", style: Styles.headerText(fontWeight: FontWeight.bold),),
           ),
-          Sizer(),
+          const Sizer(),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 6),
+            padding: const EdgeInsets.symmetric(horizontal: 6),
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
@@ -26,7 +26,7 @@ class ReelSliderWidget extends StatelessWidget {
                     10,
                     (index) {
                       return Container(
-                        margin: EdgeInsets.symmetric(horizontal: 4),
+                        margin: const EdgeInsets.symmetric(horizontal: 4),
                         height: 320,
                         width: 180,
                         decoration: BoxDecoration(

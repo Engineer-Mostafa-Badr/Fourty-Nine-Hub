@@ -63,14 +63,14 @@ class SuggestedForYouInstagramScreen extends StatelessWidget {
                   );
                 },
               ),
-              Sizer(),
+              const Sizer(),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text("See all", style: Styles.mediumText(color: Colors.blue, fontSize: 35, fontWeight: FontWeight.bold),),
-                    Icon(Icons.keyboard_arrow_down_rounded)
+                    const Icon(Icons.keyboard_arrow_down_rounded)
                   ],
                 ),
               ),
@@ -126,14 +126,14 @@ class SuggestedForYouInstagramScreen extends StatelessWidget {
                   );
                 },
               ),
-              Sizer(),
+              const Sizer(),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text("See all", style: Styles.mediumText(color: Colors.blue, fontSize: 35, fontWeight: FontWeight.bold),),
-                    Icon(Icons.keyboard_arrow_down_rounded)
+                    const Icon(Icons.keyboard_arrow_down_rounded)
                   ],
                 ),
               ),
@@ -188,18 +188,18 @@ class SuggestedForYouInstagramScreen extends StatelessWidget {
                   );
                 },
               ),
-              Sizer(),
+              const Sizer(),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text("See all", style: Styles.mediumText(color: Colors.blue, fontSize: 35, fontWeight: FontWeight.bold),),
-                    Icon(Icons.keyboard_arrow_down_rounded)
+                    const Icon(Icons.keyboard_arrow_down_rounded)
                   ],
                 ),
               ),
-              Sizer(height: 50,),
+              const Sizer(height: 50,),
             ],
           ),
         ),

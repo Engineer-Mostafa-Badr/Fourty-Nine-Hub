@@ -78,7 +78,7 @@ class _InstagramViewState extends State<InstagramView> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) =>
-                                      CreatePostInstagramScreen(),
+                                      const CreatePostInstagramScreen(),
                                 ));
                           },
                           child: Container(
@@ -87,27 +87,27 @@ class _InstagramViewState extends State<InstagramView> {
                             color: Colors.red,
                           ),
                         ),
-                        Sizer(),
-                        InstagramAdWidget(),
-                        Sizer(),
-                        ReelSliderWidget(),
-                        Sizer(),
-                        InstagramAdSliderWidget(),
-                        Sizer(),
+                        const Sizer(),
+                        const InstagramAdWidget(),
+                        const Sizer(),
+                        const ReelSliderWidget(),
+                        const Sizer(),
+                        const InstagramAdSliderWidget(),
+                        const Sizer(),
                         const InstagramPostWidget(
                           mechan: true,
                           multiImage: false,
                         ),
-                        Sizer(),
+                        const Sizer(),
                         const InstagramPostWidget(
                           mechan: false,
                           multiImage: true,
                         ),
-                        Sizer(),
-                        InstagramVideoPostWidget(),
-                        Sizer(),
-                        InstagramForYouSliderWidget(),
-                        Sizer(
+                        const Sizer(),
+                        const InstagramVideoPostWidget(),
+                        const Sizer(),
+                        const InstagramForYouSliderWidget(),
+                        const Sizer(
                           height: 60,
                         )
                         // Expanded(

@@ -3,10 +3,8 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_post_buttom_sheet_without_mention_widget.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_user_info_with_mention_post_widget.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_users_mention_bottom_sheet_widget.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instgram_images_post_widget.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class InstagramVideoPostWidget extends StatelessWidget {
   const InstagramVideoPostWidget({super.key});
@@ -20,13 +18,13 @@ class InstagramVideoPostWidget extends StatelessWidget {
         children: [
           Container(
             color: Colors.grey,
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             child: Column(
               children: [
                 Row(
                   children: [
                     
-                    InstagramUserInfoWithMentionPostWidget(isMenchan: false,),
+                    const InstagramUserInfoWithMentionPostWidget(isMenchan: false,),
                     const Spacer(),
                     GestureDetector(
                         onTap: () {
@@ -53,28 +51,28 @@ class InstagramVideoPostWidget extends StatelessWidget {
                 context: context,
                 backgroundColor: Colors.white,
                 builder: (context) {
-                  return InstagramUsersMentionBottomSheetWidget();
+                  return const InstagramUsersMentionBottomSheetWidget();
                 },
               );
                 },
                 child: Container(
                   width: 20,
                   height: 20,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Colors.black,
                     shape: BoxShape.circle,
                   ),
-                  child: Center(child: Icon(Icons.person, size: 15, color: Colors.white,)),
+                  child: const Center(child: Icon(Icons.person, size: 15, color: Colors.white,)),
                 ),
               ),
               Container(
                 width: 20,
                 height: 20,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.black,
                   shape: BoxShape.circle,
                 ),
-                child: Center(child: Icon(Icons.volume_off_rounded, size: 14, color: Colors.white,)),
+                child: const Center(child: Icon(Icons.volume_off_rounded, size: 14, color: Colors.white,)),
               )
             ],
           )
@@ -84,7 +82,7 @@ class InstagramVideoPostWidget extends StatelessWidget {
           
           const Sizer(height: 10,),
           Container(
-            padding: EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
             child: Column(
               children: [
                 Row(

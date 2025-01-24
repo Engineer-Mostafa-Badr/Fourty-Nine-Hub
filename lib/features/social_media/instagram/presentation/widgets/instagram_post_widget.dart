@@ -5,7 +5,6 @@ import 'package:fourtyninehub/features/social_media/instagram/presentation/widge
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instgram_images_post_widget.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class InstagramPostWidget extends StatelessWidget {
   const InstagramPostWidget({super.key, required this.multiImage, required this.mechan});

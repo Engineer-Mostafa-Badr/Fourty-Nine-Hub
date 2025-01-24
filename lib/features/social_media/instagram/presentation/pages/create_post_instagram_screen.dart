@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
@@ -145,7 +144,7 @@ class _CreatePostInstagramScreenState extends State<CreatePostInstagramScreen> {
       body: Column(
         children: [
           if (selectedImage == null)
-            Container(
+            SizedBox(
               width: double.infinity,
               height: MediaQuery.of(context).size.height * 0.45,
               child: selectedImage == null
@@ -163,7 +162,7 @@ class _CreatePostInstagramScreenState extends State<CreatePostInstagramScreen> {
                 if (snapshot.hasData) {
                   return Stack(
                     children: [
-                      Container(
+                      SizedBox(
                         width: double.infinity,
                         height: MediaQuery.of(context).size.height * 0.45,
                         child: InteractiveViewer(

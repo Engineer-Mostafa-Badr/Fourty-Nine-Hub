@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_post_buttom_sheet_without_mention_widget.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_user_info_with_mention_post_widget.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instgram_images_post_widget.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class InstagramAdWidget extends StatelessWidget {
   const InstagramAdWidget({super.key});
@@ -18,7 +16,7 @@ class InstagramAdWidget extends StatelessWidget {
         children: [
           Row(
             children: [
-              InstagramUserInfoWithMentionPostWidget(
+              const InstagramUserInfoWithMentionPostWidget(
                 subTitle: "Sponsored",
                 isMenchan: false,
               ),
@@ -43,14 +41,14 @@ class InstagramAdWidget extends StatelessWidget {
           Container(
             width: double.infinity,
             height: 50,
-            padding: EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             color: Colors.blue,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text("Sign Up", style: Styles.headerText(color: Colors.white)),
-                Icon(Icons.arrow_forward_ios, color: Colors.white,)
+                const Icon(Icons.arrow_forward_ios, color: Colors.white,)
               ],
             ),
           ),
