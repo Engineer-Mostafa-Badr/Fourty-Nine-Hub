@@ -325,7 +325,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Label(
+                  ad.price == 0 ? const Spacer() : Label(
                     text:
                         '${NumbersHelper.formatThousands(number: ad.price ?? 0)} ${LocaleKeys.currency.localize}',
                     style: Styles.mediumText(

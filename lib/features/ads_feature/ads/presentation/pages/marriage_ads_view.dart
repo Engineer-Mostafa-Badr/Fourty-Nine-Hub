@@ -151,18 +151,18 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                                         mainCategory: state.mainCategory!,
                                         fromMarriage: true,
                                         subCategory: state.subCategories![state.subCategories?.indexWhere((element) => element.isSelected==true)??0],));
-                                // if (data != null) {
-                                //   print("objectsdaa");
-                                //   // Future.delayed(const Duration(seconds: 1), () =>
-                                //   //     controller.changeState(data, data != null));
-                                //   // context.read<AdvertisementCubit>().loadFilterData(
-                                //   //     model: data,
-                                //   //     filter: userType);
-                                //   controller.changeFilterModel(data);
-                                //
-                                //   controller.loadFilterData(
-                                //       model: data, filter: 'user');
-                                // }
+                                if (data != null) {
+                                  print("objectsdaa");
+                                  // Future.delayed(const Duration(seconds: 1), () =>
+                                  //     controller.changeState(data, data != null));
+                                  // context.read<AdvertisementCubit>().loadFilterData(
+                                  //     model: data,
+                                  //     filter: userType);
+                                  controller.changeFilterModel(data);
+
+                                  controller.loadFilterData(
+                                      model: data, filter: 'user');
+                                }
                               }),
                         ),
                         const Sizer(
@@ -190,7 +190,7 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                                   controller.state.city = data.cityId;
                                   controller.state.governorate = data.governorateId;
                                   controller.changeFilterModel(data);
-                                  FilterModel model = FilterModel(cityId: "state.city", governorateId: "state.governorate");
+                                  // FilterModel model = FilterModel(cityId: "state.city", governorateId: "state.governorate");
                                   // Future.delayed(const Duration(seconds: 1), () =>
                                   //     controller.changeState(data, data != null));
                                   // context.read<AdvertisementCubit>().loadFilterData(
@@ -218,6 +218,7 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
 
                       },
                       child: Container(
+                        width: 250.w,
                         alignment: AlignmentDirectional.center,
                         padding: EdgeInsets.all(6.w),
                         margin: EdgeInsets.all(2.w),
@@ -240,7 +241,9 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                 ),
                 const Sizer(height: 40,),
                 Expanded(
-                  child: state.status == SubcategoriesStates.loadingAds?const Center(child: CircularProgressIndicator(),):ListView.builder(
+                  child: state.status == SubcategoriesStates.loadingAds?const Center(child: CircularProgressIndicator(),):controller.marriageAds.isEmpty? Center(
+                    child:Label(text: LocaleKeys.noAds.localize)
+                  ):ListView.builder(
                     controller: _scrollController,
                       itemCount: controller.marriageAds.length,
                       physics: const BouncingScrollPhysics(),

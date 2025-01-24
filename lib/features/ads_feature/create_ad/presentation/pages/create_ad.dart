@@ -297,19 +297,19 @@ class _CreateAdViewState extends State<CreateAdView> {
                                   borderSide: BorderSide(
                                       color: context.isDarkMode
                                           ? AppColors.LIGHT_COLOR
-                                          : Colors.grey),
+                                          : Colors.black),
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
                                       color: context.isDarkMode
                                           ? AppColors.LIGHT_COLOR
-                                          : Colors.grey),
+                                          : Colors.black),
                                 ),
                                 border: OutlineInputBorder(
                                   borderSide: BorderSide(
                                       color: context.isDarkMode
                                           ? AppColors.LIGHT_COLOR
-                                          : Colors.grey),
+                                          : Colors.black),
                                 ),
                                 fillColor: context.isDarkMode
                                     ? Colors.transparent
@@ -363,19 +363,19 @@ class _CreateAdViewState extends State<CreateAdView> {
                                                 borderSide: BorderSide(
                                                     color: context.isDarkMode
                                                         ? AppColors.LIGHT_COLOR
-                                                        : Colors.grey),
+                                                        : Colors.black),
                                               ),
                                               enabledBorder: OutlineInputBorder(
                                                 borderSide: BorderSide(
                                                     color: context.isDarkMode
                                                         ? AppColors.LIGHT_COLOR
-                                                        : Colors.grey),
+                                                        : Colors.black),
                                               ),
                                               border: OutlineInputBorder(
                                                 borderSide: BorderSide(
                                                     color: context.isDarkMode
                                                         ? AppColors.LIGHT_COLOR
-                                                        : Colors.grey),
+                                                        : Colors.black),
                                               ),
                                               fillColor: context.isDarkMode
                                                   ? Colors.transparent
@@ -517,7 +517,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                         Assets.image,
                         height: kToolbarHeight * .8,
                       ),
-                    if (controller.loadImage==true)
+                    // if (controller.loadImage==true)
                       BadgedLabel(
                         label: LocaleKeys.addImages.localize,
                         isBordered: true,
@@ -525,6 +525,9 @@ class _CreateAdViewState extends State<CreateAdView> {
                         color: AppColors.SECONDARY_COLOR,
                         isCentered: true,
                         close: false,
+                        onTap: () => controller.uploadImage(
+                            subCategoryId: widget.categorization.subCategory.id,context:context),
+
                       ),
                     Label(
                       text: LocaleKeys.addImagesDesc.localize,
