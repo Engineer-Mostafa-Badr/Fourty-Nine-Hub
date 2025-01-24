@@ -5,13 +5,21 @@ import 'dart:typed_data';
 
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/extensions/file_extension.dart';
-
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../core/error/failure.dart';
@@ -21,17 +29,51 @@ class UploadFile {
   Future<Either<Failure, bool>?> uploadImage(
       {bool isGallery = true,
       required String subCategoryId,
+      required BuildContext context,
       required Function(UploadFileEntity) onUploaded}) async {
     final file = await FilePickerHelper()
         .pickImage(isGallery: isGallery)
         .then((file) async {
       if (file != null) {
-        final bytes = await file.readAsBytes();
+        // Crop the image
+        final CroppedFile? croppedFile = await ImageCropper().cropImage(
+          sourcePath: file.path,
+          uiSettings: [
+            AndroidUiSettings(
+              toolbarTitle: LocaleKeys.cropImage.localize,
+              toolbarColor: AppColors.SECONDARY_COLOR,
+              toolbarWidgetColor: Colors.white,
+              initAspectRatio: CropAspectRatioPreset.original,
+              lockAspectRatio: false,
+            ),
+            IOSUiSettings(
+              title: 'Crop Image',
+            ),
+          ],
+        );
+
+        XFile finalFile = XFile(croppedFile?.path??'');
+        showLoadingDialog(context);
+        final tempDir = await getTemporaryDirectory();
+        final uniqueFileName =
+            'compressed_${DateTime.now().millisecondsSinceEpoch}_${finalFile.name}';
+        final targetPath = '${tempDir.path}/$uniqueFileName';
+        print("finalFile.path${finalFile.path}");
+        print("finalFile.path$targetPath");
+        print("objectUpload2");
+        var result = await FlutterImageCompress.compressAndGetFile(
+          finalFile.path,
+          targetPath,
+          quality: 50,
+          rotate: 360,
+        );
+
+        final bytes = await result!.readAsBytes();
         int size = bytes.length;
         // get signed url
         final signedURLResponse =
             await serviceLocator<ApiConsumer>().post(EndPoints.mediaUrl, data: {
-          "type": "image/${file.mimeType ?? 'png'}",
+          "type": "image/${finalFile.mimeType ?? 'png'}",
           "size": size,
           "subcategoryId": subCategoryId
         });
@@ -40,8 +82,21 @@ class UploadFile {
           print(l.toString());
         }, (data) async {
           log("responseData: ${jsonEncode(data)}");
+          final tempDir = await getTemporaryDirectory();
+          final uniqueFileName =
+              'compressed_${DateTime.now().millisecondsSinceEpoch}_${finalFile.name}';
+          final targetPath = '${tempDir.path}/$uniqueFileName';
+          print("finalFile.path${finalFile.path}");
+          print("finalFile.path$targetPath");
+          print("objectUpload2");
+          var result = await FlutterImageCompress.compressAndGetFile(
+            finalFile.path,
+            targetPath,
+            quality: 50,
+            rotate: 360,
+          );
           await sendBinaryFileData(
-                  file: file, signedUrl: data['data']['signedUrl'])
+                  file: result!, signedUrl: data['data']['signedUrl'])
               .then((value) async {
             print("amdl;maldmaslkd");
             final mediaId = data['data']['mediaId'];
@@ -52,7 +107,9 @@ class UploadFile {
               return Left(l);
             }, (data) { */
             print("object111");
-            onUploaded(UploadFileEntity(mediaId: mediaId, file: file));
+            onUploaded(UploadFileEntity(mediaId: mediaId, file: finalFile));
+            context.pop();
+
             return const Right(true);
             // });
           });

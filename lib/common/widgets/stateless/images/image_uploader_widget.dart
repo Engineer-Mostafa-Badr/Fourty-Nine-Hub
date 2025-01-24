@@ -43,7 +43,7 @@ class _ImageUploaderWidgetState extends State<ImageUploaderWidget> {
               _image = Image.file(File(value.file.path));
             });
             widget.onUploaded?.call(value);
-          },
+          }, context: context,
         );
       },
       child: ImagePickerPlaceholder(

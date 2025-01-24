@@ -337,7 +337,7 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
 
   // ================================= upload images =================================
   Future<void> _uploadImage(
-      {required dynamic Function(UploadFileEntity) onUploaded,
+      {required dynamic Function(UploadFileEntity) onUploaded,required BuildContext context,
       subcategoryId}) async {
     if (createRestaurantParams.subcategoryId != null ||
         createRestaurantParams.subcategoryId != "" ||
@@ -348,7 +348,7 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
             createRestaurantParams.subcategoryId ?? subcategoryId ?? '',
         onUploaded: (value) {
           onUploaded(value);
-        },
+        }, context: context,
       );
       emit(CreateRestaurantCloseLoading());
     } else {
@@ -360,9 +360,10 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
   List<String> restaurantImagesIds = [];
   List<String> licensRestaurantImagesIds = [];
 
-  Future<void> uploadProfileImage({subcategoryId}) async {
+  Future<void> uploadProfileImage({subcategoryId,required BuildContext context}) async {
     await _uploadImage(
         subcategoryId: subcategoryId,
+        context: context,
         onUploaded: (media) {
           restaurantImages.add(media.file);
           restaurantImagesIds.add(media.mediaId);
@@ -372,31 +373,31 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
         });
   }
 
-  Future<void> uploadLicenseFirstPageImage() async {
+  Future<void> uploadLicenseFirstPageImage({required BuildContext context}) async {
     await _uploadImage(onUploaded: (media) {
       licensRestaurantImagesIds.add(media.mediaId);
       createRestaurantParams.licenseMedia = licensRestaurantImagesIds;
 
       emit(CreateRestaurantUploadLicenseFirstPageImage(media.file));
-    });
+    }, context: context);
   }
 
-  Future<void> uploadLicenseSecondPageImage() async {
+  Future<void> uploadLicenseSecondPageImage({required BuildContext context}) async {
     await _uploadImage(onUploaded: (media) {
       licensRestaurantImagesIds.add(media.mediaId);
       createRestaurantParams.licenseMedia = licensRestaurantImagesIds;
 
       emit(CreateRestaurantUploadLicenseSecondPageImage(media.file));
-    });
+    }, context: context);
   }
 
-  Future<void> uploadLicenseThiredPageImage() async {
+  Future<void> uploadLicenseThiredPageImage({required BuildContext context}) async {
     await _uploadImage(onUploaded: (media) {
       licensRestaurantImagesIds.add(media.mediaId);
       createRestaurantParams.licenseMedia = licensRestaurantImagesIds;
 
       emit(CreateRestaurantUploadLicenseThiredPageImage(media.file));
-    });
+    }, context: context);
   }
 
   final name = TextEditingController();

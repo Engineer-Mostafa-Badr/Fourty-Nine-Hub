@@ -17,6 +17,7 @@ import 'package:fourtyninehub/features/ads_feature/ad_requests/presentation/cubi
 import 'package:fourtyninehub/features/ads_feature/ad_requests/presentation/pages/ad_requests_view.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_view.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/marriage_ads_view.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/pages/create_ad.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/create_company_ad_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/presentation/pages/filter_ads.dart';
@@ -248,6 +249,7 @@ import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/avaiable_trips_view.dart';
 import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/widgets/join_meeting_screen.dart';
+import 'package:fourtyninehub/main.dart';
 import 'package:go_router/go_router.dart';
 
 import '../features/account_taps/account/presentation/cubit/cubit/favourite_drawer_cubit.dart';
@@ -344,7 +346,9 @@ class AppPages {
 
   static late final GoRouter router;
   static initializeRouter(String initialRoute) {
-    router = GoRouter(initialLocation: initialRoute, routes: <RouteBase>[
+    router = GoRouter(
+      navigatorKey: navigatorKey,
+      initialLocation: initialRoute, routes: <RouteBase>[
       GoRoute(
         path: Routes.HOME,
         builder: (context, state) => MultiBlocProvider(
@@ -593,12 +597,25 @@ class AppPages {
                     ]),
               ]),
           GoRoute(
+              path: Paths.MARRIAGESUBCATEGORIES,
+              name: Routes.MARRIAGESUBCATEGORIES,
+              builder: (context, state) => BlocProvider(
+                    create: (context) =>serviceLocator<SubcategoriesCubit>(),
+                    child: MarriageSubCategoriesView(
+                      mainCategory: state.extra as MainCategoryEntity,
+                    ),
+                  ),
+              ),
+          GoRoute(
             name: Routes.LOGIN,
             path: Paths.LOGIN,
             builder: (context, state) => MultiBlocProvider(
               providers: [
                 BlocProvider(
                   create: (_) => serviceLocator<LoginCubit>(),
+                ),
+                BlocProvider(
+                  create: (_) => serviceLocator<VerifyOtpCubit>(),
                 ),
                 BlocProvider(
                   create: (_) => serviceLocator<GetWalletCubit>(),
@@ -662,6 +679,9 @@ class AppPages {
               providers: [
                 BlocProvider(
                   create: (_) => serviceLocator<LoginCubit>(),
+                ),
+                BlocProvider(
+                  create: (_) => serviceLocator<VerifyOtpCubit>(),
                 ),
                 BlocProvider(
                   create: (_) => serviceLocator<RegisterCubit>(),

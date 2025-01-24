@@ -210,7 +210,7 @@ class CreatePostCubit extends Cubit<CreatePostState> {
     emit(state.copyWith(selectedActivity: item));
   }
 
-  uploadPhoto({bool isGallery = true}) async {
+  uploadPhoto({bool isGallery = true,required BuildContext context}) async {
     final UploadFile upload = UploadFile();
     print("objectssssssssss");
     await upload.uploadImage(
@@ -230,7 +230,7 @@ class CreatePostCubit extends Cubit<CreatePostState> {
               images: images,
               backColor: '#FFFFFFFF',
               status: CreatePostStates.success));
-        });
+        }, context: context);
     print("length${state.images?.length}");
   }
 

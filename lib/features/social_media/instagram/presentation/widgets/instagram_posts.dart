@@ -19,6 +19,7 @@ import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/insta_reel_card.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/insta_reels.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_post_comments.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_suggest_people.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
@@ -164,6 +165,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                 child: const InstagramSuggestPeople(),
               ),
             ),
+
             PagedSliverList<int, PostEntity>(
               pagingController: controller.feedPagingController,
               builderDelegate: PagedChildBuilderDelegate<PostEntity>(
@@ -182,6 +184,9 @@ class _InstagramPostsState extends State<InstagramPosts> {
                 },
                 itemBuilder: (context, item, index) {
                   final pageController = PageController();
+                  if(index== 0 || index % 5 == 0){
+                    return InstagramReels(reels: state.reels ?? [],);
+                  }
                   if (controller.feedPagingController.itemList?[index].type ==
                       'advertisement') {
                     return FacebookAdvertisementCard(

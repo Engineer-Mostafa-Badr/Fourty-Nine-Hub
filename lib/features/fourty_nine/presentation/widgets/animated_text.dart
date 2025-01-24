@@ -88,7 +88,7 @@ class _ScrollableTextWithAnimationState extends State<ScrollableTextWithAnimatio
               }
             },
             child: Container(
-              height: 100.h,
+              height: 60.h,
               alignment: Alignment.center,
               child: AutoScrollText(
                 context.isArabic?context.read<MainCategoriesCubit>().state.question?.messageAr??'':context.read<MainCategoriesCubit>().state.question?.messageEn??'',

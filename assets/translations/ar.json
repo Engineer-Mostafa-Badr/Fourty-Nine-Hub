@@ -157,7 +157,7 @@
   "emptyFieldNotValid": "حقل فارغ غير صالح",
   "login": "تسجيل الدخول",
   "register": "تسجيل",
-  "emailOrPhone": "البريد الإلكتروني أو الهاتف",
+  "emailOrPhone": "البريد الإلكتروني",
   "password": "كلمة المرور",
   "forgetPassword": "نسيت كلمة المرور",
   "lastName": "اللقب",
@@ -1233,6 +1233,13 @@
   "yourAnswer": "إجابتك",
   "enterSomething": "ادخل شيئًا...",
   "pleaseEnterAValue": "يرجى إدخال قيمة",
-  "answerSentSuccessfully": "تم إرسال الإجابة بنجاح"
+  "answerSentSuccessfully": "تم إرسال الإجابة بنجاح",
+
+  "cropImage": "قص صورة",
+  "sureLogoutApp": "هل أنت متأكد أنك تريد الخروج؟",
+  "ExitApp": "الخروج من التطبيق",
+  "sure": "متأكد",
+  "warning": "تحذير",
+  "loginOrRegister": "تسجيل الدخول\n للاستمتاع بالتطبيق"
 
 }

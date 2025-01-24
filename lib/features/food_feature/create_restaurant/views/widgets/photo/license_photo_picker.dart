@@ -33,7 +33,7 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
               children: [
                 InkWell(
                   onTap: () async {
-                    await createRestaurantCubit.uploadLicenseFirstPageImage();
+                    await createRestaurantCubit.uploadLicenseFirstPageImage(context: context);
                   },
                   child:
                       BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
@@ -65,7 +65,7 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
                 const Sizer(),
                 InkWell(
                   onTap: () async {
-                    await createRestaurantCubit.uploadLicenseSecondPageImage();
+                    await createRestaurantCubit.uploadLicenseSecondPageImage(context: context);
                   },
                   child:
                       BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
@@ -97,7 +97,7 @@ class CreateRestaurantLicensePhotoPicker extends StatelessWidget {
                 const Sizer(),
                 InkWell(
                   onTap: () async {
-                    await createRestaurantCubit.uploadLicenseThiredPageImage();
+                    await createRestaurantCubit.uploadLicenseThiredPageImage(context: context);
                   },
                   child:
                       BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(

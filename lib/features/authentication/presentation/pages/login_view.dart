@@ -36,6 +36,7 @@ import '../../../../core/localization/locales.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../controllers/login_cubit/login_cubit.dart';
+import '../controllers/verify_otp_cubit/verify_otp_cubit.dart';
 
 class LoginView extends StatefulWidget {
   LoginView({super.key, required this.authType});
@@ -66,6 +67,7 @@ class _LoginViewState extends State<LoginView> {
   Widget build(BuildContext context) {
     final loginCubit = context.read<LoginCubit>();
     final registerCubit = context.read<RegisterCubit>();
+    final verifyOtpCubit = context.read<VerifyOtpCubit>();
     // if (MediaQuery.of(context).viewInsets.bottom != 0.0) {
     //   log("lllllllllllllllllllllllllll");
     //   scrollController.jumpTo(409);
@@ -75,7 +77,11 @@ class _LoginViewState extends State<LoginView> {
     return BlocListener<RegisterCubit, RegisterState>(
       listener: (context, state) async {
         if (state is RegisterError) {
+          // String  isVeryfied = getFailureMessage(state.failure, context).toString();
+          // print("Print here ${isVeryfied}");
+
           showErrorMessage(context, getFailureMessage(state.failure, context));
+
         } else if (state is OTPSent) {
           showSuccessMessage(context, LocaleKeys.oTP.localize);
           context.go(
@@ -91,6 +97,16 @@ class _LoginViewState extends State<LoginView> {
       child: BlocListener<LoginCubit, LoginState>(
         listener: (context, state) async {
           if (state is LoginError) {
+            String  isVerified = getFailureMessage(state.failure, context).toString();
+            print("Print here ${isVerified}");
+            if (isVerified == "Email not verified") {
+              context.go(
+                Routes.VERIFYMAIL,
+                extra: loginCubit.emailTextController.text,
+              );
+              // Call the resendOTP method from VerifyOtpCubit
+              verifyOtpCubit.resendOTP(loginCubit.emailTextController.text);
+            }
             showErrorMessage(
               context,
               getFailureMessage(
@@ -98,7 +114,9 @@ class _LoginViewState extends State<LoginView> {
                 context,
               ),
             );
-          } else if (state is LoginSuccess) {
+          }
+
+          else if (state is LoginSuccess) {
             // await CacheManager.saveAccessToken(
             //     state.userTokensEntity.accessToken);
             // await CacheManager.saveRefreshToken(
@@ -308,6 +326,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           // style: TextStyle(fontSize: 30.sp, color: AppColors.QUANTITY_COLOR),
           controller: loginCubit.emailTextController,
           hint: LocaleKeys.emailOrPhone.localize,
+
           prefix: Icon(
             Icons.email,
             color: AppColors.GREY_DARK_COLOR,

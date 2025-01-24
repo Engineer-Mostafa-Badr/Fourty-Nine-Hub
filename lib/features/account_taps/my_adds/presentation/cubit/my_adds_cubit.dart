@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/accept_come_with_me_usecase.dart';
@@ -286,7 +287,7 @@ class MyAddsCubit extends Cubit<MyAddsState> {
 
   List<String>? selectedImages;
 
-  uploadPhoto({bool isGallery = true}) async {
+  uploadPhoto({bool isGallery = true,required BuildContext context}) async {
     final UploadFile upload = UploadFile();
     print("objectssssssssss");
     await upload.uploadImage(
@@ -306,7 +307,7 @@ class MyAddsCubit extends Cubit<MyAddsState> {
               images: images,
               // backColor: '#FFFFFFFF',
               status: MyAddsStates.success));
-        });
+        }, context: context);
     print("length${state.images?.length}");
   }
 

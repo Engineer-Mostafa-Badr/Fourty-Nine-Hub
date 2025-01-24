@@ -22,7 +22,8 @@ class UserModel extends UserEntity {
       super.city,
       super.country,
       super.job,
-      super.gender});
+      super.gender, 
+      super.firebaseToken});
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
@@ -53,6 +54,7 @@ class UserModel extends UserEntity {
       job: json['job'] ?? '',
       country: json['country'] ?? '',
       gender: json['gender'] ?? '',
+      firebaseToken: json['firebaseToken'] ?? '',
     );
   }
 }

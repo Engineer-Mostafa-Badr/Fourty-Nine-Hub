@@ -140,7 +140,7 @@ class ChatProfileView extends StatelessWidget {
                                           Navigator.pop(context);
                                           await context
                                               .read<UserCubit>()
-                                              .uploadPhoto(isGallery: true);
+                                              .uploadPhoto(isGallery: true, context: context);
                                           // Reload user data if needed
                                         },
                                       ),
@@ -151,7 +151,7 @@ class ChatProfileView extends StatelessWidget {
                                           Navigator.pop(context);
                                           await context
                                               .read<UserCubit>()
-                                              .uploadPhoto(isGallery: false);
+                                              .uploadPhoto(isGallery: false, context: context);
                                           // Reload user data if needed
                                         },
                                       ),
