@@ -443,7 +443,7 @@ class _TinderCardStackState extends State<TinderCardStack> {
 
   _navigateToUserProfile(BuildContext context, UserDataTinderEntity cardUser) {
     if (!context.read<UserCubit>().isLoggedIn) {
-      return  CustomNotLogged();
+      return  const CustomNotLogged();
     }
     if (serviceLocator<UserCubit>().state.data != null) {
       Navigator.push(

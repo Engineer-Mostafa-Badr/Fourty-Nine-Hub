@@ -266,7 +266,7 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                 );
               },
             )
-          :  CustomNotLogged(),
+          :  const CustomNotLogged(),
     );
   }
 }

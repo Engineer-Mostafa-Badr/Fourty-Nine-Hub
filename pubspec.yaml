@@ -145,7 +145,7 @@ dependencies:
   image_cropper: ^7.0.5
 
 
-  photo_manager: ^3.6.3
+#  photo_manager: ^3.6.3
   # photo_manager: ^3.6.3
 dependency_overrides:
   #  camera_android_camerax: 0.6.10+1

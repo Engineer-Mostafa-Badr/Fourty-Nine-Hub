@@ -46,7 +46,7 @@ class CustomTextNoLogin extends StatelessWidget {
   }
 }
 class CustomTextNoLoginNew extends StatelessWidget {
-   CustomTextNoLoginNew({super.key});
+   const CustomTextNoLoginNew({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -74,13 +74,15 @@ class CustomTextNoLoginNew extends StatelessWidget {
 }
 
 class CustomNotLogged extends StatelessWidget {
+  const CustomNotLogged({super.key});
+
 
   @override
   Widget build(BuildContext context) {
-    return   Stack(
+    return   const Stack(
       alignment: Alignment.center,
       children: [
-        const CircularStepProgressIndicator(
+        CircularStepProgressIndicator(
           totalSteps: 20,
           stepSize: 20,
           selectedStepSize: 20,

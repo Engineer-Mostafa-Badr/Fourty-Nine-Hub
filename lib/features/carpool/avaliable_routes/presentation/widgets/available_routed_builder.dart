@@ -164,7 +164,7 @@ class _AvailableRoutesBottomSheetState
                     },
                     activeColor: AppColors.PRIMARY_COLOR,
                     trackColor:
-                        const MaterialStatePropertyAll(AppColors.SECONDARY_COLOR),
+                        const WidgetStatePropertyAll(AppColors.SECONDARY_COLOR),
                     inactiveThumbColor: Colors.grey,
                   ),
                 ),
@@ -189,7 +189,7 @@ class _AvailableRoutesBottomSheetState
                     },
                     activeColor: AppColors.PRIMARY_COLOR,
                     trackColor:
-                        const MaterialStatePropertyAll(AppColors.SECONDARY_COLOR),
+                        const WidgetStatePropertyAll(AppColors.SECONDARY_COLOR),
                     inactiveThumbColor: Colors.grey,
                   ),
                 ),
@@ -215,7 +215,7 @@ class _AvailableRoutesBottomSheetState
                           setState(() {});
                         },
                         activeColor: AppColors.PRIMARY_COLOR,
-                        trackColor: const MaterialStatePropertyAll(
+                        trackColor: const WidgetStatePropertyAll(
                             AppColors.SECONDARY_COLOR),
                         inactiveThumbColor: Colors.grey,
                       ),

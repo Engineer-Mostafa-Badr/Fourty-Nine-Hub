@@ -98,7 +98,7 @@ class _LoginViewState extends State<LoginView> {
         listener: (context, state) async {
           if (state is LoginError) {
             String  isVerified = getFailureMessage(state.failure, context).toString();
-            print("Print here ${isVerified}");
+            print("Print here $isVerified");
             if (isVerified == "Email not verified") {
               context.go(
                 Routes.VERIFYMAIL,

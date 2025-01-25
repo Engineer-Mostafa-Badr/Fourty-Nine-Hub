@@ -388,20 +388,20 @@ class _RiderRegisterViewState extends State<RiderRegisterView> {
   selectRegisterType(RegisterRiderCubit registerCubit) {
     if (registerCubit.SELECTED_NO_SOCKET_SUBCATEGORY_IDS.isNotEmpty) {
       log("RiderRegisterOne");
-      return const RideNoSocketPartsScreen();
+      // return const RideNoSocketPartsScreen();
       return RiderRegisterNoSocketScreen(
         formKey: context.read<RegisterRiderCubit>().socketFormKey,
       );
     } else {
-      log("RiderRegisterScandScreen");
-      return Column(
-        children: [
-          const RideSocketPartsScreen(),
-          RideRegisterSocketScreen(
-        formKey: context.read<RegisterRiderCubit>().socketFormKey,
-      )
-        ],
-      );
+      // log("RiderRegisterScandScreen");
+      // return Column(
+      //   children: [
+      //     const RideSocketPartsScreen(),
+      //     RideRegisterSocketScreen(
+      //   formKey: context.read<RegisterRiderCubit>().socketFormKey,
+      // )
+      //   ],
+      // );
       return RideRegisterSocketScreen(
         formKey: context.read<RegisterRiderCubit>().socketFormKey,
       );
