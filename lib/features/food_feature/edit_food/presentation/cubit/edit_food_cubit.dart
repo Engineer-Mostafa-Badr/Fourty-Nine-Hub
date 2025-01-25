@@ -129,7 +129,7 @@ class EditFoodCubit extends Cubit<EditFoodState> {
   Future<void> uploadMealImage(BuildContext context, {subcategoryId}) async {
     await _uploadImage(context, subcategoryId: subcategoryId,
         onUploaded: (media) {
-      imageId = media.mediaId;
+      imageId = media.mediaId[0];
       emit(state.copyWith(imagePath: media.file.path));
     });
   }

@@ -44,7 +44,8 @@ class CreateAdState {
   bool? isUser;
   bool? isSale;
   bool? isMale;
-  final List<UploadFileEntity>? images;
+  final List<String>? images;
+  final List<XFile>? files;
 
   CreateAdState(
       {this.failure,
@@ -54,6 +55,7 @@ class CreateAdState {
       this.selectedCategory,
       this.selections,
       this.selectedSubCategory,
+      this.files,
       this.status,
       this.cities,
       this.city = '',
@@ -78,6 +80,7 @@ class CreateAdState {
     List<SelectionEntity>? selections,
     List<GovernorateEntity>? governorates,
     EditMyAdsEntity? myAdById,
+    List<XFile>? files,
     bool? isUser,
     bool? isSale,
     bool? isMale,
@@ -86,7 +89,7 @@ class CreateAdState {
     String? governorate,
     List<CityEntity>? cities,
     SubCategoryEntity? selectedSubCategory,
-    List<UploadFileEntity>? images,
+    List<String>? images,
   }) {
     return CreateAdState(
       status: status ?? this.status,
@@ -104,6 +107,7 @@ class CreateAdState {
       isPrice: isPrice ?? this.isPrice,
       cities: cities ?? this.cities,
       city: city ?? this.city,
+      files: files ?? this.files,
       governorate: governorate ?? this.governorate,
       governorates: governorates ?? this.governorates,
       selections: selections ?? this.selections,

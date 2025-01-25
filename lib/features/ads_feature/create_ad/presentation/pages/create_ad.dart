@@ -551,6 +551,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
                     final image = state.images![index];
+                    final file = state.files![index];
                     return SizedBox(
                       height: kToolbarHeight * 2,
                       width: kToolbarHeight * 2,
@@ -560,7 +561,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                           Positioned.fill(
                               child: Image.file(
                             fit: BoxFit.cover,
-                            File(image.file.path),
+                            File(file.path),
                           )),
                           PositionedDirectional(
                             start: 5.w,
