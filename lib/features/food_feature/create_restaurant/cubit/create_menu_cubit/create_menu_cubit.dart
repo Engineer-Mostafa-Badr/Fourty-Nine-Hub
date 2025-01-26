@@ -91,7 +91,7 @@ class RestaurantMenuCubit extends Cubit<RestaurantMenuState> {
   Future<void> uploadMealImage(BuildContext context, {subcategoryId}) async {
     await _uploadImage(context, subcategoryId: subcategoryId,
         onUploaded: (media) {
-      imageId = media.mediaId;
+      imageId = media.mediaId[0];
       emit(RestaurantMenuImagePicked(media.file.path));
     });
   }
