@@ -46,7 +46,7 @@ class CustomTextNoLogin extends StatelessWidget {
   }
 }
 class CustomTextNoLoginNew extends StatelessWidget {
-   const CustomTextNoLoginNew({super.key});
+   CustomTextNoLoginNew({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -72,29 +72,54 @@ class CustomTextNoLoginNew extends StatelessWidget {
     );
   }
 }
-
 class CustomNotLogged extends StatelessWidget {
-  const CustomNotLogged({super.key});
-
-
   @override
   Widget build(BuildContext context) {
-    return   const Stack(
-      alignment: Alignment.center,
-      children: [
-        CircularStepProgressIndicator(
-          totalSteps: 20,
-          stepSize: 20,
-          selectedStepSize: 20,
-          currentStep: 15,
-          width: 300,
-          height: 300,
-          padding: 0.5,
-          selectedColor: AppColors.PRIMARY_COLOR,
-          unselectedColor: Colors.grey,
+    return Center(
+      child: SizedBox(
+        width: 300, // Provide a fixed width
+        height: 300, // Provide a fixed height
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            const CircularStepProgressIndicator(
+              totalSteps: 20,
+              stepSize: 20,
+              selectedStepSize: 20,
+              currentStep: 15,
+              width: 300,
+              height: 300,
+              padding: 0.5,
+              selectedColor: AppColors.PRIMARY_COLOR,
+              unselectedColor: Colors.grey,
+            ),
+            CustomTextNoLoginNew(), // Ensure this widget has proper constraints
+          ],
         ),
-        CustomTextNoLoginNew()
-      ],
+      ),
     );
   }
 }
+// class CustomNotLogged extends StatelessWidget {
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return   Stack(
+//       alignment: Alignment.center,
+//       children: [
+//         const CircularStepProgressIndicator(
+//           totalSteps: 20,
+//           stepSize: 20,
+//           selectedStepSize: 20,
+//           currentStep: 15,
+//           width: 300,
+//           height: 300,
+//           padding: 0.5,
+//           selectedColor: AppColors.PRIMARY_COLOR,
+//           unselectedColor: Colors.grey,
+//         ),
+//         CustomTextNoLoginNew()
+//       ],
+//     );
+//   }
+// }

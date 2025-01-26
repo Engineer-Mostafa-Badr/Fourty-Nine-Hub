@@ -71,7 +71,7 @@ class TinderRemoteDataSourceImpl implements TinderRemoteDataSource {
       GetUsersParams params) async {
     final response = await _apiConsumer.get(
       EndPoints.getUsers,
-      queryParameters: params.toJson(),
+      queryParameters: params.isLoggedIn? params.toJsonLoggedIn(): params.toJsonNotLoggedIn(),
     );
     return response.fold((failure) {
       //  print('object :$failure');

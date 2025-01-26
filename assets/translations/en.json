@@ -1258,7 +1258,19 @@
   "sureLogoutApp": "Are you sure you want to leave?",
   "ExitApp":"Exit App",
   "sure": "Sure",
-  "warning": "Warning",
-  "loginOrRegister": "Register/Login \n To enjoy App"
+  "warning": "Warning!!!",
 
+  "emailOtpVerification": "Email OTP Verification",
+  "loginOrRegister": "Register/Login \n To enjoy App",
+  "pleaseCheckEmail": "Please check your email for the verification code.",
+  "didntReciveEmail": "Didn\\'t receive an email?",
+  "resend": "Resend",
+  "addAde": "Add ad",
+  "cashBack":"Upload At Least One Bill To Enjoy Getting Cash back As A Gift On The App",
+  "navigateBarDescription":
+  "Choose the appropriate field you would like to see in the application's bottom navigation bar.",
+  "socialDescription":
+  "Choose your preferred social shape. You can select only one shape at most.",
+  "favouriteDescription":
+  "Choose your favorite main categories that you would like to see. You can select up to 8 categories at most."
 }

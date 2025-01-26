@@ -262,9 +262,9 @@ class _EditMyAdsState extends State<EditMyAds> {
                                                               fit: BoxFit.fill,
                                                               image: FileImage(
                                                                 File(state
-                                                                    .images![
+                                                                    .files![
                                                                         index]
-                                                                    .file
+
                                                                     .path),
                                                               ),
                                                             ),

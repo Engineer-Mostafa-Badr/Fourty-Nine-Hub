@@ -17,14 +17,21 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:story_view/story_view.dart';
+import 'package:voice_message_package/voice_message_package.dart';
 import '../../../../../res/style/const.dart';
 import '../../../tinder/data/shared/shared.dart';
 import '../../../twitter/presentation/widgets/report_view.dart';
 import '../cubit/stories_cubit.dart';
 
-class EnhancedInputWidget extends StatelessWidget {
-  const EnhancedInputWidget({super.key});
+class EnhancedInputWidget extends StatefulWidget {
+  const EnhancedInputWidget({super.key, required this.story});
+  final Story story;
 
+  @override
+  State<EnhancedInputWidget> createState() => _EnhancedInputWidgetState();
+}
+
+class _EnhancedInputWidgetState extends State<EnhancedInputWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -47,9 +54,20 @@ class EnhancedInputWidget extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: IconButton(
-                icon: const Icon(Icons.favorite_border, color: Colors.white),
-                onPressed: () {
+                icon: Icon(
+                  widget.story.isLiked ? Icons.favorite : Icons.favorite_border,
+                  color: widget.story.isLiked
+                      ? AppColors.PRIMARY_COLOR_DARK
+                      : Colors.white,
+                ),
+                onPressed: () async {
                   // Handle favorite button press
+
+                  await BlocProvider.of<StoryCubit>(context)
+                      .makeLike(widget.story.id!);
+                  setState(() {
+                    widget.story.isLiked = !widget.story.isLiked;
+                  });
                 },
               ),
             ),
@@ -296,10 +314,12 @@ class UserStoryView extends StatefulWidget {
   UserStoryViewState createState() => UserStoryViewState();
 }
 
-class UserStoryViewState extends State<UserStoryView> {
+class UserStoryViewState extends State<UserStoryView>
+    with WidgetsBindingObserver {
   late final StoryController _storyController;
   late final ValueNotifier<DateTime> _currentStoryCreatedAtNotifier;
   late final ValueNotifier<String> _currentStoryIdNotifier;
+  late ValueNotifier<int> _currentStoryIndex = ValueNotifier<int>(0);
 
   @override
   void initState() {
@@ -308,10 +328,27 @@ class UserStoryViewState extends State<UserStoryView> {
     _currentStoryCreatedAtNotifier =
         ValueNotifier<DateTime>(widget.userStory.stories!.first.createdAt!);
     _currentStoryIdNotifier = ValueNotifier<String>('');
+    // Add this widget as an observer to listen for keyboard visibility changes
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didChangeMetrics() {
+    super.didChangeMetrics();
+    final bottomInset = WidgetsBinding.instance.window.viewInsets.bottom;
+    if (bottomInset > 0.0) {
+      // Keyboard is visible
+      _storyController.pause();
+    } else {
+      // Keyboard is hidden
+      _storyController.play();
+    }
   }
 
   @override
   void dispose() {
+    // Clean up resources
+    WidgetsBinding.instance.removeObserver(this);
     _storyController.dispose();
     _currentStoryCreatedAtNotifier.dispose();
     _currentStoryIdNotifier.dispose();
@@ -327,13 +364,18 @@ class UserStoryViewState extends State<UserStoryView> {
         _buildNavigationOverlay(),
         if (widget.userStory.user!.id !=
             serviceLocator<UserCubit>().state.data!.id)
-          const Positioned(
+          Positioned(
             bottom: 8,
             right: 0,
             left: 0,
             child: SizedBox(
               height: kToolbarHeight,
-              child: EnhancedInputWidget(),
+              child: ValueListenableBuilder<int>(
+                  valueListenable: _currentStoryIndex,
+                  builder: (context, currentIndex, child) {
+                    return EnhancedInputWidget(
+                        story: widget.userStory.stories![currentIndex]);
+                  }),
             ),
           )
         else
@@ -360,33 +402,22 @@ class UserStoryViewState extends State<UserStoryView> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.remove_red_eye_outlined,
-                            size: 0.08.sw,
-                            color: Colors.white,
-                            shadows: const [
-                              Shadow(
-                                color: Colors.black,
-                                offset: Offset(1, 1),
-                                blurRadius: 5.0,
-                              )
-                            ]),
+                        const Icon(
+                          Icons.remove_red_eye_outlined,
+                          size: 32,
+                          color: Colors.white,
+                        ),
                         const SizedBox(
-                          width: 2,
+                          width: 8,
                         ),
                         Text(
                           state.viewersResponse != null
                               ? state.viewersResponse!.data.length.toString()
                               : '',
                           style: Styles.mediumText(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              shadows: const [
-                                Shadow(
-                                  color: Colors.black,
-                                  offset: Offset(1, 1),
-                                  blurRadius: 5.0,
-                                )
-                              ]),
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
                         )
                       ],
                     ),
@@ -395,6 +426,72 @@ class UserStoryViewState extends State<UserStoryView> {
               );
             },
           ),
+        ValueListenableBuilder<int>(
+          valueListenable: _currentStoryIndex,
+          builder: (context, currentIndex, child) {
+            if (widget.userStory.stories![currentIndex].type == 'audio') {
+              return Center(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: MediaQuery.of(context).size.height * 0.44),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.3),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Stack(
+                      children: [
+                        Row(
+                          children: [
+                            const SizedBox(width: 8.0),
+                            Expanded(
+                              child: VoiceMessageView(
+                                counterTextStyle:
+                                    const TextStyle(color: Colors.white),
+                                activeSliderColor: AppColors.BACKGROUND_COLOR,
+                                circlesColor: AppColors.PRIMARY_COLOR_DARK,
+                                notActiveSliderColor:
+                                    Colors.black.withOpacity(0),
+                                backgroundColor: Colors.transparent,
+                                innerPadding: 12,
+                                cornerRadius: 12,
+                                controller: VoiceController(
+                                  audioSrc: widget.userStory
+                                      .stories![currentIndex].content!,
+                                  maxDuration: const Duration(minutes: 1000),
+                                  isFile: false,
+                                  onComplete: () async {
+                                    _storyController.play();
+                                  },
+                                  onPause: () async {
+                                    _storyController.play();
+                                  },
+                                  onPlaying: () async {
+                                    _storyController.pause();
+                                  },
+                                  onError: (p0) {},
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Divider(
+                          color: AppColors.LIGHT_GRAY_COLOR2,
+                          height: 70,
+                          indent: MediaQuery.of(context).size.width * 0.3,
+                          endIndent: MediaQuery.of(context).size.width * 0.32,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            }
+            return const SizedBox
+                .shrink(); // Return an empty widget if not audio
+          },
+        )
       ],
     );
   }
@@ -407,20 +504,18 @@ class UserStoryViewState extends State<UserStoryView> {
               .toList() ??
           [],
       onStoryShow: (storyItem, index) {
+        // Update the existing ValueNotifier
+        _currentStoryIndex.value = index;
         context.read<StoryCubit>().makeView(
             context: context, storyId: widget.userStory.stories![index].id);
         _currentStoryCreatedAtNotifier.value =
             widget.userStory.stories![index].createdAt!;
         _currentStoryIdNotifier.value =
             widget.userStory.stories![index].id ?? '';
-        // context.read<StoryCubit>().getViewersInStory(
-        //     context: context, storyId: widget.userStory.userStories![index].id);
       },
       controller: _storyController,
       onComplete: widget.onComplete,
       onVerticalSwipeComplete: (direction) {
-        // _storyController.pause();
-
         if (direction == Direction.down) {
           Navigator.of(context).pop();
         }
@@ -553,9 +648,7 @@ class _UserInfoBarState extends State<UserInfoBar> {
       icon: const Icon(
         Icons.arrow_back_ios,
         color: Colors.white,
-        shadows: [
-          Shadow(color: Colors.black, offset: Offset(2, 2), blurRadius: 9),
-        ],
+        size: 25,
       ),
     );
   }
@@ -565,7 +658,7 @@ class _UserInfoBarState extends State<UserInfoBar> {
       onTap: () =>
           context.push(Routes.OTHERSACCOUNT, extra: widget.userStory.user?.id),
       child: CircleAvatar(
-        minRadius: 25,
+        minRadius: 22,
         backgroundImage:
             NetworkImage(widget.userStory.user?.profilePictureUrl ?? ''),
         onBackgroundImageError: (_, __) =>
@@ -582,12 +675,19 @@ class _UserInfoBarState extends State<UserInfoBar> {
         Text(
           capitalizeAndSplit2Only(
               '${widget.userStory.user?.firstName ?? ''} ${widget.userStory.user?.lastName ?? ''}'),
-          style: const TextStyle(color: Colors.white),
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+          ),
         ),
         SizedBox(height: 4.h),
         Text(
           DateFormat('hh:mm a').format(widget.createdAt),
-          style: const TextStyle(color: Colors.white70),
+          style: const TextStyle(
+            color: Colors.white70,
+            fontWeight: FontWeight.w500,
+          ),
         ),
       ],
     );
@@ -598,19 +698,24 @@ class _UserInfoBarState extends State<UserInfoBar> {
       icon: const Icon(
         Icons.more_vert,
         color: Colors.white,
-        size: 35,
+        size: 25,
       ),
+      color: AppColors.PRIMARY_COLOR,
       onOpened: () {
         widget.controller.pause();
       },
       onCanceled: () => widget.controller.play(),
       onSelected: (String value) async {
-        if (value == 'delete') {
+        if (value == 'Delete') {
           debugPrint('Deleting story with ID: ${widget.currentStoryId}');
           await BlocProvider.of<StoryCubit>(context)
               .deleteStory(widget.currentStoryId);
+          setState(() {
+            widget.userStory.stories!
+                .removeWhere((story) => story.id == widget.currentStoryId);
+          });
           Navigator.of(context).pop();
-        } else if (value == 'report') {
+        } else if (value == 'Report') {
           await showModalBottomSheet(
             context: context,
             isScrollControlled: true,
@@ -633,50 +738,87 @@ class _UserInfoBarState extends State<UserInfoBar> {
       itemBuilder: (BuildContext context) {
         return [
           if (widget.userStory.user?.id == widget.currentUserId)
-            const PopupMenuItem<String>(
-              value: 'delete',
-              child: Row(
-                children: [
-                  Icon(Icons.delete, color: AppColors.ACCENT_COLOR),
-                  SizedBox(width: 10),
-                  Text(
-                    'Delete',
-                    textScaler: TextScaler.noScaling,
-                  ),
-                ],
-              ),
-            ),
-          if (widget.userStory.user?.id != widget.currentUserId)
             PopupMenuItem<String>(
-              value: 'report',
-              child: Row(
-                children: [
-                  const Icon(Icons.report, color: AppColors.PRIMARY_COLOR_DARK),
-                  const SizedBox(width: 10),
-                  Text(
-                    LocaleKeys.report.localize,
-                    textScaler: TextScaler.noScaling,
-                  ),
-                ],
+              value: 'Delete',
+              child: Text(
+                context.isArabic ? "حذف" : "Delete",
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           if (widget.userStory.user?.id != widget.currentUserId)
             PopupMenuItem<String>(
               value: 'Mute',
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.notifications_off_outlined,
-                    color: ThemeCubit.get(context).isDarkTheme
-                        ? Colors.white.withOpacity(0.9)
-                        : Colors.black.withOpacity(0.9),
-                  ),
-                  const SizedBox(width: 10),
-                  Text(
-                    LocaleKeys.mute.localize,
-                    textScaler: TextScaler.noScaling,
-                  ),
-                ],
+              child: Text(
+                context.isArabic ? "كتم" : "Mute",
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          if (widget.userStory.user?.id != widget.currentUserId)
+            PopupMenuItem<String>(
+              value: 'Message',
+              child: Text(
+                context.isArabic ? "رسالة" : "Message",
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          if (widget.userStory.user?.id != widget.currentUserId)
+            PopupMenuItem<String>(
+              value: 'Voice call',
+              child: Text(
+                context.isArabic ? "مكالمة صوتية" : "Voice call",
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          if (widget.userStory.user?.id != widget.currentUserId)
+            PopupMenuItem<String>(
+              value: 'video call',
+              child: Text(
+                context.isArabic ? "مكالمة فيديو" : "Video call",
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          if (widget.userStory.user?.id != widget.currentUserId)
+            PopupMenuItem<String>(
+              value: 'View contact',
+              child: Text(
+                context.isArabic ? "عرض جهة الاتصال" : "View contact",
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          if (widget.userStory.user?.id != widget.currentUserId)
+            PopupMenuItem<String>(
+              value: 'Report',
+              child: Text(
+                context.isArabic ? "إبلاغ" : "Report",
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
         ];
@@ -719,9 +861,19 @@ StoryItem createStoryItem(context, Story storyData, StoryController controller,
     case 'text':
       return StoryItem.text(
         title: removeSubstringBeforeFirstTildeOnly(storyData.content!),
-        backgroundColor:
-            colorMap[getFirstSubstringBeforeTilde(storyData.content!)] ??
-                Colors.deepOrange,
+        textStyle: TextStyle(
+          color: Colors.white,
+          fontSize: 28,
+          fontFamily: storyData.fontFamily,
+        ),
+        duration: const Duration(seconds: 7),
+        backgroundColor: colorMap[storyData.color] ?? Colors.deepOrange,
+      );
+    case 'audio':
+      return StoryItem.text(
+        title: '',
+        duration: const Duration(seconds: 7),
+        backgroundColor: colorMap[storyData.color] ?? Colors.deepOrange,
       );
     case 'image':
       return StoryItem.pageImage(
@@ -731,12 +883,15 @@ StoryItem createStoryItem(context, Story storyData, StoryController controller,
         errorWidget: const CupertinoActivityIndicator(
           color: Colors.white,
         ),
+        captionOuterPadding: const EdgeInsets.only(bottom: 60, top: 16),
+        // imageFit: BoxFit.cover,
+        duration: const Duration(seconds: 7),
         url: storyData.content!,
         caption: storyData.caption != null && storyData.caption != 'null'
             ? Text(
                 storyData.caption!,
-                textScaler: TextScaler.noScaling,
-                style: const TextStyle(color: Colors.white),
+                // textScaler: TextScaler.noScaling,
+                style: const TextStyle(color: Colors.white, fontSize: 20),
                 textAlign: TextAlign.center,
               )
             : null,
@@ -750,13 +905,18 @@ StoryItem createStoryItem(context, Story storyData, StoryController controller,
         errorWidget: const CupertinoActivityIndicator(
           color: Colors.white,
         ),
+        duration: const Duration(seconds: 7),
         storyData.content!,
         caption: storyData.caption != null && storyData.caption != 'null'
-            ? Text(
-                storyData.caption!,
-                textScaler: TextScaler.noScaling,
-                style: const TextStyle(color: Colors.white),
-                textAlign: TextAlign.center,
+            ? Container(
+                // color: Colors.black54,
+                padding: const EdgeInsets.only(bottom: 40, top: 16),
+                child: Text(
+                  storyData.caption!,
+                  textScaler: TextScaler.noScaling,
+                  style: const TextStyle(color: Colors.white, fontSize: 20),
+                  textAlign: TextAlign.center,
+                ),
               )
             : null,
         controller: controller,

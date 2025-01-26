@@ -474,7 +474,32 @@ class _ChatRoomViewState extends State<ChatRoomView>
                         (chatRoomCubit.chat.categoryId ==
                                     ChatCategoriesIds.greet &&
                                 chatRoomCubit.getMessagesCount() > 0)
-                            ? const SizedBox()
+                            ?  Container(
+                          // height: 200,
+                          color: context.isDarkMode? AppColors.PRIMARY_COLOR: Colors.white,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const SizedBox(height: 16,),
+                              Text(context.isArabic?'تم ارسال الدعوة':"Invite sent", style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                              ),),
+                              const SizedBox(height: 16,),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 16),
+                                child: Text(context.isArabic?'بإمكانك إرسال المزيد من الرسائل بعد قبول دعوتك.':"You can send more messages after your invite is accepted.", style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.grey,
+
+                                ),
+                                 textAlign: TextAlign.center,),
+                              ),
+                              const SizedBox(height: 30,),
+                            ],
+                          ),
+                        )
                             : const SendMessageWidget(),
                       ],
                     ),

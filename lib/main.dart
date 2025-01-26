@@ -1,3 +1,4 @@
+import 'package:device_preview/device_preview.dart';
 import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -74,7 +75,7 @@ bool isActivate = false;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  await CacheManager.init();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -106,11 +107,11 @@ void main() async {
   AppPages.initializeRouter(initialRoute);
   runApp(
     LocalizationService.rootWidget(
-      // child: DevicePreview(
-      //   enabled: !kReleaseMode,
-      //   builder: (context) => const MyApp(),
-      // ),
-      child: const MyApp(),
+      child: DevicePreview(
+        enabled: false,
+        builder: (context) => const MyApp(),
+      ),
+      // child: const MyApp(),
     ),
   );
 }
@@ -141,7 +142,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -265,7 +266,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(
           create: (context) => CheckPartActiveCubit(),
         ),
-        
+
         BlocProvider(
           create: (context) => CheckAcceptByDriverCubit(
             repository: serviceLocator(),

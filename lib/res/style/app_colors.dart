@@ -10,6 +10,7 @@ abstract class AppColors {
   static const SPLASH_BLACK_COLOR = Color(0xFF222222);
 
   static const MESSAGE_COLOR = Color(0xffcfd1e3);
+  static const whiteColor = Colors.white;
 
   static const DARK_GRAY_COLOR = Color(0xFF909090);
   static const LIGHT_GRAY_COLOR = Color(0xFFE0E0E0);

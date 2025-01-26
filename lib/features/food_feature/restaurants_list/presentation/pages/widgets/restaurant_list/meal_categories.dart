@@ -76,7 +76,7 @@ class _MealCategoriesState extends State<MealCategories> {
                       Icon(
                         Icons.arrow_forward_ios,
                         color: AppColors.PRIMARY_COLOR_DARK,
-                        size: 0.06.sw,
+                        size: 0.04.sw,
                       ),
                       const Sizer()
                     ],

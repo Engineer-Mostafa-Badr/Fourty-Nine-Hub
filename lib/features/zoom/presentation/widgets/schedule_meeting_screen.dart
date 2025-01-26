@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/functions/helper/time_of_day_helper.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -153,18 +154,18 @@ class _ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
                       if (title.isNotEmpty &&
                           _selectedDate != null &&
                           _endTime != null) {
-                        // if (_endTime!.isBefore(_startTime!)) {
-                        //   showErrorMessage(context,
-                        //       LocaleKeys.startDateTimeValidation.localize);
-                        //
-                        //   return;
-                        // }
-                        // if (_startTime!.isBefore(TimeOfDay.now())) {
-                        //   showErrorMessage(context,
-                        //       LocaleKeys.startDateBeginValidation.localize);
-                        //
-                        //   return;
-                        // }
+                        if (_endTime!.isBefore(_startTime!)) {
+                          showErrorMessage(context,
+                              LocaleKeys.startDateTimeValidation.localize);
+
+                          return;
+                        }
+                        if (_startTime!.isBefore(TimeOfDay.now())) {
+                          showErrorMessage(context,
+                              LocaleKeys.startDateBeginValidation.localize);
+
+                          return;
+                        }
                         await context.read<StreamCubit>().createNewMeeting(
                               startTime: _combineDateAndTime(
                                 _selectedDate!,

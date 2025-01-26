@@ -1231,7 +1231,7 @@ class CodegenLoader extends AssetLoader{
   "marriage": "زواج",
   "Rating": "تقييم:",
   "noFollowing": "لا يوجد متابعين",
-  "billCashback": "كاش باك فواتير",
+  "billCashback": "أسترجاع الفواتير",
   "selectBill": "حدد الفاتورة",
   "billValue": "قيمة الفاتورة",
   "trafficViolation": "مخالفة المرور",
@@ -1247,14 +1247,21 @@ class CodegenLoader extends AssetLoader{
   "enterSomething": "ادخل شيئًا...",
   "pleaseEnterAValue": "يرجى إدخال قيمة",
   "answerSentSuccessfully": "تم إرسال الإجابة بنجاح",
-
+  "emailOtpVerification": "التحقق من البريد الإلكتروني OTP",
+  "pleaseCheckEmail": "يرجى التحقق من بريدك الإلكتروني للحصول على رمز التحقق.",
+  "didntReciveEmail": "لم تتلق بريدا إلكترونيا؟",
+  "resend": "إعادة الإرسال",
   "cropImage": "قص صورة",
   "sureLogoutApp": "هل أنت متأكد أنك تريد الخروج؟",
   "ExitApp": "الخروج من التطبيق",
   "sure": "متأكد",
-  "warning": "تحذير",
-  "loginOrRegister": "تسجيل الدخول\n للاستمتاع بالتطبيق"
-
+  "loginOrRegister": "تسجيل الدخول\n للاستمتاع بالتطبيق",
+  "addAde": "اضافة إعلان",
+  "cashBack": "قم بتحميل فاتورة واحدة على الأقل للاستمتاع بالحصول على استرداد نقدي كهدية من التطبيق",
+  "navigateBarDescription": "اختر المجال المناسب الذي تحب أن تراه في شريط القوائم السفلي للتطبيق",
+  "socialDescription": "اختار الشكل الاجتماعي المفضل لديك يمكنك اختيار شكل واحد فقط بحدأقصى",
+  "favouriteDescrepion": "اختار الاقسام الرئيسيه المفضله لديك التي تحب أن تراها يمكنك اختيار بحد أقصى اقسام",
+  "warning": "تحذير!!!"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -2506,14 +2513,21 @@ static const Map<String,dynamic> en = {
   "enterSomething": "Enter something...",
   "pleaseEnterAValue": "Please enter a value",
   "answerSentSuccessfully": "Answer sent successfully",
-
   "cropImage": "Crop Image",
   "sureLogoutApp": "Are you sure you want to leave?",
   "ExitApp": "Exit App",
   "sure": "Sure",
-  "warning": "Warning",
-  "loginOrRegister": "Register/Login \n To enjoy App"
-
+  "warning": "Warning!!!",
+  "emailOtpVerification": "Email OTP Verification",
+  "loginOrRegister": "Register/Login \n To enjoy App",
+  "pleaseCheckEmail": "Please check your email for the verification code.",
+  "didntReciveEmail": "Didn\\'t receive an email?",
+  "resend": "Resend",
+  "addAde": "Add ad",
+  "cashBack": "Upload At Least One Bill To Enjoy Getting Cash back As A Gift On The App",
+  "navigateBarDescription": "Choose the appropriate field you would like to see in the application's bottom navigation bar.",
+  "socialDescription": "Choose your preferred social shape. You can select only one shape at most.",
+  "favouriteDescription": "Choose your favorite main categories that you would like to see. You can select up to 8 categories at most."
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

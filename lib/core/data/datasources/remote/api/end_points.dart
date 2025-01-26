@@ -470,6 +470,7 @@ class EndPoints {
   static const fetchFavourites = '/favorite-sub-category';
   static const fetchFavouritesCategory = '/favorite-category';
   static deleteStory(String id) => '/stories/$id';
+  static makeLike(String id) => '/stories/like/$id';
   static addFavouriteCategories(String id) => '/favorite-sub-category/$id';
   static fetchLastSeen(String id) => '/users/last-seen/$id';
   static const sendGift =
@@ -863,7 +864,7 @@ class EndPoints {
   static const createAd = '/ads/create-ads';
 
   static filterAd(FilterModel filter) =>
-      '/ads/filter-ads/${filter.subCategoryId}?government=${filter.governorateId}&city=${filter.cityId}&limit=${filter.limit}&page=${filter.page}&type=${filter.filter}';
+      '/ads/filter-ads/${filter.subCategoryId}?${(filter.governorateId?.isNotEmpty??false)?"government=${filter.governorateId}&":''}${filter.cityId?.isNotEmpty??false?"city=${filter.cityId}&":""}&limit=${filter.limit}&page=${filter.page}&type=${filter.filter}';
   static deleteFood(String id) => '/food/delete-food-item/$id';
   static const addFood = '/food/add-food';
   static const deleteCart = '/food/deleteCart';
@@ -952,6 +953,7 @@ class EndPoints {
   static const helpMessages = '/help';
   static const contactUs = '/email/contact-us';
   static String mediaUrl = '/media/signed-url';
+  static String bulkMediaUrl = '/media/bulk/signed-url';
 
   static String confirmUpload(String mediaId) {
     return '/media/confirm/$mediaId';

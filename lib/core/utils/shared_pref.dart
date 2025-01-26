@@ -5,10 +5,16 @@ import 'package:fourtyninehub/features/ride/Authentication/data/models/parts_soc
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CacheManager {
+  static late SharedPreferences prefs;
+  static init() async {
+    prefs = await SharedPreferences.getInstance();
+  }
+
   static const _accessTokenKey = 'accessToken';
   static const _refreshTokenKey = 'refreshToken';
   static const themeDarkKey = 'darkTheme';
   static const activeCustomPage = 'activeCustomPage';
+  static const selectedCategoryView = 'selectedCategoryView';
   static const RIDESOCKETPARTMODEL = 'RIDESOCKETPARTMODEL';
   // static const themeLightKey = 'lightTheme';
 
@@ -89,8 +95,7 @@ class CacheManager {
   }
 
   //get int
-  static Future<int?> getInt(String key) async {
-    final prefs = await SharedPreferences.getInstance();
+  static int? getInt(String key) {
     return prefs.getInt(key);
   }
 

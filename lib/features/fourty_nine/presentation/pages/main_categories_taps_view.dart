@@ -11,7 +11,8 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MainCategoriesGridView extends StatefulWidget {
-  const MainCategoriesGridView({super.key});
+  const MainCategoriesGridView({super.key, this.isAppBarShow = true});
+  final bool isAppBarShow;
 
   @override
   State<MainCategoriesGridView> createState() => _MainCategoriesGridViewState();
@@ -21,6 +22,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
     with TickerProviderStateMixin {
   late TabController _tabController;
   late ScrollController _scrollController;
+  String labelName="";
   @override
   void initState() {
     super.initState();
@@ -36,6 +38,15 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
       }
     });
   }
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    labelName=context.locale == Locales.english?
+    context.read<MainCategoriesTapsCubit>().mainCategories[0].nameEn.toString()
+        :context.read<MainCategoriesTapsCubit>().mainCategories[0].name.toString();
+
+  }
+
 
   // Scroll to the selected tab and make it the first tab in view
   void _scrollToSelectedTab(int index) {
@@ -53,7 +64,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
   Widget build(BuildContext context) {
     final controller = context.read<MainCategoriesTapsCubit>();
     return Scaffold(
-      appBar: const BackAppBar(),
+      appBar: widget.isAppBarShow ? BackAppBar(label: labelName):null,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
         child: Column(
@@ -72,6 +83,12 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                       controller: _tabController,
                       onTap: (i) {
                         controller.selectMainCategory(i);
+                        setState(() {
+                          labelName=context.locale == Locales.english?
+                           controller.mainCategories[i].nameEn.toString()
+                           : controller.mainCategories[i].name.toString();
+                        });
+                        print(labelName);
                       },
                       padding: EdgeInsets.zero,
                       labelPadding: const EdgeInsetsDirectional.only(end: 10),

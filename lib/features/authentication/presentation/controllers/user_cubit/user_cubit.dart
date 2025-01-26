@@ -23,6 +23,7 @@ import 'package:fourtyninehub/features/authentication/domain/use_cases/update_us
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 import 'package:fourtyninehub/shared_web_socket.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../common/functions/global/upload_file.dart';
 import '../../../../../core/utils/shared_pref.dart';
@@ -130,7 +131,7 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
       ));
     }
     isTokenAttached = accessToken != null && refreshToken != null;
-    getUser();
+    await getUser();
   }
 
   Future<void> updateUserBio({required String bio}) async {
@@ -149,6 +150,8 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     emit(state.copyWith(status: StateStatus.success));
   }
 
+ 
+
   Future<void> logout(BuildContext context) async {
     // cacheService.setLogin(false);
     // _attachTokenUseCase(null);
@@ -159,20 +162,26 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     final result = await _signOutUseCase(const NoParams());
     result.fold((l) => emit(state.copyWith(status: StateStatus.error)),
         (r) async {
-      emit(state.copyWith(
+      
+      emit(
+        state.copyWith(
           status: StateStatus.success,
           token: null,
-          data: const UserEntity(
-              id: '',
-              firstName: '',
-              lastName: '',
-              email: '',
-              profilePicture: '',
-              profileCover: '',
-              friendsCount: null,
-              followersCount: null,
-              followingCount: null,
-              wallet: null)));
+          // data: const UserEntity(
+          //   id: '',
+          //   firstName: '',
+          //   lastName: '',
+          //   email: null,
+          //   profilePicture: null,
+          //   profileCover: null,
+          //   friendsCount: null,
+          //   followersCount: null,
+          //   followingCount: null,
+          //   wallet: null,
+          // ),
+          data: null,
+        ),
+      );
       // await DI.reset();
       // await DI.execute();
       SharedWebSocket.disconnect();

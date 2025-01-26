@@ -93,7 +93,7 @@ class _ScrollableTextWithAnimationState extends State<ScrollableTextWithAnimatio
               child: AutoScrollText(
                 context.isArabic?context.read<MainCategoriesCubit>().state.question?.messageAr??'':context.read<MainCategoriesCubit>().state.question?.messageEn??'',
                 style: Styles.headerText(fontSize: 30, color: context.read<MainCategoriesCubit>().state.question?.enableAnswers==true?AppColors.SECONDARY_COLOR:AppColors.PRIMARY_COLOR),
-                textDirection: context.isArabic?TextDirection.ltr:TextDirection.rtl,
+                textDirection: context.isArabic?TextDirection.rtl:TextDirection.ltr,
                 // textStyle: TextStyle(fontSize: 24),
               ),
             ),

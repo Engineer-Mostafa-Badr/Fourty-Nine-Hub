@@ -140,7 +140,7 @@ class ReelsCubit extends Cubit<ReelsState> {
   String? selectedImage;
 
   Future<void> pickMediaFromGallery(BuildContext context) async {
-    final uploadFile = UploadFile2();
+    // final uploadFile = UploadFile2();
     try {
       final result = await FilePicker.platform.pickFiles(
         type: FileType.custom,

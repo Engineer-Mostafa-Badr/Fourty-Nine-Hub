@@ -29,6 +29,7 @@ class SharedWebSocket {
         'transports': ['websocket'],
         'autoConnect': true,
         'extraHeaders': {'Authorization': token},
+
       },
     );
     socket!.connect();
