@@ -124,7 +124,7 @@ class UploadImages{
 
         // get signed url
         final signedURLResponse =
-        await serviceLocator<ApiConsumer>().post(EndPoints.mediaUrl, data: payload);
+        await serviceLocator<ApiConsumer>().post(EndPoints.bulkMediaUrl, data: payload);
         // send to w3 storage
         signedURLResponse.fold((l) {
           print(l.toString());
@@ -158,7 +158,7 @@ class UploadImages{
 
             for(String id in mediaIds){
               await serviceLocator<ApiConsumer>()
-                  .put("/media/confirm/",data:payloadMedia);
+                  .put("/media/confirm",data:payloadMedia);
             }
             // await serviceLocator<ApiConsumer>()
             //     .put(EndPoints.confirmUpload(mediaId));

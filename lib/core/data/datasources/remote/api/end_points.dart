@@ -953,6 +953,7 @@ class EndPoints {
   static const helpMessages = '/help';
   static const contactUs = '/email/contact-us';
   static String mediaUrl = '/media/signed-url';
+  static String bulkMediaUrl = '/media/bulk/signed-url';
 
   static String confirmUpload(String mediaId) {
     return '/media/confirm/$mediaId';
