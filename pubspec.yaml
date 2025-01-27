@@ -143,6 +143,7 @@ dependencies:
   flutter_background_service: ^5.0.10
   restart_app:
   image_cropper: ^7.0.5
+  photo_manager: ^3.6.3
 
 
 #  photo_manager: ^3.6.3

@@ -1,11 +1,22 @@
 import 'dart:developer';
+import 'dart:io';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/core/utils/shared_pref.dart';
+import 'package:fourtyninehub/features/ride/Authentication/data/models/basic_info_part_model.dart';
+import 'package:fourtyninehub/features/ride/Authentication/data/models/car_licence_part_model.dart';
+import 'package:fourtyninehub/features/ride/Authentication/data/models/drag_analysis_part_model.dart';
+import 'package:fourtyninehub/features/ride/Authentication/data/models/driver_licence_part_model.dart';
+import 'package:fourtyninehub/features/ride/Authentication/data/models/more_info_part_model.dart';
+import 'package:fourtyninehub/features/ride/Authentication/data/models/parts_socket_model.dart';
 import 'package:fourtyninehub/features/ride/Authentication/presentation/screens/ride_no_socket_parts_screen.dart';
 import 'package:fourtyninehub/features/ride/Authentication/presentation/screens/ride_socket_parts_screen.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_cateogry_rider_cubit.dart';
@@ -388,20 +399,103 @@ class _RiderRegisterViewState extends State<RiderRegisterView> {
   selectRegisterType(RegisterRiderCubit registerCubit) {
     if (registerCubit.SELECTED_NO_SOCKET_SUBCATEGORY_IDS.isNotEmpty) {
       log("RiderRegisterOne");
-      // return const RideNoSocketPartsScreen();
+      return const RideNoSocketPartsScreen();
       return RiderRegisterNoSocketScreen(
         formKey: context.read<RegisterRiderCubit>().socketFormKey,
       );
     } else {
-      // log("RiderRegisterScandScreen");
-      // return Column(
-      //   children: [
-      //     const RideSocketPartsScreen(),
-      //     RideRegisterSocketScreen(
-      //   formKey: context.read<RegisterRiderCubit>().socketFormKey,
-      // )
-      //   ],
-      // );
+      log("RiderRegisterScandScreen");
+      return Column(
+        children: [
+          const RideSocketPartsScreen(),
+          const SizedBox(
+            height: 10,
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: AppButton(
+                backColor: AppColors.PRIMARY_COLOR,
+                textColor: Colors.white,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                ),
+                label: LocaleKeys.submit.tr(),
+                onPressed: () async {
+                  PartsSocketModel partsSocketModel =
+                      await CacheManager.getSocketPartModel() ??
+                          PartsSocketModel();
+                  if ((partsSocketModel.basicInfo?.active ?? false) &&
+                      (partsSocketModel.driverLicence?.active ?? false) &&
+                      (partsSocketModel.carLicence?.active ?? false) &&
+                      (partsSocketModel.dragAnalysisPart?.active ?? false) &&
+                      (partsSocketModel.moreInfo?.active ?? false)) {
+                    BasicInfoPartModel basicInfoPartModel =
+                        BasicInfoPartModel.fromJson(
+                            partsSocketModel.basicInfo?.part.toJson());
+                    DriverLicencePartModel driverLicence =
+                        DriverLicencePartModel.fromJson(
+                            partsSocketModel.driverLicence?.part.toJson());
+                    CarLicencePartModel carLicence = CarLicencePartModel.fromJson(
+                        partsSocketModel.carLicence?.part.toJson());
+                    DragAnalysisPartModel dragAnalysisPart =
+                        DragAnalysisPartModel.fromJson(
+                            partsSocketModel.dragAnalysisPart?.part.toJson());
+                    MoreInfoPartModel moreInfo = MoreInfoPartModel.fromJson(
+                        partsSocketModel.moreInfo?.part.toJson());
+                    context.read<RegisterRiderCubit>().model.driverImage = basicInfoPartModel.image;
+                    context.read<RegisterRiderCubit>().model.driverFirstName = basicInfoPartModel.firstName;
+                    context.read<RegisterRiderCubit>().model.driverLastName = basicInfoPartModel.lastName;
+                    context.read<RegisterRiderCubit>().model.birthDate = basicInfoPartModel.birthDate;
+                    context.read<RegisterRiderCubit>().model.phone = basicInfoPartModel.phoneNumber;
+              
+                    context.read<RegisterRiderCubit>().model.driverLicenseNumber = driverLicence.driverLicenseNumber;
+                    context.read<RegisterRiderCubit>().model.drvingExpiryDate = driverLicence.expirationDate;
+                    context.read<RegisterRiderCubit>().model.drivingImageInFront = File(driverLicence.frontDriverLicense??"");
+                    context.read<RegisterRiderCubit>().model.drivingImageBehind = File(driverLicence.backDriverLicense??"");
+                    context.read<RegisterRiderCubit>().model.verfiyUserImage = File(driverLicence.identify??"");
+              
+                    context.read<RegisterRiderCubit>().model.vehicleBrand = carLicence.carBrand;
+                    context.read<RegisterRiderCubit>().model.carModel = carLicence.carModel;
+                    context.read<RegisterRiderCubit>().model.vehicleYear = carLicence.carYear;
+                    context.read<RegisterRiderCubit>().model.vehicleColor = carLicence.carColor;
+                    context.read<RegisterRiderCubit>().model.plateInfo = carLicence.numberPlate;
+                    context.read<RegisterRiderCubit>().model.licenseExpiryDate = carLicence.expiraionDate;
+                    context.read<RegisterRiderCubit>().model.carImage = File(carLicence.carImage??"");
+                    context.read<RegisterRiderCubit>().model.carLicenseFrontImage = File(carLicence.carRegisraion??"");
+                    context.read<RegisterRiderCubit>().model.carLicenseBehindImage = File(carLicence.backVehicleLicense??"");
+              
+                    context.read<RegisterRiderCubit>().model.dragAnalysis = File(dragAnalysisPart.drug??"");
+                    context.read<RegisterRiderCubit>().model.criminalRecordImage = File(dragAnalysisPart.criminal??"");
+                    context.read<RegisterRiderCubit>().model.technicalExaminationImage = File(dragAnalysisPart.technical??"");
+                    context.read<RegisterRiderCubit>().model.dragAnalysisDate = dragAnalysisPart.drugDate;
+                    context.read<RegisterRiderCubit>().model.criminalRecordDate = dragAnalysisPart.criminalDate;
+                    context.read<RegisterRiderCubit>().model.technicalExaminationDate = dragAnalysisPart.technicalDate;
+              
+                    context.read<RegisterRiderCubit>().model.pricingPerKm = double.tryParse(moreInfo.pricing.toString());
+                    context.read<RegisterRiderCubit>().model.workingType = moreInfo.suscription;
+                    context.read<RegisterRiderCubit>().model.governorateNameAr = moreInfo.city;
+              
+              
+                    context.read<RegisterRiderCubit>().registerOne();
+                  } else {
+                    showErrorMessage(
+                        context,
+                        context.isArabic
+                            ? "يرجي كتابه جميع البيانات"
+                            : "Please enter all data");
+                  }
+                },
+              ),
+            ),
+          ),
+          // RideRegisterSocketScreen(
+          //   formKey: context.read<RegisterRiderCubit>().socketFormKey,
+          // )
+        ],
+      );
       return RideRegisterSocketScreen(
         formKey: context.read<RegisterRiderCubit>().socketFormKey,
       );

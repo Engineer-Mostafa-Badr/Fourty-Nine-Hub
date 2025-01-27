@@ -45,12 +45,12 @@ class RideSocketPartsWidget extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () => Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => const BasicInfoPartScreen(),
+              builder: (context) => BasicInfoPartScreen(model: model,),
             )),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                if(model?.basicInfo?.active??false)
+                if(!(model?.basicInfo?.active??false))
                 const Icon(
                   Icons.arrow_back_ios_new,
                   color: AppColors.PRIMARY_COLOR,
@@ -73,15 +73,18 @@ class RideSocketPartsWidget extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () => Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => const DriverLicencePartScreen(),
+              builder: (context) => DriverLicencePartScreen(),
             )),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                if(!(model?.driverLicence?.active??false))
                 const Icon(
                   Icons.arrow_back_ios_new,
                   color: AppColors.PRIMARY_COLOR,
-                ),
+                )
+                else
+                const Icon(Icons.check, color: Colors.green,),
                 Text(
                   "Driver Licence",
                   style: Styles.mediumText(fontSize: 35),
@@ -122,16 +125,19 @@ class RideSocketPartsWidget extends StatelessWidget {
                         repository: serviceLocator()),
                   ),
                 ],
-                child: const CarLicencePartScreen(),
+                child: CarLicencePartScreen(),
               ),
             )),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                if(!(model?.carLicence?.active??false))
                 const Icon(
                   Icons.arrow_back_ios_new,
                   color: AppColors.PRIMARY_COLOR,
-                ),
+                )
+                else
+                const Icon(Icons.check, color: Colors.green,),
                 Text(
                   "Car Licence",
                   style: Styles.mediumText(fontSize: 35),
@@ -177,16 +183,19 @@ class RideSocketPartsWidget extends StatelessWidget {
                 create: (context) =>
                     PictureOptionalCubit(repository: serviceLocator())
                       ..getData(),
-                child: const DragAnalysisPartScreen(),
+                child: DragAnalysisPartScreen(),
               ),
             )),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                if(!(model?.dragAnalysisPart?.active??false))
                 const Icon(
                   Icons.arrow_back_ios_new,
                   color: AppColors.PRIMARY_COLOR,
-                ),
+                )
+                else
+                const Icon(Icons.check, color: Colors.green,),
                 Text(
                   "Drag analysis",
                   style: Styles.mediumText(fontSize: 35),
@@ -201,23 +210,6 @@ class RideSocketPartsWidget extends StatelessWidget {
           const Sizer(
             height: 10,
           ),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //   children: [
-          //     const Icon(
-          //       Icons.arrow_back_ios_new,
-          //       color: AppColors.PRIMARY_COLOR,
-          //     ),
-          //     Text(
-          //       "Referral code",
-          //       style: Styles.mediumText(fontSize: 35),
-          //     ),
-          //   ],
-          // ),
-          // const Sizer(
-          //   height: 10,
-          // ),
-          // const Divider(),
           const Sizer(
             height: 10,
           ),
@@ -229,17 +221,20 @@ class RideSocketPartsWidget extends StatelessWidget {
                     builder: (context) => BlocProvider(
                       create: (context) =>
                           serviceLocator<HealthCubit>()..getGovernorates(),
-                      child: const MoreInfoPartScreen(),
+                      child: MoreInfoPartScreen(),
                     ),
                   ));
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                if(!(model?.moreInfo?.active??false))
                 const Icon(
                   Icons.arrow_back_ios_new,
                   color: AppColors.PRIMARY_COLOR,
-                ),
+                )
+                else
+                const Icon(Icons.check, color: Colors.green,),
                 Text(
                   "More info",
                   style: Styles.mediumText(fontSize: 35),

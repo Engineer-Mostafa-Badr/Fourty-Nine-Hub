@@ -2066,6 +2066,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.2"
+  photo_manager:
+    dependency: "direct main"
+    description:
+      name: photo_manager
+      sha256: dc26184676b26d722d656073ca8fe29203d7631ec613aed1a9679de3aa1f52c2
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.6.3"
   photo_view:
     dependency: "direct main"
     description:
@@ -2888,7 +2896,7 @@ packages:
     source: hosted
     version: "2.2.1"
   wakelock_plus:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
       name: wakelock_plus
       sha256: "36c88af0b930121941345306d259ec4cc4ecca3b151c02e3a9e71aede83c615e"

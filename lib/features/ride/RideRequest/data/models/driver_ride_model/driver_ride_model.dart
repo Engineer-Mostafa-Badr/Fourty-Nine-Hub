@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'rider_info_id.dart';
 
 class DriverRideModel {
@@ -20,12 +22,13 @@ class DriverRideModel {
   String? carModel;
   String? driverPictureKey;
   bool? isSocketCategory;
-
+  File? image;
   DriverRideModel({
     this.id,
     this.driverFirstName,
     this.driverLastName,
     this.userId,
+    this.image,
     this.adminIgnore,
     this.birthDate,
     this.riderInfoId,
