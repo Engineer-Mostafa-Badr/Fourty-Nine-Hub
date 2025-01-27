@@ -22,7 +22,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
     with TickerProviderStateMixin {
   late TabController _tabController;
   late ScrollController _scrollController;
-  String labelName="";
+  String labelName = "";
   @override
   void initState() {
     super.initState();
@@ -38,15 +38,22 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
       }
     });
   }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    labelName=context.locale == Locales.english?
-    context.read<MainCategoriesTapsCubit>().mainCategories[0].nameEn.toString()
-        :context.read<MainCategoriesTapsCubit>().mainCategories[0].name.toString();
-
+    labelName = context.locale == Locales.english
+        ? context
+            .read<MainCategoriesTapsCubit>()
+            .mainCategories[0]
+            .nameEn
+            .toString()
+        : context
+            .read<MainCategoriesTapsCubit>()
+            .mainCategories[0]
+            .name
+            .toString();
   }
-
 
   // Scroll to the selected tab and make it the first tab in view
   void _scrollToSelectedTab(int index) {
@@ -64,7 +71,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
   Widget build(BuildContext context) {
     final controller = context.read<MainCategoriesTapsCubit>();
     return Scaffold(
-      appBar: widget.isAppBarShow ? BackAppBar(label: labelName):null,
+      appBar: widget.isAppBarShow ? BackAppBar(label: labelName) : null,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
         child: Column(
@@ -84,9 +91,9 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                       onTap: (i) {
                         controller.selectMainCategory(i);
                         setState(() {
-                          labelName=context.locale == Locales.english?
-                           controller.mainCategories[i].nameEn.toString()
-                           : controller.mainCategories[i].name.toString();
+                          labelName = context.locale == Locales.english
+                              ? controller.mainCategories[i].nameEn.toString()
+                              : controller.mainCategories[i].name.toString();
                         });
                         print(labelName);
                       },
@@ -141,6 +148,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                   final controller = context.read<MainCategoriesTapsCubit>();
                   return Expanded(
                     child: GridView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
                       itemCount: state.subCategories?.length ?? 0,
                       controller: controller.scrollController,
                       gridDelegate:
@@ -168,6 +176,168 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
           ],
         ),
       ),
+    );
+  }
+}
+
+class MainCategoriesGrideViewSection extends StatefulWidget {
+  const MainCategoriesGrideViewSection({super.key});
+
+  @override
+  State<MainCategoriesGrideViewSection> createState() =>
+      _MainCategoriesGrideViewSectionState();
+}
+
+class _MainCategoriesGrideViewSectionState
+    extends State<MainCategoriesGrideViewSection>
+    with TickerProviderStateMixin {
+  late TabController _tabController;
+  late ScrollController _scrollController;
+  String labelName = "";
+
+  @override
+  void initState() {
+    _tabController = TabController(
+        length: context.read<MainCategoriesTapsCubit>().mainCategories.length,
+        vsync: this);
+    _scrollController = ScrollController();
+
+    // Listen for tab changes
+    _tabController.addListener(() {
+      if (_tabController.indexIsChanging) {
+        _scrollToSelectedTab(_tabController.index);
+      }
+    });
+    super.initState();
+  }
+
+  void _scrollToSelectedTab(int index) {
+    // Assuming each tab has a width of 140.w
+    double tabWidth = 235.w;
+    double targetScrollPosition = index * tabWidth;
+    _scrollController.animateTo(
+      targetScrollPosition,
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    labelName = context.locale == Locales.english
+        ? context
+            .read<MainCategoriesTapsCubit>()
+            .mainCategories[0]
+            .nameEn
+            .toString()
+        : context
+            .read<MainCategoriesTapsCubit>()
+            .mainCategories[0]
+            .name
+            .toString();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final controller = context.read<MainCategoriesTapsCubit>();
+
+    return CustomScrollView(
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      controller: _scrollController,
+      slivers: [
+        SliverToBoxAdapter(
+          child: BlocBuilder<MainCategoriesTapsCubit, MainCategoriesTapsState>(
+              builder: (context, state) {
+            return SizedBox(
+              height: 70.h,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: TabBar(
+                    isScrollable: true,
+                    controller: _tabController,
+                    onTap: (i) {
+                      controller.selectMainCategory(i);
+                      setState(() {
+                        labelName = context.locale == Locales.english
+                            ? controller.mainCategories[i].nameEn.toString()
+                            : controller.mainCategories[i].name.toString();
+                      });
+                      print(labelName);
+                    },
+                    padding: EdgeInsets.zero,
+                    labelPadding: const EdgeInsetsDirectional.only(end: 10),
+                    indicatorColor: Colors.transparent,
+                    dividerColor: Colors.transparent,
+                    tabAlignment: TabAlignment.start,
+                    tabs: List.generate(controller.mainCategories.length,
+                        (index) {
+                      final category = controller.mainCategories[index];
+                      return Container(
+                        width: 220.w,
+                        // height: 70.h,
+                        alignment: AlignmentDirectional.center,
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: index == state.selectedIndex
+                              ? AppColors.PRIMARY_COLOR
+                              : null,
+                          border: Border.all(
+                            color: index == state.selectedIndex
+                                ? AppColors.PRIMARY_COLOR
+                                : Colors.red,
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
+                            context.locale == Locales.english
+                                ? category.nameEn!
+                                : category.name ?? "",
+                            style: Styles.mediumText(
+                                color: index == state.selectedIndex
+                                    ? Colors.white
+                                    : Colors.grey),
+                            textAlign: TextAlign.center,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      );
+                    })),
+              ),
+            );
+          }),
+        ),
+        BlocBuilder<MainCategoriesTapsCubit, MainCategoriesTapsState>(
+          builder: (context, state) {
+            if (state.subCategories != null &&
+                state.subCategories!.isNotEmpty) {
+              final controller = context.read<MainCategoriesTapsCubit>();
+              return SliverGrid.builder(
+                itemCount: state.subCategories?.length ?? 0,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2, childAspectRatio: 1),
+                itemBuilder: (context, index) {
+                  final subCategory = state.subCategories![index];
+                  return SubCategoryCard(
+                    mainCategory: controller.selectedCategory,
+                    item: subCategory,
+                    onFav: () {
+                      print("object");
+                      return controller.toggleSubCategoryToFavorites(
+                          state.subCategories![index].id);
+                    },
+                  );
+                },
+              );
+            } else {
+              return const SliverToBoxAdapter(child: SizedBox.shrink());
+            }
+          },
+        ),
+      ],
     );
   }
 }

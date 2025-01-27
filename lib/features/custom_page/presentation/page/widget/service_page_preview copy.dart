@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/ads/app_open_model.dart';
@@ -21,8 +24,11 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/custom_page_botton_nav_bar.dart';
+import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_taps_cubit/main_categories_taps_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
@@ -39,7 +45,9 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:restart_app/restart_app.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:auto_scroll_text/auto_scroll_text.dart';
 
 class ServicePagePreview extends StatefulWidget {
   const ServicePagePreview({super.key});
@@ -139,9 +147,22 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
         MainCategoriesListView(controller: controller, state: state),
         BlocProvider(
           create: (context) => serviceLocator<MainCategoriesTapsCubit>(),
-          child: MainCategoriesGridView(isAppBarShow: false),
+          child: Builder(builder: (context) {
+            return MainCategoriesGrideViewSection();
+          }),
         ),
-        MainCategoriesFlipCardsView(isAppBarShow: false),
+        BlocProvider(
+          create: (context) => serviceLocator<MainCategoriesTapsCubit>(),
+          child: Builder(builder: (context) {
+            return SizedBox(
+              height: 300,
+              child: MainCategoriesFlipCardsView(
+                isAppBarShow: false,
+                data: context.read<MainCategoriesTapsCubit>().mainCategories,
+              ),
+            );
+          }),
+        ),
       ];
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
@@ -170,24 +191,47 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
           // index: 2,
         ),
         drawer: const DrawerWidget(),
-        body: ListView(
-          controller: scrollController,
-          shrinkWrap: true,
-          padding: EdgeInsets.symmetric(horizontal: 20.w),
-          children: [
-            const AddBanner(),
+        body: CustomScrollView(
+          // controller: scrollController,
+          // padding: EdgeInsets.symmetric(horizontal: 20.w),
+          slivers: [
+            const SliverToBoxAdapter(child: AddBanner()),
             //wallet
-            context.read<UserCubit>().isLoggedIn
-                ? const WalletWidget()
-                : const SizedBox.shrink(),
-            _buildStarWidget(),
-            const Sizer(),
-            _pickMeAndComeWithUWidget(),
-            const Sizer(),
-            _buildTenPercentWidget(),
-            const Sizer(),
-            _buildMainCategoriesViews(),
-            const Sizer(),
+            SliverToBoxAdapter(
+              child: context.read<UserCubit>().isLoggedIn
+                  ? const WalletWidget()
+                  : const SizedBox.shrink(),
+            ),
+            SliverToBoxAdapter(child: _buildStarWidget()),
+            const SliverToBoxAdapter(child: Sizer()),
+            SliverToBoxAdapter(
+              child: CustomAnimatedText(
+                textDirection:
+                    (context.isArabic ? TextDirection.ltr : TextDirection.rtl),
+                text: 'Custom Message',
+                onTap: () {},
+              ),
+            ),
+            const SliverToBoxAdapter(child: Sizer()),
+            SliverToBoxAdapter(child: _pickMeAndComeWithUWidget()),
+            const SliverToBoxAdapter(child: Sizer()),
+            SliverToBoxAdapter(
+              child: CustomAnimatedText(
+                text: LocaleKeys.youCanDeActivatePage.localize,
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return const CustomDeActivateDialog();
+                    },
+                  );
+                },
+              ),
+            ),
+            SliverToBoxAdapter(child: _buildTenPercentWidget()),
+            const SliverToBoxAdapter(child: Sizer()),
+            // _buildMainCategoriesViews(),
+            // const Sizer(),
             //main cats
             BlocProvider(
               create: (BuildContext context) =>
@@ -197,41 +241,17 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
                 builder: (context, state) {
                   final controller = context.read<MainCategoriesCubit>();
                   if (state.status == StateStatus.loading) {
-                    return Shimmer.fromColors(
-                      baseColor: Colors.grey[100]!,
-                      highlightColor: Colors.white24,
-                      child: Column(
-                        children: List.generate(
-                            6,
-                            (index) => Padding(
-                                  padding: EdgeInsets.only(bottom: 15.h),
-                                  child: Container(
-                                    height: MediaQuery.of(context).size.height *
-                                        .15.h,
-                                    width: double.infinity,
-                                    margin:
-                                        EdgeInsets.symmetric(horizontal: 10.w),
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 10.w),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.AUTH_CONTAINER_COLOR,
-                                      borderRadius: BorderRadius.circular(20.r),
-                                      border: Border.all(color: Colors.grey),
-                                    ),
-                                  ),
-                                )),
-                      ),
-                    );
+                    return const SliverToBoxAdapter(
+                        child: MainCategoriesShimmerLoading());
                   }
                   if (state.customPage != null) {
-                    return SizedBox(
-                      height: 500.h,
+                    return SliverToBoxAdapter(
                       child: getMainCategoryWidgets(controller, state)[
                           CacheManager.getInt(
                               CacheManager.selectedCategoryView)!],
                     );
                   } else {
-                    return const SizedBox.shrink();
+                    return SliverToBoxAdapter(child: const SizedBox.shrink());
                   }
                 },
               ),
@@ -308,47 +328,27 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
     return BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>(
       builder: (context, state) {
         if (state.status == StateStatus.loading) {
-          return Row(
-            children: List.generate(
-                2,
-                (index) => Expanded(
-                      child: Shimmer.fromColors(
-                        baseColor: Colors.grey[100]!,
-                        highlightColor: Colors.white24,
-                        child: Container(
-                          width: 100.h,
-                          height: kToolbarHeight * 2.h,
-                          margin: const EdgeInsets.symmetric(horizontal: 5),
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          decoration: BoxDecoration(
-                            color: AppColors.AUTH_CONTAINER_COLOR,
-                            borderRadius: BorderRadius.circular(20.r),
-                            border: Border.all(color: Colors.grey),
-                          ),
-                        ),
-                      ),
-                    )),
-          );
+          return const PickMeAndComeWithYouLShimmerLoading();
         } else if (state.status == StateStatus.success) {
           return Row(
             children: [
-              Expanded(
-                child: _buildRideSubCategoryItem(
-                  service: state.data?[0].service ?? RideServicesEnum.pickMe,
-                  title: LocaleKeys.carpool.localize,
-                  image: state.data?[0].image ?? '',
-                  onTab: () {
-                    AdInterstitialTop.loadIntersitialAd();
-                    AdInterstitialTop.showInterstitialAd();
-                    return HandleCashback.setCount('carPoolCount', context);
-                  },
-                  // image: Assets.carpool,
-                  // isFavorite: state.data![0].is,
-                  // numberOfAds: state.data![0].numberOfAds?.toInt(),
-                  route: Routes.CAR_POOL,
-                ),
-              ),
-              const Sizer(),
+              // Expanded(
+              //   child: _buildRideSubCategoryItem(
+              //     service: state.data?[0].service ?? RideServicesEnum.pickMe,
+              //     title: LocaleKeys.carpool.localize,
+              //     image: state.data?[0].image ?? '',
+              //     onTab: () {
+              //       AdInterstitialTop.loadIntersitialAd();
+              //       AdInterstitialTop.showInterstitialAd();
+              //       return HandleCashback.setCount('carPoolCount', context);
+              //     },
+              //     // image: Assets.carpool,
+              //     // isFavorite: state.data![0].is,
+              //     // numberOfAds: state.data![0].numberOfAds?.toInt(),
+              //     route: Routes.CAR_POOL,
+              //   ),
+              // ),
+              // const Sizer(),
               Expanded(
                 child: _buildRideSubCategoryItem(
                   service:
@@ -494,7 +494,6 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
       required String title,
       required String image,
       String? route,
-      bool? isFavorite,
       required Function() onTab}) {
     return InkWell(
       // onTap: () => context.push(Routes.ADS, extra: service.value()),
@@ -543,6 +542,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Label(
                     // text: service.title(),
@@ -552,32 +552,32 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
                       fontSize: 65.sp,
                     ),
                   ),
-                  const Spacer(),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 5.h),
-                    child: Column(
-                      children: [
-                        InkWell(
-                          onTap: () async {},
-                          child: Icon(
-                            isFavorite ?? false
-                                ? Icons.favorite
-                                : Icons.favorite_border,
-                            // Icons.favorite,
-                            color: AppColors.SECONDARY_COLOR,
-                            size: 38.h,
-                          ),
-                        ),
-                        // const Spacer(),
-                        // Label(
-                        //   text: '$numberOfAds ${LocaleKeys.ads.tr()}',
-                        //   style: Styles.mediumText(
-                        //     color: Colors.white,
-                        //   ),
-                        // ),
-                      ],
-                    ),
-                  ),
+
+                  // Padding(
+                  //   padding: EdgeInsets.symmetric(vertical: 5.h),
+                  //   child: Column(
+                  //     children: [
+                  //       InkWell(
+                  //         onTap: () async {},
+                  //         child: Icon(
+                  //           isFavorite ?? false
+                  //               ? Icons.favorite
+                  //               : Icons.favorite_border,
+                  //           // Icons.favorite,
+                  //           color: AppColors.SECONDARY_COLOR,
+                  //           size: 38.h,
+                  //         ),
+                  //       ),
+                  //       // const Spacer(),
+                  //       // Label(
+                  //       //   text: '$numberOfAds ${LocaleKeys.ads.tr()}',
+                  //       //   style: Styles.mediumText(
+                  //       //     color: Colors.white,
+                  //       //   ),
+                  //       // ),
+                  //     ],
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -690,6 +690,139 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
   }
 }
 
+class CustomDeActivateDialog extends StatelessWidget {
+  const CustomDeActivateDialog({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
+      title: Text(
+        LocaleKeys.deActivateCustomPage.localize,
+        style: Styles.headerText(
+            color: Theme.of(context).textTheme.bodyMedium?.color),
+      ),
+      content: Text(
+        LocaleKeys.areYouSureToDeActivate.localize,
+      ),
+      actions: [
+        CustomElevatedButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(LocaleKeys.cancel.localize,
+              style: Styles.smallText(color: AppColors.whiteColor)),
+        ),
+        CustomElevatedButton(
+          onPressed: () async {
+            await context.read<CustomPageCubit>().updateActivate(false);
+            Restart.restartApp();
+          },
+          child: Text(
+            LocaleKeys.yes.localize,
+            style: Styles.smallText(color: AppColors.whiteColor),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class CustomAnimatedText extends StatelessWidget {
+  const CustomAnimatedText({
+    super.key,
+    required this.text,
+    this.onTap,
+    this.textDirection,
+  });
+  final String text;
+  final void Function()? onTap;
+  final TextDirection? textDirection;
+  @override
+  Widget build(BuildContext context) {
+    return ClickableWidget(
+      onTap: onTap,
+      child: Container(
+        height: 60.h,
+        alignment: Alignment.center,
+        child: AutoScrollText(
+          text,
+          style:
+              Styles.headerText(fontSize: 30, color: AppColors.SECONDARY_COLOR),
+          textDirection: textDirection ??
+              (context.isArabic ? TextDirection.rtl : TextDirection.ltr),
+          selectable: true,
+          // textStyle: TextStyle(fontSize: 24),
+        ),
+      ),
+    );
+  }
+}
+
+class PickMeAndComeWithYouLShimmerLoading extends StatelessWidget {
+  const PickMeAndComeWithYouLShimmerLoading({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: List.generate(
+          2,
+          (index) => Expanded(
+                child: Shimmer.fromColors(
+                  baseColor: Colors.grey[100]!,
+                  highlightColor: Colors.white24,
+                  child: Container(
+                    width: 100.h,
+                    height: kToolbarHeight * 2.h,
+                    margin: const EdgeInsets.symmetric(horizontal: 5),
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    decoration: BoxDecoration(
+                      color: AppColors.AUTH_CONTAINER_COLOR,
+                      borderRadius: BorderRadius.circular(20.r),
+                      border: Border.all(color: Colors.grey),
+                    ),
+                  ),
+                ),
+              )),
+    );
+  }
+}
+
+class MainCategoriesShimmerLoading extends StatelessWidget {
+  const MainCategoriesShimmerLoading({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[100]!,
+      highlightColor: Colors.white24,
+      child: Column(
+        children: List.generate(
+            6,
+            (index) => Padding(
+                  padding: EdgeInsets.only(bottom: 15.h),
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * .15.h,
+                    width: double.infinity,
+                    margin: EdgeInsets.symmetric(horizontal: 10.w),
+                    padding: EdgeInsets.symmetric(horizontal: 10.w),
+                    decoration: BoxDecoration(
+                      color: AppColors.AUTH_CONTAINER_COLOR,
+                      borderRadius: BorderRadius.circular(20.r),
+                      border: Border.all(color: Colors.grey),
+                    ),
+                  ),
+                )),
+      ),
+    );
+  }
+}
+
 class MainCategoriesListView extends StatelessWidget {
   const MainCategoriesListView({
     super.key,
@@ -726,5 +859,14 @@ class MainCategoriesListView extends StatelessWidget {
       },
       separatorBuilder: (BuildContext context, int index) => const Sizer(),
     );
+  }
+}
+
+class SliverGridView extends StatelessWidget {
+  const SliverGridView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column();
   }
 }
