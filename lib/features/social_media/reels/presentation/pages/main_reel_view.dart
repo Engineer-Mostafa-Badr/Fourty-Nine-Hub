@@ -34,9 +34,11 @@ class ReelView extends StatelessWidget {
         // return Future.value(true);
       },
       canPop: true,
-      child: const Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: ReelsScreen(),
+      child: SafeArea(
+        child: const Scaffold(
+          resizeToAvoidBottomInset: false,
+          body: ReelsScreen(),
+        ),
       ),
     );
   }
@@ -89,6 +91,7 @@ class ReelsScreenState extends State<ReelsScreen> {
                               index: index,
                               isLoading: isLoading,
                               controller: controller,
+                              receiverId: 1,
                             )
                           : const SizedBox();
                     },

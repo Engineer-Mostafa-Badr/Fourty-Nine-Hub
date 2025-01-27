@@ -36,7 +36,7 @@ class VehicleInfoPartsScreen extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () => Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => const BasicInfoPartScreen(),
+              builder: (context) => BasicInfoPartScreen(),
             )),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -61,7 +61,7 @@ class VehicleInfoPartsScreen extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () => Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => const DriverLicencePartScreen(),
+              builder: (context) => DriverLicencePartScreen(),
             )),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -88,7 +88,7 @@ class VehicleInfoPartsScreen extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () => Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => const CarLicencePartScreen(),
+              builder: (context) => CarLicencePartScreen(),
             )),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

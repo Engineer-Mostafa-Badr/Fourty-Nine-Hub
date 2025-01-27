@@ -61,6 +61,7 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/secrets/controller/secrets_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:go_router/go_router.dart';
 import 'core/service/background_service.dart';
 import 'core/service/cache_service.dart';
 import 'core/themes/light_theme.dart';
@@ -142,7 +143,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-
+    
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -246,7 +247,9 @@ class _MyAppState extends State<MyApp> {
             context: context,
           ),
         ),
-        BlocProvider(create: (context) => AuthenticationRideCubit(),),
+        BlocProvider(
+          create: (context) => AuthenticationRideCubit(),
+        ),
         BlocProvider<GetServicesNotificationsCubit>(
           create: (context) => GetServicesNotificationsCubit(
             getNotficationsUseCase: serviceLocator(),

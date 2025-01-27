@@ -8,6 +8,7 @@ import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/animated_heart_wiidget.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/custom_progress_bar.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/unified_widget_view.dart';
+import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -23,13 +24,13 @@ class ReelsWidget extends StatefulWidget {
     super.key,
     required this.isLoading,
     required this.controller,
-    required this.index,
+    required this.index, required this.receiverId,
   });
 
   final bool isLoading;
   final VideoPlayerController controller;
   final int index;
-
+  final int receiverId;
   @override
   State<ReelsWidget> createState() => _ReelsWidgetState();
 }
@@ -199,7 +200,7 @@ class _ReelsWidgetState extends State<ReelsWidget>
                           if (!serviceLocator<UserCubit>().isLoggedIn) {
               context.push(Routes.LOGIN);
             } else {
-              // _showGiftBottomSheet(context);
+              _showGiftBottomSheet(context);
             }
                         },
                         child: Container(
@@ -250,5 +251,8 @@ class _ReelsWidgetState extends State<ReelsWidget>
         ),
       ),
     );
+  }
+   Future<void> _showGiftBottomSheet(BuildContext context) async {
+    await showGiftBottomSheet(context, receiverId: "widget.receiverId");
   }
 }

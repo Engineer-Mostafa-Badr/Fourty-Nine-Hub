@@ -10,6 +10,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/create_post_instagram_screen.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_ad_slider_widget.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_ad_widget.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_for_you_slider_widget.dart';
@@ -71,21 +72,20 @@ class _InstagramViewState extends State<InstagramView> {
                     child: Column(
                       children: [
                         _buildTabBar(context),
-                        // GestureDetector(
-                        //   onTap: () {
-                        //     Navigator.push(
-                        //         context,
-                        //         MaterialPageRoute(
-                        //           builder: (context) =>
-                        //               const CreatePostInstagramScreen(),
-                        //         ));
-                        //   },
-                        //   child: Container(
-                        //     width: 80,
-                        //     height: 50,
-                        //     color: Colors.red,
-                        //   ),
-                        // ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const CreatePostInstagramScreen(),
+                                ));
+                          },
+                          child: Container(
+                            width: 80,
+                            height: 50,
+                            color: Colors.red,
+                          ),
+                        ),
                         const Sizer(),
                         const InstagramAdWidget(),
                         const Sizer(),

@@ -368,7 +368,7 @@ class _UserInfoState extends State<_UserInfo> {
                         BoxShadow(color: Colors.black, blurRadius: 30)
                       ]
                     ),
-                    child: Text(LocaleKeys.follow.localize, style: Styles.mediumText(fontWeight: FontWeight.bold),),
+                    child: Text(LocaleKeys.follow.localize, style: Styles.mediumText(fontWeight: FontWeight.bold, color: Colors.white),),
                   ),
                 ),
                 if (widget.reel.user.verified)
@@ -772,9 +772,7 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
     }
   }
 
-  Future<void> _showGiftBottomSheet(BuildContext context) async {
-    await showGiftBottomSheet(context, receiverId: reel.user.id);
-  }
+ 
 
   Future<void> _showReportBottomSheet(BuildContext context) async {
     await showModalBottomSheet(

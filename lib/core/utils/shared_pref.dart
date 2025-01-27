@@ -4,6 +4,8 @@ import 'dart:developer';
 import 'package:fourtyninehub/features/ride/Authentication/data/models/parts_socket_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../features/ride/Authentication/data/models/basic_info_part_model.dart';
+
 class CacheManager {
   static late SharedPreferences prefs;
   static init() async {
@@ -118,15 +120,15 @@ class CacheManager {
     if (data != null) {
       try {
         Map<String, dynamic> json = jsonDecode(data);
-        PartsSocketModel model = PartsSocketModel.fromJson(json);
-        model = model.copyWith(
+        PartsSocketModel finalModel = PartsSocketModel.fromJson(json);
+        finalModel = model.copyWith(
             basicInfo: model.basicInfo,
             carLicence: model.carLicence,
             dragAnalysisPart: model.dragAnalysisPart,
             driverLicence: model.driverLicence,
             moreInfo: model.moreInfo);
-        String jsonEncod = jsonEncode(model.toJson());
-        log(jsonEncod);
+        String jsonEncod = jsonEncode(finalModel.toJson());
+        log(jsonEncod, name: "jsonEncodjsonEncod");
         prefs.setString(RIDESOCKETPARTMODEL, jsonEncod);
       } catch (error) {
         log(error.toString());

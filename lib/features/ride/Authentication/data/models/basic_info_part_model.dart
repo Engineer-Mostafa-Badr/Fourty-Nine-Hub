@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:fourtyninehub/features/ride/Authentication/data/models/base_part_model.dart';
@@ -16,7 +17,7 @@ class BasicInfoPartModel implements BasePartModel {
       firstName: json?['firstName'],
       lastName: json?['lastName'],
       phoneNumber: json?['phoneNumber'],
-      birthDate:json?['birthDate'] == null? null: DateTime.parse(json?['birthDate'])
+      birthDate:json?['birthDate'] == null? null: DateTime.tryParse(json?['birthDate'])
     );
   }
   @override

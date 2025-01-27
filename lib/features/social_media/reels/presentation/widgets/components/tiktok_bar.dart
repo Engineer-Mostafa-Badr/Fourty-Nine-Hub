@@ -97,100 +97,119 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
           //           // Icon(Icons.volume_off)
           //         ],
           //       ),
-           Column(
+          Column(
             mainAxisAlignment: MainAxisAlignment.end,
-             children: [
-               _buildLiveIcon(onTap: () {
-                      AdInterstitialTop.loadIntersitialAd();
-                      AdInterstitialTop.showInterstitialAd();
-                      if (context
-                          .read<PreloadBloc>()
-                          .state
-                          .controllers[
-                              context.read<PreloadBloc>().state.focusedIndex]!
-                          .value
-                          .isPlaying) {
-                        context
-                            .read<PreloadBloc>()
-                            .state
-                            .controllers[
-                                context.read<PreloadBloc>().state.focusedIndex]
-                            ?.pause();
-                      }
-                      if (context.isUserLoggedIn) {
-                        showTiktokOption(context, generateRandom9DigitNumber);
-                      } else {
-                        context.go(Routes.LOGIN);
-                      }
-                    }),
-
-                const Sizer(height: 50,),
-                Image.asset(Assets.volumeOff, color: Colors.white, width: 15, height: 15,),
-                Image.asset(Assets.volumeOn, color: Colors.white, width: 20, height: 20,)
-             ],
-           ),
+            children: [
+              _buildLiveIcon(onTap: () {
+                AdInterstitialTop.loadIntersitialAd();
+                AdInterstitialTop.showInterstitialAd();
+                if (context
+                    .read<PreloadBloc>()
+                    .state
+                    .controllers[
+                        context.read<PreloadBloc>().state.focusedIndex]!
+                    .value
+                    .isPlaying) {
+                  context
+                      .read<PreloadBloc>()
+                      .state
+                      .controllers[
+                          context.read<PreloadBloc>().state.focusedIndex]
+                      ?.pause();
+                }
+                if (context.isUserLoggedIn) {
+                  showTiktokOption(context, generateRandom9DigitNumber);
+                } else {
+                  context.go(Routes.LOGIN);
+                }
+              }),
+              const Sizer(
+                height: 50,
+              ),
+              Image.asset(
+                Assets.volumeOff,
+                color: Colors.white,
+                width: 15,
+                height: 15,
+              ),
+              Image.asset(
+                Assets.volumeOn,
+                color: Colors.white,
+                width: 20,
+                height: 20,
+              )
+            ],
+          ),
           Row(
             children: [
               _buildTab(LocaleKeys.Spotlight.localize, 0, onTap: () {
-                  if (context
+                if (context
+                    .read<PreloadBloc>()
+                    .state
+                    .controllers[
+                        context.read<PreloadBloc>().state.focusedIndex]!
+                    .value
+                    .isPlaying) {
+                  context
                       .read<PreloadBloc>()
                       .state
                       .controllers[
-                          context.read<PreloadBloc>().state.focusedIndex]!
-                      .value
-                      .isPlaying) {
-                    context
-                        .read<PreloadBloc>()
-                        .state
-                        .controllers[
-                            context.read<PreloadBloc>().state.focusedIndex]
-                        ?.pause();
-                  }
-                  setState(() {
-                    _selectedIndex = 0;
-                  });
-                  context.push(Routes.SPOTLIGHT);
-                }),
-                // Following Tab
-                _buildTab(LocaleKeys.snap.localize, 1, onTap: () {
-                  AdInterstitialTop.loadIntersitialAd();
-                  AdInterstitialTop.showInterstitialAd();
-                  if (context
+                          context.read<PreloadBloc>().state.focusedIndex]
+                      ?.pause();
+                }
+                setState(() {
+                  _selectedIndex = 0;
+                });
+                context.push(Routes.SPOTLIGHT);
+              }),
+              // Following Tab
+              _buildTab(LocaleKeys.snap.localize, 1, onTap: () {
+                AdInterstitialTop.loadIntersitialAd();
+                AdInterstitialTop.showInterstitialAd();
+                if (context
+                    .read<PreloadBloc>()
+                    .state
+                    .controllers[
+                        context.read<PreloadBloc>().state.focusedIndex]!
+                    .value
+                    .isPlaying) {
+                  context
                       .read<PreloadBloc>()
                       .state
                       .controllers[
-                          context.read<PreloadBloc>().state.focusedIndex]!
-                      .value
-                      .isPlaying) {
-                    context
-                        .read<PreloadBloc>()
-                        .state
-                        .controllers[
-                            context.read<PreloadBloc>().state.focusedIndex]
-                        ?.pause();
-                  }
-                  setState(() {
-                    _selectedIndex = 1;
-                  });
-                  context.push(Routes.SNAP);
-                }),
-      
-                // For You Tab with rounded underline
-                _buildTab("Reel", 2, onTap: () {
-                  setState(() {
-                    _selectedIndex = 2;
-                  });
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const ReelsRecordingScreen(),
-                    ),
-                  );
-                }),
+                          context.read<PreloadBloc>().state.focusedIndex]
+                      ?.pause();
+                }
+                setState(() {
+                  _selectedIndex = 1;
+                });
+                context.push(Routes.SNAP);
+              }),
+
+              // For You Tab with rounded underline
+              _buildTab("Reel", 2, onTap: () {
+                setState(() {
+                  _selectedIndex = 2;
+                });
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ReelsRecordingScreen(),
+                  ),
+                );
+              }),
             ],
           ),
-          const Icon(Icons.search),
-          
+          GestureDetector(
+            onTap: () {
+              context.push(Routes.Tinder);
+            },
+            child: const Icon(
+              Icons.search,
+              size: 40,
+              color: Colors.white,
+            ),
+          )
         ],
       ),
     );
@@ -203,11 +222,11 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               // LIVE Icon with Glow Effect
-              
+
               const Sizer(),
-             
+
               const Spacer(), // Explore Tab
-              
+
               const Spacer(),
               // Search Icon with custom SVG
               _buildSearchIcon(onTap: () {
