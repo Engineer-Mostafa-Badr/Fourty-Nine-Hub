@@ -39,6 +39,11 @@ abstract class Assets {
   static String hand = 'assets/images/hand.png';
   static String findLogo = 'assets/icons/findLogo.png';
   static String cameraLogo = 'assets/icons/cameraLogo.png';
+  static String giftBoxIcon = 'assets/icons/gift-box.png';
+  static String volumeOn = 'assets/icons/volume_on.png';
+  static String volumeOff = 'assets/icons/volume_off.png';
+  static String musicalNote = 'assets/icons/musical-note.png';
+  static String audienceIcon = 'assets/icons/audience_icon.png';
 
   static String fawry = 'assets/images/fawry.png';
   static String instaPay = 'assets/images/instapay.png';
@@ -65,7 +70,9 @@ abstract class Assets {
   static String threeDots = 'assets/images/three_dots.svg';
   static String mobile = 'assets/images/mobile_icon.svg';
   static String visa = 'assets/images/visa.png';
-
+  static String instagramCommentIcon = 'assets/icons/instagram_comment_icon.png';
+  static String instagramSharePostIcon = 'assets/icons/instagram_share_post_icon.png';
+  static String instagramHideIcon = 'assets/icons/instagram_hide_icon.svg';
   // reactions
   static String like = 'assets/images/reactions/like.png';
   static String heart = 'assets/images/reactions/heart.png';

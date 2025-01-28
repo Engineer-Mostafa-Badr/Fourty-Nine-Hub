@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:fourtyninehub/features/ride/Authentication/data/models/parts_socket_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/check_accept_by_rider_model/check_accept_by_rider_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/check_accept_trip_from_driver_model/check_accept_trip_from_driver_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,6 +22,8 @@ abstract class CacheService {
   Future<void> removeDriverTripInfo();
   Future<bool> saveUserIsLoggedIn(bool isLoggedIn);
   Future<bool?> getUserIsLoggedIn();
+  Future<void> saveSocketPartModel(PartsSocketModel isLoggedIn);
+  Future<PartsSocketModel?> getSocketPartModel();
   Future<void> setLogin(bool value);
 
   // Future<bool> saveUserToken(String userToken);
@@ -89,6 +92,7 @@ class CacheServiceImpl implements CacheService {
   static const _TRIP_INFO_RIDER = "_TRIP_INFO_RIDER";
   static const _TRIP_INFO_DRIVER = "_TRIP_INFO_DRIVER";
   static const _TRIP_STATE = "_TRIP_STATE";
+  static const RIDESOCKETPARTMODEL = "RIDESOCKETPARTMODEL";
   static late SharedPreferences preferences;
   @override
   Future<bool> saveUserData(String userData) async {
@@ -349,6 +353,37 @@ class CacheServiceImpl implements CacheService {
   @override
   Future<void> removeTripState() async {
     preferences.remove(_TRIP_STATE);
+  }
+
+  @override
+  Future<PartsSocketModel?> getSocketPartModel() async {
+    var data = preferences.getString(RIDESOCKETPARTMODEL);
+    if (data != null) {
+      Map<String, dynamic> json = jsonDecode(data);
+      PartsSocketModel model = PartsSocketModel.fromJson(json);
+      return model;
+    }
+    return null;
+  }
+
+  @override
+  Future<void> saveSocketPartModel(PartsSocketModel model) async {
+    var data = preferences.getString(RIDESOCKETPARTMODEL);
+    if (data != null) {
+      Map<String, dynamic> json = jsonDecode(data);
+      PartsSocketModel model = PartsSocketModel.fromJson(json);
+      model = model.copyWith(
+          basicInfo: model.basicInfo,
+          carLicence: model.carLicence,
+          dragAnalysisPart: model.dragAnalysisPart,
+          driverLicence: model.driverLicence,
+          moreInfo: model.moreInfo);
+      String jsonEncod = jsonEncode(model.toJson());
+      preferences.setString(RIDESOCKETPARTMODEL, jsonEncod);
+    } else {
+      String json = jsonEncode(model.toJson());
+      preferences.setString(RIDESOCKETPARTMODEL, json);
+    }
   }
   //   @override
   // Future<bool> saveUserToken(String userToken) async {
@@ -658,6 +693,18 @@ class CacheServiceImplV2 implements CacheService {
   @override
   Future<void> removeTripState() {
     // TODO: implement removeTripState
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<PartsSocketModel?> getSocketPartModel() {
+    // TODO: implement getSocketPartModel
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> saveSocketPartModel(PartsSocketModel isLoggedIn) {
+    // TODO: implement saveSocketPartModel
     throw UnimplementedError();
   }
 }

@@ -132,6 +132,7 @@ class _TwitterViewState extends State<TwitterView> {
                   },
                   itemBuilder: (context, item, index) {
                     final user = context.read<UserCubit>().state.data;
+                    // return const TwitterPostWidget();
                     return Padding(
                       padding: EdgeInsets.only(bottom: 30.h),
                       child: TwitterPostCard(
@@ -307,6 +308,7 @@ class _TwitterViewState extends State<TwitterView> {
                   },
                   itemBuilder: (context, item, index) {
                     final user = context.read<UserCubit>().state.data;
+                    // return const TwitterPostWidget();
                     return TwitterPostCard(
                       post: controller
                           .globalPostsPagingController.itemList![index],

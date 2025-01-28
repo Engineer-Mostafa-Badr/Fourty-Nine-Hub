@@ -148,6 +148,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/select_cateogry_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/all_rider_trip_screen.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/all_trip_no_socket_screen.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/register_ride_parts_screen.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/rider_register_view.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/shipping_rider_tab_screen.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/trip_info_by_driver_screen.dart';
@@ -196,7 +197,6 @@ import 'package:fourtyninehub/features/social_media/edit_profile/presentation/pa
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/instgram_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_all_discover_people.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_suggest_people.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_home_screen.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
@@ -956,10 +956,8 @@ class AppPages {
                 name: Routes.InstagramSuggestPeople,
                 routes: const [],
                 builder: (context, state) {
-
                   return BlocProvider<InstagramCubit>(
-                    create: (_) =>
-                        serviceLocator(),
+                    create: (_) => serviceLocator(),
                     child: const InstagramAllDiscoverPeople(),
                   );
                 },
@@ -1032,7 +1030,7 @@ class AppPages {
                     final social = state.extra as String?;
 
                     return BlocProvider<SocialPostsCubit>(
-                      create: (_) =>serviceLocator(),
+                      create: (_) => serviceLocator(),
                       child: const FacebookSuggestedPeople(),
                     );
                   },
@@ -1073,19 +1071,23 @@ class AppPages {
                       ),
                     ]),
                 GoRoute(
-                    path: Paths.REELS,
-                    name: Routes.REELS,
-                    builder: (context, state) {
-                      // context.read<ReelsCubit>().fetchReels();
-                      return const ReelView();
-                    },
-                    routes: [
-                      GoRoute(
-                        path: Paths.MUSICREELS,
-                        name: Routes.MUSICREELS,
-                        builder: (context, state) => const MusicReels(),
-                      ),
-                    ]),
+                  path: Paths.REELS,
+                  name: Routes.REELS,
+                  builder: (context, state) {
+                    // context.read<ReelsCubit>().fetchReels();
+                    return BlocProvider(
+                      create: (context) => serviceLocator<SocialPostsCubit>(),
+                      child: const ReelView(),
+                    );
+                  },
+                  routes: [
+                    GoRoute(
+                      path: Paths.MUSICREELS,
+                      name: Routes.MUSICREELS,
+                      builder: (context, state) => const MusicReels(),
+                    ),
+                  ],
+                ),
                 GoRoute(
                     path: Paths.TINDER,
                     name: Routes.Tinder,
@@ -1694,6 +1696,13 @@ class AppPages {
               },
               routes: [
                 GoRoute(
+                  path: Paths.registerRidePart,
+                  name: Routes.registerRidePart,
+                  builder: (context, state) {
+                    return const RegisterRidePartsScreen();
+                  },
+                ),
+                GoRoute(
                   path: Paths.updateDriverShipping,
                   name: Routes.updateDriverShipping,
                   builder: (context, state) {
@@ -1723,10 +1732,12 @@ class AppPages {
                                 repository: serviceLocator())
                               ..getData()),
                         BlocProvider(
-                            create: (context) =>  SelectCarModelBrandYearRideCubit()),
+                            create: (context) =>
+                                SelectCarModelBrandYearRideCubit()),
                         BlocProvider(
                             create: (context) => GetCarBrandRideCubit(
-                                repository: serviceLocator())..get()),
+                                repository: serviceLocator())
+                              ..get()),
                         BlocProvider(
                           create: (context) => GetCarYearByModelRideCubit(
                               repository: serviceLocator()),
@@ -1739,7 +1750,8 @@ class AppPages {
                               repository: serviceLocator()),
                         ),
                         BlocProvider.value(
-                          value: serviceLocator<HealthCubit>()..getGovernorates(),
+                          value: serviceLocator<HealthCubit>()
+                            ..getGovernorates(),
                         ),
                       ],
                       child: const UpdateDriverRideScreen(),

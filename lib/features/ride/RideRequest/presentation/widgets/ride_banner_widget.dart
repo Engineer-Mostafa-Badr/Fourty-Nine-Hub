@@ -44,7 +44,7 @@ class RideBannerWidget extends StatelessWidget {
                     return (state.model.mainCategory?.isDriverApproved ?? false)
                         ? Padding(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 0, vertical: 5),
+                                horizontal: 10, vertical: 5),
                             child: DashboardBanner(
                               onTap: () {
                                 if (state

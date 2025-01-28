@@ -47,7 +47,7 @@ class CallCubit extends Cubit<CallState> {
       return null;
     }
     final agoraEngine = createAgoraRtcEngine();
-    await agoraEngine.initialize(RtcEngineContext(
+    await agoraEngine.initialize(const RtcEngineContext(
       appId: UIConst.agoraAppId,
       channelProfile: ChannelProfileType.channelProfileCommunication1v1,
     ));
