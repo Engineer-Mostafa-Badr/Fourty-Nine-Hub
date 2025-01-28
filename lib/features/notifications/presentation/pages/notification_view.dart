@@ -28,6 +28,13 @@ class NotificationView extends StatefulWidget {
   State<NotificationView> createState() => _NotificationViewState();
 }
 
+int index = 0;
+List<String> titles = [
+  LocaleKeys.serviceNoifications.localize,
+  LocaleKeys.socialNotifications.localize,
+  LocaleKeys.fourtyNineNotifications.localize,
+];
+
 class _NotificationViewState extends State<NotificationView> {
   @override
   Widget build(BuildContext context) {
@@ -99,12 +106,16 @@ class _NotificationViewState extends State<NotificationView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Label(
-                      text: LocaleKeys.notifications.localize,
+                      text: titles[index],
                       style: Styles.headerText(),
                     ),
                     const Sizer(),
-                    const TabBar(
-                      tabs: [
+                    TabBar(
+                      onTap: (value) {
+                        index = value;
+                        setState(() {});
+                      },
+                      tabs: const [
                         SocialIconBuilder(),
                         ServicesIconBuilder(),
                         AppIconBuilder(),

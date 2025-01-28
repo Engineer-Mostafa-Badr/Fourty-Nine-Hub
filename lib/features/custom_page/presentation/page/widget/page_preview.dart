@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/drawer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
@@ -135,9 +136,9 @@ class _PagePreviewState extends State<PagePreview> {
                       children: [
                         CustomElevatedButton(
                           child: Text(
-                            'حفظ وتفعيل',
+                            LocaleKeys.saveAndActivate.localize,
                             style:
-                                Styles.mediumText(color: AppColors.whiteColor),
+                                Styles.smallText(color: AppColors.whiteColor),
                           ),
                           onPressed: () async {
                             await context
@@ -154,9 +155,9 @@ class _PagePreviewState extends State<PagePreview> {
                             Restart.restartApp();
                           },
                           child: Text(
-                            'حفظ وعدم تفعيل',
+                            LocaleKeys.saveWithOutActivate.localize,
                             style:
-                                Styles.mediumText(color: AppColors.whiteColor),
+                                Styles.smallText(color: AppColors.whiteColor),
                           ),
                         ),
                       ],

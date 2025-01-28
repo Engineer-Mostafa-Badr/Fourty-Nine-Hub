@@ -74,6 +74,7 @@ class _NavigateBarState extends State<NavigateBar> {
   ScrollController scrollController = ScrollController();
   bool _isScrollingDown = false;
 
+  @override
   didChangeDependencies() {
     super.didChangeDependencies();
     _setupScrollController();

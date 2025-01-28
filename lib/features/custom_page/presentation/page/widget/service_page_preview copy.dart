@@ -34,6 +34,7 @@ import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/pages/main_categories_cards_view.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/pages/main_categories_taps_view.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/widgets/animated_text.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/firebase_notfications_cubit/firebase_notfications_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/widgets/notification_snackbar.dart';
@@ -204,12 +205,9 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
             ),
             SliverToBoxAdapter(child: _buildStarWidget()),
             const SliverToBoxAdapter(child: Sizer()),
-            SliverToBoxAdapter(
-              child: CustomAnimatedText(
-                textDirection:
-                    (context.isArabic ? TextDirection.ltr : TextDirection.rtl),
-                text: 'Custom Message',
-                onTap: () {},
+            const SliverToBoxAdapter(
+              child: ScrollableTextWithAnimation(
+                textDirection: TextDirection.rtl,
               ),
             ),
             const SliverToBoxAdapter(child: Sizer()),
@@ -767,26 +765,20 @@ class PickMeAndComeWithYouLShimmerLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: List.generate(
-          2,
-          (index) => Expanded(
-                child: Shimmer.fromColors(
-                  baseColor: Colors.grey[100]!,
-                  highlightColor: Colors.white24,
-                  child: Container(
-                    width: 100.h,
-                    height: kToolbarHeight * 2.h,
-                    margin: const EdgeInsets.symmetric(horizontal: 5),
-                    padding: const EdgeInsets.symmetric(horizontal: 5),
-                    decoration: BoxDecoration(
-                      color: AppColors.AUTH_CONTAINER_COLOR,
-                      borderRadius: BorderRadius.circular(20.r),
-                      border: Border.all(color: Colors.grey),
-                    ),
-                  ),
-                ),
-              )),
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[100]!,
+      highlightColor: Colors.white24,
+      child: Container(
+        width: 100.h,
+        height: kToolbarHeight * 2.h,
+        margin: const EdgeInsets.symmetric(horizontal: 5),
+        padding: const EdgeInsets.symmetric(horizontal: 5),
+        decoration: BoxDecoration(
+          color: AppColors.AUTH_CONTAINER_COLOR,
+          borderRadius: BorderRadius.circular(20.r),
+          border: Border.all(color: Colors.grey),
+        ),
+      ),
     );
   }
 }

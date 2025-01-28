@@ -238,6 +238,9 @@ abstract class LocaleKeys {
   static const emailOtp = 'emailOtp';
   static const verification = 'verification';
   static const notifications = 'notifications';
+  static const serviceNoifications = 'serviceNoifications';
+  static const socialNotifications = 'socialNotifications';
+  static const fourtyNineNotifications = 'fourtyNineNotifications';
   static const checkVerification = 'checkVerification';
   static const congratulations = 'congratulations';
   static const close = 'close';
@@ -1285,4 +1288,6 @@ abstract class LocaleKeys {
   static const favouriteDescrepion = 'favouriteDescrepion';
   static const chooseCategoryView = 'chooseCategoryView';
   static const youCanChooseOneWayAtLeast = 'youCanChooseOneWayAtLeast';
+  static const saveAndActivate = 'saveAndActivate';
+  static const saveWithOutActivate = 'saveWithOutActivate';
 }

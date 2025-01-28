@@ -1321,7 +1321,12 @@ class CodegenLoader extends AssetLoader {
     "deActivateCustomPage": "الغاء تفعيل الصفحه المخصصه",
     "areYouSureToDeActivate": "هل انت متأكد من الغاء تفعيل الصفحه المخصصه؟",
     "chooseCategoryView": "اختر طريقه عرض القسام الرئيسيه للخدمات",
-    "youCanChooseOneWayAtLeast": "يمكنك اختيار بحد أقصى طريقه عرض واحده"
+    "youCanChooseOneWayAtLeast": "يمكنك اختيار بحد أقصى طريقه عرض واحده",
+    "saveAndActivate": "حفظ وتفعيل",
+    "saveWithOutActivate": "حفظ بدون تفعيل",
+    "serviceNoifications": 'اشعارات الخدمه',
+    "socialNotifications": 'اشعارات التواصل الاجتماعي',
+    "fourtyNineNotifications": 'اشعارات 49',
   };
   static const Map<String, dynamic> en = {
     "nnew": "New",
@@ -2672,6 +2677,11 @@ class CodegenLoader extends AssetLoader {
         "Are you sure you want to deactivate custom page?",
     "chooseCategoryView": "Choose the main category view method for services",
     "youCanChooseOneWayAtLeast": "You can select a maximum of one view method.",
+    "saveAndActivate": "Save and Activate",
+    "saveWithOutActivate": "Save Without Activate",
+    "serviceNoifications": "Service Noifications",
+    "socialNotifications": "Social Notifications",
+    "fourtyNineNotifications": "49 Notifications",
   };
   static const Map<String, Map<String, dynamic>> mapLocales = {
     "ar": ar,
