@@ -33,3 +33,45 @@ class IconWithViewCount extends StatelessWidget {
     );
   }
 }
+
+class CustomNotificationWidget extends StatelessWidget {
+  const CustomNotificationWidget({
+    super.key,
+    required this.icon,
+    required this.unreadCount,
+  });
+
+  final Widget icon;
+  final int unreadCount;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Tab(
+          icon: icon,
+        ),
+        Visibility(
+          visible: unreadCount != 0,
+          child: Positioned(
+            top: 6,
+            right: -5,
+            child: Container(
+              padding: const EdgeInsets.all(2),
+              decoration: const BoxDecoration(
+                  shape: BoxShape.circle, color: AppColors.SECONDARY_COLOR),
+              child: Center(
+                child: Text(
+                  unreadCount == 0 ? '   ' : '$unreadCount',
+                  style: Styles.smallText(
+                      color: AppColors.whiteColor, fontSize: 20),
+                ),
+              ),
+            ),
+          ),
+        )
+      ],
+    );
+  }
+}

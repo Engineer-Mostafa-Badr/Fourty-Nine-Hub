@@ -12,6 +12,7 @@ import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_comment_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/comment_react_usecase.dart';
@@ -23,6 +24,7 @@ import 'package:fourtyninehub/features/social_media/twitter/presentation/bloc/tw
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/build_twitter_document_card.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/twitter_post_card.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/twitter_post_comments.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -59,8 +61,7 @@ class _TwitterViewState extends State<TwitterView> {
         PositionedDirectional(
           bottom: 10,
           end: 10,
-          child: FloatingActionButton(
-            backgroundColor: Colors.red,
+          child: CustomElevatedButton(
             onPressed: () {
               if (context.read<UserCubit>().isLoggedIn) {
                 context.push(Routes.CREATEPOST, extra: 'twitter');
@@ -68,10 +69,9 @@ class _TwitterViewState extends State<TwitterView> {
                 context.push(Routes.LOGIN);
               }
             },
-            shape: const CircleBorder(),
-            child: const Icon(
-              Icons.add,
-              color: Colors.white,
+            child: Text(
+              LocaleKeys.createPost.localize,
+              style: Styles.smallText(color: AppColors.whiteColor),
             ),
           ),
         ),

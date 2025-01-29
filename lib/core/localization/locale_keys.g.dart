@@ -15,6 +15,7 @@ abstract class LocaleKeys {
   static const deActivateCustomPage = 'deActivateCustomPage';
   static const areYouSureToDeActivate = 'areYouSureToDeActivate';
   static const done = 'done';
+
   static const date = 'date';
   static const selectADate = 'selectADate';
   static const from = 'from';

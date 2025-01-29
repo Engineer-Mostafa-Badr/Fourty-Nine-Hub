@@ -58,7 +58,7 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
                             width: 40.w,
                           ),
                           Label(
-                            text: LocaleKeys.documentation.localize,
+                            text: LocaleKeys.verification.localize,
                             style: Styles.mediumText(
                               fontSize: 70.sp,
                             ),
@@ -92,15 +92,15 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
                             style: Styles.mediumText(),
                             decoration: InputDecoration(
                               contentPadding: EdgeInsets.all(10.w),
-                              border: OutlineInputBorder(
+                              border: const OutlineInputBorder(
                                   borderSide: BorderSide(
-                                      color: Theme.of(context).primaryColor)),
-                              enabledBorder: OutlineInputBorder(
+                                      color: AppColors.PRIMARY_COLOR)),
+                              enabledBorder: const OutlineInputBorder(
                                   borderSide: BorderSide(
-                                      color: Theme.of(context).primaryColor)),
-                              focusedBorder: OutlineInputBorder(
+                                      color: AppColors.PRIMARY_COLOR)),
+                              focusedBorder: const OutlineInputBorder(
                                   borderSide: BorderSide(
-                                      color: Theme.of(context).primaryColor)),
+                                      color: AppColors.PRIMARY_COLOR)),
                               hintText:
                                   '${LocaleKeys.typeYourName.localize} ....',
                               hintStyle: Styles.mediumText(),
@@ -145,7 +145,8 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
                                     label: '',
                                     text: LocaleKeys.front.localize,
                                     onTap: () {
-                                      controller.uploadFrontId(context: context);
+                                      controller.uploadFrontId(
+                                          context: context);
                                     },
                                     onRemove: () {
                                       controller.removeFrontId();
@@ -230,7 +231,7 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
       height: 70.h,
       child: ElevatedAppButton(
         label: LocaleKeys.requestVerification.localize,
-        backColor: AppColors.Arrow_Icon_color,
+        backColor: AppColors.PRIMARY_COLOR,
         onPressed: onTap,
         textStyle: Styles.mediumText(
             fontSize: 65.sp, color: AppColors.AUTH_CONTAINER_COLOR),

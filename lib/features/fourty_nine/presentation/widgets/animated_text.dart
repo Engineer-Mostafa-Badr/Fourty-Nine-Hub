@@ -126,18 +126,8 @@ class _ScrollableTextWithAnimationState
                     alignment: Alignment.center,
                     child: AutoScrollText(
                       context.isArabic
-                          ? context
-                                  .read<MainCategoriesCubit>()
-                                  .state
-                                  .question
-                                  ?.messageAr ??
-                              ''
-                          : context
-                                  .read<MainCategoriesCubit>()
-                                  .state
-                                  .question
-                                  ?.messageEn ??
-                              '',
+                          ? '${context.read<MainCategoriesCubit>().state.question?.messageAr}               '
+                          : '${context.read<MainCategoriesCubit>().state.question?.messageEn}               ',
                       style: Styles.headerText(
                           fontSize: 30,
                           color: context

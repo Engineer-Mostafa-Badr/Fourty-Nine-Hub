@@ -30,8 +30,8 @@ class NotificationView extends StatefulWidget {
 
 int index = 0;
 List<String> titles = [
-  LocaleKeys.serviceNoifications.localize,
   LocaleKeys.socialNotifications.localize,
+  LocaleKeys.serviceNoifications.localize,
   LocaleKeys.fourtyNineNotifications.localize,
 ];
 
