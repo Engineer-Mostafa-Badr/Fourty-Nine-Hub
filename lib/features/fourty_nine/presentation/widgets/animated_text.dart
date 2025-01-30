@@ -96,7 +96,7 @@ class _ScrollableTextWithAnimationState
               child: AutoScrollText(
                 context.isArabic?context.read<MainCategoriesCubit>().state.question?.messageAr??'':context.read<MainCategoriesCubit>().state.question?.messageEn??'',
                 style: Styles.headerText(fontSize: 30, color: context.read<MainCategoriesCubit>().state.question?.enableAnswers==true?AppColors.SECONDARY_COLOR:AppColors.PRIMARY_COLOR),
-                textDirection:widget.textDirection ?? context.isArabic?TextDirection.rtl:TextDirection.ltr,
+                textDirection:widget.textDirection ?? (context.isArabic?TextDirection.rtl:TextDirection.ltr),
                 // textStyle: TextStyle(fontSize: 24),
               ),
             ),
