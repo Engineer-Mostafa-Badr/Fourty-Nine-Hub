@@ -32,6 +32,7 @@ class FormTextField extends StatelessWidget {
   final String? Function(String?)? validator;
   final Color? fillColor;
   final bool noBorder;
+  final bool? readOnly;
   final TextStyle? hintStyle;
   final BorderRadius? borderRadius;
   final BoxConstraints? constraints;
@@ -46,6 +47,7 @@ class FormTextField extends StatelessWidget {
       this.borderRadius,
       this.prefix,
       this.noBorder = false,
+      this.readOnly = false,
       this.constraints,
       this.fillColor,
       this.hint,
@@ -77,6 +79,7 @@ class FormTextField extends StatelessWidget {
       SizedBox(
         height: height ?? 70,
         child: TextFormField(
+          readOnly: readOnly??false,
           // style:
           //     textStyle ?? Styles.mediumText(color: AppColors.QUANTITY_COLOR),
           textAlignVertical: textAlignVertical,
