@@ -1,6 +1,7 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
+import 'dart:math';
+import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
@@ -8,6 +9,8 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/common/theme/cubit/cubit.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/send_message_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 import 'package:fourtyninehub/features/social_media/stories/data/models/friends_stories_model.dart';
 import 'package:fourtyninehub/features/social_media/stories/data/models/muted_stories_model.dart';
 import 'package:fourtyninehub/features/social_media/stories/data/models/viewers_model.dart';
@@ -46,6 +49,7 @@ class StoryCubit extends Cubit<StoryState> {
   final DeleteStoryUseCase _deleteStoryUseCase;
   final FetchStoriesUseCase _fetchStoriesUseCase;
   final MakeLikeUseCase _makeLikeUseCase;
+  final SendMessageUseCase _sendMessageUseCase;
 
   StoryCubit(
     this._createStoryUseCase,
@@ -58,7 +62,26 @@ class StoryCubit extends Cubit<StoryState> {
     this._getFollowersUseCase,
     this._updateStoryPrivacyUseCase,
     this._makeLikeUseCase,
+    this._sendMessageUseCase,
   ) : super(StoryState());
+
+  Future<void> sendMessage({required ChatEntity chat, required String message}) async {
+    final result = await _sendMessageUseCase(SendMessageParams(
+      
+      message: message,
+      chat: chat,
+      media: [],
+      sharedContacts: [],
+      oneTimeView: false,
+      isForward: false,
+      
+    ));
+    result.fold(
+        (l) => emit(state),
+        (r) async {
+      emit(state);
+    });
+  }
 
   makeView({storyId, context}) async {
     getViewersInStory(context: context, storyId: storyId);
@@ -236,7 +259,8 @@ class StoryCubit extends Cubit<StoryState> {
     final response = await _deleteStoryUseCase(storyId);
 
     response.fold(
-      (failure) {
+      (failure)async {
+        await fetchStories();
         emit(StoryError('Failed to delete story: $failure'));
         emit(state.copyWith(isLoading: false)); // Reset loading state
       },
@@ -275,8 +299,8 @@ class StoryCubit extends Cubit<StoryState> {
       isFetchingMore: loadMore,
     ));
     // _fetchStoriesUseCase
-    final response = await _fetchStoriesUseCase(
-        PaginationParams(page: state.currentPage, limit: 100));
+    final response =
+        await _fetchStoriesUseCase(PaginationParams(page: 1, limit: 100));
 
     response.fold(
       (failure) {
@@ -441,7 +465,7 @@ class StoryCubit extends Cubit<StoryState> {
         emit(StoryError('Failed to create story: $failure'));
       },
       (data) async {
-        log("createTextStory: $data");
+        // log("createTextStory: $data");
         await fetchStories();
         await getMutedStories();
         emit(state.copyWith(isLoading: false)); // Reset loading state
@@ -454,6 +478,142 @@ class StoryCubit extends Cubit<StoryState> {
   }
 }
 
+// showViewerList(BuildContext context, ViewersResponse viewers) async {
+//   await showModalBottomSheet(
+//     shape: const RoundedRectangleBorder(
+//       borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+//     ),
+//     context: context,
+//     isScrollControlled: true,
+//     backgroundColor: Colors.white.withOpacity(0.9),
+//     builder: (BuildContext context) {
+//       return DraggableScrollableSheet(
+//         expand: false,
+//         initialChildSize: 0.5,
+//         maxChildSize: 0.9,
+//         minChildSize: 0.3,
+//         builder: (BuildContext context, ScrollController scrollController) {
+//           return Column(
+//             children: [
+//               // Beautiful Header Section with shadow effect
+//               Container(
+//                 decoration: const BoxDecoration(
+//                   color: AppColors.PRIMARY_COLOR,
+//                   borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+//                   boxShadow: [
+//                     BoxShadow(
+//                       color: Colors.black26,
+//                       offset: Offset(0, -3),
+//                       blurRadius: 10,
+//                     ),
+//                   ],
+//                 ),
+//                 padding: const EdgeInsets.all(20),
+//                 child: Row(
+//                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                   children: [
+//                     Text(
+//                       context.isArabic
+//                           ? 'شوهدت بواسطة ${viewers.data.length}'
+//                           : 'Viewed by ${viewers.data.length}',
+//                       style: const TextStyle(
+//                         fontSize: 20,
+//                         fontWeight: FontWeight.w500,
+//                         color: Colors.white,
+//                       ),
+//                     ),
+//                     // GestureDetector(
+//                     //   onTap: () {
+//                     //     Navigator.pop(context);
+//                     //   },
+//                     //   child: const Icon(
+//                     //     Icons.close,
+//                     //     size: 26,
+//                     //     color: Colors.black54,
+//                     //   ),
+//                     // ),
+//                   ],
+//                 ),
+//               ),
+//               // const Divider(thickness: 1, color: Colors.transparent),
+
+//               // Responsive List of Viewers
+//               Expanded(
+//                 child: Container(
+//                   padding: const EdgeInsets.symmetric(horizontal: 10),
+//                   decoration: const BoxDecoration(
+//                     color: Colors.white,
+//                   ),
+//                   child: ListView.builder(
+//                     controller: scrollController,
+//                     itemCount: viewers.data.length,
+//                     itemBuilder: (context, index) {
+//                       final viewer = viewers.data[index];
+//                       return Padding(
+//                         padding: const EdgeInsets.symmetric(vertical: 8.0),
+//                         child: ListTile(
+//                           contentPadding: const EdgeInsets.all(8),
+//                           tileColor: Colors.white,
+//                           shape: RoundedRectangleBorder(
+//                             borderRadius: BorderRadius.circular(15),
+//                             side:
+//                                 BorderSide(color: Colors.grey[300]!, width: 1),
+//                           ),
+//                           leading: GestureDetector(
+//                             onTap: () => context.push(Routes.OTHERSACCOUNT,
+//                                 extra: viewer.user.id),
+//                             child: CircleAvatar(
+//                               radius: 19,
+//                               backgroundColor: AppColors.PRIMARY_COLOR_DARK,
+//                               child: CircleAvatar(
+//                                 radius: 16,
+//                                 backgroundImage: NetworkImage(viewer
+//                                     .user.profile!.profilePicture!.mediaKey!),
+//                                 backgroundColor: Colors.grey[300],
+//                               ),
+//                             ),
+//                           ),
+//                           title: Text(
+//                             capitalizeAndSplit2Only(
+//                                 "${viewer.user.firstName} ${viewer.user.lastName}"),
+//                             style: TextStyle(
+//                               fontSize: 16,
+//                               fontWeight: FontWeight.w500,
+//                               color: Colors.black.withOpacity(0.8),
+//                             ),
+//                           ),
+//                           subtitle: Text(
+//                             '',
+//                             // getTimeAgo(context, viewer.createdAt.toString()),
+//                             style: TextStyle(
+//                               fontSize: 14,
+//                               color: Colors.grey[600],
+//                             ),
+//                           ),
+//                           trailing: Text(
+//                             getTimeAgo(context, viewer.updatedAt.toString()),
+//                             style: TextStyle(
+//                               fontSize: 14,
+//                               color: Colors.grey[600],
+//                             ),
+//                           ),
+//                           onTap: () {
+//                             // Optional: Add tap functionality here
+//                           },
+//                         ),
+//                       );
+//                     },
+//                   ),
+//                 ),
+//               ),
+//             ],
+//           );
+//         },
+//       );
+//     },
+//   );
+// }
+
 showViewerList(BuildContext context, ViewersResponse viewers) async {
   await showModalBottomSheet(
     shape: const RoundedRectangleBorder(
@@ -463,131 +623,266 @@ showViewerList(BuildContext context, ViewersResponse viewers) async {
     isScrollControlled: true,
     backgroundColor: Colors.white.withOpacity(0.9),
     builder: (BuildContext context) {
-      return DraggableScrollableSheet(
-        expand: false,
-        initialChildSize: 0.5,
-        maxChildSize: 0.9,
-        minChildSize: 0.3,
-        builder: (BuildContext context, ScrollController scrollController) {
-          return Column(
+      return StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+          return Stack(
             children: [
-              // Beautiful Header Section with shadow effect
-              Container(
-                decoration: const BoxDecoration(
-                  color: AppColors.PRIMARY_COLOR,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black26,
-                      offset: Offset(0, -3),
-                      blurRadius: 10,
-                    ),
-                  ],
-                ),
-                padding: const EdgeInsets.all(20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      context.isArabic
-                          ? 'شوهدت بواسطة ${viewers.data.length}'
-                          : 'Viewed by ${viewers.data.length}',
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white,
-                      ),
-                    ),
-                    // GestureDetector(
-                    //   onTap: () {
-                    //     Navigator.pop(context);
-                    //   },
-                    //   child: const Icon(
-                    //     Icons.close,
-                    //     size: 26,
-                    //     color: Colors.black54,
-                    //   ),
-                    // ),
-                  ],
-                ),
-              ),
-              // const Divider(thickness: 1, color: Colors.transparent),
-
-              // Responsive List of Viewers
-              Expanded(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                  ),
-                  child: ListView.builder(
-                    controller: scrollController,
-                    itemCount: viewers.data.length,
-                    itemBuilder: (context, index) {
-                      final viewer = viewers.data[index];
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: ListTile(
-                          contentPadding: const EdgeInsets.all(8),
-                          tileColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                            side:
-                                BorderSide(color: Colors.grey[300]!, width: 1),
-                          ),
-                          leading: GestureDetector(
-                            onTap: () => context.push(Routes.OTHERSACCOUNT,
-                                extra: viewer.user.id),
-                            child: CircleAvatar(
-                              radius: 19,
-                              backgroundColor: AppColors.PRIMARY_COLOR_DARK,
-                              child: CircleAvatar(
-                                radius: 16,
-                                backgroundImage: NetworkImage(viewer
-                                    .user.profile!.profilePicture!.mediaKey!),
-                                backgroundColor: Colors.grey[300],
+              // Bottom Sheet Content
+              DraggableScrollableSheet(
+                expand: false,
+                initialChildSize: 0.5,
+                maxChildSize: 0.9,
+                minChildSize: 0.3,
+                builder:
+                    (BuildContext context, ScrollController scrollController) {
+                  return Column(
+                    children: [
+                      // Beautiful Header Section with shadow effect
+                      Container(
+                        decoration: const BoxDecoration(
+                          color: AppColors.PRIMARY_COLOR,
+                          borderRadius:
+                              BorderRadius.vertical(top: Radius.circular(25)),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black26,
+                              offset: Offset(0, -3),
+                              blurRadius: 10,
+                            ),
+                          ],
+                        ),
+                        padding: const EdgeInsets.all(20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              context.isArabic
+                                  ? 'شوهدت بواسطة ${viewers.data.length}'
+                                  : 'Viewed by ${viewers.data.length}',
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white,
                               ),
                             ),
-                          ),
-                          title: Text(
-                            capitalizeAndSplit2Only(
-                                "${viewer.user.firstName} ${viewer.user.lastName}"),
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.black.withOpacity(0.8),
-                            ),
-                          ),
-                          subtitle: Text(
-                            '',
-                            // getTimeAgo(context, viewer.createdAt.toString()),
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                          trailing: Text(
-                            getTimeAgo(context, viewer.updatedAt.toString()),
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                          onTap: () {
-                            // Optional: Add tap functionality here
-                          },
+                          ],
                         ),
-                      );
-                    },
-                  ),
-                ),
+                      ),
+                      // Responsive List of Viewers
+                      Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                          ),
+                          child: ListView.builder(
+                            controller: scrollController,
+                            itemCount: viewers.data.length,
+                            itemBuilder: (context, index) {
+                              final viewer = viewers.data[index];
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
+                                child: ListTile(
+                                  contentPadding: const EdgeInsets.all(8),
+                                  tileColor: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                    side: BorderSide(
+                                        color: Colors.grey[300]!, width: 1),
+                                  ),
+                                  leading: GestureDetector(
+                                    onTap: () => context.push(
+                                        Routes.OTHERSACCOUNT,
+                                        extra: viewer.user.id),
+                                    child: CircleAvatar(
+                                      radius: 19,
+                                      backgroundColor:
+                                          AppColors.PRIMARY_COLOR_DARK,
+                                      child: CircleAvatar(
+                                        radius: 16,
+                                        backgroundImage: NetworkImage(viewer
+                                            .user
+                                            .profile!
+                                            .profilePicture!
+                                            .mediaKey!),
+                                        backgroundColor: Colors.grey[300],
+                                      ),
+                                    ),
+                                  ),
+                                  title: Text(
+                                    capitalizeAndSplit2Only(
+                                        "${viewer.user.firstName} ${viewer.user.lastName}"),
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.black.withOpacity(0.8),
+                                    ),
+                                  ),
+                                  trailing: Text(
+                                    getTimeAgo(
+                                        context, viewer.updatedAt.toString()),
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.grey[600],
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    // Optional: Add tap functionality here
+                                  },
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
               ),
+              // Animated Hearts Overlay
+              viewers.data.isNotEmpty
+                  ? Positioned.fill(
+                      child: HeartAnimationWidget(),
+                    )
+                  : const SizedBox.shrink(),
             ],
           );
         },
       );
     },
   );
+}
+
+class HeartAnimationWidget extends StatefulWidget {
+  @override
+  _HeartAnimationWidgetState createState() => _HeartAnimationWidgetState();
+}
+
+class _HeartAnimationWidgetState extends State<HeartAnimationWidget>
+    with TickerProviderStateMixin {
+  final Random _random = Random();
+  final List<Widget> _hearts = [];
+  Timer? _timer;
+
+  void _generateHeart() {
+    final double startX =
+        _random.nextDouble() * MediaQuery.of(context).size.width;
+    final double endY = MediaQuery.of(context).size.height * 0.1;
+
+    final heart = Positioned(
+      left: startX,
+      bottom: 0,
+      child: _AnimatedHeart(endY: endY),
+    );
+
+    setState(() {
+      _hearts.add(heart);
+    });
+
+    // Remove the heart after animation is done
+    Future.delayed(const Duration(seconds: 3), () {
+      setState(() {
+        _hearts.remove(heart);
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Start generating hearts periodically
+    _timer = Timer.periodic(const Duration(milliseconds: 300), (_) {
+      _generateHeart();
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel(); // Stop the timer when the widget is disposed
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: _hearts,
+    );
+  }
+}
+
+class _AnimatedHeart extends StatefulWidget {
+  final double endY;
+
+  const _AnimatedHeart({required this.endY});
+
+  @override
+  __AnimatedHeartState createState() => __AnimatedHeartState();
+}
+
+class __AnimatedHeartState extends State<_AnimatedHeart>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _yAnimation;
+  late final Animation<double> _opacityAnimation;
+  late final Animation<double> _sizeAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    )..forward();
+
+    _yAnimation = Tween<double>(
+      begin: 0,
+      end: widget.endY,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
+
+    _opacityAnimation = Tween<double>(
+      begin: 1.0,
+      end: 0.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
+
+    _sizeAnimation = Tween<double>(
+      begin: 20.0,
+      end: 50.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
+
+    _controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _controller.dispose();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        return Opacity(
+          opacity: _opacityAnimation.value,
+          child: Transform.translate(
+            offset: Offset(0, -_yAnimation.value),
+            child: Icon(
+              Icons.favorite,
+              color: AppColors.PRIMARY_COLOR_DARK,
+              size: _sizeAnimation.value,
+            ),
+          ),
+        );
+      },
+    );
+  }
 }
 
 // Example Data

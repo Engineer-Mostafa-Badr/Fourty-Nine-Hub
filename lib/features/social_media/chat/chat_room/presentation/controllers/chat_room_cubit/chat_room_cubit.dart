@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_contacts/contact.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/socket/socket_data_source.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
@@ -16,9 +17,12 @@ import 'package:fourtyninehub/core/extensions/map_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_shared_contacts_entity.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/assign_labels_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/clear_chat_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/create_lable_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/delete_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_chat_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_lables_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_one_time_view_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_clear_chat_usecase.dart';
@@ -67,6 +71,9 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
   final StopRecordingMessageUseCase _stopRecordingMessageUseCase;
   final PinMessageUseCase _pinMessageUseCase;
   final UnPinMessageUseCase _unpinMessageUseCase;
+  final GetLablesUsecase _getLabelsUseCase;
+  final CreateLableUsecase _createLableUsecase;
+  final AssignLabelsUsecase _assignLableUsecase;
 
   final ListenToPinMessageUseCase _listenToPinMessageUseCase;
   final ListenToUnPinMessageUseCase _listenToUnPinMessageUseCase;
@@ -120,6 +127,9 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     this._deleteMessageUseCase,
     this._listenToDeleteMessageUseCase,
     this._showDeletedMessageUseCase,
+    this._getLabelsUseCase,
+    this._createLableUsecase,
+    this._assignLableUsecase,
   ) : super(const ChatRoomState()) {
     _listenToDeliveredMessages();
     _listenToSeenMessages();
@@ -230,6 +240,67 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
         _scrollDown();
       }
     });
+  }
+
+  Future<void> getLabels() async {
+    final response = await _getLabelsUseCase(GetLablesParams(chatId: chat.id));
+    response.fold(
+        (failure) => emit(
+            state.copyWith(failure: failure, status: ChatRoomStates.error)),
+        (data) {
+      log("get labels result $data");
+      chat.lables.clear();
+      for (final label in data) {
+        log("lable name ${label.name}");
+        chat.lables.add(label);
+      }
+      emit(state.copyWith(status: ChatRoomStates.success));
+    });
+  }
+
+  Future<void> createLable(
+      {required String color, required String name}) async {
+    final response =
+        await _createLableUsecase(CreatLabelParams(name: name, color: color));
+
+    response.fold(
+        (failure) => emit(
+            state.copyWith(failure: failure, status: ChatRoomStates.error)),
+        (data) async {
+      log("Create label result $data");
+      chat.lastMessage = null;
+      await getLabels();
+      emit(state.copyWith(status: ChatRoomStates.success));
+    });
+  }
+
+  Future<void> assignLabels() async {
+    final response = await _assignLableUsecase(
+      AssignLabelParams(
+        chatId: chat.id,
+        labelsId: chat.lables
+            .where((element) => element.isSelected)
+            .map((label) => label.id)
+            .toList(),
+      ),
+    );
+    response.fold(
+        (failure) => emit(
+            state.copyWith(failure: failure, status: ChatRoomStates.error)),
+        (data) async {
+      log("Assign label result $data");
+      chat.lastMessage = null;
+      await getLabels();
+      emit(state.copyWith(status: ChatRoomStates.success));
+    });
+  }
+
+  void updateLabelSelection(int index, bool? newValue) {
+    final label = chat.lables[index];
+    label.isSelected = newValue ?? false;
+    emit(state.copyWith(
+        status:
+            ChatRoomStates.success)); // Emit a new state to trigger a rebuild
   }
 
   Future<void> clearChat({required bool clearForAll}) async {

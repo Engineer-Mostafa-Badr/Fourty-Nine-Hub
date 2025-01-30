@@ -857,6 +857,7 @@ class EndPoints {
   static String getSubcategoryAdProps(String id) {
     return '/ads/PropsBySubCategoryId/$id';
   }
+
   static String getMainCategoryAdProps(String id) {
     return '/ads/PropsByMainCategoryId/$id';
   }
@@ -864,7 +865,7 @@ class EndPoints {
   static const createAd = '/ads/create-ads';
 
   static filterAd(FilterModel filter) =>
-      '/ads/filter-ads/${filter.subCategoryId}?${(filter.governorateId?.isNotEmpty??false)?"government=${filter.governorateId}&":''}${filter.cityId?.isNotEmpty??false?"city=${filter.cityId}&":""}&limit=${filter.limit}&page=${filter.page}&type=${filter.filter}';
+      '/ads/filter-ads/${filter.subCategoryId}?${(filter.governorateId?.isNotEmpty ?? false) ? "government=${filter.governorateId}&" : ''}${filter.cityId?.isNotEmpty ?? false ? "city=${filter.cityId}&" : ""}&limit=${filter.limit}&page=${filter.page}&type=${filter.filter}';
   static deleteFood(String id) => '/food/delete-food-item/$id';
   static const addFood = '/food/add-food';
   static const deleteCart = '/food/deleteCart';
@@ -961,8 +962,16 @@ class EndPoints {
   // chat_room
   static String getChats = '/chat/get-chats';
 
+  static String assignLabels() {
+    return '/chat/set-labels';
+  }
+
   static String getChatMessages(String chatId) {
     return '/chat/get-chat/$chatId';
+  }
+
+  static String getLabels(String chatId) {
+    return '/chat/get-labels?chatId=$chatId';
   }
 
   static String getChatDetails(String chatId) {
@@ -971,6 +980,10 @@ class EndPoints {
 
   static String updateChat(String chatId) {
     return '/chat/update-chat-member/$chatId';
+  }
+
+  static String createLabel() {
+    return '/chat/label';
   }
 
   static String createNormalChat(

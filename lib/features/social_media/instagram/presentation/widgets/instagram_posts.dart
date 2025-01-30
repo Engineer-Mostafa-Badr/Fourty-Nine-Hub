@@ -155,7 +155,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                 create: (_) => serviceLocator()
                   ..fetchStories()
                   ..getMutedStories(),
-                child: const ChatStories(),
+                child: const SizedBox(height: 75, child: ChatStories()),
               ),
             ),
             //hey ahmed dont forget this part
@@ -184,8 +184,10 @@ class _InstagramPostsState extends State<InstagramPosts> {
                 },
                 itemBuilder: (context, item, index) {
                   final pageController = PageController();
-                  if(index== 0 || index % 5 == 0){
-                    return InstagramReels(reels: state.reels ?? [],);
+                  if (index == 0 || index % 5 == 0) {
+                    return InstagramReels(
+                      reels: state.reels ?? [],
+                    );
                   }
                   if (controller.feedPagingController.itemList?[index].type ==
                       'advertisement') {
