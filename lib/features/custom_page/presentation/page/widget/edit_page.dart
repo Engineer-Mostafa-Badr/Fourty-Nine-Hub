@@ -72,16 +72,21 @@ class _EditPageState extends State<EditPage> {
 
 class CustomElevatedButton extends StatelessWidget {
   const CustomElevatedButton(
-      {super.key, required this.child, this.onPressed, this.borderRadius});
+      {super.key,
+      required this.child,
+      this.onPressed,
+      this.borderRadius,
+      this.backgoundColor});
   final Widget child;
   final void Function()? onPressed;
   final double? borderRadius;
+  final Color? backgoundColor;
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.PRIMARY_COLOR,
+          backgroundColor: backgoundColor ?? AppColors.PRIMARY_COLOR,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(borderRadius ?? 20))),
       child: child,
