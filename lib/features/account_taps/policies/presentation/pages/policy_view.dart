@@ -9,7 +9,8 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'dart:io';
 
 class PolicyView extends StatefulWidget {
-  const PolicyView({super.key});
+  const PolicyView({super.key, this.fromTerms});
+  final bool? fromTerms;
 
   @override
   _PolicyViewState createState() => _PolicyViewState();
@@ -57,7 +58,7 @@ class _PolicyViewState extends State<PolicyView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: BackAppBar(
-        label: LocaleKeys.policies.localize,
+        label: widget.fromTerms==true?LocaleKeys.conditions.localize:LocaleKeys.policies.localize,
       ),
       body: Center(
         child: _isLoading

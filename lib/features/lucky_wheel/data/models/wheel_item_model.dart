@@ -11,7 +11,7 @@ class WheelItemModel extends WheelItemEntity {
   });
 
   factory WheelItemModel.fromJson(Map<String, dynamic> json) => WheelItemModel(
-        name: json['name'],
+        name: json['name']??'',
         value: double.parse(json['value'].toString()),
         percentage: double.parse(json['percentage']?.toString() ?? '0'),
         type: WheelItemTypes.values.firstWhere(

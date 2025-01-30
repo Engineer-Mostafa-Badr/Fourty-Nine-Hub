@@ -9,17 +9,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_state.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/authentication/presentation/widgets/birth_date_field.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
@@ -512,6 +515,11 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 Sizer(
                   height: 30.h,
                 ),
+                BirthDatePicker(controller: registerCubit.birthDateTextController, ),
+
+                Sizer(
+                  height: 30.h,
+                ),
                 FormTextField(
                   constraints: BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
                   fillColor: const Color(0xFFEEEEEE),
@@ -682,11 +690,18 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                       '${LocaleKeys.iAcceptAll.localize} ',
                       style: Styles.mediumText(fontWeight: FontWeight.w600),
                     ),
-                    Text(
-                      LocaleKeys.conditions.localize,
-                      style: Styles.mediumText(
-                          color: const Color(0xFF4898D6),
-                          fontWeight: FontWeight.w600),
+                    ClickableWidget(
+                      onTap: (){
+                        AdInterstitialTop.loadIntersitialAd();
+                        AdInterstitialTop.showInterstitialAd();
+                        context.push(Routes.POLICY,extra: true);
+                      },
+                      child: Text(
+                        LocaleKeys.conditions.localize,
+                        style: Styles.mediumText(
+                            color: const Color(0xFF4898D6),
+                            fontWeight: FontWeight.w600),
+                      ),
                     ),
                     Checkbox(
                       activeColor: Colors.red,
