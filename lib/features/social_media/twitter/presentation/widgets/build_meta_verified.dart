@@ -69,7 +69,7 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
                         height: 70.sp,
                       ),
                       Label(
-                        text: LocaleKeys.userName.localize,
+                        text: LocaleKeys.name.localize,
                         style: Styles.mediumText(fontSize: 65.sp),
                       ),
                       SizedBox(

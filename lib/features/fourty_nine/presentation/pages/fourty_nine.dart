@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -769,7 +768,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                     ),
                     Container(
                       color: Colors.black
-                          .withOpacity(0.6), // Darken the background
+                          .withOpacity(0.5), // Darken the background
                     ),
                   ],
                 ),
@@ -805,13 +804,6 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   // ),
                   const Spacer(),
                   Container(
-                    decoration: BoxDecoration(boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.5),
-                        spreadRadius: 0.03,
-                        blurRadius: 6,
-                      ),
-                    ]),
                     child: Label(
                       // text: service.title(),
                       text: title,
