@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/label_colors_map.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/widgets_contacts/view_contact_custom_divider.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/widgets_contacts/view_contact_incription_cart.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/widgets_contacts/view_contact_status_cart.dart';
@@ -109,6 +110,31 @@ class _ViewContactViewState extends State<ViewContactView> {
                               : AppColors.PRIMARY_COLOR,
                         ),
                       ),
+                      widget.chatsCubit.selectedChat.lables.isNotEmpty?   SizedBox(
+                        height: 30, // Adjust height as needed
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: widget.chatsCubit.selectedChat.lables.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.only(left: 16),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(Icons.label, size: 24, color: LabelColorsMap.getColor(widget.chatsCubit.selectedChat.lables[index].color,),),
+                                  const SizedBox(width: 4,),
+                                  Text(widget.chatsCubit.selectedChat.lables[index].name,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14,
+                                  ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ): const SizedBox(),
                       const ViewContactCustomDivider(),
                       ViewContactStatusCart(
                         bio: widget.chatsCubit.user!.bio ?? '',

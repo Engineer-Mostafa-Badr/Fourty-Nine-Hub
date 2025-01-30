@@ -5,9 +5,12 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/data/datasour
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/datasources/remote/chat_message_remote_datasourse.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/repositories/chat_room_repository.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/assign_labels_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/clear_chat_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/create_lable_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/delete_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_chat_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_lables_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_one_time_view_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_pin_message_usecase.dart';
@@ -185,5 +188,20 @@ class ChatRoomRepositoryImplementation extends ChatRoomRepository {
   @override
   void listenToDeleteMessage(Function(DeleteMessageParams p1) params) {
     _chatRemoteDataSource.listenToDeleteMessage(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> createLable(CreatLabelParams params) {
+    return _chatRemoteDataSource.createLable(params);
+  }
+
+  @override
+  Future<Either<Failure, List<GetLablesEntity>>> getLables(GetLablesParams params) {
+    return _chatRemoteDataSource.getLables(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> assignLabels(AssignLabelParams params) {
+    return _chatRemoteDataSource.assignLabels(params);
   }
 }

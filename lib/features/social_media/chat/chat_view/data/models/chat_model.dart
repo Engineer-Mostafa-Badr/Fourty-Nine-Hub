@@ -1,4 +1,5 @@
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/message_model.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_lables_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 
 class ChatModel extends ChatEntity {
@@ -21,6 +22,8 @@ class ChatModel extends ChatEntity {
     super.pinnedMessageId,
     super.isTimerActive,
     super.hasStory,
+    super.isAdmin,
+    super.lables,
   });
 
   factory ChatModel.fromJson(Map<String, dynamic> json) => ChatModel(
@@ -32,8 +35,9 @@ class ChatModel extends ChatEntity {
         name: json['username'] ?? 'Unknown',
         lastSeenCount: json['lastSeenCount'],
         unreadCount: json['unreadCount'],
-        userId: json['userId'],
+        userId: json['userId']?? "",
         avatar: json['avatar'] ?? "",
+        isAdmin: json['userType']?? "user",
         // typing: false,
     hasStory: json['hasStory'] ?? false,
         online: false,
@@ -45,6 +49,13 @@ class ChatModel extends ChatEntity {
                 json['lastMessage'],
               )
             : null,
+            lables: json['Labels'] != null
+          ? (json['Labels'] as List)
+              .whereType<
+                  Map<String, dynamic>>() // Only keep items that are maps
+              .map((e) => GetLablesEntity.fromJson(e))
+              .toList()
+          : [],
         // ignore: prefer_if_null_operators
         pinnedMessageId: json['pinnedMessage'],
       );
