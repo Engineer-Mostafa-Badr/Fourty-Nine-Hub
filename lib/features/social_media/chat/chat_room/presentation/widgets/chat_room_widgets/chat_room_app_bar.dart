@@ -78,21 +78,55 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                             children: [
                               context.read<ChatsCubit>().selectedChat.avatar !=
                                       ""
-                                  ? CircleAvatar(
-                                      backgroundColor: Colors.white,
-                                      backgroundImage: NetworkImage(
-                                        context
-                                            .read<ChatsCubit>()
-                                            .selectedChat
-                                            .avatar,
-                                      ),
-                                    )
-                                  : const CircleAvatar(
-                                      backgroundColor: Colors.white,
-                                      backgroundImage: NetworkImage(
-                                        UIConst.profilePlaceHolder,
-                                      ),
+                                  ? InkWell(
+                                onTap: context.read<ChatsCubit>().selectedChat.hasStory?(){
+                                  // navigate to stories
+                                }
+                                    :null,
+                                    child: Container(
+                                                                    height: kToolbarHeight * .8,
+                                                                    width: kToolbarHeight * .8,
+                                                                    decoration: context.read<ChatsCubit>().selectedChat.hasStory? BoxDecoration(
+                                      borderRadius: BorderRadius.circular(50),
+                                      border: Border.all(
+                                        color: AppColors.PRIMARY_COLOR_DARK,
+                                        width: 3,
+                                      )
+                                                                    ): null,
+                                      child: CircleAvatar(
+                                          backgroundColor: Colors.white,
+                                          backgroundImage: NetworkImage(
+                                            context
+                                                .read<ChatsCubit>()
+                                                .selectedChat
+                                                .avatar,
+                                          ),
+                                        ),
                                     ),
+                                  )
+                                  : InkWell(
+                                onTap: context.read<ChatsCubit>().selectedChat.hasStory?(){
+                                  // navigate to stories
+                                }
+                                    :null,
+                                    child: Container(
+                                                                    height: kToolbarHeight * .8,
+                                                                    width: kToolbarHeight * .8,
+                                                                    decoration: context.read<ChatsCubit>().selectedChat.hasStory? BoxDecoration(
+                                      borderRadius: BorderRadius.circular(50),
+                                      border: Border.all(
+                                        color: AppColors.PRIMARY_COLOR_DARK,
+                                        width: 3,
+                                      )
+                                                                    ): null,
+                                      child: const CircleAvatar(
+                                          backgroundColor: Colors.white,
+                                          backgroundImage: NetworkImage(
+                                            UIConst.profilePlaceHolder,
+                                          ),
+                                        ),
+                                    ),
+                                  ),
                               const SizedBox(width: 12),
                               SizedBox(
                                 height: 60,

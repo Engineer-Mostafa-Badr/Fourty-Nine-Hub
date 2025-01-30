@@ -20,6 +20,7 @@ class ChatModel extends ChatEntity {
     super.lastMessage,
     super.pinnedMessageId,
     super.isTimerActive,
+    super.hasStory,
   });
 
   factory ChatModel.fromJson(Map<String, dynamic> json) => ChatModel(
@@ -34,6 +35,7 @@ class ChatModel extends ChatEntity {
         userId: json['userId'],
         avatar: json['avatar'] ?? "",
         // typing: false,
+    hasStory: json['hasStory'] ?? false,
         online: false,
         isPinned: json['pinned'] ?? false,
         isService: json['isService'] ?? false,

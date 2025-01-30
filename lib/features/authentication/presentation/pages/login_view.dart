@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:developer';
 import 'dart:io';
 
@@ -7,17 +9,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/login_cubit/login_state.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/authentication/presentation/widgets/birth_date_field.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
@@ -89,8 +94,8 @@ class _LoginViewState extends State<LoginView> {
             extra: registerCubit.emailTextController.text,
           );
         } else if (state is RegisterSuccess) {
-          context.read<UserCubit>().setLogin(true);
-          context.read<UserCubit>().getUser();
+          await context.read<UserCubit>().setLogin(true);
+         await context.read<UserCubit>().getUser();
           context.go(Routes.HOME);
         }
       },
@@ -98,7 +103,7 @@ class _LoginViewState extends State<LoginView> {
         listener: (context, state) async {
           if (state is LoginError) {
             String  isVerified = getFailureMessage(state.failure, context).toString();
-            print("Print here ${isVerified}");
+            print("Print here $isVerified");
             if (isVerified == "Email not verified") {
               context.go(
                 Routes.VERIFYMAIL,
@@ -229,7 +234,9 @@ class _LoginViewState extends State<LoginView> {
                       //           : 100.h
                       //       : 0,
                       // ),
-                      Sizer(height: 50,),
+                      const Sizer(
+                        height: 50,
+                      ),
                       widget.authType == AuthType.REGISTER
                           ? DefaultButton(
                               labelStyle: TextStyle(
@@ -257,8 +264,10 @@ class _LoginViewState extends State<LoginView> {
                               labelStyle: TextStyle(
                                   fontSize: 35.sp,
                                   color: AppColors.AUTH_CONTAINER_COLOR),
-                              onPressed: () =>
-                                  loginCubit.login(formKey, context),
+                              onPressed: () {
+                                log("message");
+                                loginCubit.login(formKey, context);
+                              },
                             ),
                     ],
                   )),
@@ -506,6 +515,11 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 Sizer(
                   height: 30.h,
                 ),
+                BirthDatePicker(controller: registerCubit.birthDateTextController, ),
+
+                Sizer(
+                  height: 30.h,
+                ),
                 FormTextField(
                   constraints: BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
                   fillColor: const Color(0xFFEEEEEE),
@@ -676,11 +690,18 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                       '${LocaleKeys.iAcceptAll.localize} ',
                       style: Styles.mediumText(fontWeight: FontWeight.w600),
                     ),
-                    Text(
-                      LocaleKeys.conditions.localize,
-                      style: Styles.mediumText(
-                          color: const Color(0xFF4898D6),
-                          fontWeight: FontWeight.w600),
+                    ClickableWidget(
+                      onTap: (){
+                        AdInterstitialTop.loadIntersitialAd();
+                        AdInterstitialTop.showInterstitialAd();
+                        context.push(Routes.POLICY,extra: true);
+                      },
+                      child: Text(
+                        LocaleKeys.conditions.localize,
+                        style: Styles.mediumText(
+                            color: const Color(0xFF4898D6),
+                            fontWeight: FontWeight.w600),
+                      ),
                     ),
                     Checkbox(
                       activeColor: Colors.red,

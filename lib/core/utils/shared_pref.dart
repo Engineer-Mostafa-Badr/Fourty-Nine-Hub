@@ -1,6 +1,10 @@
+import 'dart:convert';
 import 'dart:developer';
 
+import 'package:fourtyninehub/features/ride/Authentication/data/models/parts_socket_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../features/ride/Authentication/data/models/basic_info_part_model.dart';
 
 class CacheManager {
   static late SharedPreferences prefs;
@@ -13,6 +17,7 @@ class CacheManager {
   static const themeDarkKey = 'darkTheme';
   static const activeCustomPage = 'activeCustomPage';
   static const selectedCategoryView = 'selectedCategoryView';
+  static const RIDESOCKETPARTMODEL = 'RIDESOCKETPARTMODEL';
   // static const themeLightKey = 'lightTheme';
 
   // Save access token
@@ -94,5 +99,51 @@ class CacheManager {
   //get int
   static int? getInt(String key) {
     return prefs.getInt(key);
+  }
+
+  static Future<PartsSocketModel?> getSocketPartModel() async {
+    final prefs = await SharedPreferences.getInstance();
+    var data = prefs.getString(RIDESOCKETPARTMODEL);
+    log(data.toString(), name: "lsdkjfskdjfdjdjdjd");
+    if (data != null) {
+      Map<String, dynamic> json = jsonDecode(data);
+      PartsSocketModel model = PartsSocketModel.fromJson(json);
+      log(json.toString(), name: "lskdfjlskjdflskjdf34lskdjf");
+      return model;
+    }
+    return null;
+  }
+
+  static Future<void> saveSocketPartModel(PartsSocketModel model) async {
+    final prefs = await SharedPreferences.getInstance();
+    var data = prefs.getString(RIDESOCKETPARTMODEL);
+    if (data != null) {
+      try {
+        Map<String, dynamic> json = jsonDecode(data);
+        PartsSocketModel finalModel = PartsSocketModel.fromJson(json);
+        finalModel = model.copyWith(
+            basicInfo: model.basicInfo,
+            carLicence: model.carLicence,
+            dragAnalysisPart: model.dragAnalysisPart,
+            driverLicence: model.driverLicence,
+            moreInfo: model.moreInfo);
+        String jsonEncod = jsonEncode(finalModel.toJson());
+        log(jsonEncod, name: "jsonEncodjsonEncod");
+        prefs.setString(RIDESOCKETPARTMODEL, jsonEncod);
+      } catch (error) {
+        log(error.toString());
+      }
+    } else {
+      log(model.toJson().toString());
+      try {
+        log(model.toJson().toString());
+        String json = jsonEncode(model.toJson());
+        log(json.toString());
+        var l = await prefs.setString(RIDESOCKETPARTMODEL, json);
+        log("${l}lskdjfldskjfdd");
+      } catch (error) {
+        log(error.toString());
+      }
+    }
   }
 }

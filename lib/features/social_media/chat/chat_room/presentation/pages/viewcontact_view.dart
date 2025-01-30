@@ -72,12 +72,29 @@ class _ViewContactViewState extends State<ViewContactView> {
                       const SizedBox(
                         height: 24,
                       ),
-                      CircleAvatar(
-                        // backgroundColor: Colors.transparent,
-                        radius: 54,
-                        backgroundImage: CachedNetworkImageProvider(
-                          widget.chatsCubit.selectedChat.avatar ??
-                              UIConst.profilePlaceHolder,
+                      InkWell(
+                        onTap: widget.chatsCubit.selectedChat.hasStory?(){
+                          // navigate to stories
+                        }
+                            :null,
+                        child: Container(
+                          // height: kToolbarHeight * .8,
+                          // width: kToolbarHeight * .8,
+                          decoration: widget.chatsCubit.selectedChat.hasStory? BoxDecoration(
+                              borderRadius: BorderRadius.circular(100),
+                              border: Border.all(
+                                color: AppColors.PRIMARY_COLOR_DARK,
+                                width: 4,
+                              )
+                          ): null,
+                          child: CircleAvatar(
+                            // backgroundColor: Colors.transparent,
+                            radius: 54,
+                            backgroundImage: CachedNetworkImageProvider(
+                              widget.chatsCubit.selectedChat.avatar ??
+                                  UIConst.profilePlaceHolder,
+                            ),
+                          ),
                         ),
                       ),
                       const SizedBox(

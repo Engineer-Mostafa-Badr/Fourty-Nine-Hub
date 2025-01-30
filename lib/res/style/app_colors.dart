@@ -38,6 +38,9 @@ abstract class AppColors {
   static const BACKGROUND_COLOR = Color(0xFFFFFFFF);
   static const GREY_LIGHT_COLOR = Color(0xFFF3F3F3);
   static const GREY_NORMAL_COLOR = Color(0xFFB9B9B9);
+  static const GREYCARD = Color(0xFFEDEBEB);
+  static const GREYTEXT = Color(0xFF949494);
+  static const GREYBG = Color(0xFFD9D9D9);
   static const GREY_DARK_COLOR = Color(0xFF707070);
   static const GREY_BORDER_COLOR = Color(0xFFDEDEDE);
   static const WHATS_APP_COLOR = Color(0xFF55CD6C);

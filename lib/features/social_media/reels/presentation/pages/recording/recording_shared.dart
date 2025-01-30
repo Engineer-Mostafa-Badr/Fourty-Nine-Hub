@@ -239,7 +239,7 @@ class VideoPlaybackScreenState extends State<VideoPlaybackScreen> {
                               final fileSize = await file.length();
 
                               await serviceLocator<StoryCubit>()
-                                  .uploadStoryVideoOrImage(
+                                  .uploadStoryVideoOrImageOrVoice(
                                 file,
                                 fileType,
                                 fileSize,

@@ -515,23 +515,6 @@ class ChatStories extends StatelessWidget {
             const SizedBox(
               width: 12,
             ),
-            BlocConsumer<StoryCubit, StoryState>(
-              listener: (context, state) {
-                // TODO: implement listener
-              },
-              builder: (context, state) {
-                if (state.mutedStoriesResponse != null) {
-                  return _mutedStories(context);
-                }
-                return const SizedBox(
-                  height: 0,
-                  width: 0,
-                );
-              },
-            ),
-            const Sizer(
-              width: 12,
-            ),
             BlocBuilder<StoryCubit, StoryState>(
               builder: (context, state) {
                 if (state.users.isEmpty ?? false) {
@@ -562,6 +545,27 @@ class ChatStories extends StatelessWidget {
                   itemCount: state.users.length ?? 0,
                 );
               },
+            ),
+            const Sizer(
+              width: 12,
+            ),
+            BlocConsumer<StoryCubit, StoryState>(
+              listener: (context, state) {
+                // TODO: implement listener
+              },
+              builder: (context, state) {
+                if (state.mutedStoriesResponse != null &&
+                    state.mutedStoriesResponse!.data.stories.isNotEmpty) {
+                  return _mutedStories(context);
+                }
+                return const SizedBox(
+                  height: 0,
+                  width: 0,
+                );
+              },
+            ),
+            const Sizer(
+              width: 12,
             ),
           ],
         ),
@@ -598,7 +602,8 @@ class ChatStories extends StatelessWidget {
                     child: CircleAvatar(
                       backgroundColor: AppColors.PRIMARY_COLOR,
                       backgroundImage: NetworkImage(
-                        serviceLocator<UserCubit>().state.data != null
+                        serviceLocator<UserCubit>().state.data != null &&
+                                context.isUserLoggedIn
                             ? serviceLocator<UserCubit>()
                                 .state
                                 .data!
@@ -789,7 +794,7 @@ class ChatStories extends StatelessWidget {
                   state.users[index].user?.firstName ?? '',
                 ),
                 textScaler: TextScaler.noScaling,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40.sp),
+                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 40.sp),
                 textAlign: TextAlign.center,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,

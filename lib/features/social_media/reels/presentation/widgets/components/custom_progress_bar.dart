@@ -133,7 +133,7 @@ class _CustomProgressBarState extends State<CustomProgressBar> {
                       children: [
                         // Background
                         Container(
-                          height: 4,
+                          height: 2,
                           decoration: BoxDecoration(
                             color: Colors.grey[700],
                             borderRadius: BorderRadius.circular(2),
@@ -142,7 +142,7 @@ class _CustomProgressBarState extends State<CustomProgressBar> {
                         FractionallySizedBox(
                           widthFactor: playedPart,
                           child: Container(
-                            height: 4,
+                            height: 2,
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(2),

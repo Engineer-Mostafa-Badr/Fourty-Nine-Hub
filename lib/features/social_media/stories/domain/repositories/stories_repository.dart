@@ -7,11 +7,13 @@ import 'package:fourtyninehub/features/social_media/stories/data/models/viewers_
 import 'package:fourtyninehub/features/social_media/stories/domain/use_case/update_privacy_use_case.dart';
 
 import '../../../../../core/error/failure.dart';
+import '../use_case/create_story_use_case.dart';
 
 abstract class StoriesRepository {
   Future<Either<Failure, bool>> makeViews(String id);
-  Future<Either<Failure, bool>> createStory(String id);
+  Future<Either<Failure, bool>> createStory(CreateStoryParams params);
   Future<Either<Failure, bool>> deleteStory(String id);
+  Future<Either<Failure, bool>> makeLike(String id);
   Future<Either<Failure, bool>> muteUserStories(String id);
   Future<Either<Failure, ViewersResponse>> getStoryViewers(String id);
   Future<Either<Failure, ResponseModel>> getFollowers();

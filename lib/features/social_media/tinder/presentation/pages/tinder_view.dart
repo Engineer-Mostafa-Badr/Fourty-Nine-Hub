@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
@@ -29,13 +30,18 @@ class TinderView extends StatelessWidget {
         BlocProvider(create: (_) => serviceLocator<UserCubit>()),
         BlocProvider(create: (_) => serviceLocator<ChatsCubit>()),
       ],
-      child: const TinderScreen(),
+      child: TinderScreen(
+        isMaleSelected: context.read<UserCubit>().state.data?.gender == 'male'
+            ? false
+            : true,
+      ),
     );
   }
 }
 
 class TinderScreen extends StatefulWidget {
-  const TinderScreen({super.key});
+  const TinderScreen({super.key, required this.isMaleSelected});
+  final bool isMaleSelected; // Default state
 
   @override
   State<TinderScreen> createState() => _TinderScreenState();
@@ -43,6 +49,13 @@ class TinderScreen extends StatefulWidget {
 
 class _TinderScreenState extends State<TinderScreen> {
   late final ScrollController _scrollController;
+
+  bool? isMaleSelected;
+  @override
+  initState() {
+    super.initState();
+    isMaleSelected = widget.isMaleSelected;
+  }
 
   @override
   void didChangeDependencies() {
@@ -59,9 +72,8 @@ class _TinderScreenState extends State<TinderScreen> {
 
   void _initializeTinderData() {
     final tinderCubit = context.read<TinderViewCubit>();
-    final user = context.read<UserCubit>();
     tinderCubit
-      ..fetchUserData(user.state.data?.gender ?? 'female')
+      ..fetchUserData(gender: isMaleSelected! ? 'female' : 'male', isLoggedIn: context.isUserLoggedIn, userId: context.isUserLoggedIn ? context.read<UserCubit>().state.data!.id : "")
       // ..fetchSubCategoryData()
       ..fetchFavorites();
     // ..fetchMainCategoryById(context,'62c8b5b09332225799fe335e');
@@ -72,6 +84,47 @@ class _TinderScreenState extends State<TinderScreen> {
     return Scaffold(
       appBar: BackAppBar(
         label: LocaleKeys.tinder_find.tr(),
+        actions: [
+          // The text behind the icon
+          Text(
+            isMaleSelected!
+                ? context.isArabic
+                    ? "ذكر"
+                    : 'Male'
+                : context.isArabic
+                    ? "انثى"
+                    : 'Female',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: isMaleSelected!
+                  ? AppColors.PRIMARY_COLOR
+                  : AppColors.PRIMARY_COLOR_DARK, // Subtle background color
+            ),
+          ),
+          IconButton(
+            onPressed: () {
+              setState(() {
+                isMaleSelected = !isMaleSelected!; // Toggle the state
+                final tinderCubit = context.read<TinderViewCubit>();
+                tinderCubit
+                  ..fetchUserData(gender: isMaleSelected! ? 'female' : 'male', isLoggedIn: context.isUserLoggedIn, userId: context.isUserLoggedIn ? context.read<UserCubit>().state.data!.id : "")
+                  // ..fetchSubCategoryData()
+                  ..fetchFavorites();
+              });
+            },
+            icon: Icon(
+              isMaleSelected! ? Icons.male : Icons.female,
+              size: 28,
+              color: isMaleSelected!
+                  ? AppColors.PRIMARY_COLOR
+                  : AppColors.PRIMARY_COLOR_DARK, // Optional styling
+            ),
+            tooltip: isMaleSelected!
+                ? 'Male'
+                : 'Female', // Tooltip for accessibility
+          ),
+        ],
       ),
       body: BlocBuilder<TinderViewCubit, TinderViewState>(
         builder: (context, state) {

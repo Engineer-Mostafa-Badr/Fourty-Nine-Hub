@@ -16,6 +16,22 @@ abstract class Assets {
   static String allRestaurants = 'assets/images/allRestaurants.png';
   static String healthcare = 'assets/images/healthcare.png';
   static String facebookShare = 'assets/icons/share.png';
+  static String backIcon = 'assets/icons/backIcon.svg';
+  static String imageIcon = 'assets/icons/imageIcon.svg';
+  static String tagIcon = 'assets/icons/tagIcon.svg';
+  static String feelingIcon = 'assets/icons/feelingIcon.svg';
+  static String locationIcon = 'assets/icons/locationIcon.svg';
+  static String liveVideoIcon = 'assets/icons/liveVideoIcon.svg';
+  static String backgroundIcon = 'assets/icons/backgroundIcon.svg';
+  static String camera = 'assets/icons/cameraIcon.svg';
+  static String gifIcon = 'assets/icons/gifIcon.svg';
+  static String lifeEventIcon = 'assets/icons/lifeEventIcon.svg';
+  static String musicIcon = 'assets/icons/musicIcon.svg';
+  static String avatarIcon = 'assets/icons/avatarIcon.svg';
+  static String publicIcon = 'assets/icons/publicIcon.svg';
+  static String onInstaIcon = 'assets/icons/onInstaIcon.svg';
+  static String onTweetIcon = 'assets/icons/onTweetIcon.svg';
+  static String maleIcon = 'assets/icons/maleIcon.svg';
   static String newChat = 'assets/icons/newChat.png';
   static String savedReels = 'assets/icons/savedReels.png';
   static String homeReel = 'assets/icons/homeReel.png';
@@ -39,6 +55,11 @@ abstract class Assets {
   static String hand = 'assets/images/hand.png';
   static String findLogo = 'assets/icons/findLogo.png';
   static String cameraLogo = 'assets/icons/cameraLogo.png';
+  static String giftBoxIcon = 'assets/icons/gift-box.png';
+  static String volumeOn = 'assets/icons/volume_on.png';
+  static String volumeOff = 'assets/icons/volume_off.png';
+  static String musicalNote = 'assets/icons/musical-note.png';
+  static String audienceIcon = 'assets/icons/audience_icon.png';
 
   static String fawry = 'assets/images/fawry.png';
   static String instaPay = 'assets/images/instapay.png';
@@ -65,7 +86,9 @@ abstract class Assets {
   static String threeDots = 'assets/images/three_dots.svg';
   static String mobile = 'assets/images/mobile_icon.svg';
   static String visa = 'assets/images/visa.png';
-
+  static String instagramCommentIcon = 'assets/icons/instagram_comment_icon.png';
+  static String instagramSharePostIcon = 'assets/icons/instagram_share_post_icon.png';
+  static String instagramHideIcon = 'assets/icons/instagram_hide_icon.svg';
   // reactions
   static String like = 'assets/images/reactions/like.png';
   static String heart = 'assets/images/reactions/heart.png';

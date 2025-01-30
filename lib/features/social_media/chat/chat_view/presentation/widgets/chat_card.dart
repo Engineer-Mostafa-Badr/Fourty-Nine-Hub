@@ -104,9 +104,16 @@ class _ChatCardState extends State<ChatCard> {
                       const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12),
                   child: Row(
                     children: [
-                      SizedBox(
-                        height: kToolbarHeight * .7,
-                        width: kToolbarHeight * .7,
+                      Container(
+                        height: kToolbarHeight * .8,
+                        width: kToolbarHeight * .8,
+                        decoration: widget.chat!.hasStory? BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            border: Border.all(
+                              color: AppColors.PRIMARY_COLOR_DARK,
+                              width: 3,
+                            )
+                        ): null,
                         child: widget.isSecret
                             ? const CircleAvatar(
                                 backgroundColor: Colors.red,
@@ -115,7 +122,10 @@ class _ChatCardState extends State<ChatCard> {
                                   color: Colors.grey,
                                 ))
                             : GestureDetector(
-                                onTap: () {
+                                onTap: widget.chat!.hasStory?(){
+                                  // navigate to stories
+                                }
+                                    : () {
                                   if (context.isUserLoggedIn) {
                                     context.read<UserCubit>().updateProfileView(
                                           isProfile: false,

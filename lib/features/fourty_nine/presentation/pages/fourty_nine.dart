@@ -1,9 +1,6 @@
-import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -150,6 +147,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
+    // context.push(Routes.REELS);
     print("objectUser${UserCubit.to.state.data?.id}");
     return BlocListener<NotificationSocketIoCubit, NotificationSocketIoState>(
       listener: (context, state) {
@@ -732,7 +730,6 @@ class _FourtyNineViewState extends State<FourtyNineView>
       required String title,
       required String image,
       String? route,
-      bool? isFavorite,
       required Function() onTab}) {
     return InkWell(
       // onTap: () => context.push(Routes.ADS, extra: service.value()),
