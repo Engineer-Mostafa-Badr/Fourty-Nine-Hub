@@ -1272,5 +1272,17 @@
   "socialDescription":
   "Choose your preferred social shape. You can select only one shape at most.",
   "favouriteDescription":
-  "Choose your favorite main categories that you would like to see. You can select up to 8 categories at most."
+  "Choose your favorite main categories that you would like to see. You can select up to 8 categories at most.",
+  "saveAndActivate": "Save and Activate",
+  "saveWithOutActivate": "Save Without Activate",
+  "serviceNoifications": "Service Noifications",
+  "socialNotifications": "Social Notifications",
+  "fourtyNineNotifications": "49 Notifications",
+  "deActivateCustomPage": "deactivate custom page",
+  "areYouSureToDeActivate":
+  "Are you sure you want to deactivate custom page?",
+  "youCanDeActivatePage":
+  "You can deactivate the custom page and return to the main page from here",
+  "chooseCategoryView": "Choose the main category view method for services",
+  "youCanChooseOneWayAtLeast": "You can select a maximum of one view method."
 }

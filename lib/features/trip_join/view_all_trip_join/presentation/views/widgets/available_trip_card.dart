@@ -52,7 +52,8 @@ class _AvailableTripCardState extends State<AvailableTripCard> {
             children: [
               CustomCard(
                 children: [
-                  Row(crossAxisAlignment: CrossAxisAlignment.center,
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
                         _localizeStatus(
@@ -63,65 +64,79 @@ class _AvailableTripCardState extends State<AvailableTripCard> {
                         ),
                       ),
                       const Spacer(),
-
-
-                      Row(crossAxisAlignment: CrossAxisAlignment.center,
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
                               widget.tripJoinCardEntity.journeyPrice
                                       ?.toStringAsFixed(0) ??
                                   '' "  ",
                               style: Styles.headerText(
-                                  fontSize: 50, color:Colors.black
-                              // Colors.green[600]
-                              )
+                                  fontSize: 50, color: Colors.black
+                                  // Colors.green[600]
+                                  )),
+                          const SizedBox(
+                            width: 2,
                           ),
-                          const SizedBox(width: 2,),
-                          context.locale.languageCode=="ar"?
-                          Text(
-                            context.isArabic
-                                ? BlocProvider.of<GetCurrencyCubit>(context)
-                                    .currnecyAr
-                                : BlocProvider.of<GetCurrencyCubit>(context)
-                                    .currnecyEn,
-                            style: Styles.mediumText(fontSize:context.locale.languageCode=="ar"?35: 30,
-                                fontWeight: FontWeight.w500,
-                                color:AppColors.SECONDARY_COLOR
-                            ),
-                          )
-                              :SizedBox(height: 17,
-                            child:  Text(
-                            context.isArabic
-                                ? BlocProvider.of<GetCurrencyCubit>(context)
-                                .currnecyAr
-                                : BlocProvider.of<GetCurrencyCubit>(context)
-                                .currnecyEn,
-                            style: Styles.mediumText(fontSize:context.locale.languageCode=="ar"?35: 30,
-                                fontWeight: FontWeight.w500,
-                                color:AppColors.SECONDARY_COLOR
-                            ),
-                          ),)
+                          context.locale.languageCode == "ar"
+                              ? Text(
+                                  context.isArabic
+                                      ? BlocProvider.of<GetCurrencyCubit>(
+                                              context)
+                                          .currnecyAr
+                                      : BlocProvider.of<GetCurrencyCubit>(
+                                              context)
+                                          .currnecyEn,
+                                  style: Styles.mediumText(
+                                      fontSize:
+                                          context.locale.languageCode == "ar"
+                                              ? 35
+                                              : 30,
+                                      fontWeight: FontWeight.w500,
+                                      color: AppColors.SECONDARY_COLOR),
+                                )
+                              : SizedBox(
+                                  height: 17,
+                                  child: Text(
+                                    context.isArabic
+                                        ? BlocProvider.of<GetCurrencyCubit>(
+                                                context)
+                                            .currnecyAr
+                                        : BlocProvider.of<GetCurrencyCubit>(
+                                                context)
+                                            .currnecyEn,
+                                    style: Styles.mediumText(
+                                        fontSize:
+                                            context.locale.languageCode == "ar"
+                                                ? 35
+                                                : 30,
+                                        fontWeight: FontWeight.w500,
+                                        color: AppColors.SECONDARY_COLOR),
+                                  ),
+                                )
                         ],
                       ),
                     ],
                   ),
-                  widget.tripJoinCardEntity.brand!=null&&widget.tripJoinCardEntity.brand!=""?
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.time_to_leave),
-                      const Sizer(),
-                      Text(
-                        '${widget.tripJoinCardEntity.brand}, ${widget.tripJoinCardEntity.model}',
-                        style: Styles.headerText(
-                          fontSize: 45,
-                          color: AppColors.getSecondryColor(context),
-                          // color: testColor,
-                        ),
-                        textAlign: TextAlign.start,
-                      ),
-                    ],
-                  ):const SizedBox.shrink(),
+                  widget.tripJoinCardEntity.brand != null &&
+                          widget.tripJoinCardEntity.brand != ""
+                      ? Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.time_to_leave),
+                            const Sizer(),
+                            Text(
+                              '${widget.tripJoinCardEntity.brand}, ${widget.tripJoinCardEntity.model}',
+                              style: Styles.headerText(
+                                fontSize: 45,
+                                color: AppColors.getSecondryColor(context),
+                                // color: testColor,
+                              ),
+                              textAlign: TextAlign.start,
+                            ),
+                          ],
+                        )
+                      : const SizedBox.shrink(),
                   const Sizer(),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -205,37 +220,9 @@ class _AvailableTripCardState extends State<AvailableTripCard> {
                     ],
                   ),
                   const Sizer(),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        flex: 3,
-                        child: AvaialbleTripsButton(
-                          title: LocaleKeys.premuimRequest.localize,
-                          // color: testColor,
-                          color: AppColors.getSecondryColor(context),
-                          onTap: widget.premuimRequestOnTap,
-                        ),
-                      ),
-                      const Sizer(width: 5),
-                      Expanded(
-                        flex: 3,
-                        child: AvaialbleTripsButton(
-                          title: LocaleKeys.regularRequest.localize,
-                          color: AppColors.PRIMARY_COLOR,
-                          onTap: widget.requestOnTap,
-                        ),
-                      )
-                    ],
-                  ),
-                  const Sizer(),
-                  CallMessageButtons(
-                    otherUserId: widget.tripJoinCardEntity.userId!,
-                    subcategoryId: widget.tripJoinCardEntity.categoryId!,
-                    phone: widget.tripJoinCardEntity.phone!,
-                    id: widget.tripJoinCardEntity.id!,
-                    hasReport: true,
-                  ),
+                  TripJoinButtonsSection(widget: widget),
+                  // const Sizer(),
+
                   // Row(
                   //   crossAxisAlignment: CrossAxisAlignment.center,
                   //   children: [
@@ -315,5 +302,46 @@ class _AvailableTripCardState extends State<AvailableTripCard> {
       default:
         return context.isArabic ? 'عادي' : 'Regular';
     }
+  }
+}
+
+class TripJoinButtonsSection extends StatelessWidget {
+  const TripJoinButtonsSection({
+    super.key,
+    required this.widget,
+  });
+
+  final AvailableTripCard widget;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.whiteColor,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          AvaialbleTripsButton(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+            title: LocaleKeys.regularRequest.localize,
+            color: AppColors.SECONDARY_COLOR,
+            onTap: widget.requestOnTap,
+          ),
+          const Sizer(width: 5),
+          Expanded(
+            child: CallMessageButtons(
+              otherUserId: widget.tripJoinCardEntity.userId!,
+              subcategoryId: widget.tripJoinCardEntity.categoryId!,
+              phone: widget.tripJoinCardEntity.phone!,
+              id: widget.tripJoinCardEntity.id!,
+              hasReport: true,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

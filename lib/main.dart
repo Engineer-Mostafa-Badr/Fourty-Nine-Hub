@@ -80,6 +80,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   await CacheServiceImpl.init();
   await DI.execute();
   await Geolocator.checkPermission().then(

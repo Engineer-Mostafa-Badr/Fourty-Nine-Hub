@@ -52,7 +52,7 @@ class _BirthDatePickerState extends State<BirthDatePicker> {
           controller: widget.controller,
           style: const TextStyle(color: AppColors.QUANTITY_COLOR),
           // label: 'E-mail or phone number',
-          hint: LocaleKeys.lastName.localize,
+          hint: LocaleKeys.birthDate.localize,
           prefix: const Icon(Icons.calendar_today),
           onTap: () => _selectDate(context),
           action: (v) {},

@@ -184,8 +184,10 @@ class _InstagramPostsState extends State<InstagramPosts> {
                 },
                 itemBuilder: (context, item, index) {
                   final pageController = PageController();
-                  if(index== 0 || index % 5 == 0){
-                    return InstagramReels(reels: state.reels ?? [],);
+                  if (index == 0 || index % 5 == 0) {
+                    return InstagramReels(
+                      reels: state.reels ?? [],
+                    );
                   }
                   if (controller.feedPagingController.itemList?[index].type ==
                       'advertisement') {
