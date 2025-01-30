@@ -45,6 +45,7 @@ class UIConst {
   static const String pickmeCategoryId = '62ea008d69ea29c91dfc3908';
   static const String addTripJoinCategoryId = '62ea00e269ea29c91dfc390c';
 
-   static const int callOfflineCheckDuration = 10;
+  static const int callOfflineCheckDuration = 10;
   static const int callRingingDuration = 60;
+  static const String agoraAppId = '';
 }

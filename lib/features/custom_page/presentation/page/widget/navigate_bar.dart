@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
@@ -74,6 +76,7 @@ class _NavigateBarState extends State<NavigateBar> {
   ScrollController scrollController = ScrollController();
   bool _isScrollingDown = false;
 
+  @override
   didChangeDependencies() {
     super.didChangeDependencies();
     _setupScrollController();

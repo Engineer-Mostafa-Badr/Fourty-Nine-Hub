@@ -215,7 +215,7 @@ class EndPoints {
   static const getWheel = '/wheels/random';
   static const spinWheel = '/wheels/spin/';
   static const wheelWallet = '/wheel/wallets/my/wallet';
-  static const sendForgetPasswordOTP = '/auth/forgot-password';
+  static const sendForgetPasswordOTP = '/auth/forget-password';
   static const verifyForgetPasswordOTP = '/auth/verify/otp';
   static const createNewForgetPassword = '/auth/reset-password';
   static const notifications = '/notifications';
@@ -448,7 +448,7 @@ class EndPoints {
       '$developmentBaseUrl/loading/trip/loadingTripRequests';
 
   // reels
-  static const getExploreReels = '/reels/explore';
+  static const getExploreReels = '/reels-explore';
   static const snap = '/categories/main/snap-filters';
   static const fetchReelsForFollowers =
       '/reels/followers?subCategory=66684135dbb427ee42aa0141';
@@ -620,7 +620,7 @@ class EndPoints {
   }
 
   static String getReels(TwitterFeedParams params) {
-    return '/reels/explore?limit=${params.limit}&page=${params.page}&subCategory=${Constants.reelsSubCategory}';
+    return '/reels-explore?limit=${params.limit}&page=${params.page}&subCategory=${Constants.reelsSubCategory}';
   }
 
   static String getUserReels(UserReelsParams params) {
@@ -954,6 +954,7 @@ class EndPoints {
   static const helpMessages = '/help';
   static const contactUs = '/email/contact-us';
   static String mediaUrl = '/media/signed-url';
+  static String bulkMediaUrl = '/media/bulk/signed-url';
 
   static String confirmUpload(String mediaId) {
     return '/media/confirm/$mediaId';

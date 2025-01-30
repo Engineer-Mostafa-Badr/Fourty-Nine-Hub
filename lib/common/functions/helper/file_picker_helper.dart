@@ -7,6 +7,13 @@ class FilePickerHelper {
         source: isGallery ? ImageSource.gallery : ImageSource.camera);
   }
 
+  Future<List<XFile>?> pickImages({bool isGallery = true}) async {
+    final ImagePicker picker = ImagePicker();
+    return await picker.pickMultiImage(
+      imageQuality: 100, // Adjust quality as needed (e.g., 100 for maximum quality)
+    );
+  }
+
   Future<XFile?> pickVideo({bool isGallery = true}) async {
     final ImagePicker picker = ImagePicker();
     return await picker.pickVideo(

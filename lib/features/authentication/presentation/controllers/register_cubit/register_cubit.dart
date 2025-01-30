@@ -28,6 +28,7 @@ class RegisterCubit extends Cubit<RegisterState> {
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
   final confirmPasswordTextController = TextEditingController();
+  final birthDateTextController = TextEditingController();
   final referralId = TextEditingController();
 
   final firstNameFocusNode = FocusNode();
@@ -58,6 +59,7 @@ class RegisterCubit extends Cubit<RegisterState> {
       RegisterParams(
         firstName: firstNameController.text.trim(),
         lastName: lastNameController.text.trim(),
+        birthday: birthDateTextController.text.trim(),
         email: emailTextController.text.trim(),
         password: passwordTextController.text.trim(),
         confirmPassword: confirmPasswordTextController.text.trim(),

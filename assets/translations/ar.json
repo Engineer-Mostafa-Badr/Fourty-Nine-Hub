@@ -1253,7 +1253,16 @@
   "اختار الشكل الاجتماعي المفضل لديك يمكنك اختيار شكل واحد فقط بحدأقصى",
   "favouriteDescrepion":
   "اختار الاقسام الرئيسيه المفضله لديك التي تحب أن تراها يمكنك اختيار بحد أقصى اقسام",
-  "warning": "تحذير!!!"
-
-
+  "warning": "تحذير!!!",
+  "saveAndActivate": "حفظ وتفعيل",
+  "saveWithOutActivate": "حفظ بدون تفعيل",
+  "serviceNoifications": "اشعارات الخدمه",
+  "socialNotifications": "اشعارات التواصل الاجتماعي",
+  "fourtyNineNotifications": "اشعارات 49",
+  "deActivateCustomPage": "الغاء تفعيل الصفحه المخصصه",
+  "areYouSureToDeActivate": "هل انت متأكد من الغاء تفعيل الصفحه المخصصه؟",
+  "youCanDeActivatePage":
+  "يمكنك الغاء تفعيل الصفحه المخصصه و العوده الي الصفحه الرئيسيه من هنا ",
+  "chooseCategoryView": "اختر طريقه عرض القسام الرئيسيه للخدمات",
+  "youCanChooseOneWayAtLeast": "يمكنك اختيار بحد أقصى طريقه عرض واحده"
 }

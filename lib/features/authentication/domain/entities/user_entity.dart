@@ -22,6 +22,7 @@ class UserEntity extends Equatable {
   final bool? isRestaurant;
   final bool? isLoading;
   final bool? isDocument;
+  final String? firebaseToken;
 
   String get fullName => '$firstName $lastName';
 
@@ -50,7 +51,8 @@ class UserEntity extends Equatable {
       this.city,
       this.country,
       this.job,
-      this.gender});
+      this.gender, 
+       this.firebaseToken});
 
   @override
   List<Object?> get props => [
@@ -63,6 +65,7 @@ class UserEntity extends Equatable {
         friendsCount,
         followersCount,
         followingCount,
-        wallet
+        wallet, 
+        firebaseToken
       ];
 }

@@ -1,4 +1,5 @@
 import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,13 +13,13 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/regis
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/Identity_confirmation_card_register_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/behind_car_license_register_card_widget.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/criminal_record_register_card_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/behind_driver_license_card_register_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/car_image_register_card_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/car_model_register_card_widget.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/criminal_record_register_card_widget.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/drag_analysis_register_card_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/driver_license_card_register_ride_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/expiration_date_driver_license_card_register_widget.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/drag_analysis_register_card_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/front_car_license_register_card_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/front_driver_license_card_register_widget.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/more_information_register_card_widget.dart';
@@ -97,6 +98,7 @@ class _RideRegisterSocketScreenState extends State<RideRegisterSocketScreen> {
                       date.toString();
                 },
               ),
+              ///////////
               const Sizer(
                 height: 30,
               ),
@@ -271,7 +273,6 @@ class _RideRegisterSocketScreenState extends State<RideRegisterSocketScreen> {
               const Sizer(
                 height: 30,
               ),
-              // GovernoratesRideWidget(),
               const SizedBox(
                 height: 10,
               ),

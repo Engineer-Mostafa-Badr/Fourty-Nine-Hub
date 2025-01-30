@@ -262,15 +262,17 @@ class _SearchViewState extends State<SearchView>
           labelPadding: EdgeInsets.only(left: 20.w),
           labelStyle: Styles.mediumText(fontSize: 32),
           tabs: [
-            Tab(text: LocaleKeys.profile.localize),
-            Tab(text: LocaleKeys.reel.localize),
-            Tab(text: LocaleKeys.post.localize),
-            Tab(text: LocaleKeys.mainCategory.localize),
-            Tab(text: LocaleKeys.subCategory.localize),
-            Tab(text: LocaleKeys.ads.localize),
-            Tab(text: LocaleKeys.tripJoin.localize),
-            Tab(text: LocaleKeys.carpool.localize),
-            Tab(text: LocaleKeys.ride.localize),
+            CustomTapWidget(
+              text: LocaleKeys.profile.localize,
+            ),
+            CustomTapWidget(text: LocaleKeys.reel.localize),
+            CustomTapWidget(text: LocaleKeys.post.localize),
+            CustomTapWidget(text: LocaleKeys.mainCategory.localize),
+            CustomTapWidget(text: LocaleKeys.subCategory.localize),
+            CustomTapWidget(text: LocaleKeys.ads.localize),
+            CustomTapWidget(text: LocaleKeys.tripJoin.localize),
+            CustomTapWidget(text: LocaleKeys.carpool.localize),
+            CustomTapWidget(text: LocaleKeys.ride.localize),
           ],
         ),
       ),
@@ -288,6 +290,23 @@ class _SearchViewState extends State<SearchView>
           Center(child: Text('Trip')),
           Center(child: Text('Trip')),
         ],
+      ),
+    );
+  }
+}
+
+class CustomTapWidget extends StatelessWidget {
+  const CustomTapWidget({
+    super.key,
+    required this.text,
+  });
+  final String text;
+  @override
+  Widget build(BuildContext context) {
+    return Tab(
+      child: SizedBox(
+        width: 120,
+        child: Center(child: Text(text)),
       ),
     );
   }

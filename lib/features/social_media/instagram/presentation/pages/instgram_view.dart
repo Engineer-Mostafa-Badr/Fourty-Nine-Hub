@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -9,8 +10,14 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/create_post_instagram_screen.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_ad_slider_widget.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_ad_widget.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_for_you_slider_widget.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_global_posts.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_posts.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_post_widget.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_video_post_widget.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/reel_slider_widget.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -61,14 +68,53 @@ class _InstagramViewState extends State<InstagramView> {
         body: BlocBuilder<UserCubit, BasicState<UserEntity>>(
           builder: (context, state) {
             return context.read<UserCubit>().isLoggedIn
-                ? Column(
-                    children: [
-                      _buildTabBar(context),
-                      Expanded(
-                        child:
-                            InstagramPosts(scrollController: scrollController),
-                      ),
-                    ],
+                ? SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        _buildTabBar(context),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const CreatePostInstagramScreen(),
+                                ));
+                          },
+                          child: Container(
+                            width: 80,
+                            height: 50,
+                            color: Colors.red,
+                          ),
+                        ),
+                        const Sizer(),
+                        const InstagramAdWidget(),
+                        const Sizer(),
+                        const ReelSliderWidget(),
+                        const Sizer(),
+                        const InstagramAdSliderWidget(),
+                        const Sizer(),
+                        const InstagramPostWidget(
+                          mechan: true,
+                          multiImage: false,
+                        ),
+                        const Sizer(),
+                        const InstagramPostWidget(
+                          mechan: false,
+                          multiImage: true,
+                        ),
+                        const Sizer(),
+                        const InstagramVideoPostWidget(),
+                        const Sizer(),
+                        const InstagramForYouSliderWidget(),
+                        const Sizer(
+                          height: 60,
+                        )
+                        // Expanded(
+                        //   child:
+                        //       InstagramPosts(scrollController: scrollController),
+                        // ),
+                      ],
+                    ),
                   )
                 : Column(
                     children: [

@@ -1,6 +1,9 @@
 import 'package:device_preview/device_preview.dart';
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,6 +23,8 @@ import 'package:fourtyninehub/features/notifications/presentation/cubits/get_ser
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_social_notifications/get_social_notifications_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_unread_notifications_count/get_unread_notifications_count_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
+import 'package:fourtyninehub/features/ride/Authentication/presentation/cubit/authentication_ride_cubit.dart';
+import 'package:fourtyninehub/features/ride/Authentication/presentation/cubit/check_part_active_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/NoSocket/check_trip_end_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/NoSocket/complete_no_socket_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/NoSocket/rating_driver_cubit.dart';
@@ -56,6 +61,7 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/secrets/controller/secrets_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:go_router/go_router.dart';
 import 'core/service/background_service.dart';
 import 'core/service/cache_service.dart';
 import 'core/themes/light_theme.dart';
@@ -74,6 +80,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   await CacheServiceImpl.init();
   await DI.execute();
   await Geolocator.checkPermission().then(
@@ -130,8 +137,14 @@ class _MyAppState extends State<MyApp> {
     // _startWebSocketService();
   }
 
+  Future getToken() async {
+    var token = await FirebaseMessaging.instance.getAPNSToken();
+    log(token.toString(), name: "lskdjflskdfjlskdjfdslkfj");
+  }
+
   @override
   Widget build(BuildContext context) {
+    
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -235,6 +248,9 @@ class _MyAppState extends State<MyApp> {
             context: context,
           ),
         ),
+        BlocProvider(
+          create: (context) => AuthenticationRideCubit(),
+        ),
         BlocProvider<GetServicesNotificationsCubit>(
           create: (context) => GetServicesNotificationsCubit(
             getNotficationsUseCase: serviceLocator(),
@@ -251,6 +267,10 @@ class _MyAppState extends State<MyApp> {
             repository: serviceLocator(),
           ),
         ),
+        BlocProvider(
+          create: (context) => CheckPartActiveCubit(),
+        ),
+
         BlocProvider(
           create: (context) => CheckAcceptByDriverCubit(
             repository: serviceLocator(),

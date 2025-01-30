@@ -1,0 +1,29 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
+
+class BuildSheetItem extends StatelessWidget {
+  const BuildSheetItem({super.key, this.onTap, required this.icon, required this.title, this.hasDivider});
+  final GestureTapCallback? onTap;
+  final bool? hasDivider;
+  final String icon;
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ListTile(
+          leading: SvgPicture.asset(icon,height: 18,width: 18,),
+          title: Text(title, style: const TextStyle(fontSize: 18,fontWeight: FontWeight.w400),),
+          horizontalTitleGap: 18,
+          onTap: onTap,
+        ),
+        if(hasDivider==true)const Divider(),
+
+      ],
+    );
+
+  }
+}

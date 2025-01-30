@@ -142,8 +142,8 @@ class CustomPageCubit extends Cubit<CustomPageState> {
 
   //
   Future<void> updateActivate(bool params) async {
-    bool? active = await CacheManager.getActivation();
-    CacheManager.updateActive(!(active ?? false));
+    // bool? active = await CacheManager.getActivation();
+    CacheManager.updateActive((params));
     // final response = await _updateActivateUseCase.call(params);
     // response.fold((l) {
     //   emit(state.copyWith(failure: l, status: CustomPageStates.error));

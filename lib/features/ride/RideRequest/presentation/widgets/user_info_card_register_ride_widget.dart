@@ -20,7 +20,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class UserInfoCardRegisterRideWidget extends StatefulWidget {
-  const UserInfoCardRegisterRideWidget({super.key, this.model});
+  const UserInfoCardRegisterRideWidget({super.key, this.model,});
   final DriverRideModel? model;
   @override
   State<UserInfoCardRegisterRideWidget> createState() =>
@@ -43,13 +43,14 @@ class _UserInfoCardRegisterRideWidgetState
     if (widget.model != null) {
       firstNameController.text = widget.model?.driverFirstName ?? "";
       lastNameController.text = widget.model?.driverLastName ?? "";
-      birthDate = birthDate;
+      birthDate = widget.model?.birthDate??birthDate;
       phoneController.text = widget.model?.phone??"";
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    log(widget.model?.toJson().toString()??"ldf", name: "lksdjflskdjfkddkddd");
     var rideRegisterCubit = context.read<RegisterRiderCubit>();
     log("${rideRegisterCubit.print()}");
     setState(() {});
@@ -98,14 +99,12 @@ class _UserInfoCardRegisterRideWidgetState
                                         ),
                                         color: AppColors.PRIMARY_COLOR,
                                         shape: BoxShape.circle),
-                                    child:
-                                        rideRegisterCubit.model.driverImage ==
-                                                null
+                                    child: rideRegisterCubit.model.driverImage == null
                                             ? Image.asset(
                                                 Assets.avatarRemovebackground,
                                                 color: Colors.white,
                                               )
-                                            : null),
+                                            : widget.model?.image != null? Image.file(widget.model!.image!): null),
                                 if (field.hasError)
                                   ValidationErrorWidget(
                                     message: field.errorText ?? "",

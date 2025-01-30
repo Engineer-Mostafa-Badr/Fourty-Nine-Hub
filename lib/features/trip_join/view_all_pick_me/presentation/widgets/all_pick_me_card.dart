@@ -141,36 +141,30 @@ class AllPickMeCard extends StatelessWidget {
                   ),
                   const Sizer(),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Expanded(
-                        flex: 3,
-                        child: AvaialbleTripsButton(
-                          title: LocaleKeys.premuimRequest.localize,
-                          // color: testColor,
-                          color: AppColors.getSecondryColor(context),
-                          onTap: premuimRequestOnTap,
-                        ),
-                      ),
-                      const Sizer(width: 5),
-                      Expanded(
-                        flex: 3,
+                      SizedBox(
+                        width: 180.w,
                         child: AvaialbleTripsButton(
                           title: LocaleKeys.regularRequest.localize,
-                          color: AppColors.PRIMARY_COLOR,
+                          color: AppColors.SECONDARY_COLOR,
                           onTap: requestOnTap,
                         ),
-                      )
+                      ),
+                      const Sizer(),
+                      Expanded(
+                        child: CallMessageButtons(
+                          otherUserId: pickMeCardEntity.userId!,
+                          subcategoryId: pickMeCardEntity.categoryId ?? '',
+                          phone: pickMeCardEntity.phone!,
+                          id: pickMeCardEntity.id!,
+                          hasReport: true,
+                        ),
+                      ),
                     ],
                   ),
-                  const Sizer(),
-                  CallMessageButtons(
-                    otherUserId: pickMeCardEntity.userId!,
-                    subcategoryId: pickMeCardEntity.categoryId ?? '',
-                    phone: pickMeCardEntity.phone!,
-                    id: pickMeCardEntity.id!,
-                    hasReport: true,
-                  ),
+
                   // Row(
                   //   crossAxisAlignment: CrossAxisAlignment.center,
                   //   children: [
@@ -230,45 +224,55 @@ class AllPickMeCard extends StatelessWidget {
                     context.isArabic ? TextDirection.rtl : TextDirection.ltr,
                 child: Column(
                   children: [
-                    Row(crossAxisAlignment: CrossAxisAlignment.center,
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
                             pickMeCardEntity.journeyPrice?.toStringAsFixed(0) ??
                                 '',
                             style: Styles.headerText(
-                                fontSize: 50, color:Colors.black
-                              // Colors.green[600]
-                            )
+                                fontSize: 50, color: Colors.black
+                                // Colors.green[600]
+                                )),
+                        const SizedBox(
+                          width: 2,
                         ),
-                        const SizedBox(width: 2,),
-                        context.locale.languageCode=="ar"?
-                        Text(
-                          context.isArabic
-                              ? BlocProvider.of<GetCurrencyCubit>(context)
-                              .currnecyAr
-                              : BlocProvider.of<GetCurrencyCubit>(context)
-                              .currnecyEn,
-                          style: Styles.mediumText(fontSize:context.locale.languageCode=="ar"?35: 30,
-                              fontWeight: FontWeight.w500,
-                              color:AppColors.SECONDARY_COLOR
-                          ),
-                        )
-                            :SizedBox(height: 17,
-                          child:  Text(
-                            context.isArabic
-                                ? BlocProvider.of<GetCurrencyCubit>(context)
-                                .currnecyAr
-                                : BlocProvider.of<GetCurrencyCubit>(context)
-                                .currnecyEn,
-                            style: Styles.mediumText(fontSize:context.locale.languageCode=="ar"?35: 30,
-                                fontWeight: FontWeight.w500,
-                                color:AppColors.SECONDARY_COLOR
-                            ),
-                          ),)
+                        context.locale.languageCode == "ar"
+                            ? Text(
+                                context.isArabic
+                                    ? BlocProvider.of<GetCurrencyCubit>(context)
+                                        .currnecyAr
+                                    : BlocProvider.of<GetCurrencyCubit>(context)
+                                        .currnecyEn,
+                                style: Styles.mediumText(
+                                    fontSize:
+                                        context.locale.languageCode == "ar"
+                                            ? 35
+                                            : 30,
+                                    fontWeight: FontWeight.w500,
+                                    color: AppColors.SECONDARY_COLOR),
+                              )
+                            : SizedBox(
+                                height: 17,
+                                child: Text(
+                                  context.isArabic
+                                      ? BlocProvider.of<GetCurrencyCubit>(
+                                              context)
+                                          .currnecyAr
+                                      : BlocProvider.of<GetCurrencyCubit>(
+                                              context)
+                                          .currnecyEn,
+                                  style: Styles.mediumText(
+                                      fontSize:
+                                          context.locale.languageCode == "ar"
+                                              ? 35
+                                              : 30,
+                                      fontWeight: FontWeight.w500,
+                                      color: AppColors.SECONDARY_COLOR),
+                                ),
+                              )
                       ],
                     ),
-
-
                     Text(
                       _localizeStatus(context, pickMeCardEntity.status ?? ''),
                       style: Styles.headerText(
