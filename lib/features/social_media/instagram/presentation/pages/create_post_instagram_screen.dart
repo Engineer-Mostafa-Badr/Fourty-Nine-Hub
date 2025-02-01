@@ -3,10 +3,13 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/Post/create_post_instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/create_post_details_instagram_screen.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -127,8 +130,11 @@ class _CreatePostInstagramScreenState extends State<CreatePostInstagramScreen> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => CreatePostDetailsInstagramScreen(
+                    builder: (context) => BlocProvider(
+                      create: (context) => CreatePostInstagramCubit(repository: serviceLocator()),
+                      child: CreatePostDetailsInstagramScreen(
                         images: multiSelect ? fileImges : [oneImage!]),
+                    ),
                   ));
             },
             child: Container(

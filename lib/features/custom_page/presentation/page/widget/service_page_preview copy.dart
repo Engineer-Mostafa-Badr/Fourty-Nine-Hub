@@ -139,9 +139,9 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
         MainCategoriesListView(controller: controller, state: state),
         BlocProvider(
           create: (context) => serviceLocator<MainCategoriesTapsCubit>(),
-          child: MainCategoriesGridView(isAppBarShow: false),
+          child: const MainCategoriesGridView(isAppBarShow: false),
         ),
-        MainCategoriesFlipCardsView(isAppBarShow: false),
+        const MainCategoriesFlipCardsView(isAppBarShow: false),
       ];
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override

@@ -453,7 +453,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   padding: const EdgeInsets.all(16),
                   child: Column(
                     children: [
-                      CustomNotLogged(),
+                      const CustomNotLogged(),
                       const SizedBox(height: 10,),
                       AppButton(
                           color: AppColors.LIGHT_COLOR,

@@ -46,7 +46,7 @@ class _ChooseCategoriesViwBodyState extends State<ChooseCategoriesViwBody> {
     return Scaffold(
         body: Column(
           children: [
-            ListTile(
+            const ListTile(
               title: Text('اختر طريقه عرض القسام الرئيسيه للخدمات'),
               subtitle: Text('يمكنك اختيار بحد أقصى طريقه عرض واحده'),
             ),

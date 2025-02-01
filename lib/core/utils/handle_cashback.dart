@@ -16,7 +16,7 @@ class HandleCashback {
     if (serviceLocator<UserCubit>().isLoggedIn == false) {
       return;
     }
-    int? num = await CacheManager.getInt(key);
+    int? num = CacheManager.getInt(key);
     if (num == null) {
       num = 1;
       CacheManager.setInt(key, num);

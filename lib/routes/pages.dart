@@ -194,6 +194,8 @@ import 'package:fourtyninehub/features/social_media/club_house/presentation/widg
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
 import 'package:fourtyninehub/features/social_media/edit_profile/presentation/cubit/edit_profile_cubit.dart';
 import 'package:fourtyninehub/features/social_media/edit_profile/presentation/pages/edit_profile_view.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/Post/create_post_instagram_cubit.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/Post/get_posts_instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/instgram_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_all_discover_people.dart';
@@ -971,6 +973,12 @@ class AppPages {
                 ),
                 BlocProvider(
                   create: (context) => serviceLocator<StoryCubit>(),
+                ),
+                BlocProvider(
+                  create: (context) => CreatePostInstagramCubit(repository: serviceLocator()),
+                ),
+                BlocProvider(
+                  create: (context) => GetPostsInstagramCubit(repository: serviceLocator()),
                 ),
               ],
               child: const InstagramView(),

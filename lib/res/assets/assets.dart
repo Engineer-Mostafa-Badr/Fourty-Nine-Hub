@@ -27,6 +27,13 @@ abstract class Assets {
   static String instaLogo = 'assets/icons/instaLogo.png';
   static String floatImage = 'assets/icons/floatImage.png';
   static String facebookLogo = 'assets/icons/facebookLogo.png';
+  static String facebookAppBarIcon = 'assets/icons/Facebook_app_bar_icon.svg';
+  static String instagramAppBarIcon = 'assets/icons/Instagram_app_bar_icon.svg';
+  static String twitterAppBarIcon = 'assets/icons/Twitter_app_bar_icon.svg';
+  static String homeSocialAppBar = 'assets/icons/home_social_app_bar-icon.svg';
+  static String createPostAppBarIcon = 'assets/icons/create_post_app_bar_icon.svg';
+  static String profileSocialAppBarIcon = 'assets/icons/profile_social_app_bar_icon.svg';
+
   static String twitterLogo = 'assets/icons/twitterLogo.png';
   static String loadingCar = 'assets/icons/loadingCar.png';
   static String comment = 'assets/icons/comment.png';

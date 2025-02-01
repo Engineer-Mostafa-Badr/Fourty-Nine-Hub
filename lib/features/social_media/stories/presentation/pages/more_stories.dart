@@ -2,11 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/theme/cubit/cubit.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
 import 'package:fourtyninehub/features/social_media/stories/data/models/friends_stories_model.dart';
@@ -319,7 +316,7 @@ class UserStoryViewState extends State<UserStoryView>
   late final StoryController _storyController;
   late final ValueNotifier<DateTime> _currentStoryCreatedAtNotifier;
   late final ValueNotifier<String> _currentStoryIdNotifier;
-  late ValueNotifier<int> _currentStoryIndex = ValueNotifier<int>(0);
+  late final ValueNotifier<int> _currentStoryIndex = ValueNotifier<int>(0);
 
   @override
   void initState() {

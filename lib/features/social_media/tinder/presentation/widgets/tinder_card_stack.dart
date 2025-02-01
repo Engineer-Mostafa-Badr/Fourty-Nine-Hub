@@ -14,7 +14,6 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/chat_room_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
 import 'package:fourtyninehub/features/social_media/tinder/domain/domain/user_data_tinder_entity.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_state.dart';
@@ -32,7 +31,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../chat/chat_view/domain/entities/chat_entity.dart';
 import '../../../chat/chat_view/domain/usecases/get_chats_usecase.dart';
 import '../../../chat/chat_view/presentation/pages/chats_view.dart';
-import '../../../social_posts/presentation/pages/message_button.dart';
 import '../../data/shared/shared.dart';
 
 class TinderCardStack extends StatefulWidget {
@@ -497,7 +495,7 @@ class _TinderCardStackState extends State<TinderCardStack> {
 
   _navigateToUserProfile(BuildContext context, UserDataTinderEntity cardUser) {
     if (!context.read<UserCubit>().isLoggedIn) {
-      return CustomNotLogged();
+      return const CustomNotLogged();
     }
     if (serviceLocator<UserCubit>().state.data != null) {
       Navigator.push(
