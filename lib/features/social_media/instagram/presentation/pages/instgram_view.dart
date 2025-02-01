@@ -98,7 +98,7 @@ class _InstagramViewState extends State<InstagramView> {
                     multiImage: false,
                   ),
                   const Sizer(),
-                  
+
                   const Sizer(),
                   const InstagramVideoPostWidget(),
                   const Sizer(),
@@ -149,11 +149,15 @@ class _InstagramViewState extends State<InstagramView> {
                   width: double.infinity,
                   child: GestureDetector(
                     onTap: () {
-                      log('message');selectedIndex = index;
-
-                      setState(() {
-                        
-                      });
+                      if (index == 1) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CreatePostInstagramScreen(),
+                          ),
+                        );
+                      }
+                      setState(() {});
                       log(selectedIndex.toString());
                     },
                     child: Column(
