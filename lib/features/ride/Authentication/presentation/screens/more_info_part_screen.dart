@@ -31,15 +31,15 @@ class MoreInfoPartScreen extends StatelessWidget {
           key: formKey,
           child: Column(
             children: [
-              Sizer(
+              const Sizer(
                   height: 30,
                 ),
-              MoreInformationRegisterCardWidget(),
-                Sizer(
+              const MoreInformationRegisterCardWidget(),
+                const Sizer(
                   height: 30,
                 ),
                 Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: AppButton(
                       color: Colors.white,
                       backColor: AppColors.PRIMARY_COLOR,
@@ -64,7 +64,7 @@ class MoreInfoPartScreen extends StatelessWidget {
                       },
                     ),
                   ),
-                  Sizer(
+                  const Sizer(
                     height: 60,
                   )
             ],

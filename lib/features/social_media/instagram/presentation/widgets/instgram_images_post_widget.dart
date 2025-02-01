@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -17,9 +19,13 @@ class _InstgramImagesPostWidgetState extends State<InstgramImagesPostWidget> {
   @override
   Widget build(BuildContext context) {
     if (widget.images.length == 1) {
+      log(widget.images.first);
       return Container(
         height: 400,
-        color: Colors.red,
+        decoration: BoxDecoration(
+            color: Colors.green,
+            image: DecorationImage(
+                image: NetworkImage(widget.images.first), fit: BoxFit.cover)),
       );
     } else {
       return Column(
@@ -42,10 +48,15 @@ class _InstgramImagesPostWidgetState extends State<InstgramImagesPostWidget> {
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                    color: Colors.black.withValues(alpha: 0.5),
+                      color: Colors.black.withValues(alpha: 0.5),
                     ),
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-                    child: Text("${currentIndex+1}/${widget.images.length}", style: Styles.mediumText(color: Colors.white, fontWeight: FontWeight.bold),),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                    child: Text(
+                      "${currentIndex + 1}/${widget.images.length}",
+                      style: Styles.mediumText(
+                          color: Colors.white, fontWeight: FontWeight.w400),
+                    ),
                   ),
                 );
               },
@@ -56,20 +67,22 @@ class _InstgramImagesPostWidgetState extends State<InstgramImagesPostWidget> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ...List.generate(
-            widget.images.length,
-            (index) {
-              return AnimatedContainer(
-                margin: const EdgeInsets.symmetric(horizontal: 2),
-                duration: const Duration(milliseconds: 500),
-                width: 10,
-                height: 10,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: currentIndex == index? AppColors.PRIMARY_COLOR: Colors.grey,
-                ),
-              );
-            },
-          )
+                widget.images.length,
+                (index) {
+                  return AnimatedContainer(
+                    margin: const EdgeInsets.symmetric(horizontal: 2),
+                    duration: const Duration(milliseconds: 500),
+                    width: 10,
+                    height: 10,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: currentIndex == index
+                          ? AppColors.PRIMARY_COLOR
+                          : Colors.grey,
+                    ),
+                  );
+                },
+              )
             ],
           )
         ],

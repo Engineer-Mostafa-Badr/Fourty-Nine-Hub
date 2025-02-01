@@ -503,7 +503,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                 iconSize: 50.h,
                 onPressed: () async {
                   HandleCashback.setCount('booking', context);
-                  int? num = await CacheManager.getInt('booking');
+                  int? num = CacheManager.getInt('booking');
                   print(num);
                 }),
           ),

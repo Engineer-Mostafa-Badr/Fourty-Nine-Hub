@@ -34,8 +34,8 @@ class ReelView extends StatelessWidget {
         // return Future.value(true);
       },
       canPop: true,
-      child: SafeArea(
-        child: const Scaffold(
+      child: const SafeArea(
+        child: Scaffold(
           resizeToAvoidBottomInset: false,
           body: ReelsScreen(),
         ),

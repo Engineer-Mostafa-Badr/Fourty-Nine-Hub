@@ -4,7 +4,6 @@ import 'dart:developer';
 import 'package:fourtyninehub/features/ride/Authentication/data/models/parts_socket_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../features/ride/Authentication/data/models/basic_info_part_model.dart';
 
 class CacheManager {
   static late SharedPreferences prefs;

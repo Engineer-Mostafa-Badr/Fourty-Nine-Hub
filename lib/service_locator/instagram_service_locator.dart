@@ -1,5 +1,7 @@
+import 'package:fourtyninehub/features/social_media/instagram/data/datasources/instagram_data_source.dart';
 import 'package:fourtyninehub/features/social_media/instagram/data/datasources/instagram_remote_datasource.dart';
 import 'package:fourtyninehub/features/social_media/instagram/data/repositories/instagram_repo_impl.dart';
+import 'package:fourtyninehub/features/social_media/instagram/data/repositories/instagram_repository.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/repositories/social_posts_repo.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_feed_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_global_feed_usecase.dart';
@@ -15,6 +17,10 @@ class InstagramServiceLocator {
         () => InstagramRemoteDataSourceImpl(
               serviceLocator(),
             ));
+    serviceLocator.registerLazySingleton(
+        () => InstagramDataSource(api: serviceLocator()));
+    serviceLocator.registerLazySingleton(
+        () => InstagramRepository(dataSource: serviceLocator()));
     serviceLocator.registerLazySingleton<InstagramRepo>(
         () => InstagramRepoImpl(serviceLocator()));
 

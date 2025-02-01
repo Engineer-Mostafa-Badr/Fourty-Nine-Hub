@@ -28,7 +28,7 @@ import '../../../../../common/widgets/dynamic/floating_button.dart';
 import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../../common/widgets/stateless/appbar/nested_appbar.dart';
 import '../widgets/posts/create_post_banner.dart';
-
+import 'package:flutter_svg/flutter_svg.dart';
 class SocialParams {
   final String userId;
   final bool? hideAppBar;
@@ -92,9 +92,12 @@ class _SocialHomeViewState extends State<SocialHomeView>
               ? null
               : HomeAppbar(
                   isWithBackArrow: true,
-                  toolbarHeight: context.screenHeight / 6.5,
+                  toolbarHeight: context.screenHeight / 6.9,
                   bottom: TabBar(
                     padding: EdgeInsets.zero,
+                    labelStyle: const TextStyle(fontSize: 17),
+                    unselectedLabelColor: Colors.grey,
+                    
                     indicatorColor: context.isDarkMode
                         ? Colors.white
                         : AppColors.PRIMARY_COLOR,
@@ -103,26 +106,27 @@ class _SocialHomeViewState extends State<SocialHomeView>
                         : AppColors.PRIMARY_COLOR,
                     tabs: [
                       Tab(
-                        icon: Image.asset(
-                          Assets.facebookLogo,
-                          height: 50.h,
-                          width: 50.w,
+                        icon: SvgPicture.asset(
+                          Assets.facebookAppBarIcon,
+                          height: 50,
+                          width: 50,
                         ),
                         text: LocaleKeys.Face.localize,
                       ),
                       Tab(
-                        icon: Image.asset(
-                          Assets.instaLogo,
-                          height: 50.h,
-                          width: 50.w,
+                        icon: SvgPicture.asset(
+                          Assets.instagramAppBarIcon,
+                          height: 50,
+                          width: 50,
                         ),
+                        
                         text: LocaleKeys.Insta.localize,
                       ),
                       Tab(
-                        icon: Image.asset(
-                          Assets.twitterLogo,
-                          height: 50.h,
-                          width: 50.w,
+                        icon: SvgPicture.asset(
+                          Assets.twitterAppBarIcon,
+                          height: 50,
+                          width: 50,
                         ),
                         text: LocaleKeys.tweet.localize,
                       ),
