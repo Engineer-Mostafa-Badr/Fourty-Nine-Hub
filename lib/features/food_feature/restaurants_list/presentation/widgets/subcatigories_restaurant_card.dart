@@ -189,10 +189,19 @@ class PropertyCard extends StatelessWidget {
                   child:
                       DetailsSection(item: item, myRestaurant: myRestaurant)),
               if (!myRestaurant) const SizedBox(height: 4),
-              if (!myRestaurant) PremiumAndRequestButtons(item: item),
-              if (!myRestaurant) const SizedBox(height: 4),
-              if (!myRestaurant) CallMessageReportButtons(item: item),
-              if (!myRestaurant) const SizedBox(height: 2),
+              if (!myRestaurant)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                        width: 180,
+                        child: PremiumAndRequestButtons(item: item)),
+                    CallMessageReportButtons(item: item),
+                  ],
+                ),
+              // if (!myRestaurant) const SizedBox(height: 4),
+              // if (!myRestaurant)
+              // if (!myRestaurant) const SizedBox(height: 2),
               // CallMessageButtons(
               //     otherUserId: item.userIdModel!.id??''!,
               //     subcategoryId: item.subcategoryId!.id,
@@ -347,7 +356,7 @@ class DetailsSection extends StatelessWidget {
           Expanded(
             child: Text(
                 "${context.isArabic ? item.subcategoryId?.nameAr : item.subcategoryId?.nameEn ?? ''}"
-                    "${item.description!=null?",":""} ${item.description ?? ''}",
+                "${item.description != null ? "," : ""} ${item.description ?? ''}",
                 style: Styles.mediumText(
                     fontWeight: FontWeight.w600, fontSize: 30)),
           ),
@@ -431,22 +440,22 @@ class PremiumAndRequestButtons extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 0),
       child: Row(
         children: [
-          _buildButton(
-            label: LocaleKeys.premiumRequest.localize,
-            color: AppColors.PRIMARY_COLOR_DARK,
-            onPressed: () async {
-              serviceLocator<SubscriptionController>().checkIfUserSubscribed(
-                showRegular: false,
-                title:
-                    "${context.isArabic ? item.subcategoryId?.nameAr : item.subcategoryId?.nameEn} Subscription",
-                onSubscribed: () {
-                  context.push(Routes.RESTAURANTDETAILS, extra: item);
-                },
-                subCategoryId: item.subcategoryId!.id,
-              );
-            },
-          ),
-          const SizedBox(width: 4),
+          // _buildButton(
+          //   label: LocaleKeys.premiumRequest.localize,
+          //   color: AppColors.PRIMARY_COLOR_DARK,
+          //   onPressed: () async {
+          //     serviceLocator<SubscriptionController>().checkIfUserSubscribed(
+          //       showRegular: false,
+          //       title:
+          //           "${context.isArabic ? item.subcategoryId?.nameAr : item.subcategoryId?.nameEn} Subscription",
+          //       onSubscribed: () {
+          //         context.push(Routes.RESTAURANTDETAILS, extra: item);
+          //       },
+          //       subCategoryId: item.subcategoryId!.id,
+          //     );
+          //   },
+          // ),
+          // const SizedBox(width: 4),
           _buildButton(
             label: LocaleKeys.request.localize,
             color: AppColors.PRIMARY_COLOR,
@@ -490,9 +499,8 @@ class CallMessageReportButtons extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 0),
       child: Row(
         children: [
-          _buildButtonWithIcon(
-            label: LocaleKeys.call.localize,
-            icon: Icons.call,
+          IconButton(
+            icon: const Icon(Icons.call),
             color: isChatEnabled
                 ? AppColors.PRIMARY_COLOR
                 : AppColors.GREY_DARK_COLOR,
@@ -505,9 +513,8 @@ class CallMessageReportButtons extends StatelessWidget {
                   },
           ),
           const SizedBox(width: 4),
-          _buildButtonWithIcon(
-            label: LocaleKeys.message.localize,
-            icon: Icons.message,
+          IconButton(
+            icon: const Icon(Icons.message),
             color: isChatEnabled
                 ? AppColors.PRIMARY_COLOR
                 : AppColors.GREY_DARK_COLOR,
@@ -524,9 +531,8 @@ class CallMessageReportButtons extends StatelessWidget {
                   },
           ),
           const SizedBox(width: 4),
-          _buildButtonWithIcon(
-            label: LocaleKeys.report.localize,
-            icon: Icons.report,
+          IconButton(
+            icon: const Icon(Icons.report),
             color: AppColors.PRIMARY_COLOR_DARK,
             onPressed: () async {
               await showModalBottomSheet(

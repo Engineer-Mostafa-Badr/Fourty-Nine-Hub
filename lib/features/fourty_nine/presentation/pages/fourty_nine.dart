@@ -305,34 +305,40 @@ class _FourtyNineViewState extends State<FourtyNineView>
                     );
                   }
                   if (state.data != null) {
-                    return ListView.separated(
+                    return GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisSpacing: 10,
+                              crossAxisCount: 2,
+                              childAspectRatio: 5 / 4),
                       itemCount: state.data?.length ?? 0,
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
-                        return InkWell(
-                          onTap: () {
-                            AdInterstitialTop.loadIntersitialAd();
-                            AdInterstitialTop.showInterstitialAd();
-                            HandleCashback.setCount(
-                                'mainCategoriesCount', context);
-                            context.push(Routes.SUBCATEGORIES,
-                                extra: state.data![index]);
-                          },
-                          child: MainCategoryBanner(
-                            category: state.data![index],
-                            onFavorite: () async {
-                              var result =
-                                  await controller.toggleFavoriteMedicalService(
-                                      state.data![index].id);
-                              print("result$result");
-                              return result;
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: InkWell(
+                            onTap: () {
+                              AdInterstitialTop.loadIntersitialAd();
+                              AdInterstitialTop.showInterstitialAd();
+                              HandleCashback.setCount(
+                                  'mainCategoriesCount', context);
+                              context.push(Routes.SUBCATEGORIES,
+                                  extra: state.data![index]);
                             },
+                            child: MainCategoryBanner(
+                              category: state.data![index],
+                              onFavorite: () async {
+                                var result = await controller
+                                    .toggleFavoriteMedicalService(
+                                        state.data![index].id);
+                                print("result$result");
+                                return result;
+                              },
+                            ),
                           ),
                         );
                       },
-                      separatorBuilder: (BuildContext context, int index) =>
-                          const Sizer(),
                     );
                   } else {
                     return const SizedBox.shrink();
@@ -365,21 +371,12 @@ class _FourtyNineViewState extends State<FourtyNineView>
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             _buildItemTabBar(
-              SvgPicture.asset(
-                Assets.threeDots,
-                height: 34.h,
-                width: 34.h,
-              ),
+              Icon(Icons.grid_view),
               Routes.MAINCATEGORIESTREE,
               () => HandleCashback.setCount('threeDotsCount', context),
             ),
             _buildItemTabBar(
-                SvgPicture.asset(
-                  Assets.mobile,
-                  height: 34.h,
-                  width: 34.h,
-                ),
-                Routes.MAINCATEGORIESCARDS, () {
+                Icon(Icons.view_carousel), Routes.MAINCATEGORIESCARDS, () {
               AdInterstitialTop.loadIntersitialAd();
               AdInterstitialTop.showInterstitialAd();
               HandleCashback.setCount('mainCategoriesSliderCount', context);
@@ -545,7 +542,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
           Positioned.fill(
             child: AppButton(
                 color: AppColors.AUTH_CONTAINER_COLOR,
-                label: LocaleKeys.beAStar.localize,
+                label: LocaleKeys.tube.localize,
                 style: Styles.mediumText(
                   color: AppColors.AUTH_CONTAINER_COLOR,
                   fontWeight: FontWeight.bold,
@@ -848,7 +845,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                     ),
                     Container(
                       color: Colors.black
-                          .withOpacity(0.6), // Darken the background
+                          .withOpacity(0.4), // Darken the background
                     ),
                   ],
                 ),
@@ -884,13 +881,6 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   // ),
                   const Spacer(),
                   Container(
-                    decoration: BoxDecoration(boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.5),
-                        spreadRadius: 0.03,
-                        blurRadius: 6,
-                      ),
-                    ]),
                     child: Label(
                       // text: service.title(),
                       text: title,

@@ -1,6 +1,6 @@
 // DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
 
-// ignore_for_file: prefer_single_quotes, avoid_renaming_method_parameters
+// ignore_for_file: prefer_single_quotes, avoid_renaming_method_parameters, constant_identifier_names
 
 import 'dart:ui';
 
@@ -14,7 +14,7 @@ class CodegenLoader extends AssetLoader{
     return Future.value(mapLocales[locale.toString()]);
   }
 
-  static const Map<String,dynamic> ar = {
+  static const Map<String,dynamic> _ar = {
   "nnew": "جديد",
   "today": "اليوم",
   "tommorow": "غدًا",
@@ -1272,9 +1272,10 @@ class CodegenLoader extends AssetLoader{
   "youCanDeActivatePage": "يمكنك الغاء تفعيل الصفحه المخصصه و العوده الي الصفحه الرئيسيه من هنا ",
   "chooseCategoryView": "اختر طريقه عرض القسام الرئيسيه للخدمات",
   "youCanChooseOneWayAtLeast": "يمكنك اختيار بحد أقصى طريقه عرض واحده",
-  "wallets": "المحافظ"
+  "wallets": "المحافظ",
+  "tube": "تيوب"
 };
-static const Map<String,dynamic> en = {
+static const Map<String,dynamic> _en = {
   "nnew": "New",
   "today": "Today",
   "tommorow": "Tomorrow",
@@ -2549,7 +2550,8 @@ static const Map<String,dynamic> en = {
   "youCanDeActivatePage": "You can deactivate the custom page and return to the main page from here",
   "chooseCategoryView": "Choose the main category view method for services",
   "youCanChooseOneWayAtLeast": "You can select a maximum of one view method.",
-  "wallets": "Wallets"
+  "wallets": "Wallets",
+  "tube": "Tube"
 };
-static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
+static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }
