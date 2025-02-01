@@ -7,6 +7,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
+import 'package:fourtyninehub/common/functions/global/upload_images.dart';
 import 'package:fourtyninehub/common/functions/helper/file_picker_helper.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
@@ -34,7 +35,6 @@ import 'package:fourtyninehub/features/health_feature/create_doctor/domain/useca
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import '../../../../../core/error/failure.dart';
 
@@ -268,25 +268,43 @@ class CreateAdCubit extends Cubit<CreateAdState> {
   void uploadImage({required String subCategoryId,required BuildContext context}) async {
     loadImage = true;
     emit(state.copyWith(status: CreateAdStates.uploadImage));
+    UploadImages uploadFile = UploadImages();
+    final mediaResponse = await uploadFile.uploadImage( subCategoryId: subCategoryId,
+        context:context,
+        onUploaded: (UploadImagesEntity media) {
+          // context.pop();
+          final images = state.images ?? [];
+          final files = state.files ?? [];
+          images.addAll(media.mediaIds);
+          files.addAll(media.files);
+          print("objectUpload1");
+          loadImage = false;
 
-    final mediaResponse = await pickImage(
-            subCategoryId: subCategoryId,
-            context:context,
-            onUploaded: (UploadFileEntity media) {
-              context.pop();
-              final images = state.images ?? [];
-              images.add(media);
-              print("objectUpload1");
-              loadImage = false;
-
-              emit(state.copyWith(
-                  images: images, status: CreateAdStates.initState,));
-            })
-        .then((value) {
+          emit(state.copyWith(
+            images: images,files:files, status: CreateAdStates.initState,));
+        }).then((value) {
       if (value == null) {
         emit(state.copyWith(status: CreateAdStates.initState));
       }
     });
+    // final mediaResponse = await pickImage(
+    //         subCategoryId: subCategoryId,
+    //         context:context,
+    //         onUploaded: (UploadFileEntity media) {
+    //           context.pop();
+    //           final images = state.images ?? [];
+    //           images.add(media);
+    //           print("objectUpload1");
+    //           loadImage = false;
+    //
+    //           emit(state.copyWith(
+    //               images: images, status: CreateAdStates.initState,));
+    //         })
+    //     .then((value) {
+    //   if (value == null) {
+    //     emit(state.copyWith(status: CreateAdStates.initState));
+    //   }
+    // });
     mediaResponse?.fold(
         (l) => emit(state.copyWith(failure: l, status: CreateAdStates.error)),
         (r) {
@@ -294,7 +312,7 @@ class CreateAdCubit extends Cubit<CreateAdState> {
     });
   }
 
-  void removeImage({required UploadFileEntity image}) {
+  void removeImage({required String image}) {
     final images = state.images;
     images?.remove(image);
     emit(state.copyWith(images: images));
@@ -364,7 +382,7 @@ class CreateAdCubit extends Cubit<CreateAdState> {
         // isUser: categorize.subCategory.hasAuction==true?state.isSale:state.isUser,
         description: description ?? '',
         phone: phone ?? '',
-        images: state.images?.map((e) => e.mediaId).toList() ?? [],
+        images: state.images?? [],
         price: num.parse(price ?? "0"),
         active: true,
         createdAt: DateTime.now(),
@@ -506,7 +524,7 @@ class CreateAdCubit extends Cubit<CreateAdState> {
     required String phone,
     required num price,
   }) async {
-    print('state.images ${state.images?.map((e) => e.mediaId).toList() ?? []}');
+    print('state.images ${state.images?? []}');
     // final List<Map<String, dynamic>> props = [];
     // final List<Map<String, dynamic>> props2 = [];
     // final existingProps = state.myAdById!.props;
@@ -632,7 +650,7 @@ class CreateAdCubit extends Cubit<CreateAdState> {
       city: (state.city?.isEmpty ?? true)
           ? state.myAdById?.cityDataId
           : state.city,
-      images: state.images?.map((e) => e.mediaId).toList() ??
+      images: state.images??
           state.myAdById!.images.map((e) => e.id).toList(),
     ));
     response.fold(

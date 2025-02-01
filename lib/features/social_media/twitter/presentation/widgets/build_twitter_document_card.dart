@@ -73,7 +73,7 @@ class _BuildTwitterDocumentCardState extends State<BuildTwitterDocumentCard> {
                   height: 60.h,
                 ),
                 Label(
-                  text: LocaleKeys.documentation.localize,
+                  text: LocaleKeys.verification.localize,
                   style: Styles.headerText(color: Colors.white),
                 ),
                 const SizedBox(
@@ -81,7 +81,7 @@ class _BuildTwitterDocumentCardState extends State<BuildTwitterDocumentCard> {
                 ),
                 const Icon(
                   Icons.verified,
-                  color: AppColors.PRIMARY_COLOR_DARK,
+                  color: AppColors.blueColor,
                   size: 25,
                 )
               ],

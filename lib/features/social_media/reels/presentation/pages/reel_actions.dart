@@ -7,10 +7,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/preload_cubit/preload_bloc.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments/show_comments_sheet.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:readmore/readmore.dart';
 import 'package:share_plus/share_plus.dart';
@@ -101,27 +105,104 @@ class _UserSection extends StatelessWidget {
         const SizedBox(
           width: 10,
         ),
-        _UserInfo(reel: reel),
+        Flexible(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Sizer(),
+                  _UserAvatar(reel: reel),
+                  const Sizer(),
+                  _UserInfo(reel: reel),
+                ],
+              ),
+              const Sizer(),
+              Container(
+                margin: const EdgeInsets.only(top: 5),
+                padding: const EdgeInsets.only(left: 10),
+                child: GestureDetector(
+                            onTap: () {
+                // setState(() {
+                //   _isCollapsed = !_isCollapsed;
+                // });
+                            },
+                            child: SizedBox(
+                width: 0.7.sw,
+                child: ReadMoreText(
+                  "Simple DescriptionSimple DescriptionSimple DescriptionSimple DescriptionSimple DescriptionSimple DescriptionSimple DescriptionSimple DescriptionSimple DescriptionSimple DescriptionSimple DescriptionSimple Description",
+                  trimLines: 1,
+                  colorClickableText: AppColors.PRIMARY_COLOR_DARK,
+                  trimMode: TrimMode.Line,
+                  trimCollapsedText: ' See more',
+                  trimExpandedText: ' Hide',
+                  // isExpandable: ,
+                  // isCollapsed: ValueNotifier(_isCollapsed),
+                  textScaler: TextScaler.noScaling,
+                  lessStyle: Styles.headerText(
+                    color: AppColors.PRIMARY_COLOR_DARK,
+                  ),
+                  moreStyle: Styles.headerText(
+                    fontSize: 30,
+                    color: AppColors.PRIMARY_COLOR_DARK,
+                  ),
+                  style: Styles.mediumText(color: Colors.white),
+                ),
+                            ),
+                          ),
+              ),
+              const Sizer(),
+              Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.3),
+                        borderRadius: BorderRadius.circular(30)
+                      ),
+                      child: const Row(
+                        children: [
+                          Icon(FontAwesomeIcons.music, size: 13,),
+                          Sizer(),
+                          Text("taleen-nabil • Original audio",),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }
 }
 
 /// Widget to display the user's avatar.
-class _UserAvatar extends StatelessWidget {
+class _UserAvatar extends StatefulWidget {
   final Reel reel;
 
   const _UserAvatar({required this.reel});
 
   @override
+  State<_UserAvatar> createState() => _UserAvatarState();
+}
+
+class _UserAvatarState extends State<_UserAvatar> {
+  @override
   Widget build(BuildContext context) {
+        final controller = context.read<SocialPostsCubit>();
+
     return Container(
       width: 90.h,
       height: 90.h,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(
-          color: reel.user.story
+          color: widget.reel.user.story
               ? AppColors.PRIMARY_COLOR_DARK
               : Colors.transparent,
           width: 3,
@@ -132,19 +213,72 @@ class _UserAvatar extends StatelessWidget {
           if (!serviceLocator<UserCubit>().isLoggedIn) {
             context.push(Routes.LOGIN);
           } else {
-            context.push(Routes.OTHERSACCOUNT, extra: reel.user.id);
+            context.push(Routes.OTHERSACCOUNT, extra: widget.reel.user.id);
           }
         },
-        child: CircleAvatar(
-          // radius: reel.user.profilePictureSignedUrl != null
-          //     ? 70.h
-          //     : 20.h, // Adjust based on item type if needed
-          backgroundImage: reel.user.profilePictureSignedUrl != null
-              ? CachedNetworkImageProvider(reel.user.profilePictureSignedUrl!)
-              : null,
-          child: reel.user.profilePictureSignedUrl == null
-              ? const Icon(Icons.person, color: Colors.white)
-              : null,
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            CircleAvatar(
+              // radius: reel.user.profilePictureSignedUrl != null
+              //     ? 70.h
+              //     : 20.h, // Adjust based on item type if needed
+              backgroundImage: widget.reel.user.profilePictureSignedUrl != null
+                  ? CachedNetworkImageProvider(widget.reel.user.profilePictureSignedUrl!)
+                  : null,
+              child: widget.reel.user.profilePictureSignedUrl == null
+                  ? const Icon(Icons.person, color: Colors.white)
+                  : null,
+            ),
+            widget.reel.user.isSentRequest?Container():
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: -5,
+              child: GestureDetector(
+                onTap: () async {
+                  if (context.read<UserCubit>().isLoggedIn) {
+                      if (widget.reel.user.areFriends == true) {
+                      } else {
+                        if (widget.reel.user.isSentRequest ==
+                            true) {
+                          var result =
+                              await controller.removeFriendRequest(
+                                  context: context,
+                                  userId: widget.reel.user.id);
+                          if (result == true) {
+                            widget.reel.user.isSentRequest =
+                                false;
+                            setState(() {});
+                          }
+                        } else {
+                          var result =
+                              await controller.friendRequest(
+                                  context: context,
+                                  userId: widget.reel.user.id);
+                          if (result == true) {
+                            widget.reel.user.isSentRequest =
+                                true;
+                            setState(() {});
+                          }
+                        }
+                      }
+                    } else {
+                      context.push(Routes.LOGIN);
+                    }
+                },
+                child: Container(
+                  width: 15,
+                  height: 15,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.red
+                  ),
+                  child: const Center(child: Icon(Icons.add, size: 13,)),
+                ),
+              ),
+            )
+          ],
         ),
       ),
     );
@@ -170,73 +304,90 @@ class _UserInfoState extends State<_UserInfo> {
     return "${widget.reel.name.substring(0, maxLength)}...";
   }
 
-  bool _isCollapsed = true;
+  final bool _isCollapsed = true;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        InkWell(
-          onTap: () {
-            if (!serviceLocator<UserCubit>().isLoggedIn) {
-              context.push(Routes.LOGIN);
-            } else {
-              context.push(Routes.OTHERSACCOUNT, extra: widget.reel.user.id);
-            }
-          },
-          child: Row(
-            children: [
-              Text(
-                _displayName,
-                textScaler: TextScaler.noScaling,
-                style: _nameTextStyle,
-              ),
-              if (widget.reel.user.verified)
-                const Icon(
-                  Icons.verified,
-                  color: AppColors.PRIMARY_COLOR_DARK,
-                  size: 25,
+    final controller = context.read<SocialPostsCubit>();
+    return Flexible(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          InkWell(
+            onTap: () {
+              if (!serviceLocator<UserCubit>().isLoggedIn) {
+                context.push(Routes.LOGIN);
+              } else {
+                context.push(Routes.OTHERSACCOUNT, extra: widget.reel.user.id);
+              }
+            },
+            child: Row(
+              children: [
+                Flexible(
+                  child: Text(
+                    _displayName,
+                    overflow: TextOverflow.ellipsis,
+                    textScaler: TextScaler.noScaling,
+                    style: _nameTextStyle,
+                  ),
                 ),
-            ],
-          ),
-        ),
-        GestureDetector(
-          onTap: () {
-            setState(() {
-              _isCollapsed = !_isCollapsed;
-            });
-          },
-          child: SizedBox(
-            width: 0.7.sw,
-            child: ReadMoreText(
-              "Simple Description",
-              trimLines: 1,
-              colorClickableText: AppColors.PRIMARY_COLOR_DARK,
-              trimMode: TrimMode.Line,
-              trimCollapsedText: ' See more',
-              trimExpandedText: ' Hide',
-              // isExpandable: ,
-              isCollapsed: ValueNotifier(_isCollapsed),
-              textScaler: TextScaler.noScaling,
-              lessStyle: Styles.headerText(
-                color: AppColors.PRIMARY_COLOR_DARK,
-              ),
-              moreStyle: Styles.headerText(
-                fontSize: 30,
-                color: AppColors.PRIMARY_COLOR_DARK,
-              ),
-              style: Styles.mediumText(color: Colors.white),
+                const Sizer(width: 40,),
+                widget.reel.user.isFollowed?Container():
+                GestureDetector(
+                  onTap: () async {
+                    if (context.read<UserCubit>().isLoggedIn) {
+                                  if (widget.reel.user.isFollowed == true) {
+                                    var result =
+                                        await controller.unFollowRequest(
+                                            context: context,
+                                            userId: widget.reel.user.id);
+                                    if (result == true) {
+                                      widget.reel.user.isFollowed = false;
+                                      setState(() {});
+                                    }
+                                  } else {
+                                    var result = await controller.followRequest(
+                                        context: context,
+                                        userId: widget.reel.user.id);
+                                    if (result == true) {
+                                      widget.reel.user.isFollowed = true;
+                                      setState(() {});
+                                    }
+                                  }
+                                } else {
+                                  context.push(Routes.LOGIN);
+                                }
+
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(color: Colors.white),
+                      boxShadow: const [
+                        BoxShadow(color: Colors.black, blurRadius: 30)
+                      ]
+                    ),
+                    child: Text(LocaleKeys.follow.localize, style: Styles.mediumText(fontWeight: FontWeight.bold, color: Colors.white),),
+                  ),
+                ),
+                if (widget.reel.user.verified)
+                  const Icon(
+                    Icons.verified,
+                    color: AppColors.PRIMARY_COLOR_DARK,
+                    size: 25,
+                  ),
+              ],
             ),
           ),
-        ),
-        // _ReelDetails(name: _displayReelName, viewCount: reel.viewCount),
-      ],
+          // _ReelDetails(name: _displayReelName, viewCount: reel.viewCount),
+        ],
+      ),
     );
   }
 
   TextStyle get _nameTextStyle => TextStyle(
-        fontSize: 50.sp,
+        fontSize: 40.sp,
         color: Colors.white,
         decoration: TextDecoration.none,
         fontWeight: FontWeight.bold,
@@ -376,31 +527,40 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         // Profile Icon with Plus Button (Follow)
-        Stack(
-          alignment: Alignment.bottomCenter,
-          children: [
-            _UserAvatar(reel: reel),
-            // Positioned(
-            //   bottom: 0,
-            //   child: Container(
-            //     decoration: BoxDecoration(
-            //       color: Colors.red,
-            //       borderRadius: BorderRadius.circular(15),
-            //       border: Border.all(color: Colors.white, width: 2),
-            //     ),
-            //     child: const Icon(Icons.add, color: Colors.white, size: 15),
-            //   ),
-            // ),
-          ],
-        ).animate().scale(duration: 200.ms),
-        const SizedBox(height: 12),
+        // Stack(
+        //   alignment: Alignment.bottomCenter,
+        //   children: [
 
-        // Heart Icon (Like)
+        //     // Positioned(
+        //     //   bottom: 0,
+        //     //   child: Container(
+        //     //     decoration: BoxDecoration(
+        //     //       color: Colors.red,
+        //     //       borderRadius: BorderRadius.circular(15),
+        //     //       border: Border.all(color: Colors.white, width: 2),
+        //     //     ),
+        //     //     child: const Icon(Icons.add, color: Colors.white, size: 15),
+        //     //   ),
+        //     // ),
+        //   ],
+        // ).animate().scale(duration: 200.ms),
+        // _buildReactionButton(
+        //   iconWidget: Image.asset(Assets.giftBoxIcon, color: Colors.white, width: 30, height: 30,),
+        //   count: '',
+        //   onTap: () {
+        //     if (!serviceLocator<UserCubit>().isLoggedIn) {
+        //       context.push(Routes.LOGIN);
+        //     } else {
+        //       _showGiftBottomSheet(context);
+        //     }
+        //   },
+        // ),
+        const SizedBox(height: 12),
         _buildReactionButton(
           iconWidget: Icon(
             Icons.favorite,
             size: iconSize,
-            color: reel.likeCount > 0 ? Colors.pinkAccent : Colors.white,
+            color: reel.likeCount > 0 ? Colors.red : Colors.white,
             shadows: iconShadows,
           ),
           count: reel.likeCount.toString(),
@@ -436,22 +596,7 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
         // const SizedBox(height: 6),
 
         // Bookmark Icon
-        _buildReactionButton(
-          iconWidget: Icon(
-            Icons.bookmark,
-            size: iconSize,
-            color: reel.saveCount == 0 ? Colors.white : Colors.yellowAccent,
-            shadows: iconShadows,
-          ),
-          count: reel.saveCount.toString(),
-          onTap: () {
-            if (!serviceLocator<UserCubit>().isLoggedIn) {
-              context.push(Routes.LOGIN);
-            } else {
-              _handleSaveAction(context, reelsCubit);
-            }
-          },
-        ),
+        
         // const SizedBox(height: 6),
 
         // Share Icon (Reversed)
@@ -472,46 +617,63 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
             }
           },
         ),
-        // const SizedBox(height: 6),
-
-        // Gift Icon
-        _buildReactionButton(
-          iconWidget: Icon(
-            Icons.card_giftcard,
-            size: iconSize,
-            color: Colors.white,
-            shadows: iconShadows,
-          ),
-          count: '',
-          onTap: () {
-            if (!serviceLocator<UserCubit>().isLoggedIn) {
-              context.push(Routes.LOGIN);
-            } else {
-              _showGiftBottomSheet(context);
-            }
+        IconButton(
+          icon: const Icon(Icons.more_horiz),
+          onPressed: () {
+            showModalBottomSheet(
+              context: context,
+              builder: (context) {
+                return Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  height: 80,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      _buildReactionButton(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                          iconWidget: Icon(
+                            Icons.report,
+                            size: iconSize,
+                            color: Colors.white,
+                            shadows: iconShadows,
+                          ),
+                          count: LocaleKeys.report.localize,
+                          onTap: () {
+                            if (!serviceLocator<UserCubit>().isLoggedIn) {
+                              context.push(Routes.LOGIN);
+                            } else {
+                              _showReportBottomSheet(context);
+                            }
+                          },
+                        ),
+                        const Sizer(),
+                      _buildReactionButton(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        iconWidget: Icon(
+                          Icons.bookmark,
+                          size: iconSize,
+                          color: reel.saveCount == 0 ? Colors.white : Colors.yellowAccent,
+                          shadows: iconShadows,
+                        ),
+                        count: LocaleKeys.save.localize,
+                        onTap: () {
+                          if (!serviceLocator<UserCubit>().isLoggedIn) {
+                            context.push(Routes.LOGIN);
+                          } else {
+                            _handleSaveAction(context, reelsCubit);
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              },
+            );
           },
         ),
-        // const SizedBox(height: 6),
-
-        // Report Icon
-        _buildReactionButton(
-          iconWidget: Icon(
-            Icons.report,
-            size: iconSize,
-            color: Colors.white,
-            shadows: iconShadows,
-          ),
-          count: '',
-          onTap: () {
-            if (!serviceLocator<UserCubit>().isLoggedIn) {
-              context.push(Routes.LOGIN);
-            } else {
-              _showReportBottomSheet(context);
-            }
-          },
-        ),
-        // const SizedBox(height: 6),
-
+        const SizedBox(height: 6),
         if (itemType != ReelItemType.instagram)
           RotatingCircularButton(
             reel: reel,
@@ -527,24 +689,33 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
     required VoidCallback onTap,
     required String count,
     bool isReversed = false,
+    MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start
   }) {
     final Widget animatedIcon = iconWidget.animate().scale(duration: 200.ms);
 
     return GestureDetector(
       onTap: onTap,
-      child: Column(
-        children: [
-          isReversed
-              ? Directionality(
-                  textDirection: TextDirection.rtl,
-                  child: animatedIcon,
-                )
-              : animatedIcon,
-          Text(
-            count,
-            style: countTextStyle,
-          ),
-        ],
+      child: Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(color: Colors.black.withOpacity(0.4), blurRadius: 30)
+          ]
+        ),
+        child: Column(
+          mainAxisAlignment: mainAxisAlignment,
+          children: [
+            isReversed
+                ? Directionality(
+                    textDirection: TextDirection.rtl,
+                    child: animatedIcon,
+                  )
+                : animatedIcon,
+            Text(
+              count,
+              style: countTextStyle,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -601,9 +772,7 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
     }
   }
 
-  Future<void> _showGiftBottomSheet(BuildContext context) async {
-    await showGiftBottomSheet(context, receiverId: reel.user.id);
-  }
+ 
 
   Future<void> _showReportBottomSheet(BuildContext context) async {
     await showModalBottomSheet(

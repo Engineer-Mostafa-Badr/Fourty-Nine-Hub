@@ -53,14 +53,13 @@ class _CallMessageButtonsState extends State<CallMessageButtons> {
             children: [
               Expanded(
                 flex: 3,
-                child: AvaialbleTripsButton(
-                  title: LocaleKeys.call.localize,
+                child: IconButton(
                   color: (snap.data == true &&
                           context.read<UserCubit>().isLoggedIn)
                       ? AppColors.PRIMARY_COLOR
                       : AppColors.DARK_GRAY_COLOR,
-                  icon: Icons.call,
-                  onTap: !context.read<UserCubit>().isLoggedIn
+                  icon: const Icon(Icons.call),
+                  onPressed: !context.read<UserCubit>().isLoggedIn
                       ? () => context.push(Routes.LOGIN)
                       : snap.data == true
                           ? () {
@@ -76,14 +75,13 @@ class _CallMessageButtonsState extends State<CallMessageButtons> {
               const Sizer(width: 5),
               Expanded(
                 flex: 3,
-                child: AvaialbleTripsButton(
-                  title: LocaleKeys.message.localize,
+                child: IconButton(
                   color: (snap.data == true &&
                           context.read<UserCubit>().isLoggedIn)
                       ? AppColors.PRIMARY_COLOR
                       : AppColors.DARK_GRAY_COLOR,
-                  icon: Icons.email,
-                  onTap: !context.read<UserCubit>().isLoggedIn
+                  icon: const Icon(Icons.email),
+                  onPressed: !context.read<UserCubit>().isLoggedIn
                       ? () => context.push(Routes.LOGIN)
                       : snap.data == true
                           ? () async {
@@ -113,11 +111,10 @@ class _CallMessageButtonsState extends State<CallMessageButtons> {
                 const Sizer(width: 5),
                 Expanded(
                   flex: 3,
-                  child: AvaialbleTripsButton(
-                    title: LocaleKeys.report.localize,
+                  child: IconButton(
                     color: AppColors.SECONDARY_COLOR,
-                    icon: Icons.report,
-                    onTap: !context.read<UserCubit>().isLoggedIn
+                    icon: const Icon(Icons.report),
+                    onPressed: !context.read<UserCubit>().isLoggedIn
                         ? () => context.push(Routes.LOGIN)
                         : () {
                             bottomSheet(

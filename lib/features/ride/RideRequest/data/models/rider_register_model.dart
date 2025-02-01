@@ -91,7 +91,7 @@ class RiderRegisterModel {
       "airConditioner": airCondition ?? false,
       "city": governorateNameAr,
       "plateInfo": plateInfo,
-      "idNumber": idNumber,
+      "idNumber": "idNumber",
       "workingType": workingType,
       "vehicleColor": vehicleColor,
       "birthday": birthDate.toString(),

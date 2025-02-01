@@ -12,13 +12,16 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:auto_scroll_text/auto_scroll_text.dart';
 
 class ScrollableTextWithAnimation extends StatefulWidget {
-  const ScrollableTextWithAnimation({super.key, });
+  const ScrollableTextWithAnimation({super.key, this.textDirection});
 
+  final TextDirection? textDirection;
   @override
-  State<ScrollableTextWithAnimation> createState() => _ScrollableTextWithAnimationState();
+  State<ScrollableTextWithAnimation> createState() =>
+      _ScrollableTextWithAnimationState();
 }
 
-class _ScrollableTextWithAnimationState extends State<ScrollableTextWithAnimation> {
+class _ScrollableTextWithAnimationState
+    extends State<ScrollableTextWithAnimation> {
   final TextEditingController _controller = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   @override
@@ -45,16 +48,16 @@ class _ScrollableTextWithAnimationState extends State<ScrollableTextWithAnimatio
                           decoration: InputDecoration(
                             labelText: LocaleKeys.yourAnswer.localize,
                             hintText: LocaleKeys.enterSomething.localize,
-                            border: OutlineInputBorder(
+                            border: const OutlineInputBorder(
                               borderRadius: BorderRadius.all(Radius.circular(20.0)),
                             ),
-                            disabledBorder: OutlineInputBorder(
+                            disabledBorder: const OutlineInputBorder(
                               borderRadius: BorderRadius.all(Radius.circular(20.0)),
                             ),
-                            enabledBorder: OutlineInputBorder(
+                            enabledBorder: const OutlineInputBorder(
                               borderRadius: BorderRadius.all(Radius.circular(20.0)),
                             ),
-                            focusedBorder: OutlineInputBorder(
+                            focusedBorder: const OutlineInputBorder(
                               borderRadius: BorderRadius.all(Radius.circular(20.0)),
                             ),
                           ),
@@ -93,7 +96,7 @@ class _ScrollableTextWithAnimationState extends State<ScrollableTextWithAnimatio
               child: AutoScrollText(
                 context.isArabic?context.read<MainCategoriesCubit>().state.question?.messageAr??'':context.read<MainCategoriesCubit>().state.question?.messageEn??'',
                 style: Styles.headerText(fontSize: 30, color: context.read<MainCategoriesCubit>().state.question?.enableAnswers==true?AppColors.SECONDARY_COLOR:AppColors.PRIMARY_COLOR),
-                textDirection: context.isArabic?TextDirection.rtl:TextDirection.ltr,
+                textDirection:widget.textDirection ?? (context.isArabic?TextDirection.rtl:TextDirection.ltr),
                 // textStyle: TextStyle(fontSize: 24),
               ),
             ),

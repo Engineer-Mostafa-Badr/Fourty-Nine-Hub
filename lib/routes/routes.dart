@@ -194,6 +194,7 @@ abstract class Routes {
 
   static const updateDriverShipping = '/Ride/updateDriverShipping';
   static const updateDriverRide = '/Ride/updateDriverRide';
+  static const registerRidePart = '/Ride/RegisterRidePart';
 }
 
 abstract class Paths {
@@ -377,4 +378,6 @@ abstract class Paths {
 
   static const updateDriverShipping = 'updateDriverShipping';
   static const updateDriverRide = 'updateDriverRide';
+  static const registerRidePart = 'RegisterRidePart';
+
 }

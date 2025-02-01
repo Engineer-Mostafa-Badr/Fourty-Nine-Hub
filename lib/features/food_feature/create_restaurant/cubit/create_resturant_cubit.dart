@@ -366,7 +366,7 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
         context: context,
         onUploaded: (media) {
           restaurantImages.add(media.file);
-          restaurantImagesIds.add(media.mediaId);
+          restaurantImagesIds.add(media.mediaId[0]);
           createRestaurantParams.restaurantMedia = restaurantImagesIds;
 
           emit(CreateRestaurantUploadProfileImage(restaurantImages));
@@ -375,7 +375,7 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
 
   Future<void> uploadLicenseFirstPageImage({required BuildContext context}) async {
     await _uploadImage(onUploaded: (media) {
-      licensRestaurantImagesIds.add(media.mediaId);
+      licensRestaurantImagesIds.add(media.mediaId[0]);
       createRestaurantParams.licenseMedia = licensRestaurantImagesIds;
 
       emit(CreateRestaurantUploadLicenseFirstPageImage(media.file));
@@ -384,7 +384,7 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
 
   Future<void> uploadLicenseSecondPageImage({required BuildContext context}) async {
     await _uploadImage(onUploaded: (media) {
-      licensRestaurantImagesIds.add(media.mediaId);
+      licensRestaurantImagesIds.add(media.mediaId[0]);
       createRestaurantParams.licenseMedia = licensRestaurantImagesIds;
 
       emit(CreateRestaurantUploadLicenseSecondPageImage(media.file));
@@ -393,7 +393,7 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
 
   Future<void> uploadLicenseThiredPageImage({required BuildContext context}) async {
     await _uploadImage(onUploaded: (media) {
-      licensRestaurantImagesIds.add(media.mediaId);
+      licensRestaurantImagesIds.add(media.mediaId[0]);
       createRestaurantParams.licenseMedia = licensRestaurantImagesIds;
 
       emit(CreateRestaurantUploadLicenseThiredPageImage(media.file));

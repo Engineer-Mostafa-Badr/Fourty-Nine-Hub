@@ -277,7 +277,7 @@ class InstagramCubit extends Cubit<InstagramState> {
     List<PostEntity> advertisements = [];
     List<PostEntity> reels = [];
     List<PostEntity> savedReels = [];
-    savedReels.addAll(state.reels??[]);
+    savedReels.addAll(state.reels ?? []);
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
         (data) async {
@@ -285,7 +285,7 @@ class InstagramCubit extends Cubit<InstagramState> {
         advertisements = await getAdvertisements();
         reels = await getReels();
         savedReels.addAll(reels);
-        reels.map((element) => element.type='reels').toList();
+        reels.map((element) => element.type = 'reels').toList();
       }
       List<PostEntity> totalPosts = [];
       totalPosts.addAll(data);
@@ -304,7 +304,8 @@ class InstagramCubit extends Cubit<InstagramState> {
         final nextPageKey = page + 1;
         feedPagingController.appendPage(totalPosts, nextPageKey);
       }
-      emit(state.copyWith(posts: totalPosts,reels:savedReels, status: StateStatus.initial));
+      emit(state.copyWith(
+          posts: totalPosts, reels: savedReels, status: StateStatus.initial));
     });
   }
 
@@ -657,13 +658,10 @@ class InstagramCubit extends Cubit<InstagramState> {
     return value;
   }
 
-
-
   List<SuggestUserEntity> facebookSuggestPeople = [];
   bool isLoadingMore = false;
   bool hasMoreData = true;
   int currentPage = 1;
-
 
   void loadInitialSuggestPeople() async {
     emit(state.copyWith(status: StateStatus.loading));
@@ -683,9 +681,9 @@ class InstagramCubit extends Cubit<InstagramState> {
     );
 
     response.fold(
-          (failure) => emit(
-          state.copyWith(failure: failure, status: StateStatus.error)),
-          (data) {
+      (failure) =>
+          emit(state.copyWith(failure: failure, status: StateStatus.error)),
+      (data) {
         facebookSuggestPeople.addAll(data);
 
         if (data.length < pageSize) {

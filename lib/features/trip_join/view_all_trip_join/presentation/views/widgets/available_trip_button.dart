@@ -11,18 +11,20 @@ class AvaialbleTripsButton extends StatelessWidget {
     this.color,
     this.noFill = false,
     this.icon,
+    this.padding,
   });
   final void Function()? onTap;
   final Color? color;
   final String title;
   final bool noFill;
   final IconData? icon;
+  final EdgeInsetsGeometry? padding;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 5.h),
+        padding: padding ?? EdgeInsets.symmetric(vertical: 5.h),
         decoration: BoxDecoration(
           color: noFill ? null : color,
           borderRadius: BorderRadius.circular(5),

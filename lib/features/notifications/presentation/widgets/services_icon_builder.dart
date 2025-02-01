@@ -17,7 +17,7 @@ class ServicesIconBuilder extends StatelessWidget {
       final getUnreadNotificationsCountCubit =
           context.watch<GetUnreadNotificationsCountCubit>();
 
-      return IconWithViewCount(
+      return CustomNotificationWidget(
         icon: Image.asset(
           Assets.hand,
           height: 30.h,

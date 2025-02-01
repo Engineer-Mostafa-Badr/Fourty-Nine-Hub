@@ -1236,5 +1236,15 @@ abstract class  LocaleKeys {
   static const socialDescription = 'socialDescription';
   static const favouriteDescrepion = 'favouriteDescrepion';
   static const warning = 'warning';
+  static const saveAndActivate = 'saveAndActivate';
+  static const saveWithOutActivate = 'saveWithOutActivate';
+  static const serviceNoifications = 'serviceNoifications';
+  static const socialNotifications = 'socialNotifications';
+  static const fourtyNineNotifications = 'fourtyNineNotifications';
+  static const deActivateCustomPage = 'deActivateCustomPage';
+  static const areYouSureToDeActivate = 'areYouSureToDeActivate';
+  static const youCanDeActivatePage = 'youCanDeActivatePage';
+  static const chooseCategoryView = 'chooseCategoryView';
+  static const youCanChooseOneWayAtLeast = 'youCanChooseOneWayAtLeast';
 
 }

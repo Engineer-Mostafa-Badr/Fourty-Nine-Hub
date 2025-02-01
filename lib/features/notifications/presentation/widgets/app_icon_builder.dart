@@ -16,7 +16,7 @@ class AppIconBuilder extends StatelessWidget {
     return Builder(builder: (context) {
       final getUnreadNotificationsCountCubit =
           context.watch<GetUnreadNotificationsCountCubit>();
-      return IconWithViewCount(
+      return CustomNotificationWidget(
         icon: Image.asset(
           Assets.logo,
           height: 30.h,

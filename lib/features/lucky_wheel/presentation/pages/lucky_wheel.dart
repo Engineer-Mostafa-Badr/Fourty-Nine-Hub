@@ -151,7 +151,7 @@ class LuckyWheelView extends StatelessWidget {
                       color: Theme.of(context).scaffoldBackgroundColor,
                     ),
                     onPressed: () {
-                      return spinWheelCubit.spin(state.data!);
+                      return spinWheelCubit.spin(state.data!,context);
                     },
                   ),
                   SizedBox(height: 30.h),

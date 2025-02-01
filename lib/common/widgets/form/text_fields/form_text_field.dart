@@ -32,6 +32,7 @@ class FormTextField extends StatelessWidget {
   final String? Function(String?)? validator;
   final Color? fillColor;
   final bool noBorder;
+  final bool? readOnly;
   final TextStyle? hintStyle;
   final BorderRadius? borderRadius;
   final BoxConstraints? constraints;
@@ -46,6 +47,7 @@ class FormTextField extends StatelessWidget {
       this.borderRadius,
       this.prefix,
       this.noBorder = false,
+      this.readOnly = false,
       this.constraints,
       this.fillColor,
       this.hint,
@@ -77,6 +79,7 @@ class FormTextField extends StatelessWidget {
       SizedBox(
         height: height ?? 70,
         child: TextFormField(
+          readOnly: readOnly??false,
           // style:
           //     textStyle ?? Styles.mediumText(color: AppColors.QUANTITY_COLOR),
           textAlignVertical: textAlignVertical,
@@ -119,11 +122,11 @@ class FormTextField extends StatelessWidget {
           obscureText: obsecure ?? false,
           onChanged: action,
           decoration: InputDecoration(
-            errorStyle: TextStyle(height: 0.1),
+            errorStyle: const TextStyle(height: 0.1),
             constraints: constraints,
             hintText: hint,
             filled: true,
-            fillColor: context.theme.inputDecorationTheme.fillColor,
+            fillColor: context.theme.scaffoldBackgroundColor,
             labelText: label,
             // hintStyle: style ??
             //     TextStyle(fontSize: 30.sp, color: AppColors.QUANTITY_COLOR),
@@ -135,9 +138,9 @@ class FormTextField extends StatelessWidget {
                 ? InputBorder.none
                 : OutlineInputBorder(
                     borderSide: const BorderSide(
-                      color: AppColors.LIGHT_GRAY_COLOR,
+                      color: Colors.black,
                     ),
-                    borderRadius: borderRadius ?? BorderRadius.circular(10),
+                    borderRadius: borderRadius ?? BorderRadius.circular(5),
                   ),
             focusedBorder: noBorder
                 ? InputBorder.none
@@ -145,13 +148,13 @@ class FormTextField extends StatelessWidget {
                     borderSide: const BorderSide(
                       color: AppColors.PRIMARY_COLOR,
                     ),
-                    borderRadius: borderRadius ?? BorderRadius.circular(10),
+                    borderRadius: borderRadius ?? BorderRadius.circular(5),
                   ),
             errorBorder: OutlineInputBorder(
               borderSide: const BorderSide(
                 color: Colors.red,
               ),
-              borderRadius: borderRadius ?? BorderRadius.circular(10),
+              borderRadius: borderRadius ?? BorderRadius.circular(5),
             ),
             focusedErrorBorder: noBorder
                 ? InputBorder.none
@@ -159,7 +162,7 @@ class FormTextField extends StatelessWidget {
                     borderSide: const BorderSide(
                       color: Colors.red,
                     ),
-                    borderRadius: borderRadius ?? BorderRadius.circular(10),
+                    borderRadius: borderRadius ?? BorderRadius.circular(5),
                   ),
           ),
         ),
