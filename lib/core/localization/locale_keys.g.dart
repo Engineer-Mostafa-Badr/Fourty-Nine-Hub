@@ -1246,5 +1246,6 @@ abstract class  LocaleKeys {
   static const youCanDeActivatePage = 'youCanDeActivatePage';
   static const chooseCategoryView = 'chooseCategoryView';
   static const youCanChooseOneWayAtLeast = 'youCanChooseOneWayAtLeast';
+  static const wallets = 'wallets';
 
 }

@@ -14,10 +14,13 @@ import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/ad_c
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/mobile_ad_card.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/provider_ads_view.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/user_ads_view.dart';
+import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 
 class AdsView extends StatefulWidget {
   final AdsViewParams params;
@@ -223,7 +226,14 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
   }
   Widget buildFloatingAction(BuildContext context){
     return FloatingActionButton.extended(
-      onPressed: () {},
+      onPressed: () {
+        if(context.isUserLoggedIn){
+          context.push(Routes.CREATEAD,extra: CategorizationEntity(
+              mainCategory: widget.params.mainCategory, subCategory: widget.params.subCategory));
+        }else{
+          context.push(Routes.LOGIN);
+        }
+      },
       backgroundColor: AppColors.PRIMARY_COLOR,
       icon: const Icon(
         Icons.add,
@@ -253,6 +263,7 @@ enum Categories {
   homeService,
   homeEssentials,
   healthyTools,
+  industry,
   scenery,
   realEstate,
   cars,
@@ -274,22 +285,41 @@ enum Categories {
   rawMaterials,
   remnants,
   marketingSales,
+  jobs,
+  tourism,
+  technology,
   accountantJob,
   doctorJob,
   engineerJob,
   otherJob,
   events,
+  projects,
   health,
   dating,
+  smooking,
+  farming,
+  governmentCharity
 }
 
 extension CategoriesExtension on Categories {
   Widget view(
       {required AdEntity item,
-      required Function(String) onFav,
-      required Function(String) onRemoveFav}) {
+        required Function(String) onFav,
+        required Function(String) onRemoveFav}) {
     switch (this) {
       case Categories.craft:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.technology:
+        return MobileAdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.smooking:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.projects:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.jobs:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.tourism:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.industry:
         return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
       case Categories.talent:
         return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
@@ -320,7 +350,7 @@ extension CategoriesExtension on Categories {
       case Categories.animals:
         return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
       case Categories.computersCameras:
-        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+        return MobileAdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
       case Categories.mobilesTablets:
         return MobileAdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
       case Categories.musicalInstruments:
@@ -355,81 +385,57 @@ extension CategoriesExtension on Categories {
         return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
       case Categories.dating:
         return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.farming:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
+      case Categories.governmentCharity:
+        return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
       default:
         return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);
     }
   }
 
-  static Categories fromNameEn(String nameEn) {
-    switch (nameEn) {
-      case "Craft":
+  static Categories fromId(String id) {
+    switch (id) {
+      case "62c8b5829332225799fe330e":
         return Categories.craft;
-      case "Talent":
-        return Categories.talent;
-      case "Home Service":
+      case "62c8b5819332225799fe330c":
         return Categories.homeService;
-      case "Home Essentials":
+      case "62c8b5919332225799fe3322":
         return Categories.homeEssentials;
-      case "Healthy Tools":
-        return Categories.healthyTools;
-      case "Scenery":
-        return Categories.scenery;
-      case "Real Estate":
+      case "62c8b5849332225799fe3310":
         return Categories.realEstate;
-      case "Cars":
+      case "62c8b5889332225799fe3316":
         return Categories.cars;
-      case "Vehicles":
-        return Categories.vehicles;
-      case "Spare Parts":
-        return Categories.spareParts;
-      case "Fashion/Beauty":
+      case "62c8b5ae9332225799fe3358":
         return Categories.fashionBeauty;
-      case "Accessories":
-        return Categories.accessories;
-      case "Jewelry/Watches":
-        return Categories.jewelryWatches;
-      case "Collectibles/Gifts":
-        return Categories.collectiblesGifts;
-      case "Animals":
+      case "62c8b5af9332225799fe335a":
         return Categories.animals;
-      case "Computers/Cameras":
+      case "62c8b5979332225799fe3330":
         return Categories.computersCameras;
-      case "Mobiles/Tablets":
-        return Categories.mobilesTablets;
-      case "Musical Instruments":
+      case "62c8b59f9332225799fe333e":
         return Categories.musicalInstruments;
-      case "Fitness":
+      case "62c8b5a29332225799fe3348":
         return Categories.fitness;
-      case "Education":
-        return Categories.education;
-      case "Libraries":
+      case "62c8b5a49332225799fe334a":
         return Categories.libraries;
-      case "Packaging":
-        return Categories.packaging;
-      case "Equipment":
-        return Categories.equipment;
-      case "Raw Materials":
-        return Categories.rawMaterials;
-      case "Remnants":
-        return Categories.remnants;
-      case "Marketing/Sales":
-        return Categories.marketingSales;
-      case "Accountant Job":
-        return Categories.accountantJob;
-      case "Doctor Job":
-        return Categories.doctorJob;
-      case "Engineer Job":
-        return Categories.engineerJob;
-      case "Other Job":
-        return Categories.otherJob;
-      case "Events":
-        return Categories.events;
-      case "Health":
-        return Categories.health;
-      case "Dating":
-        return Categories.dating;
+      case "62c8b5879332225799fe3312":
+        return Categories.industry;
+      case "62c8b5949332225799fe3328":
+        return Categories.jobs;
+      case "62c8b5a09332225799fe3340":
+        return Categories.tourism;
+      case "62c8b5959332225799fe332a":
+        return Categories.technology;
+      case "62c8b5969332225799fe332e":
+        return Categories.projects;
+      case "62c8b58a9332225799fe331a":
+        return Categories.smooking;
+      case "62c8b5b19332225799fe3360":
+        return Categories.farming;
+      case "62c8b5b29332225799fe3362":
+        return Categories.governmentCharity;
       default:
-        throw ArgumentError("Invalid category nameEn: $nameEn");
+        throw ArgumentError("Invalid category id: $id");
     }
   }
 }

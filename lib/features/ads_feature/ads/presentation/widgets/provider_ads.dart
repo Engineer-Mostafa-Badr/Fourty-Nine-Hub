@@ -95,8 +95,8 @@ class _ProviderAdsState extends State<ProviderAds> {
   }
 
   Widget _buildAdContent(AdModel item) {
-    return CategoriesExtension.fromNameEn(
-            widget.params.mainCategory.nameEn ?? '')
+    return CategoriesExtension.fromId(
+            widget.params.mainCategory.id ?? '')
         .view(
       item: item,
       onFav: (String id) async {

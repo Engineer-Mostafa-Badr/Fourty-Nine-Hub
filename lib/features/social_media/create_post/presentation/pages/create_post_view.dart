@@ -1,40 +1,23 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/features/social_media/create_post/domain/entities/activity_entity.dart';
-import 'package:fourtyninehub/features/social_media/create_post/domain/entities/feeling_entity.dart';
-import 'package:fourtyninehub/features/social_media/create_post/domain/entities/post_user_entity.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/pages/select_activity_view.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_colors_ballet.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_create_post.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_create_post_app_bar.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_create_post_header.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_media_card.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_options.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_search_friends.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_sheet_item.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/show_all_images.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:go_router/go_router.dart';
-import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
-import '../../../../../common/widgets/stateless/custom_sheet/custom_vertical_sheet_item.dart';
-import '../../../../../common/widgets/stateless/custom_sheet/sheet_vertical_item.dart';
-import '../../../../account_taps/privacy/domain/entities/privacy_status_enum.dart';
 import '../cubit/create_post_cubit.dart';
-import 'select_feeling_view.dart';
 import 'package:snapping_bottom_sheet/snapping_bottom_sheet.dart';
+import 'package:giphy_get/giphy_get.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 
 class CreatePostView extends StatefulWidget {
   const CreatePostView({super.key, required this.social});
@@ -394,7 +377,22 @@ class _CreatePostViewState extends State<CreatePostView> {
                         BuildSheetItem(icon: Assets.liveVideoIcon,title: "Live video",onTap: (){},hasDivider:true),
                         BuildSheetItem(icon: Assets.backgroundIcon,title: "Background color",onTap: (){},hasDivider:true),
                         BuildSheetItem(icon: Assets.cameraIcon,title: "Camera",onTap: (){},hasDivider:true),
-                        BuildSheetItem(icon: Assets.gifIcon,title: "GIF",onTap: (){},hasDivider:true),
+                        BuildSheetItem(icon: Assets.gifIcon,title: "GIF",onTap: () async {
+                          final gif = await GiphyGet.getGif(
+                            context: context,
+                            apiKey: "4zu1PNDOTTLV9hxPIoeHAOYUcGRvB5NQ", // Replace with your actual API key
+                            lang: context.isArabic ? GiphyLanguage.arabic : GiphyLanguage.english,
+                            randomID: "",
+                            searchText: "Search GIF",
+                            tabColor: Colors.blue,
+                            
+                          );
+
+                          if (gif != null) {
+                            print(gif.images?.original?.url);
+                            // controller.onGifSelected(gif.images.original!.url);
+                          }
+                        },hasDivider:true),
                         BuildSheetItem(icon: Assets.lifeEventIcon,title: "Life event",onTap: (){},hasDivider:true),
                         BuildSheetItem(icon: Assets.musicIcon,title: "Music",onTap: (){},hasDivider:true),
                         BuildSheetItem(icon: Assets.avatarIcon,title: "Your avatar",onTap: (){},hasDivider: false,),

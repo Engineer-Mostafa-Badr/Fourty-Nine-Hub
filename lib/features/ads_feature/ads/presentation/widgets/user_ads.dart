@@ -100,8 +100,8 @@ class _UserAdsState extends State<UserAds> {
                     height: 50,
                     child: getAdIfNeeded(index, _adsManager),
                   ),
-                CategoriesExtension.fromNameEn(
-                        widget.params.mainCategory.nameEn ?? '')
+                CategoriesExtension.fromId(
+                        widget.params.mainCategory.id ?? '')
                     .view(
                   item: item,
                   onFav: (String id) async {
