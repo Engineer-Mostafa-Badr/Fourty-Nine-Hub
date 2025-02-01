@@ -14,6 +14,7 @@ import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/premium_request_button.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
+import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcategories_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
