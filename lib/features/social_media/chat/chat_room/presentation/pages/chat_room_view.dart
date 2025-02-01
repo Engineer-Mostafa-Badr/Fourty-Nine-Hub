@@ -500,7 +500,24 @@ class _ChatRoomViewState extends State<ChatRoomView>
                             ],
                           ),
                         )
-                            : const SendMessageWidget(),
+                            :
+                        chatRoomCubit.chat.isAdmin == "admin"?
+                        Container(
+                            color: AppColors.PRIMARY_COLOR,
+                          child: Center(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              child: Text(context.isArabic?'فقط 49Hub يمكنه ارسال الرسائل.':'Only 49Hub can send messages.',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                              ),
+                            ),
+                          ),
+                        )
+                        :const SendMessageWidget(),
                       ],
                     ),
                   ),

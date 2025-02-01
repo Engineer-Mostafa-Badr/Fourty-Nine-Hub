@@ -48,6 +48,7 @@ class Follower {
   String id;
   FollowerId followerId;
   String followingId;
+  
   int version;
 
   Follower({
@@ -83,7 +84,7 @@ class FollowerId {
   String email;
   bool twitterDocumentation;
   UserProfile userProfile;
-  String image;
+  String ?image;
 
   FollowerId({
     required this.id,

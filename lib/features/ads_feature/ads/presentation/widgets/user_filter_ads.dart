@@ -56,8 +56,8 @@ class _UserFilterAdsState extends State<UserFilterAds> {
               );
             },
             itemBuilder: (context, item, index) {
-              return CategoriesExtension.fromNameEn(
-                      widget.params.mainCategory.nameEn ?? '')
+              return CategoriesExtension.fromId(
+                      widget.params.mainCategory.id ?? '')
                   .view(
                 item: item,
                 onFav: (String id) async {

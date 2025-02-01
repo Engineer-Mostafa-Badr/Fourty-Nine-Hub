@@ -27,6 +27,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/locat
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:liquid_progress_indicator_v2/liquid_progress_indicator.dart';
 
 import '../../../../common/widgets/dynamic/bottom_navigator.dart';
 import '../../../../common/widgets/dynamic/drawer.dart';
@@ -207,6 +208,23 @@ class _FourtyNineViewState extends State<FourtyNineView>
               const ScrollableTextWithAnimation(),
 
               //wallet
+              // Row(
+              //   children: [
+              //     SizedBox(
+              //       width:250.w,
+              //       height: 150.h,
+              //       child: LiquidCircularProgressIndicator(
+              //         value: 0.5, // Defaults to 0.5.
+              //         valueColor: AlwaysStoppedAnimation(Colors.pink), // Defaults to the current Theme's accentColor.
+              //         backgroundColor: Colors.white, // Defaults to the current Theme's backgroundColor.
+              //         borderColor: Colors.red,
+              //         borderWidth: 5.0,
+              //         direction: Axis.vertical, // The direction the liquid moves (Axis.vertical = bottom to top, Axis.horizontal = left to right). Defaults to Axis.vertical.
+              //         center: Text("Loading..."),
+              //       ),
+              //     ),
+              //   ],
+              // ),
               context.read<UserCubit>().isLoggedIn
                   ? const WalletWidget()
                   : const SizedBox.shrink(),
@@ -233,7 +251,15 @@ class _FourtyNineViewState extends State<FourtyNineView>
               //    Sizer(),
               //admob
               //   const GoogleAddsBanner(),
-              _buildStarWidget(),
+              Row(
+                children: [
+                  Expanded(
+                    child: _walletsWidget(),
+                  ),
+                  const Sizer(),
+                  Expanded(child: _buildStarWidget()),
+                ],
+              ),
               const Sizer(),
               //pick me and come with U
               _pickMeAndComeWithUWidget(),
@@ -325,6 +351,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
       ),
     );
   }
+
 
   Widget _buildMainCategoriesViews() {
     return Container(
@@ -473,7 +500,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                 iconSize: 50.h,
                 onPressed: () async {
                   HandleCashback.setCount('booking', context);
-                  int? num = await CacheManager.getInt('booking');
+                  int? num = CacheManager.getInt('booking');
                   print(num);
                 }),
           ),
@@ -527,6 +554,59 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   AdInterstitialTop.showInterstitialAd();
                   HandleCashback.setCount('beAStarCount', context);
                   context.push(Routes.BE_STAR);
+                }),
+          ),
+          Positioned(
+              bottom: 5,
+              left: 5,
+              child: Icon(
+                Icons.star,
+                size: 20.h,
+                color: AppColors.ACCENT_COLOR,
+              )),
+          Positioned(
+              top: 0,
+              left: 10,
+              child: Icon(
+                Icons.star,
+                size: 20.h,
+                color: AppColors.ACCENT_COLOR,
+              )),
+          Positioned(
+              top: 15,
+              right: 10,
+              child: Icon(
+                Icons.star,
+                size: 20.h,
+                color: AppColors.ACCENT_COLOR,
+              ))
+        ],
+      ),
+    );
+  }
+
+  Widget _walletsWidget() {
+    return SizedBox(
+      height: kToolbarHeight * .9.h,
+      width: double.infinity,
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child:
+            AppButton(
+                color: AppColors.AUTH_CONTAINER_COLOR,
+                label: LocaleKeys.wallets.localize,
+                style: Styles.mediumText(
+                  color: AppColors.AUTH_CONTAINER_COLOR,
+                  fontWeight: FontWeight.bold,
+                ),
+                icon: Icons.star,
+                iconSize: 50.h,
+                onPressed: () {
+                  // AdInterstitialTop.loadIntersitialAd();
+                  // AdInterstitialTop.showInterstitialAd();
+                  // HandleCashback.setCount('beAStarCount', context);
+                  context.push(Routes.WALLET);
                 }),
           ),
           Positioned(

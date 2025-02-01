@@ -314,7 +314,7 @@ class _CamViewState extends State<_CamView> {
 }
 
 class _BaseIcon extends StatelessWidget {
-  final Color? color;
+  final Color?    color;
   final IconData icon;
   final double? iconSize;
   final void Function()? onTap;

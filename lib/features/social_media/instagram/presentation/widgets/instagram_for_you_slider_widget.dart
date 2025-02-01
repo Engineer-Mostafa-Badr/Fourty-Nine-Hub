@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/suggested_for_you_instagram_screen.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class InstagramForYouSliderWidget extends StatelessWidget {
@@ -17,7 +18,7 @@ class InstagramForYouSliderWidget extends StatelessWidget {
               Text(
                 "Suggested for you",
                 style: Styles.headerText(
-                    fontSize: 41, fontWeight: FontWeight.bold),
+                    fontSize: 41, fontWeight: FontWeight.w500),
               ),
               const Spacer(),
               GestureDetector(
@@ -33,7 +34,7 @@ class InstagramForYouSliderWidget extends StatelessWidget {
                   style: Styles.headerText(
                       fontSize: 40,
                       fontWeight: FontWeight.bold,
-                      color: const Color(0xff1198F8)),
+                      color: AppColors.PRIMARY_COLOR),
                 ),
               ),
             ],
@@ -48,7 +49,7 @@ class InstagramForYouSliderWidget extends StatelessWidget {
                   (index) {
                     return Container(
                       margin: const EdgeInsets.symmetric(horizontal: 7),
-                      width: MediaQuery.of(context).size.width * 0.7,
+                      width: MediaQuery.of(context).size.width * 0.65,
                       // height: 350,
                       padding: const EdgeInsets.all(5),
                       decoration: BoxDecoration(
@@ -58,11 +59,10 @@ class InstagramForYouSliderWidget extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          const Icon(Icons.close),
                           const Sizer(),
                           Container(
                             width: double.infinity,
-                            height: 220,
+                            height: 160,
                             decoration: const BoxDecoration(
                                 color: Colors.red, shape: BoxShape.circle),
                           ),
@@ -75,15 +75,40 @@ class InstagramForYouSliderWidget extends StatelessWidget {
                                   "zyad mohamed",
                                   style: Styles.headerText(
                                       fontSize: 41,
-                                      fontWeight: FontWeight.bold,
+                                      fontWeight: FontWeight.w600,
                                       color: Colors.black),
                                 ),
-                                Text(
-                                  "Suggested for you",
-                                  style: Styles.headerText(
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.grey),
-                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Positioned(
+                  right: 14,
+                  child: Container(
+                    width: 25,
+                    height: 25,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.green,
+                    ),
+                  ),
+                ),
+                Container(
+                  width: 25,
+                  height: 25,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.blue,
+                  ),
+                ),
+              ],
+            ),
+            const Sizer(),
+            Text("Followed by micaljohan,\nanthonymark + 67 morea", style: TextStyle(fontSize: 15, color: Colors.black.withOpacity(0.6)),)
+                                  ],
+                                )
                               ],
                             ),
                           ),
@@ -93,7 +118,7 @@ class InstagramForYouSliderWidget extends StatelessWidget {
                             height: 40,
                             width: double.infinity,
                             decoration: BoxDecoration(
-                                color: Colors.blue,
+                                color: AppColors.PRIMARY_COLOR,
                                 borderRadius: BorderRadius.circular(10)),
                             child: Center(
                               child: Text(

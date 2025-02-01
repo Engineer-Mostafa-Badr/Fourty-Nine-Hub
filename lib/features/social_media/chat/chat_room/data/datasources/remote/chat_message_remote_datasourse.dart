@@ -9,9 +9,12 @@ import 'package:fourtyninehub/core/data/datasources/remote/socket/socket_data_so
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/message_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/assign_labels_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/clear_chat_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/create_lable_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/delete_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_chat_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_lables_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_messages_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_one_time_view_message_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/listen_to_pin_message_usecase.dart';
@@ -49,6 +52,8 @@ abstract class MessagesRemoteDataSource {
   Future<Either<Failure, bool>> stopTyping({required String chatId});
 
   Future<Either<Failure, bool>> clearChat(ClearChatParams params);
+  Future<Either<Failure, bool>> createLable(CreatLabelParams params);
+  Future<Either<Failure, bool>> assignLabels(AssignLabelParams params);
   void listenToTypingStatus(
       Function(ListenToTypingParams listenToTypingParams) params);
 
@@ -63,6 +68,8 @@ abstract class MessagesRemoteDataSource {
 
   Future<Either<Failure, List<MessageEntity>>> getMessages(
       GetMessagesParams params);
+  Future<Either<Failure, List<GetLablesEntity>>> getLables(
+      GetLablesParams params);
   Future<Either<Failure, String?>> getChatPinnedMessage(GetChatParams params);
 
   Future<Either<Failure, bool>> markMessageAsSeen(
@@ -1249,5 +1256,54 @@ class MessagesRemoteDataSourceImplementation
     } catch (e) {
       CliLogger.info("can't listen to delete message error $e");
     }
+  }
+
+  @override
+  Future<Either<Failure, bool>> createLable(CreatLabelParams params) async {
+    var labelData = {
+      "name": params.name,
+      "color": params.color,
+    };
+    final response =
+        await _apiConsumer.post(EndPoints.createLabel(), data: labelData);
+    return response.fold((failure) {
+      log(" createLable Remote Data Source : $failure");
+      return Left(failure);
+    }, (data) {
+      log(" createLable Remote Data Source : $data");
+      log(" createLable Remote Data Source ${data['data']}");
+      return Right(data['status']);
+    });
+  }
+
+  @override
+  Future<Either<Failure, List<GetLablesEntity>>> getLables(
+      GetLablesParams params) async {
+    final response = await _apiConsumer.get(
+      EndPoints.getLabels(params.chatId),
+    );
+    return response.fold((failure) => Left(failure), (data) {
+      List<GetLablesEntity> lableModels = [];
+
+      for (var element in data['data']) {
+        GetLablesEntity lableModel = GetLablesEntity.fromJson(element);
+        lableModels.add(lableModel);
+      }
+      return Right(lableModels);
+    });
+  }
+  
+  @override
+  Future<Either<Failure, bool>> assignLabels(AssignLabelParams params)async {
+    final response =
+        await _apiConsumer.put(EndPoints.assignLabels(), data: params.toJson());
+    return response.fold((failure) {
+      log(" assignLabels Remote Data Source : $failure");
+      return Left(failure);
+    }, (data) {
+      log(" assignLabels Remote Data Source : $data");
+      log(" assignLabels Remote Data Source ${data['data']}");
+      return Right(data['status']);
+    }); 
   }
 }

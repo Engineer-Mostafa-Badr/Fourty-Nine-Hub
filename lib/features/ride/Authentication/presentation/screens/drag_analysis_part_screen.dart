@@ -127,7 +127,7 @@ class DragAnalysisPartScreen extends StatelessWidget {
                   },
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: AppButton(
                     color: Colors.white,
                     backColor: AppColors.PRIMARY_COLOR,
@@ -155,7 +155,7 @@ class DragAnalysisPartScreen extends StatelessWidget {
                     },
                   ),
                 ),
-                Sizer(
+                const Sizer(
                   height: 60,
                 )
             ],

@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/stories/presentation/pages/muted_stories.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -29,6 +30,7 @@ class Stories extends StatelessWidget {
       height: kToolbarHeight * 2.5,
       margin: const EdgeInsets.symmetric(vertical: 10),
       child: ListView(
+        padding: const EdgeInsets.all(8),
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
         children: [
@@ -38,6 +40,40 @@ class Stories extends StatelessWidget {
             width: 8,
           ),
           const Sizer(),
+          SizedBox(
+            height: kToolbarHeight * 2.5,
+            child: BlocBuilder<StoryCubit, StoryState>(
+              builder: (context, state) {
+                return (state.users.isNotEmpty ?? false)
+                    ? ListView.separated(
+                        physics: const NeverScrollableScrollPhysics(),
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) =>
+                            _buildOthersStories(context, state, index),
+                        separatorBuilder: (context, index) => const Sizer(
+                              width: 8,
+                            ),
+                        itemCount: state.users.length ?? 0)
+                    // : Padding(
+                    //     padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                    //     child: Shimmer.fromColors(
+                    //       baseColor: Colors.transparent,
+                    //       highlightColor: Colors.grey.withOpacity(0.2),
+                    //       child: Container(
+                    //         color: Colors.grey,
+                    //         height: kToolbarHeight * 2,
+                    //         width: kToolbarHeight * 1.5,
+                    //       ),
+                    //     ),
+                    //   );
+                    : const SizedBox();
+              },
+            ),
+          ),
+          const Sizer(
+            width: 8,
+          ),
           BlocConsumer<StoryCubit, StoryState>(
             listener: (context, state) {
               // TODO: implement listener
@@ -55,36 +91,6 @@ class Stories extends StatelessWidget {
           const Sizer(
             width: 8,
           ),
-          SizedBox(
-            height: kToolbarHeight * 2.5,
-            child: BlocBuilder<StoryCubit, StoryState>(
-              builder: (context, state) {
-                return (state.users.isNotEmpty ?? false)
-                    ? ListView.separated(
-                        physics: const NeverScrollableScrollPhysics(),
-                        scrollDirection: Axis.horizontal,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) =>
-                            _buildOthersStories(context, state, index),
-                        separatorBuilder: (context, index) => const Sizer(
-                              width: 8,
-                            ),
-                        itemCount: state.users.length ?? 0)
-                    : Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                        child: Shimmer.fromColors(
-                          baseColor: Colors.transparent,
-                          highlightColor: Colors.grey.withOpacity(0.2),
-                          child: Container(
-                            color: Colors.grey,
-                            height: kToolbarHeight * 2,
-                            width: kToolbarHeight * 1.5,
-                          ),
-                        ),
-                      );
-              },
-            ),
-          )
         ],
       ),
     );
@@ -183,25 +189,24 @@ class Stories extends StatelessWidget {
                               ),
                             ),
                           ),
+                          const Spacer(),
                           Align(
                             alignment: Alignment.bottomLeft,
-                            child: FittedBox(
-                              child: Label(
-                                  text: capitalizeAndSplit2Only(
-                                      "${state.users[index].user!.firstName}\n${state.users[index].user!.lastName}"),
-                                  textAlign: TextAlign.start,
-                                  style: Styles.mediumText(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    shadows: [
-                                      const Shadow(
-                                        offset: Offset(1.0, 1.0),
-                                        blurRadius: 8.0,
-                                        color: Colors.black,
-                                      ),
-                                    ],
-                                  )),
-                            ),
+                            child: Label(
+                                text: capitalizeAndSplit2Only(
+                                    "${state.users[index].user!.firstName} ${state.users[index].user!.lastName}"),
+                                textAlign: TextAlign.start,
+                                style: Styles.mediumText(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  shadows: [
+                                    const Shadow(
+                                      offset: Offset(1.0, 1.0),
+                                      blurRadius: 8.0,
+                                      color: Colors.black,
+                                    ),
+                                  ],
+                                )),
                           )
                         ],
                       ),
@@ -219,84 +224,90 @@ class Stories extends StatelessWidget {
   }
 
   Widget _buildYourStory(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(5),
-      child: GestureDetector(
-        onTap: () async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const CameraScreen(),
-            ),
-          );
-
-          BlocProvider.of<StoryCubit>(context)
-            ..fetchStories()
-            ..getMutedStories();
-        },
-        child: Container(
-          height: kToolbarHeight * 2,
-          width: kToolbarHeight * 1.5,
-          decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
+    return GestureDetector(
+      onTap: () async {
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const CameraScreen(),
           ),
-          child: Stack(
-            children: [
-              Positioned.fill(
-                  child: Column(
-                children: [
-                  Expanded(
-                    child: Image.network(
-                      serviceLocator<UserCubit>().state.data != null &&
-                              serviceLocator<UserCubit>()
-                                      .state
-                                      .data!
-                                      .profilePicture !=
-                                  null
-                          ? serviceLocator<UserCubit>()
-                              .state
-                              .data!
-                              .profilePicture!
-                          : UIConst.profilePlaceHolder,
-                      errorBuilder: (context, error, stackTrace) =>
-                          Image.network(UIConst.imagePlaceHolder),
-                    ),
-                  ),
-                  Expanded(
-                      child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Label(
-                        text: LocaleKeys.create_story.tr(),
-                        // Localized text
-                        color: Theme.of(context).primaryColor,
-                        maxLines: 1,
+        );
 
-                        style: Styles.mediumText(
-                            color: Theme.of(context).primaryColor,
-                            fontWeight: FontWeight.bold),
-                      )
-                    ],
-                  ))
-                ],
-              )),
-              const Positioned.fill(
-                  child: Center(
-                child: CircleAvatar(
-                  radius: 18,
-                  backgroundColor: Colors.white,
-                  child: CircleAvatar(
-                    radius: 15,
-                    backgroundColor: AppColors.PRIMARY_COLOR,
-                    child: Icon(
-                      Icons.add,
-                      color: Colors.white,
-                    ),
+        BlocProvider.of<StoryCubit>(context)
+          ..fetchStories()
+          ..getMutedStories();
+      },
+      child: Container(
+        height: kToolbarHeight * 2,
+        width: kToolbarHeight * 1.5,
+        decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          borderRadius: BorderRadius.circular(8), // Add border radius
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2), // Shadow color with opacity
+              blurRadius: 8, // Spread of the shadow
+              offset: const Offset(0, 4), // Position of the shadow (x, y)
+            ),
+          ],
+        ),
+        child: Stack(
+          children: [
+            Positioned.fill(
+                child: Column(
+              children: [
+                Expanded(
+                  child: Image.network(
+                    serviceLocator<UserCubit>().state.data != null &&
+                            serviceLocator<UserCubit>()
+                                    .state
+                                    .data!
+                                    .profilePicture !=
+                                null
+                        ? serviceLocator<UserCubit>()
+                            .state
+                            .data!
+                            .profilePicture!
+                        : UIConst.profilePlaceHolder,
+                    errorBuilder: (context, error, stackTrace) =>
+                        Image.network(UIConst.imagePlaceHolder),
                   ),
                 ),
-              ))
-            ],
-          ),
+                Expanded(
+                    child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Label(
+                      text: context.isArabic ? 'إضافة قصة' : 'Add Story',
+                      // Localized text
+                      color: Theme.of(context).primaryColor,
+                      maxLines: 1,
+
+                      style: Styles.mediumText(
+                          color: Theme.of(context).primaryColor,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 4),
+                  ],
+                ))
+              ],
+            )),
+            const Positioned.fill(
+                child: Center(
+              child: CircleAvatar(
+                radius: 18,
+                backgroundColor: Colors.white,
+                child: CircleAvatar(
+                  radius: 15,
+                  backgroundColor: AppColors.PRIMARY_COLOR,
+                  child: Icon(
+                    Icons.add,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ))
+          ],
         ),
       ),
     );
@@ -336,12 +347,18 @@ class Stories extends StatelessWidget {
                     color: Colors.black54),
               ),
               Positioned(
-                bottom: 2,
+                bottom: 4,
                 left: 2,
                 // right: 2,
-                child: Text(
-                  'Muted',
-                  style: Styles.headerText(fontWeight: FontWeight.bold),
+                child: Label(
+                  text: context.isArabic ? 'صامته' : 'Muted',
+                  // Localized text
+                  color: Theme.of(context).primaryColor,
+                  maxLines: 1,
+
+                  style: Styles.mediumText(
+                      color: Theme.of(context).primaryColor,
+                      fontWeight: FontWeight.bold),
                 ),
               )
             ],

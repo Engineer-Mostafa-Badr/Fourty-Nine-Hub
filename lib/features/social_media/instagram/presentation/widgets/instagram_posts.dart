@@ -155,7 +155,7 @@ class _InstagramPostsState extends State<InstagramPosts> {
                 create: (_) => serviceLocator()
                   ..fetchStories()
                   ..getMutedStories(),
-                child: const ChatStories(),
+                child: const SizedBox(height: 75, child: ChatStories()),
               ),
             ),
             //hey ahmed dont forget this part

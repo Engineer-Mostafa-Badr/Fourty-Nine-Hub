@@ -414,7 +414,7 @@ class _RiderRegisterViewState extends State<RiderRegisterView> {
           Align(
             alignment: Alignment.center,
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: AppButton(
                 backColor: AppColors.PRIMARY_COLOR,
                 textColor: Colors.white,

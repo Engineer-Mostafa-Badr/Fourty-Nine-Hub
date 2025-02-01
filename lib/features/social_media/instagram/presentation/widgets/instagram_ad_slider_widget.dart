@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class InstagramAdSliderWidget extends StatelessWidget {
@@ -21,10 +22,10 @@ class InstagramAdSliderWidget extends StatelessWidget {
                     style: Styles.headerText(
                         fontSize: 41, fontWeight: FontWeight.bold),
                   ),
-                  Text(
-                    "Sponsored",
-                    style: Styles.headerText(color: Colors.grey),
-                  ),
+                  // Text(
+                  //   "Sponsored",
+                  //   style: Styles.headerText(color: Colors.grey),
+                  // ),
                 ],
               ),
               const Spacer(),
@@ -33,7 +34,7 @@ class InstagramAdSliderWidget extends StatelessWidget {
                 style: Styles.headerText(
                     fontSize: 41,
                     fontWeight: FontWeight.w800,
-                    color: const Color(0xff1198F8)),
+                    color: AppColors.PRIMARY_COLOR),
               ),
             ],
           ),
@@ -89,14 +90,14 @@ class InstagramAdSliderWidget extends StatelessWidget {
                             width: double.infinity,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: const Color(0xff4B5EFA)
+                              color: AppColors.PRIMARY_COLOR
                             ),
                             child: Center(
                               child: Text(
-                    "Sign Up",
-                    style: Styles.headerText(
-                        fontSize: 41, fontWeight: FontWeight.bold, color: Colors.white),
-                  ),
+                                "Sign Up",
+                                style: Styles.headerText(
+                                    fontSize: 35, fontWeight: FontWeight.w400, color: Colors.white),
+                              ),
                             ),
                           ),
                           const Sizer()

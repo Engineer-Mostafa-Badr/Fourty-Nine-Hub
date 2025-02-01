@@ -114,7 +114,7 @@ class _BeStarViewState extends State<BeStarView> {
       body: BlocBuilder<StarCubit, StarState>(
         builder: (BuildContext context, state) {
           if (!context.read<UserCubit>().isLoggedIn) {
-            return CustomNotLogged();
+            return const CustomNotLogged();
           }
           if (state.status == StarStates.loading) {
             return const CustomLoading();
