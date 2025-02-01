@@ -8,6 +8,7 @@ import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/notifications/domain/entities/notification_entity.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/all_notifications_seen/all_notfications_seen_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -97,9 +98,13 @@ class _NotificationCardState extends State<NotificationCard> {
                             height: kToolbarHeight,
                             width: kToolbarHeight,
                             child: Image.asset(
-                              widget.notificationEntity.gender == 'male'
-                                  ? Assets.maleImagePlaceholder
-                                  : Assets.femaleImagePlacehlder,
+                              widget.notificationEntity.receiverId ==
+                                      UserCubit.to.state.data?.id
+                                  ? UserCubit.to.state.data?.profilePicture ??
+                                      Assets.maleImagePlaceholder
+                                  : widget.notificationEntity.gender == 'male' 
+                                      ? Assets.maleImagePlaceholder
+                                      : Assets.femaleImagePlacehlder,
                               fit: BoxFit.fill,
                             ));
                       }
