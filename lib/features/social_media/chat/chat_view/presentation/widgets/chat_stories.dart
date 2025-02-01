@@ -498,76 +498,80 @@ class ChatStories extends StatelessWidget {
     // if(context.read<UserCubit>().isLoggedIn){
     //   return Container();
     // }
-    return Container(
-      height: 0.1.sh, // Responsive height
-      decoration: BoxDecoration(
-        color: Theme.of(context).scaffoldBackgroundColor,
-      ),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(
-              width: 4,
-            ),
-            _createMyStory(context),
-            const SizedBox(
-              width: 12,
-            ),
-            BlocBuilder<StoryCubit, StoryState>(
-              builder: (context, state) {
-                if (state.users.isEmpty ?? false) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                    child: Shimmer.fromColors(
-                      baseColor: Colors.grey.withOpacity(0.1),
-                      highlightColor: Colors.grey.withOpacity(0.5),
-                      child: CircleAvatar(
-                        radius: MediaQuery.of(context).size.height *
-                            0.03, // Responsive radius
-                      ),
+    return Padding(
+      padding: const EdgeInsets.only(top: 4),
+      child: Container(
+        height: 100, // Responsive height
+        decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+        ),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(
+                width: 8,
+              ),
+              Container(height: 100, child: _createMyStory(context)),
+              const SizedBox(
+                width: 6,
+              ),
+              BlocBuilder<StoryCubit, StoryState>(
+                builder: (context, state) {
+                  if (state.users.isEmpty ?? false) {
+                    // return Padding(
+                    //   padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                    //   child: Shimmer.fromColors(
+                    //     baseColor: Colors.grey.withOpacity(0.1),
+                    //     highlightColor: Colors.grey.withOpacity(0.5),
+                    //     child: CircleAvatar(
+                    //       radius: MediaQuery.of(context).size.height *
+                    //           0.03, // Responsive radius
+                    //     ),
+                    //   ),
+                    // );
+                    return const SizedBox();
+                  }
+                  return ListView.separated(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 6),
+                        child: _buildStoryItem(context, state, index),
+                      );
+                    },
+                    separatorBuilder: (context, index) => const Sizer(
+                      width: 8,
                     ),
+                    itemCount: state.users.length ?? 0,
                   );
-                }
-                return ListView.separated(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                      child: _buildStoryItem(context, state, index),
-                    );
-                  },
-                  separatorBuilder: (context, index) => const Sizer(
-                    width: 8,
-                  ),
-                  itemCount: state.users.length ?? 0,
-                );
-              },
-            ),
-            const Sizer(
-              width: 12,
-            ),
-            BlocConsumer<StoryCubit, StoryState>(
-              listener: (context, state) {
-                // TODO: implement listener
-              },
-              builder: (context, state) {
-                if (state.mutedStoriesResponse != null &&
-                    state.mutedStoriesResponse!.data.stories.isNotEmpty) {
-                  return _mutedStories(context);
-                }
-                return const SizedBox(
-                  height: 0,
-                  width: 0,
-                );
-              },
-            ),
-            const Sizer(
-              width: 12,
-            ),
-          ],
+                },
+              ),
+              const Sizer(
+                width: 12,
+              ),
+              BlocConsumer<StoryCubit, StoryState>(
+                listener: (context, state) {
+                  // TODO: implement listener
+                },
+                builder: (context, state) {
+                  if (state.mutedStoriesResponse != null &&
+                      state.mutedStoriesResponse!.data.stories.isNotEmpty) {
+                    return _mutedStories(context);
+                  }
+                  return const SizedBox(
+                    height: 0,
+                    width: 0,
+                  );
+                },
+              ),
+              const Sizer(
+                width: 12,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -615,20 +619,16 @@ class ChatStories extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Positioned(
+                  const Positioned(
                     bottom: 0,
                     right: 0,
                     child: CircleAvatar(
-                      backgroundColor: context.isDarkMode
-                          ? Colors.white
-                          : AppColors.PRIMARY_COLOR,
-                      radius: 10,
+                      backgroundColor: AppColors.PRIMARY_COLOR_DARK,
+                      radius: 12,
                       child: Icon(
                         Icons.add,
-                        size: 15,
-                        color: context.isDarkMode
-                            ? AppColors.PRIMARY_COLOR
-                            : Colors.white,
+                        size: 18,
+                        color: Colors.white,
                       ),
                     ),
                   ),
@@ -737,61 +737,66 @@ class ChatStories extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircleAvatar(
-              radius:
-                  MediaQuery.of(context).size.width * 0.09, // Responsive radius
-              backgroundColor: AppColors.SECONDARY_COLOR,
-              child: CircleAvatar(
-                radius: MediaQuery.of(context).size.width *
-                    0.08, // Responsive radius
-                backgroundColor: AppColors.SECONDARY_COLOR,
-                child: ClipOval(
-                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                  child: SizedBox(
-                    width: double.infinity,
-                    height: double.infinity,
-                    child: IgnorePointer(
-                      ignoring: true,
-                      child: Image.network(
-                          fit: BoxFit.cover,
-                          state.users[index].user?.profilePictureUrl ?? ''),
+            // CircleAvatar(
+            //   radius: MediaQuery.of(context).size.width *
+            //       0.09, // Responsive radius
+            //   backgroundColor: AppColors.SECONDARY_COLOR,
+            //   child: CircleAvatar(
+            //     radius: MediaQuery.of(context).size.width *
+            //         0.08, // Responsive radius
+            //     backgroundColor: AppColors.SECONDARY_COLOR,
+            //     child: ClipOval(
+            //       clipBehavior: Clip.antiAliasWithSaveLayer,
+            //       child: SizedBox(
+            //         width: double.infinity,
+            //         height: double.infinity,
+            //         child: IgnorePointer(
+            //           ignoring: true,
+            //           child: Image.network(
+            //               fit: BoxFit.cover,
+            //               state.users[index].user?.profilePictureUrl ?? ''),
 
-                      // StoryView(
-                      //   indicatorColor: Colors.transparent,
-                      //   indicatorForegroundColor: Colors.transparent,
-                      //   storyItems: [
-                      //     state.users[index].userStories!.first.type != 'video'
-                      //         ? createStoryItem(
-                      //             context,
-                      //             state.users[index].userStories!.first,
-                      //             userController,
-                      //             textStyle: const TextStyle(fontSize: 6))
-                      //         : StoryItem.pageImage(
-                      //             loadingWidget: const CupertinoActivityIndicator(
-                      //               color: Colors.white,
-                      //             ),
-                      //             url:
-                      //                 state.users[index].user!.profilePictureUrl!,
-                      //             errorWidget: Image.network(
-                      //               UIConst.profilePlaceHolder,
-                      //               fit: BoxFit.fitHeight,
-                      //             ),
-                      //             imageFit: BoxFit.cover,
-                      //             controller: userController,
-                      //           ),
-                      //   ],
-                      //   controller: userController,
-                      // ),
-                    ),
-                  ),
-                ),
-              ),
+            //           // StoryView(
+            //           //   indicatorColor: Colors.transparent,
+            //           //   indicatorForegroundColor: Colors.transparent,
+            //           //   storyItems: [
+            //           //     state.users[index].userStories!.first.type != 'video'
+            //           //         ? createStoryItem(
+            //           //             context,
+            //           //             state.users[index].userStories!.first,
+            //           //             userController,
+            //           //             textStyle: const TextStyle(fontSize: 6))
+            //           //         : StoryItem.pageImage(
+            //           //             loadingWidget: const CupertinoActivityIndicator(
+            //           //               color: Colors.white,
+            //           //             ),
+            //           //             url:
+            //           //                 state.users[index].user!.profilePictureUrl!,
+            //           //             errorWidget: Image.network(
+            //           //               UIConst.profilePlaceHolder,
+            //           //               fit: BoxFit.fitHeight,
+            //           //             ),
+            //           //             imageFit: BoxFit.cover,
+            //           //             controller: userController,
+            //           //           ),
+            //           //   ],
+            //           //   controller: userController,
+            //           // ),
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            ProfileWithStoriesBorder(
+              profilePictureUrl:
+                  state.users[index].user?.profilePictureUrl ?? '',
+              storiesCount: state.users[index].stories?.length ?? 0,
             ),
             const SizedBox(height: 2),
             FittedBox(
               child: Text(
                 capitalizeAndSplit2Only(
-                  state.users[index].user?.firstName ?? '',
+                  state.users[index].user?.firstName?.split(' ').first ?? '',
                 ),
                 textScaler: TextScaler.noScaling,
                 style: TextStyle(fontWeight: FontWeight.w600, fontSize: 40.sp),
@@ -805,4 +810,77 @@ class ChatStories extends StatelessWidget {
       ),
     );
   }
+}
+
+class ProfileWithStoriesBorder extends StatelessWidget {
+  final String profilePictureUrl;
+  final int storiesCount;
+
+  const ProfileWithStoriesBorder({
+    super.key,
+    required this.profilePictureUrl,
+    required this.storiesCount,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.2,
+      height: MediaQuery.of(context).size.width * 0.2,
+      decoration: const BoxDecoration(
+        shape: BoxShape.circle,
+      ),
+      child: CustomPaint(
+        painter: StoriesBorderPainter(storiesCount: storiesCount),
+        child: ClipOval(
+          child: Image.network(
+            profilePictureUrl,
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class StoriesBorderPainter extends CustomPainter {
+  final int storiesCount;
+
+  StoriesBorderPainter({required this.storiesCount});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (storiesCount <= 0) return;
+
+    final Paint paint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 8.0
+      ..color = Colors.red;
+
+    final double radius = size.width / 2;
+    final Offset center = Offset(size.width / 2, size.height / 2);
+
+    if (storiesCount == 1) {
+      // Draw a complete circle for a single story
+      canvas.drawCircle(center, radius, paint);
+    } else {
+      // Rotate the starting point by π/2 to align cuts at the top and bottom
+      final double angle = 2 * 3.141592653589793 / storiesCount;
+      const double rotationOffset = 3.141592653589793 / 2; // π/2 radians
+
+      for (int i = 0; i < storiesCount; i++) {
+        final double startAngle = (i * angle) - rotationOffset;
+        canvas.drawArc(
+          Rect.fromCircle(center: center, radius: radius),
+          startAngle,
+          angle - 0.1, // Add a small gap for better separation
+          false,
+          paint,
+        );
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }

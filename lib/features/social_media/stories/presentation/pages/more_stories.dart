@@ -1,10 +1,20 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:math';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/theme/cubit/cubit.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
 import 'package:fourtyninehub/features/social_media/stories/data/models/friends_stories_model.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -21,14 +31,17 @@ import '../../../twitter/presentation/widgets/report_view.dart';
 import '../cubit/stories_cubit.dart';
 
 class EnhancedInputWidget extends StatefulWidget {
-  const EnhancedInputWidget({super.key, required this.story});
+  const EnhancedInputWidget(
+      {super.key, required this.story, required this.userStories});
   final Story story;
+  final UserStories userStories;
 
   @override
   State<EnhancedInputWidget> createState() => _EnhancedInputWidgetState();
 }
 
 class _EnhancedInputWidgetState extends State<EnhancedInputWidget> {
+  TextEditingController _messageController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -70,6 +83,7 @@ class _EnhancedInputWidgetState extends State<EnhancedInputWidget> {
             ),
             Expanded(
               child: TextField(
+                controller: _messageController,
                 decoration: InputDecoration(
                   disabledBorder: InputBorder.none,
                   border: InputBorder.none,
@@ -90,8 +104,54 @@ class _EnhancedInputWidgetState extends State<EnhancedInputWidget> {
               padding: const EdgeInsets.all(8.0),
               child: IconButton(
                 icon: const Icon(Icons.send, color: Colors.white),
-                onPressed: () {
-                  // Handle send button press
+                onPressed: () async {
+                  if (_messageController.text.trim().isEmpty) {
+                    showErrorMessage(
+                        context,
+                        context.isArabic
+                            ? 'يرجى إدخال رسالة'
+                            : 'Please enter a message');
+                  } else {
+                    ChatEntity? chat =
+                        await context.read<UserCubit>().createNormalChat(
+                              otherId: widget.userStories.user!.id!,
+                              categoryId: ChatCategoriesIds.social,
+                            );
+                    if (chat != null) {
+                      print('social chat created');
+                      await context.read<StoryCubit>().sendMessage(
+                            chat: chat,
+                            message: _messageController.text,
+                          );
+                          showSuccessMessage(
+                        context,
+                        context.isArabic
+                            ? 'تم ارسال الرسالة بنجاح'
+                            : 'Successfully sent message');
+                    } else {
+                      ChatEntity? greetChat =
+                          await context.read<UserCubit>().createNormalChat(
+                                otherId: widget.userStories.user!.id!,
+                                categoryId: ChatCategoriesIds.greet,
+                              );
+                      if (greetChat != null) {
+                        print('greet chat created');
+                        await context.read<StoryCubit>().sendMessage(
+                              chat: greetChat,
+                              message: _messageController.text,
+                            );
+                            showSuccessMessage(
+                        context,
+                        context.isArabic
+                            ? 'تم ارسال الرسالة بنجاح'
+                            : 'Successfully sent message');
+                      }
+                    }
+
+                    _messageController.clear();
+                    
+                    setState(() {});
+                  }
                 },
               ),
             ),
@@ -316,7 +376,7 @@ class UserStoryViewState extends State<UserStoryView>
   late final StoryController _storyController;
   late final ValueNotifier<DateTime> _currentStoryCreatedAtNotifier;
   late final ValueNotifier<String> _currentStoryIdNotifier;
-  late final ValueNotifier<int> _currentStoryIndex = ValueNotifier<int>(0);
+  late ValueNotifier<int> _currentStoryIndex = ValueNotifier<int>(0);
 
   @override
   void initState() {
@@ -371,7 +431,9 @@ class UserStoryViewState extends State<UserStoryView>
                   valueListenable: _currentStoryIndex,
                   builder: (context, currentIndex, child) {
                     return EnhancedInputWidget(
-                        story: widget.userStory.stories![currentIndex]);
+                      story: widget.userStory.stories![currentIndex],
+                      userStories: widget.userStory,
+                    );
                   }),
             ),
           )

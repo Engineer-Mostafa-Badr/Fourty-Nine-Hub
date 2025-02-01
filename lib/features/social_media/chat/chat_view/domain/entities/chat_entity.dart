@@ -1,4 +1,5 @@
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/usecases/get_lables_usecase.dart';
 
 class ChatEntity {
   String id;
@@ -23,6 +24,8 @@ class ChatEntity {
   bool isPinned = false;
   bool isTimerActive = false;
   bool hasStory = false;
+  String? isAdmin;
+  List<GetLablesEntity> lables = [];
 
   ChatEntity({
     required this.id,
@@ -47,5 +50,7 @@ class ChatEntity {
     this.isTimerActive = false,
     this.lastSeen,
     this.hasStory = false,
+    this.isAdmin,
+    this.lables = const [],
   });
 }

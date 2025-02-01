@@ -4,8 +4,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/lucky_wheel/domain/entities/wheel_entity.dart';
 import 'package:fourtyninehub/features/lucky_wheel/domain/entities/wheel_item_entity.dart';
@@ -26,16 +28,19 @@ class SpinWheelCubit extends Cubit<BasicState<WheelItemEntity>> {
 
   bool isMessageShown = false;
 
-  Future<void> spin(WheelEntity wheel) async {
+  Future<void> spin(WheelEntity wheel,BuildContext context) async {
     if (state.status == StateStatus.loading) return;
     emit(state.copyWith(status: StateStatus.loading));
     final result = await _spinWheelUseCase(wheel.id);
     emit(
       result.fold(
-        (failure) => state.copyWith(
+        (failure) {
+          showErrorMessage(context, getFailureMessage(failure,context));
+          return state.copyWith(
           status: StateStatus.error,
           failure: failure,
-        ),
+        );
+        },
         (item) {
           isMessageShown = false;
           final prizeIndex = wheel.items.indexWhere((e) =>

@@ -874,7 +874,9 @@ class AppPages {
                 GoRoute(
                     path: Paths.POLICY,
                     name: Routes.POLICY,
-                    builder: (context, state) => const PolicyView()),
+                    builder: (context, state) => PolicyView(
+                        fromTerms: state.extra as bool
+                    )),
                 GoRoute(
                     path: Paths.Lists,
                     name: Routes.Lists,

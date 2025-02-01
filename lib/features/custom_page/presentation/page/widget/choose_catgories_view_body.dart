@@ -46,9 +46,9 @@ class _ChooseCategoriesViwBodyState extends State<ChooseCategoriesViwBody> {
     return Scaffold(
         body: Column(
           children: [
-            const ListTile(
-              title: Text('اختر طريقه عرض القسام الرئيسيه للخدمات'),
-              subtitle: Text('يمكنك اختيار بحد أقصى طريقه عرض واحده'),
+            ListTile(
+              title: Text(LocaleKeys.chooseCategoryView.localize),
+              subtitle: Text(LocaleKeys.youCanChooseOneWayAtLeast.localize),
             ),
             Expanded(
               child: ListView.builder(

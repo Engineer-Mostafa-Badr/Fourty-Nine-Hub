@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,6 +27,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/locat
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:liquid_progress_indicator_v2/liquid_progress_indicator.dart';
 
 import '../../../../common/widgets/dynamic/bottom_navigator.dart';
 import '../../../../common/widgets/dynamic/drawer.dart';
@@ -42,6 +42,7 @@ import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../custom_page/presentation/page/widget/service_page_preview copy.dart';
 import '../widgets/announce_widget.dart';
 import 'package:auto_scroll_text/auto_scroll_text.dart';
 
@@ -125,6 +126,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
     //     .read<NotificationSocketIoCubit>()
     //     .notificationListener(languageCode: 'en');
   }
+
   @override
   initState() {
     context
@@ -133,6 +135,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
 
     super.initState();
   }
+
   @override
   void dispose() {
     scrollController.dispose();
@@ -205,6 +208,23 @@ class _FourtyNineViewState extends State<FourtyNineView>
               const ScrollableTextWithAnimation(),
 
               //wallet
+              // Row(
+              //   children: [
+              //     SizedBox(
+              //       width:250.w,
+              //       height: 150.h,
+              //       child: LiquidCircularProgressIndicator(
+              //         value: 0.5, // Defaults to 0.5.
+              //         valueColor: AlwaysStoppedAnimation(Colors.pink), // Defaults to the current Theme's accentColor.
+              //         backgroundColor: Colors.white, // Defaults to the current Theme's backgroundColor.
+              //         borderColor: Colors.red,
+              //         borderWidth: 5.0,
+              //         direction: Axis.vertical, // The direction the liquid moves (Axis.vertical = bottom to top, Axis.horizontal = left to right). Defaults to Axis.vertical.
+              //         center: Text("Loading..."),
+              //       ),
+              //     ),
+              //   ],
+              // ),
               context.read<UserCubit>().isLoggedIn
                   ? const WalletWidget()
                   : const SizedBox.shrink(),
@@ -216,9 +236,12 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   height: 60.h,
                   alignment: Alignment.center,
                   child: AutoScrollText(
-                    "${LocaleKeys.choosePreferredAppStyle.localize}...   ",
-                    style: Styles.headerText(fontSize: 30, color: AppColors.SECONDARY_COLOR),
-                    textDirection: context.isArabic?TextDirection.rtl:TextDirection.ltr,
+                    "${LocaleKeys.choosePreferredAppStyle.localize}...               ",
+                    style: Styles.headerText(
+                        fontSize: 30, color: AppColors.SECONDARY_COLOR),
+                    textDirection: context.isArabic
+                        ? TextDirection.rtl
+                        : TextDirection.ltr,
                     selectable: true,
                     // textStyle: TextStyle(fontSize: 24),
                   ),
@@ -228,7 +251,15 @@ class _FourtyNineViewState extends State<FourtyNineView>
               //    Sizer(),
               //admob
               //   const GoogleAddsBanner(),
-              _buildStarWidget(),
+              Row(
+                children: [
+                  Expanded(
+                    child: _walletsWidget(),
+                  ),
+                  const Sizer(),
+                  Expanded(child: _buildStarWidget()),
+                ],
+              ),
               const Sizer(),
               //pick me and come with U
               _pickMeAndComeWithUWidget(),
@@ -315,6 +346,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
     );
   }
 
+
   Widget _buildMainCategoriesViews() {
     return Container(
       decoration: BoxDecoration(
@@ -381,27 +413,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
     return BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>(
       builder: (context, state) {
         if (state.status == StateStatus.loading) {
-          return Row(
-            children: List.generate(
-                2,
-                (index) => Expanded(
-                      child: Shimmer.fromColors(
-                        baseColor: Colors.grey[100]!,
-                        highlightColor: Colors.white24,
-                        child: Container(
-                          width: 100.h,
-                          height: kToolbarHeight * 2.h,
-                          margin: const EdgeInsets.symmetric(horizontal: 5),
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          decoration: BoxDecoration(
-                            color: AppColors.AUTH_CONTAINER_COLOR,
-                            borderRadius: BorderRadius.circular(20.r),
-                            border: Border.all(color: Colors.grey),
-                          ),
-                        ),
-                      ),
-                    )),
-          );
+          return const PickMeAndComeWithYouLShimmerLoading();
         } else if (state.status == StateStatus.success) {
           return Row(
             children: [
@@ -426,7 +438,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                 child: _buildRideSubCategoryItem(
                   service:
                       state.data?[1].service ?? RideServicesEnum.comeWithYou,
-                  title:state.data![1].name.toString(),
+                  title: state.data![1].name.toString(),
                   image: state.data?[1].image ?? '',
                   // image: Assets.tripJoin,
 
@@ -576,6 +588,59 @@ class _FourtyNineViewState extends State<FourtyNineView>
     );
   }
 
+  Widget _walletsWidget() {
+    return SizedBox(
+      height: kToolbarHeight * .9.h,
+      width: double.infinity,
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child:
+            AppButton(
+                color: AppColors.AUTH_CONTAINER_COLOR,
+                label: LocaleKeys.wallets.localize,
+                style: Styles.mediumText(
+                  color: AppColors.AUTH_CONTAINER_COLOR,
+                  fontWeight: FontWeight.bold,
+                ),
+                icon: Icons.star,
+                iconSize: 50.h,
+                onPressed: () {
+                  // AdInterstitialTop.loadIntersitialAd();
+                  // AdInterstitialTop.showInterstitialAd();
+                  // HandleCashback.setCount('beAStarCount', context);
+                  context.push(Routes.WALLET);
+                }),
+          ),
+          Positioned(
+              bottom: 5,
+              left: 5,
+              child: Icon(
+                Icons.star,
+                size: 20.h,
+                color: AppColors.ACCENT_COLOR,
+              )),
+          Positioned(
+              top: 0,
+              left: 10,
+              child: Icon(
+                Icons.star,
+                size: 20.h,
+                color: AppColors.ACCENT_COLOR,
+              )),
+          Positioned(
+              top: 15,
+              right: 10,
+              child: Icon(
+                Icons.star,
+                size: 20.h,
+                color: AppColors.ACCENT_COLOR,
+              ))
+        ],
+      ),
+    );
+  }
+
   Widget _buildTenPercentWidget() {
     return SizedBox(
       height: kToolbarHeight * .9.h,
@@ -643,7 +708,15 @@ class _FourtyNineViewState extends State<FourtyNineView>
                       iconSize: 50.h,
                       onPressed: () {
                         //HandleCashback.setCount('tenPercentCount',context);
-                        context.push(Routes.MARRIAGESUBCATEGORIES,extra: MainCategoryEntity(id: '62c8b5b09332225799fe335e', nameEn: 'Marriage',name:'زواج', image: "", banner: '', cover: '', total: 0));
+                        context.push(Routes.MARRIAGESUBCATEGORIES,
+                            extra: MainCategoryEntity(
+                                id: '62c8b5b09332225799fe335e',
+                                nameEn: 'Marriage',
+                                name: 'زواج',
+                                image: "",
+                                banner: '',
+                                cover: '',
+                                total: 0));
                       }),
                 ),
                 Positioned(
@@ -775,7 +848,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                     ),
                     Container(
                       color: Colors.black
-                          .withOpacity(0.3), // Darken the background
+                          .withOpacity(0.6), // Darken the background
                     ),
                   ],
                 ),
@@ -811,22 +884,20 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   // ),
                   const Spacer(),
                   Container(
-                    decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.5),
-                            spreadRadius: 0.03,
-                            blurRadius: 6,
-                          ),
-                        ]
-                    ),
+                    decoration: BoxDecoration(boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.5),
+                        spreadRadius: 0.03,
+                        blurRadius: 6,
+                      ),
+                    ]),
                     child: Label(
                       // text: service.title(),
                       text: title,
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
-                          fontSize:  45.sp),
+                          fontSize: 45.sp),
                     ),
                   ),
                   const Spacer(),

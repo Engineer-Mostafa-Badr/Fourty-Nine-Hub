@@ -24,6 +24,7 @@ class RegisterParams extends Equatable {
   final String password;
   final String confirmPassword;
   final String token;
+  final String? birthday;
   final String? referralId;
   final bool isMale;
 
@@ -34,6 +35,7 @@ class RegisterParams extends Equatable {
     required this.password,
     required this.confirmPassword,
     required this.token,
+    this.birthday,
     this.referralId,
     required this.isMale,
   });
@@ -41,6 +43,7 @@ class RegisterParams extends Equatable {
   Future<Map<String, dynamic>> toJson() async => {
         'firstName': firstName,
         'lastName': lastName,
+        if(birthday!=null&&(birthday?.isNotEmpty??false))'birthday': birthday,
         'email': email,
         'password': password,
         'confirmPassword': confirmPassword,

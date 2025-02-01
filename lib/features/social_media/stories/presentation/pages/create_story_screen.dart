@@ -200,32 +200,37 @@ class CameraScreenState extends State<CameraScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: _selectedPageIndex != 0 ? Colors.black : currentColor,
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 32),
-            child: _buildTopControls(),
-          ),
-          Expanded(
-            child: PageView(
-              controller: _pageController,
-              onPageChanged: (index) {
-                setState(() {
-                  _disposeVideoControllers();
-                  _selectedPageIndex = index;
-                });
-              },
-              children: [
-                _buildTextStoryInput(),
-                _buildImagePreview(context),
-                _buildVideoPreview(),
-              ],
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        backgroundColor: _selectedPageIndex != 0 ? Colors.black : currentColor,
+        body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 32),
+              child: _buildTopControls(),
             ),
-          ),
-          _buildBottomControls(),
-        ],
+            Expanded(
+              child: PageView(
+                controller: _pageController,
+                onPageChanged: (index) {
+                  setState(() {
+                    _disposeVideoControllers();
+                    _selectedPageIndex = index;
+                  });
+                },
+                children: [
+                  _buildTextStoryInput(),
+                  _buildImagePreview(context),
+                  _buildVideoPreview(),
+                ],
+              ),
+            ),
+            _buildBottomControls(),
+          ],
+        ),
       ),
     );
   }
@@ -302,6 +307,7 @@ class CameraScreenState extends State<CameraScreen> {
               padding: const EdgeInsets.all(0),
               icon: const Icon(Icons.more_horiz, color: Colors.white, size: 22),
               onPressed: () {
+                FocusScope.of(context).requestFocus(FocusNode());
                 Navigator.push(
                     context,
                     MaterialPageRoute(

@@ -215,7 +215,7 @@ class EndPoints {
   static const getWheel = '/wheels/random';
   static const spinWheel = '/wheels/spin/';
   static const wheelWallet = '/wheel/wallets/my/wallet';
-  static const sendForgetPasswordOTP = '/auth/forgot-password';
+  static const sendForgetPasswordOTP = '/auth/forget-password';
   static const verifyForgetPasswordOTP = '/auth/verify/otp';
   static const createNewForgetPassword = '/auth/reset-password';
   static const notifications = '/notifications';
@@ -448,7 +448,7 @@ class EndPoints {
       '$developmentBaseUrl/loading/trip/loadingTripRequests';
 
   // reels
-  static const getExploreReels = '/reels/explore';
+  static const getExploreReels = '/reels-explore';
   static const snap = '/categories/main/snap-filters';
   static const fetchReelsForFollowers =
       '/reels/followers?subCategory=66684135dbb427ee42aa0141';
@@ -620,7 +620,7 @@ class EndPoints {
   }
 
   static String getReels(TwitterFeedParams params) {
-    return '/reels/explore?limit=${params.limit}&page=${params.page}&subCategory=${Constants.reelsSubCategory}';
+    return '/reels-explore?limit=${params.limit}&page=${params.page}&subCategory=${Constants.reelsSubCategory}';
   }
 
   static String getUserReels(UserReelsParams params) {
@@ -857,6 +857,7 @@ class EndPoints {
   static String getSubcategoryAdProps(String id) {
     return '/ads/PropsBySubCategoryId/$id';
   }
+
   static String getMainCategoryAdProps(String id) {
     return '/ads/PropsByMainCategoryId/$id';
   }
@@ -864,7 +865,7 @@ class EndPoints {
   static const createAd = '/ads/create-ads';
 
   static filterAd(FilterModel filter) =>
-      '/ads/filter-ads/${filter.subCategoryId}?${(filter.governorateId?.isNotEmpty??false)?"government=${filter.governorateId}&":''}${filter.cityId?.isNotEmpty??false?"city=${filter.cityId}&":""}&limit=${filter.limit}&page=${filter.page}&type=${filter.filter}';
+      '/ads/filter-ads/${filter.subCategoryId}?${(filter.governorateId?.isNotEmpty ?? false) ? "government=${filter.governorateId}&" : ''}${filter.cityId?.isNotEmpty ?? false ? "city=${filter.cityId}&" : ""}&limit=${filter.limit}&page=${filter.page}&type=${filter.filter}';
   static deleteFood(String id) => '/food/delete-food-item/$id';
   static const addFood = '/food/add-food';
   static const deleteCart = '/food/deleteCart';
@@ -962,8 +963,16 @@ class EndPoints {
   // chat_room
   static String getChats = '/chat/get-chats';
 
+  static String assignLabels() {
+    return '/chat/set-labels';
+  }
+
   static String getChatMessages(String chatId) {
     return '/chat/get-chat/$chatId';
+  }
+
+  static String getLabels(String chatId) {
+    return '/chat/get-labels?chatId=$chatId';
   }
 
   static String getChatDetails(String chatId) {
@@ -972,6 +981,10 @@ class EndPoints {
 
   static String updateChat(String chatId) {
     return '/chat/update-chat-member/$chatId';
+  }
+
+  static String createLabel() {
+    return '/chat/label';
   }
 
   static String createNormalChat(

@@ -1261,7 +1261,18 @@ class CodegenLoader extends AssetLoader{
   "navigateBarDescription": "اختر المجال المناسب الذي تحب أن تراه في شريط القوائم السفلي للتطبيق",
   "socialDescription": "اختار الشكل الاجتماعي المفضل لديك يمكنك اختيار شكل واحد فقط بحدأقصى",
   "favouriteDescrepion": "اختار الاقسام الرئيسيه المفضله لديك التي تحب أن تراها يمكنك اختيار بحد أقصى اقسام",
-  "warning": "تحذير!!!"
+  "warning": "تحذير!!!",
+  "saveAndActivate": "حفظ وتفعيل",
+  "saveWithOutActivate": "حفظ بدون تفعيل",
+  "serviceNoifications": "اشعارات الخدمه",
+  "socialNotifications": "اشعارات التواصل الاجتماعي",
+  "fourtyNineNotifications": "اشعارات 49",
+  "deActivateCustomPage": "الغاء تفعيل الصفحه المخصصه",
+  "areYouSureToDeActivate": "هل انت متأكد من الغاء تفعيل الصفحه المخصصه؟",
+  "youCanDeActivatePage": "يمكنك الغاء تفعيل الصفحه المخصصه و العوده الي الصفحه الرئيسيه من هنا ",
+  "chooseCategoryView": "اختر طريقه عرض القسام الرئيسيه للخدمات",
+  "youCanChooseOneWayAtLeast": "يمكنك اختيار بحد أقصى طريقه عرض واحده",
+  "wallets": "المحافظ"
 };
 static const Map<String,dynamic> en = {
   "nnew": "New",
@@ -1670,7 +1681,7 @@ static const Map<String,dynamic> en = {
   "availableTrips": "Available Trips",
   "checkRequest": "Please wait to check request",
   "reportSentSuccess": "Report sent successfully",
-  "whatDoYouThink": "What do you think about?",
+  "whatDoYouThink": "What’s on your mind ?",
   "peopleYouMayKnow": "People you may know",
   "noFriendsSuggested": "No Friends Suggested",
   "days": "d",
@@ -2527,7 +2538,18 @@ static const Map<String,dynamic> en = {
   "cashBack": "Upload At Least One Bill To Enjoy Getting Cash back As A Gift On The App",
   "navigateBarDescription": "Choose the appropriate field you would like to see in the application's bottom navigation bar.",
   "socialDescription": "Choose your preferred social shape. You can select only one shape at most.",
-  "favouriteDescription": "Choose your favorite main categories that you would like to see. You can select up to 8 categories at most."
+  "favouriteDescription": "Choose your favorite main categories that you would like to see. You can select up to 8 categories at most.",
+  "saveAndActivate": "Save and Activate",
+  "saveWithOutActivate": "Save Without Activate",
+  "serviceNoifications": "Service Noifications",
+  "socialNotifications": "Social Notifications",
+  "fourtyNineNotifications": "49 Notifications",
+  "deActivateCustomPage": "deactivate custom page",
+  "areYouSureToDeActivate": "Are you sure you want to deactivate custom page?",
+  "youCanDeActivatePage": "You can deactivate the custom page and return to the main page from here",
+  "chooseCategoryView": "Choose the main category view method for services",
+  "youCanChooseOneWayAtLeast": "You can select a maximum of one view method.",
+  "wallets": "Wallets"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

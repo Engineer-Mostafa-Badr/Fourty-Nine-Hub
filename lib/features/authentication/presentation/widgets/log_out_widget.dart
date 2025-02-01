@@ -28,6 +28,8 @@ class _LogoutWidgetState extends State<LogoutWidget> {
    Future<void> setLogOut() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool("ISLOGIN", false);
+    context.go(Routes.HOME);
+
   }
 
   @override
@@ -75,7 +77,8 @@ class _LogoutWidgetState extends State<LogoutWidget> {
                   // await DI.reset();
                   // await DI.execute();
                   setLogOut();
-                  context.pushReplacement(Routes.HOME);
+
+                  // context.pushReplacement(Routes.HOME);
                   // await Restart.restartApp();
                   // context.read<MainCategoriesCubit>().loadData(context);
                   // setState(() {});

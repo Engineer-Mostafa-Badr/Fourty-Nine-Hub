@@ -3,12 +3,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/common/widgets/stateful/dynamic/pagination_view.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/subcategory_card.dart';
 
 
+import '../../../../common/widgets/stateless/images/square_image.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../res/style/styles.dart';
 import '../cubit/subcategories_cubit.dart';
@@ -85,9 +91,15 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                       children: [
                         ListTile(contentPadding: const EdgeInsets.all(0),
                           dense: true,
-                          title: Label(text: item.nameAr ?? '', style: Styles.mediumText(fontWeight: FontWeight.bold)),
+                          title: Label(text: context.isArabic?item.nameAr:item.nameEn , style: Styles.mediumText(fontWeight: FontWeight.bold)),
                           onTap: () {
-                            Navigator.pop(context, item.id);
+                            if(context.isUserLoggedIn){
+                              Navigator.pop(context);
+                              context.push(Routes.CREATEAD,extra: CategorizationEntity(
+                                  mainCategory: widget.mainCategory, subCategory: item));
+                            }else{
+                              context.push(Routes.LOGIN);
+                            }
                           },
                         ),
                         Divider(height: 1,thickness: 1,color: Colors.grey.shade300,)

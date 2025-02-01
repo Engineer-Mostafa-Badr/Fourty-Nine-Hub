@@ -9,6 +9,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/label_colors_map.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -107,13 +108,14 @@ class _ChatCardState extends State<ChatCard> {
                       Container(
                         height: kToolbarHeight * .8,
                         width: kToolbarHeight * .8,
-                        decoration: widget.chat!.hasStory? BoxDecoration(
-                            borderRadius: BorderRadius.circular(50),
-                            border: Border.all(
-                              color: AppColors.PRIMARY_COLOR_DARK,
-                              width: 3,
-                            )
-                        ): null,
+                        decoration: widget.chat!.hasStory
+                            ? BoxDecoration(
+                                borderRadius: BorderRadius.circular(50),
+                                border: Border.all(
+                                  color: AppColors.PRIMARY_COLOR_DARK,
+                                  width: 3,
+                                ))
+                            : null,
                         child: widget.isSecret
                             ? const CircleAvatar(
                                 backgroundColor: Colors.red,
@@ -122,149 +124,189 @@ class _ChatCardState extends State<ChatCard> {
                                   color: Colors.grey,
                                 ))
                             : GestureDetector(
-                                onTap: widget.chat!.hasStory?(){
-                                  // navigate to stories
-                                }
-                                    : () {
-                                  if (context.isUserLoggedIn) {
-                                    context.read<UserCubit>().updateProfileView(
-                                          isProfile: false,
-                                          userId: widget.chat!.userId,
-                                        );
-                                  }
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) {
-                                      return BlocProvider.value(
-                                        value: widget.chatsCubit!,
-                                        child: Builder(builder: (context) {
-                                          return AlertDialog(
-                                            contentPadding: EdgeInsets
-                                                .zero, // Remove default padding
-                                            backgroundColor: Colors
-                                                .transparent, // Make the dialog background transparent
-                                            content: ClipRRect(
-                                              child: Stack(
-                                                children: [
-                                                  Image.network(
-                                                    widget.chat!.avatar,
-                                                    fit: BoxFit.cover,
-                                                    errorBuilder: (context,
-                                                        error, stackTrace) {
-                                                      return Image.network(
-                                                        UIConst
-                                                            .profilePlaceHolder,
-                                                        fit: BoxFit.cover,
-                                                      );
-                                                    },
-                                                  ),
-                                                  Positioned(
-                                                    top: 0,
-                                                    left: 0,
-                                                    right: 0,
-                                                    child: Container(
-                                                      color: Colors.black
-                                                          .withOpacity(0.4),
-                                                      child: Row(
-                                                        children: [
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: Text(
-                                                              widget.chat!.name,
-                                                              style: const TextStyle(
-                                                                  fontSize: 20,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  color: Colors
-                                                                      .white),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Positioned(
-                                                    bottom: 0,
-                                                    left: 0,
-                                                    right: 0,
-                                                    child: Container(
-                                                        color: Colors.white,
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceEvenly, // Distribute icons evenly
+                                onTap: widget.chat!.hasStory
+                                    ? () {
+                                        // navigate to stories
+                                      }
+                                    : widget.chat!.isAdmin == "admin"
+                                        ? null
+                                        : () {
+                                            if (context.isUserLoggedIn) {
+                                              context
+                                                  .read<UserCubit>()
+                                                  .updateProfileView(
+                                                    isProfile: false,
+                                                    userId: widget.chat!.userId,
+                                                  );
+                                            }
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return BlocProvider.value(
+                                                  value: widget.chatsCubit!,
+                                                  child: Builder(
+                                                      builder: (context) {
+                                                    return AlertDialog(
+                                                      contentPadding: EdgeInsets
+                                                          .zero, // Remove default padding
+                                                      backgroundColor: Colors
+                                                          .transparent, // Make the dialog background transparent
+                                                      content: ClipRRect(
+                                                        child: Stack(
                                                           children: [
-                                                            IconButton(
-                                                              icon: const Icon(
-                                                                Icons.chat,
-                                                                color: AppColors
-                                                                    .SECONDARY_COLOR,
-                                                              ),
-                                                              onPressed: () {
-                                                                context
-                                                                        .read<
-                                                                            ChatsCubit>()
-                                                                        .selectChat =
-                                                                    widget
-                                                                        .chat!;
-                                                                context.push(
-                                                                    Routes
-                                                                        .CHATROOM,
-                                                                    extra: widget
-                                                                        .chatsCubit);
+                                                            Image.network(
+                                                              widget
+                                                                  .chat!.avatar,
+                                                              fit: BoxFit.cover,
+                                                              errorBuilder:
+                                                                  (context,
+                                                                      error,
+                                                                      stackTrace) {
+                                                                return Image
+                                                                    .network(
+                                                                  UIConst
+                                                                      .profilePlaceHolder,
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                );
                                                               },
                                                             ),
-                                                            IconButton(
-                                                              icon: const Icon(
-                                                                Icons.call,
-                                                                color: AppColors
-                                                                    .SECONDARY_COLOR,
-                                                              ),
-                                                              onPressed: () {},
-                                                            ),
-                                                            IconButton(
-                                                              icon: const Icon(
-                                                                Icons.videocam,
-                                                                color: AppColors
-                                                                    .SECONDARY_COLOR,
-                                                              ),
-                                                              onPressed: () {},
-                                                            ),
-                                                            IconButton(
-                                                              icon: const Icon(
-                                                                Icons.info,
-                                                                color: AppColors
-                                                                    .SECONDARY_COLOR,
-                                                              ),
-                                                              onPressed: () {
-                                                                context
-                                                                        .read<
-                                                                            ChatsCubit>()
-                                                                        .selectChat =
+                                                            Positioned(
+                                                              top: 0,
+                                                              left: 0,
+                                                              right: 0,
+                                                              child: Container(
+                                                                color: Colors
+                                                                    .black
+                                                                    .withOpacity(
+                                                                        0.4),
+                                                                child: Row(
+                                                                  children: [
+                                                                    Padding(
+                                                                      padding: const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
+                                                                      child:
+                                                                          Text(
+                                                                        widget
+                                                                            .chat!
+                                                                            .name,
+                                                                        style: const TextStyle(
+                                                                            fontSize:
+                                                                                20,
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
+                                                                            color: Colors.white),
+                                                                      ),
+                                                                    ),
+                                                                    widget.chat!.isAdmin ==
+                                                                            "admin"
+                                                                        ? const Icon(
+                                                                            Icons.verified,
+                                                                            color:
+                                                                                Colors.blue,
+                                                                            size:
+                                                                                20,
+                                                                          )
+                                                                        : const SizedBox(),
                                                                     widget
-                                                                        .chat!;
-                                                                context.push(
-                                                                    Routes
-                                                                        .VIEWCONTACT,
-                                                                    extra: widget
-                                                                        .chatsCubit);
-                                                              },
+                                                                            .chat!
+                                                                            .lables
+                                                                            .isNotEmpty
+                                                                        ? Icon(
+                                                                            Icons.label,
+                                                                            color:
+                                                                                LabelColorsMap.getColor(widget.chat!.lables.last.color),
+                                                                            size:
+                                                                                20,
+                                                                          )
+                                                                        : const SizedBox(),
+                                                                  ],
+                                                                ),
+                                                              ),
                                                             ),
+                                                            Positioned(
+                                                              bottom: 0,
+                                                              left: 0,
+                                                              right: 0,
+                                                              child: Container(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  child: Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .spaceEvenly, // Distribute icons evenly
+                                                                    children: [
+                                                                      IconButton(
+                                                                        icon:
+                                                                            const Icon(
+                                                                          Icons
+                                                                              .chat,
+                                                                          color:
+                                                                              AppColors.SECONDARY_COLOR,
+                                                                        ),
+                                                                        onPressed:
+                                                                            () {
+                                                                          context
+                                                                              .read<ChatsCubit>()
+                                                                              .selectChat = widget.chat!;
+                                                                          context.push(
+                                                                              Routes.CHATROOM,
+                                                                              extra: widget.chatsCubit);
+                                                                        },
+                                                                      ),
+                                                                      IconButton(
+                                                                        icon:
+                                                                            const Icon(
+                                                                          Icons
+                                                                              .call,
+                                                                          color:
+                                                                              AppColors.SECONDARY_COLOR,
+                                                                        ),
+                                                                        onPressed:
+                                                                            () {},
+                                                                      ),
+                                                                      IconButton(
+                                                                        icon:
+                                                                            const Icon(
+                                                                          Icons
+                                                                              .videocam,
+                                                                          color:
+                                                                              AppColors.SECONDARY_COLOR,
+                                                                        ),
+                                                                        onPressed:
+                                                                            () {},
+                                                                      ),
+                                                                      IconButton(
+                                                                        icon:
+                                                                            const Icon(
+                                                                          Icons
+                                                                              .info,
+                                                                          color:
+                                                                              AppColors.SECONDARY_COLOR,
+                                                                        ),
+                                                                        onPressed:
+                                                                            () {
+                                                                          context
+                                                                              .read<ChatsCubit>()
+                                                                              .selectChat = widget.chat!;
+                                                                          context.push(
+                                                                              Routes.VIEWCONTACT,
+                                                                              extra: widget.chatsCubit);
+                                                                        },
+                                                                      ),
+                                                                    ],
+                                                                  )),
+                                                            )
                                                           ],
-                                                        )),
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          );
-                                        }),
-                                      );
-                                    },
-                                  );
-                                },
+                                                        ),
+                                                      ),
+                                                    );
+                                                  }),
+                                                );
+                                              },
+                                            );
+                                          },
                                 child: Stack(
                                   children: [
                                     ClipRRect(
@@ -323,13 +365,68 @@ class _ChatCardState extends State<ChatCard> {
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Label(
-                                text: widget.isSecret
-                                    ? 'Mxxx xxxl'
-                                    : '${widget.chat?.name}',
-                                style: Styles.mediumText(
-                                    fontWeight: FontWeight.bold),
-                                maxLines: 1,
+                              child: Row(
+                                children: [
+                                  Label(
+                                    text: widget.isSecret
+                                        ? 'Mxxx xxxl'
+                                        : widget.chat!.isAdmin == "admin"
+                                            ? "49Hub"
+                                            : '${widget.chat?.name}',
+                                    style: Styles.mediumText(
+                                        fontWeight: FontWeight.bold),
+                                    maxLines: 1,
+                                  ),
+                                  const SizedBox(
+                                    width: 8,
+                                  ),
+                                  widget.chat!.isAdmin == "admin"
+                                      ? const Icon(
+                                          Icons.verified,
+                                          color: Colors.blue,
+                                          size: 18,
+                                        )
+                                      : const SizedBox(),
+                                  widget.chat!.lables.isNotEmpty &&
+                                          widget.chat!.lables.length == 1
+                                      ? Icon(
+                                          Icons.label,
+                                          color: LabelColorsMap.getColor(
+                                              widget.chat!.lables.last.color),
+                                          size: 20,
+                                        )
+                                      : const SizedBox(),
+                                  widget.chat!.lables.isNotEmpty &&
+                                          widget.chat!.lables.length != 1
+                                      ? Stack(
+                                          clipBehavior: Clip.none,
+                                          children: [
+                                            Positioned(
+                                              left: 4,
+                                              bottom: 4,
+                                              child: Icon(
+                                                Icons.label,
+                                                color: LabelColorsMap.getColor(
+                                                    widget
+                                                        .chat!
+                                                        .lables[widget.chat!
+                                                                .lables.length -
+                                                            2]
+                                                        .color),
+                                                size: 20,
+                                              ),
+                                            ),
+                                            Icon(
+                                              Icons.label,
+                                              color: LabelColorsMap.getColor(
+                                                  widget
+                                                      .chat!.lables.last.color),
+                                              size: 20,
+                                            ),
+                                          ],
+                                        )
+                                      : const SizedBox(),
+                                ],
                               ),
                             ),
                             Row(
@@ -436,181 +533,190 @@ class _ChatCardState extends State<ChatCard> {
                               style: Styles.mediumText(color: Colors.grey)),
                           widget.chat?.lastSeenCount == null
                               ? const SizedBox()
-                              : GestureDetector(
-                                  onTap: () {},
-                                  child: Row(
-                                    children: [
-                                      Label(
-                                          text: '${widget.chat?.lastSeenCount}',
-                                          style: Styles.mediumText(
-                                              color: Colors.grey)),
-                                      const SizedBox(width: 10),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 2.0),
-                                        child: InkWell(
-                                          onTap: () async {
-                                            // Call the getLastSeen function
-                                            await context
-                                                .read<ChatsCubit>()
-                                                .getChatLastSeen(
-                                                    chatId: widget.chat!.id);
+                              : widget.chat!.isAdmin == "admin"
+                                  ? const SizedBox()
+                                  : GestureDetector(
+                                      onTap: () {},
+                                      child: Row(
+                                        children: [
+                                          Label(
+                                              text:
+                                                  '${widget.chat?.lastSeenCount}',
+                                              style: Styles.mediumText(
+                                                  color: Colors.grey)),
+                                          const SizedBox(width: 10),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 2.0),
+                                            child: InkWell(
+                                              onTap: () async {
+                                                // Call the getLastSeen function
+                                                await context
+                                                    .read<ChatsCubit>()
+                                                    .getChatLastSeen(
+                                                        chatId:
+                                                            widget.chat!.id);
 
-                                            // Open a scrollable bottom sheet
-                                            showModalBottomSheet(
-                                              context: context,
-                                              isScrollControlled: true,
-                                              constraints: BoxConstraints(
-                                                maxHeight:
-                                                    MediaQuery.of(context)
-                                                            .size
-                                                            .height *
-                                                        0.9,
-                                              ),
-                                              shape:
-                                                  const RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.vertical(
-                                                        top: Radius.circular(
-                                                            20)),
-                                              ),
-                                              builder: (context) {
-                                                // Ensure the context has access to ChatsCubit using BlocProvider
-                                                return BlocProvider<
-                                                    ChatsCubit>.value(
-                                                  value: widget.chatsCubit!,
-                                                  child: Builder(
-                                                    builder: (context) {
-                                                      return BlocBuilder<
-                                                          ChatsCubit,
-                                                          ChatsState>(
-                                                        builder:
-                                                            (context, state) {
-                                                          return Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(16.0),
-                                                            child: Column(
-                                                              mainAxisSize:
-                                                                  MainAxisSize
-                                                                      .min,
-                                                              children: [
-                                                                // Header
-                                                                Text(
-                                                                  context.isArabic
-                                                                      ? "سجل مشاهدات الدردشة"
-                                                                      : 'Chat Views History',
-                                                                  style:
-                                                                      const TextStyle(
-                                                                    fontSize:
-                                                                        18,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                  ),
-                                                                ),
-                                                                const SizedBox(
-                                                                    height: 16),
-                                                                // List of last seen chats
-                                                                if (widget
-                                                                    .chatsCubit!
-                                                                    .lastSeenChats
-                                                                    .isEmpty)
-                                                                  Center(
-                                                                    child: Text(
+                                                // Open a scrollable bottom sheet
+                                                showModalBottomSheet(
+                                                  context: context,
+                                                  isScrollControlled: true,
+                                                  constraints: BoxConstraints(
+                                                    maxHeight:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            0.9,
+                                                  ),
+                                                  shape:
+                                                      const RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.vertical(
+                                                            top:
+                                                                Radius.circular(
+                                                                    20)),
+                                                  ),
+                                                  builder: (context) {
+                                                    // Ensure the context has access to ChatsCubit using BlocProvider
+                                                    return BlocProvider<
+                                                        ChatsCubit>.value(
+                                                      value: widget.chatsCubit!,
+                                                      child: Builder(
+                                                        builder: (context) {
+                                                          return BlocBuilder<
+                                                              ChatsCubit,
+                                                              ChatsState>(
+                                                            builder: (context,
+                                                                state) {
+                                                              return Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(
+                                                                        16.0),
+                                                                child: Column(
+                                                                  mainAxisSize:
+                                                                      MainAxisSize
+                                                                          .min,
+                                                                  children: [
+                                                                    // Header
+                                                                    Text(
                                                                       context.isArabic
-                                                                          ? "لا يوجد بيانات"
-                                                                          : 'No data available',
-                                                                      style: const TextStyle(
-                                                                          color:
-                                                                              Colors.grey),
+                                                                          ? "سجل مشاهدات الدردشة"
+                                                                          : 'Chat Views History',
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        fontSize:
+                                                                            18,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                      ),
                                                                     ),
-                                                                  )
-                                                                else
-                                                                  Flexible(
-                                                                    child: ListView
-                                                                        .builder(
-                                                                      shrinkWrap:
-                                                                          true,
-                                                                      itemCount: widget
-                                                                          .chatsCubit!
-                                                                          .lastSeenChats
-                                                                          .length,
-                                                                      itemBuilder:
-                                                                          (context,
-                                                                              index) {
-                                                                        final chat = widget
-                                                                            .chatsCubit!
-                                                                            .lastSeenChats[index];
-                                                                        return Padding(
-                                                                          padding: const EdgeInsets
-                                                                              .symmetric(
-                                                                              vertical: 8.0),
-                                                                          child:
-                                                                              Card(
-                                                                            elevation:
-                                                                                3,
-                                                                            shape:
-                                                                                RoundedRectangleBorder(
-                                                                              borderRadius: BorderRadius.circular(10),
-                                                                            ),
-                                                                            child:
-                                                                                ListTile(
-                                                                              leading: ClipRRect(
-                                                                                borderRadius: BorderRadius.circular(50),
-                                                                                child: CircleAvatar(
-                                                                                  radius: 25,
-                                                                                  child: Image.network(
-                                                                                    widget.chat!.avatar,
-                                                                                    fit: BoxFit.cover,
-                                                                                    errorBuilder: (context, error, stackTrace) {
-                                                                                      return Image.network(
-                                                                                        UIConst.profilePlaceHolder,
+                                                                    const SizedBox(
+                                                                        height:
+                                                                            16),
+                                                                    // List of last seen chats
+                                                                    if (widget
+                                                                        .chatsCubit!
+                                                                        .lastSeenChats
+                                                                        .isEmpty)
+                                                                      Center(
+                                                                        child:
+                                                                            Text(
+                                                                          context.isArabic
+                                                                              ? "لا يوجد بيانات"
+                                                                              : 'No data available',
+                                                                          style:
+                                                                              const TextStyle(color: Colors.grey),
+                                                                        ),
+                                                                      )
+                                                                    else
+                                                                      Flexible(
+                                                                        child: ListView
+                                                                            .builder(
+                                                                          shrinkWrap:
+                                                                              true,
+                                                                          itemCount: widget
+                                                                              .chatsCubit!
+                                                                              .lastSeenChats
+                                                                              .length,
+                                                                          itemBuilder:
+                                                                              (context, index) {
+                                                                            final chat =
+                                                                                widget.chatsCubit!.lastSeenChats[index];
+                                                                            return Padding(
+                                                                              padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                                                              child: Card(
+                                                                                elevation: 3,
+                                                                                shape: RoundedRectangleBorder(
+                                                                                  borderRadius: BorderRadius.circular(10),
+                                                                                ),
+                                                                                child: ListTile(
+                                                                                  leading: ClipRRect(
+                                                                                    borderRadius: BorderRadius.circular(50),
+                                                                                    child: CircleAvatar(
+                                                                                      radius: 25,
+                                                                                      child: Image.network(
+                                                                                        widget.chat!.avatar,
                                                                                         fit: BoxFit.cover,
-                                                                                      );
-                                                                                    },
+                                                                                        errorBuilder: (context, error, stackTrace) {
+                                                                                          return Image.network(
+                                                                                            UIConst.profilePlaceHolder,
+                                                                                            fit: BoxFit.cover,
+                                                                                          );
+                                                                                        },
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                  title: Row(
+                                                                                    children: [
+                                                                                      Text(
+                                                                                        chat.name,
+                                                                                        style: const TextStyle(
+                                                                                          fontWeight: FontWeight.bold,
+                                                                                        ),
+                                                                                      ),
+                                                                                      widget.chat!.isAdmin == "admin"
+                                                                                          ? const Icon(
+                                                                                              Icons.verified,
+                                                                                              color: Colors.blue,
+                                                                                              size: 20,
+                                                                                            )
+                                                                                          : const SizedBox(),
+                                                                                    ],
+                                                                                  ),
+                                                                                  subtitle: Text(
+                                                                                    '${chat.date} - ${chat.time}',
+                                                                                    style: const TextStyle(
+                                                                                      color: Colors.grey,
+                                                                                    ),
                                                                                   ),
                                                                                 ),
                                                                               ),
-                                                                              title: Text(
-                                                                                chat.name,
-                                                                                style: const TextStyle(
-                                                                                  fontWeight: FontWeight.bold,
-                                                                                ),
-                                                                              ),
-                                                                              subtitle: Text(
-                                                                                '${chat.date} - ${chat.time}',
-                                                                                style: const TextStyle(
-                                                                                  color: Colors.grey,
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                        );
-                                                                      },
-                                                                    ),
-                                                                  ),
-                                                              ],
-                                                            ),
+                                                                            );
+                                                                          },
+                                                                        ),
+                                                                      ),
+                                                                  ],
+                                                                ),
+                                                              );
+                                                            },
                                                           );
                                                         },
-                                                      );
-                                                    },
-                                                  ),
+                                                      ),
+                                                    );
+                                                  },
                                                 );
                                               },
-                                            );
-                                          },
-                                          child: const Icon(
-                                            FontAwesomeIcons.eye,
-                                            color: Colors.grey,
-                                            size: 14,
+                                              child: const Icon(
+                                                FontAwesomeIcons.eye,
+                                                color: Colors.grey,
+                                                size: 14,
+                                              ),
+                                            ),
                                           ),
-                                        ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                )
+                                    )
                         ],
                       ),
                     ],

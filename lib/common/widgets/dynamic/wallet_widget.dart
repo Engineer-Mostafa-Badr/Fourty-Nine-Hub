@@ -63,13 +63,15 @@ class WalletWidget extends StatelessWidget {
                   AdInterstitialTop.loadIntersitialAd();
                   AdInterstitialTop.showInterstitialAd();
                   context.push(Routes.BALANCE);
-                }, LocaleKeys.balance.tr(), '${FormatNumbers().formatNumber(state.wallet?.balance??0) } ',
+                },
+                    LocaleKeys.balance.tr(),
+                    '${FormatNumbers().formatNumber(state.wallet?.balance ?? 0)} ',
                     state.wallet?.currency ?? ''),
                 Container(
                   width: 2.w,
                   margin: EdgeInsets.symmetric(horizontal: 5.w),
                   color: Colors.grey,
-                  height: kToolbarHeight * 1.3.h,
+                  height: double.infinity,
                 ),
                 CircleAvatar(
                   radius: 6.w,
@@ -80,13 +82,15 @@ class WalletWidget extends StatelessWidget {
                   AdInterstitialTop.loadIntersitialAd();
                   AdInterstitialTop.showInterstitialAd();
                   context.push(Routes.GIFT);
-                }, LocaleKeys.gift.tr(), '${FormatNumbers().formatNumber(state.wallet?.giftWallet??0)} ',
+                },
+                    LocaleKeys.gift.tr(),
+                    '${FormatNumbers().formatNumber(state.wallet?.giftWallet ?? 0)} ',
                     state.wallet?.currency ?? ''),
                 Container(
                   width: 2.h,
                   margin: EdgeInsets.symmetric(horizontal: 5.w),
                   color: Colors.grey,
-                  height: kToolbarHeight * 1.3,
+                  height: double.infinity,
                 ),
                 CircleAvatar(
                   radius: 6.w,
@@ -100,7 +104,7 @@ class WalletWidget extends StatelessWidget {
                   //showing
                 },
                     LocaleKeys.wallet.tr(),
-                    '${FormatNumbers().formatNumber(state.wallet?.realAmount??0)} ',
+                    '${FormatNumbers().formatNumber(state.wallet?.realAmount ?? 0)} ',
                     state.wallet?.currency ?? ''),
               ],
             ),

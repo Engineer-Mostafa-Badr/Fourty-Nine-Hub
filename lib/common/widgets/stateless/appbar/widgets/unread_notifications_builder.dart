@@ -17,24 +17,27 @@ class UnreadNotificationsBuilder extends StatelessWidget {
         final getUnreadNotificationsCountCubit =
             context.watch<GetUnreadNotificationsCountCubit>();
 
-        return IconWithViewCount(
-          icon: Icon(
-            Icons.notifications,
-            size: 45.w,
-            color: context.isDarkMode
-                ? Colors.grey[200]
-                : Colors.black.withOpacity(0.8),
+        return Padding(
+          padding: const EdgeInsets.only(right: 10),
+          child: CustomNotificationWidget(
+            icon: Icon(
+              Icons.notifications,
+              size: 45.w,
+              color: context.isDarkMode
+                  ? Colors.grey[200]
+                  : Colors.black.withOpacity(0.8),
+            ),
+            // icon: Image.asset(
+            //   Assets.notification,
+            //   width: 30.h,
+            //   height: 30.h,
+            //   fit: BoxFit.cover,
+            // ),
+
+            unreadCount: getUnreadNotificationsCountCubit
+                    .unreadNotificationsCountEntity?.total ??
+                0,
           ),
-          // icon: Image.asset(
-          //   Assets.notification,
-          //   width: 30.h,
-          //   height: 30.h,
-          //   fit: BoxFit.cover,
-          // ),
-          spaceBetween: 0,
-          unreadCount: getUnreadNotificationsCountCubit
-                  .unreadNotificationsCountEntity?.total ??
-              0,
         );
       },
     );
