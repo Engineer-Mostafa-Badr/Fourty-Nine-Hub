@@ -53,7 +53,7 @@ class _MainCategoriesFlipCardsViewState
   @override
   Widget build(BuildContext context) {
     var mainCategories = mainCategoriesCubit.state.data ?? [];
-    mainCategories = widget.data!;
+    // mainCategories = widget.data!;
 
     return Scaffold(
       appBar: widget.isAppBarShow
