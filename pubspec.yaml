@@ -145,6 +145,7 @@ dependencies:
   image_cropper: ^7.0.5
   photo_manager: ^3.6.3
   giphy_get: ^3.6.0
+  liquid_progress_indicator_v2: ^0.5.0
 #  photo_manager: ^3.6.3
   # photo_manager: ^3.6.3
 dependency_overrides:
