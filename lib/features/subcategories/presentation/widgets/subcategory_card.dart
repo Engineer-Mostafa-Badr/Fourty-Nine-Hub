@@ -44,9 +44,9 @@ class _SubCategoryCardState extends State<SubCategoryCard> {
         decoration: BoxDecoration(
             color: Theme.of(context).scaffoldBackgroundColor,
             borderRadius: BorderRadius.circular(5),
-            boxShadow: const [
+            boxShadow: [
               BoxShadow(
-                  color: Colors.grey,
+                  color: Colors.grey.withOpacity(0.5),
                   spreadRadius: 1,
                   offset: Offset(-1, 1),
                   blurRadius: 5)

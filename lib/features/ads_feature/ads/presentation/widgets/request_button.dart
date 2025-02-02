@@ -33,7 +33,7 @@ class RequestButton extends StatelessWidget {
         title: LocaleKeys.request.localize,
         color: subscriptionStatus == 'premium'
             ? AppColors.DARK_GRAY_COLOR
-            : AppColors.PRIMARY_COLOR,
+            : AppColors.SECONDARY_COLOR,
         onTap: !context.read<UserCubit>().isLoggedIn
             ? () => context.push(Routes.LOGIN)
             : subscriptionStatus == 'premium'

@@ -20,6 +20,7 @@ import '../../../tinder/data/shared/shared.dart';
 import '../cubit/stories_cubit.dart';
 import 'more_stories.dart';
 import 'create_story_screen.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 
 class Stories extends StatelessWidget {
   const Stories({super.key});
@@ -27,7 +28,7 @@ class Stories extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: kToolbarHeight * 2.5,
+      height: kToolbarHeight * 3.2,
       margin: const EdgeInsets.symmetric(vertical: 10),
       child: ListView(
         padding: const EdgeInsets.all(8),
@@ -224,92 +225,181 @@ class Stories extends StatelessWidget {
   }
 
   Widget _buildYourStory(BuildContext context) {
-    return GestureDetector(
-      onTap: () async {
-        await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const CameraScreen(),
-          ),
-        );
-
-        BlocProvider.of<StoryCubit>(context)
-          ..fetchStories()
-          ..getMutedStories();
-      },
-      child: Container(
-        height: kToolbarHeight * 2,
-        width: kToolbarHeight * 1.5,
-        decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          borderRadius: BorderRadius.circular(8), // Add border radius
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2), // Shadow color with opacity
-              blurRadius: 8, // Spread of the shadow
-              offset: const Offset(0, 4), // Position of the shadow (x, y)
-            ),
-          ],
-        ),
-        child: Stack(
-          children: [
-            Positioned.fill(
-                child: Column(
-              children: [
-                Expanded(
-                  child: Image.network(
-                    serviceLocator<UserCubit>().state.data != null &&
-                            serviceLocator<UserCubit>()
-                                    .state
-                                    .data!
-                                    .profilePicture !=
-                                null
-                        ? serviceLocator<UserCubit>()
-                            .state
-                            .data!
-                            .profilePicture!
-                        : UIConst.profilePlaceHolder,
-                    errorBuilder: (context, error, stackTrace) =>
-                        Image.network(UIConst.imagePlaceHolder),
-                  ),
-                ),
-                Expanded(
-                    child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Label(
-                      text: context.isArabic ? 'إضافة قصة' : 'Add Story',
-                      // Localized text
-                      color: Theme.of(context).primaryColor,
-                      maxLines: 1,
-
-                      style: Styles.mediumText(
-                          color: Theme.of(context).primaryColor,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 4),
-                  ],
-                ))
-              ],
-            )),
-            const Positioned.fill(
-                child: Center(
-              child: CircleAvatar(
-                radius: 18,
-                backgroundColor: Colors.white,
-                child: CircleAvatar(
-                  radius: 15,
-                  backgroundColor: AppColors.PRIMARY_COLOR,
-                  child: Icon(
-                    Icons.add,
-                    color: Colors.white,
-                  ),
-                ),
+    return Column(
+      children: [
+        Expanded(child: GestureDetector(
+          onTap: () async {
+            await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const CameraScreen(),
               ),
-            ))
-          ],
-        ),
-      ),
+            );
+
+            BlocProvider.of<StoryCubit>(context)
+              ..fetchStories()
+              ..getMutedStories();
+          },
+          child: Container(
+            height: kToolbarHeight * 2,
+            width: kToolbarHeight * 1.8,
+            decoration: BoxDecoration(
+              color: AppColors.PRIMARY_COLOR,
+              borderRadius: BorderRadius.circular(8), // Add border radius
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2), // Shadow color with opacity
+                  blurRadius: 8, // Spread of the shadow
+                  offset: const Offset(0, 4), // Position of the shadow (x, y)
+                ),
+              ],
+            ),
+            child: Stack(
+              children: [
+                Positioned.fill(
+                    child: Column(
+                      children: [
+                        Sizer(),
+                        Expanded(
+                          child: Image.asset(
+                            Assets.openBook,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Label(
+                                  text: context.isArabic ? 'إضافة قصة' : 'Create Story',
+                                  // Localized text
+                                  color: Theme.of(context).primaryColor,
+                                  maxLines: 1,
+
+                                  style: Styles.mediumText(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                const SizedBox(height: 4),
+                              ],
+                            ))
+                      ],
+                    )),
+                // const Positioned.fill(
+                //     child: Center(
+                //       child: CircleAvatar(
+                //         radius: 18,
+                //         backgroundColor: Colors.white,
+                //         child: CircleAvatar(
+                //           radius: 15,
+                //           backgroundColor: AppColors.PRIMARY_COLOR,
+                //           child: Icon(
+                //             Icons.add,
+                //             color: Colors.white,
+                //           ),
+                //         ),
+                //       ),
+                //     ))
+              ],
+            ),
+          ),
+        )),
+        Sizer(),
+        Expanded(child: GestureDetector(
+          onTap: () async {
+            // await Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => const CameraScreen(),
+            //   ),
+            // );
+            //
+            // BlocProvider.of<StoryCubit>(context)
+            //   ..fetchStories()
+            //   ..getMutedStories();
+          },
+          child: Container(
+            height: kToolbarHeight * 2,
+            width: kToolbarHeight * 1.8,
+            decoration: BoxDecoration(
+              color: AppColors.SECONDARY_COLOR,
+              borderRadius: BorderRadius.circular(8), // Add border radius
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2), // Shadow color with opacity
+                  blurRadius: 8, // Spread of the shadow
+                  offset: const Offset(0, 4), // Position of the shadow (x, y)
+                ),
+              ],
+            ),
+            child: Stack(
+              children: [
+                Positioned.fill(
+                    child: Column(
+                      children: [
+                        // Expanded(
+                        //   child: Image.network(
+                        //     serviceLocator<UserCubit>().state.data != null &&
+                        //         serviceLocator<UserCubit>()
+                        //             .state
+                        //             .data!
+                        //             .profilePicture !=
+                        //             null
+                        //         ? serviceLocator<UserCubit>()
+                        //         .state
+                        //         .data!
+                        //         .profilePicture!
+                        //         : UIConst.profilePlaceHolder,
+                        //     errorBuilder: (context, error, stackTrace) =>
+                        //         Image.network(UIConst.imagePlaceHolder),
+                        //   ),
+                        // ),
+                        Sizer(),
+                        Expanded(
+                          child: Image.asset(
+                            Assets.homeReel,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Label(
+                                  text: context.isArabic ? 'إضافة بكره' : 'Create Reel',
+                                  // Localized text
+                                  color: Theme.of(context).primaryColor,
+                                  maxLines: 1,
+
+                                  style: Styles.mediumText(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                const SizedBox(height: 4),
+                              ],
+                            ))
+                      ],
+                    )),
+                // const Positioned.fill(
+                //     child: Center(
+                //       child: CircleAvatar(
+                //         radius: 18,
+                //         backgroundColor: Colors.white,
+                //         child: CircleAvatar(
+                //           radius: 15,
+                //           backgroundColor: AppColors.PRIMARY_COLOR,
+                //           child: Icon(
+                //             Icons.add,
+                //             color: Colors.white,
+                //           ),
+                //         ),
+                //       ),
+                //     ))
+              ],
+            ),
+          ),
+        ))
+      ]
     );
   }
 

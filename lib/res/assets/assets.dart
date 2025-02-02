@@ -1,6 +1,8 @@
 abstract class Assets {
   static String spinWheel = 'assets/images/spin.png';
   static String icon = 'assets/images/icon.png';
+  static String tube = 'assets/images/tube.png';
+  static String tubeCat = 'assets/images/tubeCat.jpg';
 
   // lottie
   static String loveReaction = 'assets/lottie/love_reaction.json';
@@ -58,6 +60,7 @@ abstract class Assets {
   static String divorced = 'assets/icons/divorce.png';
   static String widowed = 'assets/icons/widowed.png';
   static String tinder = 'assets/images/tinder.svg';
+  static String openBook = 'assets/images/openBook.png';
   static String social = 'assets/images/social.svg';
   static String hand = 'assets/images/hand.png';
   static String findLogo = 'assets/icons/findLogo.png';

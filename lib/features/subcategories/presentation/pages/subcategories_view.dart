@@ -60,7 +60,7 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
   void _fetchSubcategories() async {
     final subCategoriesList =
         await context.read<SubcategoriesCubit>().getSubcategories(
-              paginationParams: PaginationParams(page: 1, limit: 60),
+              paginationParams: PaginationParams(page: 1, limit: 200),
             );
     setState(() {
       subCategories = subCategoriesList;
@@ -198,6 +198,7 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
           child: PaginationView<SubCategoryEntity>(
             build: (ScrollController scrollController,
                 List<SubCategoryEntity> data) {
+              print("data.length${data.length}");
               return GridView.builder(
                 itemCount: data.length,
                 controller: this.scrollController,
@@ -216,7 +217,7 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
             },
             fetchData: (PaginationParams paginationParams) => context
                 .read<SubcategoriesCubit>()
-                .getSubcategories(paginationParams: paginationParams),
+                .getSubcategories(paginationParams: PaginationParams(limit:200,page: 1)),
           ),
         );
       }),

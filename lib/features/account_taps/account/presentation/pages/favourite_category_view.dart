@@ -13,6 +13,7 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../res/style/styles.dart';
 import '../cubit/managers/favourite_categories_cubit.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
 
 class FavouriteCategoryView extends StatefulWidget {
   const FavouriteCategoryView({super.key});
@@ -37,12 +38,15 @@ class _FavouriteCategoryViewState extends State<FavouriteCategoryView> {
                   child: const CircularProgressIndicator(),
                 )
               : state.data!.isNotEmpty && state.data != null
-                  ? ListView.separated(
+                  ? GridView.builder(
                       padding: EdgeInsets.all(8.w),
+            gridDelegate:
+            const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2, childAspectRatio: 1),
                       itemCount: state.data?.length ?? 0,
-                      separatorBuilder: (context, i) => Sizer(
-                        height: 0.h,
-                      ),
+                      // separatorBuilder: (context, i) => Sizer(
+                      //   height: 0.h,
+                      // ),
                       itemBuilder: (context, i) => Padding(
                         padding: const EdgeInsets.only(bottom: 10.0),
                         child: InkWell(
@@ -51,7 +55,7 @@ class _FavouriteCategoryViewState extends State<FavouriteCategoryView> {
                                 extra: state.data![i]);
                             print('state.data![i]: ${state.data![i].id}');
                           },
-                          child: FavouriteMainCategoryBanner(
+                          child: MainCategoryBanner(
                             category: state.data![i],
                             canRegister: false,
                             onFavorite: () async {
