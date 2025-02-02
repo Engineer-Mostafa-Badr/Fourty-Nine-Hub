@@ -15,6 +15,7 @@ import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
@@ -27,7 +28,6 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/locat
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:liquid_progress_indicator_v2/liquid_progress_indicator.dart';
 
 import '../../../../common/widgets/dynamic/bottom_navigator.dart';
 import '../../../../common/widgets/dynamic/drawer.dart';
@@ -230,7 +230,12 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   : const SizedBox.shrink(),
               ClickableWidget(
                 onTap: () {
-                  context.push(Routes.CUSTOMPAGE);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const EditPage(),
+                    ),
+                  );
                 },
                 child: Container(
                   height: 60.h,
@@ -351,7 +356,6 @@ class _FourtyNineViewState extends State<FourtyNineView>
       ),
     );
   }
-
 
   Widget _buildMainCategoriesViews() {
     return Container(
@@ -592,8 +596,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
       child: Stack(
         children: [
           Positioned.fill(
-            child:
-            AppButton(
+            child: AppButton(
                 color: AppColors.AUTH_CONTAINER_COLOR,
                 label: LocaleKeys.wallets.localize,
                 style: Styles.mediumText(
