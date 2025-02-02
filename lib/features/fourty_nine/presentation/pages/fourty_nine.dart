@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,9 +12,11 @@ import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
+import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
@@ -207,13 +208,20 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   : const SizedBox.shrink(),
               const ScrollableTextWithAnimation(),
 
+
               //wallet
+
               context.read<UserCubit>().isLoggedIn
                   ? const WalletWidget()
                   : const SizedBox.shrink(),
               ClickableWidget(
                 onTap: () {
-                  context.push(Routes.CUSTOMPAGE);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const EditPage(),
+                    ),
+                  );
                 },
                 child: Container(
                   height: 60.h,
@@ -234,10 +242,27 @@ class _FourtyNineViewState extends State<FourtyNineView>
               //    Sizer(),
               //admob
               //   const GoogleAddsBanner(),
-              _buildStarWidget(),
+              // Row(
+              //   children: [
+              //     // Expanded(
+              //     //   child: _walletsWidget(),
+              //     // ),
+              //     // const Sizer(),
+              //     Expanded(child: _buildStarWidget()),
+              //   ],
+              // ),
               const Sizer(),
               //pick me and come with U
-              _pickMeAndComeWithUWidget(),
+              Row(
+                  children: [
+                    Expanded(child: _buildStarWidget()),
+                    const Sizer(),
+                    Expanded(
+                      child: _pickMeAndComeWithUWidget(),
+                    ),
+                  ]
+              ),
+              // _pickMeAndComeWithUWidget(),
               const Sizer(),
               _buildTenPercentWidget(),
               // const Sizer(),
@@ -280,34 +305,40 @@ class _FourtyNineViewState extends State<FourtyNineView>
                     );
                   }
                   if (state.data != null) {
-                    return ListView.separated(
+                    return GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisSpacing: 10,
+                              crossAxisCount: 2,
+                              childAspectRatio: 5 / 4),
                       itemCount: state.data?.length ?? 0,
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
-                        return InkWell(
-                          onTap: () {
-                            AdInterstitialTop.loadIntersitialAd();
-                            AdInterstitialTop.showInterstitialAd();
-                            HandleCashback.setCount(
-                                'mainCategoriesCount', context);
-                            context.push(Routes.SUBCATEGORIES,
-                                extra: state.data![index]);
-                          },
-                          child: MainCategoryBanner(
-                            category: state.data![index],
-                            onFavorite: () async {
-                              var result =
-                                  await controller.toggleFavoriteMedicalService(
-                                      state.data![index].id);
-                              print("result$result");
-                              return result;
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: InkWell(
+                            onTap: () {
+                              AdInterstitialTop.loadIntersitialAd();
+                              AdInterstitialTop.showInterstitialAd();
+                              HandleCashback.setCount(
+                                  'mainCategoriesCount', context);
+                              context.push(Routes.SUBCATEGORIES,
+                                  extra: state.data![index]);
                             },
+                            child: MainCategoryBanner(
+                              category: state.data![index],
+                              onFavorite: () async {
+                                var result = await controller
+                                    .toggleFavoriteMedicalService(
+                                        state.data![index].id);
+                                print("result$result");
+                                return result;
+                              },
+                            ),
                           ),
                         );
                       },
-                      separatorBuilder: (BuildContext context, int index) =>
-                          const Sizer(),
                     );
                   } else {
                     return const SizedBox.shrink();
@@ -339,21 +370,12 @@ class _FourtyNineViewState extends State<FourtyNineView>
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             _buildItemTabBar(
-              SvgPicture.asset(
-                Assets.threeDots,
-                height: 34.h,
-                width: 34.h,
-              ),
+              Icon(Icons.grid_view),
               Routes.MAINCATEGORIESTREE,
               () => HandleCashback.setCount('threeDotsCount', context),
             ),
             _buildItemTabBar(
-                SvgPicture.asset(
-                  Assets.mobile,
-                  height: 34.h,
-                  width: 34.h,
-                ),
-                Routes.MAINCATEGORIESCARDS, () {
+                Icon(Icons.view_carousel), Routes.MAINCATEGORIESCARDS, () {
               AdInterstitialTop.loadIntersitialAd();
               AdInterstitialTop.showInterstitialAd();
               HandleCashback.setCount('mainCategoriesSliderCount', context);
@@ -477,7 +499,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                 iconSize: 50.h,
                 onPressed: () async {
                   HandleCashback.setCount('booking', context);
-                  int? num = await CacheManager.getInt('booking');
+                  int? num = CacheManager.getInt('booking');
                   print(num);
                 }),
           ),
@@ -512,51 +534,70 @@ class _FourtyNineViewState extends State<FourtyNineView>
 
   Widget _buildStarWidget() {
     return SizedBox(
-      height: kToolbarHeight * .9.h,
+      height: kToolbarHeight * 2.h,
       width: double.infinity,
       child: Stack(
         children: [
           Positioned.fill(
-            child: AppButton(
-                color: AppColors.AUTH_CONTAINER_COLOR,
-                label: LocaleKeys.beAStar.localize,
-                style: Styles.mediumText(
-                  color: AppColors.AUTH_CONTAINER_COLOR,
-                  fontWeight: FontWeight.bold,
-                ),
-                icon: Icons.star,
-                iconSize: 50.h,
-                onPressed: () {
+            child: GestureDetector(
+                // color: AppColors.AUTH_CONTAINER_COLOR,
+                // label: LocaleKeys.tube.localize,
+                // style: Styles.mediumText(
+                //   color: AppColors.AUTH_CONTAINER_COLOR,
+                //   fontWeight: FontWeight.bold,
+                // ),
+                // icon: Icons.star,
+                // iconSize: 50.h,
+                onTap: () {
                   AdInterstitialTop.loadIntersitialAd();
                   AdInterstitialTop.showInterstitialAd();
                   HandleCashback.setCount('beAStarCount', context);
                   context.push(Routes.BE_STAR);
-                }),
+                },
+              child:Container(
+                  height: kToolbarHeight * 2.h,
+                  padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    borderRadius: BorderRadius.circular(5),
+                    image:  DecorationImage(
+                      image: AssetImage(Assets.tubeCat),
+                      fit: BoxFit.fill
+                    ),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Color.fromARGB(255, 249, 159, 162),
+                        spreadRadius: 1,
+                        blurRadius: 3,
+                        offset: Offset(1, 1),
+                      )
+                    ],
+                  ),
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children:[
+                      // Image.asset(
+                      //   Assets.tube,
+                      //   height: 35.h,
+                      //   width: 35.h,
+                      //
+                      // ),
+                      // Sizer(width: 10),
+                      Label(
+                        text: LocaleKeys.tube.localize,
+                        style: Styles.mediumText(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 45,
+                        ),
+                      )
+                    ]
+                  ),
+                )
+              )
+            ),
           ),
-          Positioned(
-              bottom: 5,
-              left: 5,
-              child: Icon(
-                Icons.star,
-                size: 20.h,
-                color: AppColors.ACCENT_COLOR,
-              )),
-          Positioned(
-              top: 0,
-              left: 10,
-              child: Icon(
-                Icons.star,
-                size: 20.h,
-                color: AppColors.ACCENT_COLOR,
-              )),
-          Positioned(
-              top: 15,
-              right: 10,
-              child: Icon(
-                Icons.star,
-                size: 20.h,
-                color: AppColors.ACCENT_COLOR,
-              ))
         ],
       ),
     );
@@ -582,7 +623,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   // AdInterstitialTop.loadIntersitialAd();
                   // AdInterstitialTop.showInterstitialAd();
                   // HandleCashback.setCount('beAStarCount', context);
-                  // context.push(Routes.BE_STAR);
+                  context.push(Routes.WALLET);
                 }),
           ),
           Positioned(
@@ -620,52 +661,52 @@ class _FourtyNineViewState extends State<FourtyNineView>
       width: double.infinity,
       child: Row(
         children: [
-          Expanded(
-            child: Stack(
-              children: [
-                Positioned.fill(
-                  child: AppButton(
-                      color: AppColors.AUTH_CONTAINER_COLOR,
-                      label: LocaleKeys.billCashback.localize,
-                      style: Styles.mediumText(
-                        color: AppColors.AUTH_CONTAINER_COLOR,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      icon: Icons.star,
-                      iconSize: 50.h,
-                      onPressed: () {
-                        HandleCashback.setCount('tenPercentCount', context);
-                        context.push(Routes.TenPercent);
-                      }),
-                ),
-                Positioned(
-                    bottom: 5,
-                    left: 5,
-                    child: Icon(
-                      Icons.star,
-                      size: 20.h,
-                      color: AppColors.ACCENT_COLOR,
-                    )),
-                Positioned(
-                    top: 0,
-                    left: 10,
-                    child: Icon(
-                      Icons.star,
-                      size: 20.h,
-                      color: AppColors.ACCENT_COLOR,
-                    )),
-                Positioned(
-                    top: 15,
-                    right: 10,
-                    child: Icon(
-                      Icons.star,
-                      size: 20.h,
-                      color: AppColors.ACCENT_COLOR,
-                    ))
-              ],
-            ),
-          ),
-          const Sizer(),
+          // Expanded(
+          //   child: Stack(
+          //     children: [
+          //       Positioned.fill(
+          //         child: AppButton(
+          //             color: AppColors.AUTH_CONTAINER_COLOR,
+          //             label: LocaleKeys.billCashback.localize,
+          //             style: Styles.mediumText(
+          //               color: AppColors.AUTH_CONTAINER_COLOR,
+          //               fontWeight: FontWeight.bold,
+          //             ),
+          //             icon: Icons.star,
+          //             iconSize: 50.h,
+          //             onPressed: () {
+          //               HandleCashback.setCount('tenPercentCount', context);
+          //               context.push(Routes.TenPercent);
+          //             }),
+          //       ),
+          //       Positioned(
+          //           bottom: 5,
+          //           left: 5,
+          //           child: Icon(
+          //             Icons.star,
+          //             size: 20.h,
+          //             color: AppColors.ACCENT_COLOR,
+          //           )),
+          //       Positioned(
+          //           top: 0,
+          //           left: 10,
+          //           child: Icon(
+          //             Icons.star,
+          //             size: 20.h,
+          //             color: AppColors.ACCENT_COLOR,
+          //           )),
+          //       Positioned(
+          //           top: 15,
+          //           right: 10,
+          //           child: Icon(
+          //             Icons.star,
+          //             size: 20.h,
+          //             color: AppColors.ACCENT_COLOR,
+          //           ))
+          //     ],
+          //   ),
+          // ),
+          // const Sizer(),
           Expanded(
             child: Stack(
               children: [
@@ -809,7 +850,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
           children: [
             Positioned.fill(
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(10.r),
+                borderRadius: BorderRadius.circular(5),
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
@@ -821,7 +862,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                     ),
                     Container(
                       color: Colors.black
-                          .withOpacity(0.6), // Darken the background
+                          .withOpacity(0.4), // Darken the background
                     ),
                   ],
                 ),
@@ -857,13 +898,6 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   // ),
                   const Spacer(),
                   Container(
-                    decoration: BoxDecoration(boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.5),
-                        spreadRadius: 0.03,
-                        blurRadius: 6,
-                      ),
-                    ]),
                     child: Label(
                       // text: service.title(),
                       text: title,

@@ -1,6 +1,8 @@
 abstract class Assets {
   static String spinWheel = 'assets/images/spin.png';
   static String icon = 'assets/images/icon.png';
+  static String tube = 'assets/images/tube.png';
+  static String tubeCat = 'assets/images/tubeCat.jpg';
 
   // lottie
   static String loveReaction = 'assets/lottie/love_reaction.json';
@@ -43,6 +45,13 @@ abstract class Assets {
   static String instaLogo = 'assets/icons/instaLogo.png';
   static String floatImage = 'assets/icons/floatImage.png';
   static String facebookLogo = 'assets/icons/facebookLogo.png';
+  static String facebookAppBarIcon = 'assets/icons/Facebook_app_bar_icon.svg';
+  static String instagramAppBarIcon = 'assets/icons/Instagram_app_bar_icon.svg';
+  static String twitterAppBarIcon = 'assets/icons/Twitter_app_bar_icon.svg';
+  static String homeSocialAppBar = 'assets/icons/home_social_app_bar-icon.svg';
+  static String createPostAppBarIcon = 'assets/icons/create_post_app_bar_icon.svg';
+  static String profileSocialAppBarIcon = 'assets/icons/profile_social_app_bar_icon.svg';
+
   static String twitterLogo = 'assets/icons/twitterLogo.png';
   static String loadingCar = 'assets/icons/loadingCar.png';
   static String comment = 'assets/icons/comment.png';
@@ -51,6 +60,7 @@ abstract class Assets {
   static String divorced = 'assets/icons/divorce.png';
   static String widowed = 'assets/icons/widowed.png';
   static String tinder = 'assets/images/tinder.svg';
+  static String openBook = 'assets/images/openBook.png';
   static String social = 'assets/images/social.svg';
   static String hand = 'assets/images/hand.png';
   static String findLogo = 'assets/icons/findLogo.png';

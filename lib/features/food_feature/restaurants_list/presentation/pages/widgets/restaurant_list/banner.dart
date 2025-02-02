@@ -34,6 +34,7 @@ class MealBanner extends StatelessWidget {
           );
         }
         return MainCategoryBanner(
+          fromHome:false,
           category: state.mainCategory != null
               ? MainCategoryEntity(
                   id: state.mainCategory?.id ?? "",

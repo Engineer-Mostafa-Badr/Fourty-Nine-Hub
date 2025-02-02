@@ -61,20 +61,27 @@ class _RiderBannerState extends State<RiderBanner> {
         }
       },
       child: MainCategoryBanner(
+        fromHome: false,
         removeFavorite: true,
         onFavorite: () {
           log("message");
           if (isFavrote) {
+            log("messageTrue");
             context
                 .read<FavoriteMainCateogryCubit>()
                 .favorite(widget.model.mainCategory?.mainCategoryId ?? "");
+            widget.model.mainCategory?.isFavorite = false;
             isFavrote = false;
+            setState(() {});
             return isFavrote;
           } else {
+            log("messageFalse");
             context
                 .read<FavoriteMainCateogryCubit>()
                 .favorite(widget.model.mainCategory?.mainCategoryId ?? "");
+            widget.model.mainCategory?.isFavorite = true;
             isFavrote = true;
+            setState(() {});
             return isFavrote;
           }
         },

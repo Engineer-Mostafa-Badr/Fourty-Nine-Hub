@@ -29,6 +29,7 @@ class MealBanner extends StatelessWidget {
         }
         if (state.mainCategory != null) {
           return MainCategoryBanner(
+            fromHome:false,
             category: state.mainCategory!,
             canRegister: state.isResturant == true ? false : true,
             onRegister: () {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_post_buttom_sheet_without_mention_widget.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_post_review_widget.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_user_info_with_mention_post_widget.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instgram_images_post_widget.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
@@ -13,13 +14,14 @@ class InstagramPostWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(10),
+      
       child: Column(
         children: [
           Row(
             children: [
               
-              InstagramUserInfoWithMentionPostWidget(isMenchan: mechan,),
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 10),child: InstagramUserInfoWithMentionPostWidget(isMenchan: mechan,)),
               const Spacer(),
               GestureDetector(
                   onTap: () {
@@ -35,80 +37,14 @@ class InstagramPostWidget extends StatelessWidget {
           ),
           const Sizer(),
           InstgramImagesPostWidget(
-            images: multiImage?[""]: [
+            images: multiImage?["https://s3-alpha-sig.figma.com/img/5e83/cdfd/ce7e32c5013518aa6e932c543a55a3c9?Expires=1739145600&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=jmpIB5No3HV98vRcBvhx1fi37cVWck8LKeso2GDfo2~wg~uP-CPoQ1AeRqEpvM1N1QY3pFStGWQiYYriRQ1TgM6PajF-AGLKPWDW-gYxZVfUHehXmV2yiy1NwEMbyaWluTarHOv-PoLPuY~KDBR955FSqt1G1-yjvsDolhiYqeR4Fkngj3mQJNCuNob8XqKSzj2-njZM3iIgQW7YN-1yDtCqPihLauQqVpPep3Z2IBHFPq3kphlm2N9TDkRJXgqqYCkwh36IjWRRzCXottwxEkH-Jf5DLrR28dWLV6pte3LNTRGAezcERRNHwxl6geCGfSrrEBe7ft6MfEuxOUvy5A__"]: [
               "",
               "",
             ],
           ),
           const Sizer(),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Icon(
-                Icons.favorite_outline,
-                size: 35,
-              ),
-              const Sizer(
-                width: 3,
-              ),
-              Text(
-                "30",
-                style: Styles.headerText(fontSize: 45),
-              ),
-              const Sizer(
-                width: 25,
-              ),
-              Image.asset(
-                Assets.instagramCommentIcon,
-                width: 30,
-              ),
-              const Sizer(
-                width: 30,
-              ),
-              Image.asset(
-                Assets.instagramSharePostIcon,
-                width: 30,
-              ),
-              const Spacer(),
-              const Icon(
-                Icons.bookmark_border_outlined,
-                size: 35,
-              )
-            ],
-          ),
-          const Sizer(),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text.rich(TextSpan(children: [
-                TextSpan(
-                    text: "Liked by ",
-                    style: Styles.headerText(fontWeight: FontWeight.w400)),
-                TextSpan(
-                    text: "ahmedshede_official and athers",
-                    style: Styles.headerText())
-              ])),
-              Text.rich(TextSpan(children: [
-                TextSpan(
-                    text: "maihelmy.official ",
-                    style: Styles.headerText(fontWeight: FontWeight.bold)),
-                TextSpan(
-                    text: "Post description",
-                    style: Styles.headerText(fontWeight: FontWeight.w400))
-              ])),
-            ],
-          ),
-          const Sizer(
-            height: 10,
-          ),
-          Row(
-            children: [
-              Text(
-                "1 day ago",
-                style: Styles.mediumText(),
-              ),
-            ],
-          )
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 10),child: const InstagramPostReviewWidget())
         ],
       ),
     );

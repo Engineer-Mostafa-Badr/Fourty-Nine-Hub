@@ -12,6 +12,7 @@ class CreatePostState {
   final PlaceEntity? place;
   final List<UploadFileEntity>? images;
   final UploadFileEntity? audio;
+  final String? gifImage;
   final List<PostUserEntity>? users;
   final List<PostUserEntity>? selectedUsers;
   final String? selectedPrivacy;
@@ -26,6 +27,7 @@ class CreatePostState {
       this.failure,
       this.images,
       this.audio,
+      this.gifImage,
       this.activities,
       this.feelings,
       this.backColor = "#FFFFFFFF",
@@ -45,6 +47,7 @@ class CreatePostState {
     List<UploadFileEntity>? images,
     UploadFileEntity? audio,
     Failure? failure,
+    String? gifImage,
     List<ActivityEntity>? activities,
     List<FeelingEntity>? feelings,
     ActivityEntity? selectedActivity,
@@ -79,6 +82,7 @@ class CreatePostState {
       isBiggerThen150: isBiggerThen150 ?? this.isBiggerThen150,
       isBiggerThen120: isBiggerThen120 ?? this.isBiggerThen120,
       music: music ?? this.music,
+      gifImage: gifImage ?? this.gifImage,
     );
   }
 }

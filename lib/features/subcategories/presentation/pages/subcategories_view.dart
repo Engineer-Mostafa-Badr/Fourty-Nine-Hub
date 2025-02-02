@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/common/widgets/stateful/dynamic/pagination_view.dart';
@@ -12,7 +13,6 @@ import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/subcategory_card.dart';
-
 
 import '../../../../common/widgets/stateless/images/square_image.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
@@ -31,23 +31,37 @@ class SubCategoriesView extends StatefulWidget {
 
 class _SubCategoriesViewState extends State<SubCategoriesView> {
   @override
+  late ScrollController scrollController;
+  bool isFloatingButtonVisible = true;
   void initState() {
     context
         .read<SubcategoriesCubit>()
         .init(mainCategoryId: widget.mainCategory.id);
-    context.read<SubcategoriesCubit>().init(mainCategoryId: widget.mainCategory.id);
+    context
+        .read<SubcategoriesCubit>()
+        .init(mainCategoryId: widget.mainCategory.id);
     _fetchSubcategories();
+    scrollController = ScrollController();
+    scrollController.addListener(() {
+      if (scrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
+        isFloatingButtonVisible = false;
+      } else {
+        isFloatingButtonVisible = true;
+      }
+      setState(() {});
+    });
     super.initState();
   }
 
   List<SubCategoryEntity> subCategories = [];
   String? selectedValue;
 
-
   void _fetchSubcategories() async {
-    final subCategoriesList = await context.read<SubcategoriesCubit>().getSubcategories(
-      paginationParams: PaginationParams(page: 1, limit: 60),
-          );
+    final subCategoriesList =
+        await context.read<SubcategoriesCubit>().getSubcategories(
+              paginationParams: PaginationParams(page: 1, limit: 200),
+            );
     setState(() {
       subCategories = subCategoriesList;
     });
@@ -60,8 +74,10 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
       return;
     }
     final RenderBox button = context.findRenderObject() as RenderBox;
-    final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
-    final double bottomPadding = MediaQuery.of(context).viewInsets.bottom + 200.0;
+    final RenderBox overlay =
+        Overlay.of(context).context.findRenderObject() as RenderBox;
+    final double bottomPadding =
+        MediaQuery.of(context).viewInsets.bottom + 200.0;
 
     final RelativeRect position = RelativeRect.fromLTRB(
       overlay.size.width - 300,
@@ -69,7 +85,6 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
       50,
       bottomPadding,
     );
-    
 
     final String? selected = await showMenu<String>(
         color: Colors.white,
@@ -78,7 +93,7 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         context: context,
         position: position,
-        items:  [
+        items: [
           PopupMenuItem<String>(
             child: ConstrainedBox(
               constraints: const BoxConstraints(
@@ -89,7 +104,8 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                   children: subCategories.map((SubCategoryEntity item) {
                     return Column(
                       children: [
-                        ListTile(contentPadding: const EdgeInsets.all(0),
+                        ListTile(
+                          contentPadding: const EdgeInsets.all(0),
                           dense: true,
                           title: Label(text: context.isArabic?item.nameAr:item.nameEn , style: Styles.mediumText(fontWeight: FontWeight.bold)),
                           onTap: () {
@@ -102,7 +118,11 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                             }
                           },
                         ),
-                        Divider(height: 1,thickness: 1,color: Colors.grey.shade300,)
+                        Divider(
+                          height: 1,
+                          thickness: 1,
+                          color: Colors.grey.shade300,
+                        )
                       ],
                     );
                   }).toList(),
@@ -110,8 +130,7 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
               ),
             ),
           ),
-        ]
-    );
+        ]);
 
     if (selected != null) {
       setState(() {
@@ -173,39 +192,40 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
       ),
       body: BlocBuilder<SubcategoriesCubit, SubcategoriesState>(
           builder: (context, state) {
-            final controller = context.read<SubcategoriesCubit>();
-            return Padding(
-              padding: EdgeInsets.all(16.0.w),
-              child: PaginationView<SubCategoryEntity>(
-                build: (ScrollController scrollController,
-                    List<SubCategoryEntity> data) {
-                  return GridView.builder(
-                    itemCount: data.length,
-                    controller: scrollController,
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3, childAspectRatio: 1),
-                    itemBuilder: (context, index) =>
-                        SubCategoryCard(
-                          mainCategory: widget.mainCategory,
-                          item: data[index],
-                          onFav: () async {
-                            var result = await controller
-                                .toggleSubCategoryToFavorites(data[index].id);
-                            return result;
-                          },
-                        ),
-                  );
-                },
-                fetchData: (PaginationParams paginationParams) =>
-                    context
-                        .read<SubcategoriesCubit>()
-                        .getSubcategories(paginationParams: paginationParams),
-              ),
-            );
-          }),
-      floatingActionButton: buildFloatingAction(context, () {
-        _showDropdownMenu(context);
+        final controller = context.read<SubcategoriesCubit>();
+        return Padding(
+          padding: EdgeInsets.all(16.0.w),
+          child: PaginationView<SubCategoryEntity>(
+            build: (ScrollController scrollController,
+                List<SubCategoryEntity> data) {
+              print("data.length${data.length}");
+              return GridView.builder(
+                itemCount: data.length,
+                controller: this.scrollController,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3, childAspectRatio: 1),
+                itemBuilder: (context, index) => SubCategoryCard(
+                  mainCategory: widget.mainCategory,
+                  item: data[index],
+                  onFav: () async {
+                    var result = await controller
+                        .toggleSubCategoryToFavorites(data[index].id);
+                    return result;
+                  },
+                ),
+              );
+            },
+            fetchData: (PaginationParams paginationParams) => context
+                .read<SubcategoriesCubit>()
+                .getSubcategories(paginationParams: PaginationParams(limit:200,page: 1)),
+          ),
+        );
       }),
+      floatingActionButton: isFloatingButtonVisible
+          ? buildFloatingAction(context, () {
+              _showDropdownMenu(context);
+            })
+          : null,
     );
   }
 

@@ -1,26 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
 
 import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 
-Widget buildFloatingAction(BuildContext context,Function()onTap){
-  return FloatingActionButton.extended(
+Widget buildFloatingAction(BuildContext context, Function() onTap) {
+  return CustomElevatedButton(
     onPressed: () {
       onTap();
     },
-    backgroundColor: AppColors.PRIMARY_COLOR,
-    icon: const Icon(
-      Icons.add,
-      color: Colors.white,
-    ),
-    label: Label(
-      text: LocaleKeys.addAde.localize,
-      style: Styles.mediumText(
-          fontWeight: FontWeight.bold,color: Colors.white),
+    backgoundColor: AppColors.PRIMARY_COLOR,
+    child: Label(
+      text: '${LocaleKeys.addAde.localize} +',
+      style:
+          Styles.mediumText(fontWeight: FontWeight.bold, color: Colors.white),
     ),
   );
 }
-

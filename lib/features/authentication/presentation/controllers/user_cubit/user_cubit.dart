@@ -24,7 +24,6 @@ import 'package:fourtyninehub/features/authentication/domain/use_cases/update_us
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 import 'package:fourtyninehub/shared_web_socket.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../common/functions/global/upload_file.dart';
 import '../../../../../core/utils/shared_pref.dart';

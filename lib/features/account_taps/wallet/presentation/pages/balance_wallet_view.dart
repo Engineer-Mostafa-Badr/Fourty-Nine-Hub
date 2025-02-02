@@ -138,56 +138,56 @@ class _BalanceWalletViewState extends State<BalanceWalletView> {
                     // if (state.balance?.openBalance == true && state.withdraw?.data == false )
                     //   Label(text: LocaleKeys.checkRequest.localize,color:AppColors.SECONDARY_COLOR,),
 
-                    _buildWalletActionItem(
-                        label:
-                            '${LocaleKeys.gift.localize} / 5 ${LocaleKeys.years.localize}',
-                        subTitle:
-                            '${state.balance?.fiveYears ?? ''}  ${state.balance?.fiveYearsLeft ?? ''} ${LocaleKeys.yearsLast.localize}',
-                        ontap: state.balance?.fiveYearsComplete == true
-                            ? () {}
-                            : state.balance?.fiveYearsTransfer == true
-                                ? () {
-                                    context
-                                        .read<BalanceCubit>()
-                                        .transferFiveBalance();
-                                  }
-                                : () {},
-                        color: state.balance?.fiveYearsComplete == true
-                            ? Theme.of(context).primaryColor
-                            : state.balance?.fiveYearsTransfer == true
-                                ? AppColors.SECONDARY_COLOR
-                                : AppColors.SECONDARY_COLOR.withOpacity(.5),
-                        transfer: state.balance?.fiveYearsComplete == true
-                            ? LocaleKeys.complete.localize
-                            : LocaleKeys.transfer.localize,
-                        textColor: state.balance?.fiveYearsComplete == true
-                            ? Theme.of(context).scaffoldBackgroundColor
-                            : AppColors.AUTH_CONTAINER_COLOR),
-                    _buildWalletActionItem(
-                        label:
-                            '${LocaleKeys.gift.localize} / 10 ${LocaleKeys.years.localize}',
-                        subTitle:
-                            '${state.balance?.tenYears ?? ''}  ${state.balance?.tenYearsLeft ?? ''} ${LocaleKeys.yearsLast.localize}',
-                        ontap: state.balance?.tenYearsComplete == true
-                            ? () {}
-                            : state.balance?.tenYearsTransfer == true
-                                ? () {
-                                    context
-                                        .read<BalanceCubit>()
-                                        .transferTenBalance();
-                                  }
-                                : () {},
-                        color: state.balance?.tenYearsComplete == true
-                            ? Theme.of(context).primaryColor
-                            : state.balance?.tenYearsTransfer == true
-                                ? AppColors.SECONDARY_COLOR
-                                : AppColors.SECONDARY_COLOR.withOpacity(.5),
-                        transfer: state.balance?.tenYearsComplete == true
-                            ? LocaleKeys.complete.localize
-                            : LocaleKeys.transfer.localize,
-                        textColor: state.balance?.tenYearsComplete == true
-                            ? Theme.of(context).scaffoldBackgroundColor
-                            : AppColors.AUTH_CONTAINER_COLOR),
+                    // _buildWalletActionItem(
+                    //     label:
+                    //         '${LocaleKeys.gift.localize} / 5 ${LocaleKeys.years.localize}',
+                    //     subTitle:
+                    //         '${state.balance?.fiveYears ?? ''}  ${state.balance?.fiveYearsLeft ?? ''} ${LocaleKeys.yearsLast.localize}',
+                    //     ontap: state.balance?.fiveYearsComplete == true
+                    //         ? () {}
+                    //         : state.balance?.fiveYearsTransfer == true
+                    //             ? () {
+                    //                 context
+                    //                     .read<BalanceCubit>()
+                    //                     .transferFiveBalance();
+                    //               }
+                    //             : () {},
+                    //     color: state.balance?.fiveYearsComplete == true
+                    //         ? Theme.of(context).primaryColor
+                    //         : state.balance?.fiveYearsTransfer == true
+                    //             ? AppColors.SECONDARY_COLOR
+                    //             : AppColors.SECONDARY_COLOR.withOpacity(.5),
+                    //     transfer: state.balance?.fiveYearsComplete == true
+                    //         ? LocaleKeys.complete.localize
+                    //         : LocaleKeys.transfer.localize,
+                    //     textColor: state.balance?.fiveYearsComplete == true
+                    //         ? Theme.of(context).scaffoldBackgroundColor
+                    //         : AppColors.AUTH_CONTAINER_COLOR),
+                    // _buildWalletActionItem(
+                    //     label:
+                    //         '${LocaleKeys.gift.localize} / 10 ${LocaleKeys.years.localize}',
+                    //     subTitle:
+                    //         '${state.balance?.tenYears ?? ''}  ${state.balance?.tenYearsLeft ?? ''} ${LocaleKeys.yearsLast.localize}',
+                    //     ontap: state.balance?.tenYearsComplete == true
+                    //         ? () {}
+                    //         : state.balance?.tenYearsTransfer == true
+                    //             ? () {
+                    //                 context
+                    //                     .read<BalanceCubit>()
+                    //                     .transferTenBalance();
+                    //               }
+                    //             : () {},
+                    //     color: state.balance?.tenYearsComplete == true
+                    //         ? Theme.of(context).primaryColor
+                    //         : state.balance?.tenYearsTransfer == true
+                    //             ? AppColors.SECONDARY_COLOR
+                    //             : AppColors.SECONDARY_COLOR.withOpacity(.5),
+                    //     transfer: state.balance?.tenYearsComplete == true
+                    //         ? LocaleKeys.complete.localize
+                    //         : LocaleKeys.transfer.localize,
+                    //     textColor: state.balance?.tenYearsComplete == true
+                    //         ? Theme.of(context).scaffoldBackgroundColor
+                    //         : AppColors.AUTH_CONTAINER_COLOR),
                     const Sizer(),
                     Label(
                       text: LocaleKeys.history.localize,

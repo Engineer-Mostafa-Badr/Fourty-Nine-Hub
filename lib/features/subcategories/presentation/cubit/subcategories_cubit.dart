@@ -103,7 +103,7 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
     print('useeeerId===>$user}');
     final response = await _getSubcategoriesUsecase(GetSubCategoriesParams(
         mainCategoryId: id,
-        paginationParams: PaginationParams(page: 1, limit: 30),
+        paginationParams: PaginationParams(page: 1, limit: 200),
         userId: user ?? ''));
     response.fold(
         (failure) => emit(state.copyWith(

@@ -145,6 +145,7 @@ dependencies:
   image_cropper: ^7.0.5
   photo_manager: ^3.6.3
   giphy_get: ^3.6.0
+  liquid_progress_indicator_v2: ^0.5.0
 #  photo_manager: ^3.6.3
   # photo_manager: ^3.6.3
 dependency_overrides:
@@ -153,7 +154,7 @@ dependency_overrides:
   permission_handler: ^11.0.1
   text_scroll: null
   auto_scroll_text: null
-  wakelock_plus: ^1.2.8
+  # wakelock_plus: ^1.2.8
 dev_dependencies:
   build_runner: ^2.4.9
   flutter_lints: ^4.0.0

@@ -44,9 +44,9 @@ class _SubCategoryCardState extends State<SubCategoryCard> {
         decoration: BoxDecoration(
             color: Theme.of(context).scaffoldBackgroundColor,
             borderRadius: BorderRadius.circular(5),
-            boxShadow: const [
+            boxShadow: [
               BoxShadow(
-                  color: Colors.grey,
+                  color: Colors.grey.withOpacity(0.5),
                   spreadRadius: 1,
                   offset: Offset(-1, 1),
                   blurRadius: 5)
@@ -64,6 +64,9 @@ class _SubCategoryCardState extends State<SubCategoryCard> {
                       url: widget.item.image,
                     ),
                   ),
+                  Container(
+                    color: Colors.black.withOpacity(0.4),
+                  ),
                   if (context.read<UserCubit>().isLoggedIn)
                     PositionedDirectional(
                         top: 10.h,
@@ -77,8 +80,7 @@ class _SubCategoryCardState extends State<SubCategoryCard> {
                                   spreadRadius: 0.03,
                                   blurRadius: 6,
                                 ),
-                              ]
-                          ),
+                              ]),
                           child: IconAppButton(
                             icon: widget.item.isFavorite == false
                                 ? Icons.favorite_outline
@@ -86,7 +88,8 @@ class _SubCategoryCardState extends State<SubCategoryCard> {
                             onPressed: () async {
                               var result = await widget.onFav();
                               if (result == true) {
-                                widget.item.isFavorite = !widget.item.isFavorite!;
+                                widget.item.isFavorite =
+                                    !widget.item.isFavorite!;
                                 setState(() {});
                               }
                             },
