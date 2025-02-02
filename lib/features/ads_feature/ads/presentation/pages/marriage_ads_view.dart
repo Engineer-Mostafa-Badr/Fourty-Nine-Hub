@@ -24,6 +24,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/request_button.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 
 class MarriageSubCategoriesView extends StatefulWidget {
   final MainCategoryEntity mainCategory;
@@ -122,7 +123,7 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: AppColors.PRIMARY_COLOR,
                       borderRadius: BorderRadius.circular(20.r),
                       border: Border.all(color: AppColors.PRIMARY_COLOR),
                     ),
@@ -130,6 +131,7 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                     child: Label(
                       text:
                           "${LocaleKeys.add.localize} ${LocaleKeys.ad.localize} ${context.isArabic ? "${context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameAr}" : "${context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameEn}"}",
+                      style:Styles.mediumText(color: Colors.white),
                     ),
                   )),
               body: Padding(
@@ -139,6 +141,7 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                     state.mainCategory == null
                         ? Container()
                         : MainCategoryBanner(
+                      fromHome:false,
                             category: context
                                 .read<SubcategoriesCubit>()
                                 .state
@@ -258,6 +261,7 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                             alignment: AlignmentDirectional.center,
                             padding: EdgeInsets.all(6.w),
                             margin: EdgeInsets.all(2.w),
+                            width: 280.w,
                             decoration: BoxDecoration(
                               color: state.subCategories?[index].isSelected ==
                                       true

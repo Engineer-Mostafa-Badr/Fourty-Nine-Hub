@@ -55,140 +55,188 @@ class WalletWidget extends StatelessWidget {
             child: Row(
               children: [
                 Expanded(
-                  child: SizedBox(
-                    height: 200.h,
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: LiquidCircularProgressIndicator(
-                            value: state.wallet?.balanceRatio.toDouble() ??
-                                0, // Defaults to 0.5.
-                            valueColor: const AlwaysStoppedAnimation(AppColors
-                                .SECONDARY_COLOR), // Defaults to the current Theme's accentColor.
-                            backgroundColor: Colors.white, // Defaults to the current Theme's backgroundColor.
-                            borderColor: AppColors.PRIMARY_COLOR,
-                            borderWidth: 2,
-                            direction: Axis
-                                .vertical, // The direction the liquid moves (Axis.vertical = bottom to top, Axis.horizontal = left to right). Defaults to Axis.vertical.
-                            center: Container(
-                              decoration: const BoxDecoration(boxShadow: [
-                                // BoxShadow(
-                                //     color: Colors.grey,
-                                //     spreadRadius: 0.01,
-                                //     offset: Offset(-1, 1),
-                                //     blurRadius: 20)
-                              ]),
-                              child: Label(
-                                text: (FormatNumbers().formatNumber(state.wallet?.balance ?? 0)),
-                                style: Styles.mediumText(
-                                  color: AppColors.PRIMARY_COLOR,
-                                    fontSize: 35,
-                                    fontWeight: FontWeight.bold),
-                              ),
+                  child: GestureDetector(
+                    onTap: () {
+                      AdInterstitialTop.loadIntersitialAd();
+                      AdInterstitialTop.showInterstitialAd();
+                      context.push(Routes.BALANCE);
+
+                    },
+                    child:SizedBox(
+                      height: 200.h,
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: GestureDetector(
+                                onTap: () {
+                                  AdInterstitialTop.loadIntersitialAd();
+                                  AdInterstitialTop.showInterstitialAd();
+                                  context.push(Routes.BALANCE);
+
+                                },
+                                child:LiquidCircularProgressIndicator(
+                                  value: state.wallet?.balanceRatio.toDouble() ??
+                                      0, // Defaults to 0.5.
+                                  valueColor: const AlwaysStoppedAnimation(AppColors
+                                      .SECONDARY_COLOR), // Defaults to the current Theme's accentColor.
+                                  backgroundColor: Colors.white, // Defaults to the current Theme's backgroundColor.
+                                  borderColor: AppColors.PRIMARY_COLOR,
+                                  borderWidth: 2,
+                                  direction: Axis
+                                      .vertical, // The direction the liquid moves (Axis.vertical = bottom to top, Axis.horizontal = left to right). Defaults to Axis.vertical.
+                                  center: Container(
+                                    decoration: const BoxDecoration(boxShadow: [
+                                      // BoxShadow(
+                                      //     color: Colors.grey,
+                                      //     spreadRadius: 0.01,
+                                      //     offset: Offset(-1, 1),
+                                      //     blurRadius: 20)
+                                    ]),
+                                    child: Label(
+                                      text: (FormatNumbers().formatNumber(state.wallet?.balance ?? 0)),
+                                      style: Styles.mediumText(
+                                          color: AppColors.PRIMARY_COLOR,
+                                          fontSize: 35,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                )
                             ),
                           ),
-                        ),
-                        const Sizer(),
-                        Label(
-                            text: LocaleKeys.balance.tr(),
-                            style:
-                                Styles.mediumText(fontWeight: FontWeight.bold)),
-                      ],
-                    ),
+                          const Sizer(),
+                          Label(
+                              text: LocaleKeys.balance.tr(),
+                              style:
+                              Styles.mediumText(fontWeight: FontWeight.bold)),
+                        ],
+                      ),
+                    )
                   ),
                 ),
                 const Sizer(width: 50,),
                 Expanded(
-                  child: SizedBox(
-                    height: 200.h,
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: LiquidCircularProgressIndicator(
-                              value: state.wallet?.giftWalletRatio.toDouble() ??
-                                  0, // Defaults to 0.5.
-                              valueColor: const AlwaysStoppedAnimation(AppColors
-                                  .SECONDARY_COLOR), // Defaults to the current Theme's accentColor.
-                              backgroundColor: Colors.white, // Defaults to the current Theme's backgroundColor.
-                              borderColor: AppColors.PRIMARY_COLOR,
-                              borderWidth: 2,
-                              direction: Axis
-                                  .vertical, // The direction the liquid moves (Axis.vertical = bottom to top, Axis.horizontal = left to right). Defaults to Axis.vertical.
-                              center: Container(
-                                decoration: const BoxDecoration(boxShadow: [
-                                  // BoxShadow(
-                                  //     color: Colors.grey,
-                                  //     spreadRadius: 0.01,
-                                  //     offset: Offset(-1, 1),
-                                  //     blurRadius: 20)
-                                ]),
-                                child: Label(
-                                  text: (FormatNumbers().formatNumber(state.wallet?.giftWallet ?? 0)),
-                                  style: Styles.mediumText(
-                                      color: AppColors.PRIMARY_COLOR,
-                                      fontSize: 35,
-                                      fontWeight: FontWeight.bold),
+                  child: GestureDetector(
+                    onTap: () {
+                      print("objectUser}");
+                      AdInterstitialTop.loadIntersitialAd();
+                      AdInterstitialTop.showInterstitialAd();
+                      context.push(Routes.GIFT);
+                    },
+                    child:SizedBox(
+                      height: 200.h,
+                      child: Column(
+                        children: [
+                          Expanded(
+                              child: InkWell(
+                                onTap: () {
+                                  print("objectUser}");
+                                  AdInterstitialTop.loadIntersitialAd();
+                                  AdInterstitialTop.showInterstitialAd();
+                                  context.push(Routes.GIFT);
+                                },
+                                child:LiquidCircularProgressIndicator(
+                                    value: state.wallet?.giftWalletRatio.toDouble() ??
+                                        0, // Defaults to 0.5.
+                                    valueColor: const AlwaysStoppedAnimation(AppColors
+                                        .SECONDARY_COLOR), // Defaults to the current Theme's accentColor.
+                                    backgroundColor: Colors.white, // Defaults to the current Theme's backgroundColor.
+                                    borderColor: AppColors.PRIMARY_COLOR,
+                                    borderWidth: 2,
+                                    direction: Axis
+                                        .vertical, // The direction the liquid moves (Axis.vertical = bottom to top, Axis.horizontal = left to right). Defaults to Axis.vertical.
+                                    center: Container(
+                                      decoration: const BoxDecoration(boxShadow: [
+                                        // BoxShadow(
+                                        //     color: Colors.grey,
+                                        //     spreadRadius: 0.01,
+                                        //     offset: Offset(-1, 1),
+                                        //     blurRadius: 20)
+                                      ]),
+                                      child: Label(
+                                        text: (FormatNumbers().formatNumber(state.wallet?.giftWallet ?? 0)),
+                                        style: Styles.mediumText(
+                                            color: AppColors.PRIMARY_COLOR,
+                                            fontSize: 35,
+                                            fontWeight: FontWeight.bold),
 
+                                      ),
+                                    )
+                                  // Text(
+                                  //     LocaleKeys.gift.tr()),
                                 ),
                               )
-                              // Text(
-                              //     LocaleKeys.gift.tr()),
-                              ),
-                        ),
-                        const Sizer(),
-                        Label(
-                            text: LocaleKeys.gift.tr(),
-                            style:
-                                Styles.mediumText(fontWeight: FontWeight.bold)),
-                      ],
-                    ),
+
+
+                          ),
+                          const Sizer(),
+                          Label(
+                              text: LocaleKeys.gift.tr(),
+                              style:
+                              Styles.mediumText(fontWeight: FontWeight.bold)),
+                        ],
+                      ),
+                    )
                   ),
                 ),
                 const Sizer(width: 50,),
                 Expanded(
-                  child: SizedBox(
-                    height: 200.h,
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: LiquidCircularProgressIndicator(
-                            value: state.wallet?.realAmountRatio.toDouble() ??
-                                0, // Defaults to 0.5.
-                            valueColor: const AlwaysStoppedAnimation(AppColors
-                                .SECONDARY_COLOR), // Defaults to the current Theme's accentColor.
-                            backgroundColor: Colors.white, // Defaults to the current Theme's backgroundColor.
-                            borderColor: AppColors.PRIMARY_COLOR,
-                            borderWidth: 2,
-                            direction: Axis
-                                .vertical, // The direction the liquid moves (Axis.vertical = bottom to top, Axis.horizontal = left to right). Defaults to Axis.vertical.
-                            center: Container(
-                              decoration:  BoxDecoration(boxShadow: [
-                                // BoxShadow(
-                                //     color: Colors.grey,
-                                //     spreadRadius: 0.01,
-                                //     offset: Offset(-1, 1),
-                                //     blurRadius: 20)
-                              ]),
-                              child: Label(
-                                text: (FormatNumbers().formatNumber(state.wallet?.realAmount ?? 0)),
-                                style: Styles.mediumText(
-                                    color: AppColors.PRIMARY_COLOR,
-                                    fontSize: 35,
-                                    fontWeight: FontWeight.bold),
+                  child: GestureDetector(
+                    onTap: () {
+                      AdInterstitialTop.loadIntersitialAd();
+                      AdInterstitialTop.showInterstitialAd();
+                      context.push(Routes.WALLET);
+                    },
+                    child:SizedBox(
+                      height: 200.h,
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                AdInterstitialTop.loadIntersitialAd();
+                                AdInterstitialTop.showInterstitialAd();
+                                context.push(Routes.WALLET);
+                              },
+                              child:LiquidCircularProgressIndicator(
+                                value: state.wallet?.realAmountRatio.toDouble() ??
+                                    0, // Defaults to 0.5.
+                                valueColor: const AlwaysStoppedAnimation(AppColors
+                                    .SECONDARY_COLOR), // Defaults to the current Theme's accentColor.
+                                backgroundColor: Colors.white, // Defaults to the current Theme's backgroundColor.
+                                borderColor: AppColors.PRIMARY_COLOR,
+                                borderWidth: 2,
+                                direction: Axis
+                                    .vertical, // The direction the liquid moves (Axis.vertical = bottom to top, Axis.horizontal = left to right). Defaults to Axis.vertical.
+                                center: Container(
+                                  decoration:  BoxDecoration(boxShadow: [
+                                    // BoxShadow(
+                                    //     color: Colors.grey,
+                                    //     spreadRadius: 0.01,
+                                    //     offset: Offset(-1, 1),
+                                    //     blurRadius: 20)
+                                  ]),
+                                  child: Label(
+                                    text: (FormatNumbers().formatNumber(state.wallet?.realAmount ?? 0)),
+                                    style: Styles.mediumText(
+                                        color: AppColors.PRIMARY_COLOR,
+                                        fontSize: 35,
+                                        fontWeight: FontWeight.bold),
 
-                              ),
+                                  ),
 
-                              // Text(LocaleKeys.wallet.tr() ,
+                                  // Text(LocaleKeys.wallet.tr() ,
+                                ),
+                              )
                             ),
                           ),
-                        ),
-                        const Sizer(),
-                        Label(
-                            text: LocaleKeys.wallet.tr(),
-                            style:
-                                Styles.mediumText(fontWeight: FontWeight.bold)),
-                      ],
-                    ),
+                          const Sizer(),
+                          Label(
+                              text: LocaleKeys.wallet.tr(),
+                              style:
+                              Styles.mediumText(fontWeight: FontWeight.bold)),
+                        ],
+                      ),
+                    )
                   ),
                 ),
               ],

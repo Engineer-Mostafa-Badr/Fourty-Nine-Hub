@@ -35,7 +35,7 @@ class FavSubCategoryView extends StatelessWidget {
                       // ignore: unnecessary_const
                       child: const CircularProgressIndicator(),
                     )
-                  : state.data!.isNotEmpty && state.data != null
+                  : state.data != null&&state.data!.isNotEmpty
                       ? GridView.builder(
                           itemCount: state.data?.length,
                           gridDelegate:
