@@ -47,6 +47,10 @@ class CreatePostCubit extends Cubit<CreatePostState> {
   // void removeMusic() {
   //   emit(state.copyWith(music: null));
   // }
+  //
+  onSelectGif(String gifPath) {
+    emit(state.copyWith(gifImage: gifPath,status: CreatePostStates.success));
+  }
 
   final AudioPlayer _audioPlayer = AudioPlayer();
 
