@@ -1003,6 +1003,8 @@ class EndPoints {
   static String getProfileviewsByUserId(
           {required String viewAction, required String userId}) =>
       '/users/profile-view/$userId?viewAction=$viewAction';
+
+      static String getUnreadedChatsCounter() => '/chat/count-unread';
   //club voice
   static String allClubVoiceRooms = '/clubvoice';
   static String createClubVoiceRoom = '/clubvoice';

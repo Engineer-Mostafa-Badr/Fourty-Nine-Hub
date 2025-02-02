@@ -22,6 +22,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/chat_room_widgets/recived_file.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/chat_room_widgets/send_file.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/widgets_contacts/send_contacts.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -199,7 +200,10 @@ class MessageCard extends StatelessWidget {
             radius: 15,
             backgroundColor:
                 context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
-            backgroundImage: const NetworkImage(UIConst.profilePlaceHolder),
+            backgroundImage: NetworkImage(
+                context.read<ChatsCubit>().selectedChat.isAdmin == "admin"
+                    ? context.read<ChatsCubit>().selectedChat.avatar
+                    : UIConst.profilePlaceHolder),
           ),
           const Sizer(width: 5),
           Padding(
@@ -665,8 +669,10 @@ class MessageCard extends StatelessWidget {
                   backgroundColor: context.isDarkMode
                       ? AppColors.QUANTITY_COLOR
                       : Colors.white,
-                  backgroundImage:
-                      const NetworkImage(UIConst.profilePlaceHolder),
+                  backgroundImage: NetworkImage(
+                      context.read<ChatsCubit>().selectedChat.isAdmin == "admin"
+                          ? context.read<ChatsCubit>().selectedChat.avatar
+                          : UIConst.profilePlaceHolder),
                 ),
                 const Sizer(width: 5),
                 messageEntity.isDeleted
@@ -1067,8 +1073,11 @@ class MessageCard extends StatelessWidget {
                     backgroundColor: context.isDarkMode
                         ? AppColors.QUANTITY_COLOR
                         : Colors.white,
-                    backgroundImage:
-                        const NetworkImage(UIConst.profilePlaceHolder),
+                    backgroundImage: NetworkImage(
+                        context.read<ChatsCubit>().selectedChat.isAdmin ==
+                                "admin"
+                            ? context.read<ChatsCubit>().selectedChat.avatar
+                            : UIConst.profilePlaceHolder),
                   ),
                   const Sizer(width: 5),
                   IntrinsicWidth(
@@ -1281,8 +1290,11 @@ class _VoiceMessageCardState extends State<VoiceMessageCard> {
                       backgroundColor: context.isDarkMode
                           ? AppColors.QUANTITY_COLOR
                           : Colors.white,
-                      backgroundImage:
-                          const NetworkImage(UIConst.profilePlaceHolder),
+                      backgroundImage: NetworkImage(
+                          context.read<ChatsCubit>().selectedChat.isAdmin ==
+                                  "admin"
+                              ? context.read<ChatsCubit>().selectedChat.avatar
+                              : UIConst.profilePlaceHolder),
                     ),
               widget.isSend ? const SizedBox() : const Sizer(width: 5),
               Container(

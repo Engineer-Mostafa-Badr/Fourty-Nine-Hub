@@ -12,6 +12,7 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/label_colors_map.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -154,23 +155,34 @@ class _ChatCardState extends State<ChatCard> {
                                                       content: ClipRRect(
                                                         child: Stack(
                                                           children: [
-                                                            Image.network(
-                                                              widget
-                                                                  .chat!.avatar,
-                                                              fit: BoxFit.cover,
-                                                              errorBuilder:
-                                                                  (context,
-                                                                      error,
-                                                                      stackTrace) {
-                                                                return Image
-                                                                    .network(
-                                                                  UIConst
-                                                                      .profilePlaceHolder,
-                                                                  fit: BoxFit
-                                                                      .cover,
-                                                                );
-                                                              },
-                                                            ),
+                                                            widget.chat!.isAdmin ==
+                                                                    "admin"
+                                                                ? Padding(
+                                                                  padding: const EdgeInsets.only(bottom: 4, right: 4, left: 8, top: 4),
+                                                                  child: Image.asset(
+                                                                      Assets.logo,
+                                                                      fit: BoxFit
+                                                                          .cover,
+                                                                    ),
+                                                                )
+                                                                : Image.network(
+                                                                    widget.chat!
+                                                                        .avatar,
+                                                                    fit: BoxFit
+                                                                        .cover,
+                                                                    errorBuilder:
+                                                                        (context,
+                                                                            error,
+                                                                            stackTrace) {
+                                                                      return Image
+                                                                          .network(
+                                                                        UIConst
+                                                                            .profilePlaceHolder,
+                                                                        fit: BoxFit
+                                                                            .cover,
+                                                                      );
+                                                                    },
+                                                                  ),
                                                             Positioned(
                                                               top: 0,
                                                               left: 0,
@@ -312,17 +324,25 @@ class _ChatCardState extends State<ChatCard> {
                                     ClipRRect(
                                       borderRadius: BorderRadius.circular(50),
                                       child: CircleAvatar(
-                                        child: Image.network(
-                                          widget.chat!.avatar,
-                                          fit: BoxFit.cover,
-                                          errorBuilder:
-                                              (context, error, stackTrace) {
-                                            return Image.network(
-                                              UIConst.profilePlaceHolder,
-                                              fit: BoxFit.cover,
-                                            );
-                                          },
-                                        ),
+                                        child: widget.chat!.isAdmin == "admin"
+                                            ? Padding(
+                                              padding: const EdgeInsets.only(bottom: 4, right: 4, left: 8, top: 4),
+                                              child: Image.asset(
+                                                  Assets.logo,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                            )
+                                            : Image.network(
+                                                widget.chat!.avatar,
+                                                fit: BoxFit.cover,
+                                                errorBuilder: (context, error,
+                                                    stackTrace) {
+                                                  return Image.network(
+                                                    UIConst.profilePlaceHolder,
+                                                    fit: BoxFit.cover,
+                                                  );
+                                                },
+                                              ),
                                       ),
                                     ),
                                     widget.chat!.isSelected
@@ -655,16 +675,24 @@ class _ChatCardState extends State<ChatCard> {
                                                                                     borderRadius: BorderRadius.circular(50),
                                                                                     child: CircleAvatar(
                                                                                       radius: 25,
-                                                                                      child: Image.network(
-                                                                                        widget.chat!.avatar,
-                                                                                        fit: BoxFit.cover,
-                                                                                        errorBuilder: (context, error, stackTrace) {
-                                                                                          return Image.network(
-                                                                                            UIConst.profilePlaceHolder,
-                                                                                            fit: BoxFit.cover,
-                                                                                          );
-                                                                                        },
-                                                                                      ),
+                                                                                      child: widget.chat!.isAdmin == "admin"
+                                                                                          ? Padding(
+                                                                                            padding: const EdgeInsets.only(bottom: 4, right: 4, left: 8, top: 4),
+                                                                                            child: Image.asset(
+                                                                                                Assets.logo,
+                                                                                                fit: BoxFit.cover,
+                                                                                              ),
+                                                                                          )
+                                                                                          : Image.network(
+                                                                                              widget.chat!.avatar,
+                                                                                              fit: BoxFit.cover,
+                                                                                              errorBuilder: (context, error, stackTrace) {
+                                                                                                return Image.network(
+                                                                                                  UIConst.profilePlaceHolder,
+                                                                                                  fit: BoxFit.cover,
+                                                                                                );
+                                                                                              },
+                                                                                            ),
                                                                                     ),
                                                                                   ),
                                                                                   title: Row(

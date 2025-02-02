@@ -81,6 +81,8 @@ abstract class AuthRemoteDataSource {
   Future<Either<Failure, List<GetProfileViewsEntity>>> getProfileViews(
       GetProfileViewsParams params);
 
+  Future<Either<Failure, int>> getUnreadedChatsCounter();
+
   Future<Either<Failure, List<GetProfileViewsEntity>>> getProfileViewsByUserId(
       GetProfileViewsParams params);
 }
@@ -418,6 +420,16 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
           .map((e) => GetProfileViewsEntity.fromJson(e))
           .toList();
       return Right(profileViews);
+    });
+  }
+
+  @override
+  Future<Either<Failure, int>> getUnreadedChatsCounter() async {
+    final response = await _apiConsumer.get(
+      EndPoints.getUnreadedChatsCounter(),
+    );
+    return response.fold((failure) => Left(failure), (data) {
+      return Right(data['data']);
     });
   }
 }
