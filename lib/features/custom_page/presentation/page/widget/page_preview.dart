@@ -39,6 +39,9 @@ class PagePreview extends StatefulWidget {
 
 class _PagePreviewState extends State<PagePreview> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  initState() {
+    serviceLocator<MainCategoriesCubit>().loadData();
+  }
 
   @override
   Widget build(BuildContext context) {
