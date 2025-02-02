@@ -1,8 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
 import 'package:fourtyninehub/core/localization/locales.dart';
+import 'package:fourtyninehub/core/utils/handle_cashback.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_taps_cubit/main_categories_taps_cubit.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/subcategory_card.dart';
@@ -242,102 +248,58 @@ class _MainCategoriesGrideViewSectionState
   Widget build(BuildContext context) {
     final controller = context.read<MainCategoriesTapsCubit>();
 
-    return CustomScrollView(
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      controller: _scrollController,
-      slivers: [
-        SliverToBoxAdapter(
-          child: BlocBuilder<MainCategoriesTapsCubit, MainCategoriesTapsState>(
-              builder: (context, state) {
-            return SizedBox(
-              height: 70.h,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: TabBar(
-                    isScrollable: true,
-                    controller: _tabController,
-                    onTap: (i) {
-                      controller.selectMainCategory(i);
-                      setState(() {
-                        labelName = context.locale == Locales.english
-                            ? controller.mainCategories[i].nameEn.toString()
-                            : controller.mainCategories[i].name.toString();
-                      });
-                      print(labelName);
-                    },
-                    padding: EdgeInsets.zero,
-                    labelPadding: const EdgeInsetsDirectional.only(end: 10),
-                    indicatorColor: Colors.transparent,
-                    dividerColor: Colors.transparent,
-                    tabAlignment: TabAlignment.start,
-                    tabs: List.generate(controller.mainCategories.length,
-                        (index) {
-                      final category = controller.mainCategories[index];
-                      return Container(
-                        width: 220.w,
-                        // height: 70.h,
-                        alignment: AlignmentDirectional.center,
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: index == state.selectedIndex
-                              ? AppColors.PRIMARY_COLOR
-                              : null,
-                          border: Border.all(
-                            color: index == state.selectedIndex
-                                ? AppColors.PRIMARY_COLOR
-                                : Colors.red,
-                          ),
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20.w),
+      child: CustomScrollView(
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        controller: _scrollController,
+        slivers: [
+          BlocBuilder<MainCategoriesTapsCubit, MainCategoriesTapsState>(
+            builder: (context, state) {
+              if (controller.mainCategories.isNotEmpty) {
+                final controller = context.read<MainCategoriesTapsCubit>();
+                final mainCategoriesController =
+                    context.read<MainCategoriesCubit>();
+                return SliverGrid.builder(
+                  itemCount: controller.mainCategories.length ?? 0,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisSpacing: 10,
+                      crossAxisCount: 2,
+                      childAspectRatio: 5 / 4),
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: InkWell(
+                        onTap: () {
+                          AdInterstitialTop.loadIntersitialAd();
+                          AdInterstitialTop.showInterstitialAd();
+                          HandleCashback.setCount(
+                              'mainCategoriesCount', context);
+                          context.push(Routes.SUBCATEGORIES,
+                              extra: controller.mainCategories[index]);
+                        },
+                        child: MainCategoryBanner(
+                          category: controller.mainCategories[index],
+                          onFavorite: () async {
+                            var result = await mainCategoriesController
+                                .toggleFavoriteMedicalService(
+                                    controller.mainCategories[index].id);
+                            print("result$result");
+                            return result;
+                          },
                         ),
-                        child: Center(
-                          child: Text(
-                            context.locale == Locales.english
-                                ? category.nameEn!
-                                : category.name ?? "",
-                            style: Styles.mediumText(
-                                color: index == state.selectedIndex
-                                    ? Colors.white
-                                    : Colors.grey),
-                            textAlign: TextAlign.center,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      );
-                    })),
-              ),
-            );
-          }),
-        ),
-        BlocBuilder<MainCategoriesTapsCubit, MainCategoriesTapsState>(
-          builder: (context, state) {
-            if (state.subCategories != null &&
-                state.subCategories!.isNotEmpty) {
-              final controller = context.read<MainCategoriesTapsCubit>();
-              return SliverGrid.builder(
-                itemCount: state.subCategories?.length ?? 0,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2, childAspectRatio: 1),
-                itemBuilder: (context, index) {
-                  final subCategory = state.subCategories![index];
-                  return SubCategoryCard(
-                    mainCategory: controller.selectedCategory,
-                    item: subCategory,
-                    onFav: () {
-                      print("object");
-                      return controller.toggleSubCategoryToFavorites(
-                          state.subCategories![index].id);
-                    },
-                  );
-                },
-              );
-            } else {
-              return const SliverToBoxAdapter(child: SizedBox.shrink());
-            }
-          },
-        ),
-      ],
+                      ),
+                    );
+                  },
+                );
+              } else {
+                return const SliverToBoxAdapter(child: SizedBox.shrink());
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 }

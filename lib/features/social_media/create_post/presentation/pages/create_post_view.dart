@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/social_media/create_post/presentation/wid
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_create_post_header.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_media_card.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_sheet_item.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -70,6 +71,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                       },
                     ),
                     const BuildCreatePostHeader(),
+
                     // Row(
                     //   children: [
                     //     InkWell(
@@ -326,6 +328,11 @@ class _CreatePostViewState extends State<CreatePostView> {
                     //     (state.images == null || state.images!.isEmpty) &&
                     //     state.isBiggerThen150 == false)
                     //   const BuildColorsBallet(),
+                    if(state.gifImage != null || (state.gifImage?.isNotEmpty??false))ImageFromInternet(
+                      width: 200,
+                      height: 300,
+                      image: state.gifImage??'',
+                    ),
                     const Sizer(),
                     if (state.images != null && state.images!.isNotEmpty)
                       const Expanded(child: BuildMediaCard()),
@@ -389,6 +396,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                           );
 
                           if (gif != null) {
+                            controller.onSelectGif(gif.images?.original?.url??'');
                             print(gif.images?.original?.url);
                             // controller.onGifSelected(gif.images.original!.url);
                           }

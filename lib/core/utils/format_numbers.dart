@@ -1,11 +1,11 @@
 class FormatNumbers{
   String formatNumber(num number) {
     if (number >= 1000 && number < 1000000) {
-      return '${(number / 1000).toStringAsFixed(2)}K';
+      return '${(number / 1000).toStringAsFixed(1)}K';
     } else if (number >= 1000000 && number < 1000000000) {
-      return '${(number / 1000000).toStringAsFixed(2)}M';
+      return '${(number / 1000000).toStringAsFixed(1)}M';
     } else if (number >= 1000000000) {
-      return '${(number / 1000000000).toStringAsFixed(2)}B';
+      return '${(number / 1000000000).toStringAsFixed(1)}B';
     } else {
       return number.toStringAsFixed(0);
     }
