@@ -15,6 +15,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/forward_messages_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/label_colors_map.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -113,12 +114,35 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                             : null,
                                         child: CircleAvatar(
                                           backgroundColor: Colors.white,
-                                          backgroundImage: NetworkImage(
-                                            context
-                                                .read<ChatsCubit>()
-                                                .selectedChat
-                                                .avatar,
-                                          ),
+                                          backgroundImage: context
+                                                      .read<ChatsCubit>()
+                                                      .selectedChat
+                                                      .isAdmin ==
+                                                  "admin"
+                                              ? null
+                                              : NetworkImage(
+                                                  context
+                                                      .read<ChatsCubit>()
+                                                      .selectedChat
+                                                      .avatar,
+                                                ),
+                                          child: context
+                                                      .read<ChatsCubit>()
+                                                      .selectedChat
+                                                      .isAdmin !=
+                                                  "admin"
+                                              ? null
+                                              : Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 4,
+                                                          left: 8,
+                                                          right: 4,
+                                                          bottom: 4),
+                                                  child: Image.asset(
+                                                    Assets.logo,
+                                                  ),
+                                                ),
                                         ),
                                       ),
                                     )
@@ -252,8 +276,8 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                                 "admin"
                                             ? Label(
                                                 text: context.isArabic
-                                                    ? "حساب 49Hub الرسمي."
-                                                    : "Official 49Hub Account.",
+                                                    ? " 49Hub الرسمي"
+                                                    : "Official 49Hub",
                                                 style: Styles.mediumText(
                                                   fontSize: 24,
                                                   color: Colors.white,
@@ -480,7 +504,8 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                         InkWell(
                                           onTap: () {
                                             setState(() {
-                                              newLabelColor = LabelColorsMap.getRandomColor();
+                                              newLabelColor = LabelColorsMap
+                                                  .getRandomColor();
                                             });
                                           },
                                           child: Container(

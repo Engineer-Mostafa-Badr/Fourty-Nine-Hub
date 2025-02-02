@@ -16,6 +16,7 @@ import 'package:fourtyninehub/features/authentication/domain/use_cases/create_no
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_profile_views_by_user_id_usecase.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_profile_views_usecase.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_tokens_use_case.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/get_unreaded_chats_counter_usecase.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/save_tokens_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/update_profile_view_usecase.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/update_user_bio_usecase.dart';
@@ -49,6 +50,8 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
   final UpdateProfileViewUseCase _updateProfileViewUseCase;
   final GetProfileViewsUseCase _getProfileViewsUseCase;
   final GetProfileViewsByUserIdUseCase _getProfileViewsByUserIdUseCase;
+  final GetUnreadedChatsCounterUsecase _getUnreadedChatsCounterUsecase;
+  int unreadedChatsCounter = 0;
   List<GetProfileViewsEntity> profileViews = [];
   List<GetProfileViewsEntity> profileViewsByUserId = [];
 
@@ -69,6 +72,7 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     this._updateProfileViewUseCase,
     this._getProfileViewsUseCase,
     this._getProfileViewsByUserIdUseCase,
+    this._getUnreadedChatsCounterUsecase,
   ) : super(const BasicState());
 
   bool get isLoggedIn => cacheService.isLogin() ?? false;
@@ -149,7 +153,18 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     emit(state.copyWith(status: StateStatus.success));
   }
 
- 
+  Future<void> getUnreadedChatsCounter() async {
+    final respons = await _getUnreadedChatsCounterUsecase( const NoParams());
+    respons.fold((l) => null, (r) {
+      unreadedChatsCounter = r;
+    });
+    emit(state.copyWith(status: StateStatus.success));
+  }
+
+  Future<void> resetUnreadedChatsCounter() async {
+    unreadedChatsCounter = 0;
+    emit(state.copyWith(status: StateStatus.success));
+  }
 
   Future<void> logout(BuildContext context) async {
     // cacheService.setLogin(false);
@@ -161,7 +176,6 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     final result = await _signOutUseCase(const NoParams());
     result.fold((l) => emit(state.copyWith(status: StateStatus.error)),
         (r) async {
-      
       emit(
         state.copyWith(
           status: StateStatus.success,
@@ -228,7 +242,7 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
 //   );
 // }
 
-  uploadPhoto({bool isGallery = true,required BuildContext context}) async {
+  uploadPhoto({bool isGallery = true, required BuildContext context}) async {
     emit(state.copyWith(status: StateStatus.loading));
     final UploadFile upload = UploadFile();
     await upload.uploadImage(
@@ -253,7 +267,8 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
               return const Right(true);
             },
           );
-        }, context: context);
+        },
+        context: context);
   }
 
   // create normal chat
