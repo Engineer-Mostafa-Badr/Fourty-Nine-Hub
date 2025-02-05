@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/ads/app_open_model.dart';
 import 'package:fourtyninehub/ads/banner_ad_model.dart';
 import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
@@ -323,8 +322,13 @@ class _FourtyNineViewState extends State<FourtyNineView>
                               AdInterstitialTop.showInterstitialAd();
                               HandleCashback.setCount(
                                   'mainCategoriesCount', context);
-                              context.push(Routes.SUBCATEGORIES,
-                                  extra: state.data![index]);
+                              if(state.data![index].id=='62c8b5b09332225799fe335e'){
+                                context.push(Routes.MARRIAGESUBCATEGORIES,
+                                    extra: state.data![index]);
+                              }else{
+                                context.push(Routes.SUBCATEGORIES,
+                                    extra: state.data![index]);
+                              }
                             },
                             child: MainCategoryBanner(
                               category: state.data![index],
@@ -533,74 +537,52 @@ class _FourtyNineViewState extends State<FourtyNineView>
   }
 
   Widget _buildStarWidget() {
-    return SizedBox(
+    return Container(
       height: kToolbarHeight * 2.h,
       width: double.infinity,
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: GestureDetector(
-                // color: AppColors.AUTH_CONTAINER_COLOR,
-                // label: LocaleKeys.tube.localize,
-                // style: Styles.mediumText(
-                //   color: AppColors.AUTH_CONTAINER_COLOR,
-                //   fontWeight: FontWeight.bold,
-                // ),
-                // icon: Icons.star,
-                // iconSize: 50.h,
-                onTap: () {
-                  AdInterstitialTop.loadIntersitialAd();
-                  AdInterstitialTop.showInterstitialAd();
-                  HandleCashback.setCount('beAStarCount', context);
-                  context.push(Routes.BE_STAR);
-                },
-              child:Container(
-                  height: kToolbarHeight * 2.h,
-                  padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                    borderRadius: BorderRadius.circular(5),
-                    image:  DecorationImage(
-                      image: AssetImage(Assets.tubeCat),
-                      fit: BoxFit.fill
-                    ),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color.fromARGB(255, 249, 159, 162),
-                        spreadRadius: 1,
-                        blurRadius: 3,
-                        offset: Offset(1, 1),
-                      )
-                    ],
-                  ),
-                child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children:[
-                      // Image.asset(
-                      //   Assets.tube,
-                      //   height: 35.h,
-                      //   width: 35.h,
-                      //
-                      // ),
-                      // Sizer(width: 10),
-                      Label(
-                        text: LocaleKeys.tube.localize,
-                        style: Styles.mediumText(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 45,
-                        ),
-                      )
-                    ]
-                  ),
-                )
-              )
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.r),
+        color: Colors.transparent,
+      ),
+      child: SizedBox(
+        height: kToolbarHeight * 2.h,
+        width: double.infinity,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Container(
+              height: kToolbarHeight * 2.h,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(Assets.tube),
+                  fit: BoxFit.fill
+                ),
+                borderRadius: BorderRadius.circular(10.r),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color.fromARGB(255, 249, 159, 162),
+                    spreadRadius: 1,
+                    blurRadius: 3,
+                    offset: Offset(1, 1),
+                  )
+                ],
+              ),
+
             ),
-          ),
-        ],
+        Label(
+                    text: LocaleKeys.tube.localize,
+                    style: Styles.mediumText(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 45,
+                    ),
+                  ),
+          ],
+        ),
       ),
     );
+
   }
 
   Widget _walletsWidget() {

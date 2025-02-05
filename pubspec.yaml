@@ -146,7 +146,7 @@ dependencies:
   photo_manager: ^3.6.3
   giphy_get: ^3.6.0
   liquid_progress_indicator_v2: ^0.5.0
-#  photo_manager: ^3.6.3
+  #  photo_manager: ^3.6.3
   # photo_manager: ^3.6.3
 dependency_overrides:
   #  camera_android_camerax: 0.6.10+1
