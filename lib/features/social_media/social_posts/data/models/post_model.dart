@@ -69,10 +69,11 @@ class PostModel extends PostEntity {
             ? LocationModel.fromJson(json['location'])
             : null,
         type: json['type'] ?? '',
-        images: json['media'] != null
-            ? List<String>.from(json['media'].map(
-                (mediaItem) => mediaItem['photo'] ?? mediaItem['mediaKey']))
-            : null,
+        images: json["mediaDetails"],
+        // images: json['media'] != null
+        //     ? List<String>.from(json['media'].map(
+        //         (mediaItem) => mediaItem['photo'] ?? mediaItem['mediaKey']))
+        //     : null,
         isShared: json['isShared'] ?? false,
         advertisementType: json['advertisement_type'] ?? '',
         post: json['post'] ?? '',

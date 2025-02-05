@@ -55,7 +55,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<UserCubit>().getUnreadedChatsCounter();
+    // context.read<UserCubit>().getUnreadedChatsCounter();
     bool isCurrentRoute(BuildContext context, String targetRoute) {
       final currentRoute = ModalRoute.of(context)?.settings.name;
       return currentRoute == targetRoute;
