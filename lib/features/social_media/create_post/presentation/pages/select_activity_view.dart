@@ -50,7 +50,7 @@ class SelectActivity extends StatelessWidget {
                     ),
                     Text(
                       '❤️',
-                      style: GoogleFonts.notoColorEmoji(), // Ensure the font supports emojis
+                      style: GoogleFonts.notoColorEmoji(),
                     ),
                     const Sizer(),
                     Expanded(child: Label(text: "${item.image} ${context.isArabic ? item.name : item.nameEn}"))
