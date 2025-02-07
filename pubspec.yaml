@@ -132,7 +132,12 @@ dependencies:
   # location: ^4.4.0
 #  location: ^4.4.0
   latlong2: ^0.9.1
+  geocoding_resolver:
+  flutter_emoji:
+  google_fonts:
   geolocator: ^12.0.0
+  geocoding: ^3.0.0
+  geocode:
   pinput: ^5.0.0
   record: ^4.4.4
   multi_dropdown: ^3.0.1

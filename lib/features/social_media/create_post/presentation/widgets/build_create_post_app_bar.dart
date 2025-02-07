@@ -30,7 +30,7 @@ class BuildCreatePostAppBar extends StatelessWidget {
           ),),
           const Spacer(),
           ClickableWidget(
-              onTap: (){},
+              onTap: onTap,
               child: Container(
             height: 38,
             width: 74,

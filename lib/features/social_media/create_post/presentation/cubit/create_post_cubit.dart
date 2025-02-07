@@ -39,7 +39,13 @@ class CreatePostCubit extends Cubit<CreatePostState> {
 
   List<String>? selectedImages;
   String? selectedAudio;
+  setAddress(String address) {
+    emit(state.copyWith(selectedLocation: address,status: CreatePostStates.success));
+  }
 
+  onRemoveAddress() {
+    emit(state.copyWith(selectedLocation: '',status: CreatePostStates.success));
+  }
   // void addMusic(String musicPath) {
   //   emit(state.copyWith(music: musicPath));
   // }
@@ -177,9 +183,11 @@ class CreatePostCubit extends Cubit<CreatePostState> {
       } else if (type == "facebook") {
         final response = await _createPostUseCase(
           PostParams(
+            type:state.gifImage != null ? "gif_post":"normal_post",
             content: postContentTextController.text,
             mediaId: selectedImages ?? [],
             color: state.backColor,
+            gifUrl: state.gifImage,
             activity: state.selectedActivity?.id,
             feeling: state.selectedFeeling?.id,
             place: state.place,
@@ -403,7 +411,7 @@ class CreatePostCubit extends Cubit<CreatePostState> {
 
   onRemoveActivity() {
     emit(state.copyWith(
-        selectedActivity: ActivityEntity(name: '', image: '', id: ''),
+        selectedActivity: ActivityEntity(name: '', nameEn:'',image: '', id: ''),
         status: CreatePostStates.success));
   }
 

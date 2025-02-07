@@ -537,50 +537,55 @@ class _FourtyNineViewState extends State<FourtyNineView>
   }
 
   Widget _buildStarWidget() {
-    return Container(
-      height: kToolbarHeight * 2.h,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10.r),
-        color: Colors.transparent,
-      ),
-      child: SizedBox(
+    return GestureDetector(
+      onTap: () {
+        context.push(Routes.BE_STAR_DETAILS);
+      },
+      child:Container(
         height: kToolbarHeight * 2.h,
         width: double.infinity,
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            Container(
-              height: kToolbarHeight * 2.h,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(Assets.tube),
-                  fit: BoxFit.fill
-                ),
-                borderRadius: BorderRadius.circular(10.r),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color.fromARGB(255, 249, 159, 162),
-                    spreadRadius: 1,
-                    blurRadius: 3,
-                    offset: Offset(1, 1),
-                  )
-                ],
-              ),
-
-            ),
-        Label(
-                    text: LocaleKeys.tube.localize,
-                    style: Styles.mediumText(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 45,
-                    ),
-                  ),
-          ],
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10.r),
+          color: Colors.transparent,
         ),
-      ),
+        child: SizedBox(
+          height: kToolbarHeight * 2.h,
+          width: double.infinity,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Container(
+                height: kToolbarHeight * 2.h,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage(Assets.tube),
+                      fit: BoxFit.fill
+                  ),
+                  borderRadius: BorderRadius.circular(10.r),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color.fromARGB(255, 249, 159, 162),
+                      spreadRadius: 1,
+                      blurRadius: 3,
+                      offset: Offset(1, 1),
+                    )
+                  ],
+                ),
+
+              ),
+              Label(
+                text: LocaleKeys.tube.localize,
+                style: Styles.mediumText(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 45,
+                ),
+              ),
+            ],
+          ),
+        ),
+      )
     );
 
   }

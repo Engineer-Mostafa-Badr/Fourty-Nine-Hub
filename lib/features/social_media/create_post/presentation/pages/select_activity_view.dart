@@ -4,8 +4,10 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/activity_entity.dart';
-
-import '../../../../../common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class SelectActivity extends StatelessWidget {
   final List<ActivityEntity> activities;
@@ -26,6 +28,7 @@ class SelectActivity extends StatelessWidget {
           itemCount: activities.length,
           itemBuilder: (context, index) {
             final item = activities[index];
+            print("${item.image} ${context.isArabic ? item.name : item.nameEn}");
             return InkWell(
               onTap: () {
                 onSelected(item);
@@ -40,10 +43,17 @@ class SelectActivity extends StatelessWidget {
                     CircleAvatar(
                       radius: 15,
                       backgroundColor: Colors.white,
-                      backgroundImage: NetworkImage(item.image),
+                      child: Label(
+                        text: item.image,
+                        style: Styles.mediumText(),
+                      ),
+                    ),
+                    Text(
+                      '❤️',
+                      style: GoogleFonts.notoColorEmoji(), // Ensure the font supports emojis
                     ),
                     const Sizer(),
-                    Expanded(child: Label(text: item.name))
+                    Expanded(child: Label(text: "${item.image} ${context.isArabic ? item.name : item.nameEn}"))
                   ],
                 ),
               ),

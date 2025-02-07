@@ -14,6 +14,7 @@ class PostEntity {
   LocationModel? location;
   final String photo;
   String? type;
+  String? gifUrl;
   final List<String>? images;
   final List<TwitterUserModel>? users;
   final List<TwitterUserModel>? likedUsers;
@@ -77,6 +78,7 @@ class PostEntity {
     required this.type,
     this.images,
     this.users,
+    this.gifUrl,
     this.firstComment,
     required this.user,
     this.commentPrivacy = 1,
