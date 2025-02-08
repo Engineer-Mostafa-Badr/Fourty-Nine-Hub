@@ -636,52 +636,52 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
               ],
             ),
           ),
-          const Sizer(),
-          Expanded(
-            child: Stack(
-              children: [
-                Positioned.fill(
-                  child: AppButton(
-                      color: AppColors.AUTH_CONTAINER_COLOR,
-                      label: LocaleKeys.marriage.localize,
-                      style: Styles.mediumText(
-                        color: AppColors.AUTH_CONTAINER_COLOR,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      icon: Icons.star,
-                      iconSize: 50.h,
-                      onPressed: () {
-                        //HandleCashback.setCount('tenPercentCount',context);
-                        context.push(Routes.Married);
-                      }),
-                ),
-                Positioned(
-                    bottom: 5,
-                    left: 5,
-                    child: Icon(
-                      Icons.star,
-                      size: 20.h,
-                      color: AppColors.ACCENT_COLOR,
-                    )),
-                Positioned(
-                    top: 0,
-                    left: 10,
-                    child: Icon(
-                      Icons.star,
-                      size: 20.h,
-                      color: AppColors.ACCENT_COLOR,
-                    )),
-                Positioned(
-                    top: 15,
-                    right: 10,
-                    child: Icon(
-                      Icons.star,
-                      size: 20.h,
-                      color: AppColors.ACCENT_COLOR,
-                    ))
-              ],
-            ),
-          ),
+          // const Sizer(),
+          // Expanded(
+          //   child: Stack(
+          //     children: [
+          //       Positioned.fill(
+          //         child: AppButton(
+          //             color: AppColors.AUTH_CONTAINER_COLOR,
+          //             label: LocaleKeys.marriage.localize,
+          //             style: Styles.mediumText(
+          //               color: AppColors.AUTH_CONTAINER_COLOR,
+          //               fontWeight: FontWeight.bold,
+          //             ),
+          //             icon: Icons.star,
+          //             iconSize: 50.h,
+          //             onPressed: () {
+          //               //HandleCashback.setCount('tenPercentCount',context);
+          //               context.push(Routes.Married);
+          //             }),
+          //       ),
+          //       Positioned(
+          //           bottom: 5,
+          //           left: 5,
+          //           child: Icon(
+          //             Icons.star,
+          //             size: 20.h,
+          //             color: AppColors.ACCENT_COLOR,
+          //           )),
+          //       Positioned(
+          //           top: 0,
+          //           left: 10,
+          //           child: Icon(
+          //             Icons.star,
+          //             size: 20.h,
+          //             color: AppColors.ACCENT_COLOR,
+          //           )),
+          //       Positioned(
+          //           top: 15,
+          //           right: 10,
+          //           child: Icon(
+          //             Icons.star,
+          //             size: 20.h,
+          //             color: AppColors.ACCENT_COLOR,
+          //           ))
+          //     ],
+          //   ),
+          // ),
         ],
       ),
     );
@@ -836,7 +836,12 @@ class MainCategoriesListView extends StatelessWidget {
             AdInterstitialTop.loadIntersitialAd();
             AdInterstitialTop.showInterstitialAd();
             HandleCashback.setCount('mainCategoriesCount', context);
-            context.push(Routes.SUBCATEGORIES, extra: state.customPage![index]);
+            if(state.customPage![index].id=='62c8b5b09332225799fe335e'){
+              context.push(Routes.MARRIAGESUBCATEGORIES,
+                  extra: state.customPage![index]);
+            }else{
+              context.push(Routes.SUBCATEGORIES, extra: state.customPage![index]);
+            }
           },
           child: MainCategoryBanner(
             category: state.customPage![index],

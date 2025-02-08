@@ -276,8 +276,13 @@ class _MainCategoriesGrideViewSectionState
                           AdInterstitialTop.showInterstitialAd();
                           HandleCashback.setCount(
                               'mainCategoriesCount', context);
-                          context.push(Routes.SUBCATEGORIES,
-                              extra: controller.mainCategories[index]);
+                          if(controller.mainCategories[index].id=='62c8b5b09332225799fe335e'){
+                            context.push(Routes.MARRIAGESUBCATEGORIES,
+                                extra: controller.mainCategories[index]);
+                          }else{
+                            context.push(Routes.SUBCATEGORIES,
+                                extra: controller.mainCategories[index]);
+                          }
                         },
                         child: MainCategoryBanner(
                           category: controller.mainCategories[index],

@@ -77,6 +77,7 @@ class _LogoutWidgetState extends State<LogoutWidget> {
                   // await DI.reset();
                   // await DI.execute();
                   setLogOut();
+                  context.go(Routes.HOME);
 
                   // context.pushReplacement(Routes.HOME);
                   // await Restart.restartApp();

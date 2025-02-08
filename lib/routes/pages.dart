@@ -1019,17 +1019,8 @@ class AppPages {
                   builder: (context, state) {
                     final social = state.extra as String?;
 
-                    return BlocProvider<CreatePostCubit>(
-                      create: (_) {
-                        if (social != 'twitter') {
-                          return serviceLocator()..loadData();
-                        } else {
-                          return serviceLocator();
-                        }
-                      },
-                      child: CreatePostView(
-                        social: social ?? 'social',
-                      ),
+                    return CreatePostView(
+                      social: social ?? 'social',
                     );
                   },
                 ),

@@ -11,18 +11,17 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
-class SelectActivity extends StatefulWidget {
-  final List<ActivityEntity> activities;
-  final Function(ActivityEntity) onSelected;
+class SelectSubActivity extends StatefulWidget {
+  final String activityId;
 
-  const SelectActivity(
-      {super.key, required this.activities, required this.onSelected});
+  const SelectSubActivity(
+      {super.key, required this.activityId,});
 
   @override
-  State<SelectActivity> createState() => _SelectActivityState();
+  State<SelectSubActivity> createState() => _SelectSubActivityState();
 }
 
-class _SelectActivityState extends State<SelectActivity> {
+class _SelectSubActivityState extends State<SelectSubActivity> {
   late ScrollController _scrollController;
 
   @override

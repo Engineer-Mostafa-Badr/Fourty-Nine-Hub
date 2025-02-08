@@ -573,8 +573,8 @@ class EndPoints {
       '/twitter/post?subCategory=${Constants.twitterSubCategory}';
 
   // static const getFeedPosts = '/facebook/feed';
-  static const activities = '/facebook/post/activities';
-  static const feelings = '/facebook/post/feelings';
+  static const activities = '/facebook/posts/activities';
+  static feelings(PaginationParams params) =>'/facebook/posts/feelings?limit=${params.limit}&page=${params.page}';
   static String getTwitterFeedPosts =
       '/twitter/feed?subCategory=${Constants.twitterSubCategory}';
   static const editProfile = '/users/profile-data';

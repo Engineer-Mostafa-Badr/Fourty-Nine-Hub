@@ -26,7 +26,7 @@ import '../helper/file_picker_helper.dart';
 class UploadFile {
   Future<Either<Failure, bool>?> uploadImage(
       {bool isGallery = true,
-      required String subCategoryId,
+      required String subCategoryId, bool? hasLoading,
       required BuildContext context,
       required Function(UploadFileEntity) onUploaded}) async {
     final file = await FilePickerHelper()
@@ -51,7 +51,7 @@ class UploadFile {
         );
 
         XFile finalFile = XFile(croppedFile?.path??'');
-        showLoadingDialog(context);
+        if(hasLoading!=false)showLoadingDialog(context);
         final tempDir = await getTemporaryDirectory();
         final uniqueFileName =
             'compressed_${DateTime.now().millisecondsSinceEpoch}_${finalFile.name}';
@@ -106,7 +106,7 @@ class UploadFile {
             }, (data) { */
             print("object111");
             onUploaded(UploadFileEntity(mediaId: mediaId, file: finalFile));
-            context.pop();
+            if(hasLoading!=false)context.pop();
 
             return const Right(true);
             // });

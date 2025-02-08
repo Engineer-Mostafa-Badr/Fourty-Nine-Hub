@@ -16,6 +16,8 @@ class CreatePostState {
   final List<PostUserEntity>? users;
   final List<PostUserEntity>? selectedUsers;
   final String? selectedPrivacy;
+  final String? selectedLocation;
+  final bool? isSheetOpen;
   String? backColor;
   final bool isLast;
   final bool isBiggerThan80;
@@ -32,6 +34,7 @@ class CreatePostState {
       this.feelings,
       this.backColor = "#FFFFFFFF",
       this.isLast = false,
+      this.isSheetOpen = true,
       this.isBiggerThan80 = false,
       this.isBiggerThen150 = false,
       this.isBiggerThen120 = false,
@@ -40,6 +43,7 @@ class CreatePostState {
       this.music,
       this.users,
       this.place,
+      this.selectedLocation,
       this.selectedUsers,
       this.selectedPrivacy});
   CreatePostState copyWith({
@@ -58,6 +62,8 @@ class CreatePostState {
     List<PostUserEntity>? selectedUsers,
     String? backColor,
     bool? isLast,
+    String? selectedLocation,
+    bool? isSheetOpen,
     bool? isBiggerThan80,
     bool? isBiggerThen150,
     bool? isBiggerThen120,
@@ -77,12 +83,14 @@ class CreatePostState {
       users: users ?? this.users,
       selectedUsers: selectedUsers ?? this.selectedUsers,
       place: place ?? this.place,
+      isSheetOpen: isSheetOpen ?? this.isSheetOpen,
       isLast: isLast ?? this.isLast,
       isBiggerThan80: isBiggerThan80 ?? this.isBiggerThan80,
       isBiggerThen150: isBiggerThen150 ?? this.isBiggerThen150,
       isBiggerThen120: isBiggerThen120 ?? this.isBiggerThen120,
       music: music ?? this.music,
       gifImage: gifImage ?? this.gifImage,
+      selectedLocation: selectedLocation ?? this.selectedLocation,
     );
   }
 }

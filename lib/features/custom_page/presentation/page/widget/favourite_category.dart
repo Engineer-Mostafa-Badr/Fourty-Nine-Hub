@@ -30,52 +30,23 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
   // Method to initialize categories based on UserPreferences
   Map<String, bool> _initFavouriteCategories(FavouriteCatEntity preferences) {
     return {
-      "Medical Service": preferences.medicalService.enabled,
       "Home Service": preferences.homeService.enabled,
       "Craft": preferences.craft.enabled,
       "Real Estate": preferences.realEstate.enabled,
-      "Equipment": preferences.equipment.enabled,
-      "Spare Parts": preferences.spareParts.enabled,
       "Cars": preferences.cars.enabled,
-      "Vehicles": preferences.vehicles.enabled,
       "Smoking": preferences.smoking.enabled,
-      "Remnants": preferences.remnants.enabled,
-      "Raw Materials": preferences.rawMaterials.enabled,
-      "Wholesale Trade": preferences.wholesaleTrade.enabled,
       "Home Essentials": preferences.homeEssentials.enabled,
-      "Mobiles Tablets": preferences.mobilesTablets.enabled,
-      "Electrical Devices": preferences.electricalDevices.enabled,
-      "Doctor Job": preferences.doctorJob.enabled,
       "Technology": preferences.technology.enabled,
-      "Packaging": preferences.packaging.enabled,
       "Projects": preferences.projects.enabled,
       "Computers Cameras": preferences.computersCameras.enabled,
-      "Marketing Sales": preferences.marketingSales.enabled,
-      "Talent": preferences.talent.enabled,
-      "Scenery": preferences.scenery.enabled,
-      "Accountant Job": preferences.accountantJob.enabled,
-      "Engineer Job": preferences.engineerJob.enabled,
-      "Events": preferences.events.enabled,
       "Musical Instruments": preferences.musicalInstruments.enabled,
       "Travel Tourism": preferences.travelTourism.enabled,
-      "Education": preferences.education.enabled,
-      "Handmades": preferences.handmades.enabled,
-      "Other Job": preferences.otherJob.enabled,
-      "Fitness": preferences.fitness.enabled,
       "Libraries": preferences.libraries.enabled,
-      "Healthy Tools": preferences.healthyTools.enabled,
-      "Jewelry Watches": preferences.jewelryWatches.enabled,
-      "Accessories": preferences.accessories.enabled,
-      "Charitys": preferences.charitys.enabled,
-      "Collectibles Gifts": preferences.collectiblesGifts.enabled,
-      "Discounts Offers": preferences.discountsOffers.enabled,
       "Fashion Beauty": preferences.fashionBeauty.enabled,
       "Animals": preferences.animals.enabled,
-      "Ports": preferences.ports.enabled,
-      "Dating": preferences.dating.enabled,
       "Farming": preferences.farming.enabled,
       "Government Services": preferences.governmentServices.enabled,
-      "Social": preferences.social.enabled,
+      "Social": preferences.industry.enabled,
     };
   }
 
@@ -83,92 +54,23 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
     final isArabic = Localizations.localeOf(context).languageCode == 'ar';
 
     return [
-      isArabic
-          ? preferences.medicalService.nameAr
-          : preferences.medicalService.nameEn,
-      isArabic
-          ? preferences.homeService.nameAr
-          : preferences.homeService.nameEn,
+      isArabic ? preferences.homeService.nameAr : preferences.homeService.nameEn,
       isArabic ? preferences.craft.nameAr : preferences.craft.nameEn,
       isArabic ? preferences.realEstate.nameAr : preferences.realEstate.nameEn,
-      isArabic ? preferences.equipment.nameAr : preferences.equipment.nameEn,
-      isArabic ? preferences.spareParts.nameAr : preferences.spareParts.nameEn,
       isArabic ? preferences.cars.nameAr : preferences.cars.nameEn,
-      isArabic ? preferences.vehicles.nameAr : preferences.vehicles.nameEn,
       isArabic ? preferences.smoking.nameAr : preferences.smoking.nameEn,
-      isArabic ? preferences.remnants.nameAr : preferences.remnants.nameEn,
-      isArabic
-          ? preferences.rawMaterials.nameAr
-          : preferences.rawMaterials.nameEn,
-      isArabic
-          ? preferences.wholesaleTrade.nameAr
-          : preferences.wholesaleTrade.nameEn,
-      isArabic
-          ? preferences.homeEssentials.nameAr
-          : preferences.homeEssentials.nameEn,
-      isArabic
-          ? preferences.mobilesTablets.nameAr
-          : preferences.mobilesTablets.nameEn,
-      isArabic
-          ? preferences.electricalDevices.nameAr
-          : preferences.electricalDevices.nameEn,
-      isArabic ? preferences.doctorJob.nameAr : preferences.doctorJob.nameEn,
+      isArabic ? preferences.homeEssentials.nameAr : preferences.homeEssentials.nameEn,
       isArabic ? preferences.technology.nameAr : preferences.technology.nameEn,
-      isArabic ? preferences.packaging.nameAr : preferences.packaging.nameEn,
       isArabic ? preferences.projects.nameAr : preferences.projects.nameEn,
-      isArabic
-          ? preferences.computersCameras.nameAr
-          : preferences.computersCameras.nameEn,
-      isArabic
-          ? preferences.marketingSales.nameAr
-          : preferences.marketingSales.nameEn,
-      isArabic ? preferences.talent.nameAr : preferences.talent.nameEn,
-      isArabic ? preferences.scenery.nameAr : preferences.scenery.nameEn,
-      isArabic
-          ? preferences.accountantJob.nameAr
-          : preferences.accountantJob.nameEn,
-      isArabic
-          ? preferences.engineerJob.nameAr
-          : preferences.engineerJob.nameEn,
-      isArabic ? preferences.events.nameAr : preferences.events.nameEn,
-      isArabic
-          ? preferences.musicalInstruments.nameAr
-          : preferences.musicalInstruments.nameEn,
-      isArabic
-          ? preferences.travelTourism.nameAr
-          : preferences.travelTourism.nameEn,
-      isArabic ? preferences.education.nameAr : preferences.education.nameEn,
-      isArabic ? preferences.handmades.nameAr : preferences.handmades.nameEn,
-      isArabic ? preferences.otherJob.nameAr : preferences.otherJob.nameEn,
-      isArabic ? preferences.fitness.nameAr : preferences.fitness.nameEn,
+      isArabic ? preferences.computersCameras.nameAr : preferences.computersCameras.nameEn,
+      isArabic ? preferences.musicalInstruments.nameAr : preferences.musicalInstruments.nameEn,
+      isArabic ? preferences.travelTourism.nameAr : preferences.travelTourism.nameEn,
       isArabic ? preferences.libraries.nameAr : preferences.libraries.nameEn,
-      isArabic
-          ? preferences.healthyTools.nameAr
-          : preferences.healthyTools.nameEn,
-      isArabic
-          ? preferences.jewelryWatches.nameAr
-          : preferences.jewelryWatches.nameEn,
-      isArabic
-          ? preferences.accessories.nameAr
-          : preferences.accessories.nameEn,
-      isArabic ? preferences.charitys.nameAr : preferences.charitys.nameEn,
-      isArabic
-          ? preferences.collectiblesGifts.nameAr
-          : preferences.collectiblesGifts.nameEn,
-      isArabic
-          ? preferences.discountsOffers.nameAr
-          : preferences.discountsOffers.nameEn,
-      isArabic
-          ? preferences.fashionBeauty.nameAr
-          : preferences.fashionBeauty.nameEn,
+      isArabic ? preferences.fashionBeauty.nameAr : preferences.fashionBeauty.nameEn,
       isArabic ? preferences.animals.nameAr : preferences.animals.nameEn,
-      isArabic ? preferences.ports.nameAr : preferences.ports.nameEn,
-      isArabic ? preferences.dating.nameAr : preferences.dating.nameEn,
       isArabic ? preferences.farming.nameAr : preferences.farming.nameEn,
-      isArabic
-          ? preferences.governmentServices.nameAr
-          : preferences.governmentServices.nameEn,
-      isArabic ? preferences.social.nameAr : preferences.social.nameEn,
+      isArabic ? preferences.governmentServices.nameAr : preferences.governmentServices.nameEn,
+      isArabic ? preferences.industry.nameAr : preferences.industry.nameEn,
     ];
   }
 

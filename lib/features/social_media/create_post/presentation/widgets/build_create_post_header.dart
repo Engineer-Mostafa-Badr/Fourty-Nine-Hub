@@ -3,10 +3,19 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_drop_down.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/common/widgets/stateless/custom_sheet/custom_vertical_sheet_item.dart';
+import 'package:fourtyninehub/common/widgets/stateless/custom_sheet/sheet_vertical_item.dart';
+import 'package:fourtyninehub/features/account_taps/privacy/domain/entities/privacy_status_enum.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
+import 'package:snapping_bottom_sheet/snapping_bottom_sheet.dart';
 
 class BuildCreatePostHeader extends StatelessWidget {
-  const BuildCreatePostHeader({super.key});
-
+  const BuildCreatePostHeader({super.key,required this.sheetController,required this.controller,required this.state});
+  final SheetController sheetController;
+  final CreatePostCubit controller;
+  final CreatePostState state;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -42,7 +51,55 @@ class BuildCreatePostHeader extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    BuildDropDown(icon:Assets.publicIcon,text:  'Public',width: 16,height: 16,),
+                    InkWell(
+                      onTap: ()async{
+                        sheetController.collapse();
+                        final res = await CustomVerticalSheetItem.normal<
+                            PrivacyStatus>(context, [
+                          CustomSheetModel(
+                            text: LocaleKeys.public.localize,
+                            value: PrivacyStatus.public,
+                            iconData: Icons.language,
+                          ),
+                          CustomSheetModel(
+                            text: LocaleKeys.friends.localize,
+                            value: PrivacyStatus.friends,
+                            iconData: Icons.family_restroom,
+                          ),
+                          CustomSheetModel(
+                            text: LocaleKeys.followers.localize,
+                            value: PrivacyStatus.followers,
+                            iconData: Icons.accessibility_sharp,
+                          ),
+                          CustomSheetModel(
+                            text: LocaleKeys.friendsAndFollowers.localize,
+                            value: PrivacyStatus.friendsAndFollowers,
+                            iconData: Icons.supervised_user_circle_outlined,
+                          ),
+                          CustomSheetModel(
+                            text: LocaleKeys.onlyMe.localize,
+                            value: PrivacyStatus.onlyMe,
+                            iconData: Icons.lock,
+                          ),
+                        ]);
+                        print(res?.name);
+                        print("============>");
+                        controller.selectPrivacy(
+                            privacy: res?.name ?? 'public');
+                      },
+                      child:BuildDropDown(icon:Assets.publicIcon,text:  state.selectedPrivacy == 'onlyMe'
+                          ? LocaleKeys.onlyMe.localize
+                          : state.selectedPrivacy == 'friends'
+                          ? LocaleKeys.friends.localize
+                          : state.selectedPrivacy == 'followers'
+                          ? LocaleKeys.followers.localize
+                          : state.selectedPrivacy ==
+                          'friendsAndFollowers'
+                          ? LocaleKeys.friendsAndFollowers
+                          .localize
+                          : LocaleKeys.public.localize,width: 16,height: 16,),
+                    )
+
                   ],
                 ),
                 const SizedBox(

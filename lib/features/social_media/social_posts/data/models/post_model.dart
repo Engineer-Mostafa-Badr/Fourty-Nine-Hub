@@ -19,6 +19,7 @@ class PostModel extends PostEntity {
     super.angryCount,
     super.commentsCount,
     super.images,
+    super.gifUrl,
     super.users,
     super.isShared,
     super.likesCount,
@@ -63,13 +64,14 @@ class PostModel extends PostEntity {
   });
   factory PostModel.fromJson(Map<String, dynamic> json) {
     return PostModel(
-        id: json['_id'],
+        id: json['_id']??json['id'] ?? '',
         content: json['content'] ?? '',
         location: json['location'] != null
             ? LocationModel.fromJson(json['location'])
             : null,
         type: json['type'] ?? '',
-        images: json['media'] != null
+        gifUrl: json['gifUrl'] ?? '',
+        images:json['media'] != null
             ? List<String>.from(json['media'].map(
                 (mediaItem) => mediaItem['photo'] ?? mediaItem['mediaKey']))
             : null,
@@ -99,11 +101,11 @@ class PostModel extends PostEntity {
         mainPost: json['mainPost'] != null
             ? MainPostModel.fromJson(json['mainPost'])
             : null,
-        user: json['user'] == null
+        user: json['owner'] == null
             ? null
-            : json['user'] is String
-                ? json['user']
-                : TwitterUserModel.fromJson(json['user']),
+            : json['owner'] is String
+                ? json['owner']
+                : TwitterUserModel.fromJson(json['owner']),
         privacy: json['privacy'] ?? 0,
         commentPrivacy: json['commentPrivacy'] ?? 0,
         sharesCount: json['sharesCount'] ?? 0,
