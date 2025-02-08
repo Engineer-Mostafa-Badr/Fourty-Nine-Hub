@@ -7,7 +7,7 @@ class ActivityModel extends ActivityEntity {
       id: json['_id'] ?? '',
       name: json['nameAr'] ?? '',
       nameEn: json['nameEn'] ?? '',
-      image: json['icon'] ?? '',
+      image: json['url'] ?? '',
     );
   }
 }

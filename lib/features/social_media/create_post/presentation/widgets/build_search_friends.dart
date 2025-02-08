@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -24,22 +26,30 @@ class BuildSearchFriends extends StatefulWidget {
 
 class _BuildSearchFriendsState extends State<BuildSearchFriends> {
   final searchController = TextEditingController();
+  late ScrollController _scrollController;
 
   @override
   void initState() {
-    widget.controller.usersPagingController.itemList = [];
+    _scrollController = ScrollController()..addListener(_onScroll);
     super.initState();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      context.read<CreatePostCubit>().fetchFriendsFollowers('');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsetsDirectional.only(top: 20.0, end: 8, start: 8),
-        child: CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
-              child: Row(
+      body: BlocBuilder<CreatePostCubit, CreatePostState>(
+        builder: (context, state) =>Padding(
+          padding: const EdgeInsetsDirectional.only(top: 40.0, end: 8, start: 8),
+          child: Column(
+            children: [
+              Row(
                 children: [
                   InkWell(
                       onTap: () => context.pop(),
@@ -53,82 +63,74 @@ class _BuildSearchFriendsState extends State<BuildSearchFriends> {
                       height: kToolbarHeight * .7,
                       action: (v) async {
                         setState(() {});
-                        widget.controller.usersPagingController.itemList = [];
+                        print(v);
+                        // widget.controller.usersPagingController.itemList = [];
                         // widget.controller.usersPagingController.refresh();
                         // widget.controller.loadUsers(v);
 
                         // widget.controller.usersPagingController.itemList = [];
-                        await widget.controller.loadUsers(v);
+                        widget.controller.loadInitialUsers(v);
                         setState(() {});
                       },
-                      controller: searchController,
+                      controller: widget.controller.searchController,
                       suffix: const Icon(Icons.search),
                     ),
                   ),
                 ],
               ),
-            ),
-            if (widget.controller.usersPagingController.itemList != null &&
-                widget.controller.usersPagingController.itemList!.isNotEmpty)
-              PagedSliverList<int, PostUserEntity>(
-                pagingController: widget.controller.usersPagingController,
-                builderDelegate: PagedChildBuilderDelegate<PostUserEntity>(
-                  noItemsFoundIndicatorBuilder: (context) {
-                    return const SizedBox.shrink();
-                  },
-                  itemBuilder: (context, item, index) {
-                    return Container(
-                      padding: const EdgeInsets.all(15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Expanded(
+                child: ListView.separated(itemBuilder: (context,index)=>Container(
+                  padding: const EdgeInsets.all(15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
                         children: [
-                          Row(
-                            children: [
-                              CircleAvatar(
-                                radius: 30,
-                                backgroundImage: NetworkImage(widget
-                                        .controller
-                                        .usersPagingController
-                                        .itemList?[index]
-                                        .profilePicture ??
-                                    ''),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Label(
-                                text: widget.controller.usersPagingController
-                                        .itemList?[index].fullName ??
-                                    '',
-                                style: Styles.headerText(),
-                              ),
-                            ],
+                          CircleAvatar(
+                            radius: 30,
+                            backgroundImage: NetworkImage(widget
+                                .controller
+                                .usersList[index]
+                                .profilePicture ??
+                                ''),
                           ),
-                          Checkbox(
-                              value: widget.controller.usersPagingController
-                                  .itemList?[index].isSelected,
-                              onChanged: (v) {
-                                widget.onSelectUser(widget.controller
-                                    .usersPagingController.itemList![index]);
-                                widget.controller.usersPagingController
-                                        .itemList?[index].isSelected =
-                                    !widget.controller.usersPagingController
-                                        .itemList![index].isSelected!;
-                                setState(() {});
-                              }),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Label(
+                            text: widget
+                                .controller
+                                .usersList[index].fullName ??
+                                '',
+                            style: Styles.headerText(),
+                          ),
                         ],
                       ),
-                    );
-                  },
-                  noMoreItemsIndicatorBuilder: (context) => Container(),
-                  firstPageProgressIndicatorBuilder: (context) =>
-                      const CupertinoActivityIndicator(),
-                  newPageProgressIndicatorBuilder: (context) =>
-                      const CupertinoActivityIndicator(),
-                ),
-              ),
-          ],
-        ),
+                      Checkbox(
+                          value: widget
+                              .controller
+                              .usersList[index].isSelected,
+                          onChanged: (v) {
+                            widget.onSelectUser(widget
+                                .controller
+                                .usersList[index]);
+                            widget
+                                .controller
+                                .usersList[index].isSelected =
+                            !widget
+                                .controller
+                                .usersList[index].isSelected!;
+                            setState(() {});
+                          }),
+                    ],
+                  ),
+                ), separatorBuilder: (context,state)=>Sizer(), itemCount: widget
+                    .controller
+                    .usersList.length),
+              )
+            ],
+          ),
+        )
       ),
     );
   }

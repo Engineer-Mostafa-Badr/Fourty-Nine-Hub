@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/social_media/create_post/presentation/wid
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_create_post_app_bar.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_create_post_header.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_media_card.dart';
+import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_search_friends.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_sheet_item.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
@@ -443,7 +444,18 @@ class _CreatePostViewState extends State<CreatePostView> {
                         BuildSheetItem(
                             icon: Assets.tagIcon,
                             title: "Tag people",
-                            onTap: () {},
+                            onTap: () {
+                              sheetController.collapse();
+                              bottomSheet(
+                                  isScrollControlled: true,
+                                  context: context,
+                                  widget: BuildSearchFriends(
+                                    controller: context.read<CreatePostCubit>(),
+                                    onSelectUser: (user) => context
+                                        .read<CreatePostCubit>()
+                                        .selectUsers(user),
+                                  ));
+                            },
                             hasDivider: true),
                         BuildSheetItem(
                             icon: Assets.feelingIcon,
@@ -491,11 +503,11 @@ class _CreatePostViewState extends State<CreatePostView> {
                               }
                             },
                             hasDivider: true),
-                        BuildSheetItem(
-                            icon: Assets.liveVideoIcon,
-                            title: "Live video",
-                            onTap: () {},
-                            hasDivider: true),
+                        // BuildSheetItem(
+                        //     icon: Assets.liveVideoIcon,
+                        //     title: "Live video",
+                        //     onTap: () {},
+                        //     hasDivider: true),
                         BuildSheetItem(
                             icon: Assets.backgroundIcon,
                             title: "Background color",
@@ -540,17 +552,17 @@ class _CreatePostViewState extends State<CreatePostView> {
                             title: "Life event",
                             onTap: () {},
                             hasDivider: true),
-                        BuildSheetItem(
-                            icon: Assets.musicIcon,
-                            title: "Music",
-                            onTap: () {},
-                            hasDivider: true),
-                        BuildSheetItem(
-                          icon: Assets.avatarIcon,
-                          title: "Your avatar",
-                          onTap: () {},
-                          hasDivider: false,
-                        ),
+                        // BuildSheetItem(
+                        //     icon: Assets.musicIcon,
+                        //     title: "Music",
+                        //     onTap: () {},
+                        //     hasDivider: true),
+                        // BuildSheetItem(
+                        //   icon: Assets.avatarIcon,
+                        //   title: "Your avatar",
+                        //   onTap: () {},
+                        //   hasDivider: false,
+                        // ),
                       ],
                     ),
                   ),

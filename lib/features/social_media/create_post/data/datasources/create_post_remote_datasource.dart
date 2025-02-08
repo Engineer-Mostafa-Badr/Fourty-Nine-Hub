@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
@@ -15,7 +16,7 @@ import '../../../../../core/error/failure.dart';
 import '../models/feeling_model.dart';
 
 abstract class CreatePostRemoteDataSource {
-  Future<Either<Failure, List<FeelingEntity>>> getFeelingsList();
+  Future<Either<Failure, List<FeelingEntity>>> getFeelingsList(PaginationParams params);
   Future<Either<Failure, List<ActivityEntity>>> getActivitiesList();
   Future<Either<Failure, bool>> postData({required Map<String, dynamic> data});
   Future<Either<Failure, List<PostUserEntity>>> getFriendsFollowers(
@@ -41,23 +42,23 @@ class CreatePostRemoteDataSourceImpl implements CreatePostRemoteDataSource {
     final response = await _apiConsumer.get(EndPoints.activities);
     return response.fold(
         (l) => Left(l),
-        (data) => Right((data['data'] as List)
+        (data) => Right((data['data']['activities'] as List)
             .map((e) => ActivityModel.fromJson(e))
             .toList()));
   }
 
   @override
-  Future<Either<Failure, List<FeelingEntity>>> getFeelingsList() async {
+  Future<Either<Failure, List<FeelingEntity>>> getFeelingsList(PaginationParams params) async {
     // final response = await _jsonParser.get(Jsons.feelings);
     // return response.fold(
     //     (l) => Left(l),
     //     (data) => Right((data['data']['items'] as List)
     //         .map((e) => FeelingModel.fromJson(e))
     //         .toList()));
-    final response = await _apiConsumer.get(EndPoints.feelings);
+    final response = await _apiConsumer.get(EndPoints.feelings(params));
     return response.fold(
         (l) => Left(l),
-        (data) => Right((data['data'] as List)
+        (data) => Right((data['data']['feelings'] as List)
             .map((e) => FeelingModel.fromJson(e))
             .toList()));
   }

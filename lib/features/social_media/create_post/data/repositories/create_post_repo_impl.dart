@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/create_post/data/datasources/create_post_remote_datasource.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/activity_entity.dart';
@@ -18,8 +19,8 @@ class CreatePostRepoImpl implements CreatePostRepo {
   }
 
   @override
-  Future<Either<Failure, List<FeelingEntity>>> getFeelingsList() {
-    return _remoteDataSource.getFeelingsList();
+  Future<Either<Failure, List<FeelingEntity>>> getFeelingsList(PaginationParams params) {
+    return _remoteDataSource.getFeelingsList(params);
   }
 
   @override
