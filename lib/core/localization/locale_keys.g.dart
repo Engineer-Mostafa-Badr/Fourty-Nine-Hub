@@ -216,6 +216,7 @@ abstract class  LocaleKeys {
   static const friends = 'friends';
   static const Doctor = 'Doctor';
   static const loadingDriver = 'loadingDriver';
+  static const loading = 'loading';
   static const Restaurant = 'Restaurant';
   static const driver = 'driver';
   static const sureLogout = 'sureLogout';

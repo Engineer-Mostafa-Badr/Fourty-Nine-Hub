@@ -8,6 +8,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
+import 'package:fourtyninehub/core/utils/hex_color_helper.dart';
 import 'package:fourtyninehub/features/lucky_wheel/domain/entities/wheel_entity.dart';
 import 'package:fourtyninehub/features/lucky_wheel/domain/entities/wheel_wallet_entity.dart';
 import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/spin_wheel_cubit/spin_wheel_cubit.dart';
@@ -60,9 +61,16 @@ class LuckyWheelView extends StatelessWidget {
                             padding: EdgeInsetsDirectional.symmetric(
                                 vertical: 15.h, horizontal: 15.w),
                             decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.r),
-                                color: Theme.of(context).primaryColor),
-                            child: Row(
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(30),
+                                topRight: Radius.circular(30),
+                                bottomLeft: Radius.circular(200),
+                              ),
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            height: 80,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   LocaleKeys.money.localize,
@@ -71,25 +79,40 @@ class LuckyWheelView extends StatelessWidget {
                                           .scaffoldBackgroundColor),
                                 ),
                                 const Spacer(),
-                                Text(
-                                  '${state.data?.amount.round() ?? 0}',
-                                  style: Styles.mediumText(
-                                      color: Theme.of(context)
-                                          .scaffoldBackgroundColor),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      '${state.data?.amount.round() ?? 0}',
+                                      style: Styles.mediumText(
+                                          color: Theme.of(context)
+                                              .scaffoldBackgroundColor),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
                           ),
                         ),
-                        const Sizer(),
+                        // const Sizer(),
+                        const SizedBox(
+                          width: 1,
+                        ),
                         Expanded(
                           child: Container(
                             padding: EdgeInsetsDirectional.symmetric(
                                 vertical: 15.h, horizontal: 15.w),
                             decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.r),
-                                color: Theme.of(context).primaryColor),
-                            child: Row(
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(30),
+                                topRight: Radius.circular(30),
+                                bottomRight: Radius.circular(200),
+                              ),
+                              color: HexColor('F75699'),
+                            ),
+                            height: 80,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Text(
                                   LocaleKeys.points.localize,
@@ -98,11 +121,16 @@ class LuckyWheelView extends StatelessWidget {
                                           .scaffoldBackgroundColor),
                                 ),
                                 const Spacer(),
-                                Text(
-                                  '${state.data?.points.round() ?? 0}',
-                                  style: Styles.mediumText(
-                                      color: Theme.of(context)
-                                          .scaffoldBackgroundColor),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      '${state.data?.points.round() ?? 0}',
+                                      style: Styles.mediumText(
+                                          color: Theme.of(context)
+                                              .scaffoldBackgroundColor),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
@@ -142,16 +170,17 @@ class LuckyWheelView extends StatelessWidget {
                           ),
                   ),
                   AppButton(
+                    radius: 30,
                     height: 80.h,
                     width: double.infinity,
                     label: LocaleKeys.spin.localize,
                     backColor: Theme.of(context).primaryColor,
-                    style: Styles.headerText(
-                      fontSize: 70.sp,
+                    style: Styles.mediumText(
+                      fontSize: 60.sp,
                       color: Theme.of(context).scaffoldBackgroundColor,
                     ),
                     onPressed: () {
-                      return spinWheelCubit.spin(state.data!,context);
+                      return spinWheelCubit.spin(state.data!, context);
                     },
                   ),
                   SizedBox(height: 30.h),

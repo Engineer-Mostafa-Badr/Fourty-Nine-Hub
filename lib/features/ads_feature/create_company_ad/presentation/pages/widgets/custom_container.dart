@@ -70,11 +70,13 @@ class CustomContainerAdvertise extends StatelessWidget {
             padding: EdgeInsetsDirectional.symmetric(
                 vertical: 15.h, horizontal: 15.w),
             width: double.infinity,
+            height: 80.h,
             decoration: BoxDecoration(
               color: Theme.of(context).primaryColor,
-              borderRadius: BorderRadius.circular(20.r),
+              borderRadius: BorderRadius.circular(30.r),
             ),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   title,
@@ -88,14 +90,15 @@ class CustomContainerAdvertise extends StatelessWidget {
                     style: Styles.mediumText(
                         color: Theme.of(context).scaffoldBackgroundColor),
                   ),
-                const Spacer(),
+                if (numberOfAdvertises > 0) const Spacer(),
                 if (numberOfAdvertises > 0)
                   Text(
                     '$totalPrice',
                     style: Styles.mediumText(
                         color: Theme.of(context).scaffoldBackgroundColor),
                   ),
-                IconButton(
+                if (numberOfAdvertises > 0)
+                  IconButton(
                   onPressed: () {},
                   icon: Icon(
                     Icons.check_circle,

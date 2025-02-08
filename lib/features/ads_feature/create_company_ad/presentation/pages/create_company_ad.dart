@@ -183,77 +183,73 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                           ],
                         ),
                       ),
-                      Row(
+                      Column(
                         children: [
-                          Expanded(
+                          Container(
+                            padding: EdgeInsetsDirectional.symmetric(
+                                vertical: 15.h, horizontal: 15.w),
+                            width: 196,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).primaryColor,
+                              borderRadius: BorderRadius.circular(30.r),
+                            ),
+                            child: Row(
+                              children: [
+                                Text(
+                                  LocaleKeys.total.localize,
+                                  style: Styles.headerText(
+                                      color: Theme.of(context)
+                                          .scaffoldBackgroundColor),
+                                ),
+                                const Spacer(),
+                                Text(
+                                  '$totalPrice', // Display the total price here
+                                  style: Styles.mediumText(
+                                      color: Theme.of(context)
+                                          .scaffoldBackgroundColor),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 5),
+                          GestureDetector(
+                            onTap: totalPrice > 0
+                                ? () {
+                                    // context
+                                    //     .read<CreateCompanyAdCubit>()
+                                    //     .payCompanyAd(
+                                    //       PayCompanyAdParams(amount: totalPrice),
+                                    //     );
+                                    // Navigator.push(
+                                    //   context,
+                                    //   MaterialPageRoute(
+                                    //     builder: (context) => BlocProvider<PaymentCubit>(
+                                    //       create: (BuildContext context) => serviceLocator(),
+                                    //       child: PaymentView(
+                                    //         amountId: '',
+                                    //         amount: totalPrice,
+                                    //       ),
+                                    //     ),
+                                    //   ),
+                                    // );
+                                  }
+                                : () {},
                             child: Container(
                               padding: EdgeInsetsDirectional.symmetric(
                                   vertical: 15.h, horizontal: 15.w),
-                              width: double.infinity,
+                              width: 196,
                               decoration: BoxDecoration(
-                                color: Theme.of(context).primaryColor,
-                                borderRadius: BorderRadius.circular(20.r),
+                                color: totalPrice > 0
+                                    ? AppColors.SECONDARY_COLOR
+                                    : AppColors.SECONDARY_COLOR
+                                        .withValues(alpha: .5),
+                                borderRadius: BorderRadius.circular(30.r),
                               ),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    LocaleKeys.total.localize,
-                                    style: Styles.headerText(
-                                        color: Theme.of(context)
-                                            .scaffoldBackgroundColor),
-                                  ),
-                                  const Spacer(),
-                                  Text(
-                                    '$totalPrice', // Display the total price here
-                                    style: Styles.mediumText(
-                                        color: Theme.of(context)
-                                            .scaffoldBackgroundColor),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 5),
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: totalPrice > 0
-                                  ? () {
-                                      // context
-                                      //     .read<CreateCompanyAdCubit>()
-                                      //     .payCompanyAd(
-                                      //       PayCompanyAdParams(amount: totalPrice),
-                                      //     );
-                                      // Navigator.push(
-                                      //   context,
-                                      //   MaterialPageRoute(
-                                      //     builder: (context) => BlocProvider<PaymentCubit>(
-                                      //       create: (BuildContext context) => serviceLocator(),
-                                      //       child: PaymentView(
-                                      //         amountId: '',
-                                      //         amount: totalPrice,
-                                      //       ),
-                                      //     ),
-                                      //   ),
-                                      // );
-                                    }
-                                  : () {},
-                              child: Container(
-                                padding: EdgeInsetsDirectional.symmetric(
-                                    vertical: 15.h, horizontal: 15.w),
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  color: totalPrice > 0
-                                      ? AppColors.SECONDARY_COLOR
-                                      : AppColors.SECONDARY_COLOR
-                                          .withOpacity(.5),
-                                  borderRadius: BorderRadius.circular(20.r),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    LocaleKeys.pay.localize,
-                                    style: Styles.headerText(
-                                      color: AppColors.AUTH_CONTAINER_COLOR,
-                                    ),
+                              child: Center(
+                                child: Text(
+                                  LocaleKeys.pay.localize,
+                                  style: Styles.headerText(
+                                    color: AppColors.AUTH_CONTAINER_COLOR,
                                   ),
                                 ),
                               ),
@@ -266,7 +262,7 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                 );
               },
             )
-          :   const CustomNotLogged(),
+          : const CustomNotLogged(),
     );
   }
 }

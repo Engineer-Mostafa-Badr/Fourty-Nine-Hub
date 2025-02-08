@@ -11,6 +11,7 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
+import 'package:fourtyninehub/core/utils/hex_color_helper.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -18,6 +19,7 @@ import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:restart_app/restart_app.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../core/widget/custom_text_no_login.dart';
@@ -25,6 +27,7 @@ import '../../../features/authentication/presentation/widgets/log_out_widget.dar
 import '../../../features/competition/presentation/cubit/competition_cubit/competition_cubit.dart';
 import '../../../features/competition/presentation/cubit/competition_cubit/competition_state.dart';
 import '../../../features/competition/presentation/view/special_ads_view.dart';
+import '../../../features/custom_page/presentation/cubit/custom_page_cubit.dart';
 import '../../../features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../../../res/assets/assets.dart';
 import '../../../res/style/app_colors.dart';
@@ -47,7 +50,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
 
   @override
   void initState() {
-    // TODO: implement initState
     AdInterstitialTop.loadIntersitialAd();
     super.initState();
   }
@@ -65,146 +67,241 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
+                    // context
+                    //     .read<UserCubit>()
+                    //     .isLoggedIn
+                    //     ? _buildAccountHeader(
+                    //   context: context,
+                    //   user: state.data,
+                    // )
+                    //     : _buildLoginWidget(context: context),
                     context.read<UserCubit>().isLoggedIn
-                        ? _buildAccountHeader(
-                            context: context,
-                            user: state.data,
-                          )
+                        ? accountWidget(context: context, user: state.data)
                         : _buildLoginWidget(context: context),
+                    const Divider(
+                      color: Colors.grey,
+                    ),
+                    IntrinsicHeight(
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              children: [
+                                competitionSubscription(context: context),
+                                drawerListTile(
+                                    image: Assets.customPage,
+                                    label: LocaleKeys.customPage.localize,
+                                    onTap: () {
+                                      AdInterstitialTop.loadIntersitialAd();
+                                      AdInterstitialTop.showInterstitialAd();
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const EditPage(),
+                                        ),
+                                      );
+                                    }),
+                                drawerListTile(
+                                  image: Assets.microphone,
+                                  label:
+                                      LocaleKeys.advertiseYourCompany.localize,
+                                  onTap: () {
+                                    AdInterstitialTop.loadIntersitialAd();
+                                    AdInterstitialTop.showInterstitialAd();
+                                    return context.push(Routes.CREATECOMPANYAD);
+                                  },
+                                ),
+                                drawerListTile(
+                                    image: Assets.quran,
+                                    label: LocaleKeys.quraan.localize,
+                                    onTap: () {
+                                      AdInterstitialTop.loadIntersitialAd();
+                                      AdInterstitialTop.showInterstitialAd();
 
-                    competitionSubscription(context: context),
+                                      return context.push(Routes.QURAAN);
+                                    }),
+                                drawerListTile(
+                                    image: Assets.azkar,
+                                    label: LocaleKeys.azkar.localize,
+                                    onTap: () {
+                                      AdInterstitialTop.loadIntersitialAd();
+                                      AdInterstitialTop.showInterstitialAd();
+                                      return context.push(Routes.AZKAAR);
+                                    }),
+                                drawerListTile(
+                                    image: Assets.favorite_main_category_icon,
+                                    label:
+                                        LocaleKeys.favouriteCategories.localize,
+                                    requireLogin: true,
+                                    onTap: () async {
+                                      AdInterstitialTop.loadIntersitialAd();
+                                      AdInterstitialTop.showInterstitialAd();
+                                      await context
+                                          .push(Routes.FAVOURITECATEGORIES);
+                                      context
+                                          .read<MainCategoriesCubit>()
+                                          .loadDataCategory();
+                                      // context.read<MainCategoriesCubit>().getMainCategoryCustomPage();
+                                    }),
 
-                    drawerListTile(
-                        image: Assets.microphone,
-                        label: LocaleKeys.advertiseYourCompany.localize,
-                        onTap: () {
-                          AdInterstitialTop.loadIntersitialAd();
-                          AdInterstitialTop.showInterstitialAd();
-                          return context.push(Routes.CREATECOMPANYAD);
-                        }),
-                    drawerListTile(
-                        image: Assets.quran,
-                        label: LocaleKeys.quraan.localize,
-                        onTap: () {
-                          AdInterstitialTop.loadIntersitialAd();
-                          AdInterstitialTop.showInterstitialAd();
+                                drawerListTile(
+                                    // icon: Icons.favorite,
+                                    image: Assets.favorite_sub_category_icon,
+                                    label: LocaleKeys
+                                        .favouriteSubCategories.localize,
+                                    requireLogin: true,
+                                    onTap: () => context
+                                        .push(Routes.FAVOURITESUBCATEGORIES)),
 
-                          return context.push(Routes.QURAAN);
-                        }),
-                    drawerListTile(
-                        image: Assets.azkar,
-                        label: LocaleKeys.azkar.localize,
-                        onTap: () {
-                          AdInterstitialTop.loadIntersitialAd();
-                          AdInterstitialTop.showInterstitialAd();
-                          return context.push(Routes.AZKAAR);
-                        }),
-                    drawerListTile(
-                        icon: Icons.maps_home_work_rounded,
-                        label: LocaleKeys.customPage.localize,
-                        onTap: () {
-                          AdInterstitialTop.loadIntersitialAd();
-                          AdInterstitialTop.showInterstitialAd();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const EditPage(),
+                                drawerListTile(
+                                    // icon: FontAwesomeIcons.adn,
+                                    image: Assets.favorite_ad_icon,
+                                    label: LocaleKeys.favouriteAds.localize,
+                                    requireLogin: true,
+                                    onTap: () =>
+                                        context.push(Routes.FAVOURITE)),
+                                // drawerListTile(
+                                //     image: Assets.history,
+                                //     label: LocaleKeys.requestHistory.localize,
+                                //     requireLogin: true,
+                                //     onTap: () => context.push(Routes.REQUESTSHISTORY)),
+
+                                // drawerListTile(
+                                //   // icon: Icons.list,
+                                //     image: Assets.lists_icon,
+                                //     label: LocaleKeys.lists.localize,
+                                //     requireLogin: true,
+                                //     onTap: () => context.push(Routes.Lists)),
+                                drawerListTile(
+                                    // icon: Icons.ads_click,
+                                    image: Assets.my_ads_icon,
+                                    label: LocaleKeys.myAds.localize,
+                                    requireLogin: true,
+                                    onTap: () => context.push(Routes.MYADDS)),
+                                // drawerListTile(icon: Icons.list, label: 'Requests', onTap: () {}),
+                                drawerListTile(
+                                    // icon: Icons.settings,
+                                    image: Assets.settings_icon,
+                                    label: LocaleKeys.settings.localize,
+                                    onTap: () => context.push(Routes.SETTINGS)),
+
+                                drawerListTile(
+                                    // icon: Icons.privacy_tip,
+                                    image: Assets.privacy_icon,
+                                    label: LocaleKeys.privacy.localize,
+                                    onTap: () {
+                                      AdInterstitialTop.loadIntersitialAd();
+                                      AdInterstitialTop.showInterstitialAd();
+                                      return context.push(Routes.PRIVACY);
+                                    }),
+
+                                drawerListTile(
+                                    image: Assets.policy,
+                                    label: LocaleKeys.policies.localize,
+                                    onTap: () {
+                                      AdInterstitialTop.loadIntersitialAd();
+                                      AdInterstitialTop.showInterstitialAd();
+                                      return context.push(Routes.POLICY);
+                                    }),
+                                drawerListTile(
+                                    // icon: Icons.share,
+                                    image: Assets.share_app_icon,
+                                    label: LocaleKeys.shareApp.localize,
+                                    onTap: () => context.push(Routes.SHAREAPP)),
+                                drawerListTile(
+                                    // icon: Icons.message,
+                                    image: Assets.contact_us_icon,
+                                    label: LocaleKeys.contactUs.localize,
+                                    onTap: () =>
+                                        context.push(Routes.CONTACTUS)),
+
+                                drawerListTile(
+                                    // icon: Icons.logout,
+                                    image: Assets.sign_out_icon,
+                                    requireLogin: true,
+                                    label: LocaleKeys.logout.localize,
+                                    onTap: () {
+                                      bottomSheet(
+                                          backColor: Theme.of(context)
+                                              .scaffoldBackgroundColor,
+                                          context: context,
+                                          widget: const LogoutWidget());
+                                    }),
+                              ],
                             ),
-                          );
-                        }),
-                    drawerListTile(
-                        image: Assets.favorite_main_category_icon,
-                        label: LocaleKeys.favouriteCategories.localize,
-                        requireLogin: true,
-                        onTap: () async {
-                          AdInterstitialTop.loadIntersitialAd();
-                          AdInterstitialTop.showInterstitialAd();
-                          await context.push(Routes.FAVOURITECATEGORIES);
-                          context
-                              .read<MainCategoriesCubit>()
-                              .loadDataCategory();
-                          // context.read<MainCategoriesCubit>().getMainCategoryCustomPage();
-                        }),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 12),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                drawerRollWidget(
+                                  label: LocaleKeys.ride.localize,
+                                  image: Assets.rideIcon,
+                                  onTap: () => context.push(Routes.RIDE),
+                                ),
+                                drawerRollWidget(
+                                  label: LocaleKeys.loading.localize,
+                                  image: Assets.loading,
+                                  onTap: () {},
+                                  // onTap: () => context.push(Routes.RIDE),
+                                ),
+                                drawerRollWidget(
+                                  label: LocaleKeys.health.localize,
+                                  image: Assets.healthIcon,
+                                  onTap: () {},
+                                ),
+                                drawerRollWidget(
+                                  label: LocaleKeys.meal.localize,
+                                  image: Assets.meal,
+                                  onTap: () {},
+                                  // onTap: () => context.push(Routes.RIDE),
 
-                    drawerListTile(
-                        // icon: Icons.favorite,
-                        image: Assets.favorite_sub_category_icon,
-                        label: LocaleKeys.favouriteSubCategories.localize,
-                        requireLogin: true,
-                        onTap: () =>
-                            context.push(Routes.FAVOURITESUBCATEGORIES)),
-                    drawerListTile(
-                        // icon: FontAwesomeIcons.adn,
-                        image: Assets.favorite_ad_icon,
-                        label: LocaleKeys.favouriteAds.localize,
-                        requireLogin: true,
-                        onTap: () => context.push(Routes.FAVOURITE)),
-                    drawerListTile(
-                        image: Assets.history,
-                        label: LocaleKeys.requestHistory.localize,
-                        requireLogin: true,
-                        onTap: () => context.push(Routes.REQUESTSHISTORY)),
+                                ),
+                                drawerRollWidget(
+                                  label: LocaleKeys.find.localize,
+                                  image: Assets.find,
+                                  onTap: () {},
+                                  // onTap: () => context.push(Routes.),
 
-                    drawerListTile(
-                        // icon: Icons.list,
-                        image: Assets.lists_icon,
-                        label: LocaleKeys.lists.localize,
-                        requireLogin: true,
-                        onTap: () => context.push(Routes.Lists)),
-                    drawerListTile(
-                        // icon: Icons.ads_click,
-                        image: Assets.my_ads_icon,
-                        label: LocaleKeys.myAds.localize,
-                        requireLogin: true,
-                        onTap: () => context.push(Routes.MYADDS)),
-                    // drawerListTile(icon: Icons.list, label: 'Requests', onTap: () {}),
-                    drawerListTile(
-                        // icon: Icons.settings,
-                        image: Assets.settings_icon,
-                        label: LocaleKeys.settings.localize,
-                        onTap: () => context.push(Routes.SETTINGS)),
-
-                    drawerListTile(
-                        // icon: Icons.privacy_tip,
-                        image: Assets.privacy_icon,
-                        label: LocaleKeys.privacy.localize,
-                        onTap: () {
-                          AdInterstitialTop.loadIntersitialAd();
-                          AdInterstitialTop.showInterstitialAd();
-                          return context.push(Routes.PRIVACY);
-                        }),
-
-                    drawerListTile(
-                        image: Assets.policy,
-                        label: LocaleKeys.policies.localize,
-                        onTap: () {
-                          AdInterstitialTop.loadIntersitialAd();
-                          AdInterstitialTop.showInterstitialAd();
-                          return context.push(Routes.POLICY);
-                        }),
-                    drawerListTile(
-                        // icon: Icons.share,
-                        image: Assets.share_app_icon,
-                        label: LocaleKeys.shareApp.localize,
-                        onTap: () => context.push(Routes.SHAREAPP)),
-                    drawerListTile(
-                        // icon: Icons.message,
-                        image: Assets.contact_us_icon,
-                        label: LocaleKeys.contactUs.localize,
-                        onTap: () => context.push(Routes.CONTACTUS)),
-
-                    drawerListTile(
-                        // icon: Icons.logout,
-                        image: Assets.sign_out_icon,
-                        requireLogin: true,
-                        label: LocaleKeys.logout.localize,
-                        onTap: () {
-                          bottomSheet(
-                              backColor:
-                                  Theme.of(context).scaffoldBackgroundColor,
-                              context: context,
-                              widget: const LogoutWidget());
-                        }),
+                                ),
+                                drawerRollWidget(
+                                  label: LocaleKeys.reel.localize,
+                                  image: Assets.reel,
+                                  // onTap: () {},
+                                  onTap: () => context.push(Routes.REELS),
+                                ),
+                                drawerRollWidget(
+                                  label: LocaleKeys.spotlight.localize,
+                                  image: Assets.spotlight,
+                                  // onTap: () {},
+                                  onTap: () => context.push(Routes.SPOTLIGHT),
+                                ),
+                                drawerRollWidget(
+                                  label: LocaleKeys.meet.localize,
+                                  image: Assets.meet,
+                                  // onTap: () {},
+                                  onTap: () => context.push(Routes.MEETINGROOM),
+                                ),
+                                drawerRollWidget(
+                                  label: LocaleKeys.live.localize,
+                                  image: Assets.liveIcon,
+                                  // onTap: () {},
+                                  onTap: () => context.push(Routes.LIVE),
+                                ),
+                                drawerRollWidget(
+                                  label: LocaleKeys.snap.localize,
+                                  image: Assets.snap,
+                                  // onTap: () {},
+                                  onTap: () => context.push(Routes.SNAP),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -434,6 +531,28 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     );
   }
 
+  Widget drawerRollWidget(
+      {required String label,
+      required String image,
+      required void Function()? onTap}) {
+    return InkWell(
+      onTap: onTap,
+      child: Column(
+        children: [
+          Image.asset(
+            image,
+            width: 40.h,
+            height: 40.h,
+            fit: BoxFit.cover,
+          ),
+          Label(
+              text: label,
+              style: Styles.mediumText(fontWeight: FontWeight.w400)),
+        ],
+      ),
+    );
+  }
+
   Widget competitionSubscription({required BuildContext context}) {
     return InkWell(
       onTap: () {
@@ -454,13 +573,16 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   child: Column(
                     children: [
                       const CustomNotLogged(),
-                      const SizedBox(height: 10,),
+                      const SizedBox(
+                        height: 10,
+                      ),
                       AppButton(
                           color: AppColors.LIGHT_COLOR,
                           backColor: AppColors.PRIMARY_COLOR_DARK,
-                          label: "Cancel", onPressed: (){
-                        Navigator.pop(context);
-                      }),
+                          label: "Cancel",
+                          onPressed: () {
+                            Navigator.pop(context);
+                          }),
                     ],
                   ),
                 ),
@@ -478,9 +600,18 @@ class _DrawerWidgetState extends State<DrawerWidget> {
             color: AppColors.LIGHT_GRAY_COLOR),
         child: Row(
           children: [
+            SizedBox(
+              height: kToolbarHeight,
+              width: kToolbarHeight,
+              child: Image.asset(
+                Assets.spinWheel,
+                // height: kToolbarHeight,
+                // width: kToolbarHeight,
+              ),
+            ),
             Expanded(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Label(
                       text: LocaleKeys.luckyWheel.localize,
@@ -493,15 +624,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           fontWeight: FontWeight.w400,
                           color: AppColors.QUANTITY_COLOR)),
                 ],
-              ),
-            ),
-            SizedBox(
-              height: kToolbarHeight,
-              width: kToolbarHeight,
-              child: Image.asset(
-                Assets.spinWheel,
-                // height: kToolbarHeight,
-                // width: kToolbarHeight,
               ),
             ),
           ],
@@ -565,145 +687,170 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     context.read<GetWalletCubit>();
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Row(
+      child: Column(
         children: [
-          SizedBox(
-            height: kToolbarHeight * 2.5.h,
-            width: kToolbarHeight * 2.5.w,
-            child: Stack(
-              alignment: AlignmentDirectional.bottomEnd,
-              children: [
-                Positioned.fill(
-                  child: BlocConsumer<UserCubit, BasicState>(
-                    listener: (context, state) {
-                      // if(state.isSuccess){
-                      //   context.pop();
-                      //   showSuccessMessage(context, 'Picture Uploaded Successfully');
-                      // }
-                      // if(state.isError){
-                      //   showErrorMessage(context, state.failure.toString());
-                      // }
-                    },
-                    builder: (context, state) {
-                      if (state.isLoading) {
-                        //create circle shimmer
+          Row(
+            children: [
+              SizedBox(
+                height: kToolbarHeight * 2.5.h,
+                width: kToolbarHeight * 2.5.w,
+                child: Stack(
+                  alignment: AlignmentDirectional.bottomEnd,
+                  children: [
+                    Positioned.fill(
+                      child: BlocConsumer<UserCubit, BasicState>(
+                        listener: (context, state) {
+                          // if(state.isSuccess){
+                          //   context.pop();
+                          //   showSuccessMessage(context, 'Picture Uploaded Successfully');
+                          // }
+                          // if(state.isError){
+                          //   showErrorMessage(context, state.failure.toString());
+                          // }
+                        },
+                        builder: (context, state) {
+                          if (state.isLoading) {
+                            //create circle shimmer
 
-                        Shimmer.fromColors(
-                          baseColor: Colors.amber,
-                          highlightColor: Colors.black,
-                          child: CircleAvatar(
-                            child: Container(
-                              color: Colors.red,
-                            ),
-                          ),
-                        );
-                      }
-                      return ImageFromInternet(
-                        isCircle: true,
-                        image:
-                            user?.profilePicture ?? UIConst.profilePlaceHolder,
-                      );
-                    },
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () async {
-                    showModalBottomSheet(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return Wrap(
-                          children: <Widget>[
-                            ListTile(
-                              leading: const Icon(Icons.photo_library),
-                              title: const Text('Gallery'),
-                              onTap: () async {
-                                // Navigator.pop(context);
-                                await context.read<UserCubit>().uploadPhoto(
-                                    isGallery: true, context: context);
-                                // Reload user data if needed
-                              },
-                            ),
-                            ListTile(
-                              leading: const Icon(Icons.camera_alt),
-                              title: const Text('Camera'),
-                              onTap: () async {
-                                // Navigator.pop(context);
-                                await context.read<UserCubit>().uploadPhoto(
-                                    isGallery: false, context: context);
-                                // Reload user data if needed
-                              },
-                            ),
-                          ],
+                            Shimmer.fromColors(
+                              baseColor: Colors.amber,
+                              highlightColor: Colors.black,
+                              child: CircleAvatar(
+                                child: Container(
+                                  color: Colors.red,
+                                ),
+                              ),
+                            );
+                          }
+                          return ImageFromInternet(
+                            isCircle: true,
+                            image: user?.profilePicture ??
+                                UIConst.profilePlaceHolder,
+                          );
+                        },
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () async {
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Wrap(
+                              children: <Widget>[
+                                ListTile(
+                                  leading: const Icon(Icons.photo_library),
+                                  title: const Text('Gallery'),
+                                  onTap: () async {
+                                    // Navigator.pop(context);
+                                    await context.read<UserCubit>().uploadPhoto(
+                                        isGallery: true, context: context);
+                                    // Reload user data if needed
+                                  },
+                                ),
+                                ListTile(
+                                  leading: const Icon(Icons.camera_alt),
+                                  title: const Text('Camera'),
+                                  onTap: () async {
+                                    // Navigator.pop(context);
+                                    await context.read<UserCubit>().uploadPhoto(
+                                        isGallery: false, context: context);
+                                    // Reload user data if needed
+                                  },
+                                ),
+                              ],
+                            );
+                          },
                         );
                       },
-                    );
-                  },
-                  child: Icon(
-                    Icons.camera_alt_outlined,
-                    size: 40.w,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                )
-              ],
-            ),
-          ),
-          const Sizer(),
-          Expanded(
-              child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Label(
-                    text: _getFirstTwoWords(user?.fullName ?? ''),
-                    style: Styles.mediumText(fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  if (user?.isDocument ?? false)
-                    Icon(
-                      Icons.verified,
-                      color: AppColors.PRIMARY_COLOR,
-                      size: 40.w,
-                    ),
-                ],
-              ),
-              // Label(
-              //   text: getUserType(user),
-              //   style: Styles.mediumText(),
-              // ),
-              Sizer(
-                height: 10.h,
-              ),
-              GestureDetector(
-                onTap: () {
-                  // context.push(
-                  //   Routes.WALLET,
-                  // );
-                },
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.wallet,
-                      size: 35.w,
-                    ),
-                    Sizer(
-                      width: 8.h,
-                      height: 8.h,
-                    ),
-                    Expanded(
-                      child: Label(
-                        text: '${user?.wallet ?? 0}',
-                        style: Styles.mediumText(
-                            decoration: TextDecoration.underline),
+                      child: Image.asset(
+                        Assets.cameraOutlined,
+                        width: 40.w,
                       ),
                     )
                   ],
                 ),
-              )
+              ),
+              const Sizer(),
+              Expanded(
+                  child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Label(
+                        text: _getFirstTwoWords(user?.fullName ?? ''),
+                        style: Styles.mediumText(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      if (user?.isDocument ?? false)
+                        Icon(
+                          Icons.verified,
+                          color: AppColors.PRIMARY_COLOR,
+                          size: 40.w,
+                        ),
+                    ],
+                  ),
+                  // Label(
+                  //   text: getUserType(user),
+                  //   style: Styles.mediumText(),
+                  // ),
+                  Sizer(
+                    height: 10.h,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      // context.push(
+                      //   Routes.WALLET,
+                      // );
+                    },
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.wallet,
+                          size: 35.w,
+                        ),
+                        Sizer(
+                          width: 8.h,
+                          height: 8.h,
+                        ),
+                        Expanded(
+                          child: Label(
+                            text: '${user?.wallet ?? 0}',
+                            style: Styles.mediumText(
+                                decoration: TextDecoration.underline),
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              )),
             ],
-          )),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Switch(
+                value: context.read<CustomPageCubit>().state.activate!.customPage,
+                onChanged: (value) async {
+                  await context.read<CustomPageCubit>().updateActivate(value);
+                  Restart.restartApp();
+                },
+                activeColor: Colors.white,
+                inactiveThumbColor: Colors.white,
+                inactiveTrackColor: HexColor('d9d9d9'),
+                activeTrackColor: Colors.black,
+                // trackColor:  WidgetStatePropertyAll(HexColor('d9d9d9')),
+                trackOutlineColor: WidgetStatePropertyAll(HexColor('ff3308')),
+              ),
+              SizedBox(
+                width: 4.w,
+              ),
+              Label(text: LocaleKeys.customPage.localize),
+            ],
+          ),
         ],
       ),
     );
