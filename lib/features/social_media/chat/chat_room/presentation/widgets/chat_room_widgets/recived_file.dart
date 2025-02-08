@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:path/path.dart';
@@ -74,7 +75,9 @@ class _ReceivedFileCardState extends State<ReceivedFileCard> {
               radius: 15,
               backgroundColor:
                   context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
-              backgroundImage: const NetworkImage(UIConst.profilePlaceHolder),
+              backgroundImage:  NetworkImage(context.read<ChatsCubit>().selectedChat.isAdmin == "admin"
+                  ? context.read<ChatsCubit>().selectedChat.avatar
+                  : UIConst.profilePlaceHolder),
             ),
             const SizedBox(
               width: 8,
