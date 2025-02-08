@@ -43,27 +43,17 @@ class _AzkarDetailsState extends State<AzkarDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
+      appBar:   AppBar(
+     //   automaticallyImplyLeading: false,
         surfaceTintColor: Colors.transparent,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Text(
-              widget.category,
-              style: const TextStyle(fontSize: 20),
-            ),
-            IconButton(
-              icon: const Icon(
-                Icons.arrow_forward,
-              ),
-              onPressed: () {
-                Navigator.of(context).pop(); // Pop the current screen
-              },
-            ),
-          ],
+        title: Text(
+          widget.category,
+          style: const TextStyle(fontSize: 20),
         ),
-      ),
+        centerTitle: true,
+        titleTextStyle:
+            const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+      ),   
       body: BlocBuilder<AzkarCubit, AzkarState>(
         builder: (BuildContext context, state) {
           if (state.status == AzkarStates.loading) {
