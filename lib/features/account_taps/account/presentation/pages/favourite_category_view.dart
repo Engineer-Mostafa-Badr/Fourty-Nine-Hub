@@ -40,9 +40,13 @@ class _FavouriteCategoryViewState extends State<FavouriteCategoryView> {
               : state.data!.isNotEmpty && state.data != null
                   ? GridView.builder(
                       padding: EdgeInsets.all(8.w),
-            gridDelegate:
-            const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, childAspectRatio: 1),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: .8,
+                        mainAxisSpacing: 8,
+                        crossAxisSpacing: 8,
+                      ),
                       itemCount: state.data?.length ?? 0,
                       // separatorBuilder: (context, i) => Sizer(
                       //   height: 0.h,
