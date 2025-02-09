@@ -28,16 +28,16 @@ class NavigateBar extends StatefulWidget {
 class _NavigateBarState extends State<NavigateBar> {
   Map<String, bool> _selectedItems = {};
   final List<String> _icons = [
-    Assets.homeRide,
-    Assets.loadingCar,
-    Assets.homeHealth,
-    Assets.homeFood,
-    Assets.findLogo,
-    Assets.homeReel,
-    Assets.spotlightIcon,
-    Assets.cameraLogo,
-    Assets.live,
-    Assets.cameraIcon,
+    Assets.rideIcon,
+    Assets.loading,
+    Assets.healthIcon,
+    Assets.meal,
+    Assets.find,
+    Assets.reel,
+    Assets.spotlight,
+    Assets.meet,
+    Assets.liveIcon,
+    Assets.snap,
   ];
 
   Map<String, bool> _initFavouriteCategories(NavigateBarEntity preferences) {
@@ -154,18 +154,7 @@ class _NavigateBarState extends State<NavigateBar> {
                             ),
                           ),
                           selected: isSelected,
-                          trailing: (index == 0 ||
-                                  index == 1 ||
-                                  index == 2 ||
-                                  index == 3 ||
-                                  index == 5 ||
-                                  index == 4 ||
-                                  index == 7)
-                              ? Image.asset(
-                                  _icons[index],
-                                  height: 40.h,
-                                )
-                              : SvgPicture.asset(
+                          trailing: Image.asset(
                                   _icons[index],
                                   height: 40.h,
                                 ),

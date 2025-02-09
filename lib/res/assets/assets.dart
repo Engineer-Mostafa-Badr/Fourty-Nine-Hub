@@ -25,6 +25,7 @@ abstract class Assets {
   static String locationIcon = 'assets/icons/locationIcon.svg';
   static String liveVideoIcon = 'assets/icons/liveVideoIcon.svg';
   static String backgroundIcon = 'assets/icons/backgroundIcon.svg';
+  static String uploadImage = 'assets/icons/upload-01.png';
   static String camera = 'assets/icons/cameraIcon.svg';
   static String gifIcon = 'assets/icons/gifIcon.svg';
   static String lifeEventIcon = 'assets/icons/lifeEventIcon.svg';
@@ -55,6 +56,7 @@ abstract class Assets {
   static String twitterLogo = 'assets/icons/twitterLogo.png';
   static String loadingCar = 'assets/icons/loadingCar.png';
   static String comment = 'assets/icons/comment.png';
+  static String clock = 'assets/icons/clock.png';
   static String single = 'assets/icons/single.png';
   static String married = 'assets/icons/married.png';
   static String divorced = 'assets/icons/divorce.png';
