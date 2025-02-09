@@ -12,6 +12,7 @@ import 'package:fourtyninehub/features/social_media/reels/presentation/pages/rec
 
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../../core/widget/custom_text_no_login.dart';
+import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -61,10 +62,7 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
                       ),
                     );
                   },
-                  icon: Icon(
-                    Icons.access_time_outlined,
-                    color: Theme.of(context).primaryColor,
-                  ),
+                  icon: Image.asset(Assets.clock,width: 40.w,),
                 )
               : const SizedBox.shrink(),
         ],

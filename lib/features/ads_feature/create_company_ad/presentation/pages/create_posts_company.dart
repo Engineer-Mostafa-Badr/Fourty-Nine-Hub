@@ -16,6 +16,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../../core/enums/base_status_enum.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 import '../../../../../service_locator/service_locator.dart';
@@ -88,79 +89,6 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                   appBar: BackAppBar(
                     centerTitle: false,
                     label: widget.title,
-                    actions: [
-                      TextButton(
-                        child: Label(text: LocaleKeys.post.localize),
-                        onPressed: () {
-                          bool inArabic = context.isArabic;
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return BlocProvider.value(
-                                value: serviceLocator<CreateCompanyAdCubit>(),
-                                child: BlocBuilder<CreateCompanyAdCubit,
-                                        CreateCompanyAdState>(
-                                    builder: (context, state) {
-                                  return AlertDialog(
-                                    title: Text(inArabic
-                                        ? "تأكيد الخدمة"
-                                        : "Service Confirmation"),
-                                    content: Text(inArabic
-                                        ? "هذه الخدمة ستكلف ${widget.totalPrice} ${context.read<MainCategoriesCubit>().state.currency?.currencyAr}. هل تريد المتابعة؟"
-                                        : "This service will cost ${widget.totalPrice} ${context.read<MainCategoriesCubit>().state.currency?.currencyEn}. Do you want to proceed?"),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        child:
-                                            Text(inArabic ? "إلغاء" : "Cancel"),
-                                      ),
-                                      TextButton(
-                                        onPressed: () async {
-                                          // Handle confirmation
-                                          print(
-                                              '**************************************');
-                                          print(controller.selectedImages);
-                                          print(
-                                              '**************************************');
-                                          if (formKey.currentState!
-                                              .validate()) {
-                                            await context
-                                                .read<CreateCompanyAdCubit>()
-                                                .addPostCompanyAdvertise(
-                                                  mediaIds: widget.picture
-                                                      ? controller
-                                                              .selectedImages ??
-                                                          showErrorMessage(
-                                                            context,
-                                                            LocaleKeys
-                                                                .imageNotSelected
-                                                                .localize,
-                                                          )
-                                                      : null,
-                                                  type: widget.type,
-                                                  post: widget.text
-                                                      ? postContentTextController
-                                                          .text
-                                                      : null,
-                                                  totalPrice: widget.totalPrice,
-                                                  context: context,
-                                                );
-                                          }
-                                        },
-                                        child: Text(
-                                            inArabic ? "تأكيد" : "Confirm"),
-                                      ),
-                                    ],
-                                  );
-                                }),
-                              );
-                            },
-                          );
-                        },
-                      ),
-                    ],
                   ),
                   body: Form(
                     key: formKey,
@@ -325,13 +253,22 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                                     ),
                                     child: Center(
                                       child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
+                                          Image.asset(
+                                            Assets.uploadImage,
+                                            width: 40.h,
+                                            height: 40.h,
+                                            fit: BoxFit.cover,
+                                          ),
+                                          SizedBox(width: 8.w,),
                                           Text(
                                             LocaleKeys.uploadImage.localize,
                                             style: Styles.headerText(
                                                 color: Theme.of(context)
                                                     .scaffoldBackgroundColor),
                                           ),
+
                                         ],
                                       ),
                                     ),
