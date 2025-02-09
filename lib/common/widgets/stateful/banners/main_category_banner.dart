@@ -137,7 +137,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.only(top: 8.0),
                     child: Label(
                       overflow: TextOverflow.ellipsis,
                       text: context.locale == Locales.english
