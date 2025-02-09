@@ -100,6 +100,7 @@ abstract class Routes {
       '/Visita/DoctorUnhandledAppointments';
   static const ALLDOCTORRESERVATIONS = '/Visita/AllDoctorReservations';
   static const FOOD = '/Food';
+  static const LIFEEVENT = '/Social/LIFEEVENT';
 
   static const RESTAURANTDETAILS = '/Food/RetaurantDetails';
   static const CusineRestaurants = '/Food/Cusine-Restaurants';
@@ -285,6 +286,7 @@ abstract class Paths {
   static const DOCTORUNHANDLEDAPPOINTMENTS = 'DoctorUnhandledAppointments';
   static const ALLDOCTORRESERVATIONS = 'AllDoctorReservations';
   static const FOOD = 'Food';
+  static const LIFEEVENT = 'LIFEEVENT';
   static const CREATERESTURANT = 'CreateResturant';
   static const CusineRestaurants = 'Cusine-Restaurants';
   static const RestaurantDashboard = 'RestaurantDashboard';

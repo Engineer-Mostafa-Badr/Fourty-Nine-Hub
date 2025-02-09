@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
@@ -190,7 +191,8 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                                               ),
                                               onTap: () async {
                                                 Navigator.pop(context);
-                                                controller.uploadPhoto(
+                                                await controller.uploadPhoto(
+                                                  hasLoading: false,
                                                     isGallery: true, context: context);
                                               },
                                             ),
@@ -300,12 +302,14 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                   } else {
                     showDialog(
                         context: context,
-                        builder: (context) => ShowAllImages(
+                        builder: (context) {
+                          return ShowAllImages(
                               images: state.images!,
                               onRemoveImage: (UploadFileEntity image) {
                                 controller.removePhoto(image);
                               },
-                            ));
+                            );
+                        });
                   }
                 },
                 child: Stack(

@@ -331,6 +331,7 @@ import '../features/shipping/create_shipping_request/presentation/cubit/get_my_t
 import '../features/social_media/club_house/presentation/pages/audio_stream_screen.dart';
 import '../features/social_media/club_house/presentation/pages/club_house_home_screen.dart';
 import '../features/social_media/create_post/presentation/pages/create_post_view.dart';
+import '../features/social_media/create_post/presentation/pages/life_event.dart';
 import '../features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import '../features/social_media/social_posts/presentation/pages/Social_home.dart';
 import '../features/social_media/social_posts/presentation/pages/other_account_view.dart';
@@ -1022,6 +1023,13 @@ class AppPages {
                     return CreatePostView(
                       social: social ?? 'social',
                     );
+                  },
+                ),
+                GoRoute(
+                  path: Paths.LIFEEVENT,
+                  name: Routes.LIFEEVENT,
+                  builder: (context, state) {
+                    return LifeEvent();
                   },
                 ),
                 GoRoute(

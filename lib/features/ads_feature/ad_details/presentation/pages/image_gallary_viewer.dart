@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:go_router/go_router.dart';
@@ -7,6 +10,7 @@ import 'package:photo_view/photo_view_gallery.dart';
 
 class ImageGalleryPage extends StatelessWidget {
   final List<String> images;
+  final List<XFile>? files;
   final int initialIndex;
   final PageController pageController;
 
@@ -14,10 +18,13 @@ class ImageGalleryPage extends StatelessWidget {
     super.key,
     required this.images,
     this.initialIndex = 0,
+    this.files,
   }) : pageController = PageController(initialPage: initialIndex);
 
   @override
   Widget build(BuildContext context) {
+    print("objectIndex$initialIndex");
+    print("objectIndexFiles$files");
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
@@ -50,13 +57,21 @@ class ImageGalleryPage extends StatelessWidget {
             Expanded(
               child: PhotoViewGallery.builder(
                 scrollPhysics: const BouncingScrollPhysics(),
-                itemCount: images.length,
+                itemCount: files!=null?files?.length??0:images.length,
                 builder: (BuildContext context, int index) {
-                  return PhotoViewGalleryPageOptions(
-                    imageProvider: NetworkImage(images[index]),
-                    initialScale: PhotoViewComputedScale.contained,
-                    heroAttributes: PhotoViewHeroAttributes(tag: images[index]),
-                  );
+                  if(files != null){
+                    return PhotoViewGalleryPageOptions(
+                      imageProvider: FileImage(File(files?[index].path??'')),
+                      initialScale: PhotoViewComputedScale.contained,
+                      heroAttributes: PhotoViewHeroAttributes(tag: files![index]),
+                    );
+                  }else{
+                    return PhotoViewGalleryPageOptions(
+                      imageProvider: NetworkImage(images[index]),
+                      initialScale: PhotoViewComputedScale.contained,
+                      heroAttributes: PhotoViewHeroAttributes(tag: images[index]),
+                    );
+                  }
                 },
                 pageController: pageController,
                 onPageChanged: (index) {},

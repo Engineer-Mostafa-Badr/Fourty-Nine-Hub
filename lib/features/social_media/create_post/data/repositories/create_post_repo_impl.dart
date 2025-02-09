@@ -9,13 +9,19 @@ import 'package:fourtyninehub/features/social_media/create_post/domain/entities/
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/creat_twitter_usecase.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/friends-followers_usecase.dart';
 import '../../domain/repositories/create_post_repo.dart';
+import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_sub_activities_usecase.dart';
 
 class CreatePostRepoImpl implements CreatePostRepo {
   final CreatePostRemoteDataSource _remoteDataSource;
   CreatePostRepoImpl(this._remoteDataSource);
   @override
-  Future<Either<Failure, List<ActivityEntity>>> getActivitiesList() {
-    return _remoteDataSource.getActivitiesList();
+  Future<Either<Failure, List<ActivityEntity>>> getActivitiesList(PaginationParams params) {
+    return _remoteDataSource.getActivitiesList(params);
+  }
+
+  @override
+  Future<Either<Failure, List<ActivityEntity>>> getSubActivitiesList(GetSubActivitiesParams params) {
+    return _remoteDataSource.getSubActivitiesList(params);
   }
 
   @override

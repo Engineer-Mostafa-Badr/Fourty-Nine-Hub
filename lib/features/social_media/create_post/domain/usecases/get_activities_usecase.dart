@@ -11,6 +11,6 @@ class GetActivitiesUseCase extends UseCase<List<ActivityEntity>, PaginationParam
   GetActivitiesUseCase(this._repo);
   @override
   Future<Either<Failure, List<ActivityEntity>>> call(PaginationParams params) {
-    return _repo.getActivitiesList();
+    return _repo.getActivitiesList(params);
   }
 }

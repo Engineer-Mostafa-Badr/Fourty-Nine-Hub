@@ -14,10 +14,12 @@ import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/friends-followers_usecase.dart';
 import '../../../../../core/error/failure.dart';
 import '../models/feeling_model.dart';
+import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_sub_activities_usecase.dart';
 
 abstract class CreatePostRemoteDataSource {
   Future<Either<Failure, List<FeelingEntity>>> getFeelingsList(PaginationParams params);
-  Future<Either<Failure, List<ActivityEntity>>> getActivitiesList();
+  Future<Either<Failure, List<ActivityEntity>>> getActivitiesList(PaginationParams params);
+  Future<Either<Failure, List<ActivityEntity>>> getSubActivitiesList(GetSubActivitiesParams params);
   Future<Either<Failure, bool>> postData({required Map<String, dynamic> data});
   Future<Either<Failure, List<PostUserEntity>>> getFriendsFollowers(
       {required FriendsFollowersParams params});
@@ -32,17 +34,32 @@ class CreatePostRemoteDataSourceImpl implements CreatePostRemoteDataSource {
   final ApiConsumer _apiConsumer;
   CreatePostRemoteDataSourceImpl(this._jsonParser, this._apiConsumer);
   @override
-  Future<Either<Failure, List<ActivityEntity>>> getActivitiesList() async {
+  Future<Either<Failure, List<ActivityEntity>>> getActivitiesList(PaginationParams params) async {
     // final response = await _jsonParser.get(Jsons.activities);
     // return response.fold(
     //     (l) => Left(l),
     //         (data) => Right((data['data']['items'] as List)
     //         .map((e) => ActivityModel.fromJson(e))
     //         .toList()));
-    final response = await _apiConsumer.get(EndPoints.activities);
+    final response = await _apiConsumer.get(EndPoints.activities(params));
     return response.fold(
         (l) => Left(l),
         (data) => Right((data['data']['activities'] as List)
+            .map((e) => ActivityModel.fromJson(e))
+            .toList()));
+  }
+  @override
+  Future<Either<Failure, List<ActivityEntity>>> getSubActivitiesList(GetSubActivitiesParams params) async {
+    // final response = await _jsonParser.get(Jsons.activities);
+    // return response.fold(
+    //     (l) => Left(l),
+    //         (data) => Right((data['data']['items'] as List)
+    //         .map((e) => ActivityModel.fromJson(e))
+    //         .toList()));
+    final response = await _apiConsumer.get(EndPoints.subActivities(params));
+    return response.fold(
+        (l) => Left(l),
+        (data) => Right((data['data']['subActivities'] as List)
             .map((e) => ActivityModel.fromJson(e))
             .toList()));
   }

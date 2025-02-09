@@ -85,6 +85,7 @@ abstract class Assets {
   static String volumeOff = 'assets/icons/volume_off.png';
   static String musicalNote = 'assets/icons/musical-note.png';
   static String audienceIcon = 'assets/icons/audience_icon.png';
+  static String lifeEvent = 'assets/images/lifeEvent.png';
 
   static String fawry = 'assets/images/fawry.png';
   static String instaPay = 'assets/images/instapay.png';

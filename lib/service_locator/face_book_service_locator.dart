@@ -48,6 +48,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/view_profile_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:get_it/get_it.dart';
+import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_sub_activities_usecase.dart';
 
 class FaceBookServiceLocator {
   static Future<void> execute({required GetIt serviceLocator}) async {
@@ -224,12 +225,18 @@ class FaceBookServiceLocator {
               serviceLocator(),
             ));
 
+    serviceLocator.registerLazySingleton<GetSubActivitiesUseCase>(
+        () => GetSubActivitiesUseCase(
+              serviceLocator(),
+            ));
+
     serviceLocator
         .registerLazySingleton<DeleteFriendUseCase>(() => DeleteFriendUseCase(
               serviceLocator(),
             ));
 
     serviceLocator.registerFactory<CreatePostCubit>(() => CreatePostCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

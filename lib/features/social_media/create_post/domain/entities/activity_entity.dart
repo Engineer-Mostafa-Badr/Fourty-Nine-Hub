@@ -3,5 +3,6 @@ class ActivityEntity {
   final String name;
   final String nameEn;
   final String image;
-  ActivityEntity({required this.id, required this.name,required this.nameEn, required this.image});
+  final String? mainId;
+  ActivityEntity({required this.id, required this.name,required this.nameEn, required this.image,this.mainId});
 }

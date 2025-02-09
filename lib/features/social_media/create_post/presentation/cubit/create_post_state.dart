@@ -6,6 +6,7 @@ class CreatePostState {
   final CreatePostStates status;
   final Failure? failure;
   final List<ActivityEntity>? activities;
+  final List<ActivityEntity>? subActivities;
   final List<FeelingEntity>? feelings;
   final ActivityEntity? selectedActivity;
   final FeelingEntity? selectedFeeling;
@@ -20,6 +21,7 @@ class CreatePostState {
   final bool? isSheetOpen;
   String? backColor;
   final bool isLast;
+  final bool showBallet;
   final bool isBiggerThan80;
   final bool isBiggerThen150;
   final bool isBiggerThen120;
@@ -31,9 +33,11 @@ class CreatePostState {
       this.audio,
       this.gifImage,
       this.activities,
+      this.subActivities,
       this.feelings,
       this.backColor = "#FFFFFFFF",
       this.isLast = false,
+      this.showBallet = false,
       this.isSheetOpen = true,
       this.isBiggerThan80 = false,
       this.isBiggerThen150 = false,
@@ -53,6 +57,7 @@ class CreatePostState {
     Failure? failure,
     String? gifImage,
     List<ActivityEntity>? activities,
+    List<ActivityEntity>? subActivities,
     List<FeelingEntity>? feelings,
     ActivityEntity? selectedActivity,
     FeelingEntity? selectedFeeling,
@@ -62,6 +67,7 @@ class CreatePostState {
     List<PostUserEntity>? selectedUsers,
     String? backColor,
     bool? isLast,
+    bool? showBallet,
     String? selectedLocation,
     bool? isSheetOpen,
     bool? isBiggerThan80,
@@ -75,6 +81,7 @@ class CreatePostState {
       images: images ?? this.images,
       audio: audio ?? this.audio,
       activities: activities ?? this.activities,
+      subActivities: subActivities ?? this.subActivities,
       feelings: feelings ?? this.feelings,
       selectedActivity: selectedActivity ?? this.selectedActivity,
       selectedFeeling: selectedFeeling ?? this.selectedFeeling,
@@ -85,6 +92,7 @@ class CreatePostState {
       place: place ?? this.place,
       isSheetOpen: isSheetOpen ?? this.isSheetOpen,
       isLast: isLast ?? this.isLast,
+      showBallet: showBallet ?? this.showBallet,
       isBiggerThan80: isBiggerThan80 ?? this.isBiggerThan80,
       isBiggerThen150: isBiggerThen150 ?? this.isBiggerThen150,
       isBiggerThen120: isBiggerThen120 ?? this.isBiggerThen120,
