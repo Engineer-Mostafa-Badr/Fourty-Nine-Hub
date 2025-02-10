@@ -4,9 +4,11 @@ import 'package:fourtyninehub/core/data/datasources/json_parser.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/features/social_media/create_post/data/models/activity_model.dart';
+import 'package:fourtyninehub/features/social_media/create_post/data/models/life_event_model.dart';
 import 'package:fourtyninehub/features/social_media/create_post/data/models/place_model.dart';
 import 'package:fourtyninehub/features/social_media/create_post/data/models/post_user_model.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/activity_entity.dart';
+import 'package:fourtyninehub/features/social_media/create_post/domain/entities/life_event_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/feeling_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/place_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/post_user_entity.dart';
@@ -20,6 +22,8 @@ abstract class CreatePostRemoteDataSource {
   Future<Either<Failure, List<FeelingEntity>>> getFeelingsList(PaginationParams params);
   Future<Either<Failure, List<ActivityEntity>>> getActivitiesList(PaginationParams params);
   Future<Either<Failure, List<ActivityEntity>>> getSubActivitiesList(GetSubActivitiesParams params);
+  Future<Either<Failure, List<LifeEventEntity>>> getLifeEventCategories();
+  Future<Either<Failure, List<LifeEventEntity>>> getLifeEventSubCategories(String id);
   Future<Either<Failure, bool>> postData({required Map<String, dynamic> data});
   Future<Either<Failure, List<PostUserEntity>>> getFriendsFollowers(
       {required FriendsFollowersParams params});
@@ -61,6 +65,36 @@ class CreatePostRemoteDataSourceImpl implements CreatePostRemoteDataSource {
         (l) => Left(l),
         (data) => Right((data['data']['subActivities'] as List)
             .map((e) => ActivityModel.fromJson(e))
+            .toList()));
+  }
+  @override
+  Future<Either<Failure, List<LifeEventEntity>>> getLifeEventCategories() async {
+    // final response = await _jsonParser.get(Jsons.activities);
+    // return response.fold(
+    //     (l) => Left(l),
+    //         (data) => Right((data['data']['items'] as List)
+    //         .map((e) => ActivityModel.fromJson(e))
+    //         .toList()));
+    final response = await _apiConsumer.get(EndPoints.getLifeEventsCategories);
+    return response.fold(
+        (l) => Left(l),
+        (data) => Right((data['data']['liveEventCategories'] as List)
+            .map((e) => LifeEventModel.fromJson(e))
+            .toList()));
+  }
+  @override
+  Future<Either<Failure, List<LifeEventEntity>>> getLifeEventSubCategories(String id) async {
+    // final response = await _jsonParser.get(Jsons.activities);
+    // return response.fold(
+    //     (l) => Left(l),
+    //         (data) => Right((data['data']['items'] as List)
+    //         .map((e) => ActivityModel.fromJson(e))
+    //         .toList()));
+    final response = await _apiConsumer.get(EndPoints.getLifeEventsSubCategories(id));
+    return response.fold(
+        (l) => Left(l),
+        (data) => Right((data['data']['liveEventTypes'] as List)
+            .map((e) => LifeEventModel.fromJson(e))
             .toList()));
   }
 

@@ -191,7 +191,9 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/chats_view.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/widgets/components/create_voice_room_sheet.dart';
+import 'package:fourtyninehub/features/social_media/create_post/domain/entities/life_event_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
+import 'package:fourtyninehub/features/social_media/create_post/presentation/pages/life_event_sub_categories.dart';
 import 'package:fourtyninehub/features/social_media/edit_profile/presentation/cubit/edit_profile_cubit.dart';
 import 'package:fourtyninehub/features/social_media/edit_profile/presentation/pages/edit_profile_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/Post/create_post_instagram_cubit.dart';
@@ -332,6 +334,7 @@ import '../features/social_media/club_house/presentation/pages/audio_stream_scre
 import '../features/social_media/club_house/presentation/pages/club_house_home_screen.dart';
 import '../features/social_media/create_post/presentation/pages/create_post_view.dart';
 import '../features/social_media/create_post/presentation/pages/life_event.dart';
+import '../features/social_media/create_post/presentation/pages/create_life_event.dart';
 import '../features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import '../features/social_media/social_posts/presentation/pages/Social_home.dart';
 import '../features/social_media/social_posts/presentation/pages/other_account_view.dart';
@@ -1030,6 +1033,20 @@ class AppPages {
                   name: Routes.LIFEEVENT,
                   builder: (context, state) {
                     return LifeEvent();
+                  },
+                ),
+                GoRoute(
+                  path: Paths.LIFEEVENTSub,
+                  name: Routes.LIFEEVENTSub,
+                  builder: (context, state) {
+                    return LifeEventSubCategories(lifeEvent: state.extra as LifeEventEntity,);
+                  },
+                ),
+                GoRoute(
+                  path: Paths.CREATELIFEEVENT,
+                  name: Routes.CREATELIFEEVENT,
+                  builder: (context, state) {
+                    return CreateLifeEvent(lifeEventData: state.extra as LifeEventEntity,);
                   },
                 ),
                 GoRoute(

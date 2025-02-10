@@ -6,6 +6,7 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../../../res/style/const.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class ImageFromInternet extends StatelessWidget {
   const ImageFromInternet({
@@ -17,6 +18,7 @@ class ImageFromInternet extends StatelessWidget {
     this.fromFile = false,
     this.isCircle = false,
     this.defaultLogo = false,
+    this.isSvg = false,
     this.fit,
   });
   final String image;
@@ -25,13 +27,20 @@ class ImageFromInternet extends StatelessWidget {
   final BorderRadius? borderRadius;
   final bool? fromFile;
   final bool? isCircle;
+  final bool? isSvg;
   final bool? defaultLogo;
   final BoxFit? fit;
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
       imageUrl: image,
-      imageBuilder: (context, imageProvider) => Container(
+      imageBuilder: (context, imageProvider) =>
+      isSvg==true?SvgPicture.network(
+        image,
+        height: height,
+        width: width,
+        fit: fit ?? BoxFit.fill,
+      ): Container(
         height: height,
         width: width,
         decoration: BoxDecoration(

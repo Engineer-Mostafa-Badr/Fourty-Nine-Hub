@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
+import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/social_media/create_post/domain/entities/life_event_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/place_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/post_user_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/creat_twitter_usecase.dart';
@@ -18,6 +20,8 @@ import '../../domain/entities/feeling_entity.dart';
 import '../../domain/usecases/create_post_usecase.dart';
 import '../../domain/usecases/get_activities_usecase.dart';
 import '../../domain/usecases/get_feelings_usecase.dart';
+import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_live_event_categories_usecase.dart';
+import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_live_event_sub_categories_usecase.dart';
 
 part 'create_post_state.dart';
 
@@ -29,6 +33,8 @@ class CreatePostCubit extends Cubit<CreatePostState> {
   final GetFeelingsUseCase _getFeelingsUseCase;
   final FriendsFollowersUseCase _friendsFollowersUseCase;
   final GetPlacesUseCase _getPlacesUseCase;
+  final GetLifeEventCategoriesUseCase _getLifeEventCategoriesUseCase;
+  final GetLifeEventSubCategoriesUseCase _getLifeEventSubCategoriesUseCase;
   final postContentTextController = TextEditingController();
   CreatePostCubit(
       this._createPostUseCase,
@@ -36,6 +42,8 @@ class CreatePostCubit extends Cubit<CreatePostState> {
       this._getFeelingsUseCase,
       this._createTwitterPostUseCase,
       this._friendsFollowersUseCase,
+      this._getLifeEventCategoriesUseCase,
+      this._getLifeEventSubCategoriesUseCase,
       this._getPlacesUseCase, this._getSubActivitiesUseCase)
       : super(CreatePostState());
 
@@ -152,6 +160,7 @@ class CreatePostCubit extends Cubit<CreatePostState> {
   void loadData() async {
     // await getActivities();
     // await getFeelings();
+    // getLifeEventCategories();
     loadInitialActivities();
     loadInitialFeelings();
 
@@ -202,6 +211,8 @@ class CreatePostCubit extends Cubit<CreatePostState> {
   List<ActivityEntity> activities = [];
   List<ActivityEntity> subActivities = [];
   List<FeelingEntity> feelings = [];
+  List<LifeEventEntity> lifeEventCategories = [];
+  List<LifeEventEntity> lifeEventSubCategories = [];
 
   Future<void> getActivities() async {
     if (!hasMoreActivities || isLoadingMoreActivities) return;
@@ -219,6 +230,52 @@ class CreatePostCubit extends Cubit<CreatePostState> {
       isLoadingMoreActivities = false;
       print(data.length);
       emit(state.copyWith(activities: data));
+    });
+  }
+
+  bool isLoadingMoreLifeEvent = false;
+  bool hasMoreLifeEvent = false;
+  Future<void> getLifeEventCategories() async {
+    // if (!hasMoreLifeEvent || isLoadingMoreLifeEvent) return;
+    isLoadingMoreLifeEvent = true;
+    emit(state.copyWith(status: CreatePostStates.loading));
+    final response = await _getLifeEventCategoriesUseCase(NoParams());
+    response.fold((l) => emit(state.copyWith(failure: l)), (data) {
+      lifeEventCategories.clear();
+      lifeEventCategories.addAll(data);
+      // if (data.length < 20) {
+      //   hasMoreLifeEvent = false;
+
+      // } else {
+      //   activitiesPage++;
+      // }
+
+      isLoadingMoreLifeEvent = false;
+      print(data.length);
+      emit(state.copyWith(status: CreatePostStates.success));
+    });
+  }
+
+  bool isLoadingMoreLifeEventSubCat = false;
+  bool hasMoreLifeEventSubCat = false;
+  Future<void> getLifeEventSubCategories(String id) async {
+    // if (!hasMoreLifeEvent || isLoadingMoreLifeEvent) return;
+    isLoadingMoreLifeEventSubCat = true;
+    emit(state.copyWith(status: CreatePostStates.loading));
+    final response = await _getLifeEventSubCategoriesUseCase(id);
+    response.fold((l) => emit(state.copyWith(failure: l)), (data) {
+      lifeEventSubCategories.clear();
+      lifeEventSubCategories.addAll(data);
+      // if (data.length < 20) {
+      //   hasMoreLifeEvent = false;
+
+      // } else {
+      //   activitiesPage++;
+      // }
+
+      isLoadingMoreLifeEventSubCat = false;
+      print(data.length);
+      emit(state.copyWith(status: CreatePostStates.success));
     });
   }
 

@@ -3,6 +3,7 @@ import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/create_post/data/datasources/create_post_remote_datasource.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/activity_entity.dart';
+import 'package:fourtyninehub/features/social_media/create_post/domain/entities/life_event_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/feeling_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/place_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/post_user_entity.dart';
@@ -22,6 +23,16 @@ class CreatePostRepoImpl implements CreatePostRepo {
   @override
   Future<Either<Failure, List<ActivityEntity>>> getSubActivitiesList(GetSubActivitiesParams params) {
     return _remoteDataSource.getSubActivitiesList(params);
+  }
+
+ @override
+  Future<Either<Failure, List<LifeEventEntity>>> getLifeEventCategories() {
+    return _remoteDataSource.getLifeEventCategories();
+  }
+
+ @override
+  Future<Either<Failure, List<LifeEventEntity>>> getLifeEventSubCategories(String id) {
+    return _remoteDataSource.getLifeEventSubCategories(id);
   }
 
   @override

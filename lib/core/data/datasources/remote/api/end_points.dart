@@ -580,6 +580,8 @@ class EndPoints {
   static String getTwitterFeedPosts =
       '/twitter/feed?subCategory=${Constants.twitterSubCategory}';
   static const editProfile = '/users/profile-data';
+  static const getLifeEventsCategories = '/facebook/live-event/categories?page=1&limit=30';
+  static getLifeEventsSubCategories(String id) => '/facebook/live-event/$id/types';
 
   static String userPosts(UserPostsParams params) {
     return '/facebook/post/user/${params.userId}?limit=${params.limit}&page=${params.page}&type=1&subCategory=${Constants.facebookSubCategory}';
