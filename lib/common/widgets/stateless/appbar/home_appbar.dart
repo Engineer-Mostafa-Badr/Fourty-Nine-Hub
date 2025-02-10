@@ -63,7 +63,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       toolbarHeight: toolbarHeight,
       bottom: bottom,
-      leading: leading,
+      // leading: leading,
       title: Row(
         children: [
           if (isShowLogo)

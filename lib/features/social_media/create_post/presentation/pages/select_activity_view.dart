@@ -9,6 +9,8 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class SelectActivity extends StatelessWidget {
   final List<ActivityEntity> activities;
   final Function(ActivityEntity) onSelected;
@@ -18,7 +20,7 @@ class SelectActivity extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: BackAppBar(
         label: LocaleKeys.selectActivity.localize,
       ),

@@ -15,6 +15,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 import '../../../../../core/loading/custom_loading.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 
 class StarWinnerView extends StatefulWidget {
   const StarWinnerView({super.key});
@@ -50,7 +51,7 @@ class _StarWinnerViewState extends State<StarWinnerView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: BackAppBar(
         label: LocaleKeys.winners.localize,
       ),

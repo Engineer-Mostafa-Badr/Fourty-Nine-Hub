@@ -4,6 +4,8 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart' as gmaps;
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class DynamicMapWithPolyline extends StatefulWidget {
   final String apiKey;
   final String url;
@@ -187,7 +189,7 @@ class _DynamicMapWithPolyline extends State<DynamicMapWithPolyline> {
         ? decodePolyline(widget.polylineString!)
         : [];
 
-    return Scaffold(
+    return CustomScaffold(
       body: Stack(
         children: [
           widget.useGoogleMaps

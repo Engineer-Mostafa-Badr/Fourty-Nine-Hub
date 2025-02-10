@@ -14,6 +14,8 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../stateless/buttons/iconAppButton.dart';
+
 class MainCategoryBanner extends StatefulWidget {
   final MainCategoryEntity category;
   final bool canRegister;
@@ -103,35 +105,30 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                         context.read<UserCubit>().isLoggedIn
                             ? widget.removeFavorite
                                 ? Container()
-                                : Positioned(
-                                    top: 0,
-                                    right: 0,
-                                    child: IconButton(
-                                      padding: EdgeInsets.zero,
-                                      color: AppColors.SECONDARY_COLOR,
-                                      onPressed: () async {
-                                        final result =
-                                            await widget.onFavorite();
-                                        print("resutlt=$result");
-                                        if (result == true) {
-                                          print(result);
-                                          setState(() {
-                                            widget.category.isFavorite =
-                                                !widget.category.isFavorite!;
-                                            print(widget.category.isFavorite);
-                                            widget.isFavorite = result;
-                                            print("===================$result");
-                                          });
-                                        }
-                                      },
-                                      icon: Icon(
-                                        widget.category.isFavorite == true
-                                            ? Icons.favorite
-                                            : Icons.favorite_border,
-                                        size: 20,
-                                      ),
-                                    ),
-                                  )
+                                : PositionedDirectional(
+                          top: 10.h,
+                          end: 10.w,
+                            child: IconAppButton(
+                              icon: widget.category.isFavorite == false
+                                  ? Icons.favorite_outline
+                                  : Icons.favorite,
+                              onPressed: () async {
+                                final result =
+                                await widget.onFavorite();
+                                print("resutlt=$result");
+                                if (result == true) {
+                                  print(result);
+                                  setState(() {
+                                    widget.category.isFavorite =
+                                    !widget.category.isFavorite!;
+                                    print(widget.category.isFavorite);
+                                    widget.isFavorite = result;
+                                    print("===================$result");
+                                  });
+                                }
+                              },
+                              color: AppColors.SECONDARY_COLOR,
+                            ),)
                             : const SizedBox.shrink(),
                       ],
                     ),

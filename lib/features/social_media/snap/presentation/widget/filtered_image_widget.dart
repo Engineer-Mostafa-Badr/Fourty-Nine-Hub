@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class FilteredImageWidget extends StatefulWidget {
   const FilteredImageWidget({super.key});
 
@@ -64,7 +66,7 @@ class FilteredImageWidgetState extends State<FilteredImageWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: AppBar(
         title: const Text('Image Filter App'),
       ),

@@ -11,6 +11,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/messages/messages.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../cubit/create_auction_cubit.dart';
 
 class CreateAuctionView extends StatelessWidget {
@@ -22,7 +23,7 @@ class CreateAuctionView extends StatelessWidget {
     final controller = context.read<CreateAuctionCubit>();
     return BlocConsumer<CreateAuctionCubit, BasicState<bool>>(
         builder: (context, state) {
-      return Scaffold(
+      return CustomScaffold(
         appBar: const BackAppBar(
           label: 'Create Auction',
         ),

@@ -13,6 +13,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:video_player/video_player.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../../core/widget/custom_scaffold.dart';
 import 'mix_voices.dart';
 import 'my_voice.dart';
 import 'other_voice.dart';
@@ -53,7 +54,7 @@ class ReelsRecordingScreenState extends State<ReelsRecordingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.max,
@@ -206,7 +207,7 @@ class VideoPlaybackScreenState extends State<VideoPlaybackScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
       ),

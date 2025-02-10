@@ -19,6 +19,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import '../../../../core/enums/wheel.dart';
+import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../res/style/styles.dart';
 import '../../domain/entities/wheel_item_entity.dart';
 
@@ -28,7 +29,7 @@ class LuckyWheelView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final spinWheelCubit = BlocProvider.of<SpinWheelCubit>(context);
-    return Scaffold(
+    return CustomScaffold(
       appBar: BackAppBar(
         centerTitle: false,
         label: LocaleKeys.luckyWheel.localize,

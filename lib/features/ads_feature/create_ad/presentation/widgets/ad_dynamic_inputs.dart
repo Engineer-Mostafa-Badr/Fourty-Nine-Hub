@@ -13,6 +13,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/app_colors.dart';
 
 class AdDynamicInputWidget extends StatefulWidget {
@@ -138,7 +139,7 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
     required Function(SelectionEntity v) action,
     required List<SelectionEntity> values,
   }) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: BackAppBar(
         label: LocaleKeys.select.localize,
       ),

@@ -26,6 +26,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/secrets/controller/secrets_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:restart_app/restart_app.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../social_media/social_posts/presentation/pages/Social_home.dart';
 import '../../../../social_media/stories/presentation/cubit/stories_cubit.dart';
 
@@ -55,7 +56,7 @@ class _PagePreviewState extends State<PagePreview> {
           }
           return true;
         },
-        child: Scaffold(
+        child: CustomScaffold(
           key: _scaffoldKey,
           appBar: HomeAppbar(
             isWithBackArrow: false,

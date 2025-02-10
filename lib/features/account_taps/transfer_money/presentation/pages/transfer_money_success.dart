@@ -10,6 +10,7 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:path_provider/path_provider.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 
@@ -46,7 +47,7 @@ class _TransactionSuccessScreenState extends State<TransactionSuccessScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: BackAppBar(
         label: LocaleKeys.transactionSuccessful.localize,
       ),

@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class ImageGalleryPage extends StatelessWidget {
   final List<String> images;
   final int initialIndex;
@@ -18,7 +20,7 @@ class ImageGalleryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
         child: Column(

@@ -50,6 +50,8 @@ import 'package:restart_app/restart_app.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:auto_scroll_text/auto_scroll_text.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class ServicePagePreview extends StatefulWidget {
   const ServicePagePreview({super.key});
 
@@ -183,7 +185,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
           // pr(state.message);
         }
       },
-      child: Scaffold(
+      child: CustomScaffold(
         key: _scaffoldKey,
         bottomNavigationBar: CustomPageBottonNavBar(
           scrollController: scrollController, currentIndex: 2,

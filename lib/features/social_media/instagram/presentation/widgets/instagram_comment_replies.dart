@@ -23,6 +23,7 @@ import '../../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../../common/widgets/stateless/images/profile_image.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 
 class InstagramCommentReplies extends StatefulWidget {
   // final List<CommentEntity> replies;
@@ -56,7 +57,7 @@ class _InstagramCommentRepliesState extends State<InstagramCommentReplies> {
       child: BlocBuilder<InstagramCubit, InstagramState>(
           builder: (context, state) {
         final controller = context.read<InstagramCubit>();
-        return Scaffold(
+        return CustomScaffold(
           appBar: AppBar(
             backgroundColor: context.isDarkMode
                 ? AppColors.DARK_BLUE_COLOR.withOpacity(0.07)

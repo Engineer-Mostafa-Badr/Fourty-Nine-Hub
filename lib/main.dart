@@ -181,8 +181,7 @@ class _MyAppState extends State<MyApp> {
               LocationSocketCubit(repository: serviceLocator()),
         ),
         BlocProvider(
-          create: (context) =>
-              ThumbnailsCubit(serviceLocator()),
+          create: (context) => ThumbnailsCubit(serviceLocator()),
         ),
         BlocProvider(
           create: (context) => serviceLocator<ShowOffersCubit>(),
@@ -376,7 +375,8 @@ class _MyAppState extends State<MyApp> {
                           title: '49',
                           debugShowCheckedModeBanner: false,
                           routerConfig: AppPages.router,
-                          localizationsDelegates: context.localizationDelegates,
+                          localizationsDelegates:
+                          context.localizationDelegates,
                           supportedLocales: context.supportedLocales,
                           locale: context.locale,
                           // for device preview package

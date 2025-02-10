@@ -13,6 +13,8 @@ import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentat
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/personal_info/edit_doctor_speciality_filed.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class EditDoctorPersonalInfoView extends StatefulWidget {
   const EditDoctorPersonalInfoView({super.key, required this.doctor});
   final DoctorEntity doctor;
@@ -34,7 +36,7 @@ class _EditDoctorPersonalInfoViewState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: BackAppBar(
         label: LocaleKeys.edit.localize,
       ),

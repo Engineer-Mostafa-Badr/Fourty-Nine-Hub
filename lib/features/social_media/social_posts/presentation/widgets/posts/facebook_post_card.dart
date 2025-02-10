@@ -33,6 +33,7 @@ import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../../common/widgets/stateless/buttons/text_button.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/styles.dart';
@@ -955,7 +956,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                 onTap: () {
                   showDialog(
                       context: context,
-                      builder: (_) => Scaffold(
+                      builder: (_) => CustomScaffold(
                         body: FacebookUserOnMap(
                           location: post.location!,
                         ),

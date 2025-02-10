@@ -18,6 +18,7 @@ import 'package:go_router/go_router.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../routes/routes.dart';
 import '../../../tinder/data/shared/shared.dart';
 import '../../../twitter/presentation/widgets/report_view.dart';
@@ -116,7 +117,7 @@ class _InstagramAudioScreenState extends State<InstagramAudioScreen> {
   @override
   Widget build(BuildContext context) {
     final reelCubit = context.watch<ReelsCubit>();
-    return Scaffold(
+    return CustomScaffold(
       backgroundColor:
           context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
       appBar: AppBar(

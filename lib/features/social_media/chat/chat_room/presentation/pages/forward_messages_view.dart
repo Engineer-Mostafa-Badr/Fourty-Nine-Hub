@@ -15,6 +15,8 @@ import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../../core/widget/custom_scaffold.dart';
+
 class ForwardMessagesViewParams {
   final ChatsCubit chatsCubit;
   final ChatRoomCubit chatRoomCubit;
@@ -45,7 +47,7 @@ class _ForwardMessagesViewState extends State<ForwardMessagesView>
         ),
       ],
       child: Builder(builder: (context) {
-        return Scaffold(
+        return CustomScaffold(
             appBar: AppBar(
               elevation: 0,
               backgroundColor: AppColors.PRIMARY_COLOR,

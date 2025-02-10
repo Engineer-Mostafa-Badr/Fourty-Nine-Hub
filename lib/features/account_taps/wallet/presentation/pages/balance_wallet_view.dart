@@ -16,6 +16,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/messages/messages.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/styles.dart';
 import '../widgets/wallet_history_card.dart';
 
@@ -55,7 +56,7 @@ class _BalanceWalletViewState extends State<BalanceWalletView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
         appBar: BackAppBar(
           label: LocaleKeys.balance.localize,
         ),

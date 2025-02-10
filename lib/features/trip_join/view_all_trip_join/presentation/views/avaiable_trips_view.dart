@@ -12,6 +12,8 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class AvailableTripsView extends StatefulWidget {
   const AvailableTripsView({
     super.key,
@@ -36,7 +38,7 @@ class _AvailableTripsViewState extends State<AvailableTripsView> {
     return DefaultTabController(
       length: 3,
       child: SafeArea(
-        child: Scaffold(
+        child: CustomScaffold(
           appBar: AppBar(
             titleSpacing: 0,
             centerTitle: false,

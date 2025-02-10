@@ -10,6 +10,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 
 class LiveStreamHomeScreen extends StatelessWidget {
   const LiveStreamHomeScreen({super.key});
@@ -18,7 +19,7 @@ class LiveStreamHomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
-      child: Scaffold(
+      child: CustomScaffold(
         appBar: AppBar(
           toolbarHeight: 30,
           automaticallyImplyLeading: false,
@@ -66,7 +67,7 @@ class LiveStreamHomeScreen extends StatelessWidget {
   // Widget _videoStreamTabBar(BuildContext context) {
   //   return RefreshIndicator(
   //     onRefresh: () async => context.read<StreamCubit>().loadLives(),
-  //     child: Scaffold(
+  //     child: CustomScaffold(
   //       body: _buildLivePages(),
   //     ),
   //   );

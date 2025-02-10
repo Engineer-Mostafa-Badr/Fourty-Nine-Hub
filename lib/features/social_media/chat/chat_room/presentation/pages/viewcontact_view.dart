@@ -14,6 +14,8 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../../../core/widget/custom_scaffold.dart';
+
 class ViewContactView extends StatefulWidget {
   const ViewContactView({super.key, required this.chatsCubit});
 
@@ -42,7 +44,7 @@ class _ViewContactViewState extends State<ViewContactView> {
                   userId: widget.chatsCubit.selectedChat.userId,
                 );
           }
-          return Scaffold(
+          return CustomScaffold(
             appBar: AppBar(
               elevation: 0,
               backgroundColor: AppColors.PRIMARY_COLOR,

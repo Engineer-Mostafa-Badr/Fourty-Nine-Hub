@@ -31,6 +31,8 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:snapping_bottom_sheet/snapping_bottom_sheet.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class InstagramProfilePostsView extends StatefulWidget {
   const InstagramProfilePostsView({
     super.key,
@@ -85,7 +87,7 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: BackAppBar(
         label: LocaleKeys.posts.localize,
       ),
@@ -1144,7 +1146,7 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
 //
 //   @override
 //   Widget build(BuildContext context) {
-//     return Scaffold(
+//     return CustomScaffold(
 //       appBar: BackAppBar(
 //         label: LocaleKeys.posts.localize,
 //       ),

@@ -14,6 +14,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../common/theme/cubit/cubit.dart';
 import '../../../../common/theme/cubit/states.dart';
 import '../../../../core/messages/messages.dart';
+import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 
@@ -26,7 +27,7 @@ class SettingsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = context.read<UserCubit>();
-    return Scaffold(
+    return CustomScaffold(
         appBar: BackAppBar(
           label: LocaleKeys.settings.localize,
         ),

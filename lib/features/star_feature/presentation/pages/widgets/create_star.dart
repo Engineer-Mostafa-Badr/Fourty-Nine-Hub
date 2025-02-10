@@ -26,6 +26,8 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class CreateStar extends StatefulWidget {
   const CreateStar({super.key});
 
@@ -62,7 +64,7 @@ class _CreateStarState extends State<CreateStar> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: BackAppBar(
         label: LocaleKeys.addStar.localize,
       ),

@@ -6,6 +6,7 @@ import '../../../../common/widgets/dynamic/bottom_navigator.dart';
 import '../../../../common/widgets/dynamic/drawer.dart';
 import '../../../../common/widgets/dynamic/floating_button.dart';
 import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
+import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../res/style/app_colors.dart';
 import '../widgets/youtube_video_card.dart';
 
@@ -44,7 +45,7 @@ class _YouTubeViewState extends State<YouTubeView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       backgroundColor: AppColors.GRAY_LIGHT_COLOR3,
       appBar: const HomeAppbar(),
       drawer: const DrawerWidget(),

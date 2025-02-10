@@ -6,13 +6,15 @@ import 'package:fourtyninehub/features/trip_join/get_requests_pick_me/data/model
 import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/presentation/widgets/pick_me_request_history_card.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class GetRequestsPickMeView extends StatelessWidget {
   final List<PickMeRequest> pickMeRequests;
   const GetRequestsPickMeView({super.key, required this.pickMeRequests});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: AppBar(
         title: Transform(
           transform: Matrix4.translationValues(-20.0, 0.0, 0.0),

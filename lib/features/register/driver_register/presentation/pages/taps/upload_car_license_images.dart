@@ -3,6 +3,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/features/register/driver_register/presentation/widgets/upload_image.dart';
 
+import '../../../../../../core/widget/custom_scaffold.dart';
+
 class UploadCarLicenseImages extends StatelessWidget {
   final int length, index;
   final String label;
@@ -14,7 +16,7 @@ class UploadCarLicenseImages extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: BackAppBar(
         label: label,
       ),

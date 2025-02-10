@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/widget/custom_scaffold.dart';
 import '../../dynamic/drawer.dart';
 import '../appbar/home_appbar.dart';
 
@@ -22,7 +23,7 @@ class SharedScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       key: key,
       extendBody: extendBody,
       backgroundColor: backgroundColor,

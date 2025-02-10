@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/account_taps/account/presentation/cubit/c
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/widgets/ad_card_drawer_favourite.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../cubit/cubit/favourite_drawer_cubit.dart';
 
 class FavouriteView extends StatefulWidget {
@@ -22,7 +23,7 @@ class FavouriteView extends StatefulWidget {
 class _FavouriteViewState extends State<FavouriteView> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: BackAppBar(
         label: LocaleKeys.favouriteAds.localize,
       ),

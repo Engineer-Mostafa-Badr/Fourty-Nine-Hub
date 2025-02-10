@@ -26,6 +26,8 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/widget/custom_scaffold.dart';
+
 class CreateRestaurantForm extends StatefulWidget {
   final String? from;
   final String? restaurantId;
@@ -70,7 +72,7 @@ class _CreateRestaurantFormState extends State<CreateRestaurantForm> {
             break;
         }
       },
-      child: Scaffold(
+      child: CustomScaffold(
           appBar: const HomeAppbar(),
           body: BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
               builder: (context, state) {

@@ -9,6 +9,8 @@ import 'package:fourtyninehub/features/health_feature/emergency/presentation/cub
 import 'package:fourtyninehub/features/health_feature/emergency/presentation/widgets/emergency_card.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class EmergencyRequestsView extends StatefulWidget {
   final String subCategoryId;
   const EmergencyRequestsView({super.key, required this.subCategoryId});
@@ -47,7 +49,7 @@ class _EmergencyRequestsViewState extends State<EmergencyRequestsView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: BackAppBar(
         label: LocaleKeys.emergencyRequests.localize,
       ),

@@ -13,6 +13,7 @@ import 'package:fourtyninehub/features/custom_page/presentation/page/widget/page
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/social_page.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
 import 'favourite_category.dart';
 
 class EditPage extends StatefulWidget {
@@ -37,7 +38,7 @@ class _EditPageState extends State<EditPage> {
   Widget build(BuildContext context) {
     return BlocProvider<EditPageCubit>(
       create: (context) => EditPageCubit(),
-      child: Scaffold(
+      child: CustomScaffold(
         appBar: BackAppBar(
           leading: Builder(builder: (context) {
             return IconButton(

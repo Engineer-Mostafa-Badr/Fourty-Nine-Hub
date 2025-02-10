@@ -30,6 +30,8 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
+import '../../../../../../core/widget/custom_scaffold.dart';
+
 class FaceBookPostDetails extends StatefulWidget {
   String? postId;
   CommentEntity? comment;
@@ -76,7 +78,7 @@ class _FaceBookPostDetailsState extends State<FaceBookPostDetails> {
   Widget build(BuildContext context) {
     final user = context.read<UserCubit>().state.data;
 
-    return Scaffold(
+    return CustomScaffold(
       appBar: AppBar(
         elevation: 0,
         // toolbarHeight: 200.h,

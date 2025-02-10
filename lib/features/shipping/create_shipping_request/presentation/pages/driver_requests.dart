@@ -13,71 +13,77 @@ import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscr
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class DriverRequests extends StatelessWidget {
   const DriverRequests({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: BlocBuilder<GetAllTripCubit, ShippingState>(
-      builder: (context, state) {
-        if (state is LoadingShippingState) {
-          return const Align(
-            child: Center(
-              child: CircularProgressIndicator(
-                color: AppColors.PRIMARY_COLOR,
+    return CustomScaffold(
+      body: BlocBuilder<GetAllTripCubit, ShippingState>(
+        builder: (context, state) {
+          if (state is LoadingShippingState) {
+            return const Align(
+              child: Center(
+                child: CircularProgressIndicator(
+                  color: AppColors.PRIMARY_COLOR,
+                ),
               ),
-            ),
-          );
-        }
-        if (state is FailureShippingState) {
-          log(getFailureMessage(state.failure, context),
-              name: "jjjjjjjjjjjjjjjjjjj");
-        }
-        if (state is SuccessGetAllTripState) {
-          return SingleChildScrollView(
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 30,
-                ),
-                const SizedBox(
-                  height: 40,
-                ),
-                ...List.generate(
-                  state.allTripList.length,
-                  (index) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        TripCardWidget(
-                          model: state.allTripList[index],
-                        ),
-                        Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 35),
-                            child: GestureDetector(
-                              onTap: () {
-                                serviceLocator<SubscriptionController>()
-                                    .showActiveSubscriptionAmounts(
-                                        walletType: WalletTypes.balance);
-                              },
-                              child: Text(
-                                LocaleKeys.subscribeToSendOfferContactTheClient
-                                    .tr(),
-                                style: const TextStyle(
-                                    fontSize: 16, color: Colors.red),
-                              ),
-                            ))
-                      ],
-                    );
-                  },
-                )
-              ],
-            ),
-          );
-        } else {
-          return Container();
-        }
-      },
-    ));
+            );
+          }
+          if (state is FailureShippingState) {
+            log(getFailureMessage(state.failure, context),
+                name: "jjjjjjjjjjjjjjjjjjj");
+          }
+          if (state is SuccessGetAllTripState) {
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  ...List.generate(
+                    state.allTripList.length,
+                    (index) {
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TripCardWidget(
+                            model: state.allTripList[index],
+                          ),
+                          Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 35),
+                              child: GestureDetector(
+                                onTap: () {
+                                  serviceLocator<SubscriptionController>()
+                                      .showActiveSubscriptionAmounts(
+                                          walletType: WalletTypes.balance);
+                                },
+                                child: Text(
+                                  LocaleKeys
+                                      .subscribeToSendOfferContactTheClient
+                                      .tr(),
+                                  style: const TextStyle(
+                                      fontSize: 16, color: Colors.red),
+                                ),
+                              ))
+                        ],
+                      );
+                    },
+                  )
+                ],
+              ),
+            );
+          } else {
+            return Container();
+          }
+        },
+      ),
+    );
   }
 }

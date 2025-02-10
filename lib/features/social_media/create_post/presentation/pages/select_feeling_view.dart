@@ -5,6 +5,7 @@ import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../domain/entities/feeling_entity.dart';
 
 class SelectFeelingView extends StatelessWidget {
@@ -16,7 +17,7 @@ class SelectFeelingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: BackAppBar(
         label: LocaleKeys.selectFeeling.localize,
       ),

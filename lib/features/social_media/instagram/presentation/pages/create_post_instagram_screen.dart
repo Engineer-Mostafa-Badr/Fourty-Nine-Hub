@@ -14,6 +14,8 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:photo_manager/photo_manager.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class CreatePostInstagramScreen extends StatefulWidget {
   const CreatePostInstagramScreen({super.key});
 
@@ -100,7 +102,7 @@ class _CreatePostInstagramScreenState extends State<CreatePostInstagramScreen> {
       return const Center(child: Text('No images found!'));
     }
 
-    return Scaffold(
+    return CustomScaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.white,
         // shadowColor: Colors.white,

@@ -15,6 +15,7 @@ import 'package:fourtyninehub/features/social_media/reels/presentation/controlle
 import 'package:path_provider/path_provider.dart';
 import 'package:video_thumbnail/video_thumbnail.dart' as thumb;
 
+import '../../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../../res/style/app_colors.dart';
 import 'recording_shared.dart';
 import '../../shared/filter_utiles.dart';
@@ -305,7 +306,7 @@ class MyVoiceVideoRecordingScreenState
   @override
   Widget build(BuildContext context) {
     if (_controller == null || !_controller!.value.isInitialized) {
-      return const Scaffold(
+      return const CustomScaffold(
           backgroundColor: Colors.black,
           body: Center(
               child: CupertinoActivityIndicator(
@@ -314,7 +315,7 @@ class MyVoiceVideoRecordingScreenState
           )));
     }
 
-    return Scaffold(
+    return CustomScaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
         child: Stack(

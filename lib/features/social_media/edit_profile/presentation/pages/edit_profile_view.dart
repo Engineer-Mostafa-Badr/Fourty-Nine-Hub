@@ -18,6 +18,8 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class EditProfileView extends StatefulWidget {
   const EditProfileView({
     super.key,
@@ -69,7 +71,7 @@ class _EditProfileViewState extends State<EditProfileView> {
       builder: (context, state) {
         return Stack(
           children: [
-            Scaffold(
+            CustomScaffold(
               appBar: BackAppBar(
                 label: LocaleKeys.editProfile.localize,
               ),

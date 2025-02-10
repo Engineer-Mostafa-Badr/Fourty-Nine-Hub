@@ -17,6 +17,7 @@ import '../../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../../common/widgets/stateless/buttons/text_button.dart';
 import '../../../../../../common/widgets/stateless/images/profile_image.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../domain/entities/comment_entity.dart';
 import '../../../domain/usecases/post_comment_usecase.dart';
@@ -55,7 +56,7 @@ class _FacebookPostCommentsState extends State<FacebookPostComments> {
         builder: (context, state) {
       final controller = context.read<SocialPostsCubit>();
       final user = context.read<UserCubit>().state.data;
-      return Scaffold(
+      return CustomScaffold(
         appBar: AppBar(
           toolbarHeight: 200.h,
           elevation: 0,

@@ -39,7 +39,7 @@
 //   @override
 //   Widget build(BuildContext context) {
 //     return SafeArea(
-//       child: Scaffold(
+//       child: CustomScaffold(
 //         backgroundColor: Colors.black,
 //         body: Stack(
 //           children: [

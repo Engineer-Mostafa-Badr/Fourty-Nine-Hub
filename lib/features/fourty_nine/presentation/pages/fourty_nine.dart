@@ -38,6 +38,7 @@ import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../core/enums/ride_services_enum.dart';
 import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
@@ -164,7 +165,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
         }
       },
       child: ExitWidget(
-        child: Scaffold(
+        child: CustomScaffold(
           key: _scaffoldKey,
           appBar: HomeAppbar(
             isWithBackArrow: false,

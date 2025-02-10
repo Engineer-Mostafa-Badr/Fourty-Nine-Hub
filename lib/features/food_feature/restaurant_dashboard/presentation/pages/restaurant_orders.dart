@@ -12,6 +12,8 @@ import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class RestaurantDashboardOrders extends StatefulWidget {
   const RestaurantDashboardOrders({super.key});
 
@@ -47,7 +49,7 @@ class _RestaurantDashboardOrdersState extends State<RestaurantDashboardOrders> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: AppBar(
         title: Text(
           LocaleKeys.restaurantOrders.localize,

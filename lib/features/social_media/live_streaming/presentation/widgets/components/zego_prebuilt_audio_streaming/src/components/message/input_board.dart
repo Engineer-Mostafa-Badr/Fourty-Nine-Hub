@@ -8,6 +8,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_audio_streaming/zego_uikit_prebuilt_live_audio_room.dart';
 
 import '../../../../../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../../../../../../core/widget/custom_scaffold.dart';
 
 /// @nodoc
 class ZegoLiveAudioRoomInRoomMessageInputBoard extends ModalRoute<String> {
@@ -43,7 +44,7 @@ class ZegoLiveAudioRoomInRoomMessageInputBoard extends ModalRoute<String> {
     Animation<double> animation,
     Animation<double> secondaryAnimation,
   ) {
-    return Scaffold(
+    return CustomScaffold(
       backgroundColor: Colors.transparent,
       body: Column(
         mainAxisSize: MainAxisSize.min,

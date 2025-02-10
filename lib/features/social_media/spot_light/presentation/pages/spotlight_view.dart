@@ -17,6 +17,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../routes/routes.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../reels/data/models/new_reels_model.dart';
@@ -83,7 +84,7 @@ class _SpotlightViewState extends State<SpotlightView> {
     final isLoggedIn = userCubit.isLoggedIn;
     final userId = userCubit.state.data?.id ?? '';
 
-    return Scaffold(
+    return CustomScaffold(
       appBar: BackAppBar(
         label: LocaleKeys.spotlight_title.tr(),
         actions: [
@@ -315,7 +316,7 @@ class _FollowingSectionState extends State<FollowingSection> {
           MaterialPageRoute(
             builder: (context) => BlocProvider.value(
                 value: serviceLocator<ReelsCubit>(),
-                child: Scaffold(
+                child: CustomScaffold(
                   extendBodyBehindAppBar: true,
                   extendBody: true,
                   appBar: AppBar(
@@ -559,7 +560,7 @@ class DiscoverSectionState extends State<DiscoverSection> {
           MaterialPageRoute(
             builder: (context) => BlocProvider.value(
               value: serviceLocator<ReelsCubit>(),
-              child: Scaffold(
+              child: CustomScaffold(
                 extendBodyBehindAppBar: true,
                 extendBody: true,
                 appBar: AppBar(

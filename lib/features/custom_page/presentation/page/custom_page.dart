@@ -14,6 +14,8 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:restart_app/restart_app.dart';
 
+import '../../../../core/widget/custom_scaffold.dart';
+
 class CustomPage extends StatefulWidget {
   const CustomPage({super.key});
 
@@ -26,7 +28,7 @@ class _CustomPageState extends State<CustomPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       key: _scaffoldKey,
       appBar: BackAppBar(
         label: LocaleKeys.customPage.localize,

@@ -16,6 +16,7 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../../core/localization/locales.dart';
+import '../../../../../../core/utils/hex_color_helper.dart';
 
 class FavouriteSubCategoryCard extends StatefulWidget {
   const FavouriteSubCategoryCard(
@@ -45,17 +46,11 @@ class _FavouriteSubCategoryCardState extends State<FavouriteSubCategoryCard> {
         ),
       ),
       child: Container(
-        margin: EdgeInsets.all(10.w),
         decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            borderRadius: BorderRadius.circular(10.r),
-            boxShadow: const [
-              BoxShadow(
-                  color: Colors.grey,
-                  spreadRadius: 1,
-                  offset: Offset(-1, 1),
-                  blurRadius: 5)
-            ]),
+          color: HexColor('E6E7EB'),
+          borderRadius: BorderRadius.circular(30.r),
+        ),
+        clipBehavior: Clip.antiAliasWithSaveLayer,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -65,7 +60,7 @@ class _FavouriteSubCategoryCardState extends State<FavouriteSubCategoryCard> {
                   Positioned.fill(
                     child: SquareImage(
                       fit: BoxFit.cover,
-                      radius: 5,
+                      radius: 30.r,
                       url: widget.item.image,
                     ),
                   ),
@@ -80,9 +75,11 @@ class _FavouriteSubCategoryCardState extends State<FavouriteSubCategoryCard> {
                 ],
               ),
             ),
-            const Sizer(),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.w),
+              padding: EdgeInsets.symmetric(
+                horizontal: 8.h,
+                vertical: 8.h,
+              ),
               child: Row(
                 children: [
                   Expanded(
@@ -104,7 +101,8 @@ class _FavouriteSubCategoryCardState extends State<FavouriteSubCategoryCard> {
                     ),
                   ),
                   IconAppButton(
-                      icon: Icons.add_box_rounded,
+                      icon: Icons.add_box_outlined,
+                      color: Theme.of(context).primaryColor,
                       size: 40.h,
                       onPressed: () {
                         if (AuthHelper().isLoggedIn()) {

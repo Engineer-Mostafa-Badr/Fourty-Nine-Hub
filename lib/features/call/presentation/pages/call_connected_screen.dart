@@ -4,6 +4,8 @@ import 'package:fourtyninehub/features/call/domain/entities/call_data.dart';
 import 'package:fourtyninehub/features/call/presentation/controller/call_controller/call_cubit.dart';
 import 'package:fourtyninehub/features/call/presentation/controller/call_controller/call_state.dart';
 
+import '../../../../core/widget/custom_scaffold.dart';
+
 class CallConnectedScreen extends StatefulWidget {
   const CallConnectedScreen({super.key});
 
@@ -67,7 +69,7 @@ class VoiceCallingScreen extends StatelessWidget {
     return BlocBuilder<CallCubit, CallState>(
       builder: (context, state) {
         if (state is HasCall) {
-          return Scaffold(
+          return CustomScaffold(
             body: CallBg(
               image: Image.network(
                 callData.isCaller

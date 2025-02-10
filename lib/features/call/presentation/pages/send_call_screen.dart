@@ -13,6 +13,8 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
+import '../../../../core/widget/custom_scaffold.dart';
+
 class SendCallScreen extends StatefulWidget {
   const SendCallScreen({
     super.key,
@@ -86,7 +88,7 @@ class _SendCallScreenState extends State<SendCallScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       backgroundColor: AppColors.ACCENT_COLOR,
       body: BlocConsumer<SendCallCubit, SendCallState>(
         listener: (context, state) {
