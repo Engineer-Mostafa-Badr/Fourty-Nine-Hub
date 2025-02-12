@@ -4,12 +4,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../core/widget/custom_scaffold.dart';
 import '../../domain/entities/feeling_entity.dart';
 
 class SelectFeelingView extends StatefulWidget {
@@ -49,53 +49,53 @@ class _SelectFeelingViewState extends State<SelectFeelingView> {
           label: LocaleKeys.selectFeeling.localize,
         ),
         body: BlocBuilder<CreatePostCubit,CreatePostState>(
-          builder: (context,state) {
-            var cubit = context.read<CreatePostCubit>();
-            return cubit.loadFeelings==true?const Center(child: CircularProgressIndicator(),):Column(
-              children: [
-                Expanded(
-                  child: GridView.builder(
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2, childAspectRatio: 2),
-                      controller: _scrollController,
-                      itemCount: cubit.feelings.length,
-                      itemBuilder: (context, index) {
-                        final item = cubit.feelings[index];
-                        return InkWell(
-                          onTap: () {
-                            widget.onSelected(item);
-                            Navigator.pop(context, item);
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 5),
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey, width: .5)),
-                            alignment: Alignment.center,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                CircleAvatar(
-                                  radius: 15,
-                                  backgroundColor: Colors.white,
-                                  backgroundImage: NetworkImage(item.image),
-                                ),
-                                const Sizer(),
-                                Expanded(child: Label(text: context.isArabic?item.name:item.nameEn,style: Styles.mediumText(),)),
-                              ],
+            builder: (context,state) {
+              var cubit = context.read<CreatePostCubit>();
+              return cubit.loadFeelings==true?const Center(child: CircularProgressIndicator(),):Column(
+                children: [
+                  Expanded(
+                    child: GridView.builder(
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2, childAspectRatio: 2),
+                        controller: _scrollController,
+                        itemCount: cubit.feelings.length,
+                        itemBuilder: (context, index) {
+                          final item = cubit.feelings[index];
+                          return InkWell(
+                            onTap: () {
+                              widget.onSelected(item);
+                              Navigator.pop(context, item);
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 5),
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.grey, width: .5)),
+                              alignment: Alignment.center,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  CircleAvatar(
+                                    radius: 15,
+                                    backgroundColor: Colors.white,
+                                    backgroundImage: NetworkImage(item.image),
+                                  ),
+                                  const Sizer(),
+                                  Expanded(child: Label(text: context.isArabic?item.name:item.nameEn,style: Styles.mediumText(),)),
+                                ],
+                              ),
                             ),
-                          ),
-                        );
-                      }),
-                ),
-                cubit.isLoadingMoreFeelings?const Column(
-                    children: [
-                      Sizer(),
-                      Center(child: CircularProgressIndicator()),
-                    ]):const SizedBox(),
+                          );
+                        }),
+                  ),
+                  cubit.isLoadingMoreFeelings?const Column(
+                      children: [
+                        Sizer(),
+                        Center(child: CircularProgressIndicator()),
+                      ]):const SizedBox(),
 
-              ],
-            );
-          }
+                ],
+              );
+            }
         ),
       ),
     );

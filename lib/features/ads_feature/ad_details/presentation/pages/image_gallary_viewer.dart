@@ -25,10 +25,9 @@ class ImageGalleryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
     print("objectIndex$initialIndex");
     print("objectIndexFiles$files");
-    return Scaffold(
+    return CustomScaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
         child: Column(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/firebase_notfications_cubit/firebase_notfications_cubit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:floating_draggable_widget/floating_draggable_widget.dart';
@@ -204,39 +205,47 @@ class _CustomScaffoldState extends State<CustomScaffold> {
                       ),
                     )
                   : Container(),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    floatNavigator = !floatNavigator;
-                    print('taped $floatNavigator');
-                  });
-                },
-                child: Container(
-                  // padding: EdgeInsets.all(50),
-                  height: 100,
-                  width: 20,
-                  decoration: BoxDecoration(
-                    color: Colors.red,
-                    border: BorderDirectional(
-                      end: BorderSide(
-                        color: AppColors.PRIMARY_COLOR,
-                        width: 2,
-                      ),
-                      top: BorderSide(
-                        color: AppColors.PRIMARY_COLOR,
-                        width: 2,
-                      ),
-                      bottom: BorderSide(
-                        color: AppColors.PRIMARY_COLOR,
-                        width: 2,
+              Material(
+                color: Colors.transparent,
+                child: ClickableWidget(
+                  onTap: () {
+                    setState(() {
+                      floatNavigator = !floatNavigator;
+                      print('taped $floatNavigator');
+                    });
+                  },
+                  child: Container(
+                    width: 40,
+                    color: Colors.transparent,
+                    alignment: AlignmentDirectional.topStart,
+                    child: Container(
+                      // padding: EdgeInsets.all(50),
+                      height: 100,
+                      width: 10,
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        border: BorderDirectional(
+                          end: BorderSide(
+                            color: AppColors.PRIMARY_COLOR,
+                            width: 2,
+                          ),
+                          top: BorderSide(
+                            color: AppColors.PRIMARY_COLOR,
+                            width: 2,
+                          ),
+                          bottom: BorderSide(
+                            color: AppColors.PRIMARY_COLOR,
+                            width: 2,
+                          ),
+                        ),
+                        borderRadius: BorderRadiusDirectional.horizontal(
+                          end: Radius.circular(20.r),
+                        ),
+                        boxShadow: const [
+                          BoxShadow(color: Colors.black26, blurRadius: 10)
+                        ],
                       ),
                     ),
-                    borderRadius: BorderRadiusDirectional.horizontal(
-                      end: Radius.circular(20.r),
-                    ),
-                    boxShadow: const [
-                      BoxShadow(color: Colors.black26, blurRadius: 10)
-                    ],
                   ),
                 ),
               ),
