@@ -40,6 +40,7 @@ import '../../../../../features/account_taps/my_adds/domain/usecases/get_all_cou
 import '../../../../../features/account_taps/my_adds/domain/usecases/update_my_ads_usecase.dart';
 import '../../../../../features/ads_feature/create_company_ad/data/models/fetch_post_company_advertise_params.dart';
 import 'package:fourtyninehub/features/chance_feature/domain/use_case/fetch_main_category.dart';
+import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_sub_activities_usecase.dart';
 
 class EndPoints {
   //logout
@@ -573,11 +574,14 @@ class EndPoints {
       '/twitter/post?subCategory=${Constants.twitterSubCategory}';
 
   // static const getFeedPosts = '/facebook/feed';
-  static const activities = '/facebook/posts/activities';
+  static activities(PaginationParams params) => '/facebook/posts/activities?limit=${params.limit}&page=${params.page}';
+  static subActivities(GetSubActivitiesParams params) => '/facebook/posts/activities/${params.id}?limit=${params.limit}&page=${params.page}';
   static feelings(PaginationParams params) =>'/facebook/posts/feelings?limit=${params.limit}&page=${params.page}';
   static String getTwitterFeedPosts =
       '/twitter/feed?subCategory=${Constants.twitterSubCategory}';
   static const editProfile = '/users/profile-data';
+  static const getLifeEventsCategories = '/facebook/live-event/categories?page=1&limit=30';
+  static getLifeEventsSubCategories(String id) => '/facebook/live-event/$id/types';
 
   static String userPosts(UserPostsParams params) {
     return '/facebook/post/user/${params.userId}?limit=${params.limit}&page=${params.page}&type=1&subCategory=${Constants.facebookSubCategory}';
@@ -600,7 +604,7 @@ class EndPoints {
   }
 
   static String getFeedPosts(TwitterFeedParams params) {
-    return '/facebook/feed?limit=${params.limit}&page=${params.page}&subCategory=${Constants.facebookSubCategory}';
+    return '/facebook/feed?page=${params.page}&subCategory=${Constants.facebookSubCategory}';
   }
 
   static String getGlobalFeed(TwitterFeedParams params) {

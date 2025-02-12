@@ -5,6 +5,7 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart'
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_colors_ballet.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_create_post.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_create_post_app_bar.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_create_post_header.dart';
@@ -30,6 +31,7 @@ import 'package:fourtyninehub/features/social_media/create_post/presentation/pag
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/feeling_entity.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 
 class CreatePostView extends StatefulWidget {
   const CreatePostView({super.key, required this.social});
@@ -158,7 +160,7 @@ class _CreatePostViewState extends State<CreatePostView> {
             child: Stack(
               children: [
                 ListView(
-                  padding: EdgeInsets.zero,
+                  padding: EdgeInsets.only(bottom: 140.h),
                   shrinkWrap: true,
                   children: [
                     BuildCreatePostAppBar(
@@ -378,7 +380,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                         }
                         return controller.removeBackground();
                       },
-                      controller: sheetController,
+                      sheetController: sheetController,
                     ),
                     // const Sizer(),
                     // if (widget.social != 'twitter' &&
@@ -395,6 +397,8 @@ class _CreatePostViewState extends State<CreatePostView> {
                     const Sizer(),
                     if (state.images != null && state.images!.isNotEmpty)
                       const Expanded(child: BuildMediaCard()),
+                    const Sizer(),
+                   const BuildColorsBallet(),
                     // const Sizer(),
                     // BuildOptions(controller:controller,social:widget.social),
                   ],
@@ -415,7 +419,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                     snapSpec: const SnapSpec(
                       snap: true,
                       initialSnap: 0.6,
-                      snappings: [0.15, 0.8, 0.8],
+                      snappings: [0.1, 0.4, 0.8],
                       positioning: SnapPositioning.relativeToAvailableSpace,
                     ),
                     body: Container(),
@@ -511,7 +515,10 @@ class _CreatePostViewState extends State<CreatePostView> {
                         BuildSheetItem(
                             icon: Assets.backgroundIcon,
                             title: "Background color",
-                            onTap: () {},
+                            onTap: () {
+                              controller.showRemoveBalletColors();
+                              sheetController.collapse();
+                            },
                             hasDivider: true),
                         BuildSheetItem(
                             icon: Assets.cameraIcon,
@@ -526,6 +533,7 @@ class _CreatePostViewState extends State<CreatePostView> {
                             icon: Assets.gifIcon,
                             title: "GIF",
                             onTap: () async {
+                              sheetController.collapse();
                               final gif = await GiphyGet.getGif(
                                 context: context,
                                 apiKey:
@@ -550,7 +558,10 @@ class _CreatePostViewState extends State<CreatePostView> {
                         BuildSheetItem(
                             icon: Assets.lifeEventIcon,
                             title: "Life event",
-                            onTap: () {},
+                            onTap: () {
+                              sheetController.collapse();
+                              context.push(Routes.LIFEEVENT);
+                            },
                             hasDivider: true),
                         // BuildSheetItem(
                         //     icon: Assets.musicIcon,

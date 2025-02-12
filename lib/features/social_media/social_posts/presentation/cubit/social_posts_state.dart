@@ -17,6 +17,8 @@ class SocialPostsState {
   final int? tweetPage;
   final int? advertisementsPage;
   final int? profilePage;
+  final bool? hasMoreData;
+  final bool? isLoadingMore;
   const SocialPostsState({
     this.status = StateStatus.loading,
     this.friendRequest,
@@ -31,6 +33,8 @@ class SocialPostsState {
     this.postComments,
     this.postDetails,
     this.tweetPage = 0,
+    this.hasMoreData = true,
+    this.isLoadingMore = false,
     this.profilePage = 0,
     this.advertisementsPage = 0,
     this.profileData,
@@ -47,6 +51,8 @@ class SocialPostsState {
     int? tweetPage,
     int? profilePage,
     int? advertisementsPage,
+    bool? hasMoreData,
+    bool? isLoadingMore,
     CommentEntity? newComment,
     UploadFileEntity? newImage,
     UploadFileEntity? newCover,
@@ -70,6 +76,8 @@ class SocialPostsState {
       profilePage: profilePage ?? this.profilePage,
       newImage: newImage ?? this.newImage,
       newCover: newCover ?? this.newCover,
+      hasMoreData: hasMoreData ?? this.hasMoreData,
+      isLoadingMore: isLoadingMore ?? this.isLoadingMore,
     );
   }
 }

@@ -5,6 +5,8 @@ import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/friends-followers_usecase.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_activities_usecase.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_feelings_usecase.dart';
+import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_live_event_categories_usecase.dart';
+import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_live_event_sub_categories_usecase.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_places_usecase.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
 import 'package:fourtyninehub/features/social_media/edit_profile/data/datasources/edit_profile_remote_datasource.dart';
@@ -48,6 +50,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/view_profile_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:get_it/get_it.dart';
+import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_sub_activities_usecase.dart';
 
 class FaceBookServiceLocator {
   static Future<void> execute({required GetIt serviceLocator}) async {
@@ -224,12 +227,30 @@ class FaceBookServiceLocator {
               serviceLocator(),
             ));
 
+    serviceLocator.registerLazySingleton<GetSubActivitiesUseCase>(
+        () => GetSubActivitiesUseCase(
+              serviceLocator(),
+            ));
+
     serviceLocator
         .registerLazySingleton<DeleteFriendUseCase>(() => DeleteFriendUseCase(
               serviceLocator(),
             ));
+    serviceLocator
+        .registerLazySingleton<GetLifeEventCategoriesUseCase>(() => GetLifeEventCategoriesUseCase(
+              serviceLocator(),
+            ));
+
+
+ serviceLocator
+        .registerLazySingleton<GetLifeEventSubCategoriesUseCase>(() => GetLifeEventSubCategoriesUseCase(
+              serviceLocator(),
+            ));
 
     serviceLocator.registerFactory<CreatePostCubit>(() => CreatePostCubit(
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
@@ -243,6 +264,7 @@ class FaceBookServiceLocator {
         ));
 
     serviceLocator.registerFactory<SocialPostsCubit>(() => SocialPostsCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

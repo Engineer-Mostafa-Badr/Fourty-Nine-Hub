@@ -11,6 +11,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/localization/locales.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/user_image.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
@@ -30,7 +31,7 @@ class CreatePostBanner extends StatelessWidget {
         children: [
           context.read<UserCubit>().isLoggedIn
               ? UserProfileImage(
-            size: 40.w,
+            size: 44.w,
                   userId: context.read<UserCubit>().state.data?.id ?? '',
                   imageURL:
                       context.read<UserCubit>().state.data?.profilePicture,
@@ -38,7 +39,6 @@ class CreatePostBanner extends StatelessWidget {
                 )
               : ProfileImage(
             size: 40.w,
-
                   accountId: 0,
                   userId: '',
                 ),
@@ -52,22 +52,32 @@ class CreatePostBanner extends StatelessWidget {
                   ? context.push(Routes.LOGIN)
                   : context.push(Routes.CREATEPOST, extra: 'facebook');
             },
-            child: Container(
-              padding: EdgeInsets.symmetric(vertical: 15.h, horizontal: 5),
+            child:Container(
+              width: double.infinity, // Ensure full width
+              height: 38,
+              padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 12), // Adjust left padding
               decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey, width: .5),
+                border: Border.all(color: Colors.grey, width: 1.5),
                 borderRadius: BorderRadius.circular(50.r),
               ),
-              child: Label(
-                text: context.locale == Locales.english
-                    ? 'What on your mind?'
-                    : 'بم تفكر؟',
-                style: Styles.mediumText(color: Colors.grey),
+              child: Align(
+                alignment: Alignment.centerLeft, // Align text to center-left
+                child: Label(
+                  text: context.locale == Locales.english
+                      ? 'What’s on your mind?'
+                      : 'بم تفكر؟',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                    color: AppColors.black
+                  ),
+                ),
               ),
             ),
-          )),
+
+              )),
           const Sizer(
-            width: 50,
+            width: 13,
           ),
           InkWell(
             onTap: () {
@@ -77,22 +87,10 @@ class CreatePostBanner extends StatelessWidget {
                 context.push(Routes.LOGIN);
               }
             },
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SvgPicture.asset(
-                  Assets.zoomMeeting,
-                  height: 50.h,
+            child:  SvgPicture.asset(
+              Assets.call,
+              // height: 50.h,
 
-                ),
-                Sizer(
-                  height: 3.h,
-                ),
-                Label(
-                  text: LocaleKeys.meet.localize,
-                  style: Styles.smallText(),
-                ),
-              ],
             ),
           ),
         ],

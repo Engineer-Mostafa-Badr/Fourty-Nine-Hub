@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
+import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/social_media/create_post/domain/entities/life_event_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/place_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/post_user_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/creat_twitter_usecase.dart';
@@ -9,6 +11,7 @@ import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_places_usecase.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_sub_activities_usecase.dart';
 
 import '../../../../../common/models/public/pagination_params.dart';
 import '../../domain/entities/activity_entity.dart';
@@ -16,6 +19,8 @@ import '../../domain/entities/feeling_entity.dart';
 import '../../domain/usecases/create_post_usecase.dart';
 import '../../domain/usecases/get_activities_usecase.dart';
 import '../../domain/usecases/get_feelings_usecase.dart';
+import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_live_event_categories_usecase.dart';
+import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_live_event_sub_categories_usecase.dart';
 
 part 'create_post_state.dart';
 
@@ -23,9 +28,12 @@ class CreatePostCubit extends Cubit<CreatePostState> {
   final CreatePostUseCase _createPostUseCase;
   final CreateTwitterPostUseCase _createTwitterPostUseCase;
   final GetActivitiesUseCase _getActivitiesUseCase;
+  final GetSubActivitiesUseCase _getSubActivitiesUseCase;
   final GetFeelingsUseCase _getFeelingsUseCase;
   final FriendsFollowersUseCase _friendsFollowersUseCase;
   final GetPlacesUseCase _getPlacesUseCase;
+  final GetLifeEventCategoriesUseCase _getLifeEventCategoriesUseCase;
+  final GetLifeEventSubCategoriesUseCase _getLifeEventSubCategoriesUseCase;
   final postContentTextController = TextEditingController();
   CreatePostCubit(
       this._createPostUseCase,
@@ -33,7 +41,9 @@ class CreatePostCubit extends Cubit<CreatePostState> {
       this._getFeelingsUseCase,
       this._createTwitterPostUseCase,
       this._friendsFollowersUseCase,
-      this._getPlacesUseCase)
+      this._getLifeEventCategoriesUseCase,
+      this._getLifeEventSubCategoriesUseCase,
+      this._getPlacesUseCase, this._getSubActivitiesUseCase)
       : super(CreatePostState());
 
   List<String>? selectedImages;
@@ -142,9 +152,14 @@ class CreatePostCubit extends Cubit<CreatePostState> {
         isBiggerThan80: false, isBiggerThen120: false, isBiggerThen150: false));
   }
 
+  showRemoveBalletColors(){
+    emit(state.copyWith(showBallet: !state.showBallet));
+  }
+
   void loadData() async {
     // await getActivities();
     // await getFeelings();
+    // getLifeEventCategories();
     loadInitialActivities();
     loadInitialFeelings();
 
@@ -154,12 +169,26 @@ class CreatePostCubit extends Cubit<CreatePostState> {
     // ]);
   }
   bool loadFeelings = false;
+  bool loadActivities = false;
+  bool loadSubActivities = false;
 
   Future loadInitialActivities() async {
+    loadActivities = true;
     activities.clear();
     activitiesPage = 1;
     hasMoreActivities = true;
     await getActivities();
+    loadActivities = true;
+  }
+
+  Future loadInitialSubActivities(String id) async {
+    loadSubActivities = true;
+    subActivities.clear();
+    subActivitiesPage = 1;
+    hasMoreSubActivities = true;
+    await getSubActivities(id);
+    loadSubActivities = false;
+    emit(state.copyWith(status: CreatePostStates.success));
   }
   Future loadInitialFeelings() async {
     loadFeelings = true;
@@ -170,13 +199,19 @@ class CreatePostCubit extends Cubit<CreatePostState> {
     loadFeelings = false;
   }
   int activitiesPage = 1;
+  int subActivitiesPage = 1;
   int feelingsPage = 1;
   bool isLoadingMoreActivities = false;
+  bool isLoadingMoreSubActivities = false;
   bool isLoadingMoreFeelings = false;
   bool hasMoreActivities = true;
+  bool hasMoreSubActivities = true;
   bool hasMoreFeelings = true;
   List<ActivityEntity> activities = [];
+  List<ActivityEntity> subActivities = [];
   List<FeelingEntity> feelings = [];
+  List<LifeEventEntity> lifeEventCategories = [];
+  List<LifeEventEntity> lifeEventSubCategories = [];
 
   Future<void> getActivities() async {
     if (!hasMoreActivities || isLoadingMoreActivities) return;
@@ -194,6 +229,71 @@ class CreatePostCubit extends Cubit<CreatePostState> {
       isLoadingMoreActivities = false;
       print(data.length);
       emit(state.copyWith(activities: data));
+    });
+  }
+
+  bool isLoadingMoreLifeEvent = false;
+  bool hasMoreLifeEvent = false;
+  Future<void> getLifeEventCategories() async {
+    // if (!hasMoreLifeEvent || isLoadingMoreLifeEvent) return;
+    isLoadingMoreLifeEvent = true;
+    emit(state.copyWith(status: CreatePostStates.loading));
+    final response = await _getLifeEventCategoriesUseCase(NoParams());
+    response.fold((l) => emit(state.copyWith(failure: l)), (data) {
+      lifeEventCategories.clear();
+      lifeEventCategories.addAll(data);
+      // if (data.length < 20) {
+      //   hasMoreLifeEvent = false;
+
+      // } else {
+      //   activitiesPage++;
+      // }
+
+      isLoadingMoreLifeEvent = false;
+      print(data.length);
+      emit(state.copyWith(status: CreatePostStates.success));
+    });
+  }
+
+  bool isLoadingMoreLifeEventSubCat = false;
+  bool hasMoreLifeEventSubCat = false;
+  Future<void> getLifeEventSubCategories(String id) async {
+    // if (!hasMoreLifeEvent || isLoadingMoreLifeEvent) return;
+    isLoadingMoreLifeEventSubCat = true;
+    emit(state.copyWith(status: CreatePostStates.loading));
+    final response = await _getLifeEventSubCategoriesUseCase(id);
+    response.fold((l) => emit(state.copyWith(failure: l)), (data) {
+      lifeEventSubCategories.clear();
+      lifeEventSubCategories.addAll(data);
+      // if (data.length < 20) {
+      //   hasMoreLifeEvent = false;
+
+      // } else {
+      //   activitiesPage++;
+      // }
+
+      isLoadingMoreLifeEventSubCat = false;
+      print(data.length);
+      emit(state.copyWith(status: CreatePostStates.success));
+    });
+  }
+
+  Future<void> getSubActivities(String id) async {
+    if (!hasMoreSubActivities || isLoadingMoreSubActivities) return;
+    isLoadingMoreSubActivities = true;
+    emit(state.copyWith(status: CreatePostStates.loading));
+    final response = await _getSubActivitiesUseCase(GetSubActivitiesParams(page: activitiesPage,limit: 20, id: id));
+    response.fold((l) => emit(state.copyWith(failure: l)), (data) {
+      subActivities.addAll(data);
+      if (data.length < 20) {
+        hasMoreSubActivities = false;
+      } else {
+        subActivitiesPage++;
+      }
+
+      isLoadingMoreSubActivities = false;
+      print(data.length);
+      emit(state.copyWith(subActivities: data));
     });
   }
 
@@ -319,13 +419,13 @@ class CreatePostCubit extends Cubit<CreatePostState> {
     emit(state.copyWith(selectedActivity: item));
   }
 
-  uploadPhoto({bool isGallery = true,required BuildContext context}) async {
+  uploadPhoto({bool isGallery = true,required BuildContext context,bool? hasLoading}) async {
     final UploadFile upload = UploadFile();
     print("objectssssssssss");
     await upload.uploadImage(
         isGallery: isGallery,
+        // hasLoading: hasLoading,
         subCategoryId: '66a3583454e6e337915514db',
-        hasLoading:false,
         onUploaded: (UploadFileEntity data) {
           print("file name ${data.file}");
           print("mediaId: ${data.mediaId}");
@@ -338,6 +438,31 @@ class CreatePostCubit extends Cubit<CreatePostState> {
           print(images.length);
           emit(state.copyWith(
               images: images,
+              backColor: '#FFFFFFFF',
+              status: CreatePostStates.success));
+        }, context: context);
+    print("length${state.images?.length}");
+  }
+
+  uploadLifeEventPhoto({bool isGallery = true,required BuildContext context,bool? hasLoading}) async {
+    final UploadFile upload = UploadFile();
+    print("objectssssssssss");
+    await upload.uploadImage(
+        isGallery: isGallery,
+        // hasLoading: hasLoading,
+        subCategoryId: '66a3583454e6e337915514db',
+        onUploaded: (UploadFileEntity data) {
+          print("file name ${data.file}");
+          print("mediaId: ${data.mediaId}");
+          selectedImages?.add(data.mediaId);
+          final images = state.lifeEventImages ?? [];
+
+          images.add(data);
+          selectedImages = images.map((e) => e.mediaId).toList();
+          print("selectedImages${selectedImages?.length}");
+          print(images.length);
+          emit(state.copyWith(
+              lifeEventImages: images,
               backColor: '#FFFFFFFF',
               status: CreatePostStates.success));
         }, context: context);
