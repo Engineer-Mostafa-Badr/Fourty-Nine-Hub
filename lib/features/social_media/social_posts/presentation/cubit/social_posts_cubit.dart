@@ -2,13 +2,17 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/utils/change_react.dart';
 import 'package:fourtyninehub/features/account_taps/lists/domain/entities/user_friend_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_model.dart';
+import 'package:fourtyninehub/features/social_media/reels/domain/use_case/get_explore_reels_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/comment_entity.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/facebook_feed_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/react_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/suggest_user_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/user_profile_entity.dart';
@@ -61,6 +65,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   final PostReactUseCase _postReactUseCase;
   final GetPostCommentsUseCase _getPostCommentsUseCase;
   final PostCommentUseCase _postCommentUseCase;
+  final GetExploreReelsUseCase _getExploreReelsUseCase;
   final DeletePostUseCase _deletePostUseCase;
   final DeleteCommentUseCase _deleteCommentUseCase;
   final HidePostUseCase _hidePostUseCase;
@@ -116,22 +121,13 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
     this._deleteFriendUseCase,
     this._getGlobalFeedUseCase,
     this._viewProfileUseCase,
-    this._searchUsersUsecase,
+    this._searchUsersUsecase, this._getExploreReelsUseCase,
   ) : super(const SocialPostsState());
 
   final shareFormKey = GlobalKey<FormState>();
 
   void loadData() async {
-    await getFeed(1);
-    feedPagingController.addPageRequestListener((pageKey) {
-      print("initStatePageKey : $pageKey");
-      getFeed(pageKey);
-    });
-    await getSuggestedFriends(1);
-    suggestUserPagingController.addPageRequestListener((pageKey) {
-      print("initStatePageKey : $pageKey");
-      getSuggestedFriends(pageKey);
-    });
+    await loadInitialData();
   }
 
   String? content;
@@ -156,10 +152,10 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   }
 
   loadInstaSuggestedPeople() async {
-    await getSuggestedFriends(1);
+    await getSuggestedFriends();
     suggestUserPagingController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
-      getSuggestedFriends(pageKey);
+      getSuggestedFriends();
     });
   }
 
@@ -201,8 +197,6 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   void onRefresh() async {
     emit(state.copyWith(
         tweetPage: 0, suggestedFriends: [], advertisementsPage: 0));
-    feedPagingController.refresh();
-    suggestUserPagingController.refresh();
   }
 
   void onRefreshPostDetails() async {
@@ -297,7 +291,91 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
       emit(state.copyWith(posts: totalPosts, status: StateStatus.initial));
     });
   }
+  bool loadFaceData = false;
+  Future loadInitialData() async {
+    loadFaceData=true;
+    allFeed.clear();
+    facePage = 1;
+    hasMoreFaceData = true;
+    emit(state.copyWith(status: StateStatus.loading));
+    await getAllFeed();
+    loadFaceData=false;
+    emit(state.copyWith(status: StateStatus.updated));
+  }
+  bool isLoadingFaceMore = false;
+  bool hasMoreFaceData = true;
+  int facePage = 1;
+  List<FacebookFeedEntity> allFeed = [];
+  Future<void> getAllFeed() async {
+    print(hasMoreFaceData);
+    print(isLoadingFaceMore);
+    if (!hasMoreFaceData || isLoadingFaceMore) return;
+    isLoadingFaceMore = true;
+    emit(state.copyWith(status: StateStatus.loading));
+    final response =
+        await _getFeedUseCase(TwitterFeedParams(limit: 5, page: facePage));
+    List<PostEntity> tweets = [];
+    List<PostEntity> advertisements = [];
+    List<Reel> reels = [];
+    response.fold(
+        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+        (data) async {
+      if (data.isNotEmpty) {
+        tweets = await getTwitterFeed();
+        advertisements = await getAdvertisements();
+        reels = await fetchReels();
+      }
+      List<FacebookFeedEntity> totalPosts = [];
+      FacebookFeedEntity feed = FacebookFeedEntity(
+        tweets: tweets,
+        posts: data,
+        ads: advertisements,
+        reels: reels
+      );
+      totalPosts.add(feed);
+      allFeed.add(feed);
+      if (data.length < 5) {
+        hasMoreFaceData = false;
+      } else {
+        facePage++;
+      }
 
+      isLoadingFaceMore = false;
+      // totalPosts.addAll(tweets);
+      // totalPosts.addAll(advertisements);
+      // final isLastPage = totalPosts.length < (5);
+      // if (facePage == 1) {
+      //   print("page == 1 $facePage");
+      //   facebookFeedPagingController.itemList = [];
+      // }
+      // if (isLastPage) {
+      //   print("isLastPage = $isLastPage");
+      //   facebookFeedPagingController.appendLastPage(totalPosts);
+      // } else {
+      //   print("isNotLastPage = $isLastPage");
+      //   final nextPageKey = facePage + 1;
+      //   facebookFeedPagingController.appendPage(totalPosts, nextPageKey);
+      // }
+      emit(state.copyWith(posts: data,status: StateStatus.initial));
+    });
+  }
+
+  Future<List<Reel>> fetchReels() async {
+    List<Reel> reels = [];
+    emit(state.copyWith(status: StateStatus.loading));
+    final result = await _getExploreReelsUseCase(
+        PaginationParams(page: facePage, limit: 1));
+
+    result.fold(
+          (failure) =>
+          emit(state.copyWith(failure: failure, status: StateStatus.error)),
+          (data) {
+            reels.addAll(data.data.reels);
+            emit(state.copyWith(status: StateStatus.success));
+      },
+    );
+    return reels;
+  }
   // get global feed posts
   getGlobalFeed(int page) async {
     final response =
@@ -336,7 +414,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
   // get advertisements
   Future<List<PostEntity>> getAdvertisements() async {
     final response = await _advertisementUseCase(
-        TwitterFeedParams(limit: 1, page: state.advertisementsPage! + 1));
+        TwitterFeedParams(limit: 1, page: facePage));
     List<PostEntity> advertisements = [];
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
@@ -352,7 +430,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
 
   Future<List<PostEntity>> getTwitterFeed() async {
     final response = await _getTwitterFeedUseCase(
-        TwitterFeedParams(limit: 1, page: state.tweetPage! + 1));
+        TwitterFeedParams(limit: 1, page: facePage));
     List<PostEntity> tweets = [];
     response.fold(
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
@@ -371,6 +449,8 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
       PagingController(firstPageKey: 1);
   final PagingController<int, PostEntity> feedPagingController =
       PagingController(firstPageKey: 1);
+  final PagingController<int, FacebookFeedEntity> facebookFeedPagingController =
+      PagingController(firstPageKey: 1);
 
   final PagingController<int, PostEntity> globalFeedPagingController =
       PagingController(firstPageKey: 1);
@@ -378,31 +458,19 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
       PagingController(firstPageKey: 1);
 
   // get suggested friends
-  Future<void> getSuggestedFriends(int page) async {
-    if (page != 4) {
+  Future<List<SuggestUserEntity>> getSuggestedFriends() async {
+    // if (page != 4) {
+    List<SuggestUserEntity> suggestedFriends = [];
       final response = await _suggestedFriendsUseCase(
-          SuggestedFriendsParams(limit: pageSize, page: page));
+          SuggestedFriendsParams(limit: 15, page: facePage));
       response.fold(
           (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
           (data) {
-        final isLastPage = data.length < pageSize || page == 3;
-        if (page == 1) {
-          print("page == 1 $page");
-          suggestUserPagingController.itemList = [];
-        }
-        if (isLastPage) {
-          print("isLastPage = $isLastPage");
-          suggestUserPagingController.appendLastPage(data);
-        } else {
-          print("isNotLastPage = $isLastPage");
-          final nextPageKey = page + 1;
-          suggestUserPagingController.appendPage(data, nextPageKey);
-        }
+        suggestedFriends.addAll(data);
         emit(state.copyWith(
             suggestedFriends: data, status: StateStatus.initial));
-        print("suggestLength${state.suggestedFriends?.length}");
       });
-    }
+    return suggestedFriends;
   }
 
 

@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -12,8 +11,6 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import '../../../../../../common/widgets/stateless/labels/read_more_label.dart';
 import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
-import '../../../../../../res/style/styles.dart';
-import '../../../data/models/post_model.dart';
 import '../../../domain/entities/post_entity.dart';
 
 class NormalPostScreen extends StatelessWidget {
@@ -21,79 +18,71 @@ class NormalPostScreen extends StatelessWidget {
 
   final PostEntity postEntity;
 
-  List<String> imageUrls = [
-    "https://images.pexels.com/photos/29136141/pexels-photo-29136141/free-photo-of-beautiful-pink-roses-in-bloom-at-ludhiana-garden.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    "https://images.pexels.com/photos/14372020/pexels-photo-14372020.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    "https://images.pexels.com/photos/8780232/pexels-photo-8780232.png?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-    // "https://images.pexels.com/photos/29136137/pexels-photo-29136137/free-photo-of-lush-white-roses-in-ludhiana-garden.jpeg",
-    // "https://images.pexels.com/photos/8780232/pexels-photo-8780232.png?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-  ];
+  // void _openImageGallery(BuildContext context, int initialIndex) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) {
+  //       return Dialog(
+  //         insetPadding: EdgeInsets.zero,
+  //         child: SizedBox(
+  //           height: MediaQuery.of(context).size.height,
+  //           width: MediaQuery.of(context).size.width,
+  //           child: Column(
+  //             children: [
+  //               AppBar(
+  //                 backgroundColor: Colors.transparent,
+  //                 elevation: 0,
+  //                 actions: [
+  //                   IconButton(
+  //                     icon: const Icon(Icons.close, color: Colors.white),
+  //                     onPressed: () => Navigator.of(context).pop(),
+  //                   ),
+  //                 ],
+  //               ),
+  //               Expanded(
+  //                 child: PageView.builder(
+  //                   itemCount: imageUrls.length,
+  //                   controller: PageController(initialPage: initialIndex),
+  //                   itemBuilder: (context, index) {
+  //                     return CachedNetworkImage(
+  //                       imageUrl: imageUrls[index],
+  //                       fit: BoxFit.contain,
+  //                       placeholder: (context, url) =>
+  //                           const Center(child: CircularProgressIndicator()),
+  //                       errorWidget: (context, url, error) =>
+  //                           const Icon(Icons.error),
+  //                     );
+  //                   },
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
-  void _openImageGallery(BuildContext context, int initialIndex) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return Dialog(
-          insetPadding: EdgeInsets.zero,
-          child: Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            child: Column(
-              children: [
-                AppBar(
-                  backgroundColor: Colors.transparent,
-                  elevation: 0,
-                  actions: [
-                    IconButton(
-                      icon: const Icon(Icons.close, color: Colors.white),
-                      onPressed: () => Navigator.of(context).pop(),
-                    ),
-                  ],
-                ),
-                Expanded(
-                  child: PageView.builder(
-                    itemCount: imageUrls.length,
-                    controller: PageController(initialPage: initialIndex),
-                    itemBuilder: (context, index) {
-                      return CachedNetworkImage(
-                        imageUrl: imageUrls[index],
-                        fit: BoxFit.contain,
-                        placeholder: (context, url) =>
-                            const Center(child: CircularProgressIndicator()),
-                        errorWidget: (context, url, error) =>
-                            const Icon(Icons.error),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildImageGrid(BuildContext context) {
-    if (imageUrls.length == 1) {
+  Widget _buildImageGrid(BuildContext context,List<String> media) {
+    if (media.length == 1) {
       return GestureDetector(
-        onTap: () => _openImageGallery(context, 0),
+        // onTap: () => _openImageGallery(context, 0),
         child: CachedNetworkImage(
-          imageUrl: imageUrls[0],
+          imageUrl: media[0],
           fit: BoxFit.cover,
           placeholder: (context, url) =>
               const Center(child: CircularProgressIndicator()),
           errorWidget: (context, url, error) => const Icon(Icons.error),
         ),
       );
-    } else if (imageUrls.length == 2) {
+    } else if (media.length == 2) {
       return Row(
         children: [
           Expanded(
             child: GestureDetector(
-              onTap: () => _openImageGallery(context, 0),
+              // onTap: () => _openImageGallery(context, 0),
               child: CachedNetworkImage(
-                imageUrl: imageUrls[0],
+                imageUrl: media[0],
                 fit: BoxFit.cover,
                 height: double.infinity,
               ),
@@ -102,9 +91,9 @@ class NormalPostScreen extends StatelessWidget {
           const SizedBox(width: 3),
           Expanded(
             child: GestureDetector(
-              onTap: () => _openImageGallery(context, 1),
+              // onTap: () => _openImageGallery(context, 1),
               child: CachedNetworkImage(
-                imageUrl: imageUrls[1],
+                imageUrl: media[1],
                 fit: BoxFit.cover,
                 height: double.infinity,
               ),
@@ -112,15 +101,15 @@ class NormalPostScreen extends StatelessWidget {
           ),
         ],
       );
-    } else if (imageUrls.length == 3) {
+    } else if (media.length == 3) {
       return Row(
         children: [
           Expanded(
             flex: 2,
             child: GestureDetector(
-              onTap: () => _openImageGallery(context, 0),
+              // onTap: () => _openImageGallery(context, 0),
               child: CachedNetworkImage(
-                imageUrl: imageUrls[0],
+                imageUrl: media[0],
                 fit: BoxFit.cover,
                 height: 256,
               ),
@@ -131,9 +120,9 @@ class NormalPostScreen extends StatelessWidget {
             children: [
               Expanded(
                 child: GestureDetector(
-                  onTap: () => _openImageGallery(context, 1),
+                  // onTap: () => _openImageGallery(context, 1),
                   child: CachedNetworkImage(
-                    imageUrl: imageUrls[1],
+                    imageUrl: media[1],
                     fit: BoxFit.cover,
                     width: 150,
                     height: double.infinity,
@@ -143,9 +132,9 @@ class NormalPostScreen extends StatelessWidget {
               const SizedBox(height: 3),
               Expanded(
                 child: GestureDetector(
-                  onTap: () => _openImageGallery(context, 2),
+                  // onTap: () => _openImageGallery(context, 2),
                   child: CachedNetworkImage(
-                    imageUrl: imageUrls[2],
+                    imageUrl: media[2],
                     fit: BoxFit.cover,
                     width: 150,
                     height: double.infinity,
@@ -162,9 +151,9 @@ class NormalPostScreen extends StatelessWidget {
           Expanded(
             flex: 2,
             child: GestureDetector(
-              onTap: () => _openImageGallery(context, 0),
+              // onTap: () => _openImageGallery(context, 0),
               child: CachedNetworkImage(
-                imageUrl: imageUrls[0],
+                imageUrl: media[0],
                 fit: BoxFit.cover,
                 height: 256,
               ),
@@ -177,9 +166,9 @@ class NormalPostScreen extends StatelessWidget {
               children: [
                 Expanded(
                   child: GestureDetector(
-                    onTap: () => _openImageGallery(context, 1),
+                    // onTap: () => _openImageGallery(context, 1),
                     child: CachedNetworkImage(
-                      imageUrl: imageUrls[1],
+                      imageUrl: media[1],
                       fit: BoxFit.cover,
                       width: double.infinity,
                       height: double.infinity,
@@ -189,23 +178,23 @@ class NormalPostScreen extends StatelessWidget {
                 const SizedBox(height: 3),
                 Expanded(
                   child: GestureDetector(
-                    onTap: () => _openImageGallery(context, 2),
+                    // onTap: () => _openImageGallery(context, 2),
                     child: Stack(
                       children: [
                         Positioned.fill(
                           child: CachedNetworkImage(
-                            imageUrl: imageUrls[2],
+                            imageUrl: media[2],
                             fit: BoxFit.cover,
                             width: double.infinity,
                             height: double.infinity,
                           ),
                         ),
-                        if (imageUrls.length > 3)
+                        if (media.length > 3)
                           Container(
                             color: Colors.black54,
                             child: Center(
                               child: Text(
-                                "+${imageUrls.length - 3}",
+                                "+${media.length - 3}",
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 20,
@@ -232,9 +221,9 @@ class NormalPostScreen extends StatelessWidget {
       children: [
         Row(
           children: [
-            if (postEntity.user != null && postEntity.user.image != null)
+            // if (postEntity.user != null && postEntity.user.image != null)
               ImageFromInternet(
-                image: postEntity.user.image,
+                image: postEntity.user?.image??'',
                 isCircle: true,
                 defaultLogo: false,
                 width: 80.w,
@@ -245,9 +234,9 @@ class NormalPostScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Label(
-                  text: "",
-                  // text: postEntity.user.firstName ?? "",
-                  style: TextStyle(
+                  // text: "",
+                  text: postEntity.user?.userName ?? "",
+                  style: const TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 16,
                       color: AppColors.PRIMARY_COLOR),
@@ -276,26 +265,27 @@ class NormalPostScreen extends StatelessWidget {
         ),
         const SizedBox(height: 10.0),
 
-        if (imageUrls.isNotEmpty)
-          GestureDetector(
-              onTap: () {
-                // Open the gallery starting from the first image
-                _openImageGallery(context, 0);
-              },
-              child: Column(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: Text(
-                        "Lorem ipsum dolor sit amet consectetur. Ac diam curabitur accumsan commodo a et sit neque nullam. Fermentum see more"),
-                  ),
-                  Container(
-                    height: 256,
-                    width: double.infinity,
-                    child: _buildImageGrid(context),
-                  ),
-                ],
-              )),
+        // if (postEntity.images?.isNotEmpty??false)
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: ReadMoreLabel(
+                  text: postEntity.content??'',
+                  // textAlign: isArabic(content) ? TextAlign.right : TextAlign.left,
+                  style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.black),
+                ),
+              ),
+              if(postEntity.images!=null&&postEntity.images!.isNotEmpty)SizedBox(
+                height: 256,
+                width: double.infinity,
+                child: _buildImageGrid(context,postEntity.images??[]),
+              ),
+            ],
+          ),
 
         // GestureDetector(
         //   onTap: () {

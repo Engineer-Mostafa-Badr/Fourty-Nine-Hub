@@ -9,7 +9,6 @@ import 'package:fourtyninehub/features/social_media/create_post/domain/entities/
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/creat_twitter_usecase.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/friends-followers_usecase.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_places_usecase.dart';
-import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_sub_activities_usecase.dart';
@@ -439,6 +438,31 @@ class CreatePostCubit extends Cubit<CreatePostState> {
           print(images.length);
           emit(state.copyWith(
               images: images,
+              backColor: '#FFFFFFFF',
+              status: CreatePostStates.success));
+        }, context: context);
+    print("length${state.images?.length}");
+  }
+
+  uploadLifeEventPhoto({bool isGallery = true,required BuildContext context,bool? hasLoading}) async {
+    final UploadFile upload = UploadFile();
+    print("objectssssssssss");
+    await upload.uploadImage(
+        isGallery: isGallery,
+        // hasLoading: hasLoading,
+        subCategoryId: '66a3583454e6e337915514db',
+        onUploaded: (UploadFileEntity data) {
+          print("file name ${data.file}");
+          print("mediaId: ${data.mediaId}");
+          selectedImages?.add(data.mediaId);
+          final images = state.lifeEventImages ?? [];
+
+          images.add(data);
+          selectedImages = images.map((e) => e.mediaId).toList();
+          print("selectedImages${selectedImages?.length}");
+          print(images.length);
+          emit(state.copyWith(
+              lifeEventImages: images,
               backColor: '#FFFFFFFF',
               status: CreatePostStates.success));
         }, context: context);

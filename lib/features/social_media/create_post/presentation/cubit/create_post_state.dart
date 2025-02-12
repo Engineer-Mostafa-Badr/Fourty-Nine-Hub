@@ -12,6 +12,7 @@ class CreatePostState {
   final FeelingEntity? selectedFeeling;
   final PlaceEntity? place;
   final List<UploadFileEntity>? images;
+  final List<UploadFileEntity>? lifeEventImages;
   final UploadFileEntity? audio;
   final String? gifImage;
   final List<PostUserEntity>? users;
@@ -30,6 +31,7 @@ class CreatePostState {
       {this.status = CreatePostStates.error,
       this.failure,
       this.images,
+      this.lifeEventImages,
       this.audio,
       this.gifImage,
       this.activities,
@@ -53,6 +55,7 @@ class CreatePostState {
   CreatePostState copyWith({
     CreatePostStates? status,
     List<UploadFileEntity>? images,
+    List<UploadFileEntity>? lifeEventImages,
     UploadFileEntity? audio,
     Failure? failure,
     String? gifImage,
@@ -79,6 +82,7 @@ class CreatePostState {
       status: status ?? this.status,
       failure: failure ?? this.failure,
       images: images ?? this.images,
+      lifeEventImages: lifeEventImages ?? this.lifeEventImages,
       audio: audio ?? this.audio,
       activities: activities ?? this.activities,
       subActivities: subActivities ?? this.subActivities,

@@ -1,6 +1,6 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/life_event_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
@@ -36,7 +36,7 @@ class _CreateLifeEventState extends State<CreateLifeEvent> {
               // crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Divider(),
-                _buildImageContainer(),
+                _buildImageContainer(context),
                 const SizedBox(height: 40),
                 _buildTitleField(),
                 const SizedBox(height: 16),
@@ -56,32 +56,55 @@ class _CreateLifeEventState extends State<CreateLifeEvent> {
     );
   }
 
-  Widget _buildImageContainer() {
+  Widget _buildImageContainer(BuildContext context) {
     return  SizedBox(
         height: 250,
         child: Stack(
             clipBehavior: Clip.none,
             children: [
-              Container(
-                height: 250,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: AppColors.GREYBG,
-                  borderRadius: BorderRadius.circular(20),
+              GestureDetector(
+                onTap: (){
+                  context.read<CreatePostCubit>().uploadLifeEventPhoto(context:context);
+                },
+                child:Container(
+                  height: 250,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: AppColors.GREYBG,
+                    borderRadius: BorderRadius.circular(20),
 
+                  ),
+                  child:(context.read<CreatePostCubit>().state.lifeEventImages==null&&context.read<CreatePostCubit>().state.lifeEventImages!.isEmpty)?const SizedBox.shrink():
+                  PageView.builder(
+                    itemCount: context.read<CreatePostCubit>().state.lifeEventImages!.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        height: 250,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          image: DecorationImage(
+                            fit: BoxFit.fill,
+                            image: FileImage(
+                              File(context.read<CreatePostCubit>().state.lifeEventImages?[index].file.path ?? ''),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  )
                 ),
-                alignment: AlignmentDirectional.center,
               ),
-              PositionedDirectional(top: 8,start: 8,
+              if(context.read<CreatePostCubit>().state.lifeEventImages!=null&&context.read<CreatePostCubit>().state.lifeEventImages!.isNotEmpty)PositionedDirectional(top: 8,start: 8,
                   child: Container(
                       height: 44,
                       width: 44,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           color: AppColors.GREYICON,
                           shape: BoxShape.circle
                       ),
                       alignment: Alignment.center,
-                      child:Icon(
+                      child:const Icon(
                         Icons.close,color: Colors.white,size: 24,
                       )
                   )
@@ -90,35 +113,44 @@ class _CreateLifeEventState extends State<CreateLifeEvent> {
                   child: Container(
                       height: 50,
                       width: 50,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           color: AppColors.PRIMARY_COLOR,
                           shape: BoxShape.circle
                       ),
                       alignment: Alignment.center,
-                      child:SvgPicture.asset(Assets.starIcon,height: 32,width: 32,color: Colors.white,)
+                      child:SvgPicture.network(widget.lifeEventData.image,height: 32,width: 32,color: Colors.white,)
                   )
               ),
-              PositionedDirectional(top: 110,start: 123,
-                  child: Text("Photos / Vidos",style: const TextStyle(fontSize: 18,fontWeight: FontWeight.w600,color: Colors.black),)
+              if(context.read<CreatePostCubit>().state.lifeEventImages==null&&context.read<CreatePostCubit>().state.lifeEventImages!.isEmpty)PositionedDirectional(top: 110,start: 123,
+                  child:
+                  GestureDetector(
+                    onTap: (){
+                      context.read<CreatePostCubit>().uploadLifeEventPhoto(context:context);
+                    },
+                    child:const Text("Photos / Vidos",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w600,color: Colors.black),)
+                  ),
               ),
               PositionedDirectional(top: 8,end: 8,
-                  child: Container(
-                    // height: 44,
-                    // width: 44,
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: AppColors.GREYICON,
-                        borderRadius: BorderRadius.circular(22),
-                      ),
-                      alignment: Alignment.center,
-                      child:Row(
-                          children:[
-                            SvgPicture.asset(Assets.addImage,height: 20,width: 20,),
-                            const SizedBox(width: 8,),
-                            Text("Photos / Vidos",style: const TextStyle(fontSize: 14,fontWeight: FontWeight.w600,color: Colors.white),)
-                          ]
+                  child:GestureDetector(
+                      onTap: (){
+                        context.read<CreatePostCubit>().uploadLifeEventPhoto(context:context);
+                      },
+                      child:Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: AppColors.GREYICON,
+                            borderRadius: BorderRadius.circular(22),
+                          ),
+                          alignment: Alignment.center,
+                          child:Row(
+                              children:[
+                                SvgPicture.asset(Assets.addImage,height: 20,width: 20,),
+                                const SizedBox(width: 8,),
+                                const Text("Photos / Vidos",style: TextStyle(fontSize: 14,fontWeight: FontWeight.w600,color: Colors.white),)
+                              ]
+                          )
                       )
-                  )
+                  ),
               ),
             ]
         )
