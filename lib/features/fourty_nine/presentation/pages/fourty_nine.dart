@@ -596,10 +596,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                           ]),
                     ))),
           ),
-        ),
-      )
-    );
-
+        ]));
   }
 
   Widget _walletsWidget() {
