@@ -66,6 +66,8 @@ import 'core/service/cache_service.dart';
 import 'core/themes/light_theme.dart';
 import 'features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'features/settings/presentation/cubit/floating_navigator_cubit.dart';
+import 'features/settings/presentation/cubit/settings_cubit.dart';
 import 'firebase_options.dart';
 import 'routes/pages.dart';
 
@@ -341,6 +343,9 @@ class _MyAppState extends State<MyApp> {
         ),
         BlocProvider(
           create: (context) => DriversNearbyCubit(repository: serviceLocator()),
+        ),
+        BlocProvider(
+          create: (context) => FloatingNavigatorCubit(),
         ),
       ],
       child: ScreenUtilInit(

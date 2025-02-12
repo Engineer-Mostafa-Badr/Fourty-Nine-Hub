@@ -100,6 +100,7 @@ class _NotificationViewState extends State<NotificationView> {
           child: CustomScaffold(
               appBar: const HomeAppbar(
                 color: Colors.red,
+                inNotifications: true,
               ),
               body: Padding(
                 padding: const EdgeInsets.all(8.0),

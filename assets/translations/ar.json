@@ -1267,5 +1267,7 @@
   "chooseCategoryView": "اختر طريقه عرض القسام الرئيسيه للخدمات",
   "youCanChooseOneWayAtLeast": "يمكنك اختيار بحد أقصى طريقه عرض واحده",
   "wallets": "المحافظ",
-  "tube": "تيوب"
+  "tube": "تيوب",
+  "floatingNavigator": "تيوب"
+
 }

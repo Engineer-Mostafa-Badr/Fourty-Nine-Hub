@@ -38,7 +38,7 @@ class _EditPageState extends State<EditPage> {
   Widget build(BuildContext context) {
     return BlocProvider<EditPageCubit>(
       create: (context) => EditPageCubit(),
-      child: CustomScaffold(
+      child: Scaffold(
         appBar: BackAppBar(
           leading: Builder(builder: (context) {
             return IconButton(

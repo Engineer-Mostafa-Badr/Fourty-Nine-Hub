@@ -70,8 +70,10 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
             InkWell(
               onTap: () {
                 if (!isCurrentRoute(context, Routes.HOME)) {
-                context.go(Routes.HOME,);
-                }else{
+                  context.go(
+                    Routes.HOME,
+                  );
+                } else {
                   print("object");
                 }
               },
@@ -110,7 +112,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
               ),
           //put lang
           Container(
-            width: 80.w,
+              width: 80.w,
               padding: EdgeInsets.symmetric(horizontal: 5.w),
               child: TextAppButton(
                   label: LocaleKeys.lang.tr(),
@@ -204,11 +206,15 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                 return;
               }
               HandleCashback.setCount('notificationCount', context);
-              context.push(context.read<UserCubit>().isLoggedIn
-                  ? Routes.NOTIFICATIONS
-                  : Routes.LOGIN);
+              context.push(
+                context.read<UserCubit>().isLoggedIn
+                    ? Routes.NOTIFICATIONS
+                    : Routes.LOGIN,
+              );
             },
-            child: const UnreadNotificationsBuilder(),
+            child: UnreadNotificationsBuilder(
+              inNotifications: inNotifications,
+            ),
           ),
           SizedBox(
             width: 5.w,

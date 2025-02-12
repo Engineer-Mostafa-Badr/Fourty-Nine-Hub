@@ -1251,5 +1251,5 @@ abstract class  LocaleKeys {
   static const youCanChooseOneWayAtLeast = 'youCanChooseOneWayAtLeast';
   static const wallets = 'wallets';
   static const tube = 'tube';
-
+  static const floatingNavigator = 'floatingNavigator';
 }

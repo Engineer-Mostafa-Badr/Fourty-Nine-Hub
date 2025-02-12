@@ -1287,6 +1287,7 @@
   "chooseCategoryView": "Choose the main category view method for services",
   "youCanChooseOneWayAtLeast": "You can select a maximum of one view method.",
   "wallets": "Wallets",
-  "tube": "Tube"
+  "tube": "Tube",
+  "floatingNavigator": "Floating Navigator"
 
 }

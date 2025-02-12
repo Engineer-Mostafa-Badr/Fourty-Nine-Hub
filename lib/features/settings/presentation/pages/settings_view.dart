@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/features/settings/presentation/cubit/floating_navigator_cubit.dart';
 import 'package:fourtyninehub/features/settings/presentation/cubit/settings_cubit.dart';
 import 'package:fourtyninehub/features/settings/presentation/cubit/settings_state.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -121,8 +122,13 @@ class SettingsView extends StatelessWidget {
                               ),
                         value: ThemeCubit.get(context).isDarkTheme,
                         activeColor: AppColors.SECONDARY_COLOR,
-                        activeTrackColor: AppColors.AUTH_CONTAINER_COLOR,
-                        inactiveTrackColor: AppColors.AUTH_CONTAINER_COLOR,
+                        inactiveThumbColor: AppColors.PRIMARY_COLOR,
+                        activeTrackColor:
+                            Theme.of(context).scaffoldBackgroundColor,
+                        inactiveTrackColor:
+                            Theme.of(context).scaffoldBackgroundColor,
+                        trackOutlineColor: const WidgetStatePropertyAll(
+                            AppColors.PRIMARY_COLOR),
                         onChanged: (value) {
                           if (theme is LightThemeModeStates) {
                             ThemeCubit.get(context).darkThemeMode();
@@ -134,6 +140,49 @@ class SettingsView extends StatelessWidget {
                       );
                     },
                   ),
+                  BlocBuilder<FloatingNavigatorCubit, FloatingNavigatorState>(
+                    builder: (context, state) {
+                      var floatingNavigatorCubit =
+                          FloatingNavigatorCubit.get(context);
+                      return SwitchListTile(
+                        secondary: Container(
+                          width: 50.h,
+                          height: 50.h,
+                          decoration: BoxDecoration(
+                              color: AppColors.SECONDARY_COLOR,
+                              borderRadius: BorderRadius.circular(15.r)),
+                          child: const Icon(
+                            Icons.swap_horiz_rounded,
+                            color: Colors.white,
+                          ),
+                        ),
+                        title: Text(
+                          LocaleKeys.floatingNavigator.localize,
+                          style: Styles.mediumText(
+                              fontSize: 65.sp, fontWeight: FontWeight.w400),
+                        ),
+                        value: floatingNavigatorCubit.floatingNavigatorStatus,
+                        activeColor: AppColors.SECONDARY_COLOR,
+                        inactiveThumbColor: AppColors.PRIMARY_COLOR,
+                        activeTrackColor:
+                            Theme.of(context).scaffoldBackgroundColor,
+                        inactiveTrackColor:
+                            Theme.of(context).scaffoldBackgroundColor,
+                        trackOutlineColor: const WidgetStatePropertyAll(
+                            AppColors.PRIMARY_COLOR),
+                        onChanged: (value) async {
+                          if (floatingNavigatorCubit.state
+                              is ActiveFloatNavigatorStatusState) {
+                            floatingNavigatorCubit.unActiveFloatingNavigator();
+                          }
+                          if (floatingNavigatorCubit.state
+                              is UnActiveFloatNavigatorStatusState) {
+                            floatingNavigatorCubit.activeFloatingNavigator();
+                          }
+                        },
+                      );
+                    },
+                  )
                 ],
               );
             },

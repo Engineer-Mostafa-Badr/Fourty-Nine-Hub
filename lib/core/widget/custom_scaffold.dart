@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/features/notifications/presentation/cubits/firebase_notfications_cubit/firebase_notfications_cubit.dart';
 import 'package:go_router/go_router.dart';
+import 'package:floating_draggable_widget/floating_draggable_widget.dart';
 
 import '../../common/widgets/stateless/labels/label.dart';
+import '../../features/settings/presentation/cubit/floating_navigator_cubit.dart';
+import '../../features/settings/presentation/cubit/settings_cubit.dart';
 import '../../res/assets/assets.dart';
+import '../../res/style/app_colors.dart';
 import '../../res/style/styles.dart';
 import '../../routes/routes.dart';
 import '../localization/locale_keys.g.dart';
+import '../utils/shared_pref.dart';
 
 class CustomScaffold extends StatefulWidget {
   const CustomScaffold({
@@ -46,6 +53,42 @@ class _CustomScaffoldState extends State<CustomScaffold> {
 
   @override
   Widget build(BuildContext context) {
+    var floatingNavigatorCubit = FloatingNavigatorCubit.get(context);
+    return BlocBuilder<FloatingNavigatorCubit, FloatingNavigatorState>(
+      builder: (context, state) {
+        if (floatingNavigatorCubit.floatingNavigatorStatus) {
+          return FloatingDraggableWidget(
+            mainScreenWidget: mainScaffold(),
+            floatingWidget: GestureDetector(
+              onTap: () {
+                setState(() {
+                  floatNavigator = !floatNavigator;
+                });
+              },
+              child: Container(
+                width: 50.h,
+                height: 50.h,
+                decoration: BoxDecoration(
+                    color: AppColors.SECONDARY_COLOR,
+                    borderRadius: BorderRadius.circular(15.r)),
+                child: const Icon(
+                  Icons.swap_horiz_rounded,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            floatingWidgetHeight: 40,
+            floatingWidgetWidth: 40,
+            autoAlign: true,
+          );
+        } else {
+          return mainScaffold();
+        }
+      },
+    );
+  }
+
+  Widget mainScaffold() {
     return Stack(
       alignment: Alignment.centerLeft,
       children: [
@@ -73,7 +116,21 @@ class _CustomScaffoldState extends State<CustomScaffold> {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadiusDirectional.horizontal(
-                          end: Radius.circular(60.r),
+                          end: Radius.circular(30.r),
+                        ),
+                        border: const BorderDirectional(
+                          end: BorderSide(
+                            color: AppColors.PRIMARY_COLOR,
+                            width: 2,
+                          ),
+                          top: BorderSide(
+                            color: AppColors.PRIMARY_COLOR,
+                            width: 2,
+                          ),
+                          bottom: BorderSide(
+                            color: AppColors.PRIMARY_COLOR,
+                            width: 2,
+                          ),
                         ),
                         boxShadow: const [
                           BoxShadow(
@@ -84,9 +141,9 @@ class _CustomScaffoldState extends State<CustomScaffold> {
                       ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
-                            vertical: 16, horizontal: 8),
+                            vertical: 32, horizontal: 16),
                         child: Column(
-                          spacing: 16.h,
+                          spacing: 32.h,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             drawerRollWidget(
@@ -157,9 +214,23 @@ class _CustomScaffoldState extends State<CustomScaffold> {
                 child: Container(
                   // padding: EdgeInsets.all(50),
                   height: 100,
-                  width: 15,
+                  width: 20,
                   decoration: BoxDecoration(
                     color: Colors.red,
+                    border: BorderDirectional(
+                      end: BorderSide(
+                        color: AppColors.PRIMARY_COLOR,
+                        width: 2,
+                      ),
+                      top: BorderSide(
+                        color: AppColors.PRIMARY_COLOR,
+                        width: 2,
+                      ),
+                      bottom: BorderSide(
+                        color: AppColors.PRIMARY_COLOR,
+                        width: 2,
+                      ),
+                    ),
                     borderRadius: BorderRadiusDirectional.horizontal(
                       end: Radius.circular(20.r),
                     ),
@@ -190,10 +261,10 @@ class _CustomScaffoldState extends State<CustomScaffold> {
             height: 40.h,
             fit: BoxFit.cover,
           ),
-          Label(
-              text: label,
-              style: Styles.mediumText(
-                  fontWeight: FontWeight.w400, color: Colors.black)),
+          // Label(
+          //     text: label,
+          //     style: Styles.mediumText(
+          //         fontWeight: FontWeight.w400, color: Colors.black)),
         ],
       ),
     );
