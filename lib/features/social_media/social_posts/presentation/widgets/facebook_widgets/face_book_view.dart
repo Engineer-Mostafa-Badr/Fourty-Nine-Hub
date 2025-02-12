@@ -124,7 +124,7 @@ class _FaceBookViewState extends State<FaceBookView> {
                           itemCount: post.reels?.length??0,
                           itemBuilder: (context,i)=>SizedBox(
                               height: 400.h,
-                              child: InstagramReelCard(item: post.reels![i],playVideo: true,)),
+                              child: InstagramReelCard(item: post.reels![i],playVideo: false,)),
                         ),
                         // FacebookPostCard(
                         //   deletePost: (String postId) => controller
