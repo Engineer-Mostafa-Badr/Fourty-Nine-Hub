@@ -14,16 +14,20 @@ class CreatePostUseCase extends UseCase<bool, PostParams> {
 }
 
 class PostParams {
+  final String type;
   final String content;
   final String? color;
   final String? feeling;
+  final String? gifUrl;
   final String? activity;
   final String? privacy;
   final PlaceEntity? place;
   final List<String>? mediaId;
   final List<String>? users;
   PostParams({
+    required this.type,
     required this.content,
+    this.gifUrl,
     this.color,
     this.activity,
     this.feeling,
@@ -34,6 +38,8 @@ class PostParams {
   });
   Map<String, dynamic> toJson() => {
         'content': content,
+        'type': type,
+    if (gifUrl != null && gifUrl!.isNotEmpty)'gifUrl': gifUrl,
         if (feeling != null && feeling!.isNotEmpty) 'feeling': feeling,
         if (activity != null && activity!.isNotEmpty) 'activity': activity,
         if (place != null)
@@ -43,7 +49,7 @@ class PostParams {
             "long": "${place?.lng}"
           },
         if (color != null) 'background_color': color,
-        'media': mediaId,
+        if(mediaId!=null&&mediaId!.isNotEmpty)'media': mediaId,
         'publicationType': privacy ?? 'public',
         "with": users,
       };

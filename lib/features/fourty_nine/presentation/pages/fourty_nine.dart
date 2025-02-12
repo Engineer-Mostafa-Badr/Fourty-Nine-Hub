@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/ads/app_open_model.dart';
 import 'package:fourtyninehub/ads/banner_ad_model.dart';
 import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
@@ -321,8 +320,13 @@ class _FourtyNineViewState extends State<FourtyNineView>
                               AdInterstitialTop.showInterstitialAd();
                               HandleCashback.setCount(
                                   'mainCategoriesCount', context);
-                              context.push(Routes.SUBCATEGORIES,
-                                  extra: state.data![index]);
+                              if(state.data![index].id=='62c8b5b09332225799fe335e'){
+                                context.push(Routes.MARRIAGESUBCATEGORIES,
+                                    extra: state.data![index]);
+                              }else{
+                                context.push(Routes.SUBCATEGORIES,
+                                    extra: state.data![index]);
+                              }
                             },
                             child: MainCategoryBanner(
                               category: state.data![index],
@@ -592,9 +596,10 @@ class _FourtyNineViewState extends State<FourtyNineView>
                           ]),
                     ))),
           ),
-        ],
-      ),
+        ),
+      )
     );
+
   }
 
   Widget _walletsWidget() {

@@ -16,6 +16,7 @@ import 'package:fourtyninehub/features/carpool/join_trip/presentation/cubits/cub
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_states.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/firebase_notfications_cubit/firebase_notfications_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_app_notifications/get_app_notifications_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_services_notifications/get_services_notifications_cubit.dart';
@@ -52,6 +53,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/send_
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/show_offers_cubit.dart';
 import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
+import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/controller/tiktok_controller_extension.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/preload_cubit/preload_bloc.dart';
@@ -152,6 +154,9 @@ class _MyAppState extends State<MyApp> {
           create: (context) => serviceLocator<UserCubit>()..getUser(),
         ),
         BlocProvider(
+          create: (context) => serviceLocator<CreatePostCubit>()..loadData(),
+        ),
+        BlocProvider(
           create: (context) => serviceLocator<SecretsCubit>()..getAllSecrets(),
         ),
         BlocProvider(
@@ -178,6 +183,10 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(
           create: (context) =>
               LocationSocketCubit(repository: serviceLocator()),
+        ),
+        BlocProvider(
+          create: (context) =>
+              ThumbnailsCubit(serviceLocator()),
         ),
         BlocProvider(
           create: (context) => serviceLocator<ShowOffersCubit>(),

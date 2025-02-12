@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/social_media/create_post/domain/entities/life_event_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/place_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/post_user_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/creat_twitter_usecase.dart';
@@ -10,6 +11,7 @@ import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_places_usecase.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_sub_activities_usecase.dart';
 
 import '../../../../../common/models/public/pagination_params.dart';
 import '../../domain/entities/activity_entity.dart';
@@ -17,6 +19,8 @@ import '../../domain/entities/feeling_entity.dart';
 import '../../domain/usecases/create_post_usecase.dart';
 import '../../domain/usecases/get_activities_usecase.dart';
 import '../../domain/usecases/get_feelings_usecase.dart';
+import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_live_event_categories_usecase.dart';
+import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_live_event_sub_categories_usecase.dart';
 
 part 'create_post_state.dart';
 
@@ -24,9 +28,12 @@ class CreatePostCubit extends Cubit<CreatePostState> {
   final CreatePostUseCase _createPostUseCase;
   final CreateTwitterPostUseCase _createTwitterPostUseCase;
   final GetActivitiesUseCase _getActivitiesUseCase;
+  final GetSubActivitiesUseCase _getSubActivitiesUseCase;
   final GetFeelingsUseCase _getFeelingsUseCase;
   final FriendsFollowersUseCase _friendsFollowersUseCase;
   final GetPlacesUseCase _getPlacesUseCase;
+  final GetLifeEventCategoriesUseCase _getLifeEventCategoriesUseCase;
+  final GetLifeEventSubCategoriesUseCase _getLifeEventSubCategoriesUseCase;
   final postContentTextController = TextEditingController();
   CreatePostCubit(
       this._createPostUseCase,
@@ -34,12 +41,20 @@ class CreatePostCubit extends Cubit<CreatePostState> {
       this._getFeelingsUseCase,
       this._createTwitterPostUseCase,
       this._friendsFollowersUseCase,
-      this._getPlacesUseCase)
+      this._getLifeEventCategoriesUseCase,
+      this._getLifeEventSubCategoriesUseCase,
+      this._getPlacesUseCase, this._getSubActivitiesUseCase)
       : super(CreatePostState());
 
   List<String>? selectedImages;
   String? selectedAudio;
+  setAddress(String address) {
+    emit(state.copyWith(selectedLocation: address,status: CreatePostStates.success));
+  }
 
+  onRemoveAddress() {
+    emit(state.copyWith(selectedLocation: '',status: CreatePostStates.success));
+  }
   // void addMusic(String musicPath) {
   //   emit(state.copyWith(music: musicPath));
   // }
@@ -137,26 +152,214 @@ class CreatePostCubit extends Cubit<CreatePostState> {
         isBiggerThan80: false, isBiggerThen120: false, isBiggerThen150: false));
   }
 
-  void loadData() async {
-    await getActivities();
-    await getFeelings();
+  showRemoveBalletColors(){
+    emit(state.copyWith(showBallet: !state.showBallet));
   }
 
+  void loadData() async {
+    // await getActivities();
+    // await getFeelings();
+    // getLifeEventCategories();
+    loadInitialActivities();
+    loadInitialFeelings();
+
+    // await Future.wait([
+    //   loadInitialActivities(),
+    //   loadInitialFeelings(),
+    // ]);
+  }
+  bool loadFeelings = false;
+  bool loadActivities = false;
+  bool loadSubActivities = false;
+
+  Future loadInitialActivities() async {
+    loadActivities = true;
+    activities.clear();
+    activitiesPage = 1;
+    hasMoreActivities = true;
+    await getActivities();
+    loadActivities = true;
+  }
+
+  Future loadInitialSubActivities(String id) async {
+    loadSubActivities = true;
+    subActivities.clear();
+    subActivitiesPage = 1;
+    hasMoreSubActivities = true;
+    await getSubActivities(id);
+    loadSubActivities = false;
+    emit(state.copyWith(status: CreatePostStates.success));
+  }
+  Future loadInitialFeelings() async {
+    loadFeelings = true;
+    feelings.clear();
+    activitiesPage = 1;
+    hasMoreActivities = true;
+    await getFeelings();
+    loadFeelings = false;
+  }
+  int activitiesPage = 1;
+  int subActivitiesPage = 1;
+  int feelingsPage = 1;
+  bool isLoadingMoreActivities = false;
+  bool isLoadingMoreSubActivities = false;
+  bool isLoadingMoreFeelings = false;
+  bool hasMoreActivities = true;
+  bool hasMoreSubActivities = true;
+  bool hasMoreFeelings = true;
+  List<ActivityEntity> activities = [];
+  List<ActivityEntity> subActivities = [];
+  List<FeelingEntity> feelings = [];
+  List<LifeEventEntity> lifeEventCategories = [];
+  List<LifeEventEntity> lifeEventSubCategories = [];
+
   Future<void> getActivities() async {
-    final response = await _getActivitiesUseCase(const NoParams());
+    if (!hasMoreActivities || isLoadingMoreActivities) return;
+    isLoadingMoreActivities = true;
+    emit(state.copyWith(status: CreatePostStates.loading));
+    final response = await _getActivitiesUseCase(PaginationParams(page: activitiesPage,limit: 20));
     response.fold((l) => emit(state.copyWith(failure: l)), (data) {
+      activities.addAll(data);
+      if (data.length < 20) {
+        hasMoreActivities = false;
+      } else {
+        activitiesPage++;
+      }
+
+      isLoadingMoreActivities = false;
       print(data.length);
       emit(state.copyWith(activities: data));
     });
   }
 
-  Future<void> getFeelings() async {
-    final response = await _getFeelingsUseCase(const NoParams());
+  bool isLoadingMoreLifeEvent = false;
+  bool hasMoreLifeEvent = false;
+  Future<void> getLifeEventCategories() async {
+    // if (!hasMoreLifeEvent || isLoadingMoreLifeEvent) return;
+    isLoadingMoreLifeEvent = true;
+    emit(state.copyWith(status: CreatePostStates.loading));
+    final response = await _getLifeEventCategoriesUseCase(NoParams());
     response.fold((l) => emit(state.copyWith(failure: l)), (data) {
+      lifeEventCategories.clear();
+      lifeEventCategories.addAll(data);
+      // if (data.length < 20) {
+      //   hasMoreLifeEvent = false;
+
+      // } else {
+      //   activitiesPage++;
+      // }
+
+      isLoadingMoreLifeEvent = false;
+      print(data.length);
+      emit(state.copyWith(status: CreatePostStates.success));
+    });
+  }
+
+  bool isLoadingMoreLifeEventSubCat = false;
+  bool hasMoreLifeEventSubCat = false;
+  Future<void> getLifeEventSubCategories(String id) async {
+    // if (!hasMoreLifeEvent || isLoadingMoreLifeEvent) return;
+    isLoadingMoreLifeEventSubCat = true;
+    emit(state.copyWith(status: CreatePostStates.loading));
+    final response = await _getLifeEventSubCategoriesUseCase(id);
+    response.fold((l) => emit(state.copyWith(failure: l)), (data) {
+      lifeEventSubCategories.clear();
+      lifeEventSubCategories.addAll(data);
+      // if (data.length < 20) {
+      //   hasMoreLifeEvent = false;
+
+      // } else {
+      //   activitiesPage++;
+      // }
+
+      isLoadingMoreLifeEventSubCat = false;
+      print(data.length);
+      emit(state.copyWith(status: CreatePostStates.success));
+    });
+  }
+
+  Future<void> getSubActivities(String id) async {
+    if (!hasMoreSubActivities || isLoadingMoreSubActivities) return;
+    isLoadingMoreSubActivities = true;
+    emit(state.copyWith(status: CreatePostStates.loading));
+    final response = await _getSubActivitiesUseCase(GetSubActivitiesParams(page: activitiesPage,limit: 20, id: id));
+    response.fold((l) => emit(state.copyWith(failure: l)), (data) {
+      subActivities.addAll(data);
+      if (data.length < 20) {
+        hasMoreSubActivities = false;
+      } else {
+        subActivitiesPage++;
+      }
+
+      isLoadingMoreSubActivities = false;
+      print(data.length);
+      emit(state.copyWith(subActivities: data));
+    });
+  }
+
+  Future<void> getFeelings() async {
+    if (!hasMoreFeelings || isLoadingMoreFeelings) return;
+    isLoadingMoreFeelings = true;
+    emit(state.copyWith(status: CreatePostStates.loading));
+
+    final response = await _getFeelingsUseCase(PaginationParams(page: feelingsPage,limit: 20));
+    response.fold((l) => emit(state.copyWith(failure: l)), (data) {
+      feelings.addAll(data);
+      print("objectFeelings ${feelings.length}");
+      if (data.length < 20) {
+        hasMoreFeelings = false;
+      } else {
+        feelingsPage++;
+      }
+
+      isLoadingMoreFeelings = false;
       print("feel ${data.length}");
       emit(state.copyWith(feelings: data));
     });
   }
+
+  Future loadInitialUsers(String Search) async {
+    usersList.clear();
+    usersPage = 1;
+    hasMoreUsers = true;
+    emit(state.copyWith(status: CreatePostStates.loading));
+    await fetchFriendsFollowers(Search);
+  }
+  int usersPage = 1;
+  bool isLoadingMoreUsers = false;
+  bool hasMoreUsers = true;
+  List<PostUserEntity> selectedUserList=[];
+  TextEditingController searchController = TextEditingController();
+  fetchFriendsFollowers(String Search) async {
+    print(hasMoreUsers);
+    print(isLoadingMoreUsers);
+    if (!hasMoreUsers || isLoadingMoreUsers) return;
+    isLoadingMoreUsers = true;
+    emit(state.copyWith(status: CreatePostStates.loading));
+
+
+    final response = await _friendsFollowersUseCase(
+        FriendsFollowersParams(search: searchController.text, limit: 25, page: usersPage));
+    response.fold(
+          (l) => emit(state.copyWith(failure: l, status: CreatePostStates.error)),
+          (data) {
+            selectedUserList.addAll(state.selectedUsers??[]);
+            usersList.addAll(data);
+            for (var user in usersList) {
+              user.isSelected = selectedUserList.any((selectedUser) => selectedUser.id == user.id);
+            }
+            print("objectFeelings ${feelings.length}");
+            if (data.length < 20) {
+              hasMoreUsers = false;
+            } else {
+              usersPage++;
+            }
+            isLoadingMoreUsers = false;
+        emit(state.copyWith(status: CreatePostStates.success));
+      },
+    );
+  }
+
 
   void createPost({required BuildContext context, required String type}) async {
     if (postContentTextController.text.isNotEmpty ||
@@ -177,9 +380,11 @@ class CreatePostCubit extends Cubit<CreatePostState> {
       } else if (type == "facebook") {
         final response = await _createPostUseCase(
           PostParams(
+            type:state.gifImage != null ? "gif_post":"normal_post",
             content: postContentTextController.text,
             mediaId: selectedImages ?? [],
             color: state.backColor,
+            gifUrl: state.gifImage,
             activity: state.selectedActivity?.id,
             feeling: state.selectedFeeling?.id,
             place: state.place,
@@ -214,11 +419,12 @@ class CreatePostCubit extends Cubit<CreatePostState> {
     emit(state.copyWith(selectedActivity: item));
   }
 
-  uploadPhoto({bool isGallery = true,required BuildContext context}) async {
+  uploadPhoto({bool isGallery = true,required BuildContext context,bool? hasLoading}) async {
     final UploadFile upload = UploadFile();
     print("objectssssssssss");
     await upload.uploadImage(
         isGallery: isGallery,
+        // hasLoading: hasLoading,
         subCategoryId: '66a3583454e6e337915514db',
         onUploaded: (UploadFileEntity data) {
           print("file name ${data.file}");
@@ -232,6 +438,31 @@ class CreatePostCubit extends Cubit<CreatePostState> {
           print(images.length);
           emit(state.copyWith(
               images: images,
+              backColor: '#FFFFFFFF',
+              status: CreatePostStates.success));
+        }, context: context);
+    print("length${state.images?.length}");
+  }
+
+  uploadLifeEventPhoto({bool isGallery = true,required BuildContext context,bool? hasLoading}) async {
+    final UploadFile upload = UploadFile();
+    print("objectssssssssss");
+    await upload.uploadImage(
+        isGallery: isGallery,
+        // hasLoading: hasLoading,
+        subCategoryId: '66a3583454e6e337915514db',
+        onUploaded: (UploadFileEntity data) {
+          print("file name ${data.file}");
+          print("mediaId: ${data.mediaId}");
+          selectedImages?.add(data.mediaId);
+          final images = state.lifeEventImages ?? [];
+
+          images.add(data);
+          selectedImages = images.map((e) => e.mediaId).toList();
+          print("selectedImages${selectedImages?.length}");
+          print(images.length);
+          emit(state.copyWith(
+              lifeEventImages: images,
               backColor: '#FFFFFFFF',
               status: CreatePostStates.success));
         }, context: context);
@@ -397,13 +628,13 @@ class CreatePostCubit extends Cubit<CreatePostState> {
 
   onRemoveFeeling() {
     emit(state.copyWith(
-        selectedFeeling: FeelingEntity(name: '', image: '', id: ''),
+        selectedFeeling: FeelingEntity(name: '', image: '', id: '', nameEn: ''),
         status: CreatePostStates.success));
   }
 
   onRemoveActivity() {
     emit(state.copyWith(
-        selectedActivity: ActivityEntity(name: '', image: '', id: ''),
+        selectedActivity: ActivityEntity(name: '', nameEn:'',image: '', id: ''),
         status: CreatePostStates.success));
   }
 

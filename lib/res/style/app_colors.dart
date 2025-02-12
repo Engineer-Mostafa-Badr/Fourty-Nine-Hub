@@ -4,6 +4,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 abstract class AppColors {
   static const PRIMARY_COLOR = Color(0xFF0B1035);
   static const blueColor = Colors.blue;
+  static const black =  Color(0xFF000000);
 
   static const DARK_BLUE_COLOR = Color.fromARGB(255, 22, 23, 24);
   static const UNSELECTED_GRAY_COLOR = Color(0xFFD2D2D2);
@@ -29,6 +30,8 @@ abstract class AppColors {
   static const PRIMARY_COLOR_DARK = Color(0xFFED1C24);
   static const SECONDARY_COLOR = Color(0xFFED1C24);
   static const SECONDARY_COLOR_DARK = Color(0xFFec5749);
+  static const c0B1035 = Color(0xFF0B1035);
+  static const c46484B = Color(0xFF46484B);
   // static const SECONDARY_COLOR = Color(0xffff3308);
 
   static const BARRIER_COLOR = Color(0x800E1E4E);
@@ -40,6 +43,7 @@ abstract class AppColors {
   static const GREY_NORMAL_COLOR = Color(0xFFB9B9B9);
   static const GREYCARD = Color(0xFFEDEBEB);
   static const GREYTEXT = Color(0xFF949494);
+  static const GREYICON = Color(0xFF414141);
   static const GREYBG = Color(0xFFD9D9D9);
   static const GREY_DARK_COLOR = Color(0xFF707070);
   static const GREY_BORDER_COLOR = Color(0xFFDEDEDE);

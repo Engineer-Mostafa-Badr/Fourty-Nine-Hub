@@ -1,7 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/functions/global/upload_file.dart';
+import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/pages/image_gallary_viewer.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
@@ -9,7 +12,7 @@ import 'package:go_router/go_router.dart';
 class ShowAllImages extends StatefulWidget {
   const ShowAllImages(
       {super.key, required this.images, required this.onRemoveImage});
-  final List<dynamic> images;
+  final List<UploadFileEntity> images;
   final Function onRemoveImage;
 
   @override
@@ -40,19 +43,31 @@ class _ShowAllImagesState extends State<ShowAllImages> {
             onTap: () {
               print("object");
               // context.push(Routes.TWITTER);
+              // print("images$images");
+              List<XFile> images = widget.images.map((e) => e.file).toList();
 
-              showDialog(
-                context: context,
-                builder: (context) => ImageDetailsScreen(
-                  image: widget.images[index].file.path,
-                  fromPost: true,
-                  isFile: true,
-                  onRemoveImage: () {
-                    context.pop();
-                    // images.remove(images[index]);
-                  },
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ImageGalleryPage(
+                    images: [],
+                    files: images,
+                    initialIndex: index,
+                  ),
                 ),
               );
+              // showDialog(
+              //   context: context,
+              //   builder: (context) => ImageDetailsScreen(
+              //     image: widget.images[index].path,
+              //     fromPost: true,
+              //     isFile: true,
+              //     onRemoveImage: () {
+              //       context.pop();
+              //       // images.remove(images[index]);
+              //     },
+              //   ),
+              // );
               // context.pop();
             },
             child: Stack(

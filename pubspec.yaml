@@ -132,7 +132,12 @@ dependencies:
   # location: ^4.4.0
 #  location: ^4.4.0
   latlong2: ^0.9.1
+  geocoding_resolver:
+  flutter_emoji:
+  google_fonts:
   geolocator: ^12.0.0
+  geocoding: ^3.0.0
+  geocode:
   pinput: ^5.0.0
   record: ^4.4.4
   multi_dropdown: ^3.0.1
@@ -146,7 +151,7 @@ dependencies:
   photo_manager: ^3.6.3
   giphy_get: ^3.6.0
   liquid_progress_indicator_v2: ^0.5.0
-#  photo_manager: ^3.6.3
+  #  photo_manager: ^3.6.3
   # photo_manager: ^3.6.3
 dependency_overrides:
   #  camera_android_camerax: 0.6.10+1
@@ -191,6 +196,7 @@ flutter:
     - assets/49 Notification 01.mp3
     - assets/lembi.mp3
     - assets/ChatSounds/
+    - assets/drawerIcons/
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
