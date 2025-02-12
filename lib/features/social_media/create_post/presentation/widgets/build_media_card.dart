@@ -2,8 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/pages/image_gallary_viewer.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/show_all_images.dart';
@@ -27,33 +30,49 @@ class BuildMediaCard extends StatelessWidget {
               padding: const EdgeInsets.all(10),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: state.images!.length == 1 ? 1 : 2,
-                childAspectRatio: 1 / 2,
+                childAspectRatio: state.images!.length == 1 ? 1:1 ,
               ),
               itemCount: state.images!.length < 4 ? state.images!.length : 4,
-              itemBuilder: (context, index) => InkWell(
+              itemBuilder: (context, index) => ClickableWidget(
                 // Handle image interactions
                 onTap: () {
                   if (index != 3 || (index == 3 && state.images!.length == 4)) {
-                    showDialog(
-                      context: context,
-                      builder: (context) => ImageDetailsScreen(
-                        image: state.images![index].file.path,
-                        isFile: true,
-                        onRemoveImage: () {
-                          createPostCubit.removePhoto(state.images![index]);
-                          context.pop();
-                        },
+                    List<XFile> images = state.images!.map((e) => e.file).toList();
+                    print("images$index");
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ImageGalleryPage(
+                          images: const [],
+                          files: images,
+                          initialIndex: index,
+                        ),
                       ),
                     );
+                    // showDialog(
+                    //   context: context,
+                    //   builder: (context) => ImageDetailsScreen(
+                    //     image: state.images![index].file.path,
+                    //     isFile: true,
+                    //     onRemoveImage: () {
+                    //       createPostCubit.removePhoto(state.images![index]);
+                    //       context.pop();
+                    //     },
+                    //   ),
+                    // );
                   } else {
                     showDialog(
                       context: context,
-                      builder: (context) => ShowAllImages(
-                        images: state.images!,
+                      builder: (context) {
+                        List<XFile> images = state.images!.map((e) => e.file).toList();
+
+                        return ShowAllImages(
+                        images: state.images??[],
                         onRemoveImage: (UploadFileEntity image) {
                           createPostCubit.removePhoto(image);
                         },
-                      ),
+                      );
+                      },
                     );
                   }
                 },
@@ -96,11 +115,11 @@ class BuildMediaCard extends StatelessWidget {
                           ),
                       ],
                     ),
-                    if (index == 0 && state.images!.length == 1)
+                    if(state.images!.length >4?index<3:index<4)
                       PositionedDirectional(
                         end: 15,
                         top: 5,
-                        child: InkWell(
+                        child: ClickableWidget(
                           onTap: () {
                             context
                                 .read<CreatePostCubit>()

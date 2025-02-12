@@ -446,6 +446,7 @@ class SendMessageWidget extends StatefulWidget {
 class _SendMessageWidgetState extends State<SendMessageWidget> {
   late final TextEditingController _messageTextController;
   late final FocusNode _messageFocusNode;
+  final ScrollController _scrollController = ScrollController();
   late bool _showMicButton;
   late bool _showEmojiKeyboard;
   final Radius radius = const Radius.circular(32);
@@ -625,6 +626,9 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
 
         return WillPopScope(
           onWillPop: () async {
+            if (context.read<ChatRoomCubit>().chat.isSearching) {
+              context.read<ChatRoomCubit>().stopSearching();
+            }
             if (_showEmojiKeyboard) {
               _closeEmojiKeyboard();
               _openTextKeyboard();
@@ -672,35 +676,131 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
                   ),
                 ),
               ),
-              child: TextFormField(
-                controller: _messageTextController,
-                focusNode: _messageFocusNode,
-                onTap: () {
-                  _closeEmojiKeyboard();
-                  _openTextKeyboard();
-                },
-                decoration: InputDecoration(
-                  fillColor: Colors.white,
-                  filled: true,
-                  hintText: LocaleKeys.message.tr(),
-                  hintStyle: const TextStyle(color: Colors.grey),
-                  contentPadding: const EdgeInsets.symmetric(vertical: 10),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.vertical(
-                      top: topRadius,
-                      bottom: radius,
-                    ),
-                    borderSide: BorderSide.none,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.vertical(
+                    top: topRadius,
+                    bottom: radius,
                   ),
-                  prefixIcon:
-                      _showEmojiKeyboard ? _keyboardButton() : _emojiButton(),
-                  suffixIcon: _attachmentButton(),
                 ),
-                style: const TextStyle(color: Colors.black),
-                keyboardType: TextInputType.multiline,
-                maxLines: 3,
-                minLines: 1,
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                child: Row(
+                  children: [
+                    _showEmojiKeyboard ? _keyboardButton() : _emojiButton(),
+                    Expanded(
+                      child: Scrollbar(
+                        controller: _scrollController,
+                        interactive: true,
+                        thickness: 4,
+                        radius: const Radius.circular(50),
+                        child: TextFormField(
+                          controller: _messageTextController,
+                          focusNode: _messageFocusNode,
+                          onTap: () {
+                            _closeEmojiKeyboard();
+                            _openTextKeyboard();
+                          },
+                          decoration: InputDecoration(
+                            hintText: LocaleKeys.message.tr(),
+                            hintStyle: const TextStyle(color: Colors.grey),
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 12),
+                            border: InputBorder
+                                .none, // إزالة البوردر لأن الكونتينر يحتويه
+                          ),
+                          style: const TextStyle(color: Colors.black),
+                          keyboardType: TextInputType.multiline,
+                          maxLines: 3,
+                          minLines: 1,
+                        ),
+                      ),
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        GestureDetector(
+                          child: Icon(
+                            context.read<ChatRoomCubit>().isOneTimeView
+                                ? Icons.looks_one
+                                : Icons.looks_one_outlined,
+                            color: Colors.grey,
+                          ),
+                          onTap: () {
+                            setState(() {
+                              context.read<ChatRoomCubit>().isOneTimeView =
+                                  !context.read<ChatRoomCubit>().isOneTimeView;
+                            });
+                          },
+                        ),
+                        _attachmentButton(),
+                      ],
+                    ),
+                  ],
+                ),
               ),
+
+              //  Scrollbar(
+              //   controller: _scrollController,
+              //   interactive: true,
+              //   scrollbarOrientation: ScrollbarOrientation.values[0],
+              //   thickness: 4,
+              //   radius: const Radius.circular(50),
+              //   child: TextFormField(
+              //     controller: _messageTextController,
+              //     focusNode: _messageFocusNode,
+              //     onTap: () {
+              //       _closeEmojiKeyboard();
+              //       _openTextKeyboard();
+              //     },
+              //     decoration: InputDecoration(
+              //       fillColor: Colors.white,
+              //       filled: true,
+              //       hintText: LocaleKeys.message.tr(),
+              //       hintStyle: const TextStyle(color: Colors.grey),
+              //       contentPadding: const EdgeInsets.symmetric(
+              //           vertical: 10, horizontal: 12),
+              //       border: OutlineInputBorder(
+              //         borderRadius: BorderRadius.vertical(
+              //           top: topRadius,
+              //           bottom: radius,
+              //         ),
+              //         borderSide: BorderSide.none,
+              //       ),
+              //       prefixIcon:
+              //           _showEmojiKeyboard ? _keyboardButton() : _emojiButton(),
+              //       suffixIcon: Padding(
+              //         padding: const EdgeInsets.only(right: 10),
+              //         child: Row(
+              //           mainAxisSize: MainAxisSize.min,
+              //           children: [
+              //             GestureDetector(
+              //               child: Icon(
+              //                 context.read<ChatRoomCubit>().isOneTimeView
+              //                     ? Icons.looks_one
+              //                     : Icons.looks_one_outlined,
+              //                 color: Colors.grey,
+              //               ),
+              //               onTap: () async {
+              //                 setState(() {
+              //                   context.read<ChatRoomCubit>().isOneTimeView =
+              //                       !context
+              //                           .read<ChatRoomCubit>()
+              //                           .isOneTimeView;
+              //                 });
+              //               },
+              //             ),
+              //             _attachmentButton(),
+              //           ],
+              //         ),
+              //       ),
+              //     ),
+              //     style: const TextStyle(color: Colors.black),
+              //     keyboardType: TextInputType.multiline,
+              //     maxLines: 3,
+              //     minLines: 1,
+              //   ),
+              // ),
             ),
           ),
         );
@@ -804,10 +904,12 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
     if (value.isNotEmpty && _showMicButton) {
       setState(() {
         _showMicButton = false;
+        context.read<ChatRoomCubit>().chat.messageDraft = value;
       });
     } else if ((value.isEmpty) && !_showMicButton) {
       setState(() {
         _showMicButton = true;
+        context.read<ChatRoomCubit>().chat.messageDraft = null;
       });
     }
   }

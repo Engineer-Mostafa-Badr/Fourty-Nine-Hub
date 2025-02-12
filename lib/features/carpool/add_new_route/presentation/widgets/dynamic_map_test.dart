@@ -12,7 +12,7 @@ class DynamicMapWithPolyline extends StatefulWidget {
   final bool useGoogleMaps;
   final double? latitude;
   final double? longitude;
-  final String? polylineString;
+  final List<LatLng>? polylineString;
 
   const DynamicMapWithPolyline({
     super.key,
@@ -126,7 +126,7 @@ class _DynamicMapWithPolyline extends State<DynamicMapWithPolyline> {
 
   void _centerPolylineOnGoogleMap() {
     if (widget.polylineString != null) {
-      List<LatLng> polylinePoints = decodePolyline(widget.polylineString!);
+      List<LatLng> polylinePoints = widget.polylineString!;
       if (polylinePoints.isNotEmpty) {
         final bounds = gmaps.LatLngBounds(
           southwest: gmaps.LatLng(
@@ -155,7 +155,7 @@ class _DynamicMapWithPolyline extends State<DynamicMapWithPolyline> {
 
   void _centerPolylineOnFlutterMap() {
     if (widget.polylineString != null) {
-      List<LatLng> polylinePoints = decodePolyline(widget.polylineString!);
+      List<LatLng> polylinePoints = widget.polylineString!;
       if (polylinePoints.isNotEmpty) {
         double minLat = polylinePoints
             .map((p) => p.latitude)
@@ -186,7 +186,7 @@ class _DynamicMapWithPolyline extends State<DynamicMapWithPolyline> {
   @override
   Widget build(BuildContext context) {
     List<LatLng> polylinePoints = widget.polylineString != null
-        ? decodePolyline(widget.polylineString!)
+        ? widget.polylineString!
         : [];
 
     return CustomScaffold(

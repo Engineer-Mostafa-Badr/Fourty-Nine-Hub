@@ -14,6 +14,11 @@ import 'package:fourtyninehub/res/style/styles.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
 
+import '../../../presentation/views/widgets/on_boarding_trip.dart';
+import '../../../presentation/views/widgets/pick_me_screen.dart';
+import '../../../presentation/views/widgets/trip_join_screen.dart';
+
+
 class AvailableTripsView extends StatefulWidget {
   const AvailableTripsView({
     super.key,
@@ -56,6 +61,9 @@ class _AvailableTripsViewState extends State<AvailableTripsView> {
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              ElevatedButton(onPressed: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> OnBoardingTrip()));
+              }, child: Text("Move")),
               Center(
                 child: Text(
                   // LocaleKeys.availableTrips.localize,

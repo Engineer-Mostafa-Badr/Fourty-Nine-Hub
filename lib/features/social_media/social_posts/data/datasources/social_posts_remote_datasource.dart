@@ -84,6 +84,7 @@ class SocialPostsRemoteDataSourceImpl implements SocialPostsRemoteDataSource {
   @override
   Future<Either<Failure, List<PostEntity>>> getFeed(
       {required TwitterFeedParams params}) async {
+    print("EndPoints.getFeedPosts(params)${EndPoints.getFeedPosts(params)}");
     final response = await _apiConsumer.get(EndPoints.getFeedPosts(params),
         data: {'subCategory': Constants.facebookSubCategory});
 

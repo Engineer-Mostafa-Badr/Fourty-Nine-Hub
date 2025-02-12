@@ -208,7 +208,6 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   : const SizedBox.shrink(),
               const ScrollableTextWithAnimation(),
 
-
               //wallet
 
               context.read<UserCubit>().isLoggedIn
@@ -227,7 +226,8 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   height: 60.h,
                   alignment: Alignment.center,
                   child: AutoScrollText(
-                    "${LocaleKeys.choosePreferredAppStyle.localize}...               ",
+                    velocity: const Velocity(pixelsPerSecond: Offset(20, 0)),
+                    "${LocaleKeys.choosePreferredAppStyle.localize}...                                         ",
                     style: Styles.headerText(
                         fontSize: 30, color: AppColors.SECONDARY_COLOR),
                     textDirection: context.isArabic
@@ -253,15 +253,13 @@ class _FourtyNineViewState extends State<FourtyNineView>
               // ),
               const Sizer(),
               //pick me and come with U
-              Row(
-                  children: [
-                    Expanded(child: _buildStarWidget()),
-                    const Sizer(),
-                    Expanded(
-                      child: _pickMeAndComeWithUWidget(),
-                    ),
-                  ]
-              ),
+              Row(children: [
+                Expanded(child: _buildStarWidget()),
+                const Sizer(),
+                Expanded(
+                  child: _pickMeAndComeWithUWidget(),
+                ),
+              ]),
               // _pickMeAndComeWithUWidget(),
               const Sizer(),
               _buildTenPercentWidget(),
@@ -538,57 +536,68 @@ class _FourtyNineViewState extends State<FourtyNineView>
   }
 
   Widget _buildStarWidget() {
-    return GestureDetector(
-      onTap: () {
-        context.push(Routes.BE_STAR_DETAILS);
-      },
-      child:Container(
-        height: kToolbarHeight * 2.h,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10.r),
-          color: Colors.transparent,
-        ),
-        child: SizedBox(
-          height: kToolbarHeight * 2.h,
-          width: double.infinity,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Container(
-                height: kToolbarHeight * 2.h,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage(Assets.tube),
-                      fit: BoxFit.fill
-                  ),
-                  borderRadius: BorderRadius.circular(10.r),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Color.fromARGB(255, 249, 159, 162),
-                      spreadRadius: 1,
-                      blurRadius: 3,
-                      offset: Offset(1, 1),
-                    )
-                  ],
-                ),
-
-              ),
-              Label(
-                text: LocaleKeys.tube.localize,
-                style: Styles.mediumText(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 45,
-                ),
-              ),
-            ],
+    return SizedBox(
+      height: kToolbarHeight * 2.h,
+      width: double.infinity,
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: GestureDetector(
+                // color: AppColors.AUTH_CONTAINER_COLOR,
+                // label: LocaleKeys.tube.localize,
+                // style: Styles.mediumText(
+                //   color: AppColors.AUTH_CONTAINER_COLOR,
+                //   fontWeight: FontWeight.bold,
+                // ),
+                // icon: Icons.star,
+                // iconSize: 50.h,
+                onTap: () {
+                  AdInterstitialTop.loadIntersitialAd();
+                  AdInterstitialTop.showInterstitialAd();
+                  HandleCashback.setCount('beAStarCount', context);
+                  context.push(Routes.BE_STAR);
+                },
+                child: Container(
+                    height: kToolbarHeight * 2.h,
+                    padding:
+                        EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).scaffoldBackgroundColor,
+                      borderRadius: BorderRadius.circular(5),
+                      image: DecorationImage(
+                          image: AssetImage(Assets.tubeCat), fit: BoxFit.fill),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Color.fromARGB(255, 249, 159, 162),
+                          spreadRadius: 1,
+                          blurRadius: 3,
+                          offset: Offset(1, 1),
+                        )
+                      ],
+                    ),
+                    child: Center(
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            // Image.asset(
+                            //   Assets.tube,
+                            //   height: 35.h,
+                            //   width: 35.h,
+                            //
+                            // ),
+                            // Sizer(width: 10),
+                            Label(
+                              text: LocaleKeys.tube.localize,
+                              style: Styles.mediumText(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 45,
+                              ),
+                            )
+                          ]),
+                    ))),
           ),
-        ),
-      )
-    );
-
+        ]));
   }
 
   Widget _walletsWidget() {

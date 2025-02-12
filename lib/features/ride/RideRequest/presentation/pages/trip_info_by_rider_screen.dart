@@ -203,7 +203,7 @@ class _TripInfoByRiderScreenState extends State<TripInfoByRiderScreen> {
                           const SizedBox(
                             height: 200,
                             child: DynamicMapWithPolyline(
-                              polylineString: "",
+                              // polylineString: "",
                               // BlocProvider.of<GetTripInfoCubit>(context).polyLine,
                               useGoogleMaps: true,
                               url:

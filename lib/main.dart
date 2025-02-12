@@ -53,6 +53,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/send_
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/show_offers_cubit.dart';
 import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
+import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/controller/tiktok_controller_extension.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/preload_cubit/preload_bloc.dart';
@@ -153,6 +154,9 @@ class _MyAppState extends State<MyApp> {
                 CheckTripEndCubit(repository: serviceLocator())),
         BlocProvider(
           create: (context) => serviceLocator<UserCubit>()..getUser(),
+        ),
+        BlocProvider(
+          create: (context) => serviceLocator<CreatePostCubit>()..loadData(),
         ),
         BlocProvider(
           create: (context) => serviceLocator<SecretsCubit>()..getAllSecrets(),

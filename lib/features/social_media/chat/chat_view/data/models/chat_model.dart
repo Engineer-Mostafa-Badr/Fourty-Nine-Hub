@@ -24,6 +24,7 @@ class ChatModel extends ChatEntity {
     super.hasStory,
     super.isAdmin,
     super.lables,
+    super.isBirthdayMonth,
   });
 
   factory ChatModel.fromJson(Map<String, dynamic> json) => ChatModel(
@@ -38,6 +39,7 @@ class ChatModel extends ChatEntity {
         userId: json['userId']?? "",
         avatar: json['avatar'] ?? "",
         isAdmin: json['userType']?? "user",
+        isBirthdayMonth: json['birthdayMonth'] ?? false,
         // typing: false,
     hasStory: json['hasStory'] ?? false,
         online: false,

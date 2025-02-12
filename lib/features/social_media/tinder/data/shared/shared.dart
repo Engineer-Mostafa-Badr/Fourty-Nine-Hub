@@ -81,10 +81,10 @@ class BottomSheetContentState extends State<BottomSheetContent> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 if (widget.goals?.isNotEmpty ?? false) ...[
-                  Text(
-                    "Live Goals:",
-                    style: Styles.headerText(),
-                  ),
+                  // Text(
+                  //   "Live Goals:",
+                  //   style: Styles.headerText(),
+                  // ),
                   SizedBox(
                     height: 180.h,
                     child: ListView.builder(
@@ -103,10 +103,10 @@ class BottomSheetContentState extends State<BottomSheetContent> {
                     ),
                   ),
                 ],
-                Text(
-                  "Live Gifts:",
-                  style: Styles.headerText(),
-                ),
+                // Text(
+                //   context.isArabic ? "ارسال هدية" : "Live Gifts:",
+                //   style: Styles.headerText(),
+                // ),
                 Expanded(
                   child: GridView.builder(
                     controller: _scrollController,
@@ -207,7 +207,8 @@ class BottomSheetContentState extends State<BottomSheetContent> {
     final data = await context.read<TinderViewCubit>().sendGift(
           receiverId: receiverId!,
           subCategoryId: '66af974f8bf69f9469944746',
-          giftId: gift.sId ?? '', context: context,
+          giftId: gift.sId ?? '',
+          context: context,
         );
 
     if (data.toString().contains('sent Gift Successfully') ||

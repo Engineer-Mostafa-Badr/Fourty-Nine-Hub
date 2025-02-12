@@ -254,7 +254,7 @@ class _TripInfoByDriverScreenState extends State<TripInfoByDriverScreen> {
                             const SizedBox(
                               height: 200,
                               child: DynamicMapWithPolyline(
-                                polylineString: "",
+                                // polylineString: "",
                                 // BlocProvider.of<GetTripInfoCubit>(context).polyLine,
                                 useGoogleMaps: true,
                                 url:

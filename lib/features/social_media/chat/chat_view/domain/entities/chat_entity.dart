@@ -26,6 +26,9 @@ class ChatEntity {
   bool hasStory = false;
   String? isAdmin;
   List<GetLablesEntity> lables = [];
+  bool isBirthdayMonth = false;
+  bool isSearching = false;
+  String? messageDraft;
 
   ChatEntity({
     required this.id,
@@ -52,5 +55,8 @@ class ChatEntity {
     this.hasStory = false,
     this.isAdmin,
     this.lables = const [],
+    this.isBirthdayMonth = false,
+    this.isSearching = false,
+    this.messageDraft,
   });
 }

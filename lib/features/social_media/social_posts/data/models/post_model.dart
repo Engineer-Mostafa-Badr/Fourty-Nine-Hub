@@ -71,7 +71,8 @@ class PostModel extends PostEntity {
             : null,
         type: json['type'] ?? '',
         gifUrl: json['gifUrl'] ?? '',
-        images:json['media'] != null
+        images:json['mediaDetails']!=null?List<String>.from(json['mediaDetails'].map(
+                (mediaItem) => mediaItem['photo'] ?? mediaItem['mediaKey'])):json['media'] != null
             ? List<String>.from(json['media'].map(
                 (mediaItem) => mediaItem['photo'] ?? mediaItem['mediaKey']))
             : null,
@@ -101,7 +102,9 @@ class PostModel extends PostEntity {
         mainPost: json['mainPost'] != null
             ? MainPostModel.fromJson(json['mainPost'])
             : null,
-        user: json['owner'] == null
+        user:json['user'] != null?json['user'] is String
+            ? json['user']
+            : TwitterUserModel.fromJson(json['user']): json['user'] == null
             ? null
             : json['owner'] is String
                 ? json['owner']

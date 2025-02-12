@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/stories/presentation/pages/muted_stories.dart';
@@ -35,43 +36,144 @@ class Stories extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
         children: [
+          GestureDetector(
+            onTap: () async {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const CameraScreen(),
+                ),
+              );
+
+              BlocProvider.of<StoryCubit>(context)
+                ..fetchStories()
+                ..getMutedStories();
+            },
+            child:Container(
+              height: kToolbarHeight * 2, // Maintain story aspect ratio
+              width: 104, // Maintain width proportion
+              decoration: BoxDecoration(
+                color: Theme.of(context).scaffoldBackgroundColor,
+                borderRadius: BorderRadius.circular(12), // Slightly rounded corners
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Stack(
+                alignment: Alignment.bottomCenter,
+                children: [
+                  /// Profile Image (Top Half)
+                  Column(
+                    children: [
+                      /// Image Takes Up **More Than Half** to Make Space for Circle
+                      Expanded(
+                        flex: 6,
+                        child: ClipRRect(
+                          borderRadius: const BorderRadius.vertical(top: Radius.circular(12)), // Rounded top corners
+                          child: Image.network(
+                            serviceLocator<UserCubit>().state.data != null &&
+                                serviceLocator<UserCubit>().state.data!.profilePicture != null
+                                ? serviceLocator<UserCubit>().state.data!.profilePicture!
+                                : UIConst.profilePlaceHolder,
+                            width: double.infinity,
+                            fit: BoxFit.cover, // Ensures the image covers full width
+                            errorBuilder: (context, error, stackTrace) =>
+                                Image.network(UIConst.imagePlaceHolder),
+                          ),
+                        ),
+                      ),
+
+                      /// White Bottom Section with Text
+                      Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                          borderRadius: const BorderRadius.vertical(bottom: Radius.circular(12)),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            const SizedBox(height: 22), // Space for the overlapping circle
+                            Label(
+                              text: context.isArabic ? 'إضافة قصة' : 'Create\nStory',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14
+                              ),
+                              textAlign: TextAlign.center,
+                              maxLines: 2,
+                            ),
+                            const SizedBox(height: 8),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  /// "+" Button Positioned in Middle (Half on Image, Half on White Section)
+                  const Positioned(
+                    bottom: (kToolbarHeight * 0.8),
+                    child: CircleAvatar(
+                      radius: 22, // Slightly bigger to match Facebook UI
+                      backgroundColor: Colors.white,
+                      child: CircleAvatar(
+                        radius: 19,
+                        backgroundColor: AppColors.PRIMARY_COLOR,
+                        child: Icon(
+                          Icons.add,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+
+
+          ),
           const Sizer(),
           _buildYourStory(context),
           const Sizer(
             width: 8,
           ),
           const Sizer(),
-          SizedBox(
-            height: kToolbarHeight * 2.5,
-            child: BlocBuilder<StoryCubit, StoryState>(
-              builder: (context, state) {
-                return (state.users.isNotEmpty ?? false)
-                    ? ListView.separated(
-                        physics: const NeverScrollableScrollPhysics(),
-                        scrollDirection: Axis.horizontal,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) =>
-                            _buildOthersStories(context, state, index),
-                        separatorBuilder: (context, index) => const Sizer(
-                              width: 8,
-                            ),
-                        itemCount: state.users.length ?? 0)
-                    // : Padding(
-                    //     padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                    //     child: Shimmer.fromColors(
-                    //       baseColor: Colors.transparent,
-                    //       highlightColor: Colors.grey.withOpacity(0.2),
-                    //       child: Container(
-                    //         color: Colors.grey,
-                    //         height: kToolbarHeight * 2,
-                    //         width: kToolbarHeight * 1.5,
-                    //       ),
-                    //     ),
-                    //   );
-                    : const SizedBox();
-              },
-            ),
-          ),
+          // SizedBox(
+          //   height: kToolbarHeight * 2.5,
+          //   child: BlocBuilder<StoryCubit, StoryState>(
+          //     builder: (context, state) {
+          //       return (state.users.isNotEmpty ?? false)
+          //           ? ListView.separated(
+          //               physics: const NeverScrollableScrollPhysics(),
+          //               scrollDirection: Axis.horizontal,
+          //               shrinkWrap: true,
+          //               itemBuilder: (context, index) =>
+          //                   _buildOthersStories(context, state, index),
+          //               separatorBuilder: (context, index) => const Sizer(
+          //                     width: 8,
+          //                   ),
+          //               itemCount: state.users.length ?? 0)
+          //           // : Padding(
+          //           //     padding: const EdgeInsets.symmetric(horizontal: 2.0),
+          //           //     child: Shimmer.fromColors(
+          //           //       baseColor: Colors.transparent,
+          //           //       highlightColor: Colors.grey.withOpacity(0.2),
+          //           //       child: Container(
+          //           //         color: Colors.grey,
+          //           //         height: kToolbarHeight * 2,
+          //           //         width: kToolbarHeight * 1.5,
+          //           //       ),
+          //           //     ),
+          //           //   );
+          //           : const SizedBox();
+          //     },
+          //   ),
+          // ),
           const Sizer(
             width: 8,
           ),
@@ -241,16 +343,23 @@ class Stories extends StatelessWidget {
               ..getMutedStories();
           },
           child: Container(
-            height: kToolbarHeight * 2,
-            width: kToolbarHeight * 1.8,
+            height: 74,
+            width: 104,
             decoration: BoxDecoration(
-              color: AppColors.PRIMARY_COLOR,
-              borderRadius: BorderRadius.circular(8), // Add border radius
+              gradient: const LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Color(0xFF0B1035), // Dark blue
+                  Color(0xFF202F9B), // Deep blue
+                ],
+              ),
+              borderRadius: BorderRadius.circular(6),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.2), // Shadow color with opacity
-                  blurRadius: 8, // Spread of the shadow
-                  offset: const Offset(0, 4), // Position of the shadow (x, y)
+                  color: Colors.black.withOpacity(0.2),
+                  blurRadius: 8,
+                  offset: const Offset(0, 4),
                 ),
               ],
             ),
@@ -259,30 +368,31 @@ class Stories extends StatelessWidget {
                 Positioned.fill(
                     child: Column(
                       children: [
-                        Sizer(),
+                        const Sizer(),
                         Expanded(
-                          child: Image.asset(
-                            Assets.openBook,
+                          child: SvgPicture.asset(
+                            Assets.createStory,
                             color: Colors.white,
                           ),
                         ),
-                        Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Label(
-                                  text: context.isArabic ? 'إضافة قصة' : 'Create Story',
-                                  // Localized text
-                                  color: Theme.of(context).primaryColor,
-                                  maxLines: 1,
-
-                                  style: Styles.mediumText(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                const SizedBox(height: 4),
-                              ],
-                            ))
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Label(
+                              text: context.isArabic ? 'إضافة \n قصة' : 'Create\nStory',
+                              // Localized text
+                              color: Theme.of(context).primaryColor,
+                              // maxLines: 2,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14,
+                                color: Colors.white
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                          ],
+                        )
                       ],
                     )),
                 // const Positioned.fill(
@@ -304,7 +414,7 @@ class Stories extends StatelessWidget {
             ),
           ),
         )),
-        Sizer(),
+        const Sizer(),
         Expanded(child: GestureDetector(
           onTap: () async {
             // await Navigator.push(
@@ -319,11 +429,18 @@ class Stories extends StatelessWidget {
             //   ..getMutedStories();
           },
           child: Container(
-            height: kToolbarHeight * 2,
-            width: kToolbarHeight * 1.8,
+            height: 74,
+            width: 104,
             decoration: BoxDecoration(
-              color: AppColors.SECONDARY_COLOR,
-              borderRadius: BorderRadius.circular(8), // Add border radius
+              gradient: const LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Color(0xFF0B1035), // Dark blue
+                  Color(0xFFFF3308), // Deep blue
+                ],
+              ),
+              borderRadius: BorderRadius.circular(6), // Add border radius
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.2), // Shadow color with opacity
@@ -354,30 +471,31 @@ class Stories extends StatelessWidget {
                         //         Image.network(UIConst.imagePlaceHolder),
                         //   ),
                         // ),
-                        Sizer(),
+                        const Sizer(),
                         Expanded(
-                          child: Image.asset(
-                            Assets.homeReel,
+                          child: SvgPicture.asset(
+                            Assets.createReel,
                             color: Colors.white,
                           ),
                         ),
-                        Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Label(
-                                  text: context.isArabic ? 'إضافة بكره' : 'Create Reel',
-                                  // Localized text
-                                  color: Theme.of(context).primaryColor,
-                                  maxLines: 1,
-
-                                  style: Styles.mediumText(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                const SizedBox(height: 4),
-                              ],
-                            ))
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Label(
+                              text: context.isArabic ? 'إضافة\n بكره' : 'Create\n Reel',
+                              // Localized text
+                              color: Theme.of(context).primaryColor,
+                              maxLines: 2,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14,
+                                  color: Colors.white
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                          ],
+                        )
                       ],
                     )),
                 // const Positioned.fill(
@@ -403,9 +521,9 @@ class Stories extends StatelessWidget {
     );
   }
 
-  _buildMutedStories(BuildContext context) {
+  Widget _buildMutedStories(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(5),
+      borderRadius: BorderRadius.circular(12), // Facebook-like rounded edges
       child: GestureDetector(
         onTap: () async {
           await Navigator.push(
@@ -423,38 +541,144 @@ class Stories extends StatelessWidget {
             ..getMutedStories();
         },
         child: Container(
-          height: kToolbarHeight * 2,
-          width: kToolbarHeight * 1.5,
-          decoration: const BoxDecoration(
-            color: Colors.black12,
+          height: kToolbarHeight * 2, // Facebook Story Aspect Ratio
+          width: 104, // Fixed width for consistency
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                blurRadius: 6,
+                offset: const Offset(0, 4),
+              ),
+            ],
           ),
           child: Stack(
+            fit: StackFit.expand,
             children: [
-              const Positioned(
-                top: 2,
-                left: 2,
-                child: Icon(Icons.notifications_off_outlined,
-                    color: Colors.black54),
-              ),
-              Positioned(
-                bottom: 4,
-                left: 2,
-                // right: 2,
-                child: Label(
-                  text: context.isArabic ? 'صامته' : 'Muted',
-                  // Localized text
-                  color: Theme.of(context).primaryColor,
-                  maxLines: 1,
-
-                  style: Styles.mediumText(
-                      color: Theme.of(context).primaryColor,
-                      fontWeight: FontWeight.bold),
+              /// **Full Background Image**
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.network(
+                  serviceLocator<UserCubit>().state.data != null &&
+                      serviceLocator<UserCubit>().state.data!.profilePicture != null
+                      ? serviceLocator<UserCubit>().state.data!.profilePicture!
+                      : UIConst.profilePlaceHolder,
+                  fit: BoxFit.cover,
                 ),
-              )
+              ),
+
+              /// **Circular Profile Picture with Muted Icon (Top Left)**
+              /// **Circular Profile Picture with White Border & Muted Icon**
+              /// **Circular Profile Picture with White Border**
+              Positioned(
+                top: 8,
+                left: 8,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    /// **Outer White Circle (Border)**
+                    const CircleAvatar(
+                      radius: 16,
+                      backgroundColor: Colors.white,
+                    ),
+
+                    /// **Inner Profile Picture (28x28)**
+                    CircleAvatar(
+                      radius: 14,
+                      backgroundColor: Colors.grey.shade300, // Placeholder BG
+                      backgroundImage: NetworkImage(
+                        serviceLocator<UserCubit>().state.data != null &&
+                            serviceLocator<UserCubit>().state.data!.profilePicture != null
+                            ? serviceLocator<UserCubit>().state.data!.profilePicture!
+                            : UIConst.profilePlaceHolder,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+
+
+              /// **Muted Text (Bottom Center)**
+              Positioned(
+                bottom: 10,
+                left: 6,
+                right: 0,
+                child: Label(
+                  text: context.isArabic ? 'صامته' :  serviceLocator<UserCubit>().state.data != null &&
+                      serviceLocator<UserCubit>().state.data!.profilePicture != null
+                      ? serviceLocator<UserCubit>().state.data!.fullName! :"",
+                  style:const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 10,
+                    color: Colors.white
+                  ),
+                  maxLines: 1,
+                ),
+              ),
             ],
           ),
         ),
       ),
     );
   }
+
+
+
+
+// _buildMutedStories(BuildContext context) {
+  //   return ClipRRect(
+  //     borderRadius: BorderRadius.circular(5),
+  //     child: GestureDetector(
+  //       onTap: () async {
+  //         await Navigator.push(
+  //           context,
+  //           MaterialPageRoute(
+  //             builder: (context) => BlocProvider.value(
+  //               value: serviceLocator<StoryCubit>(),
+  //               child: const MutedStories(),
+  //             ),
+  //           ),
+  //         );
+  //
+  //         BlocProvider.of<StoryCubit>(context)
+  //           ..fetchStories()
+  //           ..getMutedStories();
+  //       },
+  //       child: Container(
+  //         height: kToolbarHeight * 2,
+  //         width: kToolbarHeight * 1.5,
+  //         decoration: const BoxDecoration(
+  //           color: Colors.black12,
+  //         ),
+  //         child: Stack(
+  //           children: [
+  //             const Positioned(
+  //               top: 2,
+  //               left: 2,
+  //               child: Icon(Icons.notifications_off_outlined,
+  //                   color: Colors.black54),
+  //             ),
+  //             Positioned(
+  //               bottom: 4,
+  //               left: 2,
+  //               // right: 2,
+  //               child: Label(
+  //                 text: context.isArabic ? 'صامته' : 'Muted',
+  //                 // Localized text
+  //                 color: Theme.of(context).primaryColor,
+  //                 maxLines: 1,
+  //
+  //                 style: Styles.mediumText(
+  //                     color: Theme.of(context).primaryColor,
+  //                     fontWeight: FontWeight.bold),
+  //               ),
+  //             )
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 }

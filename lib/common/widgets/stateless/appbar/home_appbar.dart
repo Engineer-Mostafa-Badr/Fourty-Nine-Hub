@@ -55,6 +55,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    // context.read<UserCubit>().getUnreadedChatsCounter();
     bool isCurrentRoute(BuildContext context, String targetRoute) {
       final currentRoute = ModalRoute.of(context)?.settings.name;
       return currentRoute == targetRoute;
@@ -179,20 +180,29 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
             ),
           // if (language)
           InkWell(
-            onTap: () {
+            onTap: () async {
+              await context.read<UserCubit>().resetUnreadedChatsCounter();
+
               if (isCurrentRoute(context, Routes.CHAT) == true) {
                 return;
               }
+
               HandleCashback.setCount('chatCount', context);
               context.push(Routes.CHAT, extra: ChatsViewParams());
             },
             child: Container(
               width: 80.w,
               padding: EdgeInsets.symmetric(horizontal: 15.w),
-              child: Image.asset(
-                Assets.newChat,
-                color: AppColors.PRIMARY_COLOR,
-                height: 30.h,
+              child: Badge.count(
+                count: context.read<UserCubit>().unreadedChatsCounter,
+                backgroundColor: AppColors.PRIMARY_COLOR_DARK,
+                isLabelVisible:
+                    context.read<UserCubit>().unreadedChatsCounter > 0,
+                child: Image.asset(
+                  Assets.newChat,
+                  color: AppColors.PRIMARY_COLOR,
+                  height: 30.h,
+                ),
               ),
             ),
           ),

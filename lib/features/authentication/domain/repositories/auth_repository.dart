@@ -55,6 +55,7 @@ abstract class AuthRepository {
       UpdateProfileViewParams params);
   Future<Either<Failure, List<GetProfileViewsEntity>>> getProfileViews(
       GetProfileViewsParams params);
+      Future<Either<Failure, int>> getUnreadedChatsCounter();
   Future<Either<Failure, List<GetProfileViewsEntity>>> getProfileViewsByUserId(
       GetProfileViewsParams params);
   bool attachToken(UserTokensEntity? token);

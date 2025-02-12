@@ -6,6 +6,7 @@ import 'package:fourtyninehub/features/authentication/domain/use_cases/create_ne
 import 'package:fourtyninehub/features/authentication/domain/use_cases/create_normal_chat_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_profile_views_by_user_id_usecase.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_profile_views_usecase.dart';
+// import 'package:fourtyninehub/features/authentication/domain/use_cases/get_unreaded_chats_counter_usecase.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_welcome_gift_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/google_sign_in_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/resend_otp_use_case.dart';
@@ -53,6 +54,10 @@ class AuthServiceLocator {
         () => CreateNormalChatUseCase(
               serviceLocator(),
             ));
+    // serviceLocator.registerLazySingleton<GetUnreadedChatsCounterUsecase>(
+    //     () => GetUnreadedChatsCounterUsecase(
+    //           serviceLocator(),
+    //         ));
     serviceLocator.registerLazySingleton<CreateAnonymousChatUseCase>(
         () => CreateAnonymousChatUseCase(
               serviceLocator(),
@@ -165,6 +170,7 @@ class AuthServiceLocator {
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),
+        // serviceLocator()
       )..attachToken(),
     );
     serviceLocator.registerSingleton(

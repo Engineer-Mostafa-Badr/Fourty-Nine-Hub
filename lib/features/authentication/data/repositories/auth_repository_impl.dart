@@ -212,5 +212,10 @@ class AuthRepositoryImpl extends AuthRepository {
       GetProfileViewsParams params) {
     return _remoteDataSource.getProfileViewsByUserId(params);
   }
+  
+  @override
+  Future<Either<Failure, int>> getUnreadedChatsCounter() {
+    return _remoteDataSource.getUnreadedChatsCounter();
+  }
 }
 //enum: ['google', 'facebook', 'local', 'apple']

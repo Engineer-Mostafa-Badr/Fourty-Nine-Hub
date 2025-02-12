@@ -141,7 +141,7 @@ class _MapAndAddressFinderRideState extends State<MapAndAddressFinderRide> {
                     return SizedBox(
                       height: 200,
                       child: DynamicMapWithPolyline(
-                        polylineString: state.model.polyline,
+                        // polylineString: state.model.polyline,
                         useGoogleMaps: destIsGoogleMap(context),
                         url: getMapUrl(context, isStart: false),
                         apiKey: getApiKey(context, isStart: false),
@@ -218,7 +218,7 @@ class _MapAndAddressFinderRideState extends State<MapAndAddressFinderRide> {
                         return SizedBox(
                           height: 200,
                           child: DynamicMapWithPolyline(
-                            polylineString: state.model.polyline,
+                            // polylineString: state.model.polyline,
                             // polylineString:
                             //     BlocProvider.of<GetPriceCarpoolCubit>(context)
                             //         .carpoolRouteInfoModel

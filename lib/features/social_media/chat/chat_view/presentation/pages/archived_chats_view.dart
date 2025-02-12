@@ -102,9 +102,65 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                           ),
                           IconButton(
                             onPressed: () async {
-                              await context
-                                  .read<ChatsCubit>()
-                                  .changeArchiveChat(isArchivedTab: true);
+                              await context.read<ChatsCubit>().changeArchiveChat(isArchivedTab: true);
+                              final unarchivedChatsCount = context.read<ChatsCubit>().selectedChats.length;
+
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  backgroundColor: AppColors.PRIMARY_COLOR, // Set background color to blue
+                                  content: BlocProvider.value(
+                                    value: context.read<ChatsCubit>(),
+                                    child: Builder(
+                                      builder: (context) {
+                                        return Text.rich(
+                                          TextSpan(
+                                            children: [
+                                              TextSpan(
+                                                text: context.isArabic ? "تم إلغاء أرشفة " : "Unarchived ",
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              TextSpan(
+                                                text: "$unarchivedChatsCount ", // Count
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                              TextSpan(
+                                                text: context.isArabic ? "محادثة" : "chats",
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  action: SnackBarAction(
+                                    label: context.isArabic ? "تراجع" : "Undo",
+                                    textColor: Colors.grey, // Set "Undo" text color to gray
+                                    onPressed: () async {
+                                      await context.read<ChatsCubit>().changeArchiveChat(isArchivedTab: true);
+                                    },
+                                  ),
+                                  duration: const Duration(seconds: 3),
+                                ),
+                              );
+
+// Clear selected chats after 3 seconds
+                              Future.delayed(const Duration(seconds: 3), () {
+                                context.read<ChatsCubit>().clearSelectedChats();
+                              });
+
                             },
                             icon: const Icon(
                               Icons.unarchive,
@@ -129,9 +185,69 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                                   offset: const Offset(0, 50),
                                   onSelected: (int value) async {
                                     if (value == 0) {
-                                      await context
-                                          .read<ChatsCubit>()
-                                          .lockChats(isLockedTap: true);
+                                      // await context
+                                      //     .read<ChatsCubit>()
+                                      //     .lockChats(isLockedTap: true);
+
+                                      await context.read<ChatsCubit>().lockChats(isLockedTap: true);
+                                      final unlockedChatsCount = context.read<ChatsCubit>().selectedChats.length;
+
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          backgroundColor: AppColors.PRIMARY_COLOR, // Set background color
+                                          content: BlocProvider.value(
+                                            value: context.read<ChatsCubit>(),
+                                            child: Builder(
+                                              builder: (context) {
+                                                return Text.rich(
+                                                  TextSpan(
+                                                    children: [
+                                                      TextSpan(
+                                                        text: context.isArabic ? "تم إلغاء قفل " : "Unlocked ",
+                                                        style: const TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 16,
+                                                          fontWeight: FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                      TextSpan(
+                                                        text: "$unlockedChatsCount ", // Count
+                                                        style: const TextStyle(
+                                                          color: Colors.white,
+                                                          fontWeight: FontWeight.bold,
+                                                          fontSize: 16,
+                                                        ),
+                                                      ),
+                                                      TextSpan(
+                                                        text: context.isArabic ? "محادثة" : "chats",
+                                                        style: const TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 16,
+                                                          fontWeight: FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                          action: SnackBarAction(
+                                            label: context.isArabic ? "تراجع" : "Undo",
+                                            textColor: Colors.grey, // Set "Undo" text color to gray
+                                            onPressed: () async {
+                                              await context.read<ChatsCubit>().lockChats(isLockedTap: true);
+                                            },
+                                          ),
+                                          duration: const Duration(seconds: 3),
+                                        ),
+                                      );
+
+// Clear selected chats after 3 seconds
+                                      Future.delayed(const Duration(seconds: 3), () {
+                                        context.read<ChatsCubit>().clearSelectedChats();
+                                      });
+
                                     }
                                   },
                                   itemBuilder: (context) {
@@ -197,7 +313,7 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                           child: Label(
                               text: LocaleKeys.noChatsUntilNow.tr(),
                               style: Styles.mediumText(
-                                  fontWeight: FontWeight.bold, fontSize: 24)),
+                                  fontWeight: FontWeight.bold, fontSize: 34)),
                         )
                       : ListView.separated(
                           shrinkWrap: true,

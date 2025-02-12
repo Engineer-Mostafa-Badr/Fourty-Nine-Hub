@@ -170,14 +170,14 @@ class _SocialHomeViewState extends State<SocialHomeView>
                             // pinned: true,
                             flexibleSpace: const CreatePostBanner(),
                           ),
-                          SliverAppBar(
-                            backgroundColor:
-                                Theme.of(context).scaffoldBackgroundColor,
-                            automaticallyImplyLeading: false,
-                            // floating: true,
-                            pinned: true,
-                            flexibleSpace: _buildTabBar(),
-                          )
+                          // SliverAppBar(
+                          //   backgroundColor:
+                          //       Theme.of(context).scaffoldBackgroundColor,
+                          //   automaticallyImplyLeading: false,
+                          //   // floating: true,
+                          //   pinned: true,
+                          //   flexibleSpace: _buildTabBar(),
+                          // )
                         ],
                         body: FacebookBody(
                           scrollController: scrollController,
