@@ -274,9 +274,9 @@ class _CarPoolNewRouteInfoState extends State<CarPoolNewRouteInfo> {
           duration:
               getPriceCarpoolCubit.carpoolRouteInfoModel?.duration?.toInt(),
           firstMidpoint: [
-            getPriceCarpoolCubit.carpoolRouteInfoModel?.firstMidpoint?["lat"] ??
+            getPriceCarpoolCubit.carpoolRouteInfoModel?.firstMidpoint?[0] ??
                 0,
-            getPriceCarpoolCubit.carpoolRouteInfoModel?.firstMidpoint?["lng"] ??
+            getPriceCarpoolCubit.carpoolRouteInfoModel?.firstMidpoint?[1] ??
                 0
           ],
           locationForFirstMidpoint: getPriceCarpoolCubit
@@ -288,10 +288,10 @@ class _CarPoolNewRouteInfoState extends State<CarPoolNewRouteInfo> {
           priceForEveryUser: finalPrice.toInt(),
           secondMidpoint: [
             getPriceCarpoolCubit
-                    .carpoolRouteInfoModel?.secondMidpoint?["lat"] ??
+                    .carpoolRouteInfoModel?.secondMidpoint?[0] ??
                 0,
             getPriceCarpoolCubit
-                    .carpoolRouteInfoModel?.secondMidpoint?["lng"] ??
+                    .carpoolRouteInfoModel?.secondMidpoint?[1] ??
                 0
           ],
           startLocation:

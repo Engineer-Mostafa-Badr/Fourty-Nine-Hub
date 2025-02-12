@@ -8,10 +8,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/file_extension.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/label_colors_map.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
+import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
@@ -158,13 +160,22 @@ class _ChatCardState extends State<ChatCard> {
                                                             widget.chat!.isAdmin ==
                                                                     "admin"
                                                                 ? Padding(
-                                                                  padding: const EdgeInsets.only(bottom: 4, right: 4, left: 8, top: 4),
-                                                                  child: Image.asset(
-                                                                      Assets.logo,
+                                                                    padding: const EdgeInsets
+                                                                        .only(
+                                                                        bottom:
+                                                                            4,
+                                                                        right:
+                                                                            4,
+                                                                        left: 8,
+                                                                        top: 4),
+                                                                    child: Image
+                                                                        .asset(
+                                                                      Assets
+                                                                          .logo,
                                                                       fit: BoxFit
                                                                           .cover,
                                                                     ),
-                                                                )
+                                                                  )
                                                                 : Image.network(
                                                                     widget.chat!
                                                                         .avatar,
@@ -231,6 +242,25 @@ class _ChatCardState extends State<ChatCard> {
                                                                                 LabelColorsMap.getColor(widget.chat!.lables.last.color),
                                                                             size:
                                                                                 20,
+                                                                          )
+                                                                        : const SizedBox(),
+                                                                    (widget.chat!.isAdmin !=
+                                                                                "admin" &&
+                                                                            widget.chat!.isBirthdayMonth)
+                                                                        ? InkWell(
+                                                                            onTap:
+                                                                                () async {
+                                                                              await showGiftBottomSheet(
+                                                                                context,
+                                                                                receiverId: widget.chat!.userId,
+                                                                              );
+                                                                            },
+                                                                            child:
+                                                                                const Icon(
+                                                                              FontAwesomeIcons.cakeCandles,
+                                                                              color: AppColors.PRIMARY_COLOR_DARK,
+                                                                              size: 18,
+                                                                            ),
                                                                           )
                                                                         : const SizedBox(),
                                                                   ],
@@ -326,12 +356,16 @@ class _ChatCardState extends State<ChatCard> {
                                       child: CircleAvatar(
                                         child: widget.chat!.isAdmin == "admin"
                                             ? Padding(
-                                              padding: const EdgeInsets.only(bottom: 4, right: 4, left: 8, top: 4),
-                                              child: Image.asset(
+                                                padding: const EdgeInsets.only(
+                                                    bottom: 4,
+                                                    right: 4,
+                                                    left: 8,
+                                                    top: 4),
+                                                child: Image.asset(
                                                   Assets.logo,
                                                   fit: BoxFit.cover,
                                                 ),
-                                            )
+                                              )
                                             : Image.network(
                                                 widget.chat!.avatar,
                                                 fit: BoxFit.cover,
@@ -446,6 +480,22 @@ class _ChatCardState extends State<ChatCard> {
                                           ],
                                         )
                                       : const SizedBox(),
+                                  (widget.chat!.isAdmin != "admin" &&
+                                          widget.chat!.isBirthdayMonth)
+                                      ? InkWell(
+                                          onTap: () async {
+                                            await showGiftBottomSheet(
+                                              context,
+                                              receiverId: widget.chat!.userId,
+                                            );
+                                          },
+                                          child: const Icon(
+                                            FontAwesomeIcons.cakeCandles,
+                                            color: AppColors.PRIMARY_COLOR_DARK,
+                                            size: 18,
+                                          ),
+                                        )
+                                      : const SizedBox(),
                                 ],
                               ),
                             ),
@@ -475,18 +525,81 @@ class _ChatCardState extends State<ChatCard> {
                                 widget.chat!.typing || widget.chat!.recording
                                     ? const SizedBox()
                                     : Expanded(
-                                        child: Label(
-                                            text: widget.chat?.lastMessage
-                                                        ?.text ==
-                                                    null
-                                                ? context.isArabic
-                                                    ? "لا توجد رسائل حتي الان"
-                                                    : "No messages until now"
-                                                : '${widget.chat?.lastMessage?.text}',
-                                            style: Styles.mediumText(
-                                              fontSize: 28,
-                                              color: AppColors.DARK_GRAY_COLOR,
-                                            )),
+                                        child: Row(
+                                          children: [
+                                            (widget.chat!.lastMessage != null &&
+                                                    (widget
+                                                            .chat!
+                                                            .lastMessage
+                                                            ?.media
+                                                            .isNotEmpty ??
+                                                        false))
+                                                ? widget.chat!.lastMessage
+                                                            ?.media[0].type ==
+                                                        FileTypeEnum.image
+                                                    ? const Icon(
+                                                        Icons.image,
+                                                        color: Colors.grey,
+                                                        size: 17,
+                                                      )
+                                                    : widget
+                                                                .chat!
+                                                                .lastMessage
+                                                                ?.media[0]
+                                                                .type ==
+                                                            FileTypeEnum.video
+                                                        ? const Icon(
+                                                            Icons
+                                                                .video_camera_back,
+                                                            color: Colors.grey,
+                                                            size: 17,
+                                                          )
+                                                        : widget
+                                                                    .chat!
+                                                                    .lastMessage
+                                                                    ?.media[0]
+                                                                    .type ==
+                                                                FileTypeEnum
+                                                                    .audio
+                                                            ? const Icon(
+                                                                Icons.mic,
+                                                                color:
+                                                                    Colors.grey,
+                                                                size: 17,
+                                                              )
+                                                            : widget
+                                                                        .chat!
+                                                                        .lastMessage
+                                                                        ?.media[
+                                                                            0]
+                                                                        .type ==
+                                                                    FileTypeEnum
+                                                                        .document
+                                                                ? const Icon(
+                                                                    Icons
+                                                                        .description,
+                                                                    color: Colors
+                                                                        .grey,
+                                                                    size: 17,
+                                                                  )
+                                                                : const SizedBox()
+                                                : const SizedBox(),
+                                            const SizedBox(width: 8),
+                                            Label(
+                                                text: widget.chat?.lastMessage
+                                                            ?.text ==
+                                                        null
+                                                    ? context.isArabic
+                                                        ? "لا توجد رسائل حتي الان"
+                                                        : "No messages until now"
+                                                    : '${widget.chat?.lastMessage?.text}',
+                                                style: Styles.mediumText(
+                                                  fontSize: 28,
+                                                  color:
+                                                      AppColors.DARK_GRAY_COLOR,
+                                                )),
+                                          ],
+                                        ),
                                       ),
                                 widget.chat!.typing
                                     ? Expanded(
@@ -677,12 +790,12 @@ class _ChatCardState extends State<ChatCard> {
                                                                                       radius: 25,
                                                                                       child: widget.chat!.isAdmin == "admin"
                                                                                           ? Padding(
-                                                                                            padding: const EdgeInsets.only(bottom: 4, right: 4, left: 8, top: 4),
-                                                                                            child: Image.asset(
+                                                                                              padding: const EdgeInsets.only(bottom: 4, right: 4, left: 8, top: 4),
+                                                                                              child: Image.asset(
                                                                                                 Assets.logo,
                                                                                                 fit: BoxFit.cover,
                                                                                               ),
-                                                                                          )
+                                                                                            )
                                                                                           : Image.network(
                                                                                               widget.chat!.avatar,
                                                                                               fit: BoxFit.cover,

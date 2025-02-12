@@ -157,7 +157,7 @@ class _GoogleMapViewAddresState extends State<GoogleMapViewAddres> {
       child: BlocConsumer<GetTripInfoCubit, RiderState>(
         listener: (context, state) {
           if (state is SuccessGetTripInfoState) {
-            setPolyLine(polyline: state.model.polyline ?? "");
+            setPolyLine(polyline: state.model.polyline ?? []);
             // showBottomSheet(
             //         context: context,
             //         builder: (context) {
@@ -189,7 +189,7 @@ class _GoogleMapViewAddresState extends State<GoogleMapViewAddres> {
   }
 
   setPolyLine({
-    required String polyline,
+    required List<LatLng> polyline,
   }) {
     if (markets.length == 2) {
       addPolyLineGoogleMap(polyline);
@@ -204,11 +204,11 @@ class _GoogleMapViewAddresState extends State<GoogleMapViewAddres> {
         .toList();
   }
 
-  addPolyLineGoogleMap(String line) {
-    List<LatLng> polyLineDecode = decodePolyline(line);
+  addPolyLineGoogleMap(List<LatLng> line) {
+    // List<LatLng> polyLineDecode = decodePolyline(line);
     final Polyline polyline = Polyline(
         polylineId: const PolylineId("polyLine"),
-        points: polyLineDecode,
+        points: line,
         color: Colors.blue);
     setState(() {
       polyLineGoogleMap.add(polyline);

@@ -5,12 +5,12 @@ import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/entiti
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/domain/usecases/fetch_price_distance_usecase.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:latlong2/latlong.dart' as latlng;
 
 part 'fetch_price_distance_state.dart';
-
 class FetchPriceDistanceCubit extends Cubit<FetchPriceDistanceState> {
   final FetchPriceDistanceUsecase fetchPriceDistanceUsecase;
-  String? polyline;
+  List<latlng.LatLng>? polyline;
   TripInfoEntity? tripInfoEntity;
   FetchPriceDistanceCubit({
     required this.fetchPriceDistanceUsecase,

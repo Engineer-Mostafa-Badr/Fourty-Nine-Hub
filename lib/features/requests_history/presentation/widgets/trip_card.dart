@@ -61,7 +61,7 @@ class TripCard extends StatelessWidget {
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(24)),
                                 child: const DynamicMapWithPolyline(
-                                  polylineString: "",
+                                  // polylineString: "",
                                   // BlocProvider.of<GetTripInfoCubit>(context).polyLine,
                                   useGoogleMaps: true,
                                   url:

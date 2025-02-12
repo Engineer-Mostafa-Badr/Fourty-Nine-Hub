@@ -14,8 +14,8 @@ class TripJoinCardModel extends TripJoinCardEntity {
   String? toAr;
   String? fromEn;
   String? toEn;
-  int? distance;
-  int? duration;
+  num? distance;
+  num? duration;
   int? passengers;
   double? price;
   @override
@@ -93,8 +93,8 @@ class TripJoinCardModel extends TripJoinCardEntity {
       fromEn: json['fromEn'] as String?,
       toEn: json['toEn'] as String?,
       status: json['status'] as String?,
-      distance: json['distance'] as int?,
-      duration: json['duration'] as int?,
+      distance: json['distance'] as num?,
+      duration: json['duration'] as num?,
       passengers: json['passengers'] as int?,
       price: (json['price'] as num?)?.toDouble(),
       phone: json['phone'].toString(),
