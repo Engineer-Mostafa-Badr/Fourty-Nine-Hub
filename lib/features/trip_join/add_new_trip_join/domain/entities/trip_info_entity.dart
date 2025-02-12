@@ -1,11 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:latlong2/latlong.dart';
 class TripInfoEntity {
   final double? price;
   final double? distance;
   final double? duration;
   final String? originAddress;
   final String? destinationAddress;
-  final String? polyline;
+  final List<LatLng>? polyline;
   final String? type;
   TripInfoEntity(
       {this.price,

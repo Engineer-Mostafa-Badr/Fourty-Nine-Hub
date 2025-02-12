@@ -208,7 +208,6 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   : const SizedBox.shrink(),
               const ScrollableTextWithAnimation(),
 
-
               //wallet
 
               context.read<UserCubit>().isLoggedIn
@@ -227,7 +226,8 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   height: 60.h,
                   alignment: Alignment.center,
                   child: AutoScrollText(
-                    "${LocaleKeys.choosePreferredAppStyle.localize}...               ",
+                    velocity: const Velocity(pixelsPerSecond: Offset(20, 0)),
+                    "${LocaleKeys.choosePreferredAppStyle.localize}...                                         ",
                     style: Styles.headerText(
                         fontSize: 30, color: AppColors.SECONDARY_COLOR),
                     textDirection: context.isArabic
@@ -253,15 +253,13 @@ class _FourtyNineViewState extends State<FourtyNineView>
               // ),
               const Sizer(),
               //pick me and come with U
-              Row(
-                  children: [
-                    Expanded(child: _buildStarWidget()),
-                    const Sizer(),
-                    Expanded(
-                      child: _pickMeAndComeWithUWidget(),
-                    ),
-                  ]
-              ),
+              Row(children: [
+                Expanded(child: _buildStarWidget()),
+                const Sizer(),
+                Expanded(
+                  child: _pickMeAndComeWithUWidget(),
+                ),
+              ]),
               // _pickMeAndComeWithUWidget(),
               const Sizer(),
               _buildTenPercentWidget(),
@@ -554,49 +552,45 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   HandleCashback.setCount('beAStarCount', context);
                   context.push(Routes.BE_STAR);
                 },
-              child:Container(
-                  height: kToolbarHeight * 2.h,
-                  padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                    borderRadius: BorderRadius.circular(5),
-                    image:  DecorationImage(
-                      image: AssetImage(Assets.tubeCat),
-                      fit: BoxFit.fill
+                child: Container(
+                    height: kToolbarHeight * 2.h,
+                    padding:
+                        EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).scaffoldBackgroundColor,
+                      borderRadius: BorderRadius.circular(5),
+                      image: DecorationImage(
+                          image: AssetImage(Assets.tubeCat), fit: BoxFit.fill),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Color.fromARGB(255, 249, 159, 162),
+                          spreadRadius: 1,
+                          blurRadius: 3,
+                          offset: Offset(1, 1),
+                        )
+                      ],
                     ),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color.fromARGB(255, 249, 159, 162),
-                        spreadRadius: 1,
-                        blurRadius: 3,
-                        offset: Offset(1, 1),
-                      )
-                    ],
-                  ),
-                child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children:[
-                      // Image.asset(
-                      //   Assets.tube,
-                      //   height: 35.h,
-                      //   width: 35.h,
-                      //
-                      // ),
-                      // Sizer(width: 10),
-                      Label(
-                        text: LocaleKeys.tube.localize,
-                        style: Styles.mediumText(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 45,
-                        ),
-                      )
-                    ]
-                  ),
-                )
-              )
-            ),
+                    child: Center(
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            // Image.asset(
+                            //   Assets.tube,
+                            //   height: 35.h,
+                            //   width: 35.h,
+                            //
+                            // ),
+                            // Sizer(width: 10),
+                            Label(
+                              text: LocaleKeys.tube.localize,
+                              style: Styles.mediumText(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 45,
+                              ),
+                            )
+                          ]),
+                    ))),
           ),
         ],
       ),

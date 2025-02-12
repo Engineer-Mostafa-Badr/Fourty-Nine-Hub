@@ -7,7 +7,10 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/chat_categories.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/file_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_sender_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -35,6 +38,9 @@ class ForwardMessagesView extends StatefulWidget {
 class _ForwardMessagesViewState extends State<ForwardMessagesView>
     with TickerProviderStateMixin {
   bool isLoading = false;
+  bool isStorySelected = false;
+  TextEditingController _messageController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -72,7 +78,105 @@ class _ForwardMessagesViewState extends State<ForwardMessagesView>
                     .getChatsByCategory(ChatCategories.social),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done) {
-                    return _buildCategoryChats();
+                    return Stack(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 50),
+                          child: _buildCategoryChats(),
+                        ),
+                        const StoryCard(),
+                        const Column(),
+                        (context
+                                    .read<ChatRoomCubit>()
+                                    .selectedMessages
+                                    .isNotEmpty &&
+                                context
+                                        .read<ChatRoomCubit>()
+                                        .selectedMessages
+                                        .length ==
+                                    1 &&
+                                context
+                                    .read<ChatRoomCubit>()
+                                    .selectedMessages[0]
+                                    .media
+                                    .isNotEmpty &&
+                                context
+                                        .read<ChatRoomCubit>()
+                                        .selectedMessages[0]
+                                        .media[0]
+                                        .type ==
+                                    FileTypeEnum.image)
+                            ? Positioned(
+                                bottom: 0,
+                                right: 0,
+                                left: 0,
+                                child: Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: const BoxDecoration(
+                                    color: AppColors.PRIMARY_COLOR,
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(16),
+                                      topRight: Radius.circular(16),
+                                    ),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 16),
+                                    child: Row(
+                                      children: [
+                                        // Thumbnail for the image or video
+                                        ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            child: Image.network(
+                                              context
+                                                  .read<ChatRoomCubit>()
+                                                  .selectedMessages[0]
+                                                  .media[0]
+                                                  .url, // Replace with actual image URL
+                                              width: 60,
+                                              height: 60,
+                                              fit: BoxFit.cover,
+                                            )),
+                                        const SizedBox(width: 8),
+                                        // TextField for writing a message
+                                        Expanded(
+                                          child: TextField(
+                                            controller: _messageController,
+                                            style: TextStyle(
+                                              color:
+                                                  Colors.white.withOpacity(0.5),
+                                            ),
+                                            decoration: InputDecoration(
+                                              hintStyle: TextStyle(
+                                                color: Colors.white
+                                                    .withOpacity(0.5),
+                                              ),
+                                              hintText: context.isArabic
+                                                  ? 'اكتب رسالة'
+                                                  : 'Write a message...',
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                                borderSide: BorderSide.none,
+                                              ),
+                                              filled: true,
+                                              fillColor: Colors.transparent,
+                                              contentPadding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 12,
+                                                      vertical: 8),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : const SizedBox()
+                      ],
+                    );
                   } else {
                     return const Center(
                       child: CircularProgressIndicator.adaptive(),
@@ -86,23 +190,87 @@ class _ForwardMessagesViewState extends State<ForwardMessagesView>
                         .selectedChatsToForword
                         .isEmpty
                     ? Container()
-                    : FloatingActionButton(
-                        onPressed: () async {
-                          await context.read<ChatRoomCubit>().forwardMessages();
-                          // await Future.delayed(const Duration(seconds: 6), () {});
-                          setState(() {
-                            isLoading = false;
-                          });
-                          // context.push(Routes.CHAT);
-                          context.pop();
-                          context.pop();
-                        },
-                        backgroundColor: AppColors.PRIMARY_COLOR,
-                        child: isLoading
-                            ? const CircularProgressIndicator(
-                                color: AppColors.BACKGROUND_COLOR)
-                            : const Icon(Icons.send,
-                                color: AppColors.BACKGROUND_COLOR),
+                    : Stack(
+                        children: [
+                          Positioned(
+                            bottom: (context
+                                        .read<ChatRoomCubit>()
+                                        .selectedMessages
+                                        .isNotEmpty &&
+                                    context
+                                            .read<ChatRoomCubit>()
+                                            .selectedMessages
+                                            .length ==
+                                        1 &&
+                                    context
+                                        .read<ChatRoomCubit>()
+                                        .selectedMessages[0]
+                                        .media
+                                        .isNotEmpty &&
+                                    context
+                                            .read<ChatRoomCubit>()
+                                            .selectedMessages[0]
+                                            .media[0]
+                                            .type ==
+                                        FileTypeEnum.image)
+                                ? 100
+                                : 30,
+                            right: 10,
+                            child: FloatingActionButton(
+                              onPressed: () async {
+                                if (_messageController.text.isNotEmpty) {
+                                  MessageEntity message = MessageEntity(
+                                    id: '',
+                                    text: _messageController.text,
+                                    media: [],
+                                    sender: MessageSenderEntity(
+                                        id: '',
+                                        name: '',
+                                        avatar:
+                                            ''), // Provide actual sender details
+                                    reply: null, // No reply message initially
+                                    createdAt: DateTime.now(),
+                                    updateAt: DateTime.now(),
+                                    byMe:
+                                        true, // Assuming the user is the sender
+                                    isUpdated: false,
+                                    seen: false,
+                                    delivered: false,
+                                    hasReply: false,
+                                    time: DateTime.now()
+                                        .toIso8601String(), // Convert to string format
+                                    isDeleted: false,
+                                    sharedContacts: [],
+                                    isOneTimeViewMessage: false,
+                                    isOneTimeSeenMessage: false,
+                                    isListened: false,
+                                  );
+
+                                  context
+                                      .read<ChatRoomCubit>()
+                                      .addMessageToSelectedMessages(
+                                          message: message);
+                                }
+                                await context
+                                    .read<ChatRoomCubit>()
+                                    .forwardMessages();
+                                // await Future.delayed(const Duration(seconds: 6), () {});
+                                setState(() {
+                                  isLoading = false;
+                                });
+                                // context.push(Routes.CHAT);
+                                context.pop();
+                                context.pop();
+                              },
+                              backgroundColor: AppColors.PRIMARY_COLOR,
+                              child: isLoading
+                                  ? const CircularProgressIndicator(
+                                      color: AppColors.BACKGROUND_COLOR)
+                                  : const Icon(Icons.send,
+                                      color: AppColors.BACKGROUND_COLOR),
+                            ),
+                          ),
+                        ],
                       );
               },
             ));
@@ -416,6 +584,114 @@ class _ForwardMessagesViewState extends State<ForwardMessagesView>
                     );
         });
       },
+    );
+  }
+}
+
+class StoryCard extends StatefulWidget {
+  const StoryCard({super.key});
+
+  @override
+  State<StoryCard> createState() => _StoryCardState();
+}
+
+class _StoryCardState extends State<StoryCard> {
+  bool isStorySelected = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      splashColor: context.isDarkMode
+          ? Colors.white
+          : AppColors.PRIMARY_COLOR.withOpacity(0.05),
+      // Ripple effect color
+      highlightColor: context.isDarkMode
+          ? AppColors.QUANTITY_COLOR
+          : AppColors.LIGHT_GRAY_COLOR.withOpacity(0.2),
+      // Highlight color on tap
+      onTap: () {
+        // setState(() {
+        setState(() {
+          if (!isStorySelected) {
+            isStorySelected = true;
+          } else {
+            isStorySelected = false;
+          }
+        });
+        // });
+      },
+      onLongPress: () {
+        // setState(() {
+        setState(() {
+          if (!isStorySelected) {
+            isStorySelected = true;
+          } else {
+            isStorySelected = false;
+          }
+        });
+        // });
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        // curve: Curves.easeInOut,
+        decoration: BoxDecoration(
+          color: isStorySelected
+              ? AppColors.PRIMARY_COLOR.withOpacity(0.001)
+              : context.isDarkMode
+                  ? AppColors.QUANTITY_COLOR
+                  : AppColors.BACKGROUND_COLOR,
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: isStorySelected
+              ? [
+                  BoxShadow(
+                    color: AppColors.PRIMARY_COLOR.withOpacity(0.2),
+                    blurRadius: 6,
+                    spreadRadius: 2,
+                  )
+                ]
+              : [],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 12, left: 10, right: 10),
+          child: Row(
+            children: [
+              Stack(
+                children: [
+                  Container(
+                    decoration: const BoxDecoration(
+                      color: AppColors.PRIMARY_COLOR_DARK,
+                      borderRadius: BorderRadius.all(Radius.circular(100)),
+                    ),
+                    width: 44,
+                    height: 44,
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: AppColors.PRIMARY_COLOR,
+                        borderRadius: BorderRadius.all(Radius.circular(100)),
+                      ),
+                      child: Icon(
+                        isStorySelected ? Icons.check : Icons.add,
+                        size: 18,
+                        color: AppColors.BACKGROUND_COLOR,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(width: 8),
+              Text(context.isArabic ? 'قصتي' : 'My Story',
+                  style: Styles.mediumText(
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.PRIMARY_COLOR,
+                  ))
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

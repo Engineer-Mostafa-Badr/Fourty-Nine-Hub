@@ -155,7 +155,7 @@ class TinderRemoteDataSourceImpl implements TinderRemoteDataSource {
         await _apiConsumer.post(EndPoints.sendGift, data: params.toJson());
     return response.fold(
       (failure) => Left(failure),
-      (response) => Right(response['status']),
+      (response) => Right(SendGiftResponse.fromJson(response)),
     );
   }
 

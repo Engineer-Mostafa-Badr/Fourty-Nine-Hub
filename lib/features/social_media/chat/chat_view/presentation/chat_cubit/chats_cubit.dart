@@ -315,21 +315,37 @@ class ChatsCubit extends Cubit<ChatsState> {
     for (var chat in selectedChats) {
       // chat.archived = !chat.archived;
       log("archived = ${chat.archived}");
-      final respons = await _changeChatToArchiveOrNormalUseCase(chat.id);
-      respons.fold((l) => null, (r) {
-        if (_chats.containsKey(chat.id)) {
-          _chats[chat.id]?.archived = !(_chats[chat.id]!.archived);
-        }
-      });
+      // final respons = await _changeChatToArchiveOrNormalUseCase(chat.id);
+      // respons.fold((l) => null, (r) {
+      //   // if (_chats.containsKey(chat.id)) {
+      //   //   _chats[chat.id]?.archived = !(_chats[chat.id]!.archived);
+      //   // }
+      // });
+      if (_chats.containsKey(chat.id)) {
+        _chats[chat.id]?.archived = !(_chats[chat.id]!.archived);
+      }
       chat.isSelected = false; // setter getter in chatsEntity
     }
-    selectedChats.clear();
-
-    if (isArchivedTab) {
-      await getArchivedChats();
-    } else {
-      await getChatsByCategory(_selectedChatCategory);
+    emit(state.copyWith(
+      status: ChatsStates.success,
+    ));
+    for (var chat in selectedChats){
+      await _changeChatToArchiveOrNormalUseCase(chat.id);
     }
+
+
+    // if (isArchivedTab) {
+    //   await getArchivedChats();
+    // } else {
+    //   await getChatsByCategory(_selectedChatCategory);
+    // }
+  }
+
+  void clearSelectedChats(){
+    selectedChats.clear();
+    emit(state.copyWith(
+      status: ChatsStates.success,
+    ));
   }
 
   Future<void> changeMuteChat() async {
@@ -487,35 +503,49 @@ class ChatsCubit extends Cubit<ChatsState> {
   }
 
   Future<void> lockChats({required bool isLockedTap}) async {
-    for (var chat in selectedChats) {
-      final response = await _updateChatUseCase(
-        UpdateChatParams(
-          chatId: chat.id,
-          isLocked: !chat.locked,
-          isTimerActive: chat.isTimerActive,
-          updateLockedChat: true,
-        ),
-      );
-      response.fold(
-          (failure) =>
-              emit(state.copyWith(failure: failure, status: ChatsStates.error)),
-          (data) {
-        log("lock chats result $data");
-        chat.locked = !chat.locked;
-        emit(state.copyWith(status: ChatsStates.success));
-      });
+    // for (var chat in selectedChats) {
+    //   final response = await _updateChatUseCase(
+    //     UpdateChatParams(
+    //       chatId: chat.id,
+    //       isLocked: !chat.locked,
+    //       isTimerActive: chat.isTimerActive,
+    //       updateLockedChat: true,
+    //     ),
+    //   );
+    //   response.fold(
+    //       (failure) =>
+    //           emit(state.copyWith(failure: failure, status: ChatsStates.error)),
+    //       (data) {
+    //     log("lock chats result $data");
+    //     chat.locked = !chat.locked;
+    //     emit(state.copyWith(status: ChatsStates.success));
+    //   });
+    //
+    //   chat.isSelected = false; // Reset the selection status
+    // }
+    //
+    // // Clear selected chats after action is complete
+    // selectedChats.clear();
+    //
+    // // Refresh the chat list by category
+    // if (isLockedTap) {
+    //   await getLockedChats();
+    // } else {
+    //   await getChatsByCategory(_selectedChatCategory);
+    // }
 
-      chat.isSelected = false; // Reset the selection status
+    for (var chat in selectedChats){
+      chat.locked = !chat.locked;
     }
-
-    // Clear selected chats after action is complete
-    selectedChats.clear();
-
-    // Refresh the chat list by category
-    if (isLockedTap) {
-      await getLockedChats();
-    } else {
-      await getChatsByCategory(_selectedChatCategory);
-    }
+    emit(state.copyWith(status: ChatsStates.success));
+    for (var chat in selectedChats){
+    await _updateChatUseCase(
+      UpdateChatParams(
+        chatId: chat.id,
+        isLocked: !chat.locked,
+        isTimerActive: chat.isTimerActive,
+        updateLockedChat: true,
+      ),
+    );}
   }
 }

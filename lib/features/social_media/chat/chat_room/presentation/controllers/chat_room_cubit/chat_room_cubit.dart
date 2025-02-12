@@ -258,6 +258,16 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     });
   }
 
+  void startSearching() {
+    chat.isSearching = true;
+    emit(state.copyWith(status: ChatRoomStates.success));
+  }
+
+  void stopSearching() {
+    chat.isSearching = false;
+    emit(state.copyWith(status: ChatRoomStates.success));
+  }
+
   Future<void> createLable(
       {required String color, required String name}) async {
     final response =
@@ -496,7 +506,7 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
           message: message.text,
           chat: currentChat,
           media: [],
-          sharedContacts: [],
+          sharedContacts: message.sharedContacts,
           oneTimeView: false,
           isForward: true,
         ));

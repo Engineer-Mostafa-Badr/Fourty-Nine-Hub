@@ -125,10 +125,12 @@ class _ScrollableTextWithAnimationState
                     height: 60.h,
                     alignment: Alignment.center,
                     child: AutoScrollText(
+                      velocity: const Velocity(pixelsPerSecond: Offset(20, 0)),
+
                       context.isArabic
-                          ? '${context.read<MainCategoriesCubit>().state.question?.messageAr}            ' ??
+                          ? '${context.read<MainCategoriesCubit>().state.question?.messageAr}                                         ' ??
                               ''
-                          : '${context.read<MainCategoriesCubit>().state.question?.messageEn}            ' ??
+                          : '${context.read<MainCategoriesCubit>().state.question?.messageEn}                                         ' ??
                               '',
                       style: Styles.headerText(
                           fontSize: 30,

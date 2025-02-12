@@ -301,8 +301,14 @@ class _ChatRoomViewState extends State<ChatRoomView>
             return Scaffold(
               appBar: PreferredSize(
                 preferredSize: chatRoomCubit.chat.pinnedMessageId != null
-                    ? const Size.fromHeight(100)
-                    : const Size.fromHeight(60),
+                    ?
+                chatRoomCubit.chat.isBirthdayMonth?
+                const Size.fromHeight(140):
+                const Size.fromHeight(100)
+                    :
+                chatRoomCubit.chat.isBirthdayMonth?
+                const Size.fromHeight(100):
+                const Size.fromHeight(60),
                 child: ChatRoomAppBar(
                   chatRoomCubit: chatRoomCubit,
                 ),
