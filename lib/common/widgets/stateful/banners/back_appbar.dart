@@ -9,6 +9,7 @@ class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? label;
   final Color? backColor;
   final Color? iconColor;
+  final Color? textColor;
   final bool? centerTitle;
   final List<Widget>? actions;
   final Widget? leading;
@@ -22,6 +23,7 @@ class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.actions,
     this.centerTitle = false,
     this.leading,
+    this.textColor,
   });
 
   @override
@@ -34,15 +36,19 @@ class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
       automaticallyImplyLeading: automaticallyImplyLeading,
       leading: leading ??
           IconButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              icon: Icon(
-                Icons.arrow_back,
-                size: 40.w,
-              )),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            icon: Icon(
+              Icons.arrow_back,
+              size: 40.w,
+              color: iconColor,
+            ),
+          ),
       title: label != null
-          ? Label(text: label ?? '', style: Styles.headerText())
+          ? Label(
+              text: label ?? '',
+              style: Styles.headerText().copyWith(color: textColor))
           : null,
       actions: actions,
     );

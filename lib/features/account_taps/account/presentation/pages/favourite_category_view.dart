@@ -26,56 +26,71 @@ class _FavouriteCategoryViewState extends State<FavouriteCategoryView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: BackAppBar(
-          label: LocaleKeys.favouriteCategories.localize,
-        ),
-        body: BlocBuilder<FavouriteCategoryCubit, FavouriteCategoryState>(
-            builder: (context, state) {
-          final controller = context.read<FavouriteCategoryCubit>();
-          return state.status == StateStatus.loading
-              ? const Center(
-                  // ignore: unnecessary_const
-                  child: const CircularProgressIndicator(),
-                )
-              : state.data!.isNotEmpty && state.data != null
-                  ? GridView.builder(
-                      padding: EdgeInsets.all(8.w),
-            gridDelegate:
-            const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, childAspectRatio: 1),
-                      itemCount: state.data?.length ?? 0,
-                      // separatorBuilder: (context, i) => Sizer(
-                      //   height: 0.h,
-                      // ),
-                      itemBuilder: (context, i) => Padding(
-                        padding: const EdgeInsets.only(bottom: 10.0),
-                        child: InkWell(
-                          onTap: () {
-                            context.push(Routes.SUBCATEGORIES,
-                                extra: state.data![i]);
-                            print('state.data![i]: ${state.data![i].id}');
-                          },
-                          child: MainCategoryBanner(
-                            category: state.data![i],
-                            canRegister: false,
-                            onFavorite: () async {
-                              var result = await controller
-                                  .removeFavorite(state.data![i].id);
-                              if (result == true) {
-                                state.data?.removeWhere((element) =>
-                                    element.id == state.data![i].id);
-                              }
+      backgroundColor: Theme.of(context).primaryColor,
+      appBar: BackAppBar(
+        label: LocaleKeys.favouriteCategories.localize,
+        textColor: Colors.white,
+        iconColor: Colors.white,
+      ),
+      body: Container(
+        decoration: BoxDecoration(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(50.r),),),
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        child: BlocBuilder<FavouriteCategoryCubit, FavouriteCategoryState>(
+          builder: (context, state) {
+            final controller = context.read<FavouriteCategoryCubit>();
+            return state.status == StateStatus.loading
+                ? const Center(
+                    // ignore: unnecessary_const
+                    child: const CircularProgressIndicator(),
+                  )
+                : state.data!.isNotEmpty && state.data != null
+                    ? GridView.builder(
+                        padding: EdgeInsets.all(24.w),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: .65,
+                          mainAxisSpacing: 16,
+                          crossAxisSpacing: 16,
+                        ),
+                        itemCount: state.data?.length ?? 0,
+                        // separatorBuilder: (context, i) => Sizer(
+                        //   height: 0.h,
+                        // ),
+                        itemBuilder: (context, i) => Padding(
+                          padding: const EdgeInsets.only(bottom: 10.0),
+                          child: InkWell(
+                            onTap: () {
+                              context.push(Routes.SUBCATEGORIES,
+                                  extra: state.data![i]);
+                              print('state.data![i]: ${state.data![i].id}');
                             },
+                            child: MainCategoryBanner(
+                              category: state.data![i],
+                              canRegister: false,
+                              onFavorite: () async {
+                                var result = await controller
+                                    .removeFavorite(state.data![i].id);
+                                if (result == true) {
+                                  state.data?.removeWhere((element) =>
+                                      element.id == state.data![i].id);
+                                }
+                              },
+                            ),
                           ),
                         ),
-                      ),
-                    )
-                  : Center(
-                      child: Label(
-                          style: Styles.mediumText(fontSize: 60.sp),
-                          maxLines: 3,
-                          textAlign: TextAlign.center,
-                          text: LocaleKeys.noFavouriteCategory.localize));
-        }));
+                      )
+                    : Center(
+                        child: Label(
+                            style: Styles.mediumText(fontSize: 60.sp),
+                            maxLines: 3,
+                            textAlign: TextAlign.center,
+                            text: LocaleKeys.noFavouriteCategory.localize));
+          },
+        ),
+      ),
+    );
   }
 }

@@ -42,6 +42,7 @@ abstract class Assets {
   static String locationIcon = 'assets/icons/locationIcon.svg';
   static String liveVideoIcon = 'assets/icons/liveVideoIcon.svg';
   static String backgroundIcon = 'assets/icons/backgroundIcon.svg';
+  static String uploadImage = 'assets/icons/upload-01.png';
   static String camera = 'assets/icons/cameraIcon.svg';
   static String gifIcon = 'assets/icons/gifIcon.svg';
   static String lifeEventIcon = 'assets/icons/lifeEventIcon.svg';
@@ -72,6 +73,7 @@ abstract class Assets {
   static String twitterLogo = 'assets/icons/twitterLogo.png';
   static String loadingCar = 'assets/icons/loadingCar.png';
   static String comment = 'assets/icons/comment.png';
+  static String clock = 'assets/icons/clock.png';
   static String single = 'assets/icons/single.png';
   static String married = 'assets/icons/married.png';
   static String divorced = 'assets/icons/divorce.png';
@@ -156,19 +158,30 @@ abstract class Assets {
 
 // .png
   //drawer
-  static String contact_us_icon = 'assets/settings/contact_us_icon.png';
+  static String contact_us_icon = 'assets/drawerIcons/contact-us.png';
   static String dashbboard_icon = 'assets/settings/dashbboard_icon.png';
-  static String favorite_ad_icon = 'assets/settings/Icon awesome-heart.png';
+  static String favorite_ad_icon = 'assets/drawerIcons/favourite-ads.png';
   static String favorite_main_category_icon =
-      'assets/settings/favorite_main_category_icon.png';
+      'assets/drawerIcons/favourite-cat.png';
   static String favorite_sub_category_icon =
-      'assets/settings/favorite_sub_category_icon.png';
+      'assets/drawerIcons/favourite-sub-cat.png';
   static String lists_icon = 'assets/settings/lists_icon.png';
-  static String my_ads_icon = 'assets/settings/my_ads_icon.png';
-  static String privacy_icon = 'assets/settings/privacy_icon.png';
-  static String settings_icon = 'assets/settings/settings_icon.png';
-  static String share_app_icon = 'assets/settings/share_app_icon.png';
-  static String sign_out_icon = 'assets/settings/sign_out_icon.png';
+  static String my_ads_icon = 'assets/drawerIcons/my-ads.png';
+  static String privacy_icon = 'assets/drawerIcons/privacy.png';
+  static String settings_icon = 'assets/drawerIcons/settings.png';
+  static String share_app_icon = 'assets/drawerIcons/share.png';
+  static String sign_out_icon = 'assets/drawerIcons/logout.png';
+  static String rideIcon = 'assets/drawerIcons/ride.png';
+  static String loading = 'assets/drawerIcons/loading.png';
+  static String healthIcon = 'assets/drawerIcons/health.png';
+  static String meal = 'assets/drawerIcons/meal.png';
+  static String find = 'assets/drawerIcons/find.png';
+  static String reel = 'assets/drawerIcons/reel.png';
+  static String spotlight = 'assets/drawerIcons/spotlight.png';
+  static String meet = 'assets/drawerIcons/meet.png';
+  static String liveIcon = 'assets/drawerIcons/live.png';
+  static String snap = 'assets/drawerIcons/snap.png';
+  static String cameraOutlined = 'assets/drawerIcons/camera_outlined.png';
   static String wallet_icon = 'assets/settings/wallet_icon.png';
   static String tripViewIllustration = 'assets/images/trip_view.png';
   static String map = 'assets/images/map.png';
@@ -177,17 +190,19 @@ abstract class Assets {
   static String person = 'assets/49-New-icons/Group 6.png';
   static String noPerson = 'assets/49-New-icons/Group 5.png';
   static String password = 'assets/49-New-icons/Group 7.png';
-  static String microphone = 'assets/49-New-icons/Untitled-1-01.png';
-  static String quran = 'assets/49-New-icons/Group 2.png';
-  static String azkar = 'assets/49-New-icons/Group 3.png';
-  static String policy = 'assets/49-New-icons/Group 8.png';
-  static String history = 'assets/49-New-icons/Group 9.png';
+  static String microphone = 'assets/drawerIcons/company-ads.png';
+  static String quran = 'assets/drawerIcons/quran.png';
+  static String azkar = 'assets/drawerIcons/azkar.png';
+  static String policy = 'assets/drawerIcons/policies.png';
+  static String customPage = 'assets/drawerIcons/custom-page.png';
+  static String history = 'assets/drawerIcons/Group 9.png';
   static String snapDemo = 'assets/images/snap_demo.jpg';
   static String spotLightDemo = 'assets/images/spot_light_demo.jpg';
   static String spotlightIcon = 'assets/icons/spotlight.svg';
   static String cameraIcon = 'assets/icons/camera_icon.svg';
   static String star = 'assets/images/star.png';
   static String tripJoinImage = 'assets/images/tripJoinImage.jpg';
+  static  String azkarPrayer='assets/drawerIcons/azkar_prayer.png';
 
   //! audio
   static String notificationAudioApp = 'audio/notification.mp3';
