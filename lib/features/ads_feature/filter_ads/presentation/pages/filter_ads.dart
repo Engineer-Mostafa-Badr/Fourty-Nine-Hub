@@ -17,6 +17,8 @@ import 'package:fourtyninehub/features/ads_feature/filter_ads/presentation/pages
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class FilterAdsView extends StatefulWidget {
   final CategorizationEntity categorization;
   const FilterAdsView({super.key, required this.categorization});
@@ -49,7 +51,7 @@ class _FilterAdsViewState extends State<FilterAdsView> {
       }
     }, builder: (context, state) {
       final controller = context.read<CreateAdCubit>();
-      return Scaffold(
+      return CustomScaffold(
         appBar: BackAppBar(label: LocaleKeys.filter.localize),
         body: Form(
           key: controller.formState,

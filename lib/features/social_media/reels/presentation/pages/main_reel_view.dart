@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/preload_cubit/preload_state.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/reels_widget.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../controllers/preload_cubit/preload_bloc.dart';
 import '../widgets/components/tiktok_bar.dart';
@@ -35,7 +36,7 @@ class ReelView extends StatelessWidget {
       },
       canPop: true,
       child: const SafeArea(
-        child: Scaffold(
+        child: CustomScaffold(
           resizeToAvoidBottomInset: false,
           body: ReelsScreen(),
         ),

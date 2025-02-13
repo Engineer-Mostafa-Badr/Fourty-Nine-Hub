@@ -7,6 +7,7 @@ import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/ride_services_enum.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import '../../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../cubit/driver_register_cubit.dart';
 import 'enter_car_info.dart';
@@ -24,7 +25,7 @@ class EnterPersonalInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = context.read<DriverRegisterCubit>();
-    return Scaffold(
+    return CustomScaffold(
       appBar: BackAppBar(
         label: label,
       ),

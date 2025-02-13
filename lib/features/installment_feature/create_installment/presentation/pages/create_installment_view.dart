@@ -11,6 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/messages/messages.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
@@ -22,7 +23,7 @@ class CreateInstallmentView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
         appBar: const BackAppBar(
           label: 'Create Installment',
         ),

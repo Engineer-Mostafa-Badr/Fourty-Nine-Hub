@@ -24,6 +24,7 @@ import '../../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../../common/widgets/stateless/images/profile_image.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 
 class TwitterPostComments extends StatefulWidget {
   final List<TwitterPostCommentEntity> comments;
@@ -67,7 +68,7 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
     return BlocBuilder<TwitterCubit, TwitterState>(builder: (context, state) {
       final user = context.read<UserCubit>().state.data;
       final controller = context.read<TwitterCubit>();
-      return Scaffold(
+      return CustomScaffold(
         // backgroundColor: Colors.white,
         appBar: AppBar(
           toolbarHeight: 200.h,

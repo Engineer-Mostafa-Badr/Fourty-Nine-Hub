@@ -18,6 +18,8 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class MediaPreview extends StatefulWidget {
   String mediaPath;
   MediaType mediaType;
@@ -106,7 +108,7 @@ class _MediaPreviewState extends State<MediaPreview> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       backgroundColor: Colors.black,
       body: Stack(
         alignment: AlignmentDirectional.topStart,

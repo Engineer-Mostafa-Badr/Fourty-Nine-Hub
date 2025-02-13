@@ -11,6 +11,8 @@ import 'package:fourtyninehub/features/health_feature/doctor_details/presentatio
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/reviews.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/waiting.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class DoctorDetailsParams {
   final String doctorId;
   final bool? fromSearch;
@@ -52,7 +54,7 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: BackAppBar(
         label: LocaleKeys.doctorDetails.localize,
       ),

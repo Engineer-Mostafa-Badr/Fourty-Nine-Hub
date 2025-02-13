@@ -22,6 +22,7 @@ import 'package:icons_launcher/utils/cli_logger.dart';
 import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
@@ -31,7 +32,7 @@ class MeetingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
         resizeToAvoidBottomInset: true,
         appBar: AppBar(),
         // drawer: const DrawerWidget(),

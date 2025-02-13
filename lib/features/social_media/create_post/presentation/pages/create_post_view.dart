@@ -17,6 +17,7 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../cubit/create_post_cubit.dart';
 import 'package:snapping_bottom_sheet/snapping_bottom_sheet.dart';
 import 'package:giphy_get/giphy_get.dart';
@@ -152,7 +153,7 @@ class _CreatePostViewState extends State<CreatePostView> {
         if (state.status == CreatePostStates.error) {}
       },
       builder: (context, state) {
-        return Scaffold(
+        return CustomScaffold(
           body: Container(
             height: double.infinity,
             width: double.infinity,

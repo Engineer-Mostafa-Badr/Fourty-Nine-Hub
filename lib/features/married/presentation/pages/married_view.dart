@@ -15,6 +15,8 @@ import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/ti
 import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/subcategory_card_tinder.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
+import '../../../../core/widget/custom_scaffold.dart';
+
 class MarriedView extends StatelessWidget {
   const MarriedView({super.key});
 
@@ -68,7 +70,7 @@ class _TinderScreenState extends State<TinderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: BackAppBar(
         label: LocaleKeys.marriage.tr(),
       ),

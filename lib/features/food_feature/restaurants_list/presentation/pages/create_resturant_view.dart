@@ -28,6 +28,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 
 class CreateResturantView extends StatelessWidget {
   const CreateResturantView({super.key});
@@ -53,7 +54,7 @@ class CreateResturantView extends StatelessWidget {
             break;
         }
       },
-      child: Scaffold(
+      child: CustomScaffold(
         appBar: const HomeAppbar(),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(15.0),

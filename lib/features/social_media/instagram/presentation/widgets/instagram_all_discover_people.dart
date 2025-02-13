@@ -18,6 +18,8 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class InstagramAllDiscoverPeople extends StatefulWidget {
   const InstagramAllDiscoverPeople({super.key});
 
@@ -54,7 +56,7 @@ class _InstagramAllDiscoverPeopleState extends State<InstagramAllDiscoverPeople>
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: BackAppBar(label: !context.isArabic
           ? 'Discover people'
           : 'أشخاص قد تعرفهم',),

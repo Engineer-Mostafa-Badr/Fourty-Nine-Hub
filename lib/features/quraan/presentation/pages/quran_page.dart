@@ -5,6 +5,8 @@ import 'package:fourtyninehub/features/quraan/presentation/cubit/quraan_state.da
 import 'package:fourtyninehub/features/quraan/presentation/pages/quran_details.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
+import '../../../../core/widget/custom_scaffold.dart';
+
 class QuranPage extends StatefulWidget {
   const QuranPage({super.key});
 
@@ -22,7 +24,7 @@ class _QuranPageState extends State<QuranPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       backgroundColor: const Color(0xffF1EEE5),
       appBar: AppBar(
         title: const Text("Quran Page"),

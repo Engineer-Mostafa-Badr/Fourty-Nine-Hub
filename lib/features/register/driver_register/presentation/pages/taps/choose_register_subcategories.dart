@@ -4,6 +4,7 @@ import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart'
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 
+import '../../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../subcategories/domain/entities/sub_category_entity.dart';
 
 class ChooseRegisterSubcategories extends StatelessWidget {
@@ -14,7 +15,7 @@ class ChooseRegisterSubcategories extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: const BackAppBar(
         label: 'Choose Options',
       ),

@@ -13,6 +13,7 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../service_locator/service_locator.dart';
 import '../cache_out_cubit/payment_cubit.dart';
 
@@ -43,7 +44,7 @@ class _PaymentCashOutState extends State<PaymentCashOut> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: AppBar(
         title: Text(LocaleKeys.cashOutOption.localize),
       ),

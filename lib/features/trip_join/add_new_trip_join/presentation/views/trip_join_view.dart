@@ -5,6 +5,8 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/trip_join_body.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class TripJoinView extends StatelessWidget {
   const TripJoinView({super.key});
 
@@ -22,7 +24,7 @@ class TripJoinView extends StatelessWidget {
     // context.read<FetchCarBrandsCubit>().fetchCarBrand(search: 'niss');
     // context.read<FetchCarBrandsCubit>().fetchCarBrand(search: 'niss');
     // serviceLocator<FetchCarYearTypeUseCase>().call(brand: 'Toyota', model: 'Corolla');
-    return Scaffold(
+    return CustomScaffold(
       appBar: AppBar(
         title: Transform(
           transform: Matrix4.translationValues(-20.0, 0.0, 0.0),

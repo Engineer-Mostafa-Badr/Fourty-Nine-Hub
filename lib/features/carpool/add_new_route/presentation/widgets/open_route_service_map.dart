@@ -65,7 +65,7 @@
 
 //   @override
 //   Widget build(BuildContext context) {
-//     return Scaffold(
+//     return CustomScaffold(
 //       body: Stack(
 //         children: [
 //           FlutterMap(

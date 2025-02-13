@@ -11,6 +11,7 @@ import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentatio
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/recording/recording_shared.dart';
 
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../core/widget/custom_text_no_login.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
@@ -47,7 +48,7 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: BackAppBar(
         centerTitle: false,
         label: LocaleKeys.companyAdvertise.localize,

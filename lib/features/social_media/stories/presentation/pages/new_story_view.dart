@@ -296,7 +296,7 @@
 //
 //   @override
 //   Widget build(BuildContext context) {
-//     return Scaffold(
+//     return CustomScaffold(
 //       backgroundColor: Colors.black,
 //       body: PageView.builder(
 //         itemCount: 1,

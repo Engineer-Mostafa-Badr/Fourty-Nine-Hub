@@ -17,6 +17,8 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class TinderView extends StatelessWidget {
   const TinderView({super.key});
 
@@ -81,7 +83,7 @@ class _TinderScreenState extends State<TinderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: BackAppBar(
         label: LocaleKeys.tinder_find.tr(),
         actions: [

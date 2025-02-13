@@ -44,7 +44,7 @@
 //               ..init(chat: widget.chatsCubit.selectedChat)),
 //       ],
 //       child: Builder(builder: (context) {
-//         return Scaffold(
+//         return CustomScaffold(
 //           // backgroundColor: AppColors.BACKGROUND_COLOR,
 //           appBar: ChatRoomAppBar(
 //             chatRoomCubit: context.read<ChatRoomCubit>(),
@@ -229,6 +229,7 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../../core/widget/custom_scaffold.dart';
 import '../widgets/chat_room_widgets/chat_room_app_bar.dart';
 import '../widgets/chat_room_widgets/send_message_widget.dart';
 
@@ -298,7 +299,7 @@ class _ChatRoomViewState extends State<ChatRoomView>
         ChatRoomCubit chatRoomCubit = context.read<ChatRoomCubit>();
         return BlocBuilder<ChatRoomCubit, ChatRoomState>(
           builder: (context, state) {
-            return Scaffold(
+            return CustomScaffold(
               appBar: PreferredSize(
                 preferredSize: chatRoomCubit.chat.pinnedMessageId != null
                     ?

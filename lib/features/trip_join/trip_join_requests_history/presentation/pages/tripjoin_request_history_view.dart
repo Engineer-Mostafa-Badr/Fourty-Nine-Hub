@@ -5,6 +5,8 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/presentation/widgets/trip_join_request_history_builder.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class TripJoinRequestHistoryView extends StatefulWidget {
   const TripJoinRequestHistoryView({
     super.key,
@@ -28,7 +30,7 @@ class _TripJoinRequestHistoryViewState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: AppBar(
         title: Transform(
           transform: Matrix4.translationValues(-20.0, 0.0, 0.0),

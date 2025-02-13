@@ -7,6 +7,8 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:path/path.dart';
 
+import '../../../../../../core/widget/custom_scaffold.dart';
+
 // class OneTimeDocumentMessageViewParams {
 //   final MessageEntity messageEntity;
 //   final ChatRoomCubit chatRoomCubit;
@@ -52,7 +54,7 @@ import 'package:path/path.dart';
 
 //   @override
 //   Widget build(BuildContext context) {
-//     return Scaffold(
+//     return CustomScaffold(
 //       backgroundColor: Colors.black,
 //       appBar: AppBar(
 //         backgroundColor: Colors.transparent,
@@ -294,7 +296,7 @@ class _OneTimeDocumentMessageViewState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.transparent,

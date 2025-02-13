@@ -17,6 +17,7 @@ import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:video_player/video_player.dart';
 import 'package:path/path.dart' as path;
+import '../../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../../service_locator/service_locator.dart';
 import 'package:image/image.dart' as img;
 import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
@@ -180,7 +181,7 @@ class _MediaPreviewScreenState extends State<MediaPreviewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
         child: Stack(

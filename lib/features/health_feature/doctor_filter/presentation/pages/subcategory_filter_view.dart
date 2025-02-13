@@ -10,6 +10,8 @@ import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class DoctorSubcategoryFilterView extends StatelessWidget {
   const DoctorSubcategoryFilterView({super.key, required this.type});
   final String type;
@@ -17,7 +19,7 @@ class DoctorSubcategoryFilterView extends StatelessWidget {
   Widget build(BuildContext context) {
     final doctorSubcategoryFilter =
         context.read<DoctorSubcategoryFilterCubit>();
-    return Scaffold(
+    return CustomScaffold(
       appBar: BackAppBar(
         label: LocaleKeys.speciality.localize,
       ),

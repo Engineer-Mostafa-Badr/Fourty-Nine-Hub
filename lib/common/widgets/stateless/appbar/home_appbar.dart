@@ -64,7 +64,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       toolbarHeight: toolbarHeight,
       bottom: bottom,
-      leading: leading,
+      // leading: leading,
       title: Row(
         children: [
           if (isShowLogo)
@@ -216,11 +216,15 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                 return;
               }
               HandleCashback.setCount('notificationCount', context);
-              context.push(context.read<UserCubit>().isLoggedIn
-                  ? Routes.NOTIFICATIONS
-                  : Routes.LOGIN);
+              context.push(
+                context.read<UserCubit>().isLoggedIn
+                    ? Routes.NOTIFICATIONS
+                    : Routes.LOGIN,
+              );
             },
-            child: const UnreadNotificationsBuilder(),
+            child: UnreadNotificationsBuilder(
+              inNotifications: inNotifications,
+            ),
           ),
           SizedBox(
             width: 5.w,

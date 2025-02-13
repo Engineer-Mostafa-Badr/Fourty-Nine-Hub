@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/account_taps/my_adds/presentation/cubit/m
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/messages/messages.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../widgets/build_item_auction_card.dart';
 import 'my_ads_trip_join.dart';
 
@@ -62,7 +63,7 @@ class _MyAddsViewState extends State<MyAddsView>
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
-      child: Scaffold(
+      child: CustomScaffold(
         appBar: BackAppBar(label: LocaleKeys.myAds.localize),
         body: BlocConsumer<MyAddsCubit, MyAddsState>(
           listener: (context, state) {

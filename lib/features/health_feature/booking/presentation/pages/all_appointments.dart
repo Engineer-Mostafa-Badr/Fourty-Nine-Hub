@@ -9,6 +9,8 @@ import 'package:fourtyninehub/features/health_feature/booking/presentation/cubit
 import 'package:fourtyninehub/features/health_feature/booking/presentation/widgets/all_appointments_card.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class AllAppointmentsView extends StatefulWidget {
   const AllAppointmentsView({super.key});
 
@@ -42,7 +44,7 @@ class _AllAppointmentsViewState extends State<AllAppointmentsView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: BackAppBar(
         label: LocaleKeys.allAppointments.localize,
       ),

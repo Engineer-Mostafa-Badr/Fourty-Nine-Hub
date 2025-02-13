@@ -4,6 +4,7 @@ import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
+import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../service_locator/service_locator.dart';
 import '../controller/cubit/chance_cubit.dart';
 import '../controller/cubit/chance_states.dart';
@@ -14,7 +15,7 @@ class CreateChanceView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
         appBar: BackAppBar(
           label: LocaleKeys.CreateChance.localize,
         ),

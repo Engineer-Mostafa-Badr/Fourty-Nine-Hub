@@ -8,6 +8,8 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class MutedStories extends StatefulWidget {
   const MutedStories({super.key});
 
@@ -56,7 +58,7 @@ class _MutedStoriesState extends State<MutedStories> {
   Widget build(BuildContext context) {
     final state = context.watch<StoryCubit>().state;
 
-    return Scaffold(
+    return CustomScaffold(
       appBar: AppBar(
         backgroundColor: AppColors.PRIMARY_COLOR,
         foregroundColor: Colors.white,

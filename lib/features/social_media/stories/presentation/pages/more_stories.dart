@@ -25,6 +25,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:story_view/story_view.dart';
 import 'package:voice_message_package/voice_message_package.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/const.dart';
 import '../../../tinder/data/shared/shared.dart';
 import '../../../twitter/presentation/widgets/report_view.dart';
@@ -305,7 +306,7 @@ class StoryViewScreenState extends State<StoryViewScreen> {
   Widget build(BuildContext context) {
     return MediaQuery(
       data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
-      child: Scaffold(
+      child: CustomScaffold(
         extendBodyBehindAppBar: true,
         body: Builder(builder: (context) {
           if (widget.stories.isNotEmpty) {

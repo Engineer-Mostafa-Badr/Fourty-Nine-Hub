@@ -10,6 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../common/widgets/stateless/dynamic/rating_stars.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/styles.dart';
 
@@ -59,7 +60,7 @@ class _AllReviewsState extends State<AllReviews> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: BackAppBar(
         label: Labels.reviews,
         backColor: cardDarkColor(context),

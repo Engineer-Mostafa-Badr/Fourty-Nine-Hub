@@ -18,6 +18,8 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class SearchRestaurantView extends StatelessWidget {
   const SearchRestaurantView({super.key});
 
@@ -26,7 +28,7 @@ class SearchRestaurantView extends StatelessWidget {
     final searchCubit = context.read<SearchRestaurantsCubit>();
     return BlocBuilder<SearchRestaurantsCubit, SearchRestaurantState>(
         builder: (context, state) {
-      return Scaffold(
+      return CustomScaffold(
         appBar: BackAppBar(
           label: "${LocaleKeys.search.tr()} ${LocaleKeys.restaurants.tr()}",
           leading: IconButton(

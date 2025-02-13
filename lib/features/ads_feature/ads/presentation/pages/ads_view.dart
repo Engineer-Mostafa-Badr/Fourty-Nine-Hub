@@ -22,6 +22,8 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class AdsView extends StatefulWidget {
   final AdsViewParams params;
   const AdsView({
@@ -87,7 +89,7 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
       print('user');
     }
     print(_tabController.index);
-    return Scaffold(
+    return CustomScaffold(
       appBar: const HomeAppbar(),
       body: BlocConsumer<AdvertisementCubit, AdsState>(
           listener: (context, state) {

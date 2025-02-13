@@ -18,6 +18,8 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class BuildMetaVerified extends StatefulWidget {
   const BuildMetaVerified({
     super.key,
@@ -33,7 +35,7 @@ class _BuildMetaVerifiedState extends State<BuildMetaVerified> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       body: BlocProvider<TwitterCubit>(
         create: (_) => serviceLocator(),
         child: BlocConsumer<TwitterCubit, TwitterState>(

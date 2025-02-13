@@ -25,6 +25,7 @@ import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../common/widgets/stateless/labels/badged_label.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
@@ -53,7 +54,7 @@ class _EditMyAdsState extends State<EditMyAds> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: BackAppBar(label: LocaleKeys.editMyAds.localize),
       body: BlocProvider<CreateAdCubit>(
         create: (BuildContext context) => serviceLocator()

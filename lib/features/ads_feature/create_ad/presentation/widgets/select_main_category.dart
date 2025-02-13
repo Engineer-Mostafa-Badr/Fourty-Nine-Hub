@@ -5,6 +5,8 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class SelectMainCategory extends StatelessWidget {
   final List<MainCategoryEntity> mainCategories;
   final Function(MainCategoryEntity) onSelected;
@@ -13,7 +15,7 @@ class SelectMainCategory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: AppBar(
         leading:
             IconAppButton(icon: Icons.clear, onPressed: () => context.pop()),

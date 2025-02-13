@@ -16,6 +16,8 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../core/widget/custom_scaffold.dart';
+
 class PaymobLink {
   final String amountId;
   final num amount;
@@ -48,7 +50,7 @@ class _PaymentViewState extends State<PaymentView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: AppBar(
         title: Text(LocaleKeys.paymentOptions.localize),
       ),

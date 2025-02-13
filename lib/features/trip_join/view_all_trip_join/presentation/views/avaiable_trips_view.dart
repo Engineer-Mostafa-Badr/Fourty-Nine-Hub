@@ -12,6 +12,8 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 import '../../../presentation/views/widgets/on_boarding_trip.dart';
 import '../../../presentation/views/widgets/pick_me_screen.dart';
 import '../../../presentation/views/widgets/trip_join_screen.dart';
@@ -41,7 +43,7 @@ class _AvailableTripsViewState extends State<AvailableTripsView> {
     return DefaultTabController(
       length: 3,
       child: SafeArea(
-        child: Scaffold(
+        child: CustomScaffold(
           appBar: AppBar(
             titleSpacing: 0,
             centerTitle: false,

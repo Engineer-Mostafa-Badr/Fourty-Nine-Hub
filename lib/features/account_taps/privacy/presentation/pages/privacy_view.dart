@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/account_taps/privacy/domain/useCase/updat
 import 'package:fourtyninehub/features/account_taps/privacy/presentation/cubit/privacy_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/privacy/presentation/cubit/privacy_state.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../core/widget/custom_text_no_login.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -19,7 +20,7 @@ class PrivacyView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: BackAppBar(
         label: LocaleKeys.privacy.localize,
       ),

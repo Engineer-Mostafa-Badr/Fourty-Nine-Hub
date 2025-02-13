@@ -15,6 +15,8 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class RequestTripJoinNotificationView extends StatefulWidget {
   const RequestTripJoinNotificationView({super.key, required this.payload});
   final Map<String, dynamic> payload;
@@ -36,7 +38,7 @@ class _RequestTripJoinNotificationViewState
   Widget build(BuildContext context) {
     pr(widget.payload, 'notication page build method is called');
     return SafeArea(
-      child: Scaffold(
+      child: CustomScaffold(
         appBar: AppBar(
           title: Transform(
             transform: Matrix4.translationValues(-20.0, 0.0, 0.0),

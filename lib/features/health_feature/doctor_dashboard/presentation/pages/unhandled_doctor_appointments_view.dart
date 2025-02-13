@@ -9,6 +9,8 @@ import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentat
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class DoctorUnhandledAppointmentsView extends StatefulWidget {
   const DoctorUnhandledAppointmentsView({super.key});
 
@@ -40,7 +42,7 @@ class _DoctorUnhandledAppointmentsViewState
     return BlocListener<DoctorUnhandledAppointmentsCubit,
         DoctorUnhandledAppointmentsState>(
       listener: (context, state) {},
-      child: Scaffold(
+      child: CustomScaffold(
         appBar: BackAppBar(
           label: LocaleKeys.unhandledAppointments.localize,
         ),

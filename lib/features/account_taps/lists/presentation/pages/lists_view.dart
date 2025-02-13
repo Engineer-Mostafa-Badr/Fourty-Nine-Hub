@@ -13,6 +13,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../core/localization/locales.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/styles.dart';
 
 class ListsView extends StatefulWidget {
@@ -89,7 +90,7 @@ class _ListsViewState extends State<ListsView>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: AppBar(
         title: Label(
           text: LocaleKeys.lists.localize,

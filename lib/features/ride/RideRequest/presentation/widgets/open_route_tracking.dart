@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+
+import '../../../../../core/widget/custom_scaffold.dart';
 // import 'package:location/location.dart';
 
 class OpenRouteTracking extends StatefulWidget {
@@ -99,7 +101,7 @@ class _OpenRouteTrackingState extends State<OpenRouteTracking> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: AppBar(
         title: const Text('OpenStreetMap with Flutter'),
       ),

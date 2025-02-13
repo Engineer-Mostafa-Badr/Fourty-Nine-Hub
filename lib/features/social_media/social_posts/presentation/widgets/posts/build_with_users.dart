@@ -8,12 +8,14 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../../core/widget/custom_scaffold.dart';
+
 class BuildWithUsers extends StatelessWidget {
   const BuildWithUsers({super.key, required this.users});
   final List<TwitterUserEntity> users;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
         appBar: BackAppBar(
           label: LocaleKeys.withUsers.localize,
         ),

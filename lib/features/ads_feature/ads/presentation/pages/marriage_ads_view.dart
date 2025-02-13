@@ -26,6 +26,8 @@ import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/request_button.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class MarriageSubCategoriesView extends StatefulWidget {
   final MainCategoryEntity mainCategory;
 
@@ -99,7 +101,7 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
               child: const Center(
                 child: CircularProgressIndicator(),
               ))
-          : Scaffold(
+          :CustomScaffold(
               appBar: BackAppBar(
                 label: context.isArabic
                     ? widget.mainCategory.name

@@ -17,6 +17,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../data/shared/shared.dart';
 
 class UserProfilePage extends StatefulWidget {
@@ -46,8 +47,8 @@ class UserProfilePageState extends State<UserProfilePage> {
         : _buildProfileScaffold(context);
   }
 
-  Scaffold _buildLoadingScaffold() {
-    return Scaffold(
+  CustomScaffold _buildLoadingScaffold() {
+    return CustomScaffold(
       appBar: BackAppBar(
         label: LocaleKeys.profile.localize,
       ),
@@ -55,9 +56,9 @@ class UserProfilePageState extends State<UserProfilePage> {
     );
   }
 
-  Scaffold _buildProfileScaffold(BuildContext context) {
+  CustomScaffold _buildProfileScaffold(BuildContext context) {
     final userCubit = context.read<UserCubit>();
-    return Scaffold(
+    return CustomScaffold(
       floatingActionButton: _buildFloatingActionButton(context),
       appBar: BackAppBar(
         label: LocaleKeys.profile.localize,

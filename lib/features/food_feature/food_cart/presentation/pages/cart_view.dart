@@ -14,7 +14,8 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../../core/localization/locale_keys.g.dart'; // Ensure correct path
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/widget/custom_scaffold.dart'; // Ensure correct path
 
 // Helper functions (assuming these are defined elsewhere in your project)
 Color scaffoldDarkColor(BuildContext context) {
@@ -143,7 +144,7 @@ class _FoodCartViewState extends State<FoodCartView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       backgroundColor: scaffoldDarkColor(context),
       appBar: _buildAppBar(),
       body: BlocBuilder<RestaurantDetailsCubit, RestaurantDetailsState>(

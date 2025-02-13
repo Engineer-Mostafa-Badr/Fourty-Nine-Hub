@@ -21,6 +21,7 @@ import 'dart:async';
 import 'dart:ui' as ui;
 import 'package:flutter/rendering.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/const.dart';
 import '../../../../../routes/routes.dart';
@@ -279,12 +280,12 @@ class _AdvancedSnapchatCameraScreenState
   @override
   Widget build(BuildContext context) {
     if (!isReady || !_cameraController.value.isInitialized) {
-      return const Scaffold(
+      return const CustomScaffold(
         body: Center(child: CircularProgressIndicator()),
       );
     }
 
-    return Scaffold(
+    return CustomScaffold(
       backgroundColor: Colors.black,
       body: GestureDetector(
         onScaleUpdate: (details) {

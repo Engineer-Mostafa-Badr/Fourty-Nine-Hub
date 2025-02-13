@@ -16,6 +16,7 @@ import '../../../../../common/widgets/stateless/images/square_image.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/messages/messages.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
@@ -56,7 +57,7 @@ class _MazadDetailsState extends State<MazadDetails> {
       },
       builder: (context, state) {
         final controller = context.read<AuctionDetailsCubit>();
-        return Scaffold(
+        return CustomScaffold(
           appBar: const BackAppBar(),
           bottomNavigationBar: ((state.auction?.isMine ?? false) &&
                   !(state.auction?.isFinished ?? false))

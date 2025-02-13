@@ -14,6 +14,7 @@ import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/localization/locales.dart';
+import '../../../../core/widget/custom_scaffold.dart';
 
 class MainCategoriesFlipCardsView extends StatefulWidget {
   const MainCategoriesFlipCardsView(
@@ -55,7 +56,7 @@ class _MainCategoriesFlipCardsViewState
     var mainCategories = mainCategoriesCubit.state.data ?? [];
     // mainCategories = widget.data!;
 
-    return Scaffold(
+    return CustomScaffold(
       appBar: widget.isAppBarShow
           ? BackAppBar(
               label: mainCategories.isNotEmpty ? labelName : '',

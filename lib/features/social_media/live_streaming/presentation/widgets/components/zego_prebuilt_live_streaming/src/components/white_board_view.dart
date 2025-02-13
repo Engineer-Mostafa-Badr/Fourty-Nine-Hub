@@ -3,6 +3,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/components/screen_util/core/size_extension.dart';
 
+import '../../../../../../../../../core/widget/custom_scaffold.dart';
+
 enum DrawMode { freeDraw, rectangle, circle, triangle }
 
 class Shape {
@@ -65,7 +67,7 @@ class WhiteBoardViewState extends State<WhiteBoardView> {
     }
 
     return SafeArea(
-      child: Scaffold(
+      child: CustomScaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
           // centerTitle: true,

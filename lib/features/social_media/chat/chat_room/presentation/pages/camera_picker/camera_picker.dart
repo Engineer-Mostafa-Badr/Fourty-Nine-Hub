@@ -23,6 +23,8 @@ import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:video_player/video_player.dart';
+
+import '../../../../../../../core/widget/custom_scaffold.dart';
 // import 'package:video_trimmer/video_trimmer.dart';
 
 part 'media_slider.dart';
@@ -43,7 +45,7 @@ class CameraPickerView extends StatelessWidget {
     return BlocProvider(
       create: (context) => CameraPickerCubit()..init(),
       child: SafeArea(
-        child: Scaffold(
+        child: CustomScaffold(
           body: Column(
             children: [
               Expanded(

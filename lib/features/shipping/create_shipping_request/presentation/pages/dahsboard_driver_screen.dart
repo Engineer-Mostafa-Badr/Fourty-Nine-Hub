@@ -21,6 +21,8 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class DahsboardDriverScreen extends StatefulWidget {
   const DahsboardDriverScreen({super.key});
 
@@ -40,7 +42,7 @@ class _DahsboardDriverScreenState extends State<DahsboardDriverScreen> {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
-      child: Scaffold(
+      child: CustomScaffold(
           appBar: AppBar(
               leadingWidth: 300,
               // leading: ,

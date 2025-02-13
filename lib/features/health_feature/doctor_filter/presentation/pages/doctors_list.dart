@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../widgets/doctor_card.dart';
 
 class DoctorsListParams {
@@ -62,7 +63,7 @@ class _DoctorsListViewState extends State<DoctorsListView> {
   Widget build(BuildContext context) {
     return BlocListener<DoctorsListCubit, DoctorsListState>(
       listener: (context, state) {},
-      child: Scaffold(
+      child: CustomScaffold(
         appBar: BackAppBar(
           label: LocaleKeys.doctorList.localize,
         ),

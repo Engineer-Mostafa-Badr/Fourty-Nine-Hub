@@ -5,6 +5,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/messages/messages.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../domain/entity/sub_tab_entity.dart';
@@ -35,7 +36,7 @@ class _SubTabState extends State<SubTab> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: AppBar(
         title: Text(LocaleKeys.subTab.localize),
       ),

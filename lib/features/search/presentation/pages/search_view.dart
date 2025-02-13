@@ -16,6 +16,7 @@ import 'package:fourtyninehub/features/search/presentation/pages/widget/reel_sea
 import 'package:fourtyninehub/features/search/presentation/pages/widget/subcategory_search_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 
@@ -45,7 +46,7 @@ class _SearchViewState extends State<SearchView>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Theme.of(context).primaryColor),
