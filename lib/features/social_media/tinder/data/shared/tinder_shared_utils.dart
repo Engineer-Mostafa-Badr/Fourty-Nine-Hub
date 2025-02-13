@@ -5,6 +5,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/features/social_media/tinder/data/models/gift_model.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../core/utils/custom_show_dialog.dart';
+
 class TinderSharedUtils {
   static String _token = '';
   static List<String>? favListIds;
@@ -85,10 +87,7 @@ class TinderSharedUtils {
 
     Navigator.pop(context);
 
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
+    showAnimatedDialog(context,AlertDialog(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
           title: title == 'Gift Sent'
@@ -99,8 +98,7 @@ class TinderSharedUtils {
               : _buildMessageContent(message),
           actions: _buildDialogActions(context, isError, buttonColor),
           actionsAlignment: MainAxisAlignment.end,
-        );
-      },
+        ),
     );
   }
 

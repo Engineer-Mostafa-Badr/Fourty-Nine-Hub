@@ -35,8 +35,10 @@ class _LogoutWidgetState extends State<LogoutWidget> {
   @override
   Widget build(BuildContext context) {
     final controller = context.read<UserCubit>();
-    return ListView(
-      shrinkWrap: true,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+
+      // shrinkWrap: true,
       children: [
         Label(
           text: LocaleKeys.logout.localize,

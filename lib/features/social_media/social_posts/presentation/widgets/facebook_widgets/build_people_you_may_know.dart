@@ -21,6 +21,8 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
+import '../../../../../../core/utils/custom_show_dialog.dart';
+
 class BuildPeopleYouMayKnow extends StatefulWidget {
   const BuildPeopleYouMayKnow({super.key});
 
@@ -229,10 +231,7 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                   }
                                                                 } else if (item.addedSuccessfully == true &&
                                                                     item.followSuccessfully == true) {
-                                                                  showDialog(
-                                                                    context: context,
-                                                                    builder: (BuildContext context) {
-                                                                      return AlertDialog(
+                                                                  showAnimatedDialog(context,AlertDialog(
                                                                         backgroundColor: AppColors.BACKGROUND_COLOR,
                                                                         surfaceTintColor: AppColors.BACKGROUND_COLOR,
                                                                         title: Label(
@@ -320,9 +319,102 @@ class _BuildPeopleYouMayKnowState extends State<BuildPeopleYouMayKnow> {
                                                                             ),
                                                                           ),
                                                                         ],
-                                                                      );
-                                                                    },
+                                                                      ),
                                                                   );
+                                                                // showDialog(
+                                                                  //   context: context,
+                                                                  //   builder: (BuildContext context) {
+                                                                  //     return AlertDialog(
+                                                                  //       backgroundColor: AppColors.BACKGROUND_COLOR,
+                                                                  //       surfaceTintColor: AppColors.BACKGROUND_COLOR,
+                                                                  //       title: Label(
+                                                                  //         text: LocaleKeys.enterGreetMessage.localize,
+                                                                  //         style: Styles.headerText(),
+                                                                  //       ),
+                                                                  //       content: TextField(
+                                                                  //         controller: messageController,
+                                                                  //         maxLines: null,
+                                                                  //         maxLength: 150,
+                                                                  //         decoration: InputDecoration(
+                                                                  //           hintText: LocaleKeys.greetMessage.localize,
+                                                                  //           fillColor: Colors.white,
+                                                                  //           hintStyle: Styles.mediumText(
+                                                                  //             color: AppColors.DARK_GRAY_COLOR,
+                                                                  //           ),
+                                                                  //         ),
+                                                                  //       ),
+                                                                  //       actions: <Widget>[
+                                                                  //         TextButton(
+                                                                  //           onPressed: () {
+                                                                  //             Navigator.of(context).pop();
+                                                                  //           },
+                                                                  //           child: Container(
+                                                                  //             width: 100,
+                                                                  //             padding: const EdgeInsets.all(2),
+                                                                  //             decoration: BoxDecoration(
+                                                                  //               color: Colors.white,
+                                                                  //               borderRadius: BorderRadius.circular(4),
+                                                                  //               border: Border.all(
+                                                                  //                 color: AppColors.PRIMARY_COLOR,
+                                                                  //               ),
+                                                                  //             ),
+                                                                  //             alignment: Alignment.center,
+                                                                  //             child: Label(
+                                                                  //               text: LocaleKeys.cancel.localize,
+                                                                  //               style: Styles.headerText(
+                                                                  //                 color: Colors.red,
+                                                                  //               ),
+                                                                  //             ),
+                                                                  //           ),
+                                                                  //         ),
+                                                                  //         ClickableWidget(
+                                                                  //           onTap: () async {
+                                                                  //             if (messageController.text.isNotEmpty) {
+                                                                  //               await controller.sendGreetMessage(
+                                                                  //                 context: context,
+                                                                  //                 userId: controller
+                                                                  //                     .suggestUserPagingController
+                                                                  //                     .itemList![index]
+                                                                  //                     .id,
+                                                                  //                 message: messageController.text,
+                                                                  //               );
+                                                                  //               controller.suggestUserPagingController
+                                                                  //                   .itemList
+                                                                  //                   ?.removeWhere((element) =>
+                                                                  //               element.id ==
+                                                                  //                   controller
+                                                                  //                       .suggestUserPagingController
+                                                                  //                       .itemList?[index]
+                                                                  //                       .id);
+                                                                  //               showSuccessMessage(
+                                                                  //                 context,
+                                                                  //                 LocaleKeys.messageSentSuccessfully
+                                                                  //                     .localize,
+                                                                  //               );
+                                                                  //               Navigator.of(context).pop();
+                                                                  //               setState(() {});
+                                                                  //             }
+                                                                  //           },
+                                                                  //           child: Container(
+                                                                  //             width: 100,
+                                                                  //             padding: const EdgeInsets.all(2),
+                                                                  //             decoration: BoxDecoration(
+                                                                  //               color: AppColors.PRIMARY_COLOR,
+                                                                  //               borderRadius: BorderRadius.circular(4),
+                                                                  //             ),
+                                                                  //             alignment: Alignment.center,
+                                                                  //             child: Label(
+                                                                  //               text: LocaleKeys.send.localize,
+                                                                  //               style: Styles.headerText(
+                                                                  //                 color: Colors.white,
+                                                                  //               ),
+                                                                  //             ),
+                                                                  //           ),
+                                                                  //         ),
+                                                                  //       ],
+                                                                  //     );
+                                                                  //   },
+                                                                  // );
                                                                 }
                                                               },
                                                               child: Container(

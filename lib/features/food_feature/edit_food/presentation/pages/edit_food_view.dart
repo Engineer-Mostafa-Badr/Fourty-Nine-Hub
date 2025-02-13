@@ -21,6 +21,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../core/utils/custom_show_dialog.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 
 class EditFoodView extends StatefulWidget {
@@ -164,40 +165,70 @@ class _EditFoodViewState extends State<EditFoodView>
                 SlidableAction(
                   flex: 3,
                   onPressed: (context) async {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text(
-                              context.isArabic ? 'حذف الوجبة' : 'Delete Item',
-                              style: Styles.headerText(),
-                            ),
-                            content: Text(
-                              context.isArabic
-                                  ? 'هل أنت متأكد أنك تريد حذف هذا العنصر'
-                                  : 'Are you sure you want to remove this item?',
-                              style: Styles.mediumText(),
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.of(context).pop(),
-                                child: Text(
-                                  LocaleKeys.no.localize,
-                                  style: Styles.mediumText(color: Colors.black),
-                                ),
-                              ),
-                              ElevatedButton(
-                                onPressed: () async {
-                                  onDelete(meal.id ?? '');
-                                },
-                                child: Text(
-                                  LocaleKeys.yes.localize,
-                                  style: Styles.mediumText(color: Colors.white),
-                                ),
-                              ),
-                            ],
-                          );
-                        });
+                    showAnimatedDialog(context, AlertDialog(
+                      title: Text(
+                        context.isArabic ? 'حذف الوجبة' : 'Delete Item',
+                        style: Styles.headerText(),
+                      ),
+                      content: Text(
+                        context.isArabic
+                            ? 'هل أنت متأكد أنك تريد حذف هذا العنصر'
+                            : 'Are you sure you want to remove this item?',
+                        style: Styles.mediumText(),
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: Text(
+                            LocaleKeys.no.localize,
+                            style: Styles.mediumText(color: Colors.black),
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () async {
+                            onDelete(meal.id ?? '');
+                          },
+                          child: Text(
+                            LocaleKeys.yes.localize,
+                            style: Styles.mediumText(color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    ));
+                    // showDialog(
+                    //     context: context,
+                    //     builder: (BuildContext context) {
+                    //       return AlertDialog(
+                    //         title: Text(
+                    //           context.isArabic ? 'حذف الوجبة' : 'Delete Item',
+                    //           style: Styles.headerText(),
+                    //         ),
+                    //         content: Text(
+                    //           context.isArabic
+                    //               ? 'هل أنت متأكد أنك تريد حذف هذا العنصر'
+                    //               : 'Are you sure you want to remove this item?',
+                    //           style: Styles.mediumText(),
+                    //         ),
+                    //         actions: [
+                    //           TextButton(
+                    //             onPressed: () => Navigator.of(context).pop(),
+                    //             child: Text(
+                    //               LocaleKeys.no.localize,
+                    //               style: Styles.mediumText(color: Colors.black),
+                    //             ),
+                    //           ),
+                    //           ElevatedButton(
+                    //             onPressed: () async {
+                    //               onDelete(meal.id ?? '');
+                    //             },
+                    //             child: Text(
+                    //               LocaleKeys.yes.localize,
+                    //               style: Styles.mediumText(color: Colors.white),
+                    //             ),
+                    //           ),
+                    //         ],
+                    //       );
+                    //     });
 
                     // showConfirmationDialog(
                     //   context,

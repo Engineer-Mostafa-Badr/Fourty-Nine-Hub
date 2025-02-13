@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/core/utils/custom_show_dialog.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -16,8 +18,6 @@ import '../../../res/style/app_colors.dart';
 import '../../../res/style/styles.dart';
 import '../stateless/labels/label.dart';
 import 'sizer.dart';
-import 'package:liquid_progress_indicator_v2/liquid_progress_indicator.dart';
-
 
 class WalletWidget extends StatefulWidget {
   const WalletWidget({
@@ -50,8 +50,7 @@ class _WalletWidgetState extends State<WalletWidget> {
         builder: (BuildContext context, state) {
           return Container(
             // height: (isOpen?200:100).h,
-            margin: EdgeInsets.symmetric(
-                vertical: 10.h, horizontal:  5.w),
+            margin: EdgeInsets.symmetric(vertical: 10.h, horizontal: 5.w),
             padding: const EdgeInsets.all(5),
             decoration: BoxDecoration(
                 color: Theme.of(context).scaffoldBackgroundColor,
@@ -67,10 +66,29 @@ class _WalletWidgetState extends State<WalletWidget> {
               children: [
                 ClickableWidget(
                   onTap: () {
-
                     setState(() {
                       isOpen = !isOpen;
                     });
+                    bottomSheet(
+                        context: context,
+                        widget: Container(
+                          color: Colors.red,
+                          width: double.infinity,
+                          height: 200,
+                        ),);
+                    // showAnimatedDialog(context,AlertDialog(
+                    //   shape: RoundedRectangleBorder(
+                    //     borderRadius: BorderRadius.circular(20),
+                    //   ),
+                    //   title: Text('Animated'),
+                    //   content: Text('This is a custom animated alert dialog!'),
+                    //   actions: [
+                    //     TextButton(
+                    //       onPressed: () => Navigator.pop(context),
+                    //       child: Text('Close'),
+                    //     ),
+                    //   ],
+                    // ));
                   },
                   child: Icon(
                     isOpen
@@ -79,59 +97,70 @@ class _WalletWidgetState extends State<WalletWidget> {
                   ),
                   // color: AppColors.PRIMARY_COLOR,
                 ),
-                if (isOpen)Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CircleAvatar(
-                      radius: 6.w,
-                      backgroundColor: AppColors.SECONDARY_COLOR,
-                    ),
-                    const Sizer(),
-                    buildItem(() {
-                      AdInterstitialTop.loadIntersitialAd();
-                      AdInterstitialTop.showInterstitialAd();
-                      context.push(Routes.BALANCE);
-                    }, LocaleKeys.balance.tr(), '${FormatNumbers().formatNumber(state.wallet?.balance??0) } ',
-                        context.isArabic?state.wallet?.currencyAr ?? '':state.wallet?.currencyEn ?? ''),
-                    Container(
-                      width: 2.w,
-                      margin: EdgeInsets.symmetric(horizontal: 5.w),
-                      color: Colors.grey,
-                      height: kToolbarHeight * 1.3.h,
-                    ),
-                    CircleAvatar(
-                      radius: 6.w,
-                      backgroundColor: AppColors.SECONDARY_COLOR,
-                    ),
-                    const Sizer(),
-                    buildItem(() {
-                      AdInterstitialTop.loadIntersitialAd();
-                      AdInterstitialTop.showInterstitialAd();
-                      context.push(Routes.GIFT);
-                    }, LocaleKeys.gift.tr(), '${FormatNumbers().formatNumber(state.wallet?.giftWallet??0)} ',
-                        context.isArabic?state.wallet?.currencyAr ?? '':state.wallet?.currencyEn ?? ''),
-                    Container(
-                      width: 2.w,
-                      margin: EdgeInsets.symmetric(horizontal: 5.w),
-                      color: Colors.grey,
-                      height: kToolbarHeight * 1.3.h,
-                    ),
-                    CircleAvatar(
-                      radius: 6.w,
-                      backgroundColor: AppColors.SECONDARY_COLOR,
-                    ),
-                    const Sizer(),
-                    buildItem(() {
-                      AdInterstitialTop.loadIntersitialAd();
-                      AdInterstitialTop.showInterstitialAd();
-                      context.push(Routes.WALLET);
-                      //showing
-                    },
-                        LocaleKeys.wallet.tr(),
-                        '${FormatNumbers().formatNumber(state.wallet?.realAmount??0)} ',
-                        context.isArabic?state.wallet?.currencyAr ?? '':state.wallet?.currencyEn ?? ''),
-                  ],
-                ),
+                if (isOpen)
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CircleAvatar(
+                        radius: 6.w,
+                        backgroundColor: AppColors.SECONDARY_COLOR,
+                      ),
+                      const Sizer(),
+                      buildItem(() {
+                        AdInterstitialTop.loadIntersitialAd();
+                        AdInterstitialTop.showInterstitialAd();
+                        context.push(Routes.BALANCE);
+                      },
+                          LocaleKeys.balance.tr(),
+                          '${FormatNumbers().formatNumber(state.wallet?.balance ?? 0)} ',
+                          context.isArabic
+                              ? state.wallet?.currencyAr ?? ''
+                              : state.wallet?.currencyEn ?? ''),
+                      Container(
+                        width: 2.w,
+                        margin: EdgeInsets.symmetric(horizontal: 5.w),
+                        color: Colors.grey,
+                        height: kToolbarHeight * 1.3.h,
+                      ),
+                      CircleAvatar(
+                        radius: 6.w,
+                        backgroundColor: AppColors.SECONDARY_COLOR,
+                      ),
+                      const Sizer(),
+                      buildItem(() {
+                        AdInterstitialTop.loadIntersitialAd();
+                        AdInterstitialTop.showInterstitialAd();
+                        context.push(Routes.GIFT);
+                      },
+                          LocaleKeys.gift.tr(),
+                          '${FormatNumbers().formatNumber(state.wallet?.giftWallet ?? 0)} ',
+                          context.isArabic
+                              ? state.wallet?.currencyAr ?? ''
+                              : state.wallet?.currencyEn ?? ''),
+                      Container(
+                        width: 2.w,
+                        margin: EdgeInsets.symmetric(horizontal: 5.w),
+                        color: Colors.grey,
+                        height: kToolbarHeight * 1.3.h,
+                      ),
+                      CircleAvatar(
+                        radius: 6.w,
+                        backgroundColor: AppColors.SECONDARY_COLOR,
+                      ),
+                      const Sizer(),
+                      buildItem(() {
+                        AdInterstitialTop.loadIntersitialAd();
+                        AdInterstitialTop.showInterstitialAd();
+                        context.push(Routes.WALLET);
+                        //showing
+                      },
+                          LocaleKeys.wallet.tr(),
+                          '${FormatNumbers().formatNumber(state.wallet?.realAmount ?? 0)} ',
+                          context.isArabic
+                              ? state.wallet?.currencyAr ?? ''
+                              : state.wallet?.currencyEn ?? ''),
+                    ],
+                  ),
               ],
             ),
           );
@@ -139,7 +168,7 @@ class _WalletWidgetState extends State<WalletWidget> {
       ),
     );
 
-    return BlocProvider<MainCategoriesCubit>(
+    /*return BlocProvider<MainCategoriesCubit>(
       create: (BuildContext context) => serviceLocator()..getWallet(),
       child: BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
         builder: (BuildContext context, state) {
@@ -449,7 +478,7 @@ class _WalletWidgetState extends State<WalletWidget> {
           );
         },
       ),
-    );
+    );*/
   }
 
   Widget buildItem(Function function, String title, String amount, currency) =>
@@ -489,4 +518,3 @@ class _WalletWidgetState extends State<WalletWidget> {
         ),
       ));
 }
-

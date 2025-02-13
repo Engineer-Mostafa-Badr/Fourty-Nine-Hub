@@ -22,6 +22,7 @@ import 'package:go_router/go_router.dart';
 import 'package:restart_app/restart_app.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../../core/utils/custom_show_dialog.dart';
 import '../../../core/widget/custom_text_no_login.dart';
 import '../../../features/authentication/presentation/widgets/log_out_widget.dart';
 import '../../../features/competition/presentation/cubit/competition_cubit/competition_cubit.dart';
@@ -222,11 +223,23 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     requireLogin: true,
                                     label: LocaleKeys.logout.localize,
                                     onTap: () {
-                                      bottomSheet(
-                                          backColor: Theme.of(context)
-                                              .scaffoldBackgroundColor,
-                                          context: context,
-                                          widget: const LogoutWidget());
+                                      showAnimatedDialog(
+                                        context,
+                                        AlertDialog(
+                                          backgroundColor: Colors.white,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                          ),
+                                          content: const LogoutWidget(),
+                                        ),
+                                      );
+
+                                      // bottomSheet(
+                                      //     backColor: Theme.of(context)
+                                      //         .scaffoldBackgroundColor,
+                                      //     context: context,
+                                      //     widget: const LogoutWidget());
                                     }),
                               ],
                             ),
@@ -257,14 +270,12 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   image: Assets.meal,
                                   onTap: () {},
                                   // onTap: () => context.push(Routes.RIDE),
-
                                 ),
                                 drawerRollWidget(
                                   label: LocaleKeys.find.localize,
                                   image: Assets.find,
                                   onTap: () {},
                                   // onTap: () => context.push(Routes.),
-
                                 ),
                                 drawerRollWidget(
                                   label: LocaleKeys.reel.localize,
@@ -732,12 +743,20 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     ),
                     GestureDetector(
                       onTap: () async {
-                        showModalBottomSheet(
+                        bottomSheet(
                           context: context,
-                          builder: (BuildContext context) {
-                            return Wrap(
-                              children: <Widget>[
-                                ListTile(
+                          asAlertDialog: true,
+                          isDismissible: false,
+                          widget: Wrap(
+                            spacing: 20,
+                            runSpacing: 20,
+                            children: <Widget>[
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: HexColor('F9F9F9')
+                                ),
+                                child: ListTile(
                                   leading: const Icon(Icons.photo_library),
                                   title: const Text('Gallery'),
                                   onTap: () async {
@@ -747,7 +766,13 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     // Reload user data if needed
                                   },
                                 ),
-                                ListTile(
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: HexColor('F9F9F9')
+                                ),
+                                child: ListTile(
                                   leading: const Icon(Icons.camera_alt),
                                   title: const Text('Camera'),
                                   onTap: () async {
@@ -757,10 +782,54 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     // Reload user data if needed
                                   },
                                 ),
-                              ],
-                            );
-                          },
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: HexColor('D9D9D9')
+                                ),
+                                child: ListTile(
+                                  // leading: const Icon(Icons.camera_alt),
+                                  title: Center(child: const Text('Cancel')),
+                                  onTap: () async {
+                                    Navigator.pop(context);
+
+                                    // Reload user data if needed
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
                         );
+                        // showModalBottomSheet(
+                        //   context: context,
+                        //   builder: (BuildContext context) {
+                        //     return Wrap(
+                        //       children: <Widget>[
+                        //         ListTile(
+                        //           leading: const Icon(Icons.photo_library),
+                        //           title: const Text('Gallery'),
+                        //           onTap: () async {
+                        //             // Navigator.pop(context);
+                        //             await context.read<UserCubit>().uploadPhoto(
+                        //                 isGallery: true, context: context);
+                        //             // Reload user data if needed
+                        //           },
+                        //         ),
+                        //         ListTile(
+                        //           leading: const Icon(Icons.camera_alt),
+                        //           title: const Text('Camera'),
+                        //           onTap: () async {
+                        //             // Navigator.pop(context);
+                        //             await context.read<UserCubit>().uploadPhoto(
+                        //                 isGallery: false, context: context);
+                        //             // Reload user data if needed
+                        //           },
+                        //         ),
+                        //       ],
+                        //     );
+                        //   },
+                        // );
                       },
                       child: Image.asset(
                         Assets.cameraOutlined,
@@ -833,7 +902,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Switch(
-                value: context.read<CustomPageCubit>().state.activate!.customPage,
+                value:
+                    context.read<CustomPageCubit>().state.activate!.customPage,
                 onChanged: (value) async {
                   await context.read<CustomPageCubit>().updateActivate(value);
                   Restart.restartApp();
