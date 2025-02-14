@@ -21,46 +21,40 @@ class PrivacySwitchItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const Sizer(),
-        Card(
+    return Container(
+      decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5),
-            child: Row(
-              children: [
-                Expanded(
-                    child: Label(
-                  text: label,
-                  style: TextStyle(fontSize: 30.sp),
-                )),
-                Label(
-                  text: (privacy
-                      ? LocaleKeys.on.localize
-                      : LocaleKeys.off.localize),
-                  style: Styles.mediumText(
-                      fontSize: 50.sp, color: AppColors.GREY_DARK_COLOR),
-                ),
-                SizedBox(
-                  width: 10.w,
-                ),
-                Switch(
-                  value: privacy,
-                  onChanged: onPress,
-                  activeColor: Colors.red,
-                  inactiveThumbColor: Colors.black,
-                  activeTrackColor: AppColors.GREY_NORMAL_COLOR,
-                  inactiveTrackColor: AppColors.GREY_NORMAL_COLOR,
-                ),
-              ],
+          borderRadius: BorderRadius.circular(20.r)),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            Expanded(
+              child: Label(
+                text: label,
+                style: TextStyle(fontSize: 35.sp, fontWeight: FontWeight.w400),
+              ),
             ),
-          ),
+            Label(
+              text:
+                  (privacy ? LocaleKeys.on.localize : LocaleKeys.off.localize),
+              style: Styles.mediumText(
+                  fontSize: 50.sp, color: AppColors.GREY_DARK_COLOR),
+            ),
+            SizedBox(
+              width: 10.w,
+            ),
+            Switch(
+              value: privacy,
+              onChanged: onPress,
+              activeColor: Colors.red,
+              inactiveThumbColor: Colors.black,
+              activeTrackColor: AppColors.GREY_NORMAL_COLOR,
+              inactiveTrackColor: AppColors.GREY_NORMAL_COLOR,
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

@@ -79,6 +79,7 @@ class _FaceBookViewState extends State<FaceBookView> {
               Container(
                 width: double.infinity,
                 height: 5.h,
+                // color: Colors.red,
                 color: AppColors.LIGHT_GRAY_COLOR,
               ),
               const Stories(),

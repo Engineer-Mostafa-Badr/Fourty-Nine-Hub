@@ -7,7 +7,6 @@ import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/core/utils/custom_show_dialog.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -69,26 +68,6 @@ class _WalletWidgetState extends State<WalletWidget> {
                     setState(() {
                       isOpen = !isOpen;
                     });
-                    bottomSheet(
-                        context: context,
-                        widget: Container(
-                          color: Colors.red,
-                          width: double.infinity,
-                          height: 200,
-                        ),);
-                    // showAnimatedDialog(context,AlertDialog(
-                    //   shape: RoundedRectangleBorder(
-                    //     borderRadius: BorderRadius.circular(20),
-                    //   ),
-                    //   title: Text('Animated'),
-                    //   content: Text('This is a custom animated alert dialog!'),
-                    //   actions: [
-                    //     TextButton(
-                    //       onPressed: () => Navigator.pop(context),
-                    //       child: Text('Close'),
-                    //     ),
-                    //   ],
-                    // ));
                   },
                   child: Icon(
                     isOpen

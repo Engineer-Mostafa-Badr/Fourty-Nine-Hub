@@ -1252,4 +1252,7 @@ abstract class  LocaleKeys {
   static const wallets = 'wallets';
   static const tube = 'tube';
   static const floatingNavigator = 'floatingNavigator';
+  static const only_with = 'only_with';
+  static const except_from = 'except_from';
+
 }

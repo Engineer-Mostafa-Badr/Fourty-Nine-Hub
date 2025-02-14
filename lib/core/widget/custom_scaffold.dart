@@ -68,18 +68,23 @@ class _CustomScaffoldState extends State<CustomScaffold> {
               },
               child: Container(
                 width: 50.h,
-                height: 50.h,
+                // height: 70.h,
                 decoration: BoxDecoration(
                     color: AppColors.SECONDARY_COLOR,
                     borderRadius: BorderRadius.circular(15.r)),
-                child: const Icon(
-                  Icons.swap_horiz_rounded,
-                  color: Colors.white,
+                child: const Column(
+                  children: [
+                    Icon(
+                      Icons.swap_horiz_rounded,
+                      color: Colors.white,
+                    ),
+                    Label(text: 'text')
+                  ],
                 ),
               ),
             ),
-            floatingWidgetHeight: 40,
-            floatingWidgetWidth: 40,
+            floatingWidgetHeight: 50,
+            floatingWidgetWidth: 50,
             autoAlign: true,
           );
         } else {

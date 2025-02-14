@@ -1268,6 +1268,8 @@
   "youCanChooseOneWayAtLeast": "يمكنك اختيار بحد أقصى طريقه عرض واحده",
   "wallets": "المحافظ",
   "tube": "تيوب",
-  "floatingNavigator": "تيوب"
+  "floatingNavigator": "المتصفح العائم",
+  "only_with": "فقط مع...",
+  "except_from": "إلا من..."
 
 }

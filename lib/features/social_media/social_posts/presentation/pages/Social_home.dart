@@ -88,7 +88,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
     return DefaultTabController(
       length: 3,
       initialIndex: widget.params?.index ?? 0,
-      child: Scaffold(
+      child: CustomScaffold(
           appBar: widget.params?.hideAppBar == true
               ? null
               : HomeAppbar(
@@ -205,6 +205,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
                         body: FacebookGlobalBody(
                           scrollController: scrollController,
                         ));
+                //todo
               }),
               MultiBlocProvider(
                 providers: [

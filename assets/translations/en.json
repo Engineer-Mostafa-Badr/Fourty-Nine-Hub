@@ -1288,6 +1288,8 @@
   "youCanChooseOneWayAtLeast": "You can select a maximum of one view method.",
   "wallets": "Wallets",
   "tube": "Tube",
-  "floatingNavigator": "Floating Navigator"
+  "floatingNavigator": "Floating Navigator",
+  "only_with": "Only With...",
+  "except_from": "Except From..."
 
 }
