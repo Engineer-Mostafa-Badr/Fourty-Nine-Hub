@@ -4,24 +4,39 @@ import 'package:fourtyninehub/features/account_taps/privacy/domain/useCase/fetch
 import 'package:fourtyninehub/features/account_taps/privacy/domain/useCase/update_privacy_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/privacy/presentation/cubit/privacy_state.dart';
 
-class PrivacyCubit extends Cubit<PrivacyState> {
-  final FetchPrivacyUseCase _privacyUseCase;
-  final UpdatePrivacyUseCase _updatePrivacyUseCase;
+import '../../domain/useCase/fetch_connection_privacy_use_case.dart';
+import '../../domain/useCase/fetch_personal_privacy_use_case.dart';
 
-  PrivacyCubit(this._privacyUseCase, this._updatePrivacyUseCase)
+class PrivacyCubit extends Cubit<PrivacyState> {
+  final FetchPersonalPrivacyUseCase _privacyUseCase;
+  final UpdatePrivacyUseCase _updatePrivacyUseCase;
+  final FetchConnectionPrivacyUseCase fetchConnectionPrivacyUseCase;
+
+  PrivacyCubit(this._privacyUseCase, this._updatePrivacyUseCase, this.fetchConnectionPrivacyUseCase)
       : super(const PrivacyState());
 
   void loadData() async {
     await fetchDataPrivacy();
+    await fetchDataConnectionPrivacy();
   }
 
+
+  Future<void> fetchDataConnectionPrivacy() async {
+    emit(state.copyWith(status: PrivacyStates.loading));
+    final response = await fetchConnectionPrivacyUseCase.call(const NoParams());
+    response.fold((l) {
+      emit(state.copyWith(failure: l, status: PrivacyStates.error));
+    }, (data) {
+      emit(state.copyWith(connectionPrivacyEntity: data, status: PrivacyStates.success));
+    });
+  }
   Future<void> fetchDataPrivacy() async {
-    // emit(state.copyWith(status: PrivacyStates.loading));
+    emit(state.copyWith(status: PrivacyStates.loading));
     final response = await _privacyUseCase.call(const NoParams());
     response.fold((l) {
       emit(state.copyWith(failure: l, status: PrivacyStates.error));
     }, (data) {
-      emit(state.copyWith(privacy: data, status: PrivacyStates.success));
+      emit(state.copyWith(personalPrivacyEntity: data, status: PrivacyStates.success));
     });
   }
 

@@ -4,11 +4,16 @@ import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/features/account_taps/privacy/data/models/privacy_model.dart';
 
 import '../../../../../core/error/failure.dart';
+import '../../domain/entities/connection_privacy_entity.dart';
+import '../../domain/entities/personal_privacy_entity.dart';
 import '../../domain/entities/privacy_entity.dart';
 import '../../domain/useCase/update_privacy_use_case.dart';
+import '../models/connection_privacy_model.dart';
+import '../models/personal_privacy_model.dart';
 
 abstract class PrivacyDataSource {
-  Future<Either<Failure, PrivacyEntity>> fetchDataPrivacy();
+  Future<Either<Failure, PersonalPrivacyEntity >> fetchDataPersonalPrivacy();
+  Future<Either<Failure, ConnectionPrivacyEntity >> fetchDataConnectionPrivacy();
 
   Future<Either<Failure, PrivacyEntity>> updateDataPrivacy(
       UpdatePrivacyParams params);
@@ -20,12 +25,12 @@ class PrivacyDataSourceImpl extends PrivacyDataSource {
   PrivacyDataSourceImpl(this._apiConsumer);
 
   @override
-  Future<Either<Failure, PrivacyEntity>> fetchDataPrivacy() async {
+  Future<Either<Failure, PersonalPrivacyEntity>> fetchDataPersonalPrivacy() async {
     var response = await _apiConsumer.get(EndPoints.privacy);
 
     return response.fold(
       (failure) => Left(failure),
-      (response) => Right(PrivacyModel.fromJson(response['data'])),
+      (response) => Right(PersonalPrivacyModel.fromJson(response['data'])),
     );
   }
 
@@ -39,6 +44,16 @@ class PrivacyDataSourceImpl extends PrivacyDataSource {
     return response.fold(
       (failure) => Left(failure),
       (response) => Right(PrivacyModel.fromJson(response['data'])),
+    );
+  }
+
+  @override
+  Future<Either<Failure, ConnectionPrivacyEntity>> fetchDataConnectionPrivacy() async{
+    var response = await _apiConsumer.get(EndPoints.privacyConnection);
+
+    return response.fold(
+          (failure) => Left(failure),
+          (response) => Right(ConnectionPrivacyModel.fromJson(response['data'])),
     );
   }
 }

@@ -221,7 +221,8 @@ class EndPoints {
   static const createNewForgetPassword = '/auth/reset-password';
   static const notifications = '/notifications';
   static const unreadNotificationsCount = '/notifications/unread/count';
-  static const privacy = '/users/privacy';
+  static const privacy = '/privacy/personal';
+  static const privacyConnection = '/privacy/connections';
   static const deleteAccount = '/users/settings/delete-account';
   static const disableAccount = '/users/settings/disable-account';
   static const enableAccount = '/users/settings/enable-account';
