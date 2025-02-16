@@ -120,7 +120,6 @@ class _NavigateBarState extends State<NavigateBar> {
               return Column(
                 children: [
                   ListTile(
-                    title: Text(LocaleKeys.navigateBar.localize),
                     subtitle: Text(LocaleKeys.navigateBarDescription.localize),
                   ),
                   Expanded(

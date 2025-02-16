@@ -48,6 +48,9 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
       "Farming": preferences.farming.enabled,
       "Government Services": preferences.governmentServices.enabled,
       "Social": preferences.industry.enabled,
+      "Jobs": preferences.jobs.enabled,
+      "Fitness": preferences.fitness.enabled,
+      "Marriage": preferences.marriage.enabled,
     };
   }
 
@@ -72,6 +75,9 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
       isArabic ? preferences.farming.nameAr : preferences.farming.nameEn,
       isArabic ? preferences.governmentServices.nameAr : preferences.governmentServices.nameEn,
       isArabic ? preferences.industry.nameAr : preferences.industry.nameEn,
+      isArabic ? preferences.jobs.nameAr : preferences.jobs.nameEn,
+      isArabic ? preferences.marriage.nameAr : preferences.marriage.nameEn,
+      isArabic ? preferences.fitness.nameAr : preferences.fitness.nameEn,
     ];
   }
 
@@ -110,7 +116,6 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
               return Column(
                 children: [
                   ListTile(
-                    title: Text(LocaleKeys.favoriteCategory.localize),
                     subtitle: Text(LocaleKeys.favouriteDescrepion.localize),
                   ),
                   Expanded(

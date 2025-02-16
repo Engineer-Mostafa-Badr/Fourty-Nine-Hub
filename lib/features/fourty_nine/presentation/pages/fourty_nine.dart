@@ -146,6 +146,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
   }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     // context.push(Routes.REELS);
@@ -206,7 +207,10 @@ class _FourtyNineViewState extends State<FourtyNineView>
               !context.read<UserCubit>().isLoggedIn
                   ? const Sizer()
                   : const SizedBox.shrink(),
-              const ScrollableTextWithAnimation(),
+              ScrollableTextWithAnimation(
+                textDirection:
+                    context.isArabic ? TextDirection.rtl : TextDirection.ltr,
+              ),
 
               //wallet
 
@@ -226,8 +230,8 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   height: 60.h,
                   alignment: Alignment.center,
                   child: AutoScrollText(
-                    velocity: const Velocity(pixelsPerSecond: Offset(20, 0)),
-                    "${LocaleKeys.choosePreferredAppStyle.localize}...                                         ",
+                    velocity: const Velocity(pixelsPerSecond: Offset(25, 0)),
+                    "${LocaleKeys.choosePreferredAppStyle.localize}...  ${LocaleKeys.clickHere.localize}                                         ",
                     style: Styles.headerText(
                         fontSize: 30, color: AppColors.SECONDARY_COLOR),
                     textDirection: context.isArabic
@@ -321,10 +325,11 @@ class _FourtyNineViewState extends State<FourtyNineView>
                               AdInterstitialTop.showInterstitialAd();
                               HandleCashback.setCount(
                                   'mainCategoriesCount', context);
-                              if(state.data![index].id=='62c8b5b09332225799fe335e'){
+                              if (state.data![index].id ==
+                                  '62c8b5b09332225799fe335e') {
                                 context.push(Routes.MARRIAGESUBCATEGORIES,
                                     extra: state.data![index]);
-                              }else{
+                              } else {
                                 context.push(Routes.SUBCATEGORIES,
                                     extra: state.data![index]);
                               }
@@ -537,10 +542,9 @@ class _FourtyNineViewState extends State<FourtyNineView>
 
   Widget _buildStarWidget() {
     return SizedBox(
-      height: kToolbarHeight * 2.h,
-      width: double.infinity,
-      child: Stack(
-        children: [
+        height: kToolbarHeight * 2.h,
+        width: double.infinity,
+        child: Stack(children: [
           Positioned.fill(
             child: GestureDetector(
                 // color: AppColors.AUTH_CONTAINER_COLOR,

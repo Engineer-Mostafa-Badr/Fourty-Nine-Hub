@@ -1290,6 +1290,8 @@
   "tube": "Tube",
   "floatingNavigator": "Floating Navigator",
   "only_with": "Only With...",
-  "except_from": "Except From..."
+  "except_from": "Except From...",
+  "deposit": "Deposit",
+  "clickHere": "Click Here"
 
 }

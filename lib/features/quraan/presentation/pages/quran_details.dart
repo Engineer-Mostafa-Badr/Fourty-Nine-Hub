@@ -66,42 +66,45 @@ class _QuranViewPageState extends State<QuranViewPage> {
           ],
         ),
       ),
-      body: BlocProvider.value(
-        value: _quranCubit, // Provide the existing instance of QuranCubit
-        child: BlocConsumer<QuranCubit, QuranState>(
-          listener: (context, state) {
-            if (state.status == QuranStates.success) {
-              setState(() {
-                pages = _paginateAyahs(context, state.surah!);
-              });
-            }
-          },
-          builder: (context, state) {
-            if (state.status == QuranStates.loading) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state.status == QuranStates.success &&
-                pages.isNotEmpty) {
-              return PageView.builder(
-                controller: _pageController,
-                itemCount: pages.length + 1, // +1 for loading the next surah
-                reverse: true,
-                onPageChanged: (index) {
-                  if (index == pages.length) {
-                    _loadNextSurah();
-                  }
-                },
-                itemBuilder: (context, index) {
-                  if (index == pages.length) {
-                    return const Center(
-                        child:
-                            CircularProgressIndicator()); // Loading next surah
-                  }
-                  return buildPageContent(index, pages[index]);
-                },
-              );
-            }
-            return Container(); // Placeholder for other states
-          },
+      body: Directionality(
+        textDirection: TextDirection.ltr,
+        child: BlocProvider.value(
+          value: _quranCubit, // Provide the existing instance of QuranCubit
+          child: BlocConsumer<QuranCubit, QuranState>(
+            listener: (context, state) {
+              if (state.status == QuranStates.success) {
+                setState(() {
+                  pages = _paginateAyahs(context, state.surah!);
+                });
+              }
+            },
+            builder: (context, state) {
+              if (state.status == QuranStates.loading) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (state.status == QuranStates.success &&
+                  pages.isNotEmpty) {
+                return PageView.builder(
+                  controller: _pageController,
+                  itemCount: pages.length + 1, // +1 for loading the next surah
+                  reverse: true,
+                  onPageChanged: (index) {
+                    if (index == pages.length) {
+                      _loadNextSurah();
+                    }
+                  },
+                  itemBuilder: (context, index) {
+                    if (index == pages.length) {
+                      return const Center(
+                          child:
+                              CircularProgressIndicator()); // Loading next surah
+                    }
+                    return buildPageContent(index, pages[index]);
+                  },
+                );
+              }
+              return Container(); // Placeholder for other states
+            },
+          ),
         ),
       ),
     );

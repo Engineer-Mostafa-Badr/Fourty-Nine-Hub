@@ -49,7 +49,7 @@ class _ChooseCategoriesViwBodyState extends State<ChooseCategoriesViwBody> {
         body: Column(
           children: [
             ListTile(
-              title: Text(LocaleKeys.chooseCategoryView.localize),
+              // title: Text(LocaleKeys.chooseCategoryView.localize),
               subtitle: Text(LocaleKeys.youCanChooseOneWayAtLeast.localize),
             ),
             Expanded(

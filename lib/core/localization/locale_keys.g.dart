@@ -1254,5 +1254,7 @@ abstract class  LocaleKeys {
   static const floatingNavigator = 'floatingNavigator';
   static const only_with = 'only_with';
   static const except_from = 'except_from';
+  static const deposit = 'deposit';
+  static const clickHere = 'clickHere';
 
 }

@@ -131,6 +131,25 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                   ),
                 ),
                 const Sizer(),
+                AppButton(
+                  label: LocaleKeys.deposit.localize,
+                  backColor: Colors.green,
+                  color: AppColors.AUTH_CONTAINER_COLOR,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => BlocProvider<PaymentCubit>(
+                          create: (BuildContext context) =>
+                              serviceLocator(),
+                          //TODO Change with Deposit Screen
+                          child: const PaymentCashOut(),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                const Sizer(),
                 state.wallet?.realAmount != null &&
                         state.wallet!.realAmount! >= 500
                     ? AppButton(

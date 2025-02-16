@@ -66,26 +66,29 @@ class _CustomScaffoldState extends State<CustomScaffold> {
                   floatNavigator = !floatNavigator;
                 });
               },
-              child: Container(
-                width: 50.h,
-                // height: 70.h,
-                decoration: BoxDecoration(
-                    color: AppColors.SECONDARY_COLOR,
-                    borderRadius: BorderRadius.circular(15.r)),
-                child: const Column(
-                  children: [
-                    Icon(
-                      Icons.swap_horiz_rounded,
-                      color: Colors.white,
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Container(
+                      width: 60.w,
+                      // height: 50.h,
+                      decoration: BoxDecoration(
+                          color: AppColors.SECONDARY_COLOR,
+                          borderRadius: BorderRadius.circular(15.r)),
+                      child: const Icon(
+                        Icons.swap_horiz_rounded,
+                        color: Colors.white,
+                      ),
                     ),
-                    Label(text: 'text')
-                  ],
-                ),
+                  ),
+                  FittedBox(child: const Label(text: 'Move',))
+                ],
               ),
             ),
-            floatingWidgetHeight: 50,
-            floatingWidgetWidth: 50,
+            floatingWidgetHeight: 60,
+            floatingWidgetWidth: 60,
             autoAlign: true,
+
           );
         } else {
           return mainScaffold();

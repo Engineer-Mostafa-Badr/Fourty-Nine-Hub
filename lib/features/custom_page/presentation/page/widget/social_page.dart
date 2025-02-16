@@ -65,8 +65,7 @@ class _SocialPageState extends State<SocialPage> {
               return Column(
                 children: [
                   ListTile(
-                    title: Text(LocaleKeys.socialPage.localize),
-                    subtitle: Text(LocaleKeys.navigateBarDescription.localize),
+                    subtitle: Text(LocaleKeys.socialDescription.localize),
                   ),
                   Expanded(
                     child: ListView.builder(

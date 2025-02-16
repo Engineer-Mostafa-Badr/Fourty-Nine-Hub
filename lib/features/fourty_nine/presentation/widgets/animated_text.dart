@@ -17,6 +17,7 @@ class ScrollableTextWithAnimation extends StatefulWidget {
   const ScrollableTextWithAnimation({super.key, this.textDirection});
 
   final TextDirection? textDirection;
+
   @override
   State<ScrollableTextWithAnimation> createState() =>
       _ScrollableTextWithAnimationState();
@@ -26,6 +27,7 @@ class _ScrollableTextWithAnimationState
     extends State<ScrollableTextWithAnimation> {
   final TextEditingController _controller = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<MainCategoriesCubit>(
@@ -39,83 +41,85 @@ class _ScrollableTextWithAnimationState
               : ClickableWidget(
                   onTap: () {
                     if (cubit.state.question?.enableAnswers == true) {
-                      showAnimatedDialog(context,AlertDialog(
-                        backgroundColor:
-                        Theme.of(context).scaffoldBackgroundColor,
-                        surfaceTintColor:
-                        Theme.of(context).scaffoldBackgroundColor,
-                        title: Text(
-                          LocaleKeys.enterYourAnswer.localize,
-                          style: Styles.headerText(
-                              color: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.color),
-                        ),
-                        content: Form(
-                          key: _formKey,
-                          child: TextFormField(
-                            controller: _controller,
-                            decoration: InputDecoration(
-                              labelText: LocaleKeys.yourAnswer.localize,
-                              hintText: LocaleKeys.enterSomething.localize,
-                              border: const OutlineInputBorder(
-                                borderRadius:
-                                BorderRadius.all(Radius.circular(20.0)),
-                              ),
-                              disabledBorder: const OutlineInputBorder(
-                                borderRadius:
-                                BorderRadius.all(Radius.circular(20.0)),
-                              ),
-                              enabledBorder: const OutlineInputBorder(
-                                borderRadius:
-                                BorderRadius.all(Radius.circular(20.0)),
-                              ),
-                              focusedBorder: const OutlineInputBorder(
-                                borderRadius:
-                                BorderRadius.all(Radius.circular(20.0)),
-                              ),
-                            ),
-                            validator: (value) {
-                              if (value == null || value.trim().isEmpty) {
-                                return LocaleKeys
-                                    .pleaseEnterAValue.localize;
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context)
-                                  .pop(); // Close the dialog
-                            },
-                            child: Text(
-                              LocaleKeys.cancel.localize,
-                              style: Styles.mediumText(
+                      showAnimatedDialog(
+                          context,
+                          AlertDialog(
+                            backgroundColor:
+                                Theme.of(context).scaffoldBackgroundColor,
+                            surfaceTintColor:
+                                Theme.of(context).scaffoldBackgroundColor,
+                            title: Text(
+                              LocaleKeys.enterYourAnswer.localize,
+                              style: Styles.headerText(
                                   color: Theme.of(context)
                                       .textTheme
                                       .bodyMedium
                                       ?.color),
                             ),
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                cubit.answerQuestion(
-                                    id: cubit.state.question?.id ?? '',
-                                    answer: _controller.text,
-                                    context: context);
-                              }
-                            },
-                            child: Text(
-                              LocaleKeys.submit.localize,
-                              style: Styles.mediumText(color: Colors.white),
+                            content: Form(
+                              key: _formKey,
+                              child: TextFormField(
+                                controller: _controller,
+                                decoration: InputDecoration(
+                                  labelText: LocaleKeys.yourAnswer.localize,
+                                  hintText: LocaleKeys.enterSomething.localize,
+                                  border: const OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20.0)),
+                                  ),
+                                  disabledBorder: const OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20.0)),
+                                  ),
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20.0)),
+                                  ),
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20.0)),
+                                  ),
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.trim().isEmpty) {
+                                    return LocaleKeys
+                                        .pleaseEnterAValue.localize;
+                                  }
+                                  return null;
+                                },
+                              ),
                             ),
-                          ),
-                        ],
-                      ));
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .pop(); // Close the dialog
+                                },
+                                child: Text(
+                                  LocaleKeys.cancel.localize,
+                                  style: Styles.mediumText(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.color),
+                                ),
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  if (_formKey.currentState!.validate()) {
+                                    cubit.answerQuestion(
+                                        id: cubit.state.question?.id ?? '',
+                                        answer: _controller.text,
+                                        context: context);
+                                  }
+                                },
+                                child: Text(
+                                  LocaleKeys.submit.localize,
+                                  style: Styles.mediumText(color: Colors.white),
+                                ),
+                              ),
+                            ],
+                          ));
                       // showDialog(
                       //   context: context,
                       //   builder: (context) {
@@ -204,13 +208,13 @@ class _ScrollableTextWithAnimationState
                     height: 60.h,
                     alignment: Alignment.center,
                     child: AutoScrollText(
-                      velocity: const Velocity(pixelsPerSecond: Offset(20, 0)),
-
                       context.isArabic
-                          ? '${context.read<MainCategoriesCubit>().state.question?.messageAr}                                         ' ??
+                          ? '${context.read<MainCategoriesCubit>().state.question?.messageAr} ${LocaleKeys.clickHere.localize}                                        ' ??
                               ''
                           : '${context.read<MainCategoriesCubit>().state.question?.messageEn}                                         ' ??
                               '',
+                      velocity: const Velocity(pixelsPerSecond: Offset(25, 0)),
+
                       style: Styles.headerText(
                           fontSize: 30,
                           color: context
@@ -220,7 +224,9 @@ class _ScrollableTextWithAnimationState
                                       ?.enableAnswers ==
                                   true
                               ? AppColors.SECONDARY_COLOR
-                              : (context.isDarkMode? Colors.white : AppColors.PRIMARY_COLOR)),
+                              : (context.isDarkMode
+                                  ? Colors.white
+                                  : AppColors.PRIMARY_COLOR)),
                       textDirection: widget.textDirection ??
                           (context.isArabic
                               ? TextDirection.ltr
