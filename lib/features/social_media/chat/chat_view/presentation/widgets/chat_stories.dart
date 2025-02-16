@@ -466,6 +466,8 @@
 // // }
 // }
 
+import 'dart:math';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -501,7 +503,7 @@ class ChatStories extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 4),
       child: Container(
-        height: 100, // Responsive height
+        height: 120, // Responsive height
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
         ),
@@ -513,7 +515,7 @@ class ChatStories extends StatelessWidget {
               const SizedBox(
                 width: 8,
               ),
-              Container(height: 100, child: _createMyStory(context)),
+              SizedBox(height: 120, child: _createMyStory(context)),
               const SizedBox(
                 width: 6,
               ),
@@ -597,42 +599,75 @@ class ChatStories extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircleAvatar(
-              radius:
-                  MediaQuery.of(context).size.width * 0.08, // Responsive radius
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: CircleAvatar(
-                      backgroundColor: AppColors.PRIMARY_COLOR,
-                      backgroundImage: NetworkImage(
-                        serviceLocator<UserCubit>().state.data != null &&
-                                context.isUserLoggedIn
-                            ? serviceLocator<UserCubit>()
-                                .state
-                                .data!
-                                .profilePicture!
-                            : UIConst.profilePlaceHolder,
-                      ),
-                      onBackgroundImageError: (_, __) => Image.asset(
-                        UIConst.profilePlaceHolder,
-                      ),
+            Container(
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: LinearGradient(
+                  colors: [Color(0xFF0B1035), Color(0xFFFF3308)],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+              ),
+
+              child: Padding(
+                padding: const EdgeInsets.all(6.0),
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(100)),
+                  ),
+                  child: CircleAvatar(
+                    radius:
+                        MediaQuery.of(context).size.width * 0.1, // Responsive radius
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        Positioned.fill(
+                          child: CircleAvatar(
+                            backgroundColor: AppColors.PRIMARY_COLOR,
+                            backgroundImage: NetworkImage(
+                              serviceLocator<UserCubit>().state.data != null &&
+                                      context.isUserLoggedIn
+                                  ? serviceLocator<UserCubit>()
+                                      .state
+                                      .data!
+                                      .profilePicture!
+                                  : UIConst.profilePlaceHolder,
+                            ),
+                            onBackgroundImageError: (_, __) => Image.asset(
+                              UIConst.profilePlaceHolder,
+                            ),
+                          ),
+                        ),
+                         Positioned(
+                          bottom: -8,
+                          right: -12,
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              gradient: LinearGradient(
+                                colors: [Color(0xFF0B1035), Color(0xFFFF3308)],
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                              ),
+                            ),
+                            padding: const EdgeInsets.all(3),
+                            child: const CircleAvatar(
+                              backgroundColor: AppColors.PRIMARY_COLOR,
+                              radius: 18,
+                              child: Icon(
+                                Icons.add,
+                                size: 24,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  const Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: CircleAvatar(
-                      backgroundColor: AppColors.PRIMARY_COLOR_DARK,
-                      radius: 12,
-                      child: Icon(
-                        Icons.add,
-                        size: 18,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
             const SizedBox(
@@ -640,11 +675,11 @@ class ChatStories extends StatelessWidget {
             ),
             FittedBox(
               child: Text(
-                LocaleKeys.add_story.tr(), // Localized text
+                context.isArabic?"قصتي":"My Story", // Localized text
                 textScaler: TextScaler.noScaling,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 38.sp),
+                style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 20),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -714,6 +749,7 @@ class ChatStories extends StatelessWidget {
 
     return FittedBox(
       child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: () async {
           context.read<UserCubit>().isLoggedIn
               ? await Navigator.push(
@@ -737,69 +773,19 @@ class ChatStories extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // CircleAvatar(
-            //   radius: MediaQuery.of(context).size.width *
-            //       0.09, // Responsive radius
-            //   backgroundColor: AppColors.SECONDARY_COLOR,
-            //   child: CircleAvatar(
-            //     radius: MediaQuery.of(context).size.width *
-            //         0.08, // Responsive radius
-            //     backgroundColor: AppColors.SECONDARY_COLOR,
-            //     child: ClipOval(
-            //       clipBehavior: Clip.antiAliasWithSaveLayer,
-            //       child: SizedBox(
-            //         width: double.infinity,
-            //         height: double.infinity,
-            //         child: IgnorePointer(
-            //           ignoring: true,
-            //           child: Image.network(
-            //               fit: BoxFit.cover,
-            //               state.users[index].user?.profilePictureUrl ?? ''),
-
-            //           // StoryView(
-            //           //   indicatorColor: Colors.transparent,
-            //           //   indicatorForegroundColor: Colors.transparent,
-            //           //   storyItems: [
-            //           //     state.users[index].userStories!.first.type != 'video'
-            //           //         ? createStoryItem(
-            //           //             context,
-            //           //             state.users[index].userStories!.first,
-            //           //             userController,
-            //           //             textStyle: const TextStyle(fontSize: 6))
-            //           //         : StoryItem.pageImage(
-            //           //             loadingWidget: const CupertinoActivityIndicator(
-            //           //               color: Colors.white,
-            //           //             ),
-            //           //             url:
-            //           //                 state.users[index].user!.profilePictureUrl!,
-            //           //             errorWidget: Image.network(
-            //           //               UIConst.profilePlaceHolder,
-            //           //               fit: BoxFit.fitHeight,
-            //           //             ),
-            //           //             imageFit: BoxFit.cover,
-            //           //             controller: userController,
-            //           //           ),
-            //           //   ],
-            //           //   controller: userController,
-            //           // ),
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            // ),
             ProfileWithStoriesBorder(
               profilePictureUrl:
                   state.users[index].user?.profilePictureUrl ?? '',
               storiesCount: state.users[index].stories?.length ?? 0,
             ),
-            const SizedBox(height: 2),
+            const SizedBox(height: 8),
             FittedBox(
               child: Text(
                 capitalizeAndSplit2Only(
                   state.users[index].user?.firstName?.split(' ').first ?? '',
                 ),
                 textScaler: TextScaler.noScaling,
-                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 40.sp),
+                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20),
                 textAlign: TextAlign.center,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -832,16 +818,61 @@ class ProfileWithStoriesBorder extends StatelessWidget {
       ),
       child: CustomPaint(
         painter: StoriesBorderPainter(storiesCount: storiesCount),
-        child: ClipOval(
-          child: Image.network(
-            profilePictureUrl,
-            fit: BoxFit.cover,
+        child: Padding(
+          padding: const EdgeInsets.all(2.0),
+          child: ClipOval(
+            child: Image.network(
+              profilePictureUrl,
+              fit: BoxFit.cover,
+            ),
           ),
         ),
       ),
     );
   }
 }
+
+// class StoriesBorderPainter extends CustomPainter {
+//   final int storiesCount;
+//
+//   StoriesBorderPainter({required this.storiesCount});
+//
+//   @override
+//   void paint(Canvas canvas, Size size) {
+//     if (storiesCount <= 0) return;
+//
+//     final Paint paint = Paint()
+//       ..style = PaintingStyle.stroke
+//       ..strokeWidth = 8.0
+//       ..color = Colors.red;
+//
+//     final double radius = size.width / 2;
+//     final Offset center = Offset(size.width / 2, size.height / 2);
+//
+//     if (storiesCount == 1) {
+//       // Draw a complete circle for a single story
+//       canvas.drawCircle(center, radius, paint);
+//     } else {
+//       // Rotate the starting point by π/2 to align cuts at the top and bottom
+//       final double angle = 2 * 3.141592653589793 / storiesCount;
+//       const double rotationOffset = 3.141592653589793 / 2; // π/2 radians
+//
+//       for (int i = 0; i < storiesCount; i++) {
+//         final double startAngle = (i * angle) - rotationOffset;
+//         canvas.drawArc(
+//           Rect.fromCircle(center: center, radius: radius),
+//           startAngle,
+//           angle - 0.1, // Add a small gap for better separation
+//           false,
+//           paint,
+//         );
+//       }
+//     }
+//   }
+//
+//   @override
+//   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+// }
 
 class StoriesBorderPainter extends CustomPainter {
   final int storiesCount;
@@ -852,31 +883,47 @@ class StoriesBorderPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     if (storiesCount <= 0) return;
 
+    final double strokeWidth = 6.0;
+    final double radius = (size.width / 2) + 4;
+    final Offset center = Offset(size.width / 2, size.height / 2);
+    final Rect rect = Rect.fromCircle(center: center, radius: radius);
+
+
+    const Gradient gradient = SweepGradient(
+      colors: [Color(0xFFFF3308), Color(0xFF0B1035), ],
+      stops: [0.0, 1.0],
+    );
+
     final Paint paint = Paint()
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 8.0
-      ..color = Colors.red;
-
-    final double radius = size.width / 2;
-    final Offset center = Offset(size.width / 2, size.height / 2);
+      ..strokeWidth = strokeWidth
+      ..shader = gradient.createShader(rect)
+      ..strokeCap = StrokeCap.round;
 
     if (storiesCount == 1) {
-      // Draw a complete circle for a single story
       canvas.drawCircle(center, radius, paint);
-    } else {
-      // Rotate the starting point by π/2 to align cuts at the top and bottom
-      final double angle = 2 * 3.141592653589793 / storiesCount;
-      const double rotationOffset = 3.141592653589793 / 2; // π/2 radians
+    }
+    else if (storiesCount == 2) {
+
+      final double dashAngle = (pi * 0.9);
+      final double gapAngle = (pi * 0.1);
+
+      final double startAngle1 = -pi / 2 + (gapAngle / 2);
+      final double startAngle2 = pi / 2 + (gapAngle / 2);
+
+      canvas.drawArc(rect, startAngle1, dashAngle, false, paint);
+      canvas.drawArc(rect, startAngle2, dashAngle, false, paint);
+    }
+    else {
+
+      final double totalAngle = 2 * pi;
+      final double segmentAngle = totalAngle / storiesCount;
+      final double dashAngle = segmentAngle * 0.8;
+      final double gapAngle = segmentAngle * 0.2;
 
       for (int i = 0; i < storiesCount; i++) {
-        final double startAngle = (i * angle) - rotationOffset;
-        canvas.drawArc(
-          Rect.fromCircle(center: center, radius: radius),
-          startAngle,
-          angle - 0.1, // Add a small gap for better separation
-          false,
-          paint,
-        );
+        final double startAngle = (i * segmentAngle) - (pi / 2);
+        canvas.drawArc(rect, startAngle, dashAngle, false, paint);
       }
     }
   }
@@ -884,3 +931,4 @@ class StoriesBorderPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
+

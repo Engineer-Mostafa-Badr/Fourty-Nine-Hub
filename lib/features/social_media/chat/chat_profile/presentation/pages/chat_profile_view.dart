@@ -85,19 +85,19 @@ class ChatProfileView extends StatelessWidget {
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(
-              backgroundColor: AppColors.PRIMARY_COLOR,
+              // backgroundColor: AppColors.PRIMARY_COLOR,
               elevation: 0,
               leadingWidth: 26,
               leading: IconButton(
                 onPressed: () => context.pop(),
                 icon: const Icon(
                   Icons.arrow_back,
-                  color: Colors.white,
+                  color: Colors.black,
                 ),
               ),
               title: Text(
                 LocaleKeys.profile.tr(),
-                style: Styles.headerText(color: Colors.white),
+                style: Styles.headerText(color: Colors.black),
               ),
             ),
             body: SingleChildScrollView(
@@ -120,50 +120,61 @@ class ChatProfileView extends StatelessWidget {
                       Positioned(
                         bottom: 0,
                         right: 0,
-                        child: CircleAvatar(
-                          backgroundColor: context.isDarkMode
-                              ? AppColors.BACKGROUND_COLOR
-                              : AppColors.PRIMARY_COLOR,
-                          radius: 16,
-                          child: InkWell(
-                            onTap: () async {
-                              showModalBottomSheet(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return Wrap(
-                                    children: <Widget>[
-                                      ListTile(
-                                        leading:
-                                            const Icon(Icons.photo_library),
-                                        title: const Text('Gallery'),
-                                        onTap: () async {
-                                          Navigator.pop(context);
-                                          await context
-                                              .read<UserCubit>()
-                                              .uploadPhoto(isGallery: true, context: context);
-                                          // Reload user data if needed
-                                        },
-                                      ),
-                                      ListTile(
-                                        leading: const Icon(Icons.camera_alt),
-                                        title: const Text('Camera'),
-                                        onTap: () async {
-                                          Navigator.pop(context);
-                                          await context
-                                              .read<UserCubit>()
-                                              .uploadPhoto(isGallery: false, context: context);
-                                          // Reload user data if needed
-                                        },
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            },
-                            child: const Icon(
-                              Icons.camera_alt,
-                              color: Colors.white,
-                              size: 18,
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            gradient: LinearGradient(
+                              colors: [Color(0xFF0B1035), Color(0xFFFF3308)],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
+                            ),
+                          ),
+                          padding: const EdgeInsets.all(2),
+                          child: CircleAvatar(
+                            backgroundColor: context.isDarkMode
+                                ? AppColors.BACKGROUND_COLOR
+                                : AppColors.PRIMARY_COLOR,
+                            radius: 16,
+                            child: InkWell(
+                              onTap: () async {
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return Wrap(
+                                      children: <Widget>[
+                                        ListTile(
+                                          leading:
+                                              const Icon(Icons.photo_library),
+                                          title: const Text('Gallery'),
+                                          onTap: () async {
+                                            Navigator.pop(context);
+                                            await context
+                                                .read<UserCubit>()
+                                                .uploadPhoto(isGallery: true, context: context);
+                                            // Reload user data if needed
+                                          },
+                                        ),
+                                        ListTile(
+                                          leading: const Icon(Icons.camera_alt),
+                                          title: const Text('Camera'),
+                                          onTap: () async {
+                                            Navigator.pop(context);
+                                            await context
+                                                .read<UserCubit>()
+                                                .uploadPhoto(isGallery: false, context: context);
+                                            // Reload user data if needed
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                              child: const Icon(
+                                Icons.camera_alt,
+                                color: Colors.white,
+                                size: 18,
+                              ),
                             ),
                           ),
                         ),
@@ -173,7 +184,7 @@ class ChatProfileView extends StatelessWidget {
                   const SizedBox(height: 20),
                   ListTile(
                     leading: const Icon(
-                      Icons.person,
+                      Icons.person_outline,
                       color: AppColors.DARK_GRAY_COLOR,
                     ),
                     title: Column(
@@ -182,20 +193,21 @@ class ChatProfileView extends StatelessWidget {
                         Text(
                           LocaleKeys.name.tr(),
                           style: Styles.mediumText(
-                              color: AppColors.LIGHT_GRAY_COLOR2, fontSize: 24),
+                              color: Colors.black, fontSize: 34),
                         ),
                         Text(
                           context.read<UserCubit>().state.data!.fullName,
-                          style: Styles.mediumText(fontWeight: FontWeight.bold),
+                          style: Styles.mediumText(fontWeight: FontWeight.w500,color: AppColors.DARK_GRAY_COLOR,),
                         ),
                       ],
                     ),
                     trailing: IconButton(
+                      padding: const EdgeInsets.all(0),
                       icon: Icon(
-                        Icons.edit,
+                        Icons.edit_outlined,
                         color: context.isDarkMode
                             ? Colors.white
-                            : AppColors.PRIMARY_COLOR,
+                            :  AppColors.DARK_GRAY_COLOR,
                       ),
                       onPressed: () => _showBottomSheet(
                         context: context,
@@ -210,11 +222,11 @@ class ChatProfileView extends StatelessWidget {
                         },
                       ),
                     ),
-                    subtitle: Text(
-                      LocaleKeys.nameMessage.tr(),
-                      style: Styles.mediumText(
-                          color: AppColors.LIGHT_GRAY_COLOR2, fontSize: 24),
-                    ),
+                    // subtitle: Text(
+                    //   LocaleKeys.nameMessage.tr(),
+                    //   style: Styles.mediumText(
+                    //       color: AppColors.LIGHT_GRAY_COLOR2, fontSize: 24),
+                    // ),
                   ),
                   const Divider(),
                   ListTile(
@@ -224,7 +236,8 @@ class ChatProfileView extends StatelessWidget {
                     ),
                     title: Text(
                       LocaleKeys.about.tr(),
-                      style: Styles.mediumText(fontWeight: FontWeight.bold),
+                      style: Styles.mediumText(
+                          color: Colors.black, fontSize: 34),
                     ),
                     subtitle: Text(
                       context.read<UserCubit>().state.data!.bio == null ||
@@ -233,14 +246,14 @@ class ChatProfileView extends StatelessWidget {
                               ? " مرحبا انا استخدم تطبيق 49Hub"
                               : "Hi I am using 49Hub App"
                           : context.read<UserCubit>().state.data!.bio!,
-                      style: Styles.mediumText(
-                          color: AppColors.LIGHT_GRAY_COLOR2, fontSize: 24),
+                      style: Styles.mediumText(fontWeight: FontWeight.w500,color: AppColors.DARK_GRAY_COLOR,),
                     ),
+
                     trailing: IconButton(
-                      icon: Icon(Icons.edit,
+                      icon: Icon(Icons.edit_outlined,
                           color: context.isDarkMode
                               ? Colors.white
-                              : AppColors.PRIMARY_COLOR),
+                              : AppColors.DARK_GRAY_COLOR,),
                       onPressed: () => _showBottomSheet(
                         context: context,
                         // title: LocaleKeys.updateBio.tr(),
@@ -544,8 +557,8 @@ class ChatProfileView extends StatelessWidget {
                                 ? "مشاهدات الملف الشخصي"
                                 : "Who viewed my profile?",
                             style: const TextStyle(
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold,
+                              fontSize: 17,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                         ),
@@ -849,8 +862,8 @@ class ChatProfileView extends StatelessWidget {
                                 ? "مشاهدات صورة الملف الشخصي"
                                 : "Who viewed my profile picture?",
                             style: const TextStyle(
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold,
+                              fontSize: 17,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                         ),

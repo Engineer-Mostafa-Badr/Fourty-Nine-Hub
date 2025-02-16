@@ -51,7 +51,7 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
         child: Builder(builder: (context) {
           return Scaffold(
             appBar: AppBar(
-              backgroundColor: AppColors.PRIMARY_COLOR,
+              // backgroundColor: AppColors.PRIMARY_COLOR,
               elevation: 0,
               leadingWidth: 26,
               leading: IconButton(
@@ -60,7 +60,7 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                 },
                 icon: const Icon(
                   Icons.arrow_back,
-                  color: Colors.white,
+                  color: Colors.black,
                 ),
               ),
               actions: [
@@ -77,16 +77,16 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                                   .read<ChatsCubit>()
                                   .pinAndUnpinChat();
                             },
-                            icon: const Icon(Icons.push_pin),
-                            color: AppColors.BACKGROUND_COLOR,
+                            icon: const Icon(Icons.push_pin_outlined),
+                            color: Colors.black,
                           ),
                           IconButton(
                             onPressed: () async {
                               await context.read<ChatsCubit>().deleteChat();
                             },
                             icon: const Icon(
-                              Icons.delete_forever,
-                              color: AppColors.BACKGROUND_COLOR,
+                              Icons.delete_forever_outlined,
+                              color: Colors.black,
                             ),
                           ),
                           IconButton(
@@ -94,8 +94,8 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                               await context.read<ChatsCubit>().changeMuteChat();
                             },
                             icon: const Icon(
-                              Icons.notifications_off,
-                              color: AppColors.BACKGROUND_COLOR,
+                              Icons.notifications_off_outlined,
+                              color: Colors.black,
                             ),
                           ),
                           IconButton(
@@ -105,7 +105,7 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
 
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  backgroundColor: AppColors.PRIMARY_COLOR, // Set background color to blue
+                                  backgroundColor: const Color(0xff1A1A1A), // Set background color to blue
                                   content: BlocProvider.value(
                                     value: context.read<ChatsCubit>(),
                                     child: Builder(
@@ -144,8 +144,8 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                                     ),
                                   ),
                                   action: SnackBarAction(
-                                    label: context.isArabic ? "تراجع" : "Undo",
-                                    textColor: Colors.grey, // Set "Undo" text color to gray
+                                    label: context.isArabic ? "تراجع" : "UNDO",
+                                    textColor: AppColors.PRIMARY_COLOR_DARK, // Set "Undo" text color to gray
                                     onPressed: () async {
                                       await context.read<ChatsCubit>().changeArchiveChat(isArchivedTab: true);
                                     },
@@ -161,17 +161,15 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
 
                             },
                             icon: const Icon(
-                              Icons.unarchive,
-                              color: AppColors.BACKGROUND_COLOR,
+                              Icons.unarchive_outlined,
+                              color: Colors.black,
                             ),
                           ),
                           widget.params.category == "LockedChats"
                               ? PopupMenuButton(
-                                  icon: Icon(
-                                    Icons.more_vert,
-                                    color: !context.isDarkMode
-                                        ? Colors.white
-                                        : AppColors.PRIMARY_COLOR,
+                                  icon: const Icon(
+                                    Icons.more_vert_outlined,
+                                    color: Colors.black,
                                   ),
                                   color: context.isDarkMode
                                       ? AppColors.PRIMARY_COLOR
@@ -192,7 +190,7 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
 
                                       ScaffoldMessenger.of(context).showSnackBar(
                                         SnackBar(
-                                          backgroundColor: AppColors.PRIMARY_COLOR, // Set background color
+                                          backgroundColor: const Color(0xff1A1A1A), // Set background color
                                           content: BlocProvider.value(
                                             value: context.read<ChatsCubit>(),
                                             child: Builder(
@@ -231,8 +229,8 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                                             ),
                                           ),
                                           action: SnackBarAction(
-                                            label: context.isArabic ? "تراجع" : "Undo",
-                                            textColor: Colors.grey, // Set "Undo" text color to gray
+                                            label: context.isArabic ? "تراجع" : "UNDO",
+                                            textColor: AppColors.PRIMARY_COLOR_DARK, // Set "Undo" text color to gray
                                             onPressed: () async {
                                               await context.read<ChatsCubit>().lockChats(isLockedTap: true);
                                             },
@@ -279,8 +277,8 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                         ? LocaleKeys.anonymous.tr()
                         : widget.params.category == "LockedChats"
                             ? LocaleKeys.lockChat.tr()
-                            : LocaleKeys.archive.tr(),
-                style: Styles.headerText(color: Colors.white),
+                            : context.isArabic?"المؤرشفة":"Archived",
+                style: Styles.headerText(color: Colors.black,fontWeight: FontWeight.w500,),
               ),
             ),
             body: _body(),

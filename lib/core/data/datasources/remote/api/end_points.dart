@@ -487,7 +487,7 @@ class EndPoints {
   static getMutedStories(PaginationParams params) =>
       '/stories/mutedStories?limit=${params.limit}&page=${params.page}';
   static fetchStories(PaginationParams params) =>
-      '/stories/explore?limit=${params.limit}&page=${params.page}';
+      '/stories?limit=${params.limit}&page=${params.page}';
   static const muteUserStories = '/stories/muteUserStory';
   static const updatePrivacy = '/stories/privacy';
   static const getFollowers =
@@ -574,14 +574,19 @@ class EndPoints {
       '/twitter/post?subCategory=${Constants.twitterSubCategory}';
 
   // static const getFeedPosts = '/facebook/feed';
-  static activities(PaginationParams params) => '/facebook/posts/activities?limit=${params.limit}&page=${params.page}';
-  static subActivities(GetSubActivitiesParams params) => '/facebook/posts/activities/${params.id}?limit=${params.limit}&page=${params.page}';
-  static feelings(PaginationParams params) =>'/facebook/posts/feelings?limit=${params.limit}&page=${params.page}';
+  static activities(PaginationParams params) =>
+      '/facebook/posts/activities?limit=${params.limit}&page=${params.page}';
+  static subActivities(GetSubActivitiesParams params) =>
+      '/facebook/posts/activities/${params.id}?limit=${params.limit}&page=${params.page}';
+  static feelings(PaginationParams params) =>
+      '/facebook/posts/feelings?limit=${params.limit}&page=${params.page}';
   static String getTwitterFeedPosts =
       '/twitter/feed?subCategory=${Constants.twitterSubCategory}';
   static const editProfile = '/users/profile-data';
-  static const getLifeEventsCategories = '/facebook/live-event/categories?page=1&limit=30';
-  static getLifeEventsSubCategories(String id) => '/facebook/live-event/$id/types';
+  static const getLifeEventsCategories =
+      '/facebook/live-event/categories?page=1&limit=30';
+  static getLifeEventsSubCategories(String id) =>
+      '/facebook/live-event/$id/types';
 
   static String userPosts(UserPostsParams params) {
     return '/facebook/post/user/${params.userId}?limit=${params.limit}&page=${params.page}&type=1&subCategory=${Constants.facebookSubCategory}';
@@ -1008,7 +1013,7 @@ class EndPoints {
           {required String viewAction, required String userId}) =>
       '/users/profile-view/$userId?viewAction=$viewAction';
 
-      static String getUnreadedChatsCounter() => '/chat/count-unread';
+  static String getUnreadedChatsCounter() => '/chat/count-unread';
   //club voice
   static String allClubVoiceRooms = '/clubvoice';
   static String createClubVoiceRoom = '/clubvoice';
