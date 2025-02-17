@@ -264,14 +264,14 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                         child: MessageButton(
 
                           fromFacebook: true,
-                          user: UserProfileEntity(id: widget.post.user?.id, firstName: widget.post.user?.firstName, lastName: widget.post.user?.lastName, email: widget.post.user?.email, totalView: 0, profilePicture: widget.post.user?.image, profileCover: '', friendsCount: 0, maritalStatus: '', followersCount: 0, followingCount: 0, posts: 0, instagramPosts: 0, bio: '', city: '', country: '', job: '', phone: '',),
+                          user: UserProfileEntity(id: widget.post.user.id??'', firstName: widget.post.user.firstName, lastName: widget.post.user.lastName, email: widget.post.user.email, totalView: 0, profilePicture: widget.post.user?.image, profileCover: '', friendsCount: 0, maritalStatus: '', followersCount: 0, followingCount: 0, posts: 0, instagramPosts: 0, bio: '', city: '', country: '', job: '', phone: '',),
                           normalPress: () async {
                             if (context.read<UserCubit>().isLoggedIn) {
                               if (state.profileData?.areFriends == true) {
                                 ChatEntity? chat = await context
                                     .read<UserCubit>()
                                     .createNormalChat(
-                                  otherId: widget.post.user?.id,
+                                  otherId: widget.post.user.id??'',
                                   categoryId: ChatCategoriesIds.social,
                                 );
                                 context.pop();
@@ -287,7 +287,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                                 ChatEntity? chat = await context
                                     .read<UserCubit>()
                                     .createNormalChat(
-                                  otherId: widget.post.user?.id,
+                                  otherId: widget.post.user.id,
                                   categoryId: ChatCategoriesIds.greet,
                                 );
                                 context.pop();
@@ -309,7 +309,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                               ChatEntity? chat = await context
                                   .read<UserCubit>()
                                   .createAnonymousChat(
-                                otherId: widget.post.user?.id,
+                                otherId: widget.post.user.id,
                               );
                               context.pop();
                               context.push(

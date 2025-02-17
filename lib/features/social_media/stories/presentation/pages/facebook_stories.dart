@@ -36,108 +36,108 @@ class Stories extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
         children: [
-          GestureDetector(
-            onTap: () async {
-              await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const CameraScreen(),
-                ),
-              );
-
-              BlocProvider.of<StoryCubit>(context)
-                ..fetchStories()
-                ..getMutedStories();
-            },
-            child:Container(
-              height: kToolbarHeight * 2, // Maintain story aspect ratio
-              width: 104, // Maintain width proportion
-              decoration: BoxDecoration(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                borderRadius: BorderRadius.circular(12), // Slightly rounded corners
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    blurRadius: 8,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Stack(
-                alignment: Alignment.bottomCenter,
-                children: [
-                  /// Profile Image (Top Half)
-                  Column(
-                    children: [
-                      /// Image Takes Up **More Than Half** to Make Space for Circle
-                      Expanded(
-                        flex: 6,
-                        child: ClipRRect(
-                          borderRadius: const BorderRadius.vertical(top: Radius.circular(12)), // Rounded top corners
-                          child: Image.network(
-                            serviceLocator<UserCubit>().state.data != null &&
-                                serviceLocator<UserCubit>().state.data!.profilePicture != null
-                                ? serviceLocator<UserCubit>().state.data!.profilePicture!
-                                : UIConst.profilePlaceHolder,
-                            width: double.infinity,
-                            fit: BoxFit.cover, // Ensures the image covers full width
-                            errorBuilder: (context, error, stackTrace) =>
-                                Image.network(UIConst.imagePlaceHolder),
-                          ),
-                        ),
-                      ),
-
-                      /// White Bottom Section with Text
-                      Container(
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                          borderRadius: const BorderRadius.vertical(bottom: Radius.circular(12)),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            const SizedBox(height: 22), // Space for the overlapping circle
-                            Label(
-                              text: context.isArabic ? 'إضافة قصة' : 'Create\nStory',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 14
-                              ),
-                              textAlign: TextAlign.center,
-                              maxLines: 2,
-                            ),
-                            const SizedBox(height: 8),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  /// "+" Button Positioned in Middle (Half on Image, Half on White Section)
-                  const Positioned(
-                    bottom: (kToolbarHeight * 0.8),
-                    child: CircleAvatar(
-                      radius: 22, // Slightly bigger to match Facebook UI
-                      backgroundColor: Colors.white,
-                      child: CircleAvatar(
-                        radius: 19,
-                        backgroundColor: AppColors.PRIMARY_COLOR,
-                        child: Icon(
-                          Icons.add,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-
-
-          ),
-          const Sizer(),
+          // GestureDetector(
+          //   onTap: () async {
+          //     await Navigator.push(
+          //       context,
+          //       MaterialPageRoute(
+          //         builder: (context) => const CameraScreen(),
+          //       ),
+          //     );
+          //
+          //     BlocProvider.of<StoryCubit>(context)
+          //       ..fetchStories()
+          //       ..getMutedStories();
+          //   },
+          //   child:Container(
+          //     height: kToolbarHeight * 2, // Maintain story aspect ratio
+          //     width: 104, // Maintain width proportion
+          //     decoration: BoxDecoration(
+          //       color: Theme.of(context).scaffoldBackgroundColor,
+          //       borderRadius: BorderRadius.circular(12), // Slightly rounded corners
+          //       boxShadow: [
+          //         BoxShadow(
+          //           color: Colors.black.withOpacity(0.2),
+          //           blurRadius: 8,
+          //           offset: const Offset(0, 4),
+          //         ),
+          //       ],
+          //     ),
+          //     child: Stack(
+          //       alignment: Alignment.bottomCenter,
+          //       children: [
+          //         /// Profile Image (Top Half)
+          //         Column(
+          //           children: [
+          //             /// Image Takes Up **More Than Half** to Make Space for Circle
+          //             Expanded(
+          //               flex: 6,
+          //               child: ClipRRect(
+          //                 borderRadius: const BorderRadius.vertical(top: Radius.circular(12)), // Rounded top corners
+          //                 child: Image.network(
+          //                   serviceLocator<UserCubit>().state.data != null &&
+          //                       serviceLocator<UserCubit>().state.data!.profilePicture != null
+          //                       ? serviceLocator<UserCubit>().state.data!.profilePicture!
+          //                       : UIConst.profilePlaceHolder,
+          //                   width: double.infinity,
+          //                   fit: BoxFit.cover, // Ensures the image covers full width
+          //                   errorBuilder: (context, error, stackTrace) =>
+          //                       Image.network(UIConst.imagePlaceHolder),
+          //                 ),
+          //               ),
+          //             ),
+          //
+          //             /// White Bottom Section with Text
+          //             Container(
+          //               width: double.infinity,
+          //               decoration: BoxDecoration(
+          //                 color: Theme.of(context).scaffoldBackgroundColor,
+          //                 borderRadius: const BorderRadius.vertical(bottom: Radius.circular(12)),
+          //               ),
+          //               child: Column(
+          //                 mainAxisAlignment: MainAxisAlignment.end,
+          //                 children: [
+          //                   const SizedBox(height: 22), // Space for the overlapping circle
+          //                   Label(
+          //                     text: context.isArabic ? 'إضافة قصة' : 'Create\nStory',
+          //                     style: const TextStyle(
+          //                       fontWeight: FontWeight.w500,
+          //                       fontSize: 14
+          //                     ),
+          //                     textAlign: TextAlign.center,
+          //                     maxLines: 2,
+          //                   ),
+          //                   const SizedBox(height: 8),
+          //                 ],
+          //               ),
+          //             ),
+          //           ],
+          //         ),
+          //
+          //         /// "+" Button Positioned in Middle (Half on Image, Half on White Section)
+          //         const Positioned(
+          //           bottom: (kToolbarHeight * 0.8),
+          //           child: CircleAvatar(
+          //             radius: 22, // Slightly bigger to match Facebook UI
+          //             backgroundColor: Colors.white,
+          //             child: CircleAvatar(
+          //               radius: 19,
+          //               backgroundColor: AppColors.PRIMARY_COLOR,
+          //               child: Icon(
+          //                 Icons.add,
+          //                 color: Colors.white,
+          //               ),
+          //             ),
+          //           ),
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          //
+          //
+          //
+          // ),
+          // const Sizer(),
           _buildYourStory(context),
           const Sizer(
             width: 8,

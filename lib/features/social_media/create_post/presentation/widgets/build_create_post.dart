@@ -21,66 +21,75 @@ class BuildCreatePost extends StatelessWidget {
         var controller = context.read<CreatePostCubit>();
 
         return Container(
-          height: 260,
+          height: ((state.backColor == '#FFFFFFFF' && state.isBiggerThen150 == false)||state.selectedLifeEvent!=null)
+              ? 150
+              :((state.backColor == '#FFFFFFFF' && state.isBiggerThen120 == true)||state.selectedLifeEvent!=null)?150: (state.isBiggerThen150 == true)
+              ? 300
+              : 250,
           alignment: state.isBiggerThen150 == false ? AlignmentDirectional.topStart : Alignment.center,
-          color: Color(int.parse((state.backColor??'#FFFFFFFF').replaceAll("#", ""), radix: 16),),
-          child: Align(
-            alignment: AlignmentDirectional.center,
-            child: TextField(
-              maxLines: null,
-              expands: true,
-              textAlign: (state.backColor == '#FFFFFFFF' || state.isBiggerThen150 == true)
-                  ? TextAlign.start
-                  : TextAlign.center,
-              style: TextStyle(
-                color: (state.backColor != '#FFFFFFFF' && state.isBiggerThen150 == false)
-                    ? Colors.white
-                    : AppColors.QUANTITY_COLOR,
-                fontSize: (state.isBiggerThen120 == true && state.isBiggerThan80 == false)
-                    ? 45.sp
-                    : (state.isBiggerThen120 == false && state.isBiggerThan80 == true)
-                    ? 45.sp
-                    : 55.sp,
-                fontWeight: (state.backColor == '#FFFFFFFF' || state.isBiggerThen150 == true)
-                    ? FontWeight.w400
-                    : FontWeight.bold,
-              ),
-              onChanged: (c) {
-                if (c.isNotEmpty) {
-                  sheetController.collapse();
-                }
-                if (c.length > 80 &&
-                    c.length < 120 &&
-                    state.backColor != '#FFFFFFFF') {
-                  controller.onBigger80();
-                } else if (c.length > 120 &&
-                    c.length < 150 &&
-                    state.backColor != '#FFFFFFFF') {
-                  controller.onBigger120();
-                } else if (c.length > 150) {
-                  controller.onBigger150();
-                  // controller.selectColor(color: "#FFFFFFFF");
-                } else {
-                  controller.onSmallerText();
-                }
-                },
-              controller: context.read<CreatePostCubit>().postContentTextController,
-              decoration: InputDecoration(
-                hintText: LocaleKeys.whatDoYouThink.localize,
-                hintStyle: TextStyle(
-                  fontSize: 45.sp,
-                  fontWeight: FontWeight.w400,
-                  color:(state.backColor != '#FFFFFFFF' && state.isBiggerThen150 == false)
-                      ? Colors.white
-                      : AppColors.GREYTEXT
+          color: Color(int.parse((state.selectedLifeEvent!=null?'#FFFFFFFF':state.backColor??'#FFFFFFFF').replaceAll("#", ""), radix: 16),),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: TextField(
+                  maxLines: null,
+                  expands: true,
+                  textAlign: (state.backColor == '#FFFFFFFF' || state.isBiggerThen150 == true||state.selectedLifeEvent!=null)
+                      ? TextAlign.start
+                      : TextAlign.center,
+                  style: TextStyle(
+                    color: (state.backColor != '#FFFFFFFF' && state.isBiggerThen150 == false&&state.selectedLifeEvent==null)
+                        ? Colors.white
+                        : AppColors.QUANTITY_COLOR,
+                    fontSize: (state.isBiggerThen120 == true && state.isBiggerThan80 == false)
+                        ? 45.sp
+                        : (state.isBiggerThen120 == false && state.isBiggerThan80 == true)
+                        ? 45.sp
+                        : 55.sp,
+                    fontWeight: (state.backColor == '#FFFFFFFF' || state.isBiggerThen150 == true||state.selectedLifeEvent!=null)
+                        ? FontWeight.w400
+                        : FontWeight.bold,
+                  ),
+                  onChanged: (c) {
+                    if (c.isNotEmpty) {
+                      sheetController.collapse();
+                    }
+                    if (c.length > 80 &&
+                        c.length < 120 &&
+                        state.backColor != '#FFFFFFFF') {
+                      controller.onBigger80();
+                    } else if (c.length > 120 &&
+                        c.length < 150 &&
+                        state.backColor != '#FFFFFFFF') {
+                      controller.onBigger120();
+                    } else if (c.length > 150) {
+                      controller.onBigger150();
+                      // controller.selectColor(color: "#FFFFFFFF");
+                    } else {
+                      controller.onSmallerText();
+                    }
+                    },
+                  controller: context.read<CreatePostCubit>().postContentTextController,
+                  decoration: InputDecoration(
+                    hintText: LocaleKeys.whatDoYouThink.localize,
+                    hintStyle: TextStyle(
+                      fontSize: 45.sp,
+                      fontWeight: FontWeight.w400,
+                      color:(state.backColor != '#FFFFFFFF' && state.isBiggerThen150 == false)
+                          ? Colors.white
+                          : AppColors.GREYTEXT
+                    ),
+                    floatingLabelAlignment: FloatingLabelAlignment.center,
+                    fillColor: state.isBiggerThen150?Colors.white:Color(int.parse((state.backColor??'#FFFFFFFF').replaceAll("#", ""), radix: 16),),
+                    border: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                  ),
                 ),
-                floatingLabelAlignment: FloatingLabelAlignment.center,
-                fillColor: state.isBiggerThen150?Colors.white:Color(int.parse((state.backColor??'#FFFFFFFF').replaceAll("#", ""), radix: 16),),
-                border: InputBorder.none,
-                enabledBorder: InputBorder.none,
-                focusedBorder: InputBorder.none,
               ),
-            ),
+            ],
           ),
         );
       },

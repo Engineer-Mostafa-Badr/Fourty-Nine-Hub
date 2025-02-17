@@ -1,12 +1,21 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/pages/image_gallary_viewer.dart';
+import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/show_all_images.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/build_with_users.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../../common/widgets/stateless/labels/read_more_label.dart';
 import '../../../../../../res/assets/assets.dart';
@@ -66,7 +75,17 @@ class NormalPostScreen extends StatelessWidget {
   Widget _buildImageGrid(BuildContext context,List<String> media) {
     if (media.length == 1) {
       return GestureDetector(
-        // onTap: () => _openImageGallery(context, 0),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ImageGalleryPage(
+                images: media,
+                initialIndex: 0,
+              ),
+            ),
+          );
+        },
         child: CachedNetworkImage(
           imageUrl: media[0],
           fit: BoxFit.cover,
@@ -80,7 +99,17 @@ class NormalPostScreen extends StatelessWidget {
         children: [
           Expanded(
             child: GestureDetector(
-              // onTap: () => _openImageGallery(context, 0),
+              onTap: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ImageGalleryPage(
+                      images: media,
+                      initialIndex: 0,
+                    ),
+                  ),
+                );
+              },
               child: CachedNetworkImage(
                 imageUrl: media[0],
                 fit: BoxFit.cover,
@@ -91,7 +120,17 @@ class NormalPostScreen extends StatelessWidget {
           const SizedBox(width: 3),
           Expanded(
             child: GestureDetector(
-              // onTap: () => _openImageGallery(context, 1),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ImageGalleryPage(
+                      images: media,
+                      initialIndex: 1,
+                    ),
+                  ),
+                );
+              },
               child: CachedNetworkImage(
                 imageUrl: media[1],
                 fit: BoxFit.cover,
@@ -107,7 +146,17 @@ class NormalPostScreen extends StatelessWidget {
           Expanded(
             flex: 2,
             child: GestureDetector(
-              // onTap: () => _openImageGallery(context, 0),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ImageGalleryPage(
+                      images: media,
+                      initialIndex: 0,
+                    ),
+                  ),
+                );
+              },
               child: CachedNetworkImage(
                 imageUrl: media[0],
                 fit: BoxFit.cover,
@@ -120,7 +169,17 @@ class NormalPostScreen extends StatelessWidget {
             children: [
               Expanded(
                 child: GestureDetector(
-                  // onTap: () => _openImageGallery(context, 1),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ImageGalleryPage(
+                          images: media,
+                          initialIndex: 1,
+                        ),
+                      ),
+                    );
+                  },
                   child: CachedNetworkImage(
                     imageUrl: media[1],
                     fit: BoxFit.cover,
@@ -132,7 +191,17 @@ class NormalPostScreen extends StatelessWidget {
               const SizedBox(height: 3),
               Expanded(
                 child: GestureDetector(
-                  // onTap: () => _openImageGallery(context, 2),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ImageGalleryPage(
+                          images: media,
+                          initialIndex: 2,
+                        ),
+                      ),
+                    );
+                  },
                   child: CachedNetworkImage(
                     imageUrl: media[2],
                     fit: BoxFit.cover,
@@ -151,7 +220,17 @@ class NormalPostScreen extends StatelessWidget {
           Expanded(
             flex: 2,
             child: GestureDetector(
-              // onTap: () => _openImageGallery(context, 0),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ImageGalleryPage(
+                      images: media,
+                      initialIndex: 0,
+                    ),
+                  ),
+                );
+              },
               child: CachedNetworkImage(
                 imageUrl: media[0],
                 fit: BoxFit.cover,
@@ -166,7 +245,17 @@ class NormalPostScreen extends StatelessWidget {
               children: [
                 Expanded(
                   child: GestureDetector(
-                    // onTap: () => _openImageGallery(context, 1),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ImageGalleryPage(
+                            images: media,
+                            initialIndex: 1,
+                          ),
+                        ),
+                      );
+                    },
                     child: CachedNetworkImage(
                       imageUrl: media[1],
                       fit: BoxFit.cover,
@@ -178,7 +267,19 @@ class NormalPostScreen extends StatelessWidget {
                 const SizedBox(height: 3),
                 Expanded(
                   child: GestureDetector(
-                    // onTap: () => _openImageGallery(context, 2),
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return ShowAllImages(
+                            images: [],
+                            imagesUrls: media,
+                            onRemoveImage: (image) {
+                            },
+                          );
+                        },
+                      );
+                    },
                     child: Stack(
                       children: [
                         Positioned.fill(
@@ -220,46 +321,179 @@ class NormalPostScreen extends StatelessWidget {
     return Column(
       children: [
         Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // if (postEntity.user != null && postEntity.user.image != null)
               ImageFromInternet(
-                image: postEntity.user?.image??'',
+                image: postEntity.user.image??'',
                 isCircle: true,
                 defaultLogo: false,
                 width: 80.w,
                 height: 80.h,
               ),
             const SizedBox(width: 10.0),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Label(
-                  // text: "",
-                  text: postEntity.user?.userName ?? "",
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16,
-                      color: AppColors.PRIMARY_COLOR),
-                ),
-                RichText(
-                    text: TextSpan(children: [
-                  TextSpan(
-                      text: postEntity.sinceTime,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 14,
-                          color: AppColors.PRIMARY_COLOR)),
-                  WidgetSpan(
-                    child: SizedBox(width: 6.w),
-                  ),
-                  const WidgetSpan(
-                      child: Icon(
-                    Icons.group,
-                    size: 14,
-                    color: AppColors.PRIMARY_COLOR,
-                  ))
-                ]))
-              ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  RichText(text: TextSpan(children: [
+                    TextSpan(
+                        text: '${postEntity.user.firstName} ${postEntity.user.lastName}',
+                        style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.PRIMARY_COLOR)),
+                    if(
+                    (postEntity.activity!=null&&(postEntity.activity?.id.isNotEmpty??false))
+                        ||(postEntity.feeling!=null&&(postEntity.feeling?.id.isNotEmpty??false))
+                        ||(postEntity.location!=null&&(postEntity.location?.place.isNotEmpty??false))
+                    )
+                      const WidgetSpan(child: Icon(Icons.remove)),
+
+                    if(postEntity.feeling!=null&&(postEntity.feeling?.id.isNotEmpty??false))TextSpan(
+                      children: [
+                        WidgetSpan(child:
+
+                        CircleAvatar(
+                          radius: 12,
+                          backgroundColor: Colors.white,
+                          backgroundImage: NetworkImage(postEntity.feeling?.image??''),
+                          // child: Label(
+                          //   text: item.image,
+                          //   style: Styles.mediumText(),
+                          // ),
+                        )),
+                        const WidgetSpan(child: SizedBox(width: 5,)),
+                        TextSpan(
+                            text: LocaleKeys.feeling.localize,
+                            style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.PRIMARY_COLOR)
+                        ),
+                        const WidgetSpan(child: SizedBox(width: 5,)),
+                        TextSpan(
+                            text: context.isArabic?postEntity.feeling?.name??'':postEntity.feeling?.nameEn??'',
+                            style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.PRIMARY_COLOR)
+                        )
+                      ],
+                    ),
+
+                    if(postEntity.activity!=null&&(postEntity.activity?.id.isNotEmpty??false))TextSpan(
+                      children: [
+                        WidgetSpan(child: CircleAvatar(
+                          radius: 12,
+                          backgroundColor: Colors.white,
+                          backgroundImage: NetworkImage(postEntity.activity?.mainActivity?.image??''),
+                          // child: Label(
+                          //   text: item.image,
+                          //   style: Styles.mediumText(),
+                          // ),
+                        )),
+                        const WidgetSpan(child: SizedBox(width: 5,)),
+                        TextSpan(
+                            text: context.isArabic?postEntity.activity?.mainActivity?.name??'':postEntity.activity?.mainActivity?.nameEn??'',
+                            style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.PRIMARY_COLOR)
+                        ),
+                        const WidgetSpan(child: SizedBox(width: 5,)),
+                        TextSpan(
+                            text: context.isArabic?postEntity.activity?.name??'':postEntity.activity?.nameEn??'',
+                            style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: AppColors.PRIMARY_COLOR)
+                        )
+                      ],
+                    ),
+                    if(postEntity.users != null &&
+                        (postEntity.users?.isNotEmpty??false))TextSpan(
+                        children: [
+                          const WidgetSpan(child: Sizer()),
+                          TextSpan(text: LocaleKeys.withKey.localize,
+                              style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  color: AppColors.GREY_DARK_COLOR)),
+                          const WidgetSpan(child: Sizer()),
+                          WidgetSpan(child: ClickableWidget(
+                              onTap: (){
+                                context.push(Routes.OTHERSACCOUNT,
+                                    extra: postEntity.users?[0].id??'');
+                              },
+                              child: Text("${postEntity.users?.first.firstName??''} ${postEntity.users?.first.lastName??''}",
+                              style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.PRIMARY_COLOR)))),
+                          if((postEntity.users?.length??0)>1)WidgetSpan(child: ClickableWidget(
+                              onTap: (){
+                                showDialog(
+                                    context: context,
+                                    builder: (_) => BuildWithUsers(
+                                      users: postEntity.users??[],
+                                    ));
+                                // sheetController.collapse();
+                                // bottomSheet(
+                                //     isScrollControlled: true,
+                                //     context: context,
+                                //     widget: BuildSearchFriends(
+                                //       controller: context.read<CreatePostCubit>(),
+                                //       onSelectUser: (user) => context
+                                //           .read<CreatePostCubit>()
+                                //           .selectUsers(user),
+                                //     ));
+                              },
+                              child: Text( context.isArabic? "و ${(postEntity.users?.length??0)-1} أخرين": " and ${(postEntity.users?.length??0)-1} others", style: const TextStyle(fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.LIGHT_BLUE))))
+                        ]
+                    ),
+                    if(postEntity.location != null &&
+                        (postEntity.location?.place.isNotEmpty??false))TextSpan(
+                        children: [
+                          const WidgetSpan(child: Sizer()),
+                          TextSpan(text: context.isArabic?'في':'at',
+                              style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.GREY_DARK_COLOR)),
+                          const WidgetSpan(child: Sizer()),
+                          TextSpan(text: postEntity.location?.place??'',
+                              style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.PRIMARY_COLOR))
+                        ]
+                    ),
+                  ])),
+
+                  RichText(
+                      text: TextSpan(children: [
+                    TextSpan(
+                        text: postEntity.sinceTime,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14,
+                            color: AppColors.PRIMARY_COLOR)),
+                    WidgetSpan(
+                      child: SizedBox(width: 6.w),
+                    ),
+                    const WidgetSpan(
+                        child: Icon(
+                      Icons.group,
+                      size: 14,
+                      color: AppColors.PRIMARY_COLOR,
+                    ))
+                  ]))
+                ],
+              ),
             ),
           ],
         ),
@@ -607,7 +841,7 @@ class NormalPostScreen extends StatelessWidget {
             children: [
               if (postEntity.user != null && postEntity.user.image != null)
                 ImageFromInternet(
-                  image: postEntity.user.image,
+                  image: postEntity.user.image??'',
                   isCircle: true,
                   defaultLogo: false,
                   width: 80.w,

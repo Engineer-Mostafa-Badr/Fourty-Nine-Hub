@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/life_event_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/place_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/post_user_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/creat_twitter_usecase.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/friends-followers_usecase.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_places_usecase.dart';
+import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/confirmation_sheet.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/Social_home.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_sub_activities_usecase.dart';
@@ -21,6 +26,7 @@ import '../../domain/usecases/get_activities_usecase.dart';
 import '../../domain/usecases/get_feelings_usecase.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_live_event_categories_usecase.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_live_event_sub_categories_usecase.dart';
+import 'package:go_router/go_router.dart';
 
 part 'create_post_state.dart';
 
@@ -46,14 +52,41 @@ class CreatePostCubit extends Cubit<CreatePostState> {
       this._getPlacesUseCase, this._getSubActivitiesUseCase)
       : super(CreatePostState());
 
+
+  var formKey = GlobalKey<FormState>();
+  TextEditingController titleController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
   List<String>? selectedImages;
   String? selectedAudio;
-  setAddress(String address) {
-    emit(state.copyWith(selectedLocation: address,status: CreatePostStates.success));
+  setAddress(PlaceEntity address) {
+    emit(state.copyWith(place: address,status: CreatePostStates.success));
+  }
+
+  removeAddress() {
+    emit(state.copyWith(place: PlaceEntity(formattedAddress: '', name: '', lat: 0, lng: 0),status: CreatePostStates.success));
   }
 
   onRemoveAddress() {
     emit(state.copyWith(selectedLocation: '',status: CreatePostStates.success));
+  }
+
+  onSelectDate(DateTime date){
+    emit(state.copyWith(pickedDate:date,status: CreatePostStates.success));
+  }
+
+  setLifeEvent(LifeEventEntity life){
+    emit(state.copyWith(selectedLifeEvent: life,
+    gifImage: '',
+      backColor: '#FFFFFFFF',
+      images: [],
+    ));
+  }
+
+  onChangePublishTweetStatus(bool status){
+    emit(state.copyWith(onTweet: status,status: CreatePostStates.success));
+  }
+  onChangePublishInstaStatus(bool status){
+    emit(state.copyWith(onInsta: status,status: CreatePostStates.success));
   }
   // void addMusic(String musicPath) {
   //   emit(state.copyWith(music: musicPath));
@@ -63,8 +96,94 @@ class CreatePostCubit extends Cubit<CreatePostState> {
   //   emit(state.copyWith(music: null));
   // }
   //
+
+  Future<dynamic> bottomSheet({
+    required BuildContext context,
+    required Widget child,
+    required Color backgroundColor,
+    bool enableDrag = true,
+    bool isDismissible = true,
+    BoxConstraints? constraints,
+    double radius = 30,
+    bool isScrollControlled = true,
+    bool useRootNavigator = false,
+  }) async {
+    return await showModalBottomSheet(
+      showDragHandle: false,
+      context: context,
+      enableDrag: enableDrag,
+      useRootNavigator: useRootNavigator,
+      constraints: constraints,
+      isDismissible: isDismissible,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(radius.r),
+        ),
+      ),
+      isScrollControlled: isScrollControlled,
+      backgroundColor: backgroundColor,
+      builder: (_) => child,
+    );
+  }
+
+  Future<void> onDiscardPost()async {
+    titleController.clear();
+    descriptionController.clear();
+    postContentTextController.clear();
+    emit(state.copyWith(
+      selectedFeeling: FeelingEntity(id: '', name: '', nameEn: '', image: ''),
+      selectedActivity: ActivityEntity(id: '', name: '', nameEn: '', image: '',mainId: ''),
+      gifImage: '',
+      backColor: '#FFFFFFFF',
+      images: [],
+      lifeEventImages: [],
+      onTweet: false,
+      onInsta: false,
+      selectedUsers: [],
+      selectedLifeEvent: LifeEventEntity(id: '', titleAr: '', titleEn: '', image: '', media: [], liveEventMainCategoryId: ''),
+      place: PlaceEntity(formattedAddress: '', name: '', lat: 0, lng: 0),
+    ));
+  }
+
+  void handleBack(BuildContext context) {
+    bottomSheet(
+      context: context,
+      child: ConfirmationSheet(
+        title: "تأكيد التراجع",
+        btnTitle: 'Confirm',
+        description: "ستفقد بيانات الصفحة الحالية عند تأكيد التراجع",
+        onSafeAsDraft: (){
+          context.go(Routes.SOCIAL,
+              extra: SocialParams(
+                  userId: UserCubit.to.state.data?.id ?? '', index: 0));
+        },
+        onDiscardPost: () async{
+          await onDiscardPost();
+          context.go(Routes.SOCIAL,
+              extra: SocialParams(
+                  userId: UserCubit.to.state.data?.id ?? '', index: 0));
+          // });
+        },
+
+      ),
+      backgroundColor: Colors.white,
+    );
+  }
+
+  bool handlePopAction(){
+    if((state.images?.isNotEmpty??false)||(state.gifImage!=null&&(state.gifImage?.isNotEmpty??false))||(state.selectedLifeEvent!=null&&(state.selectedLifeEvent?.id.isNotEmpty??false))||postContentTextController.text.isNotEmpty||(state.backColor!='#FFFFFFFF'&&state.backColor!=null)||(state.selectedActivity!=null&&(state.selectedActivity?.id.isNotEmpty??false))||(state.place!=null&&(state.place?.name.isNotEmpty??false))||(state.selectedUsers!=null&&(state.selectedUsers?.isNotEmpty??false))){
+      return false;
+    }else{
+      return true;
+    }
+  }
   onSelectGif(String gifPath) {
-    emit(state.copyWith(gifImage: gifPath,status: CreatePostStates.success));
+    emit(state.copyWith(
+        gifImage: gifPath,
+        selectedLifeEvent: LifeEventEntity(id: '', titleAr: '', titleEn: '', image: '', media: [], liveEventMainCategoryId: '',mainCat: LifeEventEntity(id: '', titleAr: '', titleEn: '', image: '', media: [], liveEventMainCategoryId: '')),
+        backColor: '#FFFFFFFF',
+        images: [],
+        status: CreatePostStates.success));
   }
 
   final AudioPlayer _audioPlayer = AudioPlayer();
@@ -213,6 +332,9 @@ class CreatePostCubit extends Cubit<CreatePostState> {
   List<LifeEventEntity> lifeEventCategories = [];
   List<LifeEventEntity> lifeEventSubCategories = [];
 
+  onSelectActivity(ActivityEntity activity){
+    emit(state.copyWith(selectedActivity: activity,status: CreatePostStates.success));
+  }
   Future<void> getActivities() async {
     if (!hasMoreActivities || isLoadingMoreActivities) return;
     isLoadingMoreActivities = true;
@@ -238,7 +360,7 @@ class CreatePostCubit extends Cubit<CreatePostState> {
     // if (!hasMoreLifeEvent || isLoadingMoreLifeEvent) return;
     isLoadingMoreLifeEvent = true;
     emit(state.copyWith(status: CreatePostStates.loading));
-    final response = await _getLifeEventCategoriesUseCase(NoParams());
+    final response = await _getLifeEventCategoriesUseCase(const NoParams());
     response.fold((l) => emit(state.copyWith(failure: l)), (data) {
       lifeEventCategories.clear();
       lifeEventCategories.addAll(data);
@@ -361,34 +483,29 @@ class CreatePostCubit extends Cubit<CreatePostState> {
   }
 
 
-  void createPost({required BuildContext context, required String type}) async {
+  void createPost({required BuildContext context,}) async {
+
     if (postContentTextController.text.isNotEmpty ||
         selectedImages != null ||
         selectedImages!.isNotEmpty) {
-      print("test media ${selectedImages?.length}");
-      if (type == 'twitter') {
-        final response = await _createTwitterPostUseCase(
-            CreateTwitterPostParams(
-                content: postContentTextController.text,
-                mediaIds: selectedImages ?? []));
-        response.fold(
-            (l) => emit(
-                state.copyWith(failure: l, status: CreatePostStates.error)),
-            (r) {
-          Navigator.pop(context);
-        });
-      } else if (type == "facebook") {
+      List<UploadFileEntity> images = [];
+      images=state.images??[];
+      print(state.selectedLifeEvent);
+      print(state.selectedLifeEvent?.id);
         final response = await _createPostUseCase(
           PostParams(
-            type:state.gifImage != null ? "gif_post":"normal_post",
+            type:(state.selectedLifeEvent!=null&&(state.selectedLifeEvent?.id.isNotEmpty??false))?"live_event_post":(state.gifImage != null&&(state.gifImage?.isNotEmpty??false)) ? "gif_post":"normal_post",
             content: postContentTextController.text,
-            mediaId: selectedImages ?? [],
+            mediaId: images.map((e)=>e.mediaId).toList(),
             color: state.backColor,
             gifUrl: state.gifImage,
-            activity: state.selectedActivity?.id,
+            activity: state.selectedActivity,
             feeling: state.selectedFeeling?.id,
             place: state.place,
+            onInsta: state.onInsta??false,
+            onTweet: state.onTweet??false,
             privacy: state.selectedPrivacy,
+            lifeEvent:state.selectedLifeEvent,
             users: state.selectedUsers?.map((e) => e.id).toList() ?? [],
           ),
         );
@@ -396,9 +513,11 @@ class CreatePostCubit extends Cubit<CreatePostState> {
             (l) => emit(
                 state.copyWith(failure: l, status: CreatePostStates.error)),
             (r) {
-          Navigator.pop(context);
-        });
-      }
+              context.go(Routes.SOCIAL,
+                  extra: SocialParams(
+                      userId: UserCubit.to.state.data?.id ?? '', index: 0));
+            });
+      // }
     }
   }
 
@@ -407,7 +526,9 @@ class CreatePostCubit extends Cubit<CreatePostState> {
   }
 
   void selectedFeeling({required FeelingEntity item}) {
-    emit(state.copyWith(selectedFeeling: item));
+    emit(state.copyWith(selectedFeeling: item,
+    selectedActivity: ActivityEntity(id: '', name: '', nameEn: '', image: '',mainId: ''),
+    ));
   }
 
   void selectPrivacy({required String privacy}) {
@@ -416,7 +537,7 @@ class CreatePostCubit extends Cubit<CreatePostState> {
   }
 
   void selectActivity({required ActivityEntity item}) {
-    emit(state.copyWith(selectedActivity: item));
+    emit(state.copyWith(selectedActivity: item,selectedFeeling: FeelingEntity(id: '', name: '', nameEn: '', image: '')));
   }
 
   uploadPhoto({bool isGallery = true,required BuildContext context,bool? hasLoading}) async {
@@ -439,9 +560,44 @@ class CreatePostCubit extends Cubit<CreatePostState> {
           emit(state.copyWith(
               images: images,
               backColor: '#FFFFFFFF',
+              selectedLifeEvent: LifeEventEntity(id: '', titleAr: '', titleEn: '', image: '', media: [], liveEventMainCategoryId: '',mainCat: LifeEventEntity(id: '', titleAr: '', titleEn: '', image: '', media: [], liveEventMainCategoryId: '')),
+              gifImage: '',
               status: CreatePostStates.success));
         }, context: context);
     print("length${state.images?.length}");
+  }
+
+  onRemoveLifeEventImages(int index) {
+    final images = state.lifeEventImages ?? [];
+    images.removeAt(index);
+    emit(state.copyWith(
+        lifeEventImages: images,
+        pageIndex:index,
+        status: CreatePostStates.success
+    ));
+  }
+
+  removeLifeEvent(){
+    print("objectobjectobject");
+    emit(state.copyWith(
+      selectedLifeEvent: LifeEventEntity(id: '', titleAr: '', titleEn: '', image: '', media: [], liveEventMainCategoryId: '',desc: '',title: '',mainCat: LifeEventEntity(id: '', titleAr: '', titleEn: '', image: '', media: [], liveEventMainCategoryId: '',desc: '',title: '')),
+    ));
+  }
+  removeGif(){
+    print("objectobjectobject");
+    emit(state.copyWith(gifImage: ''
+    ));
+  }
+
+  onChangePage(int index) {
+    descriptionController.clear();
+    titleController.clear();
+    emit(state.copyWith(
+        pageIndex:index,
+        lifeEventImages: [],
+        selectedLifeEvent: LifeEventEntity(id: '', titleAr: '', titleEn: '', image: '', media: [], liveEventMainCategoryId: '',mainCat: LifeEventEntity(id: '', titleAr: '', titleEn: '', image: '', media: [], liveEventMainCategoryId: '')),
+        status: CreatePostStates.success
+    ));
   }
 
   uploadLifeEventPhoto({bool isGallery = true,required BuildContext context,bool? hasLoading}) async {

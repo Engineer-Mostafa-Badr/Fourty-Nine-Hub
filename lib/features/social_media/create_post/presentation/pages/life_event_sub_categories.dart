@@ -4,7 +4,6 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/life_event_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/pages/life_event.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
@@ -55,9 +54,19 @@ class _LifeEventSubCategoriesState extends State<LifeEventSubCategories> {
                       padding: const EdgeInsets.symmetric(horizontal: 0),
                       itemCount: cubit.lifeEventSubCategories.length,
                       itemBuilder: (context, index) {
+                        LifeEventEntity selected = LifeEventEntity(
+                            id: cubit.lifeEventSubCategories[index].id,
+                            titleAr: cubit.lifeEventSubCategories[index].titleAr,
+                            titleEn: cubit.lifeEventSubCategories[index].titleEn,
+                            image: cubit.lifeEventSubCategories[index].image,
+                            media: cubit.lifeEventSubCategories[index].media,
+                            title: context.isArabic?cubit.lifeEventSubCategories[index].titleAr:cubit.lifeEventSubCategories[index].titleEn,
+                            liveEventMainCategoryId: cubit.lifeEventSubCategories[index].liveEventMainCategoryId,
+                        mainCat: widget.lifeEvent
+                        );
                         return ClickableWidget(
                           onTap: (){
-                            context.push(Routes.CREATELIFEEVENT,extra: widget.lifeEvent);
+                            context.push(Routes.CREATELIFEEVENT,extra: selected);
                           },
                           child: Container(
                             padding:  const EdgeInsetsDirectional.only(end: 10,bottom: 16),

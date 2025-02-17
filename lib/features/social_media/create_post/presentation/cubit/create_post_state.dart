@@ -20,13 +20,18 @@ class CreatePostState {
   final String? selectedPrivacy;
   final String? selectedLocation;
   final bool? isSheetOpen;
+  final LifeEventEntity? selectedLifeEvent;
   String? backColor;
   final bool isLast;
   final bool showBallet;
   final bool isBiggerThan80;
   final bool isBiggerThen150;
   final bool isBiggerThen120;
+  final bool? onTweet;
+  final bool? onInsta;
   final String? music;
+  final int? pageIndex;
+  final DateTime? pickedDate;
   CreatePostState(
       {this.status = CreatePostStates.error,
       this.failure,
@@ -44,11 +49,16 @@ class CreatePostState {
       this.isBiggerThan80 = false,
       this.isBiggerThen150 = false,
       this.isBiggerThen120 = false,
+      this.onTweet = false,
+      this.onInsta = false,
+      this.pageIndex = 0,
       this.selectedActivity,
       this.selectedFeeling,
       this.music,
+      this.pickedDate,
       this.users,
       this.place,
+      this.selectedLifeEvent,
       this.selectedLocation,
       this.selectedUsers,
       this.selectedPrivacy});
@@ -70,16 +80,23 @@ class CreatePostState {
     List<PostUserEntity>? selectedUsers,
     String? backColor,
     bool? isLast,
+    bool? onTweet,
+    bool? onInsta,
     bool? showBallet,
     String? selectedLocation,
+    LifeEventEntity? selectedLifeEvent,
+    int? pageIndex,
     bool? isSheetOpen,
     bool? isBiggerThan80,
     bool? isBiggerThen150,
     bool? isBiggerThen120,
     String? music,
+    DateTime? pickedDate,
   }) {
     return CreatePostState(
       status: status ?? this.status,
+      onTweet: onTweet ?? this.onTweet,
+      onInsta: onInsta ?? this.onInsta,
       failure: failure ?? this.failure,
       images: images ?? this.images,
       lifeEventImages: lifeEventImages ?? this.lifeEventImages,
@@ -103,6 +120,9 @@ class CreatePostState {
       music: music ?? this.music,
       gifImage: gifImage ?? this.gifImage,
       selectedLocation: selectedLocation ?? this.selectedLocation,
+      pageIndex: pageIndex ?? this.pageIndex,
+      pickedDate: pickedDate ?? this.pickedDate,
+      selectedLifeEvent: selectedLifeEvent ?? this.selectedLifeEvent,
     );
   }
 }

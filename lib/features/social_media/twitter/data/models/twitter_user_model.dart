@@ -29,9 +29,11 @@ class TwitterUserModel extends TwitterUserEntity {
     image ??= '';
     return TwitterUserModel(
       id: json['_id'] ?? '',
-      firstName: json['firstName'] ??
+      firstName: json['firstName'][0].toUpperCase() +
+          json['firstName'].substring(1).toLowerCase() ??
           '',
-      lastName: json['lastName']??
+      lastName: json['lastName'][0].toUpperCase() +
+          json['lastName'].substring(1).toLowerCase() ??
           '',
       userName: json['username']??'',
       image: image,

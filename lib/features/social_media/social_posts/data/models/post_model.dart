@@ -102,11 +102,7 @@ class PostModel extends PostEntity {
         mainPost: json['mainPost'] != null
             ? MainPostModel.fromJson(json['mainPost'])
             : null,
-        user:json['user'] != null?json['user'] is String
-            ? json['user']
-            : TwitterUserModel.fromJson(json['user']): json['user'] == null
-            ? null
-            : json['owner'] is String
+        user: json['owner'] is String
                 ? json['owner']
                 : TwitterUserModel.fromJson(json['owner']),
         privacy: json['privacy'] ?? 0,
@@ -143,9 +139,9 @@ class PostModel extends PostEntity {
         //     : (json['love'] as List)
         //     .map((e) => TwitterUserModel.fromJson(e))
         //     .toList(),
-        users: json['with'] == null
+        users: json['tags'] == null
             ? null
-            : (json['with'] as List)
+            : (json['tags'] as List)
                 .map((e) => TwitterUserModel.fromJson(e))
                 .toList(),
         audio: json['audios'] == null

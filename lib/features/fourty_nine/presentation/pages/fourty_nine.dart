@@ -262,7 +262,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
               ]),
               // _pickMeAndComeWithUWidget(),
               const Sizer(),
-              _buildTenPercentWidget(),
+              // _buildTenPercentWidget(),
               // const Sizer(),
               // _auctionAndInstallmentWidget(),
               // const Sizer(),

@@ -32,7 +32,7 @@ class PostEntity {
   bool isSad;
   bool isAngry;
   bool isHaha;
-  final dynamic user;
+  final TwitterUserModel user;
   FeelingEntity? feeling;
   ActivityEntity? activity;
   final int privacy;

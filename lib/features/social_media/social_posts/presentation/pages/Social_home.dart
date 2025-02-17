@@ -98,7 +98,8 @@ class _SocialHomeViewState extends State<SocialHomeView>
                     padding: EdgeInsets.zero,
                     labelStyle: const TextStyle(fontSize: 17),
                     unselectedLabelColor: Colors.grey,
-                    
+                    dividerColor: Colors.transparent,
+
                     indicatorColor: context.isDarkMode
                         ? Colors.white
                         : AppColors.PRIMARY_COLOR,
@@ -109,26 +110,29 @@ class _SocialHomeViewState extends State<SocialHomeView>
                       Tab(
                         icon: SvgPicture.asset(
                           Assets.facebookAppBarIcon,
-                          height: 50,
-                          width: 50,
+                          height: 35,
+                          width: 35,
                         ),
+                        height: 78,
                         text: LocaleKeys.Face.localize,
                       ),
                       Tab(
                         icon: SvgPicture.asset(
                           Assets.instagramAppBarIcon,
-                          height: 50,
-                          width: 50,
+                          height: 35,
+                          width: 35,
                         ),
-                        
+                        height: 78,
+
                         text: LocaleKeys.Insta.localize,
                       ),
                       Tab(
                         icon: SvgPicture.asset(
                           Assets.twitterAppBarIcon,
-                          height: 50,
-                          width: 50,
+                          height: 35,
+                          width: 35,
                         ),
+                        height: 78,
                         text: LocaleKeys.tweet.localize,
                       ),
                     ],
@@ -159,26 +163,8 @@ class _SocialHomeViewState extends State<SocialHomeView>
               BlocBuilder<UserCubit, BasicState<UserEntity>>(
                   builder: (context, state) {
                 return context.read<UserCubit>().isLoggedIn
-                    ? NestedAppbar(
-                        scrollController: ScrollController(),
-                        appBars: [
-                          SliverAppBar(
-                            backgroundColor:
-                                Theme.of(context).scaffoldBackgroundColor,
-                            automaticallyImplyLeading: false,
-                            floating: true,
-                            // pinned: true,
-                            flexibleSpace: const CreatePostBanner(),
-                          ),
-                          // SliverAppBar(
-                          //   backgroundColor:
-                          //       Theme.of(context).scaffoldBackgroundColor,
-                          //   automaticallyImplyLeading: false,
-                          //   // floating: true,
-                          //   pinned: true,
-                          //   flexibleSpace: _buildTabBar(),
-                          // )
-                        ],
+                    ? Scaffold(
+
                         body: FacebookBody(
                           scrollController: scrollController,
                         ))

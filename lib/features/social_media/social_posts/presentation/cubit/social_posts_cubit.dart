@@ -268,13 +268,13 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
         (data) async {
       if (data.isNotEmpty) {
-        tweets = await getTwitterFeed();
-        advertisements = await getAdvertisements();
+        // tweets = await getTwitterFeed();
+        // advertisements = await getAdvertisements();
       }
       List<PostEntity> totalPosts = [];
       totalPosts.addAll(data);
-      totalPosts.addAll(tweets);
-      totalPosts.addAll(advertisements);
+      // totalPosts.addAll(tweets);
+      // totalPosts.addAll(advertisements);
       final isLastPage = totalPosts.length < (3);
       if (page == 1) {
         print("page == 1 $page");
@@ -321,8 +321,8 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
         (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
         (data) async {
       if (data.isNotEmpty) {
-        tweets = await getTwitterFeed();
-        advertisements = await getAdvertisements();
+        // tweets = await getTwitterFeed();
+        // advertisements = await getAdvertisements();
         reels = await fetchReels();
       }
       List<FacebookFeedEntity> totalPosts = [];

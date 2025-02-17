@@ -83,10 +83,15 @@ class _MainCategoriesFlipCardsViewState
                   (context, index, percentThresholdX, percentThresholdY) {
                 return GestureDetector(
                   onTap: () {
-                    context.push(
-                      Routes.SUBCATEGORIES,
-                      extra: mainCategories[index],
-                    );
+                    if(mainCategories[index].id=='62c8b5b09332225799fe335e'){
+                      context.push(Routes.MARRIAGESUBCATEGORIES,
+                          extra: mainCategories[index]);
+                    }else{
+                      context.push(
+                        Routes.SUBCATEGORIES,
+                        extra: mainCategories[index],
+                      );
+                    }
                   },
                   child: DecoratedBox(
                     decoration: BoxDecoration(

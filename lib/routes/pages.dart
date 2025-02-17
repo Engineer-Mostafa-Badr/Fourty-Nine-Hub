@@ -1021,18 +1021,16 @@ class AppPages {
                   path: Paths.CREATEPOST,
                   name: Routes.CREATEPOST,
                   builder: (context, state) {
-                    final social = state.extra as String?;
+                    // final social = state.extra as LifeEventEntity?;
 
-                    return CreatePostView(
-                      social: social ?? 'social',
-                    );
+                    return const CreatePostView();
                   },
                 ),
                 GoRoute(
                   path: Paths.LIFEEVENT,
                   name: Routes.LIFEEVENT,
                   builder: (context, state) {
-                    return LifeEvent();
+                    return const LifeEvent();
                   },
                 ),
                 GoRoute(

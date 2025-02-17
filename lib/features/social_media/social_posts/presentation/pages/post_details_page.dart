@@ -204,7 +204,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                       ProfileImage(
                         size: 40.sp,
                         accountId: 0,
-                        userId: state.postDetails?.user.id,
+                        userId: state.postDetails?.user.id??'',
                         imageURL: user?.profilePicture,
                         fromProfile: true,
                       ),
