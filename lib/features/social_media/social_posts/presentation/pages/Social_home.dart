@@ -27,7 +27,6 @@ import '../../../../../common/widgets/dynamic/drawer.dart';
 import '../../../../../common/widgets/dynamic/floating_button.dart';
 import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../../common/widgets/stateless/appbar/nested_appbar.dart';
-import '../../../../../core/widget/custom_scaffold.dart';
 import '../widgets/posts/create_post_banner.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 class SocialParams {
