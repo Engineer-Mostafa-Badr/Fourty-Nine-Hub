@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
+import 'package:fourtyninehub/core/widget/custom_floating_action_button.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/page_preview.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -20,6 +21,7 @@ class ChooseCategoriesViwBody extends StatefulWidget {
 
 class _ChooseCategoriesViwBodyState extends State<ChooseCategoriesViwBody> {
   late int _selectedItem;
+
   @override
   initState() {
     _selectedItem = CacheManager.getInt(CacheManager.selectedCategoryView) ?? 0;
@@ -46,60 +48,74 @@ class _ChooseCategoriesViwBodyState extends State<ChooseCategoriesViwBody> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-        body: Column(
-          children: [
-            ListTile(
-              // title: Text(LocaleKeys.chooseCategoryView.localize),
-              subtitle: Text(LocaleKeys.youCanChooseOneWayAtLeast.localize),
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: _items.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    leading: Radio<int>(
-                      value: index,
-                      groupValue: _selectedItem,
-                      activeColor: Theme.of(context).primaryColor,
-                      onChanged: (int? value) {
-                        setState(() {
-                          _selectedItem = value!;
-                        });
-                      },
-                    ),
-                    title: Text(
-                      _items[index],
-                      style: Styles.mediumText(
-                        fontSize: 65.sp,
-                        fontWeight: FontWeight.w400,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    ),
-                    trailing: _icons[index],
-                    selected: _selectedItem == index,
-                    selectedTileColor: Colors.transparent,
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
-        floatingActionButton: CustomElevatedButton(
-          child: Text(
-            LocaleKeys.next.localize,
-            style: const TextStyle(color: AppColors.whiteColor),
+      body: Column(
+        children: [
+          ListTile(
+            // title: Text(LocaleKeys.chooseCategoryView.localize),
+            subtitle: Text(LocaleKeys.youCanChooseOneWayAtLeast.localize),
           ),
-          onPressed: () {
-            CacheManager.setInt(
-                CacheManager.selectedCategoryView, _selectedItem);
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                builder: (context) => const PagePreview(
-                  isButtonsVisible: true,
-                ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: _items.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  leading: Radio<int>(
+                    value: index,
+                    groupValue: _selectedItem,
+                    activeColor: Theme.of(context).primaryColor,
+                    onChanged: (int? value) {
+                      setState(() {
+                        _selectedItem = value!;
+                      });
+                    },
+                  ),
+                  title: Text(
+                    _items[index],
+                    style: Styles.mediumText(
+                      fontSize: 65.sp,
+                      fontWeight: FontWeight.w400,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                  trailing: _icons[index],
+                  selected: _selectedItem == index,
+                  selectedTileColor: Colors.transparent,
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+      floatingActionButton: CustomFloatingActionButton(
+        onPressed: () {
+          CacheManager.setInt(CacheManager.selectedCategoryView, _selectedItem);
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (context) => const PagePreview(
+                isButtonsVisible: true,
               ),
-            );
-          },
-        ));
+            ),
+          );
+        },
+        text: LocaleKeys.next.localize,
+      ),
+      // floatingActionButton: CustomElevatedButton(
+      //   child: Text(
+      //     LocaleKeys.next.localize,
+      //     style: const TextStyle(color: AppColors.whiteColor),
+      //   ),
+      //   onPressed: () {
+      //     CacheManager.setInt(
+      //         CacheManager.selectedCategoryView, _selectedItem);
+      //     Navigator.of(context).pushReplacement(
+      //       MaterialPageRoute(
+      //         builder: (context) => const PagePreview(
+      //           isButtonsVisible: true,
+      //         ),
+      //       ),
+      //     );
+      //   },
+      // ),
+    );
   }
 }

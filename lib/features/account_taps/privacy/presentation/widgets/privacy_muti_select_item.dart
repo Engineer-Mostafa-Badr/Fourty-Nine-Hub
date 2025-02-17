@@ -101,18 +101,19 @@ class PrivacyMultiSelectItem extends StatelessWidget {
                         )
                       ],
                     ),
-
                     Row(
                       children: [
                         Radio(
-                          value: '${LocaleKeys.friends.localize}and${LocaleKeys.followers.localize}',
+                          value:
+                              '${LocaleKeys.friends.localize}and${LocaleKeys.followers.localize}',
                           groupValue: groupValue,
                           onChanged: (value) {
                             groupValue = value!;
                           },
                         ),
                         Label(
-                          text: '${LocaleKeys.friends.localize} and ${LocaleKeys.followers.localize}',
+                          text:
+                              '${LocaleKeys.friends.localize} and ${LocaleKeys.followers.localize}',
                         )
                       ],
                     ),
@@ -232,6 +233,7 @@ class PrivacyMultiSelectItem extends StatelessWidget {
     );
   }
 
+//TODO
   PrivacyStatus privacyToPrivacyStatus(String privacy) {
     switch (privacy) {
       case 'only-me':
@@ -244,6 +246,12 @@ class PrivacyMultiSelectItem extends StatelessWidget {
         return PrivacyStatus.followers;
       case 'friends/followers':
         return PrivacyStatus.friendsAndFollowers;
+      case 'contacts':
+        return PrivacyStatus.contacts;
+      case 'only-with':
+        return PrivacyStatus.onlyWith;
+      case 'friends-except':
+        return PrivacyStatus.exceptFrom;
       default:
         return PrivacyStatus.public; // Default to a known status
     }
@@ -261,6 +269,12 @@ class PrivacyMultiSelectItem extends StatelessWidget {
         return LocaleKeys.followers.localize; // Adjust if needed
       case PrivacyStatus.friendsAndFollowers:
         return '${LocaleKeys.friends.localize} / ${LocaleKeys.followers.localize}';
+      case PrivacyStatus.exceptFrom:
+        return LocaleKeys.except_from.localize;
+      case PrivacyStatus.onlyWith:
+        return LocaleKeys.only_with.localize;
+      case PrivacyStatus.contacts:
+        return LocaleKeys.contacts.localize;
     }
   }
 
@@ -275,6 +289,12 @@ class PrivacyMultiSelectItem extends StatelessWidget {
       case PrivacyStatus.followers:
         return Icons.accessibility_sharp; // Adjust if needed
       case PrivacyStatus.friendsAndFollowers:
+        return Icons.supervised_user_circle_outlined;
+      case PrivacyStatus.exceptFrom:
+        return Icons.supervised_user_circle_outlined;
+      case PrivacyStatus.onlyWith:
+        return Icons.supervised_user_circle_outlined;
+      case PrivacyStatus.contacts:
         return Icons.supervised_user_circle_outlined;
     }
   }
