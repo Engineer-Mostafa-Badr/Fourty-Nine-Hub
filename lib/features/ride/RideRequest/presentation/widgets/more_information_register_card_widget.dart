@@ -13,6 +13,8 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../core/widget/custom_switch_button.dart';
+
 class MoreInformationRegisterCardWidget extends StatefulWidget {
   const MoreInformationRegisterCardWidget({super.key});
 
@@ -234,8 +236,8 @@ class _MoreInformationRegisterCardWidgetState
               children: [
                 Row(
                   children: [
-                    Switch(
-                      inactiveTrackColor: AppColors.GREY_LIGHT_COLOR,
+                    CustomSwitchButton(
+                      // inactiveTrackColor: AppColors.GREY_LIGHT_COLOR,
                       onChanged: (value) {
                         setState(() {
                           if (context.isUserLoggedIn) {
@@ -256,8 +258,8 @@ class _MoreInformationRegisterCardWidgetState
                 ),
                 Row(
                   children: [
-                    Switch(
-                      inactiveTrackColor: AppColors.GREY_LIGHT_COLOR,
+                    CustomSwitchButton(
+                      // inactiveTrackColor: AppColors.GREY_LIGHT_COLOR,
                       onChanged: (value) {
                         setState(() {
                           if (context.isUserLoggedIn) {

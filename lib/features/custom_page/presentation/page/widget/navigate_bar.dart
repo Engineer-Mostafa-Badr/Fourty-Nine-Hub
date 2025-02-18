@@ -107,7 +107,7 @@ class _NavigateBarState extends State<NavigateBar> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
+    return Scaffold(
       body: BlocProvider<CustomPageCubit>(
         create: (BuildContext context) => serviceLocator()..fetchNavigateBar(),
         child: BlocBuilder<CustomPageCubit, CustomPageState>(

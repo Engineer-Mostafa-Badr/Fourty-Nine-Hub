@@ -48,8 +48,11 @@ class _EditPageState extends State<EditPage> {
       create: (context) => EditPageCubit(),
       child: BlocBuilder<EditPageCubit, EditPageState>(
         builder: (context, state) {
-          return Scaffold(
+          return CustomScaffold(
+            enableCustomAppBar: true,
+            // backgroundColor: Colors.transparent,
             appBar: BackAppBar(
+              enableCustomAppBar: true,
               leading: Builder(builder: (context) {
                 return IconButton(
                     onPressed: () {
@@ -68,6 +71,7 @@ class _EditPageState extends State<EditPage> {
                     icon: Icon(
                       Icons.arrow_back,
                       size: 40.w,
+                      color: Colors.white,
                     ));
               }),
               label: appBarTitle[

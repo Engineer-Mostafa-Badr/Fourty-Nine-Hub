@@ -213,7 +213,7 @@ class _ScrollableTextWithAnimationState
                               ''
                           : '${context.read<MainCategoriesCubit>().state.question?.messageEn}                                         ' ??
                               '',
-                      velocity: const Velocity(pixelsPerSecond: Offset(25, 0)),
+                      velocity: const Velocity(pixelsPerSecond: Offset(30, 0)),
 
                       style: Styles.headerText(
                           fontSize: 30,

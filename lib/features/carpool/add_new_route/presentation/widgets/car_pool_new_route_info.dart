@@ -19,6 +19,9 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
+import '../../../../../core/widget/custom_switch_button.dart';
+import '../../../../../core/widget/custom_switch_button.dart';
+
 class CarPoolNewRouteInfo extends StatefulWidget {
   const CarPoolNewRouteInfo({super.key});
   static double normalPrice = 0;
@@ -109,18 +112,18 @@ class _CarPoolNewRouteInfoState extends State<CarPoolNewRouteInfo> {
           Text(LocaleKeys.comfort.localize, style: Styles.headerText()),
           Transform.scale(
             scale: 0.8,
-            child: Switch(
+            child: CustomSwitchButton(
               value: isComfort,
               onChanged: (value) {
                 isComfort = !isComfort;
                 pr(isComfort);
                 setState(() {});
               },
-              activeColor: AppColors.PRIMARY_COLOR,
-              trackOutlineColor: const WidgetStatePropertyAll(Colors.grey),
-              activeTrackColor: Colors.grey,
-              inactiveTrackColor: Colors.white,
-              inactiveThumbColor: Colors.grey,
+              // activeColor: AppColors.PRIMARY_COLOR,
+              // trackOutlineColor: const WidgetStatePropertyAll(Colors.grey),
+              // activeTrackColor: Colors.grey,
+              // inactiveTrackColor: Colors.white,
+              // inactiveThumbColor: Colors.grey,
             ),
           ),
         ],
@@ -131,18 +134,18 @@ class _CarPoolNewRouteInfoState extends State<CarPoolNewRouteInfo> {
           Text(LocaleKeys.womenOnly.localize, style: Styles.headerText()),
           Transform.scale(
             scale: 0.8,
-            child: Switch(
+            child: CustomSwitchButton(
               value: isWomanOnly,
               onChanged: (value) {
                 isWomanOnly = !isWomanOnly;
                 pr(isWomanOnly);
                 setState(() {});
               },
-              activeColor: AppColors.PRIMARY_COLOR,
-              trackOutlineColor: const WidgetStatePropertyAll(Colors.grey),
-              activeTrackColor: Colors.grey,
-              inactiveTrackColor: Colors.white,
-              inactiveThumbColor: Colors.grey,
+              // activeColor: AppColors.PRIMARY_COLOR,
+              // trackOutlineColor: const WidgetStatePropertyAll(Colors.grey),
+              // activeTrackColor: Colors.grey,
+              // inactiveTrackColor: Colors.white,
+              // inactiveThumbColor: Colors.grey,
             ),
           ),
         ],
@@ -156,18 +159,18 @@ class _CarPoolNewRouteInfoState extends State<CarPoolNewRouteInfo> {
                   style: Styles.headerText()),
               Transform.scale(
                 scale: 0.8,
-                child: Switch(
+                child: CustomSwitchButton(
                   value: isDriverWomanOnly,
                   onChanged: (value) {
                     isDriverWomanOnly = !isDriverWomanOnly;
                     pr(isDriverWomanOnly);
                     setState(() {});
                   },
-                  activeColor: AppColors.PRIMARY_COLOR,
-                  trackOutlineColor: const WidgetStatePropertyAll(Colors.grey),
-                  activeTrackColor: Colors.grey,
-                  inactiveTrackColor: Colors.white,
-                  inactiveThumbColor: Colors.grey,
+                  // activeColor: AppColors.PRIMARY_COLOR,
+                  // trackOutlineColor: const WidgetStatePropertyAll(Colors.grey),
+                  // activeTrackColor: Colors.grey,
+                  // inactiveTrackColor: Colors.white,
+                  // inactiveThumbColor: Colors.grey,
                 ),
               ),
             ],

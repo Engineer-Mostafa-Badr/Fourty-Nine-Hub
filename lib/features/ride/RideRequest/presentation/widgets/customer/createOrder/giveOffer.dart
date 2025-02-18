@@ -5,6 +5,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider
 import '../../../../../../../common/widgets/form/text_fields/form_text_field.dart';
 import '../../../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../../core/widget/custom_switch_button.dart';
 import '../../../../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
@@ -68,7 +69,7 @@ class GiveOffer extends StatelessWidget {
                           text:
                               'Automatically accept the nearest driver for your fare',
                           style: Styles.mediumText())),
-                  Switch(
+                  CustomSwitchButton(
                       value: state.autoAccept,
                       onChanged: (v) => controller.changeAutoAcceptStatus(v: v))
                 ],

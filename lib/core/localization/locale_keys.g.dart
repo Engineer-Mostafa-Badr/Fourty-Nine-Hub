@@ -1237,7 +1237,7 @@ abstract class  LocaleKeys {
   static const cashBack = 'cashBack';
   static const navigateBarDescription = 'navigateBarDescription';
   static const socialDescription = 'socialDescription';
-  static const favouriteDescrepion = 'favouriteDescrepion';
+  static const favouriteDescription = 'favouriteDescription';
   static const warning = 'warning';
   static const saveAndActivate = 'saveAndActivate';
   static const saveWithOutActivate = 'saveWithOutActivate';
@@ -1256,5 +1256,6 @@ abstract class  LocaleKeys {
   static const except_from = 'except_from';
   static const deposit = 'deposit';
   static const clickHere = 'clickHere';
+  static const chargeWallet = 'chargeWallet';
 
 }

@@ -118,7 +118,7 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
+    return Scaffold(
       body: BlocProvider<CustomPageCubit>(
         create: (BuildContext context) =>
             serviceLocator<CustomPageCubit>()..fetchFavouriteCat(),
@@ -132,7 +132,7 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
               return Column(
                 children: [
                   ListTile(
-                    subtitle: Text(LocaleKeys.favouriteDescrepion.localize),
+                    subtitle: Text(LocaleKeys.favouriteDescription.localize),
                   ),
                   Expanded(
                     child: ListView.builder(

@@ -182,6 +182,7 @@ abstract class Assets {
   static String liveIcon = 'assets/drawerIcons/live.png';
   static String snap = 'assets/drawerIcons/snap.png';
   static String cameraOutlined = 'assets/drawerIcons/camera_outlined.png';
+  static String whatsApp = 'assets/drawerIcons/whatsapp.png';
   static String wallet_icon = 'assets/settings/wallet_icon.png';
   static String tripViewIllustration = 'assets/images/trip_view.png';
   static String map = 'assets/images/map.png';

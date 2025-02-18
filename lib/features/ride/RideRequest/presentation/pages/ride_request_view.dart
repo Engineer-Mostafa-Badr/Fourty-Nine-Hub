@@ -44,6 +44,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../../core/widget/custom_switch_button.dart';
 import '../../../../../routes/routes.dart';
 
 class RideRequestView extends StatefulWidget {
@@ -261,7 +262,7 @@ class _RideRequestViewState extends State<RideRequestView> {
                                       const SizedBox(
                                         width: 5,
                                       ),
-                                      Switch(
+                                      CustomSwitchButton(
                                         value: getTripInfoCubit.model.comfort ??
                                             false,
                                         onChanged: (value) {
@@ -297,7 +298,7 @@ class _RideRequestViewState extends State<RideRequestView> {
                                                             FontWeight.w500),
                                                   ),
                                                   const Spacer(),
-                                                  Switch(
+                                                  CustomSwitchButton(
                                                     activeColor:
                                                         AppColors.PRIMARY_COLOR,
                                                     value: getTripInfoCubit

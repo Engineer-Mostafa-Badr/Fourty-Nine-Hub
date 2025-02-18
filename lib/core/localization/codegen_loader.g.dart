@@ -1259,9 +1259,9 @@ class CodegenLoader extends AssetLoader{
   "loginOrRegister": "تسجيل الدخول\n للاستمتاع بالتطبيق",
   "addAde": "اضافة إعلان",
   "cashBack": "قم بتحميل فاتورة واحدة على الأقل للاستمتاع بالحصول على استرداد نقدي كهدية من التطبيق",
-  "navigateBarDescription": "اختر المجال المناسب الذي تحب أن تراه في شريط القوائم السفلي للتطبيق",
+  "navigateBarDescription": "اختر المجال الذي يناسب اهتماماتك في شريط القائمة السفلي. يمكنك اختيار بحد ادنى 3 مجالات وبحد اقصى 5 مجالات.",
   "socialDescription": "اختار الشكل الاجتماعي المفضل لديك يمكنك اختيار شكل واحد فقط بحدأقصى",
-  "favouriteDescrepion": "اختار الاقسام الرئيسيه المفضله لديك التي تحب أن تراها يمكنك اختيار بحد أقصى اقسام",
+  "favouriteDescription": "اختار الاقسام الرئيسيه المفضله لديك التي تحب أن تراها.  يمكنك اختيار بحد ادنى 3 فئات وبحد اقصى 8 فئات.",
   "warning": "تحذير!!!",
   "saveAndActivate": "حفظ وتفعيل",
   "saveWithOutActivate": "حفظ بدون تفعيل",
@@ -1279,7 +1279,8 @@ class CodegenLoader extends AssetLoader{
   "only_with": "فقط مع...",
   "except_from": "إلا من...",
   "deposit": "إيداع",
-  "clickHere": "إضغط هنا"
+  "clickHere": "إضغط هنا",
+  "chargeWallet": "شحن المحفظة"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -2544,9 +2545,9 @@ static const Map<String,dynamic> _en = {
   "resend": "Resend",
   "addAde": "Add ad",
   "cashBack": "Upload At Least One Bill To Enjoy Getting Cash back As A Gift On The App",
-  "navigateBarDescription": "Choose the appropriate field you would like to see in the application's bottom navigation bar.",
+  "navigateBarDescription": "Choose the field that suits your interests in the bottom menu bar. You can choose a minimum of 3 fields and a maximum of 5 fields.",
   "socialDescription": "Choose your preferred social shape. You can select only one shape at most.",
-  "favouriteDescription": "Choose your favorite main categories that you would like to see. You can select up to 8 categories at most.",
+  "favouriteDescription": "Choose your favorite main categories that you would like to see. You can choose a minimum of 3 categories and a maximum of 5 categories.",
   "saveAndActivate": "Save and Activate",
   "saveWithOutActivate": "Save Without Activate",
   "serviceNoifications": "Service Noifications",
@@ -2563,7 +2564,8 @@ static const Map<String,dynamic> _en = {
   "only_with": "Only With...",
   "except_from": "Except From...",
   "deposit": "Deposit",
-  "clickHere": "Click Here"
+  "clickHere": "Click Here",
+  "chargeWallet": "Charge Wallet"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

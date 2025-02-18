@@ -47,7 +47,7 @@ class _ChooseCategoriesViwBodyState extends State<ChooseCategoriesViwBody> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
+    return Scaffold(
       body: Column(
         children: [
           ListTile(

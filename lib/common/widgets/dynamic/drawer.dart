@@ -23,6 +23,8 @@ import 'package:restart_app/restart_app.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../core/utils/custom_show_dialog.dart';
+import '../../../core/widget/custom_switch_button.dart';
+import '../../../core/widget/custom_switch_button.dart';
 import '../../../core/widget/custom_text_no_login.dart';
 import '../../../features/authentication/presentation/widgets/log_out_widget.dart';
 import '../../../features/competition/presentation/cubit/competition_cubit/competition_cubit.dart';
@@ -103,16 +105,16 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                         ),
                                       );
                                     }),
-                                drawerListTile(
-                                  image: Assets.microphone,
-                                  label:
-                                      LocaleKeys.advertiseYourCompany.localize,
-                                  onTap: () {
-                                    AdInterstitialTop.loadIntersitialAd();
-                                    AdInterstitialTop.showInterstitialAd();
-                                    return context.push(Routes.CREATECOMPANYAD);
-                                  },
-                                ),
+                                // drawerListTile(
+                                //   image: Assets.microphone,
+                                //   label:
+                                //       LocaleKeys.advertiseYourCompany.localize,
+                                //   onTap: () {
+                                //     AdInterstitialTop.loadIntersitialAd();
+                                //     AdInterstitialTop.showInterstitialAd();
+                                //     return context.push(Routes.CREATECOMPANYAD);
+                                //   },
+                                // ),
                                 drawerListTile(
                                     image: Assets.quran,
                                     label: LocaleKeys.quraan.localize,
@@ -130,38 +132,40 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                       AdInterstitialTop.showInterstitialAd();
                                       return context.push(Routes.AZKAAR);
                                     }),
-                                drawerListTile(
-                                    image: Assets.favorite_main_category_icon,
-                                    label:
-                                        LocaleKeys.favouriteCategories.localize,
-                                    requireLogin: true,
-                                    onTap: () async {
-                                      AdInterstitialTop.loadIntersitialAd();
-                                      AdInterstitialTop.showInterstitialAd();
-                                      await context
-                                          .push(Routes.FAVOURITECATEGORIES);
-                                      context
-                                          .read<MainCategoriesCubit>()
-                                          .loadDataCategory();
-                                      // context.read<MainCategoriesCubit>().getMainCategoryCustomPage();
-                                    }),
+                                // drawerListTile(
+                                //     image: Assets.favorite_main_category_icon,
+                                //     label:
+                                //         LocaleKeys.favouriteCategories.localize,
+                                //     requireLogin: true,
+                                //     onTap: () async {
+                                //       AdInterstitialTop.loadIntersitialAd();
+                                //       AdInterstitialTop.showInterstitialAd();
+                                //       await context
+                                //           .push(Routes.FAVOURITECATEGORIES);
+                                //       context
+                                //           .read<MainCategoriesCubit>()
+                                //           .loadDataCategory();
+                                //       // context.read<MainCategoriesCubit>().getMainCategoryCustomPage();
+                                //     }),
 
-                                drawerListTile(
-                                    // icon: Icons.favorite,
-                                    image: Assets.favorite_sub_category_icon,
-                                    label: LocaleKeys
-                                        .favouriteSubCategories.localize,
-                                    requireLogin: true,
-                                    onTap: () => context
-                                        .push(Routes.FAVOURITESUBCATEGORIES)),
+                                // drawerListTile(
+                                //     // icon: Icons.favorite,
+                                //     image: Assets.favorite_sub_category_icon,
+                                //     label: LocaleKeys
+                                //         .favouriteSubCategories.localize,
+                                //     requireLogin: true,
+                                //     onTap: () => context
+                                //         .push(Routes.FAVOURITESUBCATEGORIES)),
 
-                                drawerListTile(
-                                    // icon: FontAwesomeIcons.adn,
-                                    image: Assets.favorite_ad_icon,
-                                    label: LocaleKeys.favouriteAds.localize,
-                                    requireLogin: true,
-                                    onTap: () =>
-                                        context.push(Routes.FAVOURITE)),
+                                // drawerListTile(
+                                //     // icon: FontAwesomeIcons.adn,
+                                //     image: Assets.favorite_ad_icon,
+                                //     label: LocaleKeys.favouriteAds.localize,
+                                //     requireLogin: true,
+                                //     onTap: () =>
+                                //         context.push(Routes.FAVOURITE)),
+
+
                                 // drawerListTile(
                                 //     image: Assets.history,
                                 //     label: LocaleKeys.requestHistory.localize,
@@ -174,13 +178,13 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 //     label: LocaleKeys.lists.localize,
                                 //     requireLogin: true,
                                 //     onTap: () => context.push(Routes.Lists)),
-                                drawerListTile(
-                                    // icon: Icons.ads_click,
-                                    image: Assets.my_ads_icon,
-                                    label: LocaleKeys.myAds.localize,
-                                    requireLogin: true,
-                                    onTap: () => context.push(Routes.MYADDS)),
-                                // drawerListTile(icon: Icons.list, label: 'Requests', onTap: () {}),
+                                // drawerListTile(
+                                //     // icon: Icons.ads_click,
+                                //     image: Assets.my_ads_icon,
+                                //     label: LocaleKeys.myAds.localize,
+                                //     requireLogin: true,
+                                //     onTap: () => context.push(Routes.MYADDS)),
+                                // // drawerListTile(icon: Icons.list, label: 'Requests', onTap: () {}),
                                 drawerListTile(
                                     // icon: Icons.settings,
                                     image: Assets.settings_icon,
@@ -263,49 +267,49 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 drawerRollWidget(
                                   label: LocaleKeys.health.localize,
                                   image: Assets.healthIcon,
-                                  onTap: () {},
+                                  onTap: () => context.push(Routes.VISITA),
+
                                 ),
                                 drawerRollWidget(
                                   label: LocaleKeys.meal.localize,
                                   image: Assets.meal,
-                                  onTap: () {},
-                                  // onTap: () => context.push(Routes.RIDE),
+                                  onTap: () => context.push(Routes.FOOD),
                                 ),
                                 drawerRollWidget(
                                   label: LocaleKeys.find.localize,
                                   image: Assets.find,
-                                  onTap: () {},
-                                  // onTap: () => context.push(Routes.),
+                                  onTap: () => context.push(Routes.Tinder),
                                 ),
                                 drawerRollWidget(
                                   label: LocaleKeys.reel.localize,
                                   image: Assets.reel,
-                                  // onTap: () {},
                                   onTap: () => context.push(Routes.REELS),
                                 ),
                                 drawerRollWidget(
                                   label: LocaleKeys.spotlight.localize,
                                   image: Assets.spotlight,
-                                  // onTap: () {},
                                   onTap: () => context.push(Routes.SPOTLIGHT),
                                 ),
                                 drawerRollWidget(
                                   label: LocaleKeys.meet.localize,
                                   image: Assets.meet,
-                                  // onTap: () {},
                                   onTap: () => context.push(Routes.MEETINGROOM),
                                 ),
                                 drawerRollWidget(
                                   label: LocaleKeys.live.localize,
                                   image: Assets.liveIcon,
-                                  // onTap: () {},
                                   onTap: () => context.push(Routes.LIVE),
                                 ),
                                 drawerRollWidget(
                                   label: LocaleKeys.snap.localize,
                                   image: Assets.snap,
-                                  // onTap: () {},
                                   onTap: () => context.push(Routes.SNAP),
+                                ),
+
+                                drawerRollWidget(
+                                  label: LocaleKeys.chat.localize,
+                                  image: Assets.whatsApp,
+                                  onTap: () => context.push(Routes.CHAT),
                                 ),
                               ],
                             ),
@@ -901,19 +905,19 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Switch(
+              CustomSwitchButton(
                 value:
                     context.read<CustomPageCubit>().state.activate!.customPage,
                 onChanged: (value) async {
                   await context.read<CustomPageCubit>().updateActivate(value);
                   Restart.restartApp();
                 },
-                activeColor: Colors.white,
-                inactiveThumbColor: Colors.white,
-                inactiveTrackColor: HexColor('d9d9d9'),
-                activeTrackColor: Colors.black,
-                // trackColor:  WidgetStatePropertyAll(HexColor('d9d9d9')),
-                trackOutlineColor: WidgetStatePropertyAll(HexColor('ff3308')),
+                // activeColor: Colors.white,
+                // inactiveThumbColor: Colors.white,
+                // inactiveTrackColor: HexColor('d9d9d9'),
+                // activeTrackColor: Colors.black,
+                // // trackColor:  WidgetStatePropertyAll(HexColor('d9d9d9')),
+                // trackOutlineColor: WidgetStatePropertyAll(HexColor('ff3308')),
               ),
               SizedBox(
                 width: 4.w,

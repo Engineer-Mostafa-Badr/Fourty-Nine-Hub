@@ -1269,11 +1269,11 @@
   "addAde": "Add ad",
   "cashBack":"Upload At Least One Bill To Enjoy Getting Cash back As A Gift On The App",
   "navigateBarDescription":
-  "Choose the appropriate field you would like to see in the application's bottom navigation bar.",
+  "Choose the field that suits your interests in the bottom menu bar. You can choose a minimum of 3 fields and a maximum of 5 fields.",
   "socialDescription":
   "Choose your preferred social shape. You can select only one shape at most.",
   "favouriteDescription":
-  "Choose your favorite main categories that you would like to see. You can select up to 8 categories at most.",
+  "Choose your favorite main categories that you would like to see. You can choose a minimum of 3 categories and a maximum of 5 categories.",
   "saveAndActivate": "Save and Activate",
   "saveWithOutActivate": "Save Without Activate",
   "serviceNoifications": "Service Noifications",
@@ -1292,6 +1292,7 @@
   "only_with": "Only With...",
   "except_from": "Except From...",
   "deposit": "Deposit",
-  "clickHere": "Click Here"
+  "clickHere": "Click Here",
+  "chargeWallet": "Charge Wallet"
 
 }

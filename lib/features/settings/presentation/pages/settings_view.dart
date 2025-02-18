@@ -16,6 +16,7 @@ import '../../../../common/theme/cubit/cubit.dart';
 import '../../../../common/theme/cubit/states.dart';
 import '../../../../core/messages/messages.dart';
 import '../../../../core/widget/custom_scaffold.dart';
+import '../../../../core/widget/custom_switch_list_title.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 
@@ -29,8 +30,10 @@ class SettingsView extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = context.read<UserCubit>();
     return CustomScaffold(
+      enableCustomAppBar: true,
         appBar: BackAppBar(
           label: LocaleKeys.settings.localize,
+          enableCustomAppBar: true,
         ),
         body: BlocProvider<SettingCubit>(
           create: (BuildContext context) => serviceLocator(),
@@ -100,7 +103,7 @@ class SettingsView extends StatelessWidget {
                             context: context)),
                   BlocBuilder<ThemeCubit, ThemeStates>(
                     builder: (BuildContext context, theme) {
-                      return SwitchListTile(
+                      return CustomSwitchListTile(
                         secondary: Image.asset(
                           Assets.theme,
                           width: 50.h,
@@ -121,14 +124,14 @@ class SettingsView extends StatelessWidget {
                                     fontWeight: FontWeight.w400),
                               ),
                         value: ThemeCubit.get(context).isDarkTheme,
-                        activeColor: AppColors.SECONDARY_COLOR,
-                        inactiveThumbColor: AppColors.PRIMARY_COLOR,
-                        activeTrackColor:
-                            Theme.of(context).scaffoldBackgroundColor,
-                        inactiveTrackColor:
-                            Theme.of(context).scaffoldBackgroundColor,
-                        trackOutlineColor: const WidgetStatePropertyAll(
-                            AppColors.PRIMARY_COLOR),
+                        // activeColor: AppColors.SECONDARY_COLOR,
+                        // inactiveThumbColor: AppColors.PRIMARY_COLOR,
+                        // activeTrackColor:
+                        //     Theme.of(context).scaffoldBackgroundColor,
+                        // inactiveTrackColor:
+                        //     Theme.of(context).scaffoldBackgroundColor,
+                        // trackOutlineColor: const WidgetStatePropertyAll(
+                        //     AppColors.PRIMARY_COLOR),
                         onChanged: (value) {
                           if (theme is LightThemeModeStates) {
                             ThemeCubit.get(context).darkThemeMode();
@@ -144,7 +147,7 @@ class SettingsView extends StatelessWidget {
                     builder: (context, state) {
                       var floatingNavigatorCubit =
                           FloatingNavigatorCubit.get(context);
-                      return SwitchListTile(
+                      return CustomSwitchListTile(
                         secondary: Container(
                           width: 50.h,
                           height: 50.h,
@@ -162,14 +165,14 @@ class SettingsView extends StatelessWidget {
                               fontSize: 65.sp, fontWeight: FontWeight.w400),
                         ),
                         value: floatingNavigatorCubit.floatingNavigatorStatus,
-                        activeColor: AppColors.SECONDARY_COLOR,
-                        inactiveThumbColor: AppColors.PRIMARY_COLOR,
-                        activeTrackColor:
-                            Theme.of(context).scaffoldBackgroundColor,
-                        inactiveTrackColor:
-                            Theme.of(context).scaffoldBackgroundColor,
-                        trackOutlineColor: const WidgetStatePropertyAll(
-                            AppColors.PRIMARY_COLOR),
+                        // activeColor: AppColors.SECONDARY_COLOR,
+                        // inactiveThumbColor: AppColors.PRIMARY_COLOR,
+                        // activeTrackColor:
+                        //     Theme.of(context).scaffoldBackgroundColor,
+                        // inactiveTrackColor:
+                        //     Theme.of(context).scaffoldBackgroundColor,
+                        // trackOutlineColor: const WidgetStatePropertyAll(
+                        //     AppColors.PRIMARY_COLOR),
                         onChanged: (value) async {
                           if (floatingNavigatorCubit.state
                               is ActiveFloatNavigatorStatusState) {

@@ -19,7 +19,7 @@ class AzkarCubit extends Cubit<AzkarState> {
   bool isLoadingMore = false;
   bool hasMoreData = true;
   int currentPage = 1;
-  int pageSize = 10;
+  int pageSize = 100;
 
   void loadInitialData() async {
     emit(state.copyWith(status: AzkarStates.loading));

@@ -15,6 +15,8 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
+import '../../../../../core/widget/custom_switch_button.dart';
+
 class CarpoolSearchView extends StatefulWidget {
   const CarpoolSearchView({super.key, required this.type});
   final String type;
@@ -153,17 +155,17 @@ class _AvailableRoutesBottomSheetState
                 Text('Comfort', style: Styles.mediumText()),
                 Transform.scale(
                   scale: 0.8,
-                  child: Switch(
+                  child: CustomSwitchButton(
                     value: isComfort,
                     onChanged: (value) {
                       isComfort = !isComfort;
                       pr(isComfort);
                       setState(() {});
                     },
-                    activeColor: AppColors.PRIMARY_COLOR,
-                    trackColor:
-                        const WidgetStatePropertyAll(AppColors.SECONDARY_COLOR),
-                    inactiveThumbColor: Colors.grey,
+                    // activeColor: AppColors.PRIMARY_COLOR,
+                    // trackColor:
+                    //     const WidgetStatePropertyAll(AppColors.SECONDARY_COLOR),
+                    // inactiveThumbColor: Colors.grey,
                   ),
                 ),
               ],
@@ -178,17 +180,17 @@ class _AvailableRoutesBottomSheetState
                 Text('Woman Only ', style: Styles.mediumText()),
                 Transform.scale(
                   scale: 0.8,
-                  child: Switch(
+                  child: CustomSwitchButton(
                     value: isWomanOnly,
                     onChanged: (value) {
                       isWomanOnly = !isWomanOnly;
                       pr(isWomanOnly);
                       setState(() {});
                     },
-                    activeColor: AppColors.PRIMARY_COLOR,
-                    trackColor:
-                        const WidgetStatePropertyAll(AppColors.SECONDARY_COLOR),
-                    inactiveThumbColor: Colors.grey,
+                    // activeColor: AppColors.PRIMARY_COLOR,
+                    // trackColor:
+                    //     const WidgetStatePropertyAll(AppColors.SECONDARY_COLOR),
+                    // inactiveThumbColor: Colors.grey,
                   ),
                 ),
               ],
@@ -205,17 +207,17 @@ class _AvailableRoutesBottomSheetState
                     Text('Woman Driver Only ', style: Styles.mediumText()),
                     Transform.scale(
                       scale: 0.8,
-                      child: Switch(
+                      child: CustomSwitchButton(
                         value: isDriverWomanOnly,
                         onChanged: (value) {
                           isDriverWomanOnly = !isDriverWomanOnly;
                           pr(isDriverWomanOnly);
                           setState(() {});
                         },
-                        activeColor: AppColors.PRIMARY_COLOR,
-                        trackColor: const WidgetStatePropertyAll(
-                            AppColors.SECONDARY_COLOR),
-                        inactiveThumbColor: Colors.grey,
+                        // activeColor: AppColors.PRIMARY_COLOR,
+                        // trackColor: const WidgetStatePropertyAll(
+                        //     AppColors.SECONDARY_COLOR),
+                        // inactiveThumbColor: Colors.grey,
                       ),
                     ),
                   ],
