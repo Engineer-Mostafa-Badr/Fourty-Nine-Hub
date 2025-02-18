@@ -7,6 +7,7 @@ class ConnectionPrivacyModel extends ConnectionPrivacyEntity {
     String? followerRequests,
     String? friendsList,
     String? followerList,
+    String? randomAppearance,
     Map<String, dynamic>? allowedUsers,
   }) : super(
     userId: userId,
@@ -15,6 +16,7 @@ class ConnectionPrivacyModel extends ConnectionPrivacyEntity {
     friendsList: friendsList,
     followerList: followerList,
     allowedUsers: allowedUsers,
+    randomAppearance: randomAppearance,
   );
 
   factory ConnectionPrivacyModel.fromJson(Map<String, dynamic> json) {
@@ -25,6 +27,7 @@ class ConnectionPrivacyModel extends ConnectionPrivacyEntity {
       friendsList: json['friendsList'],
       followerList: json['followerList'],
       allowedUsers: json['allowedUsers'],
+      randomAppearance: json['randomAppearance'],
     );
   }
 

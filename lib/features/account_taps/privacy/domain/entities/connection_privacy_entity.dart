@@ -4,6 +4,7 @@ class ConnectionPrivacyEntity {
   final String? followerRequests;
   final String? friendsList;
   final String? followerList;
+  final String? randomAppearance;
   final Map<String, dynamic>? allowedUsers;
 
   ConnectionPrivacyEntity({
@@ -12,6 +13,7 @@ class ConnectionPrivacyEntity {
     this.followerRequests,
     this.friendsList,
     this.followerList,
+    this.randomAppearance,
     this.allowedUsers,
   });
 }

@@ -1277,7 +1277,13 @@ class CodegenLoader extends AssetLoader{
   "tube": "تيوب",
   "floatingNavigator": "المتصفح العائم",
   "only_with": "فقط مع...",
-  "except_from": "إلا من..."
+  "except_from": "إلا من...",
+    "socialMessage": "الرسائل الاجتماعية",
+    "anonymousMessage": "رسائل مجهولة المصدر",
+  "showPosts": "إظهار المشاركات",
+  "showStories": "عرض القصص",
+  "showReels": "عرض البكرات",
+  "writeComments": "اكتب تعليقات"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -2559,7 +2565,13 @@ static const Map<String,dynamic> _en = {
   "tube": "Tube",
   "floatingNavigator": "Floating Navigator",
   "only_with": "Only With...",
-  "except_from": "Except From..."
+  "except_from": "Except From...",
+  "socialMessage": "Social Messages",
+  "anonymousMessage": "Anonymous Messages",
+  "showPosts": "Show Posts",
+  "showStories": "Show Stories",
+  "showReels": "Show Reels",
+  "writeComments": "Write Comments"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

@@ -223,6 +223,11 @@ class EndPoints {
   static const unreadNotificationsCount = '/notifications/unread/count';
   static const privacy = '/privacy/personal';
   static const privacyConnection = '/privacy/connections';
+  static const privacyMedia = '/privacy/media';
+  static const privacyCommunication = '/privacy/communications';
+  static const onlyWithPrivacy = '/privacy/exclusion/only-with';
+  static const exceptFromPrivacy = '/privacy/exclusion/except-from';
+  static const searchUserPrivacy = '/search/users/';
   static const deleteAccount = '/users/settings/delete-account';
   static const disableAccount = '/users/settings/disable-account';
   static const enableAccount = '/users/settings/enable-account';

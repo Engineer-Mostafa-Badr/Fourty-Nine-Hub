@@ -1290,6 +1290,11 @@
   "tube": "Tube",
   "floatingNavigator": "Floating Navigator",
   "only_with": "Only With...",
-  "except_from": "Except From..."
-
+  "except_from": "Except From...",
+  "socialMessage": "Social Messages",
+  "anonymousMessage": "Anonymous Messages",
+  "showPosts": "Show Posts",
+  "showStories": "Show Stories",
+  "showReels": "Show Reels",
+  "writeComments": "Write Comments"
 }
