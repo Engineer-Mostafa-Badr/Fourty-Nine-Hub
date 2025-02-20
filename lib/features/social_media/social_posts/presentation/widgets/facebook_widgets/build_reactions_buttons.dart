@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_reaction_button/flutter_reaction_button.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/post_react_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:lottie/lottie.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -382,7 +384,7 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
     required String name,
     String? from,
   }) {
-    return Column(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SizedBox(
@@ -407,19 +409,18 @@ class _BuildReactionsButtonsState extends State<BuildReactionsButtons>
   }
 
   Widget _buildReactionPlaceholder() {
-    return Column(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        FaIcon(
-          FontAwesomeIcons.thumbsUp,
-          color: Colors.grey,
-          size: 40.sp,
+        SvgPicture.asset(Assets.likeIcon),
+        SizedBox(width: 4.w), // Space between icon and text
+        Label(
+          text: LocaleKeys.like.localize,
+          style: const TextStyle(
+              color: AppColors.black,
+              fontSize: 14,
+              fontWeight: FontWeight.w400),
         ),
-        if (widget.from == 'posts') ...[
-          Label(
-              text: LocaleKeys.like.localize,
-              style: Styles.mediumText(color: Colors.grey)),
-        ],
       ],
     );
   }

@@ -52,7 +52,7 @@ class PostParams {
             "liveEventTypeId": lifeEvent?.id,
             "title": lifeEvent?.title,
             "description": lifeEvent?.desc,
-            "mediaId": lifeEvent?.media.map((model) => model.mediaId).toList(),
+            "mediaIds": lifeEvent?.media.map((model) => model.mediaId).toList(),
             "date": lifeEvent?.date.toString()
           },
         if (gifUrl != null && gifUrl!.isNotEmpty) 'gifUrl': gifUrl,

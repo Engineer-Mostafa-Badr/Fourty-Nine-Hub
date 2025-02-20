@@ -10,11 +10,12 @@ class TwitterUserModel extends TwitterUserEntity {
     super.image,
     required super.email,
     required super.isDocumented,
+    required super.hasStory,
   });
   factory TwitterUserModel.fromJson(Map<String, dynamic> json) {
     String? image;
     if (json['image'] != null) {
-      image = json['image'];
+      image = json['image']['mediaKey'];
       } else if (json['USER_PROFILE'] is Map<String, dynamic>) {
       final userProfile = json['USER_PROFILE'] as Map<String, dynamic>;
       if (userProfile['profilePictureKey'] is Map<String, dynamic>) {
@@ -38,7 +39,8 @@ class TwitterUserModel extends TwitterUserEntity {
       userName: json['username']??'',
       image: image,
       email: json['email'] ?? '',
-      isDocumented: json['twitter_documentation'] ?? false,
+      hasStory: json['hasStory'] ?? false,
+      isDocumented: json['verifiedBadge'] ?? false,
       createdAt: json['createdAt'] is String
           ? DateTime.parse(json['createdAt'])
           : DateTime.now(),

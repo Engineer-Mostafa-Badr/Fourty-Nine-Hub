@@ -4,6 +4,7 @@ import 'package:fourtyninehub/features/social_media/create_post/domain/entities/
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/instagram_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/data/models/location_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/audio_entity.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/life_event_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/main_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_user_model.dart';
 import '../../../../../res/assets/assets.dart';
@@ -15,6 +16,7 @@ class PostEntity {
   final String photo;
   String? type;
   String? gifUrl;
+  LifeEventPostEntity? lifeEvent;
   final List<String>? images;
   final List<TwitterUserModel>? users;
   final List<TwitterUserModel>? likedUsers;
@@ -79,6 +81,7 @@ class PostEntity {
     this.images,
     this.users,
     this.gifUrl,
+    this.lifeEvent,
     this.firstComment,
     required this.user,
     this.commentPrivacy = 1,

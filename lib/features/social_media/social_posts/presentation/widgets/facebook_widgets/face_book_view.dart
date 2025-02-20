@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/insta_reel_card.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_facebook_suggest_people.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/facebook_reels.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/normal_post_screen.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/create_post_banner.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_advirtesement_card.dart';
@@ -62,11 +64,12 @@ class _FaceBookViewState extends State<FaceBookView> with TickerProviderStateMix
         },
         child: ListView(
             controller: _scrollController,
+            padding: EdgeInsets.zero,
             shrinkWrap: true,
             children: [
               Column(
                 children: [
-                  CreatePostBanner(),
+                  const CreatePostBanner(),
                   Container(
                     width: double.infinity,
                     height: 5.h,
@@ -76,12 +79,15 @@ class _FaceBookViewState extends State<FaceBookView> with TickerProviderStateMix
                 ],
               ),
               // BuildPeopleYouMayKnow(),
-              controller.loadFaceData?Center(
+              controller.loadFaceData?const Center(
                 child: CircularProgressIndicator(),
               ):Column(
                 children: [
+                  // Container(height: 10,color: Colors.black,),
+                  if(controller.suggestedFriends.isNotEmpty)const BuildFacebookSuggestPeople(),
                   ListView.builder(
                       shrinkWrap: true,
+                      padding: const EdgeInsets.all(0),
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: controller
                           .allFeed.length,
@@ -90,33 +96,39 @@ class _FaceBookViewState extends State<FaceBookView> with TickerProviderStateMix
                         var post = controller
                             .allFeed[index];
                         return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             ListView.builder(
                               shrinkWrap: true,
+                              padding: const EdgeInsets.all(0),
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: post.posts?.length??0,
-                              itemBuilder: (context,i)=>NormalPostScreen(postEntity: post.posts![i],),
+                              itemBuilder: (context,i) {
+                                return NormalPostScreen(postEntity: post.posts![i],);
+                              },
                             ),
-                            ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: post.tweets?.length??0,
-                              itemBuilder: (context,i)=>FacebookTweetCard(post: post.tweets![i],),
-                            ),
-                            ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: post.ads?.length??0,
-                              itemBuilder: (context,i)=>FacebookAdvertisementCard(post: post.ads![i],),
-                            ),
-                            ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: post.reels?.length??0,
-                              itemBuilder: (context,i)=>SizedBox(
-                                  height: 400.h,
-                                  child: InstagramReelCard(item: post.reels![i],playVideo: false,)),
-                            ),
+                            // ListView.builder(
+                            //   shrinkWrap: true,
+                            //   physics: const NeverScrollableScrollPhysics(),
+                            //   itemCount: post.tweets?.length??0,
+                            //   itemBuilder: (context,i)=>FacebookTweetCard(post: post.tweets![i],),
+                            // ),
+                            // ListView.builder(
+                            //   shrinkWrap: true,
+                            //   physics: const NeverScrollableScrollPhysics(),
+                            //   itemCount: post.ads?.length??0,
+                            //   itemBuilder: (context,i)=>FacebookAdvertisementCard(post: post.ads![i],),
+                            // ),
+                            // ListView.builder(
+                            //   shrinkWrap: true,
+                            //   physics: const NeverScrollableScrollPhysics(),
+                            //   itemCount: post.reels?.length??0,
+                            //   itemBuilder: (context,i)=>SizedBox(
+                            //       height: 400.h,
+                            //       child: InstagramReelCard(item: post.reels![i],playVideo: false,)),
+                            // ),
+                            if(post.reels?.isNotEmpty??false)FacebookReels(reels: post.reels??[],),
+                            // if(post.suggestedFriends?.isNotEmpty??false)BuildFacebookSuggestPeople(suggestedFriends: post.suggestedFriends??[],),
                             // FacebookPostCard(
                             //   deletePost: (String postId) => controller
                             //       .deletePost(context: context, postId: postId),
@@ -282,16 +294,16 @@ class _FaceBookViewState extends State<FaceBookView> with TickerProviderStateMix
                             //   from: 'posts',
                             //   index: index,
                             // ),
-                            Container(
-                              width: double.infinity,
-                              height: 10.h,
-                              color: AppColors.TXTFIELD_GRAY_COLOR2,
-                            ),
+                            // Container(
+                            //   width: double.infinity,
+                            //   height: 10.h,
+                            //   color: AppColors.TXTFIELD_GRAY_COLOR2,
+                            // ),
                           ],
                         );
                       }
                   ),
-                  if(controller.isLoadingFaceMore) Center(child: const CircularProgressIndicator()),
+                  if(controller.isLoadingFaceMore) const Center(child: CircularProgressIndicator()),
                 ],
               ),
 

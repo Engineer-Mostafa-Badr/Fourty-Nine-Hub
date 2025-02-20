@@ -26,6 +26,8 @@ abstract class Assets {
   static String commentIcon = 'assets/icons/comment_icon.svg';
   static String sendIcon = 'assets/icons/send_icon.svg';
   static String shareIcon = 'assets/icons/share_icon.svg';
+  static String publication = 'assets/icons/publication.svg';
+  static String zoomVideo = 'assets/icons/zoomVideo.svg';
 
   // lottie
   static String loveReaction = 'assets/lottie/love_reaction.json';

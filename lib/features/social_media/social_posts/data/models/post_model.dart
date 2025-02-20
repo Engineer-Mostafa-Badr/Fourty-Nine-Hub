@@ -7,6 +7,8 @@ import 'package:fourtyninehub/features/social_media/social_posts/data/models/mai
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_user_model.dart';
 
+import 'life_event_post_model.dart';
+
 class PostModel extends PostEntity {
   PostModel({
     required super.id,
@@ -20,6 +22,7 @@ class PostModel extends PostEntity {
     super.commentsCount,
     super.images,
     super.gifUrl,
+    super.lifeEvent,
     super.users,
     super.isShared,
     super.likesCount,
@@ -95,6 +98,9 @@ class PostModel extends PostEntity {
         isDocumentation: json['twitter_documentation'] ?? false,
         activity: json['activity'] != null
             ? ActivityModel.fromJson(json['activity'])
+            : null,
+        lifeEvent: json['liveEvent'] != null
+            ? LifeEventPostModel.fromJson(json['liveEvent'])
             : null,
         feeling: json['feeling'] != null
             ? FeelingModel.fromJson(json['feeling'])

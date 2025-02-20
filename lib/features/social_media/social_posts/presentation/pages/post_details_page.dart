@@ -262,7 +262,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                                   createdAt: DateTime.now(),
                                   image: user.profilePicture ?? '',
                                   email: user.email ?? '',
-                                  isDocumented: false,
+                                  isDocumented: false, hasStory: false,
                                 ),
                               ),
                             );

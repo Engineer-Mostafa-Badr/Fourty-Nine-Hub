@@ -16,6 +16,7 @@ abstract class AppColors {
 
   static const DARK_GRAY_COLOR = Color(0xFF909090);
   static const LIGHT_GRAY_COLOR = Color(0xFFE0E0E0);
+  static const BG_GRAY_COLOR = Color(0xFFD9D9D9);
   static const LIGHT_GRAY_COLOR2 = Color(0xFFA5A3A3);
   static const TXTFIELD_GRAY_COLOR2 = Color(0xFFEEEEEE);
   static const DIVIDER_GRAY_COLOR2 = Color(0xFFAFAFAF);

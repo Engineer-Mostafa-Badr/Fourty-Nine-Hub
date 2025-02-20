@@ -1,6 +1,6 @@
 part of 'create_post_cubit.dart';
 
-enum CreatePostStates { loading, initial, success, error }
+enum CreatePostStates { loading,loadingCreatePost, initial, success, error }
 
 class CreatePostState {
   final CreatePostStates status;

@@ -484,6 +484,7 @@ class CreatePostCubit extends Cubit<CreatePostState> {
 
 
   void createPost({required BuildContext context,}) async {
+    emit(state.copyWith(status: CreatePostStates.loadingCreatePost));
 
     if (postContentTextController.text.isNotEmpty ||
         selectedImages != null ||
@@ -512,7 +513,9 @@ class CreatePostCubit extends Cubit<CreatePostState> {
         response.fold(
             (l) => emit(
                 state.copyWith(failure: l, status: CreatePostStates.error)),
-            (r) {
+            (r) async {
+              emit(state.copyWith(status: CreatePostStates.success));
+              onDiscardPost();
               context.go(Routes.SOCIAL,
                   extra: SocialParams(
                       userId: UserCubit.to.state.data?.id ?? '', index: 0));

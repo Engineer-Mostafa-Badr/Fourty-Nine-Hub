@@ -438,7 +438,7 @@ class _FaceBookPostDetailsState extends State<FaceBookPostDetails> {
                                   createdAt: DateTime.now(),
                                   image: user.profilePicture ?? '',
                                   email: user.email ?? '',
-                                  isDocumented: false,
+                                  isDocumented: false, hasStory: false,
                                 ),
                               ),
                             );
