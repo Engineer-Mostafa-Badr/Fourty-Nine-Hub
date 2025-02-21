@@ -132,7 +132,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
       children: [
         widget.enableCustomAppBar
             ? Scaffold(
-                backgroundColor: Theme.of(context).primaryColor,
+                // backgroundColor: Theme.of(context).primaryColor,
                 floatingActionButtonLocation:
                     widget.floatingActionButtonLocation,
                 floatingActionButton: widget.floatingActionButton,
@@ -141,15 +141,13 @@ class _CustomScaffoldState extends State<CustomScaffold>
                 body: Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: Container(
-                    // padding: const EdgeInsets.symmetric(horizontal: 16),
                     decoration: BoxDecoration(
-                      color: HexColor('F2F1F7'),
+                      color: widget.backgroundColor ?? HexColor('F2F1F7'),
                       borderRadius: BorderRadius.vertical(
                         top: Radius.circular(50.r),
                       ),
                     ),
                     clipBehavior: Clip.antiAliasWithSaveLayer,
-
                     child: widget.body,
                   ),
                 ),
@@ -229,7 +227,6 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               label: LocaleKeys.health.localize,
                               image: Assets.healthIcon,
                               onTap: () => context.push(Routes.VISITA),
-
                             ),
                             drawerRollWidget(
                               label: LocaleKeys.meal.localize,
@@ -266,7 +263,6 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               image: Assets.snap,
                               onTap: () => context.push(Routes.SNAP),
                             ),
-
                             drawerRollWidget(
                               label: LocaleKeys.chat.localize,
                               image: Assets.whatsApp,
