@@ -86,17 +86,17 @@ class SettingsView extends StatelessWidget {
                         onTap: () => showAreYouSure(
                             title: LocaleKeys.alert.localize,
                             subTitle: LocaleKeys.disable.localize,
-                            action: () async{
-                               if (state.able?.isDisabled == false) {
-                                 final prefs = await SharedPreferences.getInstance();
-                                 await prefs.setBool("ISLOGIN", false);
-                                 context.go(Routes.HOME);
+                            action: () async {
+                              // if (state.able?.isDisabled == false) {
+                              //   final prefs = await SharedPreferences.getInstance();
+                              //   await prefs.setBool("ISLOGIN", false);
+                              //   context.go(Routes.HOME);
                               return context
                                   .read<SettingCubit>()
                                   .disableAccount();
-                              } else {
-                                return context.read<SettingCubit>().enableAccount();
-                              }
+                              // } else {
+                              //   return context.read<SettingCubit>().enableAccount();
+                              // }
                             },
                             context: context)),
                   if (context.read<UserCubit>().isLoggedIn)
@@ -110,9 +110,10 @@ class SettingsView extends StatelessWidget {
                         onTap: () => showAreYouSure(
                             title: LocaleKeys.alert.localize,
                             subTitle: LocaleKeys.delete.localize,
-                            action: () async{
+                            action: () async {
                               context.read<SettingCubit>().deleteAccount();
-                              final prefs = await SharedPreferences.getInstance();
+                              final prefs =
+                                  await SharedPreferences.getInstance();
                               await prefs.setBool("ISLOGIN", false);
                               context.go(Routes.HOME);
                             },
