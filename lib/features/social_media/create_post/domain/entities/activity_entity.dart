@@ -4,5 +4,6 @@ class ActivityEntity {
   final String nameEn;
   final String image;
   final String? mainId;
-  ActivityEntity({required this.id, required this.name,required this.nameEn, required this.image,this.mainId});
+  final ActivityEntity? mainActivity;
+  ActivityEntity({required this.id, required this.name,required this.nameEn, required this.image,this.mainId,this.mainActivity});
 }

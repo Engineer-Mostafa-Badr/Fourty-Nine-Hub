@@ -11,7 +11,6 @@ import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
-import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
@@ -262,7 +261,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
               ]),
               // _pickMeAndComeWithUWidget(),
               const Sizer(),
-              _buildTenPercentWidget(),
+              // _buildTenPercentWidget(),
               // const Sizer(),
               // _auctionAndInstallmentWidget(),
               // const Sizer(),

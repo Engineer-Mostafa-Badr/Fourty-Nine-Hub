@@ -14,12 +14,20 @@ abstract class Assets {
   static String createReel = 'assets/icons/create_reels.svg';
   static String groupIcon = 'assets/icons/group.svg';
   static String likeReact = 'assets/icons/like.png';
+  static String home = 'assets/icons/home.svg';
+  static String people = 'assets/icons/people.svg';
+  static String profile = 'assets/icons/profile.svg';
   static String love = 'assets/icons/love.svg';
   static String loveReact = 'assets/icons/love_icon.png';
+  static String draftPost = 'assets/icons/draftPost.svg';
+  static String continueEditing = 'assets/icons/continieEditing.svg';
+  static String discardPost = 'assets/icons/discardPost.svg';
   static String likeIcon = 'assets/icons/like_icon.svg';
   static String commentIcon = 'assets/icons/comment_icon.svg';
   static String sendIcon = 'assets/icons/send_icon.svg';
   static String shareIcon = 'assets/icons/share_icon.svg';
+  static String publication = 'assets/icons/publication.svg';
+  static String zoomVideo = 'assets/icons/zoomVideo.svg';
 
   // lottie
   static String loveReaction = 'assets/lottie/love_reaction.json';

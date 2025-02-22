@@ -9,4 +9,12 @@ class PlaceEntity {
       required this.name,
       required this.lat,
       required this.lng});
+
+  //toJson
+  Map<String, dynamic> toMap() => {
+        'formattedAddress': formattedAddress,
+        'name': name,
+        'lat': lat,
+        'lng': lng,
+      };
 }

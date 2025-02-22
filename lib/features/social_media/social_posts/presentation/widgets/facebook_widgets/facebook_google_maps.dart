@@ -22,7 +22,7 @@ class _FacebookUserOnMapState extends State<FacebookUserOnMap> {
       infoWindow: const InfoWindow(title: 'user'),
       // icon: markerIcon,
       position: LatLng(
-          double.parse(widget.location.lat), double.parse(widget.location.log)),
+          double.parse(widget.location.lat.toString()), double.parse(widget.location.log.toString())),
     ));
     super.initState();
   }
@@ -44,8 +44,8 @@ class _FacebookUserOnMapState extends State<FacebookUserOnMap> {
       mapToolbarEnabled: true,
       zoomGesturesEnabled: true,
       initialCameraPosition: CameraPosition(
-          target: LatLng(double.parse(widget.location.lat),
-              double.parse(widget.location.log)),
+          target: LatLng(double.parse(widget.location.lat.toString()),
+              double.parse(widget.location.log.toString())),
           zoom: 12),
       markers: markers,
       onMapCreated: (GoogleMapController controller) {

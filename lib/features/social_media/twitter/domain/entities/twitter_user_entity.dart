@@ -8,6 +8,7 @@ class TwitterUserEntity {
   final String? image;
   final String email;
   final bool isDocumented;
+  final bool hasStory;
   final DateTime createdAt;
   Duration get publishedDuration => TimeUtils.calculateDuration(createdAt);
 
@@ -21,5 +22,6 @@ class TwitterUserEntity {
     this.image,
     required this.email,
     required this.isDocumented,
+    required this.hasStory,
   });
 }
