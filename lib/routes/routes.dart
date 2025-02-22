@@ -4,6 +4,7 @@ abstract class Routes {
   Routes._();
 
   static const HOME = '/';
+  static const RIDE_HOME = '/RideHome';
   static const CUSTOMPAGE = '/CustomPage';
   static const editPage = '/editPage';
   static const PAGEPREVIEW = '/CustomPage/PagePreview';
@@ -204,6 +205,7 @@ abstract class Paths {
   Paths._();
 
   static const HOME = '/';
+  static const RIDEHOME = 'RideHome';
   static const CUSTOMPAGE = 'CustomPage';
   static const PAGEPREVIEW = 'PagePreview';
   static const MAINCATEGORIESCARDS = 'MainCategoriesCards';

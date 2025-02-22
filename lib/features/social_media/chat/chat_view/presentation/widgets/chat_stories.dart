@@ -610,7 +610,7 @@ class ChatStories extends StatelessWidget {
               ),
 
               child: Padding(
-                padding: const EdgeInsets.all(6.0),
+                padding: const EdgeInsets.all(4.0),
                 child: Container(
                   padding: const EdgeInsets.all(4),
                   decoration: const BoxDecoration(
@@ -883,7 +883,7 @@ class StoriesBorderPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     if (storiesCount <= 0) return;
 
-    final double strokeWidth = 6.0;
+    final double strokeWidth = 4.0;
     final double radius = (size.width / 2) + 4;
     final Offset center = Offset(size.width / 2, size.height / 2);
     final Rect rect = Rect.fromCircle(center: center, radius: radius);
@@ -903,6 +903,7 @@ class StoriesBorderPainter extends CustomPainter {
     if (storiesCount == 1) {
       canvas.drawCircle(center, radius, paint);
     }
+
     else if (storiesCount == 2) {
 
       final double dashAngle = (pi * 0.9);
@@ -915,7 +916,6 @@ class StoriesBorderPainter extends CustomPainter {
       canvas.drawArc(rect, startAngle2, dashAngle, false, paint);
     }
     else {
-
       final double totalAngle = 2 * pi;
       final double segmentAngle = totalAngle / storiesCount;
       final double dashAngle = segmentAngle * 0.8;

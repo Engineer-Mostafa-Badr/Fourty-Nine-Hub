@@ -1197,4 +1197,12 @@ class EndPoints {
 
   static String joinTripCarPool = '/carpool/joinCompleteBus';
   static String createCarPool = '/carpool/create';
+
+  static String getRideCategories(String userId) {
+    return '/ride/get-thumbnail-ride?userId=$userId';
+  }
+
+  static String getShippingCategories(String userId) {
+    return '/loading/driver/subcategory?userId=$userId';
+  }
 }

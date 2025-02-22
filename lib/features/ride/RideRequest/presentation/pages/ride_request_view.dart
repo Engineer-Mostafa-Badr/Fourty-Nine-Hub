@@ -117,7 +117,6 @@ class _RideRequestViewState extends State<RideRequestView> {
                           )),
                       (state.model.mainCategory?.isDriverApproved ?? false)
                           ? Container(
-                            
                               padding: const EdgeInsets.all(8.0),
                               child: DashboardBanner(
                                 onTap: () => context.push(Routes.ALLTRIPRIDER),

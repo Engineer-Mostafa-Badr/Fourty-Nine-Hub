@@ -45,6 +45,7 @@ import 'package:fourtyninehub/service_locator/privacy_service_locator.dart';
 import 'package:fourtyninehub/service_locator/quran_service_locator.dart';
 import 'package:fourtyninehub/service_locator/reels_service_locator.dart';
 import 'package:fourtyninehub/service_locator/ride_service_locator.dart';
+import 'package:fourtyninehub/service_locator/ride_service_locator_updated.dart';
 import 'package:fourtyninehub/service_locator/search_service_locator.dart';
 import 'package:fourtyninehub/service_locator/secrets_service_locator.dart';
 import 'package:fourtyninehub/service_locator/setting_service_locator.dart';
@@ -324,6 +325,8 @@ class DI {
     AccountServiceLocator.execute(serviceLocator: serviceLocator);
     // Social
     SocialServiceLocator.execute(serviceLocator: serviceLocator);
+    // Ride Updated
+    RideServiceLocatorUpdated.execute(serviceLocator: serviceLocator);
     // Club Voice
     ClubVoiceServiceLocator.execute(serviceLocator: serviceLocator);
     // Stream

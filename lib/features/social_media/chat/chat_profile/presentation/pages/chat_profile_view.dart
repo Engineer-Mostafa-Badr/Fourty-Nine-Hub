@@ -139,32 +139,89 @@ class ChatProfileView extends StatelessWidget {
                               onTap: () async {
                                 showModalBottomSheet(
                                   context: context,
+                                  backgroundColor: Colors.white,
                                   builder: (BuildContext context) {
-                                    return Wrap(
-                                      children: <Widget>[
-                                        ListTile(
-                                          leading:
-                                              const Icon(Icons.photo_library),
-                                          title: const Text('Gallery'),
-                                          onTap: () async {
-                                            Navigator.pop(context);
-                                            await context
-                                                .read<UserCubit>()
-                                                .uploadPhoto(isGallery: true, context: context);
-                                            // Reload user data if needed
-                                          },
+                                    return Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        const SizedBox(height: 16,),
+                                        Container(
+                                          width: 42,
+                                          height: 4,
+                                          decoration: const BoxDecoration(
+                                            // shape: BoxShape.circle,
+                                              color: Color(0xffD9D9D9),
+                                              borderRadius: BorderRadius.all(Radius.circular(50))
+                                          ),
                                         ),
-                                        ListTile(
-                                          leading: const Icon(Icons.camera_alt),
-                                          title: const Text('Camera'),
-                                          onTap: () async {
-                                            Navigator.pop(context);
-                                            await context
-                                                .read<UserCubit>()
-                                                .uploadPhoto(isGallery: false, context: context);
-                                            // Reload user data if needed
-                                          },
+                                        Padding(
+                                          padding: const EdgeInsets.all(16),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              InkWell(
+                                                  onTap:(){
+                                                    context.pop();
+                                                  },
+                                                  child: Icon(Icons.close_outlined, color: Colors.black.withOpacity(0.5),)),
+                                              Text(context.isArabic? "صورة الملف الشخصي" : 'Profile photo', style: const TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.w500,
+                                              ),),
+                                              Icon(Icons.delete_outline, color: Colors.black.withOpacity(0.5),)
+                                            ],
+                                          ),
                                         ),
+                                         Padding(
+                                           padding: const EdgeInsets.all(16),
+                                           child: Row(
+                                            children: [
+                                              InkWell(
+                                                onTap: () async {
+                                                  Navigator.pop(context);
+                                                  await context
+                                                      .read<UserCubit>()
+                                                      .uploadPhoto(isGallery: false, context: context);
+                                                  // Reload user data if needed
+                                                },
+                                                child: Column(
+                                                  children: [
+                                                    const Icon(Icons.camera_alt_outlined,color: AppColors.PRIMARY_COLOR_DARK, size: 30,),
+                                                    const SizedBox(height: 8,),
+                                                    Text(context.isArabic? "كاميرا": 'Camera', style: TextStyle(
+                                                      color: Colors.black.withOpacity(0.5),
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.w400,
+                                                    ),)
+                                                  ],
+                                                ),
+                                              ),
+                                              const SizedBox(width: 24,),
+                                              InkWell(
+                                                onTap: () async {
+                                                  Navigator.pop(context);
+                                                  await context
+                                                      .read<UserCubit>()
+                                                      .uploadPhoto(isGallery: true, context: context);
+                                                  // Reload user data if needed
+                                                },
+                                                child: Column(
+                                                  children: [
+                                                    const Icon(Icons.photo_outlined,color: AppColors.PRIMARY_COLOR_DARK, size: 30,),
+                                                    const SizedBox(height: 8,),
+                                                    Text(context.isArabic? "المعرض":'Gallery', style: TextStyle(
+                                                      color: Colors.black.withOpacity(0.5),
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.w400,
+                                                    ),)
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                                                                   ),
+                                         ),
+
                                       ],
                                     );
                                   },
@@ -279,12 +336,13 @@ class ChatProfileView extends StatelessWidget {
                       showModalBottomSheet(
                         context: context,
                         isScrollControlled: true,
+                        backgroundColor: Colors.white,
                         constraints: BoxConstraints(
                           maxHeight: MediaQuery.of(context).size.height * 0.9,
                         ),
                         shape: const RoundedRectangleBorder(
                           borderRadius:
-                              BorderRadius.vertical(top: Radius.circular(20)),
+                              BorderRadius.vertical(top: Radius.circular(30)),
                         ),
                         builder: (context) {
                           // Ensure the context has access to ChatsCubit using BlocProvider
@@ -296,13 +354,23 @@ class ChatProfileView extends StatelessWidget {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     // Header
+                                    Container(
+                                      width: 42,
+                                      height: 4,
+                                      decoration: const BoxDecoration(
+                                        // shape: BoxShape.circle,
+                                        color: Color(0xffD9D9D9),
+                                        borderRadius: BorderRadius.all(Radius.circular(50))
+                                      ),
+                                    ),
+                                    const SizedBox(height: 16,),
                                     Text(
                                       context.isArabic
                                           ? "مشاهدات الملف الشخصي"
                                           : "Who viewed my profile?",
                                       style: const TextStyle(
                                         fontSize: 18,
-                                        fontWeight: FontWeight.bold,
+                                        fontWeight: FontWeight.w500,
                                       ),
                                     ),
                                     const SizedBox(height: 16),
@@ -343,6 +411,7 @@ class ChatProfileView extends StatelessWidget {
                                                 showModalBottomSheet(
                                                   context: context,
                                                   isScrollControlled: true,
+                                                  backgroundColor: Colors.white,
                                                   constraints: BoxConstraints(
                                                     maxHeight:
                                                         MediaQuery.of(context)
@@ -374,16 +443,24 @@ class ChatProfileView extends StatelessWidget {
                                                                     .min,
                                                             children: [
                                                               // Header
+                                                              Container(
+                                                                width: 42,
+                                                                height: 4,
+                                                                decoration: const BoxDecoration(
+                                                                  // shape: BoxShape.circle,
+                                                                    color: Color(0xffD9D9D9),
+                                                                    borderRadius: BorderRadius.all(Radius.circular(50))
+                                                                ),
+                                                              ),
+                                                              const SizedBox(height: 16,),
                                                               Text(
                                                                 context.isArabic
                                                                     ? " المشاهدات بواسطة ${context.read<UserCubit>().profileViews[index].name}"
                                                                     : "Views by ${context.read<UserCubit>().profileViews[index].name}",
                                                                 style:
-                                                                    const TextStyle(
+                                                                const TextStyle(
                                                                   fontSize: 18,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
+                                                                  fontWeight: FontWeight.w500,
                                                                 ),
                                                               ),
                                                               const SizedBox(
@@ -418,56 +495,45 @@ class ChatProfileView extends StatelessWidget {
                                                                     itemBuilder:
                                                                         (context,
                                                                             index) {
-                                                                      return Padding(
-                                                                        padding: const EdgeInsets
-                                                                            .symmetric(
-                                                                            vertical:
-                                                                                8.0),
-                                                                        child:
-                                                                            Card(
-                                                                          elevation:
-                                                                              3,
-                                                                          shape:
-                                                                              RoundedRectangleBorder(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(10),
-                                                                          ),
-                                                                          child:
-                                                                              ListTile(
-                                                                            leading:
-                                                                                ClipRRect(
-                                                                              borderRadius: BorderRadius.circular(50),
-                                                                              child: CircleAvatar(
-                                                                                radius: 25,
-                                                                                child: Image.network(
-                                                                                  context.read<UserCubit>().profileViewsByUserId[index].avatar,
-                                                                                  fit: BoxFit.cover,
-                                                                                  errorBuilder: (context, error, stackTrace) {
-                                                                                    return Image.network(
-                                                                                      UIConst.profilePlaceHolder,
-                                                                                      fit: BoxFit.cover,
-                                                                                    );
-                                                                                  },
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                            title:
-                                                                                Text(
-                                                                              context.read<UserCubit>().profileViewsByUserId[index].name,
-                                                                              style: const TextStyle(
-                                                                                fontWeight: FontWeight.bold,
-                                                                              ),
-                                                                            ),
-                                                                            subtitle:
-                                                                                Text(
-                                                                              '${context.read<UserCubit>().profileViewsByUserId[index].date} ${context.isArabic ? "في الساعة" : "at"} ${context.read<UserCubit>().profileViewsByUserId[index].time}',
-                                                                              style: const TextStyle(
-                                                                                color: Colors.grey,
-                                                                              ),
-                                                                            ),
-                                                                          ),
+                                                                      return ListTile(
+                                                                                                                                            leading:
+                                                                        ClipRRect(
+                                                                      borderRadius: BorderRadius.circular(50),
+                                                                      child: CircleAvatar(
+                                                                        radius: 25,
+                                                                        child: Image.network(
+                                                                          context.read<UserCubit>().profileViewsByUserId[index].avatar,
+                                                                          fit: BoxFit.cover,
+                                                                          width: 50,
+                                                                          height: 50,
+                                                                          errorBuilder: (context, error, stackTrace) {
+                                                                            return Image.network(
+                                                                              UIConst.profilePlaceHolder,
+                                                                              fit: BoxFit.cover,
+                                                                            );
+                                                                          },
                                                                         ),
-                                                                      );
+                                                                      ),
+                                                                                                                                            ),
+                                                                                                                                            title:
+                                                                        Text(
+                                                                      context.read<UserCubit>().profileViewsByUserId[index].name,
+                                                                      style: const TextStyle(
+                                                                        fontWeight:
+                                                                        FontWeight.w400,
+                                                                        fontSize: 17,
+                                                                      ),
+                                                                                                                                            ),
+                                                                                                                                            subtitle:
+                                                                        Text(
+                                                                      '${context.read<UserCubit>().profileViewsByUserId[index].date}         ${context.read<UserCubit>().profileViewsByUserId[index].time}',
+                                                                      style: const TextStyle(
+                                                                        color: Colors.black,
+                                                                        fontSize: 12,
+                                                                        fontWeight: FontWeight.w400,
+                                                                      ),
+                                                                                                                                            ),
+                                                                                                                                              );
                                                                     },
                                                                   ),
                                                                 ),
@@ -479,60 +545,53 @@ class ChatProfileView extends StatelessWidget {
                                                   },
                                                 );
                                               },
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 8.0),
-                                                child: Card(
-                                                  elevation: 3,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                  ),
-                                                  child: ListTile(
-                                                    leading: ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              50),
-                                                      child: CircleAvatar(
-                                                        radius: 25,
-                                                        child: Image.network(
-                                                          context
-                                                              .read<UserCubit>()
-                                                              .profileViews[
-                                                                  index]
-                                                              .avatar,
-                                                          fit: BoxFit.cover,
-                                                          errorBuilder:
-                                                              (context, error,
-                                                                  stackTrace) {
-                                                            return Image
-                                                                .network(
-                                                              UIConst
-                                                                  .profilePlaceHolder,
-                                                              fit: BoxFit.cover,
-                                                            );
-                                                          },
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    title: Text(
+                                              child: ListTile(
+                                                leading: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          50),
+                                                  child: CircleAvatar(
+                                                    radius: 25,
+                                                    backgroundColor: Colors.white,
+                                                    child: Image.network(
                                                       context
                                                           .read<UserCubit>()
-                                                          .profileViews[index]
-                                                          .name,
-                                                      style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
+                                                          .profileViews[
+                                                              index]
+                                                          .avatar,
+                                                      fit: BoxFit.cover,
+                                                      width: 50,
+                                                      height: 50,
+                                                      errorBuilder:
+                                                          (context, error,
+                                                              stackTrace) {
+                                                        return Image
+                                                            .network(
+                                                          UIConst
+                                                              .profilePlaceHolder,
+                                                          fit: BoxFit.cover,
+                                                        );
+                                                      },
                                                     ),
-                                                    subtitle: Text(
-                                                      '${context.read<UserCubit>().profileViews[index].date} - ${context.read<UserCubit>().profileViews[index].time}',
-                                                      style: const TextStyle(
-                                                        color: Colors.grey,
-                                                      ),
-                                                    ),
+                                                  ),
+                                                ),
+                                                title: Text(
+                                                  context
+                                                      .read<UserCubit>()
+                                                      .profileViews[index]
+                                                      .name,
+                                                  style: const TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.w400,
+                                                    fontSize: 17,
+                                                  ),
+                                                ),
+                                                subtitle: Text(
+                                                  '${context.read<UserCubit>().profileViews[index].date}       ${context.read<UserCubit>().profileViews[index].time}',
+                                                  style: const TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.w400,
                                                   ),
                                                 ),
                                               ),
@@ -584,6 +643,7 @@ class ChatProfileView extends StatelessWidget {
                       showModalBottomSheet(
                         context: context,
                         isScrollControlled: true,
+                        backgroundColor: Colors.white,
                         constraints: BoxConstraints(
                           maxHeight: MediaQuery.of(context).size.height * 0.9,
                         ),
@@ -601,13 +661,23 @@ class ChatProfileView extends StatelessWidget {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     // Header
+                                    Container(
+                                      width: 42,
+                                      height: 4,
+                                      decoration: const BoxDecoration(
+                                        // shape: BoxShape.circle,
+                                          color: Color(0xffD9D9D9),
+                                          borderRadius: BorderRadius.all(Radius.circular(50))
+                                      ),
+                                    ),
+                                    const SizedBox(height: 16,),
                                     Text(
                                       context.isArabic
                                           ? "مشاهدات صورة الملف الشخصي"
                                           : "Who viewed my profile picture?",
                                       style: const TextStyle(
                                         fontSize: 18,
-                                        fontWeight: FontWeight.bold,
+                                        fontWeight: FontWeight.w500,
                                       ),
                                     ),
                                     const SizedBox(height: 16),
@@ -648,6 +718,7 @@ class ChatProfileView extends StatelessWidget {
                                                 showModalBottomSheet(
                                                   context: context,
                                                   isScrollControlled: true,
+                                                  backgroundColor: Colors.white,
                                                   constraints: BoxConstraints(
                                                     maxHeight:
                                                         MediaQuery.of(context)
@@ -679,16 +750,24 @@ class ChatProfileView extends StatelessWidget {
                                                                     .min,
                                                             children: [
                                                               // Header
+                                                              Container(
+                                                                width: 42,
+                                                                height: 4,
+                                                                decoration: const BoxDecoration(
+                                                                  // shape: BoxShape.circle,
+                                                                    color: Color(0xffD9D9D9),
+                                                                    borderRadius: BorderRadius.all(Radius.circular(50))
+                                                                ),
+                                                              ),
+                                                              const SizedBox(height: 16,),
                                                               Text(
                                                                 context.isArabic
                                                                     ? " المشاهدات بواسطة ${context.read<UserCubit>().profileViews[index].name}"
                                                                     : "Views by ${context.read<UserCubit>().profileViews[index].name}",
                                                                 style:
-                                                                    const TextStyle(
+                                                                const TextStyle(
                                                                   fontSize: 18,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
+                                                                  fontWeight: FontWeight.w500,
                                                                 ),
                                                               ),
                                                               const SizedBox(
@@ -723,56 +802,45 @@ class ChatProfileView extends StatelessWidget {
                                                                     itemBuilder:
                                                                         (context,
                                                                             index) {
-                                                                      return Padding(
-                                                                        padding: const EdgeInsets
-                                                                            .symmetric(
-                                                                            vertical:
-                                                                                8.0),
-                                                                        child:
-                                                                            Card(
-                                                                          elevation:
-                                                                              3,
-                                                                          shape:
-                                                                              RoundedRectangleBorder(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(10),
-                                                                          ),
-                                                                          child:
-                                                                              ListTile(
-                                                                            leading:
-                                                                                ClipRRect(
-                                                                              borderRadius: BorderRadius.circular(50),
-                                                                              child: CircleAvatar(
-                                                                                radius: 25,
-                                                                                child: Image.network(
-                                                                                  context.read<UserCubit>().profileViewsByUserId[index].avatar,
-                                                                                  fit: BoxFit.cover,
-                                                                                  errorBuilder: (context, error, stackTrace) {
-                                                                                    return Image.network(
-                                                                                      UIConst.profilePlaceHolder,
-                                                                                      fit: BoxFit.cover,
-                                                                                    );
-                                                                                  },
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                            title:
-                                                                                Text(
-                                                                              context.read<UserCubit>().profileViewsByUserId[index].name,
-                                                                              style: const TextStyle(
-                                                                                fontWeight: FontWeight.bold,
-                                                                              ),
-                                                                            ),
-                                                                            subtitle:
-                                                                                Text(
-                                                                              '${context.read<UserCubit>().profileViewsByUserId[index].date} ${context.isArabic ? "في الساعة" : "at"} ${context.read<UserCubit>().profileViewsByUserId[index].time}',
-                                                                              style: const TextStyle(
-                                                                                color: Colors.grey,
-                                                                              ),
-                                                                            ),
-                                                                          ),
+                                                                      return ListTile(
+                                                                                                                                            leading:
+                                                                        ClipRRect(
+                                                                      borderRadius: BorderRadius.circular(50),
+                                                                      child: CircleAvatar(
+                                                                        radius: 25,
+                                                                        child: Image.network(
+                                                                          context.read<UserCubit>().profileViewsByUserId[index].avatar,
+                                                                          fit: BoxFit.cover,
+                                                                          width: 50,
+                                                                          height: 50,
+                                                                          errorBuilder: (context, error, stackTrace) {
+                                                                            return Image.network(
+                                                                              UIConst.profilePlaceHolder,
+                                                                              fit: BoxFit.cover,
+                                                                            );
+                                                                          },
                                                                         ),
-                                                                      );
+                                                                      ),
+                                                                                                                                            ),
+                                                                                                                                            title:
+                                                                        Text(
+                                                                      context.read<UserCubit>().profileViewsByUserId[index].name,
+                                                                      style: const TextStyle(
+                                                                        fontWeight:
+                                                                        FontWeight.w400,
+                                                                        fontSize: 17,
+                                                                      ),
+                                                                                                                                            ),
+                                                                                                                                            subtitle:
+                                                                        Text(
+                                                                      '${context.read<UserCubit>().profileViewsByUserId[index].date}        ${context.read<UserCubit>().profileViewsByUserId[index].time}',
+                                                                      style: const TextStyle(
+                                                                        color: Colors.black,
+                                                                        fontSize: 12,
+                                                                        fontWeight: FontWeight.w400,
+                                                                      ),
+                                                                                                                                            ),
+                                                                                                                                              );
                                                                     },
                                                                   ),
                                                                 ),
@@ -784,60 +852,53 @@ class ChatProfileView extends StatelessWidget {
                                                   },
                                                 );
                                               },
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 8.0),
-                                                child: Card(
-                                                  elevation: 3,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                  ),
-                                                  child: ListTile(
-                                                    leading: ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              50),
-                                                      child: CircleAvatar(
-                                                        radius: 25,
-                                                        child: Image.network(
-                                                          context
-                                                              .read<UserCubit>()
-                                                              .profileViews[
-                                                                  index]
-                                                              .avatar,
-                                                          fit: BoxFit.cover,
-                                                          errorBuilder:
-                                                              (context, error,
-                                                                  stackTrace) {
-                                                            return Image
-                                                                .network(
-                                                              UIConst
-                                                                  .profilePlaceHolder,
-                                                              fit: BoxFit.cover,
-                                                            );
-                                                          },
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    title: Text(
+                                              child: ListTile(
+                                                leading: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          50),
+                                                  child: CircleAvatar(
+                                                    radius: 25,
+
+                                                    child: Image.network(
                                                       context
                                                           .read<UserCubit>()
-                                                          .profileViews[index]
-                                                          .name,
-                                                      style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
+                                                          .profileViews[
+                                                              index]
+                                                          .avatar,
+                                                      fit: BoxFit.cover,
+                                                      width: 50,
+                                                      height: 50,
+                                                      errorBuilder:
+                                                          (context, error,
+                                                              stackTrace) {
+                                                        return Image
+                                                            .network(
+                                                          UIConst
+                                                              .profilePlaceHolder,
+                                                          fit: BoxFit.cover,
+                                                        );
+                                                      },
                                                     ),
-                                                    subtitle: Text(
-                                                      '${context.read<UserCubit>().profileViews[index].date} - ${context.read<UserCubit>().profileViews[index].time}',
-                                                      style: const TextStyle(
-                                                        color: Colors.grey,
-                                                      ),
-                                                    ),
+                                                  ),
+                                                ),
+                                                title: Text(
+                                                  context
+                                                      .read<UserCubit>()
+                                                      .profileViews[index]
+                                                      .name,
+                                                  style: const TextStyle(
+                                                    fontWeight:
+                                                    FontWeight.w400,
+                                                    fontSize: 17,
+                                                  ),
+                                                ),
+                                                subtitle: Text(
+                                                  '${context.read<UserCubit>().profileViews[index].date}       ${context.read<UserCubit>().profileViews[index].time}',
+                                                  style: const TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.w400,
                                                   ),
                                                 ),
                                               ),
