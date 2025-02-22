@@ -14,6 +14,9 @@ import 'package:fourtyninehub/res/style/styles.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
 
+import '../../../../RideFeature/presentation/pages/expired_trips_screen.dart';
+import '../../../../RideFeature/presentation/pages/receipt_trip_screen.dart';
+import '../../../../RideFeature/presentation/pages/running_trips_screen.dart';
 import '../../../presentation/views/widgets/on_boarding_trip.dart';
 import '../../../presentation/views/widgets/pick_me_screen.dart';
 import '../../../presentation/views/widgets/trip_join_screen.dart';
@@ -62,7 +65,7 @@ class _AvailableTripsViewState extends State<AvailableTripsView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ElevatedButton(onPressed: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=> OnBoardingTrip()));
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> ReceiptTripScreen()));
               }, child: Text("Move")),
               Center(
                 child: Text(

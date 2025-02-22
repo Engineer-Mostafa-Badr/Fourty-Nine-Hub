@@ -1294,5 +1294,8 @@
   "deposit": "Deposit",
   "clickHere": "Click Here",
   "chargeWallet": "Charge Wallet",
-  "people": "People"
+  "people": "People",
+  "receipt": "Receipt",
+  "payments": "Payments",
+  "cash": "Cash"
 }

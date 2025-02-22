@@ -33,6 +33,9 @@ abstract class AppColors {
   static const SECONDARY_COLOR_DARK = Color(0xFFec5749);
   static const c0B1035 = Color(0xFF0B1035);
   static const c46484B = Color(0xFF46484B);
+  static const cF5F5F5 = Color(0xFFF5F5F5);
+  static const cE8E8E8 = Color(0xFFE8E8E8);
+  static const c6E6E70 = Color(0xFF6E6E70);
   // static const SECONDARY_COLOR = Color(0xffff3308);
 
   static const BARRIER_COLOR = Color(0x800E1E4E);

@@ -1274,6 +1274,9 @@
   "deposit": "إيداع",
   "clickHere": "إضغط هنا",
   "chargeWallet": "شحن المحفظة",
-  "people": "الاشخاص"
+  "people": "الاشخاص",
+  "receipt": "ايصال",
+  "payments": "المدفوعات",
+  "cash": "نقدي"
 
 }

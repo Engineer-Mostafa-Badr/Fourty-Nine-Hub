@@ -228,4 +228,9 @@ abstract class Assets {
   static String maka = 'assets/images/maka.png';
   static String madina = 'assets/images/madina.png';
   static String win = 'assets/images/win.jpg';
+  static String carBanner = 'assets/images/car_banner.png';
+
+  static String redCar = 'assets/icons/red_car.svg';
+  static String blackCar = 'assets/icons/black_car.svg';
+  static String cash = 'assets/icons/cash.svg';
 }

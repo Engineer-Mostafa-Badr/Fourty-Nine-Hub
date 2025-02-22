@@ -1281,8 +1281,13 @@ class CodegenLoader extends AssetLoader{
   "deposit": "إيداع",
   "clickHere": "إضغط هنا",
   "chargeWallet": "شحن المحفظة",
-  "people": "الاشخاص"
-};
+  "people": "الاشخاص",
+    "receipt": "ايصال",
+  "payments": "المدفوعات",
+    "cash": "نقدي"
+
+
+  };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
   "today": "Today",
@@ -2567,7 +2572,12 @@ static const Map<String,dynamic> _en = {
   "deposit": "Deposit",
   "clickHere": "Click Here",
   "chargeWallet": "Charge Wallet",
-  "people": "People"
+  "people": "People",
+  "receipt": "Receipt",
+  "payments": "Payments",
+  "cash": "Cash"
+
+
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }
