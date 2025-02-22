@@ -261,8 +261,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 drawerRollWidget(
                                   label: LocaleKeys.loading.localize,
                                   image: Assets.loading,
-                                  onTap: () {},
-                                  // onTap: () => context.push(Routes.RIDE),
+                                  // onTap: () {},
+                                  onTap: () => context.push(Routes.welcomeRideRegister),
                                 ),
                                 drawerRollWidget(
                                   label: LocaleKeys.health.localize,
