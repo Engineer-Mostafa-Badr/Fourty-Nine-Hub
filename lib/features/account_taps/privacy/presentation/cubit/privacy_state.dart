@@ -2,10 +2,13 @@ import '../../../../../core/error/failure.dart';
 import '../../domain/entities/communication_privacy_entity.dart';
 import '../../domain/entities/connection_privacy_entity.dart';
 import '../../domain/entities/except_from_entity.dart';
+import '../../domain/entities/exclusion_entity.dart';
 import '../../domain/entities/media_privacy_entity.dart';
 import '../../domain/entities/only_with_entity.dart';
 import '../../domain/entities/personal_privacy_entity.dart';
 import '../../domain/entities/privacy_entity.dart';
+import '../../domain/entities/remove_response_allowed_entity.dart';
+import '../../domain/entities/remove_response_forbidden_entity.dart';
 import '../../domain/entities/search_users_entity.dart';
 import '../../domain/entities/update_personal_privacy_entity.dart';
 
@@ -24,6 +27,9 @@ class PrivacyState {
   final OnlyWithEntity? onlyWithEntity;
   final ExceptFromEntity? exceptFromEntity;
   final MediaPrivacyEntity? mediaPrivacyEntity;
+  final ExclusionEntity? exclusionEntity;
+  final RemoveDataEntity? removeDataEntity;
+  final RemoveForbiddenDataEntity? removeForbiddenDataEntity;
 
   const PrivacyState({
     this.status = PrivacyStates.loading,
@@ -38,6 +44,9 @@ class PrivacyState {
     this.onlyWithEntity,
     this.exceptFromEntity,
     this.mediaPrivacyEntity,
+    this.exclusionEntity,
+    this.removeDataEntity,
+    this.removeForbiddenDataEntity,
 
   });
   PrivacyState copyWith({
@@ -53,7 +62,9 @@ class PrivacyState {
     OnlyWithEntity? onlyWithEntity,
     ExceptFromEntity? exceptFromEntity,
     MediaPrivacyEntity? mediaPrivacyEntity,
-
+    ExclusionEntity? exclusionEntity,
+    RemoveDataEntity? removeDataEntity,
+    RemoveForbiddenDataEntity? removeForbiddenDataEntity
   }) {
     return PrivacyState(
       status: status ?? this.status,
@@ -68,6 +79,9 @@ class PrivacyState {
       onlyWithEntity: onlyWithEntity ?? this.onlyWithEntity,
       exceptFromEntity: exceptFromEntity ?? this.exceptFromEntity,
       mediaPrivacyEntity: mediaPrivacyEntity ?? this.mediaPrivacyEntity,
+      exclusionEntity: exclusionEntity ?? this.exclusionEntity,
+      removeDataEntity: removeDataEntity ?? this.removeDataEntity,
+      removeForbiddenDataEntity: removeForbiddenDataEntity ?? this.removeForbiddenDataEntity,
 
     );
   }

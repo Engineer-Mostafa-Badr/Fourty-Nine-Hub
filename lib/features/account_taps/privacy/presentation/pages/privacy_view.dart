@@ -64,6 +64,7 @@ class PrivacyView extends StatelessWidget {
                               PrivacyMultiSelectItem(
                                 label: LocaleKeys.country.localize,
                                 privacy: state.personalPrivacyEntity?.country ?? '',
+                                name:  mapPrivacyFeatureToString(PrivacyFeature.country),
                                 onChoose: (PrivacyStatus value, List<String>? selectedUsers) {
                                   PrivacyFeature feature = PrivacyFeature.country;
 
@@ -111,6 +112,7 @@ class PrivacyView extends StatelessWidget {
 
                               PrivacyMultiSelectItem(
                                 label: LocaleKeys.phone.localize,
+                                name:  mapPrivacyFeatureToString(PrivacyFeature.phoneNumber),
                                 privacy:
                                     state.personalPrivacyEntity?.phoneNumber ??
                                         '',

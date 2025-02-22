@@ -5,8 +5,11 @@ import 'package:fourtyninehub/features/account_taps/privacy/presentation/cubit/p
 import '../../domain/entities/search_users_entity.dart';
 import '../../domain/useCase/fetch_communication_privacy_use_case.dart';
 import '../../domain/useCase/fetch_connection_privacy_use_case.dart';
+import '../../domain/useCase/fetch_exclusion_privacy_use_case.dart';
 import '../../domain/useCase/fetch_media_privacy_use_case.dart';
 import '../../domain/useCase/fetch_personal_privacy_use_case.dart';
+import '../../domain/useCase/remove_allowed_use_case.dart';
+import '../../domain/useCase/remove_forbidden_use_case.dart';
 import '../../domain/useCase/search_users_privacy_use_case.dart';
 import '../../domain/useCase/update_communication_privacy_use_case.dart';
 import '../../domain/useCase/update_connection_privacy_use_case.dart';
@@ -27,8 +30,11 @@ class PrivacyCubit extends Cubit<PrivacyState> {
   final UpdateExceptFromPrivacyUseCase updateExceptFromPrivacyUseCase;
   final FetchMediaPrivacyUseCase fetchMediaPrivacyUseCase;
   final UpdateMediaPrivacyUseCase updateMediaPrivacyUseCase;
+  final FetchExclusionPrivacyUseCase fetchExclusionPrivacyUseCase;
+  final RemoveAllowedUseCase removeAllowedUseCase;
+  final RemoveForbiddenUseCase removeForbiddenUseCase;
 
-  PrivacyCubit(this._privacyUseCase, this.fetchConnectionPrivacyUseCase, this.updatePersonalPrivacyUseCase, this.updateConnectionPrivacyUseCase, this.fetchCommunicationPrivacyUseCase, this.updateCommunicationPrivacyUseCase, this.searchUsersPrivacyUseCase, this.updateOnlyWithPrivacyUseCase, this.updateExceptFromPrivacyUseCase, this.fetchMediaPrivacyUseCase, this.updateMediaPrivacyUseCase)
+  PrivacyCubit(this._privacyUseCase, this.fetchConnectionPrivacyUseCase, this.updatePersonalPrivacyUseCase, this.updateConnectionPrivacyUseCase, this.fetchCommunicationPrivacyUseCase, this.updateCommunicationPrivacyUseCase, this.searchUsersPrivacyUseCase, this.updateOnlyWithPrivacyUseCase, this.updateExceptFromPrivacyUseCase, this.fetchMediaPrivacyUseCase, this.updateMediaPrivacyUseCase, this.fetchExclusionPrivacyUseCase, this.removeAllowedUseCase, this.removeForbiddenUseCase)
       : super(const PrivacyState());
 
   void loadData() async {
@@ -38,6 +44,53 @@ class PrivacyCubit extends Cubit<PrivacyState> {
     await fetchDataCommunicationPrivacy();
     await fetchDataMediaPrivacy();
   }
+  Future<void> fetchExclusionData({required String feature}) async {
+    emit(state.copyWith(status: PrivacyStates.loading));
+
+    final response = await fetchExclusionPrivacyUseCase.call(ExclusionParams(feature: feature));
+
+    response.fold(
+          (failure) {
+        print("ExclusionEntity: error");
+        emit(state.copyWith(failure: failure, status: PrivacyStates.error));
+      },
+          (exclusionEntity) {
+        print("ExclusionEntity: ${exclusionEntity.data}");  // Check data before emission
+        emit(state.copyWith(exclusionEntity: exclusionEntity, status: PrivacyStates.success));
+      },
+    );
+  }
+
+
+  // Future<void> fetchDataExclusionPrivacy({required ExclusionParams params}) async {
+  //   emit(state.copyWith(status: PrivacyStates.loading));
+  //   final response = await fetchExclusionPrivacyUseCase.call(params);
+  //   response.fold((l) {
+  //     emit(state.copyWith(failure: l, status: PrivacyStates.error));
+  //   }, (data) {
+  //     emit(state.copyWith(exclusionEntity: data, status: PrivacyStates.success));
+  //   });
+  // }
+  Future<void> removeForbiddenData({required RemoveAllowedParams params}) async {
+    // emit(state.copyWith(status: PrivacyStates.loading));
+    final response = await removeForbiddenUseCase.call(params);
+    response.fold((l) {
+      emit(state.copyWith(failure: l, status: PrivacyStates.error));
+    }, (data) {
+      emit(state.copyWith(removeForbiddenDataEntity: data));
+    });
+  }
+
+  Future<void> removeAllowedData({required RemoveAllowedParams params}) async {
+    // emit(state.copyWith(status: PrivacyStates.loading));
+    final response = await removeAllowedUseCase.call(params);
+    response.fold((l) {
+      emit(state.copyWith(failure: l, status: PrivacyStates.error));
+    }, (data) {
+      emit(state.copyWith(removeDataEntity: data));
+    });
+  }
+
   Future<void> updateDataMediaPrivacy({required UpdateMediaPrivacyParams params}) async {
     // emit(state.copyWith(status: PrivacyStates.loading));
     final response = await updateMediaPrivacyUseCase.call(params);
@@ -68,7 +121,7 @@ class PrivacyCubit extends Cubit<PrivacyState> {
       emit(state.copyWith(failure: l, status: PrivacyStates.error));
     }, (data) {
       emit(state.copyWith(exceptFromEntity: data));
-      loadData();
+      // loadData();
     });
   }
 

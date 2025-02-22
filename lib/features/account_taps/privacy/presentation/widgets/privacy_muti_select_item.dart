@@ -1,340 +1,25 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/utils/custom_show_dialog.dart';
-import '../../../../../common/widgets/stateless/custom_sheet/custom_vertical_sheet_item.dart';
-import '../../../../../common/widgets/stateless/custom_sheet/sheet_vertical_item.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../domain/entities/privacy_status_enum.dart';
-import '../../domain/entities/search_users_entity.dart';
+import '../../domain/useCase/remove_allowed_use_case.dart';
 import '../cubit/privacy_cubit.dart';
 import '../cubit/privacy_state.dart';
 
-// class PrivacyMultiSelectItem extends StatelessWidget {
-//   final String label;
-//   final String privacy;
-//   final Function(PrivacyStatus value) onChoose;
-//   final bool isFriendEnable;
-//
-//   const PrivacyMultiSelectItem({
-//     super.key,
-//     required this.label,
-//     required this.privacy,
-//     required this.onChoose,
-//     this.isFriendEnable = true,
-//   });
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       decoration: BoxDecoration(
-//         color: Theme.of(context).scaffoldBackgroundColor,
-//         borderRadius: BorderRadius.circular(20),
-//       ),
-//       child: InkWell(
-//         borderRadius: BorderRadius.circular(10),
-//         onTap: () async {
-//           PrivacyStatus currentStatus = privacyToPrivacyStatus(privacy);
-//
-//           final res = await showDialog(
-//             context: context,
-//             builder: (context) => AlertDialog(
-//               backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-//               content: StatefulBuilder(
-//                 builder: (context, setState) {
-//                   return Column(
-//                     mainAxisSize: MainAxisSize.min,
-//                     crossAxisAlignment: CrossAxisAlignment.start,
-//                     children: [
-//                       Label(text: 'Who Can See My $label'),
-//                       _buildPrivacyOption(
-//                         context,
-//                         setState,
-//                         title: LocaleKeys.public.localize,
-//                         value: PrivacyStatus.public,
-//                         currentStatus: currentStatus,
-//                       ),
-//                       _buildPrivacyOption(
-//                         context,
-//                         setState,
-//                         title: LocaleKeys.friends.localize,
-//                         value: PrivacyStatus.friends,
-//                         currentStatus: currentStatus,
-//                       ),
-//                       _buildPrivacyOption(
-//                         context,
-//                         setState,
-//                         title: LocaleKeys.followers.localize,
-//                         value: PrivacyStatus.followers,
-//                         currentStatus: currentStatus,
-//                       ),
-//                       _buildPrivacyOption(
-//                         context,
-//                         setState,
-//                         title: '${LocaleKeys.friends.localize} / ${LocaleKeys.followers.localize}',
-//                         value: PrivacyStatus.friendsAndFollowers,
-//                         currentStatus: currentStatus,
-//                       ),
-//                       _buildPrivacyOption(
-//                         context,
-//                         setState,
-//                         title: LocaleKeys.onlyMe.localize,
-//                         value: PrivacyStatus.onlyMe,
-//                         currentStatus: currentStatus,
-//                       ),
-//                       _buildPrivacyOption(
-//                         context,
-//                         setState,
-//                         title: LocaleKeys.contacts.localize,
-//                         value: PrivacyStatus.contacts,
-//                         currentStatus: currentStatus,
-//                       ),
-//                       _buildPrivacyOption(
-//                         context,
-//                         setState,
-//                         title: LocaleKeys.only_with.localize,
-//                         value: PrivacyStatus.onlyWith,
-//                         currentStatus: currentStatus,
-//                         showUserDialog: true,
-//                       ),
-//                       _buildPrivacyOption(
-//                         context,
-//                         setState,
-//                         title: LocaleKeys.except_from.localize,
-//                         value: PrivacyStatus.exceptFrom,
-//                         currentStatus: currentStatus,
-//                         showUserDialog: true,
-//                       ),
-//                     ],
-//                   );
-//                 },
-//               ),
-//             ),
-//           );
-//
-//           if (res != null) {
-//             final selectedStatus = res as PrivacyStatus;
-//             onChoose(selectedStatus);
-//             log(selectedStatus.toString());
-//           }
-//         },
-//         child: Padding(
-//           padding: const EdgeInsets.all(8.0),
-//           child: Row(
-//             children: [
-//               Expanded(
-//                 child: Label(
-//                   text: label,
-//                   style: TextStyle(fontSize: 35, fontWeight: FontWeight.w400),
-//                 ),
-//               ),
-//               Row(
-//                 children: [
-//                   Label(
-//                     text: getPrivacyName(privacyToPrivacyStatus(privacy)),
-//                     style: TextStyle(
-//                       fontSize: 30,
-//                       color: Colors.grey,
-//                     ),
-//                   ),
-//                   SizedBox(width: 10),
-//                   Icon(
-//                     getPrivacyIcon(privacyToPrivacyStatus(privacy)),
-//                     color: Colors.grey,
-//                   ),
-//                 ],
-//               ),
-//               SizedBox(width: 15),
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-//
-//   Widget _buildPrivacyOption(
-//       BuildContext context,
-//       StateSetter setState, {
-//         required String title,
-//         required PrivacyStatus value,
-//         required PrivacyStatus currentStatus,
-//         bool showUserDialog = false,
-//       }) {
-//     return RadioListTile<PrivacyStatus>(
-//       value: value,
-//       groupValue: currentStatus,
-//       onChanged: (selectedValue) async {
-//         setState(() {
-//           currentStatus = selectedValue!;
-//         });
-//
-//         log('Selected Privacy: $currentStatus');
-//
-//         if (showUserDialog) {
-//           final selectedUsers = await showSearchUserDialog(context);
-//           if (selectedUsers != null && selectedUsers.isNotEmpty) {
-//             log('Selected Users: ${selectedUsers.map((e) => e.id).toList()}');
-//           }
-//         }
-//
-//       onChoose(currentStatus, selectedUsers);//         Navigator.pop(context);
-//       },
-//       title: Label(text: title),
-//     );
-//   }
-//
-//   PrivacyStatus privacyToPrivacyStatus(String privacy) {
-//     switch (privacy) {
-//       case 'only-me':
-//         return PrivacyStatus.onlyMe;
-//       case 'public':
-//         return PrivacyStatus.public;
-//       case 'friends':
-//         return PrivacyStatus.friends;
-//       case 'followers':
-//         return PrivacyStatus.followers;
-//       case 'friends-and-followers':
-//         return PrivacyStatus.friendsAndFollowers;
-//       case 'contacts':
-//         return PrivacyStatus.contacts;
-//       case 'only-with':
-//         return PrivacyStatus.onlyWith;
-//       case 'friends-except':
-//         return PrivacyStatus.exceptFrom;
-//       default:
-//         return PrivacyStatus.public;
-//     }
-//   }
-//
-//   Future<List<SearchUsersEntity>?> showSearchUserDialog(BuildContext context) async {
-//     List<SearchUsersEntity> selectedUsers = [];
-//
-//     return await showModalBottomSheet<List<SearchUsersEntity>>(
-//       context: context,
-//       isScrollControlled: true,
-//       builder: (context) {
-//         return BlocProvider(
-//           create: (_) => serviceLocator<PrivacyCubit>(),
-//           child: StatefulBuilder(
-//             builder: (context, setState) {
-//               return Padding(
-//                 padding: const EdgeInsets.all(16),
-//                 child: Column(
-//                   mainAxisSize: MainAxisSize.min,
-//                   children: [
-//                     TextField(
-//                       decoration: InputDecoration(
-//                         labelText: "Search Users",
-//                         prefixIcon: Icon(Icons.search),
-//                         border: OutlineInputBorder(),
-//                       ),
-//                       onChanged: (value) {
-//                         if (value.isNotEmpty) {
-//                           context.read<PrivacyCubit>().searchRestaurant(value);
-//                         }
-//                       },
-//                     ),
-//                     SizedBox(height: 10),
-//                     Expanded(
-//                       child: BlocBuilder<PrivacyCubit, PrivacyState>(
-//                         builder: (context, state) {
-//                           if (state.status == PrivacyStates.loading) {
-//                             return Center(child: CircularProgressIndicator());
-//                           }
-//                           if (state.status == PrivacyStates.error) {
-//                             return Center(child: Text("Error fetching users"));
-//                           }
-//                           if (state.searchUsers == null || state.searchUsers!.isEmpty) {
-//                             return Center(child: Text("No users found"));
-//                           }
-//
-//
-//                           return ListView.builder(
-//                             itemCount: state.searchUsers!.length,
-//                             itemBuilder: (context, index) {
-//                               final user = state.searchUsers![index];
-//                               final isSelected = selectedUsers.contains(user);
-//
-//                               return ListTile(
-//                                 title: Text(user.firstName!),
-//                                 subtitle: Text(user.lastName!),
-//                                 trailing: Icon(
-//                                   isSelected ? Icons.check_circle : Icons.circle_outlined,
-//                                   color: isSelected ? Colors.blue : null,
-//                                 ),
-//                                 onTap: () {
-//                                   setState(() {
-//                                     if (isSelected) {
-//                                       selectedUsers.remove(user);
-//                                     } else {
-//                                       selectedUsers.add(user);
-//                                     }
-//                                   });
-//                                 },
-//                               );
-//                             },
-//                           );
-//                         },
-//                       ),
-//                     ),
-//                     ElevatedButton(
-//                       onPressed: () {
-//                         print("Selected Users: ${selectedUsers.map((user) => '${user.firstName} ${user.lastName} (ID: ${user.id})').toList()}");
-//                         // Navigator.pop(context, selectedUsers);
-//                       },
-//                       child: Text("Confirm Selection"),
-//                     ),
-//
-//                   ],
-//                 ),
-//               );
-//             },
-//           ),
-//         );
-//       },
-//     );
-//   }
-//
-//   String getPrivacyName(PrivacyStatus status) {
-//     switch (status) {
-//       case PrivacyStatus.onlyMe:
-//         return LocaleKeys.onlyMe.localize;
-//       case PrivacyStatus.public:
-//         return LocaleKeys.public.localize;
-//       case PrivacyStatus.friends:
-//         return LocaleKeys.friends.localize;
-//       case PrivacyStatus.followers:
-//         return LocaleKeys.followers.localize;
-//       case PrivacyStatus.friendsAndFollowers:
-//         return '${LocaleKeys.friends.localize} / ${LocaleKeys.followers.localize}';
-//       case PrivacyStatus.exceptFrom:
-//         return LocaleKeys.except_from.localize;
-//       case PrivacyStatus.onlyWith:
-//         return LocaleKeys.only_with.localize;
-//       case PrivacyStatus.contacts:
-//         return LocaleKeys.contacts.localize;
-//     }
-//   }
-//
-//   IconData getPrivacyIcon(PrivacyStatus status) {
-//     return Icons.privacy_tip;
-//   }
-// }
-import 'dart:developer';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
-class PrivacyMultiSelectItem extends StatelessWidget {
+
+class PrivacyMultiSelectItem extends StatefulWidget {
   final String label;
   final String privacy;
   final Function(PrivacyStatus value, List<String>? selectedUsers) onChoose;
   final bool isFriendEnable;
+  final String? name;
 
   const PrivacyMultiSelectItem({
     super.key,
@@ -342,8 +27,14 @@ class PrivacyMultiSelectItem extends StatelessWidget {
     required this.privacy,
     required this.onChoose,
     this.isFriendEnable = true,
+    this.name
   });
 
+  @override
+  State<PrivacyMultiSelectItem> createState() => _PrivacyMultiSelectItemState();
+}
+
+class _PrivacyMultiSelectItemState extends State<PrivacyMultiSelectItem> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -354,7 +45,7 @@ class PrivacyMultiSelectItem extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(10.0),
           onTap: () async {
-            PrivacyStatus currentStatus = privacyToPrivacyStatus(privacy);
+            PrivacyStatus currentStatus = privacyToPrivacyStatus(widget.privacy);
 
             final res = await showDialog(
               context: context,
@@ -366,7 +57,10 @@ class PrivacyMultiSelectItem extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Label(text: 'Who Can See My $label'),
+                        Label(text: 'Here ${widget.privacy}'),
+                        Label(text: 'Here ${widget.name}'),
+
+                        Label(text: 'Who Can See My ${widget.label}'),
                         _buildPrivacyOption(context, setState, title: 'Public', value: PrivacyStatus.public, currentStatus: currentStatus),
                         _buildPrivacyOption(context, setState, title: 'Friends', value: PrivacyStatus.friends, currentStatus: currentStatus),
                         _buildPrivacyOption(context, setState, title: 'Followers', value: PrivacyStatus.followers, currentStatus: currentStatus),
@@ -386,11 +80,11 @@ class PrivacyMultiSelectItem extends StatelessWidget {
               List<String>? selectedUsers;
 
               if (selectedStatus == PrivacyStatus.onlyWith || selectedStatus == PrivacyStatus.exceptFrom) {
-                selectedUsers = await showSearchUserDialog(context);
+                selectedUsers = await showSearchUserDialog(context, name: widget.name!,);
                 log("Selected Users for $selectedStatus: ${selectedUsers?.join(", ")}");
               }
 
-              onChoose(selectedStatus, selectedUsers);
+              widget.onChoose(selectedStatus, selectedUsers);
             }
           },
 
@@ -399,13 +93,13 @@ class PrivacyMultiSelectItem extends StatelessWidget {
           child: Row(
             children: [
               Expanded(
-                child: Label(text: label),
+                child: Label(text: widget.label),
               ),
               Row(
                 children: [
-                  Label(text: getPrivacyName(privacyToPrivacyStatus(privacy))),
+                  Label(text: getPrivacyName(privacyToPrivacyStatus(widget.privacy))),
                   const SizedBox(width: 10),
-                  Icon(getPrivacyIcon(privacyToPrivacyStatus(privacy)), color: Colors.grey),
+                  Icon(getPrivacyIcon(privacyToPrivacyStatus(widget.privacy)), color: Colors.grey),
                 ],
               ),
               const SizedBox(width: 15),
@@ -429,19 +123,23 @@ class PrivacyMultiSelectItem extends StatelessWidget {
       groupValue: currentStatus,
       activeColor: Colors.grey,
       onChanged: (selectedValue) async {
+        // Use a local variable for currentStatus to avoid mutation
+        PrivacyStatus newStatus = selectedValue!;
+
         setState(() {
-          currentStatus = selectedValue!;
+          // Update the local status in state
+          currentStatus = newStatus;
         });
 
         List<String>? selectedUserIds;
 
         if (showUserDialog) {
-          selectedUserIds = await showSearchUserDialog(context);
+          selectedUserIds = await showSearchUserDialog(context, name: widget.name!,);
 
-          log("Users selected for $value: $selectedUserIds");
+          log("Users selected for $newStatus: $selectedUserIds");
         }
 
-        onChoose(currentStatus, selectedUserIds);
+        widget.onChoose(newStatus, selectedUserIds);
 
         Navigator.pop(context);
       },
@@ -449,22 +147,55 @@ class PrivacyMultiSelectItem extends StatelessWidget {
     );
   }
 
-  Future<List<String>?> showSearchUserDialog(BuildContext context) async {
+  Future<List<String>?> showSearchUserDialog2(BuildContext context, {required PrivacyStatus status}) async {
     List<String> selectedUserIds = [];
+
+    // Fetch existing selected users based on the status
+    if (status == PrivacyStatus.onlyWith || status == PrivacyStatus.exceptFrom) {
+      final exclusionState = context.read<PrivacyCubit>().state.exclusionEntity;
+
+      if (exclusionState != null) {
+        selectedUserIds = status == PrivacyStatus.onlyWith
+            ? List.from(exclusionState.data?.allowedUsers ?? [])
+            : List.from(exclusionState.data?.forbiddenUsers ?? []);
+      }
+    }
 
     return await showModalBottomSheet<List<String>>(
       context: context,
       isScrollControlled: true,
       builder: (context) {
-        return BlocProvider(
-          create: (_) => serviceLocator<PrivacyCubit>(),
+        // Make sure you pass the correct context here that contains the PrivacyCubit provider
+        return BlocProvider.value(
+          value: context.read<PrivacyCubit>(), // Use the existing instance
           child: StatefulBuilder(
-            builder: (context, setState) {
+            builder: (dialogContext, setState) {
               return Padding(
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    // Show already selected users
+                    if (selectedUserIds.isNotEmpty) ...[
+                      const Text("Selected Users", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                      Wrap(
+                        spacing: 8,
+                        children: selectedUserIds.map((userId) {
+                          return Chip(
+                            label: Text(userId), // You might want to replace userId with a user name
+                            deleteIcon: const Icon(Icons.close),
+                            onDeleted: () {
+                              setState(() {
+                                selectedUserIds.remove(userId);
+                              });
+                            },
+                          );
+                        }).toList(),
+                      ),
+                      const SizedBox(height: 10),
+                    ],
+
+                    // Search field
                     TextField(
                       decoration: const InputDecoration(
                         labelText: "Search Users",
@@ -478,6 +209,8 @@ class PrivacyMultiSelectItem extends StatelessWidget {
                       },
                     ),
                     const SizedBox(height: 10),
+
+                    // Search Results
                     Expanded(
                       child: BlocBuilder<PrivacyCubit, PrivacyState>(
                         builder: (context, state) {
@@ -519,6 +252,8 @@ class PrivacyMultiSelectItem extends StatelessWidget {
                         },
                       ),
                     ),
+
+                    // Confirm Button
                     ElevatedButton(
                       onPressed: () {
                         log("Final Selected Users: ${selectedUserIds}");
@@ -535,6 +270,114 @@ class PrivacyMultiSelectItem extends StatelessWidget {
       },
     );
   }
+
+  Future<List<String>?> showSearchUserDialog(BuildContext context, {required String name}) async {
+    final selectedUserIds = await Navigator.push<List<String>>(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BlocProvider(
+          create: (context) => serviceLocator<PrivacyCubit>(),
+          child: UserSelectionScreen(name: name),
+        ),
+      ),
+    );
+
+    return selectedUserIds;
+  }
+
+
+
+  // Future<List<String>?> showSearchUserDialog(BuildContext context, {required PrivacyStatus status}) async {
+  //   List<String> selectedUserIds = [];
+  //   if (status == PrivacyStatus.onlyWith || status == PrivacyStatus.exceptFrom) {
+  //     final exclusionState = context.read<PrivacyCubit>().state.exclusionEntity;
+  //
+  //     if (exclusionState != null) {
+  //       selectedUserIds = status == PrivacyStatus.onlyWith
+  //           ? List.from(exclusionState.data?.allowedUsers ?? [])
+  //           : List.from(exclusionState.data?.forbiddenUsers ?? []);
+  //     }
+  //   }
+  //
+  //   return await showModalBottomSheet<List<String>>(
+  //     context: context,
+  //     isScrollControlled: true,
+  //     builder: (context) {
+  //       return BlocProvider.value(
+  //         value: context.read<PrivacyCubit>(), // Directly access the cubit
+  //         child: Padding(
+  //           padding: const EdgeInsets.all(16),
+  //           child: Column(
+  //             mainAxisSize: MainAxisSize.min,
+  //             children: [
+  //               TextField(
+  //                 decoration: const InputDecoration(
+  //                   labelText: "Search Users",
+  //                   prefixIcon: Icon(Icons.search),
+  //                   border: OutlineInputBorder(),
+  //                 ),
+  //                 onChanged: (value) {
+  //                   if (value.isNotEmpty) {
+  //                     context.read<PrivacyCubit>().searchRestaurant(value);
+  //                   }
+  //                 },
+  //               ),
+  //               const SizedBox(height: 10),
+  //               Expanded(
+  //                 child: BlocBuilder<PrivacyCubit, PrivacyState>(
+  //                   builder: (context, state) {
+  //                     if (state.status == PrivacyStates.loading) {
+  //                       return const Center(child: CircularProgressIndicator());
+  //                     }
+  //                     if (state.status == PrivacyStates.error) {
+  //                       return const Center(child: Text("Error fetching users"));
+  //                     }
+  //                     if (state.searchUsers == null || state.searchUsers!.isEmpty) {
+  //                       return const Center(child: Text("No users found"));
+  //                     }
+  //
+  //                     return ListView.builder(
+  //                       itemCount: state.searchUsers!.length,
+  //                       itemBuilder: (context, index) {
+  //                         final user = state.searchUsers![index];
+  //                         final isSelected = selectedUserIds.contains(user.id);
+  //
+  //                         return ListTile(
+  //                           title: Text(user.firstName!),
+  //                           subtitle: Text(user.lastName!),
+  //                           trailing: Icon(
+  //                             isSelected ? Icons.check_circle : Icons.circle_outlined,
+  //                             color: isSelected ? Colors.blue : null,
+  //                           ),
+  //                           onTap: () {
+  //                             setState(() {
+  //                               if (isSelected) {
+  //                                 selectedUserIds.remove(user.id);
+  //                               } else {
+  //                                 selectedUserIds.add(user.id!);
+  //                               }
+  //                             });
+  //                           },
+  //                         );
+  //                       },
+  //                     );
+  //                   },
+  //                 ),
+  //               ),
+  //               ElevatedButton(
+  //                 onPressed: () {
+  //                   log("Final Selected Users: ${selectedUserIds}");
+  //                   Navigator.pop(context, selectedUserIds);
+  //                 },
+  //                 child: const Text("Confirm Selection"),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
   PrivacyStatus privacyToPrivacyStatus(String privacy) {
     switch (privacy) {
@@ -603,4 +446,745 @@ class PrivacyMultiSelectItem extends StatelessWidget {
     }
   }
 }
+
+class UserSelectionScreen extends StatefulWidget {
+  final String name;
+
+  const UserSelectionScreen({Key? key, required this.name}) : super(key: key);
+
+  @override
+  _UserSelectionScreenState createState() => _UserSelectionScreenState();
+}
+
+class _UserSelectionScreenState extends State<UserSelectionScreen> {
+  List<String> selectedUserIds = [];
+  String searchQuery = '';
+  bool showAllowed = false;
+  bool showForbidden = false;
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<PrivacyCubit>().fetchExclusionData(feature: widget.name);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Select Users"),
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _buildToggleButton("Show Allowed", showAllowed, () {
+                  setState(() {
+                    if (showForbidden) {
+                      selectedUserIds.clear();
+                      showForbidden = false;
+                    }
+                    showAllowed = !showAllowed;
+                  });
+                }),
+                _buildToggleButton("Show Forbidden", showForbidden, () {
+                  setState(() {
+                    if (showAllowed) {
+                      selectedUserIds.clear();
+                      showAllowed = false;
+                    }
+                    showForbidden = !showForbidden;
+                  });
+                }),
+              ],
+            ),
+            const SizedBox(height: 16),
+
+            if (showAllowed || showForbidden)
+              Expanded(
+                flex: 2,
+                child: _buildUserList(showAllowed ? "allowed" : "forbidden"),
+              ),
+
+            // Search Field
+            TextField(
+              onTap: (){
+                setState(() {
+
+                  showAllowed = false;
+                  showForbidden = false;
+                  selectedUserIds.clear();
+                });
+              },
+              decoration: const InputDecoration(
+                labelText: "Search Users",
+                prefixIcon: Icon(Icons.search),
+                border: OutlineInputBorder(),
+              ),
+              onChanged: (value) {
+                setState(() {
+                  searchQuery = value;
+                  // Close the allowed and forbidden lists when searching
+                  showAllowed = false;
+                  showForbidden = false;
+                  selectedUserIds.clear(); // Clear selected users when searching
+                });
+                if (value.isNotEmpty) {
+                  context.read<PrivacyCubit>().searchRestaurant(value);
+                }
+              },
+            ),
+            const SizedBox(height: 16),
+
+            // Search Results
+            Expanded(
+              flex: 3,
+              child: _buildSearchResults(),
+            ),
+
+            // Confirm Button
+            ElevatedButton(
+              onPressed: () {
+                log("Selected User IDs: ${selectedUserIds}");
+                Navigator.pop(context, selectedUserIds);
+              },
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size(double.infinity, 50),
+                backgroundColor: Colors.blue,
+              ),
+              child: const Text(
+                "Confirm Selection",
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildToggleButton(String text, bool isActive, VoidCallback onPressed) {
+    return TextButton(
+      onPressed: onPressed,
+      style: TextButton.styleFrom(
+        backgroundColor: isActive ? Colors.blue.withOpacity(0.2) : Colors.transparent,
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+          side: BorderSide(color: Colors.blue),
+        ),
+      ),
+      child: Text(
+        text,
+        style: TextStyle(
+          color: isActive ? Colors.blue : Colors.black,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildUserList(String type) {
+    return BlocBuilder<PrivacyCubit, PrivacyState>(
+      builder: (context, state) {
+        if (state.status == PrivacyStates.loading) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (state.status == PrivacyStates.success) {
+          final users = type == "allowed"
+              ? state.exclusionEntity?.data?.allowedUsers ?? []
+              : state.exclusionEntity?.data?.forbiddenUsers ?? [];
+
+          return Column(
+            children: [
+              Expanded(
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: users.length,
+                  itemBuilder: (context, index) {
+                    final user = users[index];
+                    final isSelected = selectedUserIds.contains(user.id);
+
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          if (isSelected) {
+                            selectedUserIds.remove(user.id);
+                          } else {
+                            selectedUserIds.add(user.id);
+                          }
+                        });
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Stack(
+                              children: [
+                                ClipOval(
+                                  child: Image.network(
+                                    user.profilePictureKey?.mediaKey ?? "",
+                                    width: 80,
+                                    height: 80,
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Container(
+                                        width: 80,
+                                        height: 80,
+                                        color: Colors.grey[300],
+                                        child: const Icon(
+                                          Icons.person,
+                                          size: 40,
+                                          color: Colors.grey,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+
+                                if (isSelected)
+                                  const Positioned(
+                                    bottom: 0,
+                                    right: 0,
+                                    child: Icon(
+                                      Icons.check_circle,
+                                      color: Colors.blue,
+                                      size: 24,
+                                    ),
+                                  ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              "${user.firstName} ${user.lastName}",
+                              style: const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            if (type == "forbidden")
+                              const Icon(Icons.block, color: Colors.red),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              if (selectedUserIds.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(top: 0,bottom: 10),
+                  child: AppButton(
+                    height: 60,
+                    color: AppColors.LIGHT_COLOR,
+                    backColor: AppColors.PRIMARY_COLOR_DARK,
+                    onPressed: () {
+                      final params = RemoveAllowedParams(
+                        feature: widget.name,
+                        targetUserIds: selectedUserIds,
+                      );
+                      context.read<PrivacyCubit>().removeAllowedData(params: params).then((_) {
+                        context.read<PrivacyCubit>().fetchExclusionData(feature: widget.name);
+                        setState(() {
+                          selectedUserIds.clear();
+                        });
+                      });
+                    },
+
+                    label:"Remove Selected Users",
+                  ),
+                ),
+            ],
+          );
+        }
+
+        if (state.status == PrivacyStates.error) {
+          return const Center(child: Text('An error occurred.'));
+        }
+
+        return const Center(child: Text('No data available.'));
+      },
+    );
+  }
+
+  Widget _buildSearchResults() {
+    return BlocBuilder<PrivacyCubit, PrivacyState>(
+      builder: (context, state) {
+        if (state.status == PrivacyStates.loading) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (state.status == PrivacyStates.error) {
+          return const Center(child: Text("Error fetching users"));
+        }
+
+        if (searchQuery.isNotEmpty && state.searchUsers != null) {
+          final filteredUsers = state.searchUsers!.where((user) {
+            final userName = '${user.firstName} ${user.lastName}'.toLowerCase();
+            return userName.contains(searchQuery.toLowerCase());
+          }).toList();
+
+          if (filteredUsers.isEmpty) {
+            return const Center(child: Text("No users found"));
+          }
+
+          return ListView.builder(
+            itemCount: filteredUsers.length,
+            itemBuilder: (context, index) {
+              final user = filteredUsers[index];
+              final isSelected = selectedUserIds.contains(user.id);
+
+              return ListTile(
+                leading: CircleAvatar(
+                  backgroundImage: user.image != null ? NetworkImage(user.image!) : null,
+                  child: user.image == null ? const Icon(Icons.person) : null,
+                ),
+                title: Text('${user.firstName} ${user.lastName}'),
+                trailing: Icon(
+                  isSelected ? Icons.check_circle : Icons.circle_outlined,
+                  color: isSelected ? Colors.blue : Colors.grey,
+                ),
+                onTap: () {
+                  setState(() {
+                    if (isSelected) {
+                      selectedUserIds.remove(user.id);
+                    } else {
+                      selectedUserIds.add(user.id!);
+                    }
+                  });
+                },
+              );
+            },
+          );
+        }
+
+        return const SizedBox.shrink();
+      },
+    );
+  }
+}
+
+// class UserSelectionScreen extends StatefulWidget {
+//   final String name;
+//
+//   const UserSelectionScreen({Key? key, required this.name}) : super(key: key);
+//
+//   @override
+//   _UserSelectionScreenState createState() => _UserSelectionScreenState();
+// }
+//
+//
+// class _UserSelectionScreenState extends State<UserSelectionScreen> {
+//   List<String> selectedUserIds = [];  // This will store user IDs
+//   String searchQuery = '';
+//   List<String> allowedUsers = [];  // To store allowed users
+//   List<String> forbiddenUsers = [];  // To store forbidden users
+//   bool showAllowed = false;  // To control whether to show allowed users
+//   bool showForbidden = false;  // To control whether to show forbidden users
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//     // Fetch exclusion data when the widget is initialized
+//     context.read<PrivacyCubit>().fetchExclusionData(feature: widget.name);
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: const Text("Select Users"),
+//       ),
+//       body: Padding(
+//         padding: const EdgeInsets.all(16),
+//         child: Column(
+//           children: [
+//             // Text buttons to show allowed or forbidden users
+//             Row(
+//               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//               children: [
+//                 TextButton(
+//                   onPressed: () {
+//                     setState(() {
+//                       showAllowed = !showAllowed;  // Toggle showAllowed
+//                       if (showAllowed) {
+//                         showForbidden = false;  // Hide forbidden list when showing allowed
+//                       }
+//                     });
+//                   },
+//                   child: const Text("Show Allowed"),
+//                 ),
+//                 TextButton(
+//                   onPressed: () {
+//                     setState(() {
+//                       showForbidden = !showForbidden;  // Toggle showForbidden
+//                       if (showForbidden) {
+//                         showAllowed = false;  // Hide allowed list when showing forbidden
+//                       }
+//                     });
+//                   },
+//                   child: const Text("Show Forbidden"),
+//                 ),
+//               ],
+//             ),
+//
+//             // Conditionally show the allowed users list
+//             if (showAllowed)
+//               Container(
+//                 height: 300, // Adjust height to fit the content
+//                 child: BlocBuilder<PrivacyCubit, PrivacyState>(
+//                   builder: (context, state) {
+//                     if (state.status == PrivacyStates.loading) {
+//                       return const Center(child: CircularProgressIndicator());
+//                     }
+//
+//                     if (state.status == PrivacyStates.success) {
+//                       var allowedUsers = state.exclusionEntity?.data?.allowedUsers ?? [];
+//
+//                       return Column(
+//                         children: [
+//                           Expanded(
+//                             child: ListView.builder(
+//                               scrollDirection: Axis.horizontal,
+//                               itemCount: allowedUsers.length,
+//                               itemBuilder: (context, index) {
+//                                 var user = allowedUsers[index];
+//                                 bool isSelected = selectedUserIds.contains(user.id);
+//
+//                                 return GestureDetector(
+//                                   onTap: () {
+//                                     setState(() {
+//                                       if (isSelected) {
+//                                         selectedUserIds.remove(user.id);
+//                                       } else {
+//                                         selectedUserIds.add(user.id);
+//                                       }
+//                                     });
+//                                   },
+//                                   child: Padding(
+//                                     padding: const EdgeInsets.all(8.0),
+//                                     child: Column(
+//                                       children: [
+//                                         Stack(
+//                                           children: [
+//                                             CircleAvatar(
+//                                               radius: 40,
+//                                               backgroundImage: user.profilePictureKey != null
+//                                                   ? NetworkImage(user.profilePictureKey.mediaKey)
+//                                                   : null,
+//                                             ),
+//                                             if (isSelected)
+//                                               const Positioned(
+//                                                 bottom: 0,
+//                                                 right: 0,
+//                                                 child: Icon(
+//                                                   Icons.check_circle,
+//                                                   color: Colors.blue,
+//                                                   size: 24,
+//                                                 ),
+//                                               ),
+//                                           ],
+//                                         ),
+//                                         const SizedBox(height: 8),
+//                                         Text(
+//                                           "User: ${user.firstName} ${user.lastName}",
+//                                           style: const TextStyle(fontWeight: FontWeight.bold),
+//                                         ),
+//                                         Text("Username: ${user.username}"),
+//                                       ],
+//                                     ),
+//                                   ),
+//                                 );
+//                               },
+//                             ),
+//                           ),
+//
+//                           // Remove Button
+//                           if (selectedUserIds.isNotEmpty)
+//                             Padding(
+//                               padding: const EdgeInsets.only(top: 10),
+//                               child: ElevatedButton(
+//                                 onPressed: () {
+//                                   print("ids ${selectedUserIds}");
+//                                   context.read<PrivacyCubit>().removeAllowedData(
+//                                     params: RemoveAllowedParams(
+//                                       feature: widget.name,
+//                                       targetUserIds: selectedUserIds,
+//                                     ),
+//                                   ).then((_){
+//                                     context.read<PrivacyCubit>().fetchExclusionData(feature: widget.name);
+//
+//                                     setState(() {
+//                                       selectedUserIds.clear(); // Clear selection after removal
+//                                     });
+//                                   });
+//
+//                                 },
+//                                 style: ElevatedButton.styleFrom(
+//                                   backgroundColor: Colors.red,
+//                                 ),
+//                                 child: const Text("Remove Selected Users"),
+//                               ),
+//                             ),
+//                         ],
+//                       );
+//                     }
+//
+//                     if (state.status == PrivacyStates.error) {
+//                       return const Center(child: Text('An error occurred.'));
+//                     }
+//
+//                     return const Center(child: Text('No data available.'));
+//                   },
+//                 ),
+//               ),
+//
+//
+//             // Conditionally show the forbidden users list
+//             if (showForbidden)
+//               Container(
+//                 height: 300, // Adjust height to fit the content
+//                 child: BlocBuilder<PrivacyCubit, PrivacyState>(
+//                   builder: (context, state) {
+//                     if (state.status == PrivacyStates.loading) {
+//                       return const Center(child: CircularProgressIndicator());
+//                     }
+//
+//                     if (state.status == PrivacyStates.success) {
+//                       var forbiddenUsers = state.exclusionEntity?.data?.forbiddenUsers ?? [];
+//
+//                       return Column(
+//                         children: [
+//                           Expanded(
+//                             child: ListView.builder(
+//                               scrollDirection: Axis.horizontal,
+//                               itemCount: forbiddenUsers.length,
+//                               itemBuilder: (context, index) {
+//                                 var user = forbiddenUsers[index];
+//                                 bool isSelected = selectedUserIds.contains(user.id);
+//
+//                                 return GestureDetector(
+//                                   onTap: () {
+//                                     setState(() {
+//                                       if (isSelected) {
+//                                         selectedUserIds.remove(user.id);
+//                                       } else {
+//                                         selectedUserIds.add(user.id);
+//                                       }
+//                                     });
+//                                   },
+//                                   child: Padding(
+//                                     padding: const EdgeInsets.all(8.0),
+//                                     child: Column(
+//                                       children: [
+//                                         Stack(
+//                                           children: [
+//                                             CircleAvatar(
+//                                               radius: 40,
+//                                               backgroundImage: user.profilePictureKey != null
+//                                                   ? NetworkImage(user.profilePictureKey.mediaKey)
+//                                                   : null,
+//                                             ),
+//                                             if (isSelected)
+//                                               const Positioned(
+//                                                 bottom: 0,
+//                                                 right: 0,
+//                                                 child: Icon(
+//                                                   Icons.check_circle,
+//                                                   color: Colors.blue,
+//                                                   size: 24,
+//                                                 ),
+//                                               ),
+//                                           ],
+//                                         ),
+//                                         const SizedBox(height: 8),
+//                                         Text(
+//                                           "User: ${user.firstName} ${user.lastName}",
+//                                           style: const TextStyle(fontWeight: FontWeight.bold),
+//                                         ),
+//                                         Text("Username: ${user.username}"),
+//                                         const Icon(
+//                                           Icons.block,
+//                                           color: Colors.red,
+//                                         ),
+//                                       ],
+//                                     ),
+//                                   ),
+//                                 );
+//                               },
+//                             ),
+//                           ),
+//
+//                           // Remove Button
+//                           if (selectedUserIds.isNotEmpty)
+//                             Padding(
+//                               padding: const EdgeInsets.only(top: 10),
+//                               child: ElevatedButton(
+//                                 onPressed: () {
+//                                   print("Removing users: $selectedUserIds");
+//                                   context.read<PrivacyCubit>().removeForbiddenData(
+//                                     params: RemoveAllowedParams(
+//                                       feature: widget.name,
+//                                       targetUserIds: selectedUserIds,
+//                                     ),
+//                                   ).then((_) {
+//                                     context.read<PrivacyCubit>().fetchExclusionData(feature: widget.name);
+//
+//                                     setState(() {
+//                                       selectedUserIds.clear(); // Clear selection after removal
+//                                     });
+//                                   });
+//                                 },
+//                                 style: ElevatedButton.styleFrom(
+//                                   backgroundColor: Colors.red,
+//                                 ),
+//                                 child: const Text("Remove Selected Users"),
+//                               ),
+//                             ),
+//                         ],
+//                       );
+//                     }
+//
+//                     if (state.status == PrivacyStates.error) {
+//                       return const Center(child: Text('An error occurred.'));
+//                     }
+//
+//                     return const Center(child: Text('No data available.'));
+//                   },
+//                 ),
+//               ),
+//
+//
+//             // Search field
+//             TextField(
+//               decoration: const InputDecoration(
+//                 labelText: "Search Users",
+//                 prefixIcon: Icon(Icons.search),
+//                 border: OutlineInputBorder(),
+//               ),
+//               onChanged: (value) {
+//                 setState(() {
+//                   searchQuery = value;
+//                   // Close the allowed and forbidden lists when searching
+//                   showAllowed = false;
+//                   showForbidden = false;
+//                 });
+//                 if (value.isNotEmpty) {
+//                   context.read<PrivacyCubit>().searchRestaurant(value);
+//                 }
+//               },
+//             ),
+//             const SizedBox(height: 10),
+//
+//             // Search Results or Allowed/Forbidden Users
+//             Expanded(
+//               child: BlocListener<PrivacyCubit, PrivacyState>(
+//                 listener: (context, state) {
+//                   // Check if the exclusionEntity and its required fields are not null
+//                   if (state.status == PrivacyStates.success &&
+//                       state.exclusionEntity?.data?.allowedUsers != null &&
+//                       state.exclusionEntity?.data?.forbiddenUsers != null) {
+//                     setState(() {
+//                       // Safely combine allowedUsers and forbiddenUsers into oldUsers
+//                       // allowedUsers = List.from(state.exclusionEntity!.data!.allowedUsers!);
+//                       // forbiddenUsers = List.from(state.exclusionEntity!.data!.forbiddenUsers!);
+//                       allowedUsers = state.exclusionEntity!.data!.allowedUsers!.map((user) => user.id).toList();
+//                       forbiddenUsers = state.exclusionEntity!.data!.forbiddenUsers!.map((user) => user.id).toList();
+//
+//                     });
+//                   }
+//                 },
+//                 child: BlocBuilder<PrivacyCubit, PrivacyState>(
+//                   builder: (context, state) {
+//                     if (state.status == PrivacyStates.loading) {
+//                       return const Center(child: CircularProgressIndicator());
+//                     }
+//                     if (state.status == PrivacyStates.error) {
+//                       return const Center(child: Text("Error fetching users"));
+//                     }
+//
+//                     // Show results based on user search input
+//                     if (searchQuery.isNotEmpty && state.searchUsers != null) {
+//                       final filteredUsers = state.searchUsers!.where((user) {
+//                         final userName = '${user.firstName} ${user.lastName}'.toLowerCase();
+//                         return userName.contains(searchQuery.toLowerCase());
+//                       }).toList();
+//
+//                       if (filteredUsers.isEmpty) {
+//                         return const Center(child: Text("No users found"));
+//                       }
+//
+//                       return ListView.builder(
+//                         itemCount: filteredUsers.length,
+//                         itemBuilder: (context, index) {
+//                           final user = filteredUsers[index];
+//                           final isSelected = selectedUserIds.contains(user.id);
+//
+//                           return ListTile(
+//                             leading: ClipOval(
+//                               child: Image.network(
+//                                 user.image ?? "",
+//                                 width: 40,
+//                                 height: 40,
+//                                 fit: BoxFit.cover,
+//                                 errorBuilder: (context, error, stackTrace) {
+//                                   return Container(
+//                                     width: 40,
+//                                     height: 40,
+//                                     decoration: BoxDecoration(
+//                                       color: Colors.grey[300],  // Placeholder background color
+//                                       shape: BoxShape.circle,
+//                                     ),
+//                                     child: Icon(Icons.person, color: Colors.grey[600]), // Default icon
+//                                   );
+//                                 },
+//                               ),
+//                             ),
+//
+//                             title: Text('${user.firstName} ${user.lastName}'),
+//                             trailing: Icon(
+//                               isSelected ? Icons.check_circle : Icons.circle_outlined,
+//                               color: isSelected ? Colors.blue : null,
+//                             ),
+//                             onTap: () {
+//                               setState(() {
+//                                 if (isSelected) {
+//                                   selectedUserIds.remove(user.id);
+//                                 } else {
+//                                   selectedUserIds.add(user.id!); // Use user.id here
+//                                 }
+//                               });
+//                             },
+//                           );
+//                         },
+//                       );
+//                     }
+//
+//                     return const SizedBox.shrink(); // No content if nothing matches
+//                   },
+//                 ),
+//               ),
+//             ),
+//
+//             // Confirm Button
+//             ElevatedButton(
+//               onPressed: () {
+//                 log("Selected User IDs: ${selectedUserIds}");
+//                 Navigator.pop(context, selectedUserIds);  // Return the list of user IDs
+//               },
+//               child: const Text("Confirm Selection"),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
+//
+//
+//
+
+
 

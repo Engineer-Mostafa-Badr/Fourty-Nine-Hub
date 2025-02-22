@@ -6,8 +6,11 @@ import 'package:get_it/get_it.dart';
 
 import '../features/account_taps/privacy/domain/useCase/fetch_communication_privacy_use_case.dart';
 import '../features/account_taps/privacy/domain/useCase/fetch_connection_privacy_use_case.dart';
+import '../features/account_taps/privacy/domain/useCase/fetch_exclusion_privacy_use_case.dart';
 import '../features/account_taps/privacy/domain/useCase/fetch_media_privacy_use_case.dart';
 import '../features/account_taps/privacy/domain/useCase/fetch_personal_privacy_use_case.dart';
+import '../features/account_taps/privacy/domain/useCase/remove_allowed_use_case.dart';
+import '../features/account_taps/privacy/domain/useCase/remove_forbidden_use_case.dart';
 import '../features/account_taps/privacy/domain/useCase/search_users_privacy_use_case.dart';
 import '../features/account_taps/privacy/domain/useCase/update_communication_privacy_use_case.dart';
 import '../features/account_taps/privacy/domain/useCase/update_connection_privacy_use_case.dart';
@@ -73,8 +76,23 @@ class PrivacyServiceLocator {
         .registerLazySingleton<UpdateMediaPrivacyUseCase>(() => UpdateMediaPrivacyUseCase(
               serviceLocator(),
             ));
+  serviceLocator
+        .registerLazySingleton<FetchExclusionPrivacyUseCase>(() => FetchExclusionPrivacyUseCase(
+              serviceLocator(),
+            ));
+  serviceLocator
+        .registerLazySingleton<RemoveAllowedUseCase>(() => RemoveAllowedUseCase(
+              serviceLocator(),
+            ));
+  serviceLocator
+        .registerLazySingleton<RemoveForbiddenUseCase>(() => RemoveForbiddenUseCase(
+              serviceLocator(),
+            ));
 
     serviceLocator.registerFactory<PrivacyCubit>(() => PrivacyCubit(
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

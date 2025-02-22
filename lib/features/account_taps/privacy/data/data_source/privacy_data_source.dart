@@ -7,12 +7,17 @@ import '../../../../../core/error/failure.dart';
 import '../../domain/entities/communication_privacy_entity.dart';
 import '../../domain/entities/connection_privacy_entity.dart';
 import '../../domain/entities/except_from_entity.dart';
+import '../../domain/entities/exclusion_entity.dart';
 import '../../domain/entities/media_privacy_entity.dart';
 import '../../domain/entities/only_with_entity.dart';
 import '../../domain/entities/personal_privacy_entity.dart';
 import '../../domain/entities/privacy_entity.dart';
+import '../../domain/entities/remove_response_allowed_entity.dart';
+import '../../domain/entities/remove_response_forbidden_entity.dart';
 import '../../domain/entities/search_users_entity.dart';
 import '../../domain/entities/update_personal_privacy_entity.dart';
+import '../../domain/useCase/fetch_exclusion_privacy_use_case.dart';
+import '../../domain/useCase/remove_allowed_use_case.dart';
 import '../../domain/useCase/search_users_privacy_use_case.dart';
 import '../../domain/useCase/update_communication_privacy_use_case.dart';
 import '../../domain/useCase/update_connection_privacy_use_case.dart';
@@ -23,9 +28,12 @@ import '../../domain/useCase/update_personal_privacy_use_case.dart';
 import '../models/communication_privacy_model.dart';
 import '../models/connection_privacy_model.dart';
 import '../models/except_from_model.dart';
+import '../models/exclusion_model.dart';
 import '../models/media_privacy_model.dart';
 import '../models/only_with_model.dart';
 import '../models/personal_privacy_model.dart';
+import '../models/remove_allowed_response_model.dart';
+import '../models/remove_forbidden_response_model.dart';
 import '../models/search_users_model.dart';
 import '../models/update_personal_privacy_model.dart';
 
@@ -51,6 +59,13 @@ abstract class PrivacyDataSource {
       UpdateExceptFromPrivacyParams params);
   Future<Either<Failure, UpdatePersonalPrivacyDataEntity >> updateDataMediaPrivacy(
       UpdateMediaPrivacyParams params);
+  Future<Either<Failure, ExclusionEntity >> fetchDataExclusionPrivacy({required ExclusionParams params});
+
+
+  Future<Either<Failure, RemoveDataEntity >> removeAllowed(
+      RemoveAllowedParams params);
+  Future<Either<Failure, RemoveForbiddenDataEntity >> removeForbidden(
+      RemoveAllowedParams params);
 }
 
 class PrivacyDataSourceImpl extends PrivacyDataSource {
@@ -191,5 +206,47 @@ class PrivacyDataSourceImpl extends PrivacyDataSource {
           (response) => Right(UpdatePersonalPrivacyDataModel.fromJson(response['data'])),
     );
   }
+
+  @override
+  Future<Either<Failure, ExclusionEntity>> fetchDataExclusionPrivacy({required ExclusionParams params}) async {
+    var response = await _apiConsumer.get("${EndPoints.exclusionPrivacy}${params.feature}");
+
+    // Debugging the raw response to verify its structure
+    print("API Response: $response");
+
+    return response.fold(
+          (failure) => Left(failure),
+          (response) {
+        // Log the response to ensure correct structure
+        print("Parsed Response: ${response.toString()}");
+        return Right(ExclusionModel.fromJson(response));
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, RemoveDataEntity>> removeAllowed(RemoveAllowedParams params) async{
+    var response = await _apiConsumer.delete(
+      EndPoints.removeAllowedPrivacy,
+      data: params.toJson(),
+    );
+    return response.fold(
+          (failure) => Left(failure),
+          (response) => Right(RemoveDataModel.fromJson(response['data'])),
+    );
+  }
+
+  @override
+  Future<Either<Failure, RemoveForbiddenDataEntity>> removeForbidden(RemoveAllowedParams params)async {
+    var response = await _apiConsumer.delete(
+      EndPoints.removeForbiddenPrivacy,
+      data: params.toJson(),
+    );
+    return response.fold(
+          (failure) => Left(failure),
+          (response) => Right(RemoveForbiddenDataModel.fromJson(response['data'])),
+    );
+  }
+
 
 }

@@ -81,8 +81,8 @@ String mapPrivacyFeatureToString(PrivacyFeature feature) {
       return 'followerList';
     case PrivacyFeature.randomAppearance:
       return 'randomAppearance';
-    case PrivacyFeature.exceptFrom:
-      return 'exceptFrom';
+    // case PrivacyFeature.exceptFrom:
+    //   return 'exceptFrom';
     case PrivacyFeature.showPosts:
       return 'showPosts';
     case PrivacyFeature.showStories:
