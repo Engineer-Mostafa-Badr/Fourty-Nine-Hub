@@ -290,48 +290,52 @@ class BaseApiConsumer extends ApiConsumer {
   }
 
   Failure _getFailure(dynamic e) {
-    final error = e.response?.data['error'] as Map;
-    log("Erorrrrr $error");
+    final errorData = e.response?.data; // Get the entire response data safely
+    final error = (errorData is Map && errorData['error'] is Map)
+        ? errorData['error'] as Map
+        : null;
+
+    log("Error: $error");
+
     if (e is DioException) {
       if (e.response?.statusCode == 413) {
         return const ServerFailure(
           message: 'File size is too large',
         );
       } else if (e.response?.statusCode == 401) {
-        final error = e.response?.data['error'] as Map;
-        return UnauthorizedFailure(
-          error['message'] as String,
-        );
-      } else if (e.response?.data is Map &&
-          e.response?.data['message'] is String) {
+        if (error != null) {
+          return UnauthorizedFailure(
+            error['message'] as String? ?? 'Unauthorized request',
+          );
+        }
+      } else if (errorData is Map && errorData['message'] is String) {
         return ServerFailure(
-          message: e.response?.data['message'] as String,
+          message: errorData['message'] as String,
           statusCode: e.response?.statusCode,
         );
-      } else if (e.response?.data is Map && e.response?.data['error'] is Map) {
-        final error = e.response?.data['error'] as Map;
+      } else if (error != null) {
         List<String>? errors;
         if (error['data'] is List) {
-          final data = e.response?.data['error']['data'] as List;
+          final data = error['data'] as List;
           errors = data
+              .where((e) => e is Map && e.containsKey('message'))
               .map((e) => e['message'] as String)
-              .whereType<String>()
               .toList();
         }
         return ServerFailure(
-          message: error['message'] as String,
+          message: error['message'] as String? ?? 'Unknown server error',
           statusCode: e.response?.statusCode,
           errors: errors,
         );
-      } else if (e.response?.data is Map &&
-          e.response?.data['data'] is String) {
+      } else if (errorData is Map && errorData['data'] is String) {
         return ServerFailure(
-          message: e.response?.data['data'] as String,
+          message: errorData['data'] as String,
           statusCode: e.response?.statusCode,
         );
       }
     }
-    return UnknownFailure(error['message'].toString());
+
+    return UnknownFailure(error?['message']?.toString() ?? 'Unknown error occurred');
   }
 
   Future<void> refreshToken() async {

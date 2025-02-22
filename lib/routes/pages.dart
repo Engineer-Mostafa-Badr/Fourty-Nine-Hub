@@ -192,7 +192,6 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/
 import 'package:fourtyninehub/features/social_media/club_house/presentation/controller/club_voice_bloc.dart';
 import 'package:fourtyninehub/features/social_media/club_house/presentation/widgets/components/create_voice_room_sheet.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/life_event_entity.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/pages/life_event_sub_categories.dart';
 import 'package:fourtyninehub/features/social_media/edit_profile/presentation/cubit/edit_profile_cubit.dart';
 import 'package:fourtyninehub/features/social_media/edit_profile/presentation/pages/edit_profile_view.dart';
@@ -256,6 +255,8 @@ import 'package:fourtyninehub/features/zoom/presentation/widgets/join_meeting_sc
 import 'package:fourtyninehub/main.dart';
 import 'package:go_router/go_router.dart';
 
+import '../features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
+import '../features/RideFeature/presentation/pages/ride_home.dart';
 import '../features/account_taps/account/presentation/cubit/cubit/favourite_drawer_cubit.dart';
 import '../features/account_taps/account/presentation/cubit/managers/favourite_categories_cubit.dart';
 import '../features/account_taps/account/presentation/cubit/managers/favourite_subcategories_cubit.dart';
@@ -369,6 +370,18 @@ class AppPages {
           child: const FourtyNineView(),
         ),
         routes: [
+          GoRoute(
+            path: Paths.RIDEHOME,
+            name: Routes.RIDE_HOME,
+            builder: (context, state) =>  MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (context) => serviceLocator<RideCubit>(),
+                ),
+              ],
+              child: const RideHome(),
+            ),
+          ),
           GoRoute(
               path: Routes.CUSTOMPAGE,
               name: Routes.CUSTOMPAGE,
@@ -1021,18 +1034,16 @@ class AppPages {
                   path: Paths.CREATEPOST,
                   name: Routes.CREATEPOST,
                   builder: (context, state) {
-                    final social = state.extra as String?;
+                    // final social = state.extra as LifeEventEntity?;
 
-                    return CreatePostView(
-                      social: social ?? 'social',
-                    );
+                    return const CreatePostView();
                   },
                 ),
                 GoRoute(
                   path: Paths.LIFEEVENT,
                   name: Routes.LIFEEVENT,
                   builder: (context, state) {
-                    return LifeEvent();
+                    return const LifeEvent();
                   },
                 ),
                 GoRoute(

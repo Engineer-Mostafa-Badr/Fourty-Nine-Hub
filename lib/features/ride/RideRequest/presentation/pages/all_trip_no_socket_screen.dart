@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/data/models/all_trip_no_socket_model/all_trip_no_socket_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/NoSocket/get_all_trip_no_socket_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/NoSocket/send_offer_no_socket_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/change_driver_status_cubit.dart';
@@ -86,6 +87,29 @@ class _AllTripNoSocketScreenState extends State<AllTripNoSocketScreen> {
             },
             child: BlocBuilder<GetAllTripNoSocketCubit, RiderState>(
               builder: (context, state) {
+                List<AllTripNoSocketModel> list = [
+                  AllTripNoSocketModel(
+                    status: 'accepted',
+                    createdAt: DateTime.now(),
+                    id: '',
+                    categoryId: '',
+                    driverId: '',
+                    acceptedReq: false,
+                    penalty: 1,
+                    payedPenalty: false,
+                    userId: null,
+                    riderId: '',
+                    fromTitle: "sssss",
+                    isPremium: false,
+                    isRiderGetCashback: false,
+                    isUserGetCashback: false,
+                    passengers: 1,
+                    price: 500,
+                    profit: 0,
+                    time: ""
+
+                  ),
+                ];
                 if (state is LoadingRiderState) {
                   return const Center(
                     child: CircularProgressIndicator(

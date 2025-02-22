@@ -1288,8 +1288,8 @@ class _InstagramPostsState extends State<InstagramPosts> {
             radius: 32.r,
             backgroundColor: Colors.white,
             backgroundImage: NetworkImage(
-                (post.user.image != null && post.user.image.isNotEmpty)
-                    ? post.user.image
+                (post.user.image != null && (post.user.image?.isNotEmpty??false))
+                    ? post.user.image??''
                     : UIConst.profilePlaceHolder),
           ),
         ),

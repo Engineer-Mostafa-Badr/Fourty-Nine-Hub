@@ -176,7 +176,7 @@ class _CommentRepliesState extends State<CommentReplies> {
                                 createdAt: DateTime.now(),
                                 image: user.profilePicture ?? '',
                                 email: user.email ?? '',
-                                isDocumented: false,
+                                isDocumented: false, hasStory: false,
                               ),
                             ),
                           );

@@ -55,15 +55,19 @@ class _SelectSubActivityState extends State<SelectSubActivity> {
             return GridView.builder(
               controller: _scrollController,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2, childAspectRatio: 4),
+                    crossAxisCount: 2, childAspectRatio: 2),
                 itemCount: cubit.subActivities.length,
                 itemBuilder: (context, index) {
                   final item = cubit.subActivities[index];
                   print("item.image ${item.image} ${context.isArabic ? item.name : item.nameEn}");
                   return InkWell(
                     onTap: () {
-                      // widget.onSelected(item);
-                      // Navigator.pop(context, item);
+                      ActivityEntity selectedActivity = ActivityEntity(id: item.id, name: item.name, nameEn: item.nameEn, image: item.image,mainActivity: widget.activity,mainId: widget.activity.id);
+                      context
+                          .read<CreatePostCubit>()
+                          .selectActivity(item: selectedActivity);
+                      // widget.onSelected(selectedActivity);
+                      Navigator.pop(context, selectedActivity);
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 5),

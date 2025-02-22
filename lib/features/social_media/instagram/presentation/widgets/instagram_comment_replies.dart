@@ -211,7 +211,7 @@ class _InstagramCommentRepliesState extends State<InstagramCommentReplies> {
                                   createdAt: DateTime.now(),
                                   image: user.profilePicture ?? '',
                                   email: user.email ?? '',
-                                  isDocumented: false,
+                                  isDocumented: false, hasStory: false,
                                 ),
                               ),
                             );
