@@ -4,7 +4,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 abstract class AppColors {
   static const PRIMARY_COLOR = Color(0xFF0B1035);
   static const blueColor = Colors.blue;
-  static const black =  Color(0xFF000000);
+  static const black = Color(0xFF000000);
 
   static const DARK_BLUE_COLOR = Color.fromARGB(255, 22, 23, 24);
   static const UNSELECTED_GRAY_COLOR = Color(0xFFD2D2D2);

@@ -85,20 +85,20 @@ class _ChatCardState extends State<ChatCard> {
             // curve: Curves.easeInOut,
             decoration: BoxDecoration(
               color: widget.chat!.isSelected
-                  ? AppColors.PRIMARY_COLOR.withOpacity(0.001)
+                  ? const Color(0xffFFD5CC)
                   : context.isDarkMode
                       ? AppColors.QUANTITY_COLOR
                       : AppColors.BACKGROUND_COLOR,
               borderRadius: BorderRadius.circular(8),
-              boxShadow: widget.chat!.isSelected
-                  ? [
-                      BoxShadow(
-                        color: AppColors.PRIMARY_COLOR.withOpacity(0.2),
-                        blurRadius: 6,
-                        spreadRadius: 2,
-                      )
-                    ]
-                  : [],
+              // boxShadow: widget.chat!.isSelected
+              //     ? [
+              //         BoxShadow(
+              //           color: AppColors.PRIMARY_COLOR.withOpacity(0.2),
+              //           blurRadius: 6,
+              //           spreadRadius: 2,
+              //         )
+              //       ]
+              //     : [],
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -386,12 +386,13 @@ class _ChatCardState extends State<ChatCard> {
                                             child: CircleAvatar(
                                               radius: 8,
                                               backgroundColor:
-                                                  AppColors.PRIMARY_COLOR,
+                                                  AppColors.PRIMARY_COLOR_DARK,
                                               child: Icon(
                                                 Icons.check,
                                                 color:
                                                     AppColors.BACKGROUND_COLOR,
-                                                size: 10,
+                                                size: 14,
+                                                weight: 20,
                                               ),
                                             ),
                                           )

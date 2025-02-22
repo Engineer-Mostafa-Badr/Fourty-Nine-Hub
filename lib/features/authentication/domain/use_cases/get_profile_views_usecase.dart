@@ -56,10 +56,16 @@ class GetProfileViewsEntity {
 
 String extractTime(String dateTimeString) {
   final DateTime dateTime = DateTime.parse(dateTimeString);
-  return '${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
+  final int hour = dateTime.hour;
+  final int minute = dateTime.minute;
+  final String period = hour >= 12 ? 'pm' : 'am';
+  final int formattedHour = hour % 12 == 0 ? 12 : hour % 12;
+
+  return '${formattedHour.toString().padLeft(2, '0')}:${minute.toString().padLeft(2, '0')} $period';
 }
+
 
 String extractDate(String dateTimeString) {
   final DateTime dateTime = DateTime.parse(dateTimeString);
-  return '${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}';
+  return '${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}';
 }

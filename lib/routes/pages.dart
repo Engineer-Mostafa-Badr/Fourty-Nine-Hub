@@ -255,6 +255,8 @@ import 'package:fourtyninehub/features/zoom/presentation/widgets/join_meeting_sc
 import 'package:fourtyninehub/main.dart';
 import 'package:go_router/go_router.dart';
 
+import '../features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
+import '../features/RideFeature/presentation/pages/ride_home.dart';
 import '../features/account_taps/account/presentation/cubit/cubit/favourite_drawer_cubit.dart';
 import '../features/account_taps/account/presentation/cubit/managers/favourite_categories_cubit.dart';
 import '../features/account_taps/account/presentation/cubit/managers/favourite_subcategories_cubit.dart';
@@ -368,6 +370,18 @@ class AppPages {
           child: const FourtyNineView(),
         ),
         routes: [
+          GoRoute(
+            path: Paths.RIDEHOME,
+            name: Routes.RIDE_HOME,
+            builder: (context, state) =>  MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (context) => serviceLocator<RideCubit>(),
+                ),
+              ],
+              child: const RideHome(),
+            ),
+          ),
           GoRoute(
               path: Routes.CUSTOMPAGE,
               name: Routes.CUSTOMPAGE,
