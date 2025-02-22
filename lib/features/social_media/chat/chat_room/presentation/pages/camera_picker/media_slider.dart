@@ -47,7 +47,7 @@ class _MediaSliderViewState extends State<MediaSliderView> {
         value: widget.chatRoomCubit,
         child: Builder(
           builder: (context) {
-            return Scaffold(
+            return CustomScaffold(
               backgroundColor: Colors.black,
               body: Stack(
                 children: [

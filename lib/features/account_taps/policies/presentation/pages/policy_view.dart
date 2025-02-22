@@ -8,6 +8,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'dart:io';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class PolicyView extends StatefulWidget {
   const PolicyView({super.key, this.fromTerms});
   final bool? fromTerms;
@@ -56,7 +58,7 @@ class _PolicyViewState extends State<PolicyView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: BackAppBar(
         label: widget.fromTerms==true?LocaleKeys.conditions.localize:LocaleKeys.policies.localize,
       ),

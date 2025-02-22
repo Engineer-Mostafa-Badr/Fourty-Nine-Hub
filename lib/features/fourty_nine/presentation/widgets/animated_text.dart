@@ -141,11 +141,11 @@ class _ScrollableTextWithAnimationState
                                       ?.enableAnswers ==
                                   true
                               ? AppColors.SECONDARY_COLOR
-                              : AppColors.PRIMARY_COLOR),
+                              : (context.isDarkMode? Colors.white : AppColors.PRIMARY_COLOR)),
                       textDirection: widget.textDirection ??
                           (context.isArabic
-                              ? TextDirection.rtl
-                              : TextDirection.ltr),
+                              ? TextDirection.ltr
+                              : TextDirection.rtl),
                       // textStyle: TextStyle(fontSize: 24),
                     ),
                   ),

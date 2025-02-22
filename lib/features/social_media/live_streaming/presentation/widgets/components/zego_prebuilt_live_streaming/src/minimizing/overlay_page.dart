@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 
 // Package imports:
 
+import '../../../../../../../../../core/widget/custom_scaffold.dart';
 import '../components/duration_time_board.dart';
 import '../config.dart';
 import '../controller.dart';
@@ -269,7 +270,7 @@ class _ZegoUIKitPrebuiltLiveStreamingMiniOverlayPageState
                 );
           },
           child: circleBorder(
-            child: Scaffold(
+            child: CustomScaffold(
               resizeToAvoidBottomInset: false,
               body: ZegoLiveStreamingPKBattleStateCombineNotifier
                       .instance.state.value

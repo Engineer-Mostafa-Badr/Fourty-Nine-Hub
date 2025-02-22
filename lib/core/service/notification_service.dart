@@ -192,7 +192,7 @@ Future<void> navigateToPage(
   // return navigatorKey.currentState!.push(
   //   MaterialPageRoute(
   //     builder: (context) => SafeArea(
-  //       child: Scaffold(
+  //       child: CustomScaffold(
   //         body: InAppWebView(
   //           initialOptions: InAppWebViewGroupOptions(
   //             android: AndroidInAppWebViewOptions(

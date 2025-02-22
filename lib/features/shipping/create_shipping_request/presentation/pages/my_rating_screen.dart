@@ -9,12 +9,14 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class MyRatingScreen extends StatelessWidget {
   const MyRatingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: SingleChildScrollView(

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../data/models/new_reels_model.dart';
 import '../widgets/components/unified_widget_view.dart';
 
@@ -29,7 +30,7 @@ class ReelsScreenForAudioState extends State<ReelsScreenForAudio> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       body: Builder(
         builder: (context) {
           if (widget.reels.isEmpty) {

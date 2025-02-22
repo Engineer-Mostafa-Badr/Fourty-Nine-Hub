@@ -31,6 +31,8 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class TwitterView extends StatefulWidget {
   const TwitterView({super.key});
   @override
@@ -48,7 +50,7 @@ class _TwitterViewState extends State<TwitterView> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Scaffold(
+        CustomScaffold(
           // mainCategoryId: 2,
           body: BlocBuilder<UserCubit, BasicState<UserEntity>>(
               builder: (context, state) {

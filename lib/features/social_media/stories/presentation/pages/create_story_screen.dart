@@ -28,6 +28,7 @@ import 'package:path/path.dart' as path;
 import 'package:camera/camera.dart';
 import 'package:voice_message_package/voice_message_package.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/const.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../cubit/stories_cubit.dart';
@@ -204,7 +205,7 @@ class CameraScreenState extends State<CameraScreen> {
       onTap: () {
         FocusScope.of(context).unfocus();
       },
-      child: Scaffold(
+      child: CustomScaffold(
         backgroundColor: _selectedPageIndex != 0 ? Colors.black : currentColor,
         body: Column(
           children: [

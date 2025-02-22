@@ -3,6 +3,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 
+import '../../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../../res/style/styles.dart';
 
 class ThankYou extends StatelessWidget {
@@ -15,7 +16,7 @@ class ThankYou extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: BackAppBar(
         label: label,
       ),

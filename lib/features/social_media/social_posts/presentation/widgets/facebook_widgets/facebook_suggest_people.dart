@@ -15,6 +15,8 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../../core/widget/custom_scaffold.dart';
+
 class FacebookSuggestedPeople extends StatefulWidget {
   const FacebookSuggestedPeople({super.key});
 
@@ -52,7 +54,7 @@ class _FacebookSuggestedPeopleState extends State<FacebookSuggestedPeople> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: BackAppBar(label: !context.isArabic
           ? 'People you may know'
           : 'أشخاص قد تعرفهم',),

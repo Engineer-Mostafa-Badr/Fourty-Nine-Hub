@@ -16,6 +16,7 @@ import 'package:fourtyninehub/features/subcategories/presentation/widgets/subcat
 
 import '../../../../common/widgets/stateless/images/square_image.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../res/style/styles.dart';
 import '../cubit/subcategories_cubit.dart';
 import '../widgets/floating_add_button.dart';
@@ -33,6 +34,8 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
   @override
   late ScrollController scrollController;
   bool isFloatingButtonVisible = true;
+
+
   void initState() {
     context
         .read<SubcategoriesCubit>()
@@ -66,6 +69,7 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
       subCategories = subCategoriesList;
     });
   }
+
   void _showDropdownMenu(BuildContext context) async {
     if (subCategories.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -107,13 +111,19 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                         ListTile(
                           contentPadding: const EdgeInsets.all(0),
                           dense: true,
-                          title: Label(text: context.isArabic?item.nameAr:item.nameEn , style: Styles.mediumText(fontWeight: FontWeight.bold)),
+                          title: Label(
+                              text:
+                                  context.isArabic ? item.nameAr : item.nameEn,
+                              style: Styles.mediumText(
+                                  fontWeight: FontWeight.bold)),
                           onTap: () {
-                            if(context.isUserLoggedIn){
+                            if (context.isUserLoggedIn) {
                               Navigator.pop(context);
-                              context.push(Routes.CREATEAD,extra: CategorizationEntity(
-                                  mainCategory: widget.mainCategory, subCategory: item));
-                            }else{
+                              context.push(Routes.CREATEAD,
+                                  extra: CategorizationEntity(
+                                      mainCategory: widget.mainCategory,
+                                      subCategory: item));
+                            } else {
                               context.push(Routes.LOGIN);
                             }
                           },
@@ -185,42 +195,59 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
   // }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
+      backgroundColor: Theme.of(context).primaryColor,
       appBar: BackAppBar(
         label: widget.mainCategory.name,
-        centerTitle: false,
+        textColor: Colors.white,
+        iconColor: Colors.white,
       ),
-      body: BlocBuilder<SubcategoriesCubit, SubcategoriesState>(
-          builder: (context, state) {
-        final controller = context.read<SubcategoriesCubit>();
-        return Padding(
-          padding: EdgeInsets.all(16.0.w),
-          child: PaginationView<SubCategoryEntity>(
-            build: (ScrollController scrollController,
-                List<SubCategoryEntity> data) {
-              print("data.length${data.length}");
-              return GridView.builder(
-                itemCount: data.length,
-                controller: this.scrollController,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3, childAspectRatio: 1),
-                itemBuilder: (context, index) => SubCategoryCard(
-                  mainCategory: widget.mainCategory,
-                  item: data[index],
-                  onFav: () async {
-                    var result = await controller
-                        .toggleSubCategoryToFavorites(data[index].id);
-                    return result;
-                  },
-                ),
-              );
-            },
-            fetchData: (PaginationParams paginationParams) => context
-                .read<SubcategoriesCubit>()
-                .getSubcategories(paginationParams: PaginationParams(limit:200,page: 1)),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 8.0),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(50.r),
+            ),
           ),
-        );
-      }),
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          child: BlocBuilder<SubcategoriesCubit, SubcategoriesState>(
+              builder: (context, state) {
+            final controller = context.read<SubcategoriesCubit>();
+            return PaginationView<SubCategoryEntity>(
+              build: (ScrollController scrollController,
+                  List<SubCategoryEntity> data) {
+                print("data.length${data.length}");
+                return GridView.builder(
+                  padding: EdgeInsets.all(24.w),
+                  itemCount: data.length,
+                  controller: this.scrollController,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    childAspectRatio: .65,
+                    mainAxisSpacing: 16,
+                    crossAxisSpacing: 16,
+                  ),
+                  itemBuilder: (context, index) => SubCategoryCard(
+                    mainCategory: widget.mainCategory,
+                    item: data[index],
+                    onFav: () async {
+                      var result = await controller
+                          .toggleSubCategoryToFavorites(data[index].id);
+                      return result;
+                    },
+                  ),
+                );
+              },
+              fetchData: (PaginationParams paginationParams) => context
+                  .read<SubcategoriesCubit>()
+                  .getSubcategories(
+                      paginationParams: PaginationParams(limit: 200, page: 1)),
+            );
+          }),
+        ),
+      ),
       floatingActionButton: isFloatingButtonVisible
           ? buildFloatingAction(context, () {
               _showDropdownMenu(context);
@@ -228,5 +255,4 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
           : null,
     );
   }
-
 }

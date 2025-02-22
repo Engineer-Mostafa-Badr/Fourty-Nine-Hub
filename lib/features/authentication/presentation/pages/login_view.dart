@@ -157,7 +157,7 @@ class _LoginViewState extends State<LoginView> {
             showSuccessMessage(context, LocaleKeys.welcomeBack.localize);
           }
         },
-        child: Scaffold(
+        child:Scaffold(
           resizeToAvoidBottomInset: true,
           appBar: const BackAppBar(),
           body: SingleChildScrollView(

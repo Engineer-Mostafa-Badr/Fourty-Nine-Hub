@@ -10,6 +10,8 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../../../../../core/widget/custom_scaffold.dart';
+
 class ImagesPageViewParams {
   final MessageEntity messageEntity;
   final int index;
@@ -42,7 +44,7 @@ class _ImagesPageViewState extends State<ImagesPageView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.transparent,

@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/competition/presentation/cubit/competitio
 import 'package:fourtyninehub/features/competition/presentation/view/widgets/winner_card.dart';
 
 import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../service_locator/service_locator.dart';
 
 class Winners extends StatelessWidget {
@@ -14,7 +15,7 @@ class Winners extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: BackAppBar(
         centerTitle: false,
         label: LocaleKeys.winners.localize,

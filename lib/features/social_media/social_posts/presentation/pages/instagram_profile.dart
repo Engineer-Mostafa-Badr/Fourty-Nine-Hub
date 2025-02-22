@@ -39,6 +39,8 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class InstagramProfile extends StatefulWidget {
   const InstagramProfile({super.key, required this.userId});
   final String userId;
@@ -66,7 +68,7 @@ class _InstagramProfileState extends State<InstagramProfile> {
     }
     return DefaultTabController(
       length: loginUser?.id == widget.userId ? 3 : 2,
-      child: Scaffold(
+      child: CustomScaffold(
         body: BlocBuilder<SocialPostsCubit, SocialPostsState>(
             builder: (context, state) {
           final controller = context.read<SocialPostsCubit>();

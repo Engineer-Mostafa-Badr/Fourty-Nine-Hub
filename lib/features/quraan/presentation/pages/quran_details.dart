@@ -8,6 +8,8 @@ import 'package:fourtyninehub/features/quraan/presentation/cubit/quraan_state.da
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
+import '../../../../core/widget/custom_scaffold.dart';
+
 class QuranViewPage extends StatefulWidget {
   final int surahId;
   final int pageNumber;
@@ -43,7 +45,7 @@ class _QuranViewPageState extends State<QuranViewPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Row(
@@ -286,7 +288,7 @@ class _QuranViewPageState extends State<QuranViewPage> {
 //
 //   @override
 //   Widget build(BuildContext context) {
-//     return Scaffold(
+//     return CustomScaffold(
 //       body: BlocProvider<QuranCubit>(
 //         create: (context) => serviceLocator()..fetchSurah(id: widget.surahId),
 //         child: BlocBuilder<QuranCubit, QuranState>(

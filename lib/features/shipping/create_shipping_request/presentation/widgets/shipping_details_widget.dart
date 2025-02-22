@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/presenta
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 
@@ -17,7 +18,7 @@ class ShippingDetailsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: BackAppBar(label: LocaleKeys.shippingDetails.tr()),
       body: ListView(
         children: [

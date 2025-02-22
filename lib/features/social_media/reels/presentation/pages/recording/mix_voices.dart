@@ -14,6 +14,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 // import 'package:gallery_saver/gallery_saver.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:path_provider/path_provider.dart';
+import '../../../../../../core/widget/custom_scaffold.dart';
 import '../../shared/filter_utiles.dart';
 import 'recording_shared.dart';
 
@@ -325,7 +326,7 @@ class MixVoiceVideoRecordingScreenState
   @override
   Widget build(BuildContext context) {
     if (_controller == null || !_controller!.value.isInitialized) {
-      return const Scaffold(
+      return const CustomScaffold(
           backgroundColor: Colors.black,
           body: Center(
               child: CupertinoActivityIndicator(
@@ -334,7 +335,7 @@ class MixVoiceVideoRecordingScreenState
           )));
     }
 
-    return Scaffold(
+    return CustomScaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
         child: Stack(

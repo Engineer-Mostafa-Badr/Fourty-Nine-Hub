@@ -10,6 +10,8 @@ import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentat
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/doctor_unhandled_appointments.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/popup_menu.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class DoctorDashboardView extends StatelessWidget {
   const DoctorDashboardView({super.key});
 
@@ -36,7 +38,7 @@ class DoctorDashboardView extends StatelessWidget {
         //     break;
         // }
       },
-      builder: (context, state) => Scaffold(
+      builder: (context, state) => CustomScaffold(
         appBar: BackAppBar(
           label: LocaleKeys.doctorDashboard.localize,
           actions: [

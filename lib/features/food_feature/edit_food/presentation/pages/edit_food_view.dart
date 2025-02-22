@@ -21,6 +21,8 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class EditFoodView extends StatefulWidget {
   var restaurantData;
 
@@ -454,7 +456,7 @@ class _EditFoodViewState extends State<EditFoodView>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Scaffold(
+    return CustomScaffold(
       appBar: AppBar(),
       body:
           BlocBuilder<EditFoodCubit, EditFoodState>(builder: (context, state) {

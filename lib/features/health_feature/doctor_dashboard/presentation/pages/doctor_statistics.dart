@@ -9,12 +9,14 @@ import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentat
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/history/doctor_history_card.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class DoctorStatisticsView extends StatelessWidget {
   const DoctorStatisticsView({super.key, required this.totalEarnedMoney});
   final List<EarnedMoneyEntity> totalEarnedMoney;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: const BackAppBar(),
       body: BlocBuilder<DoctorStatisticsCubit, DoctorStatisticsState>(
         builder: (context, state) {

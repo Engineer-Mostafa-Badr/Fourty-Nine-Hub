@@ -8,6 +8,7 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 
 class AudioStreamScreen extends StatelessWidget {
   final String liveId;
@@ -24,7 +25,7 @@ class AudioStreamScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     print('live id is $liveId');
     return SafeArea(
-      child: Scaffold(
+      child: CustomScaffold(
         body: PopScope(
           canPop: false,
           // onPopInvoked: (pop) async {

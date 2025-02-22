@@ -12,6 +12,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../res/style/styles.dart';
 
 class ScheduleMeetingScreen extends StatefulWidget {
@@ -110,7 +111,7 @@ class _ScheduleMeetingScreenState extends State<ScheduleMeetingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
         body: SingleChildScrollView(
       child: Padding(
         padding: EdgeInsets.only(

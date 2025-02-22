@@ -10,6 +10,7 @@ import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../../core/widget/custom_scaffold.dart';
 import '../../domain/entities/message_entity.dart';
 import '../../domain/entities/message_shared_contacts_entity.dart';
 
@@ -59,7 +60,7 @@ class ContactsViewState extends State<ContactsView> {
         context.read<ChatRoomCubit>().checkRegirterdContacts(
               contacts: widget.contactsViewParams.messageEntity.sharedContacts,
             );
-        return Scaffold(
+        return CustomScaffold(
           appBar: AppBar(
             backgroundColor: AppColors.PRIMARY_COLOR, // Background color
             elevation: 0,

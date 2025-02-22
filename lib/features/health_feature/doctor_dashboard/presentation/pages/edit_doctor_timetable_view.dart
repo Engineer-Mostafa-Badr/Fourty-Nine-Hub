@@ -14,6 +14,8 @@ import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentat
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/edit_time_table/edit_home_visit_time_table.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/edit_time_table/time_table_options_checkbox.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class EditDoctorTimetableView extends StatefulWidget {
   const EditDoctorTimetableView({super.key, required this.params});
   final CheckBoxParams params;
@@ -31,7 +33,7 @@ class _EditDoctorTimetableViewState extends State<EditDoctorTimetableView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: BackAppBar(
         label: LocaleKeys.timeTable.localize,
         backColor: cardDarkColor(context),

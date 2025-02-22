@@ -19,6 +19,7 @@ import 'package:fourtyninehub/features/notifications/presentation/widgets/social
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../res/style/styles.dart';
 
 class NotificationView extends StatefulWidget {
@@ -96,9 +97,10 @@ class _NotificationViewState extends State<NotificationView> {
         ],
         child: DefaultTabController(
           length: 3,
-          child: Scaffold(
+          child: CustomScaffold(
               appBar: const HomeAppbar(
                 color: Colors.red,
+                inNotifications: true,
               ),
               body: Padding(
                 padding: const EdgeInsets.all(8.0),

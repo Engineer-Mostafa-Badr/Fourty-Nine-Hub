@@ -9,13 +9,15 @@ import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/wid
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class CarPoolView extends StatelessWidget {
   const CarPoolView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
+      child: CustomScaffold(
         appBar: AppBar(
           title: Transform(
             transform: Matrix4.translationValues(-20.0, 0.0, 0.0),

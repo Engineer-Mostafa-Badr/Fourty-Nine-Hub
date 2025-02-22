@@ -14,6 +14,7 @@ import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
 import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../routes/routes.dart';
 import '../controller/stream_state.dart';
 
@@ -71,7 +72,7 @@ class _JoinMeetingScreenState extends State<JoinMeetingScreen> {
       }
     }
 
-    return Scaffold(
+    return CustomScaffold(
       appBar: AppBar(
         centerTitle: true,
         automaticallyImplyLeading: false,

@@ -13,6 +13,7 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../cubit/restaurants_list_cubit.dart';
 
 class RestaurantExpiredRequestsScreen extends StatefulWidget {
@@ -50,7 +51,7 @@ class _RestaurantExpiredRequestsScreenState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       backgroundColor: scaffoldDarkColor(context),
       appBar: BackAppBar(
         label: LocaleKeys.expiredRequests.tr(),

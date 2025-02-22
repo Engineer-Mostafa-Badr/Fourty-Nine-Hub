@@ -21,6 +21,7 @@ import 'package:video_player/video_player.dart';
 import '../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../common/widgets/stateless/buttons/text_button.dart';
 import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../controller/cubit/star_cubit.dart';
@@ -90,7 +91,7 @@ class _BeStarViewState extends State<BeStarView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: BackAppBar(
         label: LocaleKeys.beAStar.localize,
         actions: [

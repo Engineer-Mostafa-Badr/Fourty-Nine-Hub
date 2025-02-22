@@ -30,6 +30,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 
 class CreateDoctorView extends StatelessWidget {
   const CreateDoctorView({super.key});
@@ -55,7 +56,7 @@ class CreateDoctorView extends StatelessWidget {
             break;
         }
       },
-      child: Scaffold(
+      child: CustomScaffold(
         appBar: const HomeAppbar(),
         body: SingleChildScrollView(
           padding: EdgeInsets.all(16.w),

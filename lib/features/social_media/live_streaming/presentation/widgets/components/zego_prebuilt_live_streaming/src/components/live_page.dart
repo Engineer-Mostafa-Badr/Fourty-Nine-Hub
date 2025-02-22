@@ -27,6 +27,8 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 
+import '../../../../../../../../../core/widget/custom_scaffold.dart';
+
 /// @nodoc
 /// user and sdk should be login and init before page enter
 class ZegoLiveStreamingLivePage extends StatefulWidget {
@@ -129,7 +131,7 @@ class _ZegoLiveStreamingLivePageState extends State<ZegoLiveStreamingLivePage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       resizeToAvoidBottomInset: false,
       body: WillPopScope(
         onWillPop: () async {

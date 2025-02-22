@@ -9,6 +9,8 @@ import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentat
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class DoctorTodayAppointmentsView extends StatefulWidget {
   const DoctorTodayAppointmentsView({super.key});
 
@@ -37,7 +39,7 @@ class _DoctorTodayAppointmentsViewState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: const BackAppBar(
         label: Labels.todayAppointments,
       ),

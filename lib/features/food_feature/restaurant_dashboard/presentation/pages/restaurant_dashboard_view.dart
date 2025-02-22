@@ -15,6 +15,7 @@ import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../cubit/restaurant_dashboard_cubit.dart';
@@ -41,7 +42,7 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       backgroundColor: scaffoldDarkColor(context),
       appBar: BackAppBar(
         label: LocaleKeys.restaurantDashboard.localize,

@@ -19,6 +19,7 @@ import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import 'package:video_player/video_player.dart';
+import '../../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../../routes/routes.dart';
 
 class NextMediaPreview extends StatefulWidget {
@@ -62,7 +63,7 @@ class _MediaPreviewScreenState extends State<NextMediaPreview> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       body: SafeArea(
         child: BlocConsumer<ReelsCubit, ReelsState>(
           listener: (BuildContext context, state) {

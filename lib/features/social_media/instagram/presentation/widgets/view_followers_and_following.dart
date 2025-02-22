@@ -10,6 +10,8 @@ import 'package:fourtyninehub/features/social_media/instagram/presentation/widge
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/following_view.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class ViewFollowersAndFollowing extends StatefulWidget {
   const ViewFollowersAndFollowing(
       {super.key, required this.otherId, required this.email});
@@ -45,7 +47,7 @@ class _ViewFollowersAndFollowingState extends State<ViewFollowersAndFollowing>
     final user = context.read<UserCubit>().state.data;
     return DefaultTabController(
       length: 2,
-      child: Scaffold(
+      child: CustomScaffold(
         appBar: BackAppBar(
             label: widget.email == 'Hidden' ? '' : widget.email.split('@')[0]),
         body: BlocProvider<FollowCubit>(

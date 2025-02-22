@@ -11,6 +11,7 @@ import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../../core/messages/messages.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../domain/entity/favourite_categ_entity.dart';
@@ -95,7 +96,7 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       body: BlocProvider<CustomPageCubit>(
         create: (BuildContext context) =>
             serviceLocator<CustomPageCubit>()..fetchFavouriteCat(),

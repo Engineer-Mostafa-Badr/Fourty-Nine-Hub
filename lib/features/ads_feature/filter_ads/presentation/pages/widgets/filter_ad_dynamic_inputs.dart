@@ -13,6 +13,8 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../../core/widget/custom_scaffold.dart';
+
 class FilterAdDynamicInputWidget extends StatefulWidget {
   final AdPropertiesEntity property;
   final Function(SelectionEntity) onChanged;
@@ -136,7 +138,7 @@ class _FilterAdDynamicInputWidgetState
     required Function(SelectionEntity v) action,
     required List<SelectionEntity> values,
   }) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: BackAppBar(
         label: LocaleKeys.select.localize,
       ),

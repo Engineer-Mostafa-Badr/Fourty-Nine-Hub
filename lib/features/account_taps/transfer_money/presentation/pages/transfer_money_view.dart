@@ -16,6 +16,7 @@ import 'package:fourtyninehub/features/account_taps/transfer_money/presentation/
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/form/text_fields/form_text_field.dart';
 import '../../../../../common/widgets/stateless/dynamic/are_you_sure.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
@@ -48,7 +49,7 @@ class _TransferMoneyViewState extends State<TransferMoneyView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: BackAppBar(
         label: LocaleKeys.transferMoney.localize,
       ),

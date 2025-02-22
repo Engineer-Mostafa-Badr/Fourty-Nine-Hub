@@ -6,6 +6,8 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../../core/widget/custom_scaffold.dart';
+
 class SeeAllBroadcasts extends StatelessWidget {
   const SeeAllBroadcasts({super.key});
 
@@ -57,7 +59,7 @@ class SeeAllBroadcasts extends StatelessWidget {
       },
     ];
 
-    return Scaffold(
+    return CustomScaffold(
       appBar: AppBar(
         backgroundColor: AppColors.PRIMARY_COLOR, // Background color
         elevation: 0,

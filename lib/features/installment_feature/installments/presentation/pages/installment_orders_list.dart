@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../../common/widgets/dynamic/drawer.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../widgets/public/order_card.dart';
 
 class InstallmentOrdersList extends StatelessWidget {
@@ -10,7 +11,7 @@ class InstallmentOrdersList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: const HomeAppbar(),
       drawer: const DrawerWidget(),
       body: Padding(

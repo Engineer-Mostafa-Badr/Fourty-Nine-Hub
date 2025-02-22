@@ -22,6 +22,7 @@ import '../../../../../common/widgets/stateless/labels/badged_label.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/messages/messages.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
@@ -61,7 +62,7 @@ class _CreateAdViewState extends State<CreateAdView> {
       }
     }, builder: (context, state) {
       final controller = context.read<CreateAdCubit>();
-      return Scaffold(
+      return CustomScaffold(
         appBar: BackAppBar(label: LocaleKeys.createAd.localize),
         body: BlocBuilder<CreateAdCubit, CreateAdState>(
           // buildWhen: (previous, current) => previous.status == current.status,

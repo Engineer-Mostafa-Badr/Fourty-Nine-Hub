@@ -35,6 +35,8 @@ import 'dart:ui' as textDirection;
 
 import 'package:url_launcher/url_launcher_string.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class TripInfoByRiderScreen extends StatefulWidget {
   const TripInfoByRiderScreen({super.key, required this.model});
   final CheckAcceptTripFromDriverModel model;
@@ -68,7 +70,7 @@ class _TripInfoByRiderScreenState extends State<TripInfoByRiderScreen> {
   @override
   Widget build(BuildContext context) {
     removeData();
-    return Scaffold(
+    return CustomScaffold(
       key: scaffoldKey,
       body: BlocListener<CheckStopRecordCubit, RiderState>(
         listener: (context, state) {

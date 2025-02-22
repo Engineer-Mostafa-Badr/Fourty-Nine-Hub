@@ -5,12 +5,14 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class ApiErrorPage extends StatelessWidget {
   const ApiErrorPage({super.key, required this.message});
   final String message;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(

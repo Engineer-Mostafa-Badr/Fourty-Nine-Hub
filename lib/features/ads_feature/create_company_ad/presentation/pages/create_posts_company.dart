@@ -17,6 +17,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../../core/enums/base_status_enum.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
@@ -86,7 +87,7 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                 // }
               },
               builder: (BuildContext context, Object? state) {
-                return Scaffold(
+                return CustomScaffold(
                   appBar: BackAppBar(
                     centerTitle: false,
                     label: widget.title,

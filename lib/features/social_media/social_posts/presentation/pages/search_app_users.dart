@@ -15,6 +15,8 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class SearchAppUsers extends StatefulWidget {
   const SearchAppUsers({super.key});
 
@@ -27,7 +29,7 @@ class _SearchAppUsersState extends State<SearchAppUsers> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       body: BlocProvider(
         create: (_) => serviceLocator<SocialPostsCubit>(),
         child: BlocBuilder<SocialPostsCubit, SocialPostsState>(

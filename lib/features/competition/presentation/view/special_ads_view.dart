@@ -5,6 +5,7 @@ import 'package:fourtyninehub/features/competition/presentation/pages/winners.da
 import 'package:fourtyninehub/features/competition/presentation/view/widgets/special_ads_body.dart';
 
 import '../../../../common/widgets/stateful/banners/back_appbar.dart';
+import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 
@@ -13,7 +14,7 @@ class SpecialAdsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: BackAppBar(
         centerTitle: false,
         label: LocaleKeys.competition.localize,

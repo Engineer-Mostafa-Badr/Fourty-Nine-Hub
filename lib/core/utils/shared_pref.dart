@@ -17,6 +17,7 @@ class CacheManager {
   static const activeCustomPage = 'activeCustomPage';
   static const selectedCategoryView = 'selectedCategoryView';
   static const RIDESOCKETPARTMODEL = 'RIDESOCKETPARTMODEL';
+  static const isFloatingNavigator = 'isFloatingNavigator';
   // static const themeLightKey = 'lightTheme';
 
   // Save access token
@@ -36,6 +37,7 @@ class CacheManager {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_refreshTokenKey, token);
   }
+
 
   // Retrieve access token
   static Future<String?> getAccessToken() async {
@@ -80,10 +82,27 @@ class CacheManager {
     }
   }
 
+  static Future<bool> isFloatingNavigatorOpen(bool value) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      return await prefs.setBool(isFloatingNavigator, value);
+    } catch (e) {
+      return false;
+    }
+  }
+
   static Future<bool> getMode() async {
     try {
       final prefs = await SharedPreferences.getInstance();
       return prefs.getBool(themeDarkKey) ?? false;
+    } catch (e) {
+      return false;
+    }
+  }
+  static Future<bool> getFloatingNavigator() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      return prefs.getBool(isFloatingNavigator) ?? false;
     } catch (e) {
       return false;
     }

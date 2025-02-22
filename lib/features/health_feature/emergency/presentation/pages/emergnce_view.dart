@@ -15,6 +15,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 
 class HealthEmergencyView extends StatelessWidget {
   const HealthEmergencyView({super.key});
@@ -41,7 +42,7 @@ class HealthEmergencyView extends StatelessWidget {
             break;
         }
       },
-      child: Scaffold(
+      child: CustomScaffold(
         appBar: BackAppBar(
           label: LocaleKeys.emergency.localize,
         ),

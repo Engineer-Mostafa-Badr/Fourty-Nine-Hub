@@ -19,6 +19,8 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:path/path.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../../../core/widget/custom_scaffold.dart';
+
 class AttachementsView extends StatefulWidget {
   const AttachementsView({super.key, required this.chatRoomCubit});
   final ChatRoomCubit chatRoomCubit;
@@ -35,7 +37,7 @@ class AttachementsViewState extends State<AttachementsView> {
       child: BlocProvider.value(
         value: widget.chatRoomCubit,
         child: Builder(builder: (context) {
-          return Scaffold(
+          return CustomScaffold(
             appBar: AppBar(
               elevation: 0,
               backgroundColor: AppColors.PRIMARY_COLOR,

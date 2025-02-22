@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/social_media/club_house/presentation/cont
 import 'package:fourtyninehub/features/social_media/club_house/presentation/pages/audio_stream_screen.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
+import '../../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../../../../service_locator/service_locator.dart';
 import '../../controller/club_voice_state.dart';
@@ -32,7 +33,7 @@ class _CreateRoomScreenState extends State<CreateRoomScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
         body: Padding(
       padding: const EdgeInsets.only(
         // bottom: MediaQuery.of(context).viewInsets.bottom + 32,

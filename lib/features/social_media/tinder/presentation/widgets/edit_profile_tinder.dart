@@ -11,13 +11,15 @@ import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/ti
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class EditProfileTinder extends StatelessWidget {
   const EditProfileTinder({super.key});
 
   @override
   Widget build(BuildContext context) {
     final userCubit = context.read<UserCubit>();
-    return Scaffold(
+    return CustomScaffold(
       appBar: BackAppBar(
         label: LocaleKeys.editProfile.localize,
       ),
@@ -181,7 +183,7 @@ class EditProfileTinder extends StatelessWidget {
 //   @override
 //   Widget build(BuildContext context) {
 //     final userCubit = context.read<UserCubit>();
-//     return Scaffold(
+//     return CustomScaffold(
 //       appBar: BackAppBar(
 //         label: LocaleKeys.editProfile.localize,
 //       ),

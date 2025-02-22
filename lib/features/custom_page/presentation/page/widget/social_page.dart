@@ -13,6 +13,7 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/styles.dart';
 
 class SocialPage extends StatefulWidget {
@@ -40,7 +41,7 @@ class _SocialPageState extends State<SocialPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       body: BlocProvider<CustomPageCubit>(
         create: (BuildContext context) => serviceLocator()..fetchSocialPage(),
         child: BlocConsumer<CustomPageCubit, CustomPageState>(

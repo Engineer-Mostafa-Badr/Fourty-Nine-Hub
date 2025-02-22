@@ -6,6 +6,8 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class AddNewRouteView extends StatelessWidget {
   const AddNewRouteView({super.key});
 
@@ -17,7 +19,7 @@ class AddNewRouteView extends StatelessWidget {
         return false;
       },
       child: SafeArea(
-        child: Scaffold(
+        child: CustomScaffold(
           appBar: AppBar(
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),

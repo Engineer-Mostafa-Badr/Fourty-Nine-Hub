@@ -118,7 +118,7 @@
 //
 //   @override
 //   Widget build(BuildContext context) {
-//     return Scaffold(
+//     return CustomScaffold(
 //       body: Stack(
 //         children: [
 //           CameraPreview(_cameraController),
@@ -272,7 +272,7 @@
 // //       );
 // //     }
 // //
-// //     return Scaffold(
+// //     return CustomScaffold(
 // //       appBar: AppBar(
 // //         title: Text("Face Emoji Overlay"),
 // //       ),

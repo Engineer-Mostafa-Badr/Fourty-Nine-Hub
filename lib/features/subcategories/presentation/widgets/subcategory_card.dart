@@ -22,6 +22,7 @@ class SubCategoryCard extends StatefulWidget {
   final SubCategoryEntity item;
   final MainCategoryEntity mainCategory;
   final Function() onFav;
+
   const SubCategoryCard(
       {super.key,
       required this.item,
@@ -40,17 +41,11 @@ class _SubCategoryCardState extends State<SubCategoryCard> {
           extra: AdsViewParams(
               mainCategory: widget.mainCategory, subCategory: widget.item)),
       child: Container(
-        margin: EdgeInsets.all(10.w),
         decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            borderRadius: BorderRadius.circular(5),
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 1,
-                  offset: Offset(-1, 1),
-                  blurRadius: 5)
-            ]),
+          color: Theme.of(context).scaffoldBackgroundColor,
+          borderRadius: BorderRadius.circular(30.r),
+        ),
+        clipBehavior: Clip.antiAliasWithSaveLayer,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -60,74 +55,58 @@ class _SubCategoryCardState extends State<SubCategoryCard> {
                   Positioned.fill(
                     child: SquareImage(
                       fit: BoxFit.cover,
-                      radius: 5,
+                      radius: 30.r,
                       url: widget.item.image,
                     ),
-                  ),
-                  Container(
-                    color: Colors.black.withOpacity(0.4),
                   ),
                   if (context.read<UserCubit>().isLoggedIn)
                     PositionedDirectional(
                         top: 10.h,
                         start: 10.w,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.23),
-                                  spreadRadius: 0.03,
-                                  blurRadius: 6,
-                                ),
-                              ]),
-                          child: IconAppButton(
-                            icon: widget.item.isFavorite == false
-                                ? Icons.favorite_outline
-                                : Icons.favorite,
-                            onPressed: () async {
-                              var result = await widget.onFav();
-                              if (result == true) {
-                                widget.item.isFavorite =
-                                    !widget.item.isFavorite!;
-                                setState(() {});
-                              }
-                            },
-                            color: AppColors.SECONDARY_COLOR,
-                          ),
+                        child: IconAppButton(
+                          icon: widget.item.isFavorite == false
+                              ? Icons.favorite_outline
+                              : Icons.favorite,
+                          onPressed: () async {
+                            var result = await widget.onFav();
+                            if (result == true) {
+                              widget.item.isFavorite =
+                                  !widget.item.isFavorite!;
+                              setState(() {});
+                            }
+                          },
+                          color: AppColors.SECONDARY_COLOR,
                         ))
                 ],
               ),
             ),
-            const Sizer(),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.0.w),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Label(
-                      text: context.isArabic
-                          ? widget.item.nameAr
-                          : widget.item.nameEn,
-                      style: Styles.smallText(
-                          fontWeight: FontWeight.bold, fontSize: 24),
-                    ),
+            Row(
+              children: [
+                IconAppButton(
+                    icon: Icons.add_box_outlined,
+                    size: 40.h,
+                    color: Theme.of(context).primaryColor,
+                    onPressed: () {
+                      if (AuthHelper().isLoggedIn()) {
+                        context.push(Routes.CREATEAD,
+                            extra: CategorizationEntity(
+                                mainCategory: widget.mainCategory,
+                                subCategory: widget.item));
+                      } else {
+                        context.push(Routes.LOGIN);
+                      }
+                    }),
+                SizedBox(width: 8.w,),
+                Expanded(
+                  child: Label(
+                    text: context.isArabic
+                        ? widget.item.nameAr
+                        : widget.item.nameEn,
+                    style: Styles.smallText(
+                        fontWeight: FontWeight.bold, fontSize: 24),
                   ),
-                  IconAppButton(
-                      icon: Icons.add_box_rounded,
-                      size: 40.h,
-                      onPressed: () {
-                        if (AuthHelper().isLoggedIn()) {
-                          context.push(Routes.CREATEAD,
-                              extra: CategorizationEntity(
-                                  mainCategory: widget.mainCategory,
-                                  subCategory: widget.item));
-                        } else {
-                          context.push(Routes.LOGIN);
-                        }
-                      })
-                ],
-              ),
+                ),
+              ],
             ),
           ],
         ),

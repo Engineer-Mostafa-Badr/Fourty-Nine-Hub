@@ -7,6 +7,8 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import 'package:voice_message_package/voice_message_package.dart';
 
+import '../../../../../../core/widget/custom_scaffold.dart';
+
 class OneTimeVoiceMessageView extends StatefulWidget {
   const OneTimeVoiceMessageView({super.key, required this.messageEntity});
   final MessageEntity messageEntity;
@@ -29,7 +31,7 @@ class _OneTimeVoiceMessageViewState extends State<OneTimeVoiceMessageView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.transparent,

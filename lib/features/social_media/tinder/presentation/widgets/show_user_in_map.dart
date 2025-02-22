@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class MapScreen extends StatefulWidget {
   final LatLng location;
 
@@ -189,7 +191,7 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: AppBar(
         foregroundColor: Colors.white,
         title: const Text(

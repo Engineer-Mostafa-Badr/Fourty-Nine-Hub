@@ -17,6 +17,7 @@ import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../core/enums/base_status_enum.dart';
 import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../core/messages/messages.dart';
+import '../../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../domain/entities/company_ad_entity.dart';
 import '../../../domain/entities/media_entity.dart';
@@ -26,7 +27,7 @@ class ReelsPostContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return const CustomScaffold(
       extendBodyBehindAppBar: true,
       // appBar: _buildAppBar(context),
       backgroundColor: Colors.transparent,

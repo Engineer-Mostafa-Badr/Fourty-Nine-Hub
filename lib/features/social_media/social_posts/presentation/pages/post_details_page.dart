@@ -19,6 +19,7 @@ import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../common/widgets/stateless/buttons/text_button.dart';
 import '../../../../../common/widgets/stateless/images/profile_image.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/styles.dart';
 import '../../data/models/comment_model.dart';
 import '../../domain/entities/comment_entity.dart';
@@ -66,7 +67,7 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
   @override
   Widget build(BuildContext context) {
     final user = context.read<UserCubit>().state.data;
-    return Scaffold(
+    return CustomScaffold(
       appBar: AppBar(
         elevation: 0,
         toolbarHeight: 200.h,
