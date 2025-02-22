@@ -4,6 +4,7 @@ import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
@@ -21,8 +22,10 @@ class EnterEmailForgotPasswordView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<ForgotPasswordCubit>();
-    return Scaffold(
+    return CustomScaffold(
+      enableCustomAppBar: true,
       appBar: BackAppBar(
+        enableCustomAppBar: true,
         label: LocaleKeys.forget.localize,
       ),
       body: BlocConsumer<ForgotPasswordCubit, ForgotPasswordState>(
@@ -53,8 +56,9 @@ class EnterEmailForgotPasswordView extends StatelessWidget {
                 Form(
                   key: cubit.emailFormKey,
                   child: DefaultTextFormField(
+                    fillColor: Colors.transparent,
+
                     currentController: cubit.emailController,
-                    // controller: cubit.emailController,
                     label: LocaleKeys.email.localize,
                     hint: LocaleKeys.typeHere.localize,
                     prefix: Icon(
@@ -69,7 +73,7 @@ class EnterEmailForgotPasswordView extends StatelessWidget {
                   label: LocaleKeys.sendOTP.localize,
                   onPressed: cubit.sendForgetPasswordOTP,
                   labelStyle: TextStyle(
-                      fontSize: 50.sp.w, color: AppColors.AUTH_CONTAINER_COLOR),
+                      fontSize: 60.sp.w, color: AppColors.AUTH_CONTAINER_COLOR),
                 ),
               ],
             ),

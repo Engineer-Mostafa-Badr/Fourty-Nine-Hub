@@ -30,6 +30,7 @@ import '../../../../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../../../../core/messages/messages.dart';
 import '../../../../../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../../../../../core/widget/custom_switch_list_title.dart';
 import '../../../../../../../../../res/style/const.dart';
 import '../../../../../../../../../res/style/styles.dart';
 import '../../../../../../../../../service_locator/service_locator.dart';
@@ -813,7 +814,7 @@ class _ZegoLiveStreamingPreviewPageState
                   valueListenable: ZegoUIKit()
                       .getCameraStateNotifier(ZegoUIKit().getLocalUser().id),
                   builder: (context, videoOn, child) {
-                    return SwitchListTile(
+                    return CustomSwitchListTile(
                       title: Label(
                         text: LocaleKeys.videoOn.localize,
                         style: Styles.headerText(
@@ -824,9 +825,9 @@ class _ZegoLiveStreamingPreviewPageState
                         print('camera state notifier is $videoOn');
                         _toggleCamera(v);
                       },
-                      activeColor: Colors.white,
-                      activeTrackColor: AppColors.SECONDARY_COLOR,
-                      inactiveTrackColor: AppColors.GREY_BORDER_COLOR,
+                      // activeColor: Colors.white,
+                      // activeTrackColor: AppColors.SECONDARY_COLOR,
+                      // inactiveTrackColor: AppColors.GREY_BORDER_COLOR,
                     );
                   }),
               Container(
@@ -838,7 +839,7 @@ class _ZegoLiveStreamingPreviewPageState
               ValueListenableBuilder<bool>(
                 valueListenable: usePersonalIdNotifier,
                 builder: (BuildContext context, bool value, Widget? child) {
-                  return SwitchListTile(
+                  return CustomSwitchListTile(
                     title: Label(
                       text: "${LocaleKeys.usePersonalMeetingId.localize} (PMI)",
                       // maxLines: 3,
@@ -858,9 +859,9 @@ class _ZegoLiveStreamingPreviewPageState
                       usePersonalIdNotifier.value = v;
                       print('use id notifier ${usePersonalIdNotifier.value}');
                     },
-                    activeColor: Colors.white,
-                    activeTrackColor: AppColors.SECONDARY_COLOR,
-                    inactiveTrackColor: AppColors.GREY_BORDER_COLOR,
+                    // activeColor: Colors.white,
+                    // activeTrackColor: AppColors.SECONDARY_COLOR,
+                    // inactiveTrackColor: AppColors.GREY_BORDER_COLOR,
                   );
                 },
               ),

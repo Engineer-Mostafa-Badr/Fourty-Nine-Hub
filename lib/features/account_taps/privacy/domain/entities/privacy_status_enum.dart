@@ -4,6 +4,9 @@ enum PrivacyStatus {
   friends,
   followers,
   friendsAndFollowers,
+  exceptFrom,
+  onlyWith,
+  contacts,
 }
 
 enum MaritalStatus {
@@ -12,7 +15,7 @@ enum MaritalStatus {
   divorced,
   widowed,
 }
-
+//TODO
 String mapPrivacyStatusToString(PrivacyStatus status) {
   switch (status) {
     case PrivacyStatus.onlyMe:
@@ -25,6 +28,12 @@ String mapPrivacyStatusToString(PrivacyStatus status) {
       return 'followers';
     case PrivacyStatus.friendsAndFollowers:
       return 'friends/followers';
+    case PrivacyStatus.exceptFrom:
+      return 'friends-except';
+    case PrivacyStatus.onlyWith:
+      return 'only-with';
+    case PrivacyStatus.contacts:
+      return 'contacts';
   }
 }
 

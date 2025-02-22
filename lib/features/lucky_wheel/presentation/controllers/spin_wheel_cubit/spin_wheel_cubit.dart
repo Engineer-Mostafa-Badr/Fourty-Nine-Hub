@@ -16,6 +16,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 
 import '../../../../../common/widgets/stateless/buttons/elevated_button.dart';
 import '../../../../../core/enums/wheel.dart';
+import '../../../../../core/utils/custom_show_dialog.dart';
 import '../../../domain/use_cases/spin_wheel_use_case.dart';
 
 class SpinWheelCubit extends Cubit<BasicState<WheelItemEntity>> {
@@ -63,40 +64,68 @@ class SpinWheelCubit extends Cubit<BasicState<WheelItemEntity>> {
     if (state.data == null || isMessageShown) return;
     isMessageShown = true;
     final prize = state.data!;
-    showDialog(
-      barrierDismissible: true,
-      context: context,
-      builder: (BuildContext context) {
-        return Center(
-          child: AlertDialog(
-            scrollable: false,
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            title: Center(child: Text(LocaleKeys.youWin.localize)),
-            content: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Text(
-                    prize.type == WheelItemTypes.point
-                        ? '${prize.value} ${LocaleKeys.points.localize}'
-                        : '${prize.value}',
-                    style: TextStyle(fontSize: 30.sp),
-                  ),
-                  ElevatedAppButton(
-                    label: LocaleKeys.back.localize,
-                    textStyle: Styles.mediumText(
-                        color: AppColors.AUTH_CONTAINER_COLOR),
-                    backColor: AppColors.SECONDARY_COLOR,
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                ],
+    showAnimatedDialog(context,Center(
+      child: AlertDialog(
+        scrollable: false,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        title: Center(child: Text(LocaleKeys.youWin.localize)),
+        content: SingleChildScrollView(
+          child: Column(
+            children: [
+              Text(
+                prize.type == WheelItemTypes.point
+                    ? '${prize.value} ${LocaleKeys.points.localize}'
+                    : '${prize.value}',
+                style: TextStyle(fontSize: 30.sp),
               ),
-            ),
+              ElevatedAppButton(
+                label: LocaleKeys.back.localize,
+                textStyle: Styles.mediumText(
+                    color: AppColors.AUTH_CONTAINER_COLOR),
+                backColor: AppColors.SECONDARY_COLOR,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
           ),
-        );
-      },
-    );
+        ),
+      ),
+    ),barrierDismissible: true,);
+    // showDialog(
+    //   barrierDismissible: true,
+    //   context: context,
+    //   builder: (BuildContext context) {
+    //     return Center(
+    //       child: AlertDialog(
+    //         scrollable: false,
+    //         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+    //         title: Center(child: Text(LocaleKeys.youWin.localize)),
+    //         content: SingleChildScrollView(
+    //           child: Column(
+    //             children: [
+    //               Text(
+    //                 prize.type == WheelItemTypes.point
+    //                     ? '${prize.value} ${LocaleKeys.points.localize}'
+    //                     : '${prize.value}',
+    //                 style: TextStyle(fontSize: 30.sp),
+    //               ),
+    //               ElevatedAppButton(
+    //                 label: LocaleKeys.back.localize,
+    //                 textStyle: Styles.mediumText(
+    //                     color: AppColors.AUTH_CONTAINER_COLOR),
+    //                 backColor: AppColors.SECONDARY_COLOR,
+    //                 onPressed: () {
+    //                   Navigator.pop(context);
+    //                 },
+    //               ),
+    //             ],
+    //           ),
+    //         ),
+    //       ),
+    //     );
+    //   },
+    // );
   }
 
   @override

@@ -10,7 +10,7 @@ class FloatingNavigatorCubit extends Cubit<FloatingNavigatorState> {
 
   static FloatingNavigatorCubit get(context) => BlocProvider.of(context);
 
-  bool floatingNavigatorStatus = false;
+  bool floatingNavigatorStatus = true;
 
   Future<void> activeFloatingNavigator() async {
     floatingNavigatorStatus = false;

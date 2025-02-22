@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/core/widget/custom_floating_action_button.dart';
 import 'package:fourtyninehub/features/custom_page/domain/use_case/update_social_page_use_case.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_states.dart';
@@ -41,7 +42,7 @@ class _SocialPageState extends State<SocialPage> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
+    return Scaffold(
       body: BlocProvider<CustomPageCubit>(
         create: (BuildContext context) => serviceLocator()..fetchSocialPage(),
         child: BlocConsumer<CustomPageCubit, CustomPageState>(
@@ -65,8 +66,7 @@ class _SocialPageState extends State<SocialPage> {
               return Column(
                 children: [
                   ListTile(
-                    title: Text(LocaleKeys.socialPage.localize),
-                    subtitle: Text(LocaleKeys.navigateBarDescription.localize),
+                    subtitle: Text(LocaleKeys.socialDescription.localize),
                   ),
                   Expanded(
                     child: ListView.builder(
@@ -121,6 +121,21 @@ class _SocialPageState extends State<SocialPage> {
             }
           },
           builder: (BuildContext context, Object? state) {
+            return CustomFloatingActionButton(onPressed: () {
+              bool face = _selectedItem == 0;
+              bool insta = _selectedItem == 1;
+              bool tweet = _selectedItem == 2;
+
+              context.read<CustomPageCubit>().updateSocialPage(
+                SocialPageParams(
+                  face: face,
+                  insta: insta,
+                  tweet: tweet,
+                ),
+              );
+
+              print('Selected Item: ${_items[_selectedItem!]}');
+            },text: LocaleKeys.next.localize,);
             return CustomElevatedButton(
               child: Text(
                 LocaleKeys.next.localize,

@@ -185,7 +185,7 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
 
                   if (selectedIndex != -1 && selectedIndex < list.length) {
                     final selectedPlanPrice = list[selectedIndex];
-                    print('selectedWallet$selectedWallet');
+                    print('selectedWallet $selectedWallet');
                     final walletPrice = selectedWallet?.name == 'mainWallet'
                         ? state.wallet?.realAmount ?? 0
                         : selectedWallet?.name == 'balance'

@@ -71,13 +71,12 @@ class _InstagramViewState extends State<InstagramView> {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
-      child: CustomScaffold(
-        body: BlocBuilder<UserCubit, BasicState<UserEntity>>(
-          builder: (context, state) {
-            return
-                // context.read<UserCubit>().isLoggedIn
-                // ?
-                SingleChildScrollView(
+      child: BlocBuilder<UserCubit, BasicState<UserEntity>>(
+        builder: (context, state) {
+          return
+            // context.read<UserCubit>().isLoggedIn
+            // ?
+            SingleChildScrollView(
               child: Column(
                 children: [
                   _buildTabBar(context),
@@ -115,16 +114,15 @@ class _InstagramViewState extends State<InstagramView> {
                 ],
               ),
             );
-            // : Column(
-            //     children: [
-            //       _buildTabBar(context),
-            //       Expanded(
-            //           child: InstagramGlobalPosts(
-            //               scrollController: scrollController)),
-            //     ],
-            //   );
-          },
-        ),
+          // : Column(
+          //     children: [
+          //       _buildTabBar(context),
+          //       Expanded(
+          //           child: InstagramGlobalPosts(
+          //               scrollController: scrollController)),
+          //     ],
+          //   );
+        },
       ),
     );
   }

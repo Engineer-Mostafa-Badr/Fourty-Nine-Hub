@@ -12,6 +12,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../common/widgets/stateless/buttons/default_button.dart';
 import '../../common/widgets/stateless/buttons/elevated_button.dart';
+import '../utils/custom_show_dialog.dart';
 
 showErrorMessage(BuildContext context, String message) {
   ScaffoldMessenger.of(context).clearSnackBars();
@@ -102,9 +103,7 @@ showSuccessMessage(
   );
 }
 
-void showSuccessDialog(BuildContext context, String text) => showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
+void showSuccessDialog(BuildContext context, String text) => showAnimatedDialog(context,AlertDialog(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5),
         ),
@@ -123,47 +122,98 @@ void showSuccessDialog(BuildContext context, String text) => showDialog(
         ),
       ),
     );
+//     showDialog(
+//       context: context,
+//       builder: (_) =>
+// AlertDialog(
+//         shape: RoundedRectangleBorder(
+//           borderRadius: BorderRadius.circular(5),
+//         ),
+//         content: Text(
+//           text,
+//           style: TextStyle(
+//             fontSize: 16.sp,
+//           ),
+//           textAlign: TextAlign.center,
+//         ),
+//         contentPadding: const EdgeInsets.only(
+//           right: 20,
+//           left: 20,
+//           top: 20,
+//           bottom: 40,
+//         ),
+//       ),
+//     );
 
 Future<void> showPermissionDialog({required String message}) async =>
-    await showDialog(
-      context: AppPages.router.configuration.navigatorKey.currentContext!,
-      builder: (_) => AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5),
-        ),
-        content: Text(
-          message,
-          style: TextStyle(
-            fontSize: 16.sp,
+    showAnimatedDialog(AppPages.router.configuration.navigatorKey.currentContext!, AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5),
           ),
-          textAlign: TextAlign.center,
-        ),
-        contentPadding: const EdgeInsets.only(
-          right: 20,
-          left: 20,
-          top: 20,
-          bottom: 40,
-        ),
-        actions: [
-          TextAppButton(
-            label: LocaleKeys.openAppSettings.tr(),
-            onPressed: () async {
-              await openAppSettings();
-              AppPages.router.configuration.navigatorKey.currentContext!.pop();
-            },
+          content: Text(
+            message,
+            style: TextStyle(
+              fontSize: 16.sp,
+            ),
+            textAlign: TextAlign.center,
           ),
-        ],
-      ),
+          contentPadding: const EdgeInsets.only(
+            right: 20,
+            left: 20,
+            top: 20,
+            bottom: 40,
+          ),
+          actions: [
+            TextAppButton(
+              label: LocaleKeys.openAppSettings.tr(),
+              onPressed: () async {
+                await openAppSettings();
+                AppPages.router.configuration.navigatorKey.currentContext!.pop();
+              },
+            ),
+          ],
+        ),
     );
+    // await showDialog(
+    //   context: AppPages.router.configuration.navigatorKey.currentContext!,
+    //   builder: (_) => AlertDialog(
+    //     shape: RoundedRectangleBorder(
+    //       borderRadius: BorderRadius.circular(5),
+    //     ),
+    //     content: Text(
+    //       message,
+    //       style: TextStyle(
+    //         fontSize: 16.sp,
+    //       ),
+    //       textAlign: TextAlign.center,
+    //     ),
+    //     contentPadding: const EdgeInsets.only(
+    //       right: 20,
+    //       left: 20,
+    //       top: 20,
+    //       bottom: 40,
+    //     ),
+    //     actions: [
+    //       TextAppButton(
+    //         label: LocaleKeys.openAppSettings.tr(),
+    //         onPressed: () async {
+    //           await openAppSettings();
+    //           AppPages.router.configuration.navigatorKey.currentContext!.pop();
+    //         },
+    //       ),
+    //     ],
+    //   ),
+    // );
 
 void showLoadingDialog(BuildContext context,
         {String? message,
         bool canPop = false,
         bool barrierDismissible = false}) =>
-    showDialog(
-      context: context,
+
+    showAnimatedDialog(
+      context,
       barrierDismissible: barrierDismissible,
-      builder: (_) => PopScope(
+      PopScope(
         canPop: canPop,
         child: AlertDialog(
           shape: RoundedRectangleBorder(
@@ -192,6 +242,38 @@ void showLoadingDialog(BuildContext context,
         ),
       ),
     );
+    // showDialog(
+    //   context: context,
+    //   barrierDismissible: barrierDismissible,
+    //   builder: (_) => PopScope(
+    //     canPop: canPop,
+    //     child: AlertDialog(
+    //       shape: RoundedRectangleBorder(
+    //         borderRadius: BorderRadius.circular(5),
+    //       ),
+    //       content: Column(
+    //         mainAxisSize: MainAxisSize.min,
+    //         children: [
+    //           const CircularProgressIndicator.adaptive(),
+    //           Sizer(height: 20.h),
+    //           Text(
+    //             message ?? Labels.loading,
+    //             style: TextStyle(
+    //               fontSize: 16.sp,
+    //             ),
+    //             textAlign: TextAlign.center,
+    //           ),
+    //         ],
+    //       ),
+    //       contentPadding: const EdgeInsets.only(
+    //         right: 20,
+    //         left: 20,
+    //         top: 20,
+    //         bottom: 40,
+    //       ),
+    //     ),
+    //   ),
+    // );
 
 void showConfirmDialog(
   BuildContext context,
@@ -203,50 +285,96 @@ void showConfirmDialog(
   TextStyle? cancelTextStyle,
   TextStyle? confirmTextStyle,
 }) {
-  showDialog(
-    context: context,
-    builder: (_) => AlertDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      content: Text(
-        text,
-        style: TextStyle(
-          fontSize: 16.sp,
+
+
+  showAnimatedDialog(context,AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
         ),
-        textAlign: TextAlign.center,
-      ),
-      contentPadding: const EdgeInsets.only(
-        right: 20,
-        left: 20,
-        top: 20,
-        bottom: 40,
-      ),
-      actions: [
-        Row(
-          children: [
-            Expanded(
-              child: DefaultButton(
-                label: cancelText ?? 'Cancel',
-                onPressed: () {
-                  Navigator.of(context, rootNavigator: true).pop();
-                  onCancel?.call();
-                },
+        content: Text(
+          text,
+          style: TextStyle(
+            fontSize: 16.sp,
+          ),
+          textAlign: TextAlign.center,
+        ),
+        contentPadding: const EdgeInsets.only(
+          right: 20,
+          left: 20,
+          top: 20,
+          bottom: 40,
+        ),
+        actions: [
+          Row(
+            children: [
+              Expanded(
+                child: DefaultButton(
+                  label: cancelText ?? 'Cancel',
+                  onPressed: () {
+                    Navigator.of(context, rootNavigator: true).pop();
+                    onCancel?.call();
+                  },
+                ),
               ),
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: ElevatedAppButton(
-                label: confirmText ?? 'Delete',
-                onPressed: () {
-                  Navigator.of(context, rootNavigator: true).pop();
-                  onConfirm?.call();
-                },
+              const SizedBox(width: 8),
+              Expanded(
+                child: ElevatedAppButton(
+                  label: confirmText ?? 'Delete',
+                  onPressed: () {
+                    Navigator.of(context, rootNavigator: true).pop();
+                    onConfirm?.call();
+                  },
+                ),
               ),
-            ),
-          ],
-        )
-      ],
-    ),
+            ],
+          )
+        ],
+      )
   );
+  // showDialog(
+  //   context: context,
+  //   builder: (_) => AlertDialog(
+  //     shape: RoundedRectangleBorder(
+  //       borderRadius: BorderRadius.circular(8),
+  //     ),
+  //     content: Text(
+  //       text,
+  //       style: TextStyle(
+  //         fontSize: 16.sp,
+  //       ),
+  //       textAlign: TextAlign.center,
+  //     ),
+  //     contentPadding: const EdgeInsets.only(
+  //       right: 20,
+  //       left: 20,
+  //       top: 20,
+  //       bottom: 40,
+  //     ),
+  //     actions: [
+  //       Row(
+  //         children: [
+  //           Expanded(
+  //             child: DefaultButton(
+  //               label: cancelText ?? 'Cancel',
+  //               onPressed: () {
+  //                 Navigator.of(context, rootNavigator: true).pop();
+  //                 onCancel?.call();
+  //               },
+  //             ),
+  //           ),
+  //           const SizedBox(width: 8),
+  //           Expanded(
+  //             child: ElevatedAppButton(
+  //               label: confirmText ?? 'Delete',
+  //               onPressed: () {
+  //                 Navigator.of(context, rootNavigator: true).pop();
+  //                 onConfirm?.call();
+  //               },
+  //             ),
+  //           ),
+  //         ],
+  //       )
+  //     ],
+  //   ),
+  // );
 }

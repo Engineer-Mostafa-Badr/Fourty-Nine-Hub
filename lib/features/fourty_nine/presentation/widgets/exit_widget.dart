@@ -5,6 +5,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 
 import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../core/utils/custom_show_dialog.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../res/style/app_colors.dart';
 
@@ -64,43 +65,78 @@ class ExitWidget extends StatelessWidget {
   //       false; // Return false if the dialog is dismissed
   // }
   Future<bool> _showExitConfirmationDialog(BuildContext context) async {
-    return await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        titlePadding: const EdgeInsets.only(top: 16),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        title: Text(
-          LocaleKeys.warning.localize,
-          style: Styles.headerText(color: Colors.red, fontWeight: FontWeight.bold),
-          textAlign: TextAlign.center,
-          overflow: TextOverflow.ellipsis,
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const SizedBox(height: 8),
-            Center(
-              child: Label(
-                text: LocaleKeys.ExitApp.localize,
-                style: Styles.headerText(),
-              ),
+    return await showAnimatedDialog(context,AlertDialog(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      titlePadding: const EdgeInsets.only(top: 16),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      title: Text(
+        LocaleKeys.warning.localize,
+        style: Styles.headerText(color: Colors.red, fontWeight: FontWeight.bold),
+        textAlign: TextAlign.center,
+        overflow: TextOverflow.ellipsis,
+      ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const SizedBox(height: 8),
+          Center(
+            child: Label(
+              text: LocaleKeys.ExitApp.localize,
+              style: Styles.headerText(),
             ),
-            const SizedBox(height: 5),
-            Label(
-              text: LocaleKeys.sureLogoutApp.localize,
-              style: Styles.mediumText(),
-            ),
-          ],
-        ),
-        actionsPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-        actions: [
-          buildButton(LocaleKeys.sure.localize, AppColors.PRIMARY_COLOR,Colors.white,(){SystemNavigator.pop();}),
-          buildButton(LocaleKeys.no.localize, Colors.white,AppColors.PRIMARY_COLOR,(){Navigator.of(context).pop(false);}),
-
+          ),
+          const SizedBox(height: 5),
+          Label(
+            text: LocaleKeys.sureLogoutApp.localize,
+            style: Styles.mediumText(),
+          ),
         ],
       ),
-    ) ?? false;
+      actionsPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      actions: [
+        buildButton(LocaleKeys.sure.localize, AppColors.PRIMARY_COLOR,Colors.white,(){SystemNavigator.pop();}),
+        buildButton(LocaleKeys.no.localize, Colors.white,AppColors.PRIMARY_COLOR,(){Navigator.of(context).pop(false);}),
+
+      ],
+    ))??false;
+    // return await showDialog<bool>(
+    //   context: context,
+    //   builder: (context) => AlertDialog(
+    //     backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+    //     titlePadding: const EdgeInsets.only(top: 16),
+    //     contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    //     title: Text(
+    //       LocaleKeys.warning.localize,
+    //       style: Styles.headerText(color: Colors.red, fontWeight: FontWeight.bold),
+    //       textAlign: TextAlign.center,
+    //       overflow: TextOverflow.ellipsis,
+    //     ),
+    //     content: Column(
+    //       mainAxisSize: MainAxisSize.min,
+    //       children: [
+    //         const SizedBox(height: 8),
+    //         Center(
+    //           child: Label(
+    //             text: LocaleKeys.ExitApp.localize,
+    //             style: Styles.headerText(),
+    //           ),
+    //         ),
+    //         const SizedBox(height: 5),
+    //         Label(
+    //           text: LocaleKeys.sureLogoutApp.localize,
+    //           style: Styles.mediumText(),
+    //         ),
+    //       ],
+    //     ),
+    //     actionsPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+    //     actions: [
+    //       buildButton(LocaleKeys.sure.localize, AppColors.PRIMARY_COLOR,Colors.white,(){SystemNavigator.pop();}),
+    //       buildButton(LocaleKeys.no.localize, Colors.white,AppColors.PRIMARY_COLOR,(){Navigator.of(context).pop(false);}),
+    //
+    //     ],
+    //   ),
+    // ) ?? false;
+
   }
 
   @override

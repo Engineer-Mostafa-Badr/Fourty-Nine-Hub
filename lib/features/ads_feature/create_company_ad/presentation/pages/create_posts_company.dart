@@ -17,6 +17,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../../core/enums/base_status_enum.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/utils/custom_show_dialog.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/styles.dart';
@@ -115,7 +116,71 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                                                   CreateCompanyAdCubit,
                                                   CreateCompanyAdState>(
                                               builder: (context, state) {
-                                            return AlertDialog(
+                                            return showAnimatedDialog(context,AlertDialog(
+                                                  title: Text(inArabic
+                                                      ? "تأكيد الخدمة"
+                                                      : "Service Confirmation"),
+                                                  content: Text(inArabic
+                                                      ? "هذه الخدمة ستكلف ${widget.totalPrice} ${context.read<MainCategoriesCubit>().state.currency?.currencyAr}. هل تريد المتابعة؟"
+                                                      : "This service will cost ${widget.totalPrice} ${context.read<MainCategoriesCubit>().state.currency?.currencyEn}. Do you want to proceed?"),
+                                                  actions: [
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                      child: Text(inArabic
+                                                          ? "إلغاء"
+                                                          : "Cancel"),
+                                                    ),
+                                                    TextButton(
+                                                      onPressed: () async {
+                                                        // Handle confirmation
+                                                        print(
+                                                            '**************************************');
+                                                        print(controller
+                                                            .selectedImages);
+                                                        print(
+                                                            '**************************************');
+                                                        if (formKey
+                                                            .currentState!
+                                                            .validate()) {
+                                                          await context
+                                                              .read<
+                                                                  CreateCompanyAdCubit>()
+                                                              .addPostCompanyAdvertise(
+                                                                mediaIds: widget
+                                                                        .picture
+                                                                    ? controller
+                                                                            .selectedImages ??
+                                                                        showErrorMessage(
+                                                                          context,
+                                                                          LocaleKeys
+                                                                              .imageNotSelected
+                                                                              .localize,
+                                                                        )
+                                                                    : null,
+                                                                type:
+                                                                    widget.type,
+                                                                post: widget
+                                                                        .text
+                                                                    ? postContentTextController
+                                                                        .text
+                                                                    : null,
+                                                                totalPrice: widget
+                                                                    .totalPrice,
+                                                                context:
+                                                                    context,
+                                                              );
+                                                        }
+                                                      },
+                                                      child: Text(inArabic
+                                                          ? "تأكيد"
+                                                          : "Confirm"),
+                                                    ),
+                                                  ],
+                                                ));
+                                            /*return AlertDialog(
                                               title: Text(inArabic
                                                   ? "تأكيد الخدمة"
                                                   : "Service Confirmation"),
@@ -125,7 +190,8 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                                               actions: [
                                                 TextButton(
                                                   onPressed: () {
-                                                    Navigator.of(context).pop();
+                                                    Navigator.of(context)
+                                                        .pop();
                                                   },
                                                   child: Text(inArabic
                                                       ? "إلغاء"
@@ -144,28 +210,28 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                                                         .validate()) {
                                                       await context
                                                           .read<
-                                                              CreateCompanyAdCubit>()
+                                                          CreateCompanyAdCubit>()
                                                           .addPostCompanyAdvertise(
-                                                            mediaIds: widget
-                                                                    .picture
-                                                                ? controller
-                                                                        .selectedImages ??
-                                                                    showErrorMessage(
-                                                                      context,
-                                                                      LocaleKeys
-                                                                          .imageNotSelected
-                                                                          .localize,
-                                                                    )
-                                                                : null,
-                                                            type: widget.type,
-                                                            post: widget.text
-                                                                ? postContentTextController
-                                                                    .text
-                                                                : null,
-                                                            totalPrice: widget
-                                                                .totalPrice,
-                                                            context: context,
-                                                          );
+                                                        mediaIds: widget
+                                                            .picture
+                                                            ? controller
+                                                            .selectedImages ??
+                                                            showErrorMessage(
+                                                              context,
+                                                              LocaleKeys
+                                                                  .imageNotSelected
+                                                                  .localize,
+                                                            )
+                                                            : null,
+                                                        type: widget.type,
+                                                        post: widget.text
+                                                            ? postContentTextController
+                                                            .text
+                                                            : null,
+                                                        totalPrice: widget
+                                                            .totalPrice,
+                                                        context: context,
+                                                      );
                                                     }
                                                   },
                                                   child: Text(inArabic
@@ -173,7 +239,7 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                                                       : "Confirm"),
                                                 ),
                                               ],
-                                            );
+                                            );*/
                                           }),
                                         );
                                       },
@@ -221,8 +287,9 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                                               onTap: () async {
                                                 Navigator.pop(context);
                                                 await controller.uploadPhoto(
-                                                  hasLoading: false,
-                                                    isGallery: true, context: context);
+                                                    hasLoading: false,
+                                                    isGallery: true,
+                                                    context: context);
                                               },
                                             ),
                                             ListTile(
@@ -255,7 +322,8 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                                     ),
                                     child: Center(
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
                                           Image.asset(
                                             Assets.uploadImage,
@@ -263,14 +331,15 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                                             height: 40.h,
                                             fit: BoxFit.cover,
                                           ),
-                                          SizedBox(width: 8.w,),
+                                          SizedBox(
+                                            width: 8.w,
+                                          ),
                                           Text(
                                             LocaleKeys.uploadImage.localize,
                                             style: Styles.headerText(
                                                 color: Theme.of(context)
                                                     .scaffoldBackgroundColor),
                                           ),
-
                                         ],
                                       ),
                                     ),
@@ -359,11 +428,11 @@ class _CreatePostViewState extends State<CreatePostCompany> {
                         context: context,
                         builder: (context) {
                           return ShowAllImages(
-                              images: state.images!,
-                              onRemoveImage: (UploadFileEntity image) {
-                                controller.removePhoto(image);
-                              },
-                            );
+                            images: state.images!,
+                            onRemoveImage: (UploadFileEntity image) {
+                              controller.removePhoto(image);
+                            },
+                          );
                         });
                   }
                 },

@@ -11,6 +11,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../../../core/utils/custom_show_dialog.dart';
 import '../../../../../../core/widget/custom_scaffold.dart';
 import '../../shared/filter_utiles.dart';
 import 'recording_shared.dart';
@@ -307,9 +308,7 @@ class OtherVoiceVideoRecordingScreenState
   }
 
   void _showErrorDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
+    showAnimatedDialog(context,AlertDialog(
         title: const Padding(
           padding: EdgeInsets.all(16.0),
           child: Text(
@@ -333,6 +332,32 @@ class OtherVoiceVideoRecordingScreenState
         ],
       ),
     );
+    // showDialog(
+    //   context: context,
+    //   builder: (context) => AlertDialog(
+    //     title: const Padding(
+    //       padding: EdgeInsets.all(16.0),
+    //       child: Text(
+    //         LocaleKeys.message,
+    //       ),
+    //     ),
+    //     content: Padding(
+    //       padding: const EdgeInsets.all(16.0),
+    //       child: Text(
+    //         message,
+    //       ),
+    //     ),
+    //     actions: [
+    //       TextButton(
+    //         onPressed: () => Navigator.of(context).pop(),
+    //         child: Text(
+    //           LocaleKeys.error_dialog_ok_button.tr(),
+    //           style: const TextStyle(color: AppColors.SECONDARY_COLOR),
+    //         ),
+    //       ),
+    //     ],
+    //   ),
+    // );
   }
 
   @override

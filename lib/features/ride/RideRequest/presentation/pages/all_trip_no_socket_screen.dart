@@ -15,6 +15,8 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/tri
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/call_message_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
+import '../../../../../core/widget/custom_switch_button.dart';
+import '../../../../../core/widget/custom_switch_button.dart';
 import '../../../../../res/style/styles.dart';
 
 // ignore: must_be_immutable
@@ -58,9 +60,9 @@ class _AllTripNoSocketScreenState extends State<AllTripNoSocketScreen> {
                       });
                     }
                   },
-                  child: Switch(
-                    activeTrackColor: AppColors.PRIMARY_COLOR,
-                    inactiveTrackColor: Colors.grey,
+                  child: CustomSwitchButton(
+                    // activeTrackColor: AppColors.PRIMARY_COLOR,
+                    // inactiveTrackColor: Colors.grey,
                     value: isReady ?? false,
                     onChanged: (value) {
                       setState(() async {

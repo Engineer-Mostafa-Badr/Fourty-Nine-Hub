@@ -14,6 +14,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../core/utils/custom_show_dialog.dart';
 import '../../../../../res/style/styles.dart';
 
 class FawryPayment extends StatefulWidget {
@@ -208,30 +209,50 @@ class _FawryPaymentState extends State<FawryPayment> {
                     icon: const Icon(Icons.delete, color: Colors.red),
                     onPressed: () async {
                       // Show confirmation dialog
-                      bool? confirm = await showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: const Text('Confirm Deletion'),
-                            content: const Text(
-                                'Are you sure you want to delete this card?'),
-                            actions: <Widget>[
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop(true);
-                                },
-                                child: const Text('Delete'),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop(false);
-                                },
-                                child: const Text('Cancel'),
-                              ),
-                            ],
-                          );
-                        },
+                      bool? confirm = await showAnimatedDialog(context,AlertDialog(
+                        title: const Text('Confirm Deletion'),
+                        content: const Text(
+                            'Are you sure you want to delete this card?'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop(true);
+                            },
+                            child: const Text('Delete'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop(false);
+                            },
+                            child: const Text('Cancel'),
+                          ),
+                        ],
+                      ),
                       );
+                      // bool? confirm = await showDialog(
+                      //   context: context,
+                      //   builder: (context) {
+                      //     return AlertDialog(
+                      //       title: const Text('Confirm Deletion'),
+                      //       content: const Text(
+                      //           'Are you sure you want to delete this card?'),
+                      //       actions: <Widget>[
+                      //         TextButton(
+                      //           onPressed: () {
+                      //             Navigator.of(context).pop(true);
+                      //           },
+                      //           child: const Text('Delete'),
+                      //         ),
+                      //         TextButton(
+                      //           onPressed: () {
+                      //             Navigator.of(context).pop(false);
+                      //           },
+                      //           child: const Text('Cancel'),
+                      //         ),
+                      //       ],
+                      //     );
+                      //   },
+                      // );
 
                       if (confirm == true) {
                         // Call the delete card method
@@ -550,23 +571,43 @@ class _FawryPaymentState extends State<FawryPayment> {
                         final message =
                             state.fawryCardTokenResponseData?.message ??
                                 'No message available';
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text('Success'),
-                              content: Text('Payment was successful: $message'),
-                              actions: <Widget>[
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: const Text('OK'),
-                                ),
-                              ],
-                            );
-                          },
-                        );
+                        showAnimatedDialog(context,AlertDialog(
+                          title: const Text('Confirm Deletion'),
+                          content: const Text(
+                              'Are you sure you want to delete this card?'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(true);
+                              },
+                              child: const Text('Delete'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(false);
+                              },
+                              child: const Text('Cancel'),
+                            ),
+                          ],
+                        ),);
+
+                        //     showDialog(
+                        //   context: context,
+                        //   builder: (context) {
+                        //     return AlertDialog(
+                        //       title: const Text('Success'),
+                        //       content: Text('Payment was successful: $message'),
+                        //       actions: <Widget>[
+                        //         TextButton(
+                        //           onPressed: () {
+                        //             Navigator.of(context).pop();
+                        //           },
+                        //           child: const Text('OK'),
+                        //         ),
+                        //       ],
+                        //     );
+                        //   },
+                        // );
                       } else if (state.status == StateStatus.error) {
                         final message =
                             state.fawryCardTokenResponseData?.message ??
@@ -576,25 +617,38 @@ class _FawryPaymentState extends State<FawryPayment> {
                                 ?.data
                                 .statusDescription ??
                             'No description available';
+                        showAnimatedDialog(context,AlertDialog(
+                          title: const Text('Error'),
+                          content: Text(
+                              'Payment failed: $message\nStatus Description: $statusDescription'),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('OK'),
+                            ),
+                          ],
+                        ),);
 
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text('Error'),
-                              content: Text(
-                                  'Payment failed: $message\nStatus Description: $statusDescription'),
-                              actions: <Widget>[
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: const Text('OK'),
-                                ),
-                              ],
-                            );
-                          },
-                        );
+                        // showDialog(
+                        //   context: context,
+                        //   builder: (context) {
+                        //     return AlertDialog(
+                        //       title: const Text('Error'),
+                        //       content: Text(
+                        //           'Payment failed: $message\nStatus Description: $statusDescription'),
+                        //       actions: <Widget>[
+                        //         TextButton(
+                        //           onPressed: () {
+                        //             Navigator.of(context).pop();
+                        //           },
+                        //           child: const Text('OK'),
+                        //         ),
+                        //       ],
+                        //     );
+                        //   },
+                        // );
                       }
                     },
                   ),
@@ -646,42 +700,69 @@ class _FawryPaymentState extends State<FawryPayment> {
     final state = context.read<PaymentCubit>().state;
 
     if (state.status == StateStatus.success) {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text('Success'),
-            content: Text(
-                'Payment was successful: ${state.fawryPayWithCardData?.message ?? ''}'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
+      showAnimatedDialog(context,AlertDialog(
+        title: const Text('Success'),
+        content: Text(
+            'Payment was successful: ${state.fawryPayWithCardData?.message ?? ''}'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      ),);
+
+      // showDialog(
+      //   context: context,
+      //   builder: (context) {
+      //     return AlertDialog(
+      //       title: const Text('Success'),
+      //       content: Text(
+      //           'Payment was successful: ${state.fawryPayWithCardData?.message ?? ''}'),
+      //       actions: <Widget>[
+      //         TextButton(
+      //           onPressed: () {
+      //             Navigator.of(context).pop();
+      //           },
+      //           child: const Text('OK'),
+      //         ),
+      //       ],
+      //     );
+      //   },
+      // );
     } else if (state.status == StateStatus.error) {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text('Error'),
-            content: const Text('Payment failed:'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
+      showAnimatedDialog(context,AlertDialog(
+        title: const Text('Error'),
+        content: const Text('Payment failed:'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      ),);
+
+      // showDialog(
+      //   context: context,
+      //   builder: (context) {
+      //     return AlertDialog(
+      //       title: const Text('Error'),
+      //       content: const Text('Payment failed:'),
+      //       actions: <Widget>[
+      //         TextButton(
+      //           onPressed: () {
+      //             Navigator.of(context).pop();
+      //           },
+      //           child: const Text('OK'),
+      //         ),
+      //       ],
+      //     );
+      //   },
+      // );
     }
   }
 

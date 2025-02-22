@@ -4,6 +4,7 @@ import '../../../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../../../common/widgets/stateless/labels/label.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../../../core/widget/custom_switch_button.dart';
 import '../../../../../../../res/style/styles.dart';
 import '../../../cubit/riderequest_cubit.dart';
 
@@ -37,7 +38,7 @@ class RideOptions extends StatelessWidget {
                     child: Label(
                         text: 'Air Conditioner',
                         style: Styles.mediumText(fontWeight: FontWeight.bold))),
-                Switch(
+                CustomSwitchButton(
                     value: state.isAirConditioned,
                     onChanged: (v) =>
                         rideCubit.changeAirConditionValue(value: v))
@@ -57,7 +58,7 @@ class RideOptions extends StatelessWidget {
                           child: Label(
                               text: carType?.brand ?? '',
                               style: Styles.mediumText())),
-                      Switch(
+                      CustomSwitchButton(
                           value: state.selectedCarTypes?.contains(carType!) ??
                               false,
                           onChanged: (v) =>

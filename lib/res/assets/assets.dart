@@ -190,7 +190,14 @@ abstract class Assets {
   static String liveIcon = 'assets/drawerIcons/live.png';
   static String snap = 'assets/drawerIcons/snap.png';
   static String cameraOutlined = 'assets/drawerIcons/camera_outlined.png';
-  static String wallet_icon = 'assets/settings/wallet_icon.png';
+  static String whatsApp = 'assets/drawerIcons/whatsapp.png';
+  static String editProfile = 'assets/drawerIcons/editProfile.png';
+  static String changePassword = 'assets/drawerIcons/changePassword.png';
+  static String disableAccount = 'assets/drawerIcons/disableAccount.png';
+  static String deleteAccount = 'assets/drawerIcons/deleteAccount.png';
+  static String themeMode = 'assets/drawerIcons/themeMode.png';
+  static String floatingNavigator = 'assets/drawerIcons/floatingNavigator.png';
+  static String walletIcon = 'assets/settings/wallet_icon.png';
   static String tripViewIllustration = 'assets/images/trip_view.png';
   static String map = 'assets/images/map.png';
   static String notification = 'assets/49-New-icons/Group 1.png';

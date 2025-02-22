@@ -17,7 +17,9 @@ class DatePickerField extends StatefulWidget {
   final bool isAuthentcation;
   final double? borderWidth;
   final Color? borderColor;
+  final Widget? icon;
   final Function(DateTime?) onDateSelected;
+
   const DatePickerField(
       {super.key,
       this.title,
@@ -28,7 +30,8 @@ class DatePickerField extends StatefulWidget {
       required this.minDate,
       this.borderColor,
       required this.maxDate,
-      required this.onDateSelected});
+      required this.onDateSelected,
+      this.icon});
 
   @override
   State<DatePickerField> createState() => _DatePickerFieldState();
@@ -99,7 +102,7 @@ class _DatePickerFieldState extends State<DatePickerField> {
                     ),
             ),
             const Sizer(),
-            const Icon(Icons.calendar_month),
+            widget.icon ?? const Icon(Icons.calendar_month),
           ],
         ),
       ),

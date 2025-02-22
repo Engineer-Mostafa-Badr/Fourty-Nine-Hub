@@ -20,6 +20,7 @@ import '../../../../core/widget/custom_scaffold.dart';
 
 class MainCategoriesGridView extends StatefulWidget {
   const MainCategoriesGridView({super.key, this.isAppBarShow = true});
+
   final bool isAppBarShow;
 
   @override
@@ -31,6 +32,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
   late TabController _tabController;
   late ScrollController _scrollController;
   String labelName = "";
+
   @override
   void initState() {
     super.initState();
@@ -79,7 +81,13 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
   Widget build(BuildContext context) {
     final controller = context.read<MainCategoriesTapsCubit>();
     return CustomScaffold(
-      appBar: widget.isAppBarShow ? BackAppBar(label: labelName) : null,
+      appBar: widget.isAppBarShow
+          ? BackAppBar(
+              label: labelName,
+              enableCustomAppBar: true,
+            )
+          : null,
+      enableCustomAppBar: true,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
         child: Column(
@@ -156,12 +164,16 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                   final controller = context.read<MainCategoriesTapsCubit>();
                   return Expanded(
                     child: GridView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
+                      padding: EdgeInsets.all(24.w),
                       itemCount: state.subCategories?.length ?? 0,
                       controller: controller.scrollController,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2, childAspectRatio: 1),
+                        crossAxisCount: 3,
+                        childAspectRatio: .65,
+                        mainAxisSpacing: 16,
+                        crossAxisSpacing: 16,
+                      ),
                       itemBuilder: (context, index) {
                         final subCategory = state.subCategories![index];
                         return SubCategoryCard(
@@ -278,10 +290,11 @@ class _MainCategoriesGrideViewSectionState
                           AdInterstitialTop.showInterstitialAd();
                           HandleCashback.setCount(
                               'mainCategoriesCount', context);
-                          if(controller.mainCategories[index].id=='62c8b5b09332225799fe335e'){
+                          if (controller.mainCategories[index].id ==
+                              '62c8b5b09332225799fe335e') {
                             context.push(Routes.MARRIAGESUBCATEGORIES,
                                 extra: controller.mainCategories[index]);
-                          }else{
+                          } else {
                             context.push(Routes.SUBCATEGORIES,
                                 extra: controller.mainCategories[index]);
                           }

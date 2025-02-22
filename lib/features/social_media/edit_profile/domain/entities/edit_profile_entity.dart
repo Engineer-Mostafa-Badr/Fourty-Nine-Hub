@@ -10,6 +10,7 @@ class EditProfileEntity {
   final String country;
   final String countryPrivacy;
   final String city;
+  final String birthday;
   final String cityPrivacy;
   final String maritalStatus;
   final String maritalPrivacy;
@@ -24,6 +25,7 @@ class EditProfileEntity {
       required this.job,
       required this.country,
       required this.city,
+      required this.birthday,
       required this.maritalStatus,
       required this.maritalPrivacy,
       this.isMale = true});
@@ -43,6 +45,7 @@ class EditProfileEntity {
         'cityPrivacy': cityPrivacy,
         'maritalStatus': maritalStatus,
         'maritalStatusPrivacy': maritalPrivacy,
+        'birthday': birthday,
         'gender': isMale == true ? 'male' : 'female',
       };
 }

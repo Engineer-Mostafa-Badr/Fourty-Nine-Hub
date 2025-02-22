@@ -15,6 +15,7 @@ import '../../res/style/app_colors.dart';
 import '../../res/style/styles.dart';
 import '../../routes/routes.dart';
 import '../localization/locale_keys.g.dart';
+import '../utils/hex_color_helper.dart';
 import '../utils/shared_pref.dart';
 
 class CustomScaffold extends StatefulWidget {
@@ -29,6 +30,7 @@ class CustomScaffold extends StatefulWidget {
     this.appBar,
     this.extendBody = false,
     this.extendBodyBehindAppBar = false,
+    this.enableCustomAppBar = false,
     this.bottomSheet,
     this.resizeToAvoidBottomInset,
   });
@@ -44,12 +46,28 @@ class CustomScaffold extends StatefulWidget {
   final bool extendBodyBehindAppBar;
   final bool? resizeToAvoidBottomInset;
   final Widget? bottomSheet;
+  final bool enableCustomAppBar;
 
   @override
   State<CustomScaffold> createState() => _CustomScaffoldState();
 }
 
-class _CustomScaffoldState extends State<CustomScaffold> {
+class _CustomScaffoldState extends State<CustomScaffold>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 3),
+    )..repeat(reverse: true);
+
+    _animation = Tween<double>(begin: 0, end: 200).animate(_controller);
+  }
+
   bool floatNavigator = false;
 
   @override
@@ -60,26 +78,45 @@ class _CustomScaffoldState extends State<CustomScaffold> {
         if (floatingNavigatorCubit.floatingNavigatorStatus) {
           return FloatingDraggableWidget(
             mainScreenWidget: mainScaffold(),
-            floatingWidget: GestureDetector(
-              onTap: () {
-                setState(() {
-                  floatNavigator = !floatNavigator;
-                });
+            floatingWidget: AnimatedBuilder(
+              animation: _animation,
+              builder: (context, child) {
+                return Transform.translate(
+                  offset: Offset(0, -_animation.value),
+                  child: child,
+                );
               },
-              child: Container(
-                width: 50.h,
-                height: 50.h,
-                decoration: BoxDecoration(
-                    color: AppColors.SECONDARY_COLOR,
-                    borderRadius: BorderRadius.circular(15.r)),
-                child: const Icon(
-                  Icons.swap_horiz_rounded,
-                  color: Colors.white,
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    floatNavigator = !floatNavigator;
+                  });
+                },
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        width: 60.w,
+                        // height: 50.h,
+                        decoration: BoxDecoration(
+                            color: AppColors.SECONDARY_COLOR,
+                            borderRadius: BorderRadius.circular(15.r)),
+                        child: const Icon(
+                          Icons.swap_horiz_rounded,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    FittedBox(
+                        child: const Label(
+                      text: 'Move',
+                    ))
+                  ],
                 ),
               ),
             ),
-            floatingWidgetHeight: 40,
-            floatingWidgetWidth: 40,
+            floatingWidgetHeight: 60,
+            floatingWidgetWidth: 60,
             autoAlign: true,
           );
         } else {
@@ -93,19 +130,47 @@ class _CustomScaffoldState extends State<CustomScaffold> {
     return Stack(
       alignment: Alignment.centerLeft,
       children: [
-        Scaffold(
-          backgroundColor: widget.backgroundColor,
-          floatingActionButtonLocation: widget.floatingActionButtonLocation,
-          floatingActionButton: widget.floatingActionButton,
-          drawer: widget.drawer,
-          bottomNavigationBar: widget.bottomNavigationBar,
-          body: widget.body,
-          appBar: widget.appBar,
-          extendBody: widget.extendBody,
-          extendBodyBehindAppBar: widget.extendBodyBehindAppBar,
-          bottomSheet: widget.bottomSheet,
-          resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
-        ),
+        widget.enableCustomAppBar
+            ? Scaffold(
+                // backgroundColor: Theme.of(context).primaryColor,
+                floatingActionButtonLocation:
+                    widget.floatingActionButtonLocation,
+                floatingActionButton: widget.floatingActionButton,
+                drawer: widget.drawer,
+                bottomNavigationBar: widget.bottomNavigationBar,
+                body: Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: widget.backgroundColor ?? HexColor('F2F1F7'),
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(50.r),
+                      ),
+                    ),
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                    child: widget.body,
+                  ),
+                ),
+                appBar: widget.appBar,
+                extendBody: widget.extendBody,
+                extendBodyBehindAppBar: widget.extendBodyBehindAppBar,
+                bottomSheet: widget.bottomSheet,
+                resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
+              )
+            : Scaffold(
+                backgroundColor: widget.backgroundColor,
+                floatingActionButtonLocation:
+                    widget.floatingActionButtonLocation,
+                floatingActionButton: widget.floatingActionButton,
+                drawer: widget.drawer,
+                bottomNavigationBar: widget.bottomNavigationBar,
+                body: widget.body,
+                appBar: widget.appBar,
+                extendBody: widget.extendBody,
+                extendBodyBehindAppBar: widget.extendBodyBehindAppBar,
+                bottomSheet: widget.bottomSheet,
+                resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
+              ),
         PositionedDirectional(
           start: 0,
           child: Row(
@@ -161,19 +226,17 @@ class _CustomScaffoldState extends State<CustomScaffold> {
                             drawerRollWidget(
                               label: LocaleKeys.health.localize,
                               image: Assets.healthIcon,
-                              onTap: () {},
+                              onTap: () => context.push(Routes.VISITA),
                             ),
                             drawerRollWidget(
                               label: LocaleKeys.meal.localize,
                               image: Assets.meal,
-                              onTap: () {},
-                              // onTap: () => context.push(Routes.RIDE),
+                              onTap: () => context.push(Routes.FOOD),
                             ),
                             drawerRollWidget(
                               label: LocaleKeys.find.localize,
                               image: Assets.find,
-                              onTap: () {},
-                              // onTap: () => context.push(Routes.),
+                              onTap: () => context.push(Routes.Tinder),
                             ),
                             drawerRollWidget(
                               label: LocaleKeys.reel.localize,
@@ -199,6 +262,11 @@ class _CustomScaffoldState extends State<CustomScaffold> {
                               label: LocaleKeys.snap.localize,
                               image: Assets.snap,
                               onTap: () => context.push(Routes.SNAP),
+                            ),
+                            drawerRollWidget(
+                              label: LocaleKeys.chat.localize,
+                              image: Assets.whatsApp,
+                              onTap: () => context.push(Routes.CHAT),
                             ),
                           ],
                         ),

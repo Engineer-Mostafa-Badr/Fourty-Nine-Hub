@@ -32,6 +32,7 @@ import 'package:swipe_to/swipe_to.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:voice_message_package/voice_message_package.dart';
 
+import '../../../../../../../core/utils/custom_show_dialog.dart';
 import '../widgets_contacts/recived_contacts.dart';
 
 class MessageCard extends StatelessWidget {
@@ -406,10 +407,10 @@ class MessageCard extends StatelessWidget {
           child: Builder(builder: (context) {
             return BlocBuilder<ChatRoomCubit, ChatRoomState>(
               builder: (context, state) {
-                return AlertDialog(
+                return showAnimatedDialog(context,AlertDialog(
                   title: const Text("Show Deleted Message"),
                   content:
-                      Text(chatRoomCubit.deletedMessage?.text ?? "Loading..."),
+                  Text(chatRoomCubit.deletedMessage?.text ?? "Loading..."),
                   actions: [
                     TextButton(
                       onPressed: () {
@@ -418,7 +419,20 @@ class MessageCard extends StatelessWidget {
                       child: const Text("OK"),
                     ),
                   ],
-                );
+                ));
+                // return AlertDialog(
+                //   title: const Text("Show Deleted Message"),
+                //   content:
+                //       Text(chatRoomCubit.deletedMessage?.text ?? "Loading..."),
+                //   actions: [
+                //     TextButton(
+                //       onPressed: () {
+                //         Navigator.of(context).pop();
+                //       },
+                //       child: const Text("OK"),
+                //     ),
+                //   ],
+                // );
               },
             );
           }),
@@ -801,7 +815,7 @@ class MessageCard extends StatelessWidget {
                                               return BlocBuilder<ChatRoomCubit,
                                                   ChatRoomState>(
                                                 builder: (context, state) {
-                                                  return AlertDialog(
+                                                  return showAnimatedDialog(context,AlertDialog(
                                                     title: Text(context.isArabic
                                                         ? "رسالة نصية"
                                                         : "Text Message"),
@@ -817,7 +831,25 @@ class MessageCard extends StatelessWidget {
                                                         child: const Text("OK"),
                                                       ),
                                                     ],
-                                                  );
+                                                  ),);
+
+                                                  // return AlertDialog(
+                                                  //   title: Text(context.isArabic
+                                                  //       ? "رسالة نصية"
+                                                  //       : "Text Message"),
+                                                  //   content: Text(
+                                                  //       messageEntity.text ??
+                                                  //           "Loading..."),
+                                                  //   actions: [
+                                                  //     TextButton(
+                                                  //       onPressed: () {
+                                                  //         Navigator.of(context)
+                                                  //             .pop();
+                                                  //       },
+                                                  //       child: const Text("OK"),
+                                                  //     ),
+                                                  //   ],
+                                                  // );
                                                 },
                                               );
                                             }),

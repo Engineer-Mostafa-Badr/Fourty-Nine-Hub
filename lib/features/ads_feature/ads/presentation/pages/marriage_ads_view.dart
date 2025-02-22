@@ -11,6 +11,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/call_message_buttons.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/core/widget/custom_floating_action_button.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/premium_request_button.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
@@ -101,41 +102,59 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
               child: const Center(
                 child: CircularProgressIndicator(),
               ))
-          :CustomScaffold(
+          : CustomScaffold(
               appBar: BackAppBar(
                 label: context.isArabic
                     ? widget.mainCategory.name
                     : widget.mainCategory.nameEn,
                 centerTitle: false,
               ),
-              floatingActionButton: ClickableWidget(
-                  onTap: () {
-                    if (AuthHelper().isLoggedIn()) {
-                      context.push(Routes.CREATEAD,
-                          extra: CategorizationEntity(
-                              mainCategory: widget.mainCategory,
-                              subCategory: state.subCategories![
-                                  state.subCategories?.indexWhere((element) =>
-                                          element.isSelected == true) ??
-                                      0],
-                              fromMarriage: true));
-                    } else {
-                      context.push(Routes.LOGIN);
-                    }
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.PRIMARY_COLOR,
-                      borderRadius: BorderRadius.circular(20.r),
-                      border: Border.all(color: AppColors.PRIMARY_COLOR),
-                    ),
-                    padding: EdgeInsets.all(10.w),
-                    child: Label(
-                      text:
-                          "${LocaleKeys.add.localize} ${LocaleKeys.ad.localize} ${context.isArabic ? "${context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameAr}" : "${context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameEn}"}",
-                      style:Styles.mediumText(color: Colors.white),
-                    ),
-                  )),
+              // floatingActionButton: ClickableWidget(
+              //     onTap: () {
+              //       if (AuthHelper().isLoggedIn()) {
+              //         context.push(Routes.CREATEAD,
+              //             extra: CategorizationEntity(
+              //                 mainCategory: widget.mainCategory,
+              //                 subCategory: state.subCategories![
+              //                     state.subCategories?.indexWhere((element) =>
+              //                             element.isSelected == true) ??
+              //                         0],
+              //                 fromMarriage: true));
+              //       } else {
+              //         context.push(Routes.LOGIN);
+              //       }
+              //     },
+              //     child: Container(
+              //       decoration: BoxDecoration(
+              //         color: AppColors.PRIMARY_COLOR,
+              //         borderRadius: BorderRadius.circular(20.r),
+              //         border: Border.all(color: AppColors.PRIMARY_COLOR),
+              //       ),
+              //       padding: EdgeInsets.all(10.w),
+              //       child: Label(
+              //         text:
+              //             "${LocaleKeys.add.localize} ${LocaleKeys.ad.localize} ${context.isArabic ? "${context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameAr}" : "${context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameEn}"}",
+              //         style: Styles.mediumText(color: Colors.white),
+              //       ),
+              //     )),
+              floatingActionButton: CustomFloatingActionButton(
+                onPressed: () {
+                  if (AuthHelper().isLoggedIn()) {
+                    context.push(Routes.CREATEAD,
+                        extra: CategorizationEntity(
+                            mainCategory: widget.mainCategory,
+                            subCategory: state
+                                .subCategories![state.subCategories?.indexWhere(
+                                    (element) => element.isSelected == true) ??
+                                0],
+                            fromMarriage: true));
+                  } else {
+                    context.push(Routes.LOGIN);
+                  }
+                },
+                text:
+                    "${LocaleKeys.add.localize} ${LocaleKeys.ad.localize} ${context.isArabic ? "${context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameAr}" : "${context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameEn}"}",
+              ),
               body: Padding(
                 padding: EdgeInsets.all(16.0.w),
                 child: Column(
@@ -143,7 +162,7 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                     state.mainCategory == null
                         ? Container()
                         : MainCategoryBanner(
-                      fromHome:false,
+                            fromHome: false,
                             category: context
                                 .read<SubcategoriesCubit>()
                                 .state

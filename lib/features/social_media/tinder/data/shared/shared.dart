@@ -19,6 +19,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/utils/custom_show_dialog.dart';
 import '../../../../../routes/routes.dart';
 
 class BottomSheetContent extends StatefulWidget {
@@ -271,10 +272,7 @@ class BottomSheetContentState extends State<BottomSheetContent> {
 
     Navigator.pop(context);
 
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
+    showAnimatedDialog(context, AlertDialog(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
           title: title == LocaleKeys.gift_body_gift_sent.tr()
@@ -285,8 +283,7 @@ class BottomSheetContentState extends State<BottomSheetContent> {
               : _buildMessageContent(message),
           actions: _buildDialogActions(context, isError, buttonColor),
           actionsAlignment: MainAxisAlignment.end,
-        );
-      },
+        ),
     );
   }
 

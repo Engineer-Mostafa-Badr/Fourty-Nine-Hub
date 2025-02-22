@@ -7,6 +7,8 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/c
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../../../core/utils/custom_show_dialog.dart';
+
 class MoreIconBottomSheet extends StatefulWidget {
   final ChatModel ChatCategoryEntity;
   final ChatsCubit chatsCubit;
@@ -109,9 +111,8 @@ class _MoreIconBottomSheetState extends State<MoreIconBottomSheet> {
   }
 
   Future<bool?> showDialogConfirmDeleted(BuildContext context) async {
-    return await showDialog(
-      context: context,
-      builder: ((context) => CupertinoAlertDialog(
+
+    return await showAnimatedDialog(context,CupertinoAlertDialog(
             title: const Text('Are you sure?'),
             content: const Text('Do you want to remove this chat'),
             actions: [
@@ -126,15 +127,32 @@ class _MoreIconBottomSheetState extends State<MoreIconBottomSheet> {
                   },
                   child: const Text('Yes'))
             ],
-          )),
+          ),
     );
+    // return await showDialog(
+    //   context: context,
+    //   builder: ((context) => CupertinoAlertDialog(
+    //         title: const Text('Are you sure?'),
+    //         content: const Text('Do you want to remove this chat'),
+    //         actions: [
+    //           TextButton(
+    //               onPressed: () {
+    //                 Navigator.of(context).pop(false);
+    //               },
+    //               child: const Text('No')),
+    //           TextButton(
+    //               onPressed: () {
+    //                 Navigator.of(context).pop(true);
+    //               },
+    //               child: const Text('Yes'))
+    //         ],
+    //       )),
+    // );
   }
 
   Future<bool?> showDialogToCreateLockChatPassword(BuildContext context) async {
     TextEditingController passwordController = TextEditingController(text: '');
-    return await showDialog(
-      context: context,
-      builder: ((context) => AlertDialog(
+    return await showAnimatedDialog(context,AlertDialog(
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(5.0),
@@ -182,7 +200,59 @@ class _MoreIconBottomSheetState extends State<MoreIconBottomSheet> {
                   },
                   child: const Text('Confirm password')),
             ],
-          )),
+          ),
     );
+    // return await showDialog(
+    //   context: context,
+    //   builder: ((context) => AlertDialog(
+    //         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+    //         shape: RoundedRectangleBorder(
+    //           borderRadius: BorderRadius.circular(5.0),
+    //         ),
+    //         title: Label(
+    //             text: 'Lock chats password please',
+    //             style: Styles.headerText(
+    //                 fontWeight: FontWeight.bold,
+    //                 color: Theme.of(context).primaryColor)),
+    //         content: Material(
+    //           child: ConstrainedBox(
+    //             constraints: const BoxConstraints(maxHeight: 100.0),
+    //             child: Column(
+    //               mainAxisSize: MainAxisSize.min,
+    //               children: [
+    //                 FormTextField(
+    //                     controller: passwordController,
+    //                     hint: 'password',
+    //                     type: TextInputType.number,
+    //                     // initialValue: '',
+    //                     style: TextStyle(
+    //                         fontSize: 20.sp,
+    //                         color: Theme.of(context).scaffoldBackgroundColor,
+    //                         fontWeight: FontWeight.bold),
+    //                     action: (v) => () {}),
+    //               ],
+    //             ),
+    //           ),
+    //         ),
+    //         actions: [
+    //           TextButton(
+    //               onPressed: () async {
+    //                 if (widget.ChatCategoryEntity.locked) {
+    //                   // await widget.chatsCubit.unLockChat(
+    //                   //     chatId: widget.ChatCategoryEntity.id,
+    //                   //     lockChatPassword: passwordController.text.trim());
+    //                 } else {
+    //                   // await widget.chatsCubit.lockChat(
+    //                   //     chatId: widget.ChatCategoryEntity.id,
+    //                   //     lockChatPassword: passwordController.text.trim());
+    //                 }
+    //
+    //                 Navigator.of(context).pop(false);
+    //                 Navigator.of(context).pop(false);
+    //               },
+    //               child: const Text('Confirm password')),
+    //         ],
+    //       )),
+    // );
   }
 }

@@ -15,7 +15,10 @@ import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../core/utils/custom_show_dialog.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../core/widget/custom_switch_button.dart';
+import '../../../../../core/widget/custom_switch_button.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../cubit/restaurant_dashboard_cubit.dart';
@@ -85,15 +88,15 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView> {
                                         : LocaleKeys.notAvailable.localize,
                                     style: Styles.headerText(),
                                   )),
-                                  Switch(
+                                  CustomSwitchButton(
                                       value:
                                           state.isRestaurant?.isActive ?? false,
-                                      inactiveThumbColor: Colors.white,
-                                      activeTrackColor: Colors.grey,
-                                      activeColor: AppColors.SECONDARY_COLOR,
-                                      trackOutlineColor:
-                                          WidgetStateProperty.resolveWith(
-                                              (sattes) => Colors.white),
+                                      // inactiveThumbColor: Colors.white,
+                                      // activeTrackColor: Colors.grey,
+                                      // activeColor: AppColors.SECONDARY_COLOR,
+                                      // trackOutlineColor:
+                                      //     WidgetStateProperty.resolveWith(
+                                      //         (sattes) => Colors.white),
                                       onChanged: (v) async {
                                         print("vsssss${!v}");
                                         await context
@@ -272,37 +275,63 @@ void showConfirmationDialog(
   required VoidCallback onConfirm,
   VoidCallback? onCancel,
 }) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text(
-          title,
-          style: Styles.headerText(color: Colors.black),
-        ),
-        content: Text(
-          message,
+  showAnimatedDialog(context,AlertDialog(
+    title: Text(
+      title,
+      style: Styles.headerText(color: Colors.black),
+    ),
+    content: Text(
+      message,
+      style: Styles.mediumText(color: Colors.black),
+    ),
+    actions: <Widget>[
+      TextButton(
+        onPressed: onCancel ?? () => Navigator.of(context).pop(),
+        child: Text(
+          LocaleKeys.no.localize,
           style: Styles.mediumText(color: Colors.black),
         ),
-        actions: <Widget>[
-          TextButton(
-            onPressed: onCancel ?? () => Navigator.of(context).pop(),
-            child: Text(
-              LocaleKeys.no.localize,
-              style: Styles.mediumText(color: Colors.black),
-            ),
-          ),
-          ElevatedButton(
-            onPressed: onConfirm,
-            child: Text(
-              LocaleKeys.yes.localize,
-              style: Styles.mediumText(color: Colors.white),
-            ),
-          ),
-        ],
-      );
-    },
-  );
+      ),
+      ElevatedButton(
+        onPressed: onConfirm,
+        child: Text(
+          LocaleKeys.yes.localize,
+          style: Styles.mediumText(color: Colors.white),
+        ),
+      ),
+    ],
+  ));
+  // showDialog(
+  //   context: context,
+  //   builder: (BuildContext context) {
+  //     return AlertDialog(
+  //       title: Text(
+  //         title,
+  //         style: Styles.headerText(color: Colors.black),
+  //       ),
+  //       content: Text(
+  //         message,
+  //         style: Styles.mediumText(color: Colors.black),
+  //       ),
+  //       actions: <Widget>[
+  //         TextButton(
+  //           onPressed: onCancel ?? () => Navigator.of(context).pop(),
+  //           child: Text(
+  //             LocaleKeys.no.localize,
+  //             style: Styles.mediumText(color: Colors.black),
+  //           ),
+  //         ),
+  //         ElevatedButton(
+  //           onPressed: onConfirm,
+  //           child: Text(
+  //             LocaleKeys.yes.localize,
+  //             style: Styles.mediumText(color: Colors.white),
+  //           ),
+  //         ),
+  //       ],
+  //     );
+  //   },
+  // );
 }
 
 void deleteItem(BuildContext context) {
