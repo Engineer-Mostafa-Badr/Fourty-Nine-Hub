@@ -1206,4 +1206,13 @@ class EndPoints {
   static String getShippingCategories(String userId) {
     return '/loading/driver/subcategory?userId=$userId';
   }
+  static String getDriversInSubcategory(String subCategoryId) {
+    return '/ride/riders/drivers/$subCategoryId';
+  }
+  static String requestTrip(String id) {
+    return '/ride/trips/newTrip/$id';
+  }
+  static String getExpectedPrice(String id) {
+    return '/ride/trips/expected/price/$id';
+  }
 }
