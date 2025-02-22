@@ -32,6 +32,7 @@ class ReceiptTripScreen extends StatelessWidget {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            const SizedBox(height: 50,),
             Image.asset(Assets.carBanner,
             fit: BoxFit.cover,
             ),
