@@ -29,6 +29,7 @@ class ChatEntity {
   bool isBirthdayMonth = false;
   bool isSearching = false;
   String? messageDraft;
+  String? fcmToken;
 
   ChatEntity({
     required this.id,
@@ -58,5 +59,6 @@ class ChatEntity {
     this.isBirthdayMonth = false,
     this.isSearching = false,
     this.messageDraft,
+    this.fcmToken,
   });
 }

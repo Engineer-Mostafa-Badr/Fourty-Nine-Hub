@@ -342,6 +342,9 @@ class ChatsCubit extends Cubit<ChatsState> {
   }
 
   void clearSelectedChats(){
+    for(ChatEntity chat in selectedChats){
+      chat.isSelected = false;
+    }
     selectedChats.clear();
     emit(state.copyWith(
       status: ChatsStates.success,
