@@ -1280,7 +1280,8 @@ class CodegenLoader extends AssetLoader{
   "except_from": "إلا من...",
   "deposit": "إيداع",
   "clickHere": "إضغط هنا",
-  "chargeWallet": "شحن المحفظة"
+  "chargeWallet": "شحن المحفظة",
+  "people": "الاشخاص"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -2565,7 +2566,8 @@ static const Map<String,dynamic> _en = {
   "except_from": "Except From...",
   "deposit": "Deposit",
   "clickHere": "Click Here",
-  "chargeWallet": "Charge Wallet"
+  "chargeWallet": "Charge Wallet",
+  "people": "People"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

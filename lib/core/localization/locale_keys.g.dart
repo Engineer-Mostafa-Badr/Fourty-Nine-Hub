@@ -1257,5 +1257,6 @@ abstract class  LocaleKeys {
   static const deposit = 'deposit';
   static const clickHere = 'clickHere';
   static const chargeWallet = 'chargeWallet';
+  static const people = 'people';
 
 }
