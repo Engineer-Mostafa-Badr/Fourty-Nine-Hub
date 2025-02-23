@@ -1284,7 +1284,9 @@ class CodegenLoader extends AssetLoader{
   "people": "الاشخاص",
     "receipt": "ايصال",
   "payments": "المدفوعات",
-    "cash": "نقدي"
+    "cash": "نقدي",
+    "appNotDeduct": "لا يقوم التطبيق بخصم أي نسبة من مقدم الخدمة.",
+    "premiumPackageCashBack": "تمنحك الباقة المميزة الفرصة لتكون أكثر وضوحًا وتحصل على المزيد من الاسترداد النقدي."
 
 
   };
@@ -2575,7 +2577,10 @@ static const Map<String,dynamic> _en = {
   "people": "People",
   "receipt": "Receipt",
   "payments": "Payments",
-  "cash": "Cash"
+  "cash": "Cash",
+  "appNotDeduct": "The application does not deduct any percentage from the service provider.",
+  "premiumPackageCashBack": "The Premium Package gives you the opportunity to be more visible and get more cashback."
+
 
 
 };

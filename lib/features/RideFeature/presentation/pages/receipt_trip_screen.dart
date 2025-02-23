@@ -70,7 +70,7 @@ class ReceiptTripScreen extends StatelessWidget {
                   ),
                 ),
               ],
-            ),
+            ), 
             const SizedBox(height: 49,),
             const Divider(color: AppColors.c6E6E70,),
             const SizedBox(height: 8,),

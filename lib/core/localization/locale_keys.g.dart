@@ -1261,5 +1261,7 @@ abstract class  LocaleKeys {
   static const receipt = 'receipt';
   static const payments = 'payments';
   static const cash = 'cash';
+  static const appNotDeduct = 'appNotDeduct';
+  static const premiumPackageCashBack = 'premiumPackageCashBack';
 
 }
