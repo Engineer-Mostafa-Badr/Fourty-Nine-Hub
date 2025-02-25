@@ -16,14 +16,12 @@ import 'package:fourtyninehub/features/authentication/domain/entities/user_entit
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
-import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:restart_app/restart_app.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../core/utils/custom_show_dialog.dart';
-import '../../../core/widget/custom_switch_button.dart';
 import '../../../core/widget/custom_switch_button.dart';
 import '../../../core/widget/custom_text_no_login.dart';
 import '../../../features/authentication/presentation/widgets/log_out_widget.dart';
