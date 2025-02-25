@@ -1272,6 +1272,7 @@
   "only_with": "فقط مع...",
   "except_from": "إلا من...",
   "deposit": "إيداع",
+  "carTruckRegister": "تسجيل سائق سيارة/نقل",
   "clickHere": "إضغط هنا",
   "chargeWallet": "شحن المحفظة",
   "people": "الاشخاص",
@@ -1287,6 +1288,8 @@
   "rebook": "ريبوك",
   "noRating": "لا يوجد تقييم",
   "rate": "تقييم",
-  "rideDetails": "تفاصيل الرحلة"
+  "rideDetails": "تفاصيل الرحلة",
+  "options": "الخيارات",
+  "noSmoker": "سائق غير مدخن"
 
 }

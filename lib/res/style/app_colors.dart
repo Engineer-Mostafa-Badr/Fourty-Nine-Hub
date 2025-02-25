@@ -31,6 +31,7 @@ abstract class AppColors {
   static const PRIMARY_COLOR_DARK = Color(0xFFED1C24);
   static const SECONDARY_COLOR = Color(0xFFED1C24);
   static const SECONDARY_COLOR_DARK = Color(0xFFec5749);
+  static const SECONDARY_COLOR_DARK2 = Color(0xFFF33D49);
   static const c0B1035 = Color(0xFF0B1035);
   static const c46484B = Color(0xFF46484B);
   static const cF5F5F5 = Color(0xFFF5F5F5);
@@ -65,8 +66,10 @@ abstract class AppColors {
   static const GREY_LIGHT_COLOR = Color(0xFFF3F3F3);
   static const GREY_NORMAL_COLOR = Color(0xFFB9B9B9);
   static const GREYCARD = Color(0xFFEDEBEB);
+  static const GREYFIELD = Color(0xFFF5F5F5);
   static const GREYTEXT = Color(0xFF949494);
   static const GREYICON = Color(0xFF414141);
+  static const GREYBG2 = Color(0xffDBD1D1);
   static const GREYBG = Color(0xFFD9D9D9);
   static const GREY_DARK_COLOR = Color(0xFF707070);
   static const GREY_BORDER_COLOR = Color(0xFFDEDEDE);

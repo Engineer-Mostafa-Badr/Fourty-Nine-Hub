@@ -1307,5 +1307,8 @@
   "rebook": "Rebook",
   "noRating": "No rating",
   "rate": "Rate",
-  "rideDetails": "Ride Details"
+  "rideDetails": "Ride Details",
+  "carTruckRegister": "Car/Truck Register",
+  "options": "Options",
+  "noSmoker": "Non smoker Driver"
 }
