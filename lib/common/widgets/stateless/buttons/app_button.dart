@@ -44,7 +44,7 @@ class AppButton extends StatelessWidget {
         margin: EdgeInsets.all(margin ?? 0),
         padding: EdgeInsets.symmetric(horizontal: padding ?? 0),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(radius ?? 10.r),
+          borderRadius: BorderRadius.circular(radius ?? 15),
           color: backColor ?? AppColors.SECONDARY_COLOR,
         ),
         child: widget ??
@@ -66,7 +66,7 @@ class AppButton extends StatelessWidget {
                   SizedBox(
                     child: Label(
                       text: label,
-                      style: style ?? Styles.mediumText(color: color),
+                      style: style ?? Styles.mediumText(color: color?? Colors.white,),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
