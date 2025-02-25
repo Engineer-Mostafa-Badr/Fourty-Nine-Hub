@@ -4,11 +4,14 @@ abstract class Assets {
   static String addImage = 'assets/images/addImage.svg';
   static String icon = 'assets/images/icon.png';
   static String tube = 'assets/images/tube.png';
+  static String joinTrip = 'assets/images/join_trip.png';
+  static String tube1 = 'assets/images/tube1.png';
   static String tubeCat = 'assets/images/tubeCat.jpg';
   static String captainShare = 'assets/images/captain_share.png';
   static String tripJoinNew = 'assets/images/trip_join.png';
   static String pickMe = 'assets/images/pick_me.png';
   static String onBoardingTrip = 'assets/images/onboarding_trip.png';
+  static String doneRegister = 'assets/images/done_register.png';
   static String call = 'assets/icons/call.svg';
   static String createStory = 'assets/icons/create_story.svg';
   static String createReel = 'assets/icons/create_reels.svg';

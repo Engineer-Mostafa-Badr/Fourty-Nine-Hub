@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:go_router/go_router.dart';
-
-import '../../res/assets/assets.dart';
-import '../../res/style/styles.dart';
-import '../../routes/routes.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'widgets/register_floating_action_button.dart';
 
 class WelcomeRideRegister extends StatelessWidget {
   const WelcomeRideRegister({super.key});
@@ -19,51 +20,17 @@ class WelcomeRideRegister extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomScaffold(
       appBar: const HomeAppbar(),
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Container(
-            height: 60.h,
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            decoration: BoxDecoration(
-              color: AppColors.GREY_LIGHT_COLOR,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: const Icon(
-              Icons.arrow_back_ios_new,
-              color: AppColors.PRIMARY_COLOR,
-            ),
-          ),
-          const Sizer(),
-          InkWell(
-            onTap: ()=> context.push(Routes.personalInformationScreen),
-            child: Container(
-              height: 60.h,
-              padding: EdgeInsets.symmetric(horizontal: 12),
-              decoration: BoxDecoration(
-                color: AppColors.PRIMARY_COLOR,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Row(
-                children: [
-                  Label(
-                    text: LocaleKeys.next,
-                    style: Styles.headerText(
-                      fontWeight: FontWeight.w400,
-                      color: AppColors.AUTH_CONTAINER_COLOR,
-                    ),
-                  ),
-                  Sizer(),
-                  Sizer(),
-                  Icon(
-                    Icons.arrow_forward_ios,
-                    color: AppColors.AUTH_CONTAINER_COLOR,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
+      floatingActionButton: registerFloatingActionButton(
+        context,
+        onTap: () {
+          //TODO add in logic if isTruckDriver or NormalDriver
+          var isTruckDriver = true;
+          if (isTruckDriver) {
+            context.push(Routes.truckPersonalInformationScreen);
+          } else {
+            context.push(Routes.personalInformationScreen);
+          }
+        },
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -71,26 +38,27 @@ class WelcomeRideRegister extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Label(
-              text: 'Welcome to Ride Register',
+              text: LocaleKeys.welcomeToRideRegister.localize,
               style: Styles.headerText(
                   fontWeight: FontWeight.w500,
                   color: AppColors.SECONDARY_COLOR),
             ),
-            Sizer(),
-            Sizer(),
+            const Sizer(),
+            const Sizer(),
             Expanded(
               child: GridView.count(
                 crossAxisCount: 3,
                 childAspectRatio: 1.3,
-                mainAxisSpacing: 32.w,
-                crossAxisSpacing: 32.h,
+                mainAxisSpacing: 16,
+                crossAxisSpacing: 16,
                 children: List.generate(
                   14,
                   (index) => Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color:index==100? AppColors.GREY_LIGHT_COLOR:Colors.transparent
-                    ),
+                        borderRadius: BorderRadius.circular(12),
+                        color: index == 100
+                            ? AppColors.GREYBG
+                            : Colors.transparent),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

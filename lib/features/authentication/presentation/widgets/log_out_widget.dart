@@ -80,7 +80,6 @@ class _LogoutWidgetState extends State<LogoutWidget> {
                   // await DI.execute();
                   setLogOut();
                   context.go(Routes.HOME);
-
                   // context.pushReplacement(Routes.HOME);
                   // await Restart.restartApp();
                   // context.read<MainCategoriesCubit>().loadData(context);
@@ -93,8 +92,8 @@ class _LogoutWidgetState extends State<LogoutWidget> {
       ],
     );
   }
-  
 }
+
 /*{
     "status": true,
     "message": "success",
