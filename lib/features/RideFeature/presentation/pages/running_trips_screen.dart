@@ -67,7 +67,16 @@ class RunningTripScreen extends StatelessWidget {
     "150 EGP",
     "150 EGP",
   ];
-
+  List<String> imagesRate = [
+    Assets.personalImage,
+    Assets.personalImage,
+    Assets.personalImage,
+    Assets.personalImage,
+    Assets.personalImage,
+    Assets.personalImage,
+    Assets.personalImage,
+    Assets.personalImage,
+  ];
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
@@ -99,7 +108,7 @@ class RunningTripScreen extends StatelessWidget {
                   ),
                   PriceColumn(title: columnTitle[index], date: columnDate[index],price: columnPrice[index]),
                   const Spacer(),
-                  RateCar(image: images[index], rate: '3.5',isPerson: true,),
+                  RatePerson(image: imagesRate[index], name: 'Montaserssssssssssssss', ),
                 ],
               ),
             );

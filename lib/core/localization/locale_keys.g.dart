@@ -1263,5 +1263,13 @@ abstract class  LocaleKeys {
   static const cash = 'cash';
   static const appNotDeduct = 'appNotDeduct';
   static const premiumPackageCashBack = 'premiumPackageCashBack';
+  static const upcoming = 'upcoming';
+  static const youHaveNoUpcomingTrips = 'youHaveNoUpcomingTrips';
+  static const reserveYourRide = 'reserveYourRide';
+  static const past = 'past';
+  static const rebook = 'rebook';
+  static const noRating = 'noRating';
+  static const rate = 'rate';
+  static const rideDetails = 'rideDetails';
 
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'custom_color_circle_widget.dart';
+
 class PickUpLocationCard extends StatelessWidget {
   final String title;
   final Color? firstColor;
@@ -17,25 +19,7 @@ class PickUpLocationCard extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 12),
-              width: 16,
-              height: 16,
-              decoration: BoxDecoration(
-                color: firstColor,
-                shape: BoxShape.circle,
-              ),
-              child: Center(
-                child: Container(
-                  width: 8,
-                  height: 8,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              ),
-            ),
+            CustomColorCircleWidget(firstColor: firstColor,),
             // Text "PickUp Location"
             Text(
               title,
