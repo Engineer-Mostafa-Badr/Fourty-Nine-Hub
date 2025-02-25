@@ -8,6 +8,7 @@ abstract class  LocaleKeys {
   static const tommorow = 'tommorow';
   static const meeting = 'meeting';
   static const join = 'join';
+  static const carTruckRegister = 'Car/Truck Register';
   static const schedule = 'schedule';
   static const scheduleAMeeting = 'scheduleAMeeting';
   static const startDateBeginValidation = 'startDateBeginValidation';
@@ -1125,6 +1126,7 @@ abstract class  LocaleKeys {
   static const pricingPerKmIsRequired = 'pricingPerKmIsRequired';
   static const airConditionAc = 'airConditionAc';
   static const Smoker = 'Smoker';
+  static const noSmoker = 'noSmoker';
   static const dragAnalysis = 'dragAnalysis';
   static const welcomeToRideRegister = 'welcomeToRideRegister';
   static const tripIsComplete = 'tripIsComplete';
@@ -1258,5 +1260,5 @@ abstract class  LocaleKeys {
   static const clickHere = 'clickHere';
   static const chargeWallet = 'chargeWallet';
   static const people = 'people';
-
+  static const options = 'Options';
 }

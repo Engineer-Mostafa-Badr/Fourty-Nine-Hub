@@ -1272,8 +1272,11 @@
   "only_with": "فقط مع...",
   "except_from": "إلا من...",
   "deposit": "إيداع",
+  "carTruckRegister": "تسجيل سائق سيارة/نقل",
   "clickHere": "إضغط هنا",
   "chargeWallet": "شحن المحفظة",
+  "options": "الخيارات",
+  "noSmoker": "سائق غير مدخن",
   "people": "الاشخاص"
 
 }
