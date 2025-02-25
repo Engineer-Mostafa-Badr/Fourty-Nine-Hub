@@ -7,6 +7,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/car_circle_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/info_column_widget.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/person_trip_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/rate_car_widget.dart';
 
 import '../../../../core/localization/locale_keys.g.dart';
@@ -108,7 +109,7 @@ class RunningTripScreen extends StatelessWidget {
                   ),
                   PriceColumn(title: columnTitle[index], date: columnDate[index],price: columnPrice[index]),
                   const Spacer(),
-                  RatePerson(image: imagesRate[index], name: 'Montaserssssssssssssss', ),
+                  PersonTripWidget(image: imagesRate[index], name: 'Montaser', ),
                 ],
               ),
             );
