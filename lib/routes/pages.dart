@@ -1,4 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/activity_trip_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/expired_trips_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/running_trips_screen.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/favourite_view.dart';
 import 'package:fourtyninehub/features/account_taps/contact_us/presentation/cubit/contact_us_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/contact_us/presentation/pages/contact_us_view.dart';
@@ -443,6 +446,21 @@ class AppPages {
                     create: (context) =>
                         serviceLocator<RestaurantDashboardCubit>(),
                     child: const RestaurantDashboardOrders()),
+              ),
+              GoRoute(
+                path: Paths.RIDEACTIVITY,
+                name: Routes.RIDEACTIVITY,
+                builder: (context, state) => ActivityTripScreen(),
+              ),
+              GoRoute(
+                path: Paths.RIDERUNNINGTRIPS,
+                name: Routes.RIDERUNNINGTRIPS,
+                builder: (context, state) => RunningTripScreen(),
+              ),
+              GoRoute(
+                path: Paths.RIDEEXPIREDTRIPE,
+                name: Routes.RIDEEXPIREDTRIPE,
+                builder: (context, state) => ExpiredTripsScreen(),
               ),
               GoRoute(
                 path: Paths.EditFoodView,
