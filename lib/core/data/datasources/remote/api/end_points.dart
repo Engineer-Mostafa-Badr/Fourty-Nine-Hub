@@ -532,6 +532,7 @@ class EndPoints {
 
   static const sendRideRequest = '/ride/trips/new';
   static const checkDriverType = '/ride/riders/checkDriver/type';
+  static const getDriverStatistics = '/ride/riders/driverStatistics';
   static const createRideTripRequest = '/ride/trip';
   static const createRideTripRequestPremium = '/ride/trip/premium';
   static const getAddressFromLatAndLong = '/ride/trips/address/latAndLong';
@@ -1215,4 +1216,9 @@ class EndPoints {
   static String getExpectedPrice(String id) {
     return '/ride/trips/expected/price/$id';
   }
+  static String deleteRideRegistration = '/ride/riders';
+  static String getRideBrands = '/ride/riders/brands';
+  static String getRideModels = '/ride/riders/models';
+  static String getCarYearsAndTypes = '/ride/riders/car-years-and-types';
+  static String getRideCarColors = '/ride/riders/colors';
 }
