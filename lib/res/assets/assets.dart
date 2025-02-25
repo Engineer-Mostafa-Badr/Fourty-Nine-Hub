@@ -231,4 +231,16 @@ abstract class Assets {
   static String maka = 'assets/images/maka.png';
   static String madina = 'assets/images/madina.png';
   static String win = 'assets/images/win.jpg';
+  static String carBanner = 'assets/images/car_banner.png';
+  static String greyCar = 'assets/images/grey_car.png';
+  static String map2 = 'assets/images/map2.png';
+
+  static String redCar = 'assets/icons/red_car.svg';
+  static String blackCar = 'assets/icons/black_car.svg';
+  static String cash = 'assets/icons/cash.svg';
+  static String movingCar2 = 'assets/icons/moving_car.svg';
+  static String filter = 'assets/icons/filter.svg';
+  static String reBookIcon = 'assets/icons/rebook_icon.svg';
+  static String receiptIcon = 'assets/icons/receipt_icon.svg';
+  static String star2 = 'assets/icons/star.svg';
 }

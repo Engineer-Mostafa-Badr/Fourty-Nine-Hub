@@ -1263,6 +1263,7 @@
   "only_with": "فقط مع...",
   "except_from": "إلا من...",
   "deposit": "إيداع",
+  "carTruckRegister": "تسجيل سائق سيارة/نقل",
   "clickHere": "إضغط هنا",
   "chargeWallet": "شحن المحفظة",
   "people": "الاشخاص",
@@ -1295,5 +1296,21 @@
   "captainShare": "الكابتن شير",
   "doYouWantToCloseRegistration": "هل تريد إغلاق التسجيل؟",
   "allTheInfoAndPicturesAreSavedYouCanContinueAnyTime": "تم حفظ كافة المعلومات والصور. يمكنك المتابعة في أي وقت",
-  "areYouSureYouWantToCloseThisWindow?": "هل أنت متأكد أنك تريد إغلاق هذه النافذة؟"
+  "areYouSureYouWantToCloseThisWindow?": "هل أنت متأكد أنك تريد إغلاق هذه النافذة؟",
+  "receipt": "ايصال",
+  "payments": "المدفوعات",
+  "cash": "نقدي",
+  "appNotDeduct": "لا يقوم التطبيق بخصم أي نسبة من مقدم الخدمة.",
+  "premiumPackageCashBack": "تمنحك الباقة المميزة الفرصة لتكون أكثر وضوحًا وتحصل على المزيد من الاسترداد النقدي.",
+  "upcoming": "قادمة",
+  "youHaveNoUpcomingTrips": "ليس لديك رحلات قادمة",
+  "reserveYourRide": "احجز رحلتك",
+  "past": "ماضي",
+  "rebook": "ريبوك",
+  "noRating": "لا يوجد تقييم",
+  "rate": "تقييم",
+  "rideDetails": "تفاصيل الرحلة",
+  "options": "الخيارات",
+  "noSmoker": "سائق غير مدخن"
+
 }
