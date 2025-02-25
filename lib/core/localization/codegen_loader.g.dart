@@ -1279,6 +1279,7 @@ class CodegenLoader extends AssetLoader{
   "only_with": "فقط مع...",
   "except_from": "إلا من...",
   "deposit": "إيداع",
+  "carTruckRegister": "تسجيل سائق سيارة/نقل",
   "clickHere": "إضغط هنا",
   "chargeWallet": "شحن المحفظة",
   "people": "الاشخاص",
@@ -1308,7 +1309,25 @@ class CodegenLoader extends AssetLoader{
   "subscriptionPlan": "خطة الاشتراك",
   "favoriteCity": "المدينة المفضلة",
   "nonSmokerDriver": "سائق غير مدخن",
-  "captainShare": "الكابتن شير"
+  "captainShare": "الكابتن شير",
+  "doYouWantToCloseRegistration": "هل تريد إغلاق التسجيل؟",
+  "allTheInfoAndPicturesAreSavedYouCanContinueAnyTime": "تم حفظ كافة المعلومات والصور. يمكنك المتابعة في أي وقت",
+  "areYouSureYouWantToCloseThisWindow": "هل أنت متأكد أنك تريد إغلاق هذه النافذة؟",
+  "receipt": "ايصال",
+  "payments": "المدفوعات",
+  "cash": "نقدي",
+  "appNotDeduct": "لا يقوم التطبيق بخصم أي نسبة من مقدم الخدمة.",
+  "premiumPackageCashBack": "تمنحك الباقة المميزة الفرصة لتكون أكثر وضوحًا وتحصل على المزيد من الاسترداد النقدي.",
+  "upcoming": "قادمة",
+  "youHaveNoUpcomingTrips": "ليس لديك رحلات قادمة",
+  "reserveYourRide": "احجز رحلتك",
+  "past": "ماضي",
+  "rebook": "ريبوك",
+  "noRating": "لا يوجد تقييم",
+  "rate": "تقييم",
+  "rideDetails": "تفاصيل الرحلة",
+  "options": "الخيارات",
+  "noSmoker": "سائق غير مدخن"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -2621,7 +2640,26 @@ static const Map<String,dynamic> _en = {
   "subscriptionPlan": "Subscription plan",
   "favoriteCity": "Favorite city",
   "nonSmokerDriver": "Non smoker Driver",
-  "captainShare": "Captain Share"
+  "captainShare": "Captain Share",
+  "doYouWantToCloseRegistration": "Do you want to close registration?",
+  "allTheInfoAndPicturesAreSavedYouCanContinueAnyTime": "All the info and pictures are saved. You can continue any time",
+  "areYouSureYouWantToCloseThisWindow": "Are you sure you want to close this window?",
+  "receipt": "Receipt",
+  "payments": "Payments",
+  "cash": "Cash",
+  "appNotDeduct": "The application does not deduct any percentage from the service provider.",
+  "premiumPackageCashBack": "The Premium Package gives you the opportunity to be more visible and get more cashback.",
+  "upcoming": "Upcoming",
+  "youHaveNoUpcomingTrips": "You have no upcoming Trips",
+  "reserveYourRide": "Reserve Your ride",
+  "past": "Past",
+  "rebook": "Rebook",
+  "noRating": "No rating",
+  "rate": "Rate",
+  "rideDetails": "Ride Details",
+  "carTruckRegister": "Car/Truck Register",
+  "options": "Options",
+  "noSmoker": "Non smoker Driver"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

@@ -209,7 +209,7 @@ abstract class Routes {
   static const truckDriversLicenseScreen = '/TruckDriversLicenseScreen';
   static const truckPersonalDocumentsScreen = '/TruckPersonalDocumentsScreen';
   static const truckVehicleInformationScreen = '/TruckVehicleInformationScreen';
-  static const truckMoreInfoScreen = '/MoreInfoScreen';
+  static const truckMoreInfoScreen = '/TruckMoreInfoScreen';
   static const completeRegisterScreen = '/CompleteRegisterScreen';
 }
 

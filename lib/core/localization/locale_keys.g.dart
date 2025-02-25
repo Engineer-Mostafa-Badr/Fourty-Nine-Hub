@@ -1255,6 +1255,7 @@ abstract class  LocaleKeys {
   static const only_with = 'only_with';
   static const except_from = 'except_from';
   static const deposit = 'deposit';
+  static const carTruckRegister = 'carTruckRegister';
   static const clickHere = 'clickHere';
   static const chargeWallet = 'chargeWallet';
   static const people = 'people';
@@ -1288,5 +1289,20 @@ abstract class  LocaleKeys {
   static const doYouWantToCloseRegistration = 'doYouWantToCloseRegistration';
   static const allTheInfoAndPicturesAreSavedYouCanContinueAnyTime = 'allTheInfoAndPicturesAreSavedYouCanContinueAnyTime';
   static const areYouSureYouWantToCloseThisWindow = 'areYouSureYouWantToCloseThisWindow';
+  static const receipt = 'receipt';
+  static const payments = 'payments';
+  static const cash = 'cash';
+  static const appNotDeduct = 'appNotDeduct';
+  static const premiumPackageCashBack = 'premiumPackageCashBack';
+  static const upcoming = 'upcoming';
+  static const youHaveNoUpcomingTrips = 'youHaveNoUpcomingTrips';
+  static const reserveYourRide = 'reserveYourRide';
+  static const past = 'past';
+  static const rebook = 'rebook';
+  static const noRating = 'noRating';
+  static const rate = 'rate';
+  static const rideDetails = 'rideDetails';
+  static const options = 'options';
+  static const noSmoker = 'noSmoker';
 
 }
