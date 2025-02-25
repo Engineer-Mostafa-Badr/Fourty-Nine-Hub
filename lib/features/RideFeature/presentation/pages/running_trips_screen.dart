@@ -14,7 +14,7 @@ import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
-
+ 
 class RunningTripScreen extends StatelessWidget {
   RunningTripScreen({super.key});
 
