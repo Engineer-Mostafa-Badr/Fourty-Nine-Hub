@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/utils/hex_color_helper.dart';
 
 import '../../res/style/app_colors.dart';
 
@@ -25,14 +26,17 @@ class CustomSwitchButton extends StatelessWidget {
     return Switch(
       value: value,
       onChanged: onChanged,
-      activeColor: activeColor ?? Colors.green,
-      inactiveThumbColor: inactiveThumbColor ?? AppColors.PRIMARY_COLOR,
-      trackColor: trackColor ??
-          WidgetStatePropertyAll(Theme.of(context).scaffoldBackgroundColor),
-      trackOutlineColor: trackOutlineColor ??
-          const WidgetStatePropertyAll(AppColors.PRIMARY_COLOR),
-      // inactiveTrackColor: Colors.black,
-      // activeTrackColor: Colors.black,
+      // activeColor: activeColor ?? Colors.green,
+      // inactiveThumbColor: inactiveThumbColor ?? AppColors.PRIMARY_COLOR,
+      // trackColor: trackColor ??
+      //     WidgetStatePropertyAll(Theme.of(context).scaffoldBackgroundColor),
+      thumbColor: const WidgetStatePropertyAll(AppColors.PRIMARY_COLOR),
+      trackOutlineColor: value
+          ? const WidgetStatePropertyAll(Colors.transparent)
+          : const WidgetStatePropertyAll(AppColors.PRIMARY_COLOR),
+
+      inactiveTrackColor: Theme.of(context).scaffoldBackgroundColor,
+      activeTrackColor: HexColor('4CDA64'),
       // trackOutlineColor: WidgetStatePropertyAll(HexColor('ff3308')),
     );
   }

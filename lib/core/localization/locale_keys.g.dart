@@ -1258,5 +1258,35 @@ abstract class  LocaleKeys {
   static const clickHere = 'clickHere';
   static const chargeWallet = 'chargeWallet';
   static const people = 'people';
+  static const thankYouWeWillRespondWithin24Hours = 'thankYouWeWillRespondWithin24Hours';
+  static const pleaseNoteThatRequestProcessingTakesPlaceDuringBusinessHours = 'pleaseNoteThatRequestProcessingTakesPlaceDuringBusinessHours';
+  static const driversLicense = 'driversLicense';
+  static const backOfTheLicense = 'backOfTheLicense';
+  static const aSelfieWithTheLicense = 'aSelfieWithTheLicense';
+  static const licenseNumber = 'licenseNumber';
+  static const expirationDate = 'expirationDate';
+  static const nationalIdCard = 'nationalIdCard';
+  static const backOfTheId = 'backOfTheId';
+  static const drugAnalysis = 'drugAnalysis';
+  static const personalDocuments = 'personalDocuments';
+  static const personalPicture = 'personalPicture';
+  static const surname = 'surname';
+  static const vehiclePicture = 'vehiclePicture';
+  static const vehicleRegistrationCertificate = 'vehicleRegistrationCertificate';
+  static const backSideOfTheCertificate = 'backSideOfTheCertificate';
+  static const vehicleInformation = 'vehicleInformation';
+  static const vehicleBrand = 'vehicleBrand';
+  static const vehicleModel = 'vehicleModel';
+  static const vehicleColor = 'vehicleColor';
+  static const yearOfProduction = 'yearOfProduction';
+  static const licensePlateNumber = 'licensePlateNumber';
+  static const moreInfo = 'moreInfo';
+  static const subscriptionPlan = 'subscriptionPlan';
+  static const favoriteCity = 'favoriteCity';
+  static const nonSmokerDriver = 'nonSmokerDriver';
+  static const captainShare = 'captainShare';
+  static const doYouWantToCloseRegistration = 'doYouWantToCloseRegistration';
+  static const allTheInfoAndPicturesAreSavedYouCanContinueAnyTime = 'allTheInfoAndPicturesAreSavedYouCanContinueAnyTime';
+  static const areYouSureYouWantToCloseThisWindow = 'areYouSureYouWantToCloseThisWindow';
 
 }

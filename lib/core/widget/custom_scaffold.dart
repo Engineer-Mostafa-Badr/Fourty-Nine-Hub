@@ -78,41 +78,32 @@ class _CustomScaffoldState extends State<CustomScaffold>
         if (floatingNavigatorCubit.floatingNavigatorStatus) {
           return FloatingDraggableWidget(
             mainScreenWidget: mainScaffold(),
-            floatingWidget: AnimatedBuilder(
-              animation: _animation,
-              builder: (context, child) {
-                return Transform.translate(
-                  offset: Offset(0, -_animation.value),
-                  child: child,
-                );
+            floatingWidget: GestureDetector(
+              onTap: () {
+                setState(() {
+                  floatNavigator = !floatNavigator;
+                });
               },
-              child: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    floatNavigator = !floatNavigator;
-                  });
-                },
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        width: 60.w,
-                        // height: 50.h,
-                        decoration: BoxDecoration(
-                            color: AppColors.SECONDARY_COLOR,
-                            borderRadius: BorderRadius.circular(15.r)),
-                        child: const Icon(
-                          Icons.swap_horiz_rounded,
-                          color: Colors.white,
-                        ),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Container(
+                      width: 60.w,
+                      // height: 50.h,
+                      decoration: BoxDecoration(
+                          color: AppColors.SECONDARY_COLOR,
+                          borderRadius: BorderRadius.circular(15.r)),
+                      child: const Icon(
+                        Icons.swap_horiz_rounded,
+                        color: Colors.white,
                       ),
                     ),
-                    FittedBox(
-                        child: const Label(
-                      text: 'Move',
-                    ))
-                  ],
-                ),
+                  ),
+                  FittedBox(
+                      child: const Label(
+                    text: 'Move',
+                  ))
+                ],
               ),
             ),
             floatingWidgetHeight: 60,
@@ -132,7 +123,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
       children: [
         widget.enableCustomAppBar
             ? Scaffold(
-                // backgroundColor: Theme.of(context).primaryColor,
+                backgroundColor: AppColors.PRIMARY_COLOR,
                 floatingActionButtonLocation:
                     widget.floatingActionButtonLocation,
                 floatingActionButton: widget.floatingActionButton,
@@ -142,7 +133,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                   padding: const EdgeInsets.only(top: 8.0),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: widget.backgroundColor ?? HexColor('F2F1F7'),
+                      color: widget.backgroundColor ?? Theme.of(context).scaffoldBackgroundColor,
                       borderRadius: BorderRadius.vertical(
                         top: Radius.circular(50.r),
                       ),

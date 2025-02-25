@@ -1,0 +1,84 @@
+import 'package:flutter/material.dart';
+import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:go_router/go_router.dart';
+
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+
+import '../widgets/close_widget.dart';
+import '../widgets/register_floating_action_button.dart';
+import '../widgets/upload_file_widget.dart';
+
+
+class TruckPersonalInformationScreen extends StatelessWidget {
+  const TruckPersonalInformationScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    TextEditingController firstNameController = TextEditingController();
+    TextEditingController surNameController = TextEditingController();
+    TextEditingController dateOfBirthDayController = TextEditingController();
+    TextEditingController phoneNumberController = TextEditingController();
+    return CustomScaffold(
+      appBar: const HomeAppbar(),
+      floatingActionButton: registerFloatingActionButton(
+        context,
+        index: 1,
+        onTap: () => context.push(Routes.truckDriversLicenseScreen),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            spacing: 4,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              closeWidget(context),
+              Label(
+                text: LocaleKeys.personalInformation.localize,
+                style: Styles.headerText(
+                    fontWeight: FontWeight.w500,
+                    ),
+              ),
+              const Sizer(),
+              DefaultTextFormField(
+                currentController: firstNameController,
+                fillColor: AppColors.GREYBG,
+                borderColor: Colors.transparent,
+                hint: LocaleKeys.firstName.localize,
+              ),
+              const Sizer(),
+              DefaultTextFormField(
+                currentController: surNameController,
+                fillColor: AppColors.GREYBG,
+                borderColor: Colors.transparent,
+                hint: LocaleKeys.surname.localize,
+              ),
+              const Sizer(),
+              DefaultTextFormField(
+                currentController: dateOfBirthDayController,
+                fillColor: AppColors.GREYBG,
+                borderColor: Colors.transparent,
+                hint: LocaleKeys.user_info_date_of_birth.localize,
+              ),
+              const Sizer(),
+              DefaultTextFormField(
+                currentController: phoneNumberController,
+                fillColor: AppColors.GREYBG,
+                borderColor: Colors.transparent,
+                hint: LocaleKeys.phoneNumber.localize,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
