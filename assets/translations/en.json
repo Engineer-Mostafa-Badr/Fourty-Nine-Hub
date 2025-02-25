@@ -1294,8 +1294,21 @@
   "deposit": "Deposit",
   "clickHere": "Click Here",
   "chargeWallet": "Charge Wallet",
+  "people": "People",
+  "receipt": "Receipt",
+  "payments": "Payments",
+  "cash": "Cash",
+  "appNotDeduct": "The application does not deduct any percentage from the service provider.",
+  "premiumPackageCashBack": "The Premium Package gives you the opportunity to be more visible and get more cashback.",
+  "upcoming": "Upcoming",
+  "youHaveNoUpcomingTrips": "You have no upcoming Trips",
+  "reserveYourRide": "Reserve Your ride",
+  "past": "Past",
+  "rebook": "Rebook",
+  "noRating": "No rating",
+  "rate": "Rate",
+  "rideDetails": "Ride Details",
   "carTruckRegister": "Car/Truck Register",
   "options": "Options",
-  "noSmoker": "Non smoker Driver",
-  "people": "People"
+  "noSmoker": "Non smoker Driver"
 }

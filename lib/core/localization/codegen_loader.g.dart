@@ -1279,9 +1279,25 @@ class CodegenLoader extends AssetLoader{
   "only_with": "فقط مع...",
   "except_from": "إلا من...",
   "deposit": "إيداع",
+  "carTruckRegister": "تسجيل سائق سيارة/نقل",
   "clickHere": "إضغط هنا",
   "chargeWallet": "شحن المحفظة",
-  "people": "الاشخاص"
+  "people": "الاشخاص",
+  "receipt": "ايصال",
+  "payments": "المدفوعات",
+  "cash": "نقدي",
+  "appNotDeduct": "لا يقوم التطبيق بخصم أي نسبة من مقدم الخدمة.",
+  "premiumPackageCashBack": "تمنحك الباقة المميزة الفرصة لتكون أكثر وضوحًا وتحصل على المزيد من الاسترداد النقدي.",
+  "upcoming": "قادمة",
+  "youHaveNoUpcomingTrips": "ليس لديك رحلات قادمة",
+  "reserveYourRide": "احجز رحلتك",
+  "past": "ماضي",
+  "rebook": "ريبوك",
+  "noRating": "لا يوجد تقييم",
+  "rate": "تقييم",
+  "rideDetails": "تفاصيل الرحلة",
+  "options": "الخيارات",
+  "noSmoker": "سائق غير مدخن"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -2567,7 +2583,23 @@ static const Map<String,dynamic> _en = {
   "deposit": "Deposit",
   "clickHere": "Click Here",
   "chargeWallet": "Charge Wallet",
-  "people": "People"
+  "people": "People",
+  "receipt": "Receipt",
+  "payments": "Payments",
+  "cash": "Cash",
+  "appNotDeduct": "The application does not deduct any percentage from the service provider.",
+  "premiumPackageCashBack": "The Premium Package gives you the opportunity to be more visible and get more cashback.",
+  "upcoming": "Upcoming",
+  "youHaveNoUpcomingTrips": "You have no upcoming Trips",
+  "reserveYourRide": "Reserve Your ride",
+  "past": "Past",
+  "rebook": "Rebook",
+  "noRating": "No rating",
+  "rate": "Rate",
+  "rideDetails": "Ride Details",
+  "carTruckRegister": "Car/Truck Register",
+  "options": "Options",
+  "noSmoker": "Non smoker Driver"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

@@ -8,7 +8,6 @@ abstract class  LocaleKeys {
   static const tommorow = 'tommorow';
   static const meeting = 'meeting';
   static const join = 'join';
-  static const carTruckRegister = 'Car/Truck Register';
   static const schedule = 'schedule';
   static const scheduleAMeeting = 'scheduleAMeeting';
   static const startDateBeginValidation = 'startDateBeginValidation';
@@ -1126,7 +1125,6 @@ abstract class  LocaleKeys {
   static const pricingPerKmIsRequired = 'pricingPerKmIsRequired';
   static const airConditionAc = 'airConditionAc';
   static const Smoker = 'Smoker';
-  static const noSmoker = 'noSmoker';
   static const dragAnalysis = 'dragAnalysis';
   static const welcomeToRideRegister = 'welcomeToRideRegister';
   static const tripIsComplete = 'tripIsComplete';
@@ -1257,8 +1255,24 @@ abstract class  LocaleKeys {
   static const only_with = 'only_with';
   static const except_from = 'except_from';
   static const deposit = 'deposit';
+  static const carTruckRegister = 'carTruckRegister';
   static const clickHere = 'clickHere';
   static const chargeWallet = 'chargeWallet';
   static const people = 'people';
-  static const options = 'Options';
+  static const receipt = 'receipt';
+  static const payments = 'payments';
+  static const cash = 'cash';
+  static const appNotDeduct = 'appNotDeduct';
+  static const premiumPackageCashBack = 'premiumPackageCashBack';
+  static const upcoming = 'upcoming';
+  static const youHaveNoUpcomingTrips = 'youHaveNoUpcomingTrips';
+  static const reserveYourRide = 'reserveYourRide';
+  static const past = 'past';
+  static const rebook = 'rebook';
+  static const noRating = 'noRating';
+  static const rate = 'rate';
+  static const rideDetails = 'rideDetails';
+  static const options = 'options';
+  static const noSmoker = 'noSmoker';
+
 }

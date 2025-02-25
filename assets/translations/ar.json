@@ -1275,8 +1275,21 @@
   "carTruckRegister": "تسجيل سائق سيارة/نقل",
   "clickHere": "إضغط هنا",
   "chargeWallet": "شحن المحفظة",
+  "people": "الاشخاص",
+  "receipt": "ايصال",
+  "payments": "المدفوعات",
+  "cash": "نقدي",
+  "appNotDeduct": "لا يقوم التطبيق بخصم أي نسبة من مقدم الخدمة.",
+  "premiumPackageCashBack": "تمنحك الباقة المميزة الفرصة لتكون أكثر وضوحًا وتحصل على المزيد من الاسترداد النقدي.",
+  "upcoming": "قادمة",
+  "youHaveNoUpcomingTrips": "ليس لديك رحلات قادمة",
+  "reserveYourRide": "احجز رحلتك",
+  "past": "ماضي",
+  "rebook": "ريبوك",
+  "noRating": "لا يوجد تقييم",
+  "rate": "تقييم",
+  "rideDetails": "تفاصيل الرحلة",
   "options": "الخيارات",
-  "noSmoker": "سائق غير مدخن",
-  "people": "الاشخاص"
+  "noSmoker": "سائق غير مدخن"
 
 }
