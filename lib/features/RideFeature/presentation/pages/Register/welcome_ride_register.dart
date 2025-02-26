@@ -24,7 +24,7 @@ class WelcomeRideRegister extends StatelessWidget {
         context,
         onTap: () {
           //TODO add in logic if isTruckDriver or NormalDriver
-          var isTruckDriver = true;
+          var isTruckDriver = false;
           if (isTruckDriver) {
             context.push(Routes.truckPersonalInformationScreen);
           } else {

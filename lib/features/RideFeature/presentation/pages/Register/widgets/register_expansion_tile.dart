@@ -14,8 +14,8 @@ class RegisterExpansionTile extends StatefulWidget {
 }
 
 class _RegisterExpansionTileState extends State<RegisterExpansionTile> {
+  var controller = ExpansionTileController();
 
-  var controller =ExpansionTileController();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -26,16 +26,13 @@ class _RegisterExpansionTileState extends State<RegisterExpansionTile> {
       child: ExpansionTile(
         controller: controller,
         title: widget.title,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         backgroundColor: AppColors.GREYBG,
         expandedAlignment: Alignment.centerLeft,
         expandedCrossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            color: Theme
-                .of(context)
-                .scaffoldBackgroundColor,
+            color: Theme.of(context).scaffoldBackgroundColor,
             width: double.infinity,
             height: 10,
           ),
@@ -46,22 +43,23 @@ class _RegisterExpansionTileState extends State<RegisterExpansionTile> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: List.generate(
                 widget.children.length,
-                    (index) =>
-                    InkWell(
-                      onTap: () {
-                        setState(() {
-                          widget.title = widget.children[index];
-                          controller.collapse();
+                (index) => InkWell(
+                  onTap: () {
+                    setState(() {
+                      widget.title = widget.children[index];
+                      controller.collapse();
+                    });
 
-                        });
-
-                        if (widget.onChange != null) {
-                          widget.onChange!(
-                              widget.children[index]); // Notify parent
-                        }
-                      },
-                      child: widget.children[index],
-                    ),
+                    if (widget.onChange != null) {
+                      widget.onChange!(widget.children[index]); // Notify parent
+                    }
+                  },
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: 30,
+                    child: widget.children[index],
+                  ),
+                ),
               ),
             ),
           ),

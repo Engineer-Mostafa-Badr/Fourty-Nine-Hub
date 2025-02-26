@@ -55,7 +55,7 @@ class PersonalDocumentsScreen extends StatelessWidget {
               ),
               const Sizer(),
               SizedBox(
-                height: 300,
+                height: MediaQuery.sizeOf(context).width*.7,
                 child: GridView.count(
                   physics: const NeverScrollableScrollPhysics(),
                   padding: EdgeInsets.zero,

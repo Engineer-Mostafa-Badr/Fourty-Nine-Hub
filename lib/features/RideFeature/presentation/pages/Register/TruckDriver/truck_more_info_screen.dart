@@ -35,8 +35,6 @@ class TruckMoreInfoScreen extends StatelessWidget {
       'Ismailia',
       'Menoufia',
     ];
-    TextEditingController pricingPerKmController = TextEditingController();
-
     return CustomScaffold(
       appBar: const HomeAppbar(),
       floatingActionButton: registerFloatingActionButton(
@@ -66,11 +64,6 @@ class TruckMoreInfoScreen extends StatelessWidget {
                 onChange: (Widget selectedItem) {
                   // print("Selected Item: ${(selectedItem as Label).text}");
                 },
-              ),
-              const Sizer(),
-              DefaultTextFormField(
-                currentController: pricingPerKmController,
-                hint: LocaleKeys.pricingPerKm.localize,
               ),
             ],
           ),
