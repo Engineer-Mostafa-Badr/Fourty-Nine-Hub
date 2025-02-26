@@ -140,6 +140,7 @@ dependencies:
   widget_and_text_animator: null
   zego_express_engine: ^3.16.2
   zego_uikit_signaling_plugin: ^2.8.8
+  sentry_flutter: ^8.13.2
 dependency_overrides:
   #  camera_android_camerax: 0.6.10+1
   http: ^0.13.3
