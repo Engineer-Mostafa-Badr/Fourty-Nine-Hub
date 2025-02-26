@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
 import '../../../../common/widgets/form/text_fields/form_text_field.dart';
@@ -17,6 +18,8 @@ import 'widgets/bottom_sheet/custom_bottom_sheet.dart';
 import 'widgets/country_dropdown.dart';
 import 'widgets/fare_bottom_sheet_widget.dart';
 import 'widgets/options_bottomsheet_widget.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 
 class RideHome extends StatefulWidget {
   const RideHome({super.key});
@@ -100,7 +103,9 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                       AppButton(
                           radius: 15,
                           label: LocaleKeys.ride.tr(),
-                          onPressed: () {},
+                          onPressed: () {
+                            context.push(Routes.welcomeRideRegister);
+                          },
                           backColor: AppColors.PRIMARY_COLOR,
                           width: double.infinity),
                       AppButton(
@@ -170,9 +175,21 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
               spacing: 5,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                _tripsWidget(LocaleKeys.activity.tr()),
-                _tripsWidget(LocaleKeys.runningTrips.tr()),
-                _tripsWidget(LocaleKeys.expiredTrips.tr()),
+                ClickableWidget(
+                    onTap: (){
+                      context.push(Routes.RIDEACTIVITY);
+                    },
+                    child: _tripsWidget(LocaleKeys.activity.tr())),
+                ClickableWidget(
+                    onTap: (){
+                      context.push(Routes.RIDERUNNINGTRIPS);
+                    },
+                    child: _tripsWidget(LocaleKeys.runningTrips.tr())),
+                ClickableWidget(
+                    onTap: (){
+                      context.push(Routes.RIDEEXPIREDTRIPE);
+                    },
+                    child: _tripsWidget(LocaleKeys.expiredTrips.tr())),
                 const SizedBox(width: 10),
                 Container(
                     padding: const EdgeInsets.all(8),
@@ -199,14 +216,14 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 if (state.isLoading) {
                   return const Center(child: CircularProgressIndicator());
                 }
-                if (state.isError) {
-                  return const Center(child: Text("Error: \${state.failure}"));
-                }
-                if (!state.isSuccess ||
-                    state.rideCategory == null ||
-                    state.shippingCategory == null) {
-                  return Container();
-                }
+                // if (state.isError) {
+                //   return const Center(child: Text("Error: \${state.failure}"));
+                // }
+                // if (!state.isSuccess ||
+                //     state.rideCategory == null ||
+                //     state.shippingCategory == null) {
+                //   return Container();
+                // }
 
                 return Column(
                   spacing: 8,
@@ -214,9 +231,10 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                     _buildCategoryList(
                         "ride", state.rideCategory?.subCategories ?? []),
                     _buildCategoryList(
-                        // "shipping", state.rideCategory?.subCategories ?? []
-                        "shipping",
-                        state.shippingCategory?.subCategories ?? []),
+                        "shipping", state.rideCategory?.subCategories ?? []
+                        // "shipping",
+                        // state.shippingCategory?.subCategories ?? []
+                    ),
                     CountryDropdown(),
                     // CountryPickerDropdown(
                     //   onValuePicked: (value) {},
