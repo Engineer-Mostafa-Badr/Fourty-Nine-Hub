@@ -52,7 +52,7 @@
 //           context.pop();
 //         }
 //       },
-//       child: Scaffold(
+//       child: CustomScaffold(
 //         appBar: const BackAppBar(),
 //         body: Padding(
 //           padding: const EdgeInsets.all(8.0),

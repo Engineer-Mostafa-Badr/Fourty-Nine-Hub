@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../../../../routes/routes.dart';
@@ -30,7 +31,7 @@ class _ShowPostCompanyAdvertiseState extends State<ShowPostCompanyAdvertise> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: BackAppBar(
         centerTitle: false,
         label: LocaleKeys.myPosts.localize,

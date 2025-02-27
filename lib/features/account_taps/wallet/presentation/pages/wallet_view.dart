@@ -125,7 +125,7 @@ class WalletView extends StatelessWidget {
     return const NormalWalletView();
     //   return DefaultTabController(
     //     length: 3,
-    //     child: Scaffold(
+    //     child: CustomScaffold(
     //       appBar: const BackAppBar(),
     //       body: SingleChildScrollView(
     //         physics: const BouncingScrollPhysics(),

@@ -1274,7 +1274,8 @@ class CodegenLoader extends AssetLoader{
   "chooseCategoryView": "اختر طريقه عرض القسام الرئيسيه للخدمات",
   "youCanChooseOneWayAtLeast": "يمكنك اختيار بحد أقصى طريقه عرض واحده",
   "wallets": "المحافظ",
-  "tube": "تيوب"
+  "tube": "تيوب",
+  "floatingNavigator": "تيوب"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -2553,7 +2554,8 @@ static const Map<String,dynamic> _en = {
   "chooseCategoryView": "Choose the main category view method for services",
   "youCanChooseOneWayAtLeast": "You can select a maximum of one view method.",
   "wallets": "Wallets",
-  "tube": "Tube"
+  "tube": "Tube",
+  "floatingNavigator": "Floating Navigator"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

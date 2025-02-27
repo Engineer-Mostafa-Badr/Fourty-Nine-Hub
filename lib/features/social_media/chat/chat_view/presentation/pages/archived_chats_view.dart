@@ -14,6 +14,8 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../../core/widget/custom_scaffold.dart';
+
 class OptionsChatsViewParams {
   final ChatsCubit chatsCubit;
   final String category;
@@ -49,7 +51,7 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
       child: BlocProvider.value(
         value: widget.params.chatsCubit,
         child: Builder(builder: (context) {
-          return Scaffold(
+          return CustomScaffold(
             appBar: AppBar(
               // backgroundColor: AppColors.PRIMARY_COLOR,
               elevation: 0,

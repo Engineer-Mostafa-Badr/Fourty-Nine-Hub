@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/account_taps/my_adds/presentation/cubit/m
 import '../../../../../common/widgets/stateless/pages/empty.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/widget/call_message_buttons.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
@@ -23,7 +24,7 @@ class CustomButtonCount extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: BackAppBar(
         label: LocaleKeys.requestTripJoin.localize,
       ),

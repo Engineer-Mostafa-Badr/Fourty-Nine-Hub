@@ -29,6 +29,7 @@ import '../../../../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../../../../core/messages/messages.dart';
+import '../../../../../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../../../../../res/style/const.dart';
 import '../../../../../../../../../res/style/styles.dart';
 import '../../../../../../../../../service_locator/service_locator.dart';
@@ -115,8 +116,8 @@ class _ZegoLiveStreamingPreviewPageState
     }
   }
 
-  Scaffold livePreviewScreen() {
-    return Scaffold(
+  CustomScaffold livePreviewScreen() {
+    return CustomScaffold(
       resizeToAvoidBottomInset: false,
       body: ZegoScreenUtilInit(
         designSize: const Size(750, 1334),
@@ -365,8 +366,8 @@ class _ZegoLiveStreamingPreviewPageState
     );
   }
 
-  Scaffold zoomPreviewScreen(BuildContext context) {
-    return Scaffold(
+  CustomScaffold zoomPreviewScreen(BuildContext context) {
+    return CustomScaffold(
       // backgroundColor: const Color(0xff2d2d2d),
       appBar: AppBar(
         // backgroundColor: const Color(0xff2d2d2d),

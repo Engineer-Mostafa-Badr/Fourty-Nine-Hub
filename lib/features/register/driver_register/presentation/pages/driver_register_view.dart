@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/register/driver_register/presentation/cubit/driver_register_cubit.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
 import 'taps/choose_register_subcategories.dart';
 import 'taps/enter_personal_info.dart';
 
@@ -62,7 +63,9 @@ class _DriverRegisterState extends State<DriverRegister> {
               label: 'Enter Personal Info',
             );
           }
-          return const Scaffold();
+          return CustomScaffold(
+            body: Container(),
+          );
         },
       ),
     );

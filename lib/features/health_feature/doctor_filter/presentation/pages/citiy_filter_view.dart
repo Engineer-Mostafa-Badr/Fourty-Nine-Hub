@@ -11,6 +11,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 
 class DoctorCityFilterView extends StatefulWidget {
   const DoctorCityFilterView({
@@ -37,7 +38,7 @@ class _DoctorCityFilterViewState extends State<DoctorCityFilterView> {
   @override
   Widget build(BuildContext context) {
     final doctorCityFilter = context.read<DoctorCityFilterCubit>();
-    return Scaffold(
+    return CustomScaffold(
       appBar: BackAppBar(
         label: LocaleKeys.city.localize,
       ),

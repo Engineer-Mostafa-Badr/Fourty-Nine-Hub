@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/widget/custom_scaffold.dart';
 import '../../dynamic/bottom_navigator.dart';
 import '../../dynamic/drawer.dart';
 import '../../dynamic/floating_button.dart';
@@ -19,7 +20,7 @@ class SharedCommonNavigator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: const HomeAppbar(),
       drawer: const DrawerWidget(),
       bottomNavigationBar: showBottomNavigator

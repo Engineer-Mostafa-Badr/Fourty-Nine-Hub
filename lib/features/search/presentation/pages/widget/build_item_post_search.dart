@@ -34,6 +34,8 @@ import '../../../../../../res/style/styles.dart';
 import '../../../../../../routes/routes.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class BuildItemPostSearch extends StatefulWidget {
   final PostEntity post;
   final int index;
@@ -689,7 +691,7 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
                 onTap: () {
                   showDialog(
                       context: context,
-                      builder: (_) => Scaffold(
+                      builder: (_) => CustomScaffold(
                             body: FacebookUserOnMap(
                               location: post.location!,
                             ),

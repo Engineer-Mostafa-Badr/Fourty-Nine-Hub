@@ -18,6 +18,7 @@ import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../../common/widgets/stateless/images/profile_image.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../../res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -53,7 +54,7 @@ class _CommentRepliesState extends State<CommentReplies> {
         builder: (context, state) {
       final controller = context.read<SocialPostsCubit>();
       final user = context.read<UserCubit>().state.data;
-      return Scaffold(
+      return CustomScaffold(
         appBar: AppBar(
           elevation: 0,
           toolbarHeight: 200.h,

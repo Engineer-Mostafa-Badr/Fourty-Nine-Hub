@@ -20,7 +20,7 @@
 //
 //   @override
 //   Widget build(BuildContext context) {
-//     return Scaffold(
+//     return CustomScaffold(
 //       appBar: BackAppBar(
 //         label: LocaleKeys.contactUs.localize,
 //       ),
@@ -129,6 +129,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/messages/messages.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/styles.dart';
 import '../cubit/contact_us_cubit.dart';
 
@@ -145,7 +146,7 @@ class _ContactUsViewState extends State<ContactUsView> {
   @override
   Widget build(BuildContext context) {
     var size=MediaQuery.of(context).size;
-    return Scaffold(
+    return CustomScaffold(
       body: BlocConsumer<ContactUsCubit, ContactUsState>(
         listener: (context, state) {
           if (state.status == StateStatus.success) {

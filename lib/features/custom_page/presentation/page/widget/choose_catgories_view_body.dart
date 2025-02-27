@@ -8,6 +8,8 @@ import 'package:fourtyninehub/features/custom_page/presentation/page/widget/page
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class ChooseCategoriesViwBody extends StatefulWidget {
   const ChooseCategoriesViwBody({super.key});
 
@@ -43,7 +45,7 @@ class _ChooseCategoriesViwBodyState extends State<ChooseCategoriesViwBody> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
         body: Column(
           children: [
             ListTile(

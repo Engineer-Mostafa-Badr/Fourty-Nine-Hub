@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
+import '../../../../../../../core/widget/custom_scaffold.dart';
 import '../createOrder/map_picker.dart';
 import 'offer_card.dart';
 import 'offer_control.dart';
@@ -11,7 +12,7 @@ class WaitingOffers extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       body: Column(
         children: [
           Expanded(

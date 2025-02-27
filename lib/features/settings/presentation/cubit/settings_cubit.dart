@@ -3,6 +3,7 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/features/settings/domain/useCase/delete_account_use_case.dart';
 import 'package:fourtyninehub/features/settings/presentation/cubit/settings_state.dart';
 
+import '../../../../core/utils/shared_pref.dart';
 import '../../domain/entities/disable_entity.dart';
 import '../../domain/useCase/disable_account_use_case.dart';
 import '../../domain/useCase/enable_account_use_case.dart';
@@ -17,6 +18,7 @@ class SettingCubit extends Cubit<SettingState> {
     this._disableAccountUseCase,
     this._enableAccountUseCase,
   ) : super(SettingState(able: DisableEntity(isDisabled: false)));
+
 
   Future<void> deleteAccount() async {
     final response = await _deleteAccountUseCase.call(const NoParams());

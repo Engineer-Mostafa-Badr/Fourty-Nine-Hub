@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 // Project imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_audio_streaming/zego_uikit_prebuilt_live_audio_room.dart';
 
+import '../../../../../../../../../core/widget/custom_scaffold.dart';
 import '../core/connect/connect_manager.dart';
 import '../core/live_duration_manager.dart';
 import '../core/seat/plugins.dart';
@@ -107,7 +108,7 @@ class _ZegoLiveAudioRoomPageState extends State<ZegoLiveAudioRoomPage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       resizeToAvoidBottomInset: false,
       body: ZegoScreenUtilInit(
         designSize: const Size(750, 1334),

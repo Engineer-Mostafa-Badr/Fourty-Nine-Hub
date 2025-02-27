@@ -9,6 +9,8 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class BuildSearchPlaces extends StatefulWidget {
   const BuildSearchPlaces(
       {super.key, required this.onSelectPlace, required this.controller});
@@ -23,7 +25,7 @@ class _BuildSearchPlacesState extends State<BuildSearchPlaces> {
   @override
   Widget build(BuildContext context) {
     final searchController = TextEditingController();
-    return Scaffold(
+    return CustomScaffold(
       body: Padding(
         padding: const EdgeInsetsDirectional.only(top: 20.0, end: 8, start: 8),
         child: CustomScrollView(

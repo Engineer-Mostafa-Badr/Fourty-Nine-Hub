@@ -28,6 +28,8 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class InstagramView extends StatefulWidget {
   final bool hideAppBar;
 
@@ -69,7 +71,7 @@ class _InstagramViewState extends State<InstagramView> {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
-      child: Scaffold(
+      child: CustomScaffold(
         body: BlocBuilder<UserCubit, BasicState<UserEntity>>(
           builder: (context, state) {
             return

@@ -32,6 +32,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/const.dart';
 import '../../../../../res/style/styles.dart';
@@ -72,7 +73,7 @@ class _OtherAccountViewState extends State<OtherAccountView> {
     }
     return DefaultTabController(
       length: loginUser?.id == widget.userId ? 4 : 3,
-      child: Scaffold(
+      child: CustomScaffold(
         body: BlocBuilder<SocialPostsCubit, SocialPostsState>(
             builder: (context, state) {
           final controller = context.read<SocialPostsCubit>();

@@ -16,6 +16,8 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../core/widget/custom_scaffold.dart';
+
 class MainCategoriesGridView extends StatefulWidget {
   const MainCategoriesGridView({super.key, this.isAppBarShow = true});
   final bool isAppBarShow;
@@ -76,7 +78,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
   @override
   Widget build(BuildContext context) {
     final controller = context.read<MainCategoriesTapsCubit>();
-    return Scaffold(
+    return CustomScaffold(
       appBar: widget.isAppBarShow ? BackAppBar(label: labelName) : null,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),

@@ -25,6 +25,8 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class TwitterPostDetailsNotify extends StatefulWidget {
   TwitterPostDetailsNotify({
     super.key,
@@ -82,7 +84,7 @@ class _TwitterPostDetailsNotifyState extends State<TwitterPostDetailsNotify> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: AppBar(
         toolbarHeight: 140.h,
         // title: const Text('Post Details'),

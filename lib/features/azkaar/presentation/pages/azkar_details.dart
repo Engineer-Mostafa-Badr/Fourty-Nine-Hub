@@ -5,6 +5,8 @@ import 'package:fourtyninehub/features/azkaar/presentation/cubit/azkaar_cubit.da
 import 'package:fourtyninehub/features/azkaar/presentation/cubit/azkaar_state.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
+import '../../../../core/widget/custom_scaffold.dart';
+
 class AzkarDetails extends StatefulWidget {
   const AzkarDetails({super.key, required this.category});
 
@@ -42,7 +44,7 @@ class _AzkarDetailsState extends State<AzkarDetails> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar:   AppBar(
      //   automaticallyImplyLeading: false,
         surfaceTintColor: Colors.transparent,

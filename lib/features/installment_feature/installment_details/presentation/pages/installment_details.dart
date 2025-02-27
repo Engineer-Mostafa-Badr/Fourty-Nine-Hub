@@ -19,6 +19,7 @@ import '../../../../../common/widgets/stateless/labels/read_more_label.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/messages/messages.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/const.dart';
 import '../../../../../res/style/app_colors.dart';
@@ -60,7 +61,7 @@ class _InstallmentsDetailsState extends State<InstallmentsDetails> {
         }
       },
       builder: (context, state) {
-        return Scaffold(
+        return CustomScaffold(
           appBar: const BackAppBar(),
           body: state.isLoading
               ? const Center(

@@ -67,6 +67,8 @@ import 'core/service/cache_service.dart';
 import 'core/themes/light_theme.dart';
 import 'features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'features/settings/presentation/cubit/floating_navigator_cubit.dart';
+import 'features/settings/presentation/cubit/settings_cubit.dart';
 import 'firebase_options.dart';
 import 'routes/pages.dart';
 
@@ -185,8 +187,7 @@ class _MyAppState extends State<MyApp> {
               LocationSocketCubit(repository: serviceLocator()),
         ),
         BlocProvider(
-          create: (context) =>
-              ThumbnailsCubit(serviceLocator()),
+          create: (context) => ThumbnailsCubit(serviceLocator()),
         ),
         BlocProvider(
           create: (context) => serviceLocator<ShowOffersCubit>(),
@@ -347,6 +348,9 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(
           create: (context) => DriversNearbyCubit(repository: serviceLocator()),
         ),
+        BlocProvider(
+          create: (context) => FloatingNavigatorCubit(),
+        ),
       ],
       child: ScreenUtilInit(
         designSize: const Size(750, 1334),
@@ -380,7 +384,8 @@ class _MyAppState extends State<MyApp> {
                           title: '49',
                           debugShowCheckedModeBanner: false,
                           routerConfig: AppPages.router,
-                          localizationsDelegates: context.localizationDelegates,
+                          localizationsDelegates:
+                          context.localizationDelegates,
                           supportedLocales: context.supportedLocales,
                           locale: context.locale,
                           // for device preview package

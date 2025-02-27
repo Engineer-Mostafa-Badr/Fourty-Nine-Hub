@@ -14,6 +14,7 @@ import 'package:fourtyninehub/features/ten_percent/presentation/cubit/ten_percen
 import 'package:fourtyninehub/features/ten_percent/presentation/pages/widget/bill_value_field.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
+import '../../../../core/widget/custom_scaffold.dart';
 
 class TenPercentView extends StatefulWidget {
   const TenPercentView({super.key,});
@@ -26,7 +27,7 @@ class _TenPercentViewState extends State<TenPercentView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: BackAppBar(label: LocaleKeys.billCashback.localize),
       body: BlocBuilder<TenPercentCubit,TenPercentState>(
         builder: (context,state) {

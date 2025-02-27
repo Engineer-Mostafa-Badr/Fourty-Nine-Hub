@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class ImageDetailsScreen extends StatefulWidget {
   const ImageDetailsScreen({
     super.key,
@@ -31,7 +33,7 @@ class _ImageDetailsScreenState extends State<ImageDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       // appBar: AppBar(
       //   backgroundColor: AppColors.BACKGROUND_COLOR,
       //   leading: IconButton(

@@ -14,6 +14,7 @@ import '../../../../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../../../../core/messages/messages.dart';
+import '../../../../../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../../../../../res/style/app_colors.dart';
 import '../../../../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../../../../../../zoom/presentation/controller/stream_cubit.dart';
@@ -47,7 +48,7 @@ class _SelectLiveGoalsScreenState extends State<SelectLiveGoalsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Label(

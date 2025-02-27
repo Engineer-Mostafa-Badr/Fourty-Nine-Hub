@@ -12,6 +12,8 @@ import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../../core/widget/custom_scaffold.dart';
+
 class ChatProfileView extends StatelessWidget {
   const ChatProfileView({super.key});
 
@@ -83,7 +85,7 @@ class ChatProfileView extends StatelessWidget {
       value: context.read<UserCubit>(),
       child: BlocBuilder<UserCubit, BasicState>(
         builder: (context, state) {
-          return Scaffold(
+          return CustomScaffold(
             appBar: AppBar(
               // backgroundColor: AppColors.PRIMARY_COLOR,
               elevation: 0,

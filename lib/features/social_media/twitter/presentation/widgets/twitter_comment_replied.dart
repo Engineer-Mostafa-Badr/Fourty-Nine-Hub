@@ -21,6 +21,8 @@ import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class TwitterCommentReplies extends StatefulWidget {
   final List<TwitterCommentReplyEntity> replies;
   final String commentId;
@@ -54,7 +56,7 @@ class _TwitterCommentRepliesState extends State<TwitterCommentReplies> {
     return BlocBuilder<TwitterCubit, TwitterState>(builder: (context, state) {
       final controller = context.read<TwitterCubit>();
       final user = context.read<UserCubit>().state.data;
-      return Scaffold(
+      return CustomScaffold(
         appBar: AppBar(
           toolbarHeight: 200.h,
           elevation: 0,

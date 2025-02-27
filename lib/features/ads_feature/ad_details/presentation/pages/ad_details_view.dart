@@ -30,6 +30,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/messages/messages.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/strings/labels.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
@@ -65,7 +66,7 @@ class _AdDetailsViewState extends State<AdDetailsView> {
     final userId = serviceLocator<UserCubit>().state.data?.id ?? '';
     print("userId#{$userId");
 
-    return Scaffold(
+    return CustomScaffold(
         body: BlocConsumer<AdDetailsCubit, AdDetailsState>(
             listener: (contex, state) {
       if (state.isError) {

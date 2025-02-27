@@ -32,6 +32,8 @@ import 'dart:ui' as textDirection;
 
 import 'package:url_launcher/url_launcher_string.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class TripInfoByDriverScreen extends StatefulWidget {
   const TripInfoByDriverScreen({super.key, required this.model});
   final CheckAcceptByRiderModel model;
@@ -71,7 +73,7 @@ class _TripInfoByDriverScreenState extends State<TripInfoByDriverScreen> {
   Widget build(BuildContext context) {
     return Form(
       key: formKey,
-      child: Scaffold(
+      child: CustomScaffold(
         key: scaffoldKey,
         body: BlocListener<CheckTripEndCubit, RiderState>(
           listener: (context, state) {

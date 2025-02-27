@@ -9,6 +9,8 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../../core/widget/custom_scaffold.dart';
+
 class SelectContactsToShareView extends StatefulWidget {
   const SelectContactsToShareView({super.key, required this.chatRoomCubit});
   final ChatRoomCubit chatRoomCubit;
@@ -46,7 +48,7 @@ class _SelectContactsToShareViewState extends State<SelectContactsToShareView> {
           widget.chatRoomCubit
               .convertContactsToSharedContacts(contacts: _contacts);
         }
-        return Scaffold(
+        return CustomScaffold(
           appBar: AppBar(
             backgroundColor: AppColors.PRIMARY_COLOR,
             elevation: 0,

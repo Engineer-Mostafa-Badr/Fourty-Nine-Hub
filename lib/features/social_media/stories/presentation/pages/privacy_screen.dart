@@ -43,7 +43,7 @@
 //       context.isArabic ? 'الأصدقاء والمتابعين' : 'Friends and followers',
 //       context.isArabic ? 'عام' : 'Public',
 //     ];
-//     return Scaffold(
+//     return CustomScaffold(
 //       appBar: AppBar(
 //         title: Text(
 //           context.isArabic ? 'خصوصية الحالة' : 'Story Privacy',
@@ -335,6 +335,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../tinder/data/shared/shared.dart';
 import '../../data/models/followers_model.dart';
 import '../cubit/stories_cubit.dart';
@@ -401,7 +402,7 @@ class _StatusPrivacyScreenState extends State<StatusPrivacyScreen> {
       context.isArabic ? 'الأصدقاء والمتابعين' : 'Friends and followers',
       context.isArabic ? 'عام' : 'Public',
     ];
-    return Scaffold(
+    return CustomScaffold(
       appBar: AppBar(
         title: Text(
           context.isArabic ? 'خصوصية الحالة' : 'Story Privacy',

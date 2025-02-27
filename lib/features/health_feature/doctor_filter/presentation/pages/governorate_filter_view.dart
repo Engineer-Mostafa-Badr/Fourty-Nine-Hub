@@ -9,6 +9,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 
 class DoctorGovernorateFilterView extends StatelessWidget {
   const DoctorGovernorateFilterView({super.key, required this.type});
@@ -17,7 +18,7 @@ class DoctorGovernorateFilterView extends StatelessWidget {
   Widget build(BuildContext context) {
     final doctorGovernorateFilter =
         context.read<DoctorGovernorateFilterCubit>();
-    return Scaffold(
+    return CustomScaffold(
       appBar: BackAppBar(
         label: LocaleKeys.governorate.localize,
       ),

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../restaurants_list/presentation/widgets/restaurant_card.dart';
 import '../cubit/cusine_restaurants_cubit.dart';
 
@@ -14,7 +15,7 @@ class CusineRestaurantsView extends StatelessWidget {
     return BlocConsumer<CusineRestaurantsCubit, CusineRestaurantsState>(
         listener: (context, state) {},
         builder: (context, state) {
-          return Scaffold(
+          return CustomScaffold(
             appBar: const BackAppBar(
               label: 'Cusine Restaurants',
             ),

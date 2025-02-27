@@ -22,6 +22,8 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -136,7 +138,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       body: FutureBuilder(
         future: _initializeDeepArController(),
         builder: (context, snapshot) {

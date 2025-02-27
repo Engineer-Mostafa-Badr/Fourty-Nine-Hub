@@ -6,6 +6,7 @@ import 'package:fourtyninehub/features/azkaar/presentation/cubit/azkaar_state.da
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../res/assets/assets.dart';
 
 class AzkarView extends StatefulWidget {
@@ -42,7 +43,7 @@ class _AzkarViewState extends State<AzkarView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: AppBar(
         // automaticallyImplyLeading: false,
         centerTitle: true,

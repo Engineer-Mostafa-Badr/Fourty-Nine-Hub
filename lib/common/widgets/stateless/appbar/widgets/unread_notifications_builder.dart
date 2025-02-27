@@ -5,10 +5,15 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_unread_notifications_count/get_unread_notifications_count_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/widgets/icon_with_view_count.dart';
 
+import '../../../../../res/style/app_colors.dart';
+
 class UnreadNotificationsBuilder extends StatelessWidget {
   const UnreadNotificationsBuilder({
     super.key,
+    required this.inNotifications,
   });
+
+  final bool inNotifications;
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +28,11 @@ class UnreadNotificationsBuilder extends StatelessWidget {
             icon: Icon(
               Icons.notifications,
               size: 45.w,
-              color: context.isDarkMode
-                  ? Colors.grey[200]
-                  : Colors.black.withOpacity(0.8),
+              color: inNotifications
+                  ? AppColors.SECONDARY_COLOR
+                  : context.isDarkMode
+                      ? Colors.grey[200]
+                      : Colors.black.withOpacity(0.8),
             ),
             // icon: Image.asset(
             //   Assets.notification,

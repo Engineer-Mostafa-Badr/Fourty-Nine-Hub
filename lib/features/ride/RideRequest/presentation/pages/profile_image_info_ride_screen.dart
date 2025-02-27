@@ -12,6 +12,8 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class ProfileImageInfoRideScreen extends StatefulWidget {
   const ProfileImageInfoRideScreen({super.key});
 
@@ -25,7 +27,7 @@ class _ProfileImageInfoRideScreenState
   File? image;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       body: Container(
         margin: const EdgeInsets.only(top: 80),
         child: Column(

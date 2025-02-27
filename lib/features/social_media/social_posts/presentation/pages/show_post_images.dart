@@ -4,6 +4,8 @@ import 'package:fourtyninehub/features/social_media/create_post/presentation/wid
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class ShowPostsImages extends StatefulWidget {
   const ShowPostsImages(
       {super.key, required this.images, required this.onRemoveImage});
@@ -17,7 +19,7 @@ class ShowPostsImages extends StatefulWidget {
 class _ShowPostsImagesState extends State<ShowPostsImages> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: AppBar(
         backgroundColor: AppColors.DARK_BLUE_COLOR,
         leading: IconButton(

@@ -10,6 +10,8 @@ import 'package:fourtyninehub/features/subcategories/domain/entities/sub_categor
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class TinderSubCategoryAdsView extends StatefulWidget {
   final TinderSubAdsViewParams params;
 
@@ -51,7 +53,7 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
   Widget build(BuildContext context) {
     final tinderCubit = context.watch<TinderViewCubit>();
 
-    return Scaffold(
+    return CustomScaffold(
       appBar: const HomeAppbar(),
       body: LayoutBuilder(
         builder: (context, constraints) {

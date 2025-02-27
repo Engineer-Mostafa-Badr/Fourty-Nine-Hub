@@ -17,6 +17,8 @@ import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/cubit/
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class GovernorateFilterAdsView extends StatefulWidget {
   final CategorizationEntity categorization;
   const GovernorateFilterAdsView({super.key, required this.categorization});
@@ -50,7 +52,7 @@ class _GovernorateFilterAdsViewState extends State<GovernorateFilterAdsView> {
       }
     }, builder: (context, state) {
       final controller = context.read<CreateAdCubit>();
-      return Scaffold(
+      return CustomScaffold(
         appBar: BackAppBar(
             label: "${LocaleKeys.filter.localize} ${LocaleKeys.city.localize}"),
         body: SingleChildScrollView(

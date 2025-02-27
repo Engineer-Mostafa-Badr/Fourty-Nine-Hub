@@ -5,12 +5,14 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/data/mod
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class TripRatingScreen extends StatelessWidget {
   const TripRatingScreen({super.key, required this.model});
   final GetRequestsForLoadingModel model;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: SingleChildScrollView(

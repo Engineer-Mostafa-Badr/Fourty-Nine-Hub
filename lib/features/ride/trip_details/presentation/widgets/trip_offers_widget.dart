@@ -13,6 +13,7 @@ import 'package:fourtyninehub/features/requests_history/presentation/widgets/off
 import '../../../../../common/functions/helper/launch_url.dart';
 
 import '../../../../../core/messages/messages.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 
@@ -23,7 +24,7 @@ class TripOffersWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
-    return Scaffold(
+    return CustomScaffold(
       appBar: const BackAppBar(
         label: 'Trip Details',
       ),

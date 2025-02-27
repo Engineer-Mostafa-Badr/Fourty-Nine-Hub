@@ -14,6 +14,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider
 import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/presentation/pages/tripjoin_request_view.dart';
 
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
+import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../health_feature/health/presentation/widgets/booking/booking_card.dart';
 import '../widgets/food_order_card.dart';
@@ -41,7 +42,7 @@ class _HistoryRequestsViewState extends State<HistoryRequestsView> {
       return DefaultTabController(
         length: 6,
         initialIndex: 0,
-        child: Scaffold(
+        child: CustomScaffold(
           appBar: BackAppBar(
             label: LocaleKeys.requestLog.localize,
           ),

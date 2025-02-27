@@ -17,6 +17,8 @@ import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentat
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../core/widget/custom_scaffold.dart';
+
 class EditDoctorProfileView extends StatelessWidget {
   const EditDoctorProfileView({super.key});
 
@@ -47,7 +49,7 @@ class EditDoctorProfileView extends StatelessWidget {
             break;
         }
       },
-      builder: (context, state) => Scaffold(
+      builder: (context, state) => CustomScaffold(
         appBar: BackAppBar(
           label: LocaleKeys.editProfile.localize,
         ),

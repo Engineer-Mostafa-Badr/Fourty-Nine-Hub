@@ -10,6 +10,8 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../../core/widget/custom_scaffold.dart';
+
 class BroadcastView extends StatefulWidget {
   const BroadcastView({super.key});
 
@@ -49,7 +51,7 @@ class _BroadcastViewState extends State<BroadcastView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: AppBar(
         backgroundColor: AppColors.PRIMARY_COLOR, // Background color
         elevation: 0,

@@ -11,63 +11,91 @@ import 'package:shared_preferences/shared_preferences.dart';
 abstract class CacheService {
   // Future<void> init();
   Future<bool> saveUserData(String userData);
+
   Future<String?> getUserData();
+
   bool? isLogin();
+
   Future<void> saveRiderTripInfo(
       {required CheckAcceptTripFromDriverModel model});
+
   Future<void> saveDriverTripInfo({required CheckAcceptByRiderModel model});
+
   Future<CheckAcceptTripFromDriverModel?> getRiderTripInfo();
+
   Future<void> removeRiderTripInfo();
+
   Future<CheckAcceptByRiderModel?> getDriverTripInfo();
+
   Future<void> removeDriverTripInfo();
+
   Future<bool> saveUserIsLoggedIn(bool isLoggedIn);
+
   Future<bool?> getUserIsLoggedIn();
+
   Future<void> saveSocketPartModel(PartsSocketModel isLoggedIn);
+
   Future<PartsSocketModel?> getSocketPartModel();
+
   Future<void> setLogin(bool value);
 
   // Future<bool> saveUserToken(String userToken);
 
   Future<bool> saveTripState(String value);
+
   Future<String> getTripState();
+
   Future<void> removeTripState();
 
   // Future<String?> getUserToken();
   Future<String?> getUserId();
+
   Future<bool> setUserId(String userId);
 
   Future<bool> saveUserRefreshToken(String userRefreshToken);
+
   Future<String?> getUserRefreshToken();
 
   Future<bool> saveUserTokenExpirationDate(String userTokenExpireDate);
+
   Future<String?> getUserTokenExpirationDate();
 
   Future<String?> getLanguageCode();
+
   Future<void> setLanguageCode(String languageCode);
 
   Future<void> clearUserData();
 
   Future<bool?> isNotificationEnabled();
+
   Future<bool?> isAdTrackingNotificationEnabled();
 
   Future<bool> setNotificationStatus(bool isEnabled);
+
   Future<bool> setAdTrackingNotification(bool isEnabled);
 
   Future<bool> saveAppleUserData(String userData);
+
   Future<String?> getAppleUserData();
 
   Future<bool> saveUserThemeMode(bool isDark);
+
   Future<bool?> getUserThemeMode();
 
   Future<bool> saveIsFirstLunch(bool isFirstLunch);
+
   Future<bool?> getIsFirstLunch();
 
   Future<bool> saveFavList(List<String> favList);
+
   Future<List<String>?> getFavList();
 
   String getSubCategryDriver();
+
   String? getDriverId();
+
   Future<void> setSubCategoryDriver({required String id});
+
   Future<void> setDriverId({required String id});
 }
 
@@ -94,6 +122,7 @@ class CacheServiceImpl implements CacheService {
   static const _TRIP_STATE = "_TRIP_STATE";
   static const RIDESOCKETPARTMODEL = "RIDESOCKETPARTMODEL";
   static late SharedPreferences preferences;
+
   @override
   Future<bool> saveUserData(String userData) async {
     final prefs = await SharedPreferences.getInstance();
@@ -385,22 +414,24 @@ class CacheServiceImpl implements CacheService {
       preferences.setString(RIDESOCKETPARTMODEL, json);
     }
   }
-  //   @override
-  // Future<bool> saveUserToken(String userToken) async {
-  // final prefs = await SharedPreferences.getInstance();
-  // return await prefs.setString(_TOKEN, userToken);
-  // }
 
-  // @override
-  // Future<String?> getUserToken() async {
-  // final prefs = await SharedPreferences.getInstance();
-  // return prefs.getString(_TOKEN);
-  // }
+//   @override
+// Future<bool> saveUserToken(String userToken) async {
+// final prefs = await SharedPreferences.getInstance();
+// return await prefs.setString(_TOKEN, userToken);
+// }
+
+// @override
+// Future<String?> getUserToken() async {
+// final prefs = await SharedPreferences.getInstance();
+// return prefs.getString(_TOKEN);
+// }
 }
 
 class CacheServiceImplV2 implements CacheService {
   static const _USERDATA = "USER_DATA";
   static const _LOCALE = 'locale';
+
   // static const _IS_FIRST_LAUNCH = "IS_FIRST_LAUNCH";
   static const _HAS_RUN_BEFORE = "HAS_RUN_BEFORE";
   final _completer = Completer<FlutterSecureStorage>();

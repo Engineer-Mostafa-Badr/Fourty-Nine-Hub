@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 
 // Project imports:
 import '../../../../../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../../../../../../core/widget/custom_scaffold.dart';
 import '../../inner_text.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 
@@ -45,7 +46,7 @@ class ZegoLiveStreamingInRoomMessageInputBoard extends ModalRoute<String> {
     Animation<double> animation,
     Animation<double> secondaryAnimation,
   ) {
-    return Scaffold(
+    return CustomScaffold(
       backgroundColor: Colors.transparent,
       body: Column(
         mainAxisSize: MainAxisSize.min,

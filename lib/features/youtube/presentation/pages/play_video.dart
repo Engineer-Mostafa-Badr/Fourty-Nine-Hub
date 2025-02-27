@@ -4,6 +4,7 @@ import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../common/widgets/stateless/images/profile_image.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../res/style/const.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../common/widgets/stateful/videos/video_player.dart';
@@ -16,7 +17,7 @@ class PlayVideo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       body: ListView(
         children: [
           _buildVideoWidget(),

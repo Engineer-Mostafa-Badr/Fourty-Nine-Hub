@@ -12,6 +12,8 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../core/widget/custom_scaffold.dart';
+
 class QuraanView extends StatefulWidget {
   const QuraanView({super.key});
 
@@ -46,7 +48,7 @@ class _QuraanViewState extends State<QuraanView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Row(

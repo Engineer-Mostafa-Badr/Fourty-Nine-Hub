@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../../../../core/widget/custom_scaffold.dart';
 import '../banners/back_appbar.dart';
 
 class WebViewScaffold extends StatefulWidget {
@@ -38,7 +39,7 @@ class _WebViewWidgetState extends State<WebViewScaffold> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
         appBar: BackAppBar(label: widget.label),
         body: WebViewWidget(controller: controller));
   }
