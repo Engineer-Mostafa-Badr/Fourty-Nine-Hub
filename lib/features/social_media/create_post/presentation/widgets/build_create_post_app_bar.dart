@@ -4,8 +4,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/Social_home.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 
 class BuildCreatePostAppBar extends StatelessWidget {
   const BuildCreatePostAppBar({super.key, this.onTap});
@@ -18,7 +22,11 @@ class BuildCreatePostAppBar extends StatelessWidget {
       child: Row(
         children: [
           ClickableWidget(
-              onTap: ()=>Navigator.pop(context),
+              onTap: (){
+                context.go(Routes.SOCIAL,
+                    extra: SocialParams(
+                        userId: UserCubit.to.state.data?.id ?? '', index: 0));
+              },
               child: SvgPicture.asset(Assets.backIcon,height: 18,width: 10,)),
           const SizedBox(
             width: 18,

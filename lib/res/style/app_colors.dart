@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 
 abstract class AppColors {
-  static const PRIMARY_COLOR = Color(0xFF0B1035);
+  static const PRIMARY_COLOR = Color(0xFF0B1135);
   static const blueColor = Colors.blue;
   static const black = Color(0xFF000000);
 
@@ -16,6 +16,7 @@ abstract class AppColors {
 
   static const DARK_GRAY_COLOR = Color(0xFF909090);
   static const LIGHT_GRAY_COLOR = Color(0xFFE0E0E0);
+  static const BG_GRAY_COLOR = Color(0xFFD9D9D9);
   static const LIGHT_GRAY_COLOR2 = Color(0xFFA5A3A3);
   static const TXTFIELD_GRAY_COLOR2 = Color(0xFFEEEEEE);
   static const DIVIDER_GRAY_COLOR2 = Color(0xFFAFAFAF);
@@ -30,8 +31,31 @@ abstract class AppColors {
   static const PRIMARY_COLOR_DARK = Color(0xFFED1C24);
   static const SECONDARY_COLOR = Color(0xFFED1C24);
   static const SECONDARY_COLOR_DARK = Color(0xFFec5749);
+  static const SECONDARY_COLOR_DARK2 = Color(0xFFF33D49);
   static const c0B1035 = Color(0xFF0B1035);
   static const c46484B = Color(0xFF46484B);
+  static const cF5F5F5 = Color(0xFFF5F5F5);
+  static const cE8E8E8 = Color(0xFFE8E8E8);
+  static const c6E6E70 = Color(0xFF6E6E70);
+  static const c19D176 = Color(0xFF19D176);
+  static const c3897F0 = Color(0xFF3897F0);
+  static const c96979B = Color(0xFF96979B);
+  static const cEEEEEEE = Color(0xFFEEEEEEE);
+  static const c161F68 = Color(0xFF161F68);
+  static const c1B2781 = Color(0xFF1B2781);
+  static const c1E2B8E = Color(0xFF1E2B8E);
+  static const c1F2D95 = Color(0xFF1F2D95);
+
+  static const cF33D49 = Color(0xFFF33D49);
+  static const cC0303A = Color(0xFFC0303A);
+  static const cA72A32 = Color(0xFFA72A32);
+  static const c9A272E = Color(0xFF9A272E);
+  static const c93252C = Color(0xFF93252C);
+  static const c90242B = Color(0xFF90242B);
+  static const cF7F7F7 = Color(0xFFF7F7F7);
+  static const cF3F3F3 = Color(0xFFF3F3F3);
+  static const c5A5A5A = Color(0xFF5A5A5A);
+
   // static const SECONDARY_COLOR = Color(0xffff3308);
 
   static const BARRIER_COLOR = Color(0x800E1E4E);
@@ -42,8 +66,10 @@ abstract class AppColors {
   static const GREY_LIGHT_COLOR = Color(0xFFF3F3F3);
   static const GREY_NORMAL_COLOR = Color(0xFFB9B9B9);
   static const GREYCARD = Color(0xFFEDEBEB);
+  static const GREYFIELD = Color(0xFFF5F5F5);
   static const GREYTEXT = Color(0xFF949494);
   static const GREYICON = Color(0xFF414141);
+  static const GREYBG2 = Color(0xffDBD1D1);
   static const GREYBG = Color(0xFFD9D9D9);
   static const GREY_DARK_COLOR = Color(0xFF707070);
   static const GREY_BORDER_COLOR = Color(0xFFDEDEDE);

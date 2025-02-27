@@ -35,8 +35,10 @@ class _LogoutWidgetState extends State<LogoutWidget> {
   @override
   Widget build(BuildContext context) {
     final controller = context.read<UserCubit>();
-    return ListView(
-      shrinkWrap: true,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+
+      // shrinkWrap: true,
       children: [
         Label(
           text: LocaleKeys.logout.localize,
@@ -78,7 +80,6 @@ class _LogoutWidgetState extends State<LogoutWidget> {
                   // await DI.execute();
                   setLogOut();
                   context.go(Routes.HOME);
-
                   // context.pushReplacement(Routes.HOME);
                   // await Restart.restartApp();
                   // context.read<MainCategoriesCubit>().loadData(context);
@@ -91,8 +92,8 @@ class _LogoutWidgetState extends State<LogoutWidget> {
       ],
     );
   }
-  
 }
+
 /*{
     "status": true,
     "message": "success",

@@ -50,6 +50,7 @@ import 'package:restart_app/restart_app.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:auto_scroll_text/auto_scroll_text.dart';
 
+import '../../../../../core/utils/custom_show_dialog.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 
 class ServicePagePreview extends StatefulWidget {
@@ -722,7 +723,7 @@ class CustomDeActivateDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
+    return showAnimatedDialog(context,AlertDialog(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
       title: Text(
@@ -750,7 +751,7 @@ class CustomDeActivateDialog extends StatelessWidget {
           ),
         ),
       ],
-    );
+    ));
   }
 }
 

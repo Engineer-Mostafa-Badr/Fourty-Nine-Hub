@@ -21,6 +21,8 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../../core/utils/custom_show_dialog.dart';
+
 class ChatCard extends StatefulWidget {
   final bool isSecret;
   final ChatEntity? chat;
@@ -149,201 +151,396 @@ class _ChatCardState extends State<ChatCard> {
                                                   value: widget.chatsCubit!,
                                                   child: Builder(
                                                       builder: (context) {
-                                                    return AlertDialog(
-                                                      contentPadding: EdgeInsets
-                                                          .zero, // Remove default padding
-                                                      backgroundColor: Colors
-                                                          .transparent, // Make the dialog background transparent
-                                                      content: ClipRRect(
-                                                        child: Stack(
-                                                          children: [
-                                                            widget.chat!.isAdmin ==
+                                                        return showAnimatedDialog(context,AlertDialog(
+                                                          contentPadding: EdgeInsets
+                                                              .zero, // Remove default padding
+                                                          backgroundColor: Colors
+                                                              .transparent, // Make the dialog background transparent
+                                                          content: ClipRRect(
+                                                            child: Stack(
+                                                              children: [
+                                                                widget.chat!.isAdmin ==
                                                                     "admin"
-                                                                ? Padding(
-                                                                    padding: const EdgeInsets
-                                                                        .only(
-                                                                        bottom:
-                                                                            4,
-                                                                        right:
-                                                                            4,
-                                                                        left: 8,
-                                                                        top: 4),
-                                                                    child: Image
-                                                                        .asset(
-                                                                      Assets
-                                                                          .logo,
-                                                                      fit: BoxFit
-                                                                          .cover,
-                                                                    ),
-                                                                  )
-                                                                : Image.network(
-                                                                    widget.chat!
-                                                                        .avatar,
+                                                                    ? Padding(
+                                                                  padding: const EdgeInsets
+                                                                      .only(
+                                                                      bottom:
+                                                                      4,
+                                                                      right:
+                                                                      4,
+                                                                      left: 8,
+                                                                      top: 4),
+                                                                  child: Image
+                                                                      .asset(
+                                                                    Assets
+                                                                        .logo,
                                                                     fit: BoxFit
                                                                         .cover,
-                                                                    errorBuilder:
-                                                                        (context,
-                                                                            error,
-                                                                            stackTrace) {
-                                                                      return Image
-                                                                          .network(
-                                                                        UIConst
-                                                                            .profilePlaceHolder,
-                                                                        fit: BoxFit
-                                                                            .cover,
-                                                                      );
-                                                                    },
                                                                   ),
-                                                            Positioned(
-                                                              top: 0,
-                                                              left: 0,
-                                                              right: 0,
-                                                              child: Container(
-                                                                color: Colors
-                                                                    .black
-                                                                    .withOpacity(
+                                                                )
+                                                                    : Image.network(
+                                                                  widget.chat!
+                                                                      .avatar,
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                  errorBuilder:
+                                                                      (context,
+                                                                      error,
+                                                                      stackTrace) {
+                                                                    return Image
+                                                                        .network(
+                                                                      UIConst
+                                                                          .profilePlaceHolder,
+                                                                      fit: BoxFit
+                                                                          .cover,
+                                                                    );
+                                                                  },
+                                                                ),
+                                                                Positioned(
+                                                                  top: 0,
+                                                                  left: 0,
+                                                                  right: 0,
+                                                                  child: Container(
+                                                                    color: Colors
+                                                                        .black
+                                                                        .withOpacity(
                                                                         0.4),
-                                                                child: Row(
-                                                                  children: [
-                                                                    Padding(
-                                                                      padding: const EdgeInsets
-                                                                          .all(
-                                                                          8.0),
-                                                                      child:
+                                                                    child: Row(
+                                                                      children: [
+                                                                        Padding(
+                                                                          padding: const EdgeInsets
+                                                                              .all(
+                                                                              8.0),
+                                                                          child:
                                                                           Text(
-                                                                        widget
-                                                                            .chat!
-                                                                            .name,
-                                                                        style: const TextStyle(
-                                                                            fontSize:
+                                                                            widget
+                                                                                .chat!
+                                                                                .name,
+                                                                            style: const TextStyle(
+                                                                                fontSize:
                                                                                 20,
-                                                                            fontWeight:
+                                                                                fontWeight:
                                                                                 FontWeight.bold,
-                                                                            color: Colors.white),
-                                                                      ),
-                                                                    ),
-                                                                    widget.chat!.isAdmin ==
+                                                                                color: Colors.white),
+                                                                          ),
+                                                                        ),
+                                                                        widget.chat!.isAdmin ==
                                                                             "admin"
-                                                                        ? const Icon(
-                                                                            Icons.verified,
-                                                                            color:
-                                                                                Colors.blue,
-                                                                            size:
-                                                                                20,
-                                                                          )
-                                                                        : const SizedBox(),
-                                                                    widget
+                                                                            ? const Icon(
+                                                                          Icons.verified,
+                                                                          color:
+                                                                          Colors.blue,
+                                                                          size:
+                                                                          20,
+                                                                        )
+                                                                            : const SizedBox(),
+                                                                        widget
                                                                             .chat!
                                                                             .lables
                                                                             .isNotEmpty
-                                                                        ? Icon(
-                                                                            Icons.label,
-                                                                            color:
-                                                                                LabelColorsMap.getColor(widget.chat!.lables.last.color),
-                                                                            size:
-                                                                                20,
-                                                                          )
-                                                                        : const SizedBox(),
-                                                                    (widget.chat!.isAdmin !=
-                                                                                "admin" &&
+                                                                            ? Icon(
+                                                                          Icons.label,
+                                                                          color:
+                                                                          LabelColorsMap.getColor(widget.chat!.lables.last.color),
+                                                                          size:
+                                                                          20,
+                                                                        )
+                                                                            : const SizedBox(),
+                                                                        (widget.chat!.isAdmin !=
+                                                                            "admin" &&
                                                                             widget.chat!.isBirthdayMonth)
-                                                                        ? InkWell(
-                                                                            onTap:
-                                                                                () async {
-                                                                              await showGiftBottomSheet(
-                                                                                context,
-                                                                                receiverId: widget.chat!.userId,
-                                                                              );
-                                                                            },
-                                                                            child:
-                                                                                const Icon(
-                                                                              FontAwesomeIcons.cakeCandles,
-                                                                              color: AppColors.PRIMARY_COLOR_DARK,
-                                                                              size: 18,
-                                                                            ),
-                                                                          )
-                                                                        : const SizedBox(),
-                                                                  ],
+                                                                            ? InkWell(
+                                                                          onTap:
+                                                                              () async {
+                                                                            await showGiftBottomSheet(
+                                                                              context,
+                                                                              receiverId: widget.chat!.userId,
+                                                                            );
+                                                                          },
+                                                                          child:
+                                                                          const Icon(
+                                                                            FontAwesomeIcons.cakeCandles,
+                                                                            color: AppColors.PRIMARY_COLOR_DARK,
+                                                                            size: 18,
+                                                                          ),
+                                                                        )
+                                                                            : const SizedBox(),
+                                                                      ],
+                                                                    ),
+                                                                  ),
                                                                 ),
-                                                              ),
-                                                            ),
-                                                            Positioned(
-                                                              bottom: 0,
-                                                              left: 0,
-                                                              right: 0,
-                                                              child: Container(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  child: Row(
-                                                                    mainAxisAlignment:
+                                                                Positioned(
+                                                                  bottom: 0,
+                                                                  left: 0,
+                                                                  right: 0,
+                                                                  child: Container(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      child: Row(
+                                                                        mainAxisAlignment:
                                                                         MainAxisAlignment
                                                                             .spaceEvenly, // Distribute icons evenly
-                                                                    children: [
-                                                                      IconButton(
-                                                                        icon:
+                                                                        children: [
+                                                                          IconButton(
+                                                                            icon:
                                                                             const Icon(
-                                                                          Icons
-                                                                              .chat,
-                                                                          color:
+                                                                              Icons
+                                                                                  .chat,
+                                                                              color:
                                                                               AppColors.SECONDARY_COLOR,
-                                                                        ),
-                                                                        onPressed:
-                                                                            () {
-                                                                          context
-                                                                              .read<ChatsCubit>()
-                                                                              .selectChat = widget.chat!;
-                                                                          context.push(
-                                                                              Routes.CHATROOM,
-                                                                              extra: widget.chatsCubit);
-                                                                        },
-                                                                      ),
-                                                                      IconButton(
-                                                                        icon:
+                                                                            ),
+                                                                            onPressed:
+                                                                                () {
+                                                                              context
+                                                                                  .read<ChatsCubit>()
+                                                                                  .selectChat = widget.chat!;
+                                                                              context.push(
+                                                                                  Routes.CHATROOM,
+                                                                                  extra: widget.chatsCubit);
+                                                                            },
+                                                                          ),
+                                                                          IconButton(
+                                                                            icon:
                                                                             const Icon(
-                                                                          Icons
-                                                                              .call,
-                                                                          color:
+                                                                              Icons
+                                                                                  .call,
+                                                                              color:
                                                                               AppColors.SECONDARY_COLOR,
-                                                                        ),
-                                                                        onPressed:
-                                                                            () {},
-                                                                      ),
-                                                                      IconButton(
-                                                                        icon:
+                                                                            ),
+                                                                            onPressed:
+                                                                                () {},
+                                                                          ),
+                                                                          IconButton(
+                                                                            icon:
                                                                             const Icon(
-                                                                          Icons
-                                                                              .videocam,
-                                                                          color:
+                                                                              Icons
+                                                                                  .videocam,
+                                                                              color:
                                                                               AppColors.SECONDARY_COLOR,
-                                                                        ),
-                                                                        onPressed:
-                                                                            () {},
-                                                                      ),
-                                                                      IconButton(
-                                                                        icon:
+                                                                            ),
+                                                                            onPressed:
+                                                                                () {},
+                                                                          ),
+                                                                          IconButton(
+                                                                            icon:
                                                                             const Icon(
-                                                                          Icons
-                                                                              .info,
-                                                                          color:
+                                                                              Icons
+                                                                                  .info,
+                                                                              color:
                                                                               AppColors.SECONDARY_COLOR,
-                                                                        ),
-                                                                        onPressed:
-                                                                            () {
-                                                                          context
-                                                                              .read<ChatsCubit>()
-                                                                              .selectChat = widget.chat!;
-                                                                          context.push(
-                                                                              Routes.VIEWCONTACT,
-                                                                              extra: widget.chatsCubit);
-                                                                        },
-                                                                      ),
-                                                                    ],
-                                                                  )),
-                                                            )
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    );
+                                                                            ),
+                                                                            onPressed:
+                                                                                () {
+                                                                              context
+                                                                                  .read<ChatsCubit>()
+                                                                                  .selectChat = widget.chat!;
+                                                                              context.push(
+                                                                                  Routes.VIEWCONTACT,
+                                                                                  extra: widget.chatsCubit);
+                                                                            },
+                                                                          ),
+                                                                        ],
+                                                                      )),
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ));
+                                                    // return AlertDialog(
+                                                    //   contentPadding: EdgeInsets
+                                                    //       .zero, // Remove default padding
+                                                    //   backgroundColor: Colors
+                                                    //       .transparent, // Make the dialog background transparent
+                                                    //   content: ClipRRect(
+                                                    //     child: Stack(
+                                                    //       children: [
+                                                    //         widget.chat!.isAdmin ==
+                                                    //                 "admin"
+                                                    //             ? Padding(
+                                                    //                 padding: const EdgeInsets
+                                                    //                     .only(
+                                                    //                     bottom:
+                                                    //                         4,
+                                                    //                     right:
+                                                    //                         4,
+                                                    //                     left: 8,
+                                                    //                     top: 4),
+                                                    //                 child: Image
+                                                    //                     .asset(
+                                                    //                   Assets
+                                                    //                       .logo,
+                                                    //                   fit: BoxFit
+                                                    //                       .cover,
+                                                    //                 ),
+                                                    //               )
+                                                    //             : Image.network(
+                                                    //                 widget.chat!
+                                                    //                     .avatar,
+                                                    //                 fit: BoxFit
+                                                    //                     .cover,
+                                                    //                 errorBuilder:
+                                                    //                     (context,
+                                                    //                         error,
+                                                    //                         stackTrace) {
+                                                    //                   return Image
+                                                    //                       .network(
+                                                    //                     UIConst
+                                                    //                         .profilePlaceHolder,
+                                                    //                     fit: BoxFit
+                                                    //                         .cover,
+                                                    //                   );
+                                                    //                 },
+                                                    //               ),
+                                                    //         Positioned(
+                                                    //           top: 0,
+                                                    //           left: 0,
+                                                    //           right: 0,
+                                                    //           child: Container(
+                                                    //             color: Colors
+                                                    //                 .black
+                                                    //                 .withOpacity(
+                                                    //                     0.4),
+                                                    //             child: Row(
+                                                    //               children: [
+                                                    //                 Padding(
+                                                    //                   padding: const EdgeInsets
+                                                    //                       .all(
+                                                    //                       8.0),
+                                                    //                   child:
+                                                    //                       Text(
+                                                    //                     widget
+                                                    //                         .chat!
+                                                    //                         .name,
+                                                    //                     style: const TextStyle(
+                                                    //                         fontSize:
+                                                    //                             20,
+                                                    //                         fontWeight:
+                                                    //                             FontWeight.bold,
+                                                    //                         color: Colors.white),
+                                                    //                   ),
+                                                    //                 ),
+                                                    //                 widget.chat!.isAdmin ==
+                                                    //                         "admin"
+                                                    //                     ? const Icon(
+                                                    //                         Icons.verified,
+                                                    //                         color:
+                                                    //                             Colors.blue,
+                                                    //                         size:
+                                                    //                             20,
+                                                    //                       )
+                                                    //                     : const SizedBox(),
+                                                    //                 widget
+                                                    //                         .chat!
+                                                    //                         .lables
+                                                    //                         .isNotEmpty
+                                                    //                     ? Icon(
+                                                    //                         Icons.label,
+                                                    //                         color:
+                                                    //                             LabelColorsMap.getColor(widget.chat!.lables.last.color),
+                                                    //                         size:
+                                                    //                             20,
+                                                    //                       )
+                                                    //                     : const SizedBox(),
+                                                    //                 (widget.chat!.isAdmin !=
+                                                    //                             "admin" &&
+                                                    //                         widget.chat!.isBirthdayMonth)
+                                                    //                     ? InkWell(
+                                                    //                         onTap:
+                                                    //                             () async {
+                                                    //                           await showGiftBottomSheet(
+                                                    //                             context,
+                                                    //                             receiverId: widget.chat!.userId,
+                                                    //                           );
+                                                    //                         },
+                                                    //                         child:
+                                                    //                             const Icon(
+                                                    //                           FontAwesomeIcons.cakeCandles,
+                                                    //                           color: AppColors.PRIMARY_COLOR_DARK,
+                                                    //                           size: 18,
+                                                    //                         ),
+                                                    //                       )
+                                                    //                     : const SizedBox(),
+                                                    //               ],
+                                                    //             ),
+                                                    //           ),
+                                                    //         ),
+                                                    //         Positioned(
+                                                    //           bottom: 0,
+                                                    //           left: 0,
+                                                    //           right: 0,
+                                                    //           child: Container(
+                                                    //               color: Colors
+                                                    //                   .white,
+                                                    //               child: Row(
+                                                    //                 mainAxisAlignment:
+                                                    //                     MainAxisAlignment
+                                                    //                         .spaceEvenly, // Distribute icons evenly
+                                                    //                 children: [
+                                                    //                   IconButton(
+                                                    //                     icon:
+                                                    //                         const Icon(
+                                                    //                       Icons
+                                                    //                           .chat,
+                                                    //                       color:
+                                                    //                           AppColors.SECONDARY_COLOR,
+                                                    //                     ),
+                                                    //                     onPressed:
+                                                    //                         () {
+                                                    //                       context
+                                                    //                           .read<ChatsCubit>()
+                                                    //                           .selectChat = widget.chat!;
+                                                    //                       context.push(
+                                                    //                           Routes.CHATROOM,
+                                                    //                           extra: widget.chatsCubit);
+                                                    //                     },
+                                                    //                   ),
+                                                    //                   IconButton(
+                                                    //                     icon:
+                                                    //                         const Icon(
+                                                    //                       Icons
+                                                    //                           .call,
+                                                    //                       color:
+                                                    //                           AppColors.SECONDARY_COLOR,
+                                                    //                     ),
+                                                    //                     onPressed:
+                                                    //                         () {},
+                                                    //                   ),
+                                                    //                   IconButton(
+                                                    //                     icon:
+                                                    //                         const Icon(
+                                                    //                       Icons
+                                                    //                           .videocam,
+                                                    //                       color:
+                                                    //                           AppColors.SECONDARY_COLOR,
+                                                    //                     ),
+                                                    //                     onPressed:
+                                                    //                         () {},
+                                                    //                   ),
+                                                    //                   IconButton(
+                                                    //                     icon:
+                                                    //                         const Icon(
+                                                    //                       Icons
+                                                    //                           .info,
+                                                    //                       color:
+                                                    //                           AppColors.SECONDARY_COLOR,
+                                                    //                     ),
+                                                    //                     onPressed:
+                                                    //                         () {
+                                                    //                       context
+                                                    //                           .read<ChatsCubit>()
+                                                    //                           .selectChat = widget.chat!;
+                                                    //                       context.push(
+                                                    //                           Routes.VIEWCONTACT,
+                                                    //                           extra: widget.chatsCubit);
+                                                    //                     },
+                                                    //                   ),
+                                                    //                 ],
+                                                    //               )),
+                                                    //         )
+                                                    //       ],
+                                                    //     ),
+                                                    //   ),
+                                                    // );
                                                   }),
                                                 );
                                               },

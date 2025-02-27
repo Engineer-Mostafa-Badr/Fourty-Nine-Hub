@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/register/driver_register/presentation/cubit/driver_register_cubit.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 
+import '../../../../../core/utils/custom_show_dialog.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 import 'taps/choose_register_subcategories.dart';
 import 'taps/enter_personal_info.dart';
@@ -29,24 +30,41 @@ class _DriverRegisterState extends State<DriverRegister> {
     // ignore: deprecated_member_use
     return WillPopScope(
       onWillPop: () async {
-        return (await showDialog(
-              context: context,
-              builder: (context) => AlertDialog(
-                title: const Text('Are you sure?'),
-                content: const Text('Do you want to close register'),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(false),
-                    child: const Text('No'),
-                  ),
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(true),
-                    child: const Text('Yes'),
-                  ),
-                ],
+        return (
+            await showAnimatedDialog(context,AlertDialog(
+            title: const Text('Are you sure?'),
+            content: const Text('Do you want to close register'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: const Text('No'),
               ),
-            )) ??
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: const Text('Yes'),
+              ),
+            ],
+          ),
+        )) ??
             false;
+        // return (await showDialog(
+        //       context: context,
+        //       builder: (context) => AlertDialog(
+        //         title: const Text('Are you sure?'),
+        //         content: const Text('Do you want to close register'),
+        //         actions: <Widget>[
+        //           TextButton(
+        //             onPressed: () => Navigator.of(context).pop(false),
+        //             child: const Text('No'),
+        //           ),
+        //           TextButton(
+        //             onPressed: () => Navigator.of(context).pop(true),
+        //             child: const Text('Yes'),
+        //           ),
+        //         ],
+        //       ),
+        //     )) ??
+        //     false;
       },
       child: BlocBuilder<DriverRegisterCubit, DriverRegisterState>(
         builder: (context, state) {

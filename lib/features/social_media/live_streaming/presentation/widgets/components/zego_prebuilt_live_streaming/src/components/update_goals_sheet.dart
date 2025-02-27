@@ -11,6 +11,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../../../../core/utils/custom_show_dialog.dart';
 import '../../../../../../../../../res/style/const.dart';
 import '../../../../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../../../../../../zoom/presentation/controller/stream_cubit.dart';
@@ -395,9 +396,7 @@ Widget _buildItem(BuildContext context, GiftData gift,
             //   ], child: const SelectLiveGoalsScreen()),
             //   TransitionType.bottomToTop,
             // ));
-            showDialog(
-              context: context,
-              builder: (context) => AlertDialog(
+            showAnimatedDialog(context,AlertDialog(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -488,6 +487,99 @@ Widget _buildItem(BuildContext context, GiftData gift,
                 ),
               ),
             );
+            // showDialog(
+            //   context: context,
+            //   builder: (context) => AlertDialog(
+            //     shape: RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(12),
+            //     ),
+            //     backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            //     content: Form(
+            //       key: context.read<StreamCubit>().formKey,
+            //       child: Column(
+            //         mainAxisSize: MainAxisSize.min,
+            //         children: [
+            //           Text(
+            //             'Update Goals',
+            //             style: Styles.headerText(),
+            //           ),
+            //           SizedBox(
+            //             height: 20.h,
+            //           ),
+            //           TextFormField(
+            //             controller: context.read<StreamCubit>().goalController,
+            //             keyboardType: TextInputType.number,
+            //             validator: (value) {
+            //               if (value!.isEmpty) {
+            //                 return 'Please enter goals quantity';
+            //               } else if (int.parse(value) <= 0) {
+            //                 return 'Please enter valid goals quantity';
+            //               }
+            //               return null;
+            //             },
+            //             decoration: const InputDecoration(
+            //               hintText: 'Enter Goals quantity',
+            //             ),
+            //           ),
+            //           SizedBox(
+            //             height: 20.h,
+            //           ),
+            //           GestureDetector(
+            //             onTap: () {
+            //               print(
+            //                   'state.liveCreateResponseEntity?.goals${context.read<StreamCubit>().state.liveCreateResponseEntity?.goals}');
+            //               print(context
+            //                   .read<StreamCubit>()
+            //                   .state
+            //                   .liveCreateResponseEntity
+            //                   ?.goals
+            //                   .length);
+            //               print(context
+            //                   .read<StreamCubit>()
+            //                   .state
+            //                   .liveCreateResponseEntity
+            //                   ?.goals
+            //                   .firstWhereOrNull((e) => e.giftId == gift.sId)
+            //                   ?.id);
+            //
+            //               if (context
+            //                   .read<StreamCubit>()
+            //                   .formKey
+            //                   .currentState!
+            //                   .validate()) {
+            //                 print(
+            //                     "context.read<StreamCubit>().${context.read<StreamCubit>().goalController.text}");
+            //                 context.read<StreamCubit>().editGoal(
+            //                     gift.sId ?? '',
+            //                     context
+            //                         .read<StreamCubit>()
+            //                         .goalController
+            //                         .text
+            //                         .trim());
+            //                 context.read<StreamCubit>().goalController.clear();
+            //                 context.pop();
+            //               }
+            //             },
+            //             child: Container(
+            //               padding: EdgeInsets.symmetric(
+            //                   horizontal: 50.w, vertical: 5.h),
+            //               decoration: BoxDecoration(
+            //                   color: AppColors.PRIMARY_COLOR,
+            //                   borderRadius: BorderRadius.circular(12.r)),
+            //               child: Text(
+            //                 'save',
+            //                 style: Styles.mediumText(
+            //                     color: AppColors.AUTH_CONTAINER_COLOR),
+            //                 maxLines: 1,
+            //                 overflow: TextOverflow.ellipsis,
+            //               ),
+            //             ),
+            //           )
+            //         ],
+            //       ),
+            //     ),
+            //   ),
+            // );
           },
           icon: const Icon(Icons.edit_off_sharp)),
     ],

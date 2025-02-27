@@ -61,7 +61,7 @@ class ImageGalleryPage extends StatelessWidget {
                 scrollPhysics: const BouncingScrollPhysics(),
                 itemCount: files!=null?files?.length??0:images.length,
                 builder: (BuildContext context, int index) {
-                  if(files != null){
+                  if(files != null&&(files?.isNotEmpty??false)){
                     return PhotoViewGalleryPageOptions(
                       imageProvider: FileImage(File(files?[index].path??'')),
                       initialScale: PhotoViewComputedScale.contained,

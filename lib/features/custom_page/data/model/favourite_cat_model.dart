@@ -22,7 +22,7 @@ class FavouriteCatModel extends FavouriteCatEntity {
       required super.animals,
       required super.farming,
       required super.governmentServices,
-      required super.jobs});
+      required super.jobs, required super.fitness});
 
   factory FavouriteCatModel.fromJson(Map<String, dynamic> json) {
     FavouriteCatFeature parseFeature(Map<String, dynamic> featureJson) {
@@ -55,6 +55,8 @@ class FavouriteCatModel extends FavouriteCatEntity {
       governmentServices: parseFeature(json['Government/charity'] ?? false),
       jobs: parseFeature(json['Jobs'] ?? false),
       industry: parseFeature(json['Industry'] ?? false),
+      fitness: parseFeature(json['Fitness'] ?? false),
+
     );
   }
 }

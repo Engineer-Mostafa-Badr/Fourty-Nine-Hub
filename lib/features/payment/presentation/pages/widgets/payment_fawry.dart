@@ -8,6 +8,8 @@ import 'package:fourtyninehub/core/messages/messages.dart';
 import '../../../../../common/widgets/stateless/dynamic/are_you_sure.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/error/failure.dart';
+import '../../../../../core/widget/custom_switch_button.dart';
+import '../../../../../core/widget/custom_switch_list_title.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
@@ -66,21 +68,22 @@ class _PaymentFawryCardState extends State<PaymentFawryCard> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SwitchListTile(
+                  CustomSwitchListTile(
                     title: Label(
                       maxLines: 2,
                       text: LocaleKeys.HaveWallet.localize,
                       style: Styles.mediumText(),
                     ),
-                    value: hasDigitalWallet,
-                    activeTrackColor: AppColors.SECONDARY_COLOR,
-                    activeColor: AppColors.AUTH_CONTAINER_COLOR,
-                    inactiveTrackColor: AppColors.GREY_NORMAL_COLOR,
                     onChanged: (value) {
-                      setState(() {
-                        hasDigitalWallet = value;
-                      });
-                    },
+                    setState(() {
+                      hasDigitalWallet = value;
+                    });
+                  },
+                    value: hasDigitalWallet,
+                    // activeTrackColor: AppColors.SECONDARY_COLOR,
+                    // activeColor: AppColors.AUTH_CONTAINER_COLOR,
+                    // inactiveTrackColor: AppColors.GREY_NORMAL_COLOR,
+
                   ),
                   if (hasDigitalWallet) ...[
                     buildInputField(

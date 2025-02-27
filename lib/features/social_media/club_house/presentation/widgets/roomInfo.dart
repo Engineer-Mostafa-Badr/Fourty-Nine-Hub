@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/images/profile_image.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/widget/custom_switch_button.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
@@ -111,9 +112,9 @@ class RoomInfoWidget extends StatelessWidget {
                   style: TextStyle(fontWeight: FontWeight.w600),
                 ),
                 const Spacer(),
-                Switch(
+                CustomSwitchButton(
                   value: true,
-                  activeColor: AppColors.PRIMARY_COLOR,
+                  // activeColor: AppColors.PRIMARY_COLOR,
                   onChanged: (v) {},
                 ),
               ],
@@ -136,9 +137,9 @@ class RoomInfoWidget extends StatelessWidget {
                   style: TextStyle(fontWeight: FontWeight.w600),
                 ),
                 const Spacer(),
-                Switch(
+                CustomSwitchButton(
                   value: true,
-                  activeColor: AppColors.PRIMARY_COLOR,
+                  // activeColor: AppColors.PRIMARY_COLOR,
                   onChanged: (v) {},
                 ),
               ],

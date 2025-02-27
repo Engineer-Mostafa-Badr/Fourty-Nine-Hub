@@ -16,12 +16,13 @@ import 'package:fourtyninehub/features/authentication/domain/entities/user_entit
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
-import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:restart_app/restart_app.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../../core/utils/custom_show_dialog.dart';
+import '../../../core/widget/custom_switch_button.dart';
 import '../../../core/widget/custom_text_no_login.dart';
 import '../../../features/authentication/presentation/widgets/log_out_widget.dart';
 import '../../../features/competition/presentation/cubit/competition_cubit/competition_cubit.dart';
@@ -102,16 +103,16 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                         ),
                                       );
                                     }),
-                                drawerListTile(
-                                  image: Assets.microphone,
-                                  label:
-                                      LocaleKeys.advertiseYourCompany.localize,
-                                  onTap: () {
-                                    AdInterstitialTop.loadIntersitialAd();
-                                    AdInterstitialTop.showInterstitialAd();
-                                    return context.push(Routes.CREATECOMPANYAD);
-                                  },
-                                ),
+                                // drawerListTile(
+                                //   image: Assets.microphone,
+                                //   label:
+                                //       LocaleKeys.advertiseYourCompany.localize,
+                                //   onTap: () {
+                                //     AdInterstitialTop.loadIntersitialAd();
+                                //     AdInterstitialTop.showInterstitialAd();
+                                //     return context.push(Routes.CREATECOMPANYAD);
+                                //   },
+                                // ),
                                 drawerListTile(
                                     image: Assets.quran,
                                     label: LocaleKeys.quraan.localize,
@@ -129,38 +130,40 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                       AdInterstitialTop.showInterstitialAd();
                                       return context.push(Routes.AZKAAR);
                                     }),
-                                drawerListTile(
-                                    image: Assets.favorite_main_category_icon,
-                                    label:
-                                        LocaleKeys.favouriteCategories.localize,
-                                    requireLogin: true,
-                                    onTap: () async {
-                                      AdInterstitialTop.loadIntersitialAd();
-                                      AdInterstitialTop.showInterstitialAd();
-                                      await context
-                                          .push(Routes.FAVOURITECATEGORIES);
-                                      context
-                                          .read<MainCategoriesCubit>()
-                                          .loadDataCategory();
-                                      // context.read<MainCategoriesCubit>().getMainCategoryCustomPage();
-                                    }),
+                                // drawerListTile(
+                                //     image: Assets.favorite_main_category_icon,
+                                //     label:
+                                //         LocaleKeys.favouriteCategories.localize,
+                                //     requireLogin: true,
+                                //     onTap: () async {
+                                //       AdInterstitialTop.loadIntersitialAd();
+                                //       AdInterstitialTop.showInterstitialAd();
+                                //       await context
+                                //           .push(Routes.FAVOURITECATEGORIES);
+                                //       context
+                                //           .read<MainCategoriesCubit>()
+                                //           .loadDataCategory();
+                                //       // context.read<MainCategoriesCubit>().getMainCategoryCustomPage();
+                                //     }),
 
-                                drawerListTile(
-                                    // icon: Icons.favorite,
-                                    image: Assets.favorite_sub_category_icon,
-                                    label: LocaleKeys
-                                        .favouriteSubCategories.localize,
-                                    requireLogin: true,
-                                    onTap: () => context
-                                        .push(Routes.FAVOURITESUBCATEGORIES)),
+                                // drawerListTile(
+                                //     // icon: Icons.favorite,
+                                //     image: Assets.favorite_sub_category_icon,
+                                //     label: LocaleKeys
+                                //         .favouriteSubCategories.localize,
+                                //     requireLogin: true,
+                                //     onTap: () => context
+                                //         .push(Routes.FAVOURITESUBCATEGORIES)),
 
-                                drawerListTile(
-                                    // icon: FontAwesomeIcons.adn,
-                                    image: Assets.favorite_ad_icon,
-                                    label: LocaleKeys.favouriteAds.localize,
-                                    requireLogin: true,
-                                    onTap: () =>
-                                        context.push(Routes.FAVOURITE)),
+                                // drawerListTile(
+                                //     // icon: FontAwesomeIcons.adn,
+                                //     image: Assets.favorite_ad_icon,
+                                //     label: LocaleKeys.favouriteAds.localize,
+                                //     requireLogin: true,
+                                //     onTap: () =>
+                                //         context.push(Routes.FAVOURITE)),
+
+
                                 // drawerListTile(
                                 //     image: Assets.history,
                                 //     label: LocaleKeys.requestHistory.localize,
@@ -173,13 +176,13 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 //     label: LocaleKeys.lists.localize,
                                 //     requireLogin: true,
                                 //     onTap: () => context.push(Routes.Lists)),
-                                drawerListTile(
-                                    // icon: Icons.ads_click,
-                                    image: Assets.my_ads_icon,
-                                    label: LocaleKeys.myAds.localize,
-                                    requireLogin: true,
-                                    onTap: () => context.push(Routes.MYADDS)),
-                                // drawerListTile(icon: Icons.list, label: 'Requests', onTap: () {}),
+                                // drawerListTile(
+                                //     // icon: Icons.ads_click,
+                                //     image: Assets.my_ads_icon,
+                                //     label: LocaleKeys.myAds.localize,
+                                //     requireLogin: true,
+                                //     onTap: () => context.push(Routes.MYADDS)),
+                                // // drawerListTile(icon: Icons.list, label: 'Requests', onTap: () {}),
                                 drawerListTile(
                                     // icon: Icons.settings,
                                     image: Assets.settings_icon,
@@ -222,17 +225,29 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     requireLogin: true,
                                     label: LocaleKeys.logout.localize,
                                     onTap: () {
-                                      bottomSheet(
-                                          backColor: Theme.of(context)
-                                              .scaffoldBackgroundColor,
-                                          context: context,
-                                          widget: const LogoutWidget());
+                                      showAnimatedDialog(
+                                        context,
+                                        AlertDialog(
+                                          backgroundColor: Colors.white,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                          ),
+                                          content: const LogoutWidget(),
+                                        ),
+                                      );
+
+                                      // bottomSheet(
+                                      //     backColor: Theme.of(context)
+                                      //         .scaffoldBackgroundColor,
+                                      //     context: context,
+                                      //     widget: const LogoutWidget());
                                     }),
                               ],
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(right: 12),
+                            padding: const EdgeInsetsDirectional.only(end: 12),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
@@ -244,57 +259,55 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 drawerRollWidget(
                                   label: LocaleKeys.loading.localize,
                                   image: Assets.loading,
-                                  onTap: () {},
-                                  // onTap: () => context.push(Routes.RIDE),
+                                  // onTap: () {},
+                                  onTap: () => context.push(Routes.welcomeRideRegister),
                                 ),
                                 drawerRollWidget(
                                   label: LocaleKeys.health.localize,
                                   image: Assets.healthIcon,
-                                  onTap: () {},
+                                  onTap: () => context.push(Routes.VISITA),
+
                                 ),
                                 drawerRollWidget(
                                   label: LocaleKeys.meal.localize,
                                   image: Assets.meal,
-                                  onTap: () {},
-                                  // onTap: () => context.push(Routes.RIDE),
-
+                                  onTap: () => context.push(Routes.FOOD),
                                 ),
                                 drawerRollWidget(
                                   label: LocaleKeys.find.localize,
                                   image: Assets.find,
-                                  onTap: () {},
-                                  // onTap: () => context.push(Routes.),
-
+                                  onTap: () => context.push(Routes.Tinder),
                                 ),
                                 drawerRollWidget(
                                   label: LocaleKeys.reel.localize,
                                   image: Assets.reel,
-                                  // onTap: () {},
                                   onTap: () => context.push(Routes.REELS),
                                 ),
                                 drawerRollWidget(
                                   label: LocaleKeys.spotlight.localize,
                                   image: Assets.spotlight,
-                                  // onTap: () {},
                                   onTap: () => context.push(Routes.SPOTLIGHT),
                                 ),
                                 drawerRollWidget(
                                   label: LocaleKeys.meet.localize,
                                   image: Assets.meet,
-                                  // onTap: () {},
                                   onTap: () => context.push(Routes.MEETINGROOM),
                                 ),
                                 drawerRollWidget(
                                   label: LocaleKeys.live.localize,
                                   image: Assets.liveIcon,
-                                  // onTap: () {},
                                   onTap: () => context.push(Routes.LIVE),
                                 ),
                                 drawerRollWidget(
                                   label: LocaleKeys.snap.localize,
                                   image: Assets.snap,
-                                  // onTap: () {},
                                   onTap: () => context.push(Routes.SNAP),
+                                ),
+
+                                drawerRollWidget(
+                                  label: LocaleKeys.chat.localize,
+                                  image: Assets.whatsApp,
+                                  onTap: () => context.push(Routes.CHAT),
                                 ),
                               ],
                             ),
@@ -732,12 +745,20 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     ),
                     GestureDetector(
                       onTap: () async {
-                        showModalBottomSheet(
+                        bottomSheet(
                           context: context,
-                          builder: (BuildContext context) {
-                            return Wrap(
-                              children: <Widget>[
-                                ListTile(
+                          asAlertDialog: true,
+                          isDismissible: false,
+                          widget: Wrap(
+                            spacing: 20,
+                            runSpacing: 20,
+                            children: <Widget>[
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: HexColor('F9F9F9')
+                                ),
+                                child: ListTile(
                                   leading: const Icon(Icons.photo_library),
                                   title: const Text('Gallery'),
                                   onTap: () async {
@@ -747,7 +768,13 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     // Reload user data if needed
                                   },
                                 ),
-                                ListTile(
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: HexColor('F9F9F9')
+                                ),
+                                child: ListTile(
                                   leading: const Icon(Icons.camera_alt),
                                   title: const Text('Camera'),
                                   onTap: () async {
@@ -757,10 +784,54 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     // Reload user data if needed
                                   },
                                 ),
-                              ],
-                            );
-                          },
+                              ),
+                              Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: HexColor('D9D9D9')
+                                ),
+                                child: ListTile(
+                                  // leading: const Icon(Icons.camera_alt),
+                                  title: Center(child: const Text('Cancel')),
+                                  onTap: () async {
+                                    Navigator.pop(context);
+
+                                    // Reload user data if needed
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
                         );
+                        // showModalBottomSheet(
+                        //   context: context,
+                        //   builder: (BuildContext context) {
+                        //     return Wrap(
+                        //       children: <Widget>[
+                        //         ListTile(
+                        //           leading: const Icon(Icons.photo_library),
+                        //           title: const Text('Gallery'),
+                        //           onTap: () async {
+                        //             // Navigator.pop(context);
+                        //             await context.read<UserCubit>().uploadPhoto(
+                        //                 isGallery: true, context: context);
+                        //             // Reload user data if needed
+                        //           },
+                        //         ),
+                        //         ListTile(
+                        //           leading: const Icon(Icons.camera_alt),
+                        //           title: const Text('Camera'),
+                        //           onTap: () async {
+                        //             // Navigator.pop(context);
+                        //             await context.read<UserCubit>().uploadPhoto(
+                        //                 isGallery: false, context: context);
+                        //             // Reload user data if needed
+                        //           },
+                        //         ),
+                        //       ],
+                        //     );
+                        //   },
+                        // );
                       },
                       child: Image.asset(
                         Assets.cameraOutlined,
@@ -832,18 +903,19 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Switch(
-                value: context.read<CustomPageCubit>().state.activate!.customPage,
+              CustomSwitchButton(
+                value:
+                    context.read<CustomPageCubit>().state.activate!.customPage,
                 onChanged: (value) async {
                   await context.read<CustomPageCubit>().updateActivate(value);
                   Restart.restartApp();
                 },
-                activeColor: Colors.white,
-                inactiveThumbColor: Colors.white,
-                inactiveTrackColor: HexColor('d9d9d9'),
-                activeTrackColor: Colors.black,
-                // trackColor:  WidgetStatePropertyAll(HexColor('d9d9d9')),
-                trackOutlineColor: WidgetStatePropertyAll(HexColor('ff3308')),
+                // activeColor: Colors.white,
+                // inactiveThumbColor: Colors.white,
+                // inactiveTrackColor: HexColor('d9d9d9'),
+                // activeTrackColor: Colors.black,
+                // // trackColor:  WidgetStatePropertyAll(HexColor('d9d9d9')),
+                // trackOutlineColor: WidgetStatePropertyAll(HexColor('ff3308')),
               ),
               SizedBox(
                 width: 4.w,

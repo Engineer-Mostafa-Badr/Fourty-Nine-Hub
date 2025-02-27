@@ -32,6 +32,7 @@ class FavouriteCatEntity {
   final FavouriteCatFeature governmentServices;
   final FavouriteCatFeature jobs;
   final FavouriteCatFeature industry;
+  final FavouriteCatFeature fitness;
 
   FavouriteCatEntity(
       {required this.id,
@@ -54,5 +55,7 @@ class FavouriteCatEntity {
       required this.animals,
       required this.farming,
       required this.governmentServices,
-      required this.jobs});
+      required this.jobs,
+      required this.fitness,
+      });
 }

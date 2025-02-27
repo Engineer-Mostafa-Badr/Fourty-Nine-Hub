@@ -6,6 +6,7 @@ import '../../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../../core/error/failure.dart';
 import '../../../../../../../core/messages/messages.dart';
+import '../../../../../../../core/widget/custom_switch_button.dart';
 import '../../../../../../../res/strings/labels.dart';
 import '../../../../../../../res/style/app_colors.dart';
 import '../../../../../../../res/style/styles.dart';
@@ -285,7 +286,7 @@ class _RideOptionsBottomSheetState extends State<RideOptionsBottomSheet> {
                             child: Label(
                                 text: 'Auto Accept offer of EGP',
                                 style: Styles.mediumText(color: Colors.grey))),
-                        Switch(
+                        CustomSwitchButton(
                             value: state.autoAccept,
                             onChanged: (v) =>
                                 rideCubit.changeAutoAcceptStatus(v: v))

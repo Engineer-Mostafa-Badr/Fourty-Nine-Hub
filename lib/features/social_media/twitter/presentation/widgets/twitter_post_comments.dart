@@ -202,7 +202,7 @@ class _TwitterPostCommentsState extends State<TwitterPostComments> {
                                           lastName: user?.lastName ?? '',
                                           createdAt: DateTime.now(),
                                           email: user?.email ?? '',
-                                          isDocumented: false,
+                                          isDocumented: false, hasStory: false,
                                         ),
                                         love: data.love,
                                         loveCount: data.loveCount,

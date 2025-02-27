@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/data/models/all_trip_no_socket_model/all_trip_no_socket_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/NoSocket/get_all_trip_no_socket_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/NoSocket/send_offer_no_socket_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/change_driver_status_cubit.dart';
@@ -14,6 +15,8 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/widgets/tri
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/call_message_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
+import '../../../../../core/widget/custom_switch_button.dart';
+import '../../../../../core/widget/custom_switch_button.dart';
 import '../../../../../res/style/styles.dart';
 
 // ignore: must_be_immutable
@@ -57,9 +60,9 @@ class _AllTripNoSocketScreenState extends State<AllTripNoSocketScreen> {
                       });
                     }
                   },
-                  child: Switch(
-                    activeTrackColor: AppColors.PRIMARY_COLOR,
-                    inactiveTrackColor: Colors.grey,
+                  child: CustomSwitchButton(
+                    // activeTrackColor: AppColors.PRIMARY_COLOR,
+                    // inactiveTrackColor: Colors.grey,
                     value: isReady ?? false,
                     onChanged: (value) {
                       setState(() async {
@@ -84,6 +87,29 @@ class _AllTripNoSocketScreenState extends State<AllTripNoSocketScreen> {
             },
             child: BlocBuilder<GetAllTripNoSocketCubit, RiderState>(
               builder: (context, state) {
+                List<AllTripNoSocketModel> list = [
+                  AllTripNoSocketModel(
+                    status: 'accepted',
+                    createdAt: DateTime.now(),
+                    id: '',
+                    categoryId: '',
+                    driverId: '',
+                    acceptedReq: false,
+                    penalty: 1,
+                    payedPenalty: false,
+                    userId: null,
+                    riderId: '',
+                    fromTitle: "sssss",
+                    isPremium: false,
+                    isRiderGetCashback: false,
+                    isUserGetCashback: false,
+                    passengers: 1,
+                    price: 500,
+                    profit: 0,
+                    time: ""
+
+                  ),
+                ];
                 if (state is LoadingRiderState) {
                   return const Center(
                     child: CircularProgressIndicator(

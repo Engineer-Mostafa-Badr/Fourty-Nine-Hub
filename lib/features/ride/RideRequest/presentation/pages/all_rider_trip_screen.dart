@@ -31,6 +31,8 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../core/widget/custom_switch_button.dart';
+
 class AllRiderTripScreen extends StatefulWidget {
   const AllRiderTripScreen({super.key});
 
@@ -79,9 +81,9 @@ class _AllRiderTripScreenState extends State<AllRiderTripScreen> {
                         });
                       }
                     },
-                    child: Switch(
-                      activeTrackColor: AppColors.PRIMARY_COLOR,
-                      inactiveTrackColor: Colors.grey,
+                    child: CustomSwitchButton(
+                      // activeTrackColor: AppColors.PRIMARY_COLOR,
+                      // inactiveTrackColor: Colors.grey,
                       value: isReady ?? false,
                       onChanged: (value) {
                         setState(() async {

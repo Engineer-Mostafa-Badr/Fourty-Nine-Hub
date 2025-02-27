@@ -35,6 +35,7 @@ import 'dart:ui' as textDirection;
 
 import 'package:url_launcher/url_launcher_string.dart';
 
+import '../../../../../core/utils/custom_show_dialog.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 
 class TripInfoByRiderScreen extends StatefulWidget {
@@ -143,49 +144,87 @@ class _TripInfoByRiderScreenState extends State<TripInfoByRiderScreen> {
                 child: BlocListener<GetReasonsCubit, RiderState>(
                   listener: (context, state) {
                     if (state is SuccessGetResonsState) {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            content:
-                                BlocListener<CancelTripClientCubit, RiderState>(
-                              listener: (context, state) {
-                                log(state.toString(),
-                                    name: "lkdjslkdfjslkdjflskdjf");
-                                if (state is SuccessCancelTripClientState) {
-                                  removeData();
-                                  showSuccessMessage(context,
-                                      LocaleKeys.successCancelTrip.tr());
-                                  context.pop();
-                                  context.pushReplacement(
-                                    Routes.RIDE,
-                                  );
-                                }
-                                if (state is FailureRiderState) {
-                                  showErrorMessage(
-                                      context,
-                                      getFailureMessage(
-                                          state.failure, context));
-                                }
-                              },
-                              child: ReasonsDilogWidget(
-                                list: state.list,
-                                onTap: (reasonsId) {
-                                  log("slkdjflskdjlsdkjf",
-                                      name: reasonsId.toString());
-                                  context
-                                      .read<CancelTripClientCubit>()
-                                      .cancelTripClient(
-                                        id: widget.model.id ?? "",
-                                        reasonId: reasonsId,
-                                        note: '',
-                                      );
-                                },
-                              ),
-                            ),
-                          );
-                        },
-                      );
+                      showAnimatedDialog(context, AlertDialog(
+                        content:
+                        BlocListener<CancelTripClientCubit, RiderState>(
+                          listener: (context, state) {
+                            log(state.toString(),
+                                name: "lkdjslkdfjslkdjflskdjf");
+                            if (state is SuccessCancelTripClientState) {
+                              removeData();
+                              showSuccessMessage(context,
+                                  LocaleKeys.successCancelTrip.tr());
+                              context.pop();
+                              context.pushReplacement(
+                                Routes.RIDE,
+                              );
+                            }
+                            if (state is FailureRiderState) {
+                              showErrorMessage(
+                                  context,
+                                  getFailureMessage(
+                                      state.failure, context));
+                            }
+                          },
+                          child: ReasonsDilogWidget(
+                            list: state.list,
+                            onTap: (reasonsId) {
+                              log("slkdjflskdjlsdkjf",
+                                  name: reasonsId.toString());
+                              context
+                                  .read<CancelTripClientCubit>()
+                                  .cancelTripClient(
+                                id: widget.model.id ?? "",
+                                reasonId: reasonsId,
+                                note: '',
+                              );
+                            },
+                          ),
+                        ),
+                      ),);
+                      // showDialog(
+                      //   context: context,
+                      //   builder: (context) {
+                      //     return AlertDialog(
+                      //       content:
+                      //           BlocListener<CancelTripClientCubit, RiderState>(
+                      //         listener: (context, state) {
+                      //           log(state.toString(),
+                      //               name: "lkdjslkdfjslkdjflskdjf");
+                      //           if (state is SuccessCancelTripClientState) {
+                      //             removeData();
+                      //             showSuccessMessage(context,
+                      //                 LocaleKeys.successCancelTrip.tr());
+                      //             context.pop();
+                      //             context.pushReplacement(
+                      //               Routes.RIDE,
+                      //             );
+                      //           }
+                      //           if (state is FailureRiderState) {
+                      //             showErrorMessage(
+                      //                 context,
+                      //                 getFailureMessage(
+                      //                     state.failure, context));
+                      //           }
+                      //         },
+                      //         child: ReasonsDilogWidget(
+                      //           list: state.list,
+                      //           onTap: (reasonsId) {
+                      //             log("slkdjflskdjlsdkjf",
+                      //                 name: reasonsId.toString());
+                      //             context
+                      //                 .read<CancelTripClientCubit>()
+                      //                 .cancelTripClient(
+                      //                   id: widget.model.id ?? "",
+                      //                   reasonId: reasonsId,
+                      //                   note: '',
+                      //                 );
+                      //           },
+                      //         ),
+                      //       ),
+                      //     );
+                      //   },
+                      // );
                     }
                     if (state is FailureRiderState) {
                       showErrorMessage(

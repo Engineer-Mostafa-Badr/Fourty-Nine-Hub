@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 // Project imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 
+import '../../../../../../../../../../core/utils/custom_show_dialog.dart';
+
 Future<bool> showAlertDialog(
   BuildContext? context,
   String title,
@@ -33,40 +35,70 @@ Future<bool> showAlertDialog(
   var result = false;
 
   try {
-    result = await showDialog(
-          context: context!,
-          barrierDismissible: false,
-          builder: (BuildContext context) {
-            return CupertinoTheme(
-              data: CupertinoThemeData(
-                brightness: backgroundBrightness ?? Brightness.dark,
+    result = await showAnimatedDialog(context!,CupertinoTheme(
+      data: CupertinoThemeData(
+        brightness: backgroundBrightness ?? Brightness.dark,
+      ),
+      child: CupertinoAlertDialog(
+        title: Text(
+          title,
+          textAlign: TextAlign.center,
+          style: titleStyle ??
+              TextStyle(
+                fontSize: 30.0.zR,
+                fontWeight: FontWeight.bold,
+                color: const Color(0xff2A2A2A),
               ),
-              child: CupertinoAlertDialog(
-                title: Text(
-                  title,
-                  textAlign: TextAlign.center,
-                  style: titleStyle ??
-                      TextStyle(
-                        fontSize: 30.0.zR,
-                        fontWeight: FontWeight.bold,
-                        color: const Color(0xff2A2A2A),
-                      ),
-                ),
-                content: Text(
-                  content,
-                  textAlign: TextAlign.center,
-                  style: contentStyle ??
-                      TextStyle(
-                        fontSize: 28.0.zR,
-                        color: const Color(0xff2A2A2A),
-                      ),
-                ),
-                actions: actions,
+        ),
+        content: Text(
+          content,
+          textAlign: TextAlign.center,
+          style: contentStyle ??
+              TextStyle(
+                fontSize: 28.0.zR,
+                color: const Color(0xff2A2A2A),
               ),
-            );
-          },
+        ),
+        actions: actions,
+      ),
+    ),
+      barrierDismissible: false,
         ) ??
         false;
+        // result = await showDialog(
+        //   context: context!,
+        //   barrierDismissible: false,
+        //   builder: (BuildContext context) {
+        //     return CupertinoTheme(
+        //       data: CupertinoThemeData(
+        //         brightness: backgroundBrightness ?? Brightness.dark,
+        //       ),
+        //       child: CupertinoAlertDialog(
+        //         title: Text(
+        //           title,
+        //           textAlign: TextAlign.center,
+        //           style: titleStyle ??
+        //               TextStyle(
+        //                 fontSize: 30.0.zR,
+        //                 fontWeight: FontWeight.bold,
+        //                 color: const Color(0xff2A2A2A),
+        //               ),
+        //         ),
+        //         content: Text(
+        //           content,
+        //           textAlign: TextAlign.center,
+        //           style: contentStyle ??
+        //               TextStyle(
+        //                 fontSize: 28.0.zR,
+        //                 color: const Color(0xff2A2A2A),
+        //               ),
+        //         ),
+        //         actions: actions,
+        //       ),
+        //     );
+        //   },
+        // ) ??
+        // false;
   } catch (e) {
     ZegoLoggerService.logError(
       'show dialog error, $e, '

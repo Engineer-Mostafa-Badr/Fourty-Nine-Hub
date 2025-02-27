@@ -4,6 +4,11 @@ import 'package:fourtyninehub/features/RideFeature/data/models/completed_trips_m
 import 'package:fourtyninehub/features/RideFeature/data/models/get_location_from_address_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/history_trip_for_rider_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/history_trip_for_user_model.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/car_years_and_types_model.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/check_driver_type_model.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/driver_statistics_model.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/drivers_in_subcategory_model.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/ride_color_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/ride_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/running_trips_model.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/activity_trip_entity.dart';
@@ -11,6 +16,15 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/completed_tri
 import 'package:fourtyninehub/features/RideFeature/domain/entities/get_location_from_address_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/history_trip_for_rider_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/history_trip_for_user_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/car_years_and_types_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/check_driver_type_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_statistics_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/drivers_in_subcategory_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/expected_price_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/expected_price_params.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride_not_special_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride_special_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/request_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_category_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/running_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/accept_trip_by_driver_use_case.dart';
@@ -28,6 +42,10 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/rider_in_star
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/start_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_driver_location_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_trip_price_from_client_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_color_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_car_years_and_types_usecase.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/data/models/governrate_model.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 
 import '../../../../core/data/datasources/remote/api/api_consumer.dart';
 import '../../../../core/data/datasources/remote/api/end_points.dart';
@@ -38,6 +56,20 @@ abstract class RideRemoteDataSource {
   Future<Either<Failure, RideCategoryEntityUpdated>> getRideCategories(String userId);
 
   Future<Either<Failure, RideCategoryEntityUpdated>> getShippingCategories(String userId);
+  Future<Either<Failure, CheckDriverTypeEntity>> checkDriverType();
+  Future<Either<Failure, bool>> registerRideNotSpecial(RegisterRideNotSpecialEntity params);
+  Future<Either<Failure, bool>> registerRideSpecial(RegisterRideSpecialEntity params);
+  Future<Either<Failure, bool>> requestTrip(RequestTripEntity params);
+  Future<Either<Failure, bool>> checkRealAmountEnough(double params);
+  Future<Either<Failure, List<DriversInSubcategoryEntity>>> getDriversInSubcategory(String subCategoryId);
+  Future<Either<Failure, RideExpectedPriceEntity>> getExpectedPrice(RideExpectedPriceParams params);
+  Future<Either<Failure, RideDriverStatisticsEntity>> getDriverStatistics();
+  Future<Either<Failure, bool>> deleteRideRegistration();
+  Future<Either<Failure, List<String>>> getRideBrands();
+  Future<Either<Failure, List<String>>> getRideModels(String brand);
+  Future<Either<Failure, List<CarYearsAndTypesEntity>>> getCarYearsAndTypes(GetCarYearsAndTypesParams params);
+  Future<Either<Failure, List<RideColorEntity>>> getRideCarColors();
+  Future<Either<Failure, List<GovernorateEntity>>> getGovernorates();
 
   Future<Either<Failure, bool>> updateDriverLocation(UpdateDriverLocationUseCaseParams params);
 
@@ -109,6 +141,240 @@ class RideRemoteDataSourceImplementation
         RideCategoryModelUpdated rideCategoryModel = RideCategoryModelUpdated
             .fromJson(data['data']);
         return Right(rideCategoryModel);
+      });
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, CheckDriverTypeEntity>> checkDriverType() async {
+    try {
+      final response = await _apiConsumer.get(
+        EndPoints.checkDriverType,
+      );
+
+      return response.fold((failure) => Left(failure), (data) {
+        CheckDriverTypeModel checkDriverTypeModel = CheckDriverTypeModel.fromJson(data['data']);
+        return Right(checkDriverTypeModel);
+      });
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> registerRideNotSpecial(RegisterRideNotSpecialEntity params) async {
+    try {
+      final response = await _apiConsumer.post(
+        EndPoints.riderRegister,
+        data: params.toJson(),
+      );
+
+      return response.fold((failure) => Left(failure), (data) {
+        return Right(data['status']??false);
+      });
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> registerRideSpecial(RegisterRideSpecialEntity params) async {
+    try {
+      final response = await _apiConsumer.post(
+        EndPoints.specialRegister,
+        data: params.toJson(),
+      );
+
+      return response.fold((failure) => Left(failure), (data) {
+        return Right(data['status']??false);
+      });
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<DriversInSubcategoryEntity>>> getDriversInSubcategory(String subCategoryId) async {
+    try {
+      final response = await _apiConsumer.get(
+        EndPoints.getDriversInSubcategory(subCategoryId),
+      );
+
+      return response.fold((failure) => Left(failure), (data) {
+        return Right((data['data'] as List)
+            .map((e) => DriversInSubcategoryModel.fromJson(e))
+            .toList());
+      });
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> requestTrip(RequestTripEntity params) async {
+    try {
+      final response = await _apiConsumer.post(
+        EndPoints.requestTrip(params.id),
+        data: params.toJson(),
+      );
+
+      return response.fold((failure) => Left(failure), (data) {
+        return Right(data['status']??false);
+      });
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> checkRealAmountEnough(double params) async {
+    try {
+      final response = await _apiConsumer.post(
+        EndPoints.checkWalletEnough,
+        data: {
+          "amount" : params
+        },
+      );
+
+      return response.fold((failure) => Left(failure), (data) {
+        return Right(data['status']??false);
+      });
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, RideExpectedPriceEntity>> getExpectedPrice(RideExpectedPriceParams params) async {
+    try {
+      final response = await _apiConsumer.post(
+        EndPoints.getExpectedPrice(params.id),
+        data: params.toJson(),
+      );
+
+      return response.fold((failure) => Left(failure), (data) {
+        return Right(data['status']??false);
+      });
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, RideDriverStatisticsEntity>> getDriverStatistics() async {
+    try {
+      final response = await _apiConsumer.get(
+        EndPoints.getDriverStatistics,
+      );
+
+      return response.fold((failure) => Left(failure), (data) {
+        RideDriverStatisticsModel rideDriverStatisticsModel = RideDriverStatisticsModel.fromJson(data['data']);
+        return Right(rideDriverStatisticsModel);
+      });
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteRideRegistration() async {
+    try {
+      final response = await _apiConsumer.delete(
+        EndPoints.deleteRideRegistration,
+      );
+
+      return response.fold((failure) => Left(failure), (data) {
+        return Right(data['status']??false);
+      });
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<String>>> getRideBrands() async {
+    try {
+      final response = await _apiConsumer.post(
+        EndPoints.getRideBrands,
+        data: {
+          "brand" : ""
+        }
+      );
+
+      return response.fold((failure) => Left(failure), (data) {
+        return Right((data['data']!=null||data['data'].isNotEmpty)?List<String>.from(data['data'].map((e) => e['brand'])):[]);
+      });
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<String>>> getRideModels(String brand) async {
+    try {
+      final response = await _apiConsumer.get(
+          EndPoints.getRideModels,
+          queryParameters: {
+            "brand" : brand
+          }
+      );
+
+      return response.fold((failure) => Left(failure), (data) {
+        return Right((data['data']!=null||data['data'].isNotEmpty)?List<String>.from(data['data'].map((e) => e['model'])):[]);
+      });
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<CarYearsAndTypesEntity>>> getCarYearsAndTypes(GetCarYearsAndTypesParams params) async {
+    try {
+      final response = await _apiConsumer.get(
+        EndPoints.getCarYearsAndTypes,
+        queryParameters: params.toJson()
+      );
+
+      return response.fold((failure) => Left(failure), (data) {
+        return Right((data['data'] as List)
+            .map((e) => CarsYearsAndTypesModel.fromJson(e))
+            .toList());
+      });
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<RideColorEntity>>> getRideCarColors() async {
+    try {
+      final response = await _apiConsumer.get(
+          EndPoints.getRideCarColors,
+      );
+
+      return response.fold((failure) => Left(failure), (data) {
+        return Right((data['data'] as List)
+            .map((e) => RideColorModel.fromJson(e))
+            .toList());
+      });
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<GovernorateEntity>>> getGovernorates() async {
+    try {
+      final response = await _apiConsumer.get(
+        EndPoints.getGovernorates,
+      );
+
+      return response.fold((failure) => Left(failure), (data) {
+        return Right((data['data'] as List)
+            .map((e) => GovernorateModel.fromJson(e))
+            .toList());
       });
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));

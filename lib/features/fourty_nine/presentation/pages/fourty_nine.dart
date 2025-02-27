@@ -11,7 +11,6 @@ import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
-import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
@@ -146,6 +145,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
   }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     // context.push(Routes.REELS);
@@ -206,7 +206,10 @@ class _FourtyNineViewState extends State<FourtyNineView>
               !context.read<UserCubit>().isLoggedIn
                   ? const Sizer()
                   : const SizedBox.shrink(),
-              const ScrollableTextWithAnimation(),
+              ScrollableTextWithAnimation(
+                textDirection:
+                    context.isArabic ? TextDirection.rtl : TextDirection.ltr,
+              ),
 
               //wallet
 
@@ -226,8 +229,8 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   height: 60.h,
                   alignment: Alignment.center,
                   child: AutoScrollText(
-                    velocity: const Velocity(pixelsPerSecond: Offset(20, 0)),
-                    "${LocaleKeys.choosePreferredAppStyle.localize}...                                         ",
+                    velocity: const Velocity(pixelsPerSecond: Offset(30, 0)),
+                    "${LocaleKeys.choosePreferredAppStyle.localize}..  ${LocaleKeys.clickHere.localize}!!                                         ",
                     style: Styles.headerText(
                         fontSize: 30, color: AppColors.SECONDARY_COLOR),
                     textDirection: context.isArabic
@@ -256,13 +259,11 @@ class _FourtyNineViewState extends State<FourtyNineView>
               Row(children: [
                 Expanded(child: _buildStarWidget()),
                 const Sizer(),
-                Expanded(
-                  child: _pickMeAndComeWithUWidget(),
-                ),
+                Expanded(child: _pickMeAndComeWithUWidget()),
               ]),
               // _pickMeAndComeWithUWidget(),
               const Sizer(),
-              _buildTenPercentWidget(),
+              // _buildTenPercentWidget(),
               // const Sizer(),
               // _auctionAndInstallmentWidget(),
               // const Sizer(),
@@ -321,10 +322,11 @@ class _FourtyNineViewState extends State<FourtyNineView>
                               AdInterstitialTop.showInterstitialAd();
                               HandleCashback.setCount(
                                   'mainCategoriesCount', context);
-                              if(state.data![index].id=='62c8b5b09332225799fe335e'){
+                              if (state.data![index].id ==
+                                  '62c8b5b09332225799fe335e') {
                                 context.push(Routes.MARRIAGESUBCATEGORIES,
                                     extra: state.data![index]);
-                              }else{
+                              } else {
                                 context.push(Routes.SUBCATEGORIES,
                                     extra: state.data![index]);
                               }
@@ -433,6 +435,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
               //   ),
               // ),
               // const Sizer(),
+              const Sizer(),
               Expanded(
                 child: _buildRideSubCategoryItem(
                   service:
@@ -537,10 +540,9 @@ class _FourtyNineViewState extends State<FourtyNineView>
 
   Widget _buildStarWidget() {
     return SizedBox(
-      height: kToolbarHeight * 2.h,
-      width: double.infinity,
-      child: Stack(
-        children: [
+        height: kToolbarHeight * 2.h,
+        width: double.infinity,
+        child: Stack(children: [
           Positioned.fill(
             child: GestureDetector(
                 // color: AppColors.AUTH_CONTAINER_COLOR,
@@ -559,21 +561,27 @@ class _FourtyNineViewState extends State<FourtyNineView>
                 },
                 child: Container(
                     height: kToolbarHeight * 2.h,
-                    padding:
-                        EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
                     decoration: BoxDecoration(
                       color: Theme.of(context).scaffoldBackgroundColor,
-                      borderRadius: BorderRadius.circular(5),
-                      image: DecorationImage(
-                          image: AssetImage(Assets.tubeCat), fit: BoxFit.fill),
-                      boxShadow: const [
+                      borderRadius: BorderRadius.circular(40.r),
+                      boxShadow: [
                         BoxShadow(
-                          color: Color.fromARGB(255, 249, 159, 162),
-                          spreadRadius: 1,
-                          blurRadius: 3,
+                          color: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
+                          spreadRadius: 5,
+                          blurRadius: 5,
                           offset: Offset(1, 1),
                         )
                       ],
+                      image: DecorationImage(
+                          image: AssetImage(Assets.tube1), fit: BoxFit.fill),
+                      // boxShadow: const [
+                      //   BoxShadow(
+                      //     color: Color.fromARGB(255, 249, 159, 162),
+                      //     spreadRadius: 1,
+                      //     blurRadius: 3,
+                      //     offset: Offset(1, 1),
+                      //   )
+                      // ],
                     ),
                     child: Center(
                       child: Row(
@@ -829,40 +837,39 @@ class _FourtyNineViewState extends State<FourtyNineView>
       },
       child: Container(
         height: kToolbarHeight * 2.h,
-        padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
+        // padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
-          borderRadius: BorderRadius.circular(10.r),
-          boxShadow: const [
+          borderRadius: BorderRadius.circular(40.r),
+          boxShadow: [
             BoxShadow(
-              color: Color.fromARGB(255, 249, 159, 162),
-              spreadRadius: 1,
-              blurRadius: 3,
+              color: AppColors.PRIMARY_COLOR.withValues(alpha: .8),
+              spreadRadius: 5,
+              blurRadius: 5,
               offset: Offset(1, 1),
             )
           ],
         ),
+        clipBehavior: Clip.antiAliasWithSaveLayer,
         child: Stack(
           alignment: AlignmentDirectional.centerStart,
           children: [
             Positioned.fill(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(5),
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    Image.network(
-                      image,
-                      fit: BoxFit.cover,
-                      width: 150,
-                      // source: AssetImage(image),
-                    ),
-                    Container(
-                      color: Colors.black
-                          .withOpacity(0.4), // Darken the background
-                    ),
-                  ],
-                ),
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  //TODO
+                  Image.asset(
+                    Assets.joinTrip,
+                    fit: BoxFit.fill,
+                    // width: 150,
+                    // source: AssetImage(image),
+                  ),
+                  // Container(
+                  //   color: Colors.black
+                  //       .withOpacity(0.4), // Darken the background
+                  // ),
+                ],
               ),
             ),
             Padding(

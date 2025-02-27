@@ -1,8 +1,10 @@
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/features/social_media/create_post/domain/entities/life_event_entity.dart';
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 import '../entities/place_entity.dart';
 import '../repositories/create_post_repo.dart';
+import 'package:fourtyninehub/features/social_media/create_post/domain/entities/activity_entity.dart';
 
 class CreatePostUseCase extends UseCase<bool, PostParams> {
   final CreatePostRepo _repo;
@@ -19,18 +21,24 @@ class PostParams {
   final String? color;
   final String? feeling;
   final String? gifUrl;
-  final String? activity;
+  final bool? onTweet;
+  final bool? onInsta;
+  final ActivityEntity? activity;
   final String? privacy;
   final PlaceEntity? place;
+  final LifeEventEntity? lifeEvent;
   final List<String>? mediaId;
   final List<String>? users;
   PostParams({
     required this.type,
     required this.content,
     this.gifUrl,
+    this.lifeEvent,
     this.color,
     this.activity,
     this.feeling,
+    this.onTweet,
+    this.onInsta,
     this.privacy,
     this.mediaId,
     this.place,
@@ -39,18 +47,34 @@ class PostParams {
   Map<String, dynamic> toJson() => {
         'content': content,
         'type': type,
-    if (gifUrl != null && gifUrl!.isNotEmpty)'gifUrl': gifUrl,
-        if (feeling != null && feeling!.isNotEmpty) 'feeling': feeling,
-        if (activity != null && activity!.isNotEmpty) 'activity': activity,
-        if (place != null)
-          "location": {
-            "place": place?.name,
-            "lat": "${place?.lat}",
-            "long": "${place?.lng}"
+        if (lifeEvent != null && (lifeEvent?.id.isNotEmpty ?? false))
+          "liveEvent": {
+            "liveEventTypeId": lifeEvent?.id,
+            "title": lifeEvent?.title,
+            "description": lifeEvent?.desc,
+            "mediaIds": lifeEvent?.media.map((model) => model.mediaId).toList(),
+            "date": lifeEvent?.date.toString()
           },
-        if (color != null) 'background_color': color,
-        if(mediaId!=null&&mediaId!.isNotEmpty)'media': mediaId,
+        if (gifUrl != null && gifUrl!.isNotEmpty) 'gifUrl': gifUrl,
+        if (feeling != null && feeling!.isNotEmpty) 'feelingId': feeling,
+        if (activity != null && (activity?.id.isNotEmpty ?? false))
+          'activity': {
+            'mainId': activity?.mainActivity?.id,
+            'subId': activity?.id
+          },
+        if (place != null && (place?.name.isNotEmpty ?? false))
+          "location": {
+            "name": place?.name,
+            "fullAddress": place?.name,
+            "coordinates": [place?.lat, place?.lng],
+          },
+        if ((lifeEvent == null || (lifeEvent?.id.isEmpty ?? false)) &&
+            (gifUrl == null || (gifUrl?.isEmpty ?? false))
+            && (mediaId == null || (mediaId?.isEmpty ?? false)))
+          'backgroundColor': color,
+        if(mediaId!=null&&(mediaId?.isNotEmpty??false))'media': mediaId,
         'publicationType': privacy ?? 'public',
-        "with": users,
+        "userTagIds": users,
+        "shared": {"twitter": onTweet, "instagram": onInsta}
       };
 }

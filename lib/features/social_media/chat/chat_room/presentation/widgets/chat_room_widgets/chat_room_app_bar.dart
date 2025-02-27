@@ -22,6 +22,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../../../core/utils/custom_show_dialog.dart';
 import '../../../../../tinder/data/shared/shared.dart';
 
 class ChatRoomAppBar extends StatefulWidget implements PreferredSizeWidget {
@@ -1057,86 +1058,161 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
   void _showClearChatAlert(BuildContext context, ChatRoomCubit chatRoomCubit) {
     int selectedOption = 0; // To track the selected radio button
 
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(LocaleKeys.clearThisChat.tr()),
-          content: StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ListTile(
-                    title: Text(
-                      LocaleKeys.clearForMe.tr(),
-                      style: Styles.mediumText(
-                          color: context.isDarkMode
-                              ? Colors.white
-                              : AppColors.PRIMARY_COLOR),
-                    ),
-                    leading: Radio<int>(
-                      value: 0,
-                      activeColor: AppColors.PRIMARY_COLOR_DARK,
-                      groupValue: selectedOption,
-                      onChanged: (int? value) {
-                        setState(() {
-                          selectedOption = value!;
-                        });
-                      },
-                    ),
-                  ),
-                  ListTile(
-                    title: Text(
-                      LocaleKeys.clearForEveryone.tr(),
-                      style: Styles.mediumText(
-                          color: context.isDarkMode
-                              ? Colors.white
-                              : AppColors.PRIMARY_COLOR),
-                    ),
-                    leading: Radio<int>(
-                      value: 1,
-                      activeColor: AppColors.PRIMARY_COLOR_DARK,
-                      groupValue: selectedOption,
-                      onChanged: (int? value) {
-                        setState(() {
-                          selectedOption = value!;
-                        });
-                      },
-                    ),
-                  ),
-                ],
-              );
-            },
+    showAnimatedDialog(context,AlertDialog(
+      title: Text(LocaleKeys.clearThisChat.tr()),
+      content: StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                title: Text(
+                  LocaleKeys.clearForMe.tr(),
+                  style: Styles.mediumText(
+                      color: context.isDarkMode
+                          ? Colors.white
+                          : AppColors.PRIMARY_COLOR),
+                ),
+                leading: Radio<int>(
+                  value: 0,
+                  activeColor: AppColors.PRIMARY_COLOR_DARK,
+                  groupValue: selectedOption,
+                  onChanged: (int? value) {
+                    setState(() {
+                      selectedOption = value!;
+                    });
+                  },
+                ),
+              ),
+              ListTile(
+                title: Text(
+                  LocaleKeys.clearForEveryone.tr(),
+                  style: Styles.mediumText(
+                      color: context.isDarkMode
+                          ? Colors.white
+                          : AppColors.PRIMARY_COLOR),
+                ),
+                leading: Radio<int>(
+                  value: 1,
+                  activeColor: AppColors.PRIMARY_COLOR_DARK,
+                  groupValue: selectedOption,
+                  onChanged: (int? value) {
+                    setState(() {
+                      selectedOption = value!;
+                    });
+                  },
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+      actions: <Widget>[
+        TextButton(
+          child: Text(
+            LocaleKeys.cancel.tr(),
+            style: Styles.mediumText(
+                color: context.isDarkMode
+                    ? Colors.white
+                    : AppColors.PRIMARY_COLOR),
           ),
-          actions: <Widget>[
-            TextButton(
-              child: Text(
-                LocaleKeys.cancel.tr(),
-                style: Styles.mediumText(
-                    color: context.isDarkMode
-                        ? Colors.white
-                        : AppColors.PRIMARY_COLOR),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text(
-                LocaleKeys.clearChat.tr(),
-                style: Styles.mediumText(color: AppColors.PRIMARY_COLOR_DARK),
-              ),
-              onPressed: () async {
-                await chatRoomCubit.clearChat(clearForAll: selectedOption == 1);
-                // ignore: use_build_context_synchronously
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        TextButton(
+          child: Text(
+            LocaleKeys.clearChat.tr(),
+            style: Styles.mediumText(color: AppColors.PRIMARY_COLOR_DARK),
+          ),
+          onPressed: () async {
+            await chatRoomCubit.clearChat(clearForAll: selectedOption == 1);
+            // ignore: use_build_context_synchronously
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
+    ),);
+    // showDialog(
+    //   context: context,
+    //   builder: (BuildContext context) {
+    //     return AlertDialog(
+    //       title: Text(LocaleKeys.clearThisChat.tr()),
+    //       content: StatefulBuilder(
+    //         builder: (BuildContext context, StateSetter setState) {
+    //           return Column(
+    //             mainAxisSize: MainAxisSize.min,
+    //             children: [
+    //               ListTile(
+    //                 title: Text(
+    //                   LocaleKeys.clearForMe.tr(),
+    //                   style: Styles.mediumText(
+    //                       color: context.isDarkMode
+    //                           ? Colors.white
+    //                           : AppColors.PRIMARY_COLOR),
+    //                 ),
+    //                 leading: Radio<int>(
+    //                   value: 0,
+    //                   activeColor: AppColors.PRIMARY_COLOR_DARK,
+    //                   groupValue: selectedOption,
+    //                   onChanged: (int? value) {
+    //                     setState(() {
+    //                       selectedOption = value!;
+    //                     });
+    //                   },
+    //                 ),
+    //               ),
+    //               ListTile(
+    //                 title: Text(
+    //                   LocaleKeys.clearForEveryone.tr(),
+    //                   style: Styles.mediumText(
+    //                       color: context.isDarkMode
+    //                           ? Colors.white
+    //                           : AppColors.PRIMARY_COLOR),
+    //                 ),
+    //                 leading: Radio<int>(
+    //                   value: 1,
+    //                   activeColor: AppColors.PRIMARY_COLOR_DARK,
+    //                   groupValue: selectedOption,
+    //                   onChanged: (int? value) {
+    //                     setState(() {
+    //                       selectedOption = value!;
+    //                     });
+    //                   },
+    //                 ),
+    //               ),
+    //             ],
+    //           );
+    //         },
+    //       ),
+    //       actions: <Widget>[
+    //         TextButton(
+    //           child: Text(
+    //             LocaleKeys.cancel.tr(),
+    //             style: Styles.mediumText(
+    //                 color: context.isDarkMode
+    //                     ? Colors.white
+    //                     : AppColors.PRIMARY_COLOR),
+    //           ),
+    //           onPressed: () {
+    //             Navigator.of(context).pop();
+    //           },
+    //         ),
+    //         TextButton(
+    //           child: Text(
+    //             LocaleKeys.clearChat.tr(),
+    //             style: Styles.mediumText(color: AppColors.PRIMARY_COLOR_DARK),
+    //           ),
+    //           onPressed: () async {
+    //             await chatRoomCubit.clearChat(clearForAll: selectedOption == 1);
+    //             // ignore: use_build_context_synchronously
+    //             Navigator.of(context).pop();
+    //           },
+    //         ),
+    //       ],
+    //     );
+    //   },
+    // );
   }
 
   @override

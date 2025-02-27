@@ -27,7 +27,6 @@ import '../../../../../common/widgets/dynamic/drawer.dart';
 import '../../../../../common/widgets/dynamic/floating_button.dart';
 import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../../common/widgets/stateless/appbar/nested_appbar.dart';
-import '../../../../../core/widget/custom_scaffold.dart';
 import '../widgets/posts/create_post_banner.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 class SocialParams {
@@ -89,6 +88,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
       length: 3,
       initialIndex: widget.params?.index ?? 0,
       child: Scaffold(
+        backgroundColor: AppColors.DARK_GRAY_COLOR,
           appBar: widget.params?.hideAppBar == true
               ? null
               : HomeAppbar(
@@ -98,7 +98,8 @@ class _SocialHomeViewState extends State<SocialHomeView>
                     padding: EdgeInsets.zero,
                     labelStyle: const TextStyle(fontSize: 17),
                     unselectedLabelColor: Colors.grey,
-                    
+                    dividerColor: Colors.transparent,
+
                     indicatorColor: context.isDarkMode
                         ? Colors.white
                         : AppColors.PRIMARY_COLOR,
@@ -109,26 +110,29 @@ class _SocialHomeViewState extends State<SocialHomeView>
                       Tab(
                         icon: SvgPicture.asset(
                           Assets.facebookAppBarIcon,
-                          height: 50,
-                          width: 50,
+                          height: 35,
+                          width: 35,
                         ),
+                        height: 78,
                         text: LocaleKeys.Face.localize,
                       ),
                       Tab(
                         icon: SvgPicture.asset(
                           Assets.instagramAppBarIcon,
-                          height: 50,
-                          width: 50,
+                          height: 35,
+                          width: 35,
                         ),
-                        
+                        height: 78,
+
                         text: LocaleKeys.Insta.localize,
                       ),
                       Tab(
                         icon: SvgPicture.asset(
                           Assets.twitterAppBarIcon,
-                          height: 50,
-                          width: 50,
+                          height: 35,
+                          width: 35,
                         ),
+                        height: 78,
                         text: LocaleKeys.tweet.localize,
                       ),
                     ],
@@ -159,26 +163,8 @@ class _SocialHomeViewState extends State<SocialHomeView>
               BlocBuilder<UserCubit, BasicState<UserEntity>>(
                   builder: (context, state) {
                 return context.read<UserCubit>().isLoggedIn
-                    ? NestedAppbar(
-                        scrollController: ScrollController(),
-                        appBars: [
-                          SliverAppBar(
-                            backgroundColor:
-                                Theme.of(context).scaffoldBackgroundColor,
-                            automaticallyImplyLeading: false,
-                            floating: true,
-                            // pinned: true,
-                            flexibleSpace: const CreatePostBanner(),
-                          ),
-                          // SliverAppBar(
-                          //   backgroundColor:
-                          //       Theme.of(context).scaffoldBackgroundColor,
-                          //   automaticallyImplyLeading: false,
-                          //   // floating: true,
-                          //   pinned: true,
-                          //   flexibleSpace: _buildTabBar(),
-                          // )
-                        ],
+                    ? Scaffold(
+
                         body: FacebookBody(
                           scrollController: scrollController,
                         ))

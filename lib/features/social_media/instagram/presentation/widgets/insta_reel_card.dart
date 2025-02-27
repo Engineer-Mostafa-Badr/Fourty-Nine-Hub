@@ -56,12 +56,15 @@ class _InstagramReelCardState extends State<InstagramReelCard> {
           child: Center(
             child: _controller == null
                 ? const SizedBox.shrink()
-                : AspectRatio(
-                    aspectRatio: _controller!.value.aspectRatio,
-                    child: VideoPlayer(
-                      _controller!,
+                : ClipRRect(
+              borderRadius: BorderRadius.circular(6),
+              child: AspectRatio(
+                                aspectRatio: 9 / 16,
+                      child: VideoPlayer(
+                        _controller!,
+                      ),
                     ),
-                  ),
+                ),
           ),
         ),
         if (_controller?.value.caption.text != null) ...[
@@ -81,28 +84,6 @@ class _InstagramReelCardState extends State<InstagramReelCard> {
 class _ControlsOverlay extends StatelessWidget {
   const _ControlsOverlay({required this.controller});
 
-  static const List<Duration> _exampleCaptionOffsets = <Duration>[
-    Duration(seconds: -10),
-    Duration(seconds: -3),
-    Duration(seconds: -1, milliseconds: -500),
-    Duration(milliseconds: -250),
-    Duration.zero,
-    Duration(milliseconds: 250),
-    Duration(seconds: 1, milliseconds: 500),
-    Duration(seconds: 3),
-    Duration(seconds: 10),
-  ];
-  static const List<double> _examplePlaybackRates = <double>[
-    0.25,
-    0.5,
-    1.0,
-    1.5,
-    2.0,
-    3.0,
-    5.0,
-    10.0,
-  ];
-
   final VideoPlayerController controller;
 
   @override
@@ -120,7 +101,7 @@ class _ControlsOverlay extends StatelessWidget {
                     child: Icon(
                       Icons.play_arrow,
                       color: Colors.white,
-                      size: 100.0,
+                      size: 60.0,
                       semanticLabel: LocaleKeys.play.localize,
                     ),
                   ),
@@ -135,64 +116,6 @@ class _ControlsOverlay extends StatelessWidget {
               // controller.play();
             }
           },
-        ),
-        Align(
-          alignment: Alignment.topLeft,
-          child: PopupMenuButton<Duration>(
-            initialValue: controller.value.captionOffset,
-            tooltip: 'Caption Offset',
-            onSelected: (Duration delay) {
-              controller.setCaptionOffset(delay);
-            },
-            itemBuilder: (BuildContext context) {
-              return <PopupMenuItem<Duration>>[
-                for (final Duration offsetDuration in _exampleCaptionOffsets)
-                  PopupMenuItem<Duration>(
-                    value: offsetDuration,
-                    child: const Text(''),
-                  )
-              ];
-            },
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                // Using less vertical padding as the text is also longer
-                // horizontally, so it feels like it would need more spacing
-                // horizontally (matching the aspect ratio of the video).
-                vertical: 12.h,
-                horizontal: 16,
-              ),
-              child: Text('${controller.value.captionOffset.inMilliseconds}ms'),
-            ),
-          ),
-        ),
-        Align(
-          alignment: Alignment.topRight,
-          child: PopupMenuButton<double>(
-            initialValue: controller.value.playbackSpeed,
-            tooltip: 'Playback speed',
-            onSelected: (double speed) {
-              controller.setPlaybackSpeed(speed);
-            },
-            itemBuilder: (BuildContext context) {
-              return <PopupMenuItem<double>>[
-                for (final double speed in _examplePlaybackRates)
-                  PopupMenuItem<double>(
-                    value: speed,
-                    child: const Text(''),
-                  )
-              ];
-            },
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                // Using less vertical padding as the text is also longer
-                // horizontally, so it feels like it would need more spacing
-                // horizontally (matching the aspect ratio of the video).
-                vertical: 12.h,
-                horizontal: 16,
-              ),
-              child: const Text(''),
-            ),
-          ),
         ),
       ],
     );

@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/utils/custom_show_dialog.dart';
 import '../../../../../common/widgets/stateless/custom_sheet/custom_vertical_sheet_item.dart';
 import '../../../../../common/widgets/stateless/custom_sheet/sheet_vertical_item.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
@@ -26,89 +27,213 @@ class PrivacyMultiSelectItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const Sizer(),
-        Card(
+    return Container(
+      decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.r),
-          ),
-          child: InkWell(
-            borderRadius: BorderRadius.circular(10.r),
-            onTap: () async {
-              final res =
-                  await CustomVerticalSheetItem.normal<PrivacyStatus>(context, [
-                CustomSheetModel(
-                  text: LocaleKeys.public.localize,
-                  value: PrivacyStatus.public,
-                  iconData: Icons.language,
-                ),
-                CustomSheetModel(
-                  text: LocaleKeys.friends.localize,
-                  value: PrivacyStatus.friends,
-                  iconData: Icons.family_restroom,
-                ),
-                CustomSheetModel(
-                  text: LocaleKeys.followers.localize,
-                  value: PrivacyStatus.followers,
-                  iconData: Icons.accessibility_sharp,
-                ),
-                CustomSheetModel(
-                  text:
-                      "${LocaleKeys.friends.localize} / ${LocaleKeys.followers.localize}",
-                  value: PrivacyStatus.friendsAndFollowers,
-                  iconData: Icons.supervised_user_circle_outlined,
-                ),
-                CustomSheetModel(
-                  text: LocaleKeys.onlyMe.localize,
-                  value: PrivacyStatus.onlyMe,
-                  iconData: Icons.lock,
-                ),
-              ]);
-              if (res != null) {
-                onChoose(res);
-                log(res.toString());
-              }
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Label(
-                      text: label,
-                      style: TextStyle(fontSize: 35.sp),
+          borderRadius: BorderRadius.circular(20.r)),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(10.r),
+        onTap: () async {
+          var groupValue = privacy;
+          showAnimatedDialog(
+              context,
+              AlertDialog(
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 8,
+                  children: [
+                    Label(text: 'Who Can See My $label'),
+                    Row(
+                      children: [
+                        Radio(
+                          value: 'public',
+                          groupValue: groupValue,
+                          onChanged: (value) {
+                            groupValue = value!;
+                          },
+                        ),
+                        Label(
+                          text: LocaleKeys.public.localize,
+                        )
+                      ],
                     ),
-                  ),
-                  Row(
-                    children: [
-                      Label(
-                        text: getPrivacyName(privacyToPrivacyStatus(privacy)),
-                        style: TextStyle(
-                            fontSize: 30.sp, color: AppColors.GREY_DARK_COLOR),
-                      ),
-                      SizedBox(
-                        width: 10.w,
-                      ),
-                      Icon(
-                        getPrivacyIcon(privacyToPrivacyStatus(privacy)),
-                        color: AppColors.GREY_DARK_COLOR,
-                      ),
-                    ],
+                    Row(
+                      children: [
+                        Radio(
+                          value: LocaleKeys.friends.localize,
+                          groupValue: groupValue,
+                          onChanged: (value) {
+                            groupValue = value!;
+                          },
+                        ),
+                        Label(
+                          text: LocaleKeys.friends.localize,
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Radio(
+                          value: LocaleKeys.contacts.localize,
+                          groupValue: groupValue,
+                          onChanged: (value) {
+                            groupValue = value!;
+                          },
+                        ),
+                        Label(
+                          text: LocaleKeys.contacts.localize,
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Radio(
+                          value: LocaleKeys.followers.localize,
+                          groupValue: groupValue,
+                          onChanged: (value) {
+                            groupValue = value!;
+                          },
+                        ),
+                        Label(
+                          text: LocaleKeys.followers.localize,
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Radio(
+                          value:
+                              '${LocaleKeys.friends.localize}and${LocaleKeys.followers.localize}',
+                          groupValue: groupValue,
+                          onChanged: (value) {
+                            groupValue = value!;
+                          },
+                        ),
+                        Label(
+                          text:
+                              '${LocaleKeys.friends.localize} and ${LocaleKeys.followers.localize}',
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Radio(
+                          value: LocaleKeys.except_from.localize,
+                          groupValue: groupValue,
+                          onChanged: (value) {
+                            groupValue = value!;
+                          },
+                        ),
+                        Label(
+                          text: LocaleKeys.except_from.localize,
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Radio(
+                          value: LocaleKeys.only_with.localize,
+                          groupValue: groupValue,
+                          onChanged: (value) {
+                            groupValue = value!;
+                          },
+                        ),
+                        Label(
+                          text: LocaleKeys.only_with.localize,
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Radio(
+                          value: LocaleKeys.onlyMe.localize,
+                          groupValue: groupValue,
+                          onChanged: (value) {
+                            groupValue = value!;
+                          },
+                        ),
+                        Label(
+                          text: LocaleKeys.onlyMe.localize,
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+              ));
+          // final res =
+          //     await CustomVerticalSheetItem.normal<PrivacyStatus>(context, [
+          //   CustomSheetModel(
+          //     text: LocaleKeys.public.localize,
+          //     value: PrivacyStatus.public,
+          //     iconData: Icons.language,
+          //   ),
+          //   CustomSheetModel(
+          //     text: LocaleKeys.friends.localize,
+          //     value: PrivacyStatus.friends,
+          //     iconData: Icons.family_restroom,
+          //   ),
+          //   CustomSheetModel(
+          //     text: LocaleKeys.followers.localize,
+          //     value: PrivacyStatus.followers,
+          //     iconData: Icons.accessibility_sharp,
+          //   ),
+          //   CustomSheetModel(
+          //     text:
+          //         "${LocaleKeys.friends.localize} / ${LocaleKeys.followers.localize}",
+          //     value: PrivacyStatus.friendsAndFollowers,
+          //     iconData: Icons.supervised_user_circle_outlined,
+          //   ),
+          //   CustomSheetModel(
+          //     text: LocaleKeys.onlyMe.localize,
+          //     value: PrivacyStatus.onlyMe,
+          //     iconData: Icons.lock,
+          //   ),
+          // ]);
+          // if (res != null) {
+          //   onChoose(res);
+          //   log(res.toString());
+          // }
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              Expanded(
+                child: Label(
+                  text: label,
+                  style:
+                      TextStyle(fontSize: 35.sp, fontWeight: FontWeight.w400),
+                ),
+              ),
+              Row(
+                children: [
+                  Label(
+                    text: getPrivacyName(privacyToPrivacyStatus(privacy)),
+                    style: TextStyle(
+                        fontSize: 30.sp, color: AppColors.DIVIDER_GRAY_COLOR2),
                   ),
                   SizedBox(
-                    width: 15.w,
+                    width: 10.w,
+                  ),
+                  Icon(
+                    getPrivacyIcon(privacyToPrivacyStatus(privacy)),
+                    color: AppColors.GREY_DARK_COLOR,
                   ),
                 ],
               ),
-            ),
+              SizedBox(
+                width: 15.w,
+              ),
+            ],
           ),
         ),
-      ],
+      ),
     );
   }
 
+//TODO
   PrivacyStatus privacyToPrivacyStatus(String privacy) {
     switch (privacy) {
       case 'only-me':
@@ -121,6 +246,12 @@ class PrivacyMultiSelectItem extends StatelessWidget {
         return PrivacyStatus.followers;
       case 'friends/followers':
         return PrivacyStatus.friendsAndFollowers;
+      case 'contacts':
+        return PrivacyStatus.contacts;
+      case 'only-with':
+        return PrivacyStatus.onlyWith;
+      case 'friends-except':
+        return PrivacyStatus.exceptFrom;
       default:
         return PrivacyStatus.public; // Default to a known status
     }
@@ -138,6 +269,12 @@ class PrivacyMultiSelectItem extends StatelessWidget {
         return LocaleKeys.followers.localize; // Adjust if needed
       case PrivacyStatus.friendsAndFollowers:
         return '${LocaleKeys.friends.localize} / ${LocaleKeys.followers.localize}';
+      case PrivacyStatus.exceptFrom:
+        return LocaleKeys.except_from.localize;
+      case PrivacyStatus.onlyWith:
+        return LocaleKeys.only_with.localize;
+      case PrivacyStatus.contacts:
+        return LocaleKeys.contacts.localize;
     }
   }
 
@@ -152,6 +289,12 @@ class PrivacyMultiSelectItem extends StatelessWidget {
       case PrivacyStatus.followers:
         return Icons.accessibility_sharp; // Adjust if needed
       case PrivacyStatus.friendsAndFollowers:
+        return Icons.supervised_user_circle_outlined;
+      case PrivacyStatus.exceptFrom:
+        return Icons.supervised_user_circle_outlined;
+      case PrivacyStatus.onlyWith:
+        return Icons.supervised_user_circle_outlined;
+      case PrivacyStatus.contacts:
         return Icons.supervised_user_circle_outlined;
     }
   }

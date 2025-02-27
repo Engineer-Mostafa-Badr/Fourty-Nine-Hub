@@ -50,7 +50,7 @@ class _TwitterViewState extends State<TwitterView> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        CustomScaffold(
+        Scaffold(
           // mainCategoryId: 2,
           body: BlocBuilder<UserCubit, BasicState<UserEntity>>(
               builder: (context, state) {

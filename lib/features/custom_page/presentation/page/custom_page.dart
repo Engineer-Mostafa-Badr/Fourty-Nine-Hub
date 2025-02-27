@@ -15,6 +15,8 @@ import 'package:go_router/go_router.dart';
 import 'package:restart_app/restart_app.dart';
 
 import '../../../../core/widget/custom_scaffold.dart';
+import '../../../../core/widget/custom_switch_button.dart';
+import '../../../../core/widget/custom_switch_button.dart';
 
 class CustomPage extends StatefulWidget {
   const CustomPage({super.key});
@@ -124,16 +126,16 @@ class ActivatePageBlocConsumer extends StatelessWidget {
                       text: LocaleKeys.activatePage.localize,
                       style: Styles.mediumText(
                           fontSize: 65.sp, fontWeight: FontWeight.w400))),
-              Switch(
+              CustomSwitchButton(
                 value: state.activate?.customPage ?? false,
                 onChanged: (v) {
                   controller.updateActivate(v);
                   Restart.restartApp();
                 },
-                activeColor: Colors.red,
-                inactiveThumbColor: Colors.black,
-                activeTrackColor: Colors.grey,
-                inactiveTrackColor: Colors.grey,
+                // activeColor: Colors.red,
+                // inactiveThumbColor: Colors.black,
+                // activeTrackColor: Colors.grey,
+                // inactiveTrackColor: Colors.grey,
               ),
             ],
           ),

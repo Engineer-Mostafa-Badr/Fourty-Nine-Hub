@@ -53,6 +53,7 @@ class EndPoints {
   static const storageBaseUrl = 'https://49-space.fra1.digitaloceanspaces.com/';
   static const login = '/auth/login';
   static const getProfile = '/users/profile';
+  static const getCountries = '/ride/countries';
   static const register = '/auth/register';
   static const verifyOTP = '/auth/verify/email';
   static const getWelcomeGift = '/auth/welcome-gift';
@@ -531,6 +532,7 @@ class EndPoints {
 
   static const sendRideRequest = '/ride/trips/new';
   static const checkDriverType = '/ride/riders/checkDriver/type';
+  static const getDriverStatistics = '/ride/riders/driverStatistics';
   static const createRideTripRequest = '/ride/trip';
   static const createRideTripRequestPremium = '/ride/trip/premium';
   static const getAddressFromLatAndLong = '/ride/trips/address/latAndLong';
@@ -1205,6 +1207,20 @@ class EndPoints {
   static String getShippingCategories(String userId) {
     return '/loading/driver/subcategory?userId=$userId';
   }
+  static String getDriversInSubcategory(String subCategoryId) {
+    return '/ride/riders/drivers/$subCategoryId';
+  }
+  static String requestTrip(String id) {
+    return '/ride/trips/newTrip/$id';
+  }
+  static String getExpectedPrice(String id) {
+    return '/ride/trips/expected/price/$id';
+  }
+  static String deleteRideRegistration = '/ride/riders';
+  static String getRideBrands = '/ride/riders/brands';
+  static String getRideModels = '/ride/riders/models';
+  static String getCarYearsAndTypes = '/ride/riders/car-years-and-types';
+  static String getRideCarColors = '/ride/riders/colors';
 
   static String updateDriverLocation(){
     return '/ride/update-driver-location';

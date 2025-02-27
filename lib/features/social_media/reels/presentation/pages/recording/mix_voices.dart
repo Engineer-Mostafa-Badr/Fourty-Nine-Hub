@@ -14,6 +14,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 // import 'package:gallery_saver/gallery_saver.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:path_provider/path_provider.dart';
+import '../../../../../../core/utils/custom_show_dialog.dart';
 import '../../../../../../core/widget/custom_scaffold.dart';
 import '../../shared/filter_utiles.dart';
 import 'recording_shared.dart';
@@ -242,9 +243,7 @@ class MixVoiceVideoRecordingScreenState
   }
 
   void _showErrorDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
+    showAnimatedDialog(context,AlertDialog(
         title: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Text(
@@ -266,8 +265,33 @@ class MixVoiceVideoRecordingScreenState
             ),
           ),
         ],
-      ),
-    );
+      ),);
+    // showDialog(
+    //   context: context,
+    //   builder: (context) => AlertDialog(
+    //     title: Padding(
+    //       padding: const EdgeInsets.all(16.0),
+    //       child: Text(
+    //         LocaleKeys.error_dialog_title.tr(),
+    //       ),
+    //     ),
+    //     content: Padding(
+    //       padding: const EdgeInsets.all(16.0),
+    //       child: Text(
+    //         message,
+    //       ),
+    //     ),
+    //     actions: [
+    //       TextButton(
+    //         onPressed: () => Navigator.of(context).pop(),
+    //         child: Text(
+    //           LocaleKeys.error_dialog_ok_button.tr(),
+    //           style: const TextStyle(color: AppColors.SECONDARY_COLOR),
+    //         ),
+    //       ),
+    //     ],
+    //   ),
+    // );
   }
 
   Widget _buildFilterSelector() {
