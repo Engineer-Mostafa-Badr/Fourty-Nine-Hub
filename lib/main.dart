@@ -1,7 +1,7 @@
 import 'package:device_preview/device_preview.dart';
 import 'dart:developer';
 
-import 'package:easy_localization/easy_localization.dart';
+import 'package:easy_localization/easy_localization.dart' as easy_localization;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,6 +12,7 @@ import 'package:fourtyninehub/common/theme/cubit/states.dart';
 import 'package:fourtyninehub/core/localization/localization_service.dart';
 import 'package:fourtyninehub/core/themes/dark_theme.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
+import 'package:fourtyninehub/features/call/presentation/pages/whatsapp_screen.dart';
 import 'package:fourtyninehub/features/carpool/join_trip/presentation/cubits/cubit/join_trip_car_pool_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_states.dart';
@@ -58,6 +59,7 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/preload_cubit/preload_bloc.dart';
 import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
+import 'package:fourtyninehub/helpers/call_helpers/notifications_helper/fcm_notification_helper.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/secrets/controller/secrets_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -68,9 +70,12 @@ import 'core/themes/light_theme.dart';
 import 'features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'features/settings/presentation/cubit/floating_navigator_cubit.dart';
-import 'features/settings/presentation/cubit/settings_cubit.dart';
 import 'firebase_options.dart';
 import 'routes/pages.dart';
+import 'package:flutter_callkit_incoming_yoer/flutter_callkit_incoming.dart';
+import 'package:uuid/uuid.dart';
+import 'package:fourtyninehub/features/call/presentation/controller/call_controller/call_cubit.dart';
+import 'package:fourtyninehub/features/call/presentation/controller/send_call_controller.dart/send_call_cubit.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -85,6 +90,8 @@ void main() async {
 
   await CacheServiceImpl.init();
   await DI.execute();
+  serviceLocator<FcmNotificationHelper>().setup();
+  serviceLocator<FcmNotificationHelper>().getFcmToken();
   await Geolocator.checkPermission().then(
     (value) {
       if (value == LocationPermission.denied) {
@@ -127,7 +134,10 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  late final Uuid _uuid;
+  String? _currentUuid;
+
   Future<void> _startWebSocketService() async {
     final token = await CacheManager.getAccessToken();
     BackgroundService.startWebSocketService(token);
@@ -137,6 +147,35 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     // _startWebSocketService();
+
+    _uuid = const Uuid();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  Future<dynamic> getCurrentCall() async {
+    var calls = await FlutterCallkitIncoming.activeCalls();
+    if (calls is List) {
+      if (calls.isNotEmpty) {
+        print('DATA: $calls');
+        _currentUuid = calls[0]['id'];
+        return calls[0];
+      } else {
+        _currentUuid = "";
+        return null;
+      }
+    }
+  }
+
+  Future<void> getDevicePushTokenVoIP() async {
+    var devicePushTokenVoIP =
+        await FlutterCallkitIncoming.getDevicePushTokenVoIP();
+    print(devicePushTokenVoIP);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 
   Future getToken() async {
@@ -149,6 +188,8 @@ class _MyAppState extends State<MyApp> {
     getToken();
     return MultiBlocProvider(
       providers: [
+         BlocProvider(create: (context) => serviceLocator<SendCallCubit>()),
+          BlocProvider(create: (context) => serviceLocator<CallCubit>()),
         BlocProvider(
             create: (context) =>
                 CheckTripEndCubit(repository: serviceLocator())),
@@ -364,36 +405,45 @@ class _MyAppState extends State<MyApp> {
           return BlocBuilder<ThemeCubit, ThemeStates>(
             builder: (BuildContext context, state) {
               return FutureBuilder<bool>(
-                  future: CacheManager.getMode(),
-                  builder: (context, snapshot) {
-                    return BlocBuilder<CustomPageCubit, CustomPageState>(
-                      builder: (BuildContext context, custom) {
-                        return MaterialApp.router(
-                          builder: (context, child) {
-                            return MediaQuery(
-                              data: MediaQuery.of(context)
-                                  .copyWith(textScaler: TextScaler.noScaling),
-                              child: child!,
-                            );
-                          },
-                          themeMode: (snapshot.data ?? false)
-                              ? ThemeMode.dark
-                              : ThemeMode.light,
-                          theme: lightTheme,
-                          darkTheme: darkTheme,
-                          title: '49',
-                          debugShowCheckedModeBanner: false,
-                          routerConfig: AppPages.router,
-                          localizationsDelegates:
-                          context.localizationDelegates,
-                          supportedLocales: context.supportedLocales,
-                          locale: context.locale,
-                          // for device preview package
-                          // builder: DevicePreview.appBuilder,
-                        );
-                      },
-                    );
-                  });
+                future: CacheManager.getMode(),
+                builder: (context, snapshot) {
+                  return BlocBuilder<CustomPageCubit, CustomPageState>(
+                    builder: (BuildContext context, custom) {
+                      return Directionality(
+                        textDirection: TextDirection.ltr,
+                        child: Stack(
+                          children: [
+                            MaterialApp.router(
+                              routerConfig: AppPages.router,
+                              builder: (BuildContext context, Widget? child) {
+                                final mediaQuery = MediaQuery.of(context);
+                                return MediaQuery(
+                                  data: mediaQuery.copyWith(
+                                    textScaler: TextScaler.noScaling,
+                                  ),
+                                  child: child ?? const SizedBox.shrink(),
+                                );
+                              },
+                              themeMode: (snapshot.data ?? false)
+                                  ? ThemeMode.dark
+                                  : ThemeMode.light,
+                              theme: lightTheme,
+                              darkTheme: darkTheme,
+                              title: '49',
+                              debugShowCheckedModeBanner: false,
+                              localizationsDelegates:
+                                  context.localizationDelegates,
+                              supportedLocales: context.supportedLocales,
+                              locale: context.locale,
+                            ),
+                            const WhatsAppCallScreen(),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
+              );
             },
           );
         },
