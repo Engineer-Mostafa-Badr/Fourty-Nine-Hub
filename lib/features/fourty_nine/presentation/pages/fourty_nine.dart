@@ -47,6 +47,7 @@ import '../widgets/announce_widget.dart';
 import 'package:auto_scroll_text/auto_scroll_text.dart';
 
 import '../widgets/exit_widget.dart';
+import 'package:circular_menu/circular_menu.dart';
 
 class FourtyNineView extends StatefulWidget {
   const FourtyNineView({super.key});
@@ -309,7 +310,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                           const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisSpacing: 10,
                               crossAxisCount: 2,
-                              childAspectRatio: 5 / 4),
+                              childAspectRatio: 2 / 3),
                       itemCount: state.data?.length ?? 0,
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
@@ -358,36 +359,140 @@ class _FourtyNineViewState extends State<FourtyNineView>
   }
 
   Widget _buildMainCategoriesViews() {
-    return Container(
-      decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          borderRadius: BorderRadius.circular(20.r),
-          boxShadow: const [
-            BoxShadow(
-              color: AppColors.GRAY_LIGHT_COLOR3,
-              blurRadius: 5,
-              spreadRadius: 5,
-            )
-          ]),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20.r),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            _buildItemTabBar(
-              Icon(Icons.grid_view),
-              Routes.MAINCATEGORIESTREE,
-              () => HandleCashback.setCount('threeDotsCount', context),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: _buildItemTabBar(
+            const Icon(
+              Icons.grid_view,
+              color: AppColors.PRIMARY_COLOR,
             ),
-            _buildItemTabBar(
-                Icon(Icons.view_carousel), Routes.MAINCATEGORIESCARDS, () {
-              AdInterstitialTop.loadIntersitialAd();
-              AdInterstitialTop.showInterstitialAd();
-              HandleCashback.setCount('mainCategoriesSliderCount', context);
-            }),
-          ],
+            Routes.MAINCATEGORIESTREE,
+            () => HandleCashback.setCount('threeDotsCount', context),
+          ),
         ),
-      ),
+        const Sizer(),
+        const Sizer(),
+        CircularMenu(
+            radius: 70,
+            backgroundWidget: Container(
+              decoration: const BoxDecoration(
+                color: AppColors.BG_GRAY_COLOR,
+                shape: BoxShape.circle,
+              ),
+              width: 40,
+              height: 40,
+              child: const Icon(
+                Icons.favorite_rounded,
+                color: AppColors.SECONDARY_COLOR,
+              ),
+            ),
+            //   items: [
+            //     CircularMenuItem(
+            //       // menu item callback
+            //         onTap: () {
+            //         },
+            //         icon: Icons.home,
+            //         color: Colors.blue,
+            //         iconColor: Colors.white,
+            //         iconSize: 30.0,
+            //         margin: 10.0,
+            //         padding: 10.0,
+            //
+            //     ),
+            //     CircularMenuItem(
+            //         icon: Icons.search,
+            //         onTap: () {
+            //           //callback
+            //         }),
+            //     CircularMenuItem(
+            //         icon: Icons.settings,
+            //         onTap: () {
+            //           //callback
+            //         }),
+            //     CircularMenuItem(
+            //         icon: Icons.star,
+            //         onTap: () {
+            //           //callback
+            //         }),
+            //     CircularMenuItem(
+            //         icon: Icons.pages,
+            //         onTap: () {
+            //           //callback
+            //         }),
+            //   ]
+            //   backgroundWidget: Center(
+            //     child: Text(
+            //       "Flutter ",
+            //       style: TextStyle(
+            //         fontWeight: FontWeight.bold,
+            //         fontSize: 18,
+            //       ),
+            //     ),
+            //   ),
+            toggleButtonColor: Colors.transparent,
+            alignment: Alignment.center,
+            items: [
+              CircularMenuItem(
+                onTap: () {
+                  print('tapped');
+                },
+                icon: Icons.search,
+                iconSize: 50,
+                color: Colors.blue,
+              ),
+              CircularMenuItem(
+                onTap: () {
+                  print('tapped');
+                },
+                icon: Icons.home,
+                color: Colors.grey,
+              ),
+              CircularMenuItem(
+                onTap: () {
+                  print('tapped');
+                },
+                icon: Icons.settings,
+                color: Colors.green,
+              ),
+              CircularMenuItem(
+                onTap: () {
+                  print('tapped');
+                },
+                icon: Icons.search,
+                color: Colors.blue,
+              ),
+              CircularMenuItem(
+                onTap: () {
+                  print('tapped');
+                },
+                icon: Icons.home,
+                color: Colors.grey,
+              ),
+              CircularMenuItem(
+                onTap: () {
+                  print('tapped');
+                },
+                icon: Icons.settings,
+                color: Colors.green,
+              ),
+            ]),
+        const Sizer(),
+        const Sizer(),
+        Expanded(
+          child: _buildItemTabBar(
+              const Icon(
+                Icons.view_carousel,
+                color: AppColors.PRIMARY_COLOR,
+              ),
+              Routes.MAINCATEGORIESCARDS, () {
+            AdInterstitialTop.loadIntersitialAd();
+            AdInterstitialTop.showInterstitialAd();
+            HandleCashback.setCount('mainCategoriesSliderCount', context);
+          }),
+        ),
+      ],
     );
   }
 
@@ -402,8 +507,11 @@ class _FourtyNineViewState extends State<FourtyNineView>
         context.push(routeName);
       },
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 6.h.w, horizontal: 10.h),
-        decoration: const BoxDecoration(),
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        decoration: BoxDecoration(
+          color: AppColors.BG_GRAY_COLOR,
+          borderRadius: BorderRadius.circular(20.r),
+        ),
         child: icon,
       ),
     );
@@ -566,10 +674,11 @@ class _FourtyNineViewState extends State<FourtyNineView>
                       borderRadius: BorderRadius.circular(40.r),
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
+                          color:
+                              AppColors.SECONDARY_COLOR.withValues(alpha: .7),
                           spreadRadius: 5,
                           blurRadius: 5,
-                          offset: Offset(1, 1),
+                          offset: const Offset(1, 1),
                         )
                       ],
                       image: DecorationImage(
@@ -846,7 +955,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
               color: AppColors.PRIMARY_COLOR.withValues(alpha: .8),
               spreadRadius: 5,
               blurRadius: 5,
-              offset: Offset(1, 1),
+              offset: const Offset(1, 1),
             )
           ],
         ),

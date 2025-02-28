@@ -57,7 +57,6 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
 
   List<String> _getLocalizedNames(FavouriteCatEntity preferences) {
     final isArabic = Localizations.localeOf(context).languageCode == 'ar';
-
     return [
       isArabic
           ? preferences.homeService.nameAr
@@ -135,7 +134,10 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
                     subtitle: Text(LocaleKeys.favouriteDescription.localize),
                   ),
                   Expanded(
-                    child: ListView.builder(
+                    child: GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2),
                       controller: controller,
                       itemCount: _categoriesMap.length,
                       itemBuilder: (context, index) {

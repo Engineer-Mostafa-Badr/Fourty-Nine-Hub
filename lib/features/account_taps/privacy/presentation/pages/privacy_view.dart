@@ -23,14 +23,11 @@ class PrivacyView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
+      backgroundColor: const Color(0xfff1f2f7),
       enableCustomAppBar: true,
-      // backgroundColor: Theme
-      //     .of(context)
-      //     .primaryColor,
       appBar: BackAppBar(
         label: LocaleKeys.privacy.localize,
-        textColor: Colors.white,
-        iconColor: Colors.white,
+        enableCustomAppBar: true,
       ),
       body: context
           .read<UserCubit>()

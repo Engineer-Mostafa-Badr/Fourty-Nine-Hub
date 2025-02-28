@@ -41,7 +41,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         label: 'meal',
         index: 0,
         cacheKey: 'mealsCount',
-        image: Assets.homeFood,
+        image: Assets.meal,
         route: Routes.FOOD,
       ),
       BottomItemModel(
@@ -49,7 +49,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         // Change to a health-related icon
         label: 'health',
         cacheKey: 'healthCount',
-        image: Assets.homeHealth,
+        image: Assets.healthIcon,
         index: 2,
         // Ensure this index matches the health item
         route: Routes.VISITA,
@@ -59,7 +59,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         label: 'ride',
         cacheKey: 'rideCount',
         index: 3,
-        image: Assets.homeRide,
+        image: Assets.rideIcon,
         route: Routes.RIDE,
       ),
     ];
@@ -150,77 +150,88 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
     return AnimatedContainer(
       duration: const Duration(milliseconds: 400),
       height: bottomNavBarHeight, // Use the dynamic height
+      color: Colors.transparent,
+
       child: CustomPaint(
         painter: BottomBarPainter(
-          color: Colors.black,
+          color: Colors.transparent,
         ),
-        child: Container(
-          padding: const EdgeInsets.only(bottom: 20, top: 10),
-          decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            boxShadow: const [
-              BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 2),
-            ],
-          ),
-          child: SafeArea(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 0.w),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: List.generate(widget.items.length, (index) {
-                  int index1 = context.isArabic ? 2 : 1;
-                  int index2 = context.isArabic ? 1 : 2;
+        child: Padding(
+          padding:  EdgeInsets.symmetric(horizontal: 20.w),
+          child: Container(
+            padding: const EdgeInsets.only(bottom: 20, top: 10),
+            decoration: BoxDecoration(
+              color: Theme.of(context).scaffoldBackgroundColor,
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+              boxShadow: const [
+                BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 2),
+              ],
+            ),
+            child: SafeArea(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 0.w),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: List.generate(widget.items.length, (index) {
+                    int index1 = context.isArabic ? 2 : 1;
+                    int index2 = context.isArabic ? 1 : 2;
 
-                  return Expanded(
-                    child: GestureDetector(
-                      onTap: () {
-                        widget.onTap(index);
-                      },
-                      // child: Padding(
-                      //   // padding: EdgeInsets.zero,
-                      //   padding:EdgeInsets.only(right: 30,left: 30),
-                      //   // padding: index == index1
-                      //   //     ? EdgeInsets.only(right: 30.w)
-                      //   //     : index == index2
-                      //   //         ? EdgeInsets.only(left: 60.w)
-                      //   //         : EdgeInsets.zero,
-                      //   // Conditionally render the Icon or SvgPicture
-                      //   child: index == 2 // Index for "health"
-                      //       ? Image.asset(
-                      //           widget.items[index].image!,
-                      //           //width: 90.w,
-                      //           height: widget.items[index].height * 2.h,
-                      //         )
-                      //       : Image.asset(
-                      //           widget.items[index].image!,
-                      //           color: index!=1?AppColors.PRIMARY_COLOR:null,
-                      //           height: widget.items[index].height * 1.8.h,
-                      //         ),
-                      // ),
-                      child: Padding(
-                        // padding: EdgeInsets.only(
-                        //   left: index == 1 ? 1.0 : 20.0,  // Less padding for the first icon
-                        //   right: index == 2 ? 1.0 : 20.0, // Less padding for the last icon
+                    return Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          widget.onTap(index);
+                        },
+                        // child: Padding(
+                        //   // padding: EdgeInsets.zero,
+                        //   padding:EdgeInsets.only(right: 30,left: 30),
+                        //   // padding: index == index1
+                        //   //     ? EdgeInsets.only(right: 30.w)
+                        //   //     : index == index2
+                        //   //         ? EdgeInsets.only(left: 60.w)
+                        //   //         : EdgeInsets.zero,
+                        //   // Conditionally render the Icon or SvgPicture
+                        //   child: index == 2 // Index for "health"
+                        //       ? Image.asset(
+                        //           widget.items[index].image!,
+                        //           //width: 90.w,
+                        //           height: widget.items[index].height * 2.h,
+                        //         )
+                        //       : Image.asset(
+                        //           widget.items[index].image!,
+                        //           color: index!=1?AppColors.PRIMARY_COLOR:null,
+                        //           height: widget.items[index].height * 1.8.h,
+                        //         ),
                         // ),
-                        padding: EdgeInsetsDirectional.only(
-                          start: index == 1 ? 1.0 : 35.0,
-                          end: index == 2 ? 1.0 : 35.0,
-                        ),
-                        child: index == 2 // Index for "health"
-                            ? Image.asset(
-                          widget.items[index].image!,
-                          height: widget.items[index].height * 2.h, // Adjust height for middle item
-                        )
-                            : Image.asset(
-                          widget.items[index].image!,
-                          color: index != 1 ? AppColors.PRIMARY_COLOR : null,
-                          height: widget.items[index].height * 1.8.h,
-                        ),
-                      ),
+                        child: Padding(
+                          // padding: EdgeInsets.only(
+                          //   left: index == 1 ? 1.0 : 20.0,  // Less padding for the first icon
+                          //   right: index == 2 ? 1.0 : 20.0, // Less padding for the last icon
+                          // ),
+                          padding: EdgeInsetsDirectional.only(
+                            start: index == 1 ? 1.0 : 35.0,
+                            end: index == 2 ? 1.0 : 35.0,
+                          ),
+                          child: index == 2 // Index for "health"
+                              ? Image.asset(
+                            widget.items[index].image!,
+                            // height: widget.items[index].height * 2.h, // Adjust height for middle item
+                            height: 32, // Adjust height for middle item
+                            width: 32, // Adjust height for middle item
+                          )
+                              : Image.asset(
+                            widget.items[index].image!,
+                            color: index != 1 ? AppColors.PRIMARY_COLOR : null,
+                            height: 32,
+                            width: 32, // Adjust height for middle item
 
-                    ),
-                  );
-                }),
+                            // height: widget.items[index].height * 1.8.h,
+                          ),
+                        ),
+
+                      ),
+                    );
+                  }),
+                ),
               ),
             ),
           ),

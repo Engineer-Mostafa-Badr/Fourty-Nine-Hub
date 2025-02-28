@@ -16,7 +16,6 @@ import 'package:restart_app/restart_app.dart';
 
 import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../core/widget/custom_switch_button.dart';
-import '../../../../core/widget/custom_switch_button.dart';
 
 class CustomPage extends StatefulWidget {
   const CustomPage({super.key});
