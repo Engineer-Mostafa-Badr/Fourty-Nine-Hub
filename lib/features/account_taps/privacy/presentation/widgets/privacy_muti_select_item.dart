@@ -28,6 +28,8 @@ class PrivacyMultiSelectItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(20.r)),
@@ -196,38 +198,35 @@ class PrivacyMultiSelectItem extends StatelessWidget {
           //   log(res.toString());
           // }
         },
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            children: [
-              Expanded(
-                child: Label(
-                  text: label,
-                  style:
-                      TextStyle(fontSize: 35.sp, fontWeight: FontWeight.w400),
+        child: Row(
+          children: [
+            Expanded(
+              child: Label(
+                text: label,
+                style:
+                    TextStyle(fontSize: 35.sp, fontWeight: FontWeight.w400),
+              ),
+            ),
+            Row(
+              children: [
+                Label(
+                  text: getPrivacyName(privacyToPrivacyStatus(privacy)),
+                  style: TextStyle(
+                      fontSize: 30.sp, color: AppColors.DIVIDER_GRAY_COLOR2),
                 ),
-              ),
-              Row(
-                children: [
-                  Label(
-                    text: getPrivacyName(privacyToPrivacyStatus(privacy)),
-                    style: TextStyle(
-                        fontSize: 30.sp, color: AppColors.DIVIDER_GRAY_COLOR2),
-                  ),
-                  SizedBox(
-                    width: 10.w,
-                  ),
-                  Icon(
-                    getPrivacyIcon(privacyToPrivacyStatus(privacy)),
-                    color: AppColors.GREY_DARK_COLOR,
-                  ),
-                ],
-              ),
-              SizedBox(
-                width: 15.w,
-              ),
-            ],
-          ),
+                SizedBox(
+                  width: 10.w,
+                ),
+                Icon(
+                  getPrivacyIcon(privacyToPrivacyStatus(privacy)),
+                  color: AppColors.GREY_DARK_COLOR,
+                ),
+              ],
+            ),
+            SizedBox(
+              width: 15.w,
+            ),
+          ],
         ),
       ),
     );

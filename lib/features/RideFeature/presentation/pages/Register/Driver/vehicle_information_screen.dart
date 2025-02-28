@@ -78,7 +78,7 @@ class VehicleInformationScreen extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.only(bottom: 32,left: 16,right: 16,),
           child: Column(
             spacing: 4,
             crossAxisAlignment: CrossAxisAlignment.start,

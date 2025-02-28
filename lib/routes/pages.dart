@@ -269,8 +269,9 @@ import '../features/RideFeature/presentation/pages/Register/TruckDriver/truck_mo
 import '../features/RideFeature/presentation/pages/Register/TruckDriver/truck_personal_documents_screen.dart';
 import '../features/RideFeature/presentation/pages/Register/TruckDriver/truck_personal_information_screen.dart';
 import '../features/RideFeature/presentation/pages/Register/TruckDriver/truck_vehicle_information_screen.dart';
+import '../features/RideFeature/presentation/pages/Register/TruckDriver/truck_welcome_ride_register.dart';
 import '../features/RideFeature/presentation/pages/Register/complete_register_screen.dart';
-import '../features/RideFeature/presentation/pages/Register/welcome_ride_register.dart';
+import '../features/RideFeature/presentation/pages/Register/Driver/welcome_ride_register.dart';
 import '../features/RideFeature/presentation/pages/ride_home.dart';
 import '../features/account_taps/account/presentation/cubit/cubit/favourite_drawer_cubit.dart';
 import '../features/account_taps/account/presentation/cubit/managers/favourite_categories_cubit.dart';
@@ -2666,6 +2667,20 @@ class AppPages {
                   ], child: const MoreInfoScreen());
                 },
               ),
+              GoRoute(
+                path: Paths.truckWelcomeRideRegister,
+                name: Routes.truckWelcomeRideRegister,
+                builder: (context, state) {
+                  return MultiBlocProvider(providers: [
+                    BlocProvider<DestGetLatAndLongCubit>(
+                      create: (context) => DestGetLatAndLongCubit(
+                          getLatLongFromAddressRemoteDataSource:
+                          serviceLocator()),
+                    ),
+                  ], child: const TruckWelcomeRideRegister());
+                },
+              ),
+
               GoRoute(
                 path: Paths.truckPersonalInformationScreen,
                 name: Routes.truckPersonalInformationScreen,
