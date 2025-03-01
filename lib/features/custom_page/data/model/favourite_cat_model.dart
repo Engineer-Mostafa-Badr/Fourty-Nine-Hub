@@ -30,6 +30,7 @@ class FavouriteCatModel extends FavouriteCatEntity {
         nameEn: featureJson['nameEn'],
         nameAr: featureJson['nameAr'],
         enabled: featureJson['enabled'],
+        banner: featureJson['banner'],
       );
     }
 

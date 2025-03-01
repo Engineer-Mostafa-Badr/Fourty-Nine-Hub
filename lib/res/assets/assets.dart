@@ -81,6 +81,7 @@ abstract class Assets {
   static String createPostAppBarIcon = 'assets/icons/create_post_app_bar_icon.svg';
   static String profileSocialAppBarIcon = 'assets/icons/profile_social_app_bar_icon.svg';
 
+
   static String twitterLogo = 'assets/icons/twitterLogo.png';
   static String loadingCar = 'assets/icons/loadingCar.png';
   static String comment = 'assets/icons/comment.png';
@@ -90,6 +91,9 @@ abstract class Assets {
   static String divorced = 'assets/icons/divorce.png';
   static String widowed = 'assets/icons/widowed.png';
   static String uploadImageCamera = 'assets/icons/uploadImage.png';
+  static String rideFrom = 'assets/icons/rideFrom.png';
+  static String rideTo = 'assets/icons/rideTo.png';
+  static String requestLog = 'assets/icons/requestLog.png';
   static String tinder = 'assets/images/tinder.svg';
   static String openBook = 'assets/images/openBook.png';
   static String social = 'assets/images/social.svg';

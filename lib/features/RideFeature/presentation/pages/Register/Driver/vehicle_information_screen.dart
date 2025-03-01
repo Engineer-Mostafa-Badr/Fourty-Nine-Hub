@@ -23,8 +23,8 @@ class VehicleInformationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     List<String> uploadFilesTitles = [
       LocaleKeys.vehiclePicture.localize,
+      LocaleKeys.vehicleRegistrationCertificate.localize,
       LocaleKeys.backSideOfTheCertificate.localize,
-      LocaleKeys.vehiclePicture.localize
     ];
     List<String> vehicleBrand = [
       'Alfa Romeo',
