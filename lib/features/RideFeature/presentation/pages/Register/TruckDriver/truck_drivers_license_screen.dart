@@ -61,7 +61,7 @@ class TruckDriversLicenseScreen extends StatelessWidget {
                   crossAxisSpacing: 32.h,
                   children: List.generate(
                     uploadFilesTitles.length,
-                    (index) => uploadFileWidget(
+                    (index) => UploadFileWidget(
                       title: uploadFilesTitles[index],
                     ),
                   ),
