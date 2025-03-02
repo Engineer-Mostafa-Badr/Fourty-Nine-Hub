@@ -271,7 +271,15 @@ import '../features/RideFeature/presentation/pages/Register/TruckDriver/truck_pe
 import '../features/RideFeature/presentation/pages/Register/TruckDriver/truck_vehicle_information_screen.dart';
 import '../features/RideFeature/presentation/pages/Register/complete_register_screen.dart';
 import '../features/RideFeature/presentation/pages/Register/welcome_ride_register.dart';
+import '../features/RideFeature/presentation/pages/connection_call_screen.dart';
+import '../features/RideFeature/presentation/pages/current_ride_home.dart';
+import '../features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';
+import '../features/RideFeature/presentation/pages/rating_client_screen.dart';
+import '../features/RideFeature/presentation/pages/ride_finding_screen.dart';
 import '../features/RideFeature/presentation/pages/ride_home.dart';
+import '../features/RideFeature/presentation/pages/ride_request_screen.dart';
+import '../features/RideFeature/presentation/pages/ride_status_screen.dart';
+import '../features/RideFeature/presentation/pages/safety_ride_screen.dart';
 import '../features/account_taps/account/presentation/cubit/cubit/favourite_drawer_cubit.dart';
 import '../features/account_taps/account/presentation/cubit/managers/favourite_categories_cubit.dart';
 import '../features/account_taps/account/presentation/cubit/managers/favourite_subcategories_cubit.dart';
@@ -2743,6 +2751,96 @@ class AppPages {
                     ),
                   ], child: const CompleteRegisterScreen());
                 },
+              ),
+              GoRoute(
+                path: Paths.CURRENTRIDEHOME,
+                name: Routes.CURRENTRIDEHOME,
+                builder: (context, state) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider(
+                      create: (context) => serviceLocator<RideCubit>(),
+                    ),
+                  ],
+                  child: const CurrentRideScreen(),
+                ),
+              ),
+              GoRoute(
+                path: Paths.RideREGUESTHOME,
+                name: Routes.RideRequestHOME,
+                builder: (context, state) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider(
+                      create: (context) => serviceLocator<RideCubit>(),
+                    ),
+                  ],
+                  child: const RideRequestScreen(),
+                ),
+              ),
+              GoRoute(
+                path: Paths.RideStatusScreen,
+                name: Routes.RideStatusScreen,
+                builder: (context, state) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider(
+                      create: (context) => serviceLocator<RideCubit>(),
+                    ),
+                  ],
+                  child: const RideStatusScreen(),
+                ),
+              ),
+              GoRoute(
+                path: Paths.ratingClientScreen,
+                name: Routes.ratingClientScreen,
+                builder: (context, state) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider(
+                      create: (context) => serviceLocator<RideCubit>(),
+                    ),
+                  ],
+                  child: RatingClientScreen(),
+                ),
+              ),
+
+              GoRoute(
+                path: Paths.connectionCallScreen,
+                name: Routes.connectionCallScreen,
+                builder: (context, state) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider(
+                      create: (context) => serviceLocator<RideCubit>(),
+                    ),
+                  ],
+                  child: const ConnectionCallScreen(),
+                ),
+              ),
+              GoRoute(
+                path: Paths.safetyRideScreen,
+                name: Routes.safetyRideScreen,
+                builder: (context, state) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider(
+                      create: (context) => serviceLocator<RideCubit>(),
+                    ),
+                  ],
+                  child: const SafetyRideScreen(),
+                ),
+              ),
+              GoRoute(
+                path: Paths.rideFindingScreen,
+                name: Routes.rideFindingScreen,
+                builder: (context, state) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider(
+                      create: (context) => serviceLocator<RideCubit>(),
+                    ),
+                  ],
+                  child: const RideFindingScreen(),
+                ),
+              ),
+              GoRoute(
+                path: Paths.rideModeScreen,
+                name: Routes.rideModeScreen,
+                builder: (context, state) => const RideModeScreen(),
               ),
             ],
           ),

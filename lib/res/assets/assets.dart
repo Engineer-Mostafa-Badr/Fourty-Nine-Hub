@@ -243,4 +243,10 @@ abstract class Assets {
   static String reBookIcon = 'assets/icons/rebook_icon.svg';
   static String receiptIcon = 'assets/icons/receipt_icon.svg';
   static String star2 = 'assets/icons/star.svg';
+  static String emergencyIcon = 'assets/icons/emergency.png';
+  static String automaticAcceptIcon = 'assets/icons/automatic_accept.png';
+  static String automatic2AcceptIcon = 'assets/icons/automatic_accept_icon.png';
+  static String alertCircle = 'assets/icons/alert-circle.svg';
+  static String edit = 'assets/icons/edit.png';
+  static String option = 'assets/icons/option.png';
 }

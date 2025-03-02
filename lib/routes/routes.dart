@@ -214,6 +214,14 @@ abstract class Routes {
   static const truckVehicleInformationScreen = '/TruckVehicleInformationScreen';
   static const truckMoreInfoScreen = '/TruckMoreInfoScreen';
   static const completeRegisterScreen = '/CompleteRegisterScreen';
+  static const CURRENTRIDEHOME = '/CurrentRideHome';
+  static const RideRequestHOME = '/RideRequestScreen';
+  static const RideStatusScreen = '/Ridestatusscreen';
+  static const ratingClientScreen = '/RatingClientScreen';
+  static const connectionCallScreen = '/ConnectionCallScreen';
+  static const safetyRideScreen = '/SafetyRideScreen';
+  static const rideFindingScreen = '/RideFindingScreen';
+  static const rideModeScreen = '/RideModeScreen';
 }
 
 abstract class Paths {
@@ -418,4 +426,13 @@ abstract class Paths {
   static const truckVehicleInformationScreen = 'TruckVehicleInformationScreen';
   static const truckMoreInfoScreen = 'TruckMoreInfoScreen';
   static const completeRegisterScreen = 'CompleteRegisterScreen';
+  static const CURRENTRIDEHOME = 'CurrentRideHome';
+  static const RideREGUESTHOME = 'RideRequestScreen';
+  static const ratingClientScreen = 'RatingClientScreen';
+  static const connectionCallScreen = 'ConnectionCallScreen';
+  static const safetyRideScreen = 'SafetyRideScreen';
+  static const rideFindingScreen = 'RideFindingScreen';
+  static const RideStatusScreen = 'RideStatusScreen';
+  static const rideModeScreen = 'RideModeScreen';
+  
 }

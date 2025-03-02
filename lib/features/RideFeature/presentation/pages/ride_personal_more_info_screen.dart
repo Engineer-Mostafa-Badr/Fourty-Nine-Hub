@@ -26,7 +26,7 @@ class _RidePersonalMoreInfoScreenState
   String _selectedDate = LocaleKeys.pickupDate.localize;
   int _numberOfPassengers = 0;
   bool _isExpanded = false;
-  String _offerPrice = '';
+  String offerPrice = '';
 
   @override
   Widget build(BuildContext context) {
@@ -151,25 +151,25 @@ class _RidePersonalMoreInfoScreenState
               ImageTextRow(
                   imagePath: Assets.logo,
                   text: LocaleKeys.freeCancellation.localize),
-              SizedBox(height: 15,),
+              const SizedBox(height: 15,),
               Row(
                 children: [
                   Expanded(child: AppButton(
                     radius: 15,
                     height: 44,
                       backColor: AppColors.PRIMARY_COLOR_DARK,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: AppColors.whiteColor,
                         fontSize: 18,
                         fontWeight: FontWeight.w500
                       ),
                       label:LocaleKeys.premium_request.localize, onPressed: (){})),
-                  SizedBox(width: 4,),
+                  const SizedBox(width: 4,),
                   Expanded(child: AppButton(
                     radius: 15,
                     height: 44,
                       backColor: AppColors.PRIMARY_COLOR,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: AppColors.whiteColor,
                         fontSize: 18,
                         fontWeight: FontWeight.w500
@@ -258,7 +258,7 @@ class _RidePersonalMoreInfoScreenState
                     style: const TextStyle(
                         fontSize: 18, fontWeight: FontWeight.bold),
                     onChanged: (value) {
-                      _offerPrice = value;
+                      offerPrice = value;
                     },
                   ),
                   const SizedBox(height: 50),
@@ -267,7 +267,7 @@ class _RidePersonalMoreInfoScreenState
                     backColor: AppColors.PRIMARY_COLOR,
                     onPressed: () {
                       setState(() {
-                        _offerPrice = offerPriceController.text;
+                        offerPrice = offerPriceController.text;
                       });
                       Navigator.pop(context);
                     },
