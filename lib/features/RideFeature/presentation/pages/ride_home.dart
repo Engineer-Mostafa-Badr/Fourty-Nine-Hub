@@ -173,6 +173,14 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         spacing: 5,
         mainAxisSize: MainAxisSize.min,
         children: [
+          ClickableWidget(
+              onTap: (){
+                context.push(Routes.CURRENTRIDEHOME);
+              },
+              child: Align(
+                alignment: AlignmentDirectional.topEnd,
+                child: _tripsWidget(LocaleKeys.activity.tr()),
+              )),
           Padding(
             padding: const EdgeInsetsDirectional.symmetric(
                 horizontal: 16.0, vertical: 8),

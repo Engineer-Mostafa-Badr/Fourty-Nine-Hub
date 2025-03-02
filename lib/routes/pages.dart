@@ -272,7 +272,6 @@ import '../features/RideFeature/presentation/pages/Register/TruckDriver/truck_ve
 import '../features/RideFeature/presentation/pages/Register/TruckDriver/truck_welcome_ride_register.dart';
 import '../features/RideFeature/presentation/pages/Register/complete_register_screen.dart';
 import '../features/RideFeature/presentation/pages/Register/Driver/welcome_ride_register.dart';
-import '../features/RideFeature/presentation/pages/Register/welcome_ride_register.dart';
 import '../features/RideFeature/presentation/pages/connection_call_screen.dart';
 import '../features/RideFeature/presentation/pages/current_ride_home.dart';
 import '../features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';

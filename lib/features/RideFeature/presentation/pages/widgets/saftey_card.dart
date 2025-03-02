@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
-
-import 'font_manager.dart';
 
 
 class SafetyCard extends StatelessWidget {
@@ -42,9 +41,9 @@ class SafetyCard extends StatelessWidget {
             children: [
               const SizedBox(width: 4,),
               const Spacer(),
-               Text(
+              Text(
                 LocaleKeys.safetyFeatures.localize,
-                style: TextStyle(fontSize: FontSize.s16, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: FontSize.s16, fontWeight: FontWeight.bold),
               ),
               const Spacer(),
               Container(
@@ -94,7 +93,7 @@ class SafetyCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
-            icon:  Image.asset(Assets.emergencyIcon),
+            icon:  Image.asset(Assets.emergencyIcon,width: 30,),
             label:  Text(LocaleKeys.call_emergency.localize),
           ),
         ],
@@ -109,7 +108,7 @@ class SafetyCard extends StatelessWidget {
       child: Container(
         padding:const EdgeInsets.all(4),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8)
+            borderRadius: BorderRadius.circular(8)
         ),
         child: Column(
           children: [
