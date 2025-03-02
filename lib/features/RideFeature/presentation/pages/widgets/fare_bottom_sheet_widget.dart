@@ -5,7 +5,8 @@ import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/app_colors.dart';
 import 'bottom_sheet/custom_bottom_sheet.dart';
-import 'payment_method_bottom_sheet_widget.dart';
+// import 'payment_method_bottom_sheet_widget.dart';
+import 'partial_payment_widget.dart';
 
 class FareBottomSheetWidget extends StatelessWidget {
   const FareBottomSheetWidget({super.key});
@@ -43,7 +44,7 @@ class FareBottomSheetWidget extends StatelessWidget {
             onPressed: () {
               Navigator.pop(context);
               customBottomSheet(context,
-                  child: const PaymentBottomSheetWidget(),
+                  child: const PartialPaymentWidget(),
                   title: 'Payment Method');
             },
             backColor: AppColors.PRIMARY_COLOR),

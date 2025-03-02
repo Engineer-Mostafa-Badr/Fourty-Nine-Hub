@@ -5,6 +5,10 @@ abstract class AppColors {
   static const PRIMARY_COLOR = Color(0xFF0B1135);
   static const blueColor = Colors.blue;
   static const black = Color(0xFF000000);
+  static const buttonDialog = Color(0xFF0A0A2A);
+  static const Color colorNavy = Color(0xFF0A0A2A); // لون داكن للأزرار
+  static const Color colorRed = Color(0xFFFF4C4C);  // لون أحمر للأزرار
+  static const Color colorGreyLight = Color(0xFFF5F5F5);
 
   static const DARK_BLUE_COLOR = Color.fromARGB(255, 22, 23, 24);
   static const UNSELECTED_GRAY_COLOR = Color(0xFFD2D2D2);
@@ -78,6 +82,8 @@ abstract class AppColors {
   static const AUTH_CONTAINER_COLOR = Colors.white;
   static const CHECK_MARK_COLOR = Color(0xFF55CD6C);
   static const LIGHT_BLUE = Color.fromRGBO(60, 153, 225, 1);
+  static const grey = Colors.grey;
+  static const LightWHATS_APP_COLOR = Color(0xFF8CF59F);
 
   static const BLACK_GRAY_GRADIENT = LinearGradient(
     begin: Alignment.topCenter,
@@ -127,4 +133,5 @@ abstract class AppColors {
         ? AppColors.SECONDARY_COLOR_DARK
         : AppColors.SECONDARY_COLOR;
   }
+  
 }

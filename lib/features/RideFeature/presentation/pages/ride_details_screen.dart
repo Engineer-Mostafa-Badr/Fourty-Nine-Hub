@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/custom_color_circle_widget.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/pickup_location_card.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 
 import '../../../../common/widgets/stateless/labels/label.dart';

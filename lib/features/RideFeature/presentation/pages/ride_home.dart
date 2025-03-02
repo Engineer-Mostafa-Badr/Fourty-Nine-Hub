@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubi
 import '../../../../common/widgets/form/text_fields/form_text_field.dart';
 import '../../../../common/widgets/stateless/appbar/nested_appbar.dart';
 import '../../../../common/widgets/stateless/dynamic/shared_scaffold.dart';
+import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -17,6 +18,7 @@ import 'widgets/add_stops_widget.dart';
 import 'widgets/bottom_sheet/custom_bottom_sheet.dart';
 import 'widgets/country_dropdown.dart';
 import 'widgets/fare_bottom_sheet_widget.dart';
+import 'widgets/map_section.dart';
 import 'widgets/options_bottomsheet_widget.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -72,7 +74,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
               appBars: const [],
               body: Stack(
                 children: [
-                  _buildTopImage(),
+                  const MapSection(),
                   _buildBottomSheet(),
                 ],
               ),
@@ -172,7 +174,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
-            padding: const EdgeInsetsDirectional.only(end: 12.0),
+            padding: const EdgeInsetsDirectional.symmetric(
+                horizontal: 16.0, vertical: 8),
             child: Row(
               spacing: 5,
               mainAxisAlignment: MainAxisAlignment.end,
@@ -300,13 +303,16 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
   Widget _tripsWidget(String text) {
     return Container(
       padding: const EdgeInsets.all(4),
+      width: (MediaQuery.of(context).size.width / 3) - 16,
       decoration: BoxDecoration(
-          color: AppColors.GREYCARD,
+          color: AppColors.GREYFIELD,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(color: AppColors.DARK_BLUE_COLOR)),
-      child: Text(
-        text,
-        style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
+      child: Center(
+        child: Text(
+          text,
+          style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
+        ),
       ),
     );
   }
@@ -418,7 +424,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(100, 52),
+                      minimumSize: const Size(110, 52),
                       backgroundColor: AppColors.PRIMARY_COLOR,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20))),
@@ -469,7 +475,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                           fontWeight: FontWeight.bold, fontSize: 12)),
                   Text(LocaleKeys.offerYourFare.tr()),
                   const Spacer(),
-                  Image.asset('assets/icons/edit.png'),
+                  Image.asset(Assets.edit),
                 ],
               ),
             ),
@@ -484,7 +490,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
               },
               child: SizedBox(
                 height: 25,
-                child: Image.asset('assets/icons/option.png'),
+                child: Image.asset(Assets.option),
               ),
             ),
           )
