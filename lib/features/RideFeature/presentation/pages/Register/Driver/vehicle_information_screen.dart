@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
@@ -29,45 +30,7 @@ class VehicleInformationScreen extends StatelessWidget {
       LocaleKeys.backSideOfTheCertificate.localize,
       LocaleKeys.vehiclePicture.localize
     ];
-    List<String> vehicleBrand = [
-      'Alfa Romeo',
-      'Aston Martin',
-      'Audi',
-      'BMW',
-      'Baic',
-      'Bestune',
-      'Brilliance',
-      'Buick'
-    ];
 
-    List<String> vehicleModel = [
-      'A1',
-      'MZ 40',
-      'X3',
-    ];
-
-    List<Map> vehicleColor=[
-      {
-        "color":'000000',
-        "text":'Black'
-      },
-      {
-        "color":'ffffff',
-        "text":'White'
-      },
-      {
-        "color":'00ff00',
-        "text":'Green'
-      },
-      {
-        "color":'ff0000',
-        "text":'Red'
-      },
-      {
-        "color":'0000ff',
-        "text":'Blue'
-      },
-    ];
     return CustomScaffold(
       appBar: const HomeAppbar(),
       floatingActionButton: registerFloatingActionButton(
@@ -123,8 +86,8 @@ class VehicleInformationScreen extends StatelessWidget {
                   const Sizer(),
                   RegisterExpansionTile(
                     title: Label(text: LocaleKeys.vehicleBrand.localize),
-                    children: List.generate(vehicleBrand.length,
-                        (index) => Label(text: vehicleBrand[index])),
+                    children: List.generate(state.brands?.length??0,
+                        (index) => Label(text: state.brands?[index]??'')),
                     onChange: (Widget selectedItem) {
                       // print("Selected Item: ${(selectedItem as Label).text}");
                     },
@@ -132,8 +95,8 @@ class VehicleInformationScreen extends StatelessWidget {
                   const Sizer(),
                   RegisterExpansionTile(
                     title: Label(text: LocaleKeys.vehicleModel.localize),
-                    children: List.generate(vehicleModel.length,
-                            (index) => Label(text: vehicleModel[index])),
+                    children: List.generate(state.models?.length??0,
+                            (index) => Label(text: state.models?[index]??'')),
                     onChange: (Widget selectedItem) {
                       print("Selected Item: ${(selectedItem as Label).text}");
                     },
@@ -141,7 +104,7 @@ class VehicleInformationScreen extends StatelessWidget {
                   const Sizer(),
                   RegisterExpansionTile(
                     title: Label(text: LocaleKeys.vehicleColor.localize),
-                    children: List.generate(vehicleColor.length,
+                    children: List.generate(state.colors?.length??0,
                             (index) => Row(
                               children: [
                                 Container(
@@ -149,11 +112,11 @@ class VehicleInformationScreen extends StatelessWidget {
                                   height: 16,
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
-                                    color: HexColor(vehicleColor[index]['color']),
+                                    color: HexColor(state.colors?[index].code??''),
                                   ),
                                 ),
                                 const Sizer(),
-                                Label(text: vehicleColor[index]['text']),
+                                Label(text: context.isArabic?(state.colors?[index].nameAr??''):state.colors?[index].nameEn??''),
                               ],
                             )),
                     onChange: (Widget selectedItem) {

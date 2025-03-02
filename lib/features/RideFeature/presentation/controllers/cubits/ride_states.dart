@@ -1,4 +1,7 @@
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_color_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/sub_category_entity.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../../../domain/entities/ride_category_entity.dart';
@@ -33,6 +36,11 @@ class RideState {
   final XFile? vehiclePicture;
   final RideCategoryEntityUpdated? rideCategory;
   final RideCategoryEntityUpdated? shippingCategory;
+  final List<SubCategoryEntityUpdated>? rideSubCategories;
+  final List<GovernorateEntity>? govs;
+  final List<RideColorEntity>? colors;
+  final List<String>? brands;
+  final List<String>? models;
 
   const RideState({
     this.status = RideStates.initState,
@@ -49,7 +57,12 @@ class RideState {
     this.vehicleBackPicture,
     this.vehiclePicture,
     this.rideCategory,
+    this.rideSubCategories,
     this.shippingCategory,
+    this.govs,
+    this.brands,
+    this.models,
+    this.colors,
   });
 
   RideState copyWith({
@@ -67,6 +80,11 @@ class RideState {
     XFile? vehicleBackPicture,
     XFile? vehiclePicture,
     RideCategoryEntityUpdated? rideCategory,
+    List<SubCategoryEntityUpdated>? rideSubCategories,
+    List<GovernorateEntity>? govs,
+    List<String>? brands,
+    List<String>? models,
+    List<RideColorEntity>? colors,
     RideCategoryEntityUpdated? shippingCategory,
   }) {
     return RideState(
@@ -85,6 +103,11 @@ class RideState {
       vehiclePicture: vehiclePicture ?? this.vehiclePicture,
       rideCategory: rideCategory ?? this.rideCategory,
       shippingCategory: shippingCategory ?? this.shippingCategory,
+      rideSubCategories: rideSubCategories ?? this.rideSubCategories,
+      govs: govs ?? this.govs,
+      brands: brands ?? this.brands,
+      models: models ?? this.models,
+      colors: colors ?? this.colors,
     );
   }
 }
