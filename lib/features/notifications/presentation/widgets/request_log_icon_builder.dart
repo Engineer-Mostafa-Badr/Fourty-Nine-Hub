@@ -21,8 +21,9 @@ class RequestLogIconBuilder extends StatelessWidget {
           Assets.requestLog,
           height: 30,
         ),
+        //TODO Add request log count to backend
         unreadCount: getUnreadNotificationsCountCubit
-                .unreadNotificationsCountEntity?.appCount ??
+                .unreadNotificationsCountEntity?.requestLogCount ??
             0,
       );
     });

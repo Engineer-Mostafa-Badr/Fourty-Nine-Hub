@@ -36,8 +36,8 @@ class NotificationsServiceLocator {
         notificationRepo: serviceLocator(),
       ),
     );
-    serviceLocator.registerLazySingleton<GetNotficationsUseCase>(
-      () => GetNotficationsUseCase(
+    serviceLocator.registerLazySingleton<GetNotificationsUseCase>(
+      () => GetNotificationsUseCase(
         notificationRepo: serviceLocator(),
       ),
     );

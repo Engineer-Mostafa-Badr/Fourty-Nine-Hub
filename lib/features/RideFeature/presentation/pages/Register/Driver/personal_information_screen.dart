@@ -27,67 +27,73 @@ class PersonalInformationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomScaffold(
       appBar: const HomeAppbar(),
-      floatingActionButton: registerFloatingActionButton(
-        context,
-        index: 1,
-        onTap: () => context.push(Routes.driversLicenseScreen),
-      ),
-      body: SingleChildScrollView(
-        child: BlocBuilder<RideCubit, RideState>(
-          builder: (context,state) {
-            var cubit = context.read<RideCubit>();
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 32,left: 16,right: 16,),
-              child: Column(
-                spacing: 4,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  closeWidget(context),
-                  Label(
-                    text: LocaleKeys.personalInformation.localize,
-                    style: Styles.headerText(
-                        fontWeight: FontWeight.w500,
+
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: BlocBuilder<RideCubit, RideState>(
+                builder: (context,state) {
+                  var cubit = context.read<RideCubit>();
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 32,left: 16,right: 16,),
+                    child: Column(
+                      spacing: 4,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        closeWidget(context),
+                        Label(
+                          text: LocaleKeys.personalInformation.localize,
+                          style: Styles.headerText(
+                              fontWeight: FontWeight.w500,
+                              ),
                         ),
-                  ),
-                  const Sizer(),
-                  UploadFileWidget(title: LocaleKeys.personalPicture.localize,
-                  onTap: (){
-                    cubit.onUploadPersonalPicture(context);
-                  }, imageUrl: state.personalPicture,
-                  ),
-                  const Sizer(),
-                  DefaultTextFormField(
-                    currentController: cubit.rideNameController,
-                    fillColor: AppColors.GREYBG,
-                    borderColor: Colors.transparent,
-                    hint: LocaleKeys.firstName.localize,
-                  ),
-                  const Sizer(),
-                  DefaultTextFormField(
-                    currentController: cubit.rideSurNameController,
-                    fillColor: AppColors.GREYBG,
-                    borderColor: Colors.transparent,
-                    hint: LocaleKeys.surname.localize,
-                  ),
-                  const Sizer(),
-                  DefaultTextFormField(
-                    currentController: cubit.rideDateOfBirthController,
-                    fillColor: AppColors.GREYBG,
-                    borderColor: Colors.transparent,
-                    hint: LocaleKeys.user_info_date_of_birth.localize,
-                  ),
-                  const Sizer(),
-                  DefaultTextFormField(
-                    currentController: cubit.ridePhoneNumberController,
-                    fillColor: AppColors.GREYBG,
-                    borderColor: Colors.transparent,
-                    hint: LocaleKeys.phoneNumber.localize,
-                  ),
-                ],
+                        const Sizer(),
+                        UploadFileWidget(title: LocaleKeys.personalPicture.localize,
+                        onTap: (){
+                          cubit.onUploadPersonalPicture(context);
+                        }, imageUrl: state.personalPicture,
+                        ),
+                        const Sizer(),
+                        DefaultTextFormField(
+                          currentController: cubit.rideNameController,
+                          fillColor: AppColors.GREYBG,
+                          borderColor: Colors.transparent,
+                          hint: LocaleKeys.firstName.localize,
+                        ),
+                        const Sizer(),
+                        DefaultTextFormField(
+                          currentController: cubit.rideSurNameController,
+                          fillColor: AppColors.GREYBG,
+                          borderColor: Colors.transparent,
+                          hint: LocaleKeys.surname.localize,
+                        ),
+                        const Sizer(),
+                        DefaultTextFormField(
+                          currentController: cubit.rideDateOfBirthController,
+                          fillColor: AppColors.GREYBG,
+                          borderColor: Colors.transparent,
+                          hint: LocaleKeys.user_info_date_of_birth.localize,
+                        ),
+                        const Sizer(),
+                        DefaultTextFormField(
+                          currentController: cubit.ridePhoneNumberController,
+                          fillColor: AppColors.GREYBG,
+                          borderColor: Colors.transparent,
+                          hint: LocaleKeys.phoneNumber.localize,
+                        ),
+                      ],
+                    ),
+                  );
+                }
               ),
-            );
-          }
-        ),
+            ),
+          ),
+          RegisterNextRow(
+            index: 1,
+            onTap: () => context.push(Routes.driversLicenseScreen),
+          ),
+        ],
       ),
     );
   }

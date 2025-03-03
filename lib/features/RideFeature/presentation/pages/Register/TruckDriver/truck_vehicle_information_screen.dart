@@ -35,74 +35,79 @@ class TruckVehicleInformationScreen extends StatelessWidget {
         TextEditingController();
     return CustomScaffold(
       appBar: const HomeAppbar(),
-      floatingActionButton: registerFloatingActionButton(
-        context,
-        index: 4,
-        onTap: () => context.push(Routes.truckMoreInfoScreen),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 32,left: 16,right: 16,),
-          child: Column(
-            spacing: 4,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              closeWidget(context),
-              Label(
-                text: LocaleKeys.vehicleInformation.localize,
-                style: Styles.headerText(
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              const Sizer(),
-              SizedBox(
-                height: MediaQuery.sizeOf(context).width*.35,
-                child: GridView.count(
-                  physics: const NeverScrollableScrollPhysics(),
-                  padding: EdgeInsets.zero,
-                  crossAxisCount: 3,
-                  childAspectRatio: .75,
-                  mainAxisSpacing: 16,
-                  crossAxisSpacing: 16,
-                  children: List.generate(
-                    uploadFilesTitles.length,
-                    (index) => UploadFileWidget(
-                      title: uploadFilesTitles[index],
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 32,left: 16,right: 16,),
+                child: Column(
+                  spacing: 4,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    closeWidget(context),
+                    Label(
+                      text: LocaleKeys.vehicleInformation.localize,
+                      style: Styles.headerText(
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                  ),
+                    const Sizer(),
+                    SizedBox(
+                      height: MediaQuery.sizeOf(context).width*.35,
+                      child: GridView.count(
+                        physics: const NeverScrollableScrollPhysics(),
+                        padding: EdgeInsets.zero,
+                        crossAxisCount: 3,
+                        childAspectRatio: .75,
+                        mainAxisSpacing: 16,
+                        crossAxisSpacing: 16,
+                        children: List.generate(
+                          uploadFilesTitles.length,
+                          (index) => UploadFileWidget(
+                            title: uploadFilesTitles[index],
+                          ),
+                        ),
+                      ),
+                    ),
+                    const Sizer(),
+                    DefaultTextFormField(
+                      currentController: vehicleBrandController,
+                      fillColor: AppColors.GREYBG,
+                      borderColor: Colors.transparent,
+                      hint: LocaleKeys.vehicleBrand.localize,
+                    ),
+                    const Sizer(),
+                    DefaultTextFormField(
+                      currentController: vehicleModelController,
+                      fillColor: AppColors.GREYBG,
+                      borderColor: Colors.transparent,
+                      hint: LocaleKeys.vehicleModel.localize,
+                    ),
+                    const Sizer(),
+                    DefaultTextFormField(
+                      currentController: licensePlateNumberController,
+                      fillColor: AppColors.GREYBG,
+                      borderColor: Colors.transparent,
+                      hint: LocaleKeys.licensePlateNumber.localize,
+                    ),
+                    const Sizer(),
+                    DefaultTextFormField(
+                      currentController: expirationDateController,
+                      fillColor: AppColors.GREYBG,
+                      borderColor: Colors.transparent,
+                      hint: LocaleKeys.expireDate.localize,
+                    ),
+                  ],
                 ),
               ),
-              const Sizer(),
-              DefaultTextFormField(
-                currentController: vehicleBrandController,
-                fillColor: AppColors.GREYBG,
-                borderColor: Colors.transparent,
-                hint: LocaleKeys.vehicleBrand.localize,
-              ),
-              const Sizer(),
-              DefaultTextFormField(
-                currentController: vehicleModelController,
-                fillColor: AppColors.GREYBG,
-                borderColor: Colors.transparent,
-                hint: LocaleKeys.vehicleModel.localize,
-              ),
-              const Sizer(),
-              DefaultTextFormField(
-                currentController: licensePlateNumberController,
-                fillColor: AppColors.GREYBG,
-                borderColor: Colors.transparent,
-                hint: LocaleKeys.licensePlateNumber.localize,
-              ),
-              const Sizer(),
-              DefaultTextFormField(
-                currentController: expirationDateController,
-                fillColor: AppColors.GREYBG,
-                borderColor: Colors.transparent,
-                hint: LocaleKeys.expireDate.localize,
-              ),
-            ],
+            ),
           ),
-        ),
+          RegisterNextRow(
+            index: 4,
+            onTap: () => context.push(Routes.truckMoreInfoScreen),
+          ),
+        ],
       ),
     );
   }

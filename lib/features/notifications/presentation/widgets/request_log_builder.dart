@@ -11,8 +11,13 @@ class RequestLogBuilder extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       itemCount: 10,
       itemBuilder: (context, index) {
-        return const RideWidget();
-      }, separatorBuilder: (BuildContext context, int index) =>const Sizer(),
+        return const RideWidget(
+          isTruck: true,
+          isDriver: true,
+          isSubscribed: true,
+        );
+      },
+      separatorBuilder: (BuildContext context, int index) => const Sizer(),
     );
   }
 }

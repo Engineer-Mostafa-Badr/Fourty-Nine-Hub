@@ -94,6 +94,8 @@ abstract class Assets {
   static String rideFrom = 'assets/icons/rideFrom.png';
   static String rideTo = 'assets/icons/rideTo.png';
   static String requestLog = 'assets/icons/requestLog.png';
+  static String reportRounded = 'assets/icons/reportRounded.png';
+  static String close = 'assets/icons/close.png';
   static String tinder = 'assets/images/tinder.svg';
   static String openBook = 'assets/images/openBook.png';
   static String social = 'assets/images/social.svg';

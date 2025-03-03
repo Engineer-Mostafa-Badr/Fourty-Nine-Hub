@@ -31,104 +31,109 @@ class DriversLicenseScreen extends StatelessWidget {
     ];
     return CustomScaffold(
       appBar: const HomeAppbar(),
-      floatingActionButton: registerFloatingActionButton(
-        context,
-        index: 2,
-        onTap: () => context.push(Routes.personalDocumentsScreen),
-      ),
-      body: SingleChildScrollView(
-        child: BlocBuilder<RideCubit, RideState>(
-          builder: (context,state) {
-            var cubit = context.read<RideCubit>();
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 32,left: 16,right: 16,),
-              child: Column(
-                spacing: 4,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  closeWidget(context),
-                  Label(
-                    text: LocaleKeys.driversLicense.localize,
-                    style: Styles.headerText(
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const Sizer(),
-
-                  // Wrap(
-                  //   direction: Axis.horizontal,
-                  //   children: [
-                  //     UploadFileWidget(
-                  //       title: uploadFilesTitles[0],
-                  //       onTap: (){
-                  //           cubit.onUploadDriverLicensePicture(context);
-                  //
-                  //       },
-                  //       imageUrl: state.driverLicensePicture,
-                  //     ),
-                  //     UploadFileWidget(
-                  //       title: uploadFilesTitles[1],
-                  //       onTap: (){
-                  //           cubit.onUploadBackOfDriverLicensePicture(context);
-                  //       },
-                  //       imageUrl: state.backOfDriverLicensePicture,
-                  //     ),
-                  //     UploadFileWidget(
-                  //       title: uploadFilesTitles[2],
-                  //       onTap: (){
-                  //           cubit.onUploadSelfieDriverLicensePicture(context);
-                  //       },
-                  //       imageUrl: state.selfieDriverLicensePicture,
-                  //     )
-                  //   ],
-                  // ),
-
-                  SizedBox(
-                    height: MediaQuery.sizeOf(context).width*.35,
-                    child: GridView.count(
-                      physics: const NeverScrollableScrollPhysics(),
-                      padding: EdgeInsets.zero,
-                      crossAxisCount: 3,
-                      childAspectRatio: .75,
-                      mainAxisSpacing: 32.w,
-                      crossAxisSpacing: 32.h,
-                      children: List.generate(
-                        uploadFilesTitles.length,
-                        (index) => UploadFileWidget(
-                          title: uploadFilesTitles[index],
-                          onTap: (){
-                            if(index==0){
-                              cubit.onUploadDriverLicensePicture(context);
-                            }else if(index==1){
-                              cubit.onUploadBackOfDriverLicensePicture(context);
-                            }else{
-                              cubit.onUploadSelfieDriverLicensePicture(context);
-                            }
-                          },
-                          imageUrl: index==0?state.driverLicensePicture:index==1?state.backOfDriverLicensePicture:state.selfieDriverLicensePicture,
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: BlocBuilder<RideCubit, RideState>(
+                builder: (context,state) {
+                  var cubit = context.read<RideCubit>();
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 32,left: 16,right: 16,),
+                    child: Column(
+                      spacing: 4,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        closeWidget(context),
+                        Label(
+                          text: LocaleKeys.driversLicense.localize,
+                          style: Styles.headerText(
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
-                      ),
+                        const Sizer(),
+
+                        // Wrap(
+                        //   direction: Axis.horizontal,
+                        //   children: [
+                        //     UploadFileWidget(
+                        //       title: uploadFilesTitles[0],
+                        //       onTap: (){
+                        //           cubit.onUploadDriverLicensePicture(context);
+                        //
+                        //       },
+                        //       imageUrl: state.driverLicensePicture,
+                        //     ),
+                        //     UploadFileWidget(
+                        //       title: uploadFilesTitles[1],
+                        //       onTap: (){
+                        //           cubit.onUploadBackOfDriverLicensePicture(context);
+                        //       },
+                        //       imageUrl: state.backOfDriverLicensePicture,
+                        //     ),
+                        //     UploadFileWidget(
+                        //       title: uploadFilesTitles[2],
+                        //       onTap: (){
+                        //           cubit.onUploadSelfieDriverLicensePicture(context);
+                        //       },
+                        //       imageUrl: state.selfieDriverLicensePicture,
+                        //     )
+                        //   ],
+                        // ),
+
+                        SizedBox(
+                          height: MediaQuery.sizeOf(context).width*.35,
+                          child: GridView.count(
+                            physics: const NeverScrollableScrollPhysics(),
+                            padding: EdgeInsets.zero,
+                            crossAxisCount: 3,
+                            childAspectRatio: .75,
+                            mainAxisSpacing: 32.w,
+                            crossAxisSpacing: 32.h,
+                            children: List.generate(
+                              uploadFilesTitles.length,
+                              (index) => UploadFileWidget(
+                                title: uploadFilesTitles[index],
+                                onTap: (){
+                                  if(index==0){
+                                    cubit.onUploadDriverLicensePicture(context);
+                                  }else if(index==1){
+                                    cubit.onUploadBackOfDriverLicensePicture(context);
+                                  }else{
+                                    cubit.onUploadSelfieDriverLicensePicture(context);
+                                  }
+                                },
+                                imageUrl: index==0?state.driverLicensePicture:index==1?state.backOfDriverLicensePicture:state.selfieDriverLicensePicture,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const Sizer(),
+                        DefaultTextFormField(
+                          currentController: cubit.rideDriverLicenseNumController,
+                          fillColor: AppColors.GREYBG,
+                          borderColor: Colors.transparent,
+                          hint: LocaleKeys.licenseNumber.localize,
+                        ),
+                        const Sizer(),
+                        DefaultTextFormField(
+                          currentController: cubit.rideDriverExpireDateController,
+                          fillColor: AppColors.GREYBG,
+                          borderColor: Colors.transparent,
+                          hint: LocaleKeys.expireDate.localize,
+                        ),
+                      ],
                     ),
-                  ),
-                  const Sizer(),
-                  DefaultTextFormField(
-                    currentController: cubit.rideDriverLicenseNumController,
-                    fillColor: AppColors.GREYBG,
-                    borderColor: Colors.transparent,
-                    hint: LocaleKeys.licenseNumber.localize,
-                  ),
-                  const Sizer(),
-                  DefaultTextFormField(
-                    currentController: cubit.rideDriverExpireDateController,
-                    fillColor: AppColors.GREYBG,
-                    borderColor: Colors.transparent,
-                    hint: LocaleKeys.expireDate.localize,
-                  ),
-                ],
+                  );
+                }
               ),
-            );
-          }
-        ),
+            ),
+          ),
+          RegisterNextRow(
+            index: 2,
+            onTap: () => context.push(Routes.personalDocumentsScreen),
+          ),
+          ],
       ),
     );
   }

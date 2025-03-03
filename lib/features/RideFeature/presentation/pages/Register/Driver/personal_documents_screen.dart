@@ -31,125 +31,131 @@ class PersonalDocumentsScreen extends StatelessWidget {
     ];
     return CustomScaffold(
       appBar: const HomeAppbar(),
-      floatingActionButton: registerFloatingActionButton(
-        context,
-        index: 3,
-        onTap: () => context.push(Routes.vehicleInformationScreen),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 32,left: 16,right: 16,),
-          child: BlocBuilder<RideCubit, RideState>(
-            builder: (context,state) {
-              var cubit = context.read<RideCubit>();
-              return Column(
-                spacing: 4,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  closeWidget(context),
-                  Label(
-                    text: LocaleKeys.personalDocuments.localize,
-                    style: Styles.headerText(
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const Sizer(),
-                  // Wrap(
-                  //   direction: Axis.horizontal,
-                  //   children: [
-                  //     UploadFileWidget(
-                  //       title: uploadFilesTitles[0],
-                  //       onTap: (){
-                  //         cubit.onUploadPersonalFrontIdPicture(context);
-                  //       },
-                  //       imageUrl: state.driverLicensePicture,
-                  //     ),
-                  //     UploadFileWidget(
-                  //       title: uploadFilesTitles[1],
-                  //       onTap: (){
-                  //         cubit.onUploadPersonalBackIdPicture(context);
-                  //       },
-                  //       imageUrl: state.backOfDriverLicensePicture,
-                  //     ),
-                  //     UploadFileWidget(
-                  //       title: uploadFilesTitles[2],
-                  //       onTap: (){
-                  //         cubit.onUploadPersonalCriminalRecordPicture(context);
-                  //       },
-                  //       imageUrl: state.selfieDriverLicensePicture,
-                  //     ),
-                  //     UploadFileWidget(
-                  //       title: uploadFilesTitles[3],
-                  //       onTap: (){
-                  //         cubit.onUploadPersonalDrugAnalysisPicture(context);
-                  //       },
-                  //       imageUrl: state.selfieDriverLicensePicture,
-                  //     )
-                  //   ],
-                  // ),
-                  SizedBox(
-                    height: MediaQuery.sizeOf(context).width*.7,
-                    child: GridView.count(
-                      physics: const NeverScrollableScrollPhysics(),
-                      padding: EdgeInsets.zero,
-                      crossAxisCount: 3,
-                      childAspectRatio: .85,
-                      mainAxisSpacing: 16,
-                      crossAxisSpacing: 16,
-                      children: List.generate(
-                        uploadFilesTitles.length,
-                        (index) => UploadFileWidget(
-                          title: uploadFilesTitles[index],
-                          onTap: (){
-                            if(index==0){
-                              cubit.onUploadPersonalFrontIdPicture(context);
-                            }else if(index==1){
-                              cubit.onUploadPersonalBackIdPicture(context);
-                            }else if(index==2){
-                              cubit.onUploadPersonalCriminalRecordPicture(context);
-                            }else{
-                              cubit.onUploadPersonalDrugAnalysisPicture(context);
-                            }
-                          },
-                          imageUrl: index==0?state.personalFrontIdPicture:index==1?state.personalBackIdPicture:index==2?state.personalCriminalRecordPicture:state.personalDrugAnalysisPicture,
 
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 32,left: 16,right: 16,),
+                child: BlocBuilder<RideCubit, RideState>(
+                  builder: (context,state) {
+                    var cubit = context.read<RideCubit>();
+                    return Column(
+                      spacing: 4,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        closeWidget(context),
+                        Label(
+                          text: LocaleKeys.personalDocuments.localize,
+                          style: Styles.headerText(
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
-                  const Sizer(),
-                  DefaultTextFormField(
-                    currentController: cubit.ridePersonalDocLicenseNumController,
-                    fillColor: AppColors.GREYBG,
-                    borderColor: Colors.transparent,
-                    hint: LocaleKeys.licenseNumber.localize,
-                  ),
-                  const Sizer(),
-                  DefaultTextFormField(
-                    currentController: cubit.ridePersonalDocExpireDateController,
-                    fillColor: AppColors.GREYBG,
-                    borderColor: Colors.transparent,
-                    hint: LocaleKeys.expireDate.localize,
-                  ),
-                  const Sizer(),
-                  DefaultTextFormField(
-                    currentController: cubit.rideDragAnalysisExpireDateController,
-                    fillColor: AppColors.GREYBG,
-                    borderColor: Colors.transparent,
-                    hint: '${LocaleKeys.drugAnalysis.localize} ${LocaleKeys.expireDate.localize}',
-                  ),
-                  const Sizer(),
-                  DefaultTextFormField(
-                    currentController: cubit.rideCriminalRecordExpireDateController,
-                    fillColor: AppColors.GREYBG,
-                    borderColor: Colors.transparent,
-                    hint: '${LocaleKeys.criminalRecord.localize} ${LocaleKeys.expireDate.localize}',
-                  ),
-                ],
-              );
-            }
+                        const Sizer(),
+                        // Wrap(
+                        //   direction: Axis.horizontal,
+                        //   children: [
+                        //     UploadFileWidget(
+                        //       title: uploadFilesTitles[0],
+                        //       onTap: (){
+                        //         cubit.onUploadPersonalFrontIdPicture(context);
+                        //       },
+                        //       imageUrl: state.driverLicensePicture,
+                        //     ),
+                        //     UploadFileWidget(
+                        //       title: uploadFilesTitles[1],
+                        //       onTap: (){
+                        //         cubit.onUploadPersonalBackIdPicture(context);
+                        //       },
+                        //       imageUrl: state.backOfDriverLicensePicture,
+                        //     ),
+                        //     UploadFileWidget(
+                        //       title: uploadFilesTitles[2],
+                        //       onTap: (){
+                        //         cubit.onUploadPersonalCriminalRecordPicture(context);
+                        //       },
+                        //       imageUrl: state.selfieDriverLicensePicture,
+                        //     ),
+                        //     UploadFileWidget(
+                        //       title: uploadFilesTitles[3],
+                        //       onTap: (){
+                        //         cubit.onUploadPersonalDrugAnalysisPicture(context);
+                        //       },
+                        //       imageUrl: state.selfieDriverLicensePicture,
+                        //     )
+                        //   ],
+                        // ),
+                        SizedBox(
+                          height: MediaQuery.sizeOf(context).width*.7,
+                          child: GridView.count(
+                            physics: const NeverScrollableScrollPhysics(),
+                            padding: EdgeInsets.zero,
+                            crossAxisCount: 3,
+                            childAspectRatio: .85,
+                            mainAxisSpacing: 16,
+                            crossAxisSpacing: 16,
+                            children: List.generate(
+                              uploadFilesTitles.length,
+                              (index) => UploadFileWidget(
+                                title: uploadFilesTitles[index],
+                                onTap: (){
+                                  if(index==0){
+                                    cubit.onUploadPersonalFrontIdPicture(context);
+                                  }else if(index==1){
+                                    cubit.onUploadPersonalBackIdPicture(context);
+                                  }else if(index==2){
+                                    cubit.onUploadPersonalCriminalRecordPicture(context);
+                                  }else{
+                                    cubit.onUploadPersonalDrugAnalysisPicture(context);
+                                  }
+                                },
+                                imageUrl: index==0?state.personalFrontIdPicture:index==1?state.personalBackIdPicture:index==2?state.personalCriminalRecordPicture:state.personalDrugAnalysisPicture,
+
+                              ),
+                            ),
+                          ),
+                        ),
+                        const Sizer(),
+                        DefaultTextFormField(
+                          currentController: cubit.ridePersonalDocLicenseNumController,
+                          fillColor: AppColors.GREYBG,
+                          borderColor: Colors.transparent,
+                          hint: LocaleKeys.licenseNumber.localize,
+                        ),
+                        const Sizer(),
+                        DefaultTextFormField(
+                          currentController: cubit.ridePersonalDocExpireDateController,
+                          fillColor: AppColors.GREYBG,
+                          borderColor: Colors.transparent,
+                          hint: LocaleKeys.expireDate.localize,
+                        ),
+                        const Sizer(),
+                        DefaultTextFormField(
+                          currentController: cubit.rideDragAnalysisExpireDateController,
+                          fillColor: AppColors.GREYBG,
+                          borderColor: Colors.transparent,
+                          hint: '${LocaleKeys.drugAnalysis.localize} ${LocaleKeys.expireDate.localize}',
+                        ),
+                        const Sizer(),
+                        DefaultTextFormField(
+                          currentController: cubit.rideCriminalRecordExpireDateController,
+                          fillColor: AppColors.GREYBG,
+                          borderColor: Colors.transparent,
+                          hint: '${LocaleKeys.criminalRecord.localize} ${LocaleKeys.expireDate.localize}',
+                        ),
+                      ],
+                    );
+                  }
+                ),
+              ),
+            ),
           ),
-        ),
+          RegisterNextRow(
+            index: 3,
+            onTap: () => context.push(Routes.vehicleInformationScreen),
+          ),
+        ],
       ),
     );
   }
