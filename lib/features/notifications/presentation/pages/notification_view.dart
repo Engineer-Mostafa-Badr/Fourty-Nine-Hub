@@ -22,6 +22,7 @@ import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../res/style/styles.dart';
 import '../widgets/request_log_builder.dart';
+import '../widgets/request_log_icon_builder.dart';
 
 class NotificationView extends StatefulWidget {
   const NotificationView({super.key});
@@ -123,7 +124,7 @@ class _NotificationViewState extends State<NotificationView> {
                         AppIconBuilder(),
                         SocialIconBuilder(),
                         ServicesIconBuilder(),
-                        AppIconBuilder(),
+                        RequestLogIconBuilder(),
                       ],
                     ),
                     Expanded(

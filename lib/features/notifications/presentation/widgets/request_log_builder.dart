@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/ride_widget.dart';
 
 class RequestLogBuilder extends StatelessWidget {
@@ -6,14 +7,12 @@ class RequestLogBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    return ListView.separated(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
       itemCount: 10,
       itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: RideWidget(),
-        );
-      },
+        return const RideWidget();
+      }, separatorBuilder: (BuildContext context, int index) =>const Sizer(),
     );
   }
 }

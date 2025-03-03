@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/notifications/presentation/cubits/firebas
 import 'package:go_router/go_router.dart';
 import 'package:floating_draggable_widget/floating_draggable_widget.dart';
 
+import '../../common/widgets/dynamic/drawer.dart';
 import '../../common/widgets/stateless/labels/label.dart';
 import '../../features/settings/presentation/cubit/floating_navigator_cubit.dart';
 import '../../features/settings/presentation/cubit/settings_cubit.dart';
