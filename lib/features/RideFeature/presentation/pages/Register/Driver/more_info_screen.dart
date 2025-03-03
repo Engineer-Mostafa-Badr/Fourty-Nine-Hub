@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
@@ -25,22 +26,6 @@ class MoreInfoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<String> subscriptionPlans = [
-      'Percentage',
-      'Subscribe Package',
-    ];
-    List<String> favoriteCity = [
-      'Cairo',
-      'Giza',
-      'Alexandria',
-      'Dakahlia',
-      'Red Sea',
-      'Beheira',
-      'Fayoum',
-      'Gharbia',
-      'Ismailia',
-      'Menoufia',
-    ];
 
     return CustomScaffold(
       appBar: const HomeAppbar(),
@@ -73,8 +58,8 @@ class MoreInfoScreen extends StatelessWidget {
                   const Sizer(),
                   RegisterExpansionTile(
                     title: Label(text: LocaleKeys.subscriptionPlan.localize),
-                    children: List.generate(subscriptionPlans.length,
-                        (index) => Label(text: subscriptionPlans[index])),
+                    children: List.generate(cubit.subscriptionPlans.length,
+                        (index) => Label(text: cubit.subscriptionPlans[index])),
                     onChange: (Widget selectedItem) {
                       // print("Selected Item: ${(selectedItem as Label).text}");
                     },
@@ -84,8 +69,8 @@ class MoreInfoScreen extends StatelessWidget {
                     title: Label(
                       text: LocaleKeys.favoriteCity.localize,
                     ),
-                    children: List.generate(favoriteCity.length,
-                        (index) => Label(text: favoriteCity[index])),
+                    children: List.generate(state.govs?.length??0,
+                            (index) => Label(text: context.isArabic?(state.govs?[index].nameAr??''):state.govs?[index].nameEn??'')),
                     onChange: (Widget selectedItem) {
                       // print("Selected Item: ${(selectedItem as Label).text}");
                     },
@@ -109,7 +94,7 @@ class MoreInfoScreen extends StatelessWidget {
                   ),
                   CustomSwitchListTile(
                     title: Text(
-                      LocaleKeys.captainShare.localize,
+                      "Air Conditioner",
                       style: Styles.mediumText(
                           fontSize: 65.sp, fontWeight: FontWeight.w400),
                     ),

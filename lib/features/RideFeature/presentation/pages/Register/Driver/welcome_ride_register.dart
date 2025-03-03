@@ -30,7 +30,7 @@ class _WelcomeRideRegisterState extends State<WelcomeRideRegister> {
 
   @override
   void initState() {
-    context.read<RideCubit>().loadRegisterData();
+    context.read<RideCubit>().loadRegisterData(context);
     super.initState();
   }
 
@@ -77,7 +77,7 @@ class _WelcomeRideRegisterState extends State<WelcomeRideRegister> {
                         var subCategory = list?[index];
                         return  InkWell(
                           onTap: () {
-                            cubit.onSelectSubCategory(subCategory?.subCategoryId??'');
+                            cubit.onSelectSubCategory(subCategory?.subCategoryId??'',context);
                             // bottomSheet(
                             //   context: context,
                             //   widget: Column(

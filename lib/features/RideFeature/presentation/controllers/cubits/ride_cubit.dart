@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/global/upload_image.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_color_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_brands_usecase.dart';
@@ -11,6 +12,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_gove
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_models_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_shipping_categories_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 
 import '../../../../../core/error/failure.dart';
@@ -85,12 +87,12 @@ class RideCubit extends Cubit<RideState> {
     );
   }
 
-  loadRegisterData()async{
+  loadRegisterData(BuildContext context)async{
     emit(state.copyWith(status: RideStates.loading));
     await Future.wait([
       fetchGovs(),
       fetchBrands(),
-      fetchColors()
+      fetchColors(context)
     ]);
     emit(state.copyWith(status: RideStates.success));
   }
@@ -120,6 +122,32 @@ class RideCubit extends Cubit<RideState> {
     );
   }
 
+  List<String> subscriptionPlans = [
+    'Percentage',
+    'Subscribe Package',
+  ];
+
+  onSelectBrand(String brand){
+    if(brand == state.selectedBrand)return;
+    emit(state.copyWith(selectedBrand: brand,selectedModel: '',status: RideStates.loadingModels));
+    fetchModels(brand);
+  }
+
+  onSelectModel(String model){
+    emit(state.copyWith(selectedModel: model,status: RideStates.success));
+  }
+  onSelectColor(String color){
+    emit(state.copyWith(selectedColors: color,status: RideStates.success));
+  }
+  onSelectGov(String color){
+    emit(state.copyWith(selectedGov: color,status: RideStates.success));
+  }
+  onSelectPlan(String color){
+    emit(state.copyWith(selectedPlan: color,status: RideStates.success));
+  }
+
+
+
   Future<void> fetchModels(String brandId) async {
 
     final Either<Failure, List<String>> result =
@@ -133,16 +161,22 @@ class RideCubit extends Cubit<RideState> {
     );
   }
 
-  Future<void> fetchColors() async {
+  Future<void> fetchColors(BuildContext context) async {
 
     final Either<Failure, List<RideColorEntity>> result =
         await getRideCarColorsUseCase(const NoParams());
 
     result.fold(
-      (failure) =>
-          emit(state.copyWith(status: RideStates.error, failure: failure)),
-      (data) => emit(state.copyWith(
-          status: RideStates.success, colors: data)),
+      (failure) {
+        print("failure${getFailureMessage(failure, context)}");
+        emit(state.copyWith(status: RideStates.error, failure: failure));
+      },
+      (data) {
+        print("data.length${data.length}");
+        print("data.length${data[0].nameAr}");
+        emit(state.copyWith(
+          status: RideStates.success, colors: data));
+      },
     );
   }
 
@@ -239,7 +273,8 @@ class RideCubit extends Cubit<RideState> {
   String intercity = '62c8baa08e28a58a3edf57ed';
   String premium = '62c8baa38e28a58a3edf57f3';
 
-  onSelectSubCategory(String id){
+  onSelectSubCategory(String id,BuildContext context){
+    bool isMale = UserCubit.to.state.data?.gender == 'male';
     List<SubCategoryEntityUpdated> subCategories = [];
     subCategories.addAll(state.rideSubCategories ?? []);
     SubCategoryEntityUpdated selectedItem = subCategories.firstWhere((element) => element.subCategoryId == id);
@@ -248,6 +283,10 @@ class RideCubit extends Cubit<RideState> {
     SubCategoryEntityUpdated premiumCategory = subCategories.firstWhere((element) => element.subCategoryId == premium);
     SubCategoryEntityUpdated intercityCategory = subCategories.firstWhere((element) => element.subCategoryId == intercity);
     if(id == captain){
+      if(!isMale){
+        showErrorMessage(context, "You are female, try register as a lady or change your gender from setting.");
+        return;
+      }
       if(selectedItem.isSelected==true){
         print('captain');
         if(premiumCategory.isSelected==true||intercityCategory.isSelected==true){
@@ -274,6 +313,10 @@ class RideCubit extends Cubit<RideState> {
         }
       }
     }else if(id == lady){
+      if(isMale){
+        showErrorMessage(context, "You are male, try register as a captain or change your gender from setting.");
+        return;
+      }
       if(selectedItem.isSelected==true){
         if(premiumCategory.isSelected==true||intercityCategory.isSelected==true){
           captainCategory.isEnabled=true;

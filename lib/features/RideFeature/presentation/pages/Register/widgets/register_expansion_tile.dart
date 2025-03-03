@@ -30,6 +30,7 @@ class _RegisterExpansionTileState extends State<RegisterExpansionTile> {
         backgroundColor: AppColors.GREYBG,
         expandedAlignment: Alignment.centerLeft,
         expandedCrossAxisAlignment: CrossAxisAlignment.start,
+        minTileHeight: 20,
         children: [
           Container(
             color: Theme.of(context).scaffoldBackgroundColor,
@@ -38,8 +39,9 @@ class _RegisterExpansionTileState extends State<RegisterExpansionTile> {
           ),
           Container(
             constraints: const BoxConstraints(
-              maxHeight: 300,
-              minHeight: 40
+              maxHeight: 250,
+              minHeight: 40,
+
             ),
             child: ListView(
               padding: const EdgeInsets.all(16.0),
@@ -47,13 +49,15 @@ class _RegisterExpansionTileState extends State<RegisterExpansionTile> {
                 widget.children.length,
                     (index) => InkWell(
                   onTap: () {
-                    setState(() {
-                      widget.title = widget.children[index];
-                      controller.collapse();
-                    });
+                    if(widget.children.isNotEmpty){
+                      setState(() {
+                        widget.title = widget.children[index];
+                        controller.collapse();
+                      });
 
-                    if (widget.onChange != null) {
-                      widget.onChange!(widget.children[index]); // Notify parent
+                      if (widget.onChange != null) {
+                        widget.onChange!(widget.children[index]); // Notify parent
+                      }
                     }
                   },
                   child: Container(

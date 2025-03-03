@@ -9,6 +9,7 @@ import '../../../domain/entities/ride_category_entity.dart';
 enum RideStates {
   initState,
   loading,
+  loadingModels,
   error,
   success,
 }
@@ -16,6 +17,7 @@ enum RideStates {
 extension RideStatex on RideState {
   bool get isInitial => status == RideStates.initState;
   bool get isLoading => status == RideStates.loading;
+  bool get isLoadingModels => status == RideStates.loadingModels;
   bool get isError => status == RideStates.error;
   bool get isSuccess => status == RideStates.success;
 }
@@ -41,6 +43,11 @@ class RideState {
   final List<RideColorEntity>? colors;
   final List<String>? brands;
   final List<String>? models;
+  final String? selectedModel;
+  final String? selectedBrand;
+  final String? selectedColors;
+  final String? selectedGov;
+  final String? selectedPlan;
 
   const RideState({
     this.status = RideStates.initState,
@@ -63,6 +70,11 @@ class RideState {
     this.brands,
     this.models,
     this.colors,
+    this.selectedModel,
+    this.selectedBrand,
+    this.selectedColors,
+    this.selectedGov,
+    this.selectedPlan,
   });
 
   RideState copyWith({
@@ -86,6 +98,11 @@ class RideState {
     List<String>? models,
     List<RideColorEntity>? colors,
     RideCategoryEntityUpdated? shippingCategory,
+    String? selectedModel,
+    String? selectedBrand,
+    String? selectedColors,
+    String? selectedGov,
+    String? selectedPlan,
   }) {
     return RideState(
       status: status ?? this.status,
@@ -108,6 +125,11 @@ class RideState {
       brands: brands ?? this.brands,
       models: models ?? this.models,
       colors: colors ?? this.colors,
+      selectedModel: selectedModel ?? this.selectedModel,
+      selectedBrand: selectedBrand ?? this.selectedBrand,
+      selectedColors: selectedColors ?? this.selectedColors,
+      selectedGov: selectedGov ?? this.selectedGov,
+      selectedPlan: selectedPlan ?? this.selectedPlan,
     );
   }
 }

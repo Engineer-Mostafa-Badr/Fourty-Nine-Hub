@@ -89,11 +89,12 @@ class VehicleInformationScreen extends StatelessWidget {
                     children: List.generate(state.brands?.length??0,
                         (index) => Label(text: state.brands?[index]??'')),
                     onChange: (Widget selectedItem) {
+                      cubit.onSelectBrand((selectedItem as Label).text);
                       // print("Selected Item: ${(selectedItem as Label).text}");
                     },
                   ),
                   const Sizer(),
-                  RegisterExpansionTile(
+                  state.isLoadingModels?const Center(child: CircularProgressIndicator()):RegisterExpansionTile(
                     title: Label(text: LocaleKeys.vehicleModel.localize),
                     children: List.generate(state.models?.length??0,
                             (index) => Label(text: state.models?[index]??'')),
