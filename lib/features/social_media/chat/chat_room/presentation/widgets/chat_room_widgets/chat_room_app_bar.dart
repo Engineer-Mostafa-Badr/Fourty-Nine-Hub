@@ -8,21 +8,31 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/enums/call_enums_manager.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/core/states/basic_state.dart';
+import 'package:fourtyninehub/features/authentication/data/models/user_model.dart';
+import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/call/presentation/controller/call_controller/call_cubit.dart';
+import 'package:fourtyninehub/features/call/presentation/controller/send_call_controller.dart/send_call_cubit.dart';
+import 'package:fourtyninehub/features/call/presentation/pages/send_whatsapp_call.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/forward_messages_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/label_colors_map.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
+import 'package:fourtyninehub/helpers/call_helpers/notifications_helper/fcm_notification_helper.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../../../../core/utils/custom_show_dialog.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../../../../../tinder/data/shared/shared.dart';
 
 class ChatRoomAppBar extends StatefulWidget implements PreferredSizeWidget {
@@ -39,494 +49,586 @@ class ChatRoomAppBar extends StatefulWidget implements PreferredSizeWidget {
 class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
   @override
   Widget build(BuildContext context) {
+    final chat = context.read<ChatsCubit>().selectedChat;
     return BlocBuilder<ChatRoomCubit, ChatRoomState>(
       builder: (context, state) {
         return Column(
           children: [
-            BlocConsumer<ChatsCubit, ChatsState>(
-              listener: (context, state) {
-                // ignore: unrelated_type_equality_checks
-                if (state.status == ChatsStates.typing &&
-                    context.read<ChatsCubit>().selectedChat.id ==
-                        state.listenToTypingParams!.chatId) {
-                  setState(() {
-                    context.read<ChatsCubit>().selectedChat.typing =
-                        state.listenToTypingParams!.isTyping;
-                    log("typing chat card = ${context.read<ChatsCubit>().selectedChat.typing}");
-                  });
-                }
-                // ignore: unrelated_type_equality_checks
-                if (state.status == ChatsStates.recording &&
-                    context.read<ChatsCubit>().selectedChat.id ==
-                        state.listenToRecordingParams!.chatId) {
-                  setState(() {
-                    context.read<ChatsCubit>().selectedChat.recording =
-                        state.listenToRecordingParams!.isRecording;
-                    log("recording chat card = ${context.read<ChatsCubit>().selectedChat.recording}");
-                  });
-                }
-              },
-              builder: (context, state) {
-                return AppBar(
-                  backgroundColor: AppColors.PRIMARY_COLOR, // Background color
-                  elevation: 0,
-                  leadingWidth: 26,
-                  leading: IconButton(
-                    onPressed: () {
-                      if (context.read<ChatRoomCubit>().chat.isSearching) {
-                        context.read<ChatRoomCubit>().stopSearching();
-                      } else {
-                        context.pop();
-                      }
-                    },
-                    icon: const Icon(
-                      Icons.arrow_back,
-                      color: Colors.white,
+            BlocConsumer<ChatsCubit, ChatsState>(listener: (context, state) {
+              // ignore: unrelated_type_equality_checks
+              if (state.status == ChatsStates.typing &&
+                  context.read<ChatsCubit>().selectedChat.id ==
+                      state.listenToTypingParams!.chatId) {
+                setState(() {
+                  context.read<ChatsCubit>().selectedChat.typing =
+                      state.listenToTypingParams!.isTyping;
+                  log("typing chat card = ${context.read<ChatsCubit>().selectedChat.typing}");
+                });
+              }
+              // ignore: unrelated_type_equality_checks
+              if (state.status == ChatsStates.recording &&
+                  context.read<ChatsCubit>().selectedChat.id ==
+                      state.listenToRecordingParams!.chatId) {
+                setState(() {
+                  context.read<ChatsCubit>().selectedChat.recording =
+                      state.listenToRecordingParams!.isRecording;
+                  log("recording chat card = ${context.read<ChatsCubit>().selectedChat.recording}");
+                });
+              }
+            }, builder: (context, state) {
+              return BlocBuilder<UserCubit, BasicState<UserEntity>>(
+                builder: (context, userStateEntity) {
+                  return AppBar(
+                    backgroundColor:
+                    AppColors.PRIMARY_COLOR, // Background color
+                    elevation: 0,
+                    leadingWidth: 26,
+                    leading: IconButton(
+                      onPressed: () {
+                        if (context.read<ChatRoomCubit>().chat.isSearching) {
+                          context.read<ChatRoomCubit>().stopSearching();
+                        } else {
+                          context.pop();
+                        }
+                      },
+                      icon: const Icon(
+                        Icons.arrow_back,
+                        color: Colors.white,
+                      ),
                     ),
-                  ),
-                  title: widget.chatRoomCubit.chat.isSearching
-                      ? Container(
-                          height: 40,
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(8),
+                    title: widget.chatRoomCubit.chat.isSearching
+                        ? Container(
+                      height: 40,
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: TextField(
+                        onChanged: (value) {
+                          // Handle search input here
+                        },
+                        cursorColor: Colors.white,
+                        style: Styles.mediumText(
+                          color: Colors.white.withOpacity(
+                              0.5), // Same as hint text color
+                        ),
+                        decoration: InputDecoration(
+                          hintText:
+                          context.isArabic ? "بحث..." : "Search...",
+                          hintStyle: Styles.mediumText(
+                            color: Colors.white.withOpacity(0.5),
                           ),
-                          child: TextField(
-                            onChanged: (value) {
-                              // Handle search input here
-                            },
-                            cursorColor: Colors.white,
-                            style: Styles.mediumText(
-                              color: Colors.white
-                                  .withOpacity(0.5), // Same as hint text color
-                            ),
-                            decoration: InputDecoration(
-                              hintText:
-                                  context.isArabic ? "بحث..." : "Search...",
-                              hintStyle: Styles.mediumText(
-                                color: Colors.white.withOpacity(0.5),
-                              ),
-                              border: InputBorder.none,
-                              filled: false,
-                            ),
-                          ),
-                        )
-                      : widget.chatRoomCubit.selectedMessages.isEmpty
-                          ? GestureDetector(
-                              onTap: context
-                                          .read<ChatsCubit>()
-                                          .selectedChat
-                                          .isAdmin ==
-                                      "admin"
-                                  ? null
-                                  : () => context.push(Routes.VIEWCONTACT,
-                                      extra: context.read<ChatsCubit>()),
-                              child: Row(
-                                children: [
+                          border: InputBorder.none,
+                          filled: false,
+                        ),
+                      ),
+                    )
+                        : widget.chatRoomCubit.selectedMessages.isEmpty
+                        ? GestureDetector(
+                      onTap: context
+                          .read<ChatsCubit>()
+                          .selectedChat
+                          .isAdmin ==
+                          "admin"
+                          ? null
+                          : () => context.push(Routes.VIEWCONTACT,
+                          extra: context.read<ChatsCubit>()),
+                      child: Row(
+                        children: [
+                          context
+                              .read<ChatsCubit>()
+                              .selectedChat
+                              .avatar !=
+                              ""
+                              ? InkWell(
+                            onTap: context
+                                .read<ChatsCubit>()
+                                .selectedChat
+                                .hasStory
+                                ? () {
+                              // navigate to stories
+                            }
+                                : null,
+                            child: Container(
+                              height: kToolbarHeight * .8,
+                              width: kToolbarHeight * .8,
+                              decoration: context
+                                  .read<ChatsCubit>()
+                                  .selectedChat
+                                  .hasStory
+                                  ? BoxDecoration(
+                                  borderRadius:
+                                  BorderRadius.circular(
+                                      50),
+                                  border: Border.all(
+                                    color: AppColors
+                                        .PRIMARY_COLOR_DARK,
+                                    width: 3,
+                                  ))
+                                  : null,
+                              child: CircleAvatar(
+                                backgroundColor: Colors.white,
+                                backgroundImage: context
+                                    .read<ChatsCubit>()
+                                    .selectedChat
+                                    .isAdmin ==
+                                    "admin"
+                                    ? null
+                                    : NetworkImage(
                                   context
-                                              .read<ChatsCubit>()
-                                              .selectedChat
-                                              .avatar !=
-                                          ""
-                                      ? InkWell(
-                                          onTap: context
-                                                  .read<ChatsCubit>()
-                                                  .selectedChat
-                                                  .hasStory
-                                              ? () {
-                                                  // navigate to stories
-                                                }
-                                              : null,
-                                          child: Container(
-                                            height: kToolbarHeight * .8,
-                                            width: kToolbarHeight * .8,
-                                            decoration: context
-                                                    .read<ChatsCubit>()
-                                                    .selectedChat
-                                                    .hasStory
-                                                ? BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            50),
-                                                    border: Border.all(
-                                                      color: AppColors
-                                                          .PRIMARY_COLOR_DARK,
-                                                      width: 3,
-                                                    ))
-                                                : null,
-                                            child: CircleAvatar(
-                                              backgroundColor: Colors.white,
-                                              backgroundImage: context
-                                                          .read<ChatsCubit>()
-                                                          .selectedChat
-                                                          .isAdmin ==
-                                                      "admin"
-                                                  ? null
-                                                  : NetworkImage(
-                                                      context
-                                                          .read<ChatsCubit>()
-                                                          .selectedChat
-                                                          .avatar,
-                                                    ),
-                                              child: context
-                                                          .read<ChatsCubit>()
-                                                          .selectedChat
-                                                          .isAdmin !=
-                                                      "admin"
-                                                  ? null
-                                                  : Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              top: 4,
-                                                              left: 8,
-                                                              right: 4,
-                                                              bottom: 4),
-                                                      child: Image.asset(
-                                                        Assets.logo,
-                                                      ),
-                                                    ),
+                                      .read<ChatsCubit>()
+                                      .selectedChat
+                                      .avatar,
+                                ),
+                                child: context
+                                    .read<ChatsCubit>()
+                                    .selectedChat
+                                    .isAdmin !=
+                                    "admin"
+                                    ? null
+                                    : Padding(
+                                  padding:
+                                  const EdgeInsets
+                                      .only(
+                                      top: 4,
+                                      left: 8,
+                                      right: 4,
+                                      bottom: 4),
+                                  child: Image.asset(
+                                    Assets.logo,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                              : InkWell(
+                            onTap: context
+                                .read<ChatsCubit>()
+                                .selectedChat
+                                .hasStory
+                                ? () {
+                              // navigate to stories
+                            }
+                                : null,
+                            child: Container(
+                              height: kToolbarHeight * .8,
+                              width: kToolbarHeight * .8,
+                              decoration: context
+                                  .read<ChatsCubit>()
+                                  .selectedChat
+                                  .hasStory
+                                  ? BoxDecoration(
+                                  borderRadius:
+                                  BorderRadius.circular(
+                                      50),
+                                  border: Border.all(
+                                    color: AppColors
+                                        .PRIMARY_COLOR_DARK,
+                                    width: 3,
+                                  ))
+                                  : null,
+                              child: const CircleAvatar(
+                                backgroundColor: Colors.white,
+                                backgroundImage: NetworkImage(
+                                  UIConst.profilePlaceHolder,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          SizedBox(
+                            height: 60,
+                            child: Column(
+                              crossAxisAlignment:
+                              CrossAxisAlignment.start,
+                              mainAxisAlignment:
+                              MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Column(
+                                  children: [
+                                    Stack(
+                                      clipBehavior: Clip.none,
+                                      children: [
+                                        ConstrainedBox(
+                                          constraints: BoxConstraints(
+                                              maxWidth: MediaQuery.of(
+                                                  context)
+                                                  .size
+                                                  .width *
+                                                  0.4),
+                                          child: Text(
+                                            context
+                                                .read<ChatsCubit>()
+                                                .selectedChat
+                                                .name,
+                                            // 'state.chatData?.chat?.contact?.name',
+                                            overflow:
+                                            TextOverflow.ellipsis,
+                                            style: Styles.headerText(
+                                              color: Colors.white,
+                                              fontWeight:
+                                              FontWeight.w400,
                                             ),
+                                          ),
+                                        ),
+                                        context
+                                            .read<
+                                            ChatsCubit>()
+                                            .selectedChat
+                                            .isAdmin ==
+                                            "admin"
+                                            ? Positioned(
+                                          right:
+                                          context.isArabic
+                                              ? 0
+                                              : -72,
+                                          left: context.isArabic
+                                              ? -72
+                                              : 0,
+                                          child: const Icon(
+                                            Icons.verified,
+                                            color: Colors.blue,
+                                            size: 20,
                                           ),
                                         )
-                                      : InkWell(
-                                          onTap: context
-                                                  .read<ChatsCubit>()
-                                                  .selectedChat
-                                                  .hasStory
-                                              ? () {
-                                                  // navigate to stories
-                                                }
-                                              : null,
-                                          child: Container(
-                                            height: kToolbarHeight * .8,
-                                            width: kToolbarHeight * .8,
-                                            decoration: context
-                                                    .read<ChatsCubit>()
-                                                    .selectedChat
-                                                    .hasStory
-                                                ? BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            50),
-                                                    border: Border.all(
-                                                      color: AppColors
-                                                          .PRIMARY_COLOR_DARK,
-                                                      width: 3,
-                                                    ))
-                                                : null,
-                                            child: const CircleAvatar(
-                                              backgroundColor: Colors.white,
-                                              backgroundImage: NetworkImage(
-                                                UIConst.profilePlaceHolder,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                  const SizedBox(width: 12),
-                                  SizedBox(
-                                    height: 60,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Column(
-                                          children: [
-                                            Stack(
-                                              clipBehavior: Clip.none,
-                                              children: [
-                                                ConstrainedBox(
-                                                  constraints: BoxConstraints(
-                                                      maxWidth:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width *
-                                                              0.4),
-                                                  child: Text(
-                                                    context
-                                                        .read<ChatsCubit>()
-                                                        .selectedChat
-                                                        .name,
-                                                    // 'state.chatData?.chat?.contact?.name',
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: Styles.headerText(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                    ),
-                                                  ),
-                                                ),
-                                                context
-                                                            .read<ChatsCubit>()
-                                                            .selectedChat
-                                                            .isAdmin ==
-                                                        "admin"
-                                                    ? Positioned(
-                                                        right: context.isArabic
-                                                            ? 0
-                                                            : -72,
-                                                        left: context.isArabic
-                                                            ? -72
-                                                            : 0,
-                                                        child: const Icon(
-                                                          Icons.verified,
-                                                          color: Colors.blue,
-                                                          size: 20,
-                                                        ),
-                                                      )
-                                                    : const SizedBox(),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                        context
-                                                .read<ChatsCubit>()
-                                                .selectedChat
-                                                .typing
-                                            ? Label(
-                                                text: context.isArabic
-                                                    ? "يكتب..."
-                                                    : "Typing...",
-                                                style: Styles.mediumText(
-                                                  fontSize: 24,
-                                                  color: Colors.white,
-                                                ))
-                                            : const SizedBox(),
-                                        context
-                                                .read<ChatsCubit>()
-                                                .selectedChat
-                                                .recording
-                                            ? Label(
-                                                text: context.isArabic
-                                                    ? "يسجل رساله صوتية..."
-                                                    : "Recording...",
-                                                style: Styles.mediumText(
-                                                  fontSize: 24,
-                                                  color: Colors.white,
-                                                ))
-                                            : const SizedBox(),
-                                        (!context
-                                                    .read<ChatsCubit>()
-                                                    .selectedChat
-                                                    .typing &&
-                                                !context
-                                                    .read<ChatsCubit>()
-                                                    .selectedChat
-                                                    .recording)
-                                            ? context
-                                                        .read<ChatsCubit>()
-                                                        .selectedChat
-                                                        .isAdmin ==
-                                                    "admin"
-                                                ? Label(
-                                                    text: context.isArabic
-                                                        ? " 49Hub الرسمي"
-                                                        : "Official 49Hub",
-                                                    style: Styles.mediumText(
-                                                      fontSize: 24,
-                                                      color: Colors.white,
-                                                    ))
-                                                : Label(
-                                                    text: context
-                                                            .read<ChatsCubit>()
-                                                            .selectedChat
-                                                            .online
-                                                        ? context.isArabic
-                                                            ? "متصل"
-                                                            : "Online"
-                                                        : context.isArabic
-                                                            ? " اخر ظهور في ${context.read<ChatsCubit>().selectedChat.lastSeen}"
-                                                            : "Last seen at ${context.read<ChatsCubit>().selectedChat.lastSeen}",
-                                                    style: Styles.mediumText(
-                                                      fontSize: 24,
-                                                      color: Colors.white,
-                                                    ))
                                             : const SizedBox(),
                                       ],
                                     ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          : Text(
-                              widget.chatRoomCubit.selectedMessages.length
-                                  .toString(),
-                              // 'state.chatData?.chat?.contact?.name',
-                              overflow: TextOverflow.ellipsis,
-                              style: Styles.mediumText(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
-                              ),
+                                  ],
+                                ),
+                                context
+                                    .read<ChatsCubit>()
+                                    .selectedChat
+                                    .typing
+                                    ? Label(
+                                    text: context.isArabic
+                                        ? "يكتب..."
+                                        : "Typing...",
+                                    style: Styles.mediumText(
+                                      fontSize: 24,
+                                      color: Colors.white,
+                                    ))
+                                    : const SizedBox(),
+                                context
+                                    .read<ChatsCubit>()
+                                    .selectedChat
+                                    .recording
+                                    ? Label(
+                                    text: context.isArabic
+                                        ? "يسجل رساله صوتية..."
+                                        : "Recording...",
+                                    style: Styles.mediumText(
+                                      fontSize: 24,
+                                      color: Colors.white,
+                                    ))
+                                    : const SizedBox(),
+                                (!context
+                                    .read<ChatsCubit>()
+                                    .selectedChat
+                                    .typing &&
+                                    !context
+                                        .read<ChatsCubit>()
+                                        .selectedChat
+                                        .recording)
+                                    ? context
+                                    .read<ChatsCubit>()
+                                    .selectedChat
+                                    .isAdmin ==
+                                    "admin"
+                                    ? Label(
+                                    text: context.isArabic
+                                        ? " 49Hub الرسمي"
+                                        : "Official 49Hub",
+                                    style: Styles.mediumText(
+                                      fontSize: 24,
+                                      color: Colors.white,
+                                    ))
+                                    : Label(
+                                    text: context
+                                        .read<
+                                        ChatsCubit>()
+                                        .selectedChat
+                                        .online
+                                        ? context.isArabic
+                                        ? "متصل"
+                                        : "Online"
+                                        : context.isArabic
+                                        ? " اخر ظهور في ${context.read<ChatsCubit>().selectedChat.lastSeen}"
+                                        : "Last seen at ${context.read<ChatsCubit>().selectedChat.lastSeen}",
+                                    style: Styles.mediumText(
+                                      fontSize: 24,
+                                      color: Colors.white,
+                                    ))
+                                    : const SizedBox(),
+                              ],
                             ),
-                  actions: widget.chatRoomCubit.chat.isSearching
-                      ? []
-                      : widget.chatRoomCubit.selectedMessages.isEmpty
-                          ? context.read<ChatsCubit>().selectedChat.isAdmin ==
-                                  "admin"
-                              ? []
-                              : [
-                                  // video call
-                                  IconAppButton(
-                                    icon: Icons.videocam,
-                                    size: 24,
-                                    onPressed: () {},
-                                    color: Colors.white,
-                                  ),
-                                  const Sizer(
-                                    width: 20,
-                                  ),
-                                  // call
-                                  IconAppButton(
-                                    icon: Icons.call,
-                                    size: 20,
-                                    onPressed: () {},
-                                    color: Colors.white,
-                                  ),
-                                  PopupMenuButton(
-                                    icon: const Icon(
-                                      Icons.more_vert,
-                                      color: Colors.white,
-                                    ),
-                                    color: context.isDarkMode
-                                        ? AppColors.PRIMARY_COLOR
-                                        : AppColors.BACKGROUND_COLOR,
-                                    shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(16.0)),
-                                    ),
-                                    offset: const Offset(0, 50),
-                                    onSelected: (int value) async {
-                                      if (value == 0) {
-                                        context.push(Routes.VIEWCONTACT,
-                                            extra: context.read<ChatsCubit>());
-                                      }
-                                      if (value == 1) {
-                                        context.push(
-                                          Routes.ATTACHMENTSVIEW,
-                                          extra: widget.chatRoomCubit,
-                                        );
-                                      }
-                                      if (value == 5) {
-// Show alert dialog when "Clear Chat" is selected
-                                        _showClearChatAlert(
-                                            context, widget.chatRoomCubit);
-                                      }
-                                      if (value == 6) {
-                                        await widget.chatRoomCubit.getLabels();
-                                        _showLabelChatBottomSheet(
-                                            context, widget.chatRoomCubit);
-                                      }
-                                      if (value == 2) {
-                                        widget.chatRoomCubit.startSearching();
-                                      }
-                                    },
-                                    itemBuilder: (context) {
-                                      return _mainMenuBuilder(context);
-                                    },
-                                  )
-                                ]
-                          : [
-                              widget.chatRoomCubit.selectedMessages.length == 1
-                                  ? IconAppButton(
-                                      icon: Icons.copy,
-                                      size: 20,
-                                      onPressed: () async {
-                                        await widget.chatRoomCubit.copyMessage(
-                                          widget.chatRoomCubit.selectedMessages
-                                              .first,
-                                        );
-                                        widget.chatRoomCubit
-                                            .clearSelectedMessages();
-                                      },
-                                      color: Colors.white,
-                                    )
-                                  : const SizedBox(),
-                              const Sizer(width: 15),
-                              widget.chatRoomCubit.selectedMessages.length == 1
-                                  ? IconButton(
-                                      onPressed: () async {
-                                        await widget.chatRoomCubit.pinMessage(
-                                          message: widget.chatRoomCubit
-                                              .selectedMessages.first,
-                                        );
-                                      },
-                                      icon: const Icon(Icons.push_pin),
-                                      color: Colors.white,
-                                    )
-                                  : const SizedBox(),
-                              const Sizer(width: 15),
-                              IconButton(
-                                onPressed: () async {
-                                  // await context.read<ChatsCubit>().deleteChat();
-                                  await widget.chatRoomCubit.deleteMessages();
-                                },
-                                icon: const Icon(
-                                  Icons.delete_forever,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              const Sizer(width: 15),
-                              IconButton(
-                                onPressed: () async {
-                                  context.push(
-                                    Routes.FORWARDMESSAGES,
-                                    extra: ForwardMessagesViewParams(
-                                      chatRoomCubit: widget.chatRoomCubit,
-                                      chatsCubit: context.read<ChatsCubit>(),
-                                    ),
-                                  );
-                                },
-                                icon: const Icon(
-                                  Icons.shortcut,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
-                );
-              },
-            ),
+                          ),
+                        ],
+                      ),
+                    )
+                        : Text(
+                      widget.chatRoomCubit.selectedMessages.length
+                          .toString(),
+                      // 'state.chatData?.chat?.contact?.name',
+                      overflow: TextOverflow.ellipsis,
+                      style: Styles.mediumText(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    actions: widget.chatRoomCubit.chat.isSearching
+                        ? []
+                        : widget.chatRoomCubit.selectedMessages.isEmpty
+                        ? context.read<ChatsCubit>().selectedChat.isAdmin ==
+                        "admin"
+                        ? []
+                        : [
+                      // video call
+                      IconAppButton(
+                        icon: Icons.videocam,
+                        size: 24,
+                        onPressed: () async {
+                          if (await Permission.microphone
+                              .request() !=
+                              PermissionStatus.granted ||
+                              await Permission.camera.request() !=
+                                  PermissionStatus.granted) {
+                            await Permission.microphone.request();
+                            await Permission.camera.request();
+                          }
+                          final fcmToken = await serviceLocator<
+                              FcmNotificationHelper>()
+                              .getFcmUserToken();
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      SendWhatsappCallScreen(
+                                        isRealCall: false,
+                                        callType: CallType.video,
+                                        receiver: UserModel(
+                                            id: chat.userId,
+                                            firstName: chat.name,
+                                            lastName: '',
+                                            firebaseToken:
+                                            chat.fcmToken),
+                                        sender: UserModel(
+                                          id: userStateEntity
+                                              .data!.id,
+                                          firstName:
+                                          userStateEntity
+                                              .data!
+                                              .firstName,
+                                          lastName:
+                                          userStateEntity
+                                              .data!.lastName,
+                                          firebaseToken: fcmToken,
+                                        ),
+                                      )));
+                        },
+                        color: Colors.white,
+                      ),
+                      const Sizer(
+                        width: 20,
+                      ),
+                      // call
+                      IconAppButton(
+                        icon: Icons.call,
+                        size: 20,
+                        onPressed: () async {
+                          if (await Permission.microphone
+                              .request() !=
+                              PermissionStatus.granted ||
+                              await Permission.camera.request() !=
+                                  PermissionStatus.granted) {
+                            await Permission.microphone.request();
+                            await Permission.camera.request();
+                          }
+                          print(
+                              'sender data is ${chat.id}, ${chat.name}, ${chat.avatar}, ${chat.fcmToken}');
+                          final fcmToken = await serviceLocator<
+                              FcmNotificationHelper>()
+                              .getFcmUserToken();
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      SendWhatsappCallScreen(
+                                        isRealCall: false,
+                                        callType: CallType.audio,
+                                        receiver: UserModel(
+                                            id: chat.userId,
+                                            firstName: chat.name,
+                                            lastName: '',
+                                            firebaseToken:
+                                            "eVbbeN09TSa8oSMH4xEgki:APA91bEiZraT2zh96KMj-EUBaUQVuoFSk2WNCC3yU7CDOOXtspeHH5CtauPZatt7ghxS7Em-4pv7xbkM8rI7WcIPHWHQVtiScl2OLK04BTm4bGS6LxFJyo0"
+                                          // chat.fcmToken
+                                        ),
+                                        sender: UserModel(
+                                          id: userStateEntity
+                                              .data!.id,
+                                          firstName:
+                                          userStateEntity
+                                              .data!
+                                              .firstName,
+                                          lastName:
+                                          userStateEntity
+                                              .data!.lastName,
+                                          firebaseToken: fcmToken,
+                                        ),
+                                      )));
+                        },
+                        color: Colors.white,
+                      ),
+                      PopupMenuButton(
+                        icon: const Icon(
+                          Icons.more_vert,
+                          color: Colors.white,
+                        ),
+                        color: context.isDarkMode
+                            ? AppColors.PRIMARY_COLOR
+                            : AppColors.BACKGROUND_COLOR,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                              Radius.circular(16.0)),
+                        ),
+                        offset: const Offset(0, 50),
+                        onSelected: (int value) async {
+                          if (value == 0) {
+                            context.push(Routes.VIEWCONTACT,
+                                extra:
+                                context.read<ChatsCubit>());
+                          }
+                          if (value == 1) {
+                            context.push(
+                              Routes.ATTACHMENTSVIEW,
+                              extra: widget.chatRoomCubit,
+                            );
+                          }
+                          if (value == 5) {
+                            // Show alert dialog when "Clear Chat" is selected
+                            _showClearChatAlert(
+                                context, widget.chatRoomCubit);
+                          }
+                          if (value == 6) {
+                            await widget.chatRoomCubit
+                                .getLabels();
+                            _showLabelChatBottomSheet(
+                                context, widget.chatRoomCubit);
+                          }
+                          if (value == 2) {
+                            widget.chatRoomCubit.startSearching();
+                          }
+                        },
+                        itemBuilder: (context) {
+                          return _mainMenuBuilder(context);
+                        },
+                      )
+                    ]
+                        : [
+                      widget.chatRoomCubit.selectedMessages.length ==
+                          1
+                          ? IconAppButton(
+                        icon: Icons.copy,
+                        size: 20,
+                        onPressed: () async {
+                          await widget.chatRoomCubit
+                              .copyMessage(
+                            widget.chatRoomCubit
+                                .selectedMessages.first,
+                          );
+                          widget.chatRoomCubit
+                              .clearSelectedMessages();
+                        },
+                        color: Colors.white,
+                      )
+                          : const SizedBox(),
+                      const Sizer(width: 15),
+                      widget.chatRoomCubit.selectedMessages.length ==
+                          1
+                          ? IconButton(
+                        onPressed: () async {
+                          await widget.chatRoomCubit.pinMessage(
+                            message: widget.chatRoomCubit
+                                .selectedMessages.first,
+                          );
+                        },
+                        icon: const Icon(Icons.push_pin),
+                        color: Colors.white,
+                      )
+                          : const SizedBox(),
+                      const Sizer(width: 15),
+                      IconButton(
+                        onPressed: () async {
+                          // await context.read<ChatsCubit>().deleteChat();
+                          await widget.chatRoomCubit.deleteMessages();
+                        },
+                        icon: const Icon(
+                          Icons.delete_forever,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const Sizer(width: 15),
+                      IconButton(
+                        onPressed: () async {
+                          context.push(
+                            Routes.FORWARDMESSAGES,
+                            extra: ForwardMessagesViewParams(
+                              chatRoomCubit: widget.chatRoomCubit,
+                              chatsCubit: context.read<ChatsCubit>(),
+                            ),
+                          );
+                        },
+                        icon: const Icon(
+                          Icons.shortcut,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              );
+            }),
             widget.chatRoomCubit.chat.pinnedMessageId != null
                 ? _buildPinnedMessageCard(context)
                 : const SizedBox(),
             widget.chatRoomCubit.chat.isBirthdayMonth
                 ? InkWell(
-                    onTap: () async {
-                      await showGiftBottomSheet(
-                        context,
-                        receiverId: widget.chatRoomCubit.chat.userId,
-                      );
-                    },
-                    child: Container(
-                      width: double.infinity,
-                      // height: 50,
-                      color: AppColors.PRIMARY_COLOR,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(width: 8),
-                            ConstrainedBox(
-                              constraints: BoxConstraints(
-                                  maxWidth:
-                                      MediaQuery.of(context).size.width * 0.85),
-                              child: Text(
-                                context.isArabic
-                                    ? "إنه عيد ميلاد ${widget.chatRoomCubit.chat.name}، أرسل هدية! 🎂🎉"
-                                    : 'It\'s ${widget.chatRoomCubit.chat.name} birthday, Send Gift!🎂🎉',
-                                overflow: TextOverflow.ellipsis,
-                                style: Styles.mediumText(color: Colors.white),
-                              ),
-                            ),
-                          ],
+              onTap: () async {
+                await showGiftBottomSheet(
+                  context,
+                  receiverId: widget.chatRoomCubit.chat.userId,
+                );
+              },
+              child: Container(
+                width: double.infinity,
+                // height: 50,
+                color: AppColors.PRIMARY_COLOR,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(width: 8),
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                            maxWidth:
+                            MediaQuery.of(context).size.width * 0.85),
+                        child: Text(
+                          context.isArabic
+                              ? "إنه عيد ميلاد ${widget.chatRoomCubit.chat.name}، أرسل هدية! 🎂🎉"
+                              : 'It\'s ${widget.chatRoomCubit.chat.name} birthday, Send Gift!🎂🎉',
+                          overflow: TextOverflow.ellipsis,
+                          style: Styles.mediumText(color: Colors.white),
                         ),
                       ),
-                    ),
-                  )
+                    ],
+                  ),
+                ),
+              ),
+            )
                 : const SizedBox(),
           ],
         );
@@ -616,23 +718,23 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                               primaryColor: AppColors
                                                   .PRIMARY_COLOR, // تحديد اللون الأساسي
                                               inputDecorationTheme:
-                                                  InputDecorationTheme(
+                                              InputDecorationTheme(
                                                 focusedBorder:
-                                                    const UnderlineInputBorder(
+                                                const UnderlineInputBorder(
                                                   borderSide: BorderSide(
                                                     color: AppColors
                                                         .PRIMARY_COLOR, // تحديد اللون للحد السفلي
                                                     width:
-                                                        2.0, // تعديل سمك الحد السفلي
+                                                    2.0, // تعديل سمك الحد السفلي
                                                   ),
                                                 ),
                                                 enabledBorder:
-                                                    UnderlineInputBorder(
+                                                UnderlineInputBorder(
                                                   borderSide: BorderSide(
                                                     color: AppColors
                                                         .PRIMARY_COLOR
                                                         .withOpacity(
-                                                            0.5), // تغيير اللون عند عدم التركيز
+                                                        0.5), // تغيير اللون عند عدم التركيز
                                                     width: 2.0,
                                                   ),
                                                 ),
@@ -653,33 +755,33 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                         const SizedBox(width: 10),
                                         newLabelController.text.isNotEmpty
                                             ? IconButton(
-                                                icon: const Icon(Icons.check,
-                                                    color: AppColors
-                                                        .PRIMARY_COLOR_DARK),
-                                                onPressed: () async {
-                                                  await chatRoomCubit
-                                                      .createLable(
-                                                          name:
-                                                              newLabelController
-                                                                  .text,
-                                                          color: newLabelColor);
-                                                  setState(() {
-                                                    isEditingNewLabel = false;
-                                                    newLabelController.clear();
-                                                  });
-                                                },
-                                              )
+                                          icon: const Icon(Icons.check,
+                                              color: AppColors
+                                                  .PRIMARY_COLOR_DARK),
+                                          onPressed: () async {
+                                            await chatRoomCubit
+                                                .createLable(
+                                                name:
+                                                newLabelController
+                                                    .text,
+                                                color: newLabelColor);
+                                            setState(() {
+                                              isEditingNewLabel = false;
+                                              newLabelController.clear();
+                                            });
+                                          },
+                                        )
                                             : IconButton(
-                                                icon: const Icon(Icons.close,
-                                                    color: AppColors
-                                                        .PRIMARY_COLOR_DARK),
-                                                onPressed: () async {
-                                                  setState(() {
-                                                    isEditingNewLabel = false;
-                                                    newLabelController.clear();
-                                                  });
-                                                },
-                                              ),
+                                          icon: const Icon(Icons.close,
+                                              color: AppColors
+                                                  .PRIMARY_COLOR_DARK),
+                                          onPressed: () async {
+                                            setState(() {
+                                              isEditingNewLabel = false;
+                                              newLabelController.clear();
+                                            });
+                                          },
+                                        ),
                                       ],
                                     ),
                                   );
@@ -698,9 +800,9 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                           Container(
                                             decoration: BoxDecoration(
                                               color:
-                                                  Colors.grey.withOpacity(0.3),
+                                              Colors.grey.withOpacity(0.3),
                                               borderRadius:
-                                                  BorderRadius.circular(50),
+                                              BorderRadius.circular(50),
                                             ),
                                             padding: const EdgeInsets.all(10),
                                             child: const Icon(Icons.add,
@@ -723,7 +825,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                               } else {
                                 return Padding(
                                   padding:
-                                      const EdgeInsets.symmetric(vertical: 4.0),
+                                  const EdgeInsets.symmetric(vertical: 4.0),
                                   child: Row(
                                     children: [
                                       Container(
@@ -750,7 +852,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                         value: chatRoomCubit
                                             .chat.lables[index - 1].isSelected,
                                         activeColor:
-                                            AppColors.PRIMARY_COLOR_DARK,
+                                        AppColors.PRIMARY_COLOR_DARK,
                                         checkColor: Colors.white,
                                         onChanged: (bool? newValue) {
                                           chatRoomCubit.updateLabelSelection(
@@ -775,7 +877,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 8),
                           backgroundColor:
-                              AppColors.PRIMARY_COLOR, // Button color
+                          AppColors.PRIMARY_COLOR, // Button color
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(50),
                           ),
@@ -811,44 +913,44 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
         return widget.chatRoomCubit.chat.pinnedMessage == null
             ? const SizedBox()
             : Container(
-                width: double.infinity,
-                // height: 50,
-                color: AppColors.PRIMARY_COLOR,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Icon(
-                        Icons.push_pin,
-                        size: 20,
-                        color: Colors.white.withOpacity(0.5),
-                      ),
-                      const SizedBox(width: 8),
-                      ConstrainedBox(
-                        constraints: BoxConstraints(
-                            maxWidth: MediaQuery.of(context).size.width * 0.8),
-                        child: Text(
-                          widget.chatRoomCubit.chat.pinnedMessage!.text,
-                          overflow: TextOverflow.ellipsis,
-                          style: Styles.mediumText(color: Colors.white),
-                        ),
-                      ),
-                      const Spacer(),
-                      InkWell(
-                        onTap: () async {
-                          await widget.chatRoomCubit.unpinMessage();
-                        },
-                        child: Icon(
-                          Icons.close,
-                          size: 20,
-                          color: Colors.white.withOpacity(0.5),
-                        ),
-                      )
-                    ],
+          width: double.infinity,
+          // height: 50,
+          color: AppColors.PRIMARY_COLOR,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(
+                  Icons.push_pin,
+                  size: 20,
+                  color: Colors.white.withOpacity(0.5),
+                ),
+                const SizedBox(width: 8),
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width * 0.8),
+                  child: Text(
+                    widget.chatRoomCubit.chat.pinnedMessage!.text,
+                    overflow: TextOverflow.ellipsis,
+                    style: Styles.mediumText(color: Colors.white),
                   ),
                 ),
-              );
+                const Spacer(),
+                InkWell(
+                  onTap: () async {
+                    await widget.chatRoomCubit.unpinMessage();
+                  },
+                  child: Icon(
+                    Icons.close,
+                    size: 20,
+                    color: Colors.white.withOpacity(0.5),
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
       },
     );
   }
@@ -861,7 +963,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
           LocaleKeys.viewContact.tr(),
           style: Styles.mediumText(
               color:
-                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
+              context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
         ),
       ),
       PopupMenuItem<int>(
@@ -870,7 +972,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
           LocaleKeys.mediaLinksAndDocs.tr(),
           style: Styles.mediumText(
               color:
-                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
+              context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
         ),
       ),
       PopupMenuItem<int>(
@@ -879,7 +981,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
           LocaleKeys.search.tr(),
           style: Styles.mediumText(
               color:
-                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
+              context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
         ),
       ),
       PopupMenuItem<int>(
@@ -888,7 +990,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
           LocaleKeys.muteNotifications.tr(),
           style: Styles.mediumText(
               color:
-                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
+              context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
         ),
       ),
       // PopupMenuItem<int>(
@@ -937,7 +1039,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
           LocaleKeys.block.tr(),
           style: Styles.mediumText(
               color:
-                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
+              context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
         ),
       ),
       PopupMenuItem<int>(
@@ -950,7 +1052,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
           LocaleKeys.clearChat.tr(),
           style: Styles.mediumText(
               color:
-                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
+              context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
         ),
       ),
       PopupMenuItem<int>(
@@ -959,7 +1061,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
           context.isArabic ? "اضافة علامة للمحادثة" : "Label Chat",
           style: Styles.mediumText(
               color:
-                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
+              context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
         ),
       ),
     ];
@@ -1058,161 +1160,86 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
   void _showClearChatAlert(BuildContext context, ChatRoomCubit chatRoomCubit) {
     int selectedOption = 0; // To track the selected radio button
 
-    showAnimatedDialog(context,AlertDialog(
-      title: Text(LocaleKeys.clearThisChat.tr()),
-      content: StatefulBuilder(
-        builder: (BuildContext context, StateSetter setState) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                title: Text(
-                  LocaleKeys.clearForMe.tr(),
-                  style: Styles.mediumText(
-                      color: context.isDarkMode
-                          ? Colors.white
-                          : AppColors.PRIMARY_COLOR),
-                ),
-                leading: Radio<int>(
-                  value: 0,
-                  activeColor: AppColors.PRIMARY_COLOR_DARK,
-                  groupValue: selectedOption,
-                  onChanged: (int? value) {
-                    setState(() {
-                      selectedOption = value!;
-                    });
-                  },
-                ),
-              ),
-              ListTile(
-                title: Text(
-                  LocaleKeys.clearForEveryone.tr(),
-                  style: Styles.mediumText(
-                      color: context.isDarkMode
-                          ? Colors.white
-                          : AppColors.PRIMARY_COLOR),
-                ),
-                leading: Radio<int>(
-                  value: 1,
-                  activeColor: AppColors.PRIMARY_COLOR_DARK,
-                  groupValue: selectedOption,
-                  onChanged: (int? value) {
-                    setState(() {
-                      selectedOption = value!;
-                    });
-                  },
-                ),
-              ),
-            ],
-          );
-        },
-      ),
-      actions: <Widget>[
-        TextButton(
-          child: Text(
-            LocaleKeys.cancel.tr(),
-            style: Styles.mediumText(
-                color: context.isDarkMode
-                    ? Colors.white
-                    : AppColors.PRIMARY_COLOR),
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(LocaleKeys.clearThisChat.tr()),
+          content: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ListTile(
+                    title: Text(
+                      LocaleKeys.clearForMe.tr(),
+                      style: Styles.mediumText(
+                          color: context.isDarkMode
+                              ? Colors.white
+                              : AppColors.PRIMARY_COLOR),
+                    ),
+                    leading: Radio<int>(
+                      value: 0,
+                      activeColor: AppColors.PRIMARY_COLOR_DARK,
+                      groupValue: selectedOption,
+                      onChanged: (int? value) {
+                        setState(() {
+                          selectedOption = value!;
+                        });
+                      },
+                    ),
+                  ),
+                  ListTile(
+                    title: Text(
+                      LocaleKeys.clearForEveryone.tr(),
+                      style: Styles.mediumText(
+                          color: context.isDarkMode
+                              ? Colors.white
+                              : AppColors.PRIMARY_COLOR),
+                    ),
+                    leading: Radio<int>(
+                      value: 1,
+                      activeColor: AppColors.PRIMARY_COLOR_DARK,
+                      groupValue: selectedOption,
+                      onChanged: (int? value) {
+                        setState(() {
+                          selectedOption = value!;
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-        TextButton(
-          child: Text(
-            LocaleKeys.clearChat.tr(),
-            style: Styles.mediumText(color: AppColors.PRIMARY_COLOR_DARK),
-          ),
-          onPressed: () async {
-            await chatRoomCubit.clearChat(clearForAll: selectedOption == 1);
-            // ignore: use_build_context_synchronously
-            Navigator.of(context).pop();
-          },
-        ),
-      ],
-    ),);
-    // showDialog(
-    //   context: context,
-    //   builder: (BuildContext context) {
-    //     return AlertDialog(
-    //       title: Text(LocaleKeys.clearThisChat.tr()),
-    //       content: StatefulBuilder(
-    //         builder: (BuildContext context, StateSetter setState) {
-    //           return Column(
-    //             mainAxisSize: MainAxisSize.min,
-    //             children: [
-    //               ListTile(
-    //                 title: Text(
-    //                   LocaleKeys.clearForMe.tr(),
-    //                   style: Styles.mediumText(
-    //                       color: context.isDarkMode
-    //                           ? Colors.white
-    //                           : AppColors.PRIMARY_COLOR),
-    //                 ),
-    //                 leading: Radio<int>(
-    //                   value: 0,
-    //                   activeColor: AppColors.PRIMARY_COLOR_DARK,
-    //                   groupValue: selectedOption,
-    //                   onChanged: (int? value) {
-    //                     setState(() {
-    //                       selectedOption = value!;
-    //                     });
-    //                   },
-    //                 ),
-    //               ),
-    //               ListTile(
-    //                 title: Text(
-    //                   LocaleKeys.clearForEveryone.tr(),
-    //                   style: Styles.mediumText(
-    //                       color: context.isDarkMode
-    //                           ? Colors.white
-    //                           : AppColors.PRIMARY_COLOR),
-    //                 ),
-    //                 leading: Radio<int>(
-    //                   value: 1,
-    //                   activeColor: AppColors.PRIMARY_COLOR_DARK,
-    //                   groupValue: selectedOption,
-    //                   onChanged: (int? value) {
-    //                     setState(() {
-    //                       selectedOption = value!;
-    //                     });
-    //                   },
-    //                 ),
-    //               ),
-    //             ],
-    //           );
-    //         },
-    //       ),
-    //       actions: <Widget>[
-    //         TextButton(
-    //           child: Text(
-    //             LocaleKeys.cancel.tr(),
-    //             style: Styles.mediumText(
-    //                 color: context.isDarkMode
-    //                     ? Colors.white
-    //                     : AppColors.PRIMARY_COLOR),
-    //           ),
-    //           onPressed: () {
-    //             Navigator.of(context).pop();
-    //           },
-    //         ),
-    //         TextButton(
-    //           child: Text(
-    //             LocaleKeys.clearChat.tr(),
-    //             style: Styles.mediumText(color: AppColors.PRIMARY_COLOR_DARK),
-    //           ),
-    //           onPressed: () async {
-    //             await chatRoomCubit.clearChat(clearForAll: selectedOption == 1);
-    //             // ignore: use_build_context_synchronously
-    //             Navigator.of(context).pop();
-    //           },
-    //         ),
-    //       ],
-    //     );
-    //   },
-    // );
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                LocaleKeys.cancel.tr(),
+                style: Styles.mediumText(
+                    color: context.isDarkMode
+                        ? Colors.white
+                        : AppColors.PRIMARY_COLOR),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text(
+                LocaleKeys.clearChat.tr(),
+                style: Styles.mediumText(color: AppColors.PRIMARY_COLOR_DARK),
+              ),
+              onPressed: () async {
+                await chatRoomCubit.clearChat(clearForAll: selectedOption == 1);
+                // ignore: use_build_context_synchronously
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override

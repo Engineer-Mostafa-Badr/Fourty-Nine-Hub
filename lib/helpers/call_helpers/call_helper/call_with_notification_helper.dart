@@ -9,6 +9,7 @@ import 'package:fourtyninehub/features/call/domain/entities/call_data.dart';
 import 'package:fourtyninehub/features/call/domain/usecases/get_agora_token_usecase.dart';
 import 'package:fourtyninehub/features/call/presentation/controller/call_controller/call_cubit.dart';
 import 'package:fourtyninehub/features/call/presentation/controller/call_controller/call_state.dart';
+import 'package:fourtyninehub/features/call/presentation/controller/send_call_controller.dart/send_call_cubit.dart';
 import 'package:fourtyninehub/helpers/call_helpers/call_helper/call_kit_helper.dart';
 import 'package:fourtyninehub/helpers/call_helpers/notifications_helper/fcm_notification_helper.dart';
 import 'package:fourtyninehub/helpers/call_helpers/notifications_helper/send_notification_params.dart';
@@ -16,6 +17,7 @@ import 'package:fourtyninehub/main.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 
 class CallWithNotificationHelper {
   final FcmNotificationHelper _notificationHelper;
@@ -37,7 +39,7 @@ class CallWithNotificationHelper {
       const Duration(seconds: UIConst.callOfflineCheckDuration),
       () {
         if (context != null) {
-         
+          context!.read<SendCallCubit>().setCallClosedState(' غير متاح الان');
         }
       },
     );
@@ -56,7 +58,7 @@ class CallWithNotificationHelper {
   void _handleReceiverResponseOnline(CallData callData) {
     _isOfflineTimer?.cancel();
     if (context != null) {
-     
+      context!.read<SendCallCubit>().setStatToCallRinging(callData);
     }
   }
 
@@ -86,7 +88,7 @@ class CallWithNotificationHelper {
           additionalData: {
             'type': CallNotificationType.receiverIsOnline.name,
             'time': DateTime.now().toUtc().toIso8601String(),
-            ...callData.toMap(fcmToken: fcmToken),
+            ...callData.toMap(fcmToken: fcmToken, isRealCall: true.toString()),
           },
         ),
       );
@@ -100,24 +102,33 @@ class CallWithNotificationHelper {
     if (data['action'] == CallActions.callEnded.name) {
       if (context != null &&
           context!.read<CallCubit>().state is HasCall &&
-          (context!.read<CallCubit>().state as HasCall).callData.channelName ==
-              data['channel_name']) {
+          (context!.read<CallCubit>().state as HasCall).callData.channel ==
+              data['channel']) {
         log('====================++++++++++++++++notification +++++++++++++++++====================');
-       
+        context!.read<CallCubit>().endCall();
       }
       _callKitHelper.stopCalling();
     } else if (data['action'] == CallActions.receiverDeclinedCall.name) {
       if (context != null) {
-       
+        context!.read<SendCallCubit>().setDeclinedCallState();
+        // .setCallClosedState(data['reason'] ?? 'رفض المكالمة');
       }
     } else if (data['action'] == CallActions.receiverAcceptedCall.name) {
-      _connectToCall(CallData.fromMap(data, true));
+      print("The Data sended for calling is $data");
+      _connectToCall(CallData.fromMap(data, true), false);
     }
   }
 
-  void _connectToCall(CallData data) async {
+  void _connectToCall(CallData data, bool isFromCheckComingCall) async {
     if (context != null) {
-      if (data.isCaller) {
+      if (data.isRealCall == true.toString()) {
+        if (data.isCaller) {
+          context!.read<SendCallCubit>().setCallConnected();
+        }
+        context!.read<CallCubit>().startCall(data, isFromCheckComingCall);
+      } else {
+        context!.read<CallCubit>().startCall(data, isFromCheckComingCall);
+        context!.read<SendCallCubit>().setFakeCallConnected();
       }
     }
   }
@@ -131,10 +142,11 @@ class CallWithNotificationHelper {
           if (!serviceLocator.isRegistered<SharedPreferences>()) {
             await DI.execute();
           }
-          await serviceLocator<SharedPreferences>()
-              .setString('call_data', json.encode(data.toMap()));
+          await serviceLocator<SharedPreferences>().setString('call_data',
+              json.encode(data.toMap(isRealCall: true.toString())));
         } else {
-          _connectToCall(data);
+          print("accept call data $data");
+          _connectToCall(data, true);
         }
         sendActionNotification(
           data,
@@ -152,47 +164,76 @@ class CallWithNotificationHelper {
     );
   }
 
-  Future sendCallNotification(
-    BuildContext context, {
+  Future<void> sendCallNotification({
+    required String isRealCall,
+    required String agoraAppId,
+    required String serviceType,
+    required String uid,
+    required int zegoAppId,
+    required String zegoAppSign,
+    required BuildContext context,
+    required String receiverToken,
     required String callerName,
     required String callerImage,
-    required String receiverName,
     required String receiverImage,
-    required String receiverToken,
-    required int expirationTime,
-    required String caseId,
+    required String receiverName,
+    required String callType,
   }) async {
-  
-    try {
-      final myNotificationToken = await _notificationHelper.getFcmToken();
-      await myNotificationToken.fold(
-        (e) async =>e,
-        (notificationToken) async {
-          final info = await _getAgoraTokenUsecase(GetAgoraTokenParams(
-              expirationTime: expirationTime, caseId: caseId));
+    final cubit = context.read<SendCallCubit>();
+    cubit.setCallLoading();
 
-          print('+++++++++++++ $info');
+    final callData = CallData(
+      isRealCall: isRealCall,
+      callType: callType,
+      agoraAppId: agoraAppId,
+      serviceType: serviceType,
+      uid: uid,
+      zegoAppId: zegoAppId.toString(),
+      zegoAppSign: zegoAppSign,
+      callerName: callerName,
+      callerImage: callerImage,
+      receiverImage: receiverImage,
+      receiverName: receiverName,
+      fcmToken: '',
+      isCaller: true,
+      receiverId: uid,
+      rtcToken: '',
+      channel: '',
+      channelId: '',
+      permission: '',
+      expiresAt: '',
+      // callAction: CallActions.calling,
+    );
+
+    final myNotificationToken = await _notificationHelper.getFcmToken();
+    print("Geting notification token $myNotificationToken");
+    await myNotificationToken
+        .fold((e) async => cubit.setCallClosedState('فشل إرسال مكالمة'),
+            (notificationToken) async {
+      if (isRealCall == true.toString()) {
+        print('I am in real call');
+        if (serviceType == 'agora') {
+          final info = await _getAgoraTokenUsecase(const GetAgoraTokenParams());
+
           info.fold(
-            (e) async => e,
+            (e) async => cubit.setCallClosedState('فشل إرسال مكالمة'),
             (agoraToken) async {
-              final callData = CallData(
-                fcmToken: notificationToken,
-                isCaller: true,
-                callerName: callerName,
-                callerImage: callerImage,
-                receiverName: receiverName,
-                receiverImage: receiverImage,
-                rtcToken: agoraToken.rtcToken,
-                channelName: agoraToken.channelName,
-                uid: agoraToken.uid,
-              );
-
+              print(
+                  "Agora info is ${agoraToken.rtcToken} and channel name is ${agoraToken.channel} and channel id is ${agoraToken.channelId}");
               final notificationParams = SendNotificationParams(
                 to: receiverToken,
                 additionalData: {
-                  "type": CallNotificationType.sendCallRequest.name,
+                  "type": CallNotificationType.sendCallRequest.name.toString(),
                   'time': DateTime.now().toUtc().toIso8601String(),
-                  ...callData.toMap(),
+                  ...callData.toMap(
+                    isRealCall: true.toString(),
+                    fcmToken: notificationToken,
+                    rtcToken: agoraToken.rtcToken,
+                    channel: agoraToken.channel,
+                    channelId: agoraToken.channelId,
+                    permission: agoraToken.permission,
+                    expiresAt: agoraToken.expiresAt,
+                  ),
                 },
               );
 
@@ -200,18 +241,65 @@ class CallWithNotificationHelper {
                   .sendNotification(notificationParams);
 
               notificationSent.fold(
-                (e) async => e,
+                (e) async => cubit.setCallClosedState('فشل إرسال مكالمة'),
                 (_) {
                   _startOfflineReceiverTimer();
                 },
               );
             },
           );
-        },
-      );
-    } catch (e) {
-      
-    }
+        } else if (serviceType == 'zego') {
+          final notificationParams = SendNotificationParams(
+            to: receiverToken,
+            additionalData: {
+              "type": CallNotificationType.sendCallRequest.name,
+              'time': DateTime.now().toUtc().toIso8601String(),
+              ...callData.toMap(
+                isRealCall: true.toString(),
+                fcmToken: notificationToken,
+              ),
+            },
+          );
+
+          final notificationSent =
+              await _notificationHelper.sendNotification(notificationParams);
+
+          notificationSent.fold(
+            (e) async => e,
+            (_) {
+              _startOfflineReceiverTimer();
+            },
+          );
+        }
+      } else {
+        final notificationParams = SendNotificationParams(
+          to: receiverToken,
+          additionalData: {
+            "type": CallNotificationType.sendCallRequest.name.toString(),
+            'time': DateTime.now().toUtc().toIso8601String(),
+            ...callData.toMap(
+              isRealCall: false.toString(),
+              fcmToken: notificationToken,
+              rtcToken: '',
+              channel: '',
+              channelId: '',
+              permission: '',
+              expiresAt: '',
+            ),
+          },
+        );
+
+        final notificationSent =
+            await _notificationHelper.sendNotification(notificationParams);
+
+        notificationSent.fold(
+          (e) async => cubit.setCallClosedState('فشل إرسال مكالمة'),
+          (_) {
+            _startOfflineReceiverTimer();
+          },
+        );
+      }
+    });
   }
 
   void _handleMissedCall() {}
@@ -229,7 +317,10 @@ class CallWithNotificationHelper {
             'action': action.name,
             'reason': reason ?? '',
             'time': DateTime.now().toUtc().toIso8601String(),
-            ...callData.toMap(fcmToken: fcmToken),
+            ...callData.toMap(
+              fcmToken: fcmToken,
+              isRealCall: callData.isRealCall.toString(),
+            ),
           },
         ),
       );

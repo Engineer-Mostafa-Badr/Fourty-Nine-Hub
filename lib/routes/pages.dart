@@ -2606,13 +2606,7 @@ class AppPages {
                 path: Paths.personalInformationScreen,
                 name: Routes.personalInformationScreen,
                 builder: (context, state) {
-                  return MultiBlocProvider(providers: [
-                    BlocProvider<DestGetLatAndLongCubit>(
-                      create: (context) => DestGetLatAndLongCubit(
-                          getLatLongFromAddressRemoteDataSource:
-                              serviceLocator()),
-                    ),
-                  ], child: const PersonalInformationScreen());
+                  return const PersonalInformationScreen();
                 },
               ),
               GoRoute(

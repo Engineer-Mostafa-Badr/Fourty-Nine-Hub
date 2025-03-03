@@ -60,7 +60,7 @@ class TruckPersonalDocumentsScreen extends StatelessWidget {
                   crossAxisSpacing: 16,
                   children: List.generate(
                     uploadFilesTitles.length,
-                    (index) => uploadFileWidget(
+                    (index) => UploadFileWidget(
                       title: uploadFilesTitles[index],
                     ),
                   ),

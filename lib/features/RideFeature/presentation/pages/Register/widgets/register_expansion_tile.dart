@@ -30,39 +30,74 @@ class _RegisterExpansionTileState extends State<RegisterExpansionTile> {
         backgroundColor: AppColors.GREYBG,
         expandedAlignment: Alignment.centerLeft,
         expandedCrossAxisAlignment: CrossAxisAlignment.start,
+        minTileHeight: 20,
         children: [
           Container(
             color: Theme.of(context).scaffoldBackgroundColor,
             width: double.infinity,
             height: 10,
           ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              spacing: 8,
-              crossAxisAlignment: CrossAxisAlignment.start,
+          Container(
+            constraints: const BoxConstraints(
+              maxHeight: 250,
+              minHeight: 40,
+
+            ),
+            child: ListView(
+              padding: const EdgeInsets.all(16.0),
               children: List.generate(
                 widget.children.length,
-                (index) => InkWell(
+                    (index) => InkWell(
                   onTap: () {
-                    setState(() {
-                      widget.title = widget.children[index];
-                      controller.collapse();
-                    });
+                    if(widget.children.isNotEmpty){
+                      setState(() {
+                        widget.title = widget.children[index];
+                        controller.collapse();
+                      });
 
-                    if (widget.onChange != null) {
-                      widget.onChange!(widget.children[index]); // Notify parent
+                      if (widget.onChange != null) {
+                        widget.onChange!(widget.children[index]); // Notify parent
+                      }
                     }
                   },
-                  child: SizedBox(
+                  child: Container(
+                    margin: const EdgeInsets.only(bottom: 8),
                     width: double.infinity,
                     height: 30,
                     child: widget.children[index],
                   ),
                 ),
               ),
+
             ),
-          ),
+          )
+          // Padding(
+          //   padding: const EdgeInsets.all(16.0),
+          //   child: Column(
+          //     spacing: 8,
+          //     crossAxisAlignment: CrossAxisAlignment.start,
+          //     children: List.generate(
+          //       widget.children.length,
+          //       (index) => InkWell(
+          //         onTap: () {
+          //           setState(() {
+          //             widget.title = widget.children[index];
+          //             controller.collapse();
+          //           });
+          //
+          //           if (widget.onChange != null) {
+          //             widget.onChange!(widget.children[index]); // Notify parent
+          //           }
+          //         },
+          //         child: SizedBox(
+          //           width: double.infinity,
+          //           height: 30,
+          //           child: widget.children[index],
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

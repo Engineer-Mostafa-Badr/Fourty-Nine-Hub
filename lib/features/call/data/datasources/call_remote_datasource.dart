@@ -22,16 +22,18 @@ class CallRemoteDatasourceImpl implements CallRemoteDatasource {
       headers.addAll({'Authorization': 'Bearer $token'});
       http.Response response = await http.post(
         Uri.parse(
-            EndPoints.developmentBaseUrl + EndPoints.agoraGenerateToken),
-        body: json.encode(params.toMap()),
+            EndPoints.developmentBaseUrl + EndPoints.whatsAppAgoraToken),
         headers: headers,
       );
+
+      print("Response of getAgoraToken: ${response.statusCode} %% ${response.body}");
 
       if (response.statusCode > 199 &&
           response.statusCode < 300 &&
           response.body.isNotEmpty) {
         var body = jsonDecode(response.body);
-        return Right(AgoraInfoModel.fromJson(body as Map<String, dynamic>));
+        print("The body of agora is ${body['data']}");
+        return Right(AgoraInfoModel.fromJson(body['data'] as Map<String, dynamic>));
       }
 
       return Left(Exception('Unable to get required data to initiate call'));

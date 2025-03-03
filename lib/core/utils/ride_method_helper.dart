@@ -102,4 +102,246 @@ class RideMethodHelper {
     );
   }
 
+  uploadDriverImage({
+    required XFile driverImage,
+  }) async {
+    getSignUrl(
+      data: {
+        "document": {
+          "type": await getFileExtension(File(driverImage.path)),
+          "size": await getFileSize(File(driverImage.path))
+        }
+      },
+      url: "${EndPoints.developmentBaseUrl}/ride/info/driver-picture",
+      onSuccess: (data) async {
+        await sendBinaryFileData(
+            file: XFile(driverImage.path),
+            signedUrl: data['data']['undefinedData']['signedUrl']);
+        await successUploadImage(data: {
+          "mediaId": data['data']['undefinedData']['mediaId'],
+          "type": "Ride" // Loading or Ride
+        }, url: "${EndPoints.developmentBaseUrl}/ride/info/success-driver-picture");
+      },
+    );
+  }
+
+  uploadDriverLicense(
+      {required XFile drivingImageInFront,
+        required XFile drivingImageBehind,
+        required String drivingExpiryDate}
+      ) async {
+    getSignUrl(
+      data: {
+        "expireDate": drivingExpiryDate,
+        "drivingLicenseFront": {
+          "type": await getFileExtension(File(drivingImageInFront.path)),
+          "size": await getFileSize(File(drivingImageInFront.path))
+        },
+        "drivingLicenseBehind": {
+          "type": await getFileExtension((File(drivingImageBehind.path))),
+          "size": await getFileSize(File(drivingImageInFront.path))
+        }
+      },
+      url: "${EndPoints.developmentBaseUrl}/ride/info/driving-license",
+      onSuccess: (data) async {
+        await sendBinaryFileData(
+            file: XFile(File(drivingImageInFront.path).path),
+            signedUrl: data['data']['drivingLicenseFrontData']['signedUrl'])
+            .then(
+              (value) async {
+            await sendBinaryFileData(
+                file: XFile(drivingImageBehind.path),
+                signedUrl: data['data']['drivingLicenseBehindData']
+                ['signedUrl'])
+                .then(
+                  (value) async {
+                await successUploadImage(data: {
+                  "frontMediaId": data['data']['drivingLicenseFrontData']
+                  ['mediaId'],
+                  "behindMediaId": data['data']['drivingLicenseBehindData']
+                  ['mediaId']
+                }, url: "${EndPoints.developmentBaseUrl}/ride/info/success-upload");
+              },
+            );
+          },
+        );
+      },
+    );
+  }
+
+  confirmIdentity({
+    required XFile verifyUserImage,
+  }) async {
+    getSignUrl(
+      data: {
+        // "expireDate": "2024-5-24",
+        "document": {
+          "name": "confirmIdentity",
+          "type": await getFileExtension(File(verifyUserImage.path)),
+          "size": await getFileSize(File(verifyUserImage.path))
+        }
+      },
+      url: "${EndPoints.developmentBaseUrl}/ride/info/documents",
+      onSuccess: (data) async {
+        await sendBinaryFileData(
+            file: XFile(File(verifyUserImage.path).path),
+            signedUrl: data['data']['confirmIdentityData']['signedUrl']);
+        await successUploadImage(
+            url:
+            "${EndPoints.developmentBaseUrl}/ride/info/documents/${data['data']['confirmIdentityData']['mediaId']}");
+      },
+    );
+  }
+
+  uploadCarLicense({
+    required XFile carLicenseFrontImage,
+    required XFile carLicenseBehindImage,
+    required String licenseExpiryDate
+}) async {
+    getSignUrl(
+      data: {
+        "expireDate": licenseExpiryDate,
+        "carLicenseFront": {
+          "type": await getFileExtension(File(carLicenseFrontImage.path)),
+          "size": await getFileSize(File(carLicenseFrontImage.path))
+        },
+        "carLicenseBehind": {
+          "type": await getFileExtension(File(carLicenseBehindImage.path)),
+          "size": await getFileSize(File(carLicenseBehindImage.path))
+        }
+      },
+      url: "${EndPoints.developmentBaseUrl}/ride/info/car-license",
+      onSuccess: (data) async {
+        await sendBinaryFileData(
+            file: XFile(carLicenseFrontImage.path),
+            signedUrl: data['data']['carLicenseFrontData']['signedUrl'])
+            .then(
+              (value) async {
+            await sendBinaryFileData(
+                file: XFile(carLicenseBehindImage.path),
+                signedUrl: data['data']['carLicenseBehindData']
+                ['signedUrl'])
+                .then(
+                  (value) async {
+                await successUploadImage(data: {
+                  "frontMediaId": data['data']['carLicenseFrontData']
+                  ['mediaId'],
+                  "behindMediaId": data['data']['carLicenseBehindData']
+                  ['mediaId']
+                }, url: "${EndPoints.developmentBaseUrl}/ride/info/success-upload");
+              },
+            );
+          },
+        );
+      },
+    );
+  }
+
+
+  uploadCarImage({
+    required XFile carImage,
+}) async {
+    getSignUrl(
+      data: {
+        "updateImageIndex": [1],
+        "carImages": [
+          {
+            "type": await getFileExtension(File(carImage.path)),
+            "size": await getFileSize(File(carImage.path))
+          }
+        ]
+      },
+      url: "${EndPoints.developmentBaseUrl}/ride/info/car-images",
+      onSuccess: (data) async {
+        await sendBinaryFileData(
+            file: XFile(carImage.path),
+            signedUrl: data['data'][0]['signedUrl']);
+        await successUploadImage(
+          data: {"mediaId": data['data'][0]['mediaId']},
+          url: "${EndPoints.developmentBaseUrl}/ride/info/success-car-images",
+        );
+        log("criminalRecordData");
+      },
+    );
+  }
+
+  uploadDrugAnalysis({
+    required XFile dragAnalysis,
+    required String dragAnalysisDate
+  }) async {
+    getSignUrl(
+      data: {
+        "expireDate": dragAnalysisDate,
+        "document": {
+          "name": "drugAnalysis",
+          "type": await getFileExtension(File(dragAnalysis.path)),
+          "size": await getFileSize(File(dragAnalysis.path))
+        }
+      },
+      url: "${EndPoints.developmentBaseUrl}/ride/info/documents",
+      onSuccess: (data) async {
+        await sendBinaryFileData(
+            file: XFile(dragAnalysis.path),
+            signedUrl: data['data']['drugAnalysisData']['signedUrl']);
+        await successUploadImage(
+            url:
+            "${EndPoints.developmentBaseUrl}/ride/info/documents/${data['data']['drugAnalysisData']['mediaId']}");
+        log("drugAnalysisData");
+      },
+    );
+  }
+
+  uploadTechnicalExamination({
+    required XFile technicalExaminationImage,
+    required String technicalExaminationDate
+  }) async {
+    getSignUrl(
+      data: {
+        "expireDate": technicalExaminationDate,
+        "document": {
+          "name": "technicalExamination",
+          "type": await getFileExtension(File(technicalExaminationImage.path)),
+          "size": await getFileSize(File(technicalExaminationImage.path))
+        }
+      },
+      url: "${EndPoints.developmentBaseUrl}/ride/info/documents",
+      onSuccess: (data) async {
+        await sendBinaryFileData(
+            file: XFile(technicalExaminationImage.path),
+            signedUrl: data['data']['technicalExaminationData']['signedUrl']);
+        await successUploadImage(
+            url:
+            "${EndPoints.developmentBaseUrl}/ride/info/documents/${data['data']['technicalExaminationData']['mediaId']}");
+        log("technicalExaminationData");
+      },
+    );
+  }
+
+  uploadCriminalRecord({
+    required XFile criminalRecordImage,
+    required String criminalRecordDate
+  }) async {
+    getSignUrl(
+      data: {
+        "expireDate": criminalRecordDate,
+        "document": {
+          "name": "criminalRecord",
+          "type": await getFileExtension(File(criminalRecordImage.path)),
+          "size": await getFileSize(File(criminalRecordImage.path))
+        }
+      },
+      url: "${EndPoints.developmentBaseUrl}/ride/info/documents",
+      onSuccess: (data) async {
+        await sendBinaryFileData(
+            file: XFile(criminalRecordImage.path),
+            signedUrl: data['data']['criminalRecordData']['signedUrl']);
+        await successUploadImage(
+            url:
+            "${EndPoints.developmentBaseUrl}/ride/info/documents/${data['data']['criminalRecordData']['mediaId']}");
+        log("criminalRecordData");
+      },
+    );
+  }
+
+
 }
