@@ -212,8 +212,8 @@ class _CustomScaffoldState extends State<CustomScaffold>
                             drawerRollWidget(
                               label: LocaleKeys.loading.localize,
                               image: Assets.loading,
-                              onTap: () {},
-                              // onTap: () => context.push(Routes.RIDE),
+                              // onTap: () {},
+                              onTap: () => context.push(Routes.SHIPPING),
                             ),
                             drawerRollWidget(
                               label: LocaleKeys.health.localize,
@@ -284,7 +284,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                       width: 10,
                       decoration: BoxDecoration(
                         color: Colors.red,
-                        border: BorderDirectional(
+                        border: const BorderDirectional(
                           end: BorderSide(
                             color: AppColors.PRIMARY_COLOR,
                             width: 2,

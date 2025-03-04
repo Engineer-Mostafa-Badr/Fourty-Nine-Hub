@@ -10,6 +10,9 @@ import 'package:get_it/get_it.dart';
 
 import '../features/RideFeature/data/datasources/ride_local_data_source.dart';
 import '../features/RideFeature/data/datasources/ride_remote_data_source.dart';
+import '../features/RideFeature/data/datasources/shipping_remote_data_source.dart';
+import '../features/RideFeature/data/repositories/shipping_repository_imp.dart';
+import '../features/RideFeature/domain/repositories/shipping_repository.dart';
 import '../features/RideFeature/domain/usecases/get_ride_categories_usecase.dart';
 
 class RideServiceLocatorUpdated {
@@ -17,6 +20,10 @@ class RideServiceLocatorUpdated {
     // ---------------------------------- data sources ----------------------------------
     serviceLocator.registerLazySingleton<RideRemoteDataSource>(
             () => RideRemoteDataSourceImplementation(
+          serviceLocator(),
+        ));
+    serviceLocator.registerLazySingleton<ShippingRemoteDataSource>(
+            () => ShippingRemoteDataSourceImplementation(
           serviceLocator(),
         ));
 
@@ -27,6 +34,9 @@ class RideServiceLocatorUpdated {
     // ---------------------------------- repositories ----------------------------------
     serviceLocator.registerLazySingleton<RideRepository>(() =>
         RideRepositoryImplementation(serviceLocator()));
+
+    serviceLocator.registerLazySingleton<ShippingRepository>(() =>
+        ShippingRepositoryImplementation(serviceLocator()));
 
     serviceLocator.registerLazySingleton<RideRepositoryImplementation>(() =>
         RideRepositoryImplementation(serviceLocator()));
