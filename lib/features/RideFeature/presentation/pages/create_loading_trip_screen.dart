@@ -12,16 +12,16 @@ import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 
-class RidePersonalMoreInfoScreen extends StatefulWidget {
-  const RidePersonalMoreInfoScreen({super.key});
+class CreateLoadingTripScreen extends StatefulWidget {
+  const CreateLoadingTripScreen({super.key});
 
   @override
-  State<RidePersonalMoreInfoScreen> createState() =>
-      _RidePersonalMoreInfoScreenState();
+  State<CreateLoadingTripScreen> createState() =>
+      _CreateLoadingTripScreenState();
 }
 
-class _RidePersonalMoreInfoScreenState
-    extends State<RidePersonalMoreInfoScreen> {
+class _CreateLoadingTripScreenState
+    extends State<CreateLoadingTripScreen> {
   String _selectedTime = LocaleKeys.pickupTime.localize;
   String _selectedDate = LocaleKeys.pickupDate.localize;
   int _numberOfPassengers = 0;

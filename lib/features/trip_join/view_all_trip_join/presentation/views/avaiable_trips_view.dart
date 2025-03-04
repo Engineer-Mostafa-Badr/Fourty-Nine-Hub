@@ -18,7 +18,7 @@ import '../../../../RideFeature/presentation/pages/activity_trip_screen.dart';
 import '../../../../RideFeature/presentation/pages/expired_trips_screen.dart';
 import '../../../../RideFeature/presentation/pages/receipt_trip_screen.dart';
 import '../../../../RideFeature/presentation/pages/ride_details_screen.dart';
-import '../../../../RideFeature/presentation/pages/ride_personal_more_info_screen.dart';
+import '../../../../RideFeature/presentation/pages/create_loading_trip_screen.dart';
 import '../../../../RideFeature/presentation/pages/running_trips_screen.dart';
 import '../../../../RideFeature/presentation/pages/widgets/custom_ride_button.dart';
 import '../../../presentation/views/widgets/on_boarding_trip.dart';

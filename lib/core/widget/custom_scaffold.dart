@@ -213,7 +213,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               label: LocaleKeys.loading.localize,
                               image: Assets.loading,
                               // onTap: () {},
-                              onTap: () => context.push(Routes.SHIPPING),
+                              onTap: () => context.push(Routes.createLoadingTripScreen),
                             ),
                             drawerRollWidget(
                               label: LocaleKeys.health.localize,

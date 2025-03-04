@@ -216,6 +216,7 @@ abstract class Routes {
   static const truckVehicleInformationScreen = '/TruckVehicleInformationScreen';
   static const truckMoreInfoScreen = '/TruckMoreInfoScreen';
   static const completeRegisterScreen = '/CompleteRegisterScreen';
+  static const createLoadingTripScreen = '/CreateLoadingTripScreen';
 }
 
 abstract class Paths {
@@ -421,4 +422,5 @@ abstract class Paths {
   static const truckVehicleInformationScreen = 'TruckVehicleInformationScreen';
   static const truckMoreInfoScreen = 'TruckMoreInfoScreen';
   static const completeRegisterScreen = 'CompleteRegisterScreen';
+  static const createLoadingTripScreen = 'CreateLoadingTripScreen';
 }
