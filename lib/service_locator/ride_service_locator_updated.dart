@@ -13,6 +13,7 @@ import '../features/RideFeature/data/datasources/ride_remote_data_source.dart';
 import '../features/RideFeature/data/datasources/shipping_remote_data_source.dart';
 import '../features/RideFeature/data/repositories/shipping_repository_imp.dart';
 import '../features/RideFeature/domain/repositories/shipping_repository.dart';
+import '../features/RideFeature/domain/usecases/create_loading_trip_usecase.dart';
 import '../features/RideFeature/domain/usecases/get_ride_categories_usecase.dart';
 
 class RideServiceLocatorUpdated {
@@ -48,6 +49,7 @@ class RideServiceLocatorUpdated {
     serviceLocator.registerLazySingleton<GetRideBrandsUseCase>(() => GetRideBrandsUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetRideModelsUseCase>(() => GetRideModelsUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetRideCarColorsUseCase>(() => GetRideCarColorsUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<CreateLoadingTripUseCase>(() => CreateLoadingTripUseCase(serviceLocator()));
 
     // ---------------------------------- cubits ----------------------------------
 
