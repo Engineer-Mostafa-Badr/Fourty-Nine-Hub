@@ -13,6 +13,9 @@ import 'package:fourtyninehub/features/notifications/helpers/firebase_notificati
 import 'package:fourtyninehub/features/notifications/helpers/web_socket_helper.dart';
 import 'package:get_it/get_it.dart';
 
+import '../features/notifications/domain/usecases/get_all_user_trips_usecase.dart';
+import '../features/notifications/presentation/cubits/get_user_trips_notifications/get_user_trips_notifications_cubit.dart';
+
 class NotificationsServiceLocator {
   static execute({required GetIt serviceLocator}) async {
     serviceLocator.registerLazySingleton<FirebaseHelper>(
@@ -30,6 +33,7 @@ class NotificationsServiceLocator {
         notificationRemoteDataSource: serviceLocator(),
       ),
     );
+
     serviceLocator
         .registerLazySingleton<SetInterceptedNotificationMessageUseCase>(
       () => SetInterceptedNotificationMessageUseCase(
@@ -63,6 +67,14 @@ class NotificationsServiceLocator {
     );
     serviceLocator.registerLazySingleton<DeleteAllNotificationsUseCase>(
       () => DeleteAllNotificationsUseCase(notificationRepo: serviceLocator()),
+    );
+    serviceLocator.registerLazySingleton<GetAllUserTripsUseCase>(
+      () => GetAllUserTripsUseCase(notificationRepo: serviceLocator()),
+    );
+
+    serviceLocator.registerLazySingleton<GetUserTripsNotificationsCubit>(
+      () => GetUserTripsNotificationsCubit(
+          getAllUserTripsUseCase: serviceLocator()),
     );
   }
 }
