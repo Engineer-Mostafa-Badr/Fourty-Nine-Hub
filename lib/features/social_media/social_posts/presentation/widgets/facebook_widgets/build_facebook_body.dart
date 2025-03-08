@@ -53,8 +53,8 @@ class _FacebookBodyState extends State<FacebookBody> with TickerProviderStateMix
                       mainAxisAlignment: MainAxisAlignment.center,
                       children:[
                         SvgPicture.asset(Assets.home,width: 18,height: 18,),
-                        SizedBox(width: 10),
-                        Text(LocaleKeys.home.localize,style:TextStyle(
+                        const SizedBox(width: 10),
+                        Text(LocaleKeys.home.localize,style:const TextStyle(
                             color: Colors.black,
                             fontSize: 16,
                             fontWeight:FontWeight.w700

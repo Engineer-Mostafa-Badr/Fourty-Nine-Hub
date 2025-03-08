@@ -43,7 +43,7 @@ class _VideoStreamTabBarState extends State<VideoStreamTabBar> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
+    return Scaffold(
       body: BlocBuilder<StreamCubit, StreamState>(
         builder: (context, state) {
           final cubit = context.read<StreamCubit>();

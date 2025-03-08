@@ -42,6 +42,8 @@ import '../../../../../features/ads_feature/create_company_ad/data/models/fetch_
 import 'package:fourtyninehub/features/chance_feature/domain/use_case/fetch_main_category.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_sub_activities_usecase.dart';
 
+import '../../../../../features/azkaar/domain/use_case/search_azkar_usecase.dart';
+
 class EndPoints {
   //logout
   static const logout = '/auth/logout';
@@ -237,6 +239,10 @@ class EndPoints {
       '/azkar/categories?page=${params.page}&limit=${params.limit}';
   static String azkarDetails(AzkarDetailsParams params) =>
       '/azkar/azkar-in-category?page=${params.page}&limit=${params.limit}';
+
+  static String searchAzkar(SearchAzkarParams params) =>
+      '/azkar/search-azkar?page=${params.page}&limit=${params.limit}';
+
 
   static String notificationsSeen(String id) => '/notifications/$id';
 

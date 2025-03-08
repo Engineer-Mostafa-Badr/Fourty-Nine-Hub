@@ -76,20 +76,20 @@ class CreatePostBanner extends StatelessWidget {
           const Sizer(
             width: 13,
           ),
-          InkWell(
-            onTap: () {
-              if (context.isUserLoggedIn) {
-                context.push(Routes.ZOOM);
-              } else {
-                context.push(Routes.LOGIN);
-              }
-            },
-            child:  SvgPicture.asset(
-              Assets.zoomVideo,
-              // height: 50.h,
-
-            ),
-          ),
+          // InkWell(
+          //   onTap: () {
+          //     if (context.isUserLoggedIn) {
+          //       context.push(Routes.ZOOM);
+          //     } else {
+          //       context.push(Routes.LOGIN);
+          //     }
+          //   },
+          //   child:  SvgPicture.asset(
+          //     Assets.zoomVideo,
+          //     // height: 50.h,
+          //
+          //   ),
+          // ),
         ],
       ),
     );

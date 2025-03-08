@@ -80,11 +80,13 @@ class BaseApiConsumer extends ApiConsumer {
     if (token != null) {
       log(token.accessToken.toString(), name: "Token");
       _dio.options.headers['Authorization'] = 'Bearer ${token.accessToken}';
+      _dio.options.headers['x-api-key'] = '25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91';
       // _dio.options.headers['Authorization'] = 'Bearer ${await CacheManager.getAccessToken()}';
       // _dio.options.headers['Authorization'] = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb2NrZXRJZCI6ImEzMWEyNzkzLWFiYTEtNDliOC1iZTgzLTlkYzM2NWZhOTk1OCIsImlhdCI6MTczMjA1MTYzMywiZXhwIjo1NTczMjA1MTYzMywic3ViIjoiNjZkODZhODJlOWNkMzk5NzAwMmY2MzM2In0.Mcl_dnYecdxc2htakepeWmZUYMDjfdjYkvgwWb4p9ok';
     }
   }
 
+  //addAll({"x-api-key":"25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91"})
   @override
   Future<Either<Failure, Map<String, dynamic>>> patch(String url,
       {Map<String, dynamic>? data,
@@ -95,7 +97,10 @@ class BaseApiConsumer extends ApiConsumer {
         url,
         data: data,
         queryParameters: queryParameters,
-        options: Options(headers: headers),
+        options: Options(headers: {
+          ...?headers,
+          "x-api-key": "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91", // Your custom header
+        }),
       );
 
       if (result.data['status']) {
@@ -113,7 +118,10 @@ class BaseApiConsumer extends ApiConsumer {
             url,
             queryParameters: queryParameters,
             data: data,
-            headers: headers,
+            headers: {
+              ...?headers,
+              "x-api-key": "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91", // Your custom header
+            },
           ),
         );
       } else {
@@ -131,7 +139,10 @@ class BaseApiConsumer extends ApiConsumer {
       final result = await _dio.delete(
         url,
         data: data,
-        options: Options(headers: headers),
+        options: Options(headers: {
+          ...?headers,
+          "x-api-key": "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91", // Your custom header
+        }),
         queryParameters: queryParameters,
       );
       return Right(result.data as Map<String, dynamic>);
@@ -162,7 +173,10 @@ class BaseApiConsumer extends ApiConsumer {
       final result = await _dio.get(url,
           data: data,
           queryParameters: queryParameters,
-          options: Options(headers: headers)
+          options: Options(headers: {
+            ...?headers,
+            "x-api-key": "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91", // Your custom header
+          })
           // options: Options(headers: {
           //   "Authorization":
           //       'Bearer ${}'
@@ -217,7 +231,10 @@ class BaseApiConsumer extends ApiConsumer {
         url,
         data: formData ?? data,
         queryParameters: queryParameters,
-        options: Options(headers: headers),
+        options: Options(headers: {
+          ...?headers,
+          "x-api-key": "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91", // Your custom header
+        }),
       );
       log(result.data.toString(), name: "url");
       if (result.data['status']) {
@@ -256,7 +273,10 @@ class BaseApiConsumer extends ApiConsumer {
       final result = await _dio.put(url,
           data: data,
           queryParameters: queryParameters,
-          options: Options(headers: headers));
+          options: Options(headers: {
+            ...?headers,
+            "x-api-key": "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91", // Your custom header
+          }));
       log(result.data.toString(), name: "url");
       if (getSuccessState(result.data)) {
         log('iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');

@@ -1400,8 +1400,8 @@ static const Map<String,dynamic> _en = {
   "arabic": "Arabic",
   "english": "English",
   "meal": "Meal",
-  "darkMode": "Dark mode",
-  "lightMode": "Light mode",
+  "darkMode": "Dark Mode",
+  "lightMode": "Light Mode",
   "voice": "Voice",
   "restaurantName": "ٌRestaurant Name",
   "theCommercialRegister": "The Commercial Register",
@@ -2659,7 +2659,8 @@ static const Map<String,dynamic> _en = {
   "rideDetails": "Ride Details",
   "carTruckRegister": "Car/Truck Register",
   "options": "Options",
-  "noSmoker": "Non smoker Driver"
+  "noSmoker": "Non smoker Driver",
+  "choiceRuler": "Choice Ruler"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

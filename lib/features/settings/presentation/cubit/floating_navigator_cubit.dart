@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/utils/shared_pref.dart';
 
@@ -10,22 +11,27 @@ class FloatingNavigatorCubit extends Cubit<FloatingNavigatorState> {
 
   static FloatingNavigatorCubit get(context) => BlocProvider.of(context);
 
-  bool floatingNavigatorStatus = true;
+  bool floatingNavigatorStatus = false;
+
+  Future<void> getFloatingNavigatorStatus() async {
+    floatingNavigatorStatus = await CacheManager.getFloatingNavigator();
+  }
 
   Future<void> activeFloatingNavigator() async {
-    floatingNavigatorStatus = false;
+    floatingNavigatorStatus = !floatingNavigatorStatus;
     await CacheManager.isFloatingNavigatorOpen(floatingNavigatorStatus);
     emit(ActiveFloatNavigatorStatusState());
     print(floatingNavigatorStatus);
-    print('getFloatingNavigator saved to ${await CacheManager.getFloatingNavigator()}');
+    print(
+        'getFloatingNavigator saved to ${await CacheManager.getFloatingNavigator()}');
   }
 
   Future<void> unActiveFloatingNavigator() async {
-    floatingNavigatorStatus = true;
+    floatingNavigatorStatus = !floatingNavigatorStatus;
     await CacheManager.isFloatingNavigatorOpen(floatingNavigatorStatus);
     emit(UnActiveFloatNavigatorStatusState());
     print(floatingNavigatorStatus);
-    print('getFloatingNavigator saved to ${await CacheManager.getFloatingNavigator()}');
+    print(
+        'getFloatingNavigator saved to ${await CacheManager.getFloatingNavigator()}');
   }
-
 }
