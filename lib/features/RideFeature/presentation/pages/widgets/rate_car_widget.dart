@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 
 import '../../../../../res/style/app_colors.dart';
 

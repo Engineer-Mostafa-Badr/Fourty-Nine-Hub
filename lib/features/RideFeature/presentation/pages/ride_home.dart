@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubi
 import '../../../../common/widgets/form/text_fields/form_text_field.dart';
 import '../../../../common/widgets/stateless/appbar/nested_appbar.dart';
 import '../../../../common/widgets/stateless/dynamic/shared_scaffold.dart';
+import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -17,6 +18,7 @@ import 'widgets/add_stops_widget.dart';
 import 'widgets/bottom_sheet/custom_bottom_sheet.dart';
 import 'widgets/country_dropdown.dart';
 import 'widgets/fare_bottom_sheet_widget.dart';
+import 'widgets/map_section.dart';
 import 'widgets/options_bottomsheet_widget.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -74,7 +76,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
               appBars: const [],
               body: Stack(
                 children: [
-                  _buildTopImage(),
+                  const MapSection(),
                   _buildBottomSheet(),
                 ],
               ),
@@ -85,89 +87,89 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildTopImage() {
-    return Stack(
-      children: [
-        Image.network(
-          "https://miro.medium.com/v2/resize:fit:1024/1*lNbCllyMLyiVyGfY-HXHjw.png",
-          width: double.infinity,
-          height: MediaQuery.of(context).size.height * 0.4,
-          fit: BoxFit.cover,
-        ),
-        GestureDetector(
-          onTap: () {
-            print("context.read<RideCubit>().state.driverInfo!=null${context.read<RideCubit>().state.driverInfo!=null}");
-            customBottomSheet(context,
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    spacing: 10,
-                    children: [
-                      if(context.read<RideCubit>().state.driverInfo==null||(context.read<RideCubit>().state.driverInfo?.isApproved==false))AppButton(
-                          radius: 15,
-                          label: LocaleKeys.ride.tr(),
-                          onPressed: () {
-                            if(context.read<RideCubit>().state.driverInfo!=null){
-                              context.push(Routes.UploadRiderImages);
-                            }else{
-                              context.push(Routes.welcomeRideRegister);
-                            }
-                          },
-                          backColor: AppColors.PRIMARY_COLOR,
-                          width: double.infinity),
-                      AppButton(
-                          radius: 15,
-                          label: LocaleKeys.shipping.tr(),
-                          onPressed: () {
-                            context.push(Routes.truckWelcomeRideRegister);
-                          },
-                          backColor: AppColors.PRIMARY_COLOR,
-                          width: double.infinity),
-                    ],
-                  ),
-                ),
-                title: '');
-          },
-          child: Container(
-            margin: const EdgeInsets.all(12),
-            width: double.infinity,
-            height: 50,
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [
-                  Color(0xFF0B1035),
-                  Color(0xFF161F68),
-                  Color(0xFF1B2781),
-                  Color(0xFF1E2B8E),
-                  Color(0xFF1F2D95),
-                  Color(0xFF0B1035)
-                ],
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-              ),
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
-                    spreadRadius: 2,
-                    blurRadius: 5,
-                    offset: const Offset(0, 3)),
-              ],
-            ),
-            child: Center(
-              child: Text(
-                LocaleKeys.carTruckRegister.tr(),
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
+  // Widget _buildTopImage() {
+  //   return Stack(
+  //     children: [
+  //       Image.network(
+  //         "https://miro.medium.com/v2/resize:fit:1024/1*lNbCllyMLyiVyGfY-HXHjw.png",
+  //         width: double.infinity,
+  //         height: MediaQuery.of(context).size.height * 0.4,
+  //         fit: BoxFit.cover,
+  //       ),
+  //       GestureDetector(
+  //         onTap: () {
+  //           print("context.read<RideCubit>().state.driverInfo!=null${context.read<RideCubit>().state.driverInfo!=null}");
+  //           customBottomSheet(context,
+  //               child: Padding(
+  //                 padding: const EdgeInsets.all(12.0),
+  //                 child: Column(
+  //                   spacing: 10,
+  //                   children: [
+  //                     if(context.read<RideCubit>().state.driverInfo==null||(context.read<RideCubit>().state.driverInfo?.isApproved==false))AppButton(
+  //                         radius: 15,
+  //                         label: LocaleKeys.ride.tr(),
+  //                         onPressed: () {
+  //                           if(context.read<RideCubit>().state.driverInfo!=null){
+  //                             context.push(Routes.UploadRiderImages);
+  //                           }else{
+  //                             context.push(Routes.welcomeRideRegister);
+  //                           }
+  //                         },
+  //                         backColor: AppColors.PRIMARY_COLOR,
+  //                         width: double.infinity),
+  //                     AppButton(
+  //                         radius: 15,
+  //                         label: LocaleKeys.shipping.tr(),
+  //                         onPressed: () {
+  //                           context.push(Routes.truckWelcomeRideRegister);
+  //                         },
+  //                         backColor: AppColors.PRIMARY_COLOR,
+  //                         width: double.infinity),
+  //                   ],
+  //                 ),
+  //               ),
+  //               title: '');
+  //         },
+  //         child: Container(
+  //           margin: const EdgeInsets.all(12),
+  //           width: double.infinity,
+  //           height: 50,
+  //           decoration: BoxDecoration(
+  //             gradient: const LinearGradient(
+  //               colors: [
+  //                 Color(0xFF0B1035),
+  //                 Color(0xFF161F68),
+  //                 Color(0xFF1B2781),
+  //                 Color(0xFF1E2B8E),
+  //                 Color(0xFF1F2D95),
+  //                 Color(0xFF0B1035)
+  //               ],
+  //               begin: Alignment.centerLeft,
+  //               end: Alignment.centerRight,
+  //             ),
+  //             borderRadius: BorderRadius.circular(15),
+  //             boxShadow: [
+  //               BoxShadow(
+  //                   color: Colors.black.withOpacity(0.3),
+  //                   spreadRadius: 2,
+  //                   blurRadius: 5,
+  //                   offset: const Offset(0, 3)),
+  //             ],
+  //           ),
+  //           child: Center(
+  //             child: Text(
+  //               LocaleKeys.carTruckRegister.tr(),
+  //               style: const TextStyle(
+  //                   color: Colors.white,
+  //                   fontSize: 22,
+  //                   fontWeight: FontWeight.bold),
+  //             ),
+  //           ),
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 
   Widget _buildBottomSheet() {
     return Positioned(
@@ -179,35 +181,97 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
-            padding: const EdgeInsetsDirectional.only(end: 12.0),
+            padding: const EdgeInsetsDirectional.symmetric(horizontal: 16.0),
             child: Row(
               spacing: 5,
-              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                ClickableWidget(
-                    onTap: (){
-                      context.push(Routes.RIDEACTIVITY);
+                Expanded(
+                  child: ClickableWidget(
+                      onTap: () {
+                        context.push(Routes.rideLoadingRequestScreen);
+                      },
+                      child: Stack(
+                        alignment: AlignmentDirectional.topEnd,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: _tripsWidget(
+                                text: 'Ride Request',
+                                backgroundColor: AppColors.GREYBG),
+                          ),
+                          const CircleAvatar(
+                            backgroundColor: AppColors.SECONDARY_COLOR_DARK2,
+                            radius: 9,
+                            child: Text(
+                              '1k',
+                              style: TextStyle(
+                                  color: AppColors.GREYBG,
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                          )
+                        ],
+                      )),
+                ),
+                Expanded(
+                  child: ClickableWidget(
+                    onTap: () {
+                      context.push(Routes.rideLoadingRequestScreen);
                     },
-                    child: _tripsWidget(LocaleKeys.activity.tr())),
-                ClickableWidget(
-                    onTap: (){
-                      context.push(Routes.RIDERUNNINGTRIPS);
-                    },
-                    child: _tripsWidget(LocaleKeys.runningTrips.tr())),
-                ClickableWidget(
-                    onTap: (){
-                      context.push(Routes.RIDEEXPIREDTRIPE);
-                    },
-                    child: _tripsWidget(LocaleKeys.expiredTrips.tr())),
-                const SizedBox(width: 10),
-                Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: const Color(0xffDBD1D1).withOpacity(0.6)),
-                    child: Image.asset(
-                        'assets/icons/send2.png') //const Icon(Icons.send_rounded),
+                    child: Stack(
+                      alignment: AlignmentDirectional.topEnd,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: _tripsWidget(
+                              text: 'Loading Request',
+                              backgroundColor: AppColors.GREYBG),
+                        ),
+                        const CircleAvatar(
+                          backgroundColor: AppColors.SECONDARY_COLOR_DARK2,
+                          radius: 9,
+                          child: Text(
+                            '360',
+                            style: TextStyle(
+                                color: AppColors.GREYBG,
+                                fontSize: 9,
+                                fontWeight: FontWeight.w600),
+                          ),
+                        )
+                      ],
                     ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsetsDirectional.symmetric(
+                horizontal: 16.0, vertical: 8),
+            child: Row(
+              spacing: 5,
+              children: [
+                Expanded(
+                  child: ClickableWidget(
+                      onTap: () {
+                        context.push(Routes.RIDEACTIVITY);
+                      },
+                      child: _tripsWidget(text: LocaleKeys.activity.tr())),
+                ),
+                Expanded(
+                  child: ClickableWidget(
+                      onTap: () {
+                        context.push(Routes.RIDERUNNINGTRIPS);
+                      },
+                      child: _tripsWidget(text: LocaleKeys.runningTrips.tr())),
+                ),
+                Expanded(
+                  child: ClickableWidget(
+                      onTap: () {
+                        context.push(Routes.RIDEEXPIREDTRIPE);
+                      },
+                      child: _tripsWidget(text: LocaleKeys.expiredTrips.tr())),
+                ),
               ],
             ),
           ),
@@ -243,7 +307,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         "shipping", state.rideCategory?.subCategories ?? []
                         // "shipping",
                         // state.shippingCategory?.subCategories ?? []
-                    ),
+                        ),
                     CountryDropdown(),
                     // CountryPickerDropdown(
                     //   onValuePicked: (value) {},
@@ -273,6 +337,16 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                     _customLocationField(LocaleKeys.to.tr(), Colors.blue,
                         LocaleKeys.find.tr(), toController, true),
                     _fareField(),
+                    // Container(
+                    //     padding: const EdgeInsets.symmetric(
+                    //         horizontal: 16, vertical: 4),
+                    //     decoration: BoxDecoration(
+                    //         color: AppColors.GREYFIELD,
+                    //         borderRadius: BorderRadius.circular(15)),
+                    //     child: Row(spacing: 8, children: [
+                    //       SvgPicture.asset(Assets.alertCircle),
+                    //       const Text('Travel time:~14 min. Distance: 6.58 Km.')
+                    //     ])),
                     Row(
                       spacing: 5,
                       children: [
@@ -304,16 +378,19 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
     );
   }
 
-  Widget _tripsWidget(String text) {
+  Widget _tripsWidget(
+      {required String text, Color backgroundColor = AppColors.GREYFIELD}) {
     return Container(
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-          color: AppColors.GREYCARD,
+          color: backgroundColor,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(color: AppColors.DARK_BLUE_COLOR)),
-      child: Text(
-        text,
-        style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
+      child: Center(
+        child: Text(
+          text,
+          style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
+        ),
       ),
     );
   }
@@ -425,7 +502,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 ElevatedButton(
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(100, 52),
+                      minimumSize: const Size(110, 52),
                       backgroundColor: AppColors.PRIMARY_COLOR,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20))),
@@ -476,7 +553,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                           fontWeight: FontWeight.bold, fontSize: 12)),
                   Text(LocaleKeys.offerYourFare.tr()),
                   const Spacer(),
-                  Image.asset('assets/icons/edit.png'),
+                  Image.asset(Assets.edit),
                 ],
               ),
             ),
@@ -491,7 +568,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
               },
               child: SizedBox(
                 height: 25,
-                child: Image.asset('assets/icons/option.png'),
+                child: Image.asset(Assets.option),
               ),
             ),
           )

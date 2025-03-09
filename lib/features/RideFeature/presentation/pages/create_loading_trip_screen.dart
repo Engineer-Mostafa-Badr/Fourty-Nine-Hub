@@ -26,7 +26,7 @@ class _CreateLoadingTripScreenState
   String _selectedDate = LocaleKeys.pickupDate.localize;
   int _numberOfPassengers = 0;
   bool _isExpanded = false;
-  String _offerPrice = '';
+  String offerPrice = '';
 
   @override
   Widget build(BuildContext context) {
@@ -148,9 +148,7 @@ class _CreateLoadingTripScreenState
               ImageTextRow(
                   imagePath: Assets.logo,
                   text: LocaleKeys.freeCancellation.localize),
-              SizedBox(
-                height: 15,
-              ),
+              const SizedBox(height: 15,),
               Row(
                 children: [
                   Expanded(
@@ -261,7 +259,7 @@ class _CreateLoadingTripScreenState
                     style: const TextStyle(
                         fontSize: 18, fontWeight: FontWeight.bold),
                     onChanged: (value) {
-                      _offerPrice = value;
+                      offerPrice = value;
                     },
                   ),
                   const SizedBox(height: 50),
@@ -270,7 +268,7 @@ class _CreateLoadingTripScreenState
                     backColor: AppColors.PRIMARY_COLOR,
                     onPressed: () {
                       setState(() {
-                        _offerPrice = offerPriceController.text;
+                        offerPrice = offerPriceController.text;
                       });
                       Navigator.pop(context);
                     },

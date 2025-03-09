@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/car_circle_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/info_column_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/person_trip_widget.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/rate_car_widget.dart';
 
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../res/assets/assets.dart';
-import '../../../../res/style/app_colors.dart';
-import '../../../../res/style/styles.dart';
+
  
+// ignore: must_be_immutable
 class RunningTripScreen extends StatelessWidget {
   RunningTripScreen({super.key});
 
@@ -26,7 +21,7 @@ class RunningTripScreen extends StatelessWidget {
     Assets.redCar,
     Assets.blackCar,
     Assets.redCar,
-    Assets.blackCar,
+    Assets.blackCar
   ];
   List<String> titles = [
     "Women",

@@ -10,6 +10,7 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 
 import '../../../../res/style/app_colors.dart';
 
+// ignore: must_be_immutable
 class ActivityTripScreen extends StatelessWidget {
    ActivityTripScreen({super.key});
 
