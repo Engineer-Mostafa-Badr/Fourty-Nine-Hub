@@ -1327,7 +1327,6 @@ class CodegenLoader extends AssetLoader{
   "rate": "تقييم",
   "rideDetails": "تفاصيل الرحلة",
   "options": "الخيارات",
-  "noSmoker": "سائق غير مدخن",
   "tryAgain": "مرة اخري",
   "YouhaveenteredOTPCodeWrong": "لقد ادخلت رمز التحقق خطا",
   "cancelTheRide": "إلغاء الرحلة",
@@ -1391,7 +1390,15 @@ class CodegenLoader extends AssetLoader{
   "percentage": "نسبة",
   "subscribePackage": "رزم الاشتراك",
   "busMode": "الوضع الحافلة",
-  "trukMode": "الوضع الشاحنة"
+  "trukMode": "الوضع الشاحنة",
+  "busDetails": "تفاصيل الحافلة",
+  "trukDetails": "تفاصيل الشاحنة",
+  "busWithYou": "رحله حافلة معك",
+  "trukWithYou": "رحله شاحنة معك",
+  "passenger": "الركاب",
+  "noSmoker": "سائق غير مدخن",
+  "choiceRuler": "مسطرة الاختيارت",
+  "completeRegistration": "تكملة التسجيل"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -1464,7 +1471,7 @@ static const Map<String,dynamic> _en = {
   "arabic": "Arabic",
   "english": "English",
   "meal": "Meal",
-  "darkMode": "Dark mode",
+  "darkMode": "Dark Mode",
   "lightMode": "Light mode",
   "voice": "Voice",
   "restaurantName": "ٌRestaurant Name",
@@ -2724,6 +2731,8 @@ static const Map<String,dynamic> _en = {
   "carTruckRegister": "Car/Truck Register",
   "options": "Options",
   "noSmoker": "Non smoker Driver",
+  "choiceRuler": "Choice Ruler",
+  "completeRegistration": "Complete Registration",
   "tryAgain": "try Again",
   "YouhaveenteredOTPCodeWrong": "You have entered OTP Code Wrong",
   "cancelTheRide": "Cancel The Ride",
@@ -2787,7 +2796,12 @@ static const Map<String,dynamic> _en = {
   "percentage": "Percentage",
   "subscribePackage": "Subscribe Package",
   "busMode": "Bus Mode",
-  "trukMode": "Truck Mode"
+  "trukMode": "Truck Mode",
+  "busDetails": "Bus Details",
+  "trukDetails": "Truck Details",
+  "busWithYou": "Bus ride with You",
+  "trukWithYou": "Truck ride with You",
+  "passenger": "Passenger"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

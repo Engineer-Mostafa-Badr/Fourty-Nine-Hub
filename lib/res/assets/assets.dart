@@ -262,7 +262,5 @@ abstract class Assets {
   static String alertCircle = 'assets/icons/alert-circle.svg';
   static String edit = 'assets/icons/edit.png';
   static String option = 'assets/icons/option.png';
-  static String rideFrom = 'assets/icons/ride_from.png';
-  static String rideTo = 'assets/icons/ride_to.png';
   static String update = 'assets/icons/update.png';
 }

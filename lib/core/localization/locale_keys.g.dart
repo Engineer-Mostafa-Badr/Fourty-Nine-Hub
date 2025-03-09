@@ -1303,7 +1303,6 @@ abstract class  LocaleKeys {
   static const rate = 'rate';
   static const rideDetails = 'rideDetails';
   static const options = 'options';
-  static const noSmoker = 'noSmoker';
   static const tryAgain = 'tryAgain';
   static const YouhaveenteredOTPCodeWrong = 'YouhaveenteredOTPCodeWrong';
   static const cancelTheRide = 'cancelTheRide';
@@ -1368,9 +1367,13 @@ abstract class  LocaleKeys {
   static const subscribePackage = 'subscribePackage';
   static const busMode = 'busMode';
   static const trukMode = 'trukMode';
-  static const trukDetails = 'trukDetails';
   static const busDetails = 'busDetails';
-  static const trukWithYou = 'trukWithYou';
+  static const trukDetails = 'trukDetails';
   static const busWithYou = 'busWithYou';
+  static const trukWithYou = 'trukWithYou';
   static const passenger = 'passenger';
+  static const noSmoker = 'noSmoker';
+  static const choiceRuler = 'choiceRuler';
+  static const completeRegistration = 'completeRegistration';
+
 }
