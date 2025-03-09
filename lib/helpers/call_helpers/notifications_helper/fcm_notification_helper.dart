@@ -16,7 +16,7 @@ abstract class FcmNotificationHelper {
   Future<void> setup();
 
   Future<Either<Exception, String>> getFcmToken();
-
+  Future<String> getFcmUserToken();
   Future onFcmTokenChanges();
 
   Future<Either<Exception, void>> subscribeTopic(String topic);
@@ -41,11 +41,29 @@ class FcmNotificationHelperImpl implements FcmNotificationHelper {
       if (result == null) {
         return Left(Exception('Unable to get your notification token'));
       }
-      log('+++++ FCM Token +++++++++ $result');
+      print('+++++ FCM Token +++++++++ $result');
       return Right(result);
     } catch (e) {
       return Left(Exception('Unable to get your notification token'));
     }
+  }
+
+  @override
+  Future<String> getFcmUserToken() async {
+    // try {
+    //   final result = await _firebaseMessaging.getToken();
+    //   if (result == null) {
+    //     return Left(Exception('Unable to get your notification token'));
+    //   }
+    //   print('+++++ FCM Token +++++++++ $result');
+    //   return Right(result);
+    // } catch (e) {
+    //   return Left(Exception('Unable to get your notification token'));
+    // }
+
+    final result = await _firebaseMessaging.getToken();
+
+    return result!;
   }
 
   @override
@@ -108,16 +126,16 @@ class FcmNotificationHelperImpl implements FcmNotificationHelper {
       SendNotificationParams params) async {
     try {
       final token = await _generateAccessKey();
-
+      print('Access token inside sendNotification $token');
       if (token == null) {
         log('++++++++++++++notification sent++ no data');
 
         return Left(Exception('Unable to send notification'));
       }
 
-      log('+++++ Token +++++++++ $token');
+      print('+++++ Token +++++++++ $token');
 
-      log('++++++++++++++notification sent++ ${params.toMap()}');
+      print('++++++++++++++notification sent++ ${params.toMap()}');
 
       final result = await post(
         Uri.parse(
@@ -128,9 +146,9 @@ class FcmNotificationHelperImpl implements FcmNotificationHelper {
         },
         body: json.encode(params.toMap()),
       );
-      log('+++++++++ ${json.decode(result.body)} ++++++++++');
-
+      print('result of sendNotification ${result.body}');
       if (result.statusCode > 199 && result.statusCode < 300) {
+        print('+++++++++ ${json.decode(result.body)} ++++++++++');
         return const Right(null);
       }
 
@@ -148,6 +166,7 @@ Future<String?> _generateAccessKey() async {
   final scopes = ['https://www.googleapis.com/auth/firebase.messaging'];
   final authClient = await clientViaServiceAccount(serviceAccount, scopes);
   final accessToken = authClient.credentials.accessToken;
+  print('Access token is ${accessToken.data}');
   return accessToken.data;
 }
 

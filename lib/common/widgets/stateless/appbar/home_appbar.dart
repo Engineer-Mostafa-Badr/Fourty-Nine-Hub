@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/widgets/unread_notifications_builder.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -62,9 +63,21 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
     }
 
     return AppBar(
+      // toolbarHeight: 60,
       toolbarHeight: toolbarHeight,
       bottom: bottom,
-      // leading: leading,
+      leading: IconButton(
+        icon: Image.asset(
+          Assets.menu,
+          width: 28,
+          height: 28,
+        ),
+        onPressed: () {
+          HandleCashback.setCount('drawerCount', context);
+          // Scaffold.currentState?.openDrawer(); // Open the drawer
+          Scaffold.of(context).openDrawer();
+        },
+      ),
       title: Row(
         children: [
           if (isShowLogo)
@@ -139,37 +152,27 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
           SizedBox(
             width: 20.w,
           ),
-          Expanded(
+          const Spacer(),
+          InkWell(
+            borderRadius: BorderRadius.circular(40.r),
+            onTap: () {
+              context.push(Routes.SEARCH);
+            },
             child: Container(
-              height: 55.h,
-              padding: EdgeInsets.symmetric(horizontal: 10.w),
+              // height: 55.h,
+              padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(40.r),
                   color: AppColors.AUTH_CONTAINER_COLOR),
-              child: InkWell(
-                borderRadius: BorderRadius.circular(40.r),
-                onTap: () {
-                  context.push(Routes.SEARCH);
-                },
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.search,
-                      size: 30.h,
-                      color: AppColors.QUANTITY_COLOR,
-                    ),
-                    SizedBox(width: 10.h),
-                    Expanded(
-                      child: Label(
-                          text: LocaleKeys.search.localize,
-                          style: Styles.mediumText(
-                              color: AppColors.QUANTITY_COLOR)),
-                    ),
-                  ],
-                ),
+              child: const Icon(
+                Icons.search,
+                size: 25,
+                color: AppColors.QUANTITY_COLOR,
               ),
             ),
           ),
+          const Sizer(),
+          const Sizer(),
           if (showLanguage)
             Expanded(
               child: TextButton(
@@ -191,26 +194,27 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
               context.push(Routes.CHAT, extra: ChatsViewParams());
             },
             child: Container(
-              width: 80.w,
-              padding: EdgeInsets.symmetric(horizontal: 15.w),
+              padding: const EdgeInsets.all(12),
               child: Badge.count(
                 count: context.read<UserCubit>().unreadedChatsCounter,
                 backgroundColor: AppColors.PRIMARY_COLOR_DARK,
                 isLabelVisible:
                     context.read<UserCubit>().unreadedChatsCounter > 0,
                 child: Image.asset(
-                  Assets.newChat,
+                  Assets.whatsApp,
                   color: AppColors.PRIMARY_COLOR,
-                  height: 30.h,
+                  height: 20,
+                  width: 20,
                 ),
               ),
             ),
           ),
-
-          SizedBox(
-            width: 15.w,
-          ),
-          GestureDetector(
+          const Sizer(),
+          const Sizer(),
+          // SizedBox(
+          //   width: 15.w,
+          // ),
+          InkWell(
             onTap: () {
               if (isCurrentRoute(context, Routes.NOTIFICATIONS) == true) {
                 return;
@@ -226,14 +230,13 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
               inNotifications: inNotifications,
             ),
           ),
-          SizedBox(
-            width: 5.w,
-          ),
+          const Sizer(),
         ],
       ),
       leadingWidth: 90.w,
       elevation: 0,
       titleSpacing: 0,
+
       //systemOverlayStyle: SystemUiOverlayStyle.light,
       // automaticallyImplyLeading: false,
     );

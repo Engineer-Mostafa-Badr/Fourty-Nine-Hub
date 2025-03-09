@@ -82,8 +82,8 @@ Widget closeWidget(BuildContext context) {
           ),
         ),
       ),
-      IconButton(
-        onPressed: () {
+      InkWell(
+        onTap: () {
           showAnimatedDialog(
             context,
             AlertDialog(
@@ -145,7 +145,7 @@ Widget closeWidget(BuildContext context) {
             ),
           );
         },
-        icon: const Icon(
+        child: const Icon(
           Icons.close,
           // size: ,
           color: AppColors.PRIMARY_COLOR,

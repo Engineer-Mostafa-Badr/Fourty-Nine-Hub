@@ -27,8 +27,6 @@ class TruckPersonalDocumentsScreen extends StatelessWidget {
     ];
     TextEditingController idNumberController = TextEditingController();
     TextEditingController expirationDateController = TextEditingController();
-    TextEditingController drugAnalysisExpirationDateController =
-        TextEditingController();
     return CustomScaffold(
       appBar: const HomeAppbar(),
       floatingActionButton: registerFloatingActionButton(
@@ -38,7 +36,7 @@ class TruckPersonalDocumentsScreen extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.only(bottom: 32,left: 16,right: 16,),
           child: Column(
             spacing: 4,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,17 +50,17 @@ class TruckPersonalDocumentsScreen extends StatelessWidget {
               ),
               const Sizer(),
               SizedBox(
-                height: 300,
+                height: MediaQuery.sizeOf(context).width*.35,
                 child: GridView.count(
                   physics: const NeverScrollableScrollPhysics(),
                   padding: EdgeInsets.zero,
                   crossAxisCount: 3,
-                  childAspectRatio: .85,
+                  childAspectRatio: .75,
                   mainAxisSpacing: 16,
                   crossAxisSpacing: 16,
                   children: List.generate(
                     uploadFilesTitles.length,
-                    (index) => uploadFileWidget(
+                    (index) => UploadFileWidget(
                       title: uploadFilesTitles[index],
                     ),
                   ),

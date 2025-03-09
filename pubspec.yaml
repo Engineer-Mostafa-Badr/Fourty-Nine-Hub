@@ -33,7 +33,7 @@ dependencies:
   emoji_picker_flutter: any
   equatable: ^2.0.5
   ffmpeg_kit_flutter: ^6.0.3
-  file_picker: ^6.2.1
+  file_picker: ^8.0.6
   firebase_auth: ^4.19.6
   firebase_core: ^2.31.0
   firebase_messaging: ^14.9.2
@@ -44,7 +44,6 @@ dependencies:
   flutter_background_service: ^5.0.10
   flutter_bloc: ^8.1.5
   flutter_cache_manager: ^3.3.3
-  flutter_callkit_incoming: ^2.5.0
   flutter_card_swiper: ^7.0.1
   flutter_contacts: ^1.1.9+2
   flutter_countdown_timer: ^4.1.0
@@ -133,13 +132,16 @@ dependencies:
   url_launcher: 6.2.6
   video_player: ^2.9.1
   video_thumbnail: null
-  visibility_detector: ^0.3.3
+  visibility_detector: ^0.4.0+2
   voice_message_package: ^2.2.1
   web_socket_channel: ^2.4.5
   webview_flutter: ^4.8.0
   widget_and_text_animator: null
   zego_express_engine: ^3.16.2
   zego_uikit_signaling_plugin: ^2.8.8
+  zego_uikit_prebuilt_call: ^4.16.22
+  sentry_flutter: ^8.13.2
+  circular_menu: ^4.0.0
 dependency_overrides:
   #  camera_android_camerax: 0.6.10+1
   http: ^0.13.3
@@ -166,6 +168,7 @@ flutter:
   # generate: true
   assets:
     - assets/images/
+    - assets/sounds/
     - assets/json/
     - assets/translations/
     - assets/settings/

@@ -208,6 +208,8 @@ abstract class Routes {
   static const personalDocumentsScreen = '/PersonalDocumentsScreen';
   static const vehicleInformationScreen = '/VehicleInformationScreen';
   static const moreInfoScreen = '/MoreInfoScreen';
+  static const truckWelcomeRideRegister = '/TruckWelcomeRideRegister';
+
   static const truckPersonalInformationScreen = '/TruckPersonalInformationScreen';
   static const truckDriversLicenseScreen = '/TruckDriversLicenseScreen';
   static const truckPersonalDocumentsScreen = '/TruckPersonalDocumentsScreen';
@@ -422,6 +424,7 @@ abstract class Paths {
   static const personalDocumentsScreen = 'PersonalDocumentsScreen';
   static const vehicleInformationScreen = 'VehicleInformationScreen';
   static const moreInfoScreen = 'MoreInfoScreen';
+  static const truckWelcomeRideRegister = 'TruckWelcomeRideRegister';
   static const truckPersonalInformationScreen = 'TruckPersonalInformationScreen';
   static const truckDriversLicenseScreen = 'TruckDriversLicenseScreen';
   static const truckPersonalDocumentsScreen = 'TruckPersonalDocumentsScreen';

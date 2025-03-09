@@ -35,55 +35,53 @@ class TruckDriversLicenseScreen extends StatelessWidget {
         index: 2,
         onTap: () => context.push(Routes.truckPersonalDocumentsScreen),
       ),
-      body: Expanded(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              spacing: 4,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                closeWidget(context),
-                Label(
-                  text: LocaleKeys.driversLicense.localize,
-                  style: Styles.headerText(
-                    fontWeight: FontWeight.w500,
-                  ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 32,left: 16,right: 16,),
+          child: Column(
+            spacing: 4,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              closeWidget(context),
+              Label(
+                text: LocaleKeys.driversLicense.localize,
+                style: Styles.headerText(
+                  fontWeight: FontWeight.w500,
                 ),
-                const Sizer(),
-                SizedBox(
-                  height: 150,
-                  child: GridView.count(
-                    physics: const NeverScrollableScrollPhysics(),
-                    padding: EdgeInsets.zero,
-                    crossAxisCount: 3,
-                    childAspectRatio: .75,
-                    mainAxisSpacing: 32.w,
-                    crossAxisSpacing: 32.h,
-                    children: List.generate(
-                      uploadFilesTitles.length,
-                      (index) => uploadFileWidget(
-                        title: uploadFilesTitles[index],
-                      ),
+              ),
+              const Sizer(),
+              SizedBox(
+                height: MediaQuery.sizeOf(context).width*.35,
+                child: GridView.count(
+                  physics: const NeverScrollableScrollPhysics(),
+                  padding: EdgeInsets.zero,
+                  crossAxisCount: 3,
+                  childAspectRatio: .75,
+                  mainAxisSpacing: 32.w,
+                  crossAxisSpacing: 32.h,
+                  children: List.generate(
+                    uploadFilesTitles.length,
+                    (index) => UploadFileWidget(
+                      title: uploadFilesTitles[index],
                     ),
                   ),
                 ),
-                const Sizer(),
-                DefaultTextFormField(
-                  currentController: licenseNumberController,
-                  fillColor: AppColors.GREYBG,
-                  borderColor: Colors.transparent,
-                  hint: LocaleKeys.licenseNumber.localize,
-                ),
-                const Sizer(),
-                DefaultTextFormField(
-                  currentController: expirationDateController,
-                  fillColor: AppColors.GREYBG,
-                  borderColor: Colors.transparent,
-                  hint: LocaleKeys.expireDate.localize,
-                ),
-              ],
-            ),
+              ),
+              const Sizer(),
+              DefaultTextFormField(
+                currentController: licenseNumberController,
+                fillColor: AppColors.GREYBG,
+                borderColor: Colors.transparent,
+                hint: LocaleKeys.licenseNumber.localize,
+              ),
+              const Sizer(),
+              DefaultTextFormField(
+                currentController: expirationDateController,
+                fillColor: AppColors.GREYBG,
+                borderColor: Colors.transparent,
+                hint: LocaleKeys.expireDate.localize,
+              ),
+            ],
           ),
         ),
       ),

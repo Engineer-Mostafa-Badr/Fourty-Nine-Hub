@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
 
 import 'package:go_router/go_router.dart';
 
@@ -38,7 +41,6 @@ class MoreInfoScreen extends StatelessWidget {
       'Ismailia',
       'Menoufia',
     ];
-    TextEditingController pricingPerKmController = TextEditingController();
 
     return CustomScaffold(
       appBar: const HomeAppbar(),
@@ -49,63 +51,74 @@ class MoreInfoScreen extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            spacing: 4,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              closeWidget(context),
-              Label(
-                text: LocaleKeys.moreInfo.localize,
-                style: Styles.headerText(
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              const Sizer(),
-              RegisterExpansionTile(
-                title: Label(text: LocaleKeys.subscriptionPlan.localize),
-                children: List.generate(subscriptionPlans.length,
-                    (index) => Label(text: subscriptionPlans[index])),
-                onChange: (Widget selectedItem) {
-                  // print("Selected Item: ${(selectedItem as Label).text}");
-                },
-              ),
-              const Sizer(),
-              RegisterExpansionTile(
-                title: Label(text: LocaleKeys.favoriteCity.localize),
-                children: List.generate(favoriteCity.length,
-                    (index) => Label(text: favoriteCity[index])),
-                onChange: (Widget selectedItem) {
-                  // print("Selected Item: ${(selectedItem as Label).text}");
-                },
-              ),
-              const Sizer(),
-              DefaultTextFormField(
-                currentController: pricingPerKmController,
-                // fillColor: AppColors.GREYBG,
-                // borderColor: Colors.transparent,
-                hint: LocaleKeys.pricingPerKm.localize,
-              ),
-              const Sizer(),
-              CustomSwitchListTile(
-                title: Text(
-                  LocaleKeys.nonSmokerDriver.localize,
-                  style: Styles.mediumText(
-                      fontSize: 65.sp, fontWeight: FontWeight.w400),
-                ),
-                value: true,
-                onChanged: (value) async {},
-              ),
-              CustomSwitchListTile(
-                title: Text(
-                  LocaleKeys.captainShare.localize,
-                  style: Styles.mediumText(
-                      fontSize: 65.sp, fontWeight: FontWeight.w400),
-                ),
-                value: false,
-                onChanged: (value) async {},
-              ),
-            ],
+          padding: const EdgeInsets.only(
+            bottom: 32,
+            left: 16,
+            right: 16,
+          ),
+          child: BlocBuilder<RideCubit, RideState>(
+            builder: (context,state) {
+              var cubit = context.read<RideCubit>();
+              return Column(
+                spacing: 4,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  closeWidget(context),
+                  Label(
+                    text: LocaleKeys.moreInfo.localize,
+                    style: Styles.headerText(
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const Sizer(),
+                  RegisterExpansionTile(
+                    title: Label(text: LocaleKeys.subscriptionPlan.localize),
+                    children: List.generate(subscriptionPlans.length,
+                        (index) => Label(text: subscriptionPlans[index])),
+                    onChange: (Widget selectedItem) {
+                      // print("Selected Item: ${(selectedItem as Label).text}");
+                    },
+                  ),
+                  const Sizer(),
+                  RegisterExpansionTile(
+                    title: Label(
+                      text: LocaleKeys.favoriteCity.localize,
+                    ),
+                    children: List.generate(favoriteCity.length,
+                        (index) => Label(text: favoriteCity[index])),
+                    onChange: (Widget selectedItem) {
+                      // print("Selected Item: ${(selectedItem as Label).text}");
+                    },
+                  ),
+                  const Sizer(),
+                  DefaultTextFormField(
+                    currentController: cubit.ridePricingPerKmController,
+                    // fillColor: AppColors.GREYBG,
+                    // borderColor: Colors.transparent,
+                    hint: LocaleKeys.pricingPerKm.localize,
+                  ),
+                  const Sizer(),
+                  CustomSwitchListTile(
+                    title: Text(
+                      LocaleKeys.nonSmokerDriver.localize,
+                      style: Styles.mediumText(
+                          fontSize: 65.sp, fontWeight: FontWeight.w400),
+                    ),
+                    value: true,
+                    onChanged: (value) async {},
+                  ),
+                  CustomSwitchListTile(
+                    title: Text(
+                      LocaleKeys.captainShare.localize,
+                      style: Styles.mediumText(
+                          fontSize: 65.sp, fontWeight: FontWeight.w400),
+                    ),
+                    value: false,
+                    onChanged: (value) async {},
+                  ),
+                ],
+              );
+            }
           ),
         ),
       ),
