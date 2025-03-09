@@ -12,15 +12,15 @@ class DoctorDetailsAddressCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final doctorDetailsCubit = context.read<DoctorDetailsCubit>();
-    final doctor = doctorDetailsCubit.doctor;
-    if (doctor.address.address.isEmpty) {
+    final doctor = doctorDetailsCubit.state.doctor;
+    if (doctor?.address.address.isEmpty??false) {
       return const SizedBox.shrink();
     } else {
       return Column(
         children: [
           DoctorDetailsInfoCard(
             icon: Icons.location_on_outlined,
-            label: doctor.address.address,
+            label: doctor?.address.address??'',
           ),
           const DoctorDetailsDivider(),
         ],

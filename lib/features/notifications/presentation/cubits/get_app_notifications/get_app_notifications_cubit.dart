@@ -10,7 +10,7 @@ import 'package:fourtyninehub/res/strings/labels.dart';
 part 'get_app_notifications_state.dart';
 
 class GetAppNotificationsCubit extends Cubit<GetAppNotificationsState> {
-  final GetNotficationsUseCase getNotficationsUseCase;
+  final GetNotificationsUseCase getNotficationsUseCase;
   final BuildContext context;
   GetAppNotificationsCubit({
     required this.context,

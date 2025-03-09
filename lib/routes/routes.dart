@@ -13,6 +13,7 @@ abstract class Routes {
   static const PAGEPREVIEW = '/CustomPage/PagePreview';
   static const MAINCATEGORIESCARDS = '/MainCategoriesCards';
   static const SEARCH = '/Search';
+  static const UploadRiderImages = '/UploadRiderImages';
   static const RESTAURANTORDERS = '/RestaurantOrders';
   static const EditFoodView = '/EditFoodView';
   static const MAINCATEGORIESTREE = '/MainCategoriesTree';
@@ -205,6 +206,9 @@ abstract class Routes {
   static const welcomeRideRegister = '/WelcomeRideRegister';
   static const personalInformationScreen = '/PersonalInformationScreen';
   static const driversLicenseScreen = '/DriversLicenseScreen';
+  static const drugAnalysisScreen = '/DrugAnalysisScreen';
+  static const criminalRecordScreen = '/CriminalRecordScreen';
+  static const technicalExaminationScreen = '/TechnicalExaminationScreen';
   static const personalDocumentsScreen = '/PersonalDocumentsScreen';
   static const vehicleInformationScreen = '/VehicleInformationScreen';
   static const moreInfoScreen = '/MoreInfoScreen';
@@ -216,6 +220,7 @@ abstract class Routes {
   static const truckVehicleInformationScreen = '/TruckVehicleInformationScreen';
   static const truckMoreInfoScreen = '/TruckMoreInfoScreen';
   static const completeRegisterScreen = '/CompleteRegisterScreen';
+  static const createLoadingTripScreen = '/CreateLoadingTripScreen';
   static const CURRENTRIDEHOME = '/CurrentRideHome';
   static const RideRequestHOME = '/RideRequestScreen';
   static const RideStatusScreen = '/Ridestatusscreen';
@@ -238,6 +243,7 @@ abstract class Paths {
   static const RIDEACTIVITY = 'RIDEACTIVITY';
   static const RIDERUNNINGTRIPS = 'RIDERUNNINGTRIPS';
   static const RIDEEXPIREDTRIPE = 'RIDEEXPIREDTRIPS';
+  static const UploadRiderImages = 'UploadRiderImages';
   static const MAINCATEGORIESCARDS = 'MainCategoriesCards';
   static const SEARCH = 'Search';
   static const RESTAURANTORDERS = 'RestaurantOrders';
@@ -421,6 +427,9 @@ abstract class Paths {
   static const welcomeRideRegister = 'WelcomeRideRegister';
   static const personalInformationScreen = 'PersonalInformationScreen';
   static const driversLicenseScreen = 'DriversLicenseScreen';
+  static const technicalExaminationScreen = 'TechnicalExaminationScreen';
+  static const drugAnalysisScreen = 'DrugAnalysisScreen';
+  static const criminalRecordScreen = 'CriminalRecordScreen';
   static const personalDocumentsScreen = 'PersonalDocumentsScreen';
   static const vehicleInformationScreen = 'VehicleInformationScreen';
   static const moreInfoScreen = 'MoreInfoScreen';
@@ -431,6 +440,7 @@ abstract class Paths {
   static const truckVehicleInformationScreen = 'TruckVehicleInformationScreen';
   static const truckMoreInfoScreen = 'TruckMoreInfoScreen';
   static const completeRegisterScreen = 'CompleteRegisterScreen';
+  static const createLoadingTripScreen = 'CreateLoadingTripScreen';
   static const CURRENTRIDEHOME = 'CurrentRideHome';
   static const RideREGUESTHOME = 'RideRequestScreen';
   static const ratingClientScreen = 'RatingClientScreen';

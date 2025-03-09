@@ -15,7 +15,6 @@ import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/wid
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/card.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 class AvaiableRoutesCard extends StatefulWidget {

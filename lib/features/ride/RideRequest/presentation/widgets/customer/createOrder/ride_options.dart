@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../../../common/widgets/stateless/labels/label.dart';
-import 'package:go_router/go_router.dart';
-import '../../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../../core/widget/custom_switch_button.dart';
 import '../../../../../../../res/style/styles.dart';
 import '../../../cubit/riderequest_cubit.dart';

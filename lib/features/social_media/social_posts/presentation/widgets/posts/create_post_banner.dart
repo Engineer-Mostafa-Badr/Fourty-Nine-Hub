@@ -58,7 +58,7 @@ class CreatePostBanner extends StatelessWidget {
                 borderRadius: BorderRadius.circular(50.r),
               ),
               child: Align(
-                alignment: Alignment.centerLeft, // Align text to center-left
+                alignment: AlignmentDirectional.centerStart, // Align text to center-left
                 child: Label(
                   text: context.locale == Locales.english
                       ? 'What’s on your mind?'
@@ -73,23 +73,23 @@ class CreatePostBanner extends StatelessWidget {
             ),
 
               )),
-          const Sizer(
-            width: 13,
-          ),
-          InkWell(
-            onTap: () {
-              if (context.isUserLoggedIn) {
-                context.push(Routes.ZOOM);
-              } else {
-                context.push(Routes.LOGIN);
-              }
-            },
-            child:  SvgPicture.asset(
-              Assets.zoomVideo,
-              // height: 50.h,
-
-            ),
-          ),
+          // const Sizer(
+          //   width: 13,
+          // ),
+          // InkWell(
+          //   onTap: () {
+          //     if (context.isUserLoggedIn) {
+          //       context.push(Routes.ZOOM);
+          //     } else {
+          //       context.push(Routes.LOGIN);
+          //     }
+          //   },
+          //   child:  SvgPicture.asset(
+          //     Assets.zoomVideo,
+          //     // height: 50.h,
+          //
+          //   ),
+          // ),
         ],
       ),
     );

@@ -16,7 +16,6 @@ import 'package:fourtyninehub/features/shipping/create_shipping_request/presenta
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../../core/widget/custom_switch_button.dart';
-import '../../../../../core/widget/custom_switch_button.dart';
 import '../../../../../res/style/styles.dart';
 
 // ignore: must_be_immutable

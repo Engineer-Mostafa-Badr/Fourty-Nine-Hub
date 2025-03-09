@@ -36,10 +36,12 @@ class PremiumRequestButton extends StatelessWidget {
         title: LocaleKeys.premiumRequest.localize,
         color: AppColors.SECONDARY_COLOR,
         onTap: () {
+          context.pop();
           if (context.read<UserCubit>().isLoggedIn) {
             if (subscriptionStatus != 'premium') {
               SubscriptionMethod().subscribe(
                   subscribeId: subCategoryId,
+                  showRegular:false,
                   title: LocaleKeys.premiumRequest.localize);
             } else {
               showModalBottomSheet(

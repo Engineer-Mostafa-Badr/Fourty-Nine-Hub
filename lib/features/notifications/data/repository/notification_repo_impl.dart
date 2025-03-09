@@ -4,6 +4,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/notifications/data/data_source/notifications_remote_data_source.dart';
 import 'package:fourtyninehub/features/notifications/domain/entities/notification_entity.dart';
 import 'package:fourtyninehub/features/notifications/domain/entities/unread_notifications_count_entity.dart';
+import 'package:fourtyninehub/features/notifications/domain/entities/user_trip_entity.dart';
 
 import '../../domain/repos/notification_repo.dart';
 
@@ -61,5 +62,11 @@ class NotificationRepoImpl implements NotificationRepo {
   @override
   Future<Either<Failure, bool>> deleteAllNotifications({required String type}) {
     return notificationRemoteDataSource.deleteAllNotifications(type: type);
+  }
+
+  @override
+  Future<Either<Failure, List<UserTripEntity>>> getAllUserTrips() {
+    return notificationRemoteDataSource.getAllUserTrips();
+
   }
 }

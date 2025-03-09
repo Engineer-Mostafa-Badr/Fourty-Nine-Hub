@@ -2,12 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class RegisterExpansionTile extends StatefulWidget {
-  RegisterExpansionTile(
-      {super.key, required this.title, required this.children, this.onChange});
+  const RegisterExpansionTile({
+    super.key,
+    required this.title,
+    required this.children,
+    required this.length,
+    this.onChange,
+    this.onSelect,
+  });
 
-  late Widget title;
+  final Widget title;
   final List<Widget> children;
+  final int length;
   final ValueChanged<Widget>? onChange;
+  final Function(int id)? onSelect;
 
   @override
   State<RegisterExpansionTile> createState() => _RegisterExpansionTileState();
@@ -15,6 +23,13 @@ class RegisterExpansionTile extends StatefulWidget {
 
 class _RegisterExpansionTileState extends State<RegisterExpansionTile> {
   var controller = ExpansionTileController();
+  late Widget selectedTitle;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedTitle = widget.title;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +40,12 @@ class _RegisterExpansionTileState extends State<RegisterExpansionTile> {
       ),
       child: ExpansionTile(
         controller: controller,
-        title: widget.title,
+        title: selectedTitle, // Use state variable
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         backgroundColor: AppColors.GREYBG,
         expandedAlignment: Alignment.centerLeft,
         expandedCrossAxisAlignment: CrossAxisAlignment.start,
+        dense: true,
         children: [
           Container(
             color: Theme.of(context).scaffoldBackgroundColor,
@@ -37,23 +53,25 @@ class _RegisterExpansionTileState extends State<RegisterExpansionTile> {
             height: 10,
           ),
           Container(
-            constraints: const BoxConstraints(
-              maxHeight: 300,
-              minHeight: 40
-            ),
+            constraints: BoxConstraints(maxHeight: 250),
             child: ListView(
               padding: const EdgeInsets.all(16.0),
               children: List.generate(
                 widget.children.length,
                     (index) => InkWell(
                   onTap: () {
-                    setState(() {
-                      widget.title = widget.children[index];
-                      controller.collapse();
-                    });
+                    if (widget.children.isNotEmpty) {
+                      setState(() {
+                        selectedTitle = widget.children[index]; // Update state
+                        controller.collapse();
+                      });
 
-                    if (widget.onChange != null) {
-                      widget.onChange!(widget.children[index]); // Notify parent
+                      if (widget.onChange != null) {
+                        widget.onChange!(widget.children[index]); // Notify parent
+                        if(widget.onSelect !=null){
+                          widget.onSelect!(index);
+                        }
+                      }
                     }
                   },
                   child: Container(
@@ -64,36 +82,8 @@ class _RegisterExpansionTileState extends State<RegisterExpansionTile> {
                   ),
                 ),
               ),
-
             ),
-          )
-          // Padding(
-          //   padding: const EdgeInsets.all(16.0),
-          //   child: Column(
-          //     spacing: 8,
-          //     crossAxisAlignment: CrossAxisAlignment.start,
-          //     children: List.generate(
-          //       widget.children.length,
-          //       (index) => InkWell(
-          //         onTap: () {
-          //           setState(() {
-          //             widget.title = widget.children[index];
-          //             controller.collapse();
-          //           });
-          //
-          //           if (widget.onChange != null) {
-          //             widget.onChange!(widget.children[index]); // Notify parent
-          //           }
-          //         },
-          //         child: SizedBox(
-          //           width: double.infinity,
-          //           height: 30,
-          //           child: widget.children[index],
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
+          ),
         ],
       ),
     );

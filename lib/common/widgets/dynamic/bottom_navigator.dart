@@ -60,7 +60,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         cacheKey: 'rideCount',
         index: 3,
         image: Assets.rideIcon,
-        route: Routes.RIDE,
+        route: Routes.RIDE_HOME,
       ),
     ];
 

@@ -1380,5 +1380,9 @@
   "trukDetails": "تفاصيل الشاحنة",
   "busWithYou": "رحله حافلة معك",
   "trukWithYou": "رحله شاحنة معك",
-  "passenger": "الركاب"
+  "passenger": "الركاب",
+  "noSmoker": "سائق غير مدخن",
+  "choiceRuler": "مسطرة الاختيارت",
+  "completeRegistration": "تكملة التسجيل"
+
 }

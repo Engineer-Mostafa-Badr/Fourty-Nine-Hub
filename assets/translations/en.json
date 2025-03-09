@@ -69,7 +69,7 @@
   "arabic": "Arabic",
   "english": "English",
   "meal": "Meal",
-  "darkMode": "Dark mode",
+  "darkMode": "Dark Mode",
   "lightMode": "Light mode",
   "voice": "Voice",
   "restaurantName": "ٌRestaurant Name",
@@ -1328,6 +1328,9 @@
   "rideDetails": "Ride Details",
   "carTruckRegister": "Car/Truck Register",
   "options": "Options",
+  "noSmoker": "Non smoker Driver",
+  "choiceRuler": "Choice Ruler",
+  "completeRegistration": "Complete Registration"
   "noSmoker": "Non smoker Driver",
   "tryAgain": "try Again",
   "YouhaveenteredOTPCodeWrong": "You have entered OTP Code Wrong",

@@ -60,6 +60,7 @@ import 'package:fourtyninehub/service_locator/trip_join_service_locator.dart';
 import 'package:fourtyninehub/service_locator/twitter_service_locator.dart';
 import 'package:fourtyninehub/service_locator/wheel_service_locator.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -87,6 +88,12 @@ final serviceLocator = GetIt.instance;
 class DI {
   static Future<void> execute({String? token}) async {
     print('executed');
+
+    // Initialize SharedPreferences before registering it
+    final sharedPreferences = await SharedPreferences.getInstance();
+
+    // Register SharedPreferences as a singleton
+    serviceLocator.registerSingleton<SharedPreferences>(sharedPreferences);
 
     _callFeatureInjector();
     // //preloading
@@ -182,9 +189,6 @@ class DI {
       () => GetGiftsUseCase(serviceLocator()),
     );
 
-    // serviceLocator
-    //     .registerFactory<SliderCubit>(() => SliderCubit(serviceLocator()));
-    //
     // // Register the TinderRepository
     serviceLocator.registerLazySingleton<TinderRepository>(
       () => TinderRepositoryImpl(serviceLocator()),

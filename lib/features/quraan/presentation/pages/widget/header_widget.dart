@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:quran/quran.dart';
 
 class HeaderWidget extends StatelessWidget {

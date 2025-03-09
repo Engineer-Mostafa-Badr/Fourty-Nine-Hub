@@ -43,18 +43,18 @@ class RideMethodHelper {
   }) async {
     log(signedUrl, name: "signedUrlsignedUrl");
     Uint8List image = await file.readAsBytes();
-
-    Options options = Options(contentType: file.mimeType, headers: {
+    print("objectadsad${image.length}");
+    Options options = Options(headers: {
       'Accept': "*/*",
-      'Content-Type': 'application/octet-stream',
-      'Content-Length': image.length,
+      'Content-Type': 'application/octet-stream','Content-Length': image.length,
       'Connection': 'keep-alive',
       'User-Agent': 'ClinicPlush',
     });
 
     var response = await Dio().put(signedUrl,
-        data: Stream.fromIterable(image.map((e) => [e])), options: options);
+        data: Stream.value(image), options: options);
     log(response.data.toString(), name: "uploadImage");
+    log(response.extra.toString(), name: "uploadImage");
     log(response.statusCode.toString(), name: "uploadImage");
   }
 
@@ -80,13 +80,15 @@ class RideMethodHelper {
       },
       url: "${EndPoints.developmentBaseUrl}/ride/info/id",
       onSuccess: (data) async {
+        print("data['data']['idBehindData']['signedUrl']${data['data']['idBehindData']['signedUrl']}");
         await sendBinaryFileData(
-            file: XFile(idImageInFront.path),
+            file: XFile(idImageInBehind.path),
             signedUrl: data['data']['idBehindData']['signedUrl'])
             .then(
               (value) async {
+            print("data['data']['idFrontData']['signedUrl']${data['data']['idFrontData']['signedUrl']}");
             await sendBinaryFileData(
-                file: XFile(idImageInBehind.path),
+                file: XFile(idImageInFront.path),
                 signedUrl: data['data']['idFrontData']['signedUrl'])
                 .then(
                   (value) async {
@@ -139,7 +141,7 @@ class RideMethodHelper {
         },
         "drivingLicenseBehind": {
           "type": await getFileExtension((File(drivingImageBehind.path))),
-          "size": await getFileSize(File(drivingImageInFront.path))
+          "size": await getFileSize(File(drivingImageBehind.path))
         }
       },
       url: "${EndPoints.developmentBaseUrl}/ride/info/driving-license",
@@ -255,11 +257,13 @@ class RideMethodHelper {
       onSuccess: (data) async {
         await sendBinaryFileData(
             file: XFile(carImage.path),
-            signedUrl: data['data'][0]['signedUrl']);
-        await successUploadImage(
+            signedUrl: data['data'][0]['signedUrl']).then((value) async {
+          await successUploadImage(
           data: {"mediaId": data['data'][0]['mediaId']},
           url: "${EndPoints.developmentBaseUrl}/ride/info/success-car-images",
-        );
+          );
+        });
+
         log("criminalRecordData");
       },
     );

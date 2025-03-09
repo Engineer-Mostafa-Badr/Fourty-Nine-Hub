@@ -30,7 +30,7 @@ class BookDoctorAppointmentCubit extends Cubit<BookDoctorAppointmentState> {
   late AppointmentEntity _appointment;
 
   void init(DoctorDetailsCubit doctorDetailsCubit) {
-    _doctor = doctorDetailsCubit.doctor;
+    _doctor = doctorDetailsCubit.state.doctor!;
     _appointment = doctorDetailsCubit.selectedAppointment;
     _params.appointmentId = _appointment.id;
     _params.subCategoryId = _doctor.subCategory.id;

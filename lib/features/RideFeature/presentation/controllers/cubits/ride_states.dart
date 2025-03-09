@@ -1,4 +1,6 @@
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_info_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_picture_optional_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_color_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
@@ -9,6 +11,9 @@ import '../../../domain/entities/ride_category_entity.dart';
 enum RideStates {
   initState,
   loading,
+  loadingSubmit,
+  loadingSubmitSuccess,
+  loadingModels,
   error,
   success,
 }
@@ -16,6 +21,8 @@ enum RideStates {
 extension RideStatex on RideState {
   bool get isInitial => status == RideStates.initState;
   bool get isLoading => status == RideStates.loading;
+  bool get isLoadingModels => status == RideStates.loadingModels;
+  bool get isLoadingSubmit => status == RideStates.loadingSubmit;
   bool get isError => status == RideStates.error;
   bool get isSuccess => status == RideStates.success;
 }
@@ -31,6 +38,7 @@ class RideState {
   final XFile? personalBackIdPicture;
   final XFile? personalCriminalRecordPicture;
   final XFile? personalDrugAnalysisPicture;
+  final XFile? personalTechnicalExaminationPicture;
   final XFile? vehicleFrontPicture;
   final XFile? vehicleBackPicture;
   final XFile? vehiclePicture;
@@ -41,6 +49,25 @@ class RideState {
   final List<RideColorEntity>? colors;
   final List<String>? brands;
   final List<String>? models;
+  final String? selectedModel;
+  final String? selectedBrand;
+  final bool? isSmoking;
+  final bool? hasAirCondition;
+  final RideColorEntity? selectedColors;
+  final String? selectedGov;
+  final String? selectedPlan;
+  final DriverInfoEntity? driverInfo;
+  final DriverPictureOptionalEntity? pictureOptional;
+  final bool? isApproved;
+  final bool? isUploadDriverId;
+  final bool? isUploadDriverImage;
+  final bool? isUploadDriverLicense;
+  final bool? isUploadConfirmIdentifier;
+  final bool? isUploadCarImage;
+  final bool? isUploadCarLicense;
+  final bool? isUploadDrugAnalysis;
+  final bool? isUploadCriminalRecord;
+  final bool? isUploadTechnicalExamination;
 
   const RideState({
     this.status = RideStates.initState,
@@ -53,6 +80,7 @@ class RideState {
     this.personalBackIdPicture,
     this.personalCriminalRecordPicture,
     this.personalDrugAnalysisPicture,
+    this.personalTechnicalExaminationPicture,
     this.vehicleFrontPicture,
     this.vehicleBackPicture,
     this.vehiclePicture,
@@ -62,7 +90,26 @@ class RideState {
     this.govs,
     this.brands,
     this.models,
+    this.driverInfo,
     this.colors,
+    this.isSmoking=false,
+    this.hasAirCondition=false,
+    this.selectedModel,
+    this.selectedBrand,
+    this.selectedColors,
+    this.selectedGov,
+    this.selectedPlan,
+    this.pictureOptional,
+    this.isApproved,
+    this.isUploadDriverId,
+    this.isUploadDriverImage,
+    this.isUploadDriverLicense,
+    this.isUploadConfirmIdentifier,
+    this.isUploadCarImage,
+    this.isUploadCarLicense,
+    this.isUploadDrugAnalysis,
+    this.isUploadCriminalRecord,
+    this.isUploadTechnicalExamination,
   });
 
   RideState copyWith({
@@ -76,16 +123,36 @@ class RideState {
     XFile? personalBackIdPicture,
     XFile? personalCriminalRecordPicture,
     XFile? personalDrugAnalysisPicture,
+    XFile? personalTechnicalExaminationPicture,
     XFile? vehicleFrontPicture,
     XFile? vehicleBackPicture,
     XFile? vehiclePicture,
     RideCategoryEntityUpdated? rideCategory,
+    DriverInfoEntity? driverInfo,
+    DriverPictureOptionalEntity? pictureOptional,
     List<SubCategoryEntityUpdated>? rideSubCategories,
     List<GovernorateEntity>? govs,
     List<String>? brands,
     List<String>? models,
     List<RideColorEntity>? colors,
     RideCategoryEntityUpdated? shippingCategory,
+    String? selectedModel,
+    String? selectedBrand,
+    bool? isSmoking,
+    bool? hasAirCondition,
+    RideColorEntity? selectedColors,
+    String? selectedGov,
+    String? selectedPlan,
+    bool? isApproved,
+    bool? isUploadDriverId,
+    bool? isUploadDriverImage,
+    bool? isUploadDriverLicense,
+    bool? isUploadConfirmIdentifier,
+    bool? isUploadCarImage,
+    bool? isUploadCarLicense,
+    bool? isUploadDrugAnalysis,
+    bool? isUploadCriminalRecord,
+    bool? isUploadTechnicalExamination,
   }) {
     return RideState(
       status: status ?? this.status,
@@ -98,16 +165,36 @@ class RideState {
       personalBackIdPicture: personalBackIdPicture ?? this.personalBackIdPicture,
       personalCriminalRecordPicture: personalCriminalRecordPicture ?? this.personalCriminalRecordPicture,
       personalDrugAnalysisPicture: personalDrugAnalysisPicture ?? this.personalDrugAnalysisPicture,
+      personalTechnicalExaminationPicture: personalTechnicalExaminationPicture ?? this.personalTechnicalExaminationPicture,
       vehicleFrontPicture: vehicleFrontPicture ?? this.vehicleFrontPicture,
       vehicleBackPicture: vehicleBackPicture ?? this.vehicleBackPicture,
       vehiclePicture: vehiclePicture ?? this.vehiclePicture,
       rideCategory: rideCategory ?? this.rideCategory,
       shippingCategory: shippingCategory ?? this.shippingCategory,
       rideSubCategories: rideSubCategories ?? this.rideSubCategories,
+      driverInfo: driverInfo ?? this.driverInfo,
       govs: govs ?? this.govs,
       brands: brands ?? this.brands,
       models: models ?? this.models,
       colors: colors ?? this.colors,
+      isSmoking: isSmoking ?? this.isSmoking,
+      hasAirCondition: hasAirCondition ?? this.hasAirCondition,
+      selectedModel: selectedModel ?? this.selectedModel,
+      selectedBrand: selectedBrand ?? this.selectedBrand,
+      selectedColors: selectedColors ?? this.selectedColors,
+      selectedGov: selectedGov ?? this.selectedGov,
+      selectedPlan: selectedPlan ?? this.selectedPlan,
+      pictureOptional: pictureOptional ?? this.pictureOptional,
+      isApproved: isApproved ?? this.isApproved,
+      isUploadDriverId: isUploadDriverId ?? this.isUploadDriverId,
+      isUploadDriverImage: isUploadDriverImage ?? this.isUploadDriverImage,
+      isUploadDriverLicense: isUploadDriverLicense ?? this.isUploadDriverLicense,
+      isUploadConfirmIdentifier: isUploadConfirmIdentifier ?? this.isUploadConfirmIdentifier,
+      isUploadCarImage: isUploadCarImage ?? this.isUploadCarImage,
+      isUploadCarLicense: isUploadCarLicense ?? this.isUploadCarLicense,
+      isUploadDrugAnalysis: isUploadDrugAnalysis ?? this.isUploadDrugAnalysis,
+      isUploadCriminalRecord: isUploadCriminalRecord ?? this.isUploadCriminalRecord,
+      isUploadTechnicalExamination: isUploadTechnicalExamination ?? this.isUploadTechnicalExamination,
     );
   }
 }

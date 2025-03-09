@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+
 import '../repositories/driver_dashboard_repo.dart';
 
 class AcceptRideUseCase extends UseCase<String, String> {

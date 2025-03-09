@@ -1708,12 +1708,9 @@ class MessagesAreEndToEndEncrypted extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          InkWell(
-            onTap: ()=> context.push(Routes.RIDE_HOME),
-            child: const Icon(
-              Icons.lock_outline,
-              size: 24,
-            ),
+          const Icon(
+            Icons.lock_outline,
+            size: 24,
           ),
           Column(
             children: [

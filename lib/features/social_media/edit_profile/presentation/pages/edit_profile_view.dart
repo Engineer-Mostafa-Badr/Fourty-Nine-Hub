@@ -109,6 +109,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                   fillColor: Colors.transparent,
                   currentController: userNameTextController,
                   hint: LocaleKeys.userName.localize,
+
                 ),
                 const Sizer(),
                 Text(

@@ -63,7 +63,19 @@ class ReelsState {
   final bool showPlayPauseIcon;
   final String? selectedPrivacy;
   final List<UploadFileEntity>? video;
+
+  //preloading data
+  final List<String> urls;
+  final Map<int, VideoPlayerController> controllers;
+  final int focusedIndex;
+  final int reloadCounter;
+  final bool isLoading;
   ReelsState({
+    required this.urls,
+    required this.controllers,
+    required this.focusedIndex,
+    required this.reloadCounter,
+    required this.isLoading,
     this.status = ReelsStates.loading,
     this.failure,
     this.isCreatingReelView,
@@ -151,10 +163,12 @@ class ReelsState {
       String? uploadReelErrorMessage,
       bool? uploadReelSuccess,
       String? selectedPrivacy,
+        List<String>? urls,
+        Map<int, VideoPlayerController>? controllers,
+        int? focusedIndex,
+        int? reloadCounter,
       List<UploadFileEntity>? video}) {
     return ReelsState(
-      status: status ?? this.status,
-      failure: failure ?? this.failure,
       isCreatingReply: isCreatingReply ?? this.isCreatingReply,
       comments: comments ?? this.comments,
       isCreatingReelView: isCreatingReelView ?? this.isCreatingReelView,
@@ -203,6 +217,11 @@ class ReelsState {
       showPlayPauseIcon: showPlayPauseIcon ?? this.showPlayPauseIcon,
       selectedPrivacy: selectedPrivacy ?? this.selectedPrivacy,
       video: video ?? this.video,
+      urls: urls ?? this.urls,
+      controllers: controllers ?? this.controllers,
+      focusedIndex: focusedIndex ?? this.focusedIndex,
+      reloadCounter: reloadCounter ?? this.reloadCounter,
+      isLoading: isLoading ?? this.isLoading,
     );
   }
 }

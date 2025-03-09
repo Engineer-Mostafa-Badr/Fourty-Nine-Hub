@@ -4,7 +4,7 @@ class RegisterRideSpecialEntity {
   final String vehicleModel;
   final String vehicleBrand;
   final String vehicleYear;
-  final String subcategoryIds;
+  final List<String> subcategoryIds;
   final String pricingPerKm;
   final String phone;
   final bool smoker;
@@ -46,7 +46,7 @@ class RegisterRideSpecialEntity {
       "vehicleBrand": vehicleBrand,
       "vehicleYear": vehicleYear,
       "subcategoryIds": subcategoryIds,
-      "pricingPerKm": pricingPerKm,
+      "pricingPerKm": double.parse(pricingPerKm),
       "phone": phone,
       "smoker": smoker,
       "airConditioner": airConditioner,

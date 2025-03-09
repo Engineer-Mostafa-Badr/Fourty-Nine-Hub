@@ -99,7 +99,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
     context
         .read<FirebaseNotficationsCubit>()
         .setupInterceptedMessage(context: context);
-    context.read<LocationSocketCubit>().updateDriverLocationOn();
+    // context.read<LocationSocketCubit>().updateDriverLocationOn();
   }
 
   void _setupScrollController() {
@@ -188,11 +188,11 @@ class _FourtyNineViewState extends State<FourtyNineView>
           floatingActionButton: _isScrollingDown
               ? null
               : const FloatingButton(
-                  changeView: 1,
-                  icon: Icons.person,
-                ),
+            changeView: 1,
+            icon: Icons.person,
+          ),
           floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerDocked,
+          FloatingActionButtonLocation.centerDocked,
           drawer: const DrawerWidget(),
           body: ListView(
             controller: scrollController,
@@ -204,17 +204,21 @@ class _FourtyNineViewState extends State<FourtyNineView>
               const Sizer(),
               const AnnounceWidget(),
               const Sizer(),
-              !context.read<UserCubit>().isLoggedIn
+              !context
+                  .read<UserCubit>()
+                  .isLoggedIn
                   ? const Sizer()
                   : const SizedBox.shrink(),
               ScrollableTextWithAnimation(
                 textDirection:
-                    context.isArabic ? TextDirection.rtl : TextDirection.ltr,
+                context.isArabic ? TextDirection.rtl : TextDirection.ltr,
               ),
 
               //wallet
 
-              context.read<UserCubit>().isLoggedIn
+              context
+                  .read<UserCubit>()
+                  .isLoggedIn
                   ? const WalletWidget()
                   : const SizedBox.shrink(),
               ClickableWidget(
@@ -231,7 +235,9 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   alignment: Alignment.center,
                   child: AutoScrollText(
                     velocity: const Velocity(pixelsPerSecond: Offset(30, 0)),
-                    "${LocaleKeys.choosePreferredAppStyle.localize}..  ${LocaleKeys.clickHere.localize}!!                                         ",
+                    "${LocaleKeys.choosePreferredAppStyle
+                        .localize}..  ${LocaleKeys.clickHere
+                        .localize}!!                                         ",
                     style: Styles.headerText(
                         fontSize: 30, color: AppColors.SECONDARY_COLOR),
                     textDirection: context.isArabic
@@ -259,7 +265,9 @@ class _FourtyNineViewState extends State<FourtyNineView>
               //pick me and come with U
               Row(children: [
                 Expanded(child: _buildStarWidget()),
-                const Sizer(),
+                const Sizer(
+                  width: 32,
+                ),
                 Expanded(child: _pickMeAndComeWithUWidget()),
               ]),
               // _pickMeAndComeWithUWidget(),
@@ -284,16 +292,20 @@ class _FourtyNineViewState extends State<FourtyNineView>
                       child: Column(
                         children: List.generate(
                             6,
-                            (index) => Padding(
+                                (index) =>
+                                Padding(
                                   padding: EdgeInsets.only(bottom: 15.h),
                                   child: Container(
-                                    height: MediaQuery.of(context).size.height *
+                                    height: MediaQuery
+                                        .of(context)
+                                        .size
+                                        .height *
                                         .15.h,
                                     width: double.infinity,
                                     margin:
-                                        EdgeInsets.symmetric(horizontal: 10.w),
+                                    EdgeInsets.symmetric(horizontal: 10.w),
                                     padding:
-                                        EdgeInsets.symmetric(horizontal: 10.w),
+                                    EdgeInsets.symmetric(horizontal: 10.w),
                                     decoration: BoxDecoration(
                                       color: AppColors.AUTH_CONTAINER_COLOR,
                                       borderRadius: BorderRadius.circular(20.r),
@@ -307,10 +319,10 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   if (state.data != null) {
                     return GridView.builder(
                       gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisSpacing: 10,
-                              crossAxisCount: 2,
-                              childAspectRatio: 2 / 3),
+                      const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisSpacing: 10,
+                          crossAxisCount: 2,
+                          childAspectRatio: 2 / 3),
                       itemCount: state.data?.length ?? 0,
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
@@ -337,7 +349,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                               onFavorite: () async {
                                 var result = await controller
                                     .toggleFavoriteMedicalService(
-                                        state.data![index].id);
+                                    state.data![index].id);
                                 print("result$result");
                                 return result;
                               },
@@ -369,7 +381,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
               color: AppColors.PRIMARY_COLOR,
             ),
             Routes.MAINCATEGORIESTREE,
-            () => HandleCashback.setCount('threeDotsCount', context),
+                () => HandleCashback.setCount('threeDotsCount', context),
           ),
         ),
         const Sizer(),
@@ -496,11 +508,9 @@ class _FourtyNineViewState extends State<FourtyNineView>
     );
   }
 
-  Widget _buildItemTabBar(
-    Widget icon,
-    String routeName,
-    Function() onTab,
-  ) {
+  Widget _buildItemTabBar(Widget icon,
+      String routeName,
+      Function() onTab,) {
     return InkWell(
       onTap: () {
         onTab();
@@ -517,65 +527,44 @@ class _FourtyNineViewState extends State<FourtyNineView>
     );
   }
 
-  BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>
+  // BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>
       _pickMeAndComeWithUWidget() {
-    return BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>(
-      builder: (context, state) {
-        if (state.status == StateStatus.loading) {
-          return const PickMeAndComeWithYouLShimmerLoading();
-        } else if (state.status == StateStatus.success) {
-          return Row(
-            children: [
-              // Expanded(
-              //   child: _buildRideSubCategoryItem(
-              //     service: state.data?[0].service ?? RideServicesEnum.pickMe,
-              //     title: LocaleKeys.carpool.localize,
-              //     image: state.data?[0].image ?? '',
-              //     onTab: () {
-              //       AdInterstitialTop.loadIntersitialAd();
-              //       AdInterstitialTop.showInterstitialAd();
-              //       return HandleCashback.setCount('carPoolCount',context);
-              //     },
-              //     // image: Assets.carpool,
-              //     // isFavorite: state.data![0].is,
-              //     // numberOfAds: state.data![0].numberOfAds?.toInt(),
-              //     route: Routes.CAR_POOL,
-              //   ),
-              // ),
-              // const Sizer(),
-              const Sizer(),
-              Expanded(
-                child: _buildRideSubCategoryItem(
-                  service:
-                      state.data?[1].service ?? RideServicesEnum.comeWithYou,
-                  title: state.data![1].name.toString(),
-                  image: state.data?[1].image ?? '',
-                  // image: Assets.tripJoin,
+    return  Row(
+      children: [
+        // Expanded(
+        //   child: _buildRideSubCategoryItem(
+        //     service: state.data?[0].service ?? RideServicesEnum.pickMe,
+        //     title: LocaleKeys.carpool.localize,
+        //     image: state.data?[0].image ?? '',
+        //     onTab: () {
+        //       AdInterstitialTop.loadIntersitialAd();
+        //       AdInterstitialTop.showInterstitialAd();
+        //       return HandleCashback.setCount('carPoolCount',context);
+        //     },
+        //     // image: Assets.carpool,
+        //     // isFavorite: state.data![0].is,
+        //     // numberOfAds: state.data![0].numberOfAds?.toInt(),
+        //     route: Routes.CAR_POOL,
+        //   ),
+        // ),
+        // const Sizer(),
+        const Sizer(),
+        Expanded(
+          child: _buildRideSubCategoryItem(
+            title: context.isArabic?'جاي معاك':'Trip Join',
+            // image: '',
 
-                  route: Routes.AVAILABLE_TRIPS,
-                  onTab: () {
-                    AdInterstitialTop.loadIntersitialAd();
-                    AdInterstitialTop.showInterstitialAd();
-                    return HandleCashback.setCount('tripJoinCount', context);
-                  },
-                  // isFavorite: state.data![1].isFavorite,
-                  // numberOfAds: state.data![1].numberOfAds?.toInt(),
-                ),
-              )
-            ],
-          );
-        } else {
-          return Container(
-            padding:
-                //EdgeInsets.all
-                const EdgeInsets.symmetric(horizontal: 10),
-            child: Text(
-              LocaleKeys.noRideSubcategories.localize,
-              style: TextStyle(fontSize: 32.sp.w, fontWeight: FontWeight.w500),
-            ),
-          );
-        }
-      },
+            route: Routes.AVAILABLE_TRIPS,
+            onTab: () {
+              AdInterstitialTop.loadIntersitialAd();
+              AdInterstitialTop.showInterstitialAd();
+              return HandleCashback.setCount('tripJoinCount', context);
+            },
+            // isFavorite: state.data![1].isFavorite,
+            // numberOfAds: state.data![1].numberOfAds?.toInt(),
+          ),
+        )
+      ],
     );
   }
 
@@ -650,71 +639,47 @@ class _FourtyNineViewState extends State<FourtyNineView>
     return SizedBox(
         height: kToolbarHeight * 2.h,
         width: double.infinity,
-        child: Stack(children: [
-          Positioned.fill(
-            child: GestureDetector(
-                // color: AppColors.AUTH_CONTAINER_COLOR,
-                // label: LocaleKeys.tube.localize,
-                // style: Styles.mediumText(
-                //   color: AppColors.AUTH_CONTAINER_COLOR,
-                //   fontWeight: FontWeight.bold,
-                // ),
-                // icon: Icons.star,
-                // iconSize: 50.h,
-                onTap: () {
-                  AdInterstitialTop.loadIntersitialAd();
-                  AdInterstitialTop.showInterstitialAd();
-                  HandleCashback.setCount('beAStarCount', context);
-                  context.push(Routes.BE_STAR);
-                },
-                child: Container(
-                    height: kToolbarHeight * 2.h,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).scaffoldBackgroundColor,
-                      borderRadius: BorderRadius.circular(40.r),
-                      boxShadow: [
-                        BoxShadow(
-                          color:
-                              AppColors.SECONDARY_COLOR.withValues(alpha: .7),
-                          spreadRadius: 5,
-                          blurRadius: 5,
-                          offset: const Offset(1, 1),
-                        )
-                      ],
-                      image: DecorationImage(
-                          image: AssetImage(Assets.tube1), fit: BoxFit.fill),
-                      // boxShadow: const [
-                      //   BoxShadow(
-                      //     color: Color.fromARGB(255, 249, 159, 162),
-                      //     spreadRadius: 1,
-                      //     blurRadius: 3,
-                      //     offset: Offset(1, 1),
-                      //   )
-                      // ],
-                    ),
-                    child: Center(
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            // Image.asset(
-                            //   Assets.tube,
-                            //   height: 35.h,
-                            //   width: 35.h,
-                            //
-                            // ),
-                            // Sizer(width: 10),
-                            Label(
-                              text: LocaleKeys.tube.localize,
-                              style: Styles.mediumText(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 45,
-                              ),
-                            )
-                          ]),
-                    ))),
-          ),
-        ]));
+        child: Positioned.fill(
+          child: GestureDetector(
+              onTap: () {
+                AdInterstitialTop.loadIntersitialAd();
+                AdInterstitialTop.showInterstitialAd();
+                HandleCashback.setCount('beAStarCount', context);
+                context.push(Routes.BE_STAR);
+              },
+              child: Container(
+                  height: kToolbarHeight * 2.h,
+                  decoration: BoxDecoration(
+                    color: Theme
+                        .of(context)
+                        .scaffoldBackgroundColor,
+                    borderRadius: BorderRadius.circular(40.r),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
+                        spreadRadius: 5,
+                        blurRadius: 5,
+                        offset: const Offset(1, 1),
+                      )
+                    ],
+                    image: DecorationImage(
+                        image: AssetImage(Assets.tube1), fit: BoxFit.fill),
+                  ),
+                  child: Center(
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Label(
+                            text: LocaleKeys.tube.localize,
+                            style: Styles.mediumText(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 45,
+                            ),
+                          )
+                        ]),
+                  ))),
+        ));
   }
 
   Widget _walletsWidget() {
@@ -870,7 +835,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                       Icons.star,
                       size: 20.h,
                       color: AppColors.ACCENT_COLOR,
-                    ))
+                    ),),
               ],
             ),
           ),
@@ -879,8 +844,8 @@ class _FourtyNineViewState extends State<FourtyNineView>
     );
   }
 
-  Widget itemAuctionAndInstallmentWidget(
-      String label, Function function, IconData icon) {
+  Widget itemAuctionAndInstallmentWidget(String label, Function function,
+      IconData icon) {
     return Expanded(
       child: InkWell(
         onTap: () => context.go(Routes.MAZADAT),
@@ -932,12 +897,10 @@ class _FourtyNineViewState extends State<FourtyNineView>
     );
   }
 
-  Widget _buildRideSubCategoryItem(
-      {required RideServicesEnum service,
-      required String title,
-      required String image,
-      String? route,
-      required Function() onTab}) {
+  Widget _buildRideSubCategoryItem({
+    required String title,
+    String? route,
+    required Function() onTab}) {
     return InkWell(
       // onTap: () => context.push(Routes.ADS, extra: service.value()),
       onTap: () {
@@ -946,9 +909,10 @@ class _FourtyNineViewState extends State<FourtyNineView>
       },
       child: Container(
         height: kToolbarHeight * 2.h,
-        // padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
         decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
+          color: Theme
+              .of(context)
+              .scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(40.r),
           boxShadow: [
             BoxShadow(
@@ -958,74 +922,24 @@ class _FourtyNineViewState extends State<FourtyNineView>
               offset: const Offset(1, 1),
             )
           ],
+          image: DecorationImage(
+              image: AssetImage(Assets.joinTrip), fit: BoxFit.fill),
         ),
         clipBehavior: Clip.antiAliasWithSaveLayer,
-        child: Stack(
-          alignment: AlignmentDirectional.centerStart,
-          children: [
-            Positioned.fill(
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  //TODO
-                  Image.asset(
-                    Assets.joinTrip,
-                    fit: BoxFit.fill,
-                    // width: 150,
-                    // source: AssetImage(image),
-                  ),
-                  // Container(
-                  //   color: Colors.black
-                  //       .withOpacity(0.4), // Darken the background
-                  // ),
-                ],
+        child: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Label(
+                text: title,
+                style: Styles.mediumText(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 45,
+                ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10.w),
-              child: Row(
-                children: [
-                  // Container(
-                  //   margin: EdgeInsetsDirectional.only(start: 20.w),
-                  //   // padding: EdgeInsets.symmetric(vertical: 5.h),
-                  //   decoration: BoxDecoration(
-                  //       boxShadow: [
-                  //         BoxShadow(
-                  //           color: Colors.black.withOpacity(0.5),
-                  //           spreadRadius: 0.03,
-                  //           blurRadius: 6,
-                  //         ),
-                  //       ]
-                  //   ),
-                  //   child: InkWell(
-                  //     onTap: () async {},
-                  //     child: Icon(
-                  //       isFavorite ?? false
-                  //           ? Icons.favorite
-                  //           : Icons.favorite_border,
-                  //       // Icons.favorite,
-                  //       color: AppColors.SECONDARY_COLOR,
-                  //       size: 38.h,
-                  //     ),
-                  //   ),
-                  // ),
-                  const Spacer(),
-                  Container(
-                    child: Label(
-                      // text: service.title(),
-                      text: title,
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 45.sp),
-                    ),
-                  ),
-                  const Spacer(),
-                  Container()
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
