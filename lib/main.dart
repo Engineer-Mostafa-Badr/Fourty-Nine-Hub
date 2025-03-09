@@ -25,34 +25,34 @@ import 'package:fourtyninehub/features/notifications/presentation/cubits/get_ser
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_social_notifications/get_social_notifications_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_unread_notifications_count/get_unread_notifications_count_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
-import 'package:fourtyninehub/features/ride/Authentication/presentation/cubit/authentication_ride_cubit.dart';
-import 'package:fourtyninehub/features/ride/Authentication/presentation/cubit/check_part_active_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/NoSocket/check_trip_end_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/NoSocket/complete_no_socket_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/NoSocket/rating_driver_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/cancel_trip_client_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/cancel_trip_rider_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/check_start_record_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/check_stop_record_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/drivers_nearBy_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/start_trip_rider_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/accept_offer_by_driver_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/check_accept_by_driver_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/check_accept_by_rider_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/check_payment_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_all_trip_rider_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_cateogry_rider_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_reasons_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_ride_currentTrip_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/location_socket_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/offer_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/pick_driver_image_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/record_ride_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/register_rider_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/request_rider_trip_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_trip_reel_time_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/send_offer_by_driver_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/show_offers_cubit.dart';
+// import 'package:fourtyninehub/features/ride/Authentication/presentation/cubit/authentication_ride_cubit.dart';
+// import 'package:fourtyninehub/features/ride/Authentication/presentation/cubit/check_part_active_cubit.dart';
+// import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/NoSocket/check_trip_end_cubit.dart';
+// import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/NoSocket/complete_no_socket_cubit.dart';
+// import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/NoSocket/rating_driver_cubit.dart';
+// import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/cancel_trip_client_cubit.dart';
+// import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/cancel_trip_rider_cubit.dart';
+// import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/check_start_record_cubit.dart';
+// import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/check_stop_record_cubit.dart';
+// import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/drivers_nearBy_cubit.dart';
+// import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/TripCubit/start_trip_rider_cubit.dart';
+// import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/accept_offer_by_driver_cubit.dart';
+// import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/check_accept_by_driver_cubit.dart';
+// import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/check_accept_by_rider_cubit.dart';
+// import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/check_payment_cubit.dart';
+// import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_all_trip_rider_cubit.dart';
+// import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_cateogry_rider_cubit.dart';
+// import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_reasons_cubit.dart';
+// import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_ride_currentTrip_cubit.dart';
+// import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/location_socket_cubit.dart';
+// import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/offer_cubit.dart';
+// import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/pick_driver_image_cubit.dart';
+// import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/record_ride_cubit.dart';
+// import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/register_rider_cubit.dart';
+// import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/request_rider_trip_cubit.dart';
+// import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_trip_reel_time_cubit.dart';
+// import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/send_offer_by_driver_cubit.dart';
+// import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/show_offers_cubit.dart';
 import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
@@ -192,11 +192,11 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     getToken();
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => serviceLocator<SendCallCubit>()),
-        BlocProvider(create: (context) => serviceLocator<CallCubit>()),
-        BlocProvider(
-            create: (context) =>
-                CheckTripEndCubit(repository: serviceLocator())),
+         BlocProvider(create: (context) => serviceLocator<SendCallCubit>()),
+          BlocProvider(create: (context) => serviceLocator<CallCubit>()),
+        // BlocProvider(
+        //     create: (context) =>
+        //         CheckTripEndCubit(repository: serviceLocator())),
         BlocProvider(
           create: (context) => serviceLocator<UserCubit>()..getUser(),
         ),
@@ -230,36 +230,36 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         //   create: (BuildContext context) =>
         //       serviceLocator<MainCategoriesCubit>()..getMainCategoryCustomPage(),
         // ),
-        BlocProvider(
-          create: (context) =>
-              LocationSocketCubit(repository: serviceLocator()),
-        ),
-        BlocProvider(
-          create: (context) => ThumbnailsCubit(serviceLocator()),
-        ),
-        BlocProvider(
-          create: (context) => serviceLocator<ShowOffersCubit>(),
-        ),
-        BlocProvider(
-          create: (context) => serviceLocator<GetCateogryRiderCubit>(),
-        ),
-        BlocProvider(
-          create: (context) => serviceLocator<RiderTripReelTimeCubit>(),
-        ),
-        BlocProvider(
-          create: (context) => serviceLocator<RequestRiderTripCubit>(),
-        ),
-        BlocProvider(
-          create: (context) =>
-              SendOfferByDriverCubit(repository: serviceLocator()),
-        ),
-        BlocProvider(
-          create: (context) =>
-              AcceptOfferByDriverCubit(repository: serviceLocator()),
-        ),
-        BlocProvider(
-          create: (context) => RecordRideCubit(repository: serviceLocator()),
-        ),
+        // BlocProvider(
+        //   create: (context) =>
+        //       LocationSocketCubit(repository: serviceLocator()),
+        // ),
+        // BlocProvider(
+        //   create: (context) => ThumbnailsCubit(serviceLocator()),
+        // ),
+        // BlocProvider(
+        //   create: (context) => serviceLocator<ShowOffersCubit>(),
+        // ),
+        // BlocProvider(
+        //   create: (context) => serviceLocator<GetCateogryRiderCubit>(),
+        // ),
+        // BlocProvider(
+        //   create: (context) => serviceLocator<RiderTripReelTimeCubit>(),
+        // ),
+        // BlocProvider(
+        //   create: (context) => serviceLocator<RequestRiderTripCubit>(),
+        // ),
+        // BlocProvider(
+        //   create: (context) =>
+        //       SendOfferByDriverCubit(repository: serviceLocator()),
+        // ),
+        // BlocProvider(
+        //   create: (context) =>
+        //       AcceptOfferByDriverCubit(repository: serviceLocator()),
+        // ),
+        // BlocProvider(
+        //   create: (context) => RecordRideCubit(repository: serviceLocator()),
+        // ),
         // //  tinder to be reviewed
         // BlocProvider(
         //   create: (context) => serviceLocator<CreateShippingRequestCubit>(),
@@ -274,12 +274,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         BlocProvider<CustomPageCubit>(
           create: (context) => serviceLocator()..fetchActivate(),
         ),
-        BlocProvider(
-          create: (context) => serviceLocator<StreamCubit>()
-            ..loadLives()
-            ..getScheduledMeetings()
-            ..getTopics(),
-        ),
+        // BlocProvider(
+        //   create: (context) => serviceLocator<StreamCubit>()
+        //     ..loadLives()
+        //     ..getScheduledMeetings()
+        //     ..getTopics(),
+        // ),
         BlocProvider<FirebaseNotficationsCubit>(
           create: (context) => FirebaseNotficationsCubit(serviceLocator()),
         ),
@@ -309,9 +309,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             context: context,
           ),
         ),
-        BlocProvider(
-          create: (context) => AuthenticationRideCubit(),
-        ),
+        // BlocProvider(
+        //   create: (context) => AuthenticationRideCubit(),
+        // ),
         BlocProvider<GetServicesNotificationsCubit>(
           create: (context) => GetServicesNotificationsCubit(
             getNotficationsUseCase: serviceLocator(),
@@ -323,84 +323,84 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                   context: context,
                   notificationListenerUseCase: serviceLocator(),
                 )),
-        BlocProvider(
-          create: (context) => ShowOffersCubit(
-            repository: serviceLocator(),
-          ),
-        ),
-        BlocProvider(
-          create: (context) => CheckPartActiveCubit(),
-        ),
-
-        BlocProvider(
-          create: (context) => CheckAcceptByDriverCubit(
-            repository: serviceLocator(),
-          )..check(),
-        ),
-        BlocProvider(
-          create: (context) => CheckAcceptByRiderCubit(
-            repository: serviceLocator(),
-          )..check(),
-        ),
-        BlocProvider(
-          create: (context) =>
-              GetAllTripRiderCubit(repository: serviceLocator())..getAllTrip(),
-        ),
-        BlocProvider(
-          create: (context) => OfferCubit(repository: serviceLocator()),
-        ),
-        BlocProvider(
-          create: (context) => GetReasonsCubit(repository: serviceLocator()),
-        ),
-        BlocProvider(
-          create: (context) =>
-              StartTripRiderCubit(repository: serviceLocator()),
-        ),
-        BlocProvider(
-          create: (context) =>
-              CancelTripClientCubit(repository: serviceLocator()),
-        ),
-        BlocProvider(
-          create: (context) => CheckPaymentCubit(repository: serviceLocator()),
-        ),
-        BlocProvider(
-          create: (context) =>
-              CancelTripRiderCubit(repository: serviceLocator()),
-        ),
-        BlocProvider(
-          create: (context) => RatingDriverCubit(repository: serviceLocator()),
-        ),
-        BlocProvider(
-          create: (context) =>
-              CompleteNoSocketCubit(repository: serviceLocator()),
-        ),
-        BlocProvider(
-          create: (context) =>
-              CheckStopRecordCubit(repository: serviceLocator()),
-        ),
-        BlocProvider(
-          create: (context) =>
-              CheckStartRecordCubit(repository: serviceLocator()),
-        ),
+        // BlocProvider(
+        //   create: (context) => ShowOffersCubit(
+        //     repository: serviceLocator(),
+        //   ),
+        // ),
+        // BlocProvider(
+        //   create: (context) => CheckPartActiveCubit(),
+        // ),
+        //
+        // BlocProvider(
+        //   create: (context) => CheckAcceptByDriverCubit(
+        //     repository: serviceLocator(),
+        //   )..check(),
+        // ),
+        // BlocProvider(
+        //   create: (context) => CheckAcceptByRiderCubit(
+        //     repository: serviceLocator(),
+        //   )..check(),
+        // ),
+        // BlocProvider(
+        //   create: (context) =>
+        //       GetAllTripRiderCubit(repository: serviceLocator())..getAllTrip(),
+        // ),
+        // BlocProvider(
+        //   create: (context) => OfferCubit(repository: serviceLocator()),
+        // ),
+        // BlocProvider(
+        //   create: (context) => GetReasonsCubit(repository: serviceLocator()),
+        // ),
+        // BlocProvider(
+        //   create: (context) =>
+        //       StartTripRiderCubit(repository: serviceLocator()),
+        // ),
+        // BlocProvider(
+        //   create: (context) =>
+        //       CancelTripClientCubit(repository: serviceLocator()),
+        // ),
+        // BlocProvider(
+        //   create: (context) => CheckPaymentCubit(repository: serviceLocator()),
+        // ),
+        // BlocProvider(
+        //   create: (context) =>
+        //       CancelTripRiderCubit(repository: serviceLocator()),
+        // ),
+        // BlocProvider(
+        //   create: (context) => RatingDriverCubit(repository: serviceLocator()),
+        // ),
+        // BlocProvider(
+        //   create: (context) =>
+        //       CompleteNoSocketCubit(repository: serviceLocator()),
+        // ),
+        // BlocProvider(
+        //   create: (context) =>
+        //       CheckStopRecordCubit(repository: serviceLocator()),
+        // ),
+        // BlocProvider(
+        //   create: (context) =>
+        //       CheckStartRecordCubit(repository: serviceLocator()),
+        // ),
 
         // context.read<LocationSocketCubit>().updateDriverLocationOn();
 
-        BlocProvider(
-          create: (context) =>
-              GetRideCurrenttripCubit(repository: serviceLocator())..get(),
-        ),
-
+        // BlocProvider(
+        //   create: (context) =>
+        //       GetRideCurrenttripCubit(repository: serviceLocator())..get(),
+        // ),
+        //
         BlocProvider(create: (context) => serviceLocator<ShippingCubit>()),
-        BlocProvider(
-          create: (context) => RegisterRiderCubit(
-              repository: serviceLocator(), repo: serviceLocator()),
-        ),
-        BlocProvider(
-          create: (context) => PickDriverImageCubit(),
-        ),
-        BlocProvider(
-          create: (context) => DriversNearbyCubit(repository: serviceLocator()),
-        ),
+        // BlocProvider(
+        //   create: (context) => RegisterRiderCubit(
+        //       repository: serviceLocator(), repo: serviceLocator()),
+        // ),
+        // BlocProvider(
+        //   create: (context) => PickDriverImageCubit(),
+        // ),
+        // BlocProvider(
+        //   create: (context) => DriversNearbyCubit(repository: serviceLocator()),
+        // ),
         BlocProvider(
           create: (context) =>
               FloatingNavigatorCubit()..getFloatingNavigatorStatus(),

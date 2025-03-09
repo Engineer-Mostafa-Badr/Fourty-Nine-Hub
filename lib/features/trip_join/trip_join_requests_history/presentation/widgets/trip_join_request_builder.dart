@@ -133,7 +133,7 @@ class _TripJoinRequestBuilderState extends State<TripJoinRequestBuilder> {
                 wallets: [
                   fetchMyTripJoinAdsCubit
                           .trips[index].paymentMethod?.toWalletType ??
-                      WalletTypes.balance
+                      WalletTypes.mainWallet
                 ],
                 subCategoryId:
                     fetchMyTripJoinAdsCubit.trips[index].categoryMainId ?? '',
@@ -206,7 +206,7 @@ class _TripJoinRequestBuilderState extends State<TripJoinRequestBuilder> {
           },
           subscribeOnTap: () {
             serviceLocator<SubscriptionController>().showSubscriptionPlans(
-              wallets: [WalletTypes.balance],
+              wallets: [WalletTypes.mainWallet],
               subCategoryId: trip.categoryId ?? '62ea008d69ea29c91dfc3908',
               title: LocaleKeys.tripjoinPremuimSubscription,
             );

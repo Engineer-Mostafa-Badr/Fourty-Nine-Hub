@@ -42,7 +42,9 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final rideCubit = context.read<RideCubit>();
       if (!rideCubit.isClosed) {
-        rideCubit.fetchRideCategories(UserCubit.to.state.data?.id ?? "");
+        rideCubit.fetchRideDriverInfo(context);
+        rideCubit.fetchRideDriverPictureOptional(context);
+        rideCubit.fetchRideCategories(UserCubit.to.state.data?.id ?? "",context);
         rideCubit.fetchShippingCategories(UserCubit.to.state.data?.id ?? "");
       }
     });
@@ -94,17 +96,22 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         ),
         GestureDetector(
           onTap: () {
+            print("context.read<RideCubit>().state.driverInfo!=null${context.read<RideCubit>().state.driverInfo!=null}");
             customBottomSheet(context,
                 child: Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: Column(
                     spacing: 10,
                     children: [
-                      AppButton(
+                      if(context.read<RideCubit>().state.driverInfo==null||(context.read<RideCubit>().state.driverInfo?.isApproved==false))AppButton(
                           radius: 15,
                           label: LocaleKeys.ride.tr(),
                           onPressed: () {
-                            context.push(Routes.welcomeRideRegister);
+                            if(context.read<RideCubit>().state.driverInfo!=null){
+                              context.push(Routes.UploadRiderImages);
+                            }else{
+                              context.push(Routes.welcomeRideRegister);
+                            }
                           },
                           backColor: AppColors.PRIMARY_COLOR,
                           width: double.infinity),

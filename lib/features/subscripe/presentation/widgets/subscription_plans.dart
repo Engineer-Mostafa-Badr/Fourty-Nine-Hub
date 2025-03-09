@@ -48,6 +48,7 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
   @override
   void initState() {
     selectedWallet = widget.paymentMenthods?[0];
+    print("widget.paymentMenthods ${widget.paymentMenthods?.length}");
     super.initState();
   }
 

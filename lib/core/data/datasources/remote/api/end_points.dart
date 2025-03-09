@@ -1229,4 +1229,6 @@ class EndPoints {
   static String getCarYearsAndTypes = '/ride/riders/car-years-and-types';
   static String getRideCarColors = '/ride/riders/colors';
   static String getAllUserTrips = '/loading/trip/allUserTrips';
+  static String getRideDriverInfo = '/ride/driver/info';
+  static String getRideDriverPictureOptional = '/ride/info/picture-optional';
 }

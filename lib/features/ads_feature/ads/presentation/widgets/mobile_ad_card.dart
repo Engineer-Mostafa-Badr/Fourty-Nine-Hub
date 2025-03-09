@@ -3,15 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/call_message_buttons.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_entity.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/premium_request_button.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/request_button.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/create_ad_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
@@ -227,36 +231,79 @@ class _MobileAdCardState extends State<MobileAdCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      AvaialbleTripsButton(
+                        title: LocaleKeys.request.localize,
+                        color:AppColors.SECONDARY_COLOR,
+                        padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 5),
+                        onTap: (){
+                          showModalBottomSheet(
+                            backgroundColor: context.isDarkMode
+                                ? AppColors.DARK_BLUE_COLOR.withOpacity(0.95)
+                                : AppColors.LIGHT_COLOR,
+                            context: context,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(32.0),
+                                topRight: Radius.circular(32.0),
+                              ),
+                            ),
+                            isDismissible: true,
+                            isScrollControlled: true,
+                            builder: (BuildContext context) {
+                              return BlocProvider.value(
+                                value: serviceLocator<AdvertisementCubit>(),
+                                child: AnimatedPadding(
+                                  padding: MediaQuery.of(context).viewInsets,
+                                  duration: const Duration(milliseconds: 50),
+                                  child: Container(
+                                    height: 150.h,
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: 10.h,
+                                      horizontal: 10,
+                                    ),
+                                    child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Expanded(
+                                          flex: 3,
+                                          child: PremiumRequestButton(
+                                            adId: widget.item.id,
+                                            subCategoryId:
+                                            widget.item.subCategoryId ?? '',
+                                            subscriptionStatus:
+                                            widget.item.subscriptionStatus ?? '',
+                                          ),
+                                        ),
+                                        const Sizer(width: 5),
+                                        Expanded(
+                                          flex: 3,
+                                          child: RequestButton(
+                                            adId: widget.item.id,
+                                            subscriptionStatus:
+                                            widget.item.subscriptionStatus ?? '',
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },),
                       Expanded(
-                        flex: 3,
-                        child: PremiumRequestButton(
-                          adId: widget.item.id,
-                          subscriptionStatus:
-                              widget.item.subscriptionStatus ?? '',
-                          subCategoryId: widget.item.subCategoryId ?? '',
+                        child: CallMessageButtons(
+                          otherUserId: widget.item.userId ?? '',
+                          subcategoryId: widget.item.subCategoryId ?? '',
+                          phone: widget.item.phone ?? '',
+                          id: widget.item.id,
+                          hasReport: true,
                         ),
                       ),
-                      const Sizer(width: 5),
-                      Expanded(
-                        flex: 3,
-                        child: RequestButton(
-                          adId: widget.item.id,
-                          subscriptionStatus:
-                              widget.item.subscriptionStatus ?? '',
-                        ),
-                      )
                     ],
                   ),
-                  const Sizer(),
-                  CallMessageButtons(
-                    otherUserId: widget.item.userId ?? '',
-                    subcategoryId: widget.item.subCategoryId ?? '',
-                    phone: widget.item.phone ?? '',
-                    id: widget.item.id,
-                    hasReport: true,
-                  ),
+
                 ],
               ),
             ),

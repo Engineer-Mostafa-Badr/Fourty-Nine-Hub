@@ -2,6 +2,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/car_years_and_types_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/check_driver_type_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_info_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_picture_optional_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/drivers_in_subcategory_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/expected_price_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/expected_price_params.dart';
@@ -33,4 +35,6 @@ abstract class RideRepository {
   Future<Either<Failure, List<CarYearsAndTypesEntity>>> getCarYearsAndTypes(GetCarYearsAndTypesParams params);
   Future<Either<Failure, List<RideColorEntity>>> getRideCarColors();
   Future<Either<Failure, List<GovernorateEntity>>> getGovernorates();
+  Future<Either<Failure, DriverInfoEntity>> getRideDriverInfo();
+  Future<Either<Failure, DriverPictureOptionalEntity>> getDriverPictureOptional();
 }

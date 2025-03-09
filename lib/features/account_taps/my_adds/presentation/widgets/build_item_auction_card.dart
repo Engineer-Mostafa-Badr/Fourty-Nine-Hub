@@ -122,8 +122,6 @@ class BuildItemAuctionCard extends StatelessWidget {
                               .showSubscriptionPlans(
                             wallets: [
                               WalletTypes.mainWallet,
-                              WalletTypes.giftWallet,
-                              WalletTypes.balance,
                             ],
                             subCategoryId: item.subCategory.id,
                             title: LocaleKeys.ads.localize,

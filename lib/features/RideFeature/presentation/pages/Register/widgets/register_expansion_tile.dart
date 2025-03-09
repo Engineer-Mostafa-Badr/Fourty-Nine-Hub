@@ -8,12 +8,14 @@ class RegisterExpansionTile extends StatefulWidget {
     required this.children,
     required this.length,
     this.onChange,
+    this.onSelect,
   });
 
   final Widget title;
   final List<Widget> children;
   final int length;
   final ValueChanged<Widget>? onChange;
+  final Function(int id)? onSelect;
 
   @override
   State<RegisterExpansionTile> createState() => _RegisterExpansionTileState();
@@ -51,10 +53,7 @@ class _RegisterExpansionTileState extends State<RegisterExpansionTile> {
             height: 10,
           ),
           Container(
-            constraints: const BoxConstraints(
-              maxHeight: 250,
-              minHeight: 40,
-            ),
+            constraints: BoxConstraints(maxHeight: 250),
             child: ListView(
               padding: const EdgeInsets.all(16.0),
               children: List.generate(
@@ -69,6 +68,9 @@ class _RegisterExpansionTileState extends State<RegisterExpansionTile> {
 
                       if (widget.onChange != null) {
                         widget.onChange!(widget.children[index]); // Notify parent
+                        if(widget.onSelect !=null){
+                          widget.onSelect!(index);
+                        }
                       }
                     }
                   },

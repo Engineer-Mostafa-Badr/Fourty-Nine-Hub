@@ -32,7 +32,7 @@ class DoctorDetailsCubit extends Cubit<DoctorDetailsState> {
       : super(const DoctorDetailsState());
 
   late AppointmentEntity selectedAppointment;
-  late DoctorEntity doctor;
+  // late DoctorEntity doctor;
 
   Future<void> loadData(DoctorDetailsParams params) async {
     emit(state.copyWith(status: DoctorDetailsStates.loading));
@@ -57,7 +57,7 @@ class DoctorDetailsCubit extends Cubit<DoctorDetailsState> {
     response.fold(
         (failure) => emit(state.copyWith(
             failure: failure, status: DoctorDetailsStates.error)), (data) {
-      doctor = data;
+      // doctor = data;
       emit(state.copyWith(doctor: data));
     });
   }
@@ -88,7 +88,7 @@ class DoctorDetailsCubit extends Cubit<DoctorDetailsState> {
     response.fold(
         (failure) => emit(state.copyWith(
             failure: failure, status: DoctorDetailsStates.error)), (data) {
-      doctor = data;
+      // doctor = data;
       emit(state.copyWith(doctor: data));
     });
   }

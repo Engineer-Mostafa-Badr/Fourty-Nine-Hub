@@ -108,7 +108,7 @@ class _TripJoinRequestHistoryBuilderState
       await serviceLocator<SubscriptionController>().showSubscriptionPlans(
         wallets: [
           tripJoinRequestHistoryEntity.paymentType?.toWalletType ??
-              WalletTypes.balance
+              WalletTypes.mainWallet
         ],
         subCategoryId: subCategoryId,
         title: title,

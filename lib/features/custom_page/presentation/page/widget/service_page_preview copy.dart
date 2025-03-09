@@ -108,7 +108,6 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
     context
         .read<NotificationSocketIoCubit>()
         .notificationListener(languageCode: 'en');
-    context.read<LocationSocketCubit>().updateDriverLocationOn();
   }
 
   void _setupScrollController() {

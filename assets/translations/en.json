@@ -1329,5 +1329,6 @@
   "carTruckRegister": "Car/Truck Register",
   "options": "Options",
   "noSmoker": "Non smoker Driver",
-  "choiceRuler": "Choice Ruler"
+  "choiceRuler": "Choice Ruler",
+  "completeRegistration": "Complete Registration"
 }

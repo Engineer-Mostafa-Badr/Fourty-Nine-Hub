@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/data/models/picture_optional_model/drag_analytics.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/data/models/picture_optional_model/drag_analytics.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/data/models/picture_optional_model/technical_examination.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/data/models/picture_optional_model/technical_examination.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -19,16 +24,11 @@ import '../widgets/close_widget.dart';
 import '../widgets/register_floating_action_button.dart';
 import '../widgets/upload_file_widget.dart';
 
-class DriversLicenseScreen extends StatelessWidget {
-  const DriversLicenseScreen({super.key});
+class TechnicalExaminationScreen extends StatelessWidget {
+  const TechnicalExaminationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    List<String> uploadFilesTitles = [
-      LocaleKeys.driversLicense.localize,
-      LocaleKeys.backOfTheLicense.localize,
-      LocaleKeys.aSelfieWithTheLicense.localize,
-    ];
     return CustomScaffold(
       appBar: const HomeAppbar(),
       body: Column(
@@ -41,7 +41,7 @@ class DriversLicenseScreen extends StatelessWidget {
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 32,left: 16,right: 16,),
                     child: Form(
-                      key: cubit.driverLicenseFormKey,
+                      key: cubit.terminalExaminationFormKey,
                       child: Column(
                         spacing: 4,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,7 +51,7 @@ class DriversLicenseScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Label(
-                                text: LocaleKeys.driversLicense.localize,
+                                text: LocaleKeys.technicalExamination.localize,
                                 style: Styles.headerText(
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -95,32 +95,13 @@ class DriversLicenseScreen extends StatelessWidget {
                           //   ],
                           // ),
 
-                          SizedBox(
-                            height: MediaQuery.sizeOf(context).width*.4,
-                            child: GridView.count(
-                              physics: const NeverScrollableScrollPhysics(),
-                              padding: EdgeInsets.zero,
-                              crossAxisCount: 3,
-                              childAspectRatio: 1 / 1.5,
-                              mainAxisSpacing: 32.w,
-                              crossAxisSpacing: 32.h,
-                              children: List.generate(
-                                uploadFilesTitles.length,
-                                (index) => UploadFileWidget(
-                                  title: uploadFilesTitles[index],
-                                  onTap: (){
-                                    if(index==0){
-                                      cubit.onUploadDriverLicensePicture(context);
-                                    }else if(index==1){
-                                      cubit.onUploadBackOfDriverLicensePicture(context);
-                                    }else{
-                                      cubit.onUploadSelfieDriverLicensePicture(context);
-                                    }
-                                  },
-                                  imageUrl: index==0?state.driverLicensePicture:index==1?state.backOfDriverLicensePicture:state.selfieDriverLicensePicture,
-                                ),
-                              ),
-                            ),
+                          UploadFileWidget(
+                            title: LocaleKeys.technicalExamination.localize,
+                            onTap: (){
+                              cubit.onUploadPersonalTechnicalExaminationPicture(context);
+
+                            },
+                            imageUrl:state.personalTechnicalExaminationPicture,
                           ),
                           // const Sizer(),
                           // DefaultTextFormField(
@@ -131,12 +112,12 @@ class DriversLicenseScreen extends StatelessWidget {
                           // ),
                           const Sizer(),
                           DefaultTextFormField(
-                            currentController: cubit.rideDriverExpireDateController,
+                            currentController: cubit.rideTechnicalExaminationExpireDateController,
                             fillColor: AppColors.GREYBG,
                             borderColor: Colors.transparent,
                             hint: LocaleKeys.expireDate.localize,
                             validator: (value){
-                              if(value!=null&&value.isEmpty){
+                              if(value!=null && value.isEmpty){
                                 return LocaleKeys.required.localize;
                               }
                               return null;
@@ -174,7 +155,11 @@ class DriversLicenseScreen extends StatelessWidget {
                 InkWell(
                   onTap: () {
                     print("object");
-                    context.read<RideCubit>().onSubmitUploadingDriverLicense(context);
+                    if(context.read<RideCubit>().state.personalTechnicalExaminationPicture==null){
+                      showErrorMessage(context, "Please select technical examination");
+                    }else{
+                      context.read<RideCubit>().onSubmitUploadingTechnicalExamination(context);
+                    }
                   },
                   child: Container(
                     height: 44,

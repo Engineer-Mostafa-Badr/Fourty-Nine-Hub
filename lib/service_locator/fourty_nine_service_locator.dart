@@ -456,8 +456,8 @@ class FourtyNineServiceLocator {
     serviceLocator.registerSingleton(
       SliderCubit(serviceLocator())..loadData(),
     );
-    serviceLocator.registerFactory<ThumbnailsCubit>(
-        () => ThumbnailsCubit(serviceLocator())..loadData());
+    // serviceLocator.registerFactory<ThumbnailsCubit>(
+    //     () => ThumbnailsCubit(serviceLocator())..loadData());
     serviceLocator.registerFactory<MainCategoriesTapsCubit>(() =>
         MainCategoriesTapsCubit(serviceLocator(), serviceLocator())
           ..loadData());
