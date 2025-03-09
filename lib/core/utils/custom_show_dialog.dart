@@ -1,9 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../../features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 showAnimatedDialog(BuildContext context, Widget alertDialog,
     {bool? barrierDismissible, String? barrierLabel}) {
   showGeneralDialog(

@@ -3,9 +3,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/animations/create_custom_transition.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 // import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -19,6 +19,7 @@ import 'package:fourtyninehub/features/zoom/presentation/widgets/join_meeting_sc
 import 'package:fourtyninehub/features/zoom/presentation/widgets/schedule_meeting_screen.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
+
 import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../core/localization/locale_keys.g.dart';

@@ -17,8 +17,8 @@ import 'package:fourtyninehub/features/ride/RideRequest/data/models/get_trip_inf
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/rating_driver_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/rider_register_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/trip_request_model.dart';
-import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/trip_request_offer_model/trip_request_offer_model.dart';
+import 'package:fourtyninehub/shared_web_socket.dart';
 // import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:geolocator/geolocator.dart';
 

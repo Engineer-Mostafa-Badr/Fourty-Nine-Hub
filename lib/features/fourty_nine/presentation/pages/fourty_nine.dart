@@ -551,11 +551,8 @@ class _FourtyNineViewState extends State<FourtyNineView>
         const Sizer(),
         Expanded(
           child: _buildRideSubCategoryItem(
-            service:
-            RideServicesEnum.comeWithYou,
             title: context.isArabic?'جاي معاك':'Trip Join',
             // image: '',
-            image: Assets.tripJoin,
 
             route: Routes.AVAILABLE_TRIPS,
             onTab: () {

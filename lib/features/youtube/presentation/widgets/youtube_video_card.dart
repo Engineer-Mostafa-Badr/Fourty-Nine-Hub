@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
 import '../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/stateless/buttons/iconAppButton.dart';
@@ -6,10 +8,8 @@ import '../../../../common/widgets/stateless/images/profile_image.dart';
 import '../../../../common/widgets/stateless/images/square_image.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../res/style/const.dart';
-import '../../../../routes/routes.dart';
-import 'package:go_router/go_router.dart';
-
 import '../../../../res/style/styles.dart';
+import '../../../../routes/routes.dart';
 
 class YoutubeVideoCard extends StatelessWidget {
   final bool isVertical;

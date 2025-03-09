@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../../../../../../common/widgets/stateless/labels/label.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../../res/style/styles.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class OfferCard extends StatelessWidget {
   const OfferCard({super.key});

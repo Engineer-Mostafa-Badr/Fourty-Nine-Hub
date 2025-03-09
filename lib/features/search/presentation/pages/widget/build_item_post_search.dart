@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/functions/global/upload_file.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/common/functions/global/upload_file.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -20,9 +22,9 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/build_with_users.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_advirtesement_card.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_tweet_card.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
@@ -32,8 +34,6 @@ import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../../../../routes/routes.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import '../../../../../core/widget/custom_scaffold.dart';
 
 class BuildItemPostSearch extends StatefulWidget {

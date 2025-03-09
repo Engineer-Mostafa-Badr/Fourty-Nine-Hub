@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../labels/label.dart';
-import '../../../../res/style/styles.dart';
 
 import '../../../../res/style/app_colors.dart';
+import '../../../../res/style/styles.dart';
+import '../labels/label.dart';
 
 class TextAppButton extends StatelessWidget {
   final String label;
