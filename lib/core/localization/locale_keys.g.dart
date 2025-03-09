@@ -1304,6 +1304,7 @@ abstract class  LocaleKeys {
   static const rideDetails = 'rideDetails';
   static const options = 'options';
   static const noSmoker = 'noSmoker';
+  static const choiceRuler = 'choiceRuler';
   static const completeRegistration = 'completeRegistration';
 
 }

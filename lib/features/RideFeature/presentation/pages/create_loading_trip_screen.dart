@@ -12,16 +12,16 @@ import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 
-class RidePersonalMoreInfoScreen extends StatefulWidget {
-  RidePersonalMoreInfoScreen({super.key});
+class CreateLoadingTripScreen extends StatefulWidget {
+  const CreateLoadingTripScreen({super.key});
 
   @override
-  State<RidePersonalMoreInfoScreen> createState() =>
-      _RidePersonalMoreInfoScreenState();
+  State<CreateLoadingTripScreen> createState() =>
+      _CreateLoadingTripScreenState();
 }
 
-class _RidePersonalMoreInfoScreenState
-    extends State<RidePersonalMoreInfoScreen> {
+class _CreateLoadingTripScreenState
+    extends State<CreateLoadingTripScreen> {
   String _selectedTime = LocaleKeys.pickupTime.localize;
   String _selectedDate = LocaleKeys.pickupDate.localize;
   int _numberOfPassengers = 0;
@@ -93,8 +93,7 @@ class _RidePersonalMoreInfoScreenState
               GestureDetector(
                 onTap: () {
                   setState(() {
-                    _isExpanded =
-                        !_isExpanded;
+                    _isExpanded = !_isExpanded;
                   });
                 },
                 child: PickUpContainer(
@@ -109,10 +108,8 @@ class _RidePersonalMoreInfoScreenState
                     return GestureDetector(
                       onTap: () {
                         setState(() {
-                          _numberOfPassengers =
-                              index + 1; 
-                          _isExpanded =
-                              false; 
+                          _numberOfPassengers = index + 1;
+                          _isExpanded = false;
                         });
                       },
                       child: Container(
@@ -151,30 +148,36 @@ class _RidePersonalMoreInfoScreenState
               ImageTextRow(
                   imagePath: Assets.logo,
                   text: LocaleKeys.freeCancellation.localize),
-              SizedBox(height: 15,),
+              SizedBox(
+                height: 15,
+              ),
               Row(
                 children: [
-                  Expanded(child: AppButton(
-                    radius: 15,
-                    height: 44,
-                      backColor: AppColors.PRIMARY_COLOR_DARK,
-                      style: TextStyle(
-                        color: AppColors.whiteColor,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500
-                      ),
-                      label:LocaleKeys.premium_request.localize, onPressed: (){})),
-                  SizedBox(width: 4,),
-                  Expanded(child: AppButton(
-                    radius: 15,
-                    height: 44,
-                      backColor: AppColors.PRIMARY_COLOR,
-                      style: TextStyle(
-                        color: AppColors.whiteColor,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500
-                      ),
-                      label: LocaleKeys.request.localize, onPressed: (){})),
+                  Expanded(
+                      child: AppButton(
+                          radius: 15,
+                          height: 44,
+                          backColor: AppColors.PRIMARY_COLOR_DARK,
+                          style: TextStyle(
+                              color: AppColors.whiteColor,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500),
+                          label: LocaleKeys.premium_request.localize,
+                          onPressed: () {})),
+                  SizedBox(
+                    width: 4,
+                  ),
+                  Expanded(
+                      child: AppButton(
+                          radius: 15,
+                          height: 44,
+                          backColor: AppColors.PRIMARY_COLOR,
+                          style: TextStyle(
+                              color: AppColors.whiteColor,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500),
+                          label: LocaleKeys.request.localize,
+                          onPressed: () {})),
                 ],
               ),
             ],
@@ -287,11 +290,6 @@ class _RidePersonalMoreInfoScreenState
   }
 }
 
-
-
-
-
-
 class PickUpLocationCard extends StatelessWidget {
   final String title;
   final Color? firstColor;
@@ -301,42 +299,43 @@ class PickUpLocationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 48,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: const Color(0xFFF5F5F5),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Row(
-          children: [
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 12),
-              width: 16,
-              height: 16,
-              decoration: BoxDecoration(
-                color: firstColor,
-                shape: BoxShape.circle,
-              ),
-              child: Center(
-                child: Container(
-                  width: 8,
-                  height: 8,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                  ),
+      height: 48,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: const Color(0xFFF5F5F5),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        children: [
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 12),
+            width: 16,
+            height: 16,
+            decoration: BoxDecoration(
+              color: firstColor,
+              shape: BoxShape.circle,
+            ),
+            child: Center(
+              child: Container(
+                width: 8,
+                height: 8,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
                 ),
               ),
             ),
-            // Text "PickUp Location"
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-              ),
+          ),
+          // Text "PickUp Location"
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
             ),
-          ],
-        ));
+          ),
+        ],
+      ),
+    );
   }
 }

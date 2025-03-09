@@ -208,6 +208,7 @@ abstract class Assets {
   static String deleteAccount = 'assets/drawerIcons/deleteAccount.png';
   static String themeMode = 'assets/drawerIcons/themeMode.png';
   static String floatingNavigator = 'assets/drawerIcons/floatingNavigator.png';
+  static String ruler = 'assets/drawerIcons/ruler.png';
   static String walletIcon = 'assets/settings/wallet_icon.png';
   static String tripViewIllustration = 'assets/images/trip_view.png';
   static String map = 'assets/images/map.png';

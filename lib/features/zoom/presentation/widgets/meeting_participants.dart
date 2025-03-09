@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import '../../../../common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+
+import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../common/widgets/stateless/images/square_image.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../core/widget/custom_scaffold.dart';
+import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/const.dart';
 import '../../../../res/style/styles.dart';
-import '../../../../res/style/app_colors.dart';
 
 class MeetingParticipants extends StatelessWidget {
   const MeetingParticipants({super.key});

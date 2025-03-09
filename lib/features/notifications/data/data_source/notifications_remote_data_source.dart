@@ -14,6 +14,9 @@ import 'package:fourtyninehub/features/notifications/helpers/web_socket_helper.d
 import 'package:fourtyninehub/features/trip_join/helpers/print_helper.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
+import '../../domain/entities/user_trip_entity.dart';
+import '../models/user_trips_model.dart';
+
 abstract class NotificationsRemoteDataSource {
   Future<void> setupInteractedMessage({required BuildContext context});
 
@@ -23,15 +26,22 @@ abstract class NotificationsRemoteDataSource {
     int limit = 10,
     required String languageCode,
   });
+
   Future<void> notificationListener(
       {required Function(Map<String, dynamic> data) notificationCallback});
 
   Future<Either<Failure, UnreadNotificationsCountEntity>>
-      getUnreadNotificationsCount();
+  getUnreadNotificationsCount();
+
   Future<Either<Failure, bool>> notificationSeen({required String id});
+
   Future<Either<Failure, bool>> allNotificationSeen({required String type});
+
   Future<Either<Failure, bool>> deleteNotification({required String id});
+
   Future<Either<Failure, bool>> deleteAllNotifications({required String type});
+
+  Future<Either<Failure, List<UserTripEntity>>> getAllUserTrips();
 }
 
 class NotificationsRemoteDataSourceImp
@@ -74,11 +84,11 @@ class NotificationsRemoteDataSourceImp
     );
 
     return response.fold(
-      (failure) => Left(pr(failure)),
-      (data) {
+          (failure) => Left(pr(failure)),
+          (data) {
         pr(data);
         List<NotificationEntity> notifications =
-            (data['data']['docs'] as List).map<NotificationModel>((json) {
+        (data['data']['docs'] as List).map<NotificationModel>((json) {
           NotificationModel notification = NotificationModel.fromJson(json);
           notification.hasNextPage = hasNextPage(data);
           notification.nextPageNumber = nextPageNumber(data);
@@ -101,21 +111,21 @@ class NotificationsRemoteDataSourceImp
   @override
   Future<void> notificationListener(
       {required Function(Map<String, dynamic> data)
-          notificationCallback}) async {
+      notificationCallback}) async {
     webSocketHelper.notificationListener(notificationCallback);
   }
 
   @override
   Future<Either<Failure, UnreadNotificationsCountEntity>>
-      getUnreadNotificationsCount() async {
+  getUnreadNotificationsCount() async {
     final response = await apiConsumer.get(EndPoints.unreadNotificationsCount);
 
     return response.fold(
-      (failure) => Left(pr(failure)),
-      (data) {
+          (failure) => Left(pr(failure)),
+          (data) {
         // pr(data);
         UnreadNotificationsCountModel unreadNotificationsCountModel =
-            UnreadNotificationsCountModel.fromJson(data['data']);
+        UnreadNotificationsCountModel.fromJson(data['data']);
         pr(unreadNotificationsCountModel);
         return Right(unreadNotificationsCountModel);
       },
@@ -127,8 +137,8 @@ class NotificationsRemoteDataSourceImp
     final response = await apiConsumer.put(EndPoints.notificationsSeen(id));
 
     return response.fold(
-      (failure) => Left(pr(failure)),
-      (data) {
+          (failure) => Left(pr(failure)),
+          (data) {
         pr('Notification marked as seen');
         return const Right(true);
       },
@@ -144,8 +154,8 @@ class NotificationsRemoteDataSourceImp
     );
 
     return response.fold(
-      (failure) => Left(pr(failure)),
-      (data) {
+          (failure) => Left(pr(failure)),
+          (data) {
         pr('All Notification marked as seen');
         return const Right(true);
       },
@@ -159,8 +169,8 @@ class NotificationsRemoteDataSourceImp
     );
 
     return response.fold(
-      (failure) => Left(pr(failure)),
-      (data) {
+          (failure) => Left(pr(failure)),
+          (data) {
         pr('Notificiation Deleted Successfully');
         return const Right(true);
       },
@@ -178,11 +188,29 @@ class NotificationsRemoteDataSourceImp
     );
 
     return response.fold(
-      (failure) => Left(pr(failure)),
-      (data) {
+          (failure) => Left(pr(failure)),
+          (data) {
         pr('All Notificiations Deleted Successfully');
         return const Right(true);
       },
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<UserTripEntity>>> getAllUserTrips() async {
+    final response = await apiConsumer.get(
+      EndPoints.getAllUserTrips,
+    );
+
+    return response.fold(
+          (failure) => Left(pr(failure)),
+          (data) {
+            List<UserTripsModel> userTripsModel = (data['data'] as List)
+                .map((json) => UserTripsModel.fromJson(json))
+                .toList();
+            pr(userTripsModel);
+            return Right(userTripsModel);
+          },
     );
   }
 }

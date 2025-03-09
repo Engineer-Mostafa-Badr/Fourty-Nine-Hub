@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:ui' as textDirection;
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -31,8 +32,6 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'dart:ui' as textDirection;
-
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../../../core/utils/custom_show_dialog.dart';

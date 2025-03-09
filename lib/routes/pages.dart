@@ -277,6 +277,7 @@ import '../features/RideFeature/presentation/pages/Register/TruckDriver/truck_we
 import '../features/RideFeature/presentation/pages/Register/complete_register_screen.dart';
 import '../features/RideFeature/presentation/pages/Register/Driver/welcome_ride_register.dart';
 import '../features/RideFeature/presentation/pages/ride_home.dart';
+import '../features/RideFeature/presentation/pages/create_loading_trip_screen.dart';
 import '../features/account_taps/account/presentation/cubit/cubit/favourite_drawer_cubit.dart';
 import '../features/account_taps/account/presentation/cubit/managers/favourite_categories_cubit.dart';
 import '../features/account_taps/account/presentation/cubit/managers/favourite_subcategories_cubit.dart';
@@ -2786,6 +2787,19 @@ class AppPages {
                               serviceLocator()),
                     ),
                   ], child: const CompleteRegisterScreen());
+                },
+              ),
+              GoRoute(
+                path: Paths.createLoadingTripScreen,
+                name: Routes.createLoadingTripScreen,
+                builder: (context, state) {
+                  return MultiBlocProvider(providers: [
+                    BlocProvider<DestGetLatAndLongCubit>(
+                      create: (context) => DestGetLatAndLongCubit(
+                          getLatLongFromAddressRemoteDataSource:
+                              serviceLocator()),
+                    ),
+                  ], child: const CreateLoadingTripScreen());
                 },
               ),
             ],

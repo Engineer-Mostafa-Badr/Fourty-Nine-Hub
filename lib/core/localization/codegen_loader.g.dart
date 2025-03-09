@@ -1328,6 +1328,7 @@ class CodegenLoader extends AssetLoader{
   "rideDetails": "تفاصيل الرحلة",
   "options": "الخيارات",
   "noSmoker": "سائق غير مدخن",
+  "choiceRuler": "مسطرة الاختيارت",
   "completeRegistration": "تكملة التسجيل"
 };
 static const Map<String,dynamic> _en = {
@@ -1401,7 +1402,7 @@ static const Map<String,dynamic> _en = {
   "arabic": "Arabic",
   "english": "English",
   "meal": "Meal",
-  "darkMode": "Dark mode",
+  "darkMode": "Dark Mode",
   "lightMode": "Light mode",
   "voice": "Voice",
   "restaurantName": "ٌRestaurant Name",
@@ -2661,6 +2662,7 @@ static const Map<String,dynamic> _en = {
   "carTruckRegister": "Car/Truck Register",
   "options": "Options",
   "noSmoker": "Non smoker Driver",
+  "choiceRuler": "Choice Ruler",
   "completeRegistration": "Complete Registration"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};

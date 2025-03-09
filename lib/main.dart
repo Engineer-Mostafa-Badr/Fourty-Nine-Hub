@@ -70,6 +70,8 @@ import 'core/service/cache_service.dart';
 import 'core/themes/light_theme.dart';
 import 'features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'features/notifications/presentation/cubits/get_user_trips_notifications/get_user_trips_notifications_cubit.dart';
+import 'features/settings/presentation/cubit/choice_ruler_cubit.dart';
 import 'features/settings/presentation/cubit/floating_navigator_cubit.dart';
 import 'firebase_options.dart';
 import 'routes/pages.dart';
@@ -102,6 +104,7 @@ void main() async {
   );
   // ZegoGiftManager().cache.cache(giftItemList);
   isActivate = await CacheManager.getActivation() ?? false;
+  await CacheManager.getFloatingNavigator();
   //Admob.initialize();l
 
   SystemChrome.setPreferredOrientations([
@@ -221,8 +224,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               serviceLocator<MainCategoriesCubit>()..loadData(),
         ),
         BlocProvider(
-          create: (BuildContext context) =>
-              serviceLocator<RideCubit>(),
+          create: (BuildContext context) => serviceLocator<RideCubit>(),
         ),
         // BlocProvider(
         //   create: (BuildContext context) =>
@@ -295,6 +297,11 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             getNotficationsUseCase: serviceLocator(),
             context: context,
           ),
+        ),
+        BlocProvider<GetUserTripsNotificationsCubit>(
+          create: (context) => GetUserTripsNotificationsCubit(
+            getAllUserTripsUseCase: serviceLocator(),
+          )..getUserTripsNotifications(),
         ),
         BlocProvider<GetSocialNotificationsCubit>(
           create: (context) => GetSocialNotificationsCubit(
@@ -395,7 +402,13 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         //   create: (context) => DriversNearbyCubit(repository: serviceLocator()),
         // ),
         BlocProvider(
-          create: (context) => FloatingNavigatorCubit(),
+          create: (context) =>
+              FloatingNavigatorCubit()..getFloatingNavigatorStatus(),
+        ),
+        BlocProvider(
+          create: (context) => ChoiceRulerCubit()
+            ..getChoiceRulerStatus()
+            ..getChoiceRulerEnabledStatus(),
         ),
       ],
       child: ScreenUtilInit(

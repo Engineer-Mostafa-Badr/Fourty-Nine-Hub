@@ -1,7 +1,5 @@
 import 'package:dartz/dartz.dart';
-
 import 'package:fourtyninehub/core/error/failure.dart';
-
 import 'package:fourtyninehub/features/requests_history/data/models/trip_model.dart';
 import 'package:fourtyninehub/features/ride/trip_details/data/datasources/remote_data_source.dart';
 import 'package:fourtyninehub/features/ride/trip_details/data/models/cancel_reason_model.dart';

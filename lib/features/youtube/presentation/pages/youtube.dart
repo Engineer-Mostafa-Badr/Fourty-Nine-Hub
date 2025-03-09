@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import '../../../../common/widgets/dynamic/sizer.dart';
 
 import '../../../../common/widgets/dynamic/bottom_navigator.dart';
 import '../../../../common/widgets/dynamic/drawer.dart';
 import '../../../../common/widgets/dynamic/floating_button.dart';
+import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../res/style/app_colors.dart';

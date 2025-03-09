@@ -52,7 +52,7 @@ class _FacebookBodyState extends State<FacebookBody> with TickerProviderStateMix
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children:[
-                        SvgPicture.asset(Assets.home,width: 18,height: 16,),
+                        SvgPicture.asset(Assets.home,width: 18,height: 18,),
                         const SizedBox(width: 10),
                         Text(LocaleKeys.home.localize,style:const TextStyle(
                             color: Colors.black,

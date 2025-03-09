@@ -1,11 +1,7 @@
 import 'package:dartz/dartz.dart';
-
 import 'package:fourtyninehub/core/error/failure.dart';
-
-import 'package:fourtyninehub/features/ride/RideRequest/data/models/car_type_model.dart';
-
 import 'package:fourtyninehub/features/register/driver_register/data/models/rider_info_model.dart';
-
+import 'package:fourtyninehub/features/ride/RideRequest/data/models/car_type_model.dart';
 import 'package:fourtyninehub/features/subcategories/data/models/sub_category_model.dart';
 
 import '../../domain/repositories/rider_register_repo.dart';

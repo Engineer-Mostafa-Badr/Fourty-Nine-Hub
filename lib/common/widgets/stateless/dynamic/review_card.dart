@@ -6,8 +6,8 @@ import '../../../../res/style/const.dart';
 import '../../../../res/style/styles.dart';
 import '../../dynamic/sizer.dart';
 import '../images/profile_image.dart';
-import '../labels/read_more_label.dart';
 import '../labels/label.dart';
+import '../labels/read_more_label.dart';
 import 'rating_stars.dart';
 
 class ReviewCard extends StatelessWidget {

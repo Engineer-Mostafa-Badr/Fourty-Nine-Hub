@@ -13,12 +13,20 @@ import 'package:get_it/get_it.dart';
 
 import '../features/RideFeature/data/datasources/ride_local_data_source.dart';
 import '../features/RideFeature/data/datasources/ride_remote_data_source.dart';
+import '../features/RideFeature/data/datasources/shipping_remote_data_source.dart';
+import '../features/RideFeature/data/repositories/shipping_repository_imp.dart';
+import '../features/RideFeature/domain/repositories/shipping_repository.dart';
+import '../features/RideFeature/domain/usecases/create_loading_trip_usecase.dart';
 import '../features/RideFeature/domain/usecases/get_ride_categories_usecase.dart';
 
 class RideServiceLocatorUpdated {
   static void execute({required GetIt serviceLocator}) {
     // ---------------------------------- data sources ----------------------------------
     serviceLocator.registerLazySingleton<RideRemoteDataSource>(() => RideRemoteDataSourceImplementation(
+          serviceLocator(),
+        ));
+    serviceLocator.registerLazySingleton<ShippingRemoteDataSource>(
+            () => ShippingRemoteDataSourceImplementation(
           serviceLocator(),
         ));
 
@@ -29,7 +37,9 @@ class RideServiceLocatorUpdated {
     // ---------------------------------- repositories ----------------------------------
     serviceLocator.registerLazySingleton<RideRepository>(() => RideRepositoryImplementation(serviceLocator()));
 
-    serviceLocator.registerLazySingleton<RideRepositoryImplementation>(() => RideRepositoryImplementation(serviceLocator()));
+    serviceLocator.registerLazySingleton<ShippingRepository>(() =>
+        ShippingRepositoryImplementation(serviceLocator()));
+
 
     // ---------------------------------- use cases ----------------------------------
     serviceLocator.registerLazySingleton<GetRideCategoriesUseCase>(() => GetRideCategoriesUseCase(serviceLocator()));
@@ -41,6 +51,7 @@ class RideServiceLocatorUpdated {
     serviceLocator.registerLazySingleton<RegisterRideSpecialUseCase>(() => RegisterRideSpecialUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetRideDriverInfoUseCase>(() => GetRideDriverInfoUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetDriverPictureOptionalUseCase>(() => GetDriverPictureOptionalUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<CreateLoadingTripUseCase>(() => CreateLoadingTripUseCase(serviceLocator()));
 
     // ---------------------------------- cubits ----------------------------------
 

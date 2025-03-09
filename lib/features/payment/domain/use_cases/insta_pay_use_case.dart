@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/features/payment/domain/entities/instapay_entity.dart';
 import 'package:fourtyninehub/features/payment/domain/repositories/payment_provider_repository.dart';
+
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 

@@ -131,10 +131,6 @@ class ActivatePageBlocConsumer extends StatelessWidget {
                   controller.updateActivate(v);
                   Restart.restartApp();
                 },
-                // activeColor: Colors.red,
-                // inactiveThumbColor: Colors.black,
-                // activeTrackColor: Colors.grey,
-                // inactiveTrackColor: Colors.grey,
               ),
             ],
           ),
