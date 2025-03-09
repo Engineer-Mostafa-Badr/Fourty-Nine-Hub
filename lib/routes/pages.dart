@@ -1,4 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/creminal_record_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/drug_analysis.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/technical_examination_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/upload_rider_images.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/activity_trip_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/expired_trips_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/running_trips_screen.dart';
@@ -381,9 +385,9 @@ class AppPages {
                 BlocProvider(
                   create: (context) => serviceLocator<SliderCubit>(),
                 ),
-                BlocProvider(
-                  create: (context) => serviceLocator<ThumbnailsCubit>(),
-                ),
+                // BlocProvider(
+                //   create: (context) => serviceLocator<ThumbnailsCubit>(),
+                // ),
               ],
               child: const FourtyNineView(),
             ),
@@ -413,10 +417,10 @@ class AppPages {
                           BlocProvider(
                             create: (context) => serviceLocator<SliderCubit>(),
                           ),
-                          BlocProvider(
-                            create: (context) =>
-                                serviceLocator<ThumbnailsCubit>(),
-                          ),
+                          // BlocProvider(
+                          //   create: (context) =>
+                          //       serviceLocator<ThumbnailsCubit>(),
+                          // ),
                         ],
                         child: PagePreview(
                           state: state.extra as dynamic,
@@ -2468,6 +2472,9 @@ class AppPages {
                       create: (context) => JoinTripCarPoolCubit(
                           joinTripCarpoolUsecase: serviceLocator()),
                     ),
+                    BlocProvider<AdvertisementCubit>(
+                      create: (context) => serviceLocator<AdvertisementCubit>(),
+                    ),
                   ],
                   child: const AvailableTripsView(),
                 ),
@@ -2603,6 +2610,13 @@ class AppPages {
                 },
               ),
               GoRoute(
+                path: Paths.UploadRiderImages,
+                name: Routes.UploadRiderImages,
+                builder: (context, state) {
+                  return const UploadRiderImages();
+                },
+              ),
+              GoRoute(
                 path: Paths.personalInformationScreen,
                 name: Routes.personalInformationScreen,
                 builder: (context, state) {
@@ -2620,6 +2634,27 @@ class AppPages {
                               serviceLocator()),
                     ),
                   ], child: const DriversLicenseScreen());
+                },
+              ),
+              GoRoute(
+                path: Paths.drugAnalysisScreen,
+                name: Routes.drugAnalysisScreen,
+                builder: (context, state) {
+                  return const DragAnalyticsScreen();
+                },
+              ),
+              GoRoute(
+                path: Paths.criminalRecordScreen,
+                name: Routes.criminalRecordScreen,
+                builder: (context, state) {
+                  return const CriminalRecordScreen();
+                },
+              ),
+              GoRoute(
+                path: Paths.technicalExaminationScreen,
+                name: Routes.technicalExaminationScreen,
+                builder: (context, state) {
+                  return const TechnicalExaminationScreen();
                 },
               ),
               GoRoute(

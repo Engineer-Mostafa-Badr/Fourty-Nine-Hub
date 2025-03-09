@@ -2,6 +2,8 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/features/RideFeature/data/datasources/ride_remote_data_source.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/car_years_and_types_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/check_driver_type_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_info_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_picture_optional_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_statistics_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/drivers_in_subcategory_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/expected_price_entity.dart';
@@ -14,7 +16,6 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_color_en
 import 'package:fourtyninehub/features/RideFeature/domain/repositories/ride_repository.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_car_years_and_types_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
-import 'package:fourtyninehub/features/ride/driver_dashboard/domain/entities/driver_statistics_entity.dart';
 
 import '../../../../core/error/failure.dart';
 
@@ -101,5 +102,15 @@ class RideRepositoryImplementation extends RideRepository {
   @override
   Future<Either<Failure, List<GovernorateEntity>>> getGovernorates() async{
     return await rideRemoteDataSource.getGovernorates();
+  }
+
+  @override
+  Future<Either<Failure, DriverInfoEntity>> getRideDriverInfo() async{
+    return await rideRemoteDataSource.getRideDriverInfo();
+  }
+
+  @override
+  Future<Either<Failure, DriverPictureOptionalEntity>> getDriverPictureOptional() async{
+    return await rideRemoteDataSource.getDriverPictureOptional();
   }
 }

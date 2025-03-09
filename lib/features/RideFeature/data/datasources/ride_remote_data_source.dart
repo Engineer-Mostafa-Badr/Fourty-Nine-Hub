@@ -1,12 +1,16 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/car_years_and_types_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/check_driver_type_model.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/driver_info_model.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/driver_picture_optional_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/driver_statistics_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/drivers_in_subcategory_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/ride_color_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/ride_model.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/car_years_and_types_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/check_driver_type_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_info_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_picture_optional_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_statistics_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/drivers_in_subcategory_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/expected_price_entity.dart';
@@ -42,6 +46,8 @@ abstract class RideRemoteDataSource {
   Future<Either<Failure, List<CarYearsAndTypesEntity>>> getCarYearsAndTypes(GetCarYearsAndTypesParams params);
   Future<Either<Failure, List<RideColorEntity>>> getRideCarColors();
   Future<Either<Failure, List<GovernorateEntity>>> getGovernorates();
+  Future<Either<Failure, DriverInfoEntity>> getRideDriverInfo();
+  Future<Either<Failure, DriverPictureOptionalEntity>> getDriverPictureOptional();
 }
 
 class RideRemoteDataSourceImplementation
@@ -240,7 +246,7 @@ class RideRemoteDataSourceImplementation
       );
 
       return response.fold((failure) => Left(failure), (data) {
-        return Right((data['data']!=null||data['data'].isNotEmpty)?List<String>.from(data['data'].map((e) => e['brand'])):[]);
+        return Right((data['data']!=null||data['data'].isNotEmpty)?List<String>.from(data['data'].map((e) => e['brand'].toString())):[]);
       });
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
@@ -258,7 +264,7 @@ class RideRemoteDataSourceImplementation
       );
 
       return response.fold((failure) => Left(failure), (data) {
-        return Right((data['data']!=null||data['data'].isNotEmpty)?List<String>.from(data['data'].map((e) => e['model'])):[]);
+        return Right((data['data']!=null||data['data'].isNotEmpty)?List<String>.from(data['data'].map((e) => e['model'].toString())):[]);
       });
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
@@ -311,6 +317,36 @@ class RideRemoteDataSourceImplementation
         return Right((data['data'] as List)
             .map((e) => GovernorateModel.fromJson(e))
             .toList());
+      });
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, DriverInfoEntity>> getRideDriverInfo() async {
+    try {
+      final response = await _apiConsumer.get(
+        EndPoints.getRideDriverInfo,
+      );
+
+      return response.fold((failure) => Left(failure), (data) {
+        return Right(DriverInfoModel.fromJson(data['data']));
+      });
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, DriverPictureOptionalEntity>> getDriverPictureOptional() async {
+    try {
+      final response = await _apiConsumer.get(
+        EndPoints.getRideDriverPictureOptional,
+      );
+
+      return response.fold((failure) => Left(failure), (data) {
+        return Right(DriverPictureOptionalModel.fromJson(data['data']));
       });
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));

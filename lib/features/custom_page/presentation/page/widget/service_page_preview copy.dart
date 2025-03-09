@@ -108,7 +108,6 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
     context
         .read<NotificationSocketIoCubit>()
         .notificationListener(languageCode: 'en');
-    context.read<LocationSocketCubit>().updateDriverLocationOn();
   }
 
   void _setupScrollController() {
@@ -335,64 +334,47 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
     );
   }
 
-  BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>
-      _pickMeAndComeWithUWidget() {
-    return BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>(
-      builder: (context, state) {
-        if (state.status == StateStatus.loading) {
-          return const PickMeAndComeWithYouLShimmerLoading();
-        } else if (state.status == StateStatus.success) {
-          return Row(
-            children: [
-              // Expanded(
-              //   child: _buildRideSubCategoryItem(
-              //     service: state.data?[0].service ?? RideServicesEnum.pickMe,
-              //     title: LocaleKeys.carpool.localize,
-              //     image: state.data?[0].image ?? '',
-              //     onTab: () {
-              //       AdInterstitialTop.loadIntersitialAd();
-              //       AdInterstitialTop.showInterstitialAd();
-              //       return HandleCashback.setCount('carPoolCount', context);
-              //     },
-              //     // image: Assets.carpool,
-              //     // isFavorite: state.data![0].is,
-              //     // numberOfAds: state.data![0].numberOfAds?.toInt(),
-              //     route: Routes.CAR_POOL,
-              //   ),
-              // ),
-              // const Sizer(),
-              Expanded(
-                child: _buildRideSubCategoryItem(
-                  service:
-                      state.data?[1].service ?? RideServicesEnum.comeWithYou,
-                  title: LocaleKeys.tripJoin.localize,
-                  image: state.data?[1].image ?? '',
-                  // image: Assets.tripJoin,
+  // BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>
+  _pickMeAndComeWithUWidget() {
+    return  Row(
+      children: [
+        // Expanded(
+        //   child: _buildRideSubCategoryItem(
+        //     service: state.data?[0].service ?? RideServicesEnum.pickMe,
+        //     title: LocaleKeys.carpool.localize,
+        //     image: state.data?[0].image ?? '',
+        //     onTab: () {
+        //       AdInterstitialTop.loadIntersitialAd();
+        //       AdInterstitialTop.showInterstitialAd();
+        //       return HandleCashback.setCount('carPoolCount',context);
+        //     },
+        //     // image: Assets.carpool,
+        //     // isFavorite: state.data![0].is,
+        //     // numberOfAds: state.data![0].numberOfAds?.toInt(),
+        //     route: Routes.CAR_POOL,
+        //   ),
+        // ),
+        // const Sizer(),
+        const Sizer(),
+        Expanded(
+          child: _buildRideSubCategoryItem(
+            service:
+            RideServicesEnum.comeWithYou,
+            title: context.isArabic?'جاي معاك':'Trip Join',
+            // image: '',
+            image: Assets.tripJoin,
 
-                  route: Routes.AVAILABLE_TRIPS,
-                  onTab: () {
-                    AdInterstitialTop.loadIntersitialAd();
-                    AdInterstitialTop.showInterstitialAd();
-                    return HandleCashback.setCount('tripJoinCount', context);
-                  },
-                  // isFavorite: state.data![1].isFavorite,
-                  // numberOfAds: state.data![1].numberOfAds?.toInt(),
-                ),
-              )
-            ],
-          );
-        } else {
-          return Container(
-            padding:
-                //EdgeInsets.all
-                const EdgeInsets.symmetric(horizontal: 10),
-            child: Text(
-              LocaleKeys.noRideSubcategories.localize,
-              style: TextStyle(fontSize: 32.sp.w, fontWeight: FontWeight.w500),
-            ),
-          );
-        }
-      },
+            route: Routes.AVAILABLE_TRIPS,
+            onTab: () {
+              AdInterstitialTop.loadIntersitialAd();
+              AdInterstitialTop.showInterstitialAd();
+              return HandleCashback.setCount('tripJoinCount', context);
+            },
+            // isFavorite: state.data![1].isFavorite,
+            // numberOfAds: state.data![1].numberOfAds?.toInt(),
+          ),
+        )
+      ],
     );
   }
 

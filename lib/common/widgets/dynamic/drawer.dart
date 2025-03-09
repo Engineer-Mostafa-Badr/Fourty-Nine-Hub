@@ -205,7 +205,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     onTap: () {
                                       AdInterstitialTop.loadIntersitialAd();
                                       AdInterstitialTop.showInterstitialAd();
-                                      return context.push(Routes.POLICY);
+                                      return context.push(Routes.POLICY,extra: false);
                                     }),
                                 drawerListTile(
                                     // icon: Icons.share,

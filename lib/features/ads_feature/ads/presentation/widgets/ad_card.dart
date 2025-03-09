@@ -265,37 +265,79 @@ class _AdCardState extends State<AdCard> {
                         ? Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+
                               Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
+                                  AvaialbleTripsButton(
+                                    title: LocaleKeys.request.localize,
+                                    color:AppColors.SECONDARY_COLOR,
+                                    padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 5),
+                                    onTap: (){
+                                    showModalBottomSheet(
+                                      backgroundColor: context.isDarkMode
+                                          ? AppColors.DARK_BLUE_COLOR.withOpacity(0.95)
+                                          : AppColors.LIGHT_COLOR,
+                                      context: context,
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(32.0),
+                                          topRight: Radius.circular(32.0),
+                                        ),
+                                      ),
+                                      isDismissible: true,
+                                      isScrollControlled: true,
+                                      builder: (BuildContext context) {
+                                        return BlocProvider.value(
+                                          value: serviceLocator<AdvertisementCubit>(),
+                                          child: AnimatedPadding(
+                                            padding: MediaQuery.of(context).viewInsets,
+                                            duration: const Duration(milliseconds: 50),
+                                            child: Container(
+                                              height: 150.h,
+                                              padding: EdgeInsets.symmetric(
+                                                vertical: 10.h,
+                                                horizontal: 10,
+                                              ),
+                                              child: Row(
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: [
+                                                  Expanded(
+                                                    flex: 3,
+                                                    child: PremiumRequestButton(
+                                                      adId: widget.item.id,
+                                                      subCategoryId:
+                                                      widget.item.subCategoryId ?? '',
+                                                      subscriptionStatus:
+                                                      widget.item.subscriptionStatus ?? '',
+                                                    ),
+                                                  ),
+                                                  const Sizer(width: 5),
+                                                  Expanded(
+                                                    flex: 3,
+                                                    child: RequestButton(
+                                                      adId: widget.item.id,
+                                                      subscriptionStatus:
+                                                      widget.item.subscriptionStatus ?? '',
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },),
                                   Expanded(
-                                    flex: 3,
-                                    child: PremiumRequestButton(
-                                      adId: widget.item.id,
-                                      subCategoryId:
-                                          widget.item.subCategoryId ?? '',
-                                      subscriptionStatus:
-                                          widget.item.subscriptionStatus ?? '',
+                                    child: CallMessageButtons(
+                                      otherUserId: widget.item.userId ?? '',
+                                      subcategoryId: widget.item.subCategoryId ?? '',
+                                      phone: widget.item.phone ?? '',
+                                      id: widget.item.id,
+                                      hasReport: true, senderName: widget.item.user?.fullName??'',senderImage: widget.item.user?.profilePicture??'',
                                     ),
                                   ),
-                                  const Sizer(width: 5),
-                                  Expanded(
-                                    flex: 3,
-                                    child: RequestButton(
-                                      adId: widget.item.id,
-                                      subscriptionStatus:
-                                          widget.item.subscriptionStatus ?? '',
-                                    ),
-                                  )
                                 ],
-                              ),
-                              const Sizer(),
-                              CallMessageButtons(
-                                otherUserId: widget.item.userId ?? '',
-                                subcategoryId: widget.item.subCategoryId ?? '',
-                                phone: widget.item.phone ?? '',
-                                id: widget.item.id,
-                                hasReport: true,
                               ),
                             ],
                           )

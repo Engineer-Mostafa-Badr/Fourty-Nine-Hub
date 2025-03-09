@@ -111,6 +111,7 @@ class _AllPickMeBuilderState extends State<AllPickMeBuilder> {
               return AllPickMeCard(
                 pickMeCardEntity: pickMeCardEntity,
                 reportOnTap: () {
+                  context.pop();
                   if (context.read<UserCubit>().isLoggedIn) {
                     _reportOnTap(context, pickMeCardEntity);
                   } else {
@@ -118,6 +119,7 @@ class _AllPickMeBuilderState extends State<AllPickMeBuilder> {
                   }
                 },
                 premuimRequestOnTap: () async {
+                  context.pop();
                   if (context.read<UserCubit>().isLoggedIn) {
                     print(
                         "pickMeCardEntity.categoryId ${pickMeCardEntity.categoryId} \n");
@@ -229,7 +231,7 @@ class _AllPickMeBuilderState extends State<AllPickMeBuilder> {
       // Await the completion of showSubscriptionPlans
       await serviceLocator<SubscriptionController>().showSubscriptionPlans(
         wallets: [
-          pickMeCardEntity.paymentMethod?.toWalletType ?? WalletTypes.balance,
+          pickMeCardEntity.paymentMethod?.toWalletType ?? WalletTypes.mainWallet,
         ],
         subCategoryId: subCategoryId,
         title: title,
@@ -250,7 +252,7 @@ class _AllPickMeBuilderState extends State<AllPickMeBuilder> {
         pickMeCardEntity.isApproved == false) {
       await serviceLocator<SubscriptionController>().showSubscriptionPlans(
         wallets: [
-          pickMeCardEntity.paymentMethod?.toWalletType ?? WalletTypes.balance
+          pickMeCardEntity.paymentMethod?.toWalletType ?? WalletTypes.mainWallet
         ],
         subCategoryId: subCategoryId,
         title: title,

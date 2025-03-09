@@ -126,8 +126,6 @@ class SubscriptionWidget extends StatelessWidget {
                       .showSubscriptionPlans(
                           wallets: [
                         WalletTypes.mainWallet,
-                        WalletTypes.giftWallet,
-                        WalletTypes.balance,
                       ],
                           subCategoryId: subscription.subCategoryId!,
                           title: context.locale == Locales.english

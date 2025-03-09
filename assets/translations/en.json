@@ -1328,5 +1328,6 @@
   "rideDetails": "Ride Details",
   "carTruckRegister": "Car/Truck Register",
   "options": "Options",
-  "noSmoker": "Non smoker Driver"
+  "noSmoker": "Non smoker Driver",
+  "completeRegistration": "Complete Registration"
 }

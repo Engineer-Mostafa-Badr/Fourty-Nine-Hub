@@ -52,69 +52,15 @@ class MoreInfoScreen extends StatelessWidget {
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      const Sizer(),
-                      RegisterExpansionTile(
-                        title: Label(text: LocaleKeys.subscriptionPlan.localize),
-                        onChange: (Widget selectedItem) {
-                          // print("Selected Item: ${(selectedItem as Label).text}");
-                        },
-                        length: cubit.subscriptionPlans.length,
-                        children: List.generate(
-                            cubit.subscriptionPlans.length,
-                            (index) =>
-                                Label(text: cubit.subscriptionPlans[index])),
-                      ),
-                      const Sizer(),
-                      RegisterExpansionTile(
-                        title: Label(
-                          text: LocaleKeys.favoriteCity.localize,
-                        ),
-                        children: List.generate(
-                            state.govs?.length ?? 0,
-                            (index) => Label(
-                                text: context.isArabic
-                                    ? (state.govs?[index].nameAr ?? '')
-                                    : state.govs?[index].nameEn ?? '')),
-                        onChange: (Widget selectedItem) {
-                          // print("Selected Item: ${(selectedItem as Label).text}");
-                        },
-                        length: state.govs?.length ?? 0,
-                      ),
-                      const Sizer(),
-                      DefaultTextFormField(
-                        currentController: cubit.ridePricingPerKmController,
-                        // fillColor: AppColors.GREYBG,
-                        // borderColor: Colors.transparent,
-                        hint: LocaleKeys.pricingPerKm.localize,
-                      ),
-                      const Sizer(),
-                      CustomSwitchListTile(
-                        title: Text(
-                          LocaleKeys.nonSmokerDriver.localize,
-                          style: Styles.mediumText(
-                              fontSize: 65.sp, fontWeight: FontWeight.w400),
-                        ),
-                        value: true,
-                        onChanged: (value) async {},
-                      ),
-                      CustomSwitchListTile(
-                        title: Text(
-                          "Air Conditioner",
-                          style: Styles.mediumText(
-                              fontSize: 65.sp, fontWeight: FontWeight.w400),
-                        ),
-                        value: false,
-                        onChanged: (value) async {},
-                      ),
+
                     ],
                   );
                 }),
               ),
             ),
           ),
-          RegisterNextRow(
+          const RegisterNextRow(
             index: 5,
-            onTap: () => context.push(Routes.completeRegisterScreen),
           ),
         ],
       ),

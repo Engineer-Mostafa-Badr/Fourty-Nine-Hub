@@ -86,9 +86,7 @@ class SubscriptionController {
             subCategoryId: subCategoryId,
             paymentMenthods: wallets ??
                 [
-                  WalletTypes.balance,
                   WalletTypes.mainWallet,
-                  WalletTypes.giftWallet
                 ],
           ),
         );

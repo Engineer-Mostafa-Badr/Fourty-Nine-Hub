@@ -18,6 +18,7 @@ import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/cat
 import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcategories_cubit.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -391,25 +392,72 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                                                 //   ),
                                                 // ),
 
-                                                SizedBox(
-                                                  width: 180.w,
-                                                  child: BlocProvider(
-                                                    create: (BuildContext
-                                                            context) =>
-                                                        serviceLocator<
-                                                            AdvertisementCubit>(),
-                                                    child: RequestButton(
-                                                      adId: controller
-                                                          .marriageAds[index]
-                                                          .id,
-                                                      subscriptionStatus: controller
-                                                              .marriageAds[
-                                                                  index]
-                                                              .subscriptionStatus ??
-                                                          '',
-                                                    ),
-                                                  ),
-                                                ),
+                                                AvaialbleTripsButton(
+                                                  title: LocaleKeys.request.localize,
+                                                  color:AppColors.SECONDARY_COLOR,
+                                                  padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 5),
+                                                  onTap: (){
+                                                    showModalBottomSheet(
+                                                      backgroundColor: context.isDarkMode
+                                                          ? AppColors.DARK_BLUE_COLOR.withOpacity(0.95)
+                                                          : AppColors.LIGHT_COLOR,
+                                                      context: context,
+                                                      shape: const RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.only(
+                                                          topLeft: Radius.circular(32.0),
+                                                          topRight: Radius.circular(32.0),
+                                                        ),
+                                                      ),
+                                                      isDismissible: true,
+                                                      isScrollControlled: true,
+                                                      builder: (BuildContext context) {
+                                                        return BlocProvider.value(
+                                                          value: serviceLocator<AdvertisementCubit>(),
+                                                          child: AnimatedPadding(
+                                                            padding: MediaQuery.of(context).viewInsets,
+                                                            duration: const Duration(milliseconds: 50),
+                                                            child: Container(
+                                                              height: 150.h,
+                                                              padding: EdgeInsets.symmetric(
+                                                                vertical: 10.h,
+                                                                horizontal: 10,
+                                                              ),
+                                                              child: Row(
+                                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                                children: [
+                                                                  Expanded(
+                                                                    flex: 3,
+                                                                    child: PremiumRequestButton(
+                                                                      adId: controller
+                                                            .marriageAds[index].id,
+                                                                      subCategoryId:
+                                                                      controller
+                                                            .marriageAds[index].subCategoryId ?? '',
+                                                                      subscriptionStatus:
+                                                                      controller
+                                                            .marriageAds[index].subscriptionStatus ?? '',
+                                                                    ),
+                                                                  ),
+                                                                  const Sizer(width: 5),
+                                                                  Expanded(
+                                                                    flex: 3,
+                                                                    child: RequestButton(
+                                                                      adId: controller
+                                                                          .marriageAds[index].id,
+                                                                      subscriptionStatus:
+                                                                      controller
+                                                                          .marriageAds[index].subscriptionStatus ?? '',
+                                                                    ),
+                                                                  )
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        );
+                                                      },
+                                                    );
+                                                  },),
+
                                                 Expanded(
                                                   child: CallMessageButtons(
                                                     otherUserId: controller

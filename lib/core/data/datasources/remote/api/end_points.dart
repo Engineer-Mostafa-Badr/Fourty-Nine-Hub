@@ -48,8 +48,8 @@ class EndPoints {
 
   static const pageSize = 10;
   static const developmentWebSocketBaseUrl = 'https://49dev.com';
-  static const developmentBaseUrl = 'https://49dev.com/api/v1';
-  static const productionBaseUrl = 'https://49dev.com/api/v1';
+  static const developmentBaseUrl = 'https://3f20-41-44-170-114.ngrok-free.app/api/v1';
+  static const productionBaseUrl = 'https://3f20-41-44-170-114.ngrok-free.app/api/v1';
   static const storageBaseUrl = 'https://49-space.fra1.digitaloceanspaces.com/';
   static const login = '/auth/login';
   static const getProfile = '/users/profile';
@@ -1222,4 +1222,6 @@ class EndPoints {
   static String getRideModels = '/ride/riders/models';
   static String getCarYearsAndTypes = '/ride/riders/car-years-and-types';
   static String getRideCarColors = '/ride/riders/colors';
+  static String getRideDriverInfo = '/ride/driver/info';
+  static String getRideDriverPictureOptional = '/ride/info/picture-optional';
 }
