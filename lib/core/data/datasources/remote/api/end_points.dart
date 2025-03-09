@@ -49,8 +49,8 @@ class EndPoints {
 
   static const pageSize = 10;
   static const developmentWebSocketBaseUrl = 'https://49dev.com';
-  static const developmentBaseUrl = 'https://49dev.com/api/v1';
-  static const productionBaseUrl = 'https://49dev.com/api/v1';
+  static const developmentBaseUrl = 'https://edea-41-44-170-114.ngrok-free.app/api/v1';
+  static const productionBaseUrl = 'https://edea-41-44-170-114.ngrok-free.app/api/v1';
   static const storageBaseUrl = 'https://49-space.fra1.digitaloceanspaces.com/';
   static const login = '/auth/login';
   static const getProfile = '/users/profile';
