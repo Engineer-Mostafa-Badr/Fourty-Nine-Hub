@@ -8,6 +8,7 @@ void showCustomDialogTrip(BuildContext context, Widget screen) {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
+        backgroundColor: Colors.white,
         contentPadding: const EdgeInsets.only(
           top: 20,
           bottom: 0,

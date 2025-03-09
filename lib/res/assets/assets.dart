@@ -243,10 +243,15 @@ abstract class Assets {
   static String reBookIcon = 'assets/icons/rebook_icon.svg';
   static String receiptIcon = 'assets/icons/receipt_icon.svg';
   static String star2 = 'assets/icons/star.svg';
+  static String star1 = 'assets/icons/star1.svg';
+  static String starEmpty = 'assets/icons/StarEmpty.svg';
   static String emergencyIcon = 'assets/icons/emergency.png';
   static String automaticAcceptIcon = 'assets/icons/automatic_accept.png';
   static String automatic2AcceptIcon = 'assets/icons/automatic_accept_icon.png';
   static String alertCircle = 'assets/icons/alert-circle.svg';
   static String edit = 'assets/icons/edit.png';
   static String option = 'assets/icons/option.png';
+  static String rideFrom = 'assets/icons/ride_from.png';
+  static String rideTo = 'assets/icons/ride_to.png';
+  static String update = 'assets/icons/update.png';
 }

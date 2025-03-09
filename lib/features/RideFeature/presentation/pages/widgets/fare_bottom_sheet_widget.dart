@@ -14,29 +14,29 @@ class FareBottomSheetWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      spacing: 100,
+      spacing: 30,
       children: [
-        const TextField(
+        TextField(
           autofocus: true,
           cursorHeight: 50,
           keyboardType: TextInputType.number,
           textAlign: TextAlign.center,
           decoration: InputDecoration(
-            floatingLabelBehavior: FloatingLabelBehavior.never,
-            fillColor: Colors.white,
-            filled: true,
-            border: UnderlineInputBorder(),
-            errorBorder: UnderlineInputBorder(),
-            enabledBorder: UnderlineInputBorder(),
-            focusedBorder: UnderlineInputBorder(),
-            disabledBorder: UnderlineInputBorder(),
-            label: Text('EGP',
-                style:
-                    TextStyle(fontSize: 30, color: AppColors.DARK_GRAY_COLOR)),
-            // prefix: Text('EGP',
-            //     style: TextStyle(
-            //         fontSize: 30, color: AppColors.DARK_GRAY_COLOR)),
-          ),
+              floatingLabelBehavior: FloatingLabelBehavior.never,
+              fillColor: Colors.white,
+              filled: true,
+              border: const UnderlineInputBorder(),
+              errorBorder: const UnderlineInputBorder(),
+              enabledBorder: const UnderlineInputBorder(),
+              focusedBorder: const UnderlineInputBorder(),
+              disabledBorder: const UnderlineInputBorder(),
+              hintText: LocaleKeys.egp.tr(),
+              hintStyle: const TextStyle(
+                  fontSize: 30, color: AppColors.DARK_GRAY_COLOR)
+              // prefix: Text('EGP',
+              //     style: TextStyle(
+              //         fontSize: 30, color: AppColors.DARK_GRAY_COLOR)),
+              ),
         ),
         AppButton(
             width: double.infinity,
@@ -44,8 +44,7 @@ class FareBottomSheetWidget extends StatelessWidget {
             onPressed: () {
               Navigator.pop(context);
               customBottomSheet(context,
-                  child: const PartialPaymentWidget(),
-                  title: 'Payment Method');
+                  child: const PartialPaymentWidget(), title: 'Payment Method');
             },
             backColor: AppColors.PRIMARY_COLOR),
       ],

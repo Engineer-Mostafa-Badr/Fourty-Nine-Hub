@@ -95,27 +95,97 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
+            padding: const EdgeInsetsDirectional.symmetric(horizontal: 16.0),
+            child: Row(
+              spacing: 5,
+              children: [
+                Expanded(
+                  child: ClickableWidget(
+                      onTap: () {
+                        context.push(Routes.rideLoadingRequestScreen);
+                      },
+                      child: Stack(
+                        alignment: AlignmentDirectional.topEnd,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: _tripsWidget(
+                                text: 'Ride Request',
+                                backgroundColor: AppColors.GREYBG),
+                          ),
+                          const CircleAvatar(
+                            backgroundColor: AppColors.SECONDARY_COLOR_DARK2,
+                            radius: 9,
+                            child: Text(
+                              '1k',
+                              style: TextStyle(
+                                  color: AppColors.GREYBG,
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                          )
+                        ],
+                      )),
+                ),
+                Expanded(
+                  child: ClickableWidget(
+                    onTap: () {
+                      context.push(Routes.rideLoadingRequestScreen);
+                    },
+                    child: Stack(
+                      alignment: AlignmentDirectional.topEnd,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: _tripsWidget(
+                              text: 'Loading Request',
+                              backgroundColor: AppColors.GREYBG),
+                        ),
+                        const CircleAvatar(
+                          backgroundColor: AppColors.SECONDARY_COLOR_DARK2,
+                          radius: 9,
+                          child: Text(
+                            '360',
+                            style: TextStyle(
+                                color: AppColors.GREYBG,
+                                fontSize: 9,
+                                fontWeight: FontWeight.w600),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
             padding: const EdgeInsetsDirectional.symmetric(
                 horizontal: 16.0, vertical: 8),
             child: Row(
               spacing: 5,
-              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                ClickableWidget(
-                    onTap: () {
-                      context.push(Routes.RIDEACTIVITY);
-                    },
-                    child: _tripsWidget(LocaleKeys.activity.tr())),
-                ClickableWidget(
-                    onTap: () {
-                      context.push(Routes.RIDERUNNINGTRIPS);
-                    },
-                    child: _tripsWidget(LocaleKeys.runningTrips.tr())),
-                ClickableWidget(
-                    onTap: () {
-                      context.push(Routes.RIDEEXPIREDTRIPE);
-                    },
-                    child: _tripsWidget(LocaleKeys.expiredTrips.tr())),
+                Expanded(
+                  child: ClickableWidget(
+                      onTap: () {
+                        context.push(Routes.RIDEACTIVITY);
+                      },
+                      child: _tripsWidget(text: LocaleKeys.activity.tr())),
+                ),
+                Expanded(
+                  child: ClickableWidget(
+                      onTap: () {
+                        context.push(Routes.RIDERUNNINGTRIPS);
+                      },
+                      child: _tripsWidget(text: LocaleKeys.runningTrips.tr())),
+                ),
+                Expanded(
+                  child: ClickableWidget(
+                      onTap: () {
+                        context.push(Routes.RIDEEXPIREDTRIPE);
+                      },
+                      child: _tripsWidget(text: LocaleKeys.expiredTrips.tr())),
+                ),
               ],
             ),
           ),
@@ -222,12 +292,12 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
     );
   }
 
-  Widget _tripsWidget(String text) {
+  Widget _tripsWidget(
+      {required String text, Color backgroundColor = AppColors.GREYFIELD}) {
     return Container(
       padding: const EdgeInsets.all(4),
-      width: (MediaQuery.of(context).size.width / 3) - 16,
       decoration: BoxDecoration(
-          color: AppColors.GREYFIELD,
+          color: backgroundColor,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(color: AppColors.DARK_BLUE_COLOR)),
       child: Center(

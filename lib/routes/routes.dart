@@ -222,6 +222,8 @@ abstract class Routes {
   static const safetyRideScreen = '/SafetyRideScreen';
   static const rideFindingScreen = '/RideFindingScreen';
   static const rideModeScreen = '/RideModeScreen';
+  static const rideDashboardDetailsScreen = '/RideDashboardDetailsScreen';
+  static const rideLoadingRequestScreen = '/rideLoadingRequestScreen';
 }
 
 abstract class Paths {
@@ -434,5 +436,6 @@ abstract class Paths {
   static const rideFindingScreen = 'RideFindingScreen';
   static const RideStatusScreen = 'RideStatusScreen';
   static const rideModeScreen = 'RideModeScreen';
-  
+  static const rideDashboardDetailsScreen = 'RideDashboardDetailsScreen';
+  static const rideLoadingRequestScreen = 'rideLoadingRequestScreen';
 }

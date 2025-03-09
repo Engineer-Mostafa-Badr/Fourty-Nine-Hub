@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 
 import 'font_manager.dart';
 import 'payment_info_widget.dart';
 
-class RideFindingCard extends StatelessWidget {
+class RideFindingCard extends StatefulWidget {
   const RideFindingCard({super.key});
 
+  @override
+  State<RideFindingCard> createState() => _RideFindingCardState();
+}
+bool switchAcceptFirstDriver= false;
+int price = 79;
+class _RideFindingCardState extends State<RideFindingCard> {
   @override
   Widget build(BuildContext context) {
     return  Container(
@@ -36,15 +45,27 @@ class RideFindingCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _fareButton("-3", () {}),
-             const Padding(
+              if(!switchAcceptFirstDriver)
+              _fareButton("-3", () {
+                if(price>3) {
+                  price = price - 3;
+                  setState(() {});
+                }
+              }),
+              Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
-                  "EGP 78",
+                  "EGP $price",
                   style: const TextStyle(fontSize:  FontSize.s20, fontWeight: FontWeight.bold),
                 ),
               ),
-              _fareButton("+3", () {}),
+              if(!switchAcceptFirstDriver)
+              _fareButton("+3", () {
+
+                  price = price + 3;
+                  setState(() {});
+
+              }),
             ],
           ),
           const SizedBox(height: 8),
@@ -62,6 +83,7 @@ class RideFindingCard extends StatelessWidget {
           //   child: const Text("Raise Faire"),
           // ),
           const SizedBox(height: 8),
+          if(!switchAcceptFirstDriver)
           Container(
             width: double.infinity,
             height: 45,
@@ -81,12 +103,15 @@ class RideFindingCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Image.asset(Assets.automatic2AcceptIcon),
-               Text(LocaleKeys.automaticallyAcceptTheNearest.localize),
+              Image.asset(Assets.automatic2AcceptIcon,color: context.isDarkMode?Colors.white:Colors.black,),
+               Expanded(child: Text(LocaleKeys.automaticallyAcceptTheNearest.localize +"$price EGP")),
               Switch(
-                value: false,
-                onChanged: (value) {},
-                activeColor: AppColors.WHATS_APP_COLOR,
+                value: switchAcceptFirstDriver,
+                onChanged: (value) {
+                  switchAcceptFirstDriver=value;
+                  setState(() {});
+                },
+                activeColor: AppColors.PRIMARY_COLOR,
                 activeTrackColor: AppColors.LightWHATS_APP_COLOR,
                 inactiveThumbColor: AppColors.PRIMARY_COLOR,
                 inactiveTrackColor: AppColors.LIGHT_GRAY_COLOR,
@@ -95,7 +120,7 @@ class RideFindingCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 4),
-        const  PaymentInfoWidget(price: 68,),
+          PaymentInfoWidget(price: price,),
 
           const SizedBox(height: 4),
           Row(
@@ -114,19 +139,24 @@ class RideFindingCard extends StatelessWidget {
          const SizedBox(height: 10,),
           _locationRow("المنطقة الصناعية الثالثة العاشر من رمضان", Colors.green),
           const SizedBox(height: 16),
-          Container(
-            width: double.infinity,
-            height: 45,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: Colors.grey[100],
-              borderRadius: BorderRadius.circular(10),
+          GestureDetector(
+            onTap: (){
+              // context.push(Routes.supportRideScreen);
+            },
+            child: Container(
+              width: double.infinity,
+              height: 45,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Text(LocaleKeys.cancelOrder.localize,style:const TextStyle(
+                  fontSize: FontSize.s16,
+                  fontWeight: FontWeight.bold,
+                color: AppColors.PRIMARY_COLOR_DARK,
+              ),),
             ),
-            child: Text(LocaleKeys.cancelOrder.localize,style:const TextStyle(
-                fontSize: FontSize.s16,
-                fontWeight: FontWeight.bold,
-              color: AppColors.PRIMARY_COLOR_DARK,
-            ),),
           ),
           // ElevatedButton(
           //   onPressed: () {},

@@ -273,10 +273,13 @@ import '../features/RideFeature/presentation/pages/Register/complete_register_sc
 import '../features/RideFeature/presentation/pages/Register/welcome_ride_register.dart';
 import '../features/RideFeature/presentation/pages/connection_call_screen.dart';
 import '../features/RideFeature/presentation/pages/current_ride_home.dart';
+import '../features/RideFeature/presentation/pages/dashboards/ride_dashboard_details_screen.dart';
 import '../features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';
 import '../features/RideFeature/presentation/pages/rating_client_screen.dart';
+import '../features/RideFeature/presentation/pages/ride_details_screen.dart';
 import '../features/RideFeature/presentation/pages/ride_finding_screen.dart';
 import '../features/RideFeature/presentation/pages/ride_home.dart';
+import '../features/RideFeature/presentation/pages/ride_loading_request_screen.dart';
 import '../features/RideFeature/presentation/pages/ride_request_screen.dart';
 import '../features/RideFeature/presentation/pages/ride_status_screen.dart';
 import '../features/RideFeature/presentation/pages/safety_ride_screen.dart';
@@ -2840,8 +2843,38 @@ class AppPages {
               GoRoute(
                 path: Paths.rideModeScreen,
                 name: Routes.rideModeScreen,
-                builder: (context, state) => const RideModeScreen(),
+                builder: (context, state) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider(
+                      create: (context) => serviceLocator<RideCubit>(),
+                    ),
+                  ],
+                  child: RideModeScreen(modeType: state.extra as String),
+                ),
               ),
+              GoRoute(
+                  path: Paths.rideDashboardDetailsScreen,
+                  name: Routes.rideDashboardDetailsScreen,
+                  builder: (context, state) => MultiBlocProvider(
+                        providers: [
+                          BlocProvider(
+                            create: (context) => serviceLocator<RideCubit>(),
+                          ),
+                        ],
+                        child: RideDashboardDetailsScreen(
+                            modeType: state.extra as String),
+                      )),
+              GoRoute(
+                  path: Paths.rideLoadingRequestScreen,
+                  name: Routes.rideLoadingRequestScreen,
+                  builder: (context, state) => MultiBlocProvider(
+                        providers: [
+                          BlocProvider(
+                            create: (context) => serviceLocator<RideCubit>(),
+                          ),
+                        ],
+                        child: const RideLoadingRequestScreen(),
+                      )),
             ],
           ),
         ]);
