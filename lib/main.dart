@@ -238,7 +238,6 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<JoinTripCarPoolCubit>(
             create: (context) =>
                 JoinTripCarPoolCubit(joinTripCarpoolUsecase: serviceLocator())),
-
         BlocProvider<GetUnreadNotificationsCountCubit>(
           create: (context) => GetUnreadNotificationsCountCubit(
             getUnreadNotificationsCountUseCase: serviceLocator(),
@@ -278,7 +277,6 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(
           create: (context) => CheckPartActiveCubit(),
         ),
-
         BlocProvider(
           create: (context) => CheckAcceptByDriverCubit(
             repository: serviceLocator(),
@@ -329,14 +327,11 @@ class _MyAppState extends State<MyApp> {
           create: (context) =>
               CheckStartRecordCubit(repository: serviceLocator()),
         ),
-
         // context.read<LocationSocketCubit>().updateDriverLocationOn();
-
         BlocProvider(
           create: (context) =>
               GetRideCurrenttripCubit(repository: serviceLocator())..get(),
         ),
-
         BlocProvider(create: (context) => serviceLocator<ShippingCubit>()),
         BlocProvider(
           create: (context) => RegisterRiderCubit(

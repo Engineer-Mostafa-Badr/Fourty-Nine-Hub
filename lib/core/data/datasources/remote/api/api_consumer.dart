@@ -80,11 +80,13 @@ class BaseApiConsumer extends ApiConsumer {
     if (token != null) {
       log(token.accessToken.toString(), name: "Token");
       _dio.options.headers['Authorization'] = 'Bearer ${token.accessToken}';
+      _dio.options.headers['x-api-key'] = '25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91';
       // _dio.options.headers['Authorization'] = 'Bearer ${await CacheManager.getAccessToken()}';
       // _dio.options.headers['Authorization'] = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb2NrZXRJZCI6ImEzMWEyNzkzLWFiYTEtNDliOC1iZTgzLTlkYzM2NWZhOTk1OCIsImlhdCI6MTczMjA1MTYzMywiZXhwIjo1NTczMjA1MTYzMywic3ViIjoiNjZkODZhODJlOWNkMzk5NzAwMmY2MzM2In0.Mcl_dnYecdxc2htakepeWmZUYMDjfdjYkvgwWb4p9ok';
     }
   }
 
+  //addAll({"x-api-key":"25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91"})
   @override
   Future<Either<Failure, Map<String, dynamic>>> patch(String url,
       {Map<String, dynamic>? data,
@@ -95,7 +97,10 @@ class BaseApiConsumer extends ApiConsumer {
         url,
         data: data,
         queryParameters: queryParameters,
-        options: Options(headers: headers),
+        options: Options(headers: {
+          ...?headers,
+          "x-api-key": "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91", // Your custom header
+        }),
       );
 
       if (result.data['status']) {
@@ -113,7 +118,10 @@ class BaseApiConsumer extends ApiConsumer {
             url,
             queryParameters: queryParameters,
             data: data,
-            headers: headers,
+            headers: {
+              ...?headers,
+              "x-api-key": "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91", // Your custom header
+            },
           ),
         );
       } else {
@@ -131,7 +139,10 @@ class BaseApiConsumer extends ApiConsumer {
       final result = await _dio.delete(
         url,
         data: data,
-        options: Options(headers: headers),
+        options: Options(headers: {
+          ...?headers,
+          "x-api-key": "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91", // Your custom header
+        }),
         queryParameters: queryParameters,
       );
       return Right(result.data as Map<String, dynamic>);
@@ -162,7 +173,10 @@ class BaseApiConsumer extends ApiConsumer {
       final result = await _dio.get(url,
           data: data,
           queryParameters: queryParameters,
-          options: Options(headers: headers)
+          options: Options(headers: {
+            ...?headers,
+            "x-api-key": "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91", // Your custom header
+          })
           // options: Options(headers: {
           //   "Authorization":
           //       'Bearer ${}'
@@ -217,7 +231,10 @@ class BaseApiConsumer extends ApiConsumer {
         url,
         data: formData ?? data,
         queryParameters: queryParameters,
-        options: Options(headers: headers),
+        options: Options(headers: {
+          ...?headers,
+          "x-api-key": "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91", // Your custom header
+        }),
       );
       log(result.data.toString(), name: "url");
       if (result.data['status']) {
@@ -256,7 +273,10 @@ class BaseApiConsumer extends ApiConsumer {
       final result = await _dio.put(url,
           data: data,
           queryParameters: queryParameters,
-          options: Options(headers: headers));
+          options: Options(headers: {
+            ...?headers,
+            "x-api-key": "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91", // Your custom header
+          }));
       log(result.data.toString(), name: "url");
       if (getSuccessState(result.data)) {
         log('iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
@@ -290,48 +310,52 @@ class BaseApiConsumer extends ApiConsumer {
   }
 
   Failure _getFailure(dynamic e) {
-    final error = e.response?.data['error'] as Map;
-    log("Erorrrrr $error");
+    final errorData = e.response?.data; // Get the entire response data safely
+    final error = (errorData is Map && errorData['error'] is Map)
+        ? errorData['error'] as Map
+        : null;
+
+    log("Error: $error");
+
     if (e is DioException) {
       if (e.response?.statusCode == 413) {
         return const ServerFailure(
           message: 'File size is too large',
         );
       } else if (e.response?.statusCode == 401) {
-        final error = e.response?.data['error'] as Map;
-        return UnauthorizedFailure(
-          error['message'] as String,
-        );
-      } else if (e.response?.data is Map &&
-          e.response?.data['message'] is String) {
+        if (error != null) {
+          return UnauthorizedFailure(
+            error['message'] as String? ?? 'Unauthorized request',
+          );
+        }
+      } else if (errorData is Map && errorData['message'] is String) {
         return ServerFailure(
-          message: e.response?.data['message'] as String,
+          message: errorData['message'] as String,
           statusCode: e.response?.statusCode,
         );
-      } else if (e.response?.data is Map && e.response?.data['error'] is Map) {
-        final error = e.response?.data['error'] as Map;
+      } else if (error != null) {
         List<String>? errors;
         if (error['data'] is List) {
-          final data = e.response?.data['error']['data'] as List;
+          final data = error['data'] as List;
           errors = data
+              .where((e) => e is Map && e.containsKey('message'))
               .map((e) => e['message'] as String)
-              .whereType<String>()
               .toList();
         }
         return ServerFailure(
-          message: error['message'] as String,
+          message: error['message'] as String? ?? 'Unknown server error',
           statusCode: e.response?.statusCode,
           errors: errors,
         );
-      } else if (e.response?.data is Map &&
-          e.response?.data['data'] is String) {
+      } else if (errorData is Map && errorData['data'] is String) {
         return ServerFailure(
-          message: e.response?.data['data'] as String,
+          message: errorData['data'] as String,
           statusCode: e.response?.statusCode,
         );
       }
     }
-    return UnknownFailure(error['message'].toString());
+
+    return UnknownFailure(error?['message']?.toString() ?? 'Unknown error occurred');
   }
 
   Future<void> refreshToken() async {
