@@ -26,7 +26,7 @@ class CarContainer extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SvgPicture.asset(
+          Image.network(
             image,
             height: 25,
             width: 60,
