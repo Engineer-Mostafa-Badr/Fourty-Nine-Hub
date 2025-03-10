@@ -446,14 +446,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.8"
-  dart_earcut:
-    dependency: transitive
-    description:
-      name: dart_earcut
-      sha256: e485001bfc05dcbc437d7bfb666316182e3522d4c3f9668048e004d0eb2ce43b
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.2.0"
   dart_style:
     dependency: transitive
     description:
@@ -1044,10 +1036,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_map
-      sha256: "2ecb34619a4be19df6f40c2f8dce1591675b4eff7a6857bd8f533706977385da"
+      sha256: "87cc8349b8fa5dccda5af50018c7374b6645334a0d680931c1fe11bce88fa5bb"
       url: "https://pub.dev"
     source: hosted
-    version: "7.0.2"
+    version: "6.2.1"
   flutter_osm_interface:
     dependency: transitive
     description:
@@ -1318,10 +1310,10 @@ packages:
     dependency: "direct main"
     description:
       name: geolocator
-      sha256: "149876cc5207a0f5daf4fdd3bfcf0a0f27258b3fe95108fa084f527ad0568f1b"
+      sha256: f4efb8d3c4cdcad2e226af9661eb1a0dd38c71a9494b22526f9da80ab79520e5
       url: "https://pub.dev"
     source: hosted
-    version: "12.0.0"
+    version: "10.1.1"
   geolocator_android:
     dependency: transitive
     description:
@@ -1350,10 +1342,10 @@ packages:
     dependency: transitive
     description:
       name: geolocator_web
-      sha256: "7a22f400d831f924a89d931ba126a10e6b8b437f31e6b9311320435f3e1571bd"
+      sha256: "102e7da05b48ca6bf0a5bda0010f886b171d1a08059f01bfe02addd0175ebece"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.0"
+    version: "2.2.1"
   geolocator_windows:
     dependency: transitive
     description:
@@ -2066,6 +2058,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.0.3"
+  open_street_map_search_and_pick:
+    dependency: "direct main"
+    description:
+      name: open_street_map_search_and_pick
+      sha256: "36d9d637651b178279268acccc6a9f5797fed466b7fd8ff7f29ddb177f0f129c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.1"
   package_config:
     dependency: transitive
     description:

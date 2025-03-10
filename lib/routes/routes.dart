@@ -8,6 +8,7 @@ abstract class Routes {
   static const CUSTOMPAGE = '/CustomPage';
   static const editPage = '/editPage';
   static const RIDEACTIVITY = '/RIDEACTIVITY';
+  static const RIDEOPENSTREETMAPSEARCHANDPICK = '/RIDEOPENSTREETMAPSEARCHANDPICK';
   static const RIDERUNNINGTRIPS = '/RIDERUNNINGTRIPS';
   static const RIDEEXPIREDTRIPE = '/RIDEEXPIREDTRIPS';
   static const PAGEPREVIEW = '/CustomPage/PagePreview';
@@ -250,6 +251,7 @@ abstract class Paths {
   static const CUSTOMPAGE = 'CustomPage';
   static const PAGEPREVIEW = 'PagePreview';
   static const RIDEACTIVITY = 'RIDEACTIVITY';
+  static const RIDEOPENSTREETMAPSEARCHANDPICK = 'RIDEOPENSTREETMAPSEARCHANDPICK';
   static const RIDERUNNINGTRIPS = 'RIDERUNNINGTRIPS';
   static const RIDEEXPIREDTRIPE = 'RIDEEXPIREDTRIPS';
   static const UploadRiderImages = 'UploadRiderImages';
