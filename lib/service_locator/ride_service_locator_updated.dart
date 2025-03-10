@@ -35,11 +35,11 @@ class RideServiceLocatorUpdated {
             () => ShippingRemoteDataSourceImplementation(
           serviceLocator(),
         ));
-    serviceLocator.registerLazySingleton<RideRemoteDataSource>(
-            () =>
-            RideRemoteDataSourceImplementation(
-              serviceLocator(),
-            ));
+    // serviceLocator.registerLazySingleton<RideRemoteDataSource>(
+    //         () =>
+    //         RideRemoteDataSourceImplementation(
+    //           serviceLocator(),
+    //         ));
 
     serviceLocator.registerLazySingleton<RideLocalDataSource>(
       () => RideLocalDataSourceImplementation(),
@@ -63,12 +63,6 @@ class RideServiceLocatorUpdated {
     serviceLocator.registerLazySingleton<GetRideDriverInfoUseCase>(() => GetRideDriverInfoUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetDriverPictureOptionalUseCase>(() => GetDriverPictureOptionalUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<CreateLoadingTripUseCase>(() => CreateLoadingTripUseCase(serviceLocator()));
-    serviceLocator.registerLazySingleton<GetRideCategoriesUseCase>(() =>
-        GetRideCategoriesUseCase(serviceLocator()));
-    serviceLocator.registerLazySingleton<GetShippingCategoriesUsecase>(() =>
-        GetShippingCategoriesUsecase(serviceLocator()));
-    serviceLocator.registerLazySingleton<GetRideGovernoratesUseCase>(() =>
-        GetRideGovernoratesUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetLocationFromAddressUseCase>(() =>
         GetLocationFromAddressUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetRideExpectedPriceUseCase>(() =>
@@ -92,18 +86,11 @@ class RideServiceLocatorUpdated {
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
         ));
-    serviceLocator.registerLazySingleton<RideCubit>(() =>
-        RideCubit(
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-        ),
-    );
   }
 }

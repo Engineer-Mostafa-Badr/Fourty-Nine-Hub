@@ -283,7 +283,6 @@ import '../features/RideFeature/presentation/pages/dashboards/ride_mode_screen.d
 import '../features/RideFeature/presentation/pages/rating_client_screen.dart';
 import '../features/RideFeature/presentation/pages/ride_details_screen.dart';
 import '../features/RideFeature/presentation/pages/ride_finding_screen.dart';
-import '../features/RideFeature/presentation/pages/Register/welcome_ride_register.dart';
 import '../features/RideFeature/presentation/pages/osm_search_and_pick.dart';
 import '../features/RideFeature/presentation/pages/ride_home.dart';
 import '../features/RideFeature/presentation/pages/create_loading_trip_screen.dart';

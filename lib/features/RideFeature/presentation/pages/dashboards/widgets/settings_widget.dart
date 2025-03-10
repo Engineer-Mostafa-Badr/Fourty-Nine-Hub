@@ -1,8 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../core/localization/locale_keys.g.dart';
@@ -154,10 +156,10 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                           fontSize: 14, fontWeight: FontWeight.w500)),
                   GestureDetector(
                       onTap: () {
-                        customBottomSheet(context,
-                            child: const Padding(
-                              padding: EdgeInsets.all(12.0),
-                              child: FareBottomSheetWidget(),
+                        customBottomSheet(context, context.read<RideCubit>(),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: FareBottomSheetWidget(rideCubit: context.read<RideCubit>(), selectedCategoryPrice: 44, selectedCategoryName: 'aaa',),
                             ),
                             title: LocaleKeys.acceptAnothePrice.tr());
                       },
