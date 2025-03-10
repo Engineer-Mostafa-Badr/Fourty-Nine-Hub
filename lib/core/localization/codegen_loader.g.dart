@@ -1398,7 +1398,20 @@ class CodegenLoader extends AssetLoader{
   "passenger": "الركاب",
   "noSmoker": "سائق غير مدخن",
   "choiceRuler": "مسطرة الاختيارت",
-  "completeRegistration": "تكملة التسجيل"
+  "completeRegistration": "تكملة التسجيل",
+  "addEmergencyContacts": "إضاقة جهات اتصال طواري",
+  "reportClient": "تقرير العميل",
+  "rateTheClient": "قيم العميل",
+  "beforeTheTrip": "قبل الرحلة",
+  "identityVerification": "التحقق من الهوية",
+  "securityFeatures": "ميزات الأمان",
+  "emergencyChat": "دردشة طوارئ",
+  "carInspection": "فحص السيارات",
+  "secureCommunications": "اتصالات آمنة",
+  "completeRide": "رحلة مكتملة",
+  "requestEmergencySupport": "طلب الدعم فى حالات الطواري",
+  "writeYourProblem": "اكتب مشكلتك",
+  "writeYourPhoneNumber": "اكتب رقم هاتفك"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -2801,7 +2814,20 @@ static const Map<String,dynamic> _en = {
   "trukDetails": "Truck Details",
   "busWithYou": "Bus ride with You",
   "trukWithYou": "Truck ride with You",
-  "passenger": "Passenger"
+  "passenger": "Passenger",
+  "addEmergencyContacts": "Add Emergency Contacts",
+  "reportClient": "Report Client",
+  "rateTheClient": "Rate The Client",
+  "beforeTheTrip": "Before The Trip",
+  "identityVerification": "Identity Verification",
+  "securityFeatures": "Security Features",
+  "emergencyChat": "Emergency Chat",
+  "carInspection": "Car Inspection",
+  "secureCommunications": "Secure Communications",
+  "completeRide": "Complete Ride",
+  "requestEmergencySupport": "Request Emergency Support",
+  "writeYourProblem": "Write Your Problem",
+  "writeYourPhoneNumber": "Write Your Phone Number"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

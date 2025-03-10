@@ -30,8 +30,8 @@ class RideStatusScreen extends StatelessWidget {
       // خريطة في الخلفية مثلاً
       body: SafeArea(
         child: SharedScaffold(
-            mainCategoryId: 2,
-            body:
+          mainCategoryId: 2,
+          body:
           Stack(
             children: [
               const MapSection(),
