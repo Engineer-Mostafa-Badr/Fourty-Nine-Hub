@@ -198,8 +198,6 @@ class _DropDownSubscriptionState extends State<DropDownSubscription> {
                       .showSubscriptionPlans(
                     wallets: [
                       WalletTypes.mainWallet,
-                      WalletTypes.giftWallet,
-                      WalletTypes.balance,
                     ],
                     subCategoryId: newSubCategoryId,
                     title: context.locale == Locales.english

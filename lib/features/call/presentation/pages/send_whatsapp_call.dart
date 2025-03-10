@@ -1,0 +1,250 @@
+import 'dart:async';
+
+import 'package:audioplayers/audioplayers.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
+import 'package:fourtyninehub/core/enums/call_enums_manager.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/authentication/data/models/user_model.dart';
+import 'package:fourtyninehub/features/call/domain/entities/call_data.dart';
+import 'package:fourtyninehub/features/call/presentation/controller/call_controller/call_cubit.dart';
+import 'package:fourtyninehub/features/call/presentation/controller/call_controller/call_state.dart';
+import 'package:fourtyninehub/features/call/presentation/controller/send_call_controller.dart/send_call_cubit.dart';
+import 'package:fourtyninehub/features/call/presentation/controller/send_call_controller.dart/send_call_states.dart';
+import 'package:fourtyninehub/features/call/presentation/pages/declined_call_screen.dart';
+import 'package:fourtyninehub/features/call/widgets/build_app_bar.dart';
+import 'package:fourtyninehub/features/call/widgets/build_bottom_btns.dart';
+import 'package:fourtyninehub/helpers/call_helpers/call_helper/call_with_notification_helper.dart';
+import 'package:fourtyninehub/helpers/subscription_method.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/const.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
+
+class SendWhatsappCallScreen extends StatefulWidget {
+  const SendWhatsappCallScreen({
+    super.key,
+    required this.receiver,
+    required this.sender,
+    required this.callType,
+    required this.isRealCall,
+  });
+  final CallType callType;
+  final UserModel receiver;
+  final UserModel sender;
+  final bool isRealCall;
+
+  @override
+  State<SendWhatsappCallScreen> createState() => _SendWhatsappCallScreenState();
+}
+
+class _SendWhatsappCallScreenState extends State<SendWhatsappCallScreen> {
+  Timer? timer;
+  late AudioPlayer _audioPlayer;
+
+  @override
+  void initState() {
+    serviceLocator<CallWithNotificationHelper>()
+        .sendCallNotification(
+          isRealCall: widget.isRealCall.toString(),
+          callType: widget.callType.name.toString(),
+          agoraAppId: UIConst.agoraAppId,
+          serviceType: "agora",
+          uid: widget.sender.id,
+          zegoAppId: 0,
+          zegoAppSign: '',
+          context: context,
+          receiverToken: widget.receiver.firebaseToken!
+              .trim()
+              .trimLeft()
+              .trimRight()
+              .toString(),
+          callerName: widget.sender.fullName ?? 'unknown',
+          callerImage: widget.sender.profilePicture ??
+              'https://cdn-icons-png.flaticon.com/512/149/149071.png',
+          receiverImage: widget.receiver.profilePicture ??
+              'https://cdn-icons-png.flaticon.com/512/149/149071.png',
+          receiverName: widget.receiver.fullName,
+        )
+        .then(
+          (_) => timer = Timer(
+            const Duration(seconds: UIConst.callRingingDuration),
+            () {
+              if (widget.isRealCall) {
+                context
+                    .read<SendCallCubit>()
+                    .setCallClosedState('no answer from receiver');
+              } else {}
+            },
+          ),
+        );
+    _audioPlayer = AudioPlayer();
+    _playCallingSound();
+    super.initState();
+  }
+
+  Future<void> _playCallingSound() async {
+    // Load the sound from assets
+    await _audioPlayer.setSource(AssetSource('sounds/send_call.mp3'));
+    // Loop the sound until call is answered or declined
+    await _audioPlayer.setReleaseMode(ReleaseMode.loop);
+    // Play the sound
+    await _audioPlayer.resume();
+  }
+
+  void _stopCallingSound() {
+    _audioPlayer.stop();
+  }
+
+  @override
+  void deactivate() {
+    if (context.read<SendCallCubit>().state is CallRinging &&
+        context.read<CallCubit>() is! HasCall) {
+      print('+++++++++++++++notification sent+++++ end call');
+      final state = context.read<SendCallCubit>().state as CallRinging;
+      serviceLocator<CallWithNotificationHelper>().sendActionNotification(
+        state.callData,
+        CallActions.callEnded,
+        reason: 'caller ended call while send call',
+      );
+      _stopCallingSound();
+    }
+    super.deactivate();
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    _stopCallingSound();
+    _audioPlayer.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.PRIMARY_COLOR,
+      body: BlocConsumer<SendCallCubit, SendCallState>(
+        listener: (context, state) {
+          print("SendCallCubit state $state");
+          if (state is CallConnected) {
+            print("Call Connected Successfully");
+            // Navigator.of(context).pop();
+            _stopCallingSound();
+            Future.delayed(const Duration(seconds: 2)).then(
+              (_) => context.mounted ? Navigator.of(context).pop() : null,
+            );
+            // Navigator.pushReplacement(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => const WhatsAppCallScreen(),
+            //   ),
+            // );
+          }
+          if (state is UnableSendCall) {
+            _stopCallingSound();
+            Future.delayed(const Duration(seconds: 3)).then(
+              (_) => context.mounted ? Navigator.of(context).pop() : null,
+            );
+          }
+
+          if (state is DeclinedCall) {
+            _stopCallingSound();
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DeclinedCallScreen(
+                    receiver: widget.receiver,
+                  ),
+                ));
+          }
+
+          if (state is FakeCallConnected) {}
+        },
+        builder: (context, state) {
+          return Stack(children: [
+            Image.asset(
+              'assets/images/whatsapp_bacground.png',
+              fit: BoxFit.cover,
+              height: double.infinity,
+              width: double.infinity,
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                BuildAppBar(
+                  receiver: widget.receiver,
+                ),
+                // Top section with contact details
+
+                CircleAvatar(
+                  radius: 100,
+                  backgroundImage: NetworkImage(widget
+                          .receiver.profilePicture ??
+                      'https://cdn-icons-png.flaticon.com/512/149/149071.png'),
+                ),
+
+                // add Please subscribe to join the call!
+                if (state is FakeCallConnected)
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Please subscribe to join the call!',
+                        style: Styles.mediumText(
+                          color: AppColors.SECONDARY_COLOR,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      ElevatedAppButton(
+                        label: tr(LocaleKeys.subscribe),
+                        onPressed: () {
+                          SubscriptionMethod().subscribe(
+                              subscribeId: "668e7dc4e8cfec5bcc752afc",
+                              title: tr(LocaleKeys.ads));
+                        },
+                        backColor: const Color(0xFF11191C),
+                      ),
+                    ],
+                  ),
+
+                // Bottom call control buttons
+                BuildBottomBtns(
+                  callData: CallData(
+                      isCaller: true,
+                      isRealCall: false.toString(),
+                      callerName: widget.sender.fullName ?? "unknown",
+                      callerImage: widget.sender.profilePicture ?? "",
+                      receiverId: widget.receiver.id ?? "",
+                      receiverName: widget.receiver.fullName ?? "unknown",
+                      receiverImage: widget.receiver.profilePicture ?? "",
+                      rtcToken: "",
+                      channel: "",
+                      serviceType: "",
+                      zegoAppId: "",
+                      zegoAppSign: "",
+                      agoraAppId: "",
+                      uid: "",
+                      fcmToken: widget.receiver.firebaseToken!
+                          .trim()
+                          .trimLeft()
+                          .trimRight()
+                          .toString(),
+                      callType: "",
+                      channelId: "",
+                      permission: "",
+                      expiresAt: ""),
+                ),
+              ],
+            ),
+          ]);
+        },
+      ),
+    );
+  }
+}

@@ -17,40 +17,40 @@ abstract class ApiConsumer {
   const ApiConsumer();
 
   Future<Either<Failure, Map<String, dynamic>>> get(
-      String url, {
-        Map<String, dynamic>? headers,
-        Map<String, dynamic>? queryParameters,
-        Map<String, dynamic>? data,
-      });
+    String url, {
+    Map<String, dynamic>? headers,
+    Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? data,
+  });
 
   Future<Either<Failure, Map<String, dynamic>>> post(
-      String url, {
-        Map<String, dynamic>? data,
-        FormData? formData,
-        Map<String, dynamic>? queryParameters,
-        Map<String, dynamic>? headers,
-      });
+    String url, {
+    Map<String, dynamic>? data,
+    FormData? formData,
+    Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? headers,
+  });
 
   Future<Either<Failure, Map<String, dynamic>>> patch(
-      String url, {
-        Map<String, dynamic>? data,
-        Map<String, dynamic>? queryParameters,
-        Map<String, dynamic>? headers,
-      });
+    String url, {
+    Map<String, dynamic>? data,
+    Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? headers,
+  });
 
   Future<Either<Failure, Map<String, dynamic>>> put(
-      String url, {
-        Map<String, dynamic>? data,
-        Map<String, dynamic>? queryParameters,
-        Map<String, dynamic>? headers,
-      });
+    String url, {
+    Map<String, dynamic>? data,
+    Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? headers,
+  });
 
   Future<Either<Failure, Map<String, dynamic>>> delete(
-      String url, {
-        Map<String, dynamic>? data,
-        Map<String, dynamic>? queryParameters,
-        Map<String, dynamic>? headers,
-      });
+    String url, {
+    Map<String, dynamic>? data,
+    Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? headers,
+  });
 
   void attachToken(UserTokensEntity? token);
   bool get isTokenAttached;
@@ -65,9 +65,9 @@ class BaseApiConsumer extends ApiConsumer {
   UserTokensEntity? _token;
 
   BaseApiConsumer(
-      this._dio,
-      // this._authLocalDataSource,
-      );
+    this._dio,
+    // this._authLocalDataSource,
+  );
 
   @override
   void attachToken(UserTokensEntity? token) async {
@@ -90,8 +90,8 @@ class BaseApiConsumer extends ApiConsumer {
   @override
   Future<Either<Failure, Map<String, dynamic>>> patch(String url,
       {Map<String, dynamic>? data,
-        Map<String, dynamic>? queryParameters,
-        Map<String, dynamic>? headers}) async {
+      Map<String, dynamic>? queryParameters,
+      Map<String, dynamic>? headers}) async {
     try {
       final result = await _dio.patch(
         url,
@@ -114,7 +114,7 @@ class BaseApiConsumer extends ApiConsumer {
           e.response?.statusCode == 401 &&
           isTokenAttached) {
         return refreshToken().then(
-              (_) => patch(
+          (_) => patch(
             url,
             queryParameters: queryParameters,
             data: data,
@@ -133,8 +133,8 @@ class BaseApiConsumer extends ApiConsumer {
   @override
   Future<Either<Failure, Map<String, dynamic>>> delete(String url,
       {Map<String, dynamic>? data,
-        Map<String, dynamic>? queryParameters,
-        Map<String, dynamic>? headers}) async {
+      Map<String, dynamic>? queryParameters,
+      Map<String, dynamic>? headers}) async {
     try {
       final result = await _dio.delete(
         url,
@@ -151,7 +151,7 @@ class BaseApiConsumer extends ApiConsumer {
           e.response?.statusCode == 401 &&
           isTokenAttached) {
         return refreshToken().then(
-              (_) => delete(
+          (_) => delete(
             url,
             queryParameters: queryParameters,
             data: data,
@@ -166,8 +166,8 @@ class BaseApiConsumer extends ApiConsumer {
   @override
   Future<Either<Failure, Map<String, dynamic>>> get(String url,
       {Map<String, dynamic>? queryParameters,
-        Map<String, dynamic>? data,
-        Map<String, dynamic>? headers}) async {
+      Map<String, dynamic>? data,
+      Map<String, dynamic>? headers}) async {
     try {
       log(data.toString());
       final result = await _dio.get(url,
@@ -177,12 +177,12 @@ class BaseApiConsumer extends ApiConsumer {
             ...?headers,
             "x-api-key": "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91", // Your custom header
           })
-        // options: Options(headers: {
-        //   "Authorization":
-        //       'Bearer ${}'
-        // }
-        // )
-      );
+          // options: Options(headers: {
+          //   "Authorization":
+          //       'Bearer ${}'
+          // }
+          // )
+          );
       log(result.toString(), name: url);
       // log(_dio.options.headers['Authorization'], name: "Authorization$url");
       print('Welcome ${result.data['status']}');
@@ -219,9 +219,9 @@ class BaseApiConsumer extends ApiConsumer {
   @override
   Future<Either<Failure, Map<String, dynamic>>> post(String url,
       {Map<String, dynamic>? data,
-        FormData? formData,
-        Map<String, dynamic>? queryParameters,
-        Map<String, dynamic>? headers}) async {
+      FormData? formData,
+      Map<String, dynamic>? queryParameters,
+      Map<String, dynamic>? headers}) async {
     try {
       log(data.toString());
       if (url.contains('/chat/get-chats')) {
@@ -267,8 +267,8 @@ class BaseApiConsumer extends ApiConsumer {
   @override
   Future<Either<Failure, Map<String, dynamic>>> put(String url,
       {Map<String, dynamic>? data,
-        Map<String, dynamic>? queryParameters,
-        Map<String, dynamic>? headers}) async {
+      Map<String, dynamic>? queryParameters,
+      Map<String, dynamic>? headers}) async {
     try {
       final result = await _dio.put(url,
           data: data,
@@ -367,11 +367,11 @@ class BaseApiConsumer extends ApiConsumer {
       },
     );
     result.fold(
-          (_) {
+      (_) {
         // _authLocalDataSource.saveUserTokens(null);
         attachToken(null);
       },
-          (response) {
+      (response) {
         final accessToken = response['data']['accessToken'] as String;
         final newToken = _token!.copyWith(accessToken: accessToken);
         attachToken(newToken);

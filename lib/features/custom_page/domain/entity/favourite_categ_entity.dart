@@ -2,11 +2,13 @@ class FavouriteCatFeature {
   final String nameEn;
   final String nameAr;
   final bool enabled;
+  final String banner;
 
   FavouriteCatFeature({
     required this.nameEn,
     required this.nameAr,
     required this.enabled,
+    required this.banner,
   });
 }
 

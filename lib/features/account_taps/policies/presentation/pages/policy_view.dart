@@ -58,7 +58,7 @@ class _PolicyViewState extends State<PolicyView> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
+    return Scaffold(
       appBar: BackAppBar(
         label: widget.fromTerms==true?LocaleKeys.conditions.localize:LocaleKeys.policies.localize,
       ),

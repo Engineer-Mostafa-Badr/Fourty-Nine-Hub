@@ -7,7 +7,6 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../res/assets/assets.dart';
-import '../../../../res/style/styles.dart';
 
 class ReceiptTripScreen extends StatelessWidget {
   const ReceiptTripScreen({super.key});

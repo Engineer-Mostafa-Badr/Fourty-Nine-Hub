@@ -45,19 +45,30 @@ class ShareTheApp extends StatelessWidget {
                         user: state.shareApp?.userCount ?? 0,
                         balance: state.shareApp?.shareBalance ?? 0,
                       ),
-                      const Sizer(),
-                      Expanded(child: Image.asset(Assets.share)),
-                      const Sizer(),
-                      Label(
-                        text: LocaleKeys.recommendUs.localize,
-                        style: Styles.headerText(),
+                      const Sizer(
+                        height: 128,
                       ),
-                      const Sizer(),
+                      Image.asset(
+                        Assets.share,
+                        width: double.infinity,
+                        height: 300,
+                      ),
+                      const Sizer(
+                        height: 96,
+                      ),
+                      Center(
+                        child: Label(
+                          text: LocaleKeys.recommendUs.localize,
+                          style: Styles.headerText(),
+                        ),
+                      ),
                       Label(
                         text: LocaleKeys.shareFodeFriends.localize,
+                        style: Styles.mediumText(
+                            color: Colors.black.withValues(alpha: .7)),
                         maxLines: 5,
                       ),
-                      const Sizer(),
+                      const Sizer(height: 32,),
                       _buildLinkWidget(
                           context: context,
                           referralGift: state.shareApp?.referralGift ?? 0),
@@ -90,17 +101,20 @@ class ShareTheApp extends StatelessWidget {
             });
           },
           child: BadgedLabel(
-              height: 50,
+              height: 52,
               width: double.infinity,
               color: AppColors.PRIMARY_COLOR,
+              radius: 15,
               style: Styles.mediumText(
                   color: Theme.of(context).scaffoldBackgroundColor),
               label: '${LocaleKeys.yourReferralID.localize} $referralId'),
         ),
-        const Sizer(),
+        const Sizer(height: 32,),
         AppButton(
           color: AppColors.AUTH_CONTAINER_COLOR,
           label: LocaleKeys.shareTheApp.localize,
+          radius: 15,
+          height: 52,
           onPressed: () async {
             if (referralId.isNotEmpty) {
               await Share.share("""
@@ -158,7 +172,7 @@ https://example.com/download
             child: _buildStatisticsItem(
                 color: AppColors.PRIMARY_COLOR,
                 title: LocaleKeys.userShare.localize,
-                subTitle: '$user ${LocaleKeys.users.localize}'),
+                subTitle: '$user'),
           ),
           const Sizer(),
           Expanded(
@@ -179,54 +193,64 @@ https://example.com/download
   }) {
     return Container(
       padding: const EdgeInsets.all(5),
-      decoration:
-          BoxDecoration(color: color, borderRadius: BorderRadius.circular(10)),
+      height: 62,
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(15),
+      ),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Label(
             text: title,
-            style: Styles.mediumText(color: Colors.white),
+            style: Styles.mediumText(
+              color: Colors.white,
+              fontSize: 32,
+            ),
           ),
           Label(
             text: subTitle,
-            style: Styles.mediumText(color: Colors.white),
+            style: Styles.mediumText(
+              color: Colors.white,
+              fontSize: 32,
+            ),
           ),
         ],
       ),
     );
   }
 
-  // void initDynamicLinks() async {
-  //   FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) {
-  //     final Uri deepLink = dynamicLinkData.link;
-  //     final referralId = deepLink.queryParameters['referralId'];
-  //     if (referralId != null) {
-  //       // Save the referral ID for later use
-  //       await saveReferralId(referralId);
-  //     }
-  //   }).onError((error) {
-  //     print('Error handling dynamic link: $error');
-  //   });
-  //
-  //   // Handle deep link when app is launched from a terminated state
-  //   final PendingDynamicLinkData? initialLink =
-  //   await FirebaseDynamicLinks.instance.getInitialLink();
-  //   if (initialLink != null) {
-  //     final Uri deepLink = initialLink.link;
-  //     final referralId = deepLink.queryParameters['referralId'];
-  //     if (referralId != null) {
-  //       await saveReferralId(referralId);
-  //     }
-  //   }
-  // }
-  //
-  // Future<void> saveReferralId(String referralId) async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   await prefs.setString('referralId', referralId);
-  // }
-  //
-  // Future<String?> getReferralId() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   return prefs.getString('referralId');
-  // }
+// void initDynamicLinks() async {
+//   FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) {
+//     final Uri deepLink = dynamicLinkData.link;
+//     final referralId = deepLink.queryParameters['referralId'];
+//     if (referralId != null) {
+//       // Save the referral ID for later use
+//       await saveReferralId(referralId);
+//     }
+//   }).onError((error) {
+//     print('Error handling dynamic link: $error');
+//   });
+//
+//   // Handle deep link when app is launched from a terminated state
+//   final PendingDynamicLinkData? initialLink =
+//   await FirebaseDynamicLinks.instance.getInitialLink();
+//   if (initialLink != null) {
+//     final Uri deepLink = initialLink.link;
+//     final referralId = deepLink.queryParameters['referralId'];
+//     if (referralId != null) {
+//       await saveReferralId(referralId);
+//     }
+//   }
+// }
+//
+// Future<void> saveReferralId(String referralId) async {
+//   final prefs = await SharedPreferences.getInstance();
+//   await prefs.setString('referralId', referralId);
+// }
+//
+// Future<String?> getReferralId() async {
+//   final prefs = await SharedPreferences.getInstance();
+//   return prefs.getString('referralId');
+// }
 }

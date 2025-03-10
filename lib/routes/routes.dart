@@ -14,6 +14,7 @@ abstract class Routes {
   static const PAGEPREVIEW = '/CustomPage/PagePreview';
   static const MAINCATEGORIESCARDS = '/MainCategoriesCards';
   static const SEARCH = '/Search';
+  static const UploadRiderImages = '/UploadRiderImages';
   static const RESTAURANTORDERS = '/RestaurantOrders';
   static const EditFoodView = '/EditFoodView';
   static const MAINCATEGORIESTREE = '/MainCategoriesTree';
@@ -206,15 +207,31 @@ abstract class Routes {
   static const welcomeRideRegister = '/WelcomeRideRegister';
   static const personalInformationScreen = '/PersonalInformationScreen';
   static const driversLicenseScreen = '/DriversLicenseScreen';
+  static const drugAnalysisScreen = '/DrugAnalysisScreen';
+  static const criminalRecordScreen = '/CriminalRecordScreen';
+  static const technicalExaminationScreen = '/TechnicalExaminationScreen';
   static const personalDocumentsScreen = '/PersonalDocumentsScreen';
   static const vehicleInformationScreen = '/VehicleInformationScreen';
   static const moreInfoScreen = '/MoreInfoScreen';
+  static const truckWelcomeRideRegister = '/TruckWelcomeRideRegister';
+
   static const truckPersonalInformationScreen = '/TruckPersonalInformationScreen';
   static const truckDriversLicenseScreen = '/TruckDriversLicenseScreen';
   static const truckPersonalDocumentsScreen = '/TruckPersonalDocumentsScreen';
   static const truckVehicleInformationScreen = '/TruckVehicleInformationScreen';
   static const truckMoreInfoScreen = '/TruckMoreInfoScreen';
   static const completeRegisterScreen = '/CompleteRegisterScreen';
+  static const createLoadingTripScreen = '/CreateLoadingTripScreen';
+  static const CURRENTRIDEHOME = '/CurrentRideHome';
+  static const RideRequestHOME = '/RideRequestScreen';
+  static const RideStatusScreen = '/Ridestatusscreen';
+  static const ratingClientScreen = '/RatingClientScreen';
+  static const connectionCallScreen = '/ConnectionCallScreen';
+  static const safetyRideScreen = '/SafetyRideScreen';
+  static const rideFindingScreen = '/RideFindingScreen';
+  static const rideModeScreen = '/RideModeScreen';
+  static const rideDashboardDetailsScreen = '/RideDashboardDetailsScreen';
+  static const rideLoadingRequestScreen = '/rideLoadingRequestScreen';
 }
 
 abstract class Paths {
@@ -228,6 +245,7 @@ abstract class Paths {
   static const RIDEOPENSTREETMAPSEARCHANDPICK = 'RIDEOPENSTREETMAPSEARCHANDPICK';
   static const RIDERUNNINGTRIPS = 'RIDERUNNINGTRIPS';
   static const RIDEEXPIREDTRIPE = 'RIDEEXPIREDTRIPS';
+  static const UploadRiderImages = 'UploadRiderImages';
   static const MAINCATEGORIESCARDS = 'MainCategoriesCards';
   static const SEARCH = 'Search';
   static const RESTAURANTORDERS = 'RestaurantOrders';
@@ -411,13 +429,28 @@ abstract class Paths {
   static const welcomeRideRegister = 'WelcomeRideRegister';
   static const personalInformationScreen = 'PersonalInformationScreen';
   static const driversLicenseScreen = 'DriversLicenseScreen';
+  static const technicalExaminationScreen = 'TechnicalExaminationScreen';
+  static const drugAnalysisScreen = 'DrugAnalysisScreen';
+  static const criminalRecordScreen = 'CriminalRecordScreen';
   static const personalDocumentsScreen = 'PersonalDocumentsScreen';
   static const vehicleInformationScreen = 'VehicleInformationScreen';
   static const moreInfoScreen = 'MoreInfoScreen';
+  static const truckWelcomeRideRegister = 'TruckWelcomeRideRegister';
   static const truckPersonalInformationScreen = 'TruckPersonalInformationScreen';
   static const truckDriversLicenseScreen = 'TruckDriversLicenseScreen';
   static const truckPersonalDocumentsScreen = 'TruckPersonalDocumentsScreen';
   static const truckVehicleInformationScreen = 'TruckVehicleInformationScreen';
   static const truckMoreInfoScreen = 'TruckMoreInfoScreen';
   static const completeRegisterScreen = 'CompleteRegisterScreen';
+  static const createLoadingTripScreen = 'CreateLoadingTripScreen';
+  static const CURRENTRIDEHOME = 'CurrentRideHome';
+  static const RideREGUESTHOME = 'RideRequestScreen';
+  static const ratingClientScreen = 'RatingClientScreen';
+  static const connectionCallScreen = 'ConnectionCallScreen';
+  static const safetyRideScreen = 'SafetyRideScreen';
+  static const rideFindingScreen = 'RideFindingScreen';
+  static const RideStatusScreen = 'RideStatusScreen';
+  static const rideModeScreen = 'RideModeScreen';
+  static const rideDashboardDetailsScreen = 'RideDashboardDetailsScreen';
+  static const rideLoadingRequestScreen = 'rideLoadingRequestScreen';
 }

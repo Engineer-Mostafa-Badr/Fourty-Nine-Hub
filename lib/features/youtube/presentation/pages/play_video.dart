@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../common/widgets/stateful/videos/video_player.dart';
 import '../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../common/widgets/stateless/images/profile_image.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../core/widget/custom_scaffold.dart';
-import '../../../../res/style/const.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../common/widgets/stateful/videos/video_player.dart';
 import '../../../../res/style/app_colors.dart';
+import '../../../../res/style/const.dart';
 import '../../../../res/style/styles.dart';
 import '../widgets/youtube_video_card.dart';
 

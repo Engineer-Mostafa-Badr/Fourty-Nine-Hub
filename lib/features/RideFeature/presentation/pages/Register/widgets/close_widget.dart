@@ -34,8 +34,9 @@ Widget closeWidget(BuildContext context) {
                 ),
                 const Sizer(),
                 Label(
-                  text:
-                  LocaleKeys.allTheInfoAndPicturesAreSavedYouCanContinueAnyTime.localize,
+                  text: LocaleKeys
+                      .allTheInfoAndPicturesAreSavedYouCanContinueAnyTime
+                      .localize,
                   textAlign: TextAlign.center,
                   maxLines: 2,
                   style: Styles.headerText(
@@ -82,8 +83,8 @@ Widget closeWidget(BuildContext context) {
           ),
         ),
       ),
-      IconButton(
-        onPressed: () {
+      InkWell(
+        onTap: () {
           showAnimatedDialog(
             context,
             AlertDialog(
@@ -94,7 +95,8 @@ Widget closeWidget(BuildContext context) {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Label(
-                    text: LocaleKeys.areYouSureYouWantToCloseThisWindow.localize,
+                    text:
+                        LocaleKeys.areYouSureYouWantToCloseThisWindow.localize,
                     textAlign: TextAlign.center,
                     maxLines: 2,
                     style: Styles.headerText(
@@ -107,7 +109,7 @@ Widget closeWidget(BuildContext context) {
                     children: [
                       Expanded(
                         child: AppButton(
-                          label: LocaleKeys.close.localize,
+                          label: LocaleKeys.cancel.localize,
                           style: Styles.headerText(
                             color: AppColors.AUTH_CONTAINER_COLOR,
                           ),
@@ -126,7 +128,7 @@ Widget closeWidget(BuildContext context) {
                       const Sizer(),
                       Expanded(
                         child: AppButton(
-                          label:LocaleKeys.close.localize,
+                          label: LocaleKeys.close.localize,
                           style: Styles.headerText(
                             color: AppColors.AUTH_CONTAINER_COLOR,
                           ),
@@ -145,7 +147,7 @@ Widget closeWidget(BuildContext context) {
             ),
           );
         },
-        icon: const Icon(
+        child: const Icon(
           Icons.close,
           // size: ,
           color: AppColors.PRIMARY_COLOR,

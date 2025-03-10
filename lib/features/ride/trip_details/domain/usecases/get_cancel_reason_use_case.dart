@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/ride/trip_details/data/models/cancel_reason_model.dart';
+
 import '../repositories/trip_details_repo.dart';
 
 class GetCancelReasonUseCase

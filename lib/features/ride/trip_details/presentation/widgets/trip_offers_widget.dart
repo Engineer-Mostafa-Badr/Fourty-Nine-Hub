@@ -2,16 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/maps/map_picker.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/requests_history/domain/entities/trip_entity.dart';
 import 'package:fourtyninehub/features/requests_history/presentation/widgets/offer_ride_card.dart';
 
 import '../../../../../common/functions/helper/launch_url.dart';
-
+import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../../core/messages/messages.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/app_colors.dart';

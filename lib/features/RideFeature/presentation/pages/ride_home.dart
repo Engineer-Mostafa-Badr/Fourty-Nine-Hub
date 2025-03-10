@@ -16,6 +16,7 @@ import 'package:latlong2/latlong.dart';
 import '../../../../common/widgets/form/text_fields/form_text_field.dart';
 import '../../../../common/widgets/stateless/appbar/nested_appbar.dart';
 import '../../../../common/widgets/stateless/dynamic/shared_scaffold.dart';
+import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -23,6 +24,7 @@ import 'widgets/add_stops_widget.dart';
 import 'widgets/bottom_sheet/custom_bottom_sheet.dart';
 import 'widgets/country_dropdown.dart';
 import 'widgets/fare_bottom_sheet_widget.dart';
+import 'widgets/map_section.dart';
 import 'widgets/options_bottomsheet_widget.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -37,6 +39,8 @@ class RideHome extends StatefulWidget {
 class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
   final _formKey = GlobalKey<FormState>();
+  TextEditingController fromController = TextEditingController();
+  TextEditingController toController = TextEditingController();
   String? _selectedCategoryType = "ride"; // Initially "ride"
   int? _selectedCategoryIndex = 0; // Initially selecting the first category
   // String? _selectedCountry;
@@ -50,7 +54,9 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final rideCubit = context.read<RideCubit>();
       if (!rideCubit.isClosed) {
-        rideCubit.fetchRideCategories(UserCubit.to.state.data?.id ?? "");
+        rideCubit.fetchRideDriverInfo(context);
+        rideCubit.fetchRideDriverPictureOptional(context);
+        rideCubit.fetchRideCategories(UserCubit.to.state.data?.id ?? "",context);
         rideCubit.fetchShippingCategories(UserCubit.to.state.data?.id ?? "");
         rideCubit.fetchRideGovernorates();
       }
@@ -320,7 +326,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                     isLabelVisible: true,
                     child: ClickableWidget(
                         onTap: (){
-                    
+
                         },
                         child: _tripsWidget(context.isArabic? "طلبات التحميل": "Loading Requests", color: const Color(0xffD9D9D9))),
                   ),

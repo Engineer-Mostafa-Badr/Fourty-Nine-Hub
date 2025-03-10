@@ -16,7 +16,6 @@ import 'package:restart_app/restart_app.dart';
 
 import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../core/widget/custom_switch_button.dart';
-import '../../../../core/widget/custom_switch_button.dart';
 
 class CustomPage extends StatefulWidget {
   const CustomPage({super.key});
@@ -132,10 +131,6 @@ class ActivatePageBlocConsumer extends StatelessWidget {
                   controller.updateActivate(v);
                   Restart.restartApp();
                 },
-                // activeColor: Colors.red,
-                // inactiveThumbColor: Colors.black,
-                // activeTrackColor: Colors.grey,
-                // inactiveTrackColor: Colors.grey,
               ),
             ],
           ),

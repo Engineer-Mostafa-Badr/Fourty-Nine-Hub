@@ -91,7 +91,7 @@ class _RequestTripJoinNotificationViewState
         tripJoinCardEntity.subscribedPremium == false) {
       await serviceLocator<SubscriptionController>().showSubscriptionPlans(
         wallets: [
-          tripJoinCardEntity.paymentMethod?.toWalletType ?? WalletTypes.balance
+          tripJoinCardEntity.paymentMethod?.toWalletType ?? WalletTypes.mainWallet
         ],
         subCategoryId: subCategoryId,
         title: title,
@@ -107,7 +107,7 @@ class _RequestTripJoinNotificationViewState
         tripJoinCardEntity.isApproved == false) {
       await serviceLocator<SubscriptionController>().showSubscriptionPlans(
         wallets: [
-          tripJoinCardEntity.paymentMethod?.toWalletType ?? WalletTypes.balance
+          tripJoinCardEntity.paymentMethod?.toWalletType ?? WalletTypes.mainWallet
         ],
         subCategoryId: subCategoryId,
         title: title,

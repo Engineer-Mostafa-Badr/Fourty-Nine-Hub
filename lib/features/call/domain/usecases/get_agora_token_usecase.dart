@@ -13,18 +13,12 @@ class GetAgoraTokenUsecase {
 }
 
 class GetAgoraTokenParams extends Equatable {
-  final int expirationTime;
-  final String caseId;
-
-  const GetAgoraTokenParams(
-      {required this.expirationTime, required this.caseId});
+  const GetAgoraTokenParams();
 
   Map<String, dynamic> toMap() => {
-        'callId': caseId,
-        'expirationTime': expirationTime,
         'type': 'publisher',
       };
 
   @override
-  List<Object?> get props => [expirationTime, caseId];
+  List<Object?> get props => [];
 }

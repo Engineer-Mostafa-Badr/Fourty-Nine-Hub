@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/repositories/ride_request_repo.dart';
+
 import '../../../../../../core/abstract/use_case.dart';
 import '../../../../../subcategories/data/models/sub_category_model.dart';
 

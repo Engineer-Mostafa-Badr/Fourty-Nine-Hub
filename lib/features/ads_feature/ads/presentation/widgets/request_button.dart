@@ -31,14 +31,16 @@ class RequestButton extends StatelessWidget {
 
       return AvaialbleTripsButton(
         title: LocaleKeys.request.localize,
-        color: subscriptionStatus == 'premium'
-            ? AppColors.DARK_GRAY_COLOR
-            : AppColors.SECONDARY_COLOR,
+        color: AppColors.PRIMARY_COLOR,
         onTap: !context.read<UserCubit>().isLoggedIn
-            ? () => context.push(Routes.LOGIN)
+            ? () {
+          context.pop();
+              context.push(Routes.LOGIN);
+            }
             : subscriptionStatus == 'premium'
                 ? null
                 : () {
+          context.pop();
                     showModalBottomSheet(
                       backgroundColor: context.isDarkMode
                           ? AppColors.DARK_BLUE_COLOR.withOpacity(0.95)

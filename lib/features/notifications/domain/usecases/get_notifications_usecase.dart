@@ -3,10 +3,10 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/notifications/domain/entities/notification_entity.dart';
 import 'package:fourtyninehub/features/notifications/domain/repos/notification_repo.dart';
 
-class GetNotficationsUseCase {
+class GetNotificationsUseCase {
   final NotificationRepo notificationRepo;
 
-  GetNotficationsUseCase({required this.notificationRepo});
+  GetNotificationsUseCase({required this.notificationRepo});
   Future<Either<Failure, List<NotificationEntity>>> call({
     required String type,
     required int page,

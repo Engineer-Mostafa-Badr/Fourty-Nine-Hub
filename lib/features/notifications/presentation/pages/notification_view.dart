@@ -21,6 +21,8 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../res/style/styles.dart';
+import '../widgets/request_log_builder.dart';
+import '../widgets/request_log_icon_builder.dart';
 
 class NotificationView extends StatefulWidget {
   const NotificationView({super.key});
@@ -31,9 +33,10 @@ class NotificationView extends StatefulWidget {
 
 int index = 0;
 List<String> titles = [
+  LocaleKeys.fourtyNineNotifications.localize,
   LocaleKeys.socialNotifications.localize,
   LocaleKeys.serviceNoifications.localize,
-  LocaleKeys.fourtyNineNotifications.localize,
+  LocaleKeys.requestLog.localize,
 ];
 
 class _NotificationViewState extends State<NotificationView> {
@@ -96,7 +99,7 @@ class _NotificationViewState extends State<NotificationView> {
           ),
         ],
         child: DefaultTabController(
-          length: 3,
+          length: 4,
           child: CustomScaffold(
               appBar: const HomeAppbar(
                 color: Colors.red,
@@ -118,14 +121,20 @@ class _NotificationViewState extends State<NotificationView> {
                         setState(() {});
                       },
                       tabs: const [
+                        AppIconBuilder(),
                         SocialIconBuilder(),
                         ServicesIconBuilder(),
-                        AppIconBuilder(),
+                        RequestLogIconBuilder(),
                       ],
                     ),
                     Expanded(
                       child: TabBarView(
                         children: [
+                          GestureDetector(
+                            onHorizontalDragStart: (_) {},
+                            onHorizontalDragEnd: (_) {},
+                            child: const AppNotificationBuilder(),
+                          ),
                           GestureDetector(
                             onHorizontalDragStart: (_) {},
                             onHorizontalDragEnd: (_) {},
@@ -139,7 +148,7 @@ class _NotificationViewState extends State<NotificationView> {
                           GestureDetector(
                             onHorizontalDragStart: (_) {},
                             onHorizontalDragEnd: (_) {},
-                            child: const AppNotificationBuilder(),
+                            child: const RequestLogBuilder(),
                           ),
                         ],
                       ),

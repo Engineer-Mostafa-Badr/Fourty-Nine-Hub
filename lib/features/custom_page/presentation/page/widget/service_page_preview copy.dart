@@ -108,7 +108,6 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
     context
         .read<NotificationSocketIoCubit>()
         .notificationListener(languageCode: 'en');
-    context.read<LocationSocketCubit>().updateDriverLocationOn();
   }
 
   void _setupScrollController() {
@@ -220,7 +219,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Row(children: [
                 Expanded(child: _buildStarWidget()),
-                const Sizer(),
+                const Sizer(width: 32,),
                 Expanded(
                   child: _pickMeAndComeWithUWidget(),
                 ),
@@ -335,57 +334,51 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
     );
   }
 
-  BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>
-      _pickMeAndComeWithUWidget() {
-    return BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>(
+
+  // BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>
+  Widget _pickMeAndComeWithUWidget() {
+    return Expanded(
+      child: _buildRideSubCategoryItem(
+        title: LocaleKeys.tripJoin.localize,
+        // image: Assets.tripJoin,
+
+        route: Routes.AVAILABLE_TRIPS,
+        onTab: () {
+          AdInterstitialTop.loadIntersitialAd();
+          AdInterstitialTop.showInterstitialAd();
+          return HandleCashback.setCount('tripJoinCount', context);
+        },
+        // isFavorite: state.data![1].isFavorite,
+        // numberOfAds: state.data![1].numberOfAds?.toInt(),
+      ),
+    );
+    /* return BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>(
       builder: (context, state) {
         if (state.status == StateStatus.loading) {
           return const PickMeAndComeWithYouLShimmerLoading();
         } else if (state.status == StateStatus.success) {
-          return Row(
-            children: [
-              // Expanded(
-              //   child: _buildRideSubCategoryItem(
-              //     service: state.data?[0].service ?? RideServicesEnum.pickMe,
-              //     title: LocaleKeys.carpool.localize,
-              //     image: state.data?[0].image ?? '',
-              //     onTab: () {
-              //       AdInterstitialTop.loadIntersitialAd();
-              //       AdInterstitialTop.showInterstitialAd();
-              //       return HandleCashback.setCount('carPoolCount', context);
-              //     },
-              //     // image: Assets.carpool,
-              //     // isFavorite: state.data![0].is,
-              //     // numberOfAds: state.data![0].numberOfAds?.toInt(),
-              //     route: Routes.CAR_POOL,
-              //   ),
-              // ),
-              // const Sizer(),
-              Expanded(
-                child: _buildRideSubCategoryItem(
-                  service:
-                      state.data?[1].service ?? RideServicesEnum.comeWithYou,
-                  title: LocaleKeys.tripJoin.localize,
-                  image: state.data?[1].image ?? '',
-                  // image: Assets.tripJoin,
+          return Expanded(
+            child: _buildRideSubCategoryItem(
+              service: state.data?[1].service ?? RideServicesEnum.comeWithYou,
+              title: state.data![1].name.toString(),
+              image: state.data?[1].image ?? '',
+              // image: Assets.tripJoin,
 
-                  route: Routes.AVAILABLE_TRIPS,
-                  onTab: () {
-                    AdInterstitialTop.loadIntersitialAd();
-                    AdInterstitialTop.showInterstitialAd();
-                    return HandleCashback.setCount('tripJoinCount', context);
-                  },
-                  // isFavorite: state.data![1].isFavorite,
-                  // numberOfAds: state.data![1].numberOfAds?.toInt(),
-                ),
-              )
-            ],
+              route: Routes.AVAILABLE_TRIPS,
+              onTab: () {
+                AdInterstitialTop.loadIntersitialAd();
+                AdInterstitialTop.showInterstitialAd();
+                return HandleCashback.setCount('tripJoinCount', context);
+              },
+              // isFavorite: state.data![1].isFavorite,
+              // numberOfAds: state.data![1].numberOfAds?.toInt(),
+            ),
           );
         } else {
           return Container(
             padding:
-                //EdgeInsets.all
-                const EdgeInsets.symmetric(horizontal: 10),
+            //EdgeInsets.all
+            const EdgeInsets.symmetric(horizontal: 10),
             child: Text(
               LocaleKeys.noRideSubcategories.localize,
               style: TextStyle(fontSize: 32.sp.w, fontWeight: FontWeight.w500),
@@ -393,10 +386,10 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
           );
         }
       },
-    );
+    );*/
   }
 
-  Widget _buildStarWidget() {
+/*  Widget _buildStarWidget() {
     return SizedBox(
         height: kToolbarHeight * 2.h,
         width: double.infinity,
@@ -459,7 +452,54 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
                         ))),
               ),
             ]));
+  }*/
+  Widget _buildStarWidget() {
+    return SizedBox(
+        height: kToolbarHeight * 2.h,
+        width: double.infinity,
+        child: Positioned.fill(
+          child: GestureDetector(
+              onTap: () {
+                AdInterstitialTop.loadIntersitialAd();
+                AdInterstitialTop.showInterstitialAd();
+                HandleCashback.setCount('beAStarCount', context);
+                context.push(Routes.BE_STAR);
+              },
+              child: Container(
+                  height: kToolbarHeight * 2.h,
+                  decoration: BoxDecoration(
+                    color: Theme
+                        .of(context)
+                        .scaffoldBackgroundColor,
+                    borderRadius: BorderRadius.circular(40.r),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
+                        spreadRadius: 5,
+                        blurRadius: 5,
+                        offset: const Offset(1, 1),
+                      )
+                    ],
+                    image: DecorationImage(
+                        image: AssetImage(Assets.tube1), fit: BoxFit.fill),
+                  ),
+                  child: Center(
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Label(
+                            text: LocaleKeys.tube.localize,
+                            style: Styles.mediumText(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 45,
+                            ),
+                          )
+                        ]),
+                  ))),
+        ));
   }
+
 
   Widget itemAuctionAndInstallmentWidget(
       String label, Function function, IconData icon) {
@@ -514,12 +554,10 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
     );
   }
 
-  Widget _buildRideSubCategoryItem(
-      {required RideServicesEnum service,
-      required String title,
-      required String image,
-      String? route,
-      required Function() onTab}) {
+  Widget _buildRideSubCategoryItem({
+    required String title,
+    String? route,
+    required Function() onTab}) {
     return InkWell(
       // onTap: () => context.push(Routes.ADS, extra: service.value()),
       onTap: () {
@@ -528,86 +566,37 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
       },
       child: Container(
         height: kToolbarHeight * 2.h,
-        padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
         decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          borderRadius: BorderRadius.circular(10.r),
-          boxShadow: const [
+          color: Theme
+              .of(context)
+              .scaffoldBackgroundColor,
+          borderRadius: BorderRadius.circular(40.r),
+          boxShadow: [
             BoxShadow(
-              color: Color.fromARGB(255, 249, 159, 162),
-              spreadRadius: 1,
-              blurRadius: 3,
-              offset: Offset(1, 1),
+              color: AppColors.PRIMARY_COLOR.withValues(alpha: .8),
+              spreadRadius: 5,
+              blurRadius: 5,
+              offset: const Offset(1, 1),
             )
           ],
+          image: DecorationImage(
+              image: AssetImage(Assets.joinTrip), fit: BoxFit.fill),
         ),
-        child: Stack(
-          alignment: AlignmentDirectional.centerStart,
-          children: [
-            Positioned.fill(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10.r),
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    SquareImage(
-                      fit: BoxFit.cover,
-                      width: 150,
-                      // source: AssetImage(image),
-                      url: image,
-                    ),
-                    Container(
-                      color: Colors.black
-                          .withOpacity(0.3), // Darken the background
-                    ),
-                  ],
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        child: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Label(
+                text: title,
+                style: Styles.mediumText(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 45,
                 ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10.w),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Label(
-                    // text: service.title(),
-                    text: title,
-                    style: Styles.mediumText(
-                      color: AppColors.AUTH_CONTAINER_COLOR,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 45,
-                    ),
-                  ),
-
-                  // Padding(
-                  //   padding: EdgeInsets.symmetric(vertical: 5.h),
-                  //   child: Column(
-                  //     children: [
-                  //       InkWell(
-                  //         onTap: () async {},
-                  //         child: Icon(
-                  //           isFavorite ?? false
-                  //               ? Icons.favorite
-                  //               : Icons.favorite_border,
-                  //           // Icons.favorite,
-                  //           color: AppColors.SECONDARY_COLOR,
-                  //           size: 38.h,
-                  //         ),
-                  //       ),
-                  //       // const Spacer(),
-                  //       // Label(
-                  //       //   text: '$numberOfAds ${LocaleKeys.ads.tr()}',
-                  //       //   style: Styles.mediumText(
-                  //       //     color: Colors.white,
-                  //       //   ),
-                  //       // ),
-                  //     ],
-                  //   ),
-                  // ),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
