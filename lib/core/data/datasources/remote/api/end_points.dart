@@ -1226,15 +1226,15 @@ class EndPoints {
     return '/ride/update-driver-location';
   }
 
-  static String getAllRunningTrips({int limit = 10, int page = 1}) {
+  static String getAllRunningTrips({required int limit, required int page}) {
       return '/ride/trips/all?limit=$limit&page=$page&status=started';
   }
 
-  static String getAllCompletedTrips({int limit = 10, int page = 1}) {
+  static String getAllCompletedTrips({required int limit, required int page}) {
     return '/ride/trips/all?limit=$limit&page=$page&status=completed';
   }
 
-  static String getAllActivityTrips({int limit = 10, int page = 1}) {
+  static String getAllActivityTrips({required int limit, required int page}) {
     return '/ride/trips/activity?limit=$limit&page=$page';
   }
 

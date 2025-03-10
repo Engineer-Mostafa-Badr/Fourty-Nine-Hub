@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/activity_trip_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/completed_trips_model.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/expected_price_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/get_location_from_address_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/history_trip_for_rider_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/history_trip_for_user_model.dart';
@@ -253,11 +256,14 @@ class RideRemoteDataSourceImplementation
         EndPoints.getExpectedPrice(params.id),
         data: params.toJson(),
       );
-
       return response.fold((failure) => Left(failure), (data) {
-        return Right(data['status']??false);
+        log("55555555555555555555555555");
+        RideExpectedPriceModel rideExpectedPriceModel = RideExpectedPriceModel.fromJson(data['data']);
+        log("777777777.55555555555555");
+        return Right(rideExpectedPriceModel);
       });
     } catch (e) {
+      log(e.toString());
       return Left(ServerFailure(message: e.toString()));
     }
   }
@@ -407,8 +413,11 @@ class RideRemoteDataSourceImplementation
 
       return response.fold((failure) => Left(failure), (data) {
         List<RunningTripsModel> runningTrips = [];
-        for (var trip in data['data']['trips']) {
+        for (Map<String, dynamic> trip in data['data']['trips']) {
+          log('Running Trip gender: ${trip['gender']}');
           runningTrips.add(RunningTripsModel.fromJson(trip));
+          log('Running Trip length: ${runningTrips.length}');
+          log('Running Trip 1 gender: ${runningTrips[0].gender}');
         }
         return Right(runningTrips);
       });
@@ -428,7 +437,10 @@ class RideRemoteDataSourceImplementation
       return response.fold((failure) => Left(failure), (data) {
         List<CompletedTripsModel> completedTrips = [];
         for (var trip in data['data']['trips']) {
+          log('Completed Trip gender: ${trip['gender']}');
           completedTrips.add(CompletedTripsModel.fromJson(trip));
+          log('Completed Trip length: ${completedTrips.length}');
+          log('Completed Trip 1 gender: ${completedTrips[0].gender}');
         }
         return Right(completedTrips);
       });

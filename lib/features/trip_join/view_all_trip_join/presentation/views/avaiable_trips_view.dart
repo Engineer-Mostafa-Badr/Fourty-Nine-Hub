@@ -69,7 +69,7 @@ class _AvailableTripsViewState extends State<AvailableTripsView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ElevatedButton(onPressed: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=> RunningTripScreen()));
+                // Navigator.push(context, MaterialPageRoute(builder: (context)=> RunningTripScreen()));
               }, child: Text("Move")),
               Center(
                 child: Text(

@@ -15,6 +15,9 @@ class RunningTripsEntity {
   final String? rating;
   final String car;
   final String gender;
+  final String clientFirstName;
+  final String clientLastName;
+  final String clientGender;
 
   RunningTripsEntity({
     required this.id,
@@ -33,5 +36,8 @@ class RunningTripsEntity {
     this.rating,
     required this.car,
     required this.gender,
+    required this.clientFirstName,
+    required this.clientLastName,
+    required this.clientGender,
   });
 }

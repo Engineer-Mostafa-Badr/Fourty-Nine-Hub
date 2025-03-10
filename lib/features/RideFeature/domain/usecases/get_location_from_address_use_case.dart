@@ -15,7 +15,9 @@ class GetLocationFromAddressUseCase {
 
 class GetLocationFromAddressUseCaseParams {
   final String address;
-  GetLocationFromAddressUseCaseParams(this.address);
+  final String city;
+  final String country;
+  GetLocationFromAddressUseCaseParams(this.address, this.city, this.country);
 
-  Map<String, dynamic> toJson() => {'address': address};
+  Map<String, dynamic> toJson() => {'address': '$address, $city, $country'};
 }

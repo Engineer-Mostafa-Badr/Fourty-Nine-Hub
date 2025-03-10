@@ -17,40 +17,40 @@ abstract class ApiConsumer {
   const ApiConsumer();
 
   Future<Either<Failure, Map<String, dynamic>>> get(
-    String url, {
-    Map<String, dynamic>? headers,
-    Map<String, dynamic>? queryParameters,
-    Map<String, dynamic>? data,
-  });
+      String url, {
+        Map<String, dynamic>? headers,
+        Map<String, dynamic>? queryParameters,
+        Map<String, dynamic>? data,
+      });
 
   Future<Either<Failure, Map<String, dynamic>>> post(
-    String url, {
-    Map<String, dynamic>? data,
-    FormData? formData,
-    Map<String, dynamic>? queryParameters,
-    Map<String, dynamic>? headers,
-  });
+      String url, {
+        Map<String, dynamic>? data,
+        FormData? formData,
+        Map<String, dynamic>? queryParameters,
+        Map<String, dynamic>? headers,
+      });
 
   Future<Either<Failure, Map<String, dynamic>>> patch(
-    String url, {
-    Map<String, dynamic>? data,
-    Map<String, dynamic>? queryParameters,
-    Map<String, dynamic>? headers,
-  });
+      String url, {
+        Map<String, dynamic>? data,
+        Map<String, dynamic>? queryParameters,
+        Map<String, dynamic>? headers,
+      });
 
   Future<Either<Failure, Map<String, dynamic>>> put(
-    String url, {
-    Map<String, dynamic>? data,
-    Map<String, dynamic>? queryParameters,
-    Map<String, dynamic>? headers,
-  });
+      String url, {
+        Map<String, dynamic>? data,
+        Map<String, dynamic>? queryParameters,
+        Map<String, dynamic>? headers,
+      });
 
   Future<Either<Failure, Map<String, dynamic>>> delete(
-    String url, {
-    Map<String, dynamic>? data,
-    Map<String, dynamic>? queryParameters,
-    Map<String, dynamic>? headers,
-  });
+      String url, {
+        Map<String, dynamic>? data,
+        Map<String, dynamic>? queryParameters,
+        Map<String, dynamic>? headers,
+      });
 
   void attachToken(UserTokensEntity? token);
   bool get isTokenAttached;
@@ -65,9 +65,9 @@ class BaseApiConsumer extends ApiConsumer {
   UserTokensEntity? _token;
 
   BaseApiConsumer(
-    this._dio,
-    // this._authLocalDataSource,
-  );
+      this._dio,
+      // this._authLocalDataSource,
+      );
 
   @override
   void attachToken(UserTokensEntity? token) async {
@@ -80,22 +80,27 @@ class BaseApiConsumer extends ApiConsumer {
     if (token != null) {
       log(token.accessToken.toString(), name: "Token");
       _dio.options.headers['Authorization'] = 'Bearer ${token.accessToken}';
+      _dio.options.headers['x-api-key'] = '25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91';
       // _dio.options.headers['Authorization'] = 'Bearer ${await CacheManager.getAccessToken()}';
       // _dio.options.headers['Authorization'] = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb2NrZXRJZCI6ImEzMWEyNzkzLWFiYTEtNDliOC1iZTgzLTlkYzM2NWZhOTk1OCIsImlhdCI6MTczMjA1MTYzMywiZXhwIjo1NTczMjA1MTYzMywic3ViIjoiNjZkODZhODJlOWNkMzk5NzAwMmY2MzM2In0.Mcl_dnYecdxc2htakepeWmZUYMDjfdjYkvgwWb4p9ok';
     }
   }
 
+  //addAll({"x-api-key":"25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91"})
   @override
   Future<Either<Failure, Map<String, dynamic>>> patch(String url,
       {Map<String, dynamic>? data,
-      Map<String, dynamic>? queryParameters,
-      Map<String, dynamic>? headers}) async {
+        Map<String, dynamic>? queryParameters,
+        Map<String, dynamic>? headers}) async {
     try {
       final result = await _dio.patch(
         url,
         data: data,
         queryParameters: queryParameters,
-        options: Options(headers: headers),
+        options: Options(headers: {
+          ...?headers,
+          "x-api-key": "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91", // Your custom header
+        }),
       );
 
       if (result.data['status']) {
@@ -109,11 +114,14 @@ class BaseApiConsumer extends ApiConsumer {
           e.response?.statusCode == 401 &&
           isTokenAttached) {
         return refreshToken().then(
-          (_) => patch(
+              (_) => patch(
             url,
             queryParameters: queryParameters,
             data: data,
-            headers: headers,
+            headers: {
+              ...?headers,
+              "x-api-key": "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91", // Your custom header
+            },
           ),
         );
       } else {
@@ -125,13 +133,16 @@ class BaseApiConsumer extends ApiConsumer {
   @override
   Future<Either<Failure, Map<String, dynamic>>> delete(String url,
       {Map<String, dynamic>? data,
-      Map<String, dynamic>? queryParameters,
-      Map<String, dynamic>? headers}) async {
+        Map<String, dynamic>? queryParameters,
+        Map<String, dynamic>? headers}) async {
     try {
       final result = await _dio.delete(
         url,
         data: data,
-        options: Options(headers: headers),
+        options: Options(headers: {
+          ...?headers,
+          "x-api-key": "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91", // Your custom header
+        }),
         queryParameters: queryParameters,
       );
       return Right(result.data as Map<String, dynamic>);
@@ -140,7 +151,7 @@ class BaseApiConsumer extends ApiConsumer {
           e.response?.statusCode == 401 &&
           isTokenAttached) {
         return refreshToken().then(
-          (_) => delete(
+              (_) => delete(
             url,
             queryParameters: queryParameters,
             data: data,
@@ -155,20 +166,23 @@ class BaseApiConsumer extends ApiConsumer {
   @override
   Future<Either<Failure, Map<String, dynamic>>> get(String url,
       {Map<String, dynamic>? queryParameters,
-      Map<String, dynamic>? data,
-      Map<String, dynamic>? headers}) async {
+        Map<String, dynamic>? data,
+        Map<String, dynamic>? headers}) async {
     try {
       log(data.toString());
       final result = await _dio.get(url,
           data: data,
           queryParameters: queryParameters,
-          options: Options(headers: headers)
-          // options: Options(headers: {
-          //   "Authorization":
-          //       'Bearer ${}'
-          // }
-          // )
-          );
+          options: Options(headers: {
+            ...?headers,
+            "x-api-key": "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91", // Your custom header
+          })
+        // options: Options(headers: {
+        //   "Authorization":
+        //       'Bearer ${}'
+        // }
+        // )
+      );
       log(result.toString(), name: url);
       // log(_dio.options.headers['Authorization'], name: "Authorization$url");
       print('Welcome ${result.data['status']}');
@@ -205,9 +219,9 @@ class BaseApiConsumer extends ApiConsumer {
   @override
   Future<Either<Failure, Map<String, dynamic>>> post(String url,
       {Map<String, dynamic>? data,
-      FormData? formData,
-      Map<String, dynamic>? queryParameters,
-      Map<String, dynamic>? headers}) async {
+        FormData? formData,
+        Map<String, dynamic>? queryParameters,
+        Map<String, dynamic>? headers}) async {
     try {
       log(data.toString());
       if (url.contains('/chat/get-chats')) {
@@ -217,7 +231,10 @@ class BaseApiConsumer extends ApiConsumer {
         url,
         data: formData ?? data,
         queryParameters: queryParameters,
-        options: Options(headers: headers),
+        options: Options(headers: {
+          ...?headers,
+          "x-api-key": "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91", // Your custom header
+        }),
       );
       log(result.data.toString(), name: "url");
       if (result.data['status']) {
@@ -250,13 +267,16 @@ class BaseApiConsumer extends ApiConsumer {
   @override
   Future<Either<Failure, Map<String, dynamic>>> put(String url,
       {Map<String, dynamic>? data,
-      Map<String, dynamic>? queryParameters,
-      Map<String, dynamic>? headers}) async {
+        Map<String, dynamic>? queryParameters,
+        Map<String, dynamic>? headers}) async {
     try {
       final result = await _dio.put(url,
           data: data,
           queryParameters: queryParameters,
-          options: Options(headers: headers));
+          options: Options(headers: {
+            ...?headers,
+            "x-api-key": "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91", // Your custom header
+          }));
       log(result.data.toString(), name: "url");
       if (getSuccessState(result.data)) {
         log('iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
@@ -347,11 +367,11 @@ class BaseApiConsumer extends ApiConsumer {
       },
     );
     result.fold(
-      (_) {
+          (_) {
         // _authLocalDataSource.saveUserTokens(null);
         attachToken(null);
       },
-      (response) {
+          (response) {
         final accessToken = response['data']['accessToken'] as String;
         final newToken = _token!.copyWith(accessToken: accessToken);
         attachToken(newToken);

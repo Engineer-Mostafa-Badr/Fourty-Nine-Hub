@@ -68,6 +68,13 @@ class _CustomScaffoldState extends State<CustomScaffold>
     _animation = Tween<double>(begin: 0, end: 200).animate(_controller);
   }
 
+  @override
+  void dispose() {
+    _controller.dispose(); // Ensure this is present
+    super.dispose();
+  }
+
+
   bool floatNavigator = false;
 
   @override

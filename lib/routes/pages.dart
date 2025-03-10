@@ -271,6 +271,7 @@ import '../features/RideFeature/presentation/pages/Register/TruckDriver/truck_pe
 import '../features/RideFeature/presentation/pages/Register/TruckDriver/truck_vehicle_information_screen.dart';
 import '../features/RideFeature/presentation/pages/Register/complete_register_screen.dart';
 import '../features/RideFeature/presentation/pages/Register/welcome_ride_register.dart';
+import '../features/RideFeature/presentation/pages/osm_search_and_pick.dart';
 import '../features/RideFeature/presentation/pages/ride_home.dart';
 import '../features/account_taps/account/presentation/cubit/cubit/favourite_drawer_cubit.dart';
 import '../features/account_taps/account/presentation/cubit/managers/favourite_categories_cubit.dart';
@@ -455,12 +456,17 @@ class AppPages {
               GoRoute(
                 path: Paths.RIDERUNNINGTRIPS,
                 name: Routes.RIDERUNNINGTRIPS,
-                builder: (context, state) => RunningTripScreen(),
+                builder: (context, state) => RunningTripScreen(params: state.extra as RunningTripParams),
               ),
               GoRoute(
                 path: Paths.RIDEEXPIREDTRIPE,
                 name: Routes.RIDEEXPIREDTRIPE,
-                builder: (context, state) => ExpiredTripsScreen(),
+                builder: (context, state) => ExpiredTripsScreen(params: state.extra as ExpiredTripsScreenParams,),
+              ),
+              GoRoute(
+                path: Paths.RIDEOPENSTREETMAPSEARCHANDPICK,
+                name: Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
+                builder: (context, state) => RideOpenStreetMapSearchAndPick(params: state.extra as RideOpenStreetMapSearchAndPickParams,),
               ),
               GoRoute(
                 path: Paths.EditFoodView,
