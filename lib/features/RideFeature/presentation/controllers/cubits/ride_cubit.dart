@@ -86,17 +86,12 @@ class RideCubit extends Cubit<RideState> {
     this.registerRideSpecialUseCase,
     this.getRideDriverInfoUseCase,
     this.getDriverPictureOptionalUseCase,
-      this.getRideCategories,
-      this.getShippingCategoriesUsecase,
-      this.getRideGovernoratesUseCase,
       this.getLocationFromAddressUseCase,
       this.getRideExpectedPriceUseCase,
       this.getAllCompletedTripsUseCase,
       this.getAllRunningTripsUseCase,
       this.getAllActivityTripsUseCase,
-  ) : super(const RideState());
-
-      ) {
+  ) : super(const RideState()){
     _fetchUserLocation();
   }
 
