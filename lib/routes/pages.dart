@@ -165,7 +165,10 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/updat
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/update_driver_shipping_screen.dart';
 import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
 import 'package:fourtyninehub/features/search/presentation/pages/search_view.dart';
+import 'package:fourtyninehub/features/settings/presentation/pages/change_password_second_view.dart';
+import 'package:fourtyninehub/features/settings/presentation/pages/change_password_view.dart';
 import 'package:fourtyninehub/features/settings/presentation/pages/settings_view.dart';
+import 'package:fourtyninehub/features/settings/presentation/pages/verification_view.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/get_requests_for_loading_model/get_requests_for_loading_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/driverStatistics_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/get_all_trip_cubit.dart';
@@ -923,6 +926,25 @@ class AppPages {
                   create: (_) => serviceLocator(),
                   child: const GiftWalletView(),
                 ),
+              ),
+
+              // Change Password
+              GoRoute(
+                path: Paths.CHANGEPASSWORD,
+                name: Routes.CHANGEPASSWORD,
+                builder: (context, state) => const ChangePasswordView(),
+              ),
+
+              GoRoute(
+                path: Paths.CHANGEPASSWORDSECOND,
+                name: Routes.CHANGEPASSWORDSECOND,
+                builder: (context, state) => const ChangePasswordSecondView(),
+              ),
+
+              GoRoute(
+                path: Paths.VERIFICATION,
+                name: Routes.VERIFICATION,
+                builder: (context, state) => const VerificationView(),
               ),
 
               GoRoute(
@@ -2716,7 +2738,7 @@ class AppPages {
                     BlocProvider<DestGetLatAndLongCubit>(
                       create: (context) => DestGetLatAndLongCubit(
                           getLatLongFromAddressRemoteDataSource:
-                          serviceLocator()),
+                              serviceLocator()),
                     ),
                   ], child: const TruckWelcomeRideRegister());
                 },
