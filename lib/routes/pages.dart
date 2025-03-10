@@ -18,6 +18,7 @@ import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Ba
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_two_cubit/wallet_two_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/balance_wallet_view.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/cashback_view.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/gift_wallet_view.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/cubit/ad_details_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/pages/ad_details_view.dart';
@@ -913,6 +914,14 @@ class AppPages {
                       builder: (context, state) => const TransferMoneyView(),
                     ),
                   ]),
+
+              // CashBack
+              GoRoute(
+                path: Paths.CASHBACK,
+                name: Routes.CASHBACK,
+                builder: (context, state) => const CashbackView(),
+              ),
+
               GoRoute(
                 path: Paths.BALANCE,
                 name: Routes.BALANCE,

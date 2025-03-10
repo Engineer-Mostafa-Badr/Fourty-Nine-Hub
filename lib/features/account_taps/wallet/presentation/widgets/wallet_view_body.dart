@@ -88,7 +88,7 @@ class WalletViewBody extends StatelessWidget {
                                 ),
                                 IconAndHintWidget(
                                   text:
-                                      '//${LocaleKeys.minimum.localize}500 ${LocaleKeys.transaction.localize}',
+                                      '${LocaleKeys.minimum.localize}500 ${LocaleKeys.transaction.localize}',
                                 ),
                                 const SizedBox(
                                   height: 16,

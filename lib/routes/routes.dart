@@ -237,6 +237,9 @@ abstract class Routes {
   static const CHANGEPASSWORD = '/ChangePassword';
   static const CHANGEPASSWORDSECOND = '/ChangePasswordSecond';
   static const VERIFICATION = '/Verification';
+
+  // Cashback
+  static const CASHBACK = '/Cashback';
 }
 
 abstract class Paths {
@@ -463,4 +466,7 @@ abstract class Paths {
   static const CHANGEPASSWORD = 'ChangePassword';
   static const CHANGEPASSWORDSECOND = 'ChangePasswordSecond';
   static const VERIFICATION = 'Verification';
+
+  // Cashback
+  static const CASHBACK = 'CashBack';
 }
