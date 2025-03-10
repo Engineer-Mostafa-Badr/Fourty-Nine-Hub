@@ -16,7 +16,9 @@ import 'package:fourtyninehub/features/account_taps/share_app/presentation/pages
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet_history_entity.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Balance_Cubit/balance_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_two_cubit/wallet_two_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/balance_wallet_view.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/cashback_view.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/gift_wallet_view.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/cubit/ad_details_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/pages/ad_details_view.dart';
@@ -165,7 +167,10 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/updat
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/update_driver_shipping_screen.dart';
 import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
 import 'package:fourtyninehub/features/search/presentation/pages/search_view.dart';
+import 'package:fourtyninehub/features/settings/presentation/pages/change_password_second_view.dart';
+import 'package:fourtyninehub/features/settings/presentation/pages/change_password_view.dart';
 import 'package:fourtyninehub/features/settings/presentation/pages/settings_view.dart';
+import 'package:fourtyninehub/features/settings/presentation/pages/verification_view.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/get_requests_for_loading_model/get_requests_for_loading_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/driverStatistics_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/get_all_trip_cubit.dart';
@@ -892,8 +897,9 @@ class AppPages {
               GoRoute(
                   path: Paths.WALLET,
                   name: Routes.WALLET,
-                  builder: (context, state) => BlocProvider<WalletCubit>(
-                        create: (_) => serviceLocator(),
+                  builder: (context, state) => BlocProvider<WalletTwoCubit>(
+                        create: (_) => serviceLocator<WalletTwoCubit>()
+                          ..getAllDataWalletScreen(),
                         child: const WalletView(
                             // type: state.extra as WalletTypes,
                             ),
@@ -914,6 +920,14 @@ class AppPages {
                       builder: (context, state) => const TransferMoneyView(),
                     ),
                   ]),
+
+              // CashBack
+              GoRoute(
+                path: Paths.CASHBACK,
+                name: Routes.CASHBACK,
+                builder: (context, state) => const CashbackView(),
+              ),
+
               GoRoute(
                 path: Paths.BALANCE,
                 name: Routes.BALANCE,
@@ -929,6 +943,25 @@ class AppPages {
                   create: (_) => serviceLocator(),
                   child: const GiftWalletView(),
                 ),
+              ),
+
+              // Change Password
+              GoRoute(
+                path: Paths.CHANGEPASSWORD,
+                name: Routes.CHANGEPASSWORD,
+                builder: (context, state) => const ChangePasswordView(),
+              ),
+
+              GoRoute(
+                path: Paths.CHANGEPASSWORDSECOND,
+                name: Routes.CHANGEPASSWORDSECOND,
+                builder: (context, state) => const ChangePasswordSecondView(),
+              ),
+
+              GoRoute(
+                path: Paths.VERIFICATION,
+                name: Routes.VERIFICATION,
+                builder: (context, state) => const VerificationView(),
               ),
 
               GoRoute(
@@ -2722,7 +2755,7 @@ class AppPages {
                     BlocProvider<DestGetLatAndLongCubit>(
                       create: (context) => DestGetLatAndLongCubit(
                           getLatLongFromAddressRemoteDataSource:
-                          serviceLocator()),
+                              serviceLocator()),
                     ),
                   ], child: const TruckWelcomeRideRegister());
                 },

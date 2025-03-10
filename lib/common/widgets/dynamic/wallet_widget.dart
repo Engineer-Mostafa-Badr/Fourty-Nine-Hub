@@ -87,7 +87,8 @@ class _WalletWidgetState extends State<WalletWidget> {
                       buildItem(() {
                         AdInterstitialTop.loadIntersitialAd();
                         AdInterstitialTop.showInterstitialAd();
-                        context.push(Routes.BALANCE);
+                        // context.push(Routes.BALANCE);
+                        context.push(Routes.CASHBACK);
                       },
                           LocaleKeys.balance.tr(),
                           '${FormatNumbers().formatNumber(state.wallet?.balance ?? 0)} ',

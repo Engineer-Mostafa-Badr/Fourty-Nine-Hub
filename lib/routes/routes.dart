@@ -215,7 +215,8 @@ abstract class Routes {
   static const moreInfoScreen = '/MoreInfoScreen';
   static const truckWelcomeRideRegister = '/TruckWelcomeRideRegister';
 
-  static const truckPersonalInformationScreen = '/TruckPersonalInformationScreen';
+  static const truckPersonalInformationScreen =
+      '/TruckPersonalInformationScreen';
   static const truckDriversLicenseScreen = '/TruckDriversLicenseScreen';
   static const truckPersonalDocumentsScreen = '/TruckPersonalDocumentsScreen';
   static const truckVehicleInformationScreen = '/TruckVehicleInformationScreen';
@@ -232,6 +233,14 @@ abstract class Routes {
   static const rideModeScreen = '/RideModeScreen';
   static const rideDashboardDetailsScreen = '/RideDashboardDetailsScreen';
   static const rideLoadingRequestScreen = '/rideLoadingRequestScreen';
+
+  // Change Password
+  static const CHANGEPASSWORD = '/ChangePassword';
+  static const CHANGEPASSWORDSECOND = '/ChangePasswordSecond';
+  static const VERIFICATION = '/Verification';
+
+  // Cashback
+  static const CASHBACK = '/Cashback';
 }
 
 abstract class Paths {
@@ -436,7 +445,8 @@ abstract class Paths {
   static const vehicleInformationScreen = 'VehicleInformationScreen';
   static const moreInfoScreen = 'MoreInfoScreen';
   static const truckWelcomeRideRegister = 'TruckWelcomeRideRegister';
-  static const truckPersonalInformationScreen = 'TruckPersonalInformationScreen';
+  static const truckPersonalInformationScreen =
+      'TruckPersonalInformationScreen';
   static const truckDriversLicenseScreen = 'TruckDriversLicenseScreen';
   static const truckPersonalDocumentsScreen = 'TruckPersonalDocumentsScreen';
   static const truckVehicleInformationScreen = 'TruckVehicleInformationScreen';
@@ -453,4 +463,12 @@ abstract class Paths {
   static const rideModeScreen = 'RideModeScreen';
   static const rideDashboardDetailsScreen = 'RideDashboardDetailsScreen';
   static const rideLoadingRequestScreen = 'rideLoadingRequestScreen';
+
+  // Change Password
+  static const CHANGEPASSWORD = 'ChangePassword';
+  static const CHANGEPASSWORDSECOND = 'ChangePasswordSecond';
+  static const VERIFICATION = 'Verification';
+
+  // Cashback
+  static const CASHBACK = 'CashBack';
 }
