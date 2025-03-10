@@ -40,16 +40,16 @@ class CallCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Theme.of(context).scaffoldBackgroundColor,
+        color: Theme.of(context).colorScheme.background,
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(20),
           topRight: Radius.circular(20),
         ),
         boxShadow: const [
-          // BoxShadow(
-          //   color: Colors.black26,
-          //   blurRadius: 10,
-          // )
+          BoxShadow(
+            color: Colors.black26,
+            blurRadius: 10,
+          )
         ],
       ),
       child: Column(
@@ -78,7 +78,6 @@ class CallCard extends StatelessWidget {
                   )
                 ],),
               ),
-              SizedBox(width: 6,),
               const Expanded(
                 child: Text(
                   "Connecting  Mohamed",

@@ -141,7 +141,7 @@ class _RideFindingCardState extends State<RideFindingCard> {
           const SizedBox(height: 16),
           GestureDetector(
             onTap: (){
-              context.push(Routes.supportRideScreen);
+              // context.push(Routes.supportRideScreen);
             },
             child: Container(
               width: double.infinity,

@@ -4,7 +4,6 @@ import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.d
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/support_widget/custom_support_text_form_field.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -74,7 +73,7 @@ class RatingCard extends StatelessWidget {
   final Function(String) onTagSelected;
   final TextEditingController messageController;
 
-   RatingCard({
+  const RatingCard({
     super.key,
     required this.tags,
     required this.rating,
@@ -83,7 +82,6 @@ class RatingCard extends StatelessWidget {
     required this.messageController,
   });
 
-  TextEditingController problemController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -101,108 +99,108 @@ class RatingCard extends StatelessWidget {
           )
         ],
       ),
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(children: [
-              const  SizedBox(width: 25,),
-              const  Spacer(),
-              Text(
-                LocaleKeys.rateTheDriver.localize,
-                style: const TextStyle(fontSize: FontSize.s20, fontWeight: FontWeight.bold),
-              ),
-             const Spacer(),
-              Container(
-                height: 25,
-                width: 25,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.grey.shade200,
-                ),
-                child: const Icon(Icons.close,color: Colors.black,),
-              ),
-            ],),
-            const SizedBox(height: 8,),
-             Text(
-        getRatingText(rating),
-              style:const TextStyle(fontSize: FontSize.s20, fontWeight: FontWeight.bold),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(children: [
+            const  SizedBox(width: 25,),
+            const  Spacer(),
+            Text(
+              LocaleKeys.rateTheDriver.localize,
+              style: const TextStyle(fontSize: FontSize.s20, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 8),
-            RatingBar.builder(
-              initialRating: rating,
-              minRating: 1,
-              direction: Axis.horizontal,
-              allowHalfRating: true,
-              itemCount: 5,
-              itemSize: 26,
-              itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-              itemBuilder: (context, _) => const Icon(
-                Icons.star,
-                color: Colors.amber,
+           const Spacer(),
+            Container(
+              height: 25,
+              width: 25,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.grey.shade200,
               ),
-              onRatingUpdate: onRatingChanged,
+              child: const Icon(Icons.close,color: Colors.black,),
             ),
-            const SizedBox(height: 12),
-            Wrap(
-              spacing: 8,
-              children: tags.map((tag) =>  GestureDetector(
-                  onTap: () => onTagSelected(tag),
-                  child: Container(
-                    width: MediaQuery.sizeOf(context).width*.41,
-                    height: 40,
-                    margin: const EdgeInsets.all(4),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: context.isDarkMode?Colors.black.withOpacity(.6):Colors.grey[200],
-                      borderRadius: BorderRadius.circular(12)
-                    ),
-                    child:Text(tag),
-
-                ),
-              )).toList(),
+          ],),
+          const SizedBox(height: 8,),
+           Text(
+      getRatingText(rating),
+            style:const TextStyle(fontSize: FontSize.s20, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 8),
+          RatingBar.builder(
+            initialRating: rating,
+            minRating: 1,
+            direction: Axis.horizontal,
+            allowHalfRating: true,
+            itemCount: 5,
+            itemSize: 26,
+            itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+            itemBuilder: (context, _) => const Icon(
+              Icons.star,
+              color: Colors.amber,
             ),
-            const SizedBox(height: 12),
-            GestureDetector(
-              onTap: () {
-              },
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color:  context.isDarkMode ? Colors.grey.shade900 : Colors.grey.shade100,
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-
-                    Expanded(child: CustomSupportTextField(hintText: LocaleKeys.writeThankYouMessage.localize, controller: problemController)),
-
-                    const Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 12),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.PRIMARY_COLOR,
-                  foregroundColor: Colors.white,
-                  padding:const EdgeInsets.symmetric(vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+            onRatingUpdate: onRatingChanged,
+          ),
+          const SizedBox(height: 12),
+          Wrap(
+            spacing: 8,
+            children: tags.map((tag) =>  GestureDetector(
+                onTap: () => onTagSelected(tag),
+                child: Container(
+                  width: MediaQuery.sizeOf(context).width*.41,
+                  height: 40,
+                  margin: const EdgeInsets.all(4),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: context.isDarkMode?Colors.black.withOpacity(.6):Colors.grey[200],
+                    borderRadius: BorderRadius.circular(12)
                   ),
-                ),
-                onPressed: () {
-                  context.push(Routes.connectionCallScreen);
-                },
-                child: Text(LocaleKeys.send.localize),
+                  child:Text(tag),
+
+              ),
+            )).toList(),
+          ),
+          const SizedBox(height: 12),
+          GestureDetector(
+            onTap: () {
+            },
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                   Text(
+                    LocaleKeys.writeThankYouMessage.localize,
+                    style:const TextStyle(color: Colors.grey),
+                  ),
+                  const Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.PRIMARY_COLOR,
+                foregroundColor: Colors.white,
+                padding:const EdgeInsets.symmetric(vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              onPressed: () {
+                context.push(Routes.connectionCallScreen);
+              },
+              child: Text(LocaleKeys.send.localize),
+            ),
+          ),
+        ],
       ),
     );
   }

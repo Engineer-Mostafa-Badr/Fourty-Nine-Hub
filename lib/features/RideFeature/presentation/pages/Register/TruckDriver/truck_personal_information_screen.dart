@@ -28,56 +28,61 @@ class TruckPersonalInformationScreen extends StatelessWidget {
     TextEditingController phoneNumberController = TextEditingController();
     return CustomScaffold(
       appBar: const HomeAppbar(),
-      floatingActionButton: registerFloatingActionButton(
-        context,
-        index: 1,
-        onTap: () => context.push(Routes.truckDriversLicenseScreen),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 32,left: 16,right: 16,),
-          child: Column(
-            spacing: 4,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              closeWidget(context),
-              Label(
-                text: LocaleKeys.personalInformation.localize,
-                style: Styles.headerText(
-                    fontWeight: FontWeight.w500,
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 32,left: 16,right: 16,),
+                child: Column(
+                  spacing: 4,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    closeWidget(context),
+                    Label(
+                      text: LocaleKeys.personalInformation.localize,
+                      style: Styles.headerText(
+                          fontWeight: FontWeight.w500,
+                          ),
                     ),
+                    const Sizer(),
+                    DefaultTextFormField(
+                      currentController: firstNameController,
+                      fillColor: AppColors.GREYBG,
+                      borderColor: Colors.transparent,
+                      hint: LocaleKeys.firstName.localize,
+                    ),
+                    const Sizer(),
+                    DefaultTextFormField(
+                      currentController: surNameController,
+                      fillColor: AppColors.GREYBG,
+                      borderColor: Colors.transparent,
+                      hint: LocaleKeys.surname.localize,
+                    ),
+                    const Sizer(),
+                    DefaultTextFormField(
+                      currentController: dateOfBirthDayController,
+                      fillColor: AppColors.GREYBG,
+                      borderColor: Colors.transparent,
+                      hint: LocaleKeys.user_info_date_of_birth.localize,
+                    ),
+                    const Sizer(),
+                    DefaultTextFormField(
+                      currentController: phoneNumberController,
+                      fillColor: AppColors.GREYBG,
+                      borderColor: Colors.transparent,
+                      hint: LocaleKeys.phoneNumber.localize,
+                    ),
+                  ],
+                ),
               ),
-              const Sizer(),
-              DefaultTextFormField(
-                currentController: firstNameController,
-                fillColor: AppColors.GREYBG,
-                borderColor: Colors.transparent,
-                hint: LocaleKeys.firstName.localize,
-              ),
-              const Sizer(),
-              DefaultTextFormField(
-                currentController: surNameController,
-                fillColor: AppColors.GREYBG,
-                borderColor: Colors.transparent,
-                hint: LocaleKeys.surname.localize,
-              ),
-              const Sizer(),
-              DefaultTextFormField(
-                currentController: dateOfBirthDayController,
-                fillColor: AppColors.GREYBG,
-                borderColor: Colors.transparent,
-                hint: LocaleKeys.user_info_date_of_birth.localize,
-              ),
-              const Sizer(),
-              DefaultTextFormField(
-                currentController: phoneNumberController,
-                fillColor: AppColors.GREYBG,
-                borderColor: Colors.transparent,
-                hint: LocaleKeys.phoneNumber.localize,
-              ),
-            ],
+            ),
           ),
-        ),
+          RegisterNextRow(
+            index: 1,
+            onTap: () => context.push(Routes.truckDriversLicenseScreen),
+          ),
+        ],
       ),
     );
   }

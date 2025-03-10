@@ -117,11 +117,7 @@ class _BottomCardRequestState extends State<BottomCardRequest> {
                     });
                   },
                   activeColor: AppColors.PRIMARY_COLOR,
-                  activeTrackColor: AppColors.LightWHATS_APP_COLOR,
-                  inactiveThumbColor: AppColors.PRIMARY_COLOR,
-                  inactiveTrackColor: AppColors.LIGHT_GRAY_COLOR,
-                  // activeColor: AppColors.PRIMARY_COLOR,
-                  // activeTrackColor: switchActiveTrack,
+                  activeTrackColor: switchActiveTrack,
                 ),
               ],
             ),

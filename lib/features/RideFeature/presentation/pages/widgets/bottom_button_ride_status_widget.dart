@@ -143,7 +143,7 @@ class BottomRideStatusWidget extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Image.asset(Assets.emergencyIcon,color: Colors.red,height: 30,),
+                Image.asset(Assets.emergencyIcon,color: Colors.red,),
                 const SizedBox(width: 8),
                 Text(
                   LocaleKeys.call_emergency.localize,

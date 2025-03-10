@@ -30,8 +30,8 @@ class RideStatusScreen extends StatelessWidget {
       // خريطة في الخلفية مثلاً
       body: SafeArea(
         child: SharedScaffold(
-            mainCategoryId: 2,
-            body:
+          mainCategoryId: 2,
+          body:
           Stack(
             children: [
               const MapSection(),
@@ -131,9 +131,9 @@ class ActionButtonsWidget extends StatelessWidget {
     required this.driverRating,
     required this.driverName,
     required this.onContactDriver,
-     this.is_show_message= false,
+    this.is_show_message= false,
     required this.onSafety,
-     this.onMessage =null,
+    this.onMessage =null,
   });
 
   @override

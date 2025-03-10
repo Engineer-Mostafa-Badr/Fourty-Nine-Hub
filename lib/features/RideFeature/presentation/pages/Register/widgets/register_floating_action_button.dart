@@ -7,21 +7,21 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
-Widget registerFloatingActionButton(
-  context, {
-  int? index,
-  void Function()? onTap,
-}) {
-  return Column(
-    mainAxisAlignment: MainAxisAlignment.end,
-    children: [
-      Row(
+class RegisterNextRow extends StatelessWidget {
+  const RegisterNextRow({super.key, this.index, this.onTap});
+
+  final int? index;
+
+  final void Function()? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 32,top: 8.0,right: 12,left: 12,),
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          const Sizer(),
-          const Sizer(),
-          const Sizer(),
           if (index != null)
             Expanded(
               child: Column(
@@ -38,7 +38,7 @@ Widget registerFloatingActionButton(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Expanded(
-                        flex: index,
+                        flex: index!,
                         child: Container(
                           height: 4,
                           width: 100,
@@ -46,7 +46,7 @@ Widget registerFloatingActionButton(
                         ),
                       ),
                       Expanded(
-                        flex: 5 - index,
+                        flex: 5 - index!,
                         child: Container(
                           height: 2,
                           color: AppColors.GREY_BORDER_COLOR,
@@ -88,7 +88,9 @@ Widget registerFloatingActionButton(
                   child: Row(
                     children: [
                       Label(
-                        text:index==5? LocaleKeys.submit.localize:LocaleKeys.next.localize,
+                        text: index == 5
+                            ? LocaleKeys.submit.localize
+                            : LocaleKeys.next.localize,
                         style: Styles.headerText(
                           fontWeight: FontWeight.w400,
                           color: AppColors.AUTH_CONTAINER_COLOR,
@@ -107,9 +109,12 @@ Widget registerFloatingActionButton(
           ),
         ],
       ),
-      const Sizer(),
-      const Sizer(),
-      const Sizer(),
-    ],
-  );
+    );
+  }
 }
+
+// Widget registerFloatingActionButton(
+//   context, {
+//   int? index,
+//   void Function()? onTap,
+// }) {}

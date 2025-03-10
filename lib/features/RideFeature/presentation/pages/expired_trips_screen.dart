@@ -1,109 +1,129 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:intl/intl.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/car_circle_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/info_column_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/rate_car_widget.dart';
-
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../res/assets/assets.dart';
 
-// ignore: must_be_immutable
-class ExpiredTripsScreen extends StatelessWidget {
-  ExpiredTripsScreen({super.key});
+class ExpiredTripsScreenParams {
+  final RideCubit rideCubit;
+  ExpiredTripsScreenParams({required this.rideCubit});
+}
 
-  List<String> images = [
-    Assets.redCar,
-    Assets.blackCar,
-    Assets.redCar,
-    Assets.blackCar,
-    Assets.redCar,
-    Assets.blackCar,
-    Assets.redCar,
-    Assets.blackCar,
-  ];
-  List<String> titles = [
-    "Women",
-    "Captain",
-    "Women",
-    "Captain",
-    "Women",
-    "Captain",
-    "Women",
-    "Captain",
-  ];
-  List<String> columnTitle = [
-    "142 Street 53",
-    "142 Street 53",
-    "142 Street 53",
-    "142 Street 53",
-    "142 Street 53",
-    "142 Street 53",
-    "142 Street 53",
-    "142 Street 53",
-  ];
-  List<String> columnDate = [
-    "Feb 13 - 12:41 PM",
-    "Feb 13 - 12:41 PM",
-    "Feb 13 - 12:41 PM",
-    "Feb 13 - 12:41 PM",
-    "Feb 13 - 12:41 PM",
-    "Feb 13 - 12:41 PM",
-    "Feb 13 - 12:41 PM",
-    "Feb 13 - 12:41 PM",
-  ];
-  List<String> columnPrice = [
-    "150 EGP",
-    "150 EGP",
-    "150 EGP",
-    "150 EGP",
-    "150 EGP",
-    "150 EGP",
-    "150 EGP",
-    "150 EGP",
-  ];
+class ExpiredTripsScreen extends StatefulWidget {
+  final ExpiredTripsScreenParams params;
+  const ExpiredTripsScreen({super.key, required this.params});
+
+  @override
+  _ExpiredTripsScreenState createState() => _ExpiredTripsScreenState();
+}
+
+class _ExpiredTripsScreenState extends State<ExpiredTripsScreen> {
+  late ScrollController _scrollController;
+  int page = 1;
+  final int limit = 10;
+  bool isFetching = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController()..addListener(_onScroll);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      widget.params.rideCubit.fetchAllCompletedTrips(limit: limit, page: page);
+    });
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.extentAfter < 100 && !isFetching) {
+      _fetchMoreTrips();
+    }
+  }
+
+  void _fetchMoreTrips() {
+    if (isFetching) return;
+    setState(() => isFetching = true);
+    widget.params.rideCubit.fetchAllCompletedTrips(limit: limit, page: ++page).then((_) {
+      if (mounted) setState(() => isFetching = false);
+    }).catchError((_) {
+      if (mounted) setState(() => isFetching = false);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
-      appBar: AppBar(
-        titleSpacing: 0,
-        centerTitle: false,
-        title: Transform(
-          transform: Matrix4.translationValues(-10.0, 0.0, 0.0),
-          child:  Text(
-            LocaleKeys.expiredTrips.localize,
-            style: const TextStyle(
-                // color: AppColors.black,
-                fontWeight: FontWeight.w600,
-                fontSize: 24),
-          ),
-        ),
-      ),
-      body: ListView.builder(
-          itemCount: images.length,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.all(16),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CarContainer(title: titles[index], image: images[index]),
-                  const SizedBox(
-                    width: 16,
-                  ),
-                  PriceColumn(title: columnTitle[index], date: columnDate[index],price: columnPrice[index]),
-                  const Spacer(),
-                  RateCar(image: images[index], rate: '3.5'),
-                ],
+    return BlocProvider.value(
+      value: widget.params.rideCubit,
+      child: Builder(
+        builder: (context) {
+          return CustomScaffold(
+            appBar: AppBar(
+              titleSpacing: 0,
+              centerTitle: false,
+              title: Transform(
+                transform: Matrix4.translationValues(-10.0, 0.0, 0.0),
+                child: Text(
+                  LocaleKeys.expiredTrips.localize,
+                  style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 24),
+                ),
               ),
-            );
-          }),
+            ),
+            body: BlocBuilder<RideCubit, RideState>(
+              builder: (context, state) {
+                if (state.status == RideStates.loading && page == 1) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state.status == RideStates.error) {
+                  return Center(child: Text(state.failure.toString()));
+                } else if (state.status == RideStates.success) {
+                  return ListView.builder(
+                    controller: _scrollController,
+                    itemCount: (state.completedTrips?.length ?? 0) + (isFetching ? 1 : 0),
+                    itemBuilder: (context, index) {
+                      if (index == state.completedTrips?.length) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                      final trip = state.completedTrips?[index];
+                      if (trip == null) return const SizedBox.shrink();
+                      return Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CarContainer(title: context.isArabic ? trip.categoryNameAr : trip.categoryNameEn, image: trip.categoryPicture),
+                            const SizedBox(width: 16),
+                            PriceColumn(
+                              title: trip.address,
+                              date: context.isArabic
+                                  ? DateFormat('d MMM - hh:mm a', 'ar').format(trip.createdAt)
+                                  : DateFormat('MMM d - hh:mm a', 'en').format(trip.createdAt),
+                              price: '${NumberFormat('#,##0', context.isArabic ? 'ar' : 'en').format(trip.price)} ${context.isArabic ? trip.currencyAr : trip.currencyEn}',
+                            ),
+                            const Spacer(),
+                            RateCar(image: (trip.carPicture.isNotEmpty) ? trip.carPicture : trip.categoryPicture, rate: trip.rating.toString()),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                }
+                return const Center(child: Text("No expired trips available"));
+              },
+            ),
+          );
+        },
+      ),
     );
   }
 
-
-
-
-
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 }
