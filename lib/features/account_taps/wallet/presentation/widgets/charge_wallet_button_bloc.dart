@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/charge_wallet_cubit/charge_wallet_cubit.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_button_wallet_and_gift_and_cashback.dart';
 import '../../../../subscripe/presentation/widgets/amounts.dart';
 
 class ChargeWalletButtonBloc extends StatelessWidget {
@@ -39,16 +37,24 @@ class ChargeWalletButtonBloc extends StatelessWidget {
             child: CircularProgressIndicator(),
           );
         } else {
-          return AppButton(
-            label: LocaleKeys.chargeWallet.localize,
-            backColor: Colors.green,
-            color: AppColors.AUTH_CONTAINER_COLOR,
-            onPressed: () async {
-              context.read<ChargeWalletCubit>().showActiveSubscriptionAmounts(
-                    walletType: WalletTypes.mainWallet,
-                  );
-            },
-          );
+          return CustomButtonWalletAndGiftAndCashback(
+              title: LocaleKeys.chargeWallet.localize,
+              color: Colors.green,
+              onpressed: () async {
+                context.read<ChargeWalletCubit>().showActiveSubscriptionAmounts(
+                      walletType: WalletTypes.mainWallet,
+                    );
+              });
+          // return AppButton(
+          //   label: LocaleKeys.chargeWallet.localize,
+          //   backColor: Colors.green,
+          //   color: AppColors.AUTH_CONTAINER_COLOR,
+          //   onPressed: () async {
+          //     context.read<ChargeWalletCubit>().showActiveSubscriptionAmounts(
+          //           walletType: WalletTypes.mainWallet,
+          //         );
+          //   },
+          // );
         }
       },
     );
