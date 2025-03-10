@@ -37,42 +37,37 @@ class TruckMoreInfoScreen extends StatelessWidget {
     ];
     return CustomScaffold(
       appBar: const HomeAppbar(),
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 32,left: 16,right: 16,),
-                child: Column(
-                  spacing: 4,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    closeWidget(context),
-                    Label(
-                      text: LocaleKeys.moreInfo.localize,
-                      style: Styles.headerText(
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const Sizer(),
-                    RegisterExpansionTile(
-                      title: Label(text: LocaleKeys.favoriteCity.localize),
-                      onChange: (Widget selectedItem) {
-                        // print("Selected Item: ${(selectedItem as Label).text}");
-                      }, length: favoriteCity.length,
-                      children: List.generate(favoriteCity.length,
-                          (index) => Label(text: favoriteCity[index])),
-                    ),
-                  ],
+      floatingActionButton: registerFloatingActionButton(
+        context,
+        index: 5,
+        onTap: () => context.push(Routes.completeRegisterScreen),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 32,left: 16,right: 16,),
+          child: Column(
+            spacing: 4,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              closeWidget(context),
+              Label(
+                text: LocaleKeys.moreInfo.localize,
+                style: Styles.headerText(
+                  fontWeight: FontWeight.w500,
                 ),
               ),
-            ),
+              const Sizer(),
+              RegisterExpansionTile(
+                title: Label(text: LocaleKeys.favoriteCity.localize),
+                children: List.generate(favoriteCity.length,
+                    (index) => Label(text: favoriteCity[index])),
+                onChange: (Widget selectedItem) {
+                  // print("Selected Item: ${(selectedItem as Label).text}");
+                },
+              ),
+            ],
           ),
-          RegisterNextRow(
-            index: 5,
-            onTap: () => context.push(Routes.completeRegisterScreen),
-          ),
-        ],
+        ),
       ),
     );
   }

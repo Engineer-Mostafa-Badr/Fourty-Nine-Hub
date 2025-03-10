@@ -1,5 +1,5 @@
 class RideColorEntity{
-  final String id;
+  final int id;
   final String nameEn;
   final String nameAr;
   final String code;

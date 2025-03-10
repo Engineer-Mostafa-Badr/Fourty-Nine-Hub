@@ -21,110 +21,104 @@ class TruckWelcomeRideRegister extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomScaffold(
       appBar: const HomeAppbar(),
-      body: Column(
-        children: [
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(
-                bottom: 32,
-                left: 16,
-                right: 16,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Label(
-                    text: LocaleKeys.welcomeToRideRegister.localize,
-                    style: Styles.headerText(
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.SECONDARY_COLOR),
-                  ),
-                  const Sizer(),
-                  const Sizer(),
-                  Expanded(
-                    child: GridView.count(
-                      crossAxisCount: 3,
-                      childAspectRatio: 1.3,
-                      mainAxisSpacing: 16,
-                      crossAxisSpacing: 16,
-                      children: List.generate(
-                        14,
-                        (index) => InkWell(
-                          onTap: () {
-                            bottomSheet(
-                              context: context,
-                              widget: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Container(
-                                        decoration: const BoxDecoration(
-                                          shape: BoxShape.circle,
-                                        ),
-                                        width: 50,
-                                        height: 50,
-                                        clipBehavior: Clip.antiAliasWithSaveLayer,
-                                        child: Image.asset(
-                                          Assets.maleImagePlaceholder,
-                                        ),
-                                      ),
-                                      Container(
-                                        decoration: const BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: AppColors.PRIMARY_COLOR,
-                                        ),
-                                        width: 50,
-                                        height: 50,
-                                        padding: EdgeInsets.all(12),
-                                        clipBehavior: Clip.antiAliasWithSaveLayer,
-                                        child: Image.asset(
-                                          Assets.phone,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                color: index == 0
-                                    ? AppColors.GREYBG
-                                    : Colors.transparent),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
+      floatingActionButton: registerFloatingActionButton(
+        context,
+        onTap: () {
+            context.push(Routes.truckPersonalInformationScreen);
+        },
+      ),
+      body: Padding(
+        padding: const EdgeInsets.only(bottom: 32,left: 16,right: 16,),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Label(
+              text: LocaleKeys.welcomeToRideRegister.localize,
+              style: Styles.headerText(
+                  fontWeight: FontWeight.w500,
+                  color: AppColors.SECONDARY_COLOR),
+            ),
+            const Sizer(),
+            const Sizer(),
+            Expanded(
+              child: GridView.count(
+                crossAxisCount: 3,
+                childAspectRatio: 1.3,
+                mainAxisSpacing: 16,
+                crossAxisSpacing: 16,
+                children: List.generate(
+                  14,
+                  (index) => InkWell(
+                    onTap: () {
+                      bottomSheet(
+                        context: context,
+                        widget: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Row(
+
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
                               children: [
-                                Image.asset(
-                                  Assets.rideIcon,
+                                Container(
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                  ),
                                   width: 50,
+                                  height: 50,
+                                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                                  child: Image.asset(
+                                    Assets.maleImagePlaceholder,
+                                  ),
                                 ),
-                                const Sizer(),
-                                Label(
-                                  text: 'Captain',
-                                  style: Styles.mediumText(
-                                    fontWeight: FontWeight.w400,
+                                Container(
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: AppColors.PRIMARY_COLOR,
+                                  ),
+                                  width: 50,
+                                  height: 50,
+                                  padding: EdgeInsets.all(12),
+                                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                                  child: Image.asset(
+                                    Assets.phone,
                                   ),
                                 ),
                               ],
                             ),
-                          ),
+                          ],
                         ),
+                      );
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: index == 0
+                              ? AppColors.GREYBG
+                              : Colors.transparent),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            Assets.rideIcon,
+                            width: 50,
+                          ),
+                          const Sizer(),
+                          Label(
+                            text: 'Captain',
+                            style: Styles.mediumText(
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                ],
+                ),
               ),
             ),
-          ),
-          RegisterNextRow(
-            onTap: () => context.push(Routes.truckPersonalInformationScreen),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

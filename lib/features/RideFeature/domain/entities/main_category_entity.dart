@@ -5,7 +5,7 @@ class MainCategoryEntityUpdated {
   final String banner;
   final String cover;
   final bool isFavorite;
-  final String? registeredSubcategory;
+  final bool? registeredSubcategory;
   final bool isDriver;
   final bool? isSocketCategory;
   final bool isDriverApproved;

@@ -29,65 +29,60 @@ class TruckPersonalDocumentsScreen extends StatelessWidget {
     TextEditingController expirationDateController = TextEditingController();
     return CustomScaffold(
       appBar: const HomeAppbar(),
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 32,left: 16,right: 16,),
-                child: Column(
-                  spacing: 4,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    closeWidget(context),
-                    Label(
-                      text: LocaleKeys.personalDocuments.localize,
-                      style: Styles.headerText(
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const Sizer(),
-                    SizedBox(
-                      height: MediaQuery.sizeOf(context).width*.35,
-                      child: GridView.count(
-                        physics: const NeverScrollableScrollPhysics(),
-                        padding: EdgeInsets.zero,
-                        crossAxisCount: 3,
-                        childAspectRatio: .75,
-                        mainAxisSpacing: 16,
-                        crossAxisSpacing: 16,
-                        children: List.generate(
-                          uploadFilesTitles.length,
-                          (index) => UploadFileWidget(
-                            title: uploadFilesTitles[index],
-                          ),
-                        ),
-                      ),
-                    ),
-                    const Sizer(),
-                    DefaultTextFormField(
-                      currentController: idNumberController,
-                      fillColor: AppColors.GREYBG,
-                      borderColor: Colors.transparent,
-                      hint: LocaleKeys.licenseNumber.localize,
-                    ),
-                    const Sizer(),
-                    DefaultTextFormField(
-                      currentController: expirationDateController,
-                      fillColor: AppColors.GREYBG,
-                      borderColor: Colors.transparent,
-                      hint: LocaleKeys.expireDate.localize,
-                    ),
-                  ],
+      floatingActionButton: registerFloatingActionButton(
+        context,
+        index: 3,
+        onTap: () => context.push(Routes.truckVehicleInformationScreen),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 32,left: 16,right: 16,),
+          child: Column(
+            spacing: 4,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              closeWidget(context),
+              Label(
+                text: LocaleKeys.personalDocuments.localize,
+                style: Styles.headerText(
+                  fontWeight: FontWeight.w500,
                 ),
               ),
-            ),
+              const Sizer(),
+              SizedBox(
+                height: MediaQuery.sizeOf(context).width*.35,
+                child: GridView.count(
+                  physics: const NeverScrollableScrollPhysics(),
+                  padding: EdgeInsets.zero,
+                  crossAxisCount: 3,
+                  childAspectRatio: .75,
+                  mainAxisSpacing: 16,
+                  crossAxisSpacing: 16,
+                  children: List.generate(
+                    uploadFilesTitles.length,
+                    (index) => UploadFileWidget(
+                      title: uploadFilesTitles[index],
+                    ),
+                  ),
+                ),
+              ),
+              const Sizer(),
+              DefaultTextFormField(
+                currentController: idNumberController,
+                fillColor: AppColors.GREYBG,
+                borderColor: Colors.transparent,
+                hint: LocaleKeys.licenseNumber.localize,
+              ),
+              const Sizer(),
+              DefaultTextFormField(
+                currentController: expirationDateController,
+                fillColor: AppColors.GREYBG,
+                borderColor: Colors.transparent,
+                hint: LocaleKeys.expireDate.localize,
+              ),
+            ],
           ),
-          RegisterNextRow(
-            index: 3,
-            onTap: () => context.push(Routes.truckVehicleInformationScreen),
-          ),
-        ],
+        ),
       ),
     );
   }

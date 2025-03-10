@@ -6,10 +6,10 @@ class RideColorModel extends RideColorEntity{
   //from json
   factory RideColorModel.fromJson(Map<String, dynamic> json) {
     return RideColorModel(
-      id: json['_id']??'',
-      nameEn: json['name_english']??'',
-      nameAr: json['name_arabic']??'',
-      code: json['code']??'',
+      id: json['_id'],
+      nameEn: json['name_english'],
+      nameAr: json['name_arabic'],
+      code: json['code'],
     );
   }
 }

@@ -2,20 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class RegisterExpansionTile extends StatefulWidget {
-  const RegisterExpansionTile({
-    super.key,
-    required this.title,
-    required this.children,
-    required this.length,
-    this.onChange,
-    this.onSelect,
-  });
+  RegisterExpansionTile(
+      {super.key, required this.title, required this.children, this.onChange});
 
-  final Widget title;
+  late Widget title;
   final List<Widget> children;
-  final int length;
   final ValueChanged<Widget>? onChange;
-  final Function(int id)? onSelect;
 
   @override
   State<RegisterExpansionTile> createState() => _RegisterExpansionTileState();
@@ -23,13 +15,6 @@ class RegisterExpansionTile extends StatefulWidget {
 
 class _RegisterExpansionTileState extends State<RegisterExpansionTile> {
   var controller = ExpansionTileController();
-  late Widget selectedTitle;
-
-  @override
-  void initState() {
-    super.initState();
-    selectedTitle = widget.title;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,12 +25,11 @@ class _RegisterExpansionTileState extends State<RegisterExpansionTile> {
       ),
       child: ExpansionTile(
         controller: controller,
-        title: selectedTitle, // Use state variable
+        title: widget.title,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         backgroundColor: AppColors.GREYBG,
         expandedAlignment: Alignment.centerLeft,
         expandedCrossAxisAlignment: CrossAxisAlignment.start,
-        dense: true,
         children: [
           Container(
             color: Theme.of(context).scaffoldBackgroundColor,
@@ -53,25 +37,23 @@ class _RegisterExpansionTileState extends State<RegisterExpansionTile> {
             height: 10,
           ),
           Container(
-            constraints: BoxConstraints(maxHeight: 250),
+            constraints: const BoxConstraints(
+              maxHeight: 300,
+              minHeight: 40
+            ),
             child: ListView(
               padding: const EdgeInsets.all(16.0),
               children: List.generate(
                 widget.children.length,
                     (index) => InkWell(
                   onTap: () {
-                    if (widget.children.isNotEmpty) {
-                      setState(() {
-                        selectedTitle = widget.children[index]; // Update state
-                        controller.collapse();
-                      });
+                    setState(() {
+                      widget.title = widget.children[index];
+                      controller.collapse();
+                    });
 
-                      if (widget.onChange != null) {
-                        widget.onChange!(widget.children[index]); // Notify parent
-                        if(widget.onSelect !=null){
-                          widget.onSelect!(index);
-                        }
-                      }
+                    if (widget.onChange != null) {
+                      widget.onChange!(widget.children[index]); // Notify parent
                     }
                   },
                   child: Container(
@@ -82,8 +64,36 @@ class _RegisterExpansionTileState extends State<RegisterExpansionTile> {
                   ),
                 ),
               ),
+
             ),
-          ),
+          )
+          // Padding(
+          //   padding: const EdgeInsets.all(16.0),
+          //   child: Column(
+          //     spacing: 8,
+          //     crossAxisAlignment: CrossAxisAlignment.start,
+          //     children: List.generate(
+          //       widget.children.length,
+          //       (index) => InkWell(
+          //         onTap: () {
+          //           setState(() {
+          //             widget.title = widget.children[index];
+          //             controller.collapse();
+          //           });
+          //
+          //           if (widget.onChange != null) {
+          //             widget.onChange!(widget.children[index]); // Notify parent
+          //           }
+          //         },
+          //         child: SizedBox(
+          //           width: double.infinity,
+          //           height: 30,
+          //           child: widget.children[index],
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

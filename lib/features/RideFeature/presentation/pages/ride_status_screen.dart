@@ -68,8 +68,9 @@ class RideStatusScreen extends StatelessWidget {
                               context.push(Routes.ratingClientScreen);
 
                             }, onSafety: () {
-                              context.push(Routes.ratingClientScreen);
-                            },),
+                              context.push(Routes.rideArrivedScreen);
+                            },is_show_message: true,onMessage: (){},
+                            ),
                             const Divider(
                               height: 2,
                             ),
@@ -122,14 +123,17 @@ class ActionButtonsWidget extends StatelessWidget {
   final String driverName;
   final VoidCallback onContactDriver;
   final VoidCallback onSafety;
-
+  final VoidCallback ?onMessage;
+  final  bool? is_show_message ;
   const ActionButtonsWidget({
     super.key,
     required this.driverImageUrl,
     required this.driverRating,
     required this.driverName,
     required this.onContactDriver,
+     this.is_show_message= false,
     required this.onSafety,
+     this.onMessage =null,
   });
 
   @override
@@ -149,6 +153,11 @@ class ActionButtonsWidget extends StatelessWidget {
             icon: Icons.phone,
             label: LocaleKeys.contactDriver.localize,
             onTap: onContactDriver,
+          ),
+          _buildActionCircle(
+            icon: Icons.messenger_outline,
+            label: LocaleKeys.message.localize,
+            onTap: onMessage??(){},
           ),
 
           _buildActionCircle(

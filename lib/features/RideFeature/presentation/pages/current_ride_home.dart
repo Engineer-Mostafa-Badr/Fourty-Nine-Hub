@@ -147,10 +147,8 @@ class _CurrentRideScreenState extends State<CurrentRideScreen> {
                             OtpInputWidget(
                               length: 6,
                               onChanged: (otp) {
-                                // معالجة الإدخال
                               },
                               onCompleted: (otp) {
-                                // معالجة الإدخال المكتمل
                               },
                             ),
 
@@ -208,7 +206,6 @@ class _CurrentRideScreenState extends State<CurrentRideScreen> {
 
                             const SizedBox(height: 16),
 
-                            // **معلومات الرحلة**
                             Container(
                               width: double.infinity,
                               padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),

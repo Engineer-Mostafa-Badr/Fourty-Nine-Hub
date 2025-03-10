@@ -24,7 +24,7 @@ class MainCategoryModelUpdated extends MainCategoryEntityUpdated {
       banner: json['banner'] ?? '',
       cover: json['cover'] ?? '',
       isFavorite: json['isFavorite'] ?? false,
-      registeredSubcategory: json['registeredSubcategory']??'',
+      registeredSubcategory: json['registeredSubcategory'],
       isDriver: json['isDriver'] ?? false,
       isSocketCategory: json['isSocketCategory'],
       isDriverApproved: json['isDriverApproved'] ?? false,

@@ -13,22 +13,15 @@ import 'widgets/font_manager.dart';
 import 'widgets/map_section.dart';
 
 // هتتغير انا عملها علشان التغير بتاع ال rate بس
-class RatingClientScreen extends StatefulWidget {
+class RatingDriverScreen extends StatefulWidget {
   @override
-  State<RatingClientScreen> createState() => _RatingClientScreenState();
+  State<RatingDriverScreen> createState() => _RatingDriverScreenState();
 }
 
-class _RatingClientScreenState extends State<RatingClientScreen> {
-  final List<String> tags = [
-    "Clean and elegant",
-    "Good music",
-    "Careful driving",
-    "Polite driver",
-    "Nice car",
-    "Driver arrived quickly"
-  ];
+class _RatingDriverScreenState extends State<RatingDriverScreen> {
 
-  double _rating = 4.0;
+
+  double _rating = 5.0;
 
   String? selectedTag;
 
@@ -38,14 +31,14 @@ class _RatingClientScreenState extends State<RatingClientScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SharedScaffold(
-          mainCategoryId: 2,
-          body: Stack(
+        mainCategoryId: 2,
+        body: Stack(
           children: [
-           const MapSection(),
+            const MapSection(),
             Align(
               alignment: Alignment.bottomCenter,
               child: RatingCard(
-                tags: tags,
+
                 rating: _rating,
                 onRatingChanged: (rating) {
                   setState(() {
@@ -68,15 +61,13 @@ class _RatingClientScreenState extends State<RatingClientScreen> {
 }
 
 class RatingCard extends StatelessWidget {
-  final List<String> tags;
   final double rating;
   final Function(double) onRatingChanged;
   final Function(String) onTagSelected;
   final TextEditingController messageController;
 
-   RatingCard({
+  RatingCard({
     super.key,
-    required this.tags,
     required this.rating,
     required this.onRatingChanged,
     required this.onTagSelected,
@@ -109,10 +100,10 @@ class RatingCard extends StatelessWidget {
               const  SizedBox(width: 25,),
               const  Spacer(),
               Text(
-                LocaleKeys.rateTheDriver.localize,
+                LocaleKeys.rateTheClient.localize,
                 style: const TextStyle(fontSize: FontSize.s20, fontWeight: FontWeight.bold),
               ),
-             const Spacer(),
+              const Spacer(),
               Container(
                 height: 25,
                 width: 25,
@@ -124,8 +115,8 @@ class RatingCard extends StatelessWidget {
               ),
             ],),
             const SizedBox(height: 8,),
-             Text(
-        getRatingText(rating),
+            Text(
+              getRatingText(rating),
               style:const TextStyle(fontSize: FontSize.s20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
@@ -143,25 +134,7 @@ class RatingCard extends StatelessWidget {
               ),
               onRatingUpdate: onRatingChanged,
             ),
-            const SizedBox(height: 12),
-            Wrap(
-              spacing: 8,
-              children: tags.map((tag) =>  GestureDetector(
-                  onTap: () => onTagSelected(tag),
-                  child: Container(
-                    width: MediaQuery.sizeOf(context).width*.41,
-                    height: 40,
-                    margin: const EdgeInsets.all(4),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: context.isDarkMode?Colors.black.withOpacity(.6):Colors.grey[200],
-                      borderRadius: BorderRadius.circular(12)
-                    ),
-                    child:Text(tag),
 
-                ),
-              )).toList(),
-            ),
             const SizedBox(height: 12),
             GestureDetector(
               onTap: () {

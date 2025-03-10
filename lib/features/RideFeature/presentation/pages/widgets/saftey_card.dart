@@ -96,6 +96,25 @@ class SafetyCard extends StatelessWidget {
             icon:  Image.asset(Assets.emergencyIcon,width: 30,),
             label:  Text(LocaleKeys.call_emergency.localize),
           ),
+          Container(
+            height: MediaQuery.sizeOf(context).height*.58,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 16.0,bottom: 16,left: 6,right: 6),
+              child: GridView.builder(
+                physics: NeverScrollableScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 3.0,
+                  mainAxisSpacing: 3.0,
+                  childAspectRatio: 1.2,
+                ),
+                itemCount: items.length,
+                itemBuilder: (context, index) {
+                  return ProtectionCard(item: items[index]);
+                },
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -123,6 +142,54 @@ class SafetyCard extends StatelessWidget {
                     style: const TextStyle(fontSize: FontSize.s12)))),
           ],
         ),
+      ),
+    );
+    // saftey
+  }
+}
+
+
+
+
+
+class ProtectionItem {
+  final String title;
+  final IconData icon;
+  final Color color;
+
+  ProtectionItem({required this.title, required this.icon, required this.color});
+}
+
+List<ProtectionItem> items = [
+  ProtectionItem(title: LocaleKeys.beforeTheTrip.localize, icon: Icons.info, color: Colors.red),
+  ProtectionItem(title: LocaleKeys.identityVerification.localize, icon: Icons.verified_user, color: Colors.blue),
+  ProtectionItem(title: LocaleKeys.securityFeatures.localize, icon: Icons.security, color: Colors.green),
+  ProtectionItem(title: LocaleKeys.emergencyChat.localize, icon: Icons.chat, color: Colors.orange),
+  ProtectionItem(title: LocaleKeys.carInspection.localize, icon: Icons.directions_car, color: Colors.redAccent),
+  ProtectionItem(title: LocaleKeys.secureCommunications.localize, icon: Icons.message, color: Colors.purple),
+];
+
+class ProtectionCard extends StatelessWidget {
+  final ProtectionItem item;
+
+  const ProtectionCard({Key? key, required this.item}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      elevation: 0,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(item.icon, size: 35, color: item.color),
+          SizedBox(height: 8),
+          Text(
+            item.title,
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+          ),
+        ],
       ),
     );
   }

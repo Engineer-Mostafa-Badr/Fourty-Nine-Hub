@@ -20,21 +20,18 @@ class PriceColumn extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ConstrainedBox(
-          constraints:  BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.4),
-          child: Label(
-            text: title,
-            style: const TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 18,
-            ),
+        Label(
+          text: title,
+          style: const TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 18,
           ),
         ),
         const SizedBox(height: 4),
         Label(
           text: date,
           style: const TextStyle(
-            fontWeight: FontWeight.w400,
+            fontWeight: FontWeight.w300,
             fontSize: 14,
           ),
         ),
