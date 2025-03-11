@@ -19,6 +19,7 @@ import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wa
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_two_cubit/wallet_two_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/balance_wallet_view.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/cashback_view.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/gift_view.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/gift_wallet_view.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/cubit/ad_details_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/pages/ad_details_view.dart';
@@ -936,14 +937,21 @@ class AppPages {
                   child: const BalanceWalletView(),
                 ),
               ),
+
+              // Gift
               GoRoute(
                 path: Paths.GIFT,
                 name: Routes.GIFT,
-                builder: (context, state) => BlocProvider<WalletCubit>(
-                  create: (_) => serviceLocator(),
-                  child: const GiftWalletView(),
-                ),
+                builder: (context, state) => GiftView(),
               ),
+              // GoRoute(
+              //   path: Paths.GIFT,
+              //   name: Routes.GIFT,
+              //   builder: (context, state) => BlocProvider<WalletCubit>(
+              //     create: (_) => serviceLocator(),
+              //     child: const GiftWalletView(),
+              //   ),
+              // ),
 
               // Change Password
               GoRoute(
