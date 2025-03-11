@@ -225,7 +225,9 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                   AppButton(
                       radius: 15,
                       label: LocaleKeys.shipping.tr(),
-                      onPressed: () {},
+                      onPressed: () {
+                        context.push(Routes.CURRENTRIDEHOME);
+                      },
                       backColor: AppColors.PRIMARY_COLOR,
                       width: double.infinity),
                 ],
