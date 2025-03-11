@@ -1399,7 +1399,6 @@
   "trukDetails": "Truck Details",
   "busWithYou": "Bus ride with You",
   "trukWithYou": "Truck ride with You",
-  "passenger": "Passenger",
   "addEmergencyContacts": "Add Emergency Contacts",
   "reportClient": "Report Client",
   "rateTheClient": "Rate The Client",
@@ -1417,5 +1416,7 @@
   "enterYourPhoneNumber": "Enter Your Phone Number",
   "enterYourEmail": "Enter Your Email",
   "deviceID": "Device ID",
-  "enterYourDeviceID": "Enter Your Device ID"
+  "enterYourDeviceID": "Enter Your Device ID",
+  "passenger": "Passenger",
+  "billGift": "Bill Gift"
 }
