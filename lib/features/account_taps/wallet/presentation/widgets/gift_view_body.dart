@@ -12,29 +12,31 @@ class GiftViewBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          const HeaderTotalAccountWidget(
-            balance: '1222',
-            // state.wallet?.realAmount?.toStringAsFixed(2) ?? '',
-            type: WalletTypes.giftWallet,
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          CustomButtonWalletAndGiftAndCashback(
-            title: 'Bill Gift',
-            onpressed: () {},
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          const InvestmentSection(),
-          const SizedBox(
-            height: 16,
-          ),
-          CompetitionsSection(),
-        ],
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            const HeaderTotalAccountWidget(
+              balance: '1222',
+              // state.wallet?.realAmount?.toStringAsFixed(2) ?? '',
+              type: WalletTypes.giftWallet,
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            CustomButtonWalletAndGiftAndCashback(
+              title: 'Bill Gift',
+              onpressed: () {},
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            const InvestmentSection(),
+            const SizedBox(
+              height: 16,
+            ),
+            CompetitionsSection(),
+          ],
+        ),
       ),
     );
   }
