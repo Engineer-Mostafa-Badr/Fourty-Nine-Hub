@@ -167,6 +167,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
           }),
         ),
       ];
+
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
@@ -564,7 +565,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
         onTab();
         route != null ? context.push(route) : null;
       },
-      child: Container(
+      child:  Container(
         height: kToolbarHeight * 2.h,
         decoration: BoxDecoration(
           color: Theme
@@ -579,24 +580,24 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
               offset: const Offset(1, 1),
             )
           ],
-          image: DecorationImage(
-              image: AssetImage(Assets.joinTrip), fit: BoxFit.fill),
+          // image: DecorationImage(
+          //     image: AssetImage(Assets.joinTrip), fit: BoxFit.fill),
         ),
         clipBehavior: Clip.antiAliasWithSaveLayer,
-        child: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Label(
-                text: title,
-                style: Styles.mediumText(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 45,
-                ),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Image.asset(Assets.joinTrip,fit: BoxFit.fill,width: double.infinity,),
+            Container(color: Colors.black38,),
+            Label(
+              text: title,
+              style: Styles.mediumText(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 45,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -712,7 +713,7 @@ class CustomDeActivateDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return showAnimatedDialog(context,AlertDialog(
+    return  AlertDialog(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
       title: Text(
@@ -740,7 +741,7 @@ class CustomDeActivateDialog extends StatelessWidget {
           ),
         ),
       ],
-    ));
+    );
   }
 }
 

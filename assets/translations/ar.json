@@ -1382,6 +1382,24 @@
   "passenger": "الركاب",
   "noSmoker": "سائق غير مدخن",
   "choiceRuler": "مسطرة الاختيارت",
-  "completeRegistration": "تكملة التسجيل"
-
+  "completeRegistration": "تكملة التسجيل",
+  "addEmergencyContacts": "إضاقة جهات اتصال طواري",
+  "reportClient": "تقرير العميل",
+  "rateTheClient": "قيم العميل",
+  "beforeTheTrip": "قبل الرحلة",
+  "identityVerification": "التحقق من الهوية",
+  "securityFeatures": "ميزات الأمان",
+  "emergencyChat": "دردشة طوارئ",
+  "carInspection": "فحص السيارات",
+  "secureCommunications": "اتصالات آمنة",
+  "completeRide": "رحلة مكتملة",
+  "requestEmergencySupport": "طلب الدعم فى حالات الطواري",
+  "writeYourProblem": "اكتب مشكلتك",
+  "writeYourPhoneNumber": "اكتب رقم هاتفك",
+  "enterYourName": "ادخل الاسم",
+  "enterYourPhoneNumber": "ادخل رقم الجوال",
+  "enterYourEmail": "ادخل الايميل",
+  "deviceID": "معرف الجهاز",
+  "enterYourDeviceID": "ادخل معرف الجهاز",
+  "billGift": "فاتورة الهدية"
 }
