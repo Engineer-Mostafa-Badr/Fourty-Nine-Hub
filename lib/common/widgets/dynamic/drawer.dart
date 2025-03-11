@@ -322,14 +322,14 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     context.push(Routes.SPOTLIGHT);
                                   },
                                 ),
-                                drawerRollWidget(
-                                  label: LocaleKeys.meet.localize,
-                                  image: Assets.meet,
-                                  onTap: () {
-                                    context.pop();
-                                    context.push(Routes.MEETINGROOM);
-                                  },
-                                ),
+                                // drawerRollWidget(
+                                //   label: LocaleKeys.meet.localize,
+                                //   image: Assets.meet,
+                                //   onTap: () {
+                                //     context.pop();
+                                //     context.push(Routes.MEETINGROOM);
+                                //   },
+                                // ),
                                 drawerRollWidget(
                                   label: LocaleKeys.live.localize,
                                   image: Assets.liveIcon,
@@ -1008,23 +1008,29 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              CustomSwitchButton(
-                value: context
-                    .read<FloatingNavigatorCubit>()
-                    .floatingNavigatorStatus,
-                onChanged: (value) async {
-                  if (context.read<FloatingNavigatorCubit>().state
-                      is ActiveFloatNavigatorStatusState) {
-                    context
-                        .read<FloatingNavigatorCubit>()
-                        .unActiveFloatingNavigator();
-                  }
-                  if (context.read<FloatingNavigatorCubit>().state
-                      is UnActiveFloatNavigatorStatusState) {
-                    context
-                        .read<FloatingNavigatorCubit>()
-                        .activeFloatingNavigator();
-                  }
+              BlocBuilder<FloatingNavigatorCubit, FloatingNavigatorState>(
+                builder: (context, state) {
+                  var floatingNavigatorCubit =
+                      context.read<FloatingNavigatorCubit>();
+                  return CustomSwitchButton(
+                    value: floatingNavigatorCubit
+                        .floatingNavigatorEnable,
+                    onChanged: (value) async {
+                      floatingNavigatorCubit.changeFloatingNavigatorEnable();
+                      // if (context.read<FloatingNavigatorCubit>().state
+                      //     is ActiveFloatNavigatorStatusState) {
+                      //   context
+                      //       .read<FloatingNavigatorCubit>()
+                      //       .unActiveFloatingNavigator();
+                      // }
+                      // if (context.read<FloatingNavigatorCubit>().state
+                      //     is UnActiveFloatNavigatorStatusState) {
+                      //   context
+                      //       .read<FloatingNavigatorCubit>()
+                      //       .changeFloatingNavigator();
+                      // }
+                    },
+                  );
                 },
               ),
               SizedBox(

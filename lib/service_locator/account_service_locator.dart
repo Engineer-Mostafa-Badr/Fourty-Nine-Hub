@@ -25,8 +25,10 @@ import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/reque
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Gift_Cubit/gift_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/charge_wallet_cubit/charge_wallet_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/fetch_sub_category_wallet/fetch_sub_category_wallet_cubit.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/gift_two_cubit/gift_two_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_two_cubit/wallet_two_cubit.dart';
+import 'package:fourtyninehub/features/lucky_wheel/domain/use_cases/get_wheel_wallet_use_case.dart';
 import 'package:fourtyninehub/features/subscripe/domain/usecases/get_active_subscription_amounts.dart';
 import 'package:get_it/get_it.dart';
 import '../features/account_taps/account/data/repositories/account_repo_impl.dart';
@@ -150,14 +152,21 @@ class AccountServiceLocator {
       ),
     );
 
-    serviceLocator.registerLazySingleton<FetchSubCategoryWalletCubit>(
+    serviceLocator.registerFactory<FetchSubCategoryWalletCubit>(
         () => FetchSubCategoryWalletCubit(
               serviceLocator<SubCategoryUseCase>(),
             ));
 
-    serviceLocator.registerLazySingleton<ChargeWalletCubit>(
+    serviceLocator.registerFactory<ChargeWalletCubit>(
       () => ChargeWalletCubit(
         serviceLocator<GetActiveSubscriptionAmountsUseCase>(),
+      ),
+    );
+
+    serviceLocator.registerFactory<GiftTwoCubit>(
+      () => GiftTwoCubit(
+        serviceLocator<GetWalletGiftsUseCase>(),
+        serviceLocator<GetWheelWalletUseCase>(),
       ),
     );
 

@@ -13,28 +13,45 @@ import 'package:fourtyninehub/features/authentication/domain/use_cases/create_an
 import 'package:fourtyninehub/features/authentication/domain/use_cases/create_normal_chat_use_case.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 
+import '../entities/forget_password_questions_entity.dart';
 import '../use_cases/register_use_case.dart';
 import '../use_cases/send_forget_password_otp_use_case.dart';
 import '../use_cases/verify_forget_password_otp_use_case.dart';
+import '../use_cases/verify_questions_use_case.dart';
 
 abstract class AuthRepository {
   const AuthRepository();
 
   Future<Either<Failure, bool>> updateUserBio(String bio);
+
   Future<Either<Failure, bool>> updateUserName(String name);
 
   Future<Either<Failure, UserTokensEntity>> login(LoginParams params);
+
   Future<Either<Failure, UserTokensEntity>> signInWithGoogle();
+
   // Future<Either<Failure, UserTokensEntity>> signInWithFacebook();
   Future<Either<Failure, UserTokensEntity>> signInWithApple();
+
   Future<Either<Failure, void>> register(RegisterParams registerParams);
+
   Future<Either<Failure, UserTokensEntity>> verifyOTP(
       VerifyOTPParams verifyOTPParams);
+
+  Future<Either<Failure, String>> verifyQuestions(VerifyQuestionsParams params);
+
   Future<Either<Failure, void>> resendOTP(ResendOTPParams params);
+
   Future<Either<Failure, void>> sendForgetPasswordOTP(
-      SendForgetOTPParams params);
+      SendForgetPasswordParams params);
+
+  Future<Either<Failure,
+      ForgetPasswordQuestionsEntity>> sendForgetPasswordQuestions(
+      SendForgetPasswordParams params);
+
   Future<Either<Failure, void>> verifyForgetPasswordOTP(
       VerifyForgetOTPParams params);
+
   Future<Either<Failure, void>> createNewForgetPassword(
       CreateNewForgetParams params);
 
@@ -44,6 +61,7 @@ abstract class AuthRepository {
 
   // Future<Either<Failure, bool>> saveUserId (UserTokensEntity? userTokens);
   Future<Either<Failure, double>> getWelcomeGift();
+
   Future<Either<Failure, void>> signOut();
 
   Future<Either<Failure, ChatEntity>> createNormalChat(
@@ -51,12 +69,17 @@ abstract class AuthRepository {
 
   Future<Either<Failure, ChatEntity>> createAnonymousChat(
       CreateAnonymousChatParams params);
+
   Future<Either<Failure, bool>> updateProfileView(
       UpdateProfileViewParams params);
+
   Future<Either<Failure, List<GetProfileViewsEntity>>> getProfileViews(
       GetProfileViewsParams params);
-      Future<Either<Failure, int>> getUnreadedChatsCounter();
+
+  Future<Either<Failure, int>> getUnreadedChatsCounter();
+
   Future<Either<Failure, List<GetProfileViewsEntity>>> getProfileViewsByUserId(
       GetProfileViewsParams params);
+
   bool attachToken(UserTokensEntity? token);
 }

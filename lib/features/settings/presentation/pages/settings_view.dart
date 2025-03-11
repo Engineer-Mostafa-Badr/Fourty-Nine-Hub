@@ -60,7 +60,7 @@ class SettingsView extends StatelessWidget {
             builder: (BuildContext context, state) {
               print('Account isDisabled status: ${state.able?.isDisabled}');
               return Column(
-                spacing: 32,
+                spacing: 16,
                 children: [
                   Container(),
                   if (context.read<UserCubit>().isLoggedIn)
@@ -198,23 +198,8 @@ class SettingsView extends StatelessWidget {
                           ),
                           value: choiceRulerCubit.choiceRulerEnabled,
                           onChanged: (value) async {
-                            choiceRulerCubit.changeChoiceRulerEnabled();
-                            // if (choiceRulerCubit.choiceRulerEnabled) {
-                            //   choiceRulerCubit
-                            //       .disAbleChoiceRuler();
-                            // }else{
-                            //   choiceRulerCubit
-                            //       .changeChoiceRulerEnabled();
-                            // }
-                            // if (choiceRulerCubit.state
-                            //     is !EnableChoiceRulerStatusState) {
-                            //   choiceRulerCubit
-                            //       .enabledChoiceRuler();
-                            // }
-                            // if (choiceRulerCubit.state
-                            //     is !DisAbleChoiceRulerStatusState) {
-                            //   choiceRulerCubit.disAbleChoiceRuler();
-                            // }
+                            choiceRulerCubit
+                                .changeChoiceRulerEnabled();
                           },
                         ),
                       );

@@ -224,6 +224,12 @@ abstract class Assets {
   static String historyGraphGreen = 'assets/icons/history_graph_green.svg';
   static String historyGraphRed = 'assets/icons/history_graph_red.svg';
   static String alertIcon = 'assets/icons/alert_icon.svg';
+  static String ideaIcon = 'assets/icons/idea_icon.svg';
+  static String luckyWheelIcon = 'assets/icons/lucky_wheel_icon.svg';
+  static String spcialAdsIcon = 'assets/icons/spcia_ads_icon.svg';
+  static String friendsIcon = 'assets/icons/friends_icon.svg';
+  static String ride2Icon = 'assets/icons/ride_icon.svg';
+  static String moreIcon = 'assets/icons/more_icon.svg';
 
   // static String notification = 'assets/49-New-icons/Group 1.png';
   static String notification = 'assets/49-New-icons/bell.png';
