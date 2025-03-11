@@ -8,6 +8,8 @@ sealed class ChoiceRulerState extends Equatable {
 }
 
 class InitChoiceRulerStatusState extends ChoiceRulerState{}
+class GetChoiceRulerStatusState extends ChoiceRulerState{}
+class GetEnableChoiceRulerStatusState extends ChoiceRulerState{}
 class ActiveChoiceRulerStatusState extends ChoiceRulerState{}
 class UnActiveChoiceRulerStatusState extends ChoiceRulerState {}
 class EnableChoiceRulerStatusState extends ChoiceRulerState{}
