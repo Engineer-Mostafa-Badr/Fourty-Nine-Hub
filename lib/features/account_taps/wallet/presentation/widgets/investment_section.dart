@@ -64,7 +64,7 @@ class _InvestmentSectionState extends State<InvestmentSection> {
           child: _isHintOped
               ? Container(
                   key: const ValueKey(1),
-                  margin: const EdgeInsets.only(top: 16),
+                  margin: const EdgeInsets.only(top: 16, bottom: 16),
                   padding:
                       const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                   decoration: ShapeDecoration(
@@ -94,7 +94,7 @@ class _InvestmentSectionState extends State<InvestmentSection> {
               : Container(
                   key: const ValueKey(2),
                   width: double.infinity,
-                  margin: const EdgeInsets.only(top: 4),
+                  margin: const EdgeInsets.only(top: 4, bottom: 4),
                   padding: const EdgeInsets.only(
                     top: 8,
                     bottom: 28,
