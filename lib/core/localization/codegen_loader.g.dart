@@ -1411,7 +1411,13 @@ class CodegenLoader extends AssetLoader{
   "completeRide": "رحلة مكتملة",
   "requestEmergencySupport": "طلب الدعم فى حالات الطواري",
   "writeYourProblem": "اكتب مشكلتك",
-  "writeYourPhoneNumber": "اكتب رقم هاتفك"
+  "writeYourPhoneNumber": "اكتب رقم هاتفك",
+  "enterYourName": "ادخل الاسم",
+  "enterYourPhoneNumber": "ادخل رقم الجوال",
+  "enterYourEmail": "ادخل الايميل",
+  "deviceID": "معرف الجهاز",
+  "enterYourDeviceID": "ادخل معرف الجهاز",
+  "billGift": "فاتورة الهدية"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -2827,7 +2833,13 @@ static const Map<String,dynamic> _en = {
   "completeRide": "Complete Ride",
   "requestEmergencySupport": "Request Emergency Support",
   "writeYourProblem": "Write Your Problem",
-  "writeYourPhoneNumber": "Write Your Phone Number"
+  "writeYourPhoneNumber": "Write Your Phone Number",
+  "enterYourName": "Enter your name",
+  "enterYourPhoneNumber": "Enter Your Phone Number",
+  "enterYourEmail": "Enter Your Email",
+  "deviceID": "Device ID",
+  "enterYourDeviceID": "Enter Your Device ID",
+  "billGift": "Bill Gift"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }
