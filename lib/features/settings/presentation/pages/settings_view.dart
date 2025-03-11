@@ -76,7 +76,7 @@ class SettingsView extends StatelessWidget {
                         trailing:
                             Icon(Icons.arrow_forward_ios_outlined, size: 40.h),
                         label: LocaleKeys.changePassword.localize,
-                        onTap: () => context.push(Routes.FORGOTPASSWORD)),
+                        onTap: () => context.push(Routes.CHANGEPASSWORD)),
                   // if (context.read<UserCubit>().isLoggedIn)
                   //   listTileWidget(
                   //       image: Assets.disableAccount,
@@ -170,8 +170,7 @@ class SettingsView extends StatelessWidget {
                   ),
                   BlocBuilder<ChoiceRulerCubit, ChoiceRulerState>(
                     builder: (context, state) {
-                      var choiceRulerCubit =
-                      ChoiceRulerCubit.get(context);
+                      var choiceRulerCubit = ChoiceRulerCubit.get(context);
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: CustomSwitchListTile(
