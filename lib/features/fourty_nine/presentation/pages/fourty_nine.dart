@@ -188,11 +188,11 @@ class _FourtyNineViewState extends State<FourtyNineView>
           floatingActionButton: _isScrollingDown
               ? null
               : const FloatingButton(
-            changeView: 1,
-            icon: Icons.person,
-          ),
+                  changeView: 1,
+                  icon: Icons.person,
+                ),
           floatingActionButtonLocation:
-          FloatingActionButtonLocation.centerDocked,
+              FloatingActionButtonLocation.centerDocked,
           drawer: const DrawerWidget(),
           body: ListView(
             controller: scrollController,
@@ -204,21 +204,17 @@ class _FourtyNineViewState extends State<FourtyNineView>
               const Sizer(),
               const AnnounceWidget(),
               const Sizer(),
-              !context
-                  .read<UserCubit>()
-                  .isLoggedIn
+              !context.read<UserCubit>().isLoggedIn
                   ? const Sizer()
                   : const SizedBox.shrink(),
               ScrollableTextWithAnimation(
                 textDirection:
-                context.isArabic ? TextDirection.rtl : TextDirection.ltr,
+                    context.isArabic ? TextDirection.rtl : TextDirection.ltr,
               ),
 
               //wallet
 
-              context
-                  .read<UserCubit>()
-                  .isLoggedIn
+              context.read<UserCubit>().isLoggedIn
                   ? const WalletWidget()
                   : const SizedBox.shrink(),
               ClickableWidget(
@@ -235,9 +231,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   alignment: Alignment.center,
                   child: AutoScrollText(
                     velocity: const Velocity(pixelsPerSecond: Offset(30, 0)),
-                    "${LocaleKeys.choosePreferredAppStyle
-                        .localize}..  ${LocaleKeys.clickHere
-                        .localize}!!                                         ",
+                    "${LocaleKeys.choosePreferredAppStyle.localize}..  ${LocaleKeys.clickHere.localize}!!                                         ",
                     style: Styles.headerText(
                         fontSize: 30, color: AppColors.SECONDARY_COLOR),
                     textDirection: context.isArabic
@@ -292,20 +286,16 @@ class _FourtyNineViewState extends State<FourtyNineView>
                       child: Column(
                         children: List.generate(
                             6,
-                                (index) =>
-                                Padding(
+                            (index) => Padding(
                                   padding: EdgeInsets.only(bottom: 15.h),
                                   child: Container(
-                                    height: MediaQuery
-                                        .of(context)
-                                        .size
-                                        .height *
+                                    height: MediaQuery.of(context).size.height *
                                         .15.h,
                                     width: double.infinity,
                                     margin:
-                                    EdgeInsets.symmetric(horizontal: 10.w),
+                                        EdgeInsets.symmetric(horizontal: 10.w),
                                     padding:
-                                    EdgeInsets.symmetric(horizontal: 10.w),
+                                        EdgeInsets.symmetric(horizontal: 10.w),
                                     decoration: BoxDecoration(
                                       color: AppColors.AUTH_CONTAINER_COLOR,
                                       borderRadius: BorderRadius.circular(20.r),
@@ -319,10 +309,10 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   if (state.data != null) {
                     return GridView.builder(
                       gridDelegate:
-                      const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisSpacing: 10,
-                          crossAxisCount: 2,
-                          childAspectRatio: 2 / 3),
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisSpacing: 10,
+                              crossAxisCount: 2,
+                              childAspectRatio: 2 / 3),
                       itemCount: state.data?.length ?? 0,
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
@@ -349,7 +339,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                               onFavorite: () async {
                                 var result = await controller
                                     .toggleFavoriteMedicalService(
-                                    state.data![index].id);
+                                        state.data![index].id);
                                 print("result$result");
                                 return result;
                               },
@@ -379,13 +369,13 @@ class _FourtyNineViewState extends State<FourtyNineView>
             const Icon(
               Icons.grid_view,
               color: AppColors.PRIMARY_COLOR,
+              size: 25,
             ),
             Routes.MAINCATEGORIESTREE,
-                () => HandleCashback.setCount('threeDotsCount', context),
+            () => HandleCashback.setCount('threeDotsCount', context),
           ),
         ),
-        const Sizer(),
-        const Sizer(),
+        const Sizer(width: 32,),
         CircularMenu(
             radius: 70,
             backgroundWidget: Container(
@@ -400,49 +390,6 @@ class _FourtyNineViewState extends State<FourtyNineView>
                 color: AppColors.SECONDARY_COLOR,
               ),
             ),
-            //   items: [
-            //     CircularMenuItem(
-            //       // menu item callback
-            //         onTap: () {
-            //         },
-            //         icon: Icons.home,
-            //         color: Colors.blue,
-            //         iconColor: Colors.white,
-            //         iconSize: 30.0,
-            //         margin: 10.0,
-            //         padding: 10.0,
-            //
-            //     ),
-            //     CircularMenuItem(
-            //         icon: Icons.search,
-            //         onTap: () {
-            //           //callback
-            //         }),
-            //     CircularMenuItem(
-            //         icon: Icons.settings,
-            //         onTap: () {
-            //           //callback
-            //         }),
-            //     CircularMenuItem(
-            //         icon: Icons.star,
-            //         onTap: () {
-            //           //callback
-            //         }),
-            //     CircularMenuItem(
-            //         icon: Icons.pages,
-            //         onTap: () {
-            //           //callback
-            //         }),
-            //   ]
-            //   backgroundWidget: Center(
-            //     child: Text(
-            //       "Flutter ",
-            //       style: TextStyle(
-            //         fontWeight: FontWeight.bold,
-            //         fontSize: 18,
-            //       ),
-            //     ),
-            //   ),
             toggleButtonColor: Colors.transparent,
             alignment: Alignment.center,
             items: [
@@ -490,13 +437,13 @@ class _FourtyNineViewState extends State<FourtyNineView>
                 color: Colors.green,
               ),
             ]),
-        const Sizer(),
-        const Sizer(),
+        const Sizer(width: 32,),
         Expanded(
           child: _buildItemTabBar(
               const Icon(
                 Icons.view_carousel,
                 color: AppColors.PRIMARY_COLOR,
+                size: 30,
               ),
               Routes.MAINCATEGORIESCARDS, () {
             AdInterstitialTop.loadIntersitialAd();
@@ -508,9 +455,11 @@ class _FourtyNineViewState extends State<FourtyNineView>
     );
   }
 
-  Widget _buildItemTabBar(Widget icon,
-      String routeName,
-      Function() onTab,) {
+  Widget _buildItemTabBar(
+    Widget icon,
+    String routeName,
+    Function() onTab,
+  ) {
     return InkWell(
       onTap: () {
         onTab();
@@ -518,6 +467,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
       },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        height: 45,
         decoration: BoxDecoration(
           color: AppColors.BG_GRAY_COLOR,
           borderRadius: BorderRadius.circular(20.r),
@@ -528,47 +478,118 @@ class _FourtyNineViewState extends State<FourtyNineView>
   }
 
   // BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>
-      _pickMeAndComeWithUWidget() {
-    return  Row(
-      children: [
-        // Expanded(
-        //   child: _buildRideSubCategoryItem(
-        //     service: state.data?[0].service ?? RideServicesEnum.pickMe,
-        //     title: LocaleKeys.carpool.localize,
-        //     image: state.data?[0].image ?? '',
-        //     onTab: () {
-        //       AdInterstitialTop.loadIntersitialAd();
-        //       AdInterstitialTop.showInterstitialAd();
-        //       return HandleCashback.setCount('carPoolCount',context);
-        //     },
-        //     // image: Assets.carpool,
-        //     // isFavorite: state.data![0].is,
-        //     // numberOfAds: state.data![0].numberOfAds?.toInt(),
-        //     route: Routes.CAR_POOL,
-        //   ),
-        // ),
-        // const Sizer(),
-        const Sizer(),
-        Expanded(
-          child: _buildRideSubCategoryItem(
-            title: context.isArabic?'جاي معاك':'Trip Join',
-            // image: '',
+  _pickMeAndComeWithUWidget() {
+    return _buildRideSubCategoryItem(
+      title: context.isArabic ? 'جاي معاك' : 'Trip Join',
+      // image: '',
 
-            route: Routes.AVAILABLE_TRIPS,
-            onTab: () {
-              AdInterstitialTop.loadIntersitialAd();
-              AdInterstitialTop.showInterstitialAd();
-              return HandleCashback.setCount('tripJoinCount', context);
-            },
-            // isFavorite: state.data![1].isFavorite,
-            // numberOfAds: state.data![1].numberOfAds?.toInt(),
-          ),
-        )
-      ],
+      route: Routes.AVAILABLE_TRIPS,
+      onTab: () {
+        AdInterstitialTop.loadIntersitialAd();
+        AdInterstitialTop.showInterstitialAd();
+        return HandleCashback.setCount('tripJoinCount', context);
+      },
+      // isFavorite: state.data![1].isFavorite,
+      // numberOfAds: state.data![1].numberOfAds?.toInt(),
     );
   }
 
-  Row _auctionAndInstallmentWidget() {
+  Widget _buildStarWidget() {
+    return SizedBox(
+      height: kToolbarHeight * 2.h,
+      width: double.infinity,
+      child: GestureDetector(
+        onTap: () {
+          AdInterstitialTop.loadIntersitialAd();
+          AdInterstitialTop.showInterstitialAd();
+          HandleCashback.setCount('beAStarCount', context);
+          context.push(Routes.BE_STAR);
+        },
+        child: Container(
+          height: kToolbarHeight * 2.h,
+          decoration: BoxDecoration(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            borderRadius: BorderRadius.circular(40.r),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
+                spreadRadius: 5,
+                blurRadius: 5,
+                offset: const Offset(1, 1),
+              )
+            ],
+            image: DecorationImage(
+                image: AssetImage(Assets.tube1), fit: BoxFit.fill),
+          ),
+          child: Center(
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Label(
+                text: LocaleKeys.tube.localize,
+                style: Styles.mediumText(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 45,
+                ),
+              )
+            ]),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRideSubCategoryItem(
+      {required String title, String? route, required Function() onTab}) {
+    return InkWell(
+      // onTap: () => context.push(Routes.ADS, extra: service.value()),
+      onTap: () {
+        onTab();
+        route != null ? context.push(route) : null;
+      },
+      child: Container(
+        height: kToolbarHeight * 2.h,
+        decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          borderRadius: BorderRadius.circular(40.r),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.PRIMARY_COLOR.withValues(alpha: .8),
+              spreadRadius: 5,
+              blurRadius: 5,
+              offset: const Offset(1, 1),
+            )
+          ],
+          // image: DecorationImage(
+          //     image: AssetImage(Assets.joinTrip), fit: BoxFit.fill),
+        ),
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Image.asset(
+              Assets.joinTrip,
+              fit: BoxFit.fill,
+              width: double.infinity,
+            ),
+            Container(
+              color: Colors.black38,
+            ),
+            Label(
+              text: title,
+              style: Styles.mediumText(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 45,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/*  Row _auctionAndInstallmentWidget() {
     return Row(
       children: [
         itemAuctionAndInstallmentWidget(LocaleKeys.auction.localize, () {
@@ -582,9 +603,9 @@ class _FourtyNineViewState extends State<FourtyNineView>
         }, Icons.list),
       ],
     );
-  }
+  }*/
 
-  Widget _buildBookingWidget() {
+/*  Widget _buildBookingWidget() {
     return SizedBox(
       height: kToolbarHeight * .9.h,
       width: double.infinity,
@@ -633,56 +654,9 @@ class _FourtyNineViewState extends State<FourtyNineView>
         ],
       ),
     );
-  }
+  }*/
 
-  Widget _buildStarWidget() {
-    return SizedBox(
-        height: kToolbarHeight * 2.h,
-        width: double.infinity,
-        child: Positioned.fill(
-          child: GestureDetector(
-              onTap: () {
-                AdInterstitialTop.loadIntersitialAd();
-                AdInterstitialTop.showInterstitialAd();
-                HandleCashback.setCount('beAStarCount', context);
-                context.push(Routes.BE_STAR);
-              },
-              child: Container(
-                  height: kToolbarHeight * 2.h,
-                  decoration: BoxDecoration(
-                    color: Theme
-                        .of(context)
-                        .scaffoldBackgroundColor,
-                    borderRadius: BorderRadius.circular(40.r),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
-                        spreadRadius: 5,
-                        blurRadius: 5,
-                        offset: const Offset(1, 1),
-                      )
-                    ],
-                    image: DecorationImage(
-                        image: AssetImage(Assets.tube1), fit: BoxFit.fill),
-                  ),
-                  child: Center(
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Label(
-                            text: LocaleKeys.tube.localize,
-                            style: Styles.mediumText(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 45,
-                            ),
-                          )
-                        ]),
-                  ))),
-        ));
-  }
-
-  Widget _walletsWidget() {
+/*  Widget _walletsWidget() {
     return SizedBox(
       height: kToolbarHeight * .9.h,
       width: double.infinity,
@@ -732,9 +706,9 @@ class _FourtyNineViewState extends State<FourtyNineView>
         ],
       ),
     );
-  }
+  }*/
 
-  Widget _buildTenPercentWidget() {
+/*  Widget _buildTenPercentWidget() {
     return SizedBox(
       height: kToolbarHeight * .9.h,
       width: double.infinity,
@@ -829,23 +803,24 @@ class _FourtyNineViewState extends State<FourtyNineView>
                       color: AppColors.ACCENT_COLOR,
                     )),
                 Positioned(
-                    top: 15,
-                    right: 10,
-                    child: Icon(
-                      Icons.star,
-                      size: 20.h,
-                      color: AppColors.ACCENT_COLOR,
-                    ),),
+                  top: 15,
+                  right: 10,
+                  child: Icon(
+                    Icons.star,
+                    size: 20.h,
+                    color: AppColors.ACCENT_COLOR,
+                  ),
+                ),
               ],
             ),
           ),
         ],
       ),
     );
-  }
+  }*/
 
-  Widget itemAuctionAndInstallmentWidget(String label, Function function,
-      IconData icon) {
+/*  Widget itemAuctionAndInstallmentWidget(
+      String label, Function function, IconData icon) {
     return Expanded(
       child: InkWell(
         onTap: () => context.go(Routes.MAZADAT),
@@ -895,53 +870,4 @@ class _FourtyNineViewState extends State<FourtyNineView>
         ),
       ),
     );
-  }
-
-  Widget _buildRideSubCategoryItem({
-    required String title,
-    String? route,
-    required Function() onTab}) {
-    return InkWell(
-      // onTap: () => context.push(Routes.ADS, extra: service.value()),
-      onTap: () {
-        onTab();
-        route != null ? context.push(route) : null;
-      },
-      child: Container(
-        height: kToolbarHeight * 2.h,
-        decoration: BoxDecoration(
-          color: Theme
-              .of(context)
-              .scaffoldBackgroundColor,
-          borderRadius: BorderRadius.circular(40.r),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.PRIMARY_COLOR.withValues(alpha: .8),
-              spreadRadius: 5,
-              blurRadius: 5,
-              offset: const Offset(1, 1),
-            )
-          ],
-          image: DecorationImage(
-              image: AssetImage(Assets.joinTrip), fit: BoxFit.fill),
-        ),
-        clipBehavior: Clip.antiAliasWithSaveLayer,
-        child: Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Label(
-                text: title,
-                style: Styles.mediumText(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 45,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
+  }*/

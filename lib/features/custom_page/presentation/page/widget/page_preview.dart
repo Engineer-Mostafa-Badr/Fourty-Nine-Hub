@@ -39,10 +39,14 @@ class PagePreview extends StatefulWidget {
   State<PagePreview> createState() => _PagePreviewState();
 }
 
-class _PagePreviewState extends State<PagePreview> {
+class _PagePreviewState extends State<PagePreview> with TickerProviderStateMixin{
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
   initState() {
     serviceLocator<MainCategoriesCubit>().loadData();
+
+    super.initState();
   }
 
   @override
@@ -71,9 +75,37 @@ class _PagePreviewState extends State<PagePreview> {
               },
             ),
             bottom: TabBar(
+
+              dividerColor: Colors.transparent,
+              indicator: BoxDecoration(
+                color: Colors.red.withOpacity(0.1), // Light red background
+                borderRadius: BorderRadius.circular(8), // Rounded corners
+              ),
+              labelStyle: const TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.red,
+              ),
+                unselectedLabelStyle: const TextStyle(
+              fontWeight: FontWeight.bold,
+              color: AppColors.LIGHT_GRAY_COLOR2,
+            ),
               tabs: [
-                Tab(text: LocaleKeys.social.tr()),
-                Tab(text: LocaleKeys.service.tr()),
+                Tab(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Text(
+                      LocaleKeys.social.tr(),
+                    ),
+                  ),
+                ),
+                Tab(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Text(
+                      LocaleKeys.service.tr(),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

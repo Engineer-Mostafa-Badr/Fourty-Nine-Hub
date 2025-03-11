@@ -7,6 +7,10 @@ sealed class FloatingNavigatorState extends Equatable {
   List<Object> get props => [];
 }
 
+class InitFloatNavigatorStatusState extends FloatingNavigatorState{}
+class GetFloatNavigatorStatusState extends FloatingNavigatorState{}
 class ActiveFloatNavigatorStatusState extends FloatingNavigatorState{}
 class UnActiveFloatNavigatorStatusState extends FloatingNavigatorState {}
-
+class GetEnableFloatNavigatorState extends FloatingNavigatorState{}
+class EnableFloatNavigatorState extends FloatingNavigatorState{}
+class DisAbleFloatNavigatorState extends FloatingNavigatorState {}
