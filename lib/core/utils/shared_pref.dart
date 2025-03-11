@@ -18,6 +18,8 @@ class CacheManager {
   static const selectedCategoryView = 'selectedCategoryView';
   static const RIDESOCKETPARTMODEL = 'RIDESOCKETPARTMODEL';
   static const isFloatingNavigator = 'isFloatingNavigator';
+  static const isFloatingNavigatorEnabled = 'isFloatingNavigatorEnabled';
+
   static const isChoiceRuler = 'isChoiceRuler';
   static const isChoiceRulerEnabled = 'isChoiceRulerEnabled';
   // static const themeLightKey = 'lightTheme';
@@ -113,6 +115,16 @@ class CacheManager {
       return false;
     }
   }
+  static Future<bool> isFloatingNavigatorEnabledOpen(bool value) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      print('isFloatingNavigatorEnabledOpen $value');
+
+      return await prefs.setBool(isFloatingNavigatorEnabled, value);
+    } catch (e) {
+      return false;
+    }
+  }
 
   static Future<bool> getMode() async {
     try {
@@ -131,11 +143,20 @@ class CacheManager {
       return false;
     }
   }
+  static Future<bool> getFloatingNavigatorEnable() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      print('isFloatingNavigatorEnabled ${prefs.getBool(isFloatingNavigatorEnabled)}');
+      return prefs.getBool(isFloatingNavigatorEnabled) ?? true;
+    } catch (e) {
+      return false;
+    }
+  }
   static Future<bool> getChoiceRuler() async {
     try {
       final prefs = await SharedPreferences.getInstance();
       print('isChoiceRuler ${prefs.getBool(isChoiceRuler)}');
-      return prefs.getBool(isChoiceRuler) ?? false;
+      return prefs.getBool(isChoiceRuler) ?? true;
     } catch (e) {
       return false;
     }
@@ -144,7 +165,7 @@ class CacheManager {
     try {
       final prefs = await SharedPreferences.getInstance();
       print('isChoiceRulerEnabled ${prefs.getBool(isChoiceRulerEnabled)}');
-      return prefs.getBool(isChoiceRulerEnabled) ?? false;
+      return prefs.getBool(isChoiceRulerEnabled) ?? true;
     } catch (e) {
       return false;
     }

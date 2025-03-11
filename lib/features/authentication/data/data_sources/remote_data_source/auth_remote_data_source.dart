@@ -25,6 +25,8 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entiti
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../../../core/utils/shared_pref.dart';
+import '../../../domain/use_cases/verify_questions_use_case.dart';
+import '../../models/forget_password_questions_model.dart';
 
 abstract class AuthRemoteDataSource {
   const AuthRemoteDataSource();
@@ -48,12 +50,21 @@ abstract class AuthRemoteDataSource {
     VerifyOTPParams verifyOTPParams,
   );
 
+  Future<Either<Failure, String>> verifyQuestions(
+      VerifyQuestionsParams params,
+  );
+
   Future<Either<Failure, void>> resendOTP(
     ResendOTPParams params,
   );
 
   Future<Either<Failure, void>> sendForgetPasswordOTP(
-    SendForgetOTPParams params,
+    SendForgetPasswordParams params,
+  );
+
+  Future<Either<Failure, ForgetPasswordQuestionsModel>>
+      sendForgetPasswordQuestions(
+    SendForgetPasswordParams params,
   );
 
   Future<Either<Failure, void>> verifyForgetPasswordOTP(
@@ -75,6 +86,7 @@ abstract class AuthRemoteDataSource {
 
   Future<Either<Failure, ChatEntity>> createAnonymousChat(
       CreateAnonymousChatParams params);
+
   Future<Either<Failure, bool>> updateProfileView(
       UpdateProfileViewParams params);
 
@@ -274,7 +286,7 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
 
   @override
   Future<Either<Failure, void>> sendForgetPasswordOTP(
-    SendForgetOTPParams params,
+    SendForgetPasswordParams params,
   ) async {
     final result = await _apiConsumer.post(
       EndPoints.sendForgetPasswordOTP,
@@ -431,5 +443,29 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
     return response.fold((failure) => Left(failure), (data) {
       return Right(data['data']);
     });
+  }
+
+  @override
+  Future<Either<Failure, ForgetPasswordQuestionsModel>>
+      sendForgetPasswordQuestions(SendForgetPasswordParams params) async {
+    final result = await _apiConsumer.post(
+      EndPoints.sendForgetPasswordOTP,
+      data: params.toJson(),
+    );
+
+    return result.fold(
+      (failure) => Left(failure),
+      (response) {
+        ForgetPasswordQuestionsModel questions =
+        ForgetPasswordQuestionsModel.fromJson(response['data']);
+        return Right(questions);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, String>> verifyQuestions(VerifyQuestionsParams params) {
+    // TODO: implement verifyQuestions
+    throw UnimplementedError();
   }
 }

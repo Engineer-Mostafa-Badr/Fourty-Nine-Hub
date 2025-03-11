@@ -25,6 +25,7 @@ import 'package:fourtyninehub/features/notifications/presentation/cubits/get_ser
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_social_notifications/get_social_notifications_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/get_unread_notifications_count/get_unread_notifications_count_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
+
 // import 'package:fourtyninehub/features/ride/Authentication/presentation/cubit/authentication_ride_cubit.dart';
 // import 'package:fourtyninehub/features/ride/Authentication/presentation/cubit/check_part_active_cubit.dart';
 // import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/NoSocket/check_trip_end_cubit.dart';
@@ -192,8 +193,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     getToken();
     return MultiBlocProvider(
       providers: [
-         BlocProvider(create: (context) => serviceLocator<SendCallCubit>()),
-          BlocProvider(create: (context) => serviceLocator<CallCubit>()),
+        BlocProvider(create: (context) => serviceLocator<SendCallCubit>()),
+        BlocProvider(create: (context) => serviceLocator<CallCubit>()),
         // BlocProvider(
         //     create: (context) =>
         //         CheckTripEndCubit(repository: serviceLocator())),
@@ -402,8 +403,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         //   create: (context) => DriversNearbyCubit(repository: serviceLocator()),
         // ),
         BlocProvider(
-          create: (context) =>
-              FloatingNavigatorCubit()..getFloatingNavigatorStatus(),
+          create: (context) => FloatingNavigatorCubit()
+            ..getFloatingNavigatorStatus()
+            ..getEnableFloatingNavigatorStatus(),
         ),
         BlocProvider(
           create: (context) => ChoiceRulerCubit()

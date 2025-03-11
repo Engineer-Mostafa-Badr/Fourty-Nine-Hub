@@ -15,24 +15,34 @@ class ChoiceRulerCubit extends Cubit<ChoiceRulerState> {
 
   Future<void> getChoiceRulerEnabledStatus() async {
     choiceRulerEnabled = await CacheManager.getEnabledChoiceRuler();
-    changeChoiceRulerStatus(forceValue: !choiceRulerEnabled);
+    changeChoiceRulerStatus(forceValue: choiceRulerEnabled);
+    emit(GetEnableChoiceRulerStatusState());
   }
 
   Future<void> getChoiceRulerStatus() async {
     choiceRulerStatus = await CacheManager.getChoiceRuler();
+    emit(GetChoiceRulerStatusState());
   }
 
   Future<void> changeChoiceRulerEnabled({bool? forceValue}) async {
     choiceRulerEnabled = forceValue ?? !choiceRulerEnabled;
     await CacheManager.isChoiceRulerEnabledOpen(choiceRulerEnabled);
-    await changeChoiceRulerStatus();
-    emit(EnableChoiceRulerStatusState());
+    await changeChoiceRulerStatus(forceValue: choiceRulerEnabled);
+    if (state is ActiveChoiceRulerStatusState) {
+      emit(DisAbleChoiceRulerStatusState());
+    } else {
+      emit(EnableChoiceRulerStatusState());
+    }
   }
 
   Future<void> changeChoiceRulerStatus({bool? forceValue}) async {
     choiceRulerStatus = forceValue ?? !choiceRulerStatus;
     await CacheManager.isChoiceRulerOpen(choiceRulerStatus);
-    emit(ActiveChoiceRulerStatusState());
+    if (state is ActiveChoiceRulerStatusState) {
+      emit(UnActiveChoiceRulerStatusState());
+    } else {
+      emit(ActiveChoiceRulerStatusState());
+    }
   }
 
 // Future<void> unActiveChoiceRuler() async {
