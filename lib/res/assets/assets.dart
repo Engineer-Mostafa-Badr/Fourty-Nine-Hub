@@ -82,6 +82,8 @@ abstract class Assets {
       'assets/icons/create_post_app_bar_icon.svg';
   static String profileSocialAppBarIcon =
       'assets/icons/profile_social_app_bar_icon.svg';
+  static String cupIcon = 'assets/icons/cup_icon.svg';
+  static String crownIcon = 'assets/icons/crown_icon.svg';
 
   static String twitterLogo = 'assets/icons/twitterLogo.png';
   static String loadingCar = 'assets/icons/loadingCar.png';

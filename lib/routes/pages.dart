@@ -479,17 +479,22 @@ class AppPages {
               GoRoute(
                 path: Paths.RIDERUNNINGTRIPS,
                 name: Routes.RIDERUNNINGTRIPS,
-                builder: (context, state) => RunningTripScreen(params: state.extra as RunningTripParams),
+                builder: (context, state) =>
+                    RunningTripScreen(params: state.extra as RunningTripParams),
               ),
               GoRoute(
                 path: Paths.RIDEEXPIREDTRIPE,
                 name: Routes.RIDEEXPIREDTRIPE,
-                builder: (context, state) => ExpiredTripsScreen(params: state.extra as ExpiredTripsScreenParams,),
+                builder: (context, state) => ExpiredTripsScreen(
+                  params: state.extra as ExpiredTripsScreenParams,
+                ),
               ),
               GoRoute(
                 path: Paths.RIDEOPENSTREETMAPSEARCHANDPICK,
                 name: Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
-                builder: (context, state) => RideOpenStreetMapSearchAndPick(params: state.extra as RideOpenStreetMapSearchAndPickParams,),
+                builder: (context, state) => RideOpenStreetMapSearchAndPick(
+                  params: state.extra as RideOpenStreetMapSearchAndPickParams,
+                ),
               ),
               GoRoute(
                 path: Paths.EditFoodView,
@@ -942,7 +947,7 @@ class AppPages {
               GoRoute(
                 path: Paths.GIFT,
                 name: Routes.GIFT,
-                builder: (context, state) => GiftView(),
+                builder: (context, state) => const GiftView(),
               ),
               // GoRoute(
               //   path: Paths.GIFT,
@@ -951,6 +956,13 @@ class AppPages {
               //     create: (_) => serviceLocator(),
               //     child: const GiftWalletView(),
               //   ),
+              // ),
+
+              // Winners
+              // GoRoute(
+              //   path: Paths.WINNERS,
+              //   name: Routes.WINNERS,
+              //   builder: (context, state) => GiftView(),
               // ),
 
               // Change Password

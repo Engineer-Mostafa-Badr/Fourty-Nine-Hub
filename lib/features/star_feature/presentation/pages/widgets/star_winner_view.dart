@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -11,6 +12,8 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_winner_entity.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_cubit.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_state.dart';
+import 'package:fourtyninehub/features/star_feature/presentation/pages/widgets/winners_grid_view.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
@@ -54,12 +57,27 @@ class _StarWinnerViewState extends State<StarWinnerView> {
     return CustomScaffold(
       appBar: BackAppBar(
         label: LocaleKeys.winners.localize,
+        actions: [
+          SvgPicture.asset(Assets.cupIcon),
+        ],
       ),
       body: BlocBuilder<StarCubit, StarState>(
-        builder: (BuildContext context, state) {
+        builder: (context, state) {
           if (state.status == StarStates.loading) {
             return const CustomLoading();
           }
+          return WinnersGridView(
+            winners: state.winner!
+                .map(
+                  (w) => WinnersGridViewModel(
+                    image: w.user.image,
+                    name: '${w.user.firstName} ${w.user.lastName}',
+                    date: w.createdAt!,
+                    price: w.numberOfWins.toString(),
+                  ),
+                )
+                .toList(),
+          );
           return Padding(
             padding: EdgeInsets.all(12.w),
             child: ListView.separated(
