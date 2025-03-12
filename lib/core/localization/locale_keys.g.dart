@@ -1393,7 +1393,6 @@ abstract class  LocaleKeys {
   static const enterYourEmail = 'enterYourEmail';
   static const deviceID = 'deviceID';
   static const enterYourDeviceID = 'enterYourDeviceID';
-
   static const billGift = 'billGift';
 
 }
