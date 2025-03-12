@@ -52,7 +52,7 @@ class GiftTwoCubit extends Cubit<GiftTwoState> {
 
   Future<void> fetchWheelWallet(context) async {
     emit(GiftTwoLoading());
-    final response = await _getWheelWalletUseCase(const NoParams());
+    final response = await _getWheelWalletUseCase.call(const NoParams());
     response.fold(
       (f) {
         emit(GiftTwoFailure(message: getFailureMessage(f, context)));

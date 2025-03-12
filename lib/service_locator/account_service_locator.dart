@@ -18,12 +18,15 @@ import 'package:fourtyninehub/features/account_taps/wallet/data/repositories/wal
 import 'package:fourtyninehub/features/account_taps/wallet/domain/repositories/gift_repository.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/repositories/wallet_repo.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/delete_subscription_use_case.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_balance_history_use_case.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_balance_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_gifts_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/request_withdraw_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/request_withdraw_wheel_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Gift_Cubit/gift_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/charge_wallet_cubit/charge_wallet_cubit.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/cubit/cashback_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/fetch_sub_category_wallet/fetch_sub_category_wallet_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/gift_two_cubit/gift_two_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
@@ -167,6 +170,13 @@ class AccountServiceLocator {
       () => GiftTwoCubit(
         serviceLocator<GetWalletGiftsUseCase>(),
         serviceLocator<GetWheelWalletUseCase>(),
+      ),
+    );
+
+    serviceLocator.registerFactory<CashbackCubit>(
+      () => CashbackCubit(
+        serviceLocator<GetBalanceUseCases>(),
+        serviceLocator<GetBalanceHistoryUseCase>(),
       ),
     );
 

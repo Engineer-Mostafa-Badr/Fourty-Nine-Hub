@@ -135,10 +135,14 @@ class WalletViewBody extends StatelessWidget {
                         ),
                         SliverList.builder(
                           itemCount: state.walletHistory?.length ?? 0,
-                          itemBuilder: (context, index) =>
-                              HistoryWalletListViewItem(
-                            history: state.walletHistory?[index],
-                          ),
+                          itemBuilder: (context, index) {
+                            final history = state.walletHistory?[index];
+                            return HistoryWalletListViewItem(
+                              isReceived: history?.received == true,
+                              amount: history?.transactionAmount.toString(),
+                              date: history?.createdAt,
+                            );
+                          },
                         ),
                       ],
                     ),
