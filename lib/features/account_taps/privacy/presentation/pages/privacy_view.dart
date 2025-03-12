@@ -42,6 +42,9 @@ class PrivacyView extends StatelessWidget {
               create: (BuildContext context) => serviceLocator()..loadData(),
               child: BlocBuilder<PrivacyCubit, PrivacyState>(
                 builder: (BuildContext context, state) {
+                  if(state.status == PrivacyStates.loading ){
+                    return const Center(child: CircularProgressIndicator());
+                  }
                   if(state.personalPrivacyEntity == null ){
                     return Center(child: Text("No Data",style: TextStyle(color: Colors.white,fontSize: 35),),);
                   }
