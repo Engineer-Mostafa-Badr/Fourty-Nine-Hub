@@ -995,7 +995,7 @@ class AppPages {
                     GoRoute(
                         path: Paths.PRIVACY,
                         name: Routes.PRIVACY,
-                        builder: (context, state) => const PrivacyView()),
+                        builder: (context, state) =>  PrivacyView()),
                     GoRoute(
                         path: Paths.POLICY,
                         name: Routes.POLICY,

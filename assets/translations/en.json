@@ -1418,5 +1418,11 @@
   "enterYourEmail": "Enter Your Email",
   "deviceID": "Device ID",
   "enterYourDeviceID": "Enter Your Device ID",
-  "billGift": "Bill Gift"
+  "billGift": "Bill Gift",
+  "socialMessage": "Social Messages",
+  "anonymousMessage": "Anonymous Messages",
+  "showPosts": "Show Posts",
+  "showStories": "Show Stories",
+  "showReels": "Show Reels",
+  "writeComments": "Write Comments"
 }

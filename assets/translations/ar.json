@@ -1401,5 +1401,11 @@
   "enterYourEmail": "ادخل الايميل",
   "deviceID": "معرف الجهاز",
   "enterYourDeviceID": "ادخل معرف الجهاز",
-  "billGift": "فاتورة الهدية"
+  "billGift": "فاتورة الهدية",
+  "socialMessage": "الرسائل الاجتماعية",
+  "anonymousMessage": "رسائل مجهولة المصدر",
+  "showPosts": "إظهار المشاركات",
+  "showStories": "عرض القصص",
+  "showReels": "عرض البكرات",
+  "writeComments": "اكتب تعليقات"
 }

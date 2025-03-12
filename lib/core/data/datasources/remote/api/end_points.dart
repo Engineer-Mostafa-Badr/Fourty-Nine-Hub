@@ -224,7 +224,18 @@ class EndPoints {
   static const createNewForgetPassword = '/auth/reset-password';
   static const notifications = '/notifications';
   static const unreadNotificationsCount = '/notifications/unread/count';
-  static const privacy = '/users/privacy';
+  static const privacy = '/privacy/personal';
+  static const privacyConnection = '/privacy/connections';
+  static const privacyMedia = '/privacy/media';
+  static const removeAllowedPrivacy = '/privacy/exclusion/allowed-list';
+  static const removeForbiddenPrivacy = '/privacy/exclusion/forbidden-list';
+  static const privacyCommunication = '/privacy/communications';
+  static const onlyWithPrivacy = '/privacy/exclusion/only-with';
+  static const exceptFromPrivacy = '/privacy/exclusion/except-from';
+  static const exclusionPrivacy = '/privacy/exclusion?feature=';
+
+
+  static const searchUserPrivacy = '/search/users/';
   static const deleteAccount = '/users/settings/delete-account';
   static const disableAccount = '/users/settings/disable-account';
   static const enableAccount = '/users/settings/enable-account';

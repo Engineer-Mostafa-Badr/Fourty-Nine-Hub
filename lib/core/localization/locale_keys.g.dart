@@ -1394,5 +1394,11 @@ abstract class  LocaleKeys {
   static const deviceID = 'deviceID';
   static const enterYourDeviceID = 'enterYourDeviceID';
   static const billGift = 'billGift';
+  static const socialMessage = 'socialMessage';
+  static const anonymousMessage = 'anonymousMessage';
+  static const showPosts = 'showPosts';
+  static const showStories = 'showStories';
+  static const showReels = 'showReels';
+  static const writeComments = 'writeComments';
 
 }
