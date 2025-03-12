@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:go_router/go_router.dart';
 import 'package:floating_draggable_widget/floating_draggable_widget.dart';
 
+import '../../common/widgets/dynamic/drawer.dart';
 import '../../common/widgets/stateless/labels/label.dart';
 import '../../features/settings/presentation/cubit/choice_ruler_cubit.dart';
 import '../../features/settings/presentation/cubit/floating_navigator_cubit.dart';
@@ -21,7 +22,7 @@ class CustomScaffold extends StatefulWidget {
     this.backgroundColor,
     this.floatingActionButtonLocation,
     this.floatingActionButton,
-    this.drawer,
+    this.drawer = const DrawerWidget(),
     this.bottomNavigationBar,
     this.appBar,
     this.extendBody = false,
@@ -76,9 +77,6 @@ class _CustomScaffoldState extends State<CustomScaffold>
             ),
             floatingWidget: GestureDetector(
               onTap: () {
-                // setState(() {
-                //   floatNavigator = !floatNavigator;
-                // });
                 floatingNavigatorCubit.changeFloatingNavigator();
               },
               child: Column(
@@ -163,106 +161,107 @@ class _CustomScaffoldState extends State<CustomScaffold>
             children: [
               floatingNavigatorCubit.floatingNavigatorStatus
                   ? Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadiusDirectional.horizontal(
-                    end: Radius.circular(30.r),
-                  ),
-                  border: const BorderDirectional(
-                    end: BorderSide(
-                      color: AppColors.PRIMARY_COLOR,
-                      width: 2,
-                    ),
-                    top: BorderSide(
-                      color: AppColors.PRIMARY_COLOR,
-                      width: 2,
-                    ),
-                    bottom: BorderSide(
-                      color: AppColors.PRIMARY_COLOR,
-                      width: 2,
-                    ),
-                  ),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Colors.black26,
-                      blurRadius: 10,
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 32, horizontal: 16),
-                  child: Column(
-                    spacing: 32.h,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      drawerRollWidget(
-                        label: LocaleKeys.ride.localize,
-                        image: Assets.rideIcon,
-                        onTap: () => context.push(Routes.RIDE),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadiusDirectional.horizontal(
+                          end: Radius.circular(30.r),
+                        ),
+                        border: const BorderDirectional(
+                          end: BorderSide(
+                            color: AppColors.PRIMARY_COLOR,
+                            width: 2,
+                          ),
+                          top: BorderSide(
+                            color: AppColors.PRIMARY_COLOR,
+                            width: 2,
+                          ),
+                          bottom: BorderSide(
+                            color: AppColors.PRIMARY_COLOR,
+                            width: 2,
+                          ),
+                        ),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 10,
+                          ),
+                        ],
                       ),
-                      drawerRollWidget(
-                        label: LocaleKeys.loading.localize,
-                        image: Assets.loading,
-                        // onTap: () {},
-                        onTap: () =>
-                            context.push(Routes.createLoadingTripScreen),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 32, horizontal: 16),
+                        child: Column(
+                          spacing: 32.h,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            drawerRollWidget(
+                              label: LocaleKeys.ride.localize,
+                              image: Assets.rideIcon,
+                              onTap: () => context.push(Routes.RIDE),
+                            ),
+                            drawerRollWidget(
+                              label: LocaleKeys.loading.localize,
+                              image: Assets.loading,
+                              // onTap: () {},
+                              onTap: () =>
+                                  context.push(Routes.createLoadingTripScreen),
+                            ),
+                            drawerRollWidget(
+                              label: LocaleKeys.health.localize,
+                              image: Assets.healthIcon,
+                              onTap: () => context.push(Routes.VISITA),
+                            ),
+                            drawerRollWidget(
+                              label: LocaleKeys.meal.localize,
+                              image: Assets.meal,
+                              onTap: () => context.push(Routes.FOOD),
+                            ),
+                            drawerRollWidget(
+                              label: LocaleKeys.find.localize,
+                              image: Assets.find,
+                              onTap: () => context.push(Routes.Tinder),
+                            ),
+                            drawerRollWidget(
+                              label: LocaleKeys.reel.localize,
+                              image: Assets.reel,
+                              onTap: () => context.push(Routes.REELS),
+                            ),
+                            drawerRollWidget(
+                              label: LocaleKeys.spotlight.localize,
+                              image: Assets.spotlight,
+                              onTap: () => context.push(Routes.SPOTLIGHT),
+                            ),
+                            // drawerRollWidget(
+                            //   label: LocaleKeys.meet.localize,
+                            //   image: Assets.meet,
+                            //   onTap: () => context.push(Routes.MEETINGROOM),
+                            // ),
+                            drawerRollWidget(
+                              label: LocaleKeys.live.localize,
+                              image: Assets.liveIcon,
+                              onTap: () => context.push(Routes.LIVE),
+                            ),
+                            drawerRollWidget(
+                              label: LocaleKeys.snap.localize,
+                              image: Assets.snap,
+                              onTap: () => context.push(Routes.SNAP),
+                            ),
+                            drawerRollWidget(
+                              label: LocaleKeys.chat.localize,
+                              image: Assets.whatsApp,
+                              padding: const EdgeInsets.all(2),
+                              onTap: () => context.push(Routes.CHAT),
+                            ),
+                          ],
+                        ),
                       ),
-                      drawerRollWidget(
-                        label: LocaleKeys.health.localize,
-                        image: Assets.healthIcon,
-                        onTap: () => context.push(Routes.VISITA),
-                      ),
-                      drawerRollWidget(
-                        label: LocaleKeys.meal.localize,
-                        image: Assets.meal,
-                        onTap: () => context.push(Routes.FOOD),
-                      ),
-                      drawerRollWidget(
-                        label: LocaleKeys.find.localize,
-                        image: Assets.find,
-                        onTap: () => context.push(Routes.Tinder),
-                      ),
-                      drawerRollWidget(
-                        label: LocaleKeys.reel.localize,
-                        image: Assets.reel,
-                        onTap: () => context.push(Routes.REELS),
-                      ),
-                      drawerRollWidget(
-                        label: LocaleKeys.spotlight.localize,
-                        image: Assets.spotlight,
-                        onTap: () => context.push(Routes.SPOTLIGHT),
-                      ),
-                      // drawerRollWidget(
-                      //   label: LocaleKeys.meet.localize,
-                      //   image: Assets.meet,
-                      //   onTap: () => context.push(Routes.MEETINGROOM),
-                      // ),
-                      drawerRollWidget(
-                        label: LocaleKeys.live.localize,
-                        image: Assets.liveIcon,
-                        onTap: () => context.push(Routes.LIVE),
-                      ),
-                      drawerRollWidget(
-                        label: LocaleKeys.snap.localize,
-                        image: Assets.snap,
-                        onTap: () => context.push(Routes.SNAP),
-                      ),
-                      drawerRollWidget(
-                        label: LocaleKeys.chat.localize,
-                        image: Assets.whatsApp,
-                        padding: const EdgeInsets.all(2),
-                        onTap: () => context.push(Routes.CHAT),
-                      ),
-                    ],
-                  ),
-                ),
-              )
+                    )
                   : Container(),
               Material(
                 color: Colors.transparent,
                 child: ClickableWidget(
                   onTap: () {
+                    // choiceRulerCubit.changeChoiceRulerStatus();
                     floatingNavigatorCubit.changeFloatingNavigator();
                   },
                   child: Container(
@@ -356,11 +355,7 @@ class MainScaffold extends StatelessWidget {
                 drawer: drawer,
                 onDrawerChanged: (value) {
                   choiceRulerCubit.changeChoiceRulerStatus();
-
                   print('choiceRulerCubit.state ${choiceRulerCubit.state}');
-
-                  // cubit.choiceRulerStatus = value;
-                  // print('isRulerOpen ${cubit.choiceRulerStatus}');
                 },
                 bottomNavigationBar: bottomNavigationBar,
                 body: Padding(
@@ -368,9 +363,7 @@ class MainScaffold extends StatelessWidget {
                   child: Container(
                     decoration: BoxDecoration(
                       color: backgroundColor ??
-                          Theme
-                              .of(context)
-                              .scaffoldBackgroundColor,
+                          Theme.of(context).scaffoldBackgroundColor,
                       borderRadius: BorderRadius.vertical(
                         top: Radius.circular(50.r),
                       ),
@@ -380,7 +373,9 @@ class MainScaffold extends StatelessWidget {
                       alignment: Alignment.centerLeft,
                       children: [
                         body,
-                        if (choiceRulerCubit.choiceRulerStatus||floatingNavigatorCubit.floatingNavigatorStatus) rulerWidget,
+                        if (choiceRulerCubit.choiceRulerStatus ||
+                            floatingNavigatorCubit.floatingNavigatorStatus)
+                          rulerWidget,
                       ],
                     ),
                   ),
@@ -406,7 +401,9 @@ class MainScaffold extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   children: [
                     body,
-                    if (choiceRulerCubit.choiceRulerStatus||floatingNavigatorCubit.floatingNavigatorStatus) rulerWidget,
+                    if (choiceRulerCubit.choiceRulerStatus ||
+                        floatingNavigatorCubit.floatingNavigatorStatus)
+                      rulerWidget,
                   ],
                 ),
                 appBar: appBar,

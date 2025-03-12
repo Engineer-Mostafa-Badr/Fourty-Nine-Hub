@@ -1017,18 +1017,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         .floatingNavigatorEnable,
                     onChanged: (value) async {
                       floatingNavigatorCubit.changeFloatingNavigatorEnable();
-                      // if (context.read<FloatingNavigatorCubit>().state
-                      //     is ActiveFloatNavigatorStatusState) {
-                      //   context
-                      //       .read<FloatingNavigatorCubit>()
-                      //       .unActiveFloatingNavigator();
-                      // }
-                      // if (context.read<FloatingNavigatorCubit>().state
-                      //     is UnActiveFloatNavigatorStatusState) {
-                      //   context
-                      //       .read<FloatingNavigatorCubit>()
-                      //       .changeFloatingNavigator();
-                      // }
                     },
                   );
                 },
