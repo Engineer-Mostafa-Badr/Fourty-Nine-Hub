@@ -60,7 +60,7 @@ ThemeData get lightTheme => ThemeData(
       bottomAppBarTheme: const BottomAppBarTheme(),
       canvasColor: Colors.black38,
       bannerTheme: const MaterialBannerThemeData(),
-      bottomNavigationBarTheme: const BottomNavigationBarThemeData(),
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(backgroundColor: Colors.transparent),
       cardColor: Colors.white,
       dialogTheme: const DialogTheme(),
       bottomSheetTheme: const BottomSheetThemeData(),

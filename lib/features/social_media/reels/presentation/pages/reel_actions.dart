@@ -834,17 +834,17 @@ class RotatingCircularButton extends StatelessWidget {
                 context.push(Routes.LOGIN);
               } else {
                 if (context
-                    .read<PreloadBloc>()
+                    .read<ReelsCubit>()
                     .state
                     .controllers[
-                        context.read<PreloadBloc>().state.focusedIndex]!
+                        context.read<ReelsCubit>().state.focusedIndex]!
                     .value
                     .isPlaying) {
                   context
-                      .read<PreloadBloc>()
+                      .read<ReelsCubit>()
                       .state
                       .controllers[
-                          context.read<PreloadBloc>().state.focusedIndex]
+                          context.read<ReelsCubit>().state.focusedIndex]
                       ?.pause();
                 }
                 Navigator.push(

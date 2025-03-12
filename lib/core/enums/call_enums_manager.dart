@@ -4,6 +4,11 @@ enum CallNotificationType {
   callAction,
 }
 
+enum CallType {
+  video,
+  audio,
+}
+
 enum CallActions {
   callEnded,
   receiverAcceptedCall,

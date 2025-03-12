@@ -5,6 +5,9 @@ import 'package:fourtyninehub/features/azkaar/presentation/cubit/azkaar_cubit.da
 import 'package:fourtyninehub/features/azkaar/presentation/cubit/azkaar_state.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 
 import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../res/assets/assets.dart';
@@ -19,6 +22,7 @@ class AzkarView extends StatefulWidget {
 class _AzkarViewState extends State<AzkarView> {
   late ScrollController _scrollController;
   late AzkarCubit _cubit;
+
   @override
   void initState() {
     super.initState();
@@ -44,26 +48,27 @@ class _AzkarViewState extends State<AzkarView> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: AppBar(
-        // automaticallyImplyLeading: false,
-        centerTitle: true,
-        titleTextStyle:
-            const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-        surfaceTintColor: Colors.transparent,
-        title: Text(
-          'الاذكار',
-          style: TextStyle(fontSize: 40.sp),
-        ),
-      ),
-      // appBar: BackAppBar(
-      //   label: LocaleKeys.azkar.localize,
+      // appBar: AppBar(
+      //   automaticallyImplyLeading: false,
+      // centerTitle: true,
+      // titleTextStyle:
+      //     const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+      // surfaceTintColor: Colors.transparent,
+      // title: Text(
+      //   'الاذكار',
+      //   style: TextStyle(fontSize: 40.sp),
       // ),
+      // ),
+      enableCustomAppBar: true,
+      appBar: BackAppBar(
+        label: LocaleKeys.azkar.localize,
+        enableCustomAppBar: true,
+      ),
       body: BlocBuilder<AzkarCubit, AzkarState>(
         builder: (BuildContext context, state) {
           if (state.status == AzkarStates.loading) {
             return const Center(child: CircularProgressIndicator());
           }
-
           return ListView.separated(
             controller: _scrollController,
             physics: const AlwaysScrollableScrollPhysics(),

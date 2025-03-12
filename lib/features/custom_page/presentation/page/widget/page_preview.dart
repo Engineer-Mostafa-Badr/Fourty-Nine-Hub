@@ -15,6 +15,7 @@ import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_pag
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/service_page_preview%20copy.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/instgram_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
@@ -38,10 +39,14 @@ class PagePreview extends StatefulWidget {
   State<PagePreview> createState() => _PagePreviewState();
 }
 
-class _PagePreviewState extends State<PagePreview> {
+class _PagePreviewState extends State<PagePreview> with TickerProviderStateMixin{
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
   initState() {
     serviceLocator<MainCategoriesCubit>().loadData();
+
+    super.initState();
   }
 
   @override
@@ -70,9 +75,37 @@ class _PagePreviewState extends State<PagePreview> {
               },
             ),
             bottom: TabBar(
+
+              dividerColor: Colors.transparent,
+              indicator: BoxDecoration(
+                color: Colors.red.withOpacity(0.1), // Light red background
+                borderRadius: BorderRadius.circular(8), // Rounded corners
+              ),
+              labelStyle: const TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.red,
+              ),
+                unselectedLabelStyle: const TextStyle(
+              fontWeight: FontWeight.bold,
+              color: AppColors.LIGHT_GRAY_COLOR2,
+            ),
               tabs: [
-                Tab(text: LocaleKeys.social.tr()),
-                Tab(text: LocaleKeys.service.tr()),
+                Tab(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Text(
+                      LocaleKeys.social.tr(),
+                    ),
+                  ),
+                ),
+                Tab(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Text(
+                      LocaleKeys.service.tr(),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -94,6 +127,9 @@ class _PagePreviewState extends State<PagePreview> {
                         create: (context) => serviceLocator<CustomPageCubit>()
                           ..fetchSocialPage(),
                       ),
+                      // BlocProvider(
+                      //   create: (context) => ThumbnailsCubit(serviceLocator()),
+                      // ),
                     ],
                     child: BlocBuilder<InstagramCubit, InstagramState>(
                       builder: (BuildContext context, state) {
@@ -124,6 +160,7 @@ class _PagePreviewState extends State<PagePreview> {
                     ),
                   ),
                   const ServicePagePreview(),
+                  // Container()
                 ],
               ),
               Visibility(

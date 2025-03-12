@@ -14,10 +14,10 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:image_cropper/image_cropper.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../../core/error/failure.dart';
@@ -51,7 +51,6 @@ class UploadFile {
         );
 
         XFile finalFile = XFile(croppedFile?.path??'');
-        if(hasLoading!=false)showLoadingDialog(context);
         final tempDir = await getTemporaryDirectory();
         final uniqueFileName =
             'compressed_${DateTime.now().millisecondsSinceEpoch}_${finalFile.name}';
@@ -65,6 +64,9 @@ class UploadFile {
           quality: 50,
           rotate: 360,
         );
+        if(result == null) {
+          context.pop();
+        }
 
         final bytes = await result!.readAsBytes();
         int size = bytes.length;
@@ -79,6 +81,8 @@ class UploadFile {
         signedURLResponse.fold((l) {
           print(l.toString());
         }, (data) async {
+          if(hasLoading!=false)showLoadingDialog(context);
+
           log("responseData: ${jsonEncode(data)}");
           final tempDir = await getTemporaryDirectory();
           final uniqueFileName =
@@ -106,11 +110,12 @@ class UploadFile {
             }, (data) { */
             print("object111");
             onUploaded(UploadFileEntity(mediaId: mediaId, file: finalFile));
-            if(hasLoading!=false)context.pop();
 
             return const Right(true);
             // });
           });
+          if(hasLoading!=false)context.pop();
+
         });
       }
     });

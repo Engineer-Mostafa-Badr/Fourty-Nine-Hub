@@ -3,11 +3,13 @@ class UnreadNotificationsCountEntity {
   int? appCount;
   int? servicesCount;
   int? socialCount;
+  int? requestLogCount;
   int? total;
   UnreadNotificationsCountEntity({
     this.appCount,
     this.servicesCount,
     this.socialCount,
+    this.requestLogCount,
     this.total,
   });
 }

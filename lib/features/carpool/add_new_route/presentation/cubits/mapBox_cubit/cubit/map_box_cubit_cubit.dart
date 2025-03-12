@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:dio/dio.dart';
+import 'package:equatable/equatable.dart';
 
 part 'map_box_cubit_state.dart';
 

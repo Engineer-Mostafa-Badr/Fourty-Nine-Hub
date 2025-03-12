@@ -5,7 +5,6 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/pages/image_gallary_viewer.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/image_details.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 
@@ -13,8 +12,9 @@ import '../../../../../core/widget/custom_scaffold.dart';
 
 class ShowAllImages extends StatefulWidget {
   const ShowAllImages(
-      {super.key, required this.images, required this.onRemoveImage});
+      {super.key, required this.images,this.imagesUrls, required this.onRemoveImage});
   final List<UploadFileEntity> images;
+  final List<String>? imagesUrls;
   final Function onRemoveImage;
 
   @override
@@ -40,7 +40,7 @@ class _ShowAllImagesState extends State<ShowAllImages> {
         width: double.infinity,
         color: AppColors.DARK_BLUE_COLOR,
         child: ListView.builder(
-          itemCount: widget.images.length,
+          itemCount:widget.imagesUrls!=null? (widget.imagesUrls?.length??0): widget.images.length,
           itemBuilder: (context, index) => InkWell(
             onTap: () {
               print("object");
@@ -52,8 +52,8 @@ class _ShowAllImagesState extends State<ShowAllImages> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => ImageGalleryPage(
-                    images: [],
-                    files: images,
+                    images: widget.imagesUrls!=null?(widget.imagesUrls??[]):[],
+                    files:widget.imagesUrls!=null?null: images,
                     initialIndex: index,
                   ),
                 ),
@@ -80,12 +80,12 @@ class _ShowAllImagesState extends State<ShowAllImages> {
                   width: double.infinity,
                   decoration: BoxDecoration(
                       color: AppColors.DARK_BLUE_COLOR,
-                      image: DecorationImage(
+                      image:widget.imagesUrls!=null?DecorationImage(image: NetworkImage(widget.imagesUrls?[index]??''),fit: BoxFit.fill): DecorationImage(
                           image:
                               FileImage(File(widget.images[index].file.path)),
                           fit: BoxFit.fill)),
                 ),
-                PositionedDirectional(
+                if(widget.imagesUrls==null)PositionedDirectional(
                   end: 5,
                   top: 5,
                   child: InkWell(

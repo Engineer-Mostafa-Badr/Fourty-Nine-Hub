@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/widget/custom_floating_action_button.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_states.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/edit_page_cubit/edit_page_cubit.dart';
@@ -106,7 +107,7 @@ class _NavigateBarState extends State<NavigateBar> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
+    return Scaffold(
       body: BlocProvider<CustomPageCubit>(
         create: (BuildContext context) => serviceLocator()..fetchNavigateBar(),
         child: BlocBuilder<CustomPageCubit, CustomPageState>(
@@ -120,7 +121,6 @@ class _NavigateBarState extends State<NavigateBar> {
               return Column(
                 children: [
                   ListTile(
-                    title: Text(LocaleKeys.navigateBar.localize),
                     subtitle: Text(LocaleKeys.navigateBarDescription.localize),
                   ),
                   Expanded(
@@ -188,6 +188,37 @@ class _NavigateBarState extends State<NavigateBar> {
                   }
                 },
                 builder: (BuildContext context, Object? state) {
+                  return CustomFloatingActionButton(onPressed:  () {
+                    final selectedCategories = _selectedItems.entries
+                        .where((entry) => entry.value == true)
+                        .map((entry) => entry.key)
+                        .toList();
+                    if (selectedCategories.length >= 3 &&
+                        selectedCategories.length <= 5) {
+                      // Proceed with the selected items
+                      context
+                          .read<CustomPageCubit>()
+                          .updateNavigateBar(NavigateBarParams(
+                        ride: _selectedItems["Ride"] ?? false,
+                        loading: _selectedItems["Loading"] ?? false,
+                        health: _selectedItems["Health"] ?? false,
+                        meal: _selectedItems["Meal"] ?? false,
+                        find: _selectedItems["Find"] ?? false,
+                        reel: _selectedItems["Reel"] ?? false,
+                        spotlight: _selectedItems["Spotlight"] ?? false,
+                        meet: _selectedItems["Meet"] ?? false,
+                        live: _selectedItems["Live"] ?? false,
+                        snap: _selectedItems["Snap"] ?? false,
+                      ));
+                    } else {
+                      // Show a message if the selection is not valid
+                      showSuccessMessage(
+                        context,
+                        LocaleKeys.atLeast3atMost5items.localize,
+                        color: AppColors.SECONDARY_COLOR,
+                      );
+                    }
+                  },text: LocaleKeys.next.localize,);
                   return CustomElevatedButton(
                     child: Text(
                       LocaleKeys.next.localize,

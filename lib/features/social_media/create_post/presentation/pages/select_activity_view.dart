@@ -56,7 +56,7 @@ class _SelectActivityState extends State<SelectActivity> {
               return GridView.builder(
                   controller: _scrollController,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2, childAspectRatio: 4),
+                      crossAxisCount: 2, childAspectRatio: 2),
                   itemCount: cubit.activities.length,
                   itemBuilder: (context, index) {
                     final item = cubit.activities[index];

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class UserImage extends StatelessWidget {
   const UserImage({
@@ -9,8 +8,8 @@ class UserImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CircleAvatar(
-      radius: 24.w,
-      child: Icon(Icons.person, color: Colors.white, size: 24.w),
+      radius: 24,
+      child: Icon(Icons.person, color: Colors.white, size: 24),
     );
   }
 }

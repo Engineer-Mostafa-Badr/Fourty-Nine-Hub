@@ -22,10 +22,12 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../core/widget/custom_floating_action_button.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 
 class AdsView extends StatefulWidget {
   final AdsViewParams params;
+
   const AdsView({
     super.key,
     required this.params,
@@ -222,17 +224,33 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
           ),
         );
       }),
-        floatingActionButton:buildFloatingAction(context),
-
+      // floatingActionButton:buildFloatingAction(context),
+      floatingActionButton: CustomFloatingActionButton(
+        onPressed: () {
+          if (context.isUserLoggedIn) {
+            context.push(Routes.CREATEAD,
+                extra: CategorizationEntity(
+                    mainCategory: widget.params.mainCategory,
+                    subCategory: widget.params.subCategory));
+          } else {
+            context.push(Routes.LOGIN);
+          }
+        },
+        icon:  Icons.add,
+        text: LocaleKeys.addAde.localize,
+      ),
     );
   }
-  Widget buildFloatingAction(BuildContext context){
+
+  Widget buildFloatingAction(BuildContext context) {
     return FloatingActionButton.extended(
       onPressed: () {
-        if(context.isUserLoggedIn){
-          context.push(Routes.CREATEAD,extra: CategorizationEntity(
-              mainCategory: widget.params.mainCategory, subCategory: widget.params.subCategory));
-        }else{
+        if (context.isUserLoggedIn) {
+          context.push(Routes.CREATEAD,
+              extra: CategorizationEntity(
+                  mainCategory: widget.params.mainCategory,
+                  subCategory: widget.params.subCategory));
+        } else {
           context.push(Routes.LOGIN);
         }
       },
@@ -243,14 +261,12 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
       ),
       label: Label(
         text: LocaleKeys.addAde.localize,
-        style: Styles.mediumText(
-            fontWeight: FontWeight.bold,color: Colors.white),
+        style:
+            Styles.mediumText(fontWeight: FontWeight.bold, color: Colors.white),
       ),
     );
   }
 }
-
-
 
 class AdsViewParams {
   final MainCategoryEntity mainCategory;
@@ -306,8 +322,8 @@ enum Categories {
 extension CategoriesExtension on Categories {
   Widget view(
       {required AdEntity item,
-        required Function(String) onFav,
-        required Function(String) onRemoveFav}) {
+      required Function(String) onFav,
+      required Function(String) onRemoveFav}) {
     switch (this) {
       case Categories.craft:
         return AdCard(item: item, onFav: onFav, onRemoveFav: onRemoveFav);

@@ -11,7 +11,6 @@ import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
-import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
@@ -48,6 +47,7 @@ import '../widgets/announce_widget.dart';
 import 'package:auto_scroll_text/auto_scroll_text.dart';
 
 import '../widgets/exit_widget.dart';
+import 'package:circular_menu/circular_menu.dart';
 
 class FourtyNineView extends StatefulWidget {
   const FourtyNineView({super.key});
@@ -99,7 +99,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
     context
         .read<FirebaseNotficationsCubit>()
         .setupInterceptedMessage(context: context);
-    context.read<LocationSocketCubit>().updateDriverLocationOn();
+    // context.read<LocationSocketCubit>().updateDriverLocationOn();
   }
 
   void _setupScrollController() {
@@ -146,6 +146,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
   }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     // context.push(Routes.REELS);
@@ -206,7 +207,10 @@ class _FourtyNineViewState extends State<FourtyNineView>
               !context.read<UserCubit>().isLoggedIn
                   ? const Sizer()
                   : const SizedBox.shrink(),
-              const ScrollableTextWithAnimation(),
+              ScrollableTextWithAnimation(
+                textDirection:
+                    context.isArabic ? TextDirection.rtl : TextDirection.ltr,
+              ),
 
               //wallet
 
@@ -226,8 +230,8 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   height: 60.h,
                   alignment: Alignment.center,
                   child: AutoScrollText(
-                    velocity: const Velocity(pixelsPerSecond: Offset(20, 0)),
-                    "${LocaleKeys.choosePreferredAppStyle.localize}...                                         ",
+                    velocity: const Velocity(pixelsPerSecond: Offset(30, 0)),
+                    "${LocaleKeys.choosePreferredAppStyle.localize}..  ${LocaleKeys.clickHere.localize}!!                                         ",
                     style: Styles.headerText(
                         fontSize: 30, color: AppColors.SECONDARY_COLOR),
                     textDirection: context.isArabic
@@ -255,14 +259,14 @@ class _FourtyNineViewState extends State<FourtyNineView>
               //pick me and come with U
               Row(children: [
                 Expanded(child: _buildStarWidget()),
-                const Sizer(),
-                Expanded(
-                  child: _pickMeAndComeWithUWidget(),
+                const Sizer(
+                  width: 32,
                 ),
+                Expanded(child: _pickMeAndComeWithUWidget()),
               ]),
               // _pickMeAndComeWithUWidget(),
               const Sizer(),
-              _buildTenPercentWidget(),
+              // _buildTenPercentWidget(),
               // const Sizer(),
               // _auctionAndInstallmentWidget(),
               // const Sizer(),
@@ -308,7 +312,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                           const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisSpacing: 10,
                               crossAxisCount: 2,
-                              childAspectRatio: 5 / 4),
+                              childAspectRatio: 2 / 3),
                       itemCount: state.data?.length ?? 0,
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
@@ -321,10 +325,11 @@ class _FourtyNineViewState extends State<FourtyNineView>
                               AdInterstitialTop.showInterstitialAd();
                               HandleCashback.setCount(
                                   'mainCategoriesCount', context);
-                              if(state.data![index].id=='62c8b5b09332225799fe335e'){
+                              if (state.data![index].id ==
+                                  '62c8b5b09332225799fe335e') {
                                 context.push(Routes.MARRIAGESUBCATEGORIES,
                                     extra: state.data![index]);
-                              }else{
+                              } else {
                                 context.push(Routes.SUBCATEGORIES,
                                     extra: state.data![index]);
                               }
@@ -356,36 +361,97 @@ class _FourtyNineViewState extends State<FourtyNineView>
   }
 
   Widget _buildMainCategoriesViews() {
-    return Container(
-      decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          borderRadius: BorderRadius.circular(20.r),
-          boxShadow: const [
-            BoxShadow(
-              color: AppColors.GRAY_LIGHT_COLOR3,
-              blurRadius: 5,
-              spreadRadius: 5,
-            )
-          ]),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20.r),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            _buildItemTabBar(
-              Icon(Icons.grid_view),
-              Routes.MAINCATEGORIESTREE,
-              () => HandleCashback.setCount('threeDotsCount', context),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: _buildItemTabBar(
+            const Icon(
+              Icons.grid_view,
+              color: AppColors.PRIMARY_COLOR,
+              size: 25,
             ),
-            _buildItemTabBar(
-                Icon(Icons.view_carousel), Routes.MAINCATEGORIESCARDS, () {
-              AdInterstitialTop.loadIntersitialAd();
-              AdInterstitialTop.showInterstitialAd();
-              HandleCashback.setCount('mainCategoriesSliderCount', context);
-            }),
-          ],
+            Routes.MAINCATEGORIESTREE,
+            () => HandleCashback.setCount('threeDotsCount', context),
+          ),
         ),
-      ),
+        const Sizer(width: 32,),
+        CircularMenu(
+            radius: 70,
+            backgroundWidget: Container(
+              decoration: const BoxDecoration(
+                color: AppColors.BG_GRAY_COLOR,
+                shape: BoxShape.circle,
+              ),
+              width: 40,
+              height: 40,
+              child: const Icon(
+                Icons.favorite_rounded,
+                color: AppColors.SECONDARY_COLOR,
+              ),
+            ),
+            toggleButtonColor: Colors.transparent,
+            alignment: Alignment.center,
+            items: [
+              CircularMenuItem(
+                onTap: () {
+                  print('tapped');
+                },
+                icon: Icons.search,
+                iconSize: 50,
+                color: Colors.blue,
+              ),
+              CircularMenuItem(
+                onTap: () {
+                  print('tapped');
+                },
+                icon: Icons.home,
+                color: Colors.grey,
+              ),
+              CircularMenuItem(
+                onTap: () {
+                  print('tapped');
+                },
+                icon: Icons.settings,
+                color: Colors.green,
+              ),
+              CircularMenuItem(
+                onTap: () {
+                  print('tapped');
+                },
+                icon: Icons.search,
+                color: Colors.blue,
+              ),
+              CircularMenuItem(
+                onTap: () {
+                  print('tapped');
+                },
+                icon: Icons.home,
+                color: Colors.grey,
+              ),
+              CircularMenuItem(
+                onTap: () {
+                  print('tapped');
+                },
+                icon: Icons.settings,
+                color: Colors.green,
+              ),
+            ]),
+        const Sizer(width: 32,),
+        Expanded(
+          child: _buildItemTabBar(
+              const Icon(
+                Icons.view_carousel,
+                color: AppColors.PRIMARY_COLOR,
+                size: 30,
+              ),
+              Routes.MAINCATEGORIESCARDS, () {
+            AdInterstitialTop.loadIntersitialAd();
+            AdInterstitialTop.showInterstitialAd();
+            HandleCashback.setCount('mainCategoriesSliderCount', context);
+          }),
+        ),
+      ],
     );
   }
 
@@ -400,75 +466,130 @@ class _FourtyNineViewState extends State<FourtyNineView>
         context.push(routeName);
       },
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 6.h.w, horizontal: 10.h),
-        decoration: const BoxDecoration(),
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        height: 45,
+        decoration: BoxDecoration(
+          color: AppColors.BG_GRAY_COLOR,
+          borderRadius: BorderRadius.circular(20.r),
+        ),
         child: icon,
       ),
     );
   }
 
-  BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>
-      _pickMeAndComeWithUWidget() {
-    return BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>(
-      builder: (context, state) {
-        if (state.status == StateStatus.loading) {
-          return const PickMeAndComeWithYouLShimmerLoading();
-        } else if (state.status == StateStatus.success) {
-          return Row(
-            children: [
-              // Expanded(
-              //   child: _buildRideSubCategoryItem(
-              //     service: state.data?[0].service ?? RideServicesEnum.pickMe,
-              //     title: LocaleKeys.carpool.localize,
-              //     image: state.data?[0].image ?? '',
-              //     onTab: () {
-              //       AdInterstitialTop.loadIntersitialAd();
-              //       AdInterstitialTop.showInterstitialAd();
-              //       return HandleCashback.setCount('carPoolCount',context);
-              //     },
-              //     // image: Assets.carpool,
-              //     // isFavorite: state.data![0].is,
-              //     // numberOfAds: state.data![0].numberOfAds?.toInt(),
-              //     route: Routes.CAR_POOL,
-              //   ),
-              // ),
-              // const Sizer(),
-              Expanded(
-                child: _buildRideSubCategoryItem(
-                  service:
-                      state.data?[1].service ?? RideServicesEnum.comeWithYou,
-                  title: state.data![1].name.toString(),
-                  image: state.data?[1].image ?? '',
-                  // image: Assets.tripJoin,
+  // BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>
+  _pickMeAndComeWithUWidget() {
+    return _buildRideSubCategoryItem(
+      title: context.isArabic ? 'جاي معاك' : 'Trip Join',
+      // image: '',
 
-                  route: Routes.AVAILABLE_TRIPS,
-                  onTab: () {
-                    AdInterstitialTop.loadIntersitialAd();
-                    AdInterstitialTop.showInterstitialAd();
-                    return HandleCashback.setCount('tripJoinCount', context);
-                  },
-                  // isFavorite: state.data![1].isFavorite,
-                  // numberOfAds: state.data![1].numberOfAds?.toInt(),
-                ),
-              )
-            ],
-          );
-        } else {
-          return Container(
-            padding:
-                //EdgeInsets.all
-                const EdgeInsets.symmetric(horizontal: 10),
-            child: Text(
-              LocaleKeys.noRideSubcategories.localize,
-              style: TextStyle(fontSize: 32.sp.w, fontWeight: FontWeight.w500),
-            ),
-          );
-        }
+      route: Routes.AVAILABLE_TRIPS,
+      onTab: () {
+        AdInterstitialTop.loadIntersitialAd();
+        AdInterstitialTop.showInterstitialAd();
+        return HandleCashback.setCount('tripJoinCount', context);
       },
+      // isFavorite: state.data![1].isFavorite,
+      // numberOfAds: state.data![1].numberOfAds?.toInt(),
     );
   }
 
-  Row _auctionAndInstallmentWidget() {
+  Widget _buildStarWidget() {
+    return SizedBox(
+      height: kToolbarHeight * 2.h,
+      width: double.infinity,
+      child: GestureDetector(
+        onTap: () {
+          AdInterstitialTop.loadIntersitialAd();
+          AdInterstitialTop.showInterstitialAd();
+          HandleCashback.setCount('beAStarCount', context);
+          context.push(Routes.BE_STAR);
+        },
+        child: Container(
+          height: kToolbarHeight * 2.h,
+          decoration: BoxDecoration(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            borderRadius: BorderRadius.circular(40.r),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
+                spreadRadius: 5,
+                blurRadius: 5,
+                offset: const Offset(1, 1),
+              )
+            ],
+            image: DecorationImage(
+                image: AssetImage(Assets.tube1), fit: BoxFit.fill),
+          ),
+          child: Center(
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Label(
+                text: LocaleKeys.tube.localize,
+                style: Styles.mediumText(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 45,
+                ),
+              )
+            ]),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRideSubCategoryItem(
+      {required String title, String? route, required Function() onTab}) {
+    return InkWell(
+      // onTap: () => context.push(Routes.ADS, extra: service.value()),
+      onTap: () {
+        onTab();
+        route != null ? context.push(route) : null;
+      },
+      child: Container(
+        height: kToolbarHeight * 2.h,
+        decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          borderRadius: BorderRadius.circular(40.r),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.PRIMARY_COLOR.withValues(alpha: .8),
+              spreadRadius: 5,
+              blurRadius: 5,
+              offset: const Offset(1, 1),
+            )
+          ],
+          // image: DecorationImage(
+          //     image: AssetImage(Assets.joinTrip), fit: BoxFit.fill),
+        ),
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Image.asset(
+              Assets.joinTrip,
+              fit: BoxFit.fill,
+              width: double.infinity,
+            ),
+            Container(
+              color: Colors.black38,
+            ),
+            Label(
+              text: title,
+              style: Styles.mediumText(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 45,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/*  Row _auctionAndInstallmentWidget() {
     return Row(
       children: [
         itemAuctionAndInstallmentWidget(LocaleKeys.auction.localize, () {
@@ -482,9 +603,9 @@ class _FourtyNineViewState extends State<FourtyNineView>
         }, Icons.list),
       ],
     );
-  }
+  }*/
 
-  Widget _buildBookingWidget() {
+/*  Widget _buildBookingWidget() {
     return SizedBox(
       height: kToolbarHeight * .9.h,
       width: double.infinity,
@@ -533,74 +654,9 @@ class _FourtyNineViewState extends State<FourtyNineView>
         ],
       ),
     );
-  }
+  }*/
 
-  Widget _buildStarWidget() {
-    return SizedBox(
-      height: kToolbarHeight * 2.h,
-      width: double.infinity,
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: GestureDetector(
-                // color: AppColors.AUTH_CONTAINER_COLOR,
-                // label: LocaleKeys.tube.localize,
-                // style: Styles.mediumText(
-                //   color: AppColors.AUTH_CONTAINER_COLOR,
-                //   fontWeight: FontWeight.bold,
-                // ),
-                // icon: Icons.star,
-                // iconSize: 50.h,
-                onTap: () {
-                  AdInterstitialTop.loadIntersitialAd();
-                  AdInterstitialTop.showInterstitialAd();
-                  HandleCashback.setCount('beAStarCount', context);
-                  context.push(Routes.BE_STAR);
-                },
-                child: Container(
-                    height: kToolbarHeight * 2.h,
-                    padding:
-                        EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).scaffoldBackgroundColor,
-                      borderRadius: BorderRadius.circular(5),
-                      image: DecorationImage(
-                          image: AssetImage(Assets.tubeCat), fit: BoxFit.fill),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Color.fromARGB(255, 249, 159, 162),
-                          spreadRadius: 1,
-                          blurRadius: 3,
-                          offset: Offset(1, 1),
-                        )
-                      ],
-                    ),
-                    child: Center(
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            // Image.asset(
-                            //   Assets.tube,
-                            //   height: 35.h,
-                            //   width: 35.h,
-                            //
-                            // ),
-                            // Sizer(width: 10),
-                            Label(
-                              text: LocaleKeys.tube.localize,
-                              style: Styles.mediumText(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 45,
-                              ),
-                            )
-                          ]),
-                    ))),
-          ),
-        ]));
-  }
-
-  Widget _walletsWidget() {
+/*  Widget _walletsWidget() {
     return SizedBox(
       height: kToolbarHeight * .9.h,
       width: double.infinity,
@@ -650,9 +706,9 @@ class _FourtyNineViewState extends State<FourtyNineView>
         ],
       ),
     );
-  }
+  }*/
 
-  Widget _buildTenPercentWidget() {
+/*  Widget _buildTenPercentWidget() {
     return SizedBox(
       height: kToolbarHeight * .9.h,
       width: double.infinity,
@@ -747,22 +803,23 @@ class _FourtyNineViewState extends State<FourtyNineView>
                       color: AppColors.ACCENT_COLOR,
                     )),
                 Positioned(
-                    top: 15,
-                    right: 10,
-                    child: Icon(
-                      Icons.star,
-                      size: 20.h,
-                      color: AppColors.ACCENT_COLOR,
-                    ))
+                  top: 15,
+                  right: 10,
+                  child: Icon(
+                    Icons.star,
+                    size: 20.h,
+                    color: AppColors.ACCENT_COLOR,
+                  ),
+                ),
               ],
             ),
           ),
         ],
       ),
     );
-  }
+  }*/
 
-  Widget itemAuctionAndInstallmentWidget(
+/*  Widget itemAuctionAndInstallmentWidget(
       String label, Function function, IconData icon) {
     return Expanded(
       child: InkWell(
@@ -813,105 +870,4 @@ class _FourtyNineViewState extends State<FourtyNineView>
         ),
       ),
     );
-  }
-
-  Widget _buildRideSubCategoryItem(
-      {required RideServicesEnum service,
-      required String title,
-      required String image,
-      String? route,
-      required Function() onTab}) {
-    return InkWell(
-      // onTap: () => context.push(Routes.ADS, extra: service.value()),
-      onTap: () {
-        onTab();
-        route != null ? context.push(route) : null;
-      },
-      child: Container(
-        height: kToolbarHeight * 2.h,
-        padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
-        decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          borderRadius: BorderRadius.circular(10.r),
-          boxShadow: const [
-            BoxShadow(
-              color: Color.fromARGB(255, 249, 159, 162),
-              spreadRadius: 1,
-              blurRadius: 3,
-              offset: Offset(1, 1),
-            )
-          ],
-        ),
-        child: Stack(
-          alignment: AlignmentDirectional.centerStart,
-          children: [
-            Positioned.fill(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(5),
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    Image.network(
-                      image,
-                      fit: BoxFit.cover,
-                      width: 150,
-                      // source: AssetImage(image),
-                    ),
-                    Container(
-                      color: Colors.black
-                          .withOpacity(0.4), // Darken the background
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10.w),
-              child: Row(
-                children: [
-                  // Container(
-                  //   margin: EdgeInsetsDirectional.only(start: 20.w),
-                  //   // padding: EdgeInsets.symmetric(vertical: 5.h),
-                  //   decoration: BoxDecoration(
-                  //       boxShadow: [
-                  //         BoxShadow(
-                  //           color: Colors.black.withOpacity(0.5),
-                  //           spreadRadius: 0.03,
-                  //           blurRadius: 6,
-                  //         ),
-                  //       ]
-                  //   ),
-                  //   child: InkWell(
-                  //     onTap: () async {},
-                  //     child: Icon(
-                  //       isFavorite ?? false
-                  //           ? Icons.favorite
-                  //           : Icons.favorite_border,
-                  //       // Icons.favorite,
-                  //       color: AppColors.SECONDARY_COLOR,
-                  //       size: 38.h,
-                  //     ),
-                  //   ),
-                  // ),
-                  const Spacer(),
-                  Container(
-                    child: Label(
-                      // text: service.title(),
-                      text: title,
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 45.sp),
-                    ),
-                  ),
-                  const Spacer(),
-                  Container()
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+  }*/

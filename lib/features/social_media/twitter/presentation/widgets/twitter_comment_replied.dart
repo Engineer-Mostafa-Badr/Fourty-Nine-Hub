@@ -168,7 +168,7 @@ class _TwitterCommentRepliesState extends State<TwitterCommentReplies> {
                                       createdAt: DateTime.now(),
                                       image: user.profilePicture ?? '',
                                       email: user.email ?? '',
-                                      isDocumented: false),
+                                      isDocumented: false, hasStory: false),
                                   love: data.love,
                                   isReact: data.isReact,
                                   image: data.image));

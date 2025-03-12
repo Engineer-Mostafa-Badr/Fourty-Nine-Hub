@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import '../../../../../../../common/widgets/stateless/labels/label.dart';
 
 import '../../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../../common/widgets/stateless/buttons/app_button.dart';
+import '../../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../../core/widget/custom_switch_button.dart';
 import '../../../../../../../res/style/styles.dart';
 import '../createOrder/cancel_order.dart';
 
@@ -71,7 +72,7 @@ class OfferControl extends StatelessWidget {
                   child: Label(
                       text: 'Auto Accept offer of EGP',
                       style: Styles.mediumText())),
-              Switch(value: false, onChanged: (v) {})
+              CustomSwitchButton(value: false, onChanged: (v) {})
             ],
           ),
         ],

@@ -15,24 +15,24 @@ class DoctorDetailsFeesCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final doctorDetailsCubit = context.read<DoctorDetailsCubit>();
-    final doctor = doctorDetailsCubit.doctor;
+    final doctor = doctorDetailsCubit.state.doctor;
     return Column(
       children: [
-        if (doctor.clinicPrice.isNotEmpty)
+        if (doctor?.clinicPrice.isNotEmpty??false)
           DoctorDetailsInfoCard(
               icon: Icons.wallet_rounded,
               label:
-                  '${LocaleKeys.clinicFees.localize}: ${doctor.clinicPrice} ${context.isArabic ? doctor.currencyAr : doctor.currencyEn}'),
-        if (doctor.callsPrice.isNotEmpty)
+                  '${LocaleKeys.clinicFees.localize}: ${doctor?.clinicPrice??0} ${context.isArabic ? doctor?.currencyAr??'' : doctor?.currencyEn??''}'),
+        if (doctor?.callsPrice.isNotEmpty??false)
           DoctorDetailsInfoCard(
               icon: Icons.wallet_rounded,
               label:
-                  '${LocaleKeys.callFees.localize}: ${doctor.callsPrice} ${context.isArabic ? doctor.currencyAr : doctor.currencyEn}'),
-        if (doctor.visitHomePrice.isNotEmpty)
+                  '${LocaleKeys.callFees.localize}: ${doctor?.callsPrice??0} ${context.isArabic ? doctor?.currencyAr??'' : doctor?.currencyEn??''}'),
+        if (doctor?.visitHomePrice.isNotEmpty??false)
           DoctorDetailsInfoCard(
               icon: Icons.wallet_rounded,
               label:
-                  '${LocaleKeys.homeVisitFees.localize}: ${doctor.visitHomePrice} ${context.isArabic ? doctor.currencyAr : doctor.currencyEn}'),
+                  '${LocaleKeys.homeVisitFees.localize}: ${doctor?.visitHomePrice??0} ${context.isArabic ? doctor?.currencyAr??'' : doctor?.currencyEn??''}'),
         const DoctorDetailsDivider(),
       ],
     );

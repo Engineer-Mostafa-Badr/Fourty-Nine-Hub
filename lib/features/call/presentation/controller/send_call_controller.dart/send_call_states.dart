@@ -29,3 +29,7 @@ class CallRinging extends SendCallState {
 }
 
 class CallConnected extends SendCallState {}
+
+class FakeCallConnected extends SendCallState {}
+
+class DeclinedCall extends SendCallState {}

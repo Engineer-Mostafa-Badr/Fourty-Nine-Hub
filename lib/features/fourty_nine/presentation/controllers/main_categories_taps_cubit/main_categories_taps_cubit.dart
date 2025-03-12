@@ -36,7 +36,6 @@ class MainCategoriesTapsCubit extends Cubit<MainCategoriesTapsState> {
       _subCategories = [];
       _paginationParams = PaginationParams.basic();
       emit(state.copyWith(selectedIndex: index, status: StateStatus.updated));
-
       loadData();
     }
   }

@@ -17,9 +17,14 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/widget/custom_scaffold.dart';
+import '../../../../service_locator/service_locator.dart';
+import '../../../ads_feature/ads/presentation/pages/marriage_ads_view.dart';
+import '../../../chance_feature/domain/entity/main_categry_entity.dart';
+import '../../../subcategories/presentation/cubit/subcategories_cubit.dart';
 
 class MainCategoriesGridView extends StatefulWidget {
   const MainCategoriesGridView({super.key, this.isAppBarShow = true});
+
   final bool isAppBarShow;
 
   @override
@@ -31,6 +36,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
   late TabController _tabController;
   late ScrollController _scrollController;
   String labelName = "";
+
   @override
   void initState() {
     super.initState();
@@ -79,7 +85,13 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
   Widget build(BuildContext context) {
     final controller = context.read<MainCategoriesTapsCubit>();
     return CustomScaffold(
-      appBar: widget.isAppBarShow ? BackAppBar(label: labelName) : null,
+      appBar: widget.isAppBarShow
+          ? BackAppBar(
+              label: labelName,
+              enableCustomAppBar: true,
+            )
+          : null,
+      enableCustomAppBar: true,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
         child: Column(
@@ -104,6 +116,11 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                               : controller.mainCategories[i].name.toString();
                         });
                         print(labelName);
+                        // if (controller.mainCategories[i].id ==
+                        //     '62c8b5b09332225799fe335e') {
+                        //   context.push(Routes.MARRIAGESUBCATEGORIES,
+                        //       extra: controller.mainCategories[i]);
+                        // }
                       },
                       padding: EdgeInsets.zero,
                       labelPadding: const EdgeInsetsDirectional.only(end: 10),
@@ -151,17 +168,38 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
             const Sizer(),
             BlocBuilder<MainCategoriesTapsCubit, MainCategoriesTapsState>(
               builder: (context, state) {
+                final controller = context.read<MainCategoriesTapsCubit>();
+
+                if (controller.mainCategories[state.selectedIndex].id ==
+                    '62c8b5b09332225799fe335e') {
+                  return BlocProvider(
+                    create: (context) => serviceLocator<SubcategoriesCubit>(),
+                    child: Expanded(
+                      child: MarriageSubCategoriesView(
+                        mainCategory:
+                            controller.mainCategories[state.selectedIndex],
+                        inGridView: true,
+                      ),
+                    ),
+                  );
+                  // return Container();
+                }
                 if (state.subCategories != null &&
                     state.subCategories!.isNotEmpty) {
-                  final controller = context.read<MainCategoriesTapsCubit>();
+                  // final controller = context.read<MainCategoriesTapsCubit>();
+
                   return Expanded(
                     child: GridView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
+                      padding: EdgeInsets.all(24.w),
                       itemCount: state.subCategories?.length ?? 0,
                       controller: controller.scrollController,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2, childAspectRatio: 1),
+                        crossAxisCount: 3,
+                        childAspectRatio: .65,
+                        mainAxisSpacing: 16,
+                        crossAxisSpacing: 16,
+                      ),
                       itemBuilder: (context, index) {
                         final subCategory = state.subCategories![index];
                         return SubCategoryCard(
@@ -278,10 +316,11 @@ class _MainCategoriesGrideViewSectionState
                           AdInterstitialTop.showInterstitialAd();
                           HandleCashback.setCount(
                               'mainCategoriesCount', context);
-                          if(controller.mainCategories[index].id=='62c8b5b09332225799fe335e'){
+                          if (controller.mainCategories[index].id ==
+                              '62c8b5b09332225799fe335e') {
                             context.push(Routes.MARRIAGESUBCATEGORIES,
                                 extra: controller.mainCategories[index]);
-                          }else{
+                          } else {
                             context.push(Routes.SUBCATEGORIES,
                                 extra: controller.mainCategories[index]);
                           }

@@ -298,7 +298,7 @@ class _BuildItemAdsSearchState extends State<BuildItemAdsSearch> {
                                   subcategoryId: widget.item.subCategoryId,
                                   phone: widget.item.phone,
                                   id: widget.item.id,
-                                  hasReport: true,
+                                  hasReport: true, senderName: '', senderImage: '',
                                 ),
                               ],
                             )

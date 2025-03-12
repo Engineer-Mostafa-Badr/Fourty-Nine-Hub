@@ -1,14 +1,15 @@
 import 'dart:developer';
+import 'dart:io';
 import 'dart:typed_data';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/repositories/reider_request_repository.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/rider_state.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:record/record.dart';
-import 'package:path_provider/path_provider.dart';
-import 'dart:io';
 import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
+import 'package:record/record.dart';
 
 class RecordRideCubit extends Cubit<RiderState> {
   final ReiderRequestRepository repository;

@@ -34,38 +34,52 @@ class _EditPageState extends State<EditPage> {
     ),
   ];
 
+  List<String> appBarTitle = [
+    LocaleKeys.navigateBar.localize,
+    LocaleKeys.socialPage.localize,
+    LocaleKeys.favoriteCategory.localize,
+    LocaleKeys.chooseCategoryView.localize,
+    LocaleKeys.pagePreview.localize,
+  ];
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<EditPageCubit>(
       create: (context) => EditPageCubit(),
-      child: Scaffold(
-        appBar: BackAppBar(
-          leading: Builder(builder: (context) {
-            return IconButton(
-                onPressed: () {
-                  if (BlocProvider.of<EditPageCubit>(context).currentIndex >
-                      0) {
-                    BlocProvider.of<EditPageCubit>(context).changePage(
-                        BlocProvider.of<EditPageCubit>(context).currentIndex -
-                            1);
-                  } else {
-                    log("index ${BlocProvider.of<EditPageCubit>(context).currentIndex}");
+      child: BlocBuilder<EditPageCubit, EditPageState>(
+        builder: (context, state) {
+          return CustomScaffold(
+            enableCustomAppBar: true,
+            // backgroundColor: Colors.transparent,
+            appBar: BackAppBar(
+              enableCustomAppBar: true,
+              leading: Builder(builder: (context) {
+                return IconButton(
+                    onPressed: () {
+                      if (BlocProvider.of<EditPageCubit>(context).currentIndex >
+                          0) {
+                        BlocProvider.of<EditPageCubit>(context).changePage(
+                            BlocProvider.of<EditPageCubit>(context)
+                                    .currentIndex -
+                                1);
+                      } else {
+                        log("index ${BlocProvider.of<EditPageCubit>(context).currentIndex}");
 
-                    Navigator.of(context).pop();
-                  }
-                },
-                icon: Icon(
-                  Icons.arrow_back,
-                  size: 40.w,
-                ));
-          }),
-          label: LocaleKeys.editPage.localize,
-        ),
-        body: BlocBuilder<EditPageCubit, EditPageState>(
-          builder: (context, state) {
-            return pages[BlocProvider.of<EditPageCubit>(context).currentIndex];
-          },
-        ),
+                        Navigator.of(context).pop();
+                      }
+                    },
+                    icon: Icon(
+                      Icons.arrow_back,
+                      size: 40.w,
+                      color: Colors.white,
+                    ));
+              }),
+              label: appBarTitle[
+                  BlocProvider.of<EditPageCubit>(context).currentIndex],
+            ),
+            body: pages[BlocProvider.of<EditPageCubit>(context).currentIndex],
+          );
+        },
       ),
     );
   }
@@ -78,10 +92,12 @@ class CustomElevatedButton extends StatelessWidget {
       this.onPressed,
       this.borderRadius,
       this.backgoundColor});
+
   final Widget child;
   final void Function()? onPressed;
   final double? borderRadius;
   final Color? backgoundColor;
+
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(

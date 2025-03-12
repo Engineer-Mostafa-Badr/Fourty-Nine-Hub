@@ -124,6 +124,7 @@ import 'package:flutter/material.dart';
 
 
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/widget/custom_floating_action_button.dart';
 
 class TestScreen1 extends StatelessWidget {
   const TestScreen1({super.key});
@@ -216,11 +217,15 @@ class TestScreen1 extends StatelessWidget {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: const Color(0xFF0C1432),
+      floatingActionButton: CustomFloatingActionButton(
         onPressed: () {},
-        label: const Text("+ Create new route!"),
+        text: '+ Create new route!',
       ),
+      // floatingActionButton: FloatingActionButton.extended(
+      //   backgroundColor: const Color(0xFF0C1432),
+      //   onPressed: () {},
+      //   label: const Text("+ Create new route!"),
+      // ),
     );
   }
 

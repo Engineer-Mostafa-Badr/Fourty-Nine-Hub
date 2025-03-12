@@ -15,7 +15,8 @@ class DefaultTextFormField extends MainTextFormField {
     // final FocusNode? nextFocusNode,
     // required final TextEditingController currentController,
     required final String hint,
-    TextInputType super.keyboardType = TextInputType.text,
+
+    super.keyboardType,
     // super.margin = null,
     // super.contentPadding,
     super.style,
@@ -68,6 +69,7 @@ class DefaultTextFormField extends MainTextFormField {
           textCapitalization: TextCapitalization.words,
           // maxLines: maxLines,
           // suffixIcon: suffixIcon,
+
           prefixIcon: prefixIcon,
           inputFormatters: inputFormatter,
         );

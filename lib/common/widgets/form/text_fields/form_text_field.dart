@@ -77,7 +77,7 @@ class FormTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(children: [
       SizedBox(
-        height: height ?? 70,
+        height: height ?? 40,
         child: TextFormField(
           readOnly: readOnly??false,
           // style:
@@ -126,10 +126,10 @@ class FormTextField extends StatelessWidget {
             constraints: constraints,
             hintText: hint,
             filled: true,
-            fillColor: context.theme.scaffoldBackgroundColor,
+            fillColor: AppColors.GREYFIELD,
             labelText: label,
-            // hintStyle: style ??
-            //     TextStyle(fontSize: 30.sp, color: AppColors.QUANTITY_COLOR),
+            hintStyle: style ??
+               Styles.mediumText(fontSize: 12,color: AppColors.GREY_DARK_COLOR),
             // labelStyle: style ??
             //     TextStyle(fontSize: 30.sp, color: AppColors.QUANTITY_COLOR),
             prefixIcon: prefix,
@@ -138,7 +138,7 @@ class FormTextField extends StatelessWidget {
                 ? InputBorder.none
                 : OutlineInputBorder(
                     borderSide: const BorderSide(
-                      color: Colors.black,
+                      color: AppColors.GREYFIELD,
                     ),
                     borderRadius: borderRadius ?? BorderRadius.circular(5),
                   ),
@@ -146,7 +146,7 @@ class FormTextField extends StatelessWidget {
                 ? InputBorder.none
                 : OutlineInputBorder(
                     borderSide: const BorderSide(
-                      color: AppColors.PRIMARY_COLOR,
+                      color: AppColors.GREYFIELD,
                     ),
                     borderRadius: borderRadius ?? BorderRadius.circular(5),
                   ),

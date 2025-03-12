@@ -26,6 +26,8 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../../core/widget/custom_switch_button.dart';
+
 class TripInfoButtonSheetWidget extends StatefulWidget {
   const TripInfoButtonSheetWidget({super.key, required this.model});
   final GetTripInfoModel model;
@@ -446,9 +448,9 @@ class _TripInfoButtonSheetWidgetState extends State<TripInfoButtonSheetWidget> {
                             LocaleKeys.record.tr(),
                             style: const TextStyle(fontSize: 17),
                           ),
-                          Switch(
-                            activeTrackColor: AppColors.PRIMARY_COLOR,
-                            inactiveTrackColor: Colors.grey,
+                          CustomSwitchButton(
+                            // activeTrackColor: AppColors.PRIMARY_COLOR,
+                            // inactiveTrackColor: Colors.grey,
                             value: getTripInfoCubit.record,
                             onChanged: (value) {
                               getTripInfoCubit.recordChange(value);
@@ -465,9 +467,9 @@ class _TripInfoButtonSheetWidgetState extends State<TripInfoButtonSheetWidget> {
                             LocaleKeys.comfort.tr(),
                             style: const TextStyle(fontSize: 17),
                           ),
-                          Switch(
-                            activeTrackColor: AppColors.PRIMARY_COLOR,
-                            inactiveTrackColor: Colors.grey,
+                          CustomSwitchButton(
+                            // activeTrackColor: AppColors.PRIMARY_COLOR,
+                            // inactiveTrackColor: Colors.grey,
                             value: getTripInfoCubit.model.comfort ?? false,
                             onChanged: (value) {
                               getTripInfoCubit.comfort(value);
@@ -499,9 +501,9 @@ class _TripInfoButtonSheetWidgetState extends State<TripInfoButtonSheetWidget> {
                                       fontWeight: FontWeight.w500),
                                 ),
                                 const Spacer(),
-                                Switch(
-                                  activeTrackColor: AppColors.PRIMARY_COLOR,
-                                  inactiveTrackColor: Colors.grey,
+                                CustomSwitchButton(
+                                  // activeTrackColor: AppColors.PRIMARY_COLOR,
+                                  // inactiveTrackColor: Colors.grey,
                                   value: getTripInfoCubit.model.autoAccept ??
                                       false,
                                   onChanged: (value) {

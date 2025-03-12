@@ -1,0 +1,60 @@
+import 'package:flutter/material.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/insta_reel_card.dart';
+import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_model.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
+
+class FacebookReels extends StatefulWidget {
+  const FacebookReels({super.key, required this.reels});
+  final List<Reel> reels;
+
+  @override
+  State<FacebookReels> createState() => _FacebookReelsState();
+}
+
+class _FacebookReelsState extends State<FacebookReels> {
+  final ScrollController _scrollController = ScrollController();
+  int _currentIndex = -1;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      decoration: const BoxDecoration(
+        color: AppColors.BG_GRAY_COLOR,
+        border: Border(bottom: BorderSide(color: AppColors.BG_GRAY_COLOR, width: 6)),
+      ),
+      padding: const EdgeInsetsDirectional.only(start: 10, bottom: 16, top: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Reels',
+            style: Styles.headerText(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            height: 180,
+            child: ListView.separated(
+              controller: _scrollController,
+              shrinkWrap: true,
+              itemCount: widget.reels.length,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                return SizedBox(
+                  height: 180,
+                  width: 104,
+                  child: InstagramReelCard(
+                    item: widget.reels[index],
+                    playVideo: index == _currentIndex,
+                  ),
+                );
+              },
+              separatorBuilder: (context, index) => const SizedBox(width: 10),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

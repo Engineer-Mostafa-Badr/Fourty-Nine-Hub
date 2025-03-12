@@ -8,9 +8,9 @@ class LocationModel extends LocationEntity {
   });
   factory LocationModel.fromJson(Map<String, dynamic> json) {
     return LocationModel(
-      place: json['place'] ?? '',
-      lat: json['lat'] ?? '',
-      log: json['long'] ?? '',
+      place: json['name'] ?? '',
+      lat: ((json['coordinates'] !=null&& json['coordinates'].isNotEmpty) ? json['coordinates'][0] : 0)?? 0,
+      log: ((json['coordinates'] !=null&& json['coordinates'].isNotEmpty) ? json['coordinates'][1] : 0)?? 0,
     );
   }
 }

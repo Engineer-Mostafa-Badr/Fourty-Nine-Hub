@@ -438,7 +438,7 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                   }
                 },
                 child: ImageFromInternet(
-                  image: (post.user?.image != null) ? post.user.image : '',
+                  image: (post.user.image != null) ? post.user.image??'' : '',
                   height: 45,
                   width: 45,
                   isCircle: true,

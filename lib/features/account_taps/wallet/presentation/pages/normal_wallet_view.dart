@@ -20,6 +20,7 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 import '../../../../payment/presentation/pages/payment_cash_out.dart';
+import '../../../../subscripe/presentation/widgets/amounts.dart';
 import '../cubit/wallet_cubit.dart';
 import '../widgets/drop_down_subscription.dart';
 import '../widgets/wallet_card_widget.dart';
@@ -131,6 +132,30 @@ class _NormalWalletViewState extends State<NormalWalletView> {
                   ),
                 ),
                 const Sizer(),
+                AppButton(
+                  label: LocaleKeys.chargeWallet.localize,
+                  backColor: Colors.green,
+                  color: AppColors.AUTH_CONTAINER_COLOR,
+                  onPressed: () {
+                    // showActiveSubscriptionAmounts(walletType: subscribeParams.walletType);
+                    // const SubscriptoinAmountsWidget(
+                      // amounts: 5,
+                      // walletType: WalletTypes.mainWallet,
+                    // );
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => BlocProvider<PaymentCubit>(
+                    //       create: (BuildContext context) =>
+                    //           serviceLocator(),
+                    //       //TODO Change with Deposit Screen
+                    //       child: const PaymentCashOut(),
+                    //     ),
+                    //   ),
+                    // );
+                  },
+                ),
+                const Sizer(),
                 state.wallet?.realAmount != null &&
                         state.wallet!.realAmount! >= 500
                     ? AppButton(
@@ -227,4 +252,23 @@ class _NormalWalletViewState extends State<NormalWalletView> {
       ),
     );
   }
+  // Future<void> showActiveSubscriptionAmounts(
+  //     {required WalletTypes walletType}) async {
+  //   final response =
+  //   await _getActiveSubscriptionAmountsUseCase(const NoParams());
+  //   response.fold(
+  //         (l) => showErrorMessage(
+  //       context,
+  //       Labels.errorHappened,
+  //     ),
+  //         (data) => bottomSheet(
+  //       context: context,
+  //       widget: SubscriptoinAmountsWidget(
+  //         amounts: data,
+  //         walletType: walletType,
+  //       ),
+  //     ),
+  //   );
+  // }
+
 }

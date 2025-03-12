@@ -77,13 +77,13 @@ class _DoctorDetailsAccountHeaderState
   @override
   Widget build(BuildContext context) {
     final doctorDetailsCubit = context.read<DoctorDetailsCubit>();
-    final doctor = doctorDetailsCubit.doctor;
-    TimeOfDay timeToStart = doctor.timeToStart.isNotEmpty
-        ? stringToTimeOfDay(doctor.timeToStart)
+    final doctor = doctorDetailsCubit.state.doctor;
+    TimeOfDay timeToStart = (doctor?.timeToStart.isNotEmpty??false)
+        ? stringToTimeOfDay(doctor?.timeToStart??'')
         : TimeOfDay.now();
-    bool isNonZero = isNonZeroTime(doctor.timeToStart);
-    print('isBet ${doctor.isBetweenStartAndEnd}');
-    print('doctorRoomMeeting ${doctor.meetingData?.toJson()}');
+    bool isNonZero = isNonZeroTime(doctor?.timeToStart??'');
+    print('isBet ${doctor?.isBetweenStartAndEnd??false}');
+    print('doctorRoomMeeting ${doctor?.meetingData?.toJson()}');
     print(isNonZero);
     final formKey = GlobalKey<FormState>();
     return Column(
@@ -94,7 +94,7 @@ class _DoctorDetailsAccountHeaderState
           children: [
             SquareImage(
               source: NetworkImage(
-                doctor.image,
+                doctor?.image??'',
               ),
               radius: 10,
               height: kToolbarHeight * 1.5,
@@ -113,17 +113,17 @@ class _DoctorDetailsAccountHeaderState
                         children: [
                           Label(
                             text:
-                                '${toBeginningOfSentenceCase(doctor.firstName)} ${toBeginningOfSentenceCase(doctor.lastName)}',
+                                '${toBeginningOfSentenceCase(doctor?.firstName??'')} ${toBeginningOfSentenceCase(doctor?.lastName??'')}',
                             style:
                                 Styles.mediumText(fontWeight: FontWeight.w500),
                           ),
                           RatingStars(
-                            rating: doctor.rating,
+                            rating: doctor?.rating??0,
                             color: AppColors.ACCENT_COLOR,
                             iconSize: 18,
                           ),
                           Label(
-                              text: doctor.description,
+                              text: doctor?.description??'',
                               maxLines: 1,
                               style: Styles.mediumText()),
                         ],
@@ -264,7 +264,7 @@ class _DoctorDetailsAccountHeaderState
                                                       .addRating(
                                                           AddDoctorRatingParams(
                                                               doctorId:
-                                                                  doctor.id,
+                                                                  doctor?.id??'',
                                                               rating: rating,
                                                               comment:
                                                                   commentController
@@ -455,9 +455,9 @@ class _DoctorDetailsAccountHeaderState
                 ),
                 Row(
                   children: [
-                    doctor.isAfterEnd
+                    (doctor?.isAfterEnd??false)
                         ? const Spacer(flex: 4)
-                        : doctor.isBetweenStartAndEnd == true
+                        : doctor?.isBetweenStartAndEnd == true
                             ? Expanded(
                                 flex: 4,
                                 child: AppButton(
@@ -467,7 +467,7 @@ class _DoctorDetailsAccountHeaderState
                                     bool result = await context
                                         .read<StreamCubit>()
                                         .joinNewMeeting(
-                                            doctor.meetingData?.roomId ?? '');
+                                            doctor?.meetingData?.roomId ?? '');
                                     if (result) {
                                       await context
                                           .read<SecretsCubit>()
@@ -475,7 +475,7 @@ class _DoctorDetailsAccountHeaderState
                                       context.go(Routes.MEETINGROOM,
                                           extra: MeetingRoomArguments(
                                               liveID:
-                                                  doctor.meetingData?.roomId ??
+                                                  doctor?.meetingData?.roomId ??
                                                       '',
                                               isHost: false,
                                               userName: context
@@ -488,7 +488,7 @@ class _DoctorDetailsAccountHeaderState
                                   },
                                 ),
                               )
-                            : (doctor.timeToStart.isNotEmpty && isNonZero)
+                            : ((doctor?.timeToStart.isNotEmpty??false) && isNonZero)
                                 ? Expanded(
                                     flex: 4,
                                     child: Center(
@@ -508,7 +508,7 @@ class _DoctorDetailsAccountHeaderState
                                                 hours: timeToStart.hour),
                                             onDone: () {
                                               setState(() {
-                                                doctor.isBetweenStartAndEnd =
+                                                doctor?.isBetweenStartAndEnd =
                                                     true;
                                               });
                                             },
@@ -525,7 +525,7 @@ class _DoctorDetailsAccountHeaderState
                           bottomSheet(
                               context: context,
                               widget: ReportView(
-                                id: doctor.id,
+                                id: doctor?.id??'',
                                 categoryId: serviceLocator<HealthSharedData>()
                                     .doctorSearchParams
                                     .subCategory

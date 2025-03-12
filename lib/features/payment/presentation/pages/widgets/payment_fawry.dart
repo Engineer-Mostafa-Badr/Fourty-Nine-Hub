@@ -5,10 +5,11 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+
 import '../../../../../common/widgets/stateless/dynamic/are_you_sure.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/error/failure.dart';
-import '../../../../../res/style/app_colors.dart';
+import '../../../../../core/widget/custom_switch_list_title.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../domain/use_cases/cache_out/pay_out_request_use_case.dart';
@@ -66,21 +67,22 @@ class _PaymentFawryCardState extends State<PaymentFawryCard> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SwitchListTile(
+                  CustomSwitchListTile(
                     title: Label(
                       maxLines: 2,
                       text: LocaleKeys.HaveWallet.localize,
                       style: Styles.mediumText(),
                     ),
-                    value: hasDigitalWallet,
-                    activeTrackColor: AppColors.SECONDARY_COLOR,
-                    activeColor: AppColors.AUTH_CONTAINER_COLOR,
-                    inactiveTrackColor: AppColors.GREY_NORMAL_COLOR,
                     onChanged: (value) {
-                      setState(() {
-                        hasDigitalWallet = value;
-                      });
-                    },
+                    setState(() {
+                      hasDigitalWallet = value;
+                    });
+                  },
+                    value: hasDigitalWallet,
+                    // activeTrackColor: AppColors.SECONDARY_COLOR,
+                    // activeColor: AppColors.AUTH_CONTAINER_COLOR,
+                    // inactiveTrackColor: AppColors.GREY_NORMAL_COLOR,
+
                   ),
                   if (hasDigitalWallet) ...[
                     buildInputField(

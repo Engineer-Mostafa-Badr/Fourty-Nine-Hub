@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/riderequest_cubit.dart';
-import '../../../../../../../common/widgets/form/text_fields/form_text_field.dart';
-import '../../../../../../../common/widgets/stateless/buttons/app_button.dart';
-import '../../../../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../../../common/widgets/form/text_fields/form_text_field.dart';
+import '../../../../../../../common/widgets/stateless/buttons/app_button.dart';
+import '../../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../../core/widget/custom_switch_button.dart';
 import '../../../../../../../res/style/app_colors.dart';
+import '../../../../../../../res/style/styles.dart';
 
 class GiveOffer extends StatelessWidget {
   final formState = GlobalKey<FormState>();
@@ -68,7 +69,7 @@ class GiveOffer extends StatelessWidget {
                           text:
                               'Automatically accept the nearest driver for your fare',
                           style: Styles.mediumText())),
-                  Switch(
+                  CustomSwitchButton(
                       value: state.autoAccept,
                       onChanged: (v) => controller.changeAutoAcceptStatus(v: v))
                 ],

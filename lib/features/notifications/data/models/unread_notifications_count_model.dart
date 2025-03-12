@@ -5,6 +5,7 @@ class UnreadNotificationsCountModel extends UnreadNotificationsCountEntity {
     super.appCount,
     super.servicesCount,
     super.socialCount,
+    super.requestLogCount,
     super.total,
   });
 

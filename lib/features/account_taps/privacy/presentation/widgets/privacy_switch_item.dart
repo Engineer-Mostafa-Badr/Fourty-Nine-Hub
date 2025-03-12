@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/widget/custom_switch_button.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 
@@ -44,13 +44,13 @@ class PrivacySwitchItem extends StatelessWidget {
             SizedBox(
               width: 10.w,
             ),
-            Switch(
+            CustomSwitchButton(
               value: privacy,
               onChanged: onPress,
-              activeColor: Colors.red,
-              inactiveThumbColor: Colors.black,
-              activeTrackColor: AppColors.GREY_NORMAL_COLOR,
-              inactiveTrackColor: AppColors.GREY_NORMAL_COLOR,
+              // activeColor: Colors.red,
+              // inactiveThumbColor: Colors.black,
+              // activeTrackColor: AppColors.GREY_NORMAL_COLOR,
+              // inactiveTrackColor: AppColors.GREY_NORMAL_COLOR,
             ),
           ],
         ),

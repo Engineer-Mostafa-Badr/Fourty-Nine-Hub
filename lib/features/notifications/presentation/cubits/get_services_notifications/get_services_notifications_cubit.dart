@@ -11,7 +11,7 @@ part 'get_services_notifications_state.dart';
 
 class GetServicesNotificationsCubit
     extends Cubit<GetServicesNotificationsState> {
-  GetNotficationsUseCase getNotficationsUseCase;
+  GetNotificationsUseCase getNotficationsUseCase;
   final BuildContext context;
   GetServicesNotificationsCubit({
     required this.context,

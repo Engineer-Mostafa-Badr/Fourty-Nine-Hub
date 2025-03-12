@@ -1,14 +1,17 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+
 import '../../../../../common/widgets/stateless/dynamic/are_you_sure.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/widget/custom_switch_list_title.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
@@ -74,12 +77,12 @@ class _PaymentYellowCardState extends State<PaymentYellowCard> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SwitchListTile(
+                  CustomSwitchListTile(
                     title: Label(text: LocaleKeys.doYellowCard.localize),
                     value: hasYellowCard,
-                    activeTrackColor: AppColors.SECONDARY_COLOR,
-                    activeColor: AppColors.AUTH_CONTAINER_COLOR,
-                    inactiveTrackColor: AppColors.GREY_NORMAL_COLOR,
+                    // activeTrackColor: AppColors.SECONDARY_COLOR,
+                    // activeColor: AppColors.AUTH_CONTAINER_COLOR,
+                    // inactiveTrackColor: AppColors.GREY_NORMAL_COLOR,
                     onChanged: (value) {
                       setState(() {
                         hasYellowCard = value;

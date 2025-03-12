@@ -1,18 +1,34 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/face_book_view.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import '../../../../stories/presentation/cubit/stories_cubit.dart';
 
-class FacebookBody extends StatelessWidget {
+class FacebookBody extends StatefulWidget {
   const FacebookBody({super.key, required this.scrollController});
 
   final ScrollController scrollController;
 
   @override
+  State<FacebookBody> createState() => _FacebookBodyState();
+}
+
+class _FacebookBodyState extends State<FacebookBody> with TickerProviderStateMixin{
+  late TabController tabController;
+  @override
+  void initState() {
+    tabController = TabController(length: 3, vsync: this);
+    super.initState();
+  }
+
+    @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
@@ -26,7 +42,72 @@ class FacebookBody extends StatelessWidget {
           // create: (context) => serviceLocator<StoryCubit>(),
         ),
       ],
-      child: FaceBookView(),
+      child: Column(
+        children: [
+          TabBar(
+              controller: tabController,
+              tabs: [
+                Tab(
+                  height: 44,
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children:[
+                        SvgPicture.asset(Assets.home,width: 18,height: 18,),
+                        const SizedBox(width: 10),
+                        Text(LocaleKeys.home.localize,style:const TextStyle(
+                            color: Colors.black,
+                            fontSize: 12,
+                            fontWeight:FontWeight.w700
+                        ))
+                      ]
+                  ),
+                  // icon: SvgPicture.asset(Assets.home,width: 18,height: 18,),
+                  // text: LocaleKeys.home.localize,
+                ),
+                Tab(
+                  height: 44,
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children:[
+                        SvgPicture.asset(Assets.people,width: 18,height: 18,),
+                        const SizedBox(width: 10),
+                        Text(LocaleKeys.people.localize,style:const TextStyle(
+                            color: Colors.black,
+                            fontSize: 12,
+                            fontWeight:FontWeight.w700
+                        ))
+                      ]
+                  ),
+                  // icon: SvgPicture.asset(Assets.people,width: 18,height: 18,),
+                  // text: LocaleKeys.people.localize,
+                ),
+                Tab(
+                  height: 44,
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children:[
+                        SvgPicture.asset(Assets.profile,width: 18,height: 18,),
+                        const SizedBox(width: 10),
+                        Text(LocaleKeys.profile.localize,style:const TextStyle(
+                            color: Colors.black,
+                            fontSize: 12,
+                            fontWeight:FontWeight.w700
+                        ),overflow: TextOverflow.ellipsis,)
+                      ]
+                  ),
+                  // text: LocaleKeys.profile.localize,
+                ),
+              ]),
+          Expanded(child: TabBarView(
+              controller: tabController,
+              children: [
+                const FaceBookView(),
+                Container(),
+                Container(),
+              ]))
+        ],
+      ),
+      // child: FaceBookView(),
     );
   }
 }

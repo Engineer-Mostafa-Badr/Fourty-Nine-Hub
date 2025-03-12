@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/custom_floating_action_button.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_states.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/edit_page_cubit/edit_page_cubit.dart';
@@ -48,35 +49,55 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
       "Farming": preferences.farming.enabled,
       "Government Services": preferences.governmentServices.enabled,
       "Social": preferences.industry.enabled,
+      "Jobs": preferences.jobs.enabled,
+      "Fitness": preferences.fitness.enabled,
+      "Marriage": preferences.marriage.enabled,
     };
   }
 
   List<String> _getLocalizedNames(FavouriteCatEntity preferences) {
     final isArabic = Localizations.localeOf(context).languageCode == 'ar';
-
     return [
-      isArabic ? preferences.homeService.nameAr : preferences.homeService.nameEn,
+      isArabic
+          ? preferences.homeService.nameAr
+          : preferences.homeService.nameEn,
       isArabic ? preferences.craft.nameAr : preferences.craft.nameEn,
       isArabic ? preferences.realEstate.nameAr : preferences.realEstate.nameEn,
       isArabic ? preferences.cars.nameAr : preferences.cars.nameEn,
       isArabic ? preferences.smoking.nameAr : preferences.smoking.nameEn,
-      isArabic ? preferences.homeEssentials.nameAr : preferences.homeEssentials.nameEn,
+      isArabic
+          ? preferences.homeEssentials.nameAr
+          : preferences.homeEssentials.nameEn,
       isArabic ? preferences.technology.nameAr : preferences.technology.nameEn,
       isArabic ? preferences.projects.nameAr : preferences.projects.nameEn,
-      isArabic ? preferences.computersCameras.nameAr : preferences.computersCameras.nameEn,
-      isArabic ? preferences.musicalInstruments.nameAr : preferences.musicalInstruments.nameEn,
-      isArabic ? preferences.travelTourism.nameAr : preferences.travelTourism.nameEn,
+      isArabic
+          ? preferences.computersCameras.nameAr
+          : preferences.computersCameras.nameEn,
+      isArabic
+          ? preferences.musicalInstruments.nameAr
+          : preferences.musicalInstruments.nameEn,
+      isArabic
+          ? preferences.travelTourism.nameAr
+          : preferences.travelTourism.nameEn,
       isArabic ? preferences.libraries.nameAr : preferences.libraries.nameEn,
-      isArabic ? preferences.fashionBeauty.nameAr : preferences.fashionBeauty.nameEn,
+      isArabic
+          ? preferences.fashionBeauty.nameAr
+          : preferences.fashionBeauty.nameEn,
       isArabic ? preferences.animals.nameAr : preferences.animals.nameEn,
       isArabic ? preferences.farming.nameAr : preferences.farming.nameEn,
-      isArabic ? preferences.governmentServices.nameAr : preferences.governmentServices.nameEn,
+      isArabic
+          ? preferences.governmentServices.nameAr
+          : preferences.governmentServices.nameEn,
       isArabic ? preferences.industry.nameAr : preferences.industry.nameEn,
+      isArabic ? preferences.jobs.nameAr : preferences.jobs.nameEn,
+      isArabic ? preferences.marriage.nameAr : preferences.marriage.nameEn,
+      isArabic ? preferences.fitness.nameAr : preferences.fitness.nameEn,
     ];
   }
 
   bool isNextShow = true;
   late ScrollController controller;
+
   initState() {
     super.initState();
     controller = ScrollController();
@@ -96,7 +117,7 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
+    return Scaffold(
       body: BlocProvider<CustomPageCubit>(
         create: (BuildContext context) =>
             serviceLocator<CustomPageCubit>()..fetchFavouriteCat(),
@@ -110,11 +131,13 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
               return Column(
                 children: [
                   ListTile(
-                    title: Text(LocaleKeys.favoriteCategory.localize),
-                    subtitle: Text(LocaleKeys.favouriteDescrepion.localize),
+                    subtitle: Text(LocaleKeys.favouriteDescription.localize),
                   ),
                   Expanded(
-                    child: ListView.builder(
+                    child: GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2),
                       controller: controller,
                       itemCount: _categoriesMap.length,
                       itemBuilder: (context, index) {
@@ -173,11 +196,7 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
               }
             },
             builder: (BuildContext context, Object? state) {
-              return CustomElevatedButton(
-                child: Text(
-                  LocaleKeys.next.localize,
-                  style: const TextStyle(color: AppColors.whiteColor),
-                ),
+              return CustomFloatingActionButton(
                 onPressed: () {
                   // Collect selected categories
                   final selectedCategories = _categoriesMap.entries
@@ -264,7 +283,100 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
                     );
                   }
                 },
+                text: LocaleKeys.next.localize,
               );
+              // return CustomElevatedButton(
+              //   child: Text(
+              //     LocaleKeys.next.localize,
+              //     style: const TextStyle(color: AppColors.whiteColor),
+              //   ),
+              //   onPressed: () {
+              //     // Collect selected categories
+              //     final selectedCategories = _categoriesMap.entries
+              //         .where((entry) => entry.value == true)
+              //         .map((entry) => entry.key)
+              //         .toList();
+              //
+              //     if (selectedCategories.length >= 3 &&
+              //         selectedCategories.length <= 8) {
+              //       context
+              //           .read<CustomPageCubit>()
+              //           .updateFavouriteCat(FavouriteCatParams(
+              //             animals: _categoriesMap["Animals"] ?? false,
+              //             cars: _categoriesMap["Cars"] ?? false,
+              //             collectiblesGifts:
+              //                 _categoriesMap["Collectibles Gifts"] ?? false,
+              //             computersCameras:
+              //                 _categoriesMap["Computers Cameras"] ?? false,
+              //             craft: _categoriesMap["Craft"] ?? false,
+              //             dating: _categoriesMap["Dating"] ?? false,
+              //             discountsOffers:
+              //                 _categoriesMap["Discounts Offers"] ?? false,
+              //             doctorJob: _categoriesMap["Doctor Job"] ?? false,
+              //             electricalDevices:
+              //                 _categoriesMap["Electrical Devices"] ?? false,
+              //             equipment: _categoriesMap["Equipment"] ?? false,
+              //             farming: _categoriesMap["Farming"] ?? false,
+              //             fashionBeauty:
+              //                 _categoriesMap["Fashion Beauty"] ?? false,
+              //             governmentServices:
+              //                 _categoriesMap["Government Services"] ?? false,
+              //             homeEssentials:
+              //                 _categoriesMap["Home Essentials"] ?? false,
+              //             homeService: _categoriesMap["Home Service"] ?? false,
+              //             marketingSales:
+              //                 _categoriesMap["Marketing Sales"] ?? false,
+              //             medicalService:
+              //                 _categoriesMap["Medical Service"] ?? false,
+              //             mobilesTablets:
+              //                 _categoriesMap["Mobiles Tablets"] ?? false,
+              //             packaging: _categoriesMap["Packaging"] ?? false,
+              //             ports: _categoriesMap["Ports"] ?? false,
+              //             projects: _categoriesMap["Projects"] ?? false,
+              //             rawMaterials:
+              //                 _categoriesMap["Raw Materials"] ?? false,
+              //             realEstate: _categoriesMap["Real Estate"] ?? false,
+              //             remnants: _categoriesMap["Remnants"] ?? false,
+              //             smoking: _categoriesMap["Smoking"] ?? false,
+              //             social: _categoriesMap["Social"] ?? false,
+              //             spareParts: _categoriesMap["Spare Parts"] ?? false,
+              //             technology: _categoriesMap["Technology"] ?? false,
+              //             vehicles: _categoriesMap["Vehicles"] ?? false,
+              //             wholesaleTrade:
+              //                 _categoriesMap["Wholesale Trade"] ?? false,
+              //             // Adding the missing fields
+              //             accessories: _categoriesMap["Accessories"] ?? false,
+              //             accountantJob:
+              //                 _categoriesMap["Accountant Job"] ?? false,
+              //             charitys: _categoriesMap["Charitys"] ?? false,
+              //             education: _categoriesMap["Education"] ?? false,
+              //             engineerJob: _categoriesMap["Engineer Job"] ?? false,
+              //             events: _categoriesMap["Events"] ?? false,
+              //             fitness: _categoriesMap["Fitness"] ?? false,
+              //             handmades: _categoriesMap["Handmades"] ?? false,
+              //             healthyTools:
+              //                 _categoriesMap["Healthy Tools"] ?? false,
+              //             jewelryWatches:
+              //                 _categoriesMap["Jewelry Watches"] ?? false,
+              //             libraries: _categoriesMap["Libraries"] ?? false,
+              //             musicalInstruments:
+              //                 _categoriesMap["Musical Instruments"] ?? false,
+              //             scenery: _categoriesMap["Scenery"] ?? false,
+              //             talent: _categoriesMap["Talent"] ?? false,
+              //             travelTourism:
+              //                 _categoriesMap["Travel Tourism"] ?? false,
+              //             otherJob: _categoriesMap["Other Job"] ?? false,
+              //           ));
+              //     } else {
+              //       // Show a message if the selection is not valid
+              //       ScaffoldMessenger.of(context).showSnackBar(
+              //         SnackBar(
+              //           content: Text(LocaleKeys.atLeast3atMost8items.localize),
+              //         ),
+              //       );
+              //     }
+              //   },
+              // );
             },
           ),
         ),

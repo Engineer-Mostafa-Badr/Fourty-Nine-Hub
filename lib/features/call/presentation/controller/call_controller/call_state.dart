@@ -2,38 +2,55 @@ import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fourtyninehub/features/call/domain/entities/call_data.dart';
 
-abstract class CallState extends Equatable {
+abstract class CallState extends Equatable {}
+
+class NoCalls extends CallState {
   @override
   List<Object?> get props => [];
 }
 
-class NoCalls extends CallState {}
-
 class HasCall extends CallState {
-  final RtcEngine engine;
+  final RtcEngine? engine;
   final CallData callData;
-  final bool isSpeaker;
   final bool isMute;
+  final bool isSpeaker;
+  final bool isVideoEnabled;
+  final bool isZegoCloud;
 
   HasCall({
-    required this.engine,
+    this.engine,
     required this.callData,
-    this.isSpeaker = false,
     this.isMute = false,
+    this.isSpeaker = false,
+    this.isVideoEnabled = false,
+    this.isZegoCloud = false,
   });
 
-  HasCall copyWith({bool? isSpeaker, bool? isMute}) => HasCall(
-        engine: engine,
-        callData: callData,
-        isSpeaker: isSpeaker ?? this.isSpeaker,
-        isMute: isMute ?? this.isMute,
-      );
+  HasCall copyWith({
+    RtcEngine? engine,
+    CallData? callData,
+    bool? isMute,
+    bool? isSpeaker,
+    bool? isVideoEnabled,
+    bool? isZegoCloud,
+  }) {
+    return HasCall(
+      engine: engine ?? this.engine,
+      callData: callData ?? this.callData,
+      isMute: isMute ?? this.isMute,
+      isSpeaker: isSpeaker ?? this.isSpeaker,
+      isVideoEnabled: isVideoEnabled ?? this.isVideoEnabled,
+      isZegoCloud: isZegoCloud ?? this.isZegoCloud,
+    );
+  }
 
   @override
   List<Object?> get props => [
         engine,
         callData,
-        isSpeaker,
         isMute,
+        isSpeaker,
+        isVideoEnabled,
+        isZegoCloud,
       ];
 }
