@@ -156,7 +156,7 @@ class WalletViewBody extends StatelessWidget {
                       icon: SvgPicture.asset(
                         Assets.transferMoneyByMobileIcon,
                       ),
-                      label: 'Transfer Money',
+                      label: LocaleKeys.transferMoney.localize,
                       onPressed: () {
                         context.push(Routes.TRANSFERMONEY);
                       },

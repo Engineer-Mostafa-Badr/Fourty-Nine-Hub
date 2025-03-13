@@ -290,6 +290,7 @@
   "competitions": "Competitions",
   "requestWithdraw": "Request Withdraw",
   "requestTransaction": "request for personal transaction",
+  "requestTransaction2": "Request Transfer",
   "years": "Years",
   "transfer": "Transfer",
   "cancel": "Cancel",
@@ -1400,5 +1401,11 @@
   "busWithYou": "Bus ride with You",
   "trukWithYou": "Truck ride with You",
   "passenger": "Passenger",
-  "billGift": "Bill Gift"
+  "billGift": "Bill Gift",
+  "getMoney": "Money Get",
+  "withdrawalLimit": "Withdrawal Limit",
+  "minimumRequestWithdrawalIs": "Minimum request withdrawal is 10000 EGP for",
+  "EGPFor": "EGP for",
+  "personalTransaction": "personal transaction.",
+  "uploadBill": "Upload Bill"
 }

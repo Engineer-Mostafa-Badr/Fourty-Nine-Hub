@@ -289,6 +289,7 @@
   "competitions": "المسابقات",
   "requestWithdraw": "طلب سحب",
   "requestTransaction": "طلب للمعاملات الشخصية",
+  "requestTransaction2": "طلب معاملة",
   "years": "سنوات",
   "transfer": "تحويل",
   "save": "حفظ",
@@ -1383,5 +1384,11 @@
   "noSmoker": "سائق غير مدخن",
   "choiceRuler": "مسطرة الاختيارت",
   "completeRegistration": "تكملة التسجيل",
-  "billGift": "فاتورة الهدية"
+  "billGift": "فاتورة الهدية",
+  "getMoney": "المال المتحصل عليه",
+  "withdrawalLimit": "حد السحب",
+  "minimumRequestWithdrawalIs": "الحد الأدنى لطلب السحب هو",
+  "EGPFor": "حنيه مصري",
+  "personalTransaction": "للمعاملات الشخصية.",
+  "uploadBill": "تحميل الفاتورة"
 }

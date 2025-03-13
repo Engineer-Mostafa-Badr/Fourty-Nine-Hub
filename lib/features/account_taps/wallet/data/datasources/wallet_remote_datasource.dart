@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/gift_competitions_entity.dart';
 import '../../../../../core/data/datasources/remote/api/api_consumer.dart';
 import '../../../../../core/data/datasources/remote/api/end_points.dart';
 import '../../domain/entities/wallet/main_category_entity.dart';
@@ -9,6 +10,7 @@ import '../../domain/usecases/add_subscribe_use_case.dart';
 import '../../domain/usecases/delete_subscription_use_case.dart';
 import '../../domain/usecases/get_wallet_history_use_case.dart';
 import '../../domain/usecases/main_category_use_case.dart';
+import '../models/gift_competition_model.dart';
 import '../models/wallet/main_category_model.dart';
 import '../models/wallet/wallet_history_model.dart';
 import '../models/wallet/wallet_model.dart';
@@ -33,6 +35,8 @@ abstract class WalletRemoteDataSource {
       DeleteSubscriptionParams params);
 
   Future<Either<Failure, bool>> addSubscription(AddSubscriptionParams params);
+
+  Future<Either<Failure, List<GiftCompetitionEntity>>> getGiftCompetitions();
 }
 
 class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
@@ -154,6 +158,22 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
     return response.fold(
       (failure) => Left(failure),
       (response) => Right(response['status']),
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<GiftCompetitionEntity>>>
+      getGiftCompetitions() async {
+    final response = await _apiConsumer.get(EndPoints.competition);
+
+    return response.fold(
+      (failure) => Left(failure),
+      (response) {
+        final list = (response['data'] as List)
+            .map((e) => GiftCompetitionModel.fromJson(e))
+            .toList();
+        return Right(list);
+      },
     );
   }
 }

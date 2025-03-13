@@ -29,7 +29,7 @@ class GiftView extends StatelessWidget {
       ),
       body: BlocProvider(
         create: (context) =>
-            serviceLocator<GiftTwoCubit>()..fetchWheelWallet(context),
+            serviceLocator<GiftTwoCubit>()..getAllData(context),
         child: const GiftViewBody(),
       ),
     );

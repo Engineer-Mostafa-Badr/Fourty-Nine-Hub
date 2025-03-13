@@ -39,12 +39,14 @@ class ChargeWalletButtonBloc extends StatelessWidget {
         } else {
           return CustomButtonWalletAndGiftAndCashback(
               title: LocaleKeys.chargeWallet.localize,
-              color: Colors.green,
-              onpressed: () async {
+              activeColor: Colors.green,
+              onPressed: () async {
                 context.read<ChargeWalletCubit>().showActiveSubscriptionAmounts(
                       walletType: WalletTypes.mainWallet,
                     );
-              });
+              },
+            status: true,
+          );
           // return AppButton(
           //   label: LocaleKeys.chargeWallet.localize,
           //   backColor: Colors.green,

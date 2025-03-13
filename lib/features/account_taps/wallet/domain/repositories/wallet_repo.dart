@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/gift_competitions_entity.dart';
 import '../../../../../core/error/failure.dart';
 import '../entities/wallet/main_category_entity.dart';
 import '../entities/wallet/wallet_entity.dart';
@@ -22,4 +23,5 @@ abstract class WalletRepo {
   Future<Either<Failure, bool>> deleteSubscription(
       DeleteSubscriptionParams params);
   Future<Either<Failure, bool>> addSubscription(AddSubscriptionParams params);
+  Future<Either<Failure, List<GiftCompetitionEntity>>> getGiftCompetitions();
 }

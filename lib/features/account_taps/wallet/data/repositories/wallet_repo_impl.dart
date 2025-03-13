@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/data/models/wallet/wallet_model.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/gift_competitions_entity.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet/wallet_history_entity.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet/wallet_subscription_entity.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/add_subscribe_use_case.dart';
@@ -54,5 +55,10 @@ class WalletRepoImpl implements WalletRepo {
   @override
   Future<Either<Failure, bool>> addSubscription(AddSubscriptionParams params) {
     return _remoteDataSource.addSubscription(params);
+  }
+
+  @override
+  Future<Either<Failure, List<GiftCompetitionEntity>>> getGiftCompetitions() {
+    return _remoteDataSource.getGiftCompetitions();
   }
 }

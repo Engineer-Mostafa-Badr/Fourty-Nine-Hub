@@ -6,7 +6,10 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class InvestmentSection extends StatefulWidget {
-  const InvestmentSection({super.key});
+  const InvestmentSection({super.key, required this.yearsFromFiveYears, required this.yearsFromTenYears});
+
+  final int yearsFromFiveYears;
+  final int yearsFromTenYears;
 
   @override
   State<InvestmentSection> createState() => _InvestmentSectionState();
@@ -76,16 +79,16 @@ class _InvestmentSectionState extends State<InvestmentSection> {
                   child: Column(
                     children: [
                       InvestmentItem(
-                        totalYears: '5',
-                        currentYears: '0',
+                        totalYears: 5,
+                        currentYears: widget.yearsFromFiveYears,
                         onPressed: () {},
                       ),
                       const SizedBox(
                         height: 12,
                       ),
                       InvestmentItem(
-                        totalYears: '10',
-                        currentYears: '0',
+                        totalYears: 10,
+                        currentYears: widget.yearsFromTenYears,
                         onPressed: () {},
                       ),
                     ],

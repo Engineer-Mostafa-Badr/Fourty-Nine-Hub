@@ -12,8 +12,8 @@ class InvestmentItem extends StatelessWidget {
   });
 
   final void Function() onPressed;
-  final String totalYears;
-  final String currentYears;
+  final int totalYears;
+  final int currentYears;
 
   @override
   Widget build(BuildContext context) {
@@ -24,14 +24,14 @@ class InvestmentItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Label(
-              text: 'Gift / ${totalYears} Years',
+              text: 'Gift / $totalYears Years',
               style: Styles.mediumText(fontSize: 32),
             ),
             const SizedBox(
               height: 4,
             ),
             Label(
-              text: '${currentYears} Years',
+              text: '$currentYears Years',
               style: Styles.smallText(
                 fontSize: 24,
               ),
@@ -40,8 +40,9 @@ class InvestmentItem extends StatelessWidget {
         ),
         CustomButtonWalletAndGiftAndCashback(
           title: 'Request Transfer',
-          onpressed: onPressed,
+          onPressed:  onPressed,
           padding: 24,
+          status: totalYears == currentYears,
         ),
       ],
     );

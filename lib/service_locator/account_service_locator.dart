@@ -31,7 +31,6 @@ import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/fe
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/gift_two_cubit/gift_two_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_two_cubit/wallet_two_cubit.dart';
-import 'package:fourtyninehub/features/lucky_wheel/domain/use_cases/get_wheel_wallet_use_case.dart';
 import 'package:fourtyninehub/features/subscripe/domain/usecases/get_active_subscription_amounts.dart';
 import 'package:get_it/get_it.dart';
 import '../features/account_taps/account/data/repositories/account_repo_impl.dart';
@@ -43,6 +42,7 @@ import '../features/account_taps/account/presentation/cubit/managers/favourite_s
 import '../features/account_taps/lists/presentation/cubit/lists_cubit.dart';
 import '../features/account_taps/share_app/presentation/cubit/share_app_cubit.dart';
 import '../features/account_taps/wallet/domain/usecases/add_subscribe_use_case.dart';
+import '../features/account_taps/wallet/domain/usecases/get_gift_competitions_use_case.dart';
 import '../features/account_taps/wallet/domain/usecases/get_subscription_use_case.dart';
 import '../features/account_taps/wallet/domain/usecases/get_wallet_history_use_case.dart';
 import '../features/account_taps/wallet/domain/usecases/main_category_use_case.dart';
@@ -109,6 +109,8 @@ class AccountServiceLocator {
         () => GetDrawerFavouriteAdsUsecase(serviceLocator()));
     serviceLocator.registerLazySingleton<DeleteFavouriteAdsUsecase>(
         () => DeleteFavouriteAdsUsecase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetGiftCompetitionsUseCase>(
+            () => GetGiftCompetitionsUseCase(serviceLocator()));
 
     serviceLocator.registerFactory<FavouriteAdsCubit>(
         () => FavouriteAdsCubit(serviceLocator())..loadData());
@@ -169,7 +171,7 @@ class AccountServiceLocator {
     serviceLocator.registerFactory<GiftTwoCubit>(
       () => GiftTwoCubit(
         serviceLocator<GetWalletGiftsUseCase>(),
-        serviceLocator<GetWheelWalletUseCase>(),
+        serviceLocator<GetGiftCompetitionsUseCase>(),
       ),
     );
 

@@ -6,23 +6,29 @@ class CustomButtonWalletAndGiftAndCashback extends StatelessWidget {
   const CustomButtonWalletAndGiftAndCashback({
     super.key,
     required this.title,
-    required this.onpressed,
-    this.color,
+    required this.onPressed,
+    required this.status,
+    this.activeColor,
+    this.disableColor,
     this.padding,
   });
 
   final String title;
-  final void Function() onpressed;
-  final Color? color;
+  final void Function() onPressed;
+  final Color? activeColor;
+  final Color? disableColor;
   final double? padding;
+  final bool status;
 
   @override
   Widget build(BuildContext context) {
     return AppButton(
       label: title,
       style: Styles.headerText(color: Colors.white, fontSize: 32),
-      backColor: color ?? const Color(0xffF33D49),
-      onPressed: onpressed,
+      backColor: status
+          ? (activeColor ?? const Color(0xffF33D49))
+          : (disableColor ?? const Color(0xB3F33D49)),
+      onPressed: status ? onPressed : () {},
       padding: padding,
     );
   }

@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/data/datasources/Gift/gift_remote_data_source.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/gift_entities.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/gift_wallet_entity.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/repositories/gift_repository.dart';
 
 class GiftRepositoryImpl implements GiftRepository {
@@ -10,7 +10,7 @@ class GiftRepositoryImpl implements GiftRepository {
   GiftRepositoryImpl(this._remoteDataSource);
 
   @override
-  Future<Either<Failure, GiftEntity>> fetchGiftWallet() {
+  Future<Either<Failure, GiftWalletEntity>> fetchGiftWallet() {
     return _remoteDataSource.fetchGiftWallet();
   }
 

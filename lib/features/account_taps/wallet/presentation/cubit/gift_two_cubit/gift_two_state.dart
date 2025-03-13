@@ -12,12 +12,12 @@ final class GiftTwoInitial extends GiftTwoState {}
 final class GiftTwoLoading extends GiftTwoState {}
 
 final class GiftTwoSuccess extends GiftTwoState {
-  // final GiftEntity giftEntity;
-  final WheelWalletEntity wheelWalletEntity;
+  final GiftWalletEntity giftEntity;
+  final List<GiftCompetitionEntity> giftCompetitionEntity;
 
   const GiftTwoSuccess({
-    // required this.giftEntity,
-    required this.wheelWalletEntity,
+    required this.giftEntity,
+    required this.giftCompetitionEntity,
   });
 }
 

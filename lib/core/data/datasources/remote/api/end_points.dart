@@ -110,7 +110,7 @@ class EndPoints {
   static String toggleSubCategoryToFavorites(String id) =>
       '/favorite-sub-category/$id';
 
-  static const getGift = '/subscriber/competitions';
+  static const getGift = '/gift-wallet/wallet';
   static const requestWithdrawWheel = '/wheels/withdrawal';
   static String requestWithdrawCompetition(String id) {
     return '/subscriber/request-withdrawal/$id';

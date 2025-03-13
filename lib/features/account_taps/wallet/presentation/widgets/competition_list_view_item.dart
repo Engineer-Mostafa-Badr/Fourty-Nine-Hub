@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/competition_section.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_button_wallet_and_gift_and_cashback.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/percentage_competition_widget.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+
+import '../../domain/entities/gift_competitions_entity.dart';
 
 class CompetitionListViewItem extends StatelessWidget {
   const CompetitionListViewItem({
@@ -14,7 +18,7 @@ class CompetitionListViewItem extends StatelessWidget {
     required this.onPressed,
   });
 
-  final CompetitionsModell competition;
+  final GiftCompetitionEntity competition;
   final void Function() onPressed;
 
   @override
@@ -22,7 +26,7 @@ class CompetitionListViewItem extends StatelessWidget {
     return Column(
       children: [
         Label(
-          text: competition.title,
+          text: context.isArabic? competition.nameAr! : competition.nameEn!,
           style: Styles.headerText(fontSize: 32),
         ),
         const SizedBox(
@@ -37,9 +41,10 @@ class CompetitionListViewItem extends StatelessWidget {
           child: Column(
             children: [
               PercentageCompetitionWidget(
-                currentPoints: competition.currentPoints,
-                totalPoints: competition.totalPoints,
-                price: competition.price,
+                currentPoints: competition.countOfRequest!,
+                totalPoints: competition.maxRequests!,
+                price: competition.countOfRequest! * competition.pricePerRequest!,
+                percentage: (competition.countOfRequest! * competition.pricePerRequest!)/competition.withdrawLimit!,
               ),
               const SizedBox(
                 height: 4,
@@ -50,11 +55,12 @@ class CompetitionListViewItem extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Label(
-                      text: 'Money Get',
+                      text: LocaleKeys.getMoney.localize,
+                      //'Money Get',
                       style: Styles.mediumText(fontSize: 20),
                     ),
                     Label(
-                      text: 'Withdraw Limit',
+                      text: LocaleKeys.withdrawalLimit.localize,
                       style: Styles.mediumText(fontSize: 20),
                     ),
                   ],
@@ -77,17 +83,17 @@ class CompetitionListViewItem extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Label(
-                          text:
-                              'Every 4000 Friend request you will get 5000 EGP',
+                          text: context.isArabic? competition.descriptionAr! : competition.descriptionEn!,
                           style: Styles.mediumText(fontSize: 20),
+                          maxLines: 3,
                         ),
-                        Text(
-                          'you reached till now 4000 friend request which is equal 5000 EGP',
-                          // overflow: TextOverflow.ellipsis,
-                          maxLines: 2,
-                          softWrap: true,
-                          style: Styles.mediumText(fontSize: 20),
-                        ),
+                        // Text(
+                        //   'you reached till now 4000 friend request which is equal 5000 EGP',
+                        //   // overflow: TextOverflow.ellipsis,
+                        //   maxLines: 2,
+                        //   softWrap: true,
+                        //   style: Styles.mediumText(fontSize: 20),
+                        // ),
                       ],
                     ),
                   ),
@@ -97,11 +103,10 @@ class CompetitionListViewItem extends StatelessWidget {
                 height: 16,
               ),
               CustomButtonWalletAndGiftAndCashback(
-                title: 'Request Transfer',
-                onpressed: onPressed,
-                color: competition.totalPoints == competition.currentPoints
-                    ? const Color(0xFFF33D49)
-                    : const Color(0xB2F33D49),
+                title: LocaleKeys.requestTransaction2.localize,
+                //'Request Transfer',
+                onPressed: onPressed,
+                status: competition.countOfRequest == competition.maxRequests,
               ),
               const SizedBox(
                 height: 8,
@@ -120,11 +125,11 @@ class CompetitionListViewItem extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Label(
-                          text: 'Minimum request withdrawal is 10000 EGP for',
+                          text: '${LocaleKeys.minimumRequestWithdrawalIs.localize} ${competition.withdrawLimit} ${LocaleKeys.EGPFor.localize}',
                           style: Styles.mediumText(fontSize: 20),
                         ),
                         Label(
-                          text: 'personal transaction.',
+                          text: LocaleKeys.personalTransaction.localize,
                           style: Styles.mediumText(fontSize: 20),
                         ),
                       ],

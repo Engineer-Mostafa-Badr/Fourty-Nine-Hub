@@ -2,41 +2,40 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/gift_entities.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_gifts_use_case.dart';
-import 'package:fourtyninehub/features/lucky_wheel/domain/entities/wheel_wallet_entity.dart';
-import 'package:fourtyninehub/features/lucky_wheel/domain/use_cases/get_wheel_wallet_use_case.dart';
+import '../../../domain/entities/gift_competitions_entity.dart';
+import '../../../domain/entities/gift_wallet_entity.dart';
+import '../../../domain/usecases/get_gift_competitions_use_case.dart';
 
 part 'gift_two_state.dart';
 
 class GiftTwoCubit extends Cubit<GiftTwoState> {
-  GiftTwoCubit(this._giftUseCases, this._getWheelWalletUseCase)
+  GiftTwoCubit(this._giftUseCases, this._getGiftCompetitionsUseCase)
       : super(GiftTwoInitial());
 
   final GetWalletGiftsUseCase _giftUseCases;
-  final GetWheelWalletUseCase _getWheelWalletUseCase;
+  final GetGiftCompetitionsUseCase _getGiftCompetitionsUseCase;
 
   Future<void> getAllData(context) async {
     emit(GiftTwoLoading());
     final response = await _giftUseCases.call(const NoParams());
     response.fold((f) {
       emit(GiftTwoFailure(message: getFailureMessage(f, context)));
-    }, (giftEntity) async {
-      final response = await _getWheelWalletUseCase(const NoParams());
+    }, (gift) async {
+      final response = await _getGiftCompetitionsUseCase.call(const NoParams());
       response.fold(
         (f) {
           emit(GiftTwoFailure(message: getFailureMessage(f, context)));
         },
-        (wheelWalletEntity) {
+        (competitions) {
           emit(
             GiftTwoSuccess(
-              // giftEntity: giftEntity,
-              wheelWalletEntity: wheelWalletEntity,
+              giftEntity: gift,
+              giftCompetitionEntity: competitions,
             ),
           );
         },
       );
-      // emit(GiftTwoSuccess(gift: data));
     });
   }
 
@@ -50,16 +49,16 @@ class GiftTwoCubit extends Cubit<GiftTwoState> {
     });
   }
 
-  Future<void> fetchWheelWallet(context) async {
-    emit(GiftTwoLoading());
-    final response = await _getWheelWalletUseCase.call(const NoParams());
-    response.fold(
-      (f) {
-        emit(GiftTwoFailure(message: getFailureMessage(f, context)));
-      },
-      (data) {
-        emit(GiftTwoSuccess(wheelWalletEntity: data));
-      },
-    );
-  }
+  // Future<void> fetchWheelWallet(context) async {
+  //   emit(GiftTwoLoading());
+  //   final response = await _getWheelWalletUseCase.call(const NoParams());
+  //   response.fold(
+  //     (f) {
+  //       emit(GiftTwoFailure(message: getFailureMessage(f, context)));
+  //     },
+  //     (data) {
+  //       // emit(GiftTwoSuccess(wheelWalletEntity: data));
+  //     },
+  //   );
+  // }
 }

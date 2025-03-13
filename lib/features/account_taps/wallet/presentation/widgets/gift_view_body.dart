@@ -32,13 +32,14 @@ class GiftViewBody extends StatelessWidget {
             );
           }
           if (state is GiftTwoSuccess) {
-            // final giftEntity = state.giftEntity;
-            final wheelWalletEntity = state.wheelWalletEntity;
+            final giftEntity = state.giftEntity;
+            final giftCompetitionEntity = state.giftCompetitionEntity;
+
             return SingleChildScrollView(
               child: Column(
                 children: [
                   HeaderTotalAccountWidget(
-                    balance: wheelWalletEntity.amount.toString(),
+                    balance: giftEntity.amount.toString(), //wheelWalletEntity.amount.toString(),
                     // state.wallet?.realAmount?.toStringAsFixed(2) ?? '',
                     type: WalletTypes.giftWallet,
                   ),
@@ -47,22 +48,28 @@ class GiftViewBody extends StatelessWidget {
                   ),
                   CustomButtonWalletAndGiftAndCashback(
                     title: LocaleKeys.billGift.localize,
-                    onpressed: () {
+                    onPressed: () {
                       HandleCashback.setCount('tenPercentCount', context);
                       context.push(Routes.TenPercent);
                     },
+                    status: true,
                   ),
                   const SizedBox(
                     height: 16,
                   ),
-                  const InvestmentSection(),
+                  InvestmentSection(
+                    yearsFromFiveYears: giftEntity.fiveYears!,
+                    yearsFromTenYears: giftEntity.tenYears!,
+                  ),
                   // المسافة بين العنصرين هنا تم تحويلها إلى داخل الـ
                   // InvestmentSection
                   // لضبط الانميشن
                   // const SizedBox(
                   //   height: 16,
                   // ),
-                  CompetitionsSection(),
+                  CompetitionsSection(
+                    competitions: giftCompetitionEntity
+                  ),
                 ],
               ),
             );

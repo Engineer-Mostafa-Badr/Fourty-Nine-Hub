@@ -9,25 +9,40 @@ class WithDrawalButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return state
-        ? CustomButtonWalletAndGiftAndCashback(
-            title: 'Request Withdrawal',
-            color: const Color(0xB2F33D49),
-            onpressed: () async {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const PaymentCashOut(),
-                ),
-              );
-              // Navigator.pushNamed(context, Routes.PAYMENT);
-            },
-          )
-        : CustomButtonWalletAndGiftAndCashback(
-            title: 'Request Withdrawal',
-            color: const Color(0xFFF33D49),
-            onpressed: () {},
+    return CustomButtonWalletAndGiftAndCashback(
+      title: state? 'Request Withdrawal' : 'Request Withdrawal',
+      status: !state,
+      onPressed: () {
+        if(!state) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const PaymentCashOut(),
+            ),
           );
+          // Navigator.pushNamed(context, Routes.PAYMENT);
+        }
+      },
+    );
+    // return state
+    //     ? CustomButtonWalletAndGiftAndCashback(
+    //         title: 'Request Withdrawal',
+    //         color: const Color(0xB2F33D49),
+    //         onpressed: () async {
+    //           Navigator.push(
+    //             context,
+    //             MaterialPageRoute(
+    //               builder: (context) => const PaymentCashOut(),
+    //             ),
+    //           );
+    //           // Navigator.pushNamed(context, Routes.PAYMENT);
+    //         },
+    //       )
+    //     : CustomButtonWalletAndGiftAndCashback(
+    //         title: 'Request Withdrawal',
+    //         color: const Color(0xFFF33D49),
+    //         onpressed: () {},
+    //       );
     // return state
     //     ? AppButton(
     //         label: 'Request Withdrawal',

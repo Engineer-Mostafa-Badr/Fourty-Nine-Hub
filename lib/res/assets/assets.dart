@@ -284,4 +284,22 @@ abstract class Assets {
   static String edit = 'assets/icons/edit.png';
   static String option = 'assets/icons/option.png';
   static String update = 'assets/icons/update.png';
+  static String bookingRequestIcon = 'assets/icons/booking_request_icon.svg';
+  static String driverShippingTripsIcon = 'assets/icons/driver_shipping_trips_icon.svg';
+  static String driverTripsInRideIcon = 'assets/icons/driver_trips_in_ride_icon.svg';
+  static String followersIcon = 'assets/icons/followers_icon.svg';
+  static String foodRequestIcon = 'assets/icons/food_request_icon.svg';
+  static String likeClickedIcon = 'assets/icons/like_clicked_icon.svg';
+  static String liveHostIcon = 'assets/icons/live_host_icon.svg';
+  static String patientAppointmentIcon = 'assets/icons/patient_appointment_icon.svg';
+  static String postLikesIcon = 'assets/icons/post_likes_icon.svg';
+  static String premiumAdvertiseIcon = 'assets/icons/premium_advertise_icon.svg';
+  static String profileViewIcon = 'assets/icons/profile_view_icon.svg';
+  static String reel_view_icon = 'assets/icons/real_view_icon.svg';
+  static String reelLikesIcon = 'assets/icons/reel_likes_icon.svg';
+  static String reelViewIcon = 'assets/icons/reel_view_icon.svg';
+  static String rideUsageIcon = 'assets/icons/ride_usage_icon.svg';
+  static String userShippingTripsIcon = 'assets/icons/user_shipping_trips.svg';
+  static String viewCountIcon = 'assets/icons/view_count_icon.svg';
+
 }
