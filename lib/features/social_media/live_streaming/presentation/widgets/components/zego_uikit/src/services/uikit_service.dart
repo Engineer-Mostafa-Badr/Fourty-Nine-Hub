@@ -1,19 +1,17 @@
 // Dart imports:
 import 'dart:io' show Platform;
 
+// Package imports:
+import 'package:file_picker/file_picker.dart';
 // Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-
-// Package imports:
-import 'package:file_picker/file_picker.dart';
-import 'package:zego_express_engine/zego_express_engine.dart';
 import 'package:flutter_logs/flutter_logs.dart';
-
 // Project imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
+import 'package:zego_express_engine/zego_express_engine.dart';
 
 import '../channel/platform_interface.dart';
 import '../plugins/beauty/uikit_beauty_plugin_impl.dart';
@@ -21,28 +19,17 @@ import '../plugins/signaling/impl/core/core.dart';
 import 'internal/core/core.dart';
 
 part 'audio_video_service.dart';
-
-part 'custom_command_service.dart';
-
 part 'channel_service.dart';
-
+part 'custom_command_service.dart';
 part 'device_service.dart';
-
 part 'effect_service.dart';
-
 part 'logger_service.dart';
-
 part 'media_service.dart';
-
 part 'message_service.dart';
-
-part 'plugin_service.dart';
-
-part 'room_service.dart';
-
-part 'user_service.dart';
-
 part 'mixer_service.dart';
+part 'plugin_service.dart';
+part 'room_service.dart';
+part 'user_service.dart';
 
 /// {@category APIs}
 /// {@category Features}

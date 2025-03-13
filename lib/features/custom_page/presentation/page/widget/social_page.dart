@@ -14,7 +14,6 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
-import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/styles.dart';
 
 class SocialPage extends StatefulWidget {

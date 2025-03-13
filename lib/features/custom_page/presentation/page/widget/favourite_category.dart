@@ -8,11 +8,8 @@ import 'package:fourtyninehub/core/widget/custom_floating_action_button.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_states.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/edit_page_cubit/edit_page_cubit.dart';
-import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../../core/messages/messages.dart';
-import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../../domain/entity/favourite_categ_entity.dart';

@@ -14,6 +14,7 @@ import 'package:fourtyninehub/features/authentication/domain/use_cases/create_no
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 
 import '../entities/forget_password_questions_entity.dart';
+import '../use_cases/change_password_use_case.dart';
 import '../use_cases/register_use_case.dart';
 import '../use_cases/send_forget_password_otp_use_case.dart';
 import '../use_cases/verify_forget_password_otp_use_case.dart';
@@ -51,6 +52,9 @@ abstract class AuthRepository {
 
   Future<Either<Failure, void>> verifyForgetPasswordOTP(
       VerifyForgetOTPParams params);
+
+  Future<Either<Failure, UserTokensEntity>> changePassword(ChangePasswordParams params);
+
 
   Future<Either<Failure, void>> createNewForgetPassword(
       CreateNewForgetParams params);

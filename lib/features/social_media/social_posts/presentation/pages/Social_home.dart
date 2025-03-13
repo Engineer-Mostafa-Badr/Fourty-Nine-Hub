@@ -88,7 +88,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
     return DefaultTabController(
       length: 3,
       initialIndex: widget.params?.index ?? 0,
-      child: CustomScaffold(
+      child: Scaffold(
         backgroundColor: AppColors.DARK_GRAY_COLOR,
           appBar: widget.params?.hideAppBar == true
               ? null

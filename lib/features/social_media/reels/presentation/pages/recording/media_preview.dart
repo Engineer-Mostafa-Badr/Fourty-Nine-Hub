@@ -1,4 +1,6 @@
 import 'dart:io';
+
+import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,12 +17,12 @@ import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/s
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:video_player/video_player.dart';
+import 'package:image/image.dart' as img;
 import 'package:path/path.dart' as path;
+import 'package:video_player/video_player.dart';
+
 import '../../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../../service_locator/service_locator.dart';
-import 'package:image/image.dart' as img;
-import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 
 class MediaPreviewScreen extends StatefulWidget {
   final String mediaPath;

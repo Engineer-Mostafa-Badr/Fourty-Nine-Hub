@@ -6,6 +6,7 @@ import 'package:fourtyninehub/features/custom_page/domain/use_case/fetch_activat
 import 'package:fourtyninehub/features/custom_page/domain/use_case/fetch_social_page_use_case.dart';
 import 'package:fourtyninehub/features/custom_page/domain/use_case/update_activate_use_case.dart';
 import 'package:fourtyninehub/features/custom_page/domain/use_case/update_social_page_use_case.dart';
+
 import '../../domain/use_case/fetch_favourite_cat_use_case.dart';
 import '../../domain/use_case/fetch_navigate_bar_use_case.dart';
 import '../../domain/use_case/fetch_sub_tab_use_case.dart';

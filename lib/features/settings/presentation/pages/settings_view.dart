@@ -76,7 +76,7 @@ class SettingsView extends StatelessWidget {
                         trailing:
                             Icon(Icons.arrow_forward_ios_outlined, size: 40.h),
                         label: LocaleKeys.changePassword.localize,
-                        onTap: () => context.push(Routes.CHANGEPASSWORD)),
+                        onTap: () => context.push(Routes.CHANGEPASSWORDSECOND)),
                   // if (context.read<UserCubit>().isLoggedIn)
                   //   listTileWidget(
                   //       image: Assets.disableAccount,

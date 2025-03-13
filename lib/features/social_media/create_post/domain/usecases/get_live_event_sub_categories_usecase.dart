@@ -1,6 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/common/models/public/pagination_params.dart';
-import 'package:fourtyninehub/features/social_media/create_post/domain/entities/activity_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/life_event_entity.dart';
 
 import '../../../../../core/abstract/use_case.dart';

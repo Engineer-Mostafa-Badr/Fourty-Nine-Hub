@@ -16,6 +16,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/ride_thumb
 import 'package:fourtyninehub/res/assets/jsons.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 import '../../../../../core/error/failure.dart';
 import '../../../../subcategories/data/models/sub_category_model.dart';
 import '../models/car_type_model.dart';

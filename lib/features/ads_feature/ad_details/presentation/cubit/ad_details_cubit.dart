@@ -2,10 +2,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_details_model.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+
 import '../../../../../core/error/failure.dart';
 import '../../../ads/domain/usecases/get_ads_usecase.dart';
 import '../../domain/usecases/get_ad_details_usecase.dart';
 import '../../domain/usecases/make_ad_request_usecase.dart';
+
 part 'ad_details_state.dart';
 
 class AdDetailsCubit extends Cubit<AdDetailsState> {

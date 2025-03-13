@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
@@ -990,7 +991,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     context.read<CustomPageCubit>().state.activate!.customPage,
                 onChanged: (value) async {
                   await context.read<CustomPageCubit>().updateActivate(value);
-                  Restart.restartApp();
+                  Phoenix.rebirth(context);
+                  // Restart.restartApp();
                 },
                 // activeColor: Colors.white,
                 // inactiveThumbColor: Colors.white,

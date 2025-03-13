@@ -4,8 +4,6 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/controller/stream_state.dart';
 
-import '../../../../../core/widget/custom_scaffold.dart';
-
 class VideoStreamTabBar extends StatefulWidget {
   const VideoStreamTabBar({super.key});
 
