@@ -51,8 +51,8 @@ class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: label != null
           ? Label(
               text: label ?? '',
-              style: Styles.headerText()
-                  .copyWith(color: enableCustomAppBar ? Colors.white : textColor))
+              style: Styles.headerText().copyWith(
+                  color: enableCustomAppBar ? Colors.white : textColor))
           : null,
       actions: actions,
     );

@@ -78,8 +78,10 @@ abstract class Assets {
   static String instagramAppBarIcon = 'assets/icons/Instagram_app_bar_icon.svg';
   static String twitterAppBarIcon = 'assets/icons/Twitter_app_bar_icon.svg';
   static String homeSocialAppBar = 'assets/icons/home_social_app_bar-icon.svg';
-  static String createPostAppBarIcon = 'assets/icons/create_post_app_bar_icon.svg';
-  static String profileSocialAppBarIcon = 'assets/icons/profile_social_app_bar_icon.svg';
+  static String createPostAppBarIcon =
+      'assets/icons/create_post_app_bar_icon.svg';
+  static String profileSocialAppBarIcon =
+      'assets/icons/profile_social_app_bar_icon.svg';
 
   static String twitterLogo = 'assets/icons/twitterLogo.png';
   static String loadingCar = 'assets/icons/loadingCar.png';
@@ -127,8 +129,10 @@ abstract class Assets {
   static String threeDots = 'assets/images/three_dots.svg';
   static String mobile = 'assets/images/mobile_icon.svg';
   static String visa = 'assets/images/visa.png';
-  static String instagramCommentIcon = 'assets/icons/instagram_comment_icon.png';
-  static String instagramSharePostIcon = 'assets/icons/instagram_share_post_icon.png';
+  static String instagramCommentIcon =
+      'assets/icons/instagram_comment_icon.png';
+  static String instagramSharePostIcon =
+      'assets/icons/instagram_share_post_icon.png';
   static String instagramHideIcon = 'assets/icons/instagram_hide_icon.svg';
   // reactions
   static String like = 'assets/images/reactions/like.png';
@@ -220,7 +224,7 @@ abstract class Assets {
   static String cameraIcon = 'assets/icons/camera_icon.svg';
   static String star = 'assets/images/star.png';
   static String tripJoinImage = 'assets/images/tripJoinImage.jpg';
-  static  String azkarPrayer='assets/drawerIcons/azkar_prayer.png';
+  static String azkarPrayer = 'assets/drawerIcons/azkar_prayer.png';
 
   //! audio
   static String notificationAudioApp = 'audio/notification.mp3';
@@ -243,4 +247,9 @@ abstract class Assets {
   static String reBookIcon = 'assets/icons/rebook_icon.svg';
   static String receiptIcon = 'assets/icons/receipt_icon.svg';
   static String star2 = 'assets/icons/star.svg';
+
+  // new trip join icon
+  static String menuIcon = 'assets/icons/menuIcon.svg';
+  static String locationTripIcon = 'assets/icons/locationTripIcon.svg';
+  static String shadowTripIcon = 'assets/icons/shadowTripIcon.svg';
 }

@@ -208,12 +208,15 @@ abstract class Routes {
   static const personalDocumentsScreen = '/PersonalDocumentsScreen';
   static const vehicleInformationScreen = '/VehicleInformationScreen';
   static const moreInfoScreen = '/MoreInfoScreen';
-  static const truckPersonalInformationScreen = '/TruckPersonalInformationScreen';
+  static const truckPersonalInformationScreen =
+      '/TruckPersonalInformationScreen';
   static const truckDriversLicenseScreen = '/TruckDriversLicenseScreen';
   static const truckPersonalDocumentsScreen = '/TruckPersonalDocumentsScreen';
   static const truckVehicleInformationScreen = '/TruckVehicleInformationScreen';
   static const truckMoreInfoScreen = '/TruckMoreInfoScreen';
   static const completeRegisterScreen = '/CompleteRegisterScreen';
+  static const newTripJoinScreen = '/NewTripJoinScreen';
+  static const captainShareScreen = '/CaptainShareScreen';
 }
 
 abstract class Paths {
@@ -412,10 +415,13 @@ abstract class Paths {
   static const personalDocumentsScreen = 'PersonalDocumentsScreen';
   static const vehicleInformationScreen = 'VehicleInformationScreen';
   static const moreInfoScreen = 'MoreInfoScreen';
-  static const truckPersonalInformationScreen = 'TruckPersonalInformationScreen';
+  static const truckPersonalInformationScreen =
+      'TruckPersonalInformationScreen';
   static const truckDriversLicenseScreen = 'TruckDriversLicenseScreen';
   static const truckPersonalDocumentsScreen = 'TruckPersonalDocumentsScreen';
   static const truckVehicleInformationScreen = 'TruckVehicleInformationScreen';
   static const truckMoreInfoScreen = 'TruckMoreInfoScreen';
   static const completeRegisterScreen = 'CompleteRegisterScreen';
+  static const newTripJoinScreen = 'NewTripJoinScreen';
+  static const captainShareScreen = 'CaptainShareScreen';
 }

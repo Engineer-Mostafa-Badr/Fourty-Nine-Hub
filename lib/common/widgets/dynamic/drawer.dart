@@ -163,7 +163,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 //     onTap: () =>
                                 //         context.push(Routes.FAVOURITE)),
 
-
                                 // drawerListTile(
                                 //     image: Assets.history,
                                 //     label: LocaleKeys.requestHistory.localize,
@@ -260,13 +259,13 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   label: LocaleKeys.loading.localize,
                                   image: Assets.loading,
                                   // onTap: () {},
-                                  onTap: () => context.push(Routes.welcomeRideRegister),
+                                  onTap: () =>
+                                      context.push(Routes.welcomeRideRegister),
                                 ),
                                 drawerRollWidget(
                                   label: LocaleKeys.health.localize,
                                   image: Assets.healthIcon,
                                   onTap: () => context.push(Routes.VISITA),
-
                                 ),
                                 drawerRollWidget(
                                   label: LocaleKeys.meal.localize,
@@ -303,11 +302,17 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   image: Assets.snap,
                                   onTap: () => context.push(Routes.SNAP),
                                 ),
-
                                 drawerRollWidget(
                                   label: LocaleKeys.chat.localize,
                                   image: Assets.whatsApp,
                                   onTap: () => context.push(Routes.CHAT),
+                                ),
+                                drawerRollWidget(
+                                  label: "trip join ",
+                                  image: Assets.loading,
+                                  onTap: () {
+                                    context.push(Routes.newTripJoinScreen);
+                                  },
                                 ),
                               ],
                             ),
@@ -755,9 +760,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             children: <Widget>[
                               Container(
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: HexColor('F9F9F9')
-                                ),
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: HexColor('F9F9F9')),
                                 child: ListTile(
                                   leading: const Icon(Icons.photo_library),
                                   title: const Text('Gallery'),
@@ -772,8 +776,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               Container(
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20),
-                                    color: HexColor('F9F9F9')
-                                ),
+                                    color: HexColor('F9F9F9')),
                                 child: ListTile(
                                   leading: const Icon(Icons.camera_alt),
                                   title: const Text('Camera'),
@@ -788,8 +791,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               Container(
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20),
-                                    color: HexColor('D9D9D9')
-                                ),
+                                    color: HexColor('D9D9D9')),
                                 child: ListTile(
                                   // leading: const Icon(Icons.camera_alt),
                                   title: Center(child: const Text('Cancel')),
