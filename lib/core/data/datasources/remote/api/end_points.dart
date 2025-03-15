@@ -160,7 +160,7 @@ class EndPoints {
   static const socialPage = '/navigators/socialPage';
   static const subTab = '/navigators/subTap';
   static const navigateBar = '/navigators/navigatorsBar';
-  static const favouriteCat = '/navigators/navigateCategories';
+  static const customPageCat = '/navigators/navigateCategories';
   static const activate = '/navigators/customPage';
 
   // Star

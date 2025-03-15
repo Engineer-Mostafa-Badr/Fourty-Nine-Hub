@@ -398,7 +398,6 @@ class AppPages {
   AppPages._();
 
   static late final GoRouter router;
-
   static initializeRouter(String initialRoute) {
     router = GoRouter(
         navigatorKey: navigatorKey,

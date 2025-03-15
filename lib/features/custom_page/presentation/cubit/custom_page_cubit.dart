@@ -22,7 +22,7 @@ class CustomPageCubit extends Cubit<CustomPageState> {
   final UpdateSubTabUseCase _updateSubTabUseCase;
   final FetchNavigateBarUseCase _fetchNavigateBarUseCase;
   final UpdateNavigateBarUseCase _updateNavigateBarUseCase;
-  final FetchFavouriteCatUseCase _favouriteCatUseCase;
+  final FetchCustomPageCategoriesUseCase _customPageCategoriesUseCase;
   final UpdateFavouriteCatUseCase _updateFavouriteCatUseCase;
   final FetchActivateUseCase _fetchActivateUseCase;
   final UpdateActivateUseCase _updateActivateUseCase;
@@ -34,7 +34,7 @@ class CustomPageCubit extends Cubit<CustomPageState> {
       this._updateSubTabUseCase,
       this._fetchNavigateBarUseCase,
       this._updateNavigateBarUseCase,
-      this._favouriteCatUseCase,
+      this._customPageCategoriesUseCase,
       this._updateFavouriteCatUseCase,
       this._fetchActivateUseCase,
       this._updateActivateUseCase)
@@ -109,7 +109,7 @@ class CustomPageCubit extends Cubit<CustomPageState> {
   // Favourite Category ///////////////////////////////////////////////
 
   Future<void> fetchFavouriteCat() async {
-    final response = await _favouriteCatUseCase.call(const NoParams());
+    final response = await _customPageCategoriesUseCase.call(const NoParams());
     response.fold((l) {
       emit(state.copyWith(failure: l, status: CustomPageStates.error));
     }, (data) {
