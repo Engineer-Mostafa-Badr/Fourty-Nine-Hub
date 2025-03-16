@@ -21,6 +21,7 @@ import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/ba
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/cashback_view.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/gift_view.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/gift_wallet_view.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/winners_gift_view.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/cubit/ad_details_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/pages/ad_details_view.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_requests/presentation/cubit/ad_requests_cubit.dart';
@@ -882,6 +883,11 @@ class AppPages {
                 builder: (context, state) => const WinnersCashbackView(),
               ),
               GoRoute(
+                path: Paths.WINNERSGift,
+                name: Routes.WINNERSGift,
+                builder: (context, state) => const WinnersGiftView(),
+              ),
+              GoRoute(
                 path: Paths.QURAAN,
                 name: Routes.QURAAN,
                 builder: (context, state) => BlocProvider<QuranCubit>(
@@ -917,7 +923,8 @@ class AppPages {
                               ..getAllDataWalletScreen(context),
                           ),
                           BlocProvider(
-                            create: (_) => serviceLocator<SubscriptionWalletCubit>(),
+                            create: (_) =>
+                                serviceLocator<SubscriptionWalletCubit>(),
                           ),
                         ],
                         child: const WalletView(

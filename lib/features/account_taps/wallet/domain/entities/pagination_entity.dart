@@ -5,7 +5,7 @@ class PaginationEntity {
   final int totalPages;
   final bool hasNextPage;
   final bool hasPrevPage;
-  final int nextPage;
+  final int? nextPage;
   final int? prevPage;
 
   PaginationEntity({
@@ -17,5 +17,5 @@ class PaginationEntity {
     required this.hasPrevPage,
     required this.nextPage,
     required this.prevPage,
-});
+  });
 }

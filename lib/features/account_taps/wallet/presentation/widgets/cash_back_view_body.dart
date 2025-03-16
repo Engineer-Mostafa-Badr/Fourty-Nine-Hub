@@ -4,11 +4,10 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/cubit/cashback_cubit.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/cashback_cubit/cashback_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/cashback_histories_list_view.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/header_total_account_widget.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/icon_and_hint_widget.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/with_drawal_button.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 import '../../../../../core/widget/custom_failure_widget.dart';
@@ -48,17 +47,20 @@ class CashbackViewBody extends StatelessWidget {
                 const SizedBox(
                   height: 8,
                 ),
-                state.isLoadingButton? const Center(child: CircularProgressIndicator()):
-                CustomButtonWalletAndGiftAndCashback(
-                  title: state.cashback!.balance >= 500 ? 'Request Withdrawal' : 'Request Withdrawal',
-                  status: true,
-                  onPressed: () {
-                    context.read<CashbackCubit>().requestWithdrawal(context);
-                    if(state.cashback!.balance >= 500) {
-
-                    }
-                  },
-                ),
+                state.isLoadingButton
+                    ? const Center(child: CircularProgressIndicator())
+                    : CustomButtonWalletAndGiftAndCashback(
+                        title: state.cashback!.balance >= 500
+                            ? 'Request Withdrawal'
+                            : 'Request Withdrawal',
+                        status: true,
+                        onPressed: () {
+                          context
+                              .read<CashbackCubit>()
+                              .requestWithdrawal(context);
+                          if (state.cashback!.balance >= 500) {}
+                        },
+                      ),
                 const SizedBox(
                   height: 16,
                 ),
@@ -81,11 +83,10 @@ class CashbackViewBody extends StatelessWidget {
             );
           } else {
             return CustomFailureWidget(
-              title: state.messageFailure??  LocaleKeys.somethingWentWrong.localize,
+              title: state.messageFailure ??
+                  LocaleKeys.somethingWentWrong.localize,
               onPressed: () {
-                context
-                    .read<CashbackCubit>()
-                    .getCashback(context);
+                context.read<CashbackCubit>().getCashback(context);
               },
             );
           }

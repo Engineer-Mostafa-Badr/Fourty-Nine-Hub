@@ -77,6 +77,9 @@ class _StarWinnerViewState extends State<StarWinnerView> {
                   ),
                 )
                 .toList(),
+            paginationOnpressed: () {
+              context.read<StarCubit>().fetchWinnerStar();
+            },
           );
           return Padding(
             padding: EdgeInsets.all(12.w),

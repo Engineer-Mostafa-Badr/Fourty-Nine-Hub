@@ -113,6 +113,10 @@ class EndPoints {
       '/favorite-sub-category/$id';
 
   static const getGift = '/gift-wallet/wallet';
+  static String getWinnersGift(PaginationParams params) {
+    return '/winners/competitions/gift?page=${params.page}&limit=${params.limit}';
+  }
+
   static const requestWithdrawWheel = '/wheels/withdrawal';
   static String requestWithdrawCompetition(String id) {
     return '/subscriber/request-withdrawal/$id';
@@ -247,7 +251,6 @@ class EndPoints {
 
   static String searchAzkar(SearchAzkarParams params) =>
       '/azkar/search-azkar?page=${params.page}&limit=${params.limit}';
-
 
   static String notificationsSeen(String id) => '/notifications/$id';
 
@@ -1219,15 +1222,19 @@ class EndPoints {
   static String getShippingCategories(String userId) {
     return '/loading/driver/subcategory?userId=$userId';
   }
+
   static String getDriversInSubcategory(String subCategoryId) {
     return '/ride/riders/drivers/$subCategoryId';
   }
+
   static String requestTrip(String id) {
     return '/ride/trips/newTrip/$id';
   }
+
   static String getExpectedPrice(String id) {
     return '/ride/trips/expected/price/$id';
   }
+
   static String deleteRideRegistration = '/ride/riders';
   static String getRideBrands = '/ride/riders/brands';
   static String getRideModels = '/ride/riders/models';
@@ -1237,12 +1244,12 @@ class EndPoints {
   static String getRideDriverInfo = '/ride/driver/info';
   static String getRideDriverPictureOptional = '/ride/info/picture-optional';
 
-  static String updateDriverLocation(){
+  static String updateDriverLocation() {
     return '/ride/update-driver-location';
   }
 
   static String getAllRunningTrips({required int limit, required int page}) {
-      return '/ride/trips/all?limit=$limit&page=$page&status=started';
+    return '/ride/trips/all?limit=$limit&page=$page&status=started';
   }
 
   static String getAllCompletedTrips({required int limit, required int page}) {
@@ -1261,43 +1268,43 @@ class EndPoints {
     return '/ride/trips/rider?limit=$limit&page=$page';
   }
 
-  static String getLocationFromAddress(){
+  static String getLocationFromAddress() {
     return '/ride/trips/address/latAndLong';
   }
 
-  static String acceptTripByDriver(String tripId){
+  static String acceptTripByDriver(String tripId) {
     return '/ride/trips/accept/$tripId';
   }
 
-  static String rideInStartLocation(String id){
+  static String rideInStartLocation(String id) {
     return '/ride/trips/in-start-location/$id';
   }
 
-  static String startTrip(String tripId){
+  static String startTrip(String tripId) {
     return '/ride/trips/start/$tripId';
   }
 
-  static String partialPaymentInTrip(String tripId){
+  static String partialPaymentInTrip(String tripId) {
     return '/ride/payment/partial-payment/$tripId';
   }
 
-  static String completeTripForRide(String tripId){
+  static String completeTripForRide(String tripId) {
     return '/ride/trips/complete/$tripId';
   }
 
-  static String cancelTripByRider(String tripId){
+  static String cancelTripByRider(String tripId) {
     return '/ride/trips/cancel-by-rider/$tripId';
   }
 
-  static String cancelTripByClient(String tripId){
+  static String cancelTripByClient(String tripId) {
     return '/ride/trips/cancel-by-client/$tripId';
   }
 
-  static String recordingTrip(String tripId){
+  static String recordingTrip(String tripId) {
     return '/ride/trips/record-voice/$tripId';
   }
 
-  static String updateTripPriceFromClient(String tripId){
+  static String updateTripPriceFromClient(String tripId) {
     return '/ride/client/trips/offer/$tripId';
   }
 }

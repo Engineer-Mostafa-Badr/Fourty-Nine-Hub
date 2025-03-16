@@ -4,7 +4,7 @@ import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/cubit/cashback_cubit.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/cashback_cubit/cashback_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/cash_back_view_body.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
@@ -24,7 +24,6 @@ class CashbackView extends StatelessWidget {
           CustomWinnerAppbar(
             onPressed: () {
               context.push(Routes.WINNERSCASHBACK);
-
             },
           ),
         ],

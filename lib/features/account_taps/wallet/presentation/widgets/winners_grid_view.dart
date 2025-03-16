@@ -1,6 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -14,10 +13,12 @@ class WinnersGridView extends StatefulWidget {
   const WinnersGridView({
     super.key,
     required this.winners,
+    required this.hasReachedMax,
     required this.paginationOnpressed,
   });
 
   final List<WinnersGridViewModel> winners;
+  final bool hasReachedMax;
   final void Function() paginationOnpressed;
 
   @override
@@ -32,7 +33,9 @@ class _WinnersGridViewState extends State<WinnersGridView> {
     super.initState();
     _controller.addListener(() {
       if (_controller.position.maxScrollExtent == _controller.offset) {
-        widget.paginationOnpressed();
+        if (!widget.hasReachedMax) {
+          widget.paginationOnpressed();
+        }
       }
     });
   }
@@ -49,7 +52,9 @@ class _WinnersGridViewState extends State<WinnersGridView> {
     return GridView.builder(
       controller: _controller,
       padding: const EdgeInsets.symmetric(horizontal: 15),
-      itemCount: widget.winners.length + 1,
+      itemCount: widget.hasReachedMax
+          ? widget.winners.length
+          : widget.winners.length + 1,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisSpacing: 7,
         mainAxisSpacing: 8,
@@ -117,6 +122,7 @@ class WinnersGridViewItem extends StatelessWidget {
                 width: 80.25,
                 height: 80.25,
                 decoration: ShapeDecoration(
+                  color: Colors.grey,
                   image: DecorationImage(
                     image: NetworkImage(
                       winner.image,

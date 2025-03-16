@@ -22,7 +22,7 @@ class GiftView extends StatelessWidget {
         actions: [
           CustomWinnerAppbar(
             onPressed: () {
-              context.push(Routes.BE_STAR_DETAILS);
+              context.push(Routes.WINNERSGift);
             },
           ),
         ],
