@@ -49,13 +49,14 @@ class EndPoints {
 
   static const pageSize = 10;
   static const developmentWebSocketBaseUrl = 'https://49dev.com';
-  static const developmentBaseUrl = 'https://2aec-41-44-170-114.ngrok-free.app/api/v1';
-  static const productionBaseUrl = 'https://2aec-41-44-170-114.ngrok-free.app/api/v1';
+  static const developmentBaseUrl = 'https://49dev.com/api/v1';
+  static const productionBaseUrl = 'https://49dev.com/api/v1';
   static const storageBaseUrl = 'https://49-space.fra1.digitaloceanspaces.com/';
   static const login = '/auth/login';
   static const getProfile = '/users/profile';
   static const getCountries = '/ride/countries';
   static const register = '/auth/register';
+  static const testGift = '/test/gift';
   static const verifyOTP = '/auth/verify/email';
   static const getWelcomeGift = '/auth/welcome-gift';
   static const socialLogin = '/auth/social/login';
@@ -257,8 +258,8 @@ class EndPoints {
   // ride
   static String bannerDataRider = "$developmentBaseUrl/ride/get-thumbnail-ride";
   static String getDriverRide = "$developmentBaseUrl/ride/riders/Info";
-  static String specialRegister =
-      "$developmentBaseUrl/ride/riders/special/register/test";
+  static String specialRegister = "$developmentBaseUrl/ride/drivers/registration/special";
+  static String loadingRegister = "$developmentBaseUrl/loading/driver/register";
   static String riderRegister = "$developmentBaseUrl/ride/riders/register";
   static String expectedPrice = "$developmentBaseUrl/ride/trips/expected/price";
   static String acceptOfferRide =
@@ -1230,6 +1231,8 @@ class EndPoints {
   static String getAllUserTrips = '/loading/trip/allUserTrips';
   static String getRideDriverInfo = '/ride/driver/info';
   static String getRideDriverPictureOptional = '/ride/info/picture-optional';
+  static String getCostPerKm = '/ride/driver/info/fair-cost';
+  static String getLoadingInfo = '/loading/driver/info?subCategory=62c8baad8e28a58a3edf5805';
 
   static String updateDriverLocation(){
     return '/ride/update-driver-location';

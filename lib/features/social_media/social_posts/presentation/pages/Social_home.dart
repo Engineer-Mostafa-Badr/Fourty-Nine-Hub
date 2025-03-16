@@ -92,53 +92,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
         backgroundColor: AppColors.DARK_GRAY_COLOR,
           appBar: widget.params?.hideAppBar == true
               ? null
-              : HomeAppbar(
-                  isWithBackArrow: true,
-                  toolbarHeight: context.screenHeight / 6.9,
-                  bottom: TabBar(
-                    padding: EdgeInsets.zero,
-                    labelStyle: const TextStyle(fontSize: 17),
-                    unselectedLabelColor: Colors.grey,
-                    dividerColor: Colors.transparent,
-
-                    indicatorColor: context.isDarkMode
-                        ? Colors.white
-                        : AppColors.PRIMARY_COLOR,
-                    labelColor: context.isDarkMode
-                        ? Colors.white
-                        : AppColors.PRIMARY_COLOR,
-                    tabs: [
-                      Tab(
-                        icon: SvgPicture.asset(
-                          Assets.facebookAppBarIcon,
-                          height: 35,
-                          width: 35,
-                        ),
-                        height: 78,
-                        text: LocaleKeys.Face.localize,
-                      ),
-                      Tab(
-                        icon: SvgPicture.asset(
-                          Assets.instagramAppBarIcon,
-                          height: 35,
-                          width: 35,
-                        ),
-                        height: 78,
-
-                        text: LocaleKeys.Insta.localize,
-                      ),
-                      Tab(
-                        icon: SvgPicture.asset(
-                          Assets.twitterAppBarIcon,
-                          height: 35,
-                          width: 35,
-                        ),
-                        height: 78,
-                        text: LocaleKeys.tweet.localize,
-                      ),
-                    ],
-                  ),
-                ),
+              : HomeAppbar(           ),
           drawer:
               widget.params?.hideAppBar == true ? null : const DrawerWidget(),
           bottomNavigationBar: widget.params?.hideAppBar == true
@@ -159,52 +113,103 @@ class _SocialHomeViewState extends State<SocialHomeView>
               _isScrollingDown || widget.params?.hideAppBar == true
                   ? null
                   : FloatingActionButtonLocation.centerDocked,
-          body: TabBarView(
+          body: Column(
             children: [
-              BlocBuilder<UserCubit, BasicState<UserEntity>>(
-                  builder: (context, state) {
-                return context.read<UserCubit>().isLoggedIn
-                    ? Scaffold(
-                        body: FacebookBody(
-                          scrollController: scrollController,
-                        ))
-                    : NestedAppbar(
-                        scrollController: ScrollController(),
-                        appBars: [
-                          SliverAppBar(
-                            backgroundColor:
-                                Theme.of(context).scaffoldBackgroundColor,
-                            automaticallyImplyLeading: false,
-                            floating: true,
-                            pinned: true,
-                            flexibleSpace: const CreatePostBanner(),
-                          ),
-                          SliverAppBar(
-                            backgroundColor:
-                                Theme.of(context).scaffoldBackgroundColor,
-                            automaticallyImplyLeading: false,
-                            // floating: true,
-                            pinned: true,
-                            flexibleSpace: _buildTabBar(),
-                          )
-                        ],
-                        body: FacebookGlobalBody(
-                          scrollController: scrollController,
-                        ));
-              }),
-              MultiBlocProvider(
-                providers: [
-                  BlocProvider(
-                    create: (context) =>
-                        serviceLocator<InstagramCubit>()..loadData(),
-                  ),
-                  BlocProvider(
-                    create: (context) => serviceLocator<StoryCubit>(),
-                  ),
-                ],
-                child: const InstagramView(),
+              Container(
+                color: Theme.of(context).scaffoldBackgroundColor,
+                child: TabBar(
+                  padding: EdgeInsets.zero,
+                  labelStyle: const TextStyle(fontSize: 17),
+                  unselectedLabelColor: Colors.grey,
+                  dividerColor: Colors.transparent,
+                  indicatorColor: context.isDarkMode
+                      ? Colors.white
+                      : AppColors.PRIMARY_COLOR,
+                  labelColor: context.isDarkMode
+                      ? Colors.white
+                      : AppColors.PRIMARY_COLOR,
+                  tabs: [
+                    Tab(
+                      icon: SvgPicture.asset(
+                        Assets.facebookAppBarIcon,
+                        height: 35,
+                        width: 35,
+                      ),
+                      height: 78,
+                      text: LocaleKeys.Face.localize,
+                    ),
+                    Tab(
+                      icon: SvgPicture.asset(
+                        Assets.instagramAppBarIcon,
+                        height: 35,
+                        width: 35,
+                      ),
+                      height: 78,
+
+                      text: LocaleKeys.Insta.localize,
+                    ),
+                    Tab(
+                      icon: SvgPicture.asset(
+                        Assets.twitterAppBarIcon,
+                        height: 35,
+                        width: 35,
+                      ),
+                      height: 78,
+                      text: LocaleKeys.tweet.localize,
+                    ),
+                  ],
+                ),
               ),
-              const TwitterView(),
+              Expanded(
+                child: TabBarView(
+                  children: [
+                    BlocBuilder<UserCubit, BasicState<UserEntity>>(
+                        builder: (context, state) {
+                      return context.read<UserCubit>().isLoggedIn
+                          ? Scaffold(
+                              body: FacebookBody(
+                                scrollController: scrollController,
+                              ))
+                          : NestedAppbar(
+                              scrollController: ScrollController(),
+                              appBars: [
+                                SliverAppBar(
+                                  backgroundColor:
+                                      Theme.of(context).scaffoldBackgroundColor,
+                                  automaticallyImplyLeading: false,
+                                  floating: true,
+                                  pinned: true,
+                                  flexibleSpace: const CreatePostBanner(),
+                                ),
+                                SliverAppBar(
+                                  backgroundColor:
+                                      Theme.of(context).scaffoldBackgroundColor,
+                                  automaticallyImplyLeading: false,
+                                  // floating: true,
+                                  pinned: true,
+                                  flexibleSpace: _buildTabBar(),
+                                )
+                              ],
+                              body: FacebookGlobalBody(
+                                scrollController: scrollController,
+                              ));
+                    }),
+                    MultiBlocProvider(
+                      providers: [
+                        BlocProvider(
+                          create: (context) =>
+                              serviceLocator<InstagramCubit>()..loadData(),
+                        ),
+                        BlocProvider(
+                          create: (context) => serviceLocator<StoryCubit>(),
+                        ),
+                      ],
+                      child: const InstagramView(),
+                    ),
+                    const TwitterView(),
+                  ],
+                ),
+              ),
             ],
           )),
     );

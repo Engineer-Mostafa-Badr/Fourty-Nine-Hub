@@ -3,14 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
+import 'package:fourtyninehub/core/constants/registration_status.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_info_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/loading_info_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/upload_rider_images.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/expired_trips_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/osm_search_and_pick.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/running_trips_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/custom_ride_button.dart';
 import 'package:latlong2/latlong.dart';
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../../common/widgets/form/text_fields/form_text_field.dart';
@@ -46,7 +51,6 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
   // String? _selectedCountry;
   final MapController _mapController = MapController();
 
-
   @override
   void initState() {
     super.initState();
@@ -54,11 +58,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final rideCubit = context.read<RideCubit>();
       if (!rideCubit.isClosed) {
-        rideCubit.fetchRideDriverInfo(context);
-        rideCubit.fetchRideDriverPictureOptional(context);
-        rideCubit.fetchRideCategories(UserCubit.to.state.data?.id ?? "",context);
-        rideCubit.fetchShippingCategories(UserCubit.to.state.data?.id ?? "");
-        rideCubit.fetchRideGovernorates();
+        rideCubit.initHome(context);
       }
     });
   }
@@ -76,27 +76,32 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     // _selectedCountry = context.isArabic ? 'القاهرة' : 'Cairo';
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Form(
-        key: _formKey,
-        child: SafeArea(
-          child: SharedScaffold(
-            mainCategoryId: 2,
-            body: NestedAppbar(
-              scrollController: _scrollController,
-              appBars: const [],
-              body: Stack(
-                children: [
-                  _buildTopImage(),
-                  _buildBottomSheet(),
-                  _carTruckBtn(),
-                ],
+    return BlocBuilder<RideCubit, RideState>(
+      builder: (context,state) {
+        var cubit = context.read<RideCubit>();
+        return Scaffold(
+          resizeToAvoidBottomInset: false,
+          body: cubit.loadingHomeData==true?const Center(child: CircularProgressIndicator()):Form(
+            key: _formKey,
+            child: SafeArea(
+              child: SharedScaffold(
+                mainCategoryId: 2,
+                body: NestedAppbar(
+                  scrollController: _scrollController,
+                  appBars: const [],
+                  body: Stack(
+                    children: [
+                      _buildTopImage(),
+                      _buildBottomSheet(),
+                      _carTruckBtn(driverInfo: context.read<RideCubit>().state.driverInfo, loadingInfo: context.read<RideCubit>().state.loaderInfo),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
-        ),
-      ),
+        );
+      }
     );
   }
 
@@ -204,90 +209,134 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
     return polyline.map((point) => LatLng(point[1], point[0])).toList();
   }
 
-  Widget _carTruckBtn(){
-    return GestureDetector(
-      onTap: () {
-        customBottomSheet(context,
-            context.read<RideCubit>(),
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                spacing: 10,
-                children: [
-                  AppButton(
-                      radius: 15,
-                      label: LocaleKeys.ride.tr(),
-                      onPressed: () {
-                        context.push(Routes.welcomeRideRegister);
-                      },
-                      backColor: AppColors.PRIMARY_COLOR,
-                      width: double.infinity),
-                  AppButton(
-                      radius: 15,
-                      label: LocaleKeys.shipping.tr(),
-                      onPressed: () {
-                        context.push(Routes.CURRENTRIDEHOME);
-                      },
-                      backColor: AppColors.PRIMARY_COLOR,
-                      width: double.infinity),
-                ],
+  Widget _carTruckBtn({LoadingInfoEntity? loadingInfo, DriverInfoEntity? driverInfo}) {
+    if (loadingInfo == null && driverInfo == null) {
+      return GestureDetector(
+        onTap: () {
+          customBottomSheet(context, context.read<RideCubit>(),
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  spacing: 10,
+                  children: [
+                    AppButton(
+                        radius: 15,
+                        label: LocaleKeys.ride.tr(),
+                        onPressed: () {
+                          context.read<RideCubit>().onNavigateToWelcomeScreen(fromShipping: false, context: context);
+                        },
+                        backColor: AppColors.PRIMARY_COLOR,
+                        width: double.infinity),
+                    AppButton(
+                        radius: 15,
+                        label: LocaleKeys.shipping.tr(),
+                        onPressed: () {
+                          context.read<RideCubit>().onNavigateToWelcomeScreen(fromShipping: true, context: context);
+                        },
+                        backColor: AppColors.PRIMARY_COLOR,
+                        width: double.infinity),
+                  ],
+                ),
               ),
+              title: '');
+        },
+        child: Container(
+          margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+          width: double.infinity,
+          height: 50,
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              colors: [Color(0xFF0B1035), Color(0xFF161F68), Color(0xFF1B2781), Color(0xFF1E2B8E), Color(0xFF1F2D95), Color(0xFF0B1035)],
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
             ),
-            title: '');
-      },
-      child: Container(
+            borderRadius: BorderRadius.circular(15),
+            boxShadow: [
+              BoxShadow(color: Colors.black.withOpacity(0.3), spreadRadius: 2, blurRadius: 5, offset: const Offset(0, 3)),
+            ],
+          ),
+          child: Center(
+            child: Text(
+              LocaleKeys.carTruckRegister.tr(),
+              style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+            ),
+          ),
+        ),
+      );
+    } else {
+      return Container(
         margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
         width: double.infinity,
-        height: 50,
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [
-              Color(0xFF0B1035),
-              Color(0xFF161F68),
-              Color(0xFF1B2781),
-              Color(0xFF1E2B8E),
-              Color(0xFF1F2D95),
-              Color(0xFF0B1035)
-            ],
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
-          ),
-          borderRadius: BorderRadius.circular(15),
-          boxShadow: [
-            BoxShadow(
-                color: Colors.black.withOpacity(0.3),
-                spreadRadius: 2,
-                blurRadius: 5,
-                offset: const Offset(0, 3)),
+        height: 75,
+        child: Row(
+          children: [
+            Expanded(
+              child: CustomRideButton(
+                onPressed: () {
+                  if (driverInfo == null) {
+                    context.read<RideCubit>().onNavigateToWelcomeScreen(fromShipping: false, context: context);
+                  }
+                },
+                onTap: (){
+                  if(driverInfo != null &&driverInfo.status == RegistrationStatus.pending.status){
+                    return;
+                  }else if (driverInfo != null &&driverInfo.status == RegistrationStatus.rejected.status){
+                    context.push(Routes.UploadRiderImages,extra: UploadRiderImagesParams(isShipping: false,isSocket:driverInfo.driverType=='socket'?true:false ));
+                  }else if (driverInfo != null &&driverInfo.status == RegistrationStatus.initial.status){
+                    context.push(Routes.UploadRiderImages,extra: UploadRiderImagesParams(isShipping: false,isSocket:driverInfo.driverType=='socket'?true:false ));
+                  }
+                },
+                isRed: (driverInfo != null&&(driverInfo.status != RegistrationStatus.rejected.status)) ? true : false,
+          isPending: driverInfo != null && (driverInfo.status == RegistrationStatus.pending.status),
+                isDisabled: driverInfo != null && (driverInfo.status != RegistrationStatus.approved.status),
+                text: LocaleKeys.ride.tr(),
+                status: driverInfo?.status??'',
+              ),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Expanded(
+              child: CustomRideButton(
+                onPressed: () {
+                  if (loadingInfo == null) {
+                    print("object");
+                    context.read<RideCubit>().onNavigateToWelcomeScreen(fromShipping: true, context: context);
+                  }else{
+                    print("loadingInfo.toJson()${loadingInfo.toJson()}");
+                  }
+                },
+                onTap: (){
+                  print("loadingInfo.toJson()${loadingInfo?.toJson()}");
+                  if(loadingInfo != null &&loadingInfo.status == RegistrationStatus.pending.status){
+                    return;
+                  }else if (loadingInfo != null &&loadingInfo.status == RegistrationStatus.rejected.status){
+                    context.push(Routes.UploadRiderImages,extra: UploadRiderImagesParams(isShipping: true,isSocket:false ));
+                  }else if (loadingInfo != null &&loadingInfo.status == RegistrationStatus.initial.status){
+                    context.push(Routes.UploadRiderImages,extra: UploadRiderImagesParams(isShipping: true,isSocket:false ));
+                  }
+                },
+                isRed: (loadingInfo != null&&(loadingInfo.status != RegistrationStatus.rejected.status)) ? true : false,
+                isDisabled: loadingInfo != null && (loadingInfo.status == RegistrationStatus.pending.status||loadingInfo.status == RegistrationStatus.rejected.status||loadingInfo.status == RegistrationStatus.initial.status),
+                text: LocaleKeys.shipping.tr(), status: loadingInfo?.status??'',
+              ),
+            ),
           ],
         ),
-        child: Center(
-          child: Text(
-            LocaleKeys.carTruckRegister.tr(),
-            style: const TextStyle(
-                color: Colors.white,
-                fontSize: 22,
-                fontWeight: FontWeight.bold),
-          ),
-        ),
-      ),
-    );
+      );
+    }
   }
 
   Widget _buildTopImage() {
-    return BlocBuilder<RideCubit, RideState>(
-      builder: (context, state) {
-        return Builder(
-          builder: (context) {
-            return Stack(
-              children: [
-                _buildTopMap(state, context),
-              ],
-            );
-          }
+    return BlocBuilder<RideCubit, RideState>(builder: (context, state) {
+      return Builder(builder: (context) {
+        return Stack(
+          children: [
+            _buildTopMap(state, context),
+          ],
         );
-      }
-    );
+      });
+    });
   }
 
   Widget _buildBottomSheet() {
@@ -312,11 +361,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                     padding: const EdgeInsets.all(2),
                     label: const Text('1'),
                     isLabelVisible: false,
-                    child: ClickableWidget(
-                        onTap: (){
-
-                        },
-                        child: _tripsWidget(context.isArabic? "طلبات الرحلات": "Ride Requests", color: const Color(0xffD9D9D9))),
+                    child: ClickableWidget(onTap: () {}, child: _tripsWidget(context.isArabic ? "طلبات الرحلات" : "Ride Requests", color: const Color(0xffD9D9D9))),
                   ),
                 ),
                 Expanded(
@@ -326,11 +371,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                     padding: const EdgeInsets.all(2),
                     label: const Text('1K'),
                     isLabelVisible: true,
-                    child: ClickableWidget(
-                        onTap: (){
-
-                        },
-                        child: _tripsWidget(context.isArabic? "طلبات التحميل": "Loading Requests", color: const Color(0xffD9D9D9))),
+                    child: ClickableWidget(onTap: () {}, child: _tripsWidget(context.isArabic ? "طلبات التحميل" : "Loading Requests", color: const Color(0xffD9D9D9))),
                   ),
                 ),
               ],
@@ -344,26 +385,28 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
               children: [
                 Expanded(
                   child: ClickableWidget(
-                      onTap: (){
+                      onTap: () {
                         context.push(Routes.RIDEACTIVITY);
                       },
                       child: _tripsWidget(LocaleKeys.activity.tr(), color: AppColors.GREYCARD)),
                 ),
                 Expanded(
                   child: ClickableWidget(
-                      onTap: (){
-                        context.push(Routes.RIDERUNNINGTRIPS, extra: RunningTripParams(
-                          rideCubit: context.read<RideCubit>(),
-                        ));
+                      onTap: () {
+                        context.push(Routes.RIDERUNNINGTRIPS,
+                            extra: RunningTripParams(
+                              rideCubit: context.read<RideCubit>(),
+                            ));
                       },
                       child: _tripsWidget(LocaleKeys.runningTrips.tr(), color: AppColors.GREYCARD)),
                 ),
                 Expanded(
                   child: ClickableWidget(
-                      onTap: (){
-                        context.push(Routes.RIDEEXPIREDTRIPE, extra: ExpiredTripsScreenParams(
-                          rideCubit: context.read<RideCubit>(),
-                        ));
+                      onTap: () {
+                        context.push(Routes.RIDEEXPIREDTRIPE,
+                            extra: ExpiredTripsScreenParams(
+                              rideCubit: context.read<RideCubit>(),
+                            ));
                       },
                       child: _tripsWidget(LocaleKeys.expiredTrips.tr(), color: AppColors.GREYCARD)),
                 ),
@@ -384,34 +427,32 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 return Column(
                   spacing: 8,
                   children: [
-                    _buildCategoryList(
-                        "ride", state.rideCategory?.subCategories ?? []),
-                    _buildCategoryList(
-                        "shipping", state.shippingCategory?.subCategories ?? []
-                    ),
+                    _buildCategoryList("ride", state.rideCategory?.subCategories ?? []),
+                    _buildCategoryList("shipping", state.shippingCategory?.subCategories ?? []),
                     _customLocationField(
                       isTo: false,
                       color: Colors.green,
                       text: state.currentLocation?.address,
-                      onPressed: ()async {
-                        context.push(Routes.RIDEOPENSTREETMAPSEARCHANDPICK, extra: RideOpenStreetMapSearchAndPickParams(
-                          rideCubit: context.read<RideCubit>(),
-                          isFrom: true,
-                        ));
+                      onPressed: () async {
+                        context.push(Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
+                            extra: RideOpenStreetMapSearchAndPickParams(
+                              rideCubit: context.read<RideCubit>(),
+                              isFrom: true,
+                            ));
                       },
                     ),
                     _customLocationField(
                       isTo: true,
                       color: Colors.blue,
                       text: state.toLocation?.address,
-                      onPressed: ()async {
-                        context.push(Routes.RIDEOPENSTREETMAPSEARCHANDPICK, extra: RideOpenStreetMapSearchAndPickParams(
-                          rideCubit: context.read<RideCubit>(),
-                          isTo: true,
-                        ));
+                      onPressed: () async {
+                        context.push(Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
+                            extra: RideOpenStreetMapSearchAndPickParams(
+                              rideCubit: context.read<RideCubit>(),
+                              isTo: true,
+                            ));
                       },
                     ),
-
                     _fareField(),
                     Row(
                       spacing: 5,
@@ -427,11 +468,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         Expanded(
                             flex: 2,
                             child: AppButton(
-                                radius: 15,
-                                label: LocaleKeys.request.tr(),
-                                onPressed: () {},
-                                backColor: AppColors.PRIMARY_COLOR,
-                                width: MediaQuery.of(context).size.width)),
+                                radius: 15, label: LocaleKeys.request.tr(), onPressed: () {}, backColor: AppColors.PRIMARY_COLOR, width: MediaQuery.of(context).size.width)),
                       ],
                     )
                   ],
@@ -448,10 +485,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
     return Container(
       height: 26,
       padding: const EdgeInsets.all(4),
-      decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: AppColors.DARK_BLUE_COLOR)),
+      decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(10), border: Border.all(color: AppColors.DARK_BLUE_COLOR)),
       child: Center(
         child: Text(
           text,
@@ -474,13 +508,11 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
               itemCount: subCategories.length,
               itemBuilder: (context, index) {
                 final subCategory = subCategories[index];
-                final bool isSelected = _selectedCategoryType == type &&
-                    _selectedCategoryIndex == index;
+                final bool isSelected = _selectedCategoryType == type && _selectedCategoryIndex == index;
                 return GestureDetector(
                   onTap: () {
                     setState(() {
-                      if (_selectedCategoryType == type &&
-                          _selectedCategoryIndex == index) {
+                      if (_selectedCategoryType == type && _selectedCategoryIndex == index) {
                         _selectedCategoryType = null;
                         _selectedCategoryIndex = null;
                       } else {
@@ -490,12 +522,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                       }
                     });
                   },
-                  child: _categoryItem(
-                      context.isArabic
-                          ? subCategory.subCategoryNameAr
-                          : subCategory.subCategoryNameEn,
-                      subCategory.picture,
-                      isSelected),
+                  child: _categoryItem(context.isArabic ? subCategory.subCategoryNameAr : subCategory.subCategoryNameEn, subCategory.picture, isSelected),
                 );
               },
             ),
@@ -507,8 +534,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
               onTap: () {
                 _scrollRight();
               },
-              child: const Icon(Icons.arrow_forward_ios,
-                  size: 18, color: AppColors.SECONDARY_COLOR_DARK)),
+              child: const Icon(Icons.arrow_forward_ios, size: 18, color: AppColors.SECONDARY_COLOR_DARK)),
         ),
       ],
     );
@@ -519,168 +545,155 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
       padding: const EdgeInsets.symmetric(horizontal: 5),
       child: Container(
         decoration: BoxDecoration(
-          color: isSelected
-              ? Colors.redAccent.withOpacity(0.2)
-              : Colors.transparent,
+          color: isSelected ? Colors.redAccent.withOpacity(0.2) : Colors.transparent,
           borderRadius: BorderRadius.circular(10),
         ),
         padding: const EdgeInsets.all(8),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.network(imageUrl,
-                width: 50, height: 20, fit: BoxFit.fitWidth),
+            Image.network(imageUrl, width: 50, height: 20, fit: BoxFit.fitWidth),
             const SizedBox(height: 5),
-            Text(title,
-                style:
-                    const TextStyle(fontSize: 10, fontWeight: FontWeight.w400)),
+            Text(title, style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w400)),
           ],
         ),
       ),
     );
   }
 
-  Widget _customLocationField(
-      {
-        required Color color,
-        required String? text,
-        required bool isTo,
-        required Function()? onPressed,
-      }) {
+  Widget _customLocationField({
+    required Color color,
+    required String? text,
+    required bool isTo,
+    required Function()? onPressed,
+  }) {
     if (text == null) {
       if (isTo == true) {
         text = 'To';
-      }
-      else{
+      } else {
         text = 'From';
       }
     }
 
-    return BlocBuilder<RideCubit, RideState>(
-      builder: (context, state) {
-        return InkWell(
-          onTap: onPressed,
-          child: Container(
-            height: 52,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: const Color(0xFFEEEEEE),
-            ),
-            child: Row(
-              children: [
-                CircleAvatar(
-                  backgroundColor: Colors.transparent,
-                  child: CircleAvatar(
-                    backgroundColor: color,
-                    radius: 10,
-                    child: const CircleAvatar(
-                        backgroundColor: Colors.white, radius: 5),
-                  ),
-                ),
-                Expanded(
-                  child: Text(text == 'From' ? context.isArabic? "من": "From" : text == 'To' ? context.isArabic? "إلى": "To": text!,),
-                ),
-                if (isTo == true && text != 'To')
-                  GestureDetector(
-                    onTap: () {
-                      customBottomSheet(context,
-                          context.read<RideCubit>(),
-                          child: const AddStopsWidget(), title: context.isArabic ? 'إضافة موقع' : 'Add Stops');
-                    },
-                    child: const Icon(Icons.add, size: 18),
-                  ),
-              ],
-            ),
+    return BlocBuilder<RideCubit, RideState>(builder: (context, state) {
+      return InkWell(
+        onTap: onPressed,
+        child: Container(
+          height: 52,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: const Color(0xFFEEEEEE),
           ),
-        );
-      }
-    );
-  }
-
-
-  Widget _fareField() {
-    return BlocBuilder<RideCubit, RideState>(
-      builder: (context, state) {
-        String selectedCategoryName = "Captain";
-        double selectedCategoryPrice = 0.0;
-        if (_selectedCategoryType == "ride") {
-         selectedCategoryName = state.rideCategory?.subCategories[_selectedCategoryIndex!].subCategoryNameEn ?? "";
-        }
-        else{
-          selectedCategoryName = state.shippingCategory?.subCategories[_selectedCategoryIndex!].subCategoryNameEn ?? "";
-        }
-        if (selectedCategoryName == "Captain") {
-          selectedCategoryPrice = state.rideExpectedPrice?.priceForCaptain ?? 0.0;
-        }
-        else if (selectedCategoryName == "Scooter") {
-          selectedCategoryPrice = state.rideExpectedPrice?.priceForScooter ?? 0.0;
-        }
-        else if (selectedCategoryName == "Taxi") {
-          selectedCategoryPrice = state.rideExpectedPrice?.priceForTaxi ?? 0.0;
-        }
-        else if (selectedCategoryName == "Suv") {
-          selectedCategoryPrice = state.rideExpectedPrice?.priceForSUV ?? 0.0;
-        }
-        return GestureDetector(
-          onTap: () {
-            customBottomSheet(context,
-                context.read<RideCubit>(),
-                child:  Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: FareBottomSheetWidget(
-                    rideCubit: context.read<RideCubit>(),
-                    selectedCategoryPrice: selectedCategoryPrice,
-                    selectedCategoryName: selectedCategoryName,
-                  ),
-                ),
-                title: LocaleKeys.offerYourFare.tr());
-          },
           child: Row(
             children: [
-              Expanded(
-                flex: 8,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                  decoration: BoxDecoration(
-                    color: AppColors.GREYFIELD,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Row(
-                    spacing: 10,
-                    children: [
-                      Text(LocaleKeys.egp.tr(),
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 12)),
-                      state.rideExpectedPrice != null ? Text(selectedCategoryPrice.toString()) : Text(LocaleKeys.offerYourFare.tr()),
-                      const Spacer(),
-                      Image.asset('assets/icons/edit.png'),
-                    ],
-                  ),
+              CircleAvatar(
+                backgroundColor: Colors.transparent,
+                child: CircleAvatar(
+                  backgroundColor: color,
+                  radius: 10,
+                  child: const CircleAvatar(backgroundColor: Colors.white, radius: 5),
                 ),
               ),
               Expanded(
-                flex: 2,
-                child: GestureDetector(
-                  onTap: () {
-                    customBottomSheet(context,
-                        context.read<RideCubit>(),
-                        child:  OptionsBottomsheetWidget(
-                          rideCubit: context.read<RideCubit>(),
-                          selectedCategoryName: selectedCategoryName,
-                          selectedCategoryPrice: selectedCategoryPrice,
-                        ),
-                        title: LocaleKeys.options.tr());
-                  },
-                  child: SizedBox(
-                    height: 25,
-                    child: Image.asset('assets/icons/option.png'),
-                  ),
+                child: Text(
+                  text == 'From'
+                      ? context.isArabic
+                          ? "من"
+                          : "From"
+                      : text == 'To'
+                          ? context.isArabic
+                              ? "إلى"
+                              : "To"
+                          : text!,
                 ),
-              )
+              ),
+              if (isTo == true && text != 'To')
+                GestureDetector(
+                  onTap: () {
+                    customBottomSheet(context, context.read<RideCubit>(), child: const AddStopsWidget(), title: context.isArabic ? 'إضافة موقع' : 'Add Stops');
+                  },
+                  child: const Icon(Icons.add, size: 18),
+                ),
             ],
           ),
-        );
+        ),
+      );
+    });
+  }
+
+  Widget _fareField() {
+    return BlocBuilder<RideCubit, RideState>(builder: (context, state) {
+      String selectedCategoryName = "Captain";
+      double selectedCategoryPrice = 0.0;
+      if (_selectedCategoryType == "ride") {
+        selectedCategoryName = state.rideCategory?.subCategories[_selectedCategoryIndex!].subCategoryNameEn ?? "";
+      } else {
+        selectedCategoryName = state.shippingCategory?.subCategories[_selectedCategoryIndex!].subCategoryNameEn ?? "";
       }
-    );
+      if (selectedCategoryName == "Captain") {
+        selectedCategoryPrice = state.rideExpectedPrice?.priceForCaptain ?? 0.0;
+      } else if (selectedCategoryName == "Scooter") {
+        selectedCategoryPrice = state.rideExpectedPrice?.priceForScooter ?? 0.0;
+      } else if (selectedCategoryName == "Taxi") {
+        selectedCategoryPrice = state.rideExpectedPrice?.priceForTaxi ?? 0.0;
+      } else if (selectedCategoryName == "Suv") {
+        selectedCategoryPrice = state.rideExpectedPrice?.priceForSUV ?? 0.0;
+      }
+      return GestureDetector(
+        onTap: () {
+          customBottomSheet(context, context.read<RideCubit>(),
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: FareBottomSheetWidget(
+                  rideCubit: context.read<RideCubit>(),
+                  selectedCategoryPrice: selectedCategoryPrice,
+                  selectedCategoryName: selectedCategoryName,
+                ),
+              ),
+              title: LocaleKeys.offerYourFare.tr());
+        },
+        child: Row(
+          children: [
+            Expanded(
+              flex: 8,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                decoration: BoxDecoration(
+                  color: AppColors.GREYFIELD,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Row(
+                  spacing: 10,
+                  children: [
+                    Text(LocaleKeys.egp.tr(), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                    state.rideExpectedPrice != null ? Text(selectedCategoryPrice.toString()) : Text(LocaleKeys.offerYourFare.tr()),
+                    const Spacer(),
+                    Image.asset('assets/icons/edit.png'),
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: GestureDetector(
+                onTap: () {
+                  customBottomSheet(context, context.read<RideCubit>(),
+                      child: OptionsBottomsheetWidget(
+                        rideCubit: context.read<RideCubit>(),
+                        selectedCategoryName: selectedCategoryName,
+                        selectedCategoryPrice: selectedCategoryPrice,
+                      ),
+                      title: LocaleKeys.options.tr());
+                },
+                child: SizedBox(
+                  height: 25,
+                  child: Image.asset('assets/icons/option.png'),
+                ),
+              ),
+            )
+          ],
+        ),
+      );
+    });
   }
 }

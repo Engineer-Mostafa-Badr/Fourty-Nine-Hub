@@ -2,20 +2,15 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/functions/global/upload_image.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
+import 'package:fourtyninehub/common/widgets/stateful/picker/date_picker_field.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/utils/hex_color_helper.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/core/widget/custom_drop_down.dart';
 import 'package:fourtyninehub/core/widget/custom_switch_list_title.dart';
-import 'package:fourtyninehub/core/widget/expanded_input_widget.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_color_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/widgets/register_expansion_tile.dart';
-import 'package:go_router/go_router.dart';
 
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
@@ -24,9 +19,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
 import '../widgets/close_widget.dart';
-import '../widgets/register_floating_action_button.dart';
 import '../widgets/upload_file_widget.dart';
 
 class PersonalInformationScreen extends StatelessWidget {
@@ -61,14 +54,14 @@ class PersonalInformationScreen extends StatelessWidget {
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        const Sizer(),
+                        if(state.registerType=='socket')...[const Sizer(),
                         UploadFileWidget(
                           title: LocaleKeys.personalPicture.localize,
                           onTap: () {
                             cubit.onUploadPersonalPicture(context);
                           },
                           imageUrl: state.personalPicture,
-                        ),
+                        )],
                         const Sizer(),
                         DefaultTextFormField(
                           currentController: cubit.rideNameController,
@@ -96,20 +89,10 @@ class PersonalInformationScreen extends StatelessWidget {
                           },
                         ),
                         const Sizer(),
-                        DefaultTextFormField(
-                          currentController: cubit.rideDateOfBirthController,
-                          fillColor: AppColors.GREYBG,
-                          borderColor: Colors.transparent,
-                          hint: LocaleKeys.user_info_date_of_birth.localize,
-                          keyboardType: TextInputType.datetime,
-                          validator: (v) {
-                            if (v == null || v.isEmpty) {
-                              return LocaleKeys.required.localize;
-                            }
-                            return null;
-                          },
-                        ),
-                        const Sizer(),
+                        if(state.isShipping!=true)...[DatePickerTextField(color:AppColors.GREYBG,initialDate: DateTime.now(), minDate: DateTime(1900), maxDate: DateTime(2090),onDateSelected: (date){
+                          cubit.rideDateOfBirthController.text = DateFormat('yyyy-MM-dd').format(date??DateTime.now());
+                        }, controller:cubit.rideDateOfBirthController,hintText: LocaleKeys.user_info_date_of_birth.localize,),
+                        const Sizer()],
                         DefaultTextFormField(
                           currentController: cubit.ridePhoneNumberController,
                           fillColor: AppColors.GREYBG,
@@ -125,6 +108,20 @@ class PersonalInformationScreen extends StatelessWidget {
                         ),
                         const Sizer(),
                         DefaultTextFormField(
+                          currentController: cubit.ridePersonalDocIdNumController,
+                          fillColor: AppColors.GREYBG,
+                          borderColor: Colors.transparent,
+                          hint: LocaleKeys.idNumber.localize,
+                          keyboardType: TextInputType.number,
+                          validator: (v) {
+                            if (v == null || v.isEmpty) {
+                              return LocaleKeys.required.localize;
+                            }
+                            return null;
+                          },
+                        ),
+                        const Sizer(),
+                        if(state.isShipping!=true)...[DefaultTextFormField(
                           currentController: cubit.ridePersonalDocLicenseNumController,
                           fillColor: AppColors.GREYBG,
                           borderColor: Colors.transparent,
@@ -137,8 +134,8 @@ class PersonalInformationScreen extends StatelessWidget {
                             return null;
                           },
                         ),
-                        const Sizer(),
-                        RegisterExpansionTile(
+                        const Sizer()],
+                        if(state.registerType=='socket')...[RegisterExpansionTile(
                           title: (state.selectedColors != null || (state.selectedColors?.id.isNotEmpty ?? false))
                               ? Row(
                                   children: [
@@ -183,8 +180,6 @@ class PersonalInformationScreen extends StatelessWidget {
                               text: (state.selectedBrand != null || (state.selectedBrand?.isNotEmpty ?? false)) ? state.selectedBrand ?? '' : LocaleKeys.vehicleBrand.localize),
                           onChange: (selectedItem) {
                             cubit.onSelectBrand((selectedItem as Label).text, context);
-                            // cubit.onSelectBrand((selectedItem as Label).text);
-                            print("Selected Item: ${selectedItem.text}");
                           },
                           length: state.brands?.length ?? 0,
                           children: List.generate(state.brands?.length ?? 0, (index) => Label(text: state.brands?[index] ?? '')),
@@ -216,7 +211,20 @@ class PersonalInformationScreen extends StatelessWidget {
                             return null;
                           },
                         ),
-                        const Sizer(),
+                        const Sizer(),],
+                        if(state.registerType=='noSocket')...[DefaultTextFormField(
+                          currentController: cubit.rideCarModelController,
+                          hint: LocaleKeys.carModel.tr(),
+                          fillColor: AppColors.GREYBG,
+                          borderColor: Colors.transparent,
+                          validator: (v) {
+                            if (v == null || v.isEmpty) {
+                              return LocaleKeys.required.localize;
+                            }
+                            return null;
+                          },
+                        ),
+                        const Sizer()],
                         DefaultTextFormField(
                           currentController: cubit.rideVehiclePlateNumberController,
                           hint: LocaleKeys.plateInformation.tr(),
@@ -229,7 +237,7 @@ class PersonalInformationScreen extends StatelessWidget {
                             return null;
                           },
                         ),
-                        const Sizer(),
+                        if(state.registerType=='socket')...[const Sizer(),
                         DefaultTextFormField(
                           currentController: cubit.rideVehicleLicenseNumController,
                           hint: context.isArabic ? "رقم ترخيص السيارة" : "Vehicle License Number",
@@ -254,19 +262,7 @@ class PersonalInformationScreen extends StatelessWidget {
                           length: cubit.subscriptionPlans.length,
                           children: List.generate(cubit.subscriptionPlans.length, (index) => Label(text: cubit.subscriptionPlans[index])),
                         ),
-                        const Sizer(),
-                        RegisterExpansionTile(
-                          title: Label(
-                            text: (state.selectedGov != null || (state.selectedGov?.isNotEmpty ?? false)) ? state.selectedGov ?? '' : LocaleKeys.favoriteCity.localize,
-                          ),
-                          onChange: (Widget selectedItem) {
-                            cubit.onSelectGov((selectedItem as Label).text);
-                            // print("Selected Item: ${(selectedItem as Label).text}");
-                          },
-                          length: state.govs?.length ?? 0,
-                          children: List.generate(
-                              state.govs?.length ?? 0, (index) => Label(text: context.isArabic ? (state.govs?[index].nameAr ?? '') : state.govs?[index].nameEn ?? '')),
-                        ),
+
                         const Sizer(),
                         DefaultTextFormField(
                           currentController: cubit.ridePricingPerKmController,
@@ -275,6 +271,10 @@ class PersonalInformationScreen extends StatelessWidget {
                           validator: (v) {
                             if (v == null || v.isEmpty) {
                               return LocaleKeys.required.localize;
+                            }else{
+                              if((num.tryParse(v) ?? 0) >(state.costPerKm?.highCostPerKm??0)||(num.tryParse(v) ?? 0) <(state.costPerKm?.lowCostPerKm??0)){
+                                return context.isArabic?"يجب ان يكون السعر للكيلومتر بين ${state.costPerKm?.lowCostPerKm} و ${state.costPerKm?.highCostPerKm}":'Must be between ${state.costPerKm?.lowCostPerKm} and ${state.costPerKm?.highCostPerKm}';
+                              }
                             }
                             return null;
                           },
@@ -299,7 +299,19 @@ class PersonalInformationScreen extends StatelessWidget {
                           onChanged: (value) async {
                             cubit.onChangeAirCondition();
                           },
-                        ),
+                        )],
+                        if(state.registerType=='socket'||state.isShipping==true)...[const Sizer(),RegisterExpansionTile(
+                          title: Label(
+                            text: (state.selectedGov != null || (state.selectedGov?.isNotEmpty ?? false)) ? state.selectedGov ?? '' : LocaleKeys.favoriteCity.localize,
+                          ),
+                          onChange: (Widget selectedItem) {
+                            cubit.onSelectGov((selectedItem as Label).text);
+                            // print("Selected Item: ${(selectedItem as Label).text}");
+                          },
+                          length: state.govs?.length ?? 0,
+                          children: List.generate(
+                              state.govs?.length ?? 0, (index) => Label(text: context.isArabic ? (state.govs?[index].nameAr ?? '') : state.govs?[index].nameEn ?? '')),
+                        )],
                       ],
                     ),
                   ),
@@ -340,8 +352,7 @@ class PersonalInformationScreen extends StatelessWidget {
                                 )))
                         : InkWell(
                             onTap: () {
-                              print("object");
-                              cubit.onRegister(context);
+                              state.isShipping==true?cubit.onLoadingRegister(context):state.registerType=='socket'?cubit.onRegister(context):cubit.onNoSocketRegister(context);
                             },
                             child: Container(
                               height: 44,

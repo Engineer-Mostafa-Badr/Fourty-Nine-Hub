@@ -16,6 +16,7 @@ class AdDetailsEntity {
   final String? governorateAr;
   final String? governorateEn;
   final String? subscriptionStatus;
+  final String? userSubscriptionStatus;
   final String title;
   final String description;
   final List<String> images;
@@ -55,6 +56,7 @@ class AdDetailsEntity {
       this.views,
       this.requestsCount,
       this.subscriptionStatus,
+      this.userSubscriptionStatus,
       this.isFavourite = false,
       this.isDeleted = false,
       this.isPrimary = false,

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import 'package:fourtyninehub/core/service/cache_service.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
@@ -118,7 +119,7 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
         maxLength: widget.maxLength,
         expands: widget.expanded,
         enableSuggestions: widget.enableSuggestions,
-        style: TextStyle(
+        style: Styles.mediumText(
             color:
                 context.isDarkMode ? Colors.white : AppColors.QUANTITY_COLOR),
         textCapitalization: widget.textCapitalization,
