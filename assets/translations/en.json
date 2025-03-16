@@ -1399,5 +1399,9 @@
   "trukDetails": "Truck Details",
   "busWithYou": "Bus ride with You",
   "trukWithYou": "Truck ride with You",
-  "passenger": "Passenger"
+  "passenger": "Passenger",
+  "loadingRequest": "Loading Requests",
+  "rideRequest": "Ride Requests",
+  "transporte": "Transporte",
+  "bus": "Bus"
 }

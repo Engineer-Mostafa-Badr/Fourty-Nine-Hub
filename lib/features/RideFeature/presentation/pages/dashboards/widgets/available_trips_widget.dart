@@ -9,15 +9,19 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/styles.dart';
+import '../../../../domain/entities/dashboards/trip_entity.dart';
 import '../../widgets/dialog_widget/show_custom_dialog_trip.dart';
 import 'edit_price_widget.dart';
 
 class AvailableTripsWidget extends StatelessWidget {
   final bool isWithAnotherPrice;
-  const AvailableTripsWidget({super.key, this.isWithAnotherPrice = false});
+  final TripEntity tripEntity;
+  const AvailableTripsWidget(
+      {super.key, this.isWithAnotherPrice = false, required this.tripEntity});
 
   @override
   Widget build(BuildContext context) {
+
     return Container(
       width: context.screenWidth,
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -42,13 +46,13 @@ class AvailableTripsWidget extends StatelessWidget {
                   ),
                 ),
                 Label(
-                  text: 'Ahmed',
+                  text: tripEntity.userId.firstName, //'Ahmed',
                   style: Styles.mediumText(),
                 ),
                 const SizedBox(height: 4),
-                const Label(
-                  text: '40 Sec',
-                  style: TextStyle(fontWeight: FontWeight.w300),
+                 Label(
+                  text: '${(tripEntity.duration/120).toStringAsFixed(0)} Hour',
+                  style: const TextStyle(fontWeight: FontWeight.w300),
                 ),
               ],
             ),
@@ -59,30 +63,33 @@ class AvailableTripsWidget extends StatelessWidget {
               spacing: 4,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(children: [
+                Row(spacing: 5,children: [
                   Expanded(
                     flex: 1,
                     child: Image.asset(Assets.rideFrom, width: 24, height: 24),
                   ),
                   Expanded(
-                      flex: 9,
-                      child: Label(
-                          text: 'Tariaq Bedon Esm', style: Styles.headerText()))
+                    flex: 9,
+                    child: Label(
+                      text:tripEntity.fromTitle, //'Tariaq Bedon Esm',
+                      style: Styles.headerText(),
+                    ),
+                  )
                 ]),
-                Row(children: [
+                Row(spacing: 5,children: [
                   Expanded(
                       flex: 1,
                       child: Image.asset(Assets.rideTo, width: 24, height: 24)),
                   Expanded(
                       flex: 9,
                       child: Label(
-                          text: 'Open Air Mall - Madinaty',
+                          text: tripEntity.toTitle,//'Open Air Mall - Madinaty',
                           style:
                               Styles.mediumText(fontWeight: FontWeight.w300)))
                 ]),
-                RichText(
+               const SizedBox(height: 5), RichText(
                   text: TextSpan(
-                    text: '150 ',
+                    text: '${tripEntity.price} ',
                     style: const TextStyle(color: AppColors.black),
                     children: <TextSpan>[
                       TextSpan(
@@ -90,7 +97,9 @@ class AvailableTripsWidget extends StatelessWidget {
                           style: const TextStyle(
                               fontSize: 14,
                               color: AppColors.SECONDARY_COLOR_DARK2)),
-                      TextSpan(text: ' - 4 ${LocaleKeys.KM.tr()}'),
+                      TextSpan(
+                          text:
+                              ' - ${tripEntity.distance / 1000} ${LocaleKeys.KM.tr()}'),
                     ],
                   ),
                 ),
@@ -111,14 +120,14 @@ class AvailableTripsWidget extends StatelessWidget {
                       child: AppButton(
                         radius: 15,
                         height: 30,
-                        label: isWithAnotherPrice
+                        label: !tripEntity.autoAccept
                             ? LocaleKeys.acceptAnothePrice.tr()
                             : LocaleKeys.refuse.tr(),
                         style: Styles.mediumText(
                             color: Colors.white,
-                            fontSize: isWithAnotherPrice ? 23 : 28),
+                            fontSize: !tripEntity.autoAccept ? 23 : 28),
                         onPressed: () {
-                          if (isWithAnotherPrice) {
+                          if (!tripEntity.autoAccept) {
                             showModalBottomSheet(
                               backgroundColor: AppColors.whiteColor,
                               context: context,

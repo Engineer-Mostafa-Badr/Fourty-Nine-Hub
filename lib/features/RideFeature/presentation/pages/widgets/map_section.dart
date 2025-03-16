@@ -64,7 +64,7 @@ class _MapSectionState extends State<MapSection> {
           child: CustomRideButton(
             text: LocaleKeys.carTruckRegister.tr(),
             onPressed: () {
-              context.push(Routes.rideModeScreen, extra: 'truk');
+              context.push(Routes.rideModeScreen, extra: 'ride');
               // customBottomSheet(context,
               //     child: Padding(
               //       padding: const EdgeInsets.all(12.0),

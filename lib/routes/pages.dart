@@ -2716,7 +2716,7 @@ class AppPages {
                     BlocProvider<DestGetLatAndLongCubit>(
                       create: (context) => DestGetLatAndLongCubit(
                           getLatLongFromAddressRemoteDataSource:
-                          serviceLocator()),
+                              serviceLocator()),
                     ),
                   ], child: const TruckWelcomeRideRegister());
                 },
@@ -2901,14 +2901,8 @@ class AppPages {
               GoRoute(
                 path: Paths.rideModeScreen,
                 name: Routes.rideModeScreen,
-                builder: (context, state) => MultiBlocProvider(
-                  providers: [
-                    BlocProvider(
-                      create: (context) => serviceLocator<RideCubit>(),
-                    ),
-                  ],
-                  child: RideModeScreen(modeType: state.extra as String),
-                ),
+                builder: (context, state) =>
+                    RideModeScreen(modeType: state.extra as String),
               ),
               GoRoute(
                   path: Paths.rideDashboardDetailsScreen,

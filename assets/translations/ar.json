@@ -1382,6 +1382,9 @@
   "passenger": "الركاب",
   "noSmoker": "سائق غير مدخن",
   "choiceRuler": "مسطرة الاختيارت",
-  "completeRegistration": "تكملة التسجيل"
-
+  "completeRegistration": "تكملة التسجيل",
+  "loadingRequest": "الطلبات المنتظرة",
+  "rideRequest": "طلبات الركوب",
+  "transporte": "النقل",
+  "bus": "حافلة"
 }

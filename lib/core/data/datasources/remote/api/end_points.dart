@@ -1222,6 +1222,12 @@ class EndPoints {
   static String getExpectedPrice(String id) {
     return '/ride/trips/expected/price/$id';
   }
+  static String getAvailableTrips(String subCategoryId) {
+    return '/ride/trips/user?limit=10&page=1&subCategory=$subCategoryId';
+  }
+  static String getPastTrips(int page) {
+    return '/ride/trips/rider?limit=20&page=$page';
+  }
   static String deleteRideRegistration = '/ride/riders';
   static String getRideBrands = '/ride/riders/brands';
   static String getRideModels = '/ride/riders/models';

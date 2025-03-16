@@ -196,7 +196,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                           Padding(
                             padding: const EdgeInsets.only(top: 8.0),
                             child: _tripsWidget(
-                                text: 'Ride Request',
+                                text: LocaleKeys.rideRequest.tr(),
                                 backgroundColor: AppColors.GREYBG),
                           ),
                           const CircleAvatar(
@@ -224,7 +224,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         Padding(
                           padding: const EdgeInsets.only(top: 8.0),
                           child: _tripsWidget(
-                              text: 'Loading Request',
+                              text: LocaleKeys.loadingRequest.tr(),
                               backgroundColor: AppColors.GREYBG),
                         ),
                         const CircleAvatar(
