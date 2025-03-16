@@ -12,6 +12,8 @@ import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../core/widget/custom_failure_widget.dart';
+
 class GiftViewBody extends StatelessWidget {
   const GiftViewBody({super.key});
 
@@ -21,25 +23,19 @@ class GiftViewBody extends StatelessWidget {
       padding: const EdgeInsets.all(16.0),
       child: BlocBuilder<GiftTwoCubit, GiftTwoState>(
         builder: (context, state) {
-          if (state is GiftTwoFailure) {
-            return Center(
-              child: Text(state.message),
-            );
-          }
-          if (state is GiftTwoLoading || state is GiftTwoInitial) {
+
+          if (state.status.isLoading || state.status.isInitial) {
             return const Center(
               child: CircularProgressIndicator(),
             );
           }
-          if (state is GiftTwoSuccess) {
-            final giftEntity = state.giftEntity;
-            final giftCompetitionEntity = state.giftCompetitionEntity;
-
+         else if (state.status.isSuccess) {
+            final gift = state.giftAndCompetitionEntity!;
             return SingleChildScrollView(
               child: Column(
                 children: [
                   HeaderTotalAccountWidget(
-                    balance: giftEntity.amount.toString(), //wheelWalletEntity.amount.toString(),
+                    balance: gift.giftWallet.amount.toString(), //wheelWalletEntity.amount.toString(),
                     // state.wallet?.realAmount?.toStringAsFixed(2) ?? '',
                     type: WalletTypes.giftWallet,
                   ),
@@ -58,8 +54,8 @@ class GiftViewBody extends StatelessWidget {
                     height: 16,
                   ),
                   InvestmentSection(
-                    yearsFromFiveYears: giftEntity.fiveYears!,
-                    yearsFromTenYears: giftEntity.tenYears!,
+                    yearsFromFiveYears: gift.giftWallet.fiveYears!,
+                    yearsFromTenYears: gift.giftWallet.tenYears!,
                   ),
                   // المسافة بين العنصرين هنا تم تحويلها إلى داخل الـ
                   // InvestmentSection
@@ -68,15 +64,23 @@ class GiftViewBody extends StatelessWidget {
                   //   height: 16,
                   // ),
                   CompetitionsSection(
-                    competitions: giftCompetitionEntity
+                    competitions: gift.competitionsWallet,
                   ),
                 ],
               ),
             );
           }
-          return const Center(
-            child: Text('Something went wrong'),
-          );
+         else {
+           return CustomFailureWidget(
+             title: state.errMessage??  LocaleKeys.somethingWentWrong.localize,
+             onPressed: () {
+               context
+                   .read<GiftTwoCubit>()
+                   .getAllData(context);
+             },
+           );
+          }
+
         },
       ),
     );

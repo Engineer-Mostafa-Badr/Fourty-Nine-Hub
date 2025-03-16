@@ -1407,5 +1407,6 @@
   "minimumRequestWithdrawalIs": "Minimum request withdrawal is 10000 EGP for",
   "EGPFor": "EGP for",
   "personalTransaction": "personal transaction.",
-  "uploadBill": "Upload Bill"
+  "uploadBill": "Upload Bill",
+  "investment": "Investment"
 }

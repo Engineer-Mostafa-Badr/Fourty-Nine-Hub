@@ -26,7 +26,12 @@ class CompetitionHeaderItem extends StatelessWidget {
             shape: OvalBorder(),
           ),
           child: Center(
-            child: SvgPicture.asset(svgPath),
+            child: svgPath.isEmpty
+                ? const Icon(
+                    Icons.image_not_supported_outlined,
+                    color: Colors.grey,
+                  )
+                : SvgPicture.asset(svgPath),
           ),
         ),
         const SizedBox(

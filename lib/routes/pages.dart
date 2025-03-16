@@ -309,8 +309,10 @@ import '../features/account_taps/policies/presentation/pages/policy_view.dart';
 import '../features/account_taps/share_app/presentation/cubit/share_app_cubit.dart';
 import '../features/account_taps/transfer_money/presentation/pages/transfer_money_view.dart';
 import '../features/account_taps/wallet/presentation/cubit/Gift_Cubit/gift_cubit.dart';
+import '../features/account_taps/wallet/presentation/cubit/subscription_wallet_cubit/subscription_wallet_cubit.dart';
 import '../features/account_taps/wallet/presentation/pages/wallet_history.dart';
 import '../features/account_taps/wallet/presentation/pages/wallet_view.dart';
+import '../features/account_taps/wallet/presentation/pages/winners_cashback_view.dart';
 import '../features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
 import '../features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
 import '../features/ads_feature/create_company_ad/presentation/pages/create_company_ad.dart';
@@ -875,6 +877,11 @@ class AppPages {
                 builder: (context, state) => const Winners(),
               ),
               GoRoute(
+                path: Paths.WINNERSCASHBACK,
+                name: Routes.WINNERSCASHBACK,
+                builder: (context, state) => const WinnersCashbackView(),
+              ),
+              GoRoute(
                 path: Paths.QURAAN,
                 name: Routes.QURAAN,
                 builder: (context, state) => BlocProvider<QuranCubit>(
@@ -903,9 +910,16 @@ class AppPages {
               GoRoute(
                   path: Paths.WALLET,
                   name: Routes.WALLET,
-                  builder: (context, state) => BlocProvider<WalletTwoCubit>(
-                        create: (_) => serviceLocator<WalletTwoCubit>()
-                          ..getAllDataWalletScreen(),
+                  builder: (context, state) => MultiBlocProvider(
+                        providers: [
+                          BlocProvider(
+                            create: (_) => serviceLocator<WalletTwoCubit>()
+                              ..getAllDataWalletScreen(context),
+                          ),
+                          BlocProvider(
+                            create: (_) => serviceLocator<SubscriptionWalletCubit>(),
+                          ),
+                        ],
                         child: const WalletView(
                             // type: state.extra as WalletTypes,
                             ),

@@ -33,6 +33,7 @@ abstract class Routes {
   static const LUCKYWHEEL = '/LuckyWheel';
   static const COMPETITIONS = '/Competitions';
   static const WINNERS = '/Winners';
+  static const WINNERSCASHBACK = '/WinnersCashback';
   static const WALLET = '/Wallet';
   static const BALANCE = '/Balance';
   static const GIFT = '/Gift';
@@ -273,6 +274,7 @@ abstract class Paths {
   static const LUCKYWHEEL = 'LuckyWheel';
   static const COMPETITIONS = 'Competitions';
   static const WINNERS = 'Winners';
+  static const WINNERSCASHBACK = 'WinnersCashback';
   static const WALLET = 'Wallet';
   static const BALANCE = 'Balance';
   static const GIFT = 'Gift';

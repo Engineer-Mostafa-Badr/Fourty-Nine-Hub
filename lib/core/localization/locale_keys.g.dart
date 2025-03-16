@@ -1383,5 +1383,6 @@ abstract class  LocaleKeys {
   static const EGPFor = 'EGPFor';
   static const personalTransaction = 'personalTransaction';
   static const uploadBill = 'uploadBill';
+  static const investment = 'investment';
 
 }

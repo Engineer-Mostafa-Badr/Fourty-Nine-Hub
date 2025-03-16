@@ -1,24 +1,52 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/localization/locales.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/winners_cashback_cubit/winners_cashback_cubit.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:intl/intl.dart';
 
-class WinnersGridView extends StatelessWidget {
+class WinnersGridView extends StatefulWidget {
   const WinnersGridView({super.key, required this.winners});
 
   final List<WinnersGridViewModel> winners;
 
   @override
+  State<WinnersGridView> createState() => _WinnersGridViewState();
+}
+
+class _WinnersGridViewState extends State<WinnersGridView> {
+ final ScrollController _controller = ScrollController();
+
+  @override
+  void initState() {
+
+    super.initState();
+    _controller.addListener(() {
+      if(_controller.position.maxScrollExtent == _controller.offset) {
+        context.read<WinnersCashbackCubit>().getWinners(context);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.removeListener(() {});
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GridView.builder(
+      controller: _controller,
       padding: const EdgeInsets.symmetric(horizontal: 15),
-      itemCount: winners.length,
+      itemCount: widget.winners.length + 1,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisSpacing: 7,
         mainAxisSpacing: 8,
@@ -27,9 +55,13 @@ class WinnersGridView extends StatelessWidget {
         mainAxisExtent: 173,
       ),
       itemBuilder: (context, index) {
-        return WinnersGridViewItem(
-          winner: winners[index],
+        if(index < widget.winners.length) {
+          return WinnersGridViewItem(
+          winner: widget.winners[index],
         );
+        } else {
+          return const Center(child: CircularProgressIndicator(),);
+        }
       },
     );
   }

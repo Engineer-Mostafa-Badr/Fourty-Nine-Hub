@@ -7,18 +7,39 @@ import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/balan
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_balance_history_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_balance_use_case.dart';
 
+import '../../../domain/usecases/withdraw_balance_use_cse.dart';
+
 part 'cashback_state.dart';
 
 class CashbackCubit extends Cubit<CashbackState> {
   CashbackCubit(
     this._balanceUseCases,
-    this._balanceHistoryUseCase,
+    this._balanceHistoryUseCase, this._withdrawBalanceUseCase,
   ) : super(const CashbackState(status: CashbackStates.initial));
 
   final GetBalanceUseCases _balanceUseCases;
   final GetBalanceHistoryUseCase _balanceHistoryUseCase;
+  final RequestWithdrawBalanceUseCase _withdrawBalanceUseCase;
 
   final int limit = 30;
+
+  Future<void> requestWithdrawal(context) async {
+    emit(state.copyWith(
+      isLoadingButton: true
+    ));
+    final response = await _withdrawBalanceUseCase(const NoParams());
+    response.fold((l) {
+      emit(state.copyWith(
+        status: CashbackStates.failure,
+        messageFailure: getFailureMessage(l, context),
+        isLoadingButton: false,
+      ));
+    }, (data) {
+      emit(state.copyWith(
+          isLoadingButton: false
+      ));
+    });
+  }
 
   Future<void> getCashback(context) async {
     if (state.page == 1) emit(state.copyWith(status: CashbackStates.loading));

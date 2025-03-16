@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/gift_two_cubit/gift_two_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/investment_item.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -33,7 +37,7 @@ class _InvestmentSectionState extends State<InvestmentSection> {
             Align(
               alignment: AlignmentDirectional.center,
               child: Label(
-                text: 'Investment',
+                text: LocaleKeys.investment.localize,
                 style: Styles.headerText(
                   fontSize: 32,
                 ),
@@ -78,10 +82,14 @@ class _InvestmentSectionState extends State<InvestmentSection> {
                   ),
                   child: Column(
                     children: [
+
                       InvestmentItem(
                         totalYears: 5,
                         currentYears: widget.yearsFromFiveYears,
-                        onPressed: () {},
+                        onPressed: () {
+                          context.read<GiftTwoCubit>().requestTransferFiveYears(context);
+                        },
+                        isLoading: context.read<GiftTwoCubit>().state.buttonRequestFiveLoading??false,
                       ),
                       const SizedBox(
                         height: 12,
@@ -89,7 +97,10 @@ class _InvestmentSectionState extends State<InvestmentSection> {
                       InvestmentItem(
                         totalYears: 10,
                         currentYears: widget.yearsFromTenYears,
-                        onPressed: () {},
+                        onPressed: () {
+                          context.read<GiftTwoCubit>().requestTransferTenYears(context);
+                        },
+                        isLoading: context.read<GiftTwoCubit>().state.buttonRequestTenLoading??false,
                       ),
                     ],
                   ),

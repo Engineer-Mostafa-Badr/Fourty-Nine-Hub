@@ -3,14 +3,15 @@ import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/gift_
 
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
+import '../entities/gift_and_competition_entity.dart';
 import '../repositories/wallet_repo.dart';
 
 class GetGiftCompetitionsUseCase
-    extends UseCase<List<GiftCompetitionEntity>, NoParams> {
+    extends UseCase<GiftAndCompetitionEntity, NoParams> {
   final WalletRepo _repo;
   GetGiftCompetitionsUseCase(this._repo);
   @override
-  Future<Either<Failure, List<GiftCompetitionEntity>>> call(NoParams params) {
+  Future<Either<Failure, GiftAndCompetitionEntity>> call(NoParams params) {
     return _repo.getGiftCompetitions();
   }
 }

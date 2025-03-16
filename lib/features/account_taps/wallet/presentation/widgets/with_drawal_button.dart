@@ -1,29 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_two_cubit/wallet_two_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_button_wallet_and_gift_and_cashback.dart';
 import 'package:fourtyninehub/features/payment/presentation/pages/payment_cash_out.dart';
 
 class WithDrawalButton extends StatelessWidget {
-  const WithDrawalButton({super.key, required this.state});
+  const WithDrawalButton({super.key, required this.state, required this.amount, required this.phone});
 
   final bool state;
+  final String amount;
+  final String phone;
 
   @override
   Widget build(BuildContext context) {
-    return CustomButtonWalletAndGiftAndCashback(
-      title: state? 'Request Withdrawal' : 'Request Withdrawal',
-      status: !state,
-      onPressed: () {
-        if(!state) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const PaymentCashOut(),
-            ),
-          );
-          // Navigator.pushNamed(context, Routes.PAYMENT);
-        }
-      },
-    );
+    if(context.read<WalletTwoCubit>().buttonRequestLoading){
+      return const Center(child: CircularProgressIndicator(),);
+    } else {
+      return CustomButtonWalletAndGiftAndCashback(
+        title: state? 'Request Withdrawal' : 'Request Withdrawal',
+        status: state,
+        onPressed: () {
+          if(state) {
+            context.read<WalletTwoCubit>().requestWithdrawal(
+              context,
+              amount: amount,
+              phone: phone,
+            );
+          }
+        },
+      );
+    }
+
     // return state
     //     ? CustomButtonWalletAndGiftAndCashback(
     //         title: 'Request Withdrawal',

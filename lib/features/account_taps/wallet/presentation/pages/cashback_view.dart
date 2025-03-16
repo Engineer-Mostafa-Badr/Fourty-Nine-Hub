@@ -7,6 +7,10 @@ import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/cubit/cashback_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/cash_back_view_body.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../../../routes/routes.dart';
+import '../widgets/custom_winner_appbar.dart';
 
 class CashbackView extends StatelessWidget {
   const CashbackView({super.key});
@@ -16,6 +20,14 @@ class CashbackView extends StatelessWidget {
     return CustomScaffold(
       appBar: BackAppBar(
         label: LocaleKeys.balance.localize,
+        actions: [
+          CustomWinnerAppbar(
+            onPressed: () {
+              context.push(Routes.WINNERSCASHBACK);
+
+            },
+          ),
+        ],
       ),
       body: BlocProvider(
         create: (context) =>

@@ -85,6 +85,7 @@ abstract class Assets {
   static String cupIcon = 'assets/icons/cup_icon.svg';
   static String crownIcon = 'assets/icons/crown_icon.svg';
 
+  static String cupImage = 'assets/icons/cup_image.png';
   static String twitterLogo = 'assets/icons/twitterLogo.png';
   static String loadingCar = 'assets/icons/loadingCar.png';
   static String comment = 'assets/icons/comment.png';

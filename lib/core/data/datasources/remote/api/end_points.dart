@@ -40,6 +40,7 @@ import '../../../../../features/account_taps/my_adds/domain/usecases/edit_my_ads
 import '../../../../../features/account_taps/my_adds/domain/usecases/get_all_counts_ads_usecase.dart';
 import '../../../../../features/account_taps/my_adds/domain/usecases/get_all_counts_usecase.dart';
 import '../../../../../features/account_taps/my_adds/domain/usecases/update_my_ads_usecase.dart';
+import '../../../../../features/account_taps/wallet/domain/usecases/get_winners_cashback_use_case.dart';
 import '../../../../../features/ads_feature/create_company_ad/data/models/fetch_post_company_advertise_params.dart';
 import '../../../../../features/azkaar/domain/use_case/search_azkar_usecase.dart';
 
@@ -95,6 +96,7 @@ class EndPoints {
   static answerQuestion(String id) => '/infosAndQuestions/answer/$id';
   static const sliderItems = '/sliders/to-app';
   static const competition = '/subscriber/competitionsSubscriber';
+  static const getGiftAndCompetitions = '/subscriber/competitions';
   static const winnerCompetition = '/subscriber/winners';
   static String loggedUserId = UserCubit.to.state.data?.id ?? '';
   static String getMainCategoryDetails(String id) =>
@@ -120,6 +122,10 @@ class EndPoints {
 
   static String getHistoryBalance(BalanceHistoryParams params) {
     return '/user-transactions/balance?page=${params.page}&limit=${params.limit}';
+  }
+
+  static String getWinnersCashback(GetWinnersCashbackUseCaseParams params) {
+    return '/cashback/winners?page=${params.page}&limit=${params.limit}';
   }
 
   static String getHistoryWallet(WalletHistoryParams params) =>

@@ -21,7 +21,7 @@ class GiftWalletModel extends GiftWalletEntity {
   factory GiftWalletModel.fromJson(Map<String, dynamic> json) {
     return GiftWalletModel(
       id: json['_id'] ?? '',
-      userId: json['user_id']['_id'] ?? '',
+      userId: json['user_id'] ?? '',
       amount: json['amount'] ?? 0,
       fiveYears: json['fiveYears'] ?? 0,
       tenYears: json['tenYears'] ?? 0,

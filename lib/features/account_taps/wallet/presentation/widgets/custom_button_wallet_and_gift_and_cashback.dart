@@ -11,6 +11,7 @@ class CustomButtonWalletAndGiftAndCashback extends StatelessWidget {
     this.activeColor,
     this.disableColor,
     this.padding,
+    this.textStyle,
   });
 
   final String title;
@@ -19,12 +20,13 @@ class CustomButtonWalletAndGiftAndCashback extends StatelessWidget {
   final Color? disableColor;
   final double? padding;
   final bool status;
+  final TextStyle? textStyle;
 
   @override
   Widget build(BuildContext context) {
     return AppButton(
       label: title,
-      style: Styles.headerText(color: Colors.white, fontSize: 32),
+      style: textStyle?? Styles.headerText(color: Colors.white, fontSize: 32),
       backColor: status
           ? (activeColor ?? const Color(0xffF33D49))
           : (disableColor ?? const Color(0xB3F33D49)),

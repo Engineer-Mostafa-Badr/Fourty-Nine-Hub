@@ -11,6 +11,9 @@ import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/with_drawal_button.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../../core/widget/custom_failure_widget.dart';
+import 'custom_button_wallet_and_gift_and_cashback.dart';
+
 class CashbackViewBody extends StatelessWidget {
   const CashbackViewBody({super.key});
 
@@ -45,10 +48,16 @@ class CashbackViewBody extends StatelessWidget {
                 const SizedBox(
                   height: 8,
                 ),
-                const WithDrawalButton(
-                  state: false,
-                  // state.wallet.realAmount != null &&
-                  //     state.wallet.realAmount! >= 500,
+                state.isLoadingButton? const Center(child: CircularProgressIndicator()):
+                CustomButtonWalletAndGiftAndCashback(
+                  title: state.cashback!.balance >= 500 ? 'Request Withdrawal' : 'Request Withdrawal',
+                  status: true,
+                  onPressed: () {
+                    context.read<CashbackCubit>().requestWithdrawal(context);
+                    if(state.cashback!.balance >= 500) {
+
+                    }
+                  },
                 ),
                 const SizedBox(
                   height: 16,
@@ -70,10 +79,15 @@ class CashbackViewBody extends StatelessWidget {
                 ),
               ],
             );
-          } else if (state.status.isFailure) {
-            return Center(child: Text(state.messageFailure!));
           } else {
-            return const Center(child: Text('Something went wrong'));
+            return CustomFailureWidget(
+              title: state.messageFailure??  LocaleKeys.somethingWentWrong.localize,
+              onPressed: () {
+                context
+                    .read<CashbackCubit>()
+                    .getCashback(context);
+              },
+            );
           }
         },
       ),

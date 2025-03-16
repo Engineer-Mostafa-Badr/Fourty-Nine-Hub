@@ -15,19 +15,23 @@ class CustomWinnerAppbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onPressed,
-      child: Row(
-        children: [
-          Label(
-            text: LocaleKeys.winners.localize,
-            style: Styles.headerText(fontSize: 28),
-          ),
-          const SizedBox(
-            width: 4,
-          ),
-          SvgPicture.asset(Assets.cupIcon),
-        ],
+    return Padding(
+      padding: const EdgeInsetsDirectional.only(end: 18),
+      child: InkWell(
+        onTap: onPressed,
+        child: Row(
+          children: [
+            Label(
+              text: LocaleKeys.winners.localize,
+              style: Styles.headerText(fontSize: 28),
+            ),
+            const SizedBox(
+              width: 4,
+            ),
+            Image.asset(Assets.cupImage),
+            // SvgPicture.asset(Assets.cupIcon),
+          ],
+        ),
       ),
     );
   }
