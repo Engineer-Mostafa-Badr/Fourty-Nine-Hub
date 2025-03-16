@@ -330,7 +330,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         onTap: (){
 
                         },
-                        child: _tripsWidget(context.isArabic? "طلبات التحميل": "Loading Requests", color: const Color(0xffD9D9D9))),
+                        child: _tripsWidget(text:context.isArabic? "طلبات التحميل": "Loading Requests", color: const Color(0xffD9D9D9))),
                   ),
                 ),
               ],
@@ -347,7 +347,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                       onTap: (){
                         context.push(Routes.RIDEACTIVITY);
                       },
-                      child: _tripsWidget(LocaleKeys.activity.tr(), color: AppColors.GREYCARD)),
+                      child: _tripsWidget(_tripsWidgetLocaleKeys.activity.tr(), color: AppColors.GREYCARD)),
                 ),
                 Expanded(
                   child: ClickableWidget(
@@ -356,7 +356,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                           rideCubit: context.read<RideCubit>(),
                         ));
                       },
-                      child: _tripsWidget(LocaleKeys.runningTrips.tr(), color: AppColors.GREYCARD)),
+                      child: _tripsWidget(_tripsWidgetLocaleKeys.runningTrips.tr(), color: AppColors.GREYCARD)),
                 ),
                 Expanded(
                   child: ClickableWidget(
@@ -365,7 +365,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                           rideCubit: context.read<RideCubit>(),
                         ));
                       },
-                      child: _tripsWidget(LocaleKeys.expiredTrips.tr(), color: AppColors.GREYCARD)),
+                      child: _tripsWidget(_tripsWidgetLocaleKeys.expiredTrips.tr(), color: AppColors.GREYCARD)),
                 ),
               ],
             ),
@@ -387,32 +387,49 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                     _buildCategoryList(
                         "ride", state.rideCategory?.subCategories ?? []),
                     _buildCategoryList(
-                        "shipping", state.shippingCategory?.subCategories ?? []
-                    ),
-                    _customLocationField(
-                      isTo: false,
-                      color: Colors.green,
-                      text: state.currentLocation?.address,
-                      onPressed: ()async {
-                        context.push(Routes.RIDEOPENSTREETMAPSEARCHANDPICK, extra: RideOpenStreetMapSearchAndPickParams(
-                          rideCubit: context.read<RideCubit>(),
-                          isFrom: true,
-                        ));
-                      },
-                    ),
-                    _customLocationField(
-                      isTo: true,
-                      color: Colors.blue,
-                      text: state.toLocation?.address,
-                      onPressed: ()async {
-                        context.push(Routes.RIDEOPENSTREETMAPSEARCHANDPICK, extra: RideOpenStreetMapSearchAndPickParams(
-                          rideCubit: context.read<RideCubit>(),
-                          isTo: true,
-                        ));
-                      },
-                    ),
-
+                        "shipping", state.rideCategory?.subCategories ?? []
+                        // "shipping",
+                        // state.shippingCategory?.subCategories ?? []
+                        ),
+                    CountryDropdown(),
+                    // CountryPickerDropdown(
+                    //   onValuePicked: (value) {},
+                    // );
+                    //  InkWell(
+                    //     onTap: _showCountryPicker,
+                    //     child: Row(
+                    //         mainAxisSize: MainAxisSize.min,
+                    //         crossAxisAlignment: CrossAxisAlignment.center,
+                    //         children: [
+                    //           const Icon(Icons.keyboard_arrow_down_rounded, size: 15),
+                    //           const SizedBox(width: 4),
+                    //           ClipRRect(
+                    //               borderRadius: BorderRadius.circular(6),
+                    //               child: Image.asset(
+                    //                   CountryPickerUtils.getFlagImageAssetPath(
+                    //                       _country.isoCode),
+                    //                   height: 25.0,
+                    //                   width: 35.0,
+                    //                   fit: BoxFit.fill,
+                    //                   package: "country_pickers")),
+                    //           const SizedBox(width: 8.0),
+                    //           Text(_country.name)
+                    //         ])); //CountryDropdown();
+                    _customLocationField(LocaleKeys.from.tr(), Colors.green,
+                        LocaleKeys.find.tr(), fromController, false),
+                    _customLocationField(LocaleKeys.to.tr(), Colors.blue,
+                        LocaleKeys.find.tr(), toController, true),
                     _fareField(),
+                    // Container(
+                    //     padding: const EdgeInsets.symmetric(
+                    //         horizontal: 16, vertical: 4),
+                    //     decoration: BoxDecoration(
+                    //         color: AppColors.GREYFIELD,
+                    //         borderRadius: BorderRadius.circular(15)),
+                    //     child: Row(spacing: 8, children: [
+                    //       SvgPicture.asset(Assets.alertCircle),
+                    //       const Text('Travel time:~14 min. Distance: 6.58 Km.')
+                    //     ])),
                     Row(
                       spacing: 5,
                       children: [
@@ -444,18 +461,18 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
     );
   }
 
-  Widget _tripsWidget(String text, {required Color color}) {
+  Widget _tripsWidget(_tripsWidget
+      {required String text, Color backgroundColor = AppColors.GREYFIELD}) {
     return Container(
-      height: 26,
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-          color: color,
+          color: backgroundColor,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(color: AppColors.DARK_BLUE_COLOR)),
       child: Center(
         child: Text(
           text,
-          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+          style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w600),
         ),
       ),
     );
@@ -540,147 +557,106 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
     );
   }
 
-  Widget _customLocationField(
-      {
-        required Color color,
-        required String? text,
-        required bool isTo,
-        required Function()? onPressed,
-      }) {
-    if (text == null) {
-      if (isTo == true) {
-        text = 'To';
-      }
-      else{
-        text = 'From';
-      }
-    }
-
-    return BlocBuilder<RideCubit, RideState>(
-      builder: (context, state) {
-        return InkWell(
-          onTap: onPressed,
-          child: Container(
-            height: 52,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              color: const Color(0xFFEEEEEE),
-            ),
-            child: Row(
+  Widget _customLocationField(String label, Color color, String buttonText,
+      TextEditingController controller, bool isTo) {
+    return Row(
+      children: [
+        Expanded(
+          child: FormTextField(
+            style: Styles.mediumText(color: AppColors.GREY_DARK_COLOR),
+            constraints: const BoxConstraints(maxHeight: 52, minHeight: 52),
+            fillColor: const Color(0xFFEEEEEE),
+            borderRadius: BorderRadius.circular(20),
+            controller: controller,
+            hint: label,
+            suffix: Row(
+              spacing: 5,
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                CircleAvatar(
-                  backgroundColor: Colors.transparent,
-                  child: CircleAvatar(
-                    backgroundColor: color,
-                    radius: 10,
-                    child: const CircleAvatar(
-                        backgroundColor: Colors.white, radius: 5),
-                  ),
-                ),
-                Expanded(
-                  child: Text(text == 'From' ? context.isArabic? "من": "From" : text == 'To' ? context.isArabic? "إلى": "To": text!,),
-                ),
-                if (isTo == true && text != 'To')
+                if (isTo == true)
                   GestureDetector(
                     onTap: () {
                       customBottomSheet(context,
-                          context.read<RideCubit>(),
-                          child: const AddStopsWidget(), title: context.isArabic ? 'إضافة موقع' : 'Add Stops');
+                          child: const AddStopsWidget(), title: 'Add Stops');
                     },
                     child: const Icon(Icons.add, size: 18),
                   ),
+                ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(110, 52),
+                      backgroundColor: AppColors.PRIMARY_COLOR,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20))),
+                  child: Text(buttonText,
+                      style: const TextStyle(color: Colors.white)),
+                ),
               ],
             ),
+            prefix: CircleAvatar(
+                backgroundColor: Colors.transparent,
+                child: CircleAvatar(
+                    backgroundColor: color,
+                    radius: 10,
+                    child: const CircleAvatar(
+                        backgroundColor: Colors.white, radius: 5))),
+            action: (v) {},
           ),
-        );
-      }
+        ),
+      ],
     );
   }
 
-
   Widget _fareField() {
-    return BlocBuilder<RideCubit, RideState>(
-      builder: (context, state) {
-        String selectedCategoryName = "Captain";
-        double selectedCategoryPrice = 0.0;
-        if (_selectedCategoryType == "ride") {
-         selectedCategoryName = state.rideCategory?.subCategories[_selectedCategoryIndex!].subCategoryNameEn ?? "";
-        }
-        else{
-          selectedCategoryName = state.shippingCategory?.subCategories[_selectedCategoryIndex!].subCategoryNameEn ?? "";
-        }
-        if (selectedCategoryName == "Captain") {
-          selectedCategoryPrice = state.rideExpectedPrice?.priceForCaptain ?? 0.0;
-        }
-        else if (selectedCategoryName == "Scooter") {
-          selectedCategoryPrice = state.rideExpectedPrice?.priceForScooter ?? 0.0;
-        }
-        else if (selectedCategoryName == "Taxi") {
-          selectedCategoryPrice = state.rideExpectedPrice?.priceForTaxi ?? 0.0;
-        }
-        else if (selectedCategoryName == "Suv") {
-          selectedCategoryPrice = state.rideExpectedPrice?.priceForSUV ?? 0.0;
-        }
-        return GestureDetector(
-          onTap: () {
-            customBottomSheet(context,
-                context.read<RideCubit>(),
-                child:  Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: FareBottomSheetWidget(
-                    rideCubit: context.read<RideCubit>(),
-                    selectedCategoryPrice: selectedCategoryPrice,
-                    selectedCategoryName: selectedCategoryName,
-                  ),
-                ),
-                title: LocaleKeys.offerYourFare.tr());
-          },
-          child: Row(
-            children: [
-              Expanded(
-                flex: 8,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                  decoration: BoxDecoration(
-                    color: AppColors.GREYFIELD,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Row(
-                    spacing: 10,
-                    children: [
-                      Text(LocaleKeys.egp.tr(),
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 12)),
-                      state.rideExpectedPrice != null ? Text(selectedCategoryPrice.toString()) : Text(LocaleKeys.offerYourFare.tr()),
-                      const Spacer(),
-                      Image.asset('assets/icons/edit.png'),
-                    ],
-                  ),
-                ),
+    return GestureDetector(
+      onTap: () {
+        customBottomSheet(context,
+            child: const Padding(
+              padding: EdgeInsets.all(12.0),
+              child: FareBottomSheetWidget(),
+            ),
+            title: LocaleKeys.offerYourFare.tr());
+      },
+      child: Row(
+        children: [
+          Expanded(
+            flex: 8,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
+              decoration: BoxDecoration(
+                color: AppColors.GREYFIELD,
+                borderRadius: BorderRadius.circular(40),
               ),
-              Expanded(
-                flex: 2,
-                child: GestureDetector(
-                  onTap: () {
-                    customBottomSheet(context,
-                        context.read<RideCubit>(),
-                        child:  OptionsBottomsheetWidget(
-                          rideCubit: context.read<RideCubit>(),
-                          selectedCategoryName: selectedCategoryName,
-                          selectedCategoryPrice: selectedCategoryPrice,
-                        ),
-                        title: LocaleKeys.options.tr());
-                  },
-                  child: SizedBox(
-                    height: 25,
-                    child: Image.asset('assets/icons/option.png'),
-                  ),
-                ),
-              )
-            ],
+              child: Row(
+                spacing: 10,
+                children: [
+                  Text(LocaleKeys.egp.tr(),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 12)),
+                  Text(LocaleKeys.offerYourFare.tr()),
+                  const Spacer(),
+                  Image.asset(Assets.edit),
+                ],
+              ),
+            ),
           ),
-        );
-      }
+          Expanded(
+            flex: 2,
+            child: GestureDetector(
+              onTap: () {
+                customBottomSheet(context,
+                    child: const OptionsBottomsheetWidget(),
+                    title: LocaleKeys.options.tr());
+              },
+              child: SizedBox(
+                height: 25,
+                child: Image.asset(Assets.option),
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }

@@ -1379,5 +1379,30 @@ abstract class  LocaleKeys {
   static const rideRequest = 'rideRequest';
   static const transporte = 'transporte';
   static const bus = 'bus';
+  static const addEmergencyContacts = 'addEmergencyContacts';
+  static const reportClient = 'reportClient';
+  static const rateTheClient = 'rateTheClient';
+  static const beforeTheTrip = 'beforeTheTrip';
+  static const identityVerification = 'identityVerification';
+  static const securityFeatures = 'securityFeatures';
+  static const emergencyChat = 'emergencyChat';
+  static const carInspection = 'carInspection';
+  static const secureCommunications = 'secureCommunications';
+  static const completeRide = 'completeRide';
+  static const requestEmergencySupport = 'requestEmergencySupport';
+  static const writeYourProblem = 'writeYourProblem';
+  static const writeYourPhoneNumber = 'writeYourPhoneNumber';
+  static const enterYourName = 'enterYourName';
+  static const enterYourPhoneNumber = 'enterYourPhoneNumber';
+  static const enterYourEmail = 'enterYourEmail';
+  static const deviceID = 'deviceID';
+  static const enterYourDeviceID = 'enterYourDeviceID';
+  static const billGift = 'billGift';
+  static const socialMessage = 'socialMessage';
+  static const anonymousMessage = 'anonymousMessage';
+  static const showPosts = 'showPosts';
+  static const showStories = 'showStories';
+  static const showReels = 'showReels';
+  static const writeComments = 'writeComments';
 
 }
