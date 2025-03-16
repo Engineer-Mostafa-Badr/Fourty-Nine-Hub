@@ -42,6 +42,7 @@ abstract class MainTextFormField extends StatefulWidget {
   final Color? fillColor;
   final Color? cursorColor;
   final TextStyle? style;
+  final TextStyle? hintStyle;
   final VoidCallback? onTap;
   final VoidCallback? onEditComplete;
   final Widget? labelWidget;
@@ -81,7 +82,7 @@ abstract class MainTextFormField extends StatefulWidget {
     this.style,
     this.prefixIcon,
     this.onTap,
-    this.onEditComplete,
+    this.onEditComplete, this.hintStyle,
   });
 
   @override
@@ -136,7 +137,7 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
               widget.contentPadding ?? const EdgeInsets.fromLTRB(16, 0, 16, 0),
           hintText: widget.hintText,
           labelText: widget.label,
-          hintStyle: TextStyle(
+          hintStyle: widget.hintStyle??TextStyle(
               color:
                   context.isDarkMode ? Colors.white : AppColors.QUANTITY_COLOR),
           suffixIcon: widget.suffixIcon,

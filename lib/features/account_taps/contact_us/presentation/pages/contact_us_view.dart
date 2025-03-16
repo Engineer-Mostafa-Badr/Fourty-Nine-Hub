@@ -146,8 +146,7 @@ class _ContactUsViewState extends State<ContactUsView> {
     var size = MediaQuery.of(context).size;
     return CustomScaffold(
       appBar: BackAppBar(
-        label:
-            LocaleKeys.contactUs.localize,
+        label: LocaleKeys.contactUs.localize,
         subTitle: LocaleKeys.TeamHelp.localize,
         enableCustomAppBar: true,
       ),
@@ -188,7 +187,7 @@ class _ContactUsViewState extends State<ContactUsView> {
                     buildContainerPhoneAndEmail(
                       size,
                       LocaleKeys.email.localize,
-                      "49_mobile_app@gmail.com",
+                      "49hup.app@gmail.com",
                       Icons.email_outlined,
                       () {},
                     ),
@@ -218,13 +217,15 @@ class _ContactUsViewState extends State<ContactUsView> {
                     ),
                     const Sizer(),
                     DefaultTextFormField(
-                      contentPadding: EdgeInsets.zero,
+                      contentPadding: const EdgeInsets.all(16),
+                      // contentPadding: EdgeInsets.all(32),
                       fillColor: Colors.transparent,
                       currentController: controller.messageController,
                       hint: '${LocaleKeys.message.localize}...',
                       hintColor: Colors.black54,
                       maxLength: 150,
                       maxLines: 5,
+                      hintStyle: Styles.headerText(color: Colors.black54),
                     ),
                     // FormTextField(
                     //   textStyle: Styles.mediumText(

@@ -1227,7 +1227,7 @@ class AppPages {
                             name: Routes.EDITPROFILE,
                             builder: (context, state) =>
                                 BlocProvider<EditProfileCubit>(
-                                    create: (_) => serviceLocator(),
+                                    create: (_) => serviceLocator<EditProfileCubit>()..fetchRideGovernorates(),
                                     child: const EditProfileView()),
                           ),
                         ]),
