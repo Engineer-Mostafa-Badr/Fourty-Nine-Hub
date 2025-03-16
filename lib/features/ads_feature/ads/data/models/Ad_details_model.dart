@@ -27,6 +27,7 @@ class AddDetailsModel extends AdDetailsEntity {
     super.views,
     super.requestsCount,
     super.subscriptionStatus,
+    super.userSubscriptionStatus,
     super.isFavourite,
     super.address,
     super.user,
@@ -81,7 +82,8 @@ class AddDetailsModel extends AdDetailsEntity {
         active: json['active'] ?? true,
         isFavourite: json['isFavorite'] ?? false,
         // phone: json['phone'] ?? '',
-        subscriptionStatus: json['subscriptionStatus'] ?? '',
+        subscriptionStatus: json['ownerSubscriptionStatus'] ?? '',
+        userSubscriptionStatus: json['premium'] ?? '',
         statistics: json['statistics'] == null
             ? null
             : AdStatisticsModel.fromJson(json['statistics']),

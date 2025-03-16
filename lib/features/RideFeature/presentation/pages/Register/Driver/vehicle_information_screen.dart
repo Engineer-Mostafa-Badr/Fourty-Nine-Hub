@@ -1,5 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/stateful/picker/date_picker_field.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -120,18 +122,9 @@ class VehicleInformationScreen extends StatelessWidget {
                             //   },
                             // ),
                             // const Sizer(),
-                            DefaultTextFormField(
-                              currentController: cubit.rideVehicleExpireDateController,
-                              fillColor: AppColors.GREYBG,
-                              borderColor: Colors.transparent,
-                              hint: LocaleKeys.expireDate.localize,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return LocaleKeys.required.localize;
-                                }
-                                return null;
-                              },
-                            ),
+                            DatePickerTextField(color:AppColors.GREYBG,initialDate: DateTime.now(), minDate: DateTime(1900), maxDate: DateTime(2090),onDateSelected: (date){
+                              cubit.rideVehicleExpireDateController.text = DateFormat('yyyy-MM-dd').format(date??DateTime.now());
+                            }, controller:cubit.rideVehicleExpireDateController,hintText: LocaleKeys.expireDate.localize,),
                           ],
                         ),
                       );

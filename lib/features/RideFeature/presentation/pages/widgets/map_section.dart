@@ -3,14 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
-import '../../../../../res/style/app_colors.dart';
 import '../../../../../routes/routes.dart';
 import '../../../../carpool/add_new_route/presentation/widgets/dynamic_map_test.dart';
 import '../../../../carpool/avaliable_routes/presentation/widgets/get_current_location_driver.dart';
 import '../../../../ride/RideRequest/presentation/widgets/start_text_field_and_find_widget.dart';
-import 'bottom_sheet/custom_bottom_sheet.dart';
 import 'custom_ride_button.dart';
 
 class MapSection extends StatefulWidget {
@@ -64,7 +61,7 @@ class _MapSectionState extends State<MapSection> {
           child: CustomRideButton(
             text: LocaleKeys.carTruckRegister.tr(),
             onPressed: () {
-              context.push(Routes.rideModeScreen, extra: 'ride');
+              context.push(Routes.welcomeRideRegister);
               // customBottomSheet(context,
               //     child: Padding(
               //       padding: const EdgeInsets.all(12.0),

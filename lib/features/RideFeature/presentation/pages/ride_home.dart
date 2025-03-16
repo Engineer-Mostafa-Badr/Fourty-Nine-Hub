@@ -77,31 +77,31 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     // _selectedCountry = context.isArabic ? 'القاهرة' : 'Cairo';
     return BlocBuilder<RideCubit, RideState>(
-        builder: (context,state) {
-          var cubit = context.read<RideCubit>();
-          return Scaffold(
-            resizeToAvoidBottomInset: false,
-            body: cubit.loadingHomeData==true?const Center(child: CircularProgressIndicator()):Form(
-              key: _formKey,
-              child: SafeArea(
-                child: SharedScaffold(
-                  mainCategoryId: 2,
-                  body: NestedAppbar(
-                    scrollController: _scrollController,
-                    appBars: const [],
-                    body: Stack(
-                      children: [
-                        MapSection(),
-                        _buildBottomSheet(),
-                        _carTruckBtn(driverInfo: context.read<RideCubit>().state.driverInfo, loadingInfo: context.read<RideCubit>().state.loaderInfo),
-                      ],
-                    ),
+      builder: (context,state) {
+        var cubit = context.read<RideCubit>();
+        return Scaffold(
+          resizeToAvoidBottomInset: false,
+          body: cubit.loadingHomeData==true?const Center(child: CircularProgressIndicator()):Form(
+            key: _formKey,
+            child: SafeArea(
+              child: SharedScaffold(
+                mainCategoryId: 2,
+                body: NestedAppbar(
+                  scrollController: _scrollController,
+                  appBars: const [],
+                  body: Stack(
+                    children: [
+                      _buildTopImage(),
+                      _buildBottomSheet(),
+                      _carTruckBtn(driverInfo: context.read<RideCubit>().state.driverInfo, loadingInfo: context.read<RideCubit>().state.loaderInfo),
+                    ],
                   ),
                 ),
               ),
             ),
-          );
-        }
+          ),
+        );
+      }
     );
   }
 
@@ -287,7 +287,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                   }
                 },
                 isRed: (driverInfo != null&&(driverInfo.status != RegistrationStatus.rejected.status)) ? true : false,
-                isPending: driverInfo != null && (driverInfo.status == RegistrationStatus.pending.status),
+          isPending: driverInfo != null && (driverInfo.status == RegistrationStatus.pending.status),
                 isDisabled: driverInfo != null && (driverInfo.status != RegistrationStatus.approved.status),
                 text: LocaleKeys.ride.tr(),
                 status: driverInfo?.status??'',
@@ -598,13 +598,13 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 child: Text(
                   text == 'From'
                       ? context.isArabic
-                      ? "من"
-                      : "From"
+                          ? "من"
+                          : "From"
                       : text == 'To'
-                      ? context.isArabic
-                      ? "إلى"
-                      : "To"
-                      : text!,
+                          ? context.isArabic
+                              ? "إلى"
+                              : "To"
+                          : text!,
                 ),
               ),
               if (isTo == true && text != 'To')

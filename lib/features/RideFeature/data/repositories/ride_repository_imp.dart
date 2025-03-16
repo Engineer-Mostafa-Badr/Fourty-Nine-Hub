@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/features/RideFeature/data/datasources/ride_remote_data_source.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/activity_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/completed_trips_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/cost_per_km_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/get_location_from_address_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/history_trip_for_rider_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/history_trip_for_user_entity.dart';
@@ -13,6 +14,8 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_statis
 import 'package:fourtyninehub/features/RideFeature/domain/entities/drivers_in_subcategory_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/expected_price_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/expected_price_params.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/loading_info_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/loading_register_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride_not_special_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride_special_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/request_trip_entity.dart';
@@ -216,5 +219,20 @@ class RideRepositoryImplementation extends RideRepository {
   @override
   Future<Either<Failure, List<HistoryTripForRiderEntity>>> getAllHistoryTripsForRider(GetAllHistoryTripsForRiderUseCaseParams params) async {
     return await rideRemoteDataSource.getAllHistoryTripsForRider(params);
+  }
+
+  @override
+  Future<Either<Failure, CostPerKmEntity>> getCostPerKm() async{
+    return await rideRemoteDataSource.getCostPerKm();
+  }
+
+  @override
+  Future<Either<Failure, bool>> loadingRegister(LoadingRegisterEntity params) async {
+    return await rideRemoteDataSource.loadingRegister(params);
+  }
+
+  @override
+  Future<Either<Failure, LoadingInfoEntity>> getLoadingInfo() async{
+    return await rideRemoteDataSource.getLoadingInfo();
   }
 }
