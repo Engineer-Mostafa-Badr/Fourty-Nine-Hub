@@ -1,12 +1,8 @@
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_gifts_use_case.dart';
 import '../../../domain/entities/gift_and_competition_entity.dart';
-import '../../../domain/entities/gift_competitions_entity.dart';
-import '../../../domain/entities/gift_wallet_entity.dart';
 import '../../../domain/usecases/get_gift_competitions_use_case.dart';
 import '../../../domain/usecases/transfer_balance_use_cse.dart';
 import '../../../domain/usecases/transfer_ten_balance_use_cse.dart';
@@ -69,8 +65,8 @@ class GiftTwoCubit extends Cubit<GiftTwoState> {
         ),
       );
     }, (gift) async {
-      emit(GiftTwoState( status: GiftTwoStates.success,
-          giftAndCompetitionEntity: gift));
+      emit(GiftTwoState(
+          status: GiftTwoStates.success, giftAndCompetitionEntity: gift));
     });
   }
 
@@ -100,5 +96,4 @@ class GiftTwoCubit extends Cubit<GiftTwoState> {
   //     },
   //   );
   // }
-
 }

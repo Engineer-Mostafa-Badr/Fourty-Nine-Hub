@@ -10,14 +10,12 @@ import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/fe
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_two_cubit/wallet_two_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/button_wallet_and_bill.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/charge_wallet_button_bloc.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/history_wallet_list_view_item.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/icon_and_hint_widget.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/header_total_account_widget.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/my_subscription_section.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/select_categories_wallet_section.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/with_drawal_button.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_audio_streaming/src/components/toast.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -190,11 +188,10 @@ class WalletViewBody extends StatelessWidget {
             );
           } else {
             return CustomFailureWidget(
-              title: state.failureMessage??  LocaleKeys.somethingWentWrong.localize,
+              title: state.failureMessage ??
+                  LocaleKeys.somethingWentWrong.localize,
               onPressed: () {
-                context
-                    .read<WalletTwoCubit>()
-                    .getAllDataWalletScreen(context);
+                context.read<WalletTwoCubit>().getAllDataWalletScreen(context);
               },
             );
           }

@@ -4,7 +4,6 @@ import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/normal_wallet_view.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/wallet_view_body.dart';
 import 'package:fourtyninehub/features/competition/presentation/pages/competition_view.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/wallet_history.dart';
@@ -133,7 +132,7 @@ class WalletView extends StatelessWidget {
       ),
       body: const WalletViewBody(),
     );
-    return const NormalWalletView();
+    // return const NormalWalletView();
     //   return DefaultTabController(
     //     length: 3,
     //     child: CustomScaffold(

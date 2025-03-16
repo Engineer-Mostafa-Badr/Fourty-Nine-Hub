@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
 
 import '../../../../../../core/error/failure.dart';
 import '../../../domain/entities/data_winners_cashback_entity.dart';
