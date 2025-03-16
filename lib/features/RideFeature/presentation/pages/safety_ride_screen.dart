@@ -10,21 +10,30 @@ class SafetyRideScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: SharedScaffold(
         mainCategoryId: 2,
         body: Stack(
           children: [
-        MapSection(),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: SafetyCard(),
-            ),
+        const MapSection(),
+    DraggableScrollableSheet(
+    initialChildSize: 0.4,
+    minChildSize: 0.2,
+    maxChildSize: 0.9,
+    builder: (context, scrollController) {
+   return   Positioned(
+        bottom: 0,
+        left: 0,
+        right: 0,
+        child: SingleChildScrollView(
+            controller: scrollController,
+            child: SafetyCard()),
+      );
+    }),
           ],
         ),
       ),
     );
   }
 }
+

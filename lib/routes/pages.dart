@@ -4,8 +4,14 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/D
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/technical_examination_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/upload_rider_images.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/activity_trip_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/complete_ride_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/expired_trips_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/rating_driver_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_arrived_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/running_trips_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/emergency_contacts_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/support_client_details_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/support_ride_screen.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/favourite_view.dart';
 import 'package:fourtyninehub/features/account_taps/contact_us/presentation/cubit/contact_us_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/contact_us/presentation/pages/contact_us_view.dart';
@@ -16,7 +22,10 @@ import 'package:fourtyninehub/features/account_taps/share_app/presentation/pages
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet_history_entity.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Balance_Cubit/balance_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_two_cubit/wallet_two_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/balance_wallet_view.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/cashback_view.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/gift_view.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/gift_wallet_view.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/cubit/ad_details_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/pages/ad_details_view.dart';
@@ -165,7 +174,10 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/updat
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/update_driver_shipping_screen.dart';
 import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
 import 'package:fourtyninehub/features/search/presentation/pages/search_view.dart';
+import 'package:fourtyninehub/features/settings/presentation/pages/change_password_second_view.dart';
+import 'package:fourtyninehub/features/settings/presentation/pages/change_password_view.dart';
 import 'package:fourtyninehub/features/settings/presentation/pages/settings_view.dart';
+import 'package:fourtyninehub/features/settings/presentation/pages/verification_view.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/get_requests_for_loading_model/get_requests_for_loading_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/driverStatistics_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/get_all_trip_cubit.dart';
@@ -283,6 +295,7 @@ import '../features/RideFeature/presentation/pages/dashboards/ride_mode_screen.d
 import '../features/RideFeature/presentation/pages/rating_client_screen.dart';
 import '../features/RideFeature/presentation/pages/ride_details_screen.dart';
 import '../features/RideFeature/presentation/pages/ride_finding_screen.dart';
+import '../features/RideFeature/presentation/pages/osm_search_and_pick.dart';
 import '../features/RideFeature/presentation/pages/ride_home.dart';
 import '../features/RideFeature/presentation/pages/create_loading_trip_screen.dart';
 import '../features/RideFeature/presentation/pages/ride_loading_request_screen.dart';
@@ -472,12 +485,17 @@ class AppPages {
               GoRoute(
                 path: Paths.RIDERUNNINGTRIPS,
                 name: Routes.RIDERUNNINGTRIPS,
-                builder: (context, state) => RunningTripScreen(),
+                builder: (context, state) => RunningTripScreen(params: state.extra as RunningTripParams),
               ),
               GoRoute(
                 path: Paths.RIDEEXPIREDTRIPE,
                 name: Routes.RIDEEXPIREDTRIPE,
-                builder: (context, state) => ExpiredTripsScreen(),
+                builder: (context, state) => ExpiredTripsScreen(params: state.extra as ExpiredTripsScreenParams,),
+              ),
+              GoRoute(
+                path: Paths.RIDEOPENSTREETMAPSEARCHANDPICK,
+                name: Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
+                builder: (context, state) => RideOpenStreetMapSearchAndPick(params: state.extra as RideOpenStreetMapSearchAndPickParams,),
               ),
               GoRoute(
                 path: Paths.EditFoodView,
@@ -886,8 +904,9 @@ class AppPages {
               GoRoute(
                   path: Paths.WALLET,
                   name: Routes.WALLET,
-                  builder: (context, state) => BlocProvider<WalletCubit>(
-                        create: (_) => serviceLocator(),
+                  builder: (context, state) => BlocProvider<WalletTwoCubit>(
+                        create: (_) => serviceLocator<WalletTwoCubit>()
+                          ..getAllDataWalletScreen(),
                         child: const WalletView(
                             // type: state.extra as WalletTypes,
                             ),
@@ -908,6 +927,14 @@ class AppPages {
                       builder: (context, state) => const TransferMoneyView(),
                     ),
                   ]),
+
+              // CashBack
+              GoRoute(
+                path: Paths.CASHBACK,
+                name: Routes.CASHBACK,
+                builder: (context, state) => const CashbackView(),
+              ),
+
               GoRoute(
                 path: Paths.BALANCE,
                 name: Routes.BALANCE,
@@ -916,13 +943,39 @@ class AppPages {
                   child: const BalanceWalletView(),
                 ),
               ),
+
+              // Gift
               GoRoute(
                 path: Paths.GIFT,
                 name: Routes.GIFT,
-                builder: (context, state) => BlocProvider<WalletCubit>(
-                  create: (_) => serviceLocator(),
-                  child: const GiftWalletView(),
-                ),
+                builder: (context, state) => GiftView(),
+              ),
+              // GoRoute(
+              //   path: Paths.GIFT,
+              //   name: Routes.GIFT,
+              //   builder: (context, state) => BlocProvider<WalletCubit>(
+              //     create: (_) => serviceLocator(),
+              //     child: const GiftWalletView(),
+              //   ),
+              // ),
+
+              // Change Password
+              GoRoute(
+                path: Paths.CHANGEPASSWORD,
+                name: Routes.CHANGEPASSWORD,
+                builder: (context, state) => const ChangePasswordView(),
+              ),
+
+              GoRoute(
+                path: Paths.CHANGEPASSWORDSECOND,
+                name: Routes.CHANGEPASSWORDSECOND,
+                builder: (context, state) => const ChangePasswordSecondView(),
+              ),
+
+              GoRoute(
+                path: Paths.VERIFICATION,
+                name: Routes.VERIFICATION,
+                builder: (context, state) => const VerificationView(),
               ),
 
               GoRoute(
@@ -942,7 +995,7 @@ class AppPages {
                     GoRoute(
                         path: Paths.PRIVACY,
                         name: Routes.PRIVACY,
-                        builder: (context, state) => const PrivacyView()),
+                        builder: (context, state) =>  PrivacyView()),
                     GoRoute(
                         path: Paths.POLICY,
                         name: Routes.POLICY,
@@ -2927,6 +2980,36 @@ class AppPages {
                         ],
                         child: const RideLoadingRequestScreen(),
                       )),
+              GoRoute(
+                path: Paths.supportRideScreen,
+                name: Routes.supportRideScreen,
+                builder: (context, state) =>  SupportRideScreen(),
+              ),
+              GoRoute(
+                path: Paths.supportClientDetailsScreen,
+                name: Routes.supportClientDetailsScreen,
+                builder: (context, state) =>  SupportClientDetailsScreen(),
+              ),
+              GoRoute(
+                path: Paths.emergencyContactsScreen,
+                name: Routes.emergencyContactsScreen,
+                builder: (context, state) =>  EmergencyContactsScreen(),
+              ),
+              GoRoute(
+                path: Paths.rideArrivedScreen,
+                name: Routes.rideArrivedScreen,
+                builder: (context, state) =>  RideArrivedScreen(),
+              ),
+              GoRoute(
+                path: Paths.ratingDriverScreen,
+                name: Routes.ratingDriverScreen,
+                builder: (context, state) =>  RatingDriverScreen(),
+              ),
+              GoRoute(
+                path: Paths.completeRideScreen,
+                name: Routes.completeRideScreen,
+                builder: (context, state) =>  CompleteRideScreen(),
+              ),
             ],
           ),
         ]);

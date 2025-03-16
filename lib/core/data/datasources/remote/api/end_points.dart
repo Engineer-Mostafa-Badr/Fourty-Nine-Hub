@@ -224,7 +224,18 @@ class EndPoints {
   static const createNewForgetPassword = '/auth/reset-password';
   static const notifications = '/notifications';
   static const unreadNotificationsCount = '/notifications/unread/count';
-  static const privacy = '/users/privacy';
+  static const privacy = '/privacy/personal';
+  static const privacyConnection = '/privacy/connections';
+  static const privacyMedia = '/privacy/media';
+  static const removeAllowedPrivacy = '/privacy/exclusion/allowed-list';
+  static const removeForbiddenPrivacy = '/privacy/exclusion/forbidden-list';
+  static const privacyCommunication = '/privacy/communications';
+  static const onlyWithPrivacy = '/privacy/exclusion/only-with';
+  static const exceptFromPrivacy = '/privacy/exclusion/except-from';
+  static const exclusionPrivacy = '/privacy/exclusion?feature=';
+
+
+  static const searchUserPrivacy = '/search/users/';
   static const deleteAccount = '/users/settings/delete-account';
   static const disableAccount = '/users/settings/disable-account';
   static const enableAccount = '/users/settings/enable-account';
@@ -1236,4 +1247,68 @@ class EndPoints {
   static String getAllUserTrips = '/loading/trip/allUserTrips';
   static String getRideDriverInfo = '/ride/driver/info';
   static String getRideDriverPictureOptional = '/ride/info/picture-optional';
+
+  static String updateDriverLocation(){
+    return '/ride/update-driver-location';
+  }
+
+  static String getAllRunningTrips({required int limit, required int page}) {
+      return '/ride/trips/all?limit=$limit&page=$page&status=started';
+  }
+
+  static String getAllCompletedTrips({required int limit, required int page}) {
+    return '/ride/trips/all?limit=$limit&page=$page&status=completed';
+  }
+
+  static String getAllActivityTrips({required int limit, required int page}) {
+    return '/ride/trips/activity?limit=$limit&page=$page';
+  }
+
+  static String getAllHistoryTripsForUser() {
+    return '/ride/trips/user';
+  }
+
+  static String getAllHistoryTripsForRider({int limit = 10, int page = 1}) {
+    return '/ride/trips/rider?limit=$limit&page=$page';
+  }
+
+  static String getLocationFromAddress(){
+    return '/ride/trips/address/latAndLong';
+  }
+
+  static String acceptTripByDriver(String tripId){
+    return '/ride/trips/accept/$tripId';
+  }
+
+  static String rideInStartLocation(String id){
+    return '/ride/trips/in-start-location/$id';
+  }
+
+  static String startTrip(String tripId){
+    return '/ride/trips/start/$tripId';
+  }
+
+  static String partialPaymentInTrip(String tripId){
+    return '/ride/payment/partial-payment/$tripId';
+  }
+
+  static String completeTripForRide(String tripId){
+    return '/ride/trips/complete/$tripId';
+  }
+
+  static String cancelTripByRider(String tripId){
+    return '/ride/trips/cancel-by-rider/$tripId';
+  }
+
+  static String cancelTripByClient(String tripId){
+    return '/ride/trips/cancel-by-client/$tripId';
+  }
+
+  static String recordingTrip(String tripId){
+    return '/ride/trips/record-voice/$tripId';
+  }
+
+  static String updateTripPriceFromClient(String tripId){
+    return '/ride/client/trips/offer/$tripId';
+  }
 }

@@ -44,9 +44,10 @@ class ShareTheApp extends StatelessWidget {
                         context: context,
                         user: state.shareApp?.userCount ?? 0,
                         balance: state.shareApp?.shareBalance ?? 0,
+                        gift: state.shareApp?.referralGift ?? 0,
                       ),
                       const Sizer(
-                        height: 128,
+                        height: 64,
                       ),
                       Image.asset(
                         Assets.share,
@@ -54,7 +55,7 @@ class ShareTheApp extends StatelessWidget {
                         height: 300,
                       ),
                       const Sizer(
-                        height: 96,
+                        height: 48,
                       ),
                       Center(
                         child: Label(
@@ -163,6 +164,7 @@ https://example.com/download
     required BuildContext context,
     required num user,
     required num balance,
+    required num gift,
   }) {
     return InkWell(
       onTap: () => context.push(Routes.WALLET),
@@ -180,6 +182,13 @@ https://example.com/download
                 color: AppColors.PRIMARY_COLOR,
                 title: LocaleKeys.balance.localize,
                 subTitle: '$balance'),
+          ),
+          const Sizer(),
+          Expanded(
+            child: _buildStatisticsItem(
+                color: AppColors.PRIMARY_COLOR,
+                title: LocaleKeys.gift.localize,
+                subTitle: '$gift'),
           ),
         ],
       ),
