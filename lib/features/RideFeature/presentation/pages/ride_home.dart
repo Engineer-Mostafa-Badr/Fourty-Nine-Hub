@@ -91,7 +91,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                   appBars: const [],
                   body: Stack(
                     children: [
-                      _buildTopImage(),
+                      _buildTopMap(state, context),
                       _buildBottomSheet(),
                       _carTruckBtn(driverInfo: context.read<RideCubit>().state.driverInfo, loadingInfo: context.read<RideCubit>().state.loaderInfo),
                     ],
@@ -210,7 +210,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
   }
 
   Widget _carTruckBtn({LoadingInfoEntity? loadingInfo, DriverInfoEntity? driverInfo}) {
-    if (loadingInfo == null && driverInfo == null) {
+    // if (loadingInfo == null && driverInfo == null)
+    if(true){
       return GestureDetector(
         onTap: () {
           customBottomSheet(context, context.read<RideCubit>(),
@@ -223,7 +224,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         radius: 15,
                         label: LocaleKeys.ride.tr(),
                         onPressed: () {
-                          context.read<RideCubit>().onNavigateToWelcomeScreen(fromShipping: false, context: context);
+                          context.push(Routes.rideModeScreen,extra: 'ride');
+                          // context.read<RideCubit>().onNavigateToWelcomeScreen(fromShipping: false, context: context);
                         },
                         backColor: AppColors.PRIMARY_COLOR,
                         width: double.infinity),
@@ -231,7 +233,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         radius: 15,
                         label: LocaleKeys.shipping.tr(),
                         onPressed: () {
-                          context.read<RideCubit>().onNavigateToWelcomeScreen(fromShipping: true, context: context);
+                          context.push(Routes.rideModeScreen,extra: 'truk');
+                          // context.read<RideCubit>().onNavigateToWelcomeScreen(fromShipping: true, context: context);
                         },
                         backColor: AppColors.PRIMARY_COLOR,
                         width: double.infinity),
