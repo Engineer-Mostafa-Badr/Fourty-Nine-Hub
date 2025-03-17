@@ -22,6 +22,7 @@ class AdModel extends AdEntity {
       super.mainCategoryId,
       super.userId,
       super.subscriptionStatus,
+      super.userSubscriptionStatus,
       super.statistics,
       required super.active,
       required super.approved,
@@ -54,7 +55,8 @@ class AdModel extends AdEntity {
         active: json['isActive'] ?? true,
         approved: json['isApproved'] ?? true,
         isFavourite: json['isFavorite'] ?? false,
-        subscriptionStatus: json['subscriptionStatus'] ?? '',
+        subscriptionStatus: json['ownerSubscriptionStatus'] ?? '',
+        userSubscriptionStatus: json['userLoginSubscriptionStatus'] ?? '',
         phone: json['phone'] ?? '',
         userId: json['userId'],
         statistics: json['statistics'] == null

@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/creminal_record_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/drug_analysis.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/technical_examination_screen.dart';
@@ -2678,7 +2679,7 @@ class AppPages {
                 path: Paths.UploadRiderImages,
                 name: Routes.UploadRiderImages,
                 builder: (context, state) {
-                  return const UploadRiderImages();
+                  return UploadRiderImages(params: state.extra as UploadRiderImagesParams?,);
                 },
               ),
               GoRoute(
@@ -2954,14 +2955,8 @@ class AppPages {
               GoRoute(
                 path: Paths.rideModeScreen,
                 name: Routes.rideModeScreen,
-                builder: (context, state) => MultiBlocProvider(
-                  providers: [
-                    BlocProvider(
-                      create: (context) => serviceLocator<RideCubit>(),
-                    ),
-                  ],
-                  child: RideModeScreen(modeType: state.extra as String),
-                ),
+                builder: (context, state) =>
+                    RideModeScreen(modeType: state.extra as String),
               ),
               GoRoute(
                   path: Paths.rideDashboardDetailsScreen,

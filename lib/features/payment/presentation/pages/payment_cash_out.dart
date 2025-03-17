@@ -47,10 +47,11 @@ class _PaymentCashOutState extends State<PaymentCashOut> {
       appBar: AppBar(
         title: Text(LocaleKeys.cashOutOption.localize),
       ),
-      body: BlocProvider<PaymentCacheOutCubit>(
-        create: (BuildContext context) => serviceLocator()
-          ..payoutMethod()
-          ..getPaymentProvider(),
+      body: MultiBlocProvider(
+        providers: [
+          BlocProvider<PaymentCacheOutCubit>(create: (context) => serviceLocator()..payoutMethod()..getPaymentProvider()),
+          BlocProvider<PaymentCubit>(create: (context) => serviceLocator()),
+        ],
         child: BlocBuilder<PaymentCacheOutCubit, PaymentCacheOutState>(
           builder: (context, state) {
             return SingleChildScrollView(

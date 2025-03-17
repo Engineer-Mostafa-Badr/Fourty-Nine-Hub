@@ -56,6 +56,7 @@ class EndPoints {
   static const getProfile = '/users/profile';
   static const getCountries = '/ride/countries';
   static const register = '/auth/register';
+  static const testGift = '/test/gift';
   static const verifyOTP = '/auth/verify/email';
   static const getWelcomeGift = '/auth/welcome-gift';
   static const socialLogin = '/auth/social/login';
@@ -268,8 +269,8 @@ class EndPoints {
   // ride
   static String bannerDataRider = "$developmentBaseUrl/ride/get-thumbnail-ride";
   static String getDriverRide = "$developmentBaseUrl/ride/riders/Info";
-  static String specialRegister =
-      "$developmentBaseUrl/ride/riders/special/register";
+  static String specialRegister = "$developmentBaseUrl/ride/drivers/registration/special";
+  static String loadingRegister = "$developmentBaseUrl/loading/driver/register";
   static String riderRegister = "$developmentBaseUrl/ride/riders/register";
   static String expectedPrice = "$developmentBaseUrl/ride/trips/expected/price";
   static String acceptOfferRide =
@@ -1233,6 +1234,12 @@ class EndPoints {
   static String getExpectedPrice(String id) {
     return '/ride/trips/expected/price/$id';
   }
+  static String getAvailableTrips(String subCategoryId) {
+    return '/ride/trips/user?limit=10&page=1&subCategory=$subCategoryId';
+  }
+  static String getPastTrips(int page) {
+    return '/ride/trips/rider?limit=20&page=$page';
+  }
   static String deleteRideRegistration = '/ride/riders';
   static String getRideBrands = '/ride/riders/brands';
   static String getRideModels = '/ride/riders/models';
@@ -1241,6 +1248,8 @@ class EndPoints {
   static String getAllUserTrips = '/loading/trip/allUserTrips';
   static String getRideDriverInfo = '/ride/driver/info';
   static String getRideDriverPictureOptional = '/ride/info/picture-optional';
+  static String getCostPerKm = '/ride/driver/info/fair-cost';
+  static String getLoadingInfo = '/loading/driver/info?subCategory=62c8baad8e28a58a3edf5805';
 
   static String updateDriverLocation(){
     return '/ride/update-driver-location';
