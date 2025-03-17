@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/subscripe/presentation/widgets/amounts.da
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 
+import '../../domain/entities/subscription_amount_entity.dart';
 import '../../domain/usecases/check_if_user_subscribed_usecase.dart';
 import '../../domain/usecases/get_subscription_plans_usecase.dart';
 import '../../domain/usecases/subscribe_usecase.dart';
@@ -97,7 +98,7 @@ class SubscriptionController {
   }
 
   Future<void> showActiveSubscriptionAmounts(
-      {required WalletTypes walletType}) async {
+      {required WalletTypes walletType, num? price}) async {
     final response =
         await _getActiveSubscriptionAmountsUseCase(const NoParams());
     response.fold(
@@ -105,14 +106,28 @@ class SubscriptionController {
         context,
         Labels.errorHappened,
       ),
-      (data) => bottomSheet(
+      (data) {
+        List<SubscriptionAmountEntity> tempData = [];
+        if (price != null) {
+          for (var element in data) {
+            if (element.amount > price) {
+              tempData.add(element);
+            }
+          }
+        }
+        else{
+          tempData = data;
+        }
+
+        bottomSheet(
         context: context,
         widget: SubscriptoinAmountsWidget(
-          amounts: data,
+          amounts: tempData,
           walletType: walletType,
         ),
-      ),
+      );}
     );
+
   }
 
   //payment method

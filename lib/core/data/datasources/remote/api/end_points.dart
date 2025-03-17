@@ -1207,12 +1207,13 @@ class EndPoints {
   static String createCarPool = '/carpool/create';
 
   static String getRideCategories(String userId) {
-    return '/ride/get-thumbnail-ride?userId=$userId';
+    return '/ride/get-thumbnail-ride';
   }
 
   static String getShippingCategories(String userId) {
-    return '/loading/driver/subcategory?userId=$userId';
+    return '/loading/driver/subcategory';
   }
+
   static String getDriversInSubcategory(String subCategoryId) {
     return '/ride/riders/drivers/$subCategoryId';
   }

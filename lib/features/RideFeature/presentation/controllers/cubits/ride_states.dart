@@ -54,6 +54,8 @@ class RideState {
   final List<GovernorateEntity>? governorates;
   final GetLocationFromAddressEntity? currentLocation;
   final GetLocationFromAddressEntity? toLocation;
+  final GetLocationFromAddressEntity? wayPointOne;
+  final GetLocationFromAddressEntity? wayPointTwo;
   final RideExpectedPriceEntity? rideExpectedPrice;
   final List<CompletedTripsEntity>? completedTrips;
   final List<RunningTripsEntity>? runningTrips;
@@ -104,6 +106,8 @@ class RideState {
     this.governorates,
     this.currentLocation,
     this.toLocation,
+    this.wayPointOne,
+    this.wayPointTwo,
     this.rideExpectedPrice,
     this.completedTrips,
     this.runningTrips,
@@ -160,6 +164,8 @@ class RideState {
     List<GovernorateEntity>? governorates,
     GetLocationFromAddressEntity? currentLocation,
     GetLocationFromAddressEntity? toLocation,
+    GetLocationFromAddressEntity? wayPointOne,
+    GetLocationFromAddressEntity? wayPointTwo,
     RideExpectedPriceEntity? rideExpectedPrice,
     List<CompletedTripsEntity>? completedTrips,
     List<RunningTripsEntity>? runningTrips,
@@ -226,6 +232,8 @@ class RideState {
       governorates: governorates ?? this.governorates,
       currentLocation: currentLocation ?? this.currentLocation,
       toLocation: toLocation ?? this.toLocation,
+      wayPointOne: wayPointOne ?? this.wayPointOne,
+      wayPointTwo: wayPointTwo ?? this.wayPointTwo,
       rideExpectedPrice: rideExpectedPrice ?? this.rideExpectedPrice,
       completedTrips: completedTrips ?? this.completedTrips,
       runningTrips: runningTrips ?? this.runningTrips,

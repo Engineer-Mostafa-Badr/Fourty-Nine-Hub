@@ -13,6 +13,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_pictur
 import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride_special_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_color_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/sub_category_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/check_real_amount_enough_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_driver_picture_optional.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_brands_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_car_colors_usecase.dart';
@@ -60,6 +61,9 @@ class RideCubit extends Cubit<RideState> {
   bool isAutoAcceptIsAdded = false;
   bool isRecord = false;
 
+  bool showWaypointOne = false;
+  bool showWaypointTwo = false;
+
 
   final GetRideCategoriesUseCase getRideCategories;
   final GetShippingCategoriesUsecase getShippingCategoriesUsecase;
@@ -75,6 +79,7 @@ class RideCubit extends Cubit<RideState> {
   final GetAllCompletedTripsUseCase getAllCompletedTripsUseCase;
   final GetAllRunningTripsUseCase getAllRunningTripsUseCase;
   final GetAllActivityTripsUseCase getAllActivityTripsUseCase;
+  final CheckRealAmountEnoughUseCase checkRealAmountEnoughUseCase;
 
   RideCubit(
     this.getRideCategories,
@@ -91,6 +96,7 @@ class RideCubit extends Cubit<RideState> {
       this.getAllCompletedTripsUseCase,
       this.getAllRunningTripsUseCase,
       this.getAllActivityTripsUseCase,
+      this.checkRealAmountEnoughUseCase,
   ) : super(const RideState()){
     _fetchUserLocation();
   }
@@ -153,7 +159,7 @@ class RideCubit extends Cubit<RideState> {
   TextEditingController rideVehiclePlateNumberController = TextEditingController();
   TextEditingController ridePricingPerKmController = TextEditingController();
 
-  Future<void> fetchRideCategories(String userId, BuildContext context) async {
+  Future<void> fetchRideCategories(String userId) async {
     if (isClosed) return; // Prevents state emission if the cubit is already disposed.
     emit(state.copyWith(status: RideStates.loading));
 
@@ -162,7 +168,6 @@ class RideCubit extends Cubit<RideState> {
     if (isClosed) return; // Double-check before emitting a state
     result.fold(
       (failure) {
-        print("Failure ${getFailureMessage(failure, context)}");
         emit(state.copyWith(status: RideStates.error, failure: failure));
       },
       (rideCategory) {
@@ -252,7 +257,13 @@ class RideCubit extends Cubit<RideState> {
       RideExpectedPriceParams(
         startLocation:[state.currentLocation!.lat!, state.currentLocation!.lng!],
         targetLocation: [state.toLocation!.lat!, state.toLocation!.lng!],
-        comfort: false,
+        // startLocation: [30.0445439,31.2326909],
+        // targetLocation: [30.1186853,31.3609478],
+        comfort: isComfort,
+        nonSmoking: isNonSmoker,
+        autoAccept: isAutoAccept,
+        wayPointOne: (state.wayPointOne != null) ? [state.wayPointOne!.lat!, state.wayPointOne!.lng!] : null,
+        wayPointTwo: (state.wayPointTwo != null) ? [state.wayPointTwo!.lat!, state.wayPointTwo!.lng!] : null,
         id: id
       ),
     );
@@ -262,6 +273,16 @@ class RideCubit extends Cubit<RideState> {
     result.fold(
           (failure) => emit(state.copyWith(status: RideStates.error, failure: failure)),
           (rideExpectedPrice) => emit(state.copyWith(status: RideStates.success, rideExpectedPrice: rideExpectedPrice)),
+    );
+  }
+
+  Future<bool> checkRealAmountIsEnough({required double price}) async{
+
+    final Either<Failure, bool> result = await checkRealAmountEnoughUseCase(price);
+
+    return result.fold(
+      (failure) => false,
+      (isEnough) => isEnough,
     );
   }
 
@@ -344,6 +365,28 @@ class RideCubit extends Cubit<RideState> {
     );
 
     emit(state.copyWith(status: RideStates.success, toLocation: toLocation));
+  }
+
+  void updateWayPointOne({required double lat, required double lng, required String address}) {
+
+    GetLocationFromAddressEntity wayPointOne = GetLocationFromAddressEntity(
+      lat: lat,
+      lng: lng,
+      address: address,
+    );
+
+    emit(state.copyWith(status: RideStates.success, wayPointOne: wayPointOne));
+  }
+
+  void updateWayPointTwo({required double lat, required double lng, required String address}) {
+
+    GetLocationFromAddressEntity wayPointTwo = GetLocationFromAddressEntity(
+      lat: lat,
+      lng: lng,
+      address: address,
+    );
+
+    emit(state.copyWith(status: RideStates.success, wayPointTwo: wayPointTwo));
   }
 
   loadRegisterData(BuildContext context) async {

@@ -61,6 +61,14 @@ class _RideOpenStreetMapSearchAndPickState extends State<RideOpenStreetMapSearch
                           widget.params.rideCubit.updateToLocation(lat: pickedData.latLong.latitude, lng: pickedData.latLong.longitude, address: pickedData.addressName,);
                           await widget.params.rideCubit.fetchRideExpectedPrice(id: 'id');
                         }
+                        if(widget.params.isToOneWay){
+                          widget.params.rideCubit.updateWayPointOne(lat: pickedData.latLong.latitude, lng: pickedData.latLong.longitude, address: pickedData.addressName,);
+                          await widget.params.rideCubit.fetchRideExpectedPrice(id: 'id');
+                        }
+                        if(widget.params.isToTwoWay){
+                          widget.params.rideCubit.updateWayPointTwo(lat: pickedData.latLong.latitude, lng: pickedData.latLong.longitude, address: pickedData.addressName,);
+                          await widget.params.rideCubit.fetchRideExpectedPrice(id: 'id');
+                        }
                         context.pop();
                       },
                       buttonTextColor: Colors.white,

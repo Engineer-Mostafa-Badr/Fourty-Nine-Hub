@@ -1,9 +1,12 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
@@ -11,6 +14,8 @@ import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubi
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/expired_trips_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/osm_search_and_pick.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/running_trips_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/bottom_sheet/custom_reserve_ride_bottomsheet.dart';
+import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:latlong2/latlong.dart';
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../../common/widgets/form/text_fields/form_text_field.dart';
@@ -24,7 +29,6 @@ import 'widgets/add_stops_widget.dart';
 import 'widgets/bottom_sheet/custom_bottom_sheet.dart';
 import 'widgets/country_dropdown.dart';
 import 'widgets/fare_bottom_sheet_widget.dart';
-import 'widgets/map_section.dart';
 import 'widgets/options_bottomsheet_widget.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -39,8 +43,6 @@ class RideHome extends StatefulWidget {
 class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
   final _formKey = GlobalKey<FormState>();
-  TextEditingController fromController = TextEditingController();
-  TextEditingController toController = TextEditingController();
   String? _selectedCategoryType = "ride"; // Initially "ride"
   int? _selectedCategoryIndex = 0; // Initially selecting the first category
   // String? _selectedCountry;
@@ -54,24 +56,30 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final rideCubit = context.read<RideCubit>();
       if (!rideCubit.isClosed) {
-        rideCubit.fetchRideDriverInfo(context);
-        rideCubit.fetchRideDriverPictureOptional(context);
-        rideCubit.fetchRideCategories(UserCubit.to.state.data?.id ?? "",context);
+        rideCubit.fetchRideCategories(UserCubit.to.state.data?.id ?? "");
         rideCubit.fetchShippingCategories(UserCubit.to.state.data?.id ?? "");
         rideCubit.fetchRideGovernorates();
       }
     });
   }
 
-  final ScrollController _scrollController2 = ScrollController();
+  final ScrollController _rideScrollController = ScrollController();
+  final ScrollController _shippingScrollController = ScrollController();
 
-  void _scrollRight() {
-    _scrollController2.animateTo(
-      _scrollController2.offset + 100,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-    );
+
+  void _scrollRight(String type) {
+    final ScrollController? activeController =
+    type == "ride" ? _rideScrollController : _shippingScrollController;
+
+    if (activeController != null && activeController.hasClients) {
+      activeController.animateTo(
+        activeController.offset + 200,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -183,6 +191,21 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                   height: 40,
                   child: const Icon(Icons.location_pin, color: Colors.red, size: 40),
                 ),
+              if (state.wayPointOne != null)
+                Marker(
+                  point: LatLng(state.wayPointOne!.lat!, state.wayPointOne!.lng!),
+                  width: 40,
+                  height: 40,
+                  child: const Icon(Icons.location_pin, color: Colors.green, size: 40),
+                ),
+              if (state.wayPointTwo != null)
+                Marker(
+                  point: LatLng(state.wayPointTwo!.lat!, state.wayPointTwo!.lng!),
+                  width: 40,
+                  height: 40,
+                  child: const Icon(Icons.location_pin, color: Colors.green, size: 40),
+                ),
+
             ],
           ),
           if (routePoints.isNotEmpty)
@@ -218,14 +241,26 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                       radius: 15,
                       label: LocaleKeys.ride.tr(),
                       onPressed: () {
+                        if(context.isUserLoggedIn){
                         context.push(Routes.welcomeRideRegister);
+                        }
+                        else{
+                          context.push(Routes.LOGIN);
+                        }
                       },
                       backColor: AppColors.PRIMARY_COLOR,
                       width: double.infinity),
                   AppButton(
                       radius: 15,
                       label: LocaleKeys.shipping.tr(),
-                      onPressed: () {},
+                      onPressed: () {
+                        if(context.isUserLoggedIn){
+                          // context.push(Routes.welcomeShippingRegister);
+                        }
+                        else{
+                          context.push(Routes.LOGIN);
+                        }
+                      },
                       backColor: AppColors.PRIMARY_COLOR,
                       width: double.infinity),
                 ],
@@ -234,9 +269,9 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
             title: '');
       },
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+        margin: const EdgeInsets.symmetric(horizontal: 16),
         width: double.infinity,
-        height: 50,
+        height: 40,
         decoration: BoxDecoration(
           gradient: const LinearGradient(
             colors: [
@@ -264,7 +299,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
             LocaleKeys.carTruckRegister.tr(),
             style: const TextStyle(
                 color: Colors.white,
-                fontSize: 22,
+                fontSize: 18,
                 fontWeight: FontWeight.bold),
           ),
         ),
@@ -294,7 +329,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
       left: 0,
       right: 0,
       child: Column(
-        spacing: 8,
+        spacing: 4,
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
@@ -312,7 +347,11 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                     isLabelVisible: false,
                     child: ClickableWidget(
                         onTap: (){
-
+                          if(context.isUserLoggedIn){
+                          }
+                          else{
+                            context.push(Routes.LOGIN);
+                          }
                         },
                         child: _tripsWidget(context.isArabic? "طلبات الرحلات": "Ride Requests", color: const Color(0xffD9D9D9))),
                   ),
@@ -326,7 +365,11 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                     isLabelVisible: true,
                     child: ClickableWidget(
                         onTap: (){
-
+                          if(context.isUserLoggedIn){
+                          }
+                          else{
+                            context.push(Routes.LOGIN);
+                          }
                         },
                         child: _tripsWidget(context.isArabic? "طلبات التحميل": "Loading Requests", color: const Color(0xffD9D9D9))),
                   ),
@@ -335,7 +378,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
             ),
           ),
           Padding(
-            padding: const EdgeInsetsDirectional.only(end: 16.0, start: 16.0),
+            padding: const EdgeInsetsDirectional.only(end: 16.0, start: 16.0, bottom: 16),
             child: Row(
               spacing: 6,
               mainAxisAlignment: MainAxisAlignment.end,
@@ -343,25 +386,31 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 Expanded(
                   child: ClickableWidget(
                       onTap: (){
-                        context.push(Routes.RIDEACTIVITY);
+                        if(context.isUserLoggedIn){
+                          context.push(Routes.RIDEACTIVITY);
+                        }
+                        else{
+                          context.push(Routes.LOGIN);
+                        }
                       },
                       child: _tripsWidget(LocaleKeys.activity.tr(), color: AppColors.GREYCARD)),
                 ),
                 Expanded(
                   child: ClickableWidget(
                       onTap: (){
-                        context.push(Routes.RIDERUNNINGTRIPS, extra: RunningTripParams(
-                          rideCubit: context.read<RideCubit>(),
-                        ));
+                          context.push(Routes.RIDERUNNINGTRIPS, extra: RunningTripParams(
+                            rideCubit: context.read<RideCubit>(),
+                          ));
+
                       },
                       child: _tripsWidget(LocaleKeys.runningTrips.tr(), color: AppColors.GREYCARD)),
                 ),
                 Expanded(
                   child: ClickableWidget(
                       onTap: (){
-                        context.push(Routes.RIDEEXPIREDTRIPE, extra: ExpiredTripsScreenParams(
-                          rideCubit: context.read<RideCubit>(),
-                        ));
+                          context.push(Routes.RIDEEXPIREDTRIPE, extra: ExpiredTripsScreenParams(
+                            rideCubit: context.read<RideCubit>(),
+                          ));
                       },
                       child: _tripsWidget(LocaleKeys.expiredTrips.tr(), color: AppColors.GREYCARD)),
                 ),
@@ -411,26 +460,51 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                     ),
 
                     _fareField(),
-                    Row(
-                      spacing: 5,
-                      children: [
-                        Expanded(
-                            flex: 2,
-                            child: AppButton(
-                                radius: 15,
-                                label: LocaleKeys.premiumRequest.tr(),
-                                onPressed: () {},
-                                backColor: AppColors.SECONDARY_COLOR_DARK2,
-                                width: MediaQuery.of(context).size.width)),
-                        Expanded(
-                            flex: 2,
-                            child: AppButton(
-                                radius: 15,
-                                label: LocaleKeys.request.tr(),
-                                onPressed: () {},
-                                backColor: AppColors.PRIMARY_COLOR,
-                                width: MediaQuery.of(context).size.width)),
-                      ],
+                    SizedBox(
+                      height: 40,
+                      child: Row(
+                        spacing: 6,
+                        children: [
+                          Expanded(
+                              flex: 2,
+                              child: AppButton(
+                                  radius: 15,
+                                  label: LocaleKeys.premiumRequest.tr(),
+                                  onPressed: () {
+                                    if(context.isUserLoggedIn){
+                                      SubscriptionMethod().subscribe(
+                                          subscribeId: state.rideCategory?.subCategories[_selectedCategoryIndex!].subCategoryId ?? '',
+                                          showRegular:false,
+                                          title: LocaleKeys.premiumRequest.localize);
+                                    }
+                                    else{
+                                      context.push(Routes.LOGIN);
+                                    }
+                                  },
+                                  backColor: AppColors.SECONDARY_COLOR_DARK2,
+                                  width: MediaQuery.of(context).size.width)),
+                          Expanded(
+                              flex: 2,
+                              child: AppButton(
+                                  radius: 15,
+                                  label: LocaleKeys.request.tr(),
+                                  onPressed: () async {
+                                    if(context.isUserLoggedIn){
+                                      showModalBottomSheet(
+                                                  context: context,
+                                                  isScrollControlled: true,
+                                                  backgroundColor: Colors.transparent,
+                                                  builder: (context) => CustomReserveRideBottomSheet (rideCubit: context.read<RideCubit>(), selectedCategoryId: state.rideCategory?.subCategories[_selectedCategoryIndex!].subCategoryId ?? '',),
+                                                );
+                                    }
+                                    else{
+                                      context.push(Routes.LOGIN);
+                                    }
+                                  },
+                                  backColor: AppColors.PRIMARY_COLOR,
+                                  width: MediaQuery.of(context).size.width)),
+                        ],
+                      ),
                     )
                   ],
                 );
@@ -460,6 +534,9 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
   }
 
   Widget _buildCategoryList(String type, List subCategories) {
+    final ScrollController controller =
+    type == "ride" ? _rideScrollController : _shippingScrollController;
+
     return Row(
       children: [
         Expanded(
@@ -467,18 +544,17 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
           child: SizedBox(
             height: 60,
             child: ListView.builder(
-              controller: _scrollController2,
+              controller: controller, // Use the correct controller
               scrollDirection: Axis.horizontal,
               itemCount: subCategories.length,
               itemBuilder: (context, index) {
                 final subCategory = subCategories[index];
-                final bool isSelected = _selectedCategoryType == type &&
-                    _selectedCategoryIndex == index;
+                final bool isSelected =
+                    _selectedCategoryType == type && _selectedCategoryIndex == index;
                 return GestureDetector(
                   onTap: () {
                     setState(() {
-                      if (_selectedCategoryType == type &&
-                          _selectedCategoryIndex == index) {
+                      if (_selectedCategoryType == type && _selectedCategoryIndex == index) {
                         _selectedCategoryType = null;
                         _selectedCategoryIndex = null;
                       } else {
@@ -489,9 +565,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                     });
                   },
                   child: _categoryItem(
-                      context.isArabic
-                          ? subCategory.subCategoryNameAr
-                          : subCategory.subCategoryNameEn,
+                      context.isArabic ? subCategory.subCategoryNameAr : subCategory.subCategoryNameEn,
                       subCategory.picture,
                       isSelected),
                 );
@@ -502,15 +576,16 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         Expanded(
           flex: 1,
           child: GestureDetector(
-              onTap: () {
-                _scrollRight();
-              },
-              child: const Icon(Icons.arrow_forward_ios,
-                  size: 18, color: AppColors.SECONDARY_COLOR_DARK)),
+            onTap: () {
+              _scrollRight(type);
+            },
+            child: const Icon(Icons.arrow_forward_ios, size: 18, color: AppColors.SECONDARY_COLOR_DARK),
+          ),
         ),
       ],
     );
   }
+
 
   Widget _categoryItem(String title, String imageUrl, bool isSelected) {
     return Padding(
@@ -559,7 +634,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         return InkWell(
           onTap: onPressed,
           child: Container(
-            height: 52,
+            height: 40,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               color: const Color(0xFFEEEEEE),
@@ -576,16 +651,24 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                   ),
                 ),
                 Expanded(
-                  child: Text(text == 'From' ? context.isArabic? "من": "From" : text == 'To' ? context.isArabic? "إلى": "To": text!,),
+                  child: Text(text == 'From' ? context.isArabic? "من": "From" : text == 'To' ? context.isArabic? "إلى": "To": text!,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  ),
                 ),
                 if (isTo == true && text != 'To')
                   GestureDetector(
                     onTap: () {
                       customBottomSheet(context,
                           context.read<RideCubit>(),
-                          child: const AddStopsWidget(), title: context.isArabic ? 'إضافة موقع' : 'Add Stops');
+                          child: AddStopsWidget(
+                            rideCubit: context.read<RideCubit>(),
+                          ), title: context.isArabic ? 'إضافة موقع' : 'Add Stops');
                     },
-                    child: const Icon(Icons.add, size: 18),
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Icon(Icons.add, size: 18),
+                    ),
                   ),
               ],
             ),
@@ -633,49 +716,52 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 ),
                 title: LocaleKeys.offerYourFare.tr());
           },
-          child: Row(
-            children: [
-              Expanded(
-                flex: 8,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                  decoration: BoxDecoration(
-                    color: AppColors.GREYFIELD,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Row(
-                    spacing: 10,
-                    children: [
-                      Text(LocaleKeys.egp.tr(),
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 12)),
-                      state.rideExpectedPrice != null ? Text(selectedCategoryPrice.toString()) : Text(LocaleKeys.offerYourFare.tr()),
-                      const Spacer(),
-                      Image.asset('assets/icons/edit.png'),
-                    ],
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 2,
-                child: GestureDetector(
-                  onTap: () {
-                    customBottomSheet(context,
-                        context.read<RideCubit>(),
-                        child:  OptionsBottomsheetWidget(
-                          rideCubit: context.read<RideCubit>(),
-                          selectedCategoryName: selectedCategoryName,
-                          selectedCategoryPrice: selectedCategoryPrice,
-                        ),
-                        title: LocaleKeys.options.tr());
-                  },
-                  child: SizedBox(
-                    height: 25,
-                    child: Image.asset('assets/icons/option.png'),
+          child: SizedBox(
+            height: 40,
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 8,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: AppColors.GREYFIELD,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Row(
+                      spacing: 10,
+                      children: [
+                        Text(LocaleKeys.egp.tr(),
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 12)),
+                        state.rideExpectedPrice != null ? Text(selectedCategoryPrice.toInt().toString()) : Text(LocaleKeys.offerYourFare.tr()),
+                        const Spacer(),
+                        Image.asset('assets/icons/edit.png'),
+                      ],
+                    ),
                   ),
                 ),
-              )
-            ],
+                Expanded(
+                  flex: 1,
+                  child: GestureDetector(
+                    onTap: () {
+                      customBottomSheet(context,
+                          context.read<RideCubit>(),
+                          child:  OptionsBottomsheetWidget(
+                            rideCubit: context.read<RideCubit>(),
+                            selectedCategoryName: selectedCategoryName,
+                            selectedCategoryPrice: selectedCategoryPrice,
+                          ),
+                          title: LocaleKeys.options.tr());
+                    },
+                    child: SizedBox(
+                      height: 25,
+                      child: Image.asset('assets/icons/option.png'),
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
         );
       }

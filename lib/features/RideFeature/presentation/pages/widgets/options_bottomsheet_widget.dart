@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
@@ -30,46 +31,46 @@ class _OptionsBottomsheetWidgetState extends State<OptionsBottomsheetWidget> {
         builder: (context, state) {
           return Builder(
             builder: (context) {
-              return Column(
-                  children: [
-                    switchWidget(
-                      text: LocaleKeys.comfort.tr(),
-                      valuee: widget.rideCubit.isComfort,
-                      onChanged: (value) {
-                          widget.rideCubit.isComfort = value;
-                          widget.rideCubit.emitRefreshState();
-                      },
-                    ),
-                    switchWidget(
-                      text: LocaleKeys.noSmoker.tr(),
-                      valuee: widget.rideCubit.isNonSmoker,
-                      onChanged: (value) {
-                          widget.rideCubit.isNonSmoker = value;
-                          widget.rideCubit.emitRefreshState();
-                      },
-                    ),
-                    switchWidget(
-                      text: LocaleKeys.autoAccept.tr(),
-                      valuee: widget.rideCubit.isAutoAccept,
-                      onChanged: (value) {
-                          widget.rideCubit.isAutoAccept = value;
-                          widget.rideCubit.emitRefreshState();
-                      },
-                    ),
-                    switchWidget(
-                      text: LocaleKeys.record.tr(),
-                      valuee: widget.rideCubit.isRecord,
-                      onChanged: (value) {
-                          widget.rideCubit.isRecord = value;
-                          widget.rideCubit.emitRefreshState();
-                      },
-                    ),
-                     const SizedBox(height: 15),
-                      Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: AppButton(
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                    children: [
+                      switchWidget(
+                        text: LocaleKeys.comfort.tr(),
+                        valuee: widget.rideCubit.isComfort,
+                        onChanged: (value) {
+                            widget.rideCubit.isComfort = value;
+                            widget.rideCubit.emitRefreshState();
+                        },
+                      ),
+                      switchWidget(
+                        text: LocaleKeys.noSmoker.tr(),
+                        valuee: widget.rideCubit.isNonSmoker,
+                        onChanged: (value) {
+                            widget.rideCubit.isNonSmoker = value;
+                            widget.rideCubit.emitRefreshState();
+                        },
+                      ),
+                      switchWidget(
+                        text: LocaleKeys.autoAccept.tr(),
+                        valuee: widget.rideCubit.isAutoAccept,
+                        onChanged: (value) {
+                            widget.rideCubit.isAutoAccept = value;
+                            widget.rideCubit.emitRefreshState();
+                        },
+                      ),
+                      switchWidget(
+                        text: LocaleKeys.record.tr(),
+                        valuee: widget.rideCubit.isRecord,
+                        onChanged: (value) {
+                            widget.rideCubit.isRecord = value;
+                            widget.rideCubit.emitRefreshState();
+                        },
+                      ),
+                       // const SizedBox(height: 15),
+                        AppButton(
                             width: double.infinity,
-                            label: LocaleKeys.done.tr(),
+                            label: context.isArabic? "تفعيل" : "Apply",
                             onPressed: () {
                               if (widget.selectedCategoryName == "Captain") {
                                 if(widget.rideCubit.isComfort && !widget.rideCubit.isComfortIsAdded){
@@ -187,9 +188,9 @@ class _OptionsBottomsheetWidgetState extends State<OptionsBottomsheetWidget> {
                               Navigator.pop(context);
                             },
                             backColor: AppColors.PRIMARY_COLOR),
-                      ),
-                  ],
-                );
+                    ],
+                  ),
+              );
             }
           );
         }
@@ -201,35 +202,32 @@ class _OptionsBottomsheetWidgetState extends State<OptionsBottomsheetWidget> {
       {required String? text,
       required bool? valuee,
       Function(bool)? onChanged}) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(text ?? '',
-              style:
-                  const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
-          Transform.scale(
-            scale: 0.75,
-            child: Switch(
-              value: valuee ?? false,
-              activeColor: AppColors.PRIMARY_COLOR,
-              inactiveThumbColor: AppColors.PRIMARY_COLOR,
-              trackOutlineColor: WidgetStateProperty.all<Color>(
-                AppColors.PRIMARY_COLOR,
-              ),
-              activeTrackColor: const Color(0xff19D176),
-              inactiveTrackColor: AppColors.whiteColor,
-              onChanged: onChanged ??
-                  (value) {
-                    setState(() {
-                      valuee = value;
-                    });
-                  },
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(text ?? '',
+            style:
+                const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+        Transform.scale(
+          scale: 0.75,
+          child: Switch(
+            value: valuee ?? false,
+            activeColor: AppColors.PRIMARY_COLOR,
+            inactiveThumbColor: AppColors.PRIMARY_COLOR,
+            trackOutlineColor: WidgetStateProperty.all<Color>(
+              AppColors.PRIMARY_COLOR,
             ),
+            activeTrackColor: const Color(0xff19D176),
+            inactiveTrackColor: AppColors.whiteColor,
+            onChanged: onChanged ??
+                (value) {
+                  setState(() {
+                    valuee = value;
+                  });
+                },
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

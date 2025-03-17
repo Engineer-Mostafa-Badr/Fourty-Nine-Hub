@@ -1,5 +1,6 @@
 import 'package:fourtyninehub/features/RideFeature/data/repositories/ride_repository_imp.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/repositories/ride_repository.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/check_real_amount_enough_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_activity_trips.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_completed_trips_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_running_trips_usecase.dart';
@@ -73,10 +74,13 @@ class RideServiceLocatorUpdated {
         GetAllRunningTripsUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetAllActivityTripsUseCase>(() =>
         GetAllActivityTripsUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<CheckRealAmountEnoughUseCase>(() =>
+        CheckRealAmountEnoughUseCase(serviceLocator()));
 
     // ---------------------------------- cubits ----------------------------------
 
     serviceLocator.registerLazySingleton<RideCubit>(() => RideCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

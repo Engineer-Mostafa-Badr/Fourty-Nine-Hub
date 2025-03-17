@@ -248,7 +248,7 @@ class RideRemoteDataSourceImplementation
       );
 
       return response.fold((failure) => Left(failure), (data) {
-        return Right(data['status']??false);
+        return Right(data['data']??false);
       });
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
