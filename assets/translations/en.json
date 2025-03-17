@@ -1300,7 +1300,7 @@
   "vehicleRegistrationCertificate": "Vehicle Registration Certificate",
   "backSideOfTheCertificate": "Back Side of the Certificate",
   "vehicleInformation": "Vehicle Information",
-  "vehicleBrand":"Vehicle Brand",
+  "vehicleBrand": "Vehicle Brand",
   "vehicleModel": "Vehicle Model",
   "vehicleColor": "Vehicle Color",
   "yearOfProduction": "Year of Production",
@@ -1328,5 +1328,6 @@
   "rideDetails": "Ride Details",
   "carTruckRegister": "Car/Truck Register",
   "options": "Options",
-  "noSmoker": "Non smoker Driver"
+  "noSmoker": "Non smoker Driver",
+  "thereIsNoTripsInThisList": "There is no trips in this list."
 }

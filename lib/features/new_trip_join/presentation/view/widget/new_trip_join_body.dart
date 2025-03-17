@@ -23,11 +23,23 @@ class NewTripJoinBody extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              tripOption(Assets.locationTripIcon, 'Captain\nShare', () {
-                context.push(Routes.captainShareScreen);
-              }),
-              tripOption(Assets.locationTripIcon, 'Pick me', () {}),
-              tripOption(Assets.locationTripIcon, 'Trip Join', () {}),
+              TripOptionWidget(
+                imagePath: Assets.locationTripIcon,
+                title: 'Captain\nShare',
+                onTap: () {
+                  context.push(Routes.captainShareScreen);
+                },
+              ),
+              TripOptionWidget(
+                imagePath: Assets.locationTripIcon,
+                title: 'Pick me',
+                onTap: () {},
+              ),
+              TripOptionWidget(
+                imagePath: Assets.locationTripIcon,
+                title: 'Trip Join',
+                onTap: () {},
+              ),
             ],
           ),
         ],
