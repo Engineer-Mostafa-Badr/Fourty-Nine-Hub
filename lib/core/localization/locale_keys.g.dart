@@ -291,6 +291,7 @@ abstract class  LocaleKeys {
   static const competitions = 'competitions';
   static const requestWithdraw = 'requestWithdraw';
   static const requestTransaction = 'requestTransaction';
+  static const requestTransaction2 = 'requestTransaction2';
   static const years = 'years';
   static const transfer = 'transfer';
   static const save = 'save';
@@ -1404,5 +1405,12 @@ abstract class  LocaleKeys {
   static const showStories = 'showStories';
   static const showReels = 'showReels';
   static const writeComments = 'writeComments';
+  static const getMoney = 'getMoney';
+  static const withdrawalLimit = 'withdrawalLimit';
+  static const minimumRequestWithdrawalIs = 'minimumRequestWithdrawalIs';
+  static const EGPFor = 'EGPFor';
+  static const personalTransaction = 'personalTransaction';
+  static const uploadBill = 'uploadBill';
+  static const investment = 'investment';
 
 }

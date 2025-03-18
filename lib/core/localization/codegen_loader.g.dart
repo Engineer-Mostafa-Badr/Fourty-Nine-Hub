@@ -305,6 +305,7 @@ class CodegenLoader extends AssetLoader{
   "competitions": "المسابقات",
   "requestWithdraw": "طلب سحب",
   "requestTransaction": "طلب للمعاملات الشخصية",
+  "requestTransaction2": "طلب معاملة",
   "years": "سنوات",
   "transfer": "تحويل",
   "save": "حفظ",
@@ -1427,7 +1428,14 @@ class CodegenLoader extends AssetLoader{
   "showPosts": "إظهار المشاركات",
   "showStories": "عرض القصص",
   "showReels": "عرض البكرات",
-  "writeComments": "اكتب تعليقات"
+  "writeComments": "اكتب تعليقات",
+  "getMoney": "المال المتحصل عليه",
+  "withdrawalLimit": "حد السحب",
+  "minimumRequestWithdrawalIs": "الحد الأدنى لطلب السحب هو",
+  "EGPFor": "حنيه مصري",
+  "personalTransaction": "للمعاملات الشخصية.",
+  "uploadBill": "تحميل الفاتورة",
+  "investment": "الاستثمار"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -1721,6 +1729,7 @@ static const Map<String,dynamic> _en = {
   "competitions": "Competitions",
   "requestWithdraw": "Request Withdraw",
   "requestTransaction": "request for personal transaction",
+  "requestTransaction2": "Request Transfer",
   "years": "Years",
   "transfer": "Transfer",
   "cancel": "Cancel",
@@ -2859,7 +2868,14 @@ static const Map<String,dynamic> _en = {
   "showPosts": "Show Posts",
   "showStories": "Show Stories",
   "showReels": "Show Reels",
-  "writeComments": "Write Comments"
+  "writeComments": "Write Comments",
+  "getMoney": "Money Get",
+  "withdrawalLimit": "Withdrawal Limit",
+  "minimumRequestWithdrawalIs": "Minimum request withdrawal is 10000 EGP for",
+  "EGPFor": "EGP for",
+  "personalTransaction": "personal transaction.",
+  "uploadBill": "Upload Bill",
+  "investment": "Investment"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

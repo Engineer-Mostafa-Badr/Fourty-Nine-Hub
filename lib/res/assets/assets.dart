@@ -31,6 +31,15 @@ abstract class Assets {
   static String shareIcon = 'assets/icons/share_icon.svg';
   static String publication = 'assets/icons/publication.svg';
   static String zoomVideo = 'assets/icons/zoomVideo.svg';
+  static String adIcon = 'assets/icons/ad_icon.svg';
+  static String heartIcon = 'assets/icons/heart_icon.svg';
+  static String saveIcon = 'assets/icons/save_icon.svg';
+  static String speakerIcon = 'assets/icons/speader_icon.svg';
+  static String starYellowIcon = 'assets/icons/star_yellow_icon.svg';
+  static String starRedIcon = 'assets/icons/star_red_icon.svg';
+  static String mapPinIcon = 'assets/icons/map_pin_icon.svg';
+  static String phoneIcon = 'assets/icons/phone_icon.svg';
+  static String mailIcon = 'assets/icons/mail_icon.svg';
 
   // lottie
   static String loveReaction = 'assets/lottie/love_reaction.json';
@@ -82,7 +91,10 @@ abstract class Assets {
       'assets/icons/create_post_app_bar_icon.svg';
   static String profileSocialAppBarIcon =
       'assets/icons/profile_social_app_bar_icon.svg';
+  static String cupIcon = 'assets/icons/cup_icon.svg';
+  static String crownIcon = 'assets/icons/crown_icon.svg';
 
+  static String cupImage = 'assets/icons/cup_image.png';
   static String twitterLogo = 'assets/icons/twitterLogo.png';
   static String loadingCar = 'assets/icons/loadingCar.png';
   static String comment = 'assets/icons/comment.png';
@@ -282,4 +294,22 @@ abstract class Assets {
   static String edit = 'assets/icons/edit.png';
   static String option = 'assets/icons/option.png';
   static String update = 'assets/icons/update.png';
+  static String bookingRequestIcon = 'assets/icons/booking_request_icon.svg';
+  static String driverShippingTripsIcon = 'assets/icons/driver_shipping_trips_icon.svg';
+  static String driverTripsInRideIcon = 'assets/icons/driver_trips_in_ride_icon.svg';
+  static String followersIcon = 'assets/icons/followers_icon.svg';
+  static String foodRequestIcon = 'assets/icons/food_request_icon.svg';
+  static String likeClickedIcon = 'assets/icons/like_clicked_icon.svg';
+  static String liveHostIcon = 'assets/icons/live_host_icon.svg';
+  static String patientAppointmentIcon = 'assets/icons/patient_appointment_icon.svg';
+  static String postLikesIcon = 'assets/icons/post_likes_icon.svg';
+  static String premiumAdvertiseIcon = 'assets/icons/premium_advertise_icon.svg';
+  static String profileViewIcon = 'assets/icons/profile_view_icon.svg';
+  static String reel_view_icon = 'assets/icons/real_view_icon.svg';
+  static String reelLikesIcon = 'assets/icons/reel_likes_icon.svg';
+  static String reelViewIcon = 'assets/icons/reel_view_icon.svg';
+  static String rideUsageIcon = 'assets/icons/ride_usage_icon.svg';
+  static String userShippingTripsIcon = 'assets/icons/user_shipping_trips.svg';
+  static String viewCountIcon = 'assets/icons/view_count_icon.svg';
+
 }

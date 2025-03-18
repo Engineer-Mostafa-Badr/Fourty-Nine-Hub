@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet/wallet_subscription_entity.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/expandable_subscription.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+
+import '../cubit/subscription_wallet_cubit/subscription_wallet_cubit.dart';
 
 class MySubscriptionSection extends StatefulWidget {
   const MySubscriptionSection({super.key, required this.subscriptions});
@@ -48,20 +51,25 @@ class _MySubscriptionSectionState extends State<MySubscriptionSection> {
             ),
           _isExpanded
               ? Column(
-                  // Add your expanded content here
-                  children: widget.subscriptions
-                      .where((s) => s.isActive == true)
-                      .map(
-                        (s) => ExpandableSubscription(
-                          subscription: s,
-                        ),
-                      )
-                      .toList(),
+            // Add your expanded content here
+            children: widget.subscriptions
+                .where((s) => s.isActive == true)
+                .map(
+                  (s) =>
+                  BlocBuilder<SubscriptionWalletCubit, SubscriptionWalletState>(
+                    builder: (context, state) {
+                      return ExpandableSubscription(
+                        subscription: s,
+                      );
+                    },
+                  ),
+            )
+                .toList(),
 
-                  // children: List.generate(5, (index) {
-                  //   return const ExpandableSubscription();
-                  // }),
-                )
+            // children: List.generate(5, (index) {
+            //   return const ExpandableSubscription();
+            // }),
+          )
               : const SizedBox(),
           Row(
             children: [

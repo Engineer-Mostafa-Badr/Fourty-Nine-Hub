@@ -28,6 +28,7 @@ import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/ba
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/cashback_view.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/gift_view.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/gift_wallet_view.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/winners_gift_view.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/cubit/ad_details_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/pages/ad_details_view.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_requests/presentation/cubit/ad_requests_cubit.dart';
@@ -316,8 +317,10 @@ import '../features/account_taps/policies/presentation/pages/policy_view.dart';
 import '../features/account_taps/share_app/presentation/cubit/share_app_cubit.dart';
 import '../features/account_taps/transfer_money/presentation/pages/transfer_money_view.dart';
 import '../features/account_taps/wallet/presentation/cubit/Gift_Cubit/gift_cubit.dart';
+import '../features/account_taps/wallet/presentation/cubit/subscription_wallet_cubit/subscription_wallet_cubit.dart';
 import '../features/account_taps/wallet/presentation/pages/wallet_history.dart';
 import '../features/account_taps/wallet/presentation/pages/wallet_view.dart';
+import '../features/account_taps/wallet/presentation/pages/winners_cashback_view.dart';
 import '../features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
 import '../features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
 import '../features/ads_feature/create_company_ad/presentation/pages/create_company_ad.dart';
@@ -486,17 +489,22 @@ class AppPages {
               GoRoute(
                 path: Paths.RIDERUNNINGTRIPS,
                 name: Routes.RIDERUNNINGTRIPS,
-                builder: (context, state) => RunningTripScreen(params: state.extra as RunningTripParams),
+                builder: (context, state) =>
+                    RunningTripScreen(params: state.extra as RunningTripParams),
               ),
               GoRoute(
                 path: Paths.RIDEEXPIREDTRIPE,
                 name: Routes.RIDEEXPIREDTRIPE,
-                builder: (context, state) => ExpiredTripsScreen(params: state.extra as ExpiredTripsScreenParams,),
+                builder: (context, state) => ExpiredTripsScreen(
+                  params: state.extra as ExpiredTripsScreenParams,
+                ),
               ),
               GoRoute(
                 path: Paths.RIDEOPENSTREETMAPSEARCHANDPICK,
                 name: Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
-                builder: (context, state) => RideOpenStreetMapSearchAndPick(params: state.extra as RideOpenStreetMapSearchAndPickParams,),
+                builder: (context, state) => RideOpenStreetMapSearchAndPick(
+                  params: state.extra as RideOpenStreetMapSearchAndPickParams,
+                ),
               ),
               GoRoute(
                 path: Paths.EditFoodView,
@@ -877,6 +885,16 @@ class AppPages {
                 builder: (context, state) => const Winners(),
               ),
               GoRoute(
+                path: Paths.WINNERSCASHBACK,
+                name: Routes.WINNERSCASHBACK,
+                builder: (context, state) => const WinnersCashbackView(),
+              ),
+              GoRoute(
+                path: Paths.WINNERSGift,
+                name: Routes.WINNERSGift,
+                builder: (context, state) => const WinnersGiftView(),
+              ),
+              GoRoute(
                 path: Paths.QURAAN,
                 name: Routes.QURAAN,
                 builder: (context, state) => BlocProvider<QuranCubit>(
@@ -905,9 +923,17 @@ class AppPages {
               GoRoute(
                   path: Paths.WALLET,
                   name: Routes.WALLET,
-                  builder: (context, state) => BlocProvider<WalletTwoCubit>(
-                        create: (_) => serviceLocator<WalletTwoCubit>()
-                          ..getAllDataWalletScreen(),
+                  builder: (context, state) => MultiBlocProvider(
+                        providers: [
+                          BlocProvider(
+                            create: (_) => serviceLocator<WalletTwoCubit>()
+                              ..getAllDataWalletScreen(context),
+                          ),
+                          BlocProvider(
+                            create: (_) =>
+                                serviceLocator<SubscriptionWalletCubit>(),
+                          ),
+                        ],
                         child: const WalletView(
                             // type: state.extra as WalletTypes,
                             ),
@@ -949,7 +975,7 @@ class AppPages {
               GoRoute(
                 path: Paths.GIFT,
                 name: Routes.GIFT,
-                builder: (context, state) => GiftView(),
+                builder: (context, state) => const GiftView(),
               ),
               // GoRoute(
               //   path: Paths.GIFT,
@@ -958,6 +984,13 @@ class AppPages {
               //     create: (_) => serviceLocator(),
               //     child: const GiftWalletView(),
               //   ),
+              // ),
+
+              // Winners
+              // GoRoute(
+              //   path: Paths.WINNERS,
+              //   name: Routes.WINNERS,
+              //   builder: (context, state) => GiftView(),
               // ),
 
               // Change Password

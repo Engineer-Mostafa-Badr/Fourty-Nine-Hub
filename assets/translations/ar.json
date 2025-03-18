@@ -289,6 +289,7 @@
   "competitions": "المسابقات",
   "requestWithdraw": "طلب سحب",
   "requestTransaction": "طلب للمعاملات الشخصية",
+  "requestTransaction2": "طلب معاملة",
   "years": "سنوات",
   "transfer": "تحويل",
   "save": "حفظ",
@@ -1411,5 +1412,12 @@
   "showPosts": "إظهار المشاركات",
   "showStories": "عرض القصص",
   "showReels": "عرض البكرات",
-  "writeComments": "اكتب تعليقات"
+  "writeComments": "اكتب تعليقات",
+  "getMoney": "المال المتحصل عليه",
+  "withdrawalLimit": "حد السحب",
+  "minimumRequestWithdrawalIs": "الحد الأدنى لطلب السحب هو",
+  "EGPFor": "حنيه مصري",
+  "personalTransaction": "للمعاملات الشخصية.",
+  "uploadBill": "تحميل الفاتورة",
+  "investment": "الاستثمار"
 }

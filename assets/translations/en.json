@@ -290,6 +290,7 @@
   "competitions": "Competitions",
   "requestWithdraw": "Request Withdraw",
   "requestTransaction": "request for personal transaction",
+  "requestTransaction2": "Request Transfer",
   "years": "Years",
   "transfer": "Transfer",
   "cancel": "Cancel",
@@ -1428,5 +1429,12 @@
   "showPosts": "Show Posts",
   "showStories": "Show Stories",
   "showReels": "Show Reels",
-  "writeComments": "Write Comments"
+  "writeComments": "Write Comments",
+  "getMoney": "Money Get",
+  "withdrawalLimit": "Withdrawal Limit",
+  "minimumRequestWithdrawalIs": "Minimum request withdrawal is 10000 EGP for",
+  "EGPFor": "EGP for",
+  "personalTransaction": "personal transaction.",
+  "uploadBill": "Upload Bill",
+  "investment": "Investment"
 }

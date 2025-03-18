@@ -30,9 +30,11 @@ class FilterAdsView extends StatefulWidget {
 class _FilterAdsViewState extends State<FilterAdsView> {
   @override
   void initState() {
-    context
-        .read<CreateAdCubit>()
-        .loadData(subCategoryId: widget.categorization.fromMarriage==false?widget.categorization.mainCategory.id:widget.categorization.subCategory.id, fromMarriage: widget.categorization.fromMarriage??false);
+    context.read<CreateAdCubit>().loadData(
+        subCategoryId: widget.categorization.fromMarriage == false
+            ? widget.categorization.mainCategory.id
+            : widget.categorization.subCategory.id,
+        fromMarriage: widget.categorization.fromMarriage ?? false);
     super.initState();
   }
 
@@ -64,7 +66,7 @@ class _FilterAdsViewState extends State<FilterAdsView> {
             }
             return ListView(
               shrinkWrap: true,
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(16.0),
               children: [
                 Row(
                   children: [

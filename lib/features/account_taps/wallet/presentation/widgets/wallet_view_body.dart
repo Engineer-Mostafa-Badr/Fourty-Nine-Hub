@@ -10,17 +10,21 @@ import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/fe
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_two_cubit/wallet_two_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/button_wallet_and_bill.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/charge_wallet_button_bloc.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/history_wallet_list_view_item.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/icon_and_hint_widget.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/header_total_account_widget.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/my_subscription_section.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/select_categories_wallet_section.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/with_drawal_button.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../../../../core/widget/custom_failure_widget.dart';
+import '../cubit/subscription_wallet_cubit/subscription_wallet_cubit.dart';
+import 'history_wallet_sliver_list.dart';
 
 class WalletViewBody extends StatelessWidget {
   const WalletViewBody({super.key});
@@ -50,14 +54,15 @@ class WalletViewBody extends StatelessWidget {
       padding: const EdgeInsets.all(16.0),
       child: BlocBuilder<WalletTwoCubit, WalletTwoState>(
         builder: (context, state) {
-          if (state is WalletTwoLoading || state is WalletTwoInitial) {
+          if (state.status.isLoading || state.status.isInitial) {
             return const Center(
               child: CircularProgressIndicator(),
             );
-          } else if (state is WalletTwoSuccess) {
+          } else if (state.status.isSuccess) {
             return RefreshIndicator(
-              onRefresh: () =>
-                  context.read<WalletTwoCubit>().getAllDataWalletScreen(),
+              onRefresh: () => context
+                  .read<WalletTwoCubit>()
+                  .getAllDataWalletScreen(context),
               child: Column(
                 children: [
                   Expanded(
@@ -79,7 +84,8 @@ class WalletViewBody extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 HeaderTotalAccountWidget(
-                                  balance: state.wallet.realAmount.toString(),
+                                  balance:
+                                      state.wallet?.realAmount.toString() ?? '',
                                   // state.wallet?.realAmount?.toStringAsFixed(2) ?? '',
                                   type: WalletTypes.mainWallet,
                                 ),
@@ -101,20 +107,43 @@ class WalletViewBody extends StatelessWidget {
                                 // state.wallet?.realAmount != null &&
                                 //         state.wallet!.realAmount! >= 500
                                 WithDrawalButton(
-                                  state: state.wallet.realAmount != null &&
-                                      state.wallet.realAmount! >= 500,
+                                  state: state.wallet?.realAmount != null &&
+                                      state.wallet!.realAmount! >= 500,
+                                  amount:
+                                      state.wallet?.realAmount.toString() ?? '',
+                                  phone: UserCubit.to.state.data!.phone!,
                                 ),
                                 const SizedBox(
                                   height: 16,
                                 ),
-                                MySubscriptionSection(
-                                  subscriptions: state.subscription ?? [],
+                                BlocConsumer<SubscriptionWalletCubit,
+                                    SubscriptionWalletState>(
+                                  listener: (context, subscriptionState) {
+                                    if (subscriptionState
+                                        is SubscriptionWalletSuccess) {
+                                      context
+                                          .read<WalletTwoCubit>()
+                                          .getAllDataWalletScreen(context);
+                                    }
+                                  },
+                                  builder: (context, subscriptionState) {
+                                    if (subscriptionState
+                                        is SubscriptionWalletLoading) {
+                                      return const Center(
+                                        child: CircularProgressIndicator(),
+                                      );
+                                    } else {
+                                      return MySubscriptionSection(
+                                        subscriptions: state.subscription ?? [],
+                                      );
+                                    }
+                                  },
                                 ),
                                 const SizedBox(
                                   height: 16,
                                 ),
                                 SelectCategoriesWalletSection(
-                                  mainCategories: state.mainCategory,
+                                  mainCategories: state.mainCategory!,
                                 ),
                                 // SubCategorySubscription(
                                 //   subCategories: state,
@@ -133,12 +162,8 @@ class WalletViewBody extends StatelessWidget {
                             ),
                           ),
                         ),
-                        SliverList.builder(
-                          itemCount: state.walletHistory?.length ?? 0,
-                          itemBuilder: (context, index) =>
-                              HistoryWalletListViewItem(
-                            history: state.walletHistory?[index],
-                          ),
+                        HistoryWalletSliverList(
+                          walletHistories: state.walletHistory!,
                         ),
                       ],
                     ),
@@ -152,7 +177,7 @@ class WalletViewBody extends StatelessWidget {
                       icon: SvgPicture.asset(
                         Assets.transferMoneyByMobileIcon,
                       ),
-                      label: 'Transfer Money',
+                      label: LocaleKeys.transferMoney.localize,
                       onPressed: () {
                         context.push(Routes.TRANSFERMONEY);
                       },
@@ -162,31 +187,12 @@ class WalletViewBody extends StatelessWidget {
               ),
             );
           } else {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Label(
-                  text: LocaleKeys.somethingWentWrong.localize,
-                  style: Styles.headerText(),
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  child: ButtonWalletAndBill(
-                    icon: const Icon(
-                      Icons.refresh_sharp,
-                      color: Colors.white,
-                    ),
-                    label: 'Refresh',
-                    onPressed: () {
-                      context.read<WalletTwoCubit>().getAllDataWalletScreen();
-                    },
-                  ),
-                ),
-              ],
+            return CustomFailureWidget(
+              title: state.failureMessage ??
+                  LocaleKeys.somethingWentWrong.localize,
+              onPressed: () {
+                context.read<WalletTwoCubit>().getAllDataWalletScreen(context);
+              },
             );
           }
         },
