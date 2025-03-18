@@ -37,6 +37,9 @@ abstract class Assets {
   static String speakerIcon = 'assets/icons/speader_icon.svg';
   static String starYellowIcon = 'assets/icons/star_yellow_icon.svg';
   static String starRedIcon = 'assets/icons/star_red_icon.svg';
+  static String mapPinIcon = 'assets/icons/map_pin_icon.svg';
+  static String phoneIcon = 'assets/icons/phone_icon.svg';
+  static String mailIcon = 'assets/icons/mail_icon.svg';
 
   // lottie
   static String loveReaction = 'assets/lottie/love_reaction.json';
