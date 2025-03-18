@@ -31,6 +31,12 @@ abstract class Assets {
   static String shareIcon = 'assets/icons/share_icon.svg';
   static String publication = 'assets/icons/publication.svg';
   static String zoomVideo = 'assets/icons/zoomVideo.svg';
+  static String adIcon = 'assets/icons/ad_icon.svg';
+  static String heartIcon = 'assets/icons/heart_icon.svg';
+  static String saveIcon = 'assets/icons/save_icon.svg';
+  static String speakerIcon = 'assets/icons/speader_icon.svg';
+  static String starYellowIcon = 'assets/icons/star_yellow_icon.svg';
+  static String starRedIcon = 'assets/icons/star_red_icon.svg';
 
   // lottie
   static String loveReaction = 'assets/lottie/love_reaction.json';
