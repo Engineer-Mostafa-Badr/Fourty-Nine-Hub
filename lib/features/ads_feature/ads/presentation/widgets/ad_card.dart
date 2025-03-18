@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/constants/subscription_status.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -268,7 +269,7 @@ class _AdCardState extends State<AdCard> {
 
                               Row(
                                 children: [
-                                  AvaialbleTripsButton(
+                                  if(widget.item.userSubscriptionStatus==SubscriptionStatus.notSubscribed.status)AvaialbleTripsButton(
                                     title: LocaleKeys.request.localize,
                                     color:AppColors.SECONDARY_COLOR,
                                     padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 5),
@@ -386,30 +387,28 @@ class _AdCardState extends State<AdCard> {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(10.w),
-      color: status == 'premium'
+      color: status == SubscriptionStatus.premium.status
           ? Colors.amber
-          : status == 'Regular'
-              ? Colors.grey
-              : Colors.grey,
+          :Colors.grey,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          if (status == 'premium' || status == 'Regular') ...[
+          if (status !=SubscriptionStatus.notSubscribed.status) ...[
             Icon(
               Icons.workspace_premium_outlined,
               size: 55.w,
-              color: status == 'premium'
+              color: status == SubscriptionStatus.premium.status
                   ? AppColors.SECONDARY_COLOR
-                  : status == 'Regular'
+                  : status == SubscriptionStatus.regular.status
                       ? AppColors.PRIMARY_COLOR
                       : null,
             ),
             const Sizer(width: 5)
           ],
           Label(
-            text: status == 'premium'
+            text: status == SubscriptionStatus.premium.status
                 ? LocaleKeys.premiumSubscription.localize
-                : status == 'Regular'
+                : status == SubscriptionStatus.regular.status
                     ? LocaleKeys.regularRequest.localize
                     : LocaleKeys.notSubscribed.localize,
             style: Styles.mediumText(

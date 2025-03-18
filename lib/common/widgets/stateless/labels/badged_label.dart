@@ -20,6 +20,7 @@ class BadgedLabel extends StatelessWidget {
   final bool isBordered;
   final bool isCentered;
   final bool close;
+  final MainAxisAlignment? mainAxisAlignment;
 
   final GestureTapCallback? onRemove;
 
@@ -43,7 +44,8 @@ class BadgedLabel extends StatelessWidget {
       this.icon,
       this.iconLeading,
       this.overFlow,
-      this.max});
+      this.max,
+      this.mainAxisAlignment});
 
   @override
   Widget build(BuildContext context) {
@@ -62,9 +64,7 @@ class BadgedLabel extends StatelessWidget {
             //padding: EdgeInsetsDirectional.only(end: 8,top: 5),
             decoration: BoxDecoration(
                 color: isBordered ? color : color,
-                border: isBordered
-                    ? Border.all(color: borderColor)
-                    : null,
+                border: isBordered ? Border.all(color: borderColor) : null,
                 borderRadius: BorderRadius.circular(radius)),
             // child: isCentered
             //     ? Center(
@@ -86,11 +86,13 @@ class BadgedLabel extends StatelessWidget {
 
   Widget _buildLabelWidget() {
     return Row(
-      mainAxisAlignment: (icon != null && iconLeading != null)
-          ? MainAxisAlignment.spaceBetween
-          : (icon != null || iconLeading != null)
-              ? MainAxisAlignment.start
-              : MainAxisAlignment.center,
+      mainAxisAlignment: mainAxisAlignment != null
+          ? mainAxisAlignment!
+          : (icon != null && iconLeading != null)
+              ? MainAxisAlignment.spaceBetween
+              : (icon != null || iconLeading != null)
+                  ? MainAxisAlignment.start
+                  : MainAxisAlignment.center,
       children: [
         if (icon != null)
           Icon(

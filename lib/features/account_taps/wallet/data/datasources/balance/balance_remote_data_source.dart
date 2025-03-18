@@ -6,9 +6,13 @@ import '../../../../../../core/data/datasources/remote/api/end_points.dart';
 import '../../../../../../core/error/failure.dart';
 import '../../../domain/entities/balance/balance_history_entity.dart';
 import '../../../domain/entities/balance/request_withdraw_entity.dart';
+import '../../../domain/entities/data_winners_cashback_entity.dart';
+import '../../../domain/entities/winners_cashback_entity.dart';
 import '../../../domain/usecases/get_balance_history_use_case.dart';
+import '../../../domain/usecases/get_winners_cashback_use_case.dart';
 import '../../models/balance/balance_data_model.dart';
 import '../../models/balance/balance_history_model.dart';
+import '../../models/balance/data_winners_cashback_model.dart';
 
 abstract class BalanceRemoteDataSource {
   Future<Either<Failure, BalanceDataModel>> fetchBalance();
@@ -23,6 +27,9 @@ abstract class BalanceRemoteDataSource {
   Future<Either<Failure, bool>> requestWithdrawBalance();
 
   Future<Either<Failure, RequestWithdrawEntity>> checkRequestWithdrawBalance();
+
+  Future<Either<Failure, DataWinnersCashbackEntity>> getWinnersCashback(
+      GetWinnersCashbackUseCaseParams params);
 }
 
 class BalanceRemoteDataSourceImpl extends BalanceRemoteDataSource {
@@ -96,5 +103,18 @@ class BalanceRemoteDataSourceImpl extends BalanceRemoteDataSource {
       (failure) => Left(failure),
       (response) => Right(RequestWithdrawModel.fromJson(response)),
     );
+  }
+
+  @override
+  Future<Either<Failure, DataWinnersCashbackEntity>> getWinnersCashback(GetWinnersCashbackUseCaseParams params) async {
+    final response = await _apiConsumer.get(
+      EndPoints.getWinnersCashback(params),
+    );
+    return response.fold((l) {
+      return Left(l);
+    }, (data) {
+      final dataWinners = DataWinnersCashbackModel.fromJson(data['data']);
+      return Right(dataWinners);
+    });
   }
 }

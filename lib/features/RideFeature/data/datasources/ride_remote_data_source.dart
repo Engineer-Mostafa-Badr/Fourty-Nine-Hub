@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/activity_trip_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/completed_trips_model.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/cost_per_km_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/expected_price_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/get_location_from_address_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/history_trip_for_rider_model.dart';
@@ -13,11 +14,13 @@ import 'package:fourtyninehub/features/RideFeature/data/models/driver_info_model
 import 'package:fourtyninehub/features/RideFeature/data/models/driver_picture_optional_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/driver_statistics_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/drivers_in_subcategory_model.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/loading_info_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/ride_color_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/ride_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/running_trips_model.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/activity_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/completed_trips_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/cost_per_km_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/get_location_from_address_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/history_trip_for_rider_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/history_trip_for_user_entity.dart';
@@ -29,6 +32,8 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_statis
 import 'package:fourtyninehub/features/RideFeature/domain/entities/drivers_in_subcategory_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/expected_price_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/expected_price_params.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/loading_info_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/loading_register_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride_not_special_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride_special_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/request_trip_entity.dart';
@@ -111,6 +116,9 @@ abstract class RideRemoteDataSource {
   Future<Either<Failure, List<HistoryTripForUserEntity>>> getAllHistoryTripsForUser();
 
   Future<Either<Failure, List<HistoryTripForRiderEntity>>> getAllHistoryTripsForRider(GetAllHistoryTripsForRiderUseCaseParams params);
+  Future<Either<Failure, CostPerKmEntity>> getCostPerKm();
+  Future<Either<Failure, bool>> loadingRegister(LoadingRegisterEntity params);
+  Future<Either<Failure, LoadingInfoEntity>> getLoadingInfo();
 }
 
 class RideRemoteDataSourceImplementation
@@ -691,6 +699,51 @@ class RideRemoteDataSourceImplementation
           historyTripsForRider.add(HistoryTripForRiderModel.fromJson(trip));
         }
         return Right(historyTripsForRider);
+      });
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, CostPerKmEntity>> getCostPerKm() async{
+    try {
+      final response = await _apiConsumer.get(
+        EndPoints.getCostPerKm,
+      );
+      return response.fold((failure) => Left(failure), (data) {
+        return Right(CostPerKmModel.fromJson(data['data']));
+      });
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> loadingRegister(LoadingRegisterEntity params) async {
+    try {
+      final response = await _apiConsumer.post(
+        EndPoints.loadingRegister,
+        data: params.toJson(),
+      );
+
+      return response.fold((failure) => Left(failure), (data) {
+        return Right(data['status']??false);
+      });
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, LoadingInfoEntity>> getLoadingInfo() async {
+    try {
+      final response = await _apiConsumer.get(
+        EndPoints.getLoadingInfo,
+      );
+
+      return response.fold((failure) => Left(failure), (data) {
+        return Right(LoadingInfoModel.fromJson(data['data']));
       });
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));

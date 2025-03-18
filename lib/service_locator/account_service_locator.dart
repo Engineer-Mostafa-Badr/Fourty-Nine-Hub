@@ -18,17 +18,23 @@ import 'package:fourtyninehub/features/account_taps/wallet/data/repositories/wal
 import 'package:fourtyninehub/features/account_taps/wallet/domain/repositories/gift_repository.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/repositories/wallet_repo.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/delete_subscription_use_case.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_balance_history_use_case.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_balance_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_gifts_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_usecase.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_winners_gift_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/request_withdraw_use_case.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/request_withdraw_wallet_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/request_withdraw_wheel_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Gift_Cubit/gift_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/charge_wallet_cubit/charge_wallet_cubit.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/cashback_cubit/cashback_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/fetch_sub_category_wallet/fetch_sub_category_wallet_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/gift_two_cubit/gift_two_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_two_cubit/wallet_two_cubit.dart';
 import 'package:fourtyninehub/features/lucky_wheel/domain/use_cases/get_wheel_wallet_use_case.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/winners_gift_cubit/winners_gift_cubit.dart';
 import 'package:fourtyninehub/features/subscripe/domain/usecases/get_active_subscription_amounts.dart';
 import 'package:get_it/get_it.dart';
 import '../features/account_taps/account/data/repositories/account_repo_impl.dart';
@@ -40,10 +46,17 @@ import '../features/account_taps/account/presentation/cubit/managers/favourite_s
 import '../features/account_taps/lists/presentation/cubit/lists_cubit.dart';
 import '../features/account_taps/share_app/presentation/cubit/share_app_cubit.dart';
 import '../features/account_taps/wallet/domain/usecases/add_subscribe_use_case.dart';
+import '../features/account_taps/wallet/domain/usecases/get_gift_competitions_use_case.dart';
 import '../features/account_taps/wallet/domain/usecases/get_subscription_use_case.dart';
 import '../features/account_taps/wallet/domain/usecases/get_wallet_history_use_case.dart';
+import '../features/account_taps/wallet/domain/usecases/get_winners_cashback_use_case.dart';
 import '../features/account_taps/wallet/domain/usecases/main_category_use_case.dart';
 import '../features/account_taps/wallet/domain/usecases/sub_category_use_case.dart';
+import '../features/account_taps/wallet/domain/usecases/transfer_balance_use_cse.dart';
+import '../features/account_taps/wallet/domain/usecases/transfer_ten_balance_use_cse.dart';
+import '../features/account_taps/wallet/domain/usecases/withdraw_balance_use_cse.dart';
+import '../features/account_taps/wallet/presentation/cubit/subscription_wallet_cubit/subscription_wallet_cubit.dart';
+import '../features/account_taps/wallet/presentation/cubit/winners_cashback_cubit/winners_cashback_cubit.dart';
 
 class AccountServiceLocator {
   static Future<void> execute({required GetIt serviceLocator}) async {
@@ -106,6 +119,20 @@ class AccountServiceLocator {
         () => GetDrawerFavouriteAdsUsecase(serviceLocator()));
     serviceLocator.registerLazySingleton<DeleteFavouriteAdsUsecase>(
         () => DeleteFavouriteAdsUsecase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetGiftCompetitionsUseCase>(
+        () => GetGiftCompetitionsUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<RequestWithdrawWalletUseCase>(
+        () => RequestWithdrawWalletUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<TransferTenBalanceUseCase>(
+        () => TransferTenBalanceUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<TransferFiveBalanceUseCase>(
+        () => TransferFiveBalanceUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<RequestWithdrawBalanceUseCase>(
+        () => RequestWithdrawBalanceUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetWinnersCashbackUseCase>(
+        () => GetWinnersCashbackUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetWinnersGiftUseCase>(
+        () => GetWinnersGiftUseCase(serviceLocator()));
 
     serviceLocator.registerFactory<FavouriteAdsCubit>(
         () => FavouriteAdsCubit(serviceLocator())..loadData());
@@ -149,6 +176,7 @@ class AccountServiceLocator {
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),
+        serviceLocator(),
       ),
     );
 
@@ -165,8 +193,36 @@ class AccountServiceLocator {
 
     serviceLocator.registerFactory<GiftTwoCubit>(
       () => GiftTwoCubit(
-        serviceLocator<GetWalletGiftsUseCase>(),
-        serviceLocator<GetWheelWalletUseCase>(),
+        // serviceLocator<GetWalletGiftsUseCase>(),
+        serviceLocator<GetGiftCompetitionsUseCase>(),
+        serviceLocator<TransferFiveBalanceUseCase>(),
+        serviceLocator<TransferTenBalanceUseCase>(),
+      ),
+    );
+
+    serviceLocator.registerFactory<CashbackCubit>(
+      () => CashbackCubit(
+        serviceLocator<GetBalanceUseCases>(),
+        serviceLocator<GetBalanceHistoryUseCase>(),
+        serviceLocator<RequestWithdrawBalanceUseCase>(),
+      ),
+    );
+
+    serviceLocator.registerFactory<SubscriptionWalletCubit>(
+      () => SubscriptionWalletCubit(
+        serviceLocator<DeleteSubscriptionUseCase>(),
+      ),
+    );
+
+    serviceLocator.registerFactory<WinnersCashbackCubit>(
+      () => WinnersCashbackCubit(
+        serviceLocator<GetWinnersCashbackUseCase>(),
+      ),
+    );
+
+    serviceLocator.registerFactory<WinnersGiftCubit>(
+      () => WinnersGiftCubit(
+        serviceLocator<GetWinnersGiftUseCase>(),
       ),
     );
 

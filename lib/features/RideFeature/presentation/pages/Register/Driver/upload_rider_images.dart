@@ -10,15 +10,38 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
-class UploadRiderImages extends StatelessWidget {
-  const UploadRiderImages({super.key});
+class UploadRiderImagesParams{
+  final bool? isShipping;
+  final bool? isSocket;
+
+  UploadRiderImagesParams({required this.isShipping, required this.isSocket});
+
+}
+class UploadRiderImages extends StatefulWidget {
+  const UploadRiderImages({super.key, this.params});
+  final UploadRiderImagesParams? params;
+  @override
+  State<UploadRiderImages> createState() => _UploadRiderImagesState();
+}
+
+class _UploadRiderImagesState extends State<UploadRiderImages> {
+
+  @override
+  void initState() {
+    context.read<RideCubit>().fetchRideUploadedImagesData(context,widget.params);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocBuilder<RideCubit,RideState>(
         builder: (context,state) {
-          return ListView(
+          print("objectstate.registerType${state.registerType}");
+          print("objectstate.registerType${state.isUploadDrugAnalysis}");
+          print("objectstate.registerType${state.isUploadCriminalRecord}");
+          print("objectstate.registerType${state.isUploadTechnicalExamination}");
+          return state.isLoading?const Center(child: CircularProgressIndicator()):ListView(
             padding: const EdgeInsets.only(top: 82, left: 16, right: 16),
             children: [
               Label(
@@ -42,14 +65,14 @@ class UploadRiderImages extends StatelessWidget {
               const SizedBox(
                 height: 40,
               ),
-              if(state.isUploadDrugAnalysis!=null&&state.isUploadDrugAnalysis==true)...[UploadImageRow(title: "Drag analysis",onTap: ()=>context.push(Routes.drugAnalysisScreen),disableUpload: state.isUploadDrugAnalysis!=null&&(state.isUploadDrugAnalysis==true),),
+              if(state.pictureOptional!=null&&state.pictureOptional?.openDrugAnalysis==true&&state.registerType=='socket')...[UploadImageRow(title: "Drag analysis",onTap: ()=>context.push(Routes.drugAnalysisScreen),disableUpload: state.isUploadDrugAnalysis!=null&&(state.isUploadDrugAnalysis==true),),
               const SizedBox(
                 height: 40,
               )],
-              if(state.isUploadCriminalRecord!=null&&state.isUploadCriminalRecord==true)...[UploadImageRow(title: "Criminal Record",onTap: ()=>context.push(Routes.criminalRecordScreen),disableUpload: state.isUploadCriminalRecord!=null&&(state.isUploadCriminalRecord==true),),const SizedBox(
+              if(state.pictureOptional!=null&&state.pictureOptional?.openCriminalRecord==true&&state.registerType=='socket')...[UploadImageRow(title: "Criminal Record",onTap: ()=>context.push(Routes.criminalRecordScreen),disableUpload: state.isUploadCriminalRecord!=null&&(state.isUploadCriminalRecord==true),),const SizedBox(
                 height: 40,
               )],
-              if(state.isUploadTechnicalExamination!=null&&state.isUploadTechnicalExamination==true)UploadImageRow(title: "Terminal Examination",onTap: ()=>context.push(Routes.technicalExaminationScreen),disableUpload: state.isUploadTechnicalExamination!=null&&(state.isUploadTechnicalExamination==true),),
+              if(state.pictureOptional!=null&&state.pictureOptional?.openTechnicalExamination==true&&state.registerType=='socket')UploadImageRow(title: "Terminal Examination",onTap: ()=>context.push(Routes.technicalExaminationScreen),disableUpload: state.isUploadTechnicalExamination!=null&&(state.isUploadTechnicalExamination==true),),
             ],
           );
         }

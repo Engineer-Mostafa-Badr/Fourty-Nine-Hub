@@ -6,6 +6,7 @@ import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/constants/subscription_status.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -164,40 +165,73 @@ class _AdDetailsViewState extends State<AdDetailsView> {
         builder: (context, state) {
       return Container(
         margin: const EdgeInsets.all(10),
-        child: Column(
+        child: Row(
           children: [
-            const Sizer(),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  flex: 3,
-                  child: BlocProvider(
-                      create: (_) => serviceLocator<AdvertisementCubit>(),
-                      child: PremiumRequestButton(
-                        adId: state.ad?.id ?? '',
-                        subCategoryId: state.ad?.subCategoryId ?? '',
-                        subscriptionStatus: state.ad?.subscriptionStatus ?? '',
-                      )),
-                ),
-                const Sizer(width: 5),
-                Expanded(
-                    flex: 3,
-                    child: BlocProvider(
-                        create: (_) => serviceLocator<AdvertisementCubit>(),
-                        child: RequestButton(
-                            adId: state.ad?.id ?? '',
-                            subscriptionStatus:
-                                state.ad?.subscriptionStatus ?? '')))
-              ],
-            ),
-            const Sizer(),
-            CallMessageButtons(
-              otherUserId: state.ad?.userId ?? '',
-              subcategoryId: state.ad?.subCategoryId ?? '',
-              phone: state.ad?.phone ?? '',
-              id: state.ad?.id ?? '',
-              hasReport: true,
+            if(state.ad?.userSubscriptionStatus==SubscriptionStatus.notSubscribed.status)AvaialbleTripsButton(
+              title: LocaleKeys.request.localize,
+              color:AppColors.SECONDARY_COLOR,
+              padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 5),
+              onTap: (){
+                showModalBottomSheet(
+                  backgroundColor: context.isDarkMode
+                      ? AppColors.DARK_BLUE_COLOR.withOpacity(0.95)
+                      : AppColors.LIGHT_COLOR,
+                  context: context,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(32.0),
+                      topRight: Radius.circular(32.0),
+                    ),
+                  ),
+                  isDismissible: true,
+                  isScrollControlled: true,
+                  builder: (BuildContext context) {
+                    return BlocProvider.value(
+                      value: serviceLocator<AdvertisementCubit>(),
+                      child: AnimatedPadding(
+                        padding: MediaQuery.of(context).viewInsets,
+                        duration: const Duration(milliseconds: 50),
+                        child: Container(
+                          height: 150.h,
+                          padding: EdgeInsets.symmetric(
+                            vertical: 10.h,
+                            horizontal: 10,
+                          ),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                flex: 3,
+                                child: PremiumRequestButton(
+                                  adId: state.ad?.id ?? '',
+                                  subCategoryId: state.ad?.subCategoryId ?? '',
+                                  subscriptionStatus: state.ad?.subscriptionStatus ?? '',
+                                ),
+                              ),
+                              const Sizer(width: 5),
+                              Expanded(
+                                flex: 3,
+                                child: RequestButton(
+                                    adId: state.ad?.id ?? '',
+                                    subscriptionStatus:
+                                    state.ad?.subscriptionStatus ?? ''),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                );
+              },),
+            Expanded(
+              child: CallMessageButtons(
+                otherUserId: state.ad?.userId ?? '',
+                subcategoryId: state.ad?.subCategoryId ?? '',
+                phone: state.ad?.phone ?? '',
+                id: state.ad?.id ?? '',
+                hasReport: true,
+              ),
             ),
           ],
         ),
