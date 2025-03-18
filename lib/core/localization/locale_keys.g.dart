@@ -1375,11 +1375,24 @@ abstract class  LocaleKeys {
   static const passenger = 'passenger';
   static const noSmoker = 'noSmoker';
   static const choiceRuler = 'choiceRuler';
-  static const completeRegistration = 'completeRegistration';
   static const loadingRequest = 'loadingRequest';
   static const rideRequest = 'rideRequest';
   static const transporte = 'transporte';
   static const bus = 'bus';
+  static const socialMessage = 'socialMessage';
+  static const anonymousMessage = 'anonymousMessage';
+  static const showPosts = 'showPosts';
+  static const showStories = 'showStories';
+  static const showReels = 'showReels';
+  static const writeComments = 'writeComments';
+  static const getMoney = 'getMoney';
+  static const withdrawalLimit = 'withdrawalLimit';
+  static const minimumRequestWithdrawalIs = 'minimumRequestWithdrawalIs';
+  static const EGPFor = 'EGPFor';
+  static const personalTransaction = 'personalTransaction';
+  static const uploadBill = 'uploadBill';
+  static const investment = 'investment';
+  static const completeRegistration = 'completeRegistration';
   static const addEmergencyContacts = 'addEmergencyContacts';
   static const reportClient = 'reportClient';
   static const rateTheClient = 'rateTheClient';
@@ -1399,18 +1412,7 @@ abstract class  LocaleKeys {
   static const deviceID = 'deviceID';
   static const enterYourDeviceID = 'enterYourDeviceID';
   static const billGift = 'billGift';
-  static const socialMessage = 'socialMessage';
-  static const anonymousMessage = 'anonymousMessage';
-  static const showPosts = 'showPosts';
-  static const showStories = 'showStories';
-  static const showReels = 'showReels';
-  static const writeComments = 'writeComments';
-  static const getMoney = 'getMoney';
-  static const withdrawalLimit = 'withdrawalLimit';
-  static const minimumRequestWithdrawalIs = 'minimumRequestWithdrawalIs';
-  static const EGPFor = 'EGPFor';
-  static const personalTransaction = 'personalTransaction';
-  static const uploadBill = 'uploadBill';
-  static const investment = 'investment';
+  static const skip = 'skip';
+  static const move = 'move';
 
 }

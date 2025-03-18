@@ -12,19 +12,19 @@ import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 
 import '../../../../../common/widgets/stateless/buttons/default_button.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../routes/routes.dart';
 
 class CreateNewForgetPasswordView extends StatelessWidget {
-  final String email;
+  final Map<String,dynamic> emailOrUserId;
 
   const CreateNewForgetPasswordView({
     super.key,
-    required this.email,
+    required this.emailOrUserId,
   });
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<CreateNewForgotPasswordCubit>();
     return BlocConsumer<CreateNewForgotPasswordCubit,
         CreateNewForgotPasswordState>(
       listener: (context, state) {
@@ -39,10 +39,13 @@ class CreateNewForgetPasswordView extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        return Scaffold(
+        final cubit = context.read<CreateNewForgotPasswordCubit>();
+        return CustomScaffold(
           resizeToAvoidBottomInset: false,
+          enableCustomAppBar: true,
           appBar: BackAppBar(
             label: LocaleKeys.createNewPassword.localize,
+            enableCustomAppBar: true,
           ),
           bottomSheet: SizedBox(
             height: 160.h,
@@ -50,7 +53,7 @@ class CreateNewForgetPasswordView extends StatelessWidget {
               margin: EdgeInsets.all(30.w),
               width: double.infinity,
               label: LocaleKeys.createNewPassword.localize,
-              onPressed: () => cubit.createPassword(email),
+              onPressed: () => cubit.createPassword(emailOrUserId),
             ),
           ),
           body: Padding(

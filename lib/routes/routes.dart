@@ -5,6 +5,7 @@ abstract class Routes {
 
   static const HOME = '/';
   static const RIDE_HOME = '/RideHome';
+  static const onBoardingScreen = '/OnBoardingScreen';
   static const CUSTOMPAGE = '/CustomPage';
   static const editPage = '/editPage';
   static const RIDEACTIVITY = '/RIDEACTIVITY';
@@ -257,6 +258,7 @@ abstract class Paths {
 
   static const HOME = '/';
   static const RIDEHOME = 'RideHome';
+  static const onBoardingScreen = 'OnBoardingScreen';
   static const CUSTOMPAGE = 'CustomPage';
   static const PAGEPREVIEW = 'PagePreview';
   static const RIDEACTIVITY = 'RIDEACTIVITY';

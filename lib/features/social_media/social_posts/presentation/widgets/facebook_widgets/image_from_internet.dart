@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../../../res/style/const.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class ImageFromInternet extends StatelessWidget {
   const ImageFromInternet({

@@ -21,6 +21,7 @@ class SearchAzkarParams {
   final int limit;
   final String search;
 
+
   SearchAzkarParams(
       {required this.page, required this.limit, required this.search});
 }

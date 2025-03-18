@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateful/dynamic/pagination_view.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/create_company_ad_cubit.dart';
 import 'package:shimmer/shimmer.dart';
+
 import '../../../../../../common/models/public/pagination_params.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../domain/entities/company_ad_entity.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomContainerAdvertise extends StatelessWidget {
   const CustomContainerAdvertise({

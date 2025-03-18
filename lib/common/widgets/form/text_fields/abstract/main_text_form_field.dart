@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import 'package:fourtyninehub/core/service/cache_service.dart';
+import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -43,6 +43,7 @@ abstract class MainTextFormField extends StatefulWidget {
   final Color? fillColor;
   final Color? cursorColor;
   final TextStyle? style;
+  final TextStyle? hintStyle;
   final VoidCallback? onTap;
   final VoidCallback? onEditComplete;
   final Widget? labelWidget;
@@ -82,7 +83,7 @@ abstract class MainTextFormField extends StatefulWidget {
     this.style,
     this.prefixIcon,
     this.onTap,
-    this.onEditComplete,
+    this.onEditComplete, this.hintStyle,
   });
 
   @override
@@ -137,7 +138,7 @@ class _MainTextFormFieldState extends State<MainTextFormField> {
               widget.contentPadding ?? const EdgeInsets.fromLTRB(16, 0, 16, 0),
           hintText: widget.hintText,
           labelText: widget.label,
-          hintStyle: TextStyle(
+          hintStyle: widget.hintStyle??TextStyle(
               color:
                   context.isDarkMode ? Colors.white : AppColors.QUANTITY_COLOR),
           suffixIcon: widget.suffixIcon,

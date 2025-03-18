@@ -86,7 +86,6 @@ class _LoginViewState extends State<LoginView> {
           // print("Print here ${isVeryfied}");
 
           showErrorMessage(context, getFailureMessage(state.failure, context));
-
         } else if (state is OTPSent) {
           showSuccessMessage(context, LocaleKeys.oTP.localize);
           context.go(
@@ -95,14 +94,15 @@ class _LoginViewState extends State<LoginView> {
           );
         } else if (state is RegisterSuccess) {
           await context.read<UserCubit>().setLogin(true);
-         await context.read<UserCubit>().getUser();
+          await context.read<UserCubit>().getUser();
           context.go(Routes.HOME);
         }
       },
       child: BlocListener<LoginCubit, LoginState>(
         listener: (context, state) async {
           if (state is LoginError) {
-            String  isVerified = getFailureMessage(state.failure, context).toString();
+            String isVerified =
+                getFailureMessage(state.failure, context).toString();
             print("Print here $isVerified");
             if (isVerified == "Email not verified") {
               context.go(
@@ -119,9 +119,7 @@ class _LoginViewState extends State<LoginView> {
                 context,
               ),
             );
-          }
-
-          else if (state is LoginSuccess) {
+          } else if (state is LoginSuccess) {
             // await CacheManager.saveAccessToken(
             //     state.userTokensEntity.accessToken);
             // await CacheManager.saveRefreshToken(
@@ -157,7 +155,7 @@ class _LoginViewState extends State<LoginView> {
             showSuccessMessage(context, LocaleKeys.welcomeBack.localize);
           }
         },
-        child:Scaffold(
+        child: Scaffold(
           resizeToAvoidBottomInset: true,
           appBar: const BackAppBar(),
           body: SingleChildScrollView(
@@ -328,10 +326,10 @@ class _LoginWidgetState extends State<LoginWidget> {
           constraints: BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
           // fillColor: const Color(0xFFEEEEEE),
           borderRadius: BorderRadius.circular(20.r),
-          // style: TextStyle(fontSize: 30.sp, color: AppColors.QUANTITY_COLOR),
+          style: TextStyle(fontSize: 30.sp, color: AppColors.QUANTITY_COLOR),
           controller: loginCubit.emailTextController,
-          hint: LocaleKeys.emailOrPhone.localize,
-
+          hint:
+              '${LocaleKeys.email.localize} / ${LocaleKeys.phoneNumber.localize}',
           prefix: Icon(
             Icons.email,
             color: AppColors.GREY_DARK_COLOR,
@@ -515,7 +513,9 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 Sizer(
                   height: 30.h,
                 ),
-                BirthDatePicker(controller: registerCubit.birthDateTextController, ),
+                BirthDatePicker(
+                  controller: registerCubit.birthDateTextController,
+                ),
 
                 Sizer(
                   height: 30.h,
@@ -691,10 +691,10 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                       style: Styles.mediumText(fontWeight: FontWeight.w600),
                     ),
                     ClickableWidget(
-                      onTap: (){
+                      onTap: () {
                         AdInterstitialTop.loadIntersitialAd();
                         AdInterstitialTop.showInterstitialAd();
-                        context.push(Routes.POLICY,extra: true);
+                        context.push(Routes.POLICY, extra: true);
                       },
                       child: Text(
                         LocaleKeys.conditions.localize,

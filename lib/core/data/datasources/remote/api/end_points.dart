@@ -63,6 +63,7 @@ class EndPoints {
   static const socialLogin = '/auth/social/login';
   static const resendOTP = '/auth/resend-reset-code';
   static const resendVerificationOTP = '/auth/resend-verification-code';
+  static const checkAnswersQuestions = '/auth/check-answers-questions';
   static const refreshToken = '/auth/refresh/token';
   static const agoraGenerateToken = '/stream-services/agora/channel';
   static const whatsAppAgoraToken =
@@ -170,7 +171,7 @@ class EndPoints {
   static const socialPage = '/navigators/socialPage';
   static const subTab = '/navigators/subTap';
   static const navigateBar = '/navigators/navigatorsBar';
-  static const favouriteCat = '/navigators/navigateCategories';
+  static const customPageCat = '/navigators/navigateCategories';
   static const activate = '/navigators/customPage';
 
   // Star
@@ -233,6 +234,8 @@ class EndPoints {
   static const sendForgetPasswordOTP = '/auth/forget-password';
   static const verifyForgetPasswordOTP = '/auth/verify/otp';
   static const createNewForgetPassword = '/auth/reset-password';
+  static const createNewForgetPasswordByQuestions = '/auth/reset-password-questions';
+  static const changePassword = '/auth/change-password';
   static const notifications = '/notifications';
   static const unreadNotificationsCount = '/notifications/unread/count';
   static const privacy = '/privacy/personal';

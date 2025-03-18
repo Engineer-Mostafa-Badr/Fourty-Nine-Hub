@@ -1,8 +1,10 @@
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
@@ -10,15 +12,14 @@ import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/s
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:path/path.dart' as path;
 import 'package:video_player/video_player.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../core/widget/custom_scaffold.dart';
 import 'mix_voices.dart';
 import 'my_voice.dart';
 import 'other_voice.dart';
-import 'package:path/path.dart' as path;
-import 'package:easy_localization/easy_localization.dart';
 
 class ReelsRecordingScreen extends StatefulWidget {
   final String? voiceMediaId;
