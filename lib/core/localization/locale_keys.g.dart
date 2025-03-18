@@ -1394,5 +1394,5 @@ abstract class  LocaleKeys {
   static const deviceID = 'deviceID';
   static const enterYourDeviceID = 'enterYourDeviceID';
   static const billGift = 'billGift';
-
+  static const skip = 'skip';
 }

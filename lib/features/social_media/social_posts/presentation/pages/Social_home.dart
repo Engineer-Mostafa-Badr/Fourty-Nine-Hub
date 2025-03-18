@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -15,12 +17,12 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_global_facebook_body.dart';
 import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
 
 import '../../../../../common/widgets/dynamic/bottom_navigator.dart';
 import '../../../../../common/widgets/dynamic/drawer.dart';
@@ -29,7 +31,7 @@ import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../../common/widgets/stateless/appbar/nested_appbar.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../widgets/posts/create_post_banner.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
 class SocialParams {
   final String userId;
   final bool? hideAppBar;
@@ -58,6 +60,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
     with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   ScrollController scrollController = ScrollController();
   bool _isScrollingDown = false;
+  bool isShowExplain = false;
 
   // TabController? controller = TabController(length: length, vsync: vsync)
   @override
@@ -85,22 +88,54 @@ class _SocialHomeViewState extends State<SocialHomeView>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return DefaultTabController(
-      length: 3,
-      initialIndex: widget.params?.index ?? 0,
-      child: Scaffold(
-        backgroundColor: AppColors.DARK_GRAY_COLOR,
-          appBar: widget.params?.hideAppBar == true
-              ? null
-              : HomeAppbar(
-                  isWithBackArrow: true,
-                  toolbarHeight: context.screenHeight / 6.9,
-                  bottom: TabBar(
+    return CustomScaffold(
+      appBar: const HomeAppbar(isWithBackArrow: true),
+      body: Column(
+        children: [
+          isShowExplain ? Column(
+            children: [
+              InkWell(
+                onTap: (){
+                  context.push(Routes.GIFT);
+                },
+                child: Label(
+                  text:
+                  'Get money if you post, view,like\nand seen on any interface you like!',
+                  style: Styles.headerText(
+                    color: AppColors.SECONDARY_COLOR,
+                    shadows: const [
+                      Shadow(
+                        color: Colors.black12,
+                        offset: Offset(0, 4),
+                        blurRadius: 4,
+                      ),
+                      Shadow(
+                        color: Colors.black12,
+                        offset: Offset(0, 4),
+                        blurRadius: 4,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const Sizer(),
+            ],
+          ):Container(),
+          Expanded(
+            child: DefaultTabController(
+              length: 3,
+              initialIndex: widget.params?.index ?? 0,
+              child: Scaffold(
+                  backgroundColor: Theme
+                      .of(context)
+                      .scaffoldBackgroundColor,
+                  appBar: widget.params?.hideAppBar == true
+                      ? null
+                      : TabBar(
                     padding: EdgeInsets.zero,
                     labelStyle: const TextStyle(fontSize: 17),
                     unselectedLabelColor: Colors.grey,
                     dividerColor: Colors.transparent,
-
                     indicatorColor: context.isDarkMode
                         ? Colors.white
                         : AppColors.PRIMARY_COLOR,
@@ -108,157 +143,248 @@ class _SocialHomeViewState extends State<SocialHomeView>
                         ? Colors.white
                         : AppColors.PRIMARY_COLOR,
                     tabs: [
+
                       Tab(
-                        icon: SvgPicture.asset(
-                          Assets.facebookAppBarIcon,
-                          height: 35,
-                          width: 35,
+                        icon: Stack(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SvgPicture.asset(
+                                Assets.facebookAppBarIcon,
+                                height: 35,
+                                width: 35,
+                              ),
+                            ),
+                            Positioned(
+                              top: 0,
+                              right: 0,
+                              child: InkWell(
+                                onTap: (){
+                                  setState(() {
+                                    isShowExplain = !isShowExplain;
+                                  });
+                                },
+                                child: SvgPicture.asset(
+                                  Assets.idea,
+                                  height: 20,
+                                  width: 20,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                         height: 78,
                         text: LocaleKeys.Face.localize,
                       ),
                       Tab(
-                        icon: SvgPicture.asset(
-                          Assets.instagramAppBarIcon,
-                          height: 35,
-                          width: 35,
+                        icon: Stack(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SvgPicture.asset(
+                                Assets.instagramAppBarIcon,
+                                height: 35,
+                                width: 35,
+                              ),
+                            ),
+                            Positioned(
+                              top: 0,
+                              right: 0,
+                              child: InkWell(
+                                onTap: (){
+                                  setState(() {
+                                    isShowExplain = !isShowExplain;
+                                  });
+                                },
+                                child: SvgPicture.asset(
+                                  Assets.idea,
+                                  height: 20,
+                                  width: 20,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                         height: 78,
-
                         text: LocaleKeys.Insta.localize,
                       ),
+
                       Tab(
-                        icon: SvgPicture.asset(
-                          Assets.twitterAppBarIcon,
-                          height: 35,
-                          width: 35,
+                        icon: Stack(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SvgPicture.asset(
+                                Assets.twitterAppBarIcon,
+                                height: 35,
+                                width: 35,
+                              ),
+                            ),
+                            Positioned(
+                              top: 0,
+                              right: 0,
+                              child: InkWell(
+                                onTap: (){
+                                  setState(() {
+                                    isShowExplain = !isShowExplain;
+                                  });
+                                },
+                                child: SvgPicture.asset(
+                                  Assets.idea,
+                                  height: 20,
+                                  width: 20,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                         height: 78,
                         text: LocaleKeys.tweet.localize,
                       ),
                     ],
                   ),
-                ),
-          drawer:
-              widget.params?.hideAppBar == true ? null : const DrawerWidget(),
-          bottomNavigationBar: widget.params?.hideAppBar == true
-              ? null
-              : BottomNavigator(
-                  scrollController: scrollController,
-                  isScrollingDown: _isScrollingDown,
-                  mainCategory: 2,
-                  index: 2,
-                ),
-          floatingActionButton:
-              _isScrollingDown || widget.params?.hideAppBar == true
-                  ? null
-                  : const FloatingButton(
-                      changeView: 2,
-                    ),
-          floatingActionButtonLocation:
-              _isScrollingDown || widget.params?.hideAppBar == true
-                  ? null
-                  : FloatingActionButtonLocation.centerDocked,
-          body: TabBarView(
-            children: [
-              BlocBuilder<UserCubit, BasicState<UserEntity>>(
-                  builder: (context, state) {
-                return context.read<UserCubit>().isLoggedIn
-                    ? Scaffold(
-                        body: FacebookBody(
-                          scrollController: scrollController,
-                        ))
-                    : NestedAppbar(
-                        scrollController: ScrollController(),
-                        appBars: [
-                          SliverAppBar(
-                            backgroundColor:
-                                Theme.of(context).scaffoldBackgroundColor,
-                            automaticallyImplyLeading: false,
-                            floating: true,
-                            pinned: true,
-                            flexibleSpace: const CreatePostBanner(),
+                  drawer: widget.params?.hideAppBar == true
+                      ? null
+                      : const DrawerWidget(),
+                  bottomNavigationBar: widget.params?.hideAppBar == true
+                      ? null
+                      : BottomNavigator(
+                    scrollController: scrollController,
+                    isScrollingDown: _isScrollingDown,
+                    mainCategory: 2,
+                    index: 2,
+                  ),
+                  floatingActionButton:
+                  _isScrollingDown || widget.params?.hideAppBar == true
+                      ? null
+                      : const FloatingButton(
+                    changeView: 2,
+                  ),
+                  floatingActionButtonLocation:
+                  _isScrollingDown || widget.params?.hideAppBar == true
+                      ? null
+                      : FloatingActionButtonLocation.centerDocked,
+                  body: TabBarView(
+                    children: [
+                      BlocBuilder<UserCubit, BasicState<UserEntity>>(
+                          builder: (context, state) {
+                            return context
+                                .read<UserCubit>()
+                                .isLoggedIn
+                                ? Scaffold(
+                                body: FacebookBody(
+                                  scrollController: scrollController,
+                                ))
+                                : NestedAppbar(
+                                scrollController: ScrollController(),
+                                appBars: [
+                                  SliverAppBar(
+                                    backgroundColor: Theme
+                                        .of(context)
+                                        .scaffoldBackgroundColor,
+                                    automaticallyImplyLeading: false,
+                                    floating: true,
+                                    pinned: true,
+                                    flexibleSpace: const CreatePostBanner(),
+                                  ),
+                                  SliverAppBar(
+                                    backgroundColor: Theme
+                                        .of(context)
+                                        .scaffoldBackgroundColor,
+                                    automaticallyImplyLeading: false,
+                                    // floating: true,
+                                    pinned: true,
+                                    flexibleSpace: _buildTabBar(),
+                                  )
+                                ],
+                                body: FacebookGlobalBody(
+                                  scrollController: scrollController,
+                                ));
+                          }),
+                      MultiBlocProvider(
+                        providers: [
+                          BlocProvider(
+                            create: (context) =>
+                            serviceLocator<InstagramCubit>()
+                              ..loadData(),
                           ),
-                          SliverAppBar(
-                            backgroundColor:
-                                Theme.of(context).scaffoldBackgroundColor,
-                            automaticallyImplyLeading: false,
-                            // floating: true,
-                            pinned: true,
-                            flexibleSpace: _buildTabBar(),
-                          )
+                          BlocProvider(
+                            create: (context) => serviceLocator<StoryCubit>(),
+                          ),
                         ],
-                        body: FacebookGlobalBody(
-                          scrollController: scrollController,
-                        ));
-              }),
-              MultiBlocProvider(
-                providers: [
-                  BlocProvider(
-                    create: (context) =>
-                        serviceLocator<InstagramCubit>()..loadData(),
-                  ),
-                  BlocProvider(
-                    create: (context) => serviceLocator<StoryCubit>(),
-                  ),
-                ],
-                child: const InstagramView(),
-              ),
-              const TwitterView(),
-            ],
-          )),
+                        child: const InstagramView(),
+                      ),
+                      const TwitterView(),
+                    ],
+                  )),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   Widget _buildTabBar() {
-    final user = context.read<UserCubit>().state.data;
+    final user = context
+        .read<UserCubit>()
+        .state
+        .data;
     return Container(
         padding: EdgeInsets.all(10.r),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: List.generate(
             2,
-            (i) => GestureDetector(
-              onTap: () {
-                if (i == 1) {
-                  context.read<UserCubit>().isLoggedIn
-                      ? context.push(Routes.OTHERSACCOUNT, extra: user?.id)
-                      : context.push(Routes.LOGIN);
-                }
-              },
-              child: Container(
-                  decoration: i == 0
-                      ? BoxDecoration(
+                (i) =>
+                GestureDetector(
+                  onTap: () {
+                    if (i == 1) {
+                      context
+                          .read<UserCubit>()
+                          .isLoggedIn
+                          ? context.push(Routes.OTHERSACCOUNT, extra: user?.id)
+                          : context.push(Routes.LOGIN);
+                    }
+                  },
+                  child: Container(
+                      decoration: i == 0
+                          ? BoxDecoration(
                           border: Border(
                               bottom: BorderSide(
-                                  color: Theme.of(context).primaryColor,
+                                  color: Theme
+                                      .of(context)
+                                      .primaryColor,
                                   width: 2)))
-                      : null,
-                  child: Row(
-                    children: [
-                      Icon(
-                        i == 0 ? Icons.home : Icons.person,
-                        color: i == 0
-                            ? Theme.of(context).primaryColor
-                            : Colors.grey,
-                        size: 40.w,
-                      ),
-                      SizedBox(
-                        width: 8.w,
-                      ),
-                      Label(
-                        text: i == 0
-                            ? LocaleKeys.home.localize
-                            : LocaleKeys.profile.localize,
-                        style: Styles.headerText(
+                          : null,
+                      child: Row(
+                        children: [
+                          Icon(
+                            i == 0 ? Icons.home : Icons.person,
                             color: i == 0
-                                ? Theme.of(context).primaryColor
+                                ? Theme
+                                .of(context)
+                                .primaryColor
                                 : Colors.grey,
-                            fontSize: 30),
-                      )
-                    ],
-                  )),
-            ),
+                            size: 40.w,
+                          ),
+                          SizedBox(
+                            width: 8.w,
+                          ),
+                          Label(
+                            text: i == 0
+                                ? LocaleKeys.home.localize
+                                : LocaleKeys.profile.localize,
+                            style: Styles.headerText(
+                                color: i == 0
+                                    ? Theme
+                                    .of(context)
+                                    .primaryColor
+                                    : Colors.grey,
+                                fontSize: 30),
+                          )
+                        ],
+                      )),
+                ),
           ),
         ));
   }

@@ -197,7 +197,8 @@ class _CustomScaffoldState extends State<CustomScaffold>
                             drawerRollWidget(
                               label: LocaleKeys.ride.localize,
                               image: Assets.rideIcon,
-                              onTap: () => context.push(Routes.RIDE),
+                              onTap: () => context.push(Routes.onBoardingScreen),
+                              // onTap: () => context.push(Routes.RIDE),
                             ),
                             drawerRollWidget(
                               label: LocaleKeys.loading.localize,

@@ -1418,5 +1418,6 @@
   "deviceID": "Device ID",
   "enterYourDeviceID": "Enter Your Device ID",
   "passenger": "Passenger",
-  "billGift": "Bill Gift"
+  "billGift": "Bill Gift",
+  "skip": "Skip"
 }

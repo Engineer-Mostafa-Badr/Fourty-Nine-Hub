@@ -66,6 +66,7 @@ import 'package:sqflite/sqflite.dart';
 
 import '../core/data/datasources/local/shared_preferences/local_storage_consumer.dart';
 import '../core/localization/localization_service.dart';
+import '../features/OnBoarding/Presentation/Controllers/on_boarding_cubit.dart';
 import '../features/social_media/tinder/presentation/cubit/gift_cubit.dart';
 import '../firebase_options.dart';
 import 'account_service_locator.dart';
@@ -97,6 +98,7 @@ class DI {
 
     _callFeatureInjector();
     // //preloading
+    serviceLocator.registerLazySingleton(() => OnBoardingCubit());
     serviceLocator.registerLazySingleton(() => PreloadBloc());
     serviceLocator.registerLazySingleton<ReelsCubit>(
       () => ReelsCubit(

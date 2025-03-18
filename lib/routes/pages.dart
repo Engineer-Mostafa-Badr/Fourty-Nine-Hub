@@ -1,3 +1,4 @@
+import 'package:flutter/src/widgets/basic.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/creminal_record_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/drug_analysis.dart';
@@ -274,6 +275,8 @@ import 'package:fourtyninehub/features/zoom/presentation/widgets/join_meeting_sc
 import 'package:fourtyninehub/main.dart';
 import 'package:go_router/go_router.dart';
 
+import '../features/OnBoarding/Presentation/Controllers/on_boarding_cubit.dart';
+import '../features/OnBoarding/Presentation/Screens/on_boarding_screen.dart';
 import '../features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import '../features/RideFeature/presentation/pages/Register/Driver/drivers_license_screen.dart';
 import '../features/RideFeature/presentation/pages/Register/Driver/more_info_screen.dart';
@@ -398,6 +401,7 @@ class AppPages {
   AppPages._();
 
   static late final GoRouter router;
+
   static initializeRouter(String initialRoute) {
     router = GoRouter(
         navigatorKey: navigatorKey,
@@ -453,6 +457,15 @@ class AppPages {
                       ),
                     ),
                   ]),
+              GoRoute(
+                path: Routes.onBoardingScreen,
+                name: Routes.onBoardingScreen,
+                builder: (context, state) => BlocProvider(
+                  child: const OnBoardingScreen(),
+                  create: (context) =>
+                      serviceLocator<OnBoardingCubit>()..getOnboardingData(),
+                ),
+              ),
               GoRoute(
                 path: Paths.RestaurantDashboard,
                 name: Routes.RestaurantDashboard,
@@ -760,7 +773,7 @@ class AppPages {
                     BlocProvider<CreateNewForgotPasswordCubit>(
                   create: (_) => serviceLocator(),
                   child: CreateNewForgetPasswordView(
-                    emailOrUserId: state.extra as Map<String,dynamic>,
+                    emailOrUserId: state.extra as Map<String, dynamic>,
                   ),
                 ),
               ),
@@ -1227,7 +1240,9 @@ class AppPages {
                             name: Routes.EDITPROFILE,
                             builder: (context, state) =>
                                 BlocProvider<EditProfileCubit>(
-                                    create: (_) => serviceLocator<EditProfileCubit>()..fetchRideGovernorates(),
+                                    create: (_) =>
+                                        serviceLocator<EditProfileCubit>()
+                                          ..fetchRideGovernorates(),
                                     child: const EditProfileView()),
                           ),
                         ]),
