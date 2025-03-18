@@ -9,9 +9,9 @@ import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_pag
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_states.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/edit_page_cubit/edit_page_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
+
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/messages/messages.dart';
-import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';

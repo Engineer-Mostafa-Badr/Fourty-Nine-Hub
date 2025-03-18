@@ -14,7 +14,6 @@ import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:intl/intl.dart' as intl;
 
 class AllPickMeCard extends StatelessWidget {

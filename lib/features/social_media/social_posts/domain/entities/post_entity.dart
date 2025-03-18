@@ -7,6 +7,7 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/entities
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/life_event_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/main_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/data/models/twitter_user_model.dart';
+
 import '../../../../../res/assets/assets.dart';
 
 class PostEntity {

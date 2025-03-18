@@ -1,25 +1,24 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
 import 'package:fourtyninehub/core/localization/locales.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:go_router/go_router.dart';
-import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_taps_cubit/main_categories_taps_cubit.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/subcategory_card.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../service_locator/service_locator.dart';
 import '../../../ads_feature/ads/presentation/pages/marriage_ads_view.dart';
-import '../../../chance_feature/domain/entity/main_categry_entity.dart';
 import '../../../subcategories/presentation/cubit/subcategories_cubit.dart';
 
 class MainCategoriesGridView extends StatefulWidget {

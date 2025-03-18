@@ -19,6 +19,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 
 class InstagramPostComments extends StatefulWidget {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/info_text.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
@@ -14,7 +15,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '../../../../res/style/styles.dart';
 import '../../../account_taps/wallet/domain/usecases/add_subscribe_use_case.dart';
 import '../../domain/entities/subscription_plans_entity.dart';

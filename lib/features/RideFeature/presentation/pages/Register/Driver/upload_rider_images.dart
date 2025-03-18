@@ -38,6 +38,7 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
     return Scaffold(
       body: BlocBuilder<RideCubit,RideState>(
         builder: (context,state) {
+          print("state.loaderInfo?.toJson()${state.loaderInfo?.toJson()}");
           print("objectstate.registerType${state.registerType}");
           print("objectstate.registerType${state.isUploadDrugAnalysis}");
           print("objectstate.registerType${state.isUploadCriminalRecord}");
@@ -54,30 +55,102 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
               const SizedBox(
                 height: 20,
               ),
-              UploadImageRow(title: "ID",onTap: ()=>context.push(Routes.personalDocumentsScreen),disableUpload: state.isUploadDriverId!=null&&(state.isUploadDriverId==true),),
-              const SizedBox(
-                height: 40,
-              ),
-              UploadImageRow(title: "Driver License",onTap: ()=>context.push(Routes.driversLicenseScreen),disableUpload: state.isUploadDriverLicense!=null&&(state.isUploadDriverLicense==true),),
-              const SizedBox(
-                height: 40,
-              ),
-              UploadImageRow(title: "Car Image/License",onTap: ()=>context.push(Routes.vehicleInformationScreen),disableUpload: state.isUploadCarLicense!=null&&(state.isUploadCarLicense==true),),
-              const SizedBox(
-                height: 40,
-              ),
-              if(state.pictureOptional!=null&&state.pictureOptional?.openDrugAnalysis==true&&state.registerType=='socket')...[UploadImageRow(title: "Drag analysis",onTap: ()=>context.push(Routes.drugAnalysisScreen),disableUpload: state.isUploadDrugAnalysis!=null&&(state.isUploadDrugAnalysis==true),),
-              const SizedBox(
-                height: 40,
-              )],
-              if(state.pictureOptional!=null&&state.pictureOptional?.openCriminalRecord==true&&state.registerType=='socket')...[UploadImageRow(title: "Criminal Record",onTap: ()=>context.push(Routes.criminalRecordScreen),disableUpload: state.isUploadCriminalRecord!=null&&(state.isUploadCriminalRecord==true),),const SizedBox(
-                height: 40,
-              )],
-              if(state.pictureOptional!=null&&state.pictureOptional?.openTechnicalExamination==true&&state.registerType=='socket')UploadImageRow(title: "Terminal Examination",onTap: ()=>context.push(Routes.technicalExaminationScreen),disableUpload: state.isUploadTechnicalExamination!=null&&(state.isUploadTechnicalExamination==true),),
+              state.isShipping==true?loadingUploadImages(state):rideUploadImages(state),
+              // UploadImageRow(title: "ID",onTap: ()=>context.push(Routes.personalDocumentsScreen),disableUpload: state.isUploadDriverId!=null&&(state.isUploadDriverId==true),),
+              // const SizedBox(
+              //   height: 40,
+              // ),
+              // UploadImageRow(title: "Driver License",onTap: ()=>context.push(Routes.driversLicenseScreen),disableUpload: state.isUploadDriverLicense!=null&&(state.isUploadDriverLicense==true),),
+              // const SizedBox(
+              //   height: 40,
+              // ),
+              // UploadImageRow(title: "Car Image/License",onTap: ()=>context.push(Routes.vehicleInformationScreen),disableUpload: state.isUploadCarLicense!=null&&(state.isUploadCarLicense==true),),
+              // const SizedBox(
+              //   height: 40,
+              // ),
+              // if(state.pictureOptional!=null&&state.pictureOptional?.openDrugAnalysis==true&&state.registerType=='socket')...[UploadImageRow(title: "Drag analysis",onTap: ()=>context.push(Routes.drugAnalysisScreen),disableUpload: state.isUploadDrugAnalysis!=null&&(state.isUploadDrugAnalysis==true),),
+              // const SizedBox(
+              //   height: 40,
+              // )],
+              // if(state.pictureOptional!=null&&state.pictureOptional?.openCriminalRecord==true&&state.registerType=='socket')...[UploadImageRow(title: "Criminal Record",onTap: ()=>context.push(Routes.criminalRecordScreen),disableUpload: state.isUploadCriminalRecord!=null&&(state.isUploadCriminalRecord==true),),const SizedBox(
+              //   height: 40,
+              // )],
+              // if(state.pictureOptional!=null&&state.pictureOptional?.openTechnicalExamination==true&&state.registerType=='socket')UploadImageRow(title: "Terminal Examination",onTap: ()=>context.push(Routes.technicalExaminationScreen),disableUpload: state.isUploadTechnicalExamination!=null&&(state.isUploadTechnicalExamination==true),),
             ],
           );
         }
       ),
+    );
+  }
+
+  Widget rideUploadImages(RideState state){
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children:[
+        UploadImageRow(title: "ID",onTap: ()=>context.push(Routes.personalDocumentsScreen),disableUpload: (state.driverInfo?.isUploadDriverId==true),),
+        const SizedBox(
+          height: 40,
+        ),
+        UploadImageRow(title: "Driver License",onTap: ()=>context.push(Routes.driversLicenseScreen),disableUpload: (state.driverInfo?.isUploadDriverLicense==true),),
+        const SizedBox(
+          height: 40,
+        ),
+        UploadImageRow(title: "Car Image/License",onTap: ()=>context.push(Routes.vehicleInformationScreen),disableUpload: (state.driverInfo?.isUploadCarLicense==true),),
+        const SizedBox(
+          height: 40,
+        ),
+        if(state.pictureOptional!=null&&state.pictureOptional?.openCriminalRecord==true&&state.registerType=='socket')...[UploadImageRow(title: "Criminal Record",onTap: ()=>context.push(Routes.criminalRecordScreen),disableUpload: (state.isUploadCriminalRecord==true),),const SizedBox(
+          height: 40,
+        )],
+        if(state.pictureOptional!=null&&state.pictureOptional?.openDrugAnalysis==true&&state.registerType=='socket')...[UploadImageRow(title: "Drag analysis",onTap: ()=>context.push(Routes.drugAnalysisScreen),disableUpload: (state.isUploadDrugAnalysis==true),),
+          if(state.pictureOptional?.drugAnalysisAddress.isNotEmpty??false)...[const SizedBox(height: 10,),Label(
+            text: "${LocaleKeys.address.localize} ${state.pictureOptional?.drugAnalysisAddress??''}",
+            style: Styles.headerText(
+              fontWeight: FontWeight.w500,
+            ),
+          ),],
+          if(state.pictureOptional?.drugAnalysisPhone.isNotEmpty??false)...[const SizedBox(height: 10,),Label(
+            text: "${LocaleKeys.phone.localize} ${state.pictureOptional?.drugAnalysisPhone??''}",
+            style: Styles.headerText(
+              fontWeight: FontWeight.w500,
+            ),
+          )],
+          const SizedBox(
+            height: 40,
+          )],
+        if(state.pictureOptional!=null&&state.pictureOptional?.openTechnicalExamination==true&&state.registerType=='socket')...[
+          UploadImageRow(title: LocaleKeys.technicalExamination.localize,onTap: ()=>context.push(Routes.technicalExaminationScreen),disableUpload:(state.isUploadTechnicalExamination==true),),
+          if(state.pictureOptional?.technicalExaminationAddress.isNotEmpty??false)...[const SizedBox(height: 10,),Label(
+            text: "${LocaleKeys.address.localize} ${state.pictureOptional?.technicalExaminationAddress??''}",
+            style: Styles.headerText(
+              fontWeight: FontWeight.w500,
+            ),
+          )],
+          if(state.pictureOptional?.technicalExaminationPhone.isNotEmpty??false)...[const SizedBox(height: 10,),Label(
+            text: "${LocaleKeys.phone.localize} ${state.pictureOptional?.technicalExaminationPhone??''}",
+            style: Styles.headerText(
+              fontWeight: FontWeight.w500,
+            ),
+          )],
+        ]
+      ]
+    );
+  }
+  Widget loadingUploadImages(RideState state){
+    return Column(
+      children:[
+        UploadImageRow(title: "ID",onTap: () {
+          context.push(Routes.personalDocumentsScreen);
+        },disableUpload: state.loaderInfo?.isUploadDriverId==true,),
+        const SizedBox(
+          height: 40,
+        ),
+        UploadImageRow(title: "Driver License",onTap: ()=>context.push(Routes.driversLicenseScreen),disableUpload: state.loaderInfo?.isUploadDriverLicense==true,),
+        const SizedBox(
+          height: 40,
+        ),
+        UploadImageRow(title: "Car Image/License",onTap: ()=>context.push(Routes.vehicleInformationScreen),disableUpload: state.loaderInfo?.isUploadCarLicense==true&&state.loaderInfo?.isUploadCarImage==true,),
+      ]
     );
   }
 }

@@ -8,6 +8,7 @@ import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_live_event_categories_usecase.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_live_event_sub_categories_usecase.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_places_usecase.dart';
+import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_sub_activities_usecase.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
 import 'package:fourtyninehub/features/social_media/edit_profile/data/datasources/edit_profile_remote_datasource.dart';
 import 'package:fourtyninehub/features/social_media/edit_profile/data/repositories/edit_profile_repo_impl.dart';
@@ -50,7 +51,6 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/view_profile_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:get_it/get_it.dart';
-import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_sub_activities_usecase.dart';
 
 class FaceBookServiceLocator {
   static Future<void> execute({required GetIt serviceLocator}) async {

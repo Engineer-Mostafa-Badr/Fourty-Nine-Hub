@@ -77,6 +77,7 @@ abstract class RideRepository {
   Future<Either<Failure, bool>> cancelTripByRider(CancelTripByRiderUseCaseParams params);
   Future<Either<Failure, bool>> cancelTripByClient(CancelTripByClientUseCaseParams params);
   Future<Either<Failure, bool>> recordingTrip(RecordingTripUseCaseParams params);
+  Future<Either<Failure, bool>> makeRequestTrip();
   Future<Either<Failure, bool>> updateTripPriceFromClient(UpdateTripPriceFromClientUseCaseParams params);
   Future<Either<Failure, ActivityTripEntity>> getAllActivityTrips(GetAllActivityTripsUseCaseParams params);
   Future<Either<Failure, List<HistoryTripForUserEntity>>> getAllHistoryTripsForUser();

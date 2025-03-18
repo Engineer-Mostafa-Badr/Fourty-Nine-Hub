@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../stateless/labels/label.dart';
 

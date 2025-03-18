@@ -2,42 +2,43 @@ import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/activity_trip_model.dart';
-import 'package:fourtyninehub/features/RideFeature/data/models/completed_trips_model.dart';
-import 'package:fourtyninehub/features/RideFeature/data/models/cost_per_km_model.dart';
-import 'package:fourtyninehub/features/RideFeature/data/models/expected_price_model.dart';
-import 'package:fourtyninehub/features/RideFeature/data/models/get_location_from_address_model.dart';
-import 'package:fourtyninehub/features/RideFeature/data/models/history_trip_for_rider_model.dart';
-import 'package:fourtyninehub/features/RideFeature/data/models/history_trip_for_user_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/car_years_and_types_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/check_driver_type_model.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/completed_trips_model.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/cost_per_km_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/driver_info_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/driver_picture_optional_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/driver_statistics_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/drivers_in_subcategory_model.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/expected_price_model.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/get_location_from_address_model.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/history_trip_for_rider_model.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/history_trip_for_user_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/loading_info_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/ride_color_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/ride_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/running_trips_model.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/activity_trip_entity.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/completed_trips_entity.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/cost_per_km_entity.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/get_location_from_address_entity.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/history_trip_for_rider_entity.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/history_trip_for_user_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/car_years_and_types_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/check_driver_type_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/completed_trips_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/cost_per_km_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_info_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_picture_optional_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_statistics_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/drivers_in_subcategory_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/expected_price_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/expected_price_params.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/get_location_from_address_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/history_trip_for_rider_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/history_trip_for_user_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/loading_info_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/loading_register_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride_not_special_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride_special_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/request_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_category_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_color_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/running_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/accept_trip_by_driver_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_client.dart';
@@ -47,6 +48,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_activ
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_completed_trips_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_history_trips_for_rider_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_running_trips_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_car_years_and_types_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_location_from_address_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/partial_payment_in_trip.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/recording_trip_use_case.dart';
@@ -54,8 +56,6 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/rider_in_star
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/start_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_driver_location_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_trip_price_from_client_use_case.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_color_entity.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_car_years_and_types_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/data/models/governrate_model.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 
@@ -119,6 +119,7 @@ abstract class RideRemoteDataSource {
   Future<Either<Failure, CostPerKmEntity>> getCostPerKm();
   Future<Either<Failure, bool>> loadingRegister(LoadingRegisterEntity params);
   Future<Either<Failure, LoadingInfoEntity>> getLoadingInfo();
+  Future<Either<Failure, bool>> makeRequestTrip();
 }
 
 class RideRemoteDataSourceImplementation
@@ -744,6 +745,20 @@ class RideRemoteDataSourceImplementation
 
       return response.fold((failure) => Left(failure), (data) {
         return Right(LoadingInfoModel.fromJson(data['data']));
+      });
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+  @override
+  Future<Either<Failure, bool>> makeRequestTrip() async {
+    try {
+      final response = await _apiConsumer.post(
+        EndPoints.makeTripRequest,
+      );
+
+      return response.fold((failure) => Left(failure), (data) {
+        return Right(data['status']??false);
       });
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));

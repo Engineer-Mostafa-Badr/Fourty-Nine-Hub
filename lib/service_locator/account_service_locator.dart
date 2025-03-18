@@ -31,6 +31,7 @@ import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wa
 import 'package:fourtyninehub/features/lucky_wheel/domain/use_cases/get_wheel_wallet_use_case.dart';
 import 'package:fourtyninehub/features/subscripe/domain/usecases/get_active_subscription_amounts.dart';
 import 'package:get_it/get_it.dart';
+
 import '../features/account_taps/account/data/repositories/account_repo_impl.dart';
 import '../features/account_taps/account/domain/repositories/account_repo.dart';
 import '../features/account_taps/account/domain/usecases/get_drawer_favourite_ads_usecase.dart';

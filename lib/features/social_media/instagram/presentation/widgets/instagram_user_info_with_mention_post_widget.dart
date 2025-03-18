@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_users_mention_bottom_sheet_widget.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
 
 class InstagramUserInfoWithMentionPostWidget extends StatelessWidget {
   const InstagramUserInfoWithMentionPostWidget(

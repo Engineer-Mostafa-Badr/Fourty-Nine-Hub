@@ -1,6 +1,7 @@
 import 'package:fourtyninehub/features/competition/domain/entity/competition_entity.dart';
 import 'package:fourtyninehub/features/competition/domain/entity/winner_competition_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/currency_entity.dart';
+
 import '../../../../../../core/error/failure.dart';
 
 enum CompetitionStates { loading, initial, error, success, updateSuccess }

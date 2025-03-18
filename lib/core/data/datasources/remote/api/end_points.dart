@@ -1233,6 +1233,7 @@ class EndPoints {
   static String getRideDriverPictureOptional = '/ride/info/picture-optional';
   static String getCostPerKm = '/ride/driver/info/fair-cost';
   static String getLoadingInfo = '/loading/driver/info?subCategory=62c8baad8e28a58a3edf5805';
+  static String makeTripRequest = '/ride/trips/request';
 
   static String updateDriverLocation(){
     return '/ride/update-driver-location';

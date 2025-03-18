@@ -76,33 +76,33 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     // _selectedCountry = context.isArabic ? 'القاهرة' : 'Cairo';
-    return BlocBuilder<RideCubit, RideState>(
-      builder: (context,state) {
-        var cubit = context.read<RideCubit>();
-        return Scaffold(
-          resizeToAvoidBottomInset: false,
-          body: cubit.loadingHomeData==true?const Center(child: CircularProgressIndicator()):Form(
-            key: _formKey,
-            child: SafeArea(
-              child: SharedScaffold(
-                mainCategoryId: 2,
-                body: NestedAppbar(
-                  scrollController: _scrollController,
-                  appBars: const [],
-                  body: Stack(
-                    children: [
-                      _buildTopImage(),
-                      _buildBottomSheet(),
-                      _carTruckBtn(driverInfo: context.read<RideCubit>().state.driverInfo, loadingInfo: context.read<RideCubit>().state.loaderInfo),
-                    ],
+    return BlocBuilder<RideCubit, RideState>(builder: (context, state) {
+      var cubit = context.read<RideCubit>();
+      return Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: cubit.loadingHomeData == true
+            ? const Center(child: CircularProgressIndicator())
+            : Form(
+                key: _formKey,
+                child: SafeArea(
+                  child: SharedScaffold(
+                    mainCategoryId: 2,
+                    body: NestedAppbar(
+                      scrollController: _scrollController,
+                      appBars: const [],
+                      body: Stack(
+                        children: [
+                          _buildTopImage(),
+                          _buildBottomSheet(),
+                          _carTruckBtn(driverInfo: context.read<RideCubit>().state.driverInfo, loadingInfo: context.read<RideCubit>().state.loaderInfo),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ),
-        );
-      }
-    );
+      );
+    });
   }
 
   // Widget _buildTopMap(RideState state, BuildContext context) {
@@ -277,20 +277,21 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                     context.read<RideCubit>().onNavigateToWelcomeScreen(fromShipping: false, context: context);
                   }
                 },
-                onTap: (){
-                  if(driverInfo != null &&driverInfo.status == RegistrationStatus.pending.status){
+                onTap: () {
+                  context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: false, isSocket: driverInfo?.driverType == 'socket' ? true : false));
+                  if (driverInfo != null && driverInfo.status == RegistrationStatus.pending.status) {
                     return;
-                  }else if (driverInfo != null &&driverInfo.status == RegistrationStatus.rejected.status){
-                    context.push(Routes.UploadRiderImages,extra: UploadRiderImagesParams(isShipping: false,isSocket:driverInfo.driverType=='socket'?true:false ));
-                  }else if (driverInfo != null &&driverInfo.status == RegistrationStatus.initial.status){
-                    context.push(Routes.UploadRiderImages,extra: UploadRiderImagesParams(isShipping: false,isSocket:driverInfo.driverType=='socket'?true:false ));
+                  } else if (driverInfo != null && driverInfo.status == RegistrationStatus.rejected.status) {
+                    context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: false, isSocket: driverInfo.driverType == 'socket' ? true : false));
+                  } else if (driverInfo != null && driverInfo.status == RegistrationStatus.initial.status) {
+                    context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: false, isSocket: driverInfo.driverType == 'socket' ? true : false));
                   }
                 },
-                isRed: (driverInfo != null&&(driverInfo.status != RegistrationStatus.rejected.status)) ? true : false,
-          isPending: driverInfo != null && (driverInfo.status == RegistrationStatus.pending.status),
+                isRed: (driverInfo != null && (driverInfo.status != RegistrationStatus.rejected.status)) ? true : false,
+                isPending: driverInfo != null && (driverInfo.status == RegistrationStatus.pending.status),
                 isDisabled: driverInfo != null && (driverInfo.status != RegistrationStatus.approved.status),
-                text: LocaleKeys.ride.tr(),
-                status: driverInfo?.status??'',
+                text: LocaleKeys.rideMode.tr(),
+                status: driverInfo?.status ?? '',
               ),
             ),
             const SizedBox(
@@ -302,23 +303,27 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                   if (loadingInfo == null) {
                     print("object");
                     context.read<RideCubit>().onNavigateToWelcomeScreen(fromShipping: true, context: context);
-                  }else{
+                  } else {
                     print("loadingInfo.toJson()${loadingInfo.toJson()}");
                   }
                 },
-                onTap: (){
+                onTap: () {
                   print("loadingInfo.toJson()${loadingInfo?.toJson()}");
-                  if(loadingInfo != null &&loadingInfo.status == RegistrationStatus.pending.status){
+                  if (loadingInfo != null && loadingInfo.status == RegistrationStatus.pending.status) {
                     return;
-                  }else if (loadingInfo != null &&loadingInfo.status == RegistrationStatus.rejected.status){
-                    context.push(Routes.UploadRiderImages,extra: UploadRiderImagesParams(isShipping: true,isSocket:false ));
-                  }else if (loadingInfo != null &&loadingInfo.status == RegistrationStatus.initial.status){
-                    context.push(Routes.UploadRiderImages,extra: UploadRiderImagesParams(isShipping: true,isSocket:false ));
+                  } else if (loadingInfo != null && loadingInfo.status == RegistrationStatus.rejected.status) {
+                    context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: true, isSocket: false));
+                  } else if (loadingInfo != null && loadingInfo.status == RegistrationStatus.initial.status) {
+                    context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: true, isSocket: false));
                   }
                 },
-                isRed: (loadingInfo != null&&(loadingInfo.status != RegistrationStatus.rejected.status)) ? true : false,
-                isDisabled: loadingInfo != null && (loadingInfo.status == RegistrationStatus.pending.status||loadingInfo.status == RegistrationStatus.rejected.status||loadingInfo.status == RegistrationStatus.initial.status),
-                text: LocaleKeys.shipping.tr(), status: loadingInfo?.status??'',
+                isRed: (loadingInfo != null && (loadingInfo.status != RegistrationStatus.rejected.status)) ? true : false,
+                isDisabled: loadingInfo != null &&
+                    (loadingInfo.status == RegistrationStatus.pending.status ||
+                        loadingInfo.status == RegistrationStatus.rejected.status ||
+                        loadingInfo.status == RegistrationStatus.initial.status),
+                text: LocaleKeys.trukMode.tr(),
+                status: loadingInfo?.status ?? '',
               ),
             ),
           ],
@@ -467,8 +472,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                 width: MediaQuery.of(context).size.width)),
                         Expanded(
                             flex: 2,
-                            child: AppButton(
-                                radius: 15, label: LocaleKeys.request.tr(), onPressed: () {}, backColor: AppColors.PRIMARY_COLOR, width: MediaQuery.of(context).size.width)),
+                            child:context.read<RideCubit>().state.isLoadingSubmit?const Center(child: CircularProgressIndicator()): AppButton(
+                                radius: 15, label: LocaleKeys.request.tr(), onPressed: ()=>context.read<RideCubit>().makeRequestTrips(), backColor: AppColors.PRIMARY_COLOR, width: MediaQuery.of(context).size.width)),
                       ],
                     )
                   ],

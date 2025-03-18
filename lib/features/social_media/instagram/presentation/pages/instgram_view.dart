@@ -3,12 +3,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -16,19 +12,12 @@ import 'package:fourtyninehub/features/social_media/instagram/presentation/pages
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_ad_slider_widget.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_ad_widget.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_for_you_slider_widget.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_global_posts.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_post_widget.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_video_post_widget.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/reel_slider_widget.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/stores_instagram_widget.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:go_router/go_router.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-
-import '../../../../../core/widget/custom_scaffold.dart';
 
 class InstagramView extends StatefulWidget {
   final bool hideAppBar;
