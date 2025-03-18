@@ -40,7 +40,7 @@ class _RegisterExpansionTileState extends State<RegisterExpansionTile> {
       ),
       child: ExpansionTile(
         controller: controller,
-        title: selectedTitle, // Use state variable
+        title: selectedTitle, // Use// state variable
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         backgroundColor: AppColors.GREYBG,
         expandedAlignment: Alignment.centerLeft,

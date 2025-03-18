@@ -1,11 +1,18 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/creminal_record_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/drug_analysis.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/technical_examination_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/upload_rider_images.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/activity_trip_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/complete_ride_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/expired_trips_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/rating_driver_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_arrived_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/running_trips_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/emergency_contacts_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/support_client_details_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/support_ride_screen.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/favourite_view.dart';
 import 'package:fourtyninehub/features/account_taps/contact_us/presentation/cubit/contact_us_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/contact_us/presentation/pages/contact_us_view.dart';
@@ -1022,7 +1029,7 @@ class AppPages {
                     GoRoute(
                         path: Paths.PRIVACY,
                         name: Routes.PRIVACY,
-                        builder: (context, state) => const PrivacyView()),
+                        builder: (context, state) =>  PrivacyView()),
                     GoRoute(
                         path: Paths.POLICY,
                         name: Routes.POLICY,
@@ -2705,7 +2712,7 @@ class AppPages {
                 path: Paths.UploadRiderImages,
                 name: Routes.UploadRiderImages,
                 builder: (context, state) {
-                  return const UploadRiderImages();
+                  return UploadRiderImages(params: state.extra as UploadRiderImagesParams?,);
                 },
               ),
               GoRoute(
@@ -2981,14 +2988,8 @@ class AppPages {
               GoRoute(
                 path: Paths.rideModeScreen,
                 name: Routes.rideModeScreen,
-                builder: (context, state) => MultiBlocProvider(
-                  providers: [
-                    BlocProvider(
-                      create: (context) => serviceLocator<RideCubit>(),
-                    ),
-                  ],
-                  child: RideModeScreen(modeType: state.extra as String),
-                ),
+                builder: (context, state) =>
+                    RideModeScreen(modeType: state.extra as String),
               ),
               GoRoute(
                   path: Paths.rideDashboardDetailsScreen,
@@ -3013,6 +3014,36 @@ class AppPages {
                         ],
                         child: const RideLoadingRequestScreen(),
                       )),
+              GoRoute(
+                path: Paths.supportRideScreen,
+                name: Routes.supportRideScreen,
+                builder: (context, state) =>  SupportRideScreen(),
+              ),
+              GoRoute(
+                path: Paths.supportClientDetailsScreen,
+                name: Routes.supportClientDetailsScreen,
+                builder: (context, state) =>  SupportClientDetailsScreen(),
+              ),
+              GoRoute(
+                path: Paths.emergencyContactsScreen,
+                name: Routes.emergencyContactsScreen,
+                builder: (context, state) =>  EmergencyContactsScreen(),
+              ),
+              GoRoute(
+                path: Paths.rideArrivedScreen,
+                name: Routes.rideArrivedScreen,
+                builder: (context, state) =>  RideArrivedScreen(),
+              ),
+              GoRoute(
+                path: Paths.ratingDriverScreen,
+                name: Routes.ratingDriverScreen,
+                builder: (context, state) =>  RatingDriverScreen(),
+              ),
+              GoRoute(
+                path: Paths.completeRideScreen,
+                name: Routes.completeRideScreen,
+                builder: (context, state) =>  CompleteRideScreen(),
+              ),
             ],
           ),
         ]);

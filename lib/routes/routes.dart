@@ -236,6 +236,12 @@ abstract class Routes {
   static const rideModeScreen = '/RideModeScreen';
   static const rideDashboardDetailsScreen = '/RideDashboardDetailsScreen';
   static const rideLoadingRequestScreen = '/rideLoadingRequestScreen';
+  static const supportRideScreen = '/SupportRideScreen';
+  static const supportClientDetailsScreen = '/SupportClientDetailsScreen';
+  static const emergencyContactsScreen = '/EmergencyContactsScreen';
+  static const rideArrivedScreen = '/RideArrivedScreen';
+  static const ratingDriverScreen = '/RatingDriverScreen';
+  static const completeRideScreen = '/CompleteRideScreen';
 
   // Change Password
   static const CHANGEPASSWORD = '/ChangePassword';
@@ -469,6 +475,12 @@ abstract class Paths {
   static const rideModeScreen = 'RideModeScreen';
   static const rideDashboardDetailsScreen = 'RideDashboardDetailsScreen';
   static const rideLoadingRequestScreen = 'rideLoadingRequestScreen';
+  static const supportRideScreen = 'SupportRideScreen';
+  static const supportClientDetailsScreen = 'SupportClientDetailsScreen';
+  static const emergencyContactsScreen = 'EmergencyContactsScreen';
+  static const rideArrivedScreen = 'RideArrivedScreen';
+  static const ratingDriverScreen = 'RatingDriverScreen';
+  static const completeRideScreen = 'CompleteRideScreen';
 
   // Change Password
   static const CHANGEPASSWORD = 'ChangePassword';

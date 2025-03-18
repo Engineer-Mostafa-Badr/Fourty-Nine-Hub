@@ -69,6 +69,7 @@ import 'package:geolocator/geolocator.dart';
 import 'core/service/background_service.dart';
 import 'core/service/cache_service.dart';
 import 'core/themes/light_theme.dart';
+import 'features/RideFeature/presentation/controllers/dashboards_cubit/dashboards_cubit.dart';
 import 'features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'features/notifications/presentation/cubits/get_user_trips_notifications/get_user_trips_notifications_cubit.dart';
@@ -406,6 +407,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           create: (context) => FloatingNavigatorCubit()
             ..getFloatingNavigatorStatus()
             ..getEnableFloatingNavigatorStatus(),
+        ),
+        BlocProvider(
+          create: (context) => serviceLocator<DashboardsCubit>(),
         ),
         BlocProvider(
           create: (context) => ChoiceRulerCubit()

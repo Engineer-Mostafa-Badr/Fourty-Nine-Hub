@@ -1,4 +1,6 @@
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/data/models/Gift/gift_model.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/gift_entities.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/data/models/Gift/data_winners_gift_model.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/data/models/gift_wallet_model.dart';
@@ -16,6 +18,7 @@ abstract class GiftRemoteDataSource {
       RequestWithdrawParams params);
   Future<Either<Failure, DataWinnersGiftEntity>> getWinnersGift(
       PaginationParams params);
+  Future<Either<Failure, GiftEntity>> testGift();
 }
 
 class GiftRemoteDataSourceImpl implements GiftRemoteDataSource {
@@ -49,6 +52,13 @@ class GiftRemoteDataSourceImpl implements GiftRemoteDataSource {
       (failure) => Left(failure),
       (response) => Right(response['status']),
     );
+  }
+
+  @override
+  Future<Either<Failure, GiftEntity>> testGift() async{
+    final response = await _apiConsumer.get(EndPoints.testGift);
+    return response.fold((failure) => Left(failure),
+        (response) => Right(GiftModelModel.fromJson(response['data'])));
   }
 
   @override
