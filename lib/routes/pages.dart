@@ -329,8 +329,11 @@ import '../features/mazadat_feature/auction_details/presentation/pages/Mazad_det
 import '../features/mazadat_feature/auction_list/presentation/cubit/auction_list_cubit.dart';
 import '../features/mazadat_feature/auction_list/presentation/pages/Mazadat_view.dart';
 import '../features/mazadat_feature/create_auction/presentation/pages/create_auction_view.dart';
+import '../features/new_trip_join/presentation/view/screen/captain_share_info_screen.dart';
 import '../features/new_trip_join/presentation/view/screen/captain_share_screen.dart';
 import '../features/new_trip_join/presentation/view/screen/new_trip_join_screen.dart';
+import '../features/new_trip_join/presentation/view/screen/pick_me_info_screen.dart';
+import '../features/new_trip_join/presentation/view/screen/trip_Join_info_screen.dart';
 import '../features/notifications/presentation/pages/notification_view.dart';
 import '../features/payment/presentation/pages/payment_view.dart';
 import '../features/quraan/presentation/pages/quraan_view.dart';
@@ -2770,6 +2773,45 @@ class AppPages {
                               serviceLocator()),
                     ),
                   ], child: const CaptainShareScreen());
+                },
+              ),
+              GoRoute(
+                path: Paths.captainShareInfoScreen,
+                name: Routes.captainShareInfoScreen,
+                builder: (context, state) {
+                  return MultiBlocProvider(providers: [
+                    BlocProvider<DestGetLatAndLongCubit>(
+                      create: (context) => DestGetLatAndLongCubit(
+                          getLatLongFromAddressRemoteDataSource:
+                              serviceLocator()),
+                    ),
+                  ], child: const CaptainShareInfoScreen());
+                },
+              ),
+              GoRoute(
+                path: Paths.tripJoinInfoScreen,
+                name: Routes.tripJoinInfoScreen,
+                builder: (context, state) {
+                  return MultiBlocProvider(providers: [
+                    BlocProvider<DestGetLatAndLongCubit>(
+                      create: (context) => DestGetLatAndLongCubit(
+                          getLatLongFromAddressRemoteDataSource:
+                              serviceLocator()),
+                    ),
+                  ], child: const TripJoinInfoScreen());
+                },
+              ),
+              GoRoute(
+                path: Paths.pickMeInfoScreen,
+                name: Routes.pickMeInfoScreen,
+                builder: (context, state) {
+                  return MultiBlocProvider(providers: [
+                    BlocProvider<DestGetLatAndLongCubit>(
+                      create: (context) => DestGetLatAndLongCubit(
+                          getLatLongFromAddressRemoteDataSource:
+                              serviceLocator()),
+                    ),
+                  ], child: const PickMeInfoScreen());
                 },
               ),
             ],

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../../../routes/routes.dart';
 
 class RouteButtonWidget extends StatelessWidget {
   const RouteButtonWidget({
@@ -27,16 +30,21 @@ class RouteButtonWidget extends StatelessWidget {
           ),
         ),
         const Spacer(),
-        Container(
-          height: 35,
-          width: 35,
-          decoration: const BoxDecoration(
-            color: Color(0xff0B1035),
-            shape: BoxShape.circle,
-          ),
-          child: const Icon(
-            Icons.question_mark,
-            color: Colors.white,
+        GestureDetector(
+          onTap: () {
+            context.push(Routes.captainShareInfoScreen);
+          },
+          child: Container(
+            height: 35,
+            width: 35,
+            decoration: const BoxDecoration(
+              color: Color(0xff0B1035),
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              Icons.question_mark,
+              color: Colors.white,
+            ),
           ),
         ),
       ],

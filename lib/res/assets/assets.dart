@@ -254,4 +254,7 @@ abstract class Assets {
   static String shadowTripIcon = 'assets/icons/shadowTripIcon.svg';
   static String ideaIcon = 'assets/icons/IdeaIcon.svg';
   static String pickMeIcon = 'assets/icons/pickMeIcon.png';
+  static String captainInfoIcon = 'assets/icons/captainInfoIcon.svg';
+  static String tripInfoIcon = 'assets/icons/tripInfoIcon.svg';
+  static String pickMeInfoIcon = 'assets/icons/pickMeInfoIcon.svg';
 }
