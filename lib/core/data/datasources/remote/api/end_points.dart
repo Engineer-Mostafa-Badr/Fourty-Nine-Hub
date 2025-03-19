@@ -1231,7 +1231,7 @@ class EndPoints {
   static String createCarPool = '/carpool/create';
 
   static String getRideCategories(String userId) {
-    return '/ride/get-thumbnail-ride?userId=$userId';
+    return '/ride/get-thumbnail-ride${userId.isNotEmpty ?"userId=$userId":""}';
   }
 
   static String getShippingCategories(String userId) {

@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/utils/loading_method_helper.dart';
 import 'package:fourtyninehub/core/utils/ride_method_helper.dart';
+import 'package:fourtyninehub/core/utils/upload_record.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/cost_per_km_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_info_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_picture_optional_entity.dart';
@@ -40,6 +42,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_expe
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_shipping_categories_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/loading_register_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/make_request_trip_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/recording_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/register_ride_not_special_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/register_ride_special_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
@@ -50,10 +53,12 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../../../domain/entities/ride_category_entity.dart';
 import '../../../domain/usecases/get_ride_categories_usecase.dart';
+import 'package:record/record.dart';
 
 class RideCubit extends Cubit<RideState> {
   bool isComfort = false;
@@ -83,6 +88,7 @@ class RideCubit extends Cubit<RideState> {
   final LoadingRegisterUseCase loadingRegisterUseCase;
   final GetLoadingInfoUseCase getLoadingInfoUseCase;
   final MakeRequestTripUseCase makeRequestTripUseCase;
+  final RecordingTripUseCase recordingTripUseCase;
 
   RideCubit(
     this.getRideCategories,
@@ -104,6 +110,7 @@ class RideCubit extends Cubit<RideState> {
     this.loadingRegisterUseCase,
     this.getLoadingInfoUseCase,
     this.makeRequestTripUseCase,
+    this.recordingTripUseCase,
   ) : super(const RideState());
 
   bool loadingHomeData = false;
@@ -1304,6 +1311,67 @@ class RideCubit extends Cubit<RideState> {
           context.pushReplacement(Routes.completeRegisterScreen);
         },
       );
+    }
+  }
+
+  uploadRecord(String tripId,String mediaId) async {
+    final Either<Failure, bool> result = await recordingTripUseCase(RecordingTripUseCaseParams( tripId,  mediaId));
+
+    result.fold(
+          (failure) {
+        isLoadingSubmitRegister = false;
+        emit(state.copyWith(status: RideStates.error, failure: failure));
+      },
+          (data) async {
+        emit(state.copyWith(status: RideStates.success));
+      },
+    );
+  }
+
+
+  ///record trip
+  final record = Record();
+
+  // Start recording
+  Future<void> startRecord() async {
+    log('startRecorddd${await record.hasPermission()}');
+    try {
+      if (await record.hasPermission()) {
+        log('record.hasPermission');
+        Directory tempDir = await getTemporaryDirectory();
+        String tempPath =
+            '${tempDir.path}/audio_${DateTime.now().millisecondsSinceEpoch}.wav';
+        await record.start(
+          path: tempPath,
+        );
+        print("object");
+      } else {
+        throw Exception('Microphone permission not granted');
+      }
+    } catch (e) {
+      log('Error starting record: $e');
+    }
+  }
+
+  Future<String?> stopRecord(
+      {required String subcategoryId, required String tripId}) async {
+    try {
+      log('stopRecord');
+      String? path = await record.stop();
+      await UploadRecord().mediaUrl(
+        tripId: tripId,
+        path: path ?? "",
+        subcategoryId: subcategoryId, onSuccess: (String mediaId, String tripId) async {
+          log("tripId$tripId");
+          log("mediaId$mediaId");
+          await uploadRecord(tripId,mediaId);
+      },
+      );
+      // await recordingTripUseCase(RecordingTripUseCaseParams( tripId,  'mediaId'));
+      return path;
+    } catch (e) {
+      log('Error stopping record: $e');
+      return null;
     }
   }
 }
