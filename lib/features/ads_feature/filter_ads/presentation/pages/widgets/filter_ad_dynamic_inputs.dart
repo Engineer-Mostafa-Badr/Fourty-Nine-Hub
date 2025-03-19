@@ -55,82 +55,123 @@ class _FilterAdDynamicInputWidgetState
   }
 
   Widget _buildTextFieldWidget() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Label(
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 4),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Label(
             text: getLang() == 'ar'
                 ? widget.property.nameAr
-                : widget.property.nameEn),
-        TextFormField(
-          maxLines: null,
-          onChanged: (v) => widget.onTextChanged(v, true, widget.property.type),
-          style: Styles.headerText(fontSize: 26),
-          decoration: InputDecoration(
-              fillColor: Colors.white,
-              contentPadding: const EdgeInsets.all(5),
-              hintText: getLang() == 'ar'
-                  ? widget.property.nameAr
-                  : widget.property.nameEn,
-              hintStyle: Styles.mediumText(),
-              prefix: Sizer(
-                width: 20.w,
-              )),
-          // keyboardType: TextInputType.number,
-          validator: (value) {
-            if ((value == null || value.isEmpty)) {
-              return LocaleKeys.required.localize;
-            } else {
-              return null;
-            }
-          },
-        ),
-      ],
+                : widget.property.nameEn,
+            style: Styles.mediumText(fontSize: 32),
+          ),
+          const SizedBox(
+            height: 4,
+          ),
+          SizedBox(
+            height: 42,
+            child: TextFormField(
+              maxLines: null,
+              onChanged: (v) => widget.onTextChanged(v, true, widget.property.type),
+              style: Styles.mediumText(fontSize: 32),
+              decoration: InputDecoration(
+                fillColor: const Color(0xffF5F5F5),
+                filled: true,
+                contentPadding: const EdgeInsetsDirectional.only(start: 16),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                  borderSide: BorderSide.none,
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                  borderSide: BorderSide.none,
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                  borderSide: BorderSide.none,
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                  borderSide: BorderSide.none,
+                ),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15.0),
+                  borderSide: BorderSide.none,
+                ),
+                hintStyle: Styles.mediumText(fontSize: 32),
+                hintText: getLang() == 'ar'
+                    ? widget.property.nameAr
+                    : widget.property.nameEn,
+                // prefix: Sizer(
+                //   width: 20.w,
+                // ),
+              ),
+              // keyboardType: TextInputType.number,
+              validator: (value) {
+                if ((value == null || value.isEmpty)) {
+                  return LocaleKeys.required.localize;
+                } else {
+                  return null;
+                }
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   Widget _buildDropDownWidget() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Label(
-            text: getLang() == 'ar'
-                ? widget.property.nameAr
-                : widget.property.nameEn),
-        InkWell(
-          onTap: () {
-            bottomSheet(
-                context: context,
-                isScrollControlled: true,
-                widget: _buildOptionsSheet(
-                    action: (SelectionEntity v) {
-                      widget.onChanged(v);
-                      context.pop();
-                    },
-                    values: widget.property.values));
-          },
-          child: Container(
-            width: double.infinity,
-            padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 5),
-            // margin: EdgeInsets.all(5),
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey),
-              borderRadius: BorderRadius.circular(5),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Label(
-                      text: getLang() == 'ar'
-                          ? value?.nameAr ?? ''
-                          : value?.nameEn ?? ''),
-                ),
-                const Icon(Icons.arrow_drop_down)
-              ],
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 4),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Label(
+              text: getLang() == 'ar'
+                  ? widget.property.nameAr
+                  : widget.property.nameEn, style: Styles.mediumText(fontSize: 32),),
+          const SizedBox(
+            height: 4,
+          ),
+          InkWell(
+            onTap: () {
+              bottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  widget: _buildOptionsSheet(
+                      action: (SelectionEntity v) {
+                        widget.onChanged(v);
+                        context.pop();
+                      },
+                      values: widget.property.values));
+            },
+            child: Container(
+              width: double.infinity,
+              height: 42,
+              padding: const EdgeInsetsDirectional.only(start: 16, end: 16),
+              // margin: EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                // border: Border.all(color: Colors.grey),
+                borderRadius: BorderRadius.circular(15),
+                color: const Color(0xffF5F5F5),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Label(
+                        text: getLang() == 'ar'
+                            ? value?.nameAr ?? ''
+                            : value?.nameEn ?? '', style: Styles.mediumText(fontSize: 32),),
+                  ),
+                  const Icon(Icons.keyboard_arrow_down_rounded)
+                ],
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -152,110 +193,218 @@ class _FilterAdDynamicInputWidgetState
                 value = v;
                 setState(() {});
               },
-              title: Label(text: getLang() == 'ar' ? v.nameAr : v.nameEn),
+              title: Label(text: getLang() == 'ar' ? v.nameAr : v.nameEn, style: Styles.mediumText(fontSize: 32),),
             );
           }),
     );
   }
 
   Widget _buildNumberFieldWidget() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Label(
-            text: getLang() == 'ar'
-                ? widget.property.nameAr
-                : widget.property.nameEn),
-        Row(
-          children: [
-            Expanded(
-              child: TextFormField(
-                maxLines: 1,
-                onChanged: (v) =>
-                    widget.onTextChanged(v, true, widget.property.type),
-                keyboardType: TextInputType.number,
-                style: Styles.headerText(fontSize: 26),
-                decoration: InputDecoration(
-                    fillColor: Colors.white,
-                    contentPadding: const EdgeInsets.all(5),
-                    hintText: LocaleKeys.from.localize,
-                    hintStyle: Styles.mediumText(),
-                    prefix: Sizer(
-                      width: 20.w,
-                    )),
-                validator: (value) {
-                  if ((value == null || value.isEmpty)) {
-                    return LocaleKeys.required.localize;
-                  } else {
-                    return null;
-                  }
-                },
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 4),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Label(
+              text: getLang() == 'ar'
+                  ? widget.property.nameAr
+                  : widget.property.nameEn,
+            style: Styles.mediumText(fontSize: 32),
+          ),
+          const SizedBox(
+            height: 4,
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: SizedBox(
+                  height: 42,
+                  child: TextFormField(
+                    maxLines: 1,
+                    onChanged: (v) =>
+                        widget.onTextChanged(v, true, widget.property.type),
+                    keyboardType: TextInputType.number,
+                    style: Styles.mediumText(fontSize: 32),
+                    decoration: InputDecoration(
+                        fillColor: const Color(0xffF5F5F5),
+                        filled: true,
+                        contentPadding: const EdgeInsetsDirectional.only(start: 16),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                        borderSide: BorderSide.none,
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                        borderSide: BorderSide.none,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                        borderSide: BorderSide.none,
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                        borderSide: BorderSide.none,
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                        borderSide: BorderSide.none,
+                      ),
+                        hintStyle: Styles.mediumText(fontSize: 32),
+                      hintText: LocaleKeys.from.localize,
+                      // prefix: Sizer(
+                        //   width: 20.w,
+                        // ),
+                    ),
+                    validator: (value) {
+                      if ((value == null || value.isEmpty)) {
+                        return LocaleKeys.required.localize;
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                ),
               ),
-            ),
-            const Sizer(),
-            Expanded(
-                child: TextFormField(
-              maxLines: 1,
-              onChanged: (v) =>
-                  widget.onTextChanged(v, false, widget.property.type),
-              keyboardType: TextInputType.number,
-              style: Styles.headerText(fontSize: 26),
-              decoration: InputDecoration(
-                  fillColor: Colors.white,
-                  contentPadding: const EdgeInsets.all(5),
-                  hintText: LocaleKeys.to.localize,
-                  hintStyle: Styles.mediumText(),
-                  prefix: Sizer(
-                    width: 20.w,
-                  )),
-              validator: (value) {
-                if ((value == null || value.isEmpty)) {
-                  return LocaleKeys.required.localize;
-                } else {
-                  return null;
-                }
-              },
-            )),
-          ],
-        )
-      ],
+              const SizedBox(
+                width: 8,
+              ),
+              Expanded(
+                  child: SizedBox(
+                    height: 42,
+                    child: TextFormField(
+                                  maxLines: 1,
+                                  onChanged: (v) =>
+                      widget.onTextChanged(v, false, widget.property.type),
+                                  keyboardType: TextInputType.number,
+                      style: Styles.mediumText(fontSize: 32),
+                      decoration: InputDecoration(
+                        fillColor: const Color(0xffF5F5F5),
+                        filled: true,
+                        contentPadding: const EdgeInsetsDirectional.only(start: 16),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                          borderSide: BorderSide.none,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                          borderSide: BorderSide.none,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                          borderSide: BorderSide.none,
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                          borderSide: BorderSide.none,
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                          borderSide: BorderSide.none,
+                        ),
+
+                        hintText: LocaleKeys.to.localize,
+                        hintStyle: Styles.mediumText(fontSize: 32),
+                        // prefix: Sizer(
+                        //   width: 20.w,
+                        // ),
+                      ),
+                                  validator: (value) {
+                    if ((value == null || value.isEmpty)) {
+                      return LocaleKeys.required.localize;
+                    } else {
+                      return null;
+                    }
+                                  },
+                                ),
+                  ),),
+            ],
+          )
+        ],
+      ),
     );
   }
 
   Widget _buildSelectFieldWidget() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Label(
-            text: getLang() == 'ar'
-                ? widget.property.nameAr
-                : widget.property.nameEn),
-        RichText(
-            text: TextSpan(
-                children: widget.property.values.map((e) {
-          return WidgetSpan(
-              child: InkWell(
-            onTap: () {
-              widget.onChanged(e);
-              value = e;
-              setState(() {});
-            },
-            child: Container(
-              padding: const EdgeInsets.all(5),
-              margin: const EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                border: Border.all(
-                    color:
-                        value == e ? AppColors.SECONDARY_COLOR : Colors.grey),
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: Label(
-                text: getLang() == 'ar' ? e.nameAr : e.nameEn,
-              ),
-            ),
-          ));
-        }).toList())),
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 4),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Label(
+              text: getLang() == 'ar'
+                  ? widget.property.nameAr
+                  : widget.property.nameEn,
+            style: Styles.mediumText(fontSize: 32),
+          ),
+          const SizedBox(height: 4,),
+          Row(
+            spacing: 8,
+            children: widget.property.values.map((e) {
+              return Expanded(
+                child: InkWell(
+                  onTap: () {
+                    widget.onChanged(e);
+                    value = e;
+                    setState(() {});
+                  },
+                  child: Container(
+                    height: 42,
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.all(5),
+                    // margin: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: const Color(0xffF5F5F5),
+                      border: value == e?
+                      Border.all(
+                        color:
+                        AppColors.SECONDARY_COLOR_DARK2,
+                      ) : null,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Label(
+                      text: getLang() == 'ar' ? e.nameAr : e.nameEn,
+                      style: Styles.mediumText(fontSize: 32),
+                    ),
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+
+          // RichText(
+          //     text: TextSpan(
+          //         children: widget.property.values.map((e) {
+          //   return WidgetSpan(
+          //       child: InkWell(
+          //     onTap: () {
+          //       widget.onChanged(e);
+          //       value = e;
+          //       setState(() {});
+          //     },
+          //     child: Container(
+          //       height: 42,
+          //
+          //       padding: const EdgeInsets.all(5),
+          //       margin: const EdgeInsets.all(5),
+          //       decoration: BoxDecoration(
+          //         color: const Color(0xffF5F5F5),
+          //         border: value == e?
+          //         Border.all(
+          //             color:
+          //                AppColors.SECONDARY_COLOR_DARK2,
+          //         ) : null,
+          //         borderRadius: BorderRadius.circular(15),
+          //       ),
+          //       child: Label(
+          //         text: getLang() == 'ar' ? e.nameAr : e.nameEn,
+          //         style: Styles.mediumText(fontSize: 32),
+          //       ),
+          //     ),
+          //   ));
+          // }).toList()),
+          // ),
+        ],
+      ),
     );
   }
 }
