@@ -1435,7 +1435,8 @@ class CodegenLoader extends AssetLoader{
   "EGPFor": "حنيه مصري",
   "personalTransaction": "للمعاملات الشخصية.",
   "uploadBill": "تحميل الفاتورة",
-  "investment": "الاستثمار"
+  "investment": "الاستثمار",
+  "pleaseSubscribeToContactTheClient": "يرجى الاشتراك للتواصل مع العميل!"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -2875,7 +2876,8 @@ static const Map<String,dynamic> _en = {
   "EGPFor": "EGP for",
   "personalTransaction": "personal transaction.",
   "uploadBill": "Upload Bill",
-  "investment": "Investment"
+  "investment": "Investment",
+  "pleaseSubscribeToContactTheClient": "Please subscribe to contact the client!"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }
