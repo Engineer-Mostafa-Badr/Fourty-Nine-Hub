@@ -3,6 +3,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/custom_page/domain/entity/activate_entity.dart';
 import 'package:fourtyninehub/features/custom_page/domain/entity/social_page_entity.dart';
 
+import '../entity/custom_page_categories_entity.dart';
 import '../entity/favourite_categ_entity.dart';
 import '../entity/navigate_bar_entity.dart';
 import '../entity/sub_tab_entity.dart';
@@ -18,7 +19,7 @@ abstract class CustomPageRepository {
   Future<Either<Failure, bool>> updateSubTab(SubTabParams params);
   Future<Either<Failure, NavigateBarEntity>> fetchNavigateBar();
   Future<Either<Failure, bool>> updateNavigateBar(NavigateBarParams params);
-  Future<Either<Failure, FavouriteCatEntity>> fetchFavouriteCat();
+  Future<Either<Failure, List<CustomPageCategoriesEntity>>> fetchFavouriteCat();
   Future<Either<Failure, bool>> updateFavouriteCat(FavouriteCatParams params);
   Future<Either<Failure, ActivateEntity>> fetchActivate();
   Future<Either<Failure, bool>> updateActivate({required bool customPage});

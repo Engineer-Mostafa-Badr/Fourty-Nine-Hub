@@ -31,10 +31,10 @@ class EnterEmailForgotPasswordView extends StatelessWidget {
       body: BlocConsumer<ForgotPasswordCubit, ForgotPasswordState>(
         listener: (context, state) {
           if (state is ForgotPasswordSendOTPSuccess) {
-            context.pushNamed(
-              Routes.FORGOTPASSWORDOTP,
-              extra: cubit.emailController.text,
-            );
+            // context.pushNamed(
+            //   Routes.FORGOTPASSWORDOTP,
+            //   extra: cubit.emailController.text,
+            // );
           }
 
           if (state is ForgotPasswordSendOTPFailure) {
@@ -71,7 +71,9 @@ class EnterEmailForgotPasswordView extends StatelessWidget {
                 const Sizer(),
                 DefaultButton(
                   label: LocaleKeys.sendOTP.localize,
-                  onPressed: cubit.sendForgetPasswordOTP,
+                  onPressed: (){
+                    cubit.sendForgetPasswordOTP(context);
+                  },
                   labelStyle: TextStyle(
                       fontSize: 60.sp.w, color: AppColors.AUTH_CONTAINER_COLOR),
                 ),

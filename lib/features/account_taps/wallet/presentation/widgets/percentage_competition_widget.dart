@@ -8,10 +8,12 @@ class PercentageCompetitionWidget extends StatefulWidget {
     required this.currentPoints,
     required this.price,
     required this.totalPoints,
+    required this.percentage,
   });
   final num price;
   final int totalPoints;
   final num currentPoints;
+  final double percentage;
 
   @override
   State<PercentageCompetitionWidget> createState() =>
@@ -20,10 +22,9 @@ class PercentageCompetitionWidget extends StatefulWidget {
 
 class _PercentageCompetitionWidgetState
     extends State<PercentageCompetitionWidget> {
-  double percentage = 0;
   @override
   Widget build(BuildContext context) {
-    percentage = ((widget.currentPoints / widget.totalPoints) * 100);
+
     return Stack(
       children: [
         Positioned(
@@ -38,8 +39,8 @@ class _PercentageCompetitionWidgetState
               gradient: LinearGradient(
                 begin: const Alignment(1.00, 0.00),
                 end: const Alignment(-1, 0),
-                stops: percentage == 100 ? [1] : null,
-                colors: percentage == 100
+                stops: widget.percentage == 100 ? [1] : null,
+                colors: widget.percentage == 100
                     ? [const Color(0xFFF33D49)]
                     : [
                         const Color(0xFF0B1035),
@@ -70,7 +71,7 @@ class _PercentageCompetitionWidgetState
               // color: Color(0xFF0B1035),
               gradient: LinearGradient(
                 colors: const [Color(0xFFF33D49), Color(0xFF0B1035)],
-                stops: [percentage / 100, percentage / 100],
+                stops: [widget.percentage / 100, widget.percentage / 100],
                 begin: AlignmentDirectional.centerStart,
                 end: AlignmentDirectional.centerEnd,
               ),
@@ -97,7 +98,7 @@ class _PercentageCompetitionWidgetState
               // color: Color(0xFF0B1035),
               gradient: LinearGradient(
                 colors: const [Color(0xFFF33D49), Color(0xFF0B1035)],
-                stops: [percentage / 100, percentage / 100],
+                stops: [widget.percentage / 100, widget.percentage / 100],
                 begin: AlignmentDirectional.centerEnd,
                 end: AlignmentDirectional.centerStart,
               ),
@@ -105,7 +106,7 @@ class _PercentageCompetitionWidgetState
             ),
             child: Center(
               child: Label(
-                text: '${percentage.toStringAsFixed(2)}%',
+                text: '${widget.percentage.toStringAsFixed(1)}%',
                 style: Styles.headerText(
                   color: Colors.white,
                   fontSize: 32,

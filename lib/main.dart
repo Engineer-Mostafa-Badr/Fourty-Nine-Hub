@@ -1,3 +1,4 @@
+import 'package:device_preview/device_preview.dart';
 import 'dart:developer';
 
 import 'package:device_preview/device_preview.dart';
@@ -6,6 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_callkit_incoming_yoer/flutter_callkit_incoming.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/theme/cubit/cubit.dart';
@@ -70,6 +72,7 @@ import 'package:uuid/uuid.dart';
 import 'core/service/background_service.dart';
 import 'core/service/cache_service.dart';
 import 'core/themes/light_theme.dart';
+import 'features/RideFeature/presentation/controllers/dashboards_cubit/dashboards_cubit.dart';
 import 'features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'features/notifications/presentation/cubits/get_user_trips_notifications/get_user_trips_notifications_cubit.dart';
@@ -120,9 +123,11 @@ void main() async {
   AppPages.initializeRouter(initialRoute);
   runApp(
     LocalizationService.rootWidget(
-      child: DevicePreview(
-        enabled: false,
-        builder: (context) => const MyApp(),
+      child: Phoenix(
+        child: DevicePreview(
+          enabled: false,
+          builder: (context) => const MyApp(),
+        ),
       ),
       // child: const MyApp(),
     ),
@@ -403,6 +408,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           create: (context) => FloatingNavigatorCubit()
             ..getFloatingNavigatorStatus()
             ..getEnableFloatingNavigatorStatus(),
+        ),
+        BlocProvider(
+          create: (context) => serviceLocator<DashboardsCubit>(),
         ),
         BlocProvider(
           create: (context) => ChoiceRulerCubit()

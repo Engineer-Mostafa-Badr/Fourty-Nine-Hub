@@ -17,6 +17,7 @@ import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/widgets/animated_text.dart';
+import 'package:fourtyninehub/features/fourty_nine/presentation/widgets/custom_heart_button.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/firebase_notfications_cubit/firebase_notfications_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/widgets/notification_snackbar.dart';
@@ -366,67 +367,68 @@ class _FourtyNineViewState extends State<FourtyNineView>
           ),
         ),
         const Sizer(width: 32,),
-        CircularMenu(
-            radius: 70,
-            backgroundWidget: Container(
-              decoration: const BoxDecoration(
-                color: AppColors.BG_GRAY_COLOR,
-                shape: BoxShape.circle,
-              ),
-              width: 40,
-              height: 40,
-              child: const Icon(
-                Icons.favorite_rounded,
-                color: AppColors.SECONDARY_COLOR,
-              ),
-            ),
-            toggleButtonColor: Colors.transparent,
-            alignment: Alignment.center,
-            items: [
-              CircularMenuItem(
-                onTap: () {
-                  print('tapped');
-                },
-                icon: Icons.search,
-                iconSize: 50,
-                color: Colors.blue,
-              ),
-              CircularMenuItem(
-                onTap: () {
-                  print('tapped');
-                },
-                icon: Icons.home,
-                color: Colors.grey,
-              ),
-              CircularMenuItem(
-                onTap: () {
-                  print('tapped');
-                },
-                icon: Icons.settings,
-                color: Colors.green,
-              ),
-              CircularMenuItem(
-                onTap: () {
-                  print('tapped');
-                },
-                icon: Icons.search,
-                color: Colors.blue,
-              ),
-              CircularMenuItem(
-                onTap: () {
-                  print('tapped');
-                },
-                icon: Icons.home,
-                color: Colors.grey,
-              ),
-              CircularMenuItem(
-                onTap: () {
-                  print('tapped');
-                },
-                icon: Icons.settings,
-                color: Colors.green,
-              ),
-            ]),
+        CustomHeartButton(),
+        // CircularMenu(
+        //     radius: 70,
+        //     backgroundWidget: Container(
+        //       decoration: const BoxDecoration(
+        //         color: AppColors.BG_GRAY_COLOR,
+        //         shape: BoxShape.circle,
+        //       ),
+        //       width: 40,
+        //       height: 40,
+        //       child: const Icon(
+        //         Icons.favorite_rounded,
+        //         color: AppColors.SECONDARY_COLOR,
+        //       ),
+        //     ),
+        //     toggleButtonColor: Colors.transparent,
+        //     alignment: Alignment.center,
+        //     items: [
+        //       CircularMenuItem(
+        //         onTap: () {
+        //           print('tapped');
+        //         },
+        //         icon: Icons.search,
+        //         iconSize: 50,
+        //         color: Colors.blue,
+        //       ),
+        //       CircularMenuItem(
+        //         onTap: () {
+        //           print('tapped');
+        //         },
+        //         icon: Icons.home,
+        //         color: Colors.grey,
+        //       ),
+        //       CircularMenuItem(
+        //         onTap: () {
+        //           print('tapped');
+        //         },
+        //         icon: Icons.settings,
+        //         color: Colors.green,
+        //       ),
+        //       CircularMenuItem(
+        //         onTap: () {
+        //           print('tapped');
+        //         },
+        //         icon: Icons.search,
+        //         color: Colors.blue,
+        //       ),
+        //       CircularMenuItem(
+        //         onTap: () {
+        //           print('tapped');
+        //         },
+        //         icon: Icons.home,
+        //         color: Colors.grey,
+        //       ),
+        //       CircularMenuItem(
+        //         onTap: () {
+        //           print('tapped');
+        //         },
+        //         icon: Icons.settings,
+        //         color: Colors.green,
+        //       ),
+        //     ]),
         const Sizer(width: 32,),
         Expanded(
           child: _buildItemTabBar(

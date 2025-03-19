@@ -2,6 +2,7 @@ import 'package:auto_scroll_text/auto_scroll_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/ads/app_open_model.dart';
@@ -324,168 +325,64 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
 
 
   // BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>
-  Widget _pickMeAndComeWithUWidget() {
-    return Expanded(
-      child: _buildRideSubCategoryItem(
-        title: LocaleKeys.tripJoin.localize,
-        // image: Assets.tripJoin,
+  _pickMeAndComeWithUWidget() {
+    return _buildRideSubCategoryItem(
+      title: context.isArabic ? 'جاي معاك' : 'Trip Join',
+      // image: '',
 
-        route: Routes.AVAILABLE_TRIPS,
-        onTab: () {
-          AdInterstitialTop.loadIntersitialAd();
-          AdInterstitialTop.showInterstitialAd();
-          return HandleCashback.setCount('tripJoinCount', context);
-        },
-        // isFavorite: state.data![1].isFavorite,
-        // numberOfAds: state.data![1].numberOfAds?.toInt(),
-      ),
-    );
-    /* return BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>(
-      builder: (context, state) {
-        if (state.status == StateStatus.loading) {
-          return const PickMeAndComeWithYouLShimmerLoading();
-        } else if (state.status == StateStatus.success) {
-          return Expanded(
-            child: _buildRideSubCategoryItem(
-              service: state.data?[1].service ?? RideServicesEnum.comeWithYou,
-              title: state.data![1].name.toString(),
-              image: state.data?[1].image ?? '',
-              // image: Assets.tripJoin,
-
-              route: Routes.AVAILABLE_TRIPS,
-              onTab: () {
-                AdInterstitialTop.loadIntersitialAd();
-                AdInterstitialTop.showInterstitialAd();
-                return HandleCashback.setCount('tripJoinCount', context);
-              },
-              // isFavorite: state.data![1].isFavorite,
-              // numberOfAds: state.data![1].numberOfAds?.toInt(),
-            ),
-          );
-        } else {
-          return Container(
-            padding:
-            //EdgeInsets.all
-            const EdgeInsets.symmetric(horizontal: 10),
-            child: Text(
-              LocaleKeys.noRideSubcategories.localize,
-              style: TextStyle(fontSize: 32.sp.w, fontWeight: FontWeight.w500),
-            ),
-          );
-        }
+      route: Routes.AVAILABLE_TRIPS,
+      onTab: () {
+        AdInterstitialTop.loadIntersitialAd();
+        AdInterstitialTop.showInterstitialAd();
+        return HandleCashback.setCount('tripJoinCount', context);
       },
-    );*/
+      // isFavorite: state.data![1].isFavorite,
+      // numberOfAds: state.data![1].numberOfAds?.toInt(),
+    );
   }
 
-/*  Widget _buildStarWidget() {
-    return SizedBox(
-        height: kToolbarHeight * 2.h,
-        width: double.infinity,
-        child: Stack(
-            children: [
-              Positioned.fill(
-                child: GestureDetector(
-                  // color: AppColors.AUTH_CONTAINER_COLOR,
-                  // label: LocaleKeys.tube.localize,
-                  // style: Styles.mediumText(
-                  //   color: AppColors.AUTH_CONTAINER_COLOR,
-                  //   fontWeight: FontWeight.bold,
-                  // ),
-                  // icon: Icons.star,
-                  // iconSize: 50.h,
-                    onTap: () {
-                      AdInterstitialTop.loadIntersitialAd();
-                      AdInterstitialTop.showInterstitialAd();
-                      HandleCashback.setCount('beAStarCount', context);
-                      context.push(Routes.BE_STAR);
-                    },
-                    child: Container(
-                        height: kToolbarHeight * 2.h,
-                        padding:
-                        EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                          borderRadius: BorderRadius.circular(5),
-                          image: DecorationImage(
-                              image: AssetImage(Assets.tubeCat), fit: BoxFit.fill),
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Color.fromARGB(255, 249, 159, 162),
-                              spreadRadius: 1,
-                              blurRadius: 3,
-                              offset: Offset(1, 1),
-                            )
-                          ],
-                        ),
-                        child: Center(
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                // Image.asset(
-                                //   Assets.tube,
-                                //   height: 35.h,
-                                //   width: 35.h,
-                                //
-                                // ),
-                                // Sizer(width: 10),
-                                Label(
-                                  text: LocaleKeys.tube.localize,
-                                  style: Styles.mediumText(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 45,
-                                  ),
-                                )
-                              ]),
-                        ))),
-              ),
-            ]));
-  }*/
   Widget _buildStarWidget() {
     return SizedBox(
-        height: kToolbarHeight * 2.h,
-        width: double.infinity,
-        child: Positioned.fill(
-          child: GestureDetector(
-              onTap: () {
-                AdInterstitialTop.loadIntersitialAd();
-                AdInterstitialTop.showInterstitialAd();
-                HandleCashback.setCount('beAStarCount', context);
-                context.push(Routes.BE_STAR);
-              },
-              child: Container(
-                  height: kToolbarHeight * 2.h,
-                  decoration: BoxDecoration(
-                    color: Theme
-                        .of(context)
-                        .scaffoldBackgroundColor,
-                    borderRadius: BorderRadius.circular(40.r),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
-                        spreadRadius: 5,
-                        blurRadius: 5,
-                        offset: const Offset(1, 1),
-                      )
-                    ],
-                    image: DecorationImage(
-                        image: AssetImage(Assets.tube1), fit: BoxFit.fill),
-                  ),
-                  child: Center(
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Label(
-                            text: LocaleKeys.tube.localize,
-                            style: Styles.mediumText(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 45,
-                            ),
-                          )
-                        ]),
-                  ))),
-        ));
+      height: kToolbarHeight * 2.h,
+      width: double.infinity,
+      child: GestureDetector(
+        onTap: () {
+          AdInterstitialTop.loadIntersitialAd();
+          AdInterstitialTop.showInterstitialAd();
+          HandleCashback.setCount('beAStarCount', context);
+          context.push(Routes.BE_STAR);
+        },
+        child: Container(
+          height: kToolbarHeight * 2.h,
+          decoration: BoxDecoration(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            borderRadius: BorderRadius.circular(40.r),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
+                spreadRadius: 5,
+                blurRadius: 5,
+                offset: const Offset(1, 1),
+              )
+            ],
+            image: DecorationImage(
+                image: AssetImage(Assets.tube1), fit: BoxFit.fill),
+          ),
+          child: Center(
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Label(
+                text: LocaleKeys.tube.localize,
+                style: Styles.mediumText(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 45,
+                ),
+              )
+            ]),
+          ),
+        ),
+      ),
+    );
   }
 
 
@@ -720,7 +617,8 @@ class CustomDeActivateDialog extends StatelessWidget {
         CustomElevatedButton(
           onPressed: () async {
             await context.read<CustomPageCubit>().updateActivate(false);
-            Restart.restartApp();
+            // Restart.restartApp();
+            Phoenix.rebirth(context);
           },
           child: Text(
             LocaleKeys.yes.localize,

@@ -64,7 +64,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
 
     return AppBar(
       // toolbarHeight: 60,
-      toolbarHeight: toolbarHeight,
+      // toolbarHeight: toolbarHeight,
       bottom: bottom,
       leading: IconButton(
         icon: Image.asset(
@@ -158,17 +158,10 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
             onTap: () {
               context.push(Routes.SEARCH);
             },
-            child: Container(
-              // height: 55.h,
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(40.r),
-                  color: AppColors.AUTH_CONTAINER_COLOR),
-              child: const Icon(
-                Icons.search,
-                size: 25,
-                color: AppColors.QUANTITY_COLOR,
-              ),
+            child: const Icon(
+              Icons.search,
+              size: 25,
+              color: AppColors.QUANTITY_COLOR,
             ),
           ),
           const Sizer(),

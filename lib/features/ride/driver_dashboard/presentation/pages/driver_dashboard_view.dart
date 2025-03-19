@@ -4,6 +4,7 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/features/ride/driver_dashboard/domain/usecases/create_rider_offer_usecase.dart';
 import 'package:fourtyninehub/features/ride/driver_dashboard/presentation/cubit/driver_dashboard_cubit.dart';
+
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../core/messages/messages.dart';

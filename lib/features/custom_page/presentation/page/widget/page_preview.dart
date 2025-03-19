@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/drawer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
@@ -179,7 +180,9 @@ class _PagePreviewState extends State<PagePreview> with TickerProviderStateMixin
                             await context
                                 .read<CustomPageCubit>()
                                 .updateActivate(true);
-                            Restart.restartApp();
+                            // Restart.restartApp();
+                            Phoenix.rebirth(context);
+
                           },
                         ),
                         CustomElevatedButton(
@@ -187,7 +190,9 @@ class _PagePreviewState extends State<PagePreview> with TickerProviderStateMixin
                             await context
                                 .read<CustomPageCubit>()
                                 .updateActivate(false);
-                            Restart.restartApp();
+                            Phoenix.rebirth(context);
+
+                            // Restart.restartApp();
                           },
                           child: Text(
                             LocaleKeys.saveWithOutActivate.localize,

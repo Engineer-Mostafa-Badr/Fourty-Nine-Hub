@@ -14,7 +14,9 @@ import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 
 import '../../../../../common/widgets/stateless/buttons/default_button.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
 import '../../controllers/verify_forgot_password_otp/verify_forgot_password_otp_cubit.dart';
 
@@ -35,15 +37,19 @@ class ForgetPasswordOtpVerificationView extends StatelessWidget {
         if (state is VerifyForgotPasswordOtpSuccess) {
           context.pushReplacementNamed(
             Routes.CREATENEWFORGOTPASSWORD,
-            extra: email,
+            extra: {"email": email, "userId": null},
           );
         } else if (state is VerifyForgotPasswordOtpFailure) {
           showErrorMessage(context, getFailureMessage(state.failure, context));
         }
       },
       builder: (context, state) {
-        return Scaffold(
-          appBar: const BackAppBar(),
+        return CustomScaffold(
+          enableCustomAppBar: true,
+          appBar: const BackAppBar(
+            label: 'OTP Verify For Email',
+            enableCustomAppBar: true,
+          ),
           bottomSheet: SizedBox(
             child: DefaultButton(
               margin: EdgeInsets.all(30.w),
@@ -57,25 +63,37 @@ class ForgetPasswordOtpVerificationView extends StatelessWidget {
           body: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                const Sizer(),
                 Label(
-                  text: LocaleKeys.emailOtp.localize,
+                  text: LocaleKeys.checkVerification.localize,
+                  style: Styles.headerText(),
                 ),
-                Sizer(
-                  height: 10.h,
+                const Sizer(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Label(
+                      text: 'We\'ve sent a code to ',
+                      style: Styles.mediumText(color: Colors.black87),
+                    ),
+                    Label(
+                      text: email,
+                      style: Styles.mediumText(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                const Sizer(
+                  height: 32,
                 ),
                 Label(
-                  text: LocaleKeys.verification.localize,
+                  text: 'OTP Code',
+                  style: Styles.headerText(),
                 ),
-                Sizer(
-                  height: 10.h,
-                ),
-                Label(
-                  text: '${LocaleKeys.checkVerification.localize} ($email)',
-                ),
-                Sizer(
-                  height: 60.h,
-                ),
+                const Sizer(),
                 Directionality(
                   textDirection: TextDirection.ltr,
                   child: PinCodeTextField(
