@@ -129,75 +129,149 @@ class _FilterAdDynamicInputWidgetState
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Label(
-              text: getLang() == 'ar'
-                  ? widget.property.nameAr
-                  : widget.property.nameEn, style: Styles.mediumText(fontSize: 32),),
+            text: getLang() == 'ar'
+                ? widget.property.nameAr
+                : widget.property.nameEn,
+            style: Styles.mediumText(fontSize: 32),
+          ),
           const SizedBox(
             height: 4,
           ),
-          InkWell(
-            onTap: () {
-              bottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  widget: _buildOptionsSheet(
-                      action: (SelectionEntity v) {
-                        widget.onChanged(v);
-                        context.pop();
-                      },
-                      values: widget.property.values));
-            },
+          DropdownButtonHideUnderline(
             child: Container(
               width: double.infinity,
               height: 42,
-              padding: const EdgeInsetsDirectional.only(start: 16, end: 16),
-              // margin: EdgeInsets.all(5),
               decoration: BoxDecoration(
-                // border: Border.all(color: Colors.grey),
                 borderRadius: BorderRadius.circular(15),
                 color: const Color(0xffF5F5F5),
               ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Label(
+              child: Theme(
+                data: Theme.of(context).copyWith(
+                  canvasColor: const Color(0xFFE0E0E0),
+                ),
+                child: ButtonTheme(
+                  alignedDropdown: true,
+                  child: DropdownButton<SelectionEntity>(
+                    value: value,
+                    isExpanded: true,
+                    icon: const Icon(Icons.keyboard_arrow_down_rounded),
+                    menuMaxHeight: 300,
+                    elevation: 2,
+                    dropdownColor: const Color(0xFFE0E0E0),
+                    borderRadius: BorderRadius.circular(15),
+                    itemHeight: 50,
+                    underline: Container(),
+                    onChanged: (SelectionEntity? newValue) {
+                      if (newValue != null) {
+                        setState(() {
+                          value = newValue;
+                          widget.onChanged(newValue);
+                        });
+                      }
+                    },
+                    items: widget.property.values.map<DropdownMenuItem<SelectionEntity>>((SelectionEntity item) {
+                      return DropdownMenuItem<SelectionEntity>(
+                        value: item,
+                        alignment: AlignmentDirectional.centerStart,
+                        child: Label(
+                          text: getLang() == 'ar' ? item.nameAr : item.nameEn,
+                          style: Styles.mediumText(fontSize: 32),
+                        ),
+                      );
+                    }).toList(),
+                    hint: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Label(
                         text: getLang() == 'ar'
                             ? value?.nameAr ?? ''
-                            : value?.nameEn ?? '', style: Styles.mediumText(fontSize: 32),),
+                            : value?.nameEn ?? '',
+                        style: Styles.mediumText(fontSize: 32),
+                      ),
+                    ),
                   ),
-                  const Icon(Icons.keyboard_arrow_down_rounded)
-                ],
+                ),
               ),
             ),
           ),
         ],
       ),
     );
+    // return Padding(
+    //   padding: const EdgeInsets.only(bottom: 4),
+    //   child: Column(
+    //     crossAxisAlignment: CrossAxisAlignment.start,
+    //     children: [
+    //       Label(
+    //           text: getLang() == 'ar'
+    //               ? widget.property.nameAr
+    //               : widget.property.nameEn, style: Styles.mediumText(fontSize: 32),),
+    //       const SizedBox(
+    //         height: 4,
+    //       ),
+    //       InkWell(
+    //         onTap: () {
+    //           bottomSheet(
+    //               context: context,
+    //               isScrollControlled: true,
+    //               widget: _buildOptionsSheet(
+    //                   action: (SelectionEntity v) {
+    //                     widget.onChanged(v);
+    //                     context.pop();
+    //                   },
+    //                   values: widget.property.values));
+    //         },
+    //         child: Container(
+    //           width: double.infinity,
+    //           height: 42,
+    //           padding: const EdgeInsetsDirectional.only(start: 16, end: 16),
+    //           // margin: EdgeInsets.all(5),
+    //           decoration: BoxDecoration(
+    //             // border: Border.all(color: Colors.grey),
+    //             borderRadius: BorderRadius.circular(15),
+    //             color: const Color(0xffF5F5F5),
+    //           ),
+    //           child: Row(
+    //             children: [
+    //               Expanded(
+    //                 child: Label(
+    //                     text: getLang() == 'ar'
+    //                         ? value?.nameAr ?? ''
+    //                         : value?.nameEn ?? '', style: Styles.mediumText(fontSize: 32),),
+    //               ),
+    //               const Icon(Icons.keyboard_arrow_down_rounded)
+    //             ],
+    //           ),
+    //         ),
+    //       ),
+    //
+    //     ],
+    //   ),
+    // );
   }
 
-  Widget _buildOptionsSheet({
-    required Function(SelectionEntity v) action,
-    required List<SelectionEntity> values,
-  }) {
-    return CustomScaffold(
-      appBar: BackAppBar(
-        label: LocaleKeys.select.localize,
-      ),
-      body: ListView.builder(
-          itemCount: values.length,
-          itemBuilder: (context, index) {
-            final v = values[index];
-            return ListTile(
-              onTap: () {
-                action(v);
-                value = v;
-                setState(() {});
-              },
-              title: Label(text: getLang() == 'ar' ? v.nameAr : v.nameEn, style: Styles.mediumText(fontSize: 32),),
-            );
-          }),
-    );
-  }
+  // Widget _buildOptionsSheet({
+  //   required Function(SelectionEntity v) action,
+  //   required List<SelectionEntity> values,
+  // }) {
+  //   return CustomScaffold(
+  //     appBar: BackAppBar(
+  //       label: LocaleKeys.select.localize,
+  //     ),
+  //     body: ListView.builder(
+  //         itemCount: values.length,
+  //         itemBuilder: (context, index) {
+  //           final v = values[index];
+  //           return ListTile(
+  //             onTap: () {
+  //               action(v);
+  //               value = v;
+  //               setState(() {});
+  //             },
+  //             title: Label(text: getLang() == 'ar' ? v.nameAr : v.nameEn, style: Styles.mediumText(fontSize: 32),),
+  //           );
+  //         }),
+  //   );
+  // }
 
   Widget _buildNumberFieldWidget() {
     return Padding(
