@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/info_text.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -43,11 +44,11 @@ class SubscriptionPlansWidget extends StatefulWidget {
 class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
   bool _isPremium = true;
 
-  WalletTypes? selectedWallet;
+  // WalletTypes? selectedWallet;
 
   @override
   void initState() {
-    selectedWallet = widget.paymentMenthods?[0];
+    // selectedWallet = widget.paymentMenthods?[0];
     print("widget.paymentMenthods ${widget.paymentMenthods?.length}");
     super.initState();
   }
@@ -57,10 +58,10 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
     return BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
       builder: (BuildContext context, state) {
         return Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              SizedBox(height: 20.h),
               Text(
                 widget.title ?? "",
                 textAlign: TextAlign.center,
@@ -69,48 +70,52 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 20.h),
-              DropdownButtonHideUnderline(
-                child: DropdownMenu<WalletTypes>(
-                    inputDecorationTheme: InputDecorationTheme(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      disabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                    ),
-                    hintText: "Select Wallet",
-                    expandedInsets: const EdgeInsets.only(),
-                    dropdownMenuEntries: widget.paymentMenthods!
-                        .map((e) => DropdownMenuEntry<WalletTypes>(
-                            value: e, label: e.translatedName))
-                        .toList(),
-                    textStyle: Styles.mediumText(fontWeight: FontWeight.w600),
-                    initialSelection: selectedWallet,
-                    // inputDecorationTheme: ,
-                    onSelected: (value) {
-                      selectedWallet = value;
-                      print(selectedWallet);
-                      setState(() {});
-                      // context.read<WalletCubit>().onSelectWallet(value!);
-                    }),
+              const SizedBox(height: 16),
+              // DropdownButtonHideUnderline(
+              //   child: DropdownMenu<WalletTypes>(
+              //       inputDecorationTheme: InputDecorationTheme(
+              //         border: OutlineInputBorder(
+              //           borderRadius: BorderRadius.circular(15),
+              //         ),
+              //         focusedErrorBorder: OutlineInputBorder(
+              //           borderRadius: BorderRadius.circular(15),
+              //         ),
+              //         errorBorder: OutlineInputBorder(
+              //           borderRadius: BorderRadius.circular(15),
+              //         ),
+              //         disabledBorder: OutlineInputBorder(
+              //           borderRadius: BorderRadius.circular(15),
+              //         ),
+              //         focusedBorder: OutlineInputBorder(
+              //           borderRadius: BorderRadius.circular(15),
+              //         ),
+              //         enabledBorder: OutlineInputBorder(
+              //           borderRadius: BorderRadius.circular(15),
+              //         ),
+              //       ),
+              //       hintText: "Select Wallet",
+              //       expandedInsets: const EdgeInsets.only(),
+              //       dropdownMenuEntries: widget.paymentMenthods!
+              //           .map((e) => DropdownMenuEntry<WalletTypes>(
+              //               value: e, label: e.translatedName))
+              //           .toList(),
+              //       textStyle: Styles.mediumText(fontWeight: FontWeight.w600),
+              //       initialSelection: selectedWallet,
+              //       // inputDecorationTheme: ,
+              //       onSelected: (value) {
+              //         selectedWallet = value;
+              //         print(selectedWallet);
+              //         setState(() {});
+              //         // context.read<WalletCubit>().onSelectWallet(value!);
+              //       }),
+              // ),
+              Label(
+                text: LocaleKeys.wallet.localize,
+                style: Styles.headerText(
+                  fontSize: 32,
+                ),
               ),
-
-              SizedBox(height: 20.h),
-              // SizedBox(height: 20.h),
+              const SizedBox(height: 25),
               Row(
                 children: [
                   if (widget.showRegular!)
@@ -128,12 +133,18 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                           child: Text(
                             LocaleKeys.regular.localize,
                             textAlign: TextAlign.center,
-                            style: TextStyle(
+                            style: Styles.headerText(
+                              fontSize: 28,
                               color: !_isPremium
                                   ? AppColors.AUTH_CONTAINER_COLOR
                                   : Theme.of(context).primaryColor,
-                              fontWeight: FontWeight.bold,
                             ),
+                            // TextStyle(
+                            //   color: !_isPremium
+                            //       ? AppColors.AUTH_CONTAINER_COLOR
+                            //       : Theme.of(context).primaryColor,
+                            //   fontWeight: FontWeight.bold,
+                            // ),
                           ),
                         ),
                       ),
@@ -144,18 +155,20 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: 12.h),
                         decoration: BoxDecoration(
-                          color: _isPremium ? Colors.red : Colors.transparent,
+                          color: _isPremium
+                              ? AppColors.SECONDARY_COLOR_DARK2
+                              : Colors.transparent,
                           // : Colors.red,
-                          borderRadius: BorderRadius.circular(25),
+                          borderRadius: BorderRadius.circular(15),
                         ),
                         child: Text(
                           LocaleKeys.premiumSubscription.localize,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: Styles.headerText(
+                            fontSize: 28,
                             color: _isPremium
                                 ? AppColors.AUTH_CONTAINER_COLOR
                                 : Theme.of(context).primaryColor,
-                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
@@ -163,78 +176,185 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                   ),
                 ],
               ),
-              SizedBox(height: 20.h),
+              const SizedBox(height: 8),
               _buildList(),
-              SizedBox(height: 20.h),
+              const SizedBox(height: 10),
               AppInfoText(
                 text: LocaleKeys.premiumPackage.localize,
               ),
-              ElevatedAppButton(
-                label: LocaleKeys.confirm.localize,
-                textStyle:
-                    Styles.mediumText(color: AppColors.AUTH_CONTAINER_COLOR),
-                onPressed: () async {
-                  List<num> list = _isPremium
-                      ? widget.subscribePlans.premiumPlans
-                      : widget.subscribePlans.regularPlans;
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedAppButton(
+                      label: LocaleKeys.confirm.localize,
+                      radius: 15,
+                      textStyle: Styles.mediumText(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 36,
+                        color: Colors.white,
+                      ),
+                      onPressed: () async {
+                        List<num> list = _isPremium
+                            ? widget.subscribePlans.premiumPlans
+                            : widget.subscribePlans.regularPlans;
 
-                  // Days corresponding to plans (must match the premium/regular plans)
-                  final List<int> days = [1, 7, 30, 365];
+                        // Days corresponding to plans (must match the premium/regular plans)
+                        final List<int> days = [1, 7, 30, 365];
 
-                  // Find the index of the selected day value (_groupValue)
-                  final selectedIndex = days.indexOf(_groupValue);
+                        // Find the index of the selected day value (_groupValue)
+                        final selectedIndex = days.indexOf(_groupValue);
 
-                  if (selectedIndex != -1 && selectedIndex < list.length) {
-                    final selectedPlanPrice = list[selectedIndex];
-                    print('selectedWallet $selectedWallet');
-                    final walletPrice = selectedWallet?.name == 'mainWallet'
-                        ? state.wallet?.realAmount ?? 0
-                        : selectedWallet?.name == 'balance'
-                            ? state.wallet?.balance ?? 0
-                            : state.wallet?.giftWallet ?? 0;
-                    print(walletPrice);
-                    print(
-                        "state.wallet?.giftWallet${state.wallet?.giftWallet}");
-                    print(state.wallet?.realAmount);
-                    print(state.wallet?.balance);
-                    // print(walletPrice);
-                    // print(selectedPlanPrice);
-                    // print(_groupValue);
+                        if (selectedIndex != -1 &&
+                            selectedIndex < list.length) {
+                          final selectedPlanPrice = list[selectedIndex];
+                          // print('selectedWallet $selectedWallet');
+                          // final walletPrice = selectedWallet?.name == 'mainWallet'
+                          //     ? state.wallet?.realAmount ?? 0
+                          //     : selectedWallet?.name == 'balance'
+                          //         ? state.wallet?.balance ?? 0
+                          //         : state.wallet?.giftWallet ?? 0;
+                          final walletPrice = state.wallet?.realAmount ?? 0;
+                          print(walletPrice);
+                          print(
+                              "state.wallet?.giftWallet${state.wallet?.giftWallet}");
+                          print(state.wallet?.realAmount);
+                          print(state.wallet?.balance);
+                          // print(walletPrice);
+                          // print(selectedPlanPrice);
+                          // print(_groupValue);
 
-                    if (selectedPlanPrice < walletPrice) {
-                      print('selectedWallet${selectedWallet!.name}');
-                      showLoadingDialog(context);
-                      await context.read<WalletCubit>().addSubscription(
-                            params: AddSubscriptionParams(
-                              subCategoryId: widget.subCategoryId,
-                              paymentMethod: selectedWallet!.name,
-                              isPremium: _isPremium,
-                              period: _groupValue,
-                              periodType: 'days',
-                            ),
-                          );
-                      if (context.mounted) {
-                        context.push(Routes.HOME);
-                        // context.pushReplacement(Routes.HOME);
-                        context.read<MainCategoriesCubit>().loadDataCategory();
-                        // context.read<MainCategoriesCubit>().getMainCategoryCustomPage();
-                        // Phoenix.rebirth(context);
-                      }
-                      // context.pop();
-                    } else {
-                      await serviceLocator<SubscriptionController>().subscribe(
-                        subscribeParams: SubscribeParams(
-                          subCategoryId: widget.subCategoryId,
-                          isPremium: _isPremium,
-                          walletType: selectedWallet!,
-                          days: _groupValue,
-                        ),
-                      );
-                    }
-                  }
-                  setState(() {});
-                },
+                          if (selectedPlanPrice < walletPrice) {
+                            // print('selectedWallet${selectedWallet!.name}');
+                            print('selectedWallet mainWallet');
+                            showLoadingDialog(context);
+                            await context.read<WalletCubit>().addSubscription(
+                                  params: AddSubscriptionParams(
+                                    subCategoryId: widget.subCategoryId,
+                                    // paymentMethod: selectedWallet!.name,
+                                    paymentMethod: 'mainWallet',
+                                    isPremium: _isPremium,
+                                    period: _groupValue,
+                                    periodType: 'days',
+                                  ),
+                                );
+                            if (context.mounted) {
+                              context.push(Routes.HOME);
+                              // context.pushReplacement(Routes.HOME);
+                              context
+                                  .read<MainCategoriesCubit>()
+                                  .loadDataCategory();
+                              // context.read<MainCategoriesCubit>().getMainCategoryCustomPage();
+                              // Phoenix.rebirth(context);
+                            }
+                            // context.pop();
+                          } else {
+                            await serviceLocator<SubscriptionController>()
+                                .subscribe(
+                              subscribeParams: SubscribeParams(
+                                subCategoryId: widget.subCategoryId,
+                                isPremium: _isPremium,
+                                // walletType: selectedWallet!,
+                                walletType: WalletTypes.mainWallet,
+                                days: _groupValue,
+                              ),
+                            );
+                          }
+                        }
+                        setState(() {});
+                      },
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  Expanded(
+                    child: ElevatedAppButton(
+                      label: LocaleKeys.cancel.localize,
+                      backColor: const Color(0xffD9D9D9),
+                      radius: 15,
+                      textStyle: Styles.mediumText(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 36,
+                      ),
+                      onPressed: () {
+                        context.pop();
+                      },
+                    ),
+                  ),
+                ],
               ),
+
+              // ElevatedAppButton(
+              //   label: LocaleKeys.confirm.localize,
+              //   textStyle:
+              //       Styles.mediumText(color: AppColors.AUTH_CONTAINER_COLOR),
+              //   onPressed: () async {
+              //     List<num> list = _isPremium
+              //         ? widget.subscribePlans.premiumPlans
+              //         : widget.subscribePlans.regularPlans;
+
+              //     // Days corresponding to plans (must match the premium/regular plans)
+              //     final List<int> days = [1, 7, 30, 365];
+
+              //     // Find the index of the selected day value (_groupValue)
+              //     final selectedIndex = days.indexOf(_groupValue);
+
+              //     if (selectedIndex != -1 && selectedIndex < list.length) {
+              //       final selectedPlanPrice = list[selectedIndex];
+              //       // print('selectedWallet $selectedWallet');
+              //       // final walletPrice = selectedWallet?.name == 'mainWallet'
+              //       //     ? state.wallet?.realAmount ?? 0
+              //       //     : selectedWallet?.name == 'balance'
+              //       //         ? state.wallet?.balance ?? 0
+              //       //         : state.wallet?.giftWallet ?? 0;
+              //       final walletPrice = state.wallet?.realAmount ?? 0;
+              //       print(walletPrice);
+              //       print(
+              //           "state.wallet?.giftWallet${state.wallet?.giftWallet}");
+              //       print(state.wallet?.realAmount);
+              //       print(state.wallet?.balance);
+              //       // print(walletPrice);
+              //       // print(selectedPlanPrice);
+              //       // print(_groupValue);
+
+              //       if (selectedPlanPrice < walletPrice) {
+              //         // print('selectedWallet${selectedWallet!.name}');
+              //         print('selectedWallet mainWallet');
+              //         showLoadingDialog(context);
+              //         await context.read<WalletCubit>().addSubscription(
+              //               params: AddSubscriptionParams(
+              //                 subCategoryId: widget.subCategoryId,
+              //                 // paymentMethod: selectedWallet!.name,
+              //                 paymentMethod: 'mainWallet',
+              //                 isPremium: _isPremium,
+              //                 period: _groupValue,
+              //                 periodType: 'days',
+              //               ),
+              //             );
+              //         if (context.mounted) {
+              //           context.push(Routes.HOME);
+              //           // context.pushReplacement(Routes.HOME);
+              //           context.read<MainCategoriesCubit>().loadDataCategory();
+              //           // context.read<MainCategoriesCubit>().getMainCategoryCustomPage();
+              //           // Phoenix.rebirth(context);
+              //         }
+              //         // context.pop();
+              //       } else {
+              //         await serviceLocator<SubscriptionController>().subscribe(
+              //           subscribeParams: SubscribeParams(
+              //             subCategoryId: widget.subCategoryId,
+              //             isPremium: _isPremium,
+              //             // walletType: selectedWallet!,
+              //             walletType: WalletTypes.mainWallet,
+              //             days: _groupValue,
+              //           ),
+              //         );
+              //       }
+              //     }
+              //     setState(() {});
+              //   },
+              // ),
             ],
           ),
         );
@@ -264,6 +384,8 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
     final List<int> days = [1, 7, 30, 365];
 
     return Column(
+      mainAxisSize: MainAxisSize.min,
+      spacing: 4,
       children: [
         for (int i = 0; i < days.length; i++)
           _pricingItem(
@@ -292,8 +414,9 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
     required num price,
     required int value,
   }) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
+    return SizedBox(
+      height: 32,
+      // padding: EdgeInsets.zero,
       child: Row(
         children: [
           Radio<int>(
@@ -307,7 +430,9 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
             child: ElevatedAppButton(
               label: period,
               onPressed: () {},
-              backColor: _isPremium ? Colors.red : AppColors.PRIMARY_COLOR,
+              backColor: _isPremium
+                  ? AppColors.SECONDARY_COLOR_DARK2
+                  : AppColors.PRIMARY_COLOR,
               textStyle: Styles.mediumText(
                 color: _isPremium
                     ? AppColors.AUTH_CONTAINER_COLOR
@@ -315,12 +440,14 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
               ),
             ),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 30),
           Expanded(
             child: ElevatedAppButton(
               label: '$price',
               onPressed: () {},
-              backColor: _isPremium ? Colors.red : AppColors.PRIMARY_COLOR,
+              backColor: _isPremium
+                  ? AppColors.SECONDARY_COLOR_DARK2
+                  : AppColors.PRIMARY_COLOR,
               textStyle: Styles.mediumText(
                 color: _isPremium
                     ? AppColors.AUTH_CONTAINER_COLOR

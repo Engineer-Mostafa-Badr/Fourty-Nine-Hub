@@ -1,52 +1,73 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/localization/locales.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet/main_category_entity.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
 
-class CustomDropdown extends StatefulWidget {
+class CustomDropdown<T> extends StatefulWidget {
   const CustomDropdown({
     super.key,
-    // required this.initialItem,
     required this.items,
     required this.onItemSelected,
+    this.selectedItem,
     this.hint = "Select an item",
+    this.maxHeight = 300,
+    this.itemBuilder,
+    this.dropdownDecoration,
+    this.buttonDecoration,
+    this.buttonTextStyle,
+    this.itemTextStyle,
+    required this.displayStringForItem, // إضافة هذه الدالة
   });
 
-  final List<MainCategoryWalletEntity> items; // Each item has 'id' and 'label'
-  final ValueChanged<MainCategoryWalletEntity> onItemSelected;
+  final List<T> items;
+  final T? selectedItem;
+  final ValueChanged<T> onItemSelected;
   final String hint;
+  final double maxHeight;
+  final Widget Function(T item)? itemBuilder;
+  final BoxDecoration? dropdownDecoration;
+  final BoxDecoration? buttonDecoration;
+  final TextStyle? buttonTextStyle;
+  final TextStyle? itemTextStyle;
+  final String Function(T item)
+      displayStringForItem; // دالة لتحويل العنصر إلى نص
 
   @override
-  _CustomDropdownState createState() => _CustomDropdownState();
+  _CustomDropdownState<T> createState() => _CustomDropdownState<T>();
 }
 
-class _CustomDropdownState extends State<CustomDropdown>
+class _CustomDropdownState<T> extends State<CustomDropdown<T>>
     with SingleTickerProviderStateMixin {
   OverlayEntry? _overlayEntry;
   final LayerLink _layerLink = LayerLink();
   bool isOpen = false;
-  String? selectedItem;
   late AnimationController _animationController;
-  // late Animation<double> _opacityAnimation;
+  late Animation<double> _expandAnimation;
+  T? _selectedItem;
 
   @override
   void initState() {
     super.initState();
+    _selectedItem = widget.selectedItem;
     _animationController = AnimationController(
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 200),
       vsync: this,
     );
-    // _opacityAnimation = CurvedAnimation(
-    //   parent: _animationController,
-    //   curve: Curves.easeInOut,
-    // );
+    _expandAnimation = CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    );
+  }
+
+  @override
+  void didUpdateWidget(CustomDropdown<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.selectedItem != oldWidget.selectedItem) {
+      _selectedItem = widget.selectedItem;
+    }
   }
 
   @override
   void dispose() {
     _animationController.dispose();
+    _overlayEntry?.remove();
     super.dispose();
   }
 
@@ -73,58 +94,75 @@ class _CustomDropdownState extends State<CustomDropdown>
   }
 
   OverlayEntry _createOverlayEntry() {
-    RenderBox renderBox = context.findRenderObject() as RenderBox;
-    var size = renderBox.size;
-    // var offset = renderBox.localToGlobal(Offset.zero);
+    final RenderBox renderBox = context.findRenderObject() as RenderBox;
+    final size = renderBox.size;
+    final offset = renderBox.localToGlobal(Offset.zero);
 
     return OverlayEntry(
-      builder: (context) => Positioned(
-        width: size.width,
-        child: CompositedTransformFollower(
-          link: _layerLink,
-          offset: Offset(0, size.height + 5),
-          child: Material(
-            // elevation: 4,
-            borderRadius: BorderRadius.circular(8),
-            child: Container(
-              height: 300,
-              decoration: ShapeDecoration(
-                color: Colors.white,
-                shape: RoundedRectangleBorder(
-                  side: const BorderSide(
-                    width: 2,
-                    strokeAlign: BorderSide.strokeAlignCenter,
-                  ),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-              ),
-              child: ListView(
-                padding: EdgeInsets.zero,
-                shrinkWrap: true,
-                children: widget.items.map((item) {
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        selectedItem = context.locale == Locales.english
-                            ? item.nameEn
-                            : item.nameAr;
-                        widget.onItemSelected(item);
-                      });
-                      _closeDropdown();
-                    },
-                    child: ListTile(
-                      title: Text(
-                        context.locale == Locales.english
-                            ? item.nameEn
-                            : item.nameAr,
-                        style: Styles.headerText(),
+      builder: (context) => GestureDetector(
+        onTap: _closeDropdown,
+        behavior: HitTestBehavior.translucent,
+        child: Stack(
+          children: [
+            Positioned(
+              left: offset.dx,
+              top: offset.dy + size.height + 5,
+              width: size.width,
+              child: CompositedTransformFollower(
+                link: _layerLink,
+                offset: Offset(0, size.height + 5),
+                child: SizeTransition(
+                  axisAlignment: -1,
+                  sizeFactor: _expandAnimation,
+                  child: Material(
+                    elevation: 4,
+                    borderRadius: BorderRadius.circular(15),
+                    child: Container(
+                      constraints: BoxConstraints(
+                        maxHeight: widget.maxHeight,
+                      ),
+                      decoration: widget.dropdownDecoration ??
+                          ShapeDecoration(
+                            color: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              side: const BorderSide(
+                                width: 2,
+                                strokeAlign: BorderSide.strokeAlignCenter,
+                              ),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                          ),
+                      child: ListView.builder(
+                        padding: EdgeInsets.zero,
+                        shrinkWrap: true,
+                        itemCount: widget.items.length,
+                        itemBuilder: (context, index) {
+                          final item = widget.items[index];
+                          return InkWell(
+                            onTap: () {
+                              setState(() => _selectedItem = item);
+                              widget.onItemSelected(item);
+                              _closeDropdown();
+                            },
+                            child: widget.itemBuilder != null
+                                ? widget.itemBuilder!(item)
+                                : ListTile(
+                                    title: Text(
+                                      widget.displayStringForItem(item),
+                                      style: widget.itemTextStyle ??
+                                          TextStyle(fontSize: 16),
+                                    ),
+                                    selected: _selectedItem == item,
+                                  ),
+                          );
+                        },
                       ),
                     ),
-                  );
-                }).toList(),
+                  ),
+                ),
               ),
             ),
-          ),
+          ],
         ),
       ),
     );
@@ -139,33 +177,43 @@ class _CustomDropdownState extends State<CustomDropdown>
         child: Container(
           width: double.infinity,
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-          decoration: BoxDecoration(
-            color: const Color(0xFF0B1035),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Stack(
-            children: [
-              Align(
-                alignment: AlignmentDirectional.centerEnd,
-                child: Icon(
-                  isOpen ? Icons.arrow_drop_up : Icons.arrow_drop_down,
-                  color: Colors.white,
-                ),
+          decoration: widget.buttonDecoration ??
+              BoxDecoration(
+                color: const Color(0xFF0B1035),
+                borderRadius: BorderRadius.circular(8),
               ),
-              Align(
-                alignment: AlignmentDirectional.center,
-                child: Label(
-                  text: selectedItem ?? widget.hint,
-                  style: Styles.headerText(
-                    fontSize: 32,
-                    color: Colors.white,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Center(
+                  child: Text(
+                    _getDisplayText(),
+                    style: widget.buttonTextStyle ??
+                        const TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                        ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
+              ),
+              Icon(
+                isOpen ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+                color: Colors.white,
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  String _getDisplayText() {
+    if (_selectedItem == null) {
+      return widget.hint;
+    }
+
+    return widget.displayStringForItem(_selectedItem!);
   }
 }

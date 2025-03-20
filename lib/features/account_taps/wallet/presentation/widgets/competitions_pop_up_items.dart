@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_button_wallet_and_gift_and_cashback.dart';
 
 import '../../../../../res/style/styles.dart';
@@ -39,7 +40,8 @@ class CompetitionsPopUpItems extends StatelessWidget {
                   title: context.isArabic
                       ? competitions[index].nameAr!
                       : competitions[index].nameEn!,
-                  value: (competitions[index].countOfRequest! *
+                  value: FormatNumbers()
+                      .formatNumber(competitions[index].countOfRequest! *
                           competitions[index].pricePerRequest!)
                       .toString(),
                   svgPath: competitionIcons[competitions[index].id] ?? '',

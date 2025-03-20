@@ -26,7 +26,7 @@ class CompetitionListViewItem extends StatelessWidget {
     return Column(
       children: [
         Label(
-          text: context.isArabic? competition.nameAr! : competition.nameEn!,
+          text: context.isArabic ? competition.nameAr! : competition.nameEn!,
           style: Styles.headerText(fontSize: 32),
         ),
         const SizedBox(
@@ -43,8 +43,11 @@ class CompetitionListViewItem extends StatelessWidget {
               PercentageCompetitionWidget(
                 currentPoints: competition.countOfRequest!,
                 totalPoints: competition.maxRequests!,
-                price: competition.countOfRequest! * competition.pricePerRequest!,
-                percentage: (competition.countOfRequest! * competition.pricePerRequest!)/competition.withdrawLimit!,
+                price:
+                    competition.countOfRequest! * competition.pricePerRequest!,
+                percentage: (competition.countOfRequest! *
+                        competition.pricePerRequest!) /
+                    competition.withdrawLimit!,
               ),
               const SizedBox(
                 height: 4,
@@ -83,7 +86,9 @@ class CompetitionListViewItem extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Label(
-                          text: context.isArabic? competition.descriptionAr! : competition.descriptionEn!,
+                          text: context.isArabic
+                              ? competition.descriptionAr!
+                              : competition.descriptionEn!,
                           style: Styles.mediumText(fontSize: 20),
                           maxLines: 3,
                         ),
@@ -106,7 +111,7 @@ class CompetitionListViewItem extends StatelessWidget {
                 title: LocaleKeys.requestTransaction2.localize,
                 //'Request Transfer',
                 onPressed: onPressed,
-                status: competition.countOfRequest == competition.maxRequests,
+                status: competition.countOfRequest! > competition.maxRequests!,
               ),
               const SizedBox(
                 height: 8,
@@ -125,7 +130,8 @@ class CompetitionListViewItem extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Label(
-                          text: '${LocaleKeys.minimumRequestWithdrawalIs.localize} ${competition.withdrawLimit} ${LocaleKeys.EGPFor.localize}',
+                          text:
+                              '${LocaleKeys.minimumRequestWithdrawalIs.localize} ${competition.withdrawLimit} ${LocaleKeys.EGPFor.localize}',
                           style: Styles.mediumText(fontSize: 20),
                         ),
                         Label(

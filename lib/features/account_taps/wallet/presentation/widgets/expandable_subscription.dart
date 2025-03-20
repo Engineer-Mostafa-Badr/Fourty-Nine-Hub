@@ -1,6 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locales.dart';
 import 'package:fourtyninehub/core/utils/date_time.dart';
@@ -22,71 +25,95 @@ class ExpandableSubscription extends StatelessWidget {
 
   final WalletSubscriptionEntity subscription;
 
+  String _getTitle(
+      BuildContext context, WalletSubscriptionEntity subscription) {
+    final String name = context.isArabic
+        ? subscription.nameAr ?? '----'
+        : subscription.nameEn ?? '----';
+    final String type = subscription.isActive!
+        ? (subscription.isPremium!
+            ? LocaleKeys.premium.localize
+            : LocaleKeys.regular.localize)
+        : LocaleKeys.notSubscription.localize;
+    return '$name ($type)';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              // 'Talent (Regular)',
-              context.locale == Locales.english
-                  ? subscription.nameEn ?? '----'
-                  : subscription.nameAr ?? '----',
+            Expanded(
+              child: Label(
+                text: _getTitle(context, subscription),
+                style: Styles.mediumText(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            Label(
+              text: formatDateTime(subscription.createdAt ?? '', context),
               style: Styles.mediumText(
                 fontSize: 24,
                 fontWeight: FontWeight.w600,
+                color: subscription.isActive!
+                    ? const Color(0xff72BA88)
+                    : const Color(0xffF33D49),
               ),
-            ),
-            const Spacer(),
-            Text(
-              formatDateTime(subscription.createdAt ?? '', context),
-              style: Styles.mediumText(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w600,
-                  color: const Color(0xff72BA88)),
             ),
           ],
         ),
         const SizedBox(
           height: 4,
         ),
-         Row(
+        Row(
           children: [
-            InkWell(
-              onTap: () {
-                showAreYouSure(
-                  title: LocaleKeys.areYouSure.localize,
-                  subTitle: LocaleKeys.sureUnsubscribe.localize,
-                  action: () {
-                    context.read<SubscriptionWalletCubit>().deleteSubscription(
-                      subscriptionId: subscription.subCategoryId!,
-                    );
-                  },
-                  context: context,
-                );
-              },
-              child: const ButtonSubscription(
-                cancelColor: true,
+            Expanded(
+              child: InkWell(
+                onTap: () {
+                  bottomSheet(
+                      context: context,
+                      isFloating: true,
+                      asAlertDialog: true,
+                      widget: AreYouSure(
+                        title: LocaleKeys.areYouSure.localize,
+                        subTitle: LocaleKeys.sureUnsubscribe.localize,
+                        action: () {
+                          context
+                              .read<SubscriptionWalletCubit>()
+                              .deleteSubscription(
+                                subscriptionId: subscription.subCategoryId!,
+                              );
+                        },
+                      ));
+                },
+                child: const ButtonSubscription(
+                  cancelColor: true,
+                ),
               ),
             ),
-            const  SizedBox(
+            const SizedBox(
               width: 8,
             ),
-            InkWell(
-              onTap: () {
-                serviceLocator<SubscriptionController>()
-                    .showSubscriptionPlans(
-                    wallets: [
-                      WalletTypes.mainWallet,
-                    ],
-                    subCategoryId: subscription.subCategoryId!,
-                    title: context.locale == Locales.english
-                        ? subscription.nameEn ?? ''
-                        : subscription.nameAr ?? '');
-              },
-              child: const ButtonSubscription(
-                cancelColor: false,
+            Expanded(
+              child: InkWell(
+                onTap: () {
+                  serviceLocator<SubscriptionController>()
+                      .showSubscriptionPlans(
+                          wallets: [
+                        WalletTypes.mainWallet,
+                      ],
+                          subCategoryId: subscription.subCategoryId!,
+                          title: context.locale == Locales.english
+                              ? subscription.nameEn ?? ''
+                              : subscription.nameAr ?? '');
+                },
+                child: const ButtonSubscription(
+                  cancelColor: false,
+                ),
               ),
             ),
           ],

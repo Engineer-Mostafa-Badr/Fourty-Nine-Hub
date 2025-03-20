@@ -119,7 +119,7 @@ class _AnimatedBottomSheetState extends State<AnimatedBottomSheet>
           child: Opacity(
             opacity: _animation.value,
             child: Padding(
-              padding:  EdgeInsets.all(widget.asAlertDialog ?16:0),
+              padding: EdgeInsets.all(widget.asAlertDialog ? 16 : 0),
               child: Container(
                 decoration: BoxDecoration(
                   color: widget.backgroundColor ??

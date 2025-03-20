@@ -51,7 +51,7 @@ class WalletViewBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
       child: BlocBuilder<WalletTwoCubit, WalletTwoState>(
         builder: (context, state) {
           if (state.status.isLoading || state.status.isInitial) {

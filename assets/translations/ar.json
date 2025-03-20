@@ -1420,5 +1420,6 @@
   "personalTransaction": "للمعاملات الشخصية.",
   "uploadBill": "تحميل الفاتورة",
   "investment": "الاستثمار",
-  "pleaseSubscribeToContactTheClient": "يرجى الاشتراك للتواصل مع العميل!"
+  "pleaseSubscribeToContactTheClient": "يرجى الاشتراك للتواصل مع العميل!",
+  "refresh": "تحديث"
 }

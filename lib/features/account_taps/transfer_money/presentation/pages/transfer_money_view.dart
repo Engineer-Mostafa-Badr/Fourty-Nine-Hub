@@ -90,154 +90,151 @@ class _TransferMoneyViewState extends State<TransferMoneyView> {
                   .contains(searchController.text.toLowerCase());
             }).toList();
 
-            return ListView(
+            return Column(
               children: [
-                Container(
-                  padding: const EdgeInsets.all(5),
-                  margin: const EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Form(
-                    key: formKey,
-                    child: Stack(
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            FormTextField(
-                              textStyle: Styles.mediumText(
-                                color:
-                                    Theme.of(context).scaffoldBackgroundColor,
-                              ),
-                              constraints: BoxConstraints(
-                                maxHeight: 52.h,
-                                minHeight: 52.h,
-                              ),
-                              fillColor: Theme.of(context).primaryColor,
-                              borderRadius: BorderRadius.circular(20.r),
-                              style: TextStyle(
-                                fontSize: 30.sp,
-                                color:
-                                    Theme.of(context).scaffoldBackgroundColor,
-                              ),
-                              controller: searchController,
-                              hint: LocaleKeys.search.localize,
-                              action: (value) {
-                                setState(() {
-                                  // Show the list when the search text is not empty
-                                  showUserList = value.isNotEmpty;
-                                });
-                              },
+                Form(
+                  key: formKey,
+                  child: Stack(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          FormTextField(
+                            textStyle: Styles.mediumText(
+                              color: Theme.of(context).scaffoldBackgroundColor,
                             ),
-                            const Sizer(),
-                            FormTextField(
-                              textStyle: Styles.mediumText(
-                                color:
-                                    Theme.of(context).scaffoldBackgroundColor,
-                              ),
-                              type: TextInputType.number,
-                              constraints: BoxConstraints(
-                                maxHeight: 52.h,
-                                minHeight: 52.h,
-                              ),
-                              fillColor: Theme.of(context).primaryColor,
-                              borderRadius: BorderRadius.circular(20.r),
-                              style: TextStyle(
-                                fontSize: 30.sp,
-                                color:
-                                    Theme.of(context).scaffoldBackgroundColor,
-                              ),
-                              controller: amountController,
-                              hint: LocaleKeys.amount.localize,
-                              action: (v) {},
+                            constraints: BoxConstraints(
+                              maxHeight: 52.h,
+                              minHeight: 52.h,
                             ),
-                            const Sizer(),
-                            AppButton(
-                              label: LocaleKeys.confirm.localize,
-                              style: Styles.mediumText(
-                                fontSize: 60.sp,
-                                color: AppColors.AUTH_CONTAINER_COLOR,
-                              ),
-                              onPressed: () {
-                                if (formKey.currentState!.validate()) {
-                                  if (selectedUsername == null ||
-                                      !isUsernameInFilteredUsers(
-                                          selectedUsername, filteredUsers)) {
-                                    // If no user is selected or the user is not in the filtered list
-                                    showErrorMessage(context,
-                                        LocaleKeys.selectValidUser.localize);
-                                  } else if (int.parse(amountController.text) <
-                                      state.wallet!.realAmount!) {
-                                    return showAreYouSure(
-                                        title: LocaleKeys.alert.localize,
-                                        subTitle: LocaleKeys
-                                            .sureWithdrawMoney.localize,
-                                        action: () {
-                                          context
-                                              .read<TransferMoneyCubit>()
-                                              .transferMoney(
-                                                params: TransferMoneyParams(
-                                                  receiverUsername:
-                                                      selectedUsername!,
-                                                  amount: int.parse(
-                                                      amountController.text),
-                                                ),
-                                              );
-                                        },
-                                        context: context);
-                                  } else {
-                                    showErrorMessage(
-                                      context,
-                                      LocaleKeys.notEnoughMoneyWallet.localize,
-                                    );
-                                  }
-                                }
-                              },
+                            fillColor: Theme.of(context).primaryColor,
+                            borderRadius: BorderRadius.circular(20.r),
+                            style: TextStyle(
+                              fontSize: 30.sp,
+                              color: Theme.of(context).scaffoldBackgroundColor,
                             ),
-                          ],
-                        ),
-                        if (showUserList &&
-                            filteredUsers != null &&
-                            filteredUsers.isNotEmpty)
-                          Positioned(
-                            top: 100.h,
-                            left: 0,
-                            right: 0,
-                            child: Container(
-                              width: double.infinity,
-                              height: 300.h,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20.r),
-                                color: Theme.of(context).primaryColor,
-                              ),
-                              child: ListView.builder(
-                                itemCount: filteredUsers.length,
-                                itemBuilder: (context, index) {
-                                  var user = filteredUsers[index];
-                                  // String fullName =
-                                  //     '${capitalize(user.firstName)} ${capitalize(user.lastName)}';
-                                  return ListTile(
-                                    title: Text(
-                                      user.email,
-                                      style: Styles.mediumText(
-                                          color: Theme.of(context)
-                                              .scaffoldBackgroundColor),
-                                    ),
-                                    onTap: () {
-                                      setState(() {
-                                        searchController.text = user.email;
-                                        selectedUsername = user.userName;
-                                        showUserList = false;
-                                      });
-                                    },
+                            controller: searchController,
+                            hint: LocaleKeys.search.localize,
+                            action: (value) {
+                              setState(() {
+                                // Show the list when the search text is not empty
+                                showUserList = value.isNotEmpty;
+                              });
+                            },
+                          ),
+                          const Sizer(),
+                          FormTextField(
+                            textStyle: Styles.mediumText(
+                              color: Theme.of(context).scaffoldBackgroundColor,
+                            ),
+                            type: TextInputType.number,
+                            constraints: BoxConstraints(
+                              maxHeight: 52.h,
+                              minHeight: 52.h,
+                            ),
+                            fillColor: Theme.of(context).primaryColor,
+                            borderRadius: BorderRadius.circular(20.r),
+                            style: TextStyle(
+                              fontSize: 30.sp,
+                              color: Theme.of(context).scaffoldBackgroundColor,
+                            ),
+                            controller: amountController,
+                            hint: LocaleKeys.amount.localize,
+                            action: (v) {},
+                          ),
+                          const Sizer(),
+                          AppButton(
+                            label: LocaleKeys.confirm.localize,
+                            style: Styles.mediumText(
+                              fontSize: 60.sp,
+                              color: AppColors.AUTH_CONTAINER_COLOR,
+                            ),
+                            onPressed: () {
+                              if (formKey.currentState!.validate()) {
+                                if (selectedUsername == null ||
+                                    !isUsernameInFilteredUsers(
+                                        selectedUsername, filteredUsers)) {
+                                  // If no user is selected or the user is not in the filtered list
+                                  showErrorMessage(context,
+                                      LocaleKeys.selectValidUser.localize);
+                                } else if (int.parse(amountController.text) <
+                                    state.wallet!.realAmount!) {
+                                  return showAreYouSure(
+                                      title: LocaleKeys.alert.localize,
+                                      subTitle:
+                                          LocaleKeys.sureWithdrawMoney.localize,
+                                      action: () {
+                                        context
+                                            .read<TransferMoneyCubit>()
+                                            .transferMoney(
+                                              params: TransferMoneyParams(
+                                                receiverUsername:
+                                                    selectedUsername!,
+                                                amount: int.parse(
+                                                    amountController.text),
+                                              ),
+                                            );
+                                      },
+                                      context: context);
+                                } else {
+                                  showErrorMessage(
+                                    context,
+                                    LocaleKeys.notEnoughMoneyWallet.localize,
                                   );
-                                },
+                                }
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                      if (showUserList &&
+                          filteredUsers != null &&
+                          filteredUsers.isNotEmpty)
+                        Positioned(
+                          top: 45,
+                          left: 0,
+                          right: 0,
+                          child: Container(
+                            width: double.infinity,
+                            height: 300,
+                            decoration: ShapeDecoration(
+                              color: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                side: const BorderSide(
+                                  width: 2,
+                                  strokeAlign: BorderSide.strokeAlignCenter,
+                                ),
+                                borderRadius: BorderRadius.circular(15),
                               ),
+                            ),
+                            // decoration: BoxDecoration(
+                            //   borderRadius: BorderRadius.circular(20.r),
+                            //   color: Theme.of(context).primaryColor,
+                            // ),
+                            child: ListView.builder(
+                              itemCount: filteredUsers.length,
+                              itemBuilder: (context, index) {
+                                var user = filteredUsers[index];
+                                // String fullName =
+                                //     '${capitalize(user.firstName)} ${capitalize(user.lastName)}';
+                                return ListTile(
+                                  title: Text(
+                                    user.email,
+                                    style: Styles.headerText(),
+                                  ),
+                                  onTap: () {
+                                    setState(() {
+                                      searchController.text = user.email;
+                                      selectedUsername = user.email;
+                                      showUserList = false;
+                                    });
+                                  },
+                                );
+                              },
                             ),
                           ),
-                      ],
-                    ),
+                        ),
+                    ],
                   ),
                 ),
               ],

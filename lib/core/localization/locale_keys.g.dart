@@ -1413,5 +1413,6 @@ abstract class  LocaleKeys {
   static const uploadBill = 'uploadBill';
   static const investment = 'investment';
   static const pleaseSubscribeToContactTheClient = 'pleaseSubscribeToContactTheClient';
+  static const refresh = 'refresh';
 
 }

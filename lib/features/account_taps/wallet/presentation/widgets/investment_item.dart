@@ -28,14 +28,15 @@ class InvestmentItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Label(
-              text: 'Gift / $totalYears Years',
+              text:
+                  '${LocaleKeys.gift.localize} / $totalYears ${LocaleKeys.years.localize}',
               style: Styles.mediumText(fontSize: 32),
             ),
             const SizedBox(
               height: 4,
             ),
             Label(
-              text: '$currentYears Years',
+              text: '$currentYears ${LocaleKeys.years.localize}',
               style: Styles.smallText(
                 fontSize: 24,
               ),

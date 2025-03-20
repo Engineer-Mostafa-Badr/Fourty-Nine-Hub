@@ -1437,5 +1437,6 @@
   "personalTransaction": "personal transaction.",
   "uploadBill": "Upload Bill",
   "investment": "Investment",
-  "pleaseSubscribeToContactTheClient": "Please subscribe to contact the client!"
+  "pleaseSubscribeToContactTheClient": "Please subscribe to contact the client!",
+  "refresh": "Refresh"
 }
