@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../common/widgets/form/text_fields/default_text_form_field.dart';
+
 class BirthDatePicker extends StatefulWidget {
-  const BirthDatePicker({super.key,required this.controller});
+  const BirthDatePicker({super.key, required this.controller});
+
   final TextEditingController controller;
+
   @override
   _BirthDatePickerState createState() => _BirthDatePickerState();
 }
 
 class _BirthDatePickerState extends State<BirthDatePicker> {
   DateTime? selectedDate;
-  final DateFormat dateFormat = DateFormat('dd/MM/yyyy'); // Formatting as 05/04/2001
+  final DateFormat dateFormat =
+  DateFormat('dd/MM/yyyy'); // Formatting as 05/04/2001
 
   Future<void> _selectDate(BuildContext context) async {
     DateTime initialDate = DateTime(2000); // Default year if none is selected
@@ -41,23 +43,18 @@ class _BirthDatePickerState extends State<BirthDatePicker> {
 
   @override
   Widget build(BuildContext context) {
-    return  Column(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        FormTextField(
-    readOnly:true,
-          constraints: BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
-          fillColor: const Color(0xFFEEEEEE),
-          borderRadius: BorderRadius.circular(20.r),
-          controller: widget.controller,
-          style: const TextStyle(color: AppColors.QUANTITY_COLOR),
-          // label: 'E-mail or phone number',
+        DefaultTextFormField(
+          readOnly: true,
+          borderColor: Colors.black,
+          currentController: widget.controller,
           hint: LocaleKeys.birthDate.localize,
-          prefix: const Icon(Icons.calendar_today),
+          prefixIcon: const Icon(Icons.calendar_today),
           onTap: () => _selectDate(context),
-          action: (v) {},
-          validator: (s){
-      return null;
+          validator: (s) {
+            return null;
           },
         ),
       ],

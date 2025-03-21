@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/register_by_phone_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/register_use_case.dart';
 
 import '../../../../../core/abstract/use_case.dart';
@@ -18,11 +19,14 @@ part 'register_state.dart';
 class RegisterCubit extends Cubit<RegisterState> {
   final GetWelcomeGiftUseCase _getWelcomeGiftUseCase;
   final RegisterUseCase _registerUseCase;
+  final RegisterByPhoneUseCase _registerByPhoneUseCase;
   final GoogleSignInUseCase _googleSignInUseCase;
+
   // final FacebookSignInUseCase _facebookSignInUseCase;
   final SaveTokensUseCase _saveTokens;
   final AttachTokenUseCase _attachToken;
   final formKey = GlobalKey<FormState>();
+  final userNameController = TextEditingController();
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
   final emailTextController = TextEditingController();
@@ -46,6 +50,7 @@ class RegisterCubit extends Cubit<RegisterState> {
     this._saveTokens,
     this._attachToken,
     this._googleSignInUseCase,
+    this._registerByPhoneUseCase,
     // this._facebookSignInUseCase,
   ) : super(RegisterInitial());
 
@@ -55,25 +60,51 @@ class RegisterCubit extends Cubit<RegisterState> {
     if (state is RegisterLoading) return;
     //   if (formKey.currentState!.validate()) {
     emit(RegisterLoading());
-    final result = await _registerUseCase(
-      RegisterParams(
-        firstName: firstNameController.text.trim(),
-        lastName: lastNameController.text.trim(),
-        birthday: birthDateTextController.text.trim(),
-        email: emailTextController.text.trim(),
-        password: passwordTextController.text.trim(),
-        confirmPassword: confirmPasswordTextController.text.trim(),
-        isMale: isMale,
-        referralId: referralId.text.trim(),
-        token: token ?? "",
-      ),
-    );
-    emit(
-      result.fold(
-        (failure) => RegisterError(failure),
-        (_) => OTPSent(),
-      ),
-    );
+
+    if (_isPhoneNumber(emailTextController.text.trim())) {
+      final result = await _registerByPhoneUseCase(
+        RegisterByPhoneParams(
+          userName: userNameController.text.trim(),
+          firstName: firstNameController.text.trim(),
+          lastName: lastNameController.text.trim(),
+          birthday: birthDateTextController.text.trim(),
+          phoneNumber: emailTextController.text.trim(),
+          password: passwordTextController.text.trim(),
+          confirmPassword: confirmPasswordTextController.text.trim(),
+          isMale: isMale,
+          referralId: referralId.text.trim(),
+          token: token ?? "",
+        ),
+      );
+      emit(
+        result.fold(
+          (failure) => RegisterError(failure),
+          (_) => RegisterByPhone(),
+        ),
+      );
+    } else if (_isEmail(emailTextController.text.trim())) {
+      final result = await _registerUseCase(
+        RegisterParams(
+          userName: userNameController.text.trim(),
+          firstName: firstNameController.text.trim(),
+          lastName: lastNameController.text.trim(),
+          birthday: birthDateTextController.text.trim(),
+          email: emailTextController.text.trim(),
+          password: passwordTextController.text.trim(),
+          confirmPassword: confirmPasswordTextController.text.trim(),
+          isMale: isMale,
+          referralId: referralId.text.trim(),
+          token: token ?? "",
+        ),
+      );
+      emit(
+        result.fold(
+          (failure) => RegisterError(failure),
+          (_) => OTPSent(),
+        ),
+      );
+    }
+
     // }
   }
 
@@ -115,5 +146,15 @@ class RegisterCubit extends Cubit<RegisterState> {
       (_) {},
       (gift) => welcomeGift = gift,
     );
+  }
+
+  bool _isEmail(String input) {
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    return emailRegex.hasMatch(input);
+  }
+
+  bool _isPhoneNumber(String input) {
+    final phoneRegex = RegExp(r'^\+?[0-9]{7,15}$');
+    return phoneRegex.hasMatch(input);
   }
 }

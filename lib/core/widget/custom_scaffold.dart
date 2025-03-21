@@ -355,8 +355,11 @@ class MainScaffold extends StatelessWidget {
                 floatingActionButton: floatingActionButton,
                 drawer: drawer,
                 onDrawerChanged: (value) {
-                  choiceRulerCubit.changeChoiceRulerStatus();
-                  print('choiceRulerCubit.state ${choiceRulerCubit.state}');
+                  choiceRulerCubit.changeChoiceRulerStatus(forceValue: !value);
+
+                  // choiceRulerCubit.changeChoiceRulerStatus();
+                  print('choiceRulerCubit.state ${choiceRulerCubit.state} value $value');
+                  print('onDrawerChanged open $value');
                 },
                 bottomNavigationBar: bottomNavigationBar,
                 body: Padding(
@@ -394,9 +397,9 @@ class MainScaffold extends StatelessWidget {
                 floatingActionButton: floatingActionButton,
                 drawer: drawer,
                 onDrawerChanged: (value) {
-                  choiceRulerCubit.changeChoiceRulerStatus();
-                  print('choiceRulerCubit.state ${choiceRulerCubit.state}');
-                },
+                  choiceRulerCubit.changeChoiceRulerStatus(forceValue: !value);
+                  print('choiceRulerCubit.state ${choiceRulerCubit.state} value $value');
+                  print('onDrawerChanged open $value');                },
                 bottomNavigationBar: bottomNavigationBar,
                 body: Stack(
                   alignment: Alignment.centerLeft,

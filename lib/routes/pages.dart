@@ -469,7 +469,7 @@ class AppPages {
                 builder: (context, state) => BlocProvider(
                   child: const OnBoardingScreen(),
                   create: (context) =>
-                      serviceLocator<OnBoardingCubit>()..getOnboardingData(),
+                      serviceLocator<OnBoardingCubit>(),
                 ),
               ),
               GoRoute(
