@@ -5,6 +5,8 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/core/widget/custom_notification_badge.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/filter_button_item.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/header_button_widget.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/marriage_ads_list_view.dart';
@@ -29,13 +31,13 @@ class MarriageAdsViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        children: [
-          state.mainCategory == null
-              ? Container()
-              : MainCategoryBanner(
+    return Column(
+      children: [
+        state.mainCategory == null
+            ? Container()
+            : Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: MainCategoryBanner(
                   fromHome: false,
                   category:
                       context.read<SubcategoriesCubit>().state.mainCategory!,
@@ -47,15 +49,21 @@ class MarriageAdsViewBody extends StatelessWidget {
                     // return result;
                   },
                 ),
-          const SizedBox(
-            height: 16,
-          ),
-          Row(
+            ),
+        const SizedBox(
+          height: 16,
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
             children: [
               Expanded(
-                child: HeaderButtonWidget(
-                  title: LocaleKeys.requestLog.localize,
-                  onPressed: () {},
+                child: CustomNotificationBadge(
+                  count: 22,
+                  child: HeaderButtonWidget(
+                    title: LocaleKeys.requestLog.localize,
+                    onPressed: () {},
+                  ),
                 ),
               ),
               const SizedBox(
@@ -69,10 +77,13 @@ class MarriageAdsViewBody extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(
-            height: 16,
-          ),
-          Row(
+        ),
+        const SizedBox(
+          height: 8,
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
             children: [
               Expanded(
                 child: FilterButtonItem(
@@ -184,45 +195,56 @@ class MarriageAdsViewBody extends StatelessWidget {
               // ),
             ],
           ),
-          const SizedBox(
-            height: 16,
-          ),
-          SizedBox(
-            height: 32,
-            child: ListView.separated(
-              itemCount: state.subCategories?.length ?? 0,
-              // controller: _scrollController,
-              scrollDirection: Axis.horizontal,
-              // gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              //     crossAxisCount: 3, childAspectRatio: 1),
-              itemBuilder: (context, index) => ClickableWidget(
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        SizedBox(
+          height: 32,
+          child: ListView.separated(
+            itemCount: state.subCategories?.length ?? 0,
+            // controller: _scrollController,
+            scrollDirection: Axis.horizontal,
+            // gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            //     crossAxisCount: 3, childAspectRatio: 1),
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: EdgeInsetsDirectional.only(
+                  start: index == 0 ? 16.0 : 0,
+                    end: index==state.subCategories!.length-1? 16.0: 0,),
+                child: ClickableWidget(
                 onTap: () async {
                   await controller.changeSubCatIndex(index);
                 },
                 child: SubCategoryListViewItem(
                   subCategory: state.subCategories?[index],
                 ),
-              ),
-              separatorBuilder: (BuildContext context, int index) =>
-                  const SizedBox(
-                width: 8,
-              ),
+                              ),
+              );
+            },
+            separatorBuilder: (BuildContext context, int index) =>
+                const SizedBox(
+              width: 8,
             ),
           ),
-          const SizedBox(
-            height: 8,
-          ),
-          Expanded(
-            child: state.status == SubcategoriesStates.loadingAds
-                ? const CustomLoading()
-                : MarriageAdsListView(
+        ),
+        const SizedBox(
+          height: 8,
+        ),
+        Expanded(
+          child: state.status == SubcategoriesStates.loadingAds
+              ? const CustomLoading()
+              : state.ads == null? const SizedBox() : state.ads!.isEmpty? CustomEmptyWidget(label: LocaleKeys.noAds.localize,):
+          Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: MarriageAdsListView(
                     scrollController: _scrollController,
                     controller: controller,
                     state: state,
                   ),
-          )
-        ],
-      ),
+              ),
+        ),
+      ],
     );
   }
 }

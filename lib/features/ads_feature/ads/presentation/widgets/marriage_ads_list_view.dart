@@ -34,11 +34,16 @@ class MarriageAdsListView extends StatelessWidget {
               marriageAds: controller.marriageAds[index],
               state: state,
             ),
-            Label(
-              text: LocaleKeys.pleaseSubscribeToContactTheClient.localize,
-              style: Styles.headerText(
-                fontSize: 28,
-                color: const Color(0xFFFF3308),
+
+            Padding(
+              padding: const EdgeInsetsDirectional.only(start: 10.0),
+              child: Label(
+                text: LocaleKeys.pleaseSubscribeToContactTheClient.localize,
+                style: Styles.headerText(
+                  fontSize: 28,
+                  color: const Color(0xFFFF3308),
+                  height: 1.57,
+                ),
               ),
             ),
           ],
