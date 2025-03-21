@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /*
 class AnimatedBottomSheet extends StatefulWidget {
@@ -119,7 +118,7 @@ class _AnimatedBottomSheetState extends State<AnimatedBottomSheet>
           child: Opacity(
             opacity: _animation.value,
             child: Padding(
-              padding:  EdgeInsets.all(widget.asAlertDialog ?16:0),
+              padding: EdgeInsets.all(widget.asAlertDialog ? 16 : 0),
               child: Container(
                 decoration: BoxDecoration(
                   color: widget.backgroundColor ??
@@ -156,9 +155,9 @@ bottomSheet({
         return AnimatedBottomSheet(
           backgroundColor: backColor,
           asAlertDialog: asAlertDialog,
-          child: Container(
+          child: SizedBox(
             width: double.infinity,
-            padding: EdgeInsets.all(30.w),
+            // padding: EdgeInsets.all(30.w),
             // margin: EdgeInsets.all(kToolbarHeight),
             // decoration: BoxDecoration(
             //   borderRadius: BorderRadius.only(

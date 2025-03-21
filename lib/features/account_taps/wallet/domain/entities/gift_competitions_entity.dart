@@ -10,6 +10,8 @@ class GiftCompetitionEntity {
     required this.id,
     required this.countOfRequest,
     required this.amount,
+    required this.descriptionGiftWalletEn,
+    required this.descriptionGiftWalletAr,
   });
 
   final String? id;
@@ -20,6 +22,8 @@ class GiftCompetitionEntity {
   final String? descriptionEn;
   final String? nameAr;
   final String? descriptionAr;
+  final String? descriptionGiftWalletEn;
+  final String? descriptionGiftWalletAr;
   final int? countOfRequest;
   final num? amount;
 }

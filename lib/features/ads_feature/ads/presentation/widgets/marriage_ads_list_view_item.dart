@@ -72,7 +72,9 @@ class MarriageAdsListViewItem extends StatelessWidget {
                       ),
                       Label(
                         text: marriageAds.title,
-                        style: Styles.headerText(),
+                        style: Styles.headerText(
+                          height: 1.60,
+                        ),
                       ),
                     ],
                   ),
@@ -81,8 +83,8 @@ class MarriageAdsListViewItem extends StatelessWidget {
                   ),
                   Label(
                     text: marriageAds.description,
-                    style: Styles.mediumText(fontSize: 24),
-                    maxLines: 3,
+                    style: Styles.mediumText(fontSize: 24, height: 1.40),
+                    maxLines: 5,
                   ),
                   const SizedBox(
                     height: 4,
@@ -92,7 +94,7 @@ class MarriageAdsListViewItem extends StatelessWidget {
                     children: [
                       SvgPicture.asset(Assets.mapPinIcon),
                     const  SizedBox(
-                        width: 2,
+                        width: 4,
                       ),
                       Label(
                         text: 'Giza , Egypt',
