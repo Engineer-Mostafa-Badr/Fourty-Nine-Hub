@@ -5,6 +5,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/car_years_and
 import 'package:fourtyninehub/features/RideFeature/domain/entities/check_driver_type_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/completed_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/cost_per_km_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_info_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_picture_optional_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_statistics_entity.dart';
@@ -42,6 +43,8 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_trip_p
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 
 import '../../../../core/error/failure.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_available_ride_trips_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/available_ride_trip_model.dart';
 
 class RideRepositoryImplementation extends RideRepository {
 
@@ -238,5 +241,11 @@ class RideRepositoryImplementation extends RideRepository {
   @override
   Future<Either<Failure, bool>> makeRequestTrip() async{
     return await rideRemoteDataSource.makeRequestTrip();
+  }
+
+  @override
+  Future<Either<Failure, List<AvailableRideTripEntity>>> getAvailableRideTrips(AvailableRideTripsUseCaseParams params) async {
+    final data = await rideRemoteDataSource.getAvailableRideTrips(params);
+    return data;
   }
 }

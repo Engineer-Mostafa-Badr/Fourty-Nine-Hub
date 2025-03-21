@@ -3008,7 +3008,7 @@ class AppPages {
                 path: Paths.rideModeScreen,
                 name: Routes.rideModeScreen,
                 builder: (context, state) =>
-                    RideModeScreen(modeType: state.extra as String),
+                    RideModeScreen(params: state.extra as RideModeParams),
               ),
               GoRoute(
                   path: Paths.rideDashboardDetailsScreen,

@@ -13,6 +13,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubi
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/record_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/upload_rider_images.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/expired_trips_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/osm_search_and_pick.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/running_trips_screen.dart';
@@ -268,6 +269,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
             Expanded(
               child: CustomRideButton(
                 onPressed: () {
+                  context.push(Routes.rideModeScreen, extra: RideModeParams(modeType: 'ride', isSocket: driverInfo?.driverType == 'socket' ? true : false));
+
                   if (driverInfo == null) {
                     context.read<RideCubit>().onNavigateToWelcomeScreen(fromShipping: false, context: context);
                   }
@@ -280,6 +283,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                     context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: false, isSocket: driverInfo.driverType == 'socket' ? true : false));
                   } else if (driverInfo != null && driverInfo.status == RegistrationStatus.initial.status) {
                     context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: false, isSocket: driverInfo.driverType == 'socket' ? true : false));
+                  }else{
+                    context.push(Routes.rideModeScreen, extra: RideModeParams(modeType: 'ride', isSocket: driverInfo?.driverType == 'socket' ? true : false));
                   }
                 },
                 isRed: (driverInfo != null && (driverInfo.status != RegistrationStatus.rejected.status)) ? true : false,

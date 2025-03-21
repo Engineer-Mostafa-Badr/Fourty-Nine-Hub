@@ -1,5 +1,6 @@
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/constants/constants.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_available_ride_trips_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_balance_history_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_history_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/main_category_use_case.dart';
@@ -1328,5 +1329,9 @@ class EndPoints {
 
   static String updateTripPriceFromClient(String tripId) {
     return '/ride/client/trips/offer/$tripId';
+  }
+
+  static String getAvailableRideTrips(AvailableRideTripsUseCaseParams params) {
+    return '/ride/driver/trips/available/tracking?page=${params.page}&limit=${params.limit}';
   }
 }

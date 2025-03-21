@@ -63,7 +63,7 @@ class _VoiceNoteRecorderState extends State<VoiceNoteRecorder> {
                 if (_isRecording) {
                   await context.read<RideCubit>().stopRecord(
                     subcategoryId: '62c8ba9f8e28a58a3edf57eb',
-                    tripId: '67db526553f8217334727d6e',
+                    tripId: '67db76b6152a4bdcde6df905',
                   );
                   await _stopRecording();
                 } else {

@@ -23,6 +23,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/car_years_and
 import 'package:fourtyninehub/features/RideFeature/domain/entities/check_driver_type_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/completed_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/cost_per_km_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_info_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_picture_optional_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_statistics_entity.dart';
@@ -62,6 +63,8 @@ import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entit
 import '../../../../core/data/datasources/remote/api/api_consumer.dart';
 import '../../../../core/data/datasources/remote/api/end_points.dart';
 import '../../../../core/error/failure.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_available_ride_trips_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/available_ride_trip_model.dart';
 
 abstract class RideRemoteDataSource {
   ////////////////////Nasr////////////////////
@@ -120,6 +123,7 @@ abstract class RideRemoteDataSource {
   Future<Either<Failure, bool>> loadingRegister(LoadingRegisterEntity params);
   Future<Either<Failure, LoadingInfoEntity>> getLoadingInfo();
   Future<Either<Failure, bool>> makeRequestTrip();
+  Future<Either<Failure, List<AvailableRideTripEntity>>> getAvailableRideTrips(AvailableRideTripsUseCaseParams params);
 }
 
 class RideRemoteDataSourceImplementation
@@ -761,6 +765,24 @@ class RideRemoteDataSourceImplementation
         return Right(data['status']??false);
       });
     } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<AvailableRideTripEntity>>> getAvailableRideTrips(AvailableRideTripsUseCaseParams params) async {
+    try {
+      final response = await _apiConsumer.get(
+        EndPoints.getAvailableRideTrips(params),
+      );
+
+      return response.fold((failure) => Left(failure), (data) {
+        return Right((data['data']['trips'] as List)
+            .map((e) => AvailableRideTripModel.fromJson(e))
+            .toList());
+      });
+    } catch (e) {
+      print("e.toString ${e.toString()}");
       return Left(ServerFailure(message: e.toString()));
     }
   }
