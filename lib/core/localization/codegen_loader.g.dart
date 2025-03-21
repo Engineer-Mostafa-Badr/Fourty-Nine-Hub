@@ -1437,7 +1437,8 @@ class CodegenLoader extends AssetLoader{
   "enterYourDeviceID": "ادخل معرف الجهاز",
   "billGift": "فاتورة الهدية",
   "skip": "تخطى",
-  "move": "حرك"
+  "move": "حرك",
+  "movex": "حرك"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -2879,7 +2880,8 @@ static const Map<String,dynamic> _en = {
   "uploadBill": "Upload Bill",
   "investment": "Investment",
   "skip": "Skip",
-  "move": "Move"
+  "move": "Move",
+  "movex": "Movex"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

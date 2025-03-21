@@ -57,6 +57,7 @@ class EndPoints {
   static const getProfile = '/users/profile';
   static const getCountries = '/ride/countries';
   static const register = '/auth/register';
+  static const registerByPhone = '/auth/register/phone-number';
   static const testGift = '/test/gift';
   static const verifyOTP = '/auth/verify/email';
   static const getWelcomeGift = '/auth/welcome-gift';

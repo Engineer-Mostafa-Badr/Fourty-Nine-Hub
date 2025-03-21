@@ -35,6 +35,7 @@ import '../features/authentication/domain/use_cases/change_password_use_case.dar
 import '../features/authentication/domain/use_cases/get_tokens_use_case.dart';
 import '../features/authentication/domain/use_cases/get_user_use_case.dart';
 import '../features/authentication/domain/use_cases/login_use_case.dart';
+import '../features/authentication/domain/use_cases/register_by_phone_use_case.dart';
 import '../features/authentication/domain/use_cases/register_use_case.dart';
 import '../features/authentication/domain/use_cases/save_tokens_use_case.dart';
 import '../features/authentication/domain/use_cases/send_forget_password_question_use_case.dart';
@@ -120,6 +121,7 @@ class AuthServiceLocator {
     // serviceLocator.registerFactory<CacheService>(() => CacheServiceImpl());
     serviceLocator.registerFactory(() => GetTokensUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => RegisterUseCase(serviceLocator()));
+    serviceLocator.registerFactory(() => RegisterByPhoneUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => VerifyOTPUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => ResendOTPUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => SignOutUseCase(serviceLocator()));
@@ -210,6 +212,7 @@ class AuthServiceLocator {
 
     serviceLocator.registerFactory<RegisterCubit>(
       () => RegisterCubit(
+        serviceLocator(),
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),

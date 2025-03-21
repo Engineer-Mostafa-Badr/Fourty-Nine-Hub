@@ -57,7 +57,6 @@ class EnterEmailForgotPasswordView extends StatelessWidget {
                   key: cubit.emailFormKey,
                   child: DefaultTextFormField(
                     fillColor: Colors.transparent,
-
                     currentController: cubit.emailController,
                     label: LocaleKeys.email.localize,
                     hint: LocaleKeys.typeHere.localize,

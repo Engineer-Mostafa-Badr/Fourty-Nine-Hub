@@ -6,22 +6,22 @@ import 'package:fourtyninehub/features/authentication/domain/repositories/auth_r
 
 import '../../../../core/utils/device_id.dart';
 
-class RegisterUseCase extends UseCase<void, RegisterParams> {
+class RegisterByPhoneUseCase extends UseCase<void, RegisterByPhoneParams> {
   final AuthRepository _repository;
 
-  RegisterUseCase(this._repository);
+  RegisterByPhoneUseCase(this._repository);
 
   @override
-  Future<Either<Failure, void>> call(RegisterParams params) {
-    return _repository.register(params);
+  Future<Either<Failure, void>> call(RegisterByPhoneParams params) {
+    return _repository.registerByPhone(params);
   }
 }
 
-class RegisterParams extends Equatable {
+class RegisterByPhoneParams extends Equatable {
   final String userName;
   final String firstName;
   final String lastName;
-  final String email;
+  final String phoneNumber;
   final String password;
   final String confirmPassword;
   final String token;
@@ -29,11 +29,11 @@ class RegisterParams extends Equatable {
   final String? referralId;
   final bool isMale;
 
-  const RegisterParams({
+  const RegisterByPhoneParams({
     required this.userName,
     required this.firstName,
     required this.lastName,
-    required this.email,
+    required this.phoneNumber,
     required this.password,
     required this.confirmPassword,
     required this.token,
@@ -46,8 +46,9 @@ class RegisterParams extends Equatable {
         'username': userName,
         'firstName': firstName,
         'lastName': lastName,
-        if(birthday!=null&&(birthday?.isNotEmpty??false))'birthday': birthday,
-        'email': email,
+        if (birthday != null && (birthday?.isNotEmpty ?? false))
+          'birthday': birthday,
+        'phoneNumber': phoneNumber,
         'password': password,
         'confirmPassword': confirmPassword,
         'gender': isMale ? 'male' : 'female',
@@ -60,7 +61,7 @@ class RegisterParams extends Equatable {
   List<Object?> get props => [
         firstName,
         lastName,
-        email,
+        phoneNumber,
         password,
         confirmPassword,
       ];

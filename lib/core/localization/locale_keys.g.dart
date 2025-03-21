@@ -1414,5 +1414,6 @@ abstract class  LocaleKeys {
   static const billGift = 'billGift';
   static const skip = 'skip';
   static const move = 'move';
+  static const movex = 'movex';
 
 }
