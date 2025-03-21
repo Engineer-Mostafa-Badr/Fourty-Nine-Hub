@@ -4,6 +4,8 @@ enum EditProfileStates { loading, initial, success, error }
 
 class EditProfileState {
   final EditProfileStates status;
+  final List<GovernorateEntity>? governorates;
+  String? selectedCountry;
   final Failure? failure;
   bool? isMale;
   String? selectedCityPrivacy;
@@ -25,7 +27,10 @@ class EditProfileState {
     this.selectedJobPrivacy,
     this.selectedStatusPrivacy,
     this.selectedCountryPrivacy,
+    this.governorates,
+    this.selectedCountry,
   });
+
   EditProfileState copyWith({
     EditProfileStates? status,
     Failure? failure,
@@ -37,6 +42,8 @@ class EditProfileState {
     String? selectedStatus,
     String? selectedStatusPrivacy,
     String? selectedCountryPrivacy,
+    String? selectedCountry,
+    List<GovernorateEntity>? governorates,
   }) {
     return EditProfileState(
       status: status ?? this.status,
@@ -51,6 +58,8 @@ class EditProfileState {
           selectedStatusPrivacy ?? this.selectedStatusPrivacy,
       selectedCountryPrivacy:
           selectedCountryPrivacy ?? this.selectedCountryPrivacy,
+      selectedCountry: selectedCountry ?? this.selectedCountry,
+      governorates: governorates ?? this.governorates,
     );
   }
 }

@@ -25,6 +25,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entiti
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../../../core/utils/shared_pref.dart';
+import '../../../domain/use_cases/change_password_use_case.dart';
 import '../../../domain/use_cases/verify_questions_use_case.dart';
 import '../../models/forget_password_questions_model.dart';
 
@@ -41,6 +42,9 @@ abstract class AuthRemoteDataSource {
 
   Future<Either<Failure, UserTokensModel>> login(LoginParams loginParams);
 
+  Future<Either<Failure, UserTokensModel>> changePassword(
+      ChangePasswordParams params);
+
   Future<Either<Failure, UserTokensModel>> socialLogin(
       SocialLoginParams params);
 
@@ -51,7 +55,7 @@ abstract class AuthRemoteDataSource {
   );
 
   Future<Either<Failure, String>> verifyQuestions(
-      VerifyQuestionsParams params,
+    VerifyQuestionsParams params,
   );
 
   Future<Either<Failure, void>> resendOTP(
@@ -317,9 +321,19 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
     CreateNewForgetParams params,
   ) async {
     final result = await _apiConsumer.put(
-      EndPoints.createNewForgetPassword,
-      data: params.toJson(),
-    );
+        params.userId == null
+            ? EndPoints.createNewForgetPassword
+            : EndPoints.createNewForgetPasswordByQuestions,
+        data: params.userId == null
+            ? {
+                "email": params.email,
+                "newPassword": params.newPassword,
+                "confirmNewPassword": params.newPasswordConfirmation
+              }
+            : {
+                "userId": params.userId,
+                "newPassword": params.newPassword,
+              });
     return result.fold(
       (failure) => Left(failure),
       (response) => const Right(null),
@@ -457,15 +471,48 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
       (failure) => Left(failure),
       (response) {
         ForgetPasswordQuestionsModel questions =
-        ForgetPasswordQuestionsModel.fromJson(response['data']);
+            ForgetPasswordQuestionsModel.fromJson(response['data']);
         return Right(questions);
       },
     );
   }
 
   @override
-  Future<Either<Failure, String>> verifyQuestions(VerifyQuestionsParams params) {
-    // TODO: implement verifyQuestions
-    throw UnimplementedError();
+  Future<Either<Failure, String>> verifyQuestions(
+      VerifyQuestionsParams params) async {
+    final result = await _apiConsumer.post(
+      EndPoints.checkAnswersQuestions,
+      data: params.toJson(),
+    );
+
+    return result.fold(
+      (failure) => Left(failure),
+      (response) {
+        return Right(response['data']['userId']);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, UserTokensModel>> changePassword(
+      ChangePasswordParams params) async {
+    final result = await _apiConsumer.put(
+      EndPoints.changePassword,
+      data: params.toJson(),
+    );
+
+    return result.fold(
+      (failure) => Left(failure),
+      (response) async {
+        _apiConsumer.attachToken(UserTokensModel.fromJson(
+          response['data'],
+        ));
+        return Right(
+          UserTokensModel.fromJson(
+            response['data'],
+          ),
+        );
+      },
+    );
   }
 }

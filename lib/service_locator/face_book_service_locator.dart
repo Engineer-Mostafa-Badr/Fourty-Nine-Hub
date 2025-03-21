@@ -52,6 +52,11 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/cu
 import 'package:get_it/get_it.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_sub_activities_usecase.dart';
 
+import '../features/health_feature/create_doctor/data/repositories/create_repo_doctor_imp.dart';
+import '../features/health_feature/create_doctor/domain/repositories/create_doctor_repo.dart';
+import '../features/health_feature/create_doctor/domain/usecases/get_governorates.dart';
+import '../features/social_media/edit_profile/domain/usecases/get_governorates.dart';
+
 class FaceBookServiceLocator {
   static Future<void> execute({required GetIt serviceLocator}) async {
     serviceLocator.registerLazySingleton<CreatePostRemoteDataSource>(() =>
@@ -67,6 +72,10 @@ class FaceBookServiceLocator {
         () => SocialPostsRepoImpl(serviceLocator()));
     serviceLocator.registerLazySingleton<EditProfileRepo>(
         () => EditProfileRepoImpl(serviceLocator()));
+
+
+    // serviceLocator.registerLazySingleton<CreateDoctorRepo>(
+    //     () => CreateDoctorRepoImpl(serviceLocator()));
 
     serviceLocator.registerLazySingleton<CreatePostUseCase>(
         () => CreatePostUseCase(serviceLocator()));
@@ -246,6 +255,10 @@ class FaceBookServiceLocator {
         .registerLazySingleton<GetLifeEventSubCategoriesUseCase>(() => GetLifeEventSubCategoriesUseCase(
               serviceLocator(),
             ));
+ serviceLocator
+        .registerLazySingleton<GetProfileGovernoratesUseCase>(() => GetProfileGovernoratesUseCase(
+              serviceLocator(),
+            ));
 
     serviceLocator.registerFactory<CreatePostCubit>(() => CreatePostCubit(
           serviceLocator(),
@@ -260,6 +273,7 @@ class FaceBookServiceLocator {
         ));
 
     serviceLocator.registerFactory<EditProfileCubit>(() => EditProfileCubit(
+          serviceLocator(),
           serviceLocator(),
         ));
 

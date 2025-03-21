@@ -5,8 +5,8 @@ import '../../../../core/error/failure.dart';
 import '../../domain/entities/check_driver_type_entity.dart';
 import '../../domain/entities/create_loading_trip_entity.dart';
 import '../../domain/entities/ride_category_entity.dart';
-import '../datasources/shipping_remote_data_source.dart';
 import '../../domain/repositories/shipping_repository.dart';
+import '../datasources/shipping_remote_data_source.dart';
 import '../models/create_loading_trip_model.dart';
 
 class ShippingRepositoryImplementation extends ShippingRepository {

@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
+
 import 'package:camera/camera.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 import 'package:ffmpeg_kit_flutter/return_code.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -18,10 +20,8 @@ import 'package:video_thumbnail/video_thumbnail.dart' as thumb;
 import '../../../../../../core/utils/custom_show_dialog.dart';
 import '../../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../../res/style/app_colors.dart';
-import 'recording_shared.dart';
 import '../../shared/filter_utiles.dart';
-
-import 'package:easy_localization/easy_localization.dart';
+import 'recording_shared.dart';
 
 class MyVoiceVideoRecordingScreen extends StatefulWidget {
   final String? comeFrom;

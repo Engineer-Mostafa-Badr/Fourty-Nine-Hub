@@ -99,6 +99,7 @@ abstract class Assets {
   static String facebookAppBarIcon = 'assets/icons/Facebook_app_bar_icon.svg';
   static String instagramAppBarIcon = 'assets/icons/Instagram_app_bar_icon.svg';
   static String twitterAppBarIcon = 'assets/icons/Twitter_app_bar_icon.svg';
+  static String idea = 'assets/icons/Idea.svg';
   static String homeSocialAppBar = 'assets/icons/home_social_app_bar-icon.svg';
   static String createPostAppBarIcon =
       'assets/icons/create_post_app_bar_icon.svg';
@@ -165,6 +166,7 @@ abstract class Assets {
   static String instagramSharePostIcon =
       'assets/icons/instagram_share_post_icon.png';
   static String instagramHideIcon = 'assets/icons/instagram_hide_icon.svg';
+
   // reactions
   static String like = 'assets/images/reactions/like.png';
   static String heart = 'assets/images/reactions/heart.png';
@@ -330,4 +332,18 @@ abstract class Assets {
   static String rideUsageIcon = 'assets/icons/ride_usage_icon.svg';
   static String userShippingTripsIcon = 'assets/icons/user_shipping_trips.svg';
   static String viewCountIcon = 'assets/icons/view_count_icon.svg';
+
+
+  static String onBoarding1 = 'assets/onBoarding/onBoarding1.svg';
+  static String onBoarding2 = 'assets/onBoarding/onBoarding2.svg';
+  static String onBoarding3 = 'assets/onBoarding/onBoarding3.svg';
+  static String onBoarding4 = 'assets/onBoarding/onBoarding4.svg';
+  static String onBoarding5 = 'assets/onBoarding/onBoarding5.svg';
+  static String onBoarding6 = 'assets/onBoarding/onBoarding6.svg';
+  static String onBoarding7 = 'assets/onBoarding/onBoarding7.svg';
+  static String onBoarding8 = 'assets/onBoarding/onBoarding8.svg';
+  static String onBoarding9 = 'assets/onBoarding/onBoarding9.svg';
+  static String onBoarding10 = 'assets/onBoarding/onBoarding10.svg';
+  static String onBoarding11 = 'assets/onBoarding/onBoarding11.svg';
+  static String onBoarding12 = 'assets/onBoarding/onBoarding12.svg';
 }
