@@ -19,7 +19,7 @@ class CashbackViewBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
       child: BlocBuilder<CashbackCubit, CashbackState>(
         builder: (context, state) {
           if (state.status.isLoading || state.status.isInitial) {
@@ -50,15 +50,12 @@ class CashbackViewBody extends StatelessWidget {
                 state.isLoadingButton
                     ? const Center(child: CircularProgressIndicator())
                     : CustomButtonWalletAndGiftAndCashback(
-                        title: state.cashback!.balance >= 500
-                            ? 'Request Withdrawal'
-                            : 'Request Withdrawal',
-                        status: true,
+                        title: LocaleKeys.requestTransaction2.localize,
+                        status: state.cashback!.balance >= 1002,
                         onPressed: () {
                           context
                               .read<CashbackCubit>()
                               .requestWithdrawal(context);
-                          if (state.cashback!.balance >= 500) {}
                         },
                       ),
                 const SizedBox(

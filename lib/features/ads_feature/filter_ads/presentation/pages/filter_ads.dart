@@ -14,6 +14,7 @@ import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/cat
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/selection_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/presentation/pages/widgets/filter_ad_dynamic_inputs.dart';
+import 'package:fourtyninehub/features/ads_feature/filter_ads/presentation/pages/widgets/header_filter.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
@@ -64,78 +65,85 @@ class _FilterAdsViewState extends State<FilterAdsView> {
                 child: CircularProgressIndicator(),
               );
             }
-            return ListView(
-              shrinkWrap: true,
-              padding: const EdgeInsets.all(16.0),
-              children: [
-                Row(
+            return Padding(
+              padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0,),
+              child: SingleChildScrollView(
+                child: Column(
+                  // shrinkWrap: true,
+                  // padding: const EdgeInsets.all(16.0),
                   children: [
-                    SquareImage(
-                      width: kToolbarHeight * .8,
-                      height: kToolbarHeight * .8,
-                      radius: 10,
-                      url: widget.categorization.subCategory.image,
+                    HeaderFilter(
+                      categorization: widget.categorization,
                     ),
-                    const Sizer(),
-                    Expanded(
-                        child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Label(
-                          text: context.isArabic
-                              ? widget.categorization.subCategory.nameAr
-                              : widget.categorization.subCategory.nameEn,
-                          style: Styles.mediumText(fontWeight: FontWeight.bold),
-                        ),
-                        Label(
-                            text:
-                                widget.categorization.mainCategory.name ?? ""),
-                      ],
-                    )),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    const Divider(
+                      thickness: 2,
+                      height: 0,
+                      color: Color(0xFFD9D9D9),
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: state.filterAdProperties?.length ?? 0,
+                      itemBuilder: (context, index) {
+                        final property = state.filterAdProperties![index];
+                        return FilterAdDynamicInputWidget(
+                          property: property,
+                          onChanged: (SelectionEntity v) =>
+                              controller.onChanged(v: v, index: index),
+                          onTextChanged: (String v, bool from, String type) =>
+                              controller.onTextChanged(
+                                  v: v,
+                                  index: index,
+                                  isNumber: property.type == 'number',
+                                  from: from,
+                                  type: type),
+                        );
+                      },
+                      // separatorBuilder: (context, index) => const Sizer(),
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    ClickableWidget(
+                        onTap: () {
+                          controller.filterAds(
+                              categorize: widget.categorization, context: context);
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.all(10),
+                          decoration: ShapeDecoration(
+                            color: AppColors.PRIMARY_COLOR,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            shadows:const [
+                              BoxShadow(
+                                color: Color(0x3F000000),
+                                blurRadius: 4,
+                                offset: Offset(0, 4),
+                                spreadRadius: 0,
+                              )
+                            ],
+                          ),
+                          // decoration: BoxDecoration(
+                          //   color: AppColors.PRIMARY_COLOR,
+                          //   borderRadius: BorderRadius.circular(10),
+                          // ),
+                          child: Label(
+                            text: LocaleKeys.filter.localize,
+                            style: Styles.headerText(color: Colors.white),
+                          ),
+                        )),
                   ],
                 ),
-                const Divider(),
-                const Sizer(),
-                ListView.separated(
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (context, index) {
-                    final property = state.filterAdProperties![index];
-                    return FilterAdDynamicInputWidget(
-                      property: property,
-                      onChanged: (SelectionEntity v) =>
-                          controller.onChanged(v: v, index: index),
-                      onTextChanged: (String v, bool from, String type) =>
-                          controller.onTextChanged(
-                              v: v,
-                              index: index,
-                              isNumber: property.type == 'number',
-                              from: from,
-                              type: type),
-                    );
-                  },
-                  separatorBuilder: (context, index) => const Sizer(),
-                  shrinkWrap: true,
-                  itemCount: state.filterAdProperties?.length ?? 0,
-                ),
-                const Sizer(),
-                ClickableWidget(
-                    onTap: () {
-                      controller.filterAds(
-                          categorize: widget.categorization, context: context);
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: AppColors.PRIMARY_COLOR,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Label(
-                        text: LocaleKeys.filter.localize,
-                        style: Styles.headerText(color: Colors.white),
-                      ),
-                    )),
-              ],
+              ),
             );
           }),
         ),

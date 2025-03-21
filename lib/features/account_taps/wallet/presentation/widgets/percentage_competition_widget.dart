@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class PercentageCompetitionWidget extends StatefulWidget {
@@ -7,10 +10,12 @@ class PercentageCompetitionWidget extends StatefulWidget {
     super.key,
     required this.currentPoints,
     required this.price,
+    required this.currency,
     required this.totalPoints,
     required this.percentage,
   });
   final num price;
+  final String currency;
   final int totalPoints;
   final num currentPoints;
   final double percentage;
@@ -24,7 +29,6 @@ class _PercentageCompetitionWidgetState
     extends State<PercentageCompetitionWidget> {
   @override
   Widget build(BuildContext context) {
-
     return Stack(
       children: [
         Positioned(
@@ -39,8 +43,8 @@ class _PercentageCompetitionWidgetState
               gradient: LinearGradient(
                 begin: const Alignment(1.00, 0.00),
                 end: const Alignment(-1, 0),
-                stops: widget.percentage == 100 ? [1] : null,
-                colors: widget.percentage == 100
+                stops: widget.percentage > 100 ? [1] : null,
+                colors: widget.percentage > 100
                     ? [const Color(0xFFF33D49)]
                     : [
                         const Color(0xFF0B1035),
@@ -52,7 +56,8 @@ class _PercentageCompetitionWidgetState
             ),
             child: Center(
               child: Label(
-                text: '${widget.currentPoints}/${widget.totalPoints}',
+                text:
+                    '${FormatNumbers().formatNumber(widget.currentPoints)} / ${FormatNumbers().formatNumber(widget.totalPoints)}',
                 style: Styles.headerText(
                   color: Colors.white,
                   fontSize: 32,
@@ -79,7 +84,8 @@ class _PercentageCompetitionWidgetState
             ),
             child: Center(
               child: Label(
-                text: '${widget.price}',
+                text:
+                    '${FormatNumbers().formatNumber(widget.price)} ${widget.currency}',
                 style: Styles.headerText(
                   color: Colors.white,
                   fontSize: 32,
@@ -106,7 +112,7 @@ class _PercentageCompetitionWidgetState
             ),
             child: Center(
               child: Label(
-                text: '${widget.percentage.toStringAsFixed(1)}%',
+                text: '${widget.percentage.toStringAsFixed(0)}%',
                 style: Styles.headerText(
                   color: Colors.white,
                   fontSize: 32,

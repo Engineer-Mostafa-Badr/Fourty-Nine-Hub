@@ -15,14 +15,28 @@ import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
 import '../Controllers/on_boarding_cubit.dart';
 
-class OnBoardingScreen extends StatelessWidget {
+class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({super.key});
+
+  @override
+  State<OnBoardingScreen> createState() => _OnBoardingScreenState();
+}
+
+class _OnBoardingScreenState extends State<OnBoardingScreen> {
+
+  @override
+  initState() {
+    super.initState();
+    context.read<OnBoardingCubit>().getOnboardingData();
+  }
 
   @override
   Widget build(BuildContext context) {
     PageController controller = PageController();
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: Theme
+          .of(context)
+          .scaffoldBackgroundColor,
       body: BlocBuilder<OnBoardingCubit, OnBoardingState>(
         builder: (context, state) {
           var cubit = context.read<OnBoardingCubit>();
@@ -33,7 +47,9 @@ class OnBoardingScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(
-                  height: MediaQuery.paddingOf(context).top,
+                  height: MediaQuery
+                      .paddingOf(context)
+                      .top,
                 ),
                 const Sizer(
                   height: 64,
@@ -65,27 +81,29 @@ class OnBoardingScreen extends StatelessWidget {
                     textDirection: context.textDirection,
                     child: PageView.builder(
                       itemCount: cubit.images.length,
-                      itemBuilder: (context, index) => Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            width: double.infinity,
-                            height: 300,
-                            child: SvgPicture.asset(
-                              state.image,
-                              width: double.infinity,
-                            ),
+                      itemBuilder: (context, index) =>
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                width: double.infinity,
+                                height: 300,
+                                child: SvgPicture.asset(
+                                  state.image,
+                                  width: double.infinity,
+                                ),
+                              ),
+                              const SizedBox(height: 32),
+                              Text(
+                                context.isArabic ? state.titleAr : state
+                                    .titleEn,
+                                style: Styles.headerText(
+                                    color: context.isDarkMode
+                                        ? AppColors.AUTH_CONTAINER_COLOR
+                                        : AppColors.PRIMARY_COLOR),
+                              ),
+                            ],
                           ),
-                          const SizedBox(height: 32),
-                          Text(
-                            context.isArabic ? state.titleAr : state.titleEn,
-                            style: Styles.headerText(
-                                color: context.isDarkMode
-                                    ? AppColors.AUTH_CONTAINER_COLOR
-                                    : AppColors.PRIMARY_COLOR),
-                          ),
-                        ],
-                      ),
                       onPageChanged: (index) {
                         if (index < cubit.images.length) {
                           debugPrint(
@@ -97,7 +115,7 @@ class OnBoardingScreen extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => const Scaffold()),
-                              (route) => false);
+                                  (route) => false);
                         }
                       },
                       controller: controller,
@@ -110,28 +128,30 @@ class OnBoardingScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: List.generate(
                       cubit.images.length,
-                      (itemIndex) => Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            gradient: itemIndex == state.currentIndex
-                                ? const LinearGradient(
-                                    colors: [
-                                      Color(0xFF0B1035),
-                                      Color(0xFFFF3308),
-                                    ],
-                                    begin: Alignment.topCenter,
-                                  )
-                                : null,
-                            color: itemIndex == state.currentIndex
-                                ? null
-                                : AppColors.GREYBG,
+                          (itemIndex) =>
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 2.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                gradient: itemIndex == state.currentIndex
+                                    ? const LinearGradient(
+                                  colors: [
+                                    Color(0xFF0B1035),
+                                    Color(0xFFFF3308),
+                                  ],
+                                  begin: Alignment.topCenter,
+                                )
+                                    : null,
+                                color: itemIndex == state.currentIndex
+                                    ? null
+                                    : AppColors.GREYBG,
+                              ),
+                              height: 10,
+                              width: 10,
+                            ),
                           ),
-                          height: 10,
-                          width: 10,
-                        ),
-                      ),
                     ),
                   ),
                 ),

@@ -6,7 +6,8 @@ class TransferMoneyEntity {
   final String toUsername;
   final String toEmail;
   final num amount;
-  final String currency;
+  final String currencyEn;
+  final String currencyAr;
   final String date;
 
   TransferMoneyEntity({
@@ -15,7 +16,8 @@ class TransferMoneyEntity {
     required this.to,
     required this.toUsername,
     required this.amount,
-    required this.currency,
+    required this.currencyEn,
+    required this.currencyAr,
     required this.date,
     required this.fromEmail,
     required this.toEmail,

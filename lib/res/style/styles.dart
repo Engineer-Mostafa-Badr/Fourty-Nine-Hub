@@ -10,7 +10,8 @@ abstract class Styles {
       TextDecoration? decoration,
       double decorationThickness = 0,
       List<Shadow>? shadows,
-      FontWeight fontWeight = FontWeight.w400}) {
+        double? height,
+        FontWeight fontWeight = FontWeight.w400}) {
     return TextStyle(
         fontSize: fontSize.sp,
         color: color,
@@ -18,27 +19,32 @@ abstract class Styles {
         decoration: decoration,
         shadows: shadows,
         decorationColor: color ?? AppColors.PRIMARY_COLOR,
-        fontWeight: fontWeight);
+        fontWeight: fontWeight,
+        height: height,
+    );
   }
 
   static TextStyle mediumText(
       {double fontSize = 28,
-      Color? color=Colors.black,
+      Color? color = Colors.black,
       double decorationThickness = 0,
       TextDecoration? decoration,
       List<Shadow>? shadows,
       FontStyle? fontStyle,
+      double? height,
       FontWeight fontWeight = FontWeight.w400}) {
     return TextStyle(
-        fontSize: fontSize.sp,
-        color: color,
-        fontStyle: fontStyle,
-        // overflow: TextOverflow.ellipsis,
-        shadows: shadows,
-        decorationThickness: decorationThickness,
-        decoration: decoration,
-        decorationColor: color,
-        fontWeight: fontWeight);
+      fontSize: fontSize.sp,
+      color: color,
+      fontStyle: fontStyle,
+      // overflow: TextOverflow.ellipsis,
+      shadows: shadows,
+      decorationThickness: decorationThickness,
+      decoration: decoration,
+      decorationColor: color,
+      fontWeight: fontWeight,
+      height: height,
+    );
   }
 
   static TextStyle headerText(
@@ -48,7 +54,8 @@ abstract class Styles {
       List<Shadow>? shadows,
       double decorationThickness = 0,
       Color? color,
-      FontWeight fontWeight = FontWeight.w600}) {
+        double? height,
+        FontWeight fontWeight = FontWeight.w600}) {
     return TextStyle(
       fontSize: fontSize.sp,
       fontWeight: fontWeight,
@@ -57,6 +64,7 @@ abstract class Styles {
       decoration: decoration,
       color: color,
       decorationThickness: decorationThickness,
+      height: height,
     );
   }
 }

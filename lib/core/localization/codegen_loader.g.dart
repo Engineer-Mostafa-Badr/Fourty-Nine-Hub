@@ -247,7 +247,7 @@ class CodegenLoader extends AssetLoader{
   "emailOtp": "إرسال OTP عبر البريد الإلكتروني",
   "verification": "التحقق",
   "notifications": "الإشعارات",
-  "checkVerification": "يرجى التحقق من بريدك الإلكتروني",
+  "checkVerification": "يرجى التحقق من بريدك الإلكتروني لمعرفة رمز التحقق",
   "congratulations": "تهانينا",
   "close": "إغلاق",
   "giftApp": "لقد حصلت على هدية بقيمة 400 جنيه كهدية ترحيبية للتسجيل في تطبيق 49.",
@@ -1437,7 +1437,15 @@ class CodegenLoader extends AssetLoader{
   "enterYourDeviceID": "ادخل معرف الجهاز",
   "billGift": "فاتورة الهدية",
   "skip": "تخطى",
-  "move": "حرك"
+  "move": "حرك",
+  "pleaseSubscribeToContactTheClient": "يرجى الاشتراك للتواصل مع العميل!",
+  "refresh": "تحديث",
+  "transferTo": "تحويل لـ...",
+  "hint": "تلميح",
+  "anyMoneyYouSubscribe": "أي مبلغ تشترك فيه",
+  "insideAppYouWillGetInterest": "داخل التطبيق ستحصل على فائدة",
+  "after5YearsAnd10Years": "بعد 5 سنوات و10 سنوات",
+  "areYouSureOfTransferMoney": "هل أنت متأكد من تحويل الأموال؟"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -1674,7 +1682,7 @@ static const Map<String,dynamic> _en = {
   "emailOtp": "Email OTP",
   "verification": "Verification",
   "notifications": "Notifications",
-  "checkVerification": "Please check your email",
+  "checkVerification": "Please check your email to see the verification code ",
   "congratulations": "Congratulations",
   "close": "CLOSE",
   "giftApp": "You got a gift of 400 pounds as a welcome gift for registering on the 49 app.",
@@ -2877,9 +2885,17 @@ static const Map<String,dynamic> _en = {
   "EGPFor": "EGP for",
   "personalTransaction": "personal transaction.",
   "uploadBill": "Upload Bill",
-  "investment": "Investment",
   "skip": "Skip",
-  "move": "Move"
+  "move": "Move",
+  "investment": "Investment",
+  "pleaseSubscribeToContactTheClient": "Please subscribe to contact the client!",
+  "refresh": "Refresh",
+  "transferTo": "Transfer To...",
+  "hint": "Hint",
+  "anyMoneyYouSubscribe": "Any money you subscribe",
+  "insideAppYouWillGetInterest": "inside app, you will get interest",
+  "after5YearsAnd10Years": "after 5 years and 10 years",
+  "areYouSureOfTransferMoney": "Are you sure of transfer money?"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

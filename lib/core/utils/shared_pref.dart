@@ -169,7 +169,7 @@ class CacheManager {
     try {
       final prefs = await SharedPreferences.getInstance();
       print('isChoiceRuler ${prefs.getBool(isChoiceRuler)}');
-      return prefs.getBool(isChoiceRuler) ?? false;
+      return prefs.getBool(isChoiceRuler) ?? true;
     } catch (e) {
       return false;
     }

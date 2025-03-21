@@ -14,6 +14,7 @@ class AppButton extends StatelessWidget {
   final Widget? widget;
   final TextStyle? style;
   final IconData? icon;
+  final Widget? iconWidget;
   final Color? color;
   final MainAxisAlignment? mainAxisAlignment;
   const AppButton(
@@ -31,6 +32,7 @@ class AppButton extends StatelessWidget {
       this.textColor,
       this.style,
       this.icon,
+        this.iconWidget,
       this.color,
       this.width});
 
@@ -59,7 +61,8 @@ class AppButton extends StatelessWidget {
                       size: (iconSize ?? 30).sp,
                       color: textColor ?? Colors.white,
                     ),
-                  if (icon != null)
+                  if(iconWidget != null) iconWidget!,
+                  if (icon != null || iconWidget != null)
                     Sizer(
                       width: 10.w,
                     ),

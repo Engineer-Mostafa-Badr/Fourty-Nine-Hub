@@ -253,11 +253,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                         ),
                                       );
 
-                                      // bottomSheet(
-                                      //     backColor: Theme.of(context)
-                                      //         .scaffoldBackgroundColor,
-                                      //     context: context,
-                                      //     widget: const LogoutWidget());
                                     }),
                               ],
                             ),
@@ -387,6 +382,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   height: 100.h,
                   isCircle: true,
                   icon: Icons.person,
+                  color: AppColors.PRIMARY_COLOR,
                   onPressed: () {
                     context.pop();
                     context.push(Routes.LOGIN);
@@ -409,6 +405,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     height: 100.h,
                     isCircle: true,
                     icon: Icons.person_add,
+                    color: AppColors.PRIMARY_COLOR,
                     onPressed: () {
                       context.pop();
                       context.push(Routes.REGISTER);

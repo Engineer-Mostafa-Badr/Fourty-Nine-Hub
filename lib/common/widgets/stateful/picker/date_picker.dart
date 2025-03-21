@@ -51,6 +51,7 @@ class _DatePickerFieldState extends State<DatePickerField> {
               initialDate: widget.initialDate,
               firstDate: widget.minDate,
               lastDate: widget.maxDate,
+
             );
             if (picked != null && picked != _selectedDate) {
               setState(() {

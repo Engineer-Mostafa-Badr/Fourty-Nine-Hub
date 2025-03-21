@@ -2,18 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/gift_wallet_entity.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/gift_two_cubit/gift_two_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/investment_item.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class InvestmentSection extends StatefulWidget {
-  const InvestmentSection({super.key, required this.yearsFromFiveYears, required this.yearsFromTenYears});
+  const InvestmentSection({super.key, required this.giftWalletEntity,});
 
-  final int yearsFromFiveYears;
-  final int yearsFromTenYears;
+  final GiftWalletEntity giftWalletEntity;
 
   @override
   State<InvestmentSection> createState() => _InvestmentSectionState();
@@ -82,10 +83,11 @@ class _InvestmentSectionState extends State<InvestmentSection> {
                   ),
                   child: Column(
                     children: [
-
                       InvestmentItem(
                         totalYears: 5,
-                        currentYears: widget.yearsFromFiveYears,
+                        currentYears: widget.giftWalletEntity.fiveYears??0,
+                        currency: context.isArabic? widget.giftWalletEntity.currencyAr : widget.giftWalletEntity.currencyEn,
+                        price: 0,
                         onPressed: () {
                           context.read<GiftTwoCubit>().requestTransferFiveYears(context);
                         },
@@ -96,7 +98,9 @@ class _InvestmentSectionState extends State<InvestmentSection> {
                       ),
                       InvestmentItem(
                         totalYears: 10,
-                        currentYears: widget.yearsFromTenYears,
+                        currentYears: widget.giftWalletEntity.tenYears??0,
+                        currency: context.isArabic? widget.giftWalletEntity.currencyAr : widget.giftWalletEntity.currencyEn,
+                        price: 0,
                         onPressed: () {
                           context.read<GiftTwoCubit>().requestTransferTenYears(context);
                         },
@@ -122,7 +126,7 @@ class _InvestmentSectionState extends State<InvestmentSection> {
                   child: Column(
                     children: [
                       Label(
-                        text: 'Hint',
+                        text: LocaleKeys.hint.localize,
                         style: Styles.headerText(
                           fontSize: 32,
                           fontWeight: FontWeight.w700,
@@ -133,21 +137,21 @@ class _InvestmentSectionState extends State<InvestmentSection> {
                         height: 16,
                       ),
                       Label(
-                        text: 'Any money you subscribe',
+                        text: LocaleKeys.anyMoneyYouSubscribe.localize,
                         style: Styles.mediumText(
                           fontWeight: FontWeight.w500,
                           fontSize: 32,
                         ),
                       ),
                       Label(
-                        text: 'inside app, you will get interest',
+                        text: LocaleKeys.insideAppYouWillGetInterest.localize,
                         style: Styles.mediumText(
                           fontWeight: FontWeight.w500,
                           fontSize: 32,
                         ),
                       ),
                       Label(
-                        text: 'after 5 years and 10 years',
+                        text: LocaleKeys.after5YearsAnd10Years.localize,
                         style: Styles.mediumText(
                           fontWeight: FontWeight.w500,
                           fontSize: 32,

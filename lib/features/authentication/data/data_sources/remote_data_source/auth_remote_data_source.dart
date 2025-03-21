@@ -12,6 +12,7 @@ import 'package:fourtyninehub/features/authentication/domain/use_cases/create_ne
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_profile_views_usecase.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/google_sign_in_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/login_use_case.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/register_by_phone_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/register_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/resend_otp_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/send_forget_password_otp_use_case.dart';
@@ -101,6 +102,8 @@ abstract class AuthRemoteDataSource {
 
   Future<Either<Failure, List<GetProfileViewsEntity>>> getProfileViewsByUserId(
       GetProfileViewsParams params);
+
+  Future<Either<Failure, void>> registerByPhone(RegisterByPhoneParams params);
 }
 
 class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
@@ -513,6 +516,18 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
           ),
         );
       },
+    );
+  }
+
+  @override
+  Future<Either<Failure, void>> registerByPhone(RegisterByPhoneParams params) async {
+    final result = await _apiConsumer.post(
+      EndPoints.registerByPhone,
+      data: await params.toJson(),
+    );
+    return result.fold(
+          (failure) => Left(failure),
+          (response) => const Right(null),
     );
   }
 }
