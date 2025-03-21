@@ -1,11 +1,17 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/account_taps/transfer_money/domain/entities/transfer_money_entity.dart';
+import 'package:fourtyninehub/features/account_taps/transfer_money/presentation/pages/widgets/check_divider_widget.dart';
+import 'package:fourtyninehub/features/account_taps/transfer_money/presentation/pages/widgets/transfer_list_tile_widget.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
@@ -50,6 +56,12 @@ class _TransactionSuccessScreenState extends State<TransactionSuccessScreen> {
     return CustomScaffold(
       appBar: BackAppBar(
         label: LocaleKeys.transactionSuccessful.localize,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).popUntil((route) => route.isFirst);
+          },
+          icon: const Icon(Icons.arrow_back),
+        ),
       ),
       body: Column(
         children: [
@@ -57,143 +69,140 @@ class _TransactionSuccessScreenState extends State<TransactionSuccessScreen> {
             child: Screenshot(
               controller: screenshotController,
               child: Container(
-                // padding: const EdgeInsets.all(16.0),
+                color: Colors.white,
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       // Success Icon
-                      Icon(
-                        Icons.check_circle,
-                        color: Colors.green,
-                        size: 200.sp,
+                      Image.asset(
+                        height: 150,
+                        width: 150,
+                        Assets.checkSuccessImage,
                       ),
-                      const Sizer(),
-                      Text(
-                        LocaleKeys.yourTransactionWasSuccessful.localize,
-                        style: Styles.mediumText(),
+                      const SizedBox(
+                        height: 16,
                       ),
-                      const Sizer(),
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: '${widget.model.amount} ',
-                              style: TextStyle(
-                                fontSize: 100.sp,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            TextSpan(
-                              text: widget.model.currency,
-                              style: TextStyle(
-                                fontSize: 40.sp,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.SECONDARY_COLOR,
-                              ),
-                            ),
-                          ],
+                      Label(
+                        text: LocaleKeys.yourTransactionWasSuccessful.localize,
+                        style: Styles.headerText(
+                          fontSize: 40,
+                          height: 1.6,
                         ),
                       ),
-                      Sizer(height: 15.h),
-                      Text(
-                        LocaleKeys.transferMoney.localize,
-                        style: TextStyle(
-                          fontSize: 30.sp,
-                        ),
+                      const SizedBox(
+                        height: 8,
                       ),
-                      const Sizer(),
-                      ListTile(
-                        leading: Image.asset(
-                          Assets.logo,
-                          width: 80.w,
-                          height: 80.h,
-                        ),
-                        title: Text(LocaleKeys.from.localize),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '@${widget.model.fromEmail.split('@')[0]}',
-                              style: Styles.mediumText(
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              widget.model.from,
-                              style: Styles.mediumText(),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Row(
-                        children: [
-                          Expanded(
-                            child: Divider(
-                              color: AppColors.GREY_NORMAL_COLOR,
+                      Text.rich(
+                        TextSpan(children: [
+                          TextSpan(
+                            text: '${widget.model.amount} ',
+                            style: Styles.headerText(
+                              color: Colors.black,
+                              fontSize: 48 + 48,
+                              fontWeight: FontWeight.w700,
+                              height: 1.33,
                             ),
                           ),
-                          CircleAvatar(
-                            radius: 15,
-                            backgroundColor: AppColors.GREY_NORMAL_COLOR,
-                            child: Icon(Icons.check,
-                                color: Colors.green, size: 22),
-                          ),
-                          Expanded(
-                            child: Divider(
-                              color: AppColors.GREY_NORMAL_COLOR,
+                          TextSpan(
+                            text: context.isArabic
+                                ? widget.model.currencyAr
+                                : widget.model.currencyEn,
+                            style: Styles.headerText(
+                              color: AppColors.SECONDARY_COLOR_DARK2,
+                              fontSize: 36 + 36,
+                              fontWeight: FontWeight.w700,
+                              height: 1.78,
                             ),
                           ),
-                        ],
+                        ]),
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      Label(
+                        text: LocaleKeys.transferMoney.localize,
+                        style: Styles.headerText(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 40,
+                          height: 1.60,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      TransferListTileWidget(
+                        title: LocaleKeys.from.localize,
+                        mail: '@${widget.model.fromEmail.split('@')[0]}',
+                        name: widget.model.from,
+                        image: Image.asset(Assets.logo),
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      const CheckDividerWidget(),
+                      const SizedBox(
+                        height: 8,
                       ),
                       // To Section
-                      ListTile(
-                        leading: Icon(Icons.account_balance_wallet,
-                            size: 80.sp, color: Colors.orange),
-                        title: Text(
-                          LocaleKeys.to.localize,
-                          style: Styles.mediumText(),
-                        ),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '@${widget.model.toEmail.split('@')[0]}',
-                              style: Styles.mediumText(
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              widget.model.to,
-                              style: Styles.mediumText(),
-                            ),
-                          ],
-                        ),
+                      TransferListTileWidget(
+                        title: LocaleKeys.to.localize,
+                        mail: '@${widget.model.toEmail.split('@')[0]}',
+                        name: widget.model.to,
+                        image: SvgPicture.asset(Assets.walletImage),
                       ),
-                      ListTile(
-                        // trailing: Text(
-                        //   '${LocaleKeys.date.localize}: ${widget.model.date}',
-                        //   //widget.model.date,
-                        //   style: Styles.headerText(),
-                        // ),
-                        title: Row(
+                      const SizedBox(
+                        height: 24,
+                      ),
+                      Padding(
+                        padding: const EdgeInsetsDirectional.only(start: 29),
+                        child: Row(
                           children: [
-                            Text(
-                              '${LocaleKeys.date.localize}: ',
+                            Label(
+                              text: '${LocaleKeys.date.localize}: ',
                               style: Styles.headerText(
-                                  fontWeight: FontWeight.w400,
-                                  color: AppColors.GREY_NORMAL_COLOR),
+                                fontWeight: FontWeight.w500,
+                                color: const Color(0x993C3C43),
+                              ),
                             ),
-                            Text(
-                              widget.model.date,
-                              style: Styles.headerText(),
+                            Label(
+                              text: widget.model.date,
+                              style: Styles.headerText(
+                                fontSize: 40,
+                              ),
                             ),
                           ],
                         ),
                       ),
-                      Sizer(height: 70.h),
+                      // ListTile(
+                      //   // trailing: Text(
+                      //   //   '${LocaleKeys.date.localize}: ${widget.model.date}',
+                      //   //   //widget.model.date,
+                      //   //   style: Styles.headerText(),
+                      //   // ),
+                      //   title: Row(
+                      //     children: [
+                      //       Text(
+                      //         '${LocaleKeys.date.localize}: ',
+                      //         style: Styles.headerText(
+                      //             fontWeight: FontWeight.w400,
+                      //             color: AppColors.GREY_NORMAL_COLOR),
+                      //       ),
+                      //       Text(
+                      //         widget.model.date,
+                      //         style: Styles.headerText(),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
+                      const SizedBox(
+                        height: 15,
+                      ),
                       // Powered by Logo
                       Image.asset(
+                        height: 100,
+                        width: 100,
                         Assets.logo,
-                        width: 180.w,
                       ),
                     ],
                   ),
@@ -202,19 +211,35 @@ class _TransactionSuccessScreenState extends State<TransactionSuccessScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ElevatedButton.icon(
+            padding: const EdgeInsets.all(8.0),
+            child: AppButton(
+              width: 150,
+              label: LocaleKeys.share.localize,
+              style: Styles.headerText(
+                color: Colors.white,
+                fontSize: 40,
+              ),
               onPressed: _takeScreenshotAndShare,
-              icon: const Icon(
-                Icons.share,
-                color: AppColors.AUTH_CONTAINER_COLOR,
+              iconWidget: SvgPicture.asset(
+                Assets.share2Icon,
               ),
-              label: Text(
-                LocaleKeys.share.localize,
-                style: Styles.mediumText(color: AppColors.AUTH_CONTAINER_COLOR),
-              ),
+              backColor: const Color(0xffED1B24),
             ),
           ),
+          // Padding(
+          //   padding: const EdgeInsets.all(16.0),
+          //   child: ElevatedButton.icon(
+          //     onPressed: _takeScreenshotAndShare,
+          //     icon: const Icon(
+          //       Icons.share,
+          //       color: AppColors.AUTH_CONTAINER_COLOR,
+          //     ),
+          //     label: Text(
+          //       LocaleKeys.share.localize,
+          //       style: Styles.mediumText(color: AppColors.AUTH_CONTAINER_COLOR),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

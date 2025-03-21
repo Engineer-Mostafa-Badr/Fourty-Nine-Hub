@@ -233,7 +233,7 @@
   "emailOtp": "Email OTP",
   "verification": "Verification",
   "notifications": "Notifications",
-  "checkVerification": "Please check your email",
+  "checkVerification": "Please check your email to see the verification code ",
   "congratulations": "Congratulations",
   "close": "CLOSE",
   "giftApp": "You got a gift of 400 pounds as a welcome gift for registering on the 49 app.",
@@ -1436,7 +1436,15 @@
   "EGPFor": "EGP for",
   "personalTransaction": "personal transaction.",
   "uploadBill": "Upload Bill",
-  "investment": "Investment",
   "skip": "Skip",
-  "move": "Move"
+  "move": "Move",
+  "investment": "Investment",
+  "pleaseSubscribeToContactTheClient": "Please subscribe to contact the client!",
+  "refresh": "Refresh",
+  "transferTo": "Transfer To...",
+  "hint": "Hint",
+  "anyMoneyYouSubscribe": "Any money you subscribe",
+  "insideAppYouWillGetInterest": "inside app, you will get interest",
+  "after5YearsAnd10Years": "after 5 years and 10 years",
+  "areYouSureOfTransferMoney": "Are you sure of transfer money?"
 }

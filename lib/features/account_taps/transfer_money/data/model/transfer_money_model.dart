@@ -7,7 +7,8 @@ class TransferMoneyModel extends TransferMoneyEntity {
     required super.to,
     required super.toUsername,
     required super.amount,
-    required super.currency,
+    required super.currencyEn,
+    required super.currencyAr,
     required super.date,
     required super.fromEmail,
     required super.toEmail,
@@ -22,7 +23,8 @@ class TransferMoneyModel extends TransferMoneyEntity {
       toUsername: json['toUsername'] ?? '',
       toEmail: json['toEmail'] ?? '',
       amount: json['amount'] ?? 0,
-      currency: json['currency'] ?? '',
+      currencyEn: json['currencyEn'] ?? '',
+      currencyAr: json['currencyAr'] ?? '',
       date: json['date'] ?? '',
     );
   }

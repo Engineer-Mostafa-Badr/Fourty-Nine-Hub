@@ -1,13 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 
 class FormatNumbers{
-  String formatNumber(num number) {
+  String formatNumber(num number, {int decimals = 1}) {
     if (number >= 1000 && number < 1000000) {
-      return '${(number / 1000).toStringAsFixed(1)}K';
+      return '${(number / 1000).toStringAsFixed(decimals)}K';
     } else if (number >= 1000000 && number < 1000000000) {
-      return '${(number / 1000000).toStringAsFixed(1)}M';
+      return '${(number / 1000000).toStringAsFixed(decimals)}M';
     } else if (number >= 1000000000) {
-      return '${(number / 1000000000).toStringAsFixed(1)}B';
+      return '${(number / 1000000000).toStringAsFixed(decimals)}B';
     } else {
       return number.toStringAsFixed(0);
     }

@@ -231,7 +231,7 @@
   "emailOtp": "إرسال OTP عبر البريد الإلكتروني",
   "verification": "التحقق",
   "notifications": "الإشعارات",
-  "checkVerification": "يرجى التحقق من بريدك الإلكتروني",
+  "checkVerification": "يرجى التحقق من بريدك الإلكتروني لمعرفة رمز التحقق",
   "congratulations": "تهانينا",
   "close": "إغلاق",
   "giftApp": "لقد حصلت على هدية بقيمة 400 جنيه كهدية ترحيبية للتسجيل في تطبيق 49.",
@@ -1421,5 +1421,13 @@
   "enterYourDeviceID": "ادخل معرف الجهاز",
   "billGift": "فاتورة الهدية",
   "skip": "تخطى",
-  "move": "حرك"
+  "move": "حرك",
+  "pleaseSubscribeToContactTheClient": "يرجى الاشتراك للتواصل مع العميل!",
+  "refresh": "تحديث",
+  "transferTo": "تحويل لـ...",
+  "hint": "تلميح",
+  "anyMoneyYouSubscribe": "أي مبلغ تشترك فيه",
+  "insideAppYouWillGetInterest": "داخل التطبيق ستحصل على فائدة",
+  "after5YearsAnd10Years": "بعد 5 سنوات و10 سنوات",
+  "areYouSureOfTransferMoney": "هل أنت متأكد من تحويل الأموال؟"
 }

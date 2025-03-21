@@ -5,6 +5,7 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/localization/locales.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:intl/intl.dart';
@@ -118,28 +119,37 @@ class WinnersGridViewItem extends StatelessWidget {
               const SizedBox(
                 height: 24,
               ),
-              Container(
+              ImageFromInternet(
                 width: 80.25,
                 height: 80.25,
-                decoration: ShapeDecoration(
-                  color: Colors.grey,
-                  image: DecorationImage(
-                    image: NetworkImage(
-                      winner.image,
-                    ),
-                    fit: BoxFit.cover,
-                  ),
-                  shape: const OvalBorder(),
-                ),
+                image: winner.image,
+                isCircle: true,
               ),
+              // Container(
+              //   width: 80.25,
+              //   height: 80.25,
+              //   decoration: ShapeDecoration(
+              //     color: Colors.grey,
+              //     image: DecorationImage(
+              //       image: NetworkImage(
+              //         winner.image,
+              //       ),
+              //       fit: BoxFit.cover,
+              //     ),
+              //     shape: const OvalBorder(),
+              //   ),
+              // ),
               const SizedBox(
                 height: 4,
               ),
-              Label(
-                text: winner.name,
-                style: Styles.headerText(
-                  fontSize: 24,
-                  color: Colors.white,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Label(
+                  text: winner.name,
+                  style: Styles.headerText(
+                    fontSize: 24,
+                    color: Colors.white,
+                  ),
                 ),
               ),
               const SizedBox(height: 3),
@@ -168,8 +178,8 @@ class WinnersGridViewItem extends StatelessWidget {
             ],
           ),
           Positioned(
-            top: 0,
-            right: 14,
+            top: -2,
+            right: 11,
             child: SvgPicture.asset(Assets.crownIcon),
           ),
         ],

@@ -17,8 +17,10 @@ class SubCategoryListViewItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       alignment: AlignmentDirectional.center,
+      padding: const EdgeInsets.symmetric(horizontal: 8),
       height: 32,
-      width: 116,
+     constraints: const BoxConstraints(minWidth: 116),
+      // width: 116,
       decoration: BoxDecoration(
         color: subCategory?.isSelected == true
             ? AppColors.PRIMARY_COLOR

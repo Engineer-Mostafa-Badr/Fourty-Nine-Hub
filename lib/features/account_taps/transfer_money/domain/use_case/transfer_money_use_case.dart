@@ -25,7 +25,7 @@ class TransferMoneyParams {
 
   Map<String, dynamic> toJson() {
     return {
-      "receiverUsername": receiverUsername,
+      "receiverEmail": receiverUsername,
       "amount": amount,
     };
   }

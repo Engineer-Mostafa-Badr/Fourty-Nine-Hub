@@ -16,11 +16,16 @@ class PriceTextFormField extends MainTextFormField {
     super.maxLength,
     super.hintColor,
     super.fillColor,
+    super.style,
+    String? hint,
+    TextStyle? hintStyle,
+    Color? borderColor,
   }) : super(
           validator: Validator().validateEmptyValue,
-          hintText: LocaleKeys.price.tr(),
+          hintText: hint ?? LocaleKeys.price.tr(),
           keyboardType: TextInputType.number,
           textCapitalization: TextCapitalization.words,
-          borderColor: AppColors.GREY_DARK_COLOR,
+          borderColor: borderColor ?? AppColors.GREY_DARK_COLOR,
+          hintStyle: hintStyle,
         );
 }
