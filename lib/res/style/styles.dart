@@ -10,7 +10,8 @@ abstract class Styles {
       TextDecoration? decoration,
       double decorationThickness = 0,
       List<Shadow>? shadows,
-      FontWeight fontWeight = FontWeight.w400}) {
+        double? height,
+        FontWeight fontWeight = FontWeight.w400}) {
     return TextStyle(
         fontSize: fontSize.sp,
         color: color,
@@ -18,7 +19,9 @@ abstract class Styles {
         decoration: decoration,
         shadows: shadows,
         decorationColor: color ?? AppColors.PRIMARY_COLOR,
-        fontWeight: fontWeight);
+        fontWeight: fontWeight,
+        height: height,
+    );
   }
 
   static TextStyle mediumText(
@@ -51,7 +54,8 @@ abstract class Styles {
       List<Shadow>? shadows,
       double decorationThickness = 0,
       Color? color,
-      FontWeight fontWeight = FontWeight.w600}) {
+        double? height,
+        FontWeight fontWeight = FontWeight.w600}) {
     return TextStyle(
       fontSize: fontSize.sp,
       fontWeight: fontWeight,
@@ -60,6 +64,7 @@ abstract class Styles {
       decoration: decoration,
       color: color,
       decorationThickness: decorationThickness,
+      height: height,
     );
   }
 }

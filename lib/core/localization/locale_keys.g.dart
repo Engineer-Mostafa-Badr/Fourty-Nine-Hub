@@ -1414,5 +1414,11 @@ abstract class  LocaleKeys {
   static const investment = 'investment';
   static const pleaseSubscribeToContactTheClient = 'pleaseSubscribeToContactTheClient';
   static const refresh = 'refresh';
+  static const transferTo = 'transferTo';
+  static const hint = 'hint';
+  static const anyMoneyYouSubscribe = 'anyMoneyYouSubscribe';
+  static const insideAppYouWillGetInterest = 'insideAppYouWillGetInterest';
+  static const after5YearsAnd10Years = 'after5YearsAnd10Years';
+  static const areYouSureOfTransferMoney = 'areYouSureOfTransferMoney';
 
 }

@@ -15,7 +15,6 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../res/style/styles.dart';
 import '../../../account_taps/wallet/domain/usecases/add_subscribe_use_case.dart';
 import '../../domain/entities/subscription_plans_entity.dart';
@@ -58,19 +57,30 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
     return BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
       builder: (BuildContext context, state) {
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                widget.title ?? "",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 55.sp,
-                  fontWeight: FontWeight.bold,
-                ),
+              Row(
+                children: [
+                  Label(
+                    text: widget.title ?? "",
+                    textAlign: TextAlign.center,
+                    style: Styles.headerText(
+                      fontWeight: FontWeight.w800,
+                      fontSize: 40,
+                    ),
+                  ),
+                  Label(
+                    text: LocaleKeys.subscription.localize,
+                    style: Styles.headerText(
+                      fontWeight: FontWeight.w800,
+                      fontSize: 40,
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 8),
               // DropdownButtonHideUnderline(
               //   child: DropdownMenu<WalletTypes>(
               //       inputDecorationTheme: InputDecorationTheme(
@@ -109,13 +119,25 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
               //         // context.read<WalletCubit>().onSelectWallet(value!);
               //       }),
               // ),
-              Label(
-                text: LocaleKeys.wallet.localize,
-                style: Styles.headerText(
-                  fontSize: 32,
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 7,
+                ),
+                decoration: ShapeDecoration(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    side: const BorderSide(color: Colors.grey, width: 1),
+                  ),
+                ),
+                child: Label(
+                  text: LocaleKeys.wallet.localize,
+                  style: Styles.headerText(
+                    fontSize: 32,
+                  ),
                 ),
               ),
-              const SizedBox(height: 25),
+              const SizedBox(height: 16),
               Row(
                 children: [
                   if (widget.showRegular!)
@@ -123,52 +145,63 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                       child: GestureDetector(
                         onTap: () => setState(() => _isPremium = false),
                         child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 12.h),
+                          height: 32,
+                          // padding: EdgeInsets.symmetric(vertical: 12.h),
                           decoration: BoxDecoration(
                             color: !_isPremium
                                 ? AppColors.PRIMARY_COLOR
                                 : Colors.transparent,
                             borderRadius: BorderRadius.circular(25),
+                            border: Border.all(color: Colors.grey, width: 1),
                           ),
-                          child: Text(
-                            LocaleKeys.regular.localize,
-                            textAlign: TextAlign.center,
-                            style: Styles.headerText(
-                              fontSize: 28,
-                              color: !_isPremium
-                                  ? AppColors.AUTH_CONTAINER_COLOR
-                                  : Theme.of(context).primaryColor,
+                          child: Center(
+                            child: Label(
+                              text: LocaleKeys.regular.localize,
+                              textAlign: TextAlign.center,
+                              style: Styles.headerText(
+                                fontSize: 28,
+                                color: !_isPremium
+                                    ? AppColors.AUTH_CONTAINER_COLOR
+                                    : Theme.of(context).primaryColor,
+                              ),
+                              // TextStyle(
+                              //   color: !_isPremium
+                              //       ? AppColors.AUTH_CONTAINER_COLOR
+                              //       : Theme.of(context).primaryColor,
+                              //   fontWeight: FontWeight.bold,
+                              // ),
                             ),
-                            // TextStyle(
-                            //   color: !_isPremium
-                            //       ? AppColors.AUTH_CONTAINER_COLOR
-                            //       : Theme.of(context).primaryColor,
-                            //   fontWeight: FontWeight.bold,
-                            // ),
                           ),
                         ),
                       ),
                     ),
+                  const SizedBox(
+                    width: 4,
+                  ),
                   Expanded(
                     child: GestureDetector(
                       onTap: () => setState(() => _isPremium = true),
                       child: Container(
-                        padding: EdgeInsets.symmetric(vertical: 12.h),
+                        height: 32,
+                        // padding: EdgeInsets.symmetric(vertical: 12.h),
                         decoration: BoxDecoration(
                           color: _isPremium
                               ? AppColors.SECONDARY_COLOR_DARK2
                               : Colors.transparent,
                           // : Colors.red,
                           borderRadius: BorderRadius.circular(15),
+                          border: Border.all(color: Colors.grey, width: 1),
                         ),
-                        child: Text(
-                          LocaleKeys.premiumSubscription.localize,
-                          textAlign: TextAlign.center,
-                          style: Styles.headerText(
-                            fontSize: 28,
-                            color: _isPremium
-                                ? AppColors.AUTH_CONTAINER_COLOR
-                                : Theme.of(context).primaryColor,
+                        child: Center(
+                          child: Label(
+                            text: LocaleKeys.premiumSubscription.localize,
+                            textAlign: TextAlign.center,
+                            style: Styles.headerText(
+                              fontSize: 28,
+                              color: _isPremium
+                                  ? AppColors.AUTH_CONTAINER_COLOR
+                                  : Theme.of(context).primaryColor,
+                            ),
                           ),
                         ),
                       ),

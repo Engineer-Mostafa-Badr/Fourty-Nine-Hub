@@ -10,10 +10,12 @@ class PercentageCompetitionWidget extends StatefulWidget {
     super.key,
     required this.currentPoints,
     required this.price,
+    required this.currency,
     required this.totalPoints,
     required this.percentage,
   });
   final num price;
+  final String currency;
   final int totalPoints;
   final num currentPoints;
   final double percentage;
@@ -55,7 +57,7 @@ class _PercentageCompetitionWidgetState
             child: Center(
               child: Label(
                 text:
-                    '${FormatNumbers().formatNumber(widget.currentPoints)}/${widget.totalPoints}',
+                    '${FormatNumbers().formatNumber(widget.currentPoints)} / ${FormatNumbers().formatNumber(widget.totalPoints)}',
                 style: Styles.headerText(
                   color: Colors.white,
                   fontSize: 32,
@@ -83,7 +85,7 @@ class _PercentageCompetitionWidgetState
             child: Center(
               child: Label(
                 text:
-                    '${FormatNumbers().formatNumber(widget.price)} ${LocaleKeys.egp.localize}',
+                    '${FormatNumbers().formatNumber(widget.price)} ${widget.currency}',
                 style: Styles.headerText(
                   color: Colors.white,
                   fontSize: 32,

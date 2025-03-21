@@ -29,6 +29,7 @@ abstract class Assets {
   static String commentIcon = 'assets/icons/comment_icon.svg';
   static String sendIcon = 'assets/icons/send_icon.svg';
   static String shareIcon = 'assets/icons/share_icon.svg';
+  static String share2Icon = 'assets/icons/share_2_icon.svg';
   static String publication = 'assets/icons/publication.svg';
   static String zoomVideo = 'assets/icons/zoomVideo.svg';
   static String adIcon = 'assets/icons/ad_icon.svg';
@@ -41,6 +42,17 @@ abstract class Assets {
   static String phoneIcon = 'assets/icons/phone_icon.svg';
   static String mailIcon = 'assets/icons/mail_icon.svg';
   static String refreshIcon = 'assets/icons/refresh_icon.svg';
+  static String searchIcon = 'assets/icons/search_icon.svg';
+  static String captainTripsIcon= 'assets/icons/captain_trips_icon.svg';
+  static String doctorBookingsIcon = 'assets/icons/doctor_bookings_icon.svg';
+  static String followRequestIcon = 'assets/icons/follow_request_icon.svg';
+  static String clicksOnLiveIcon = 'assets/icons/clicks_on_live_icon.svg';
+  static String friendRequestsIcon = 'assets/icons/friend_requests_icon.svg';
+  static String liveLickesIcon = 'assets/icons/live_lickes_icon.svg';
+  static String restauranOrdersIcon = 'assets/icons/restauran_orders_icon.svg';
+  static String shippingDriverTripsIcon = 'assets/icons/shipping_driver_trips_icon.svg';
+  static String storyLikesIcon = 'assets/icons/story_likes_icon.svg';
+  static String storyViewsIcon = 'assets/icons/story_views_icon.svg';
 
   // lottie
   static String loveReaction = 'assets/lottie/love_reaction.json';
@@ -190,6 +202,8 @@ abstract class Assets {
   static String tripJoin = "assets/images/tripjoincar.png";
   static String carImage = "assets/images/car_image.jpg";
   static String personalImage = "assets/images/personal_image.png";
+  static String checkSuccessImage = 'assets/images/check_success_image.png';
+  static String walletImage = 'assets/images/wallet_image.svg';
 
 // .png
   //drawer

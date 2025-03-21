@@ -9,7 +9,8 @@ class GiftWalletEntity {
   final int? fiveYears;
   final String createdAt;
   final String updatedAt;
-  final String currency;
+  final String currencyEn;
+  final String currencyAr;
   final bool? fiveYearsTransfer;
   final bool? tenYearsTransfer;
   final num? fiveYearsLeft;
@@ -27,7 +28,8 @@ class GiftWalletEntity {
     required this.fiveYearsComplete,
     required this.createdAt,
     required this.updatedAt,
-    required this.currency,
+    required this.currencyEn,
+    required this.currencyAr,
     required this.fiveYearsTransfer,
     required this.tenYearsTransfer,
     required this.fiveYearsLeft,

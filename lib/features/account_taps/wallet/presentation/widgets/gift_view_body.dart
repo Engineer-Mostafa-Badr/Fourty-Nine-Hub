@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
@@ -53,8 +54,7 @@ class GiftViewBody extends StatelessWidget {
                     height: 16,
                   ),
                   InvestmentSection(
-                    yearsFromFiveYears: gift.giftWallet.fiveYears!,
-                    yearsFromTenYears: gift.giftWallet.tenYears!,
+                   giftWalletEntity: gift.giftWallet,
                   ),
                   // المسافة بين العنصرين هنا تم تحويلها إلى داخل الـ
                   // InvestmentSection
@@ -64,6 +64,9 @@ class GiftViewBody extends StatelessWidget {
                   // ),
                   CompetitionsSection(
                     competitions: gift.competitionsWallet,
+                    luckyWheel: gift.wheelWallet,
+                    currency: context.isArabic? gift.giftWallet.currencyAr : gift.giftWallet.currencyEn,
+
                   ),
                 ],
               ),
