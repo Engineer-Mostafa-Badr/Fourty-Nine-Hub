@@ -8,6 +8,8 @@ import '../features/RideFeature/data/repositories/trip_repository_impl.dart';
 import '../features/RideFeature/domain/repositories/trip_repository.dart';
 import '../features/RideFeature/domain/usecases/dashboards/get_available_trips_usecase.dart';
 import '../features/RideFeature/domain/usecases/dashboards/get_past_trips_usecase.dart';
+import '../features/RideFeature/domain/usecases/dashboards/get_settings_dashboard_usecase.dart';
+import '../features/RideFeature/domain/usecases/dashboards/update_settings_dashboard_usecase.dart';
 import '../features/RideFeature/presentation/controllers/dashboards_cubit/dashboards_cubit.dart';
 
 class RideDashboardServiceLocatorUpdated {
@@ -25,10 +27,14 @@ class RideDashboardServiceLocatorUpdated {
     serviceLocator.registerLazySingleton<GetAvailableTripsUsecase>(() => GetAvailableTripsUsecase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetPastTripsUsecase>(() => GetPastTripsUsecase(serviceLocator()));
     serviceLocator.registerLazySingleton<AvailableRideTripsUseCase>(() => AvailableRideTripsUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetSettingsDashboardUsecase>(() => GetSettingsDashboardUsecase(serviceLocator()));
+    serviceLocator.registerLazySingleton<UpdateSettingsDashboardUsecase>(() => UpdateSettingsDashboardUsecase(serviceLocator()));
 
     // ---------------------------------- cubits ----------------------------------
 
     serviceLocator.registerLazySingleton<DashboardsCubit>(() => DashboardsCubit(
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

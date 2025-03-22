@@ -1,121 +1,44 @@
 import 'package:equatable/equatable.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/car_type_entity.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/location_entity.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/rider_entity.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/sub_category_entity.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/user_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/rating_entity.dart';
+import 'client_details_entity.dart';
+import 'driver_details_entity.dart';
+import 'sub_category_entity.dart';
+import 'trip_details_entity.dart';
 
 class TripEntity extends Equatable {
-  final LocationEntity startLocation;
-  final LocationEntity targetLocation;
-  final String? tripRatingId;
-  final String id;
-  final UserEntity userId;
-  final RiderEntity? riderId;
-  final SubCategoryEntity subCategoryId;
-  final CarTypeEntity? carTypeId;
-  final String fromTitle;
-  final String toTitle;
-  final double profit;
-  final bool autoAccept;
-  final bool isPremium;
-  final int distance;
-  final int duration;
-  final int passengers;
-  final double price;
-  final double calculateB;
-  final String paymentMethod;
-  final String status;
-  final double penalty;
-  final bool payedPenalty;
-  final bool isUserGetCashback;
-  final bool isRiderGetCashback;
-  final String otp;
-  final bool freeTripForDriver;
-  final String? holdMoneyForTrip;
-  final String? recordingVoice;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final String? rate;
-  final DateTime expireAt;
-  final DateTime? startTime;
-  final String currencyEn;
-  final String currencyAr;
+  final ClientDetailsEntity? clientDetails;
+  final DriverDetailsEntity? driverDetails;
+  final SubCategoryEntity? subCategory;
+  final TripDetailsEntity? tripDetails;
+  final StateEntity? state;
+  final TripRatingEntity? rating;
 
-  TripEntity({
-    required this.startLocation,
-    required this.targetLocation,
-    required this.tripRatingId,
-    required this.id,
-    required this.userId,
-    required this.riderId,
-    required this.subCategoryId,
-    required this.carTypeId,
-    required this.fromTitle,
-    required this.toTitle,
-    required this.profit,
-    required this.autoAccept,
-    required this.isPremium,
-    required this.distance,
-    required this.duration,
-    required this.passengers,
-    required this.price,
-    required this.calculateB,
-    required this.paymentMethod,
-    required this.status,
-    required this.penalty,
-    required this.payedPenalty,
-    required this.isUserGetCashback,
-    required this.isRiderGetCashback,
-    required this.otp,
-    required this.freeTripForDriver,
-    required this.holdMoneyForTrip,
-    required this.recordingVoice,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.rate,
-    required this.expireAt,
-    required this.startTime,
-    required this.currencyEn,
-    required this.currencyAr,
+  const TripEntity( {
+    required this.clientDetails,
+    required this.driverDetails,
+    required this.subCategory,
+    required this.tripDetails,required this.state,required this.rating,
   });
 
   @override
-  List<Object?> get props => [
-        startLocation,
-        targetLocation,
-        tripRatingId,
-        id,
-        userId,
-        riderId,
-        subCategoryId,
-        carTypeId,
-        fromTitle,
-        toTitle,
-        profit,
-        autoAccept,
-        isPremium,
-        distance,
-        duration,
-        passengers,
-        price,
-        calculateB,
-        paymentMethod,
-        status,
-        penalty,
-        payedPenalty,
-        isUserGetCashback,
-        isRiderGetCashback,
-        otp,
-        freeTripForDriver,
-        holdMoneyForTrip,
-        recordingVoice,
-        createdAt,
-        updatedAt,
-        rate,
-        expireAt,
-        startTime,
-        currencyEn,
-        currencyAr
-      ];
+  List<Object?> get props =>
+      [clientDetails, driverDetails, subCategory, tripDetails,state,rating];
+}
+
+// state.dart
+class StateEntity {
+  final bool isButtonEnabled;
+
+  StateEntity({required this.isButtonEnabled});
+
+}
+
+// trip_rating.dart
+class TripRatingEntity {
+  final RatingEntity yourRating;
+  final RatingEntity client;
+
+  TripRatingEntity({required this.yourRating, required this.client});
+
+
 }

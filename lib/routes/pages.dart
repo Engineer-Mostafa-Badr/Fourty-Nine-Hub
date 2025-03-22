@@ -280,6 +280,7 @@ import 'package:go_router/go_router.dart';
 import '../features/OnBoarding/Presentation/Controllers/on_boarding_cubit.dart';
 import '../features/OnBoarding/Presentation/Screens/on_boarding_screen.dart';
 import '../features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
+import '../features/RideFeature/presentation/controllers/dashboards_cubit/dashboards_cubit.dart';
 import '../features/RideFeature/presentation/pages/Register/Driver/drivers_license_screen.dart';
 import '../features/RideFeature/presentation/pages/Register/Driver/more_info_screen.dart';
 import '../features/RideFeature/presentation/pages/Register/Driver/personal_documents_screen.dart';
@@ -1046,7 +1047,7 @@ class AppPages {
                     GoRoute(
                         path: Paths.PRIVACY,
                         name: Routes.PRIVACY,
-                        builder: (context, state) =>  PrivacyView()),
+                        builder: (context, state) => PrivacyView()),
                     GoRoute(
                         path: Paths.POLICY,
                         name: Routes.POLICY,
@@ -2731,7 +2732,9 @@ class AppPages {
                 path: Paths.UploadRiderImages,
                 name: Routes.UploadRiderImages,
                 builder: (context, state) {
-                  return UploadRiderImages(params: state.extra as UploadRiderImagesParams?,);
+                  return UploadRiderImages(
+                    params: state.extra as UploadRiderImagesParams?,
+                  );
                 },
               ),
               GoRoute(
@@ -3007,8 +3010,10 @@ class AppPages {
               GoRoute(
                 path: Paths.rideModeScreen,
                 name: Routes.rideModeScreen,
-                builder: (context, state) =>
-                    RideModeScreen(params: state.extra as RideModeParams),
+                builder: (context, state) => BlocProvider(
+                  create: (context) => serviceLocator<DashboardsCubit>(),
+                  child: RideModeScreen(params: state.extra as RideModeParams),
+                ),
               ),
               GoRoute(
                   path: Paths.rideDashboardDetailsScreen,
@@ -3016,7 +3021,8 @@ class AppPages {
                   builder: (context, state) => MultiBlocProvider(
                         providers: [
                           BlocProvider(
-                            create: (context) => serviceLocator<RideCubit>(),
+                            create: (context) =>
+                                serviceLocator<DashboardsCubit>(),
                           ),
                         ],
                         child: RideDashboardDetailsScreen(
