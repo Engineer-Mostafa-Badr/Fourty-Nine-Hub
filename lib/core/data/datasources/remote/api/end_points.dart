@@ -1233,20 +1233,20 @@ class EndPoints {
   static String createCarPool = '/carpool/create';
 
   static String getRideCategories(String userId) {
-    return '/ride/get-thumbnail-ride${userId.isNotEmpty ?"userId=$userId":""}';
+    return '/ride/get-thumbnail-ride';
   }
 
   static String getShippingCategories(String userId) {
-    return '/loading/driver/subcategory?userId=$userId';
+    return '/loading/driver/subcategory';
   }
+
   static String getDriversInSubcategory(String subCategoryId) {
     return '/ride/riders/drivers/$subCategoryId';
   }
-
-  static String requestTrip(String id) {
-    return '/ride/trips/newTrip/$id';
+  static String requestTrip(String subcategoryId) {
+    return '/ride/trips/newTrip/$subcategoryId';
   }
-
+  static String retrieveClientLatestTrip = '/ride/client/trips/latest';
   static String getExpectedPrice(String id) {
     return '/ride/trips/expected/price/$id';
   }
@@ -1325,7 +1325,11 @@ class EndPoints {
     return '/ride/trips/cancel-by-client/$tripId';
   }
 
-  static String recordingTrip(String tripId) {
+  static String cancelPendingTripByClient(String tripId){
+    return '/ride/client/trips/pending/cancel/$tripId';
+  }
+
+  static String recordingTrip(String tripId){
     return '/ride/trips/record-voice/$tripId';
   }
 

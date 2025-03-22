@@ -4,18 +4,17 @@ import 'dart:developer';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/expected_price_entity.dart';
 
 class RideExpectedPriceModel extends RideExpectedPriceEntity{
-  RideExpectedPriceModel({required super.priceForWomen, required super.priceForTaxi, required super.priceForScooter, required super.priceForCaptain, required super.priceForPremium, required super.priceForSUV, required super.lowestFare, required super.highestFare, required super.from, required super.to, required super.startLocation, required super.targetLocation, required super.distance, required super.duration, required super.polyline, required super.comfort, required super.type, required super.autoAccept, required super.nonSmoking,});
+  RideExpectedPriceModel({required super.priceForWomen, required super.priceForTaxi, required super.priceForScooter, required super.priceForCaptain, required super.priceForPremium, required super.priceForIntercity, required super.priceForSUV, required super.lowestFare, required super.highestFare, required super.from, required super.to, required super.startLocation, required super.targetLocation, required super.distance, required super.duration, required super.polyline, required super.comfort, required super.type, required super.autoAccept, required super.nonSmoking, required super.subcategoryModel,});
 
   //fromJson
   factory RideExpectedPriceModel.fromJson(Map<String, dynamic> json) {
-    log("Expeeeeexted Price Model");
-    log("$json");
     return RideExpectedPriceModel(
-      priceForCaptain: (json['priceFroCaptain'] ?? 0).toDouble(),
+      priceForCaptain: (json['priceForCaptain'] ?? 0).toDouble(),
       priceForWomen: (json['priceForWomen'] ?? 0).toDouble(),
       priceForTaxi: (json['priceForTaxi'] ?? 0).toDouble(),
       priceForScooter: (json['priceForScooter'] ?? 0).toDouble(),
       priceForPremium: (json['priceForPremium'] ?? 0).toDouble(),
+      priceForIntercity: (json['priceForIntercity'] ?? 0).toDouble(),
       priceForSUV: (json['priceForSUV'] ?? 0).toDouble(),
       lowestFare: (json['lowestFare'] ?? 0).toDouble(),
       highestFare: (json['highestFare'] ?? 0).toDouble(),
@@ -47,6 +46,34 @@ class RideExpectedPriceModel extends RideExpectedPriceEntity{
       comfort: (json['options']?['comfort'] ?? 0).toDouble(),
       autoAccept: (json['options']?['autoAccept'] ?? 0).toDouble(),
       nonSmoking: (json['options']?['nonSmoking'] ?? 0).toDouble(),
+      subcategoryModel: (json['subcategory'] as List?)?.map((e) => SubcategoryModel.fromJson(e)).toList() ?? [],
+    );
+  }
+}
+
+class SubcategoryModel {
+  final String id;
+  final String nameEn;
+  final String nameAr;
+  final String picture;
+  final double price;
+  bool isSelected = false;
+
+  SubcategoryModel({
+    required this.id,
+    required this.nameEn,
+    required this.nameAr,
+    required this.picture,
+    required this.price,
+  });
+
+  factory SubcategoryModel.fromJson(Map<String, dynamic> json) {
+    return SubcategoryModel(
+      id: json['id'] ?? '',
+      nameEn: json['nameEn'] ?? '',
+      nameAr: json['nameAr'] ?? '',
+      picture: json['picture'] ?? '',
+      price: (json['price'] ?? 0).toDouble(),
     );
   }
 }
