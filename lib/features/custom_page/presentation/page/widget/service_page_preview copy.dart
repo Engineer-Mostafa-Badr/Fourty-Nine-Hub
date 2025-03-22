@@ -1,27 +1,22 @@
-import 'dart:async';
-
+import 'package:auto_scroll_text/auto_scroll_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_card_swiper/flutter_card_swiper.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/ads/app_open_model.dart';
-import 'package:fourtyninehub/ads/banner_ad_model.dart';
 import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/drawer.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/wallet_widget.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
-import 'package:fourtyninehub/core/enums/ride_services_enum.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
@@ -31,15 +26,12 @@ import 'package:fourtyninehub/features/custom_page/presentation/page/widget/cust
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_taps_cubit/main_categories_taps_cubit.dart';
-import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/pages/main_categories_cards_view.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/pages/main_categories_taps_view.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/widgets/animated_text.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/firebase_notfications_cubit/firebase_notfications_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/widgets/notification_snackbar.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/ride_thumbnail_entity.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/location_socket_cubit.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -48,10 +40,6 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:restart_app/restart_app.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:auto_scroll_text/auto_scroll_text.dart';
-
-import '../../../../../core/utils/custom_show_dialog.dart';
-import '../../../../../core/widget/custom_scaffold.dart';
 
 class ServicePagePreview extends StatefulWidget {
   const ServicePagePreview({super.key});
@@ -337,168 +325,64 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
 
 
   // BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>
-  Widget _pickMeAndComeWithUWidget() {
-    return Expanded(
-      child: _buildRideSubCategoryItem(
-        title: LocaleKeys.tripJoin.localize,
-        // image: Assets.tripJoin,
+  _pickMeAndComeWithUWidget() {
+    return _buildRideSubCategoryItem(
+      title: context.isArabic ? 'جاي معاك' : 'Trip Join',
+      // image: '',
 
-        route: Routes.AVAILABLE_TRIPS,
-        onTab: () {
-          AdInterstitialTop.loadIntersitialAd();
-          AdInterstitialTop.showInterstitialAd();
-          return HandleCashback.setCount('tripJoinCount', context);
-        },
-        // isFavorite: state.data![1].isFavorite,
-        // numberOfAds: state.data![1].numberOfAds?.toInt(),
-      ),
-    );
-    /* return BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>(
-      builder: (context, state) {
-        if (state.status == StateStatus.loading) {
-          return const PickMeAndComeWithYouLShimmerLoading();
-        } else if (state.status == StateStatus.success) {
-          return Expanded(
-            child: _buildRideSubCategoryItem(
-              service: state.data?[1].service ?? RideServicesEnum.comeWithYou,
-              title: state.data![1].name.toString(),
-              image: state.data?[1].image ?? '',
-              // image: Assets.tripJoin,
-
-              route: Routes.AVAILABLE_TRIPS,
-              onTab: () {
-                AdInterstitialTop.loadIntersitialAd();
-                AdInterstitialTop.showInterstitialAd();
-                return HandleCashback.setCount('tripJoinCount', context);
-              },
-              // isFavorite: state.data![1].isFavorite,
-              // numberOfAds: state.data![1].numberOfAds?.toInt(),
-            ),
-          );
-        } else {
-          return Container(
-            padding:
-            //EdgeInsets.all
-            const EdgeInsets.symmetric(horizontal: 10),
-            child: Text(
-              LocaleKeys.noRideSubcategories.localize,
-              style: TextStyle(fontSize: 32.sp.w, fontWeight: FontWeight.w500),
-            ),
-          );
-        }
+      route: Routes.AVAILABLE_TRIPS,
+      onTab: () {
+        AdInterstitialTop.loadIntersitialAd();
+        AdInterstitialTop.showInterstitialAd();
+        return HandleCashback.setCount('tripJoinCount', context);
       },
-    );*/
+      // isFavorite: state.data![1].isFavorite,
+      // numberOfAds: state.data![1].numberOfAds?.toInt(),
+    );
   }
 
-/*  Widget _buildStarWidget() {
-    return SizedBox(
-        height: kToolbarHeight * 2.h,
-        width: double.infinity,
-        child: Stack(
-            children: [
-              Positioned.fill(
-                child: GestureDetector(
-                  // color: AppColors.AUTH_CONTAINER_COLOR,
-                  // label: LocaleKeys.tube.localize,
-                  // style: Styles.mediumText(
-                  //   color: AppColors.AUTH_CONTAINER_COLOR,
-                  //   fontWeight: FontWeight.bold,
-                  // ),
-                  // icon: Icons.star,
-                  // iconSize: 50.h,
-                    onTap: () {
-                      AdInterstitialTop.loadIntersitialAd();
-                      AdInterstitialTop.showInterstitialAd();
-                      HandleCashback.setCount('beAStarCount', context);
-                      context.push(Routes.BE_STAR);
-                    },
-                    child: Container(
-                        height: kToolbarHeight * 2.h,
-                        padding:
-                        EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                          borderRadius: BorderRadius.circular(5),
-                          image: DecorationImage(
-                              image: AssetImage(Assets.tubeCat), fit: BoxFit.fill),
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Color.fromARGB(255, 249, 159, 162),
-                              spreadRadius: 1,
-                              blurRadius: 3,
-                              offset: Offset(1, 1),
-                            )
-                          ],
-                        ),
-                        child: Center(
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                // Image.asset(
-                                //   Assets.tube,
-                                //   height: 35.h,
-                                //   width: 35.h,
-                                //
-                                // ),
-                                // Sizer(width: 10),
-                                Label(
-                                  text: LocaleKeys.tube.localize,
-                                  style: Styles.mediumText(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 45,
-                                  ),
-                                )
-                              ]),
-                        ))),
-              ),
-            ]));
-  }*/
   Widget _buildStarWidget() {
     return SizedBox(
-        height: kToolbarHeight * 2.h,
-        width: double.infinity,
-        child: Positioned.fill(
-          child: GestureDetector(
-              onTap: () {
-                AdInterstitialTop.loadIntersitialAd();
-                AdInterstitialTop.showInterstitialAd();
-                HandleCashback.setCount('beAStarCount', context);
-                context.push(Routes.BE_STAR);
-              },
-              child: Container(
-                  height: kToolbarHeight * 2.h,
-                  decoration: BoxDecoration(
-                    color: Theme
-                        .of(context)
-                        .scaffoldBackgroundColor,
-                    borderRadius: BorderRadius.circular(40.r),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
-                        spreadRadius: 5,
-                        blurRadius: 5,
-                        offset: const Offset(1, 1),
-                      )
-                    ],
-                    image: DecorationImage(
-                        image: AssetImage(Assets.tube1), fit: BoxFit.fill),
-                  ),
-                  child: Center(
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Label(
-                            text: LocaleKeys.tube.localize,
-                            style: Styles.mediumText(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 45,
-                            ),
-                          )
-                        ]),
-                  ))),
-        ));
+      height: kToolbarHeight * 2.h,
+      width: double.infinity,
+      child: GestureDetector(
+        onTap: () {
+          AdInterstitialTop.loadIntersitialAd();
+          AdInterstitialTop.showInterstitialAd();
+          HandleCashback.setCount('beAStarCount', context);
+          context.push(Routes.BE_STAR);
+        },
+        child: Container(
+          height: kToolbarHeight * 2.h,
+          decoration: BoxDecoration(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            borderRadius: BorderRadius.circular(40.r),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
+                spreadRadius: 5,
+                blurRadius: 5,
+                offset: const Offset(1, 1),
+              )
+            ],
+            image: DecorationImage(
+                image: AssetImage(Assets.tube1), fit: BoxFit.fill),
+          ),
+          child: Center(
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Label(
+                text: LocaleKeys.tube.localize,
+                style: Styles.mediumText(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 45,
+                ),
+              )
+            ]),
+          ),
+        ),
+      ),
+    );
   }
 
 
@@ -733,7 +617,8 @@ class CustomDeActivateDialog extends StatelessWidget {
         CustomElevatedButton(
           onPressed: () async {
             await context.read<CustomPageCubit>().updateActivate(false);
-            Restart.restartApp();
+            // Restart.restartApp();
+            Phoenix.rebirth(context);
           },
           child: Text(
             LocaleKeys.yes.localize,

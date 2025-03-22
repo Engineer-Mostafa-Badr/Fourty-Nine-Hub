@@ -2,17 +2,15 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 // Flutter imports:
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-
 // Package imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_prebuilt_live_streaming/src/pk/core/data.dart';
-
 // Project imports:
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 
-import 'package:collection/collection.dart';
 import '../../../components/utils/dialogs.dart';
 import '../../../core/defines.dart';
 import '../../../defines.dart';
@@ -26,17 +24,12 @@ import '../mixer.dart';
 import 'defines.dart';
 import 'protocol.dart';
 
-part 'completer.dart';
-
-part 'dialogs.dart';
-
-part 'host.pk.dart';
-
-part 'host.request.dart';
-
-part 'pk_users.dart';
-
 part '../event/events.dart';
+part 'completer.dart';
+part 'dialogs.dart';
+part 'host.pk.dart';
+part 'host.request.dart';
+part 'pk_users.dart';
 
 mixin ZegoUIKitPrebuiltLiveStreamingPKServices {
   bool _serviceInitialized = false;

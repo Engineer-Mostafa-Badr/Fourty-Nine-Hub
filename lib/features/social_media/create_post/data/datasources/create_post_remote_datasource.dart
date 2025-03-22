@@ -8,15 +8,16 @@ import 'package:fourtyninehub/features/social_media/create_post/data/models/life
 import 'package:fourtyninehub/features/social_media/create_post/data/models/place_model.dart';
 import 'package:fourtyninehub/features/social_media/create_post/data/models/post_user_model.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/activity_entity.dart';
-import 'package:fourtyninehub/features/social_media/create_post/domain/entities/life_event_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/feeling_entity.dart';
+import 'package:fourtyninehub/features/social_media/create_post/domain/entities/life_event_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/place_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/post_user_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/creat_twitter_usecase.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/friends-followers_usecase.dart';
+import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_sub_activities_usecase.dart';
+
 import '../../../../../core/error/failure.dart';
 import '../models/feeling_model.dart';
-import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_sub_activities_usecase.dart';
 
 abstract class CreatePostRemoteDataSource {
   Future<Either<Failure, List<FeelingEntity>>> getFeelingsList(PaginationParams params);

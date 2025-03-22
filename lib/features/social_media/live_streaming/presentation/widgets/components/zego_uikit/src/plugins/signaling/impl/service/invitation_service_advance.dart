@@ -3,7 +3,6 @@ import 'dart:convert';
 
 // Flutter imports:
 import 'package:flutter/services.dart';
-
 // Package imports:
 import 'package:zego_plugin_adapter/zego_plugin_adapter.dart';
 

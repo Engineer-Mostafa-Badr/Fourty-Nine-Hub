@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/create_company_ad/presentation/cubit/create_company_ad_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+
 import '../../../../../../common/widgets/stateful/dynamic/pagination_view.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../core/enums/base_status_enum.dart';
 import '../../../../../../core/messages/messages.dart';
 import '../../../domain/entities/company_ad_entity.dart';
 import 'build_item_photo_post.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PhotoPostContent extends StatefulWidget {
   const PhotoPostContent({super.key});

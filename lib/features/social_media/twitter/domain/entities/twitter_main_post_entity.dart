@@ -1,5 +1,6 @@
 import 'package:fourtyninehub/core/utils/time_utils.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/entities/twitter_user_entity.dart';
+
 import '../../../../../res/assets/assets.dart';
 
 class TwitterMainPostEntity {

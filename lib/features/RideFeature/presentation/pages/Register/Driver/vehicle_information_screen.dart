@@ -2,25 +2,18 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateful/picker/date_picker_field.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/utils/hex_color_helper.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import '../widgets/close_widget.dart';
-import '../widgets/register_expansion_tile.dart';
-import '../widgets/register_floating_action_button.dart';
 import '../widgets/upload_file_widget.dart';
 
 class VehicleInformationScreen extends StatelessWidget {
@@ -92,18 +85,18 @@ class VehicleInformationScreen extends StatelessWidget {
                                     title: uploadFilesTitles[index],
                                     onTap: () {
                                       if (index == 0) {
-                                        cubit.onUploadVehicleFrontPicture(context);
-                                      } else if (index == 1) {
-                                        cubit.onUploadVehicleBackPicture(context);
-                                      } else {
                                         cubit.onUploadVehiclePicture(context);
+                                      } else if (index == 1) {
+                                        cubit.onUploadVehicleFrontPicture(context);
+                                      } else {
+                                        cubit.onUploadVehicleBackPicture(context);
                                       }
                                     },
                                     imageUrl: index == 0
-                                        ? state.vehicleFrontPicture
+                                        ? state.vehiclePicture
                                         : index == 1
-                                            ? state.vehicleBackPicture
-                                            : state.vehiclePicture,
+                                            ? state.vehicleFrontPicture
+                                            : state.vehicleBackPicture,
                                   ),
                                 ),
                               ),

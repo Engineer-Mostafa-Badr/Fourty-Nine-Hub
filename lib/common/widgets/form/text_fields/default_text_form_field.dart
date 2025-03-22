@@ -18,7 +18,7 @@ class DefaultTextFormField extends MainTextFormField {
 
     super.keyboardType,
     // super.margin = null,
-    // super.contentPadding,
+    super.contentPadding,
     super.style,
     super.onTap,
     super.isAuthentcation,
@@ -30,7 +30,7 @@ class DefaultTextFormField extends MainTextFormField {
     super.readOnly,
     // final TextInputType keyboardType = TextInputType.text,
     super.margin = null,
-    final EdgeInsetsGeometry? contentPadding,
+    // final EdgeInsetsGeometry? contentPadding,
     // final VoidCallback? onTap,
     // final bool enabled = true,
     // final bool readOnly = false,
@@ -57,6 +57,7 @@ class DefaultTextFormField extends MainTextFormField {
     // super.label,
     super.constraints,
     super.hintColor,
+    super.hintStyle,
     // final ValueChanged<String>? onChanged,
     // Color? hintColor,
   }) : super(

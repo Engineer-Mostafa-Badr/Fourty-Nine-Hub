@@ -9,7 +9,6 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usec
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 
 import '../../../../../core/error/failure.dart';
-
 import '../../data/models/restaurant_model.dart';
 
 abstract class RestaurantListRepo {

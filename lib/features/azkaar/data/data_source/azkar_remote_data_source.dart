@@ -18,6 +18,7 @@ abstract class AzkarRemoteDataSource {
 
   Future<Either<Failure, List<AzkarDetailsEntity>>> fetchAzkarDetail(
       AzkarDetailsParams params);
+
   Future<Either<Failure, List<AzkarSearchEntity>>> searchAzkar(
       SearchAzkarParams parmas);
 }
@@ -61,18 +62,15 @@ class AzkarRemoteDataSourceImpl extends AzkarRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, List<AzkarSearchEntity>>> searchAzkar(SearchAzkarParams params) async {
-    final response =await _apiConsumer.get(EndPoints.searchAzkar(params),data: {
-      'search': params.search
+  Future<Either<Failure, List<AzkarSearchEntity>>> searchAzkar(
+      SearchAzkarParams params) async {
+    final response = await _apiConsumer
+        .get(EndPoints.searchAzkar(params), data: {'search': params.search});
+    return response.fold((failure) => Left(failure), (response) {
+      final list = (response['data'] as List)
+          .map((e) => SearchAzkarModel.fromJson(e))
+          .toList();
+      return Right(list);
     });
-    return response.fold(
-        (failure)=> Left(failure),
-        (response){
-          final list = (response['data'] as List)
-              .map((e) => SearchAzkarModel.fromJson(e))
-              .toList();
-          return Right(list);
-        }
-    );
   }
 }

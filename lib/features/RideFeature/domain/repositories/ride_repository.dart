@@ -3,6 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/activity_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/completed_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/cost_per_km_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/get_location_from_address_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/history_trip_for_rider_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/history_trip_for_user_entity.dart';
@@ -38,7 +39,8 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_trip_p
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_color_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_car_years_and_types_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
-
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_available_ride_trips_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/available_ride_trip_model.dart';
 import '../../../../core/error/failure.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_statistics_entity.dart';
 
@@ -77,10 +79,12 @@ abstract class RideRepository {
   Future<Either<Failure, bool>> cancelTripByRider(CancelTripByRiderUseCaseParams params);
   Future<Either<Failure, bool>> cancelTripByClient(CancelTripByClientUseCaseParams params);
   Future<Either<Failure, bool>> recordingTrip(RecordingTripUseCaseParams params);
+  Future<Either<Failure, bool>> makeRequestTrip();
   Future<Either<Failure, bool>> updateTripPriceFromClient(UpdateTripPriceFromClientUseCaseParams params);
   Future<Either<Failure, ActivityTripEntity>> getAllActivityTrips(GetAllActivityTripsUseCaseParams params);
   Future<Either<Failure, List<HistoryTripForUserEntity>>> getAllHistoryTripsForUser();
   Future<Either<Failure, List<HistoryTripForRiderEntity>>> getAllHistoryTripsForRider(GetAllHistoryTripsForRiderUseCaseParams params);
   Future<Either<Failure, DriverInfoEntity>> getRideDriverInfo();
   Future<Either<Failure, DriverPictureOptionalEntity>> getDriverPictureOptional();
+  Future<Either<Failure, List<AvailableRideTripEntity>>> getAvailableRideTrips(AvailableRideTripsUseCaseParams params);
 }

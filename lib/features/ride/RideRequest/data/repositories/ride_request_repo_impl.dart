@@ -10,7 +10,6 @@ import 'package:fourtyninehub/features/ride/RideRequest/data/models/report_model
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/ride_offer_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/ride_request_model.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/domain/entity/ride_thumbnail_entity.dart';
-
 import 'package:fourtyninehub/features/ride/RideRequest/domain/repositories/ride_request_repo.dart';
 import 'package:google_maps_flutter_platform_interface/src/types/location.dart';
 

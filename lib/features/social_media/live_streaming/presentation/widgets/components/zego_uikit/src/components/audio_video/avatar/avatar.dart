@@ -1,18 +1,17 @@
 // Dart imports:
 import 'dart:math';
 
+// Package imports:
+import 'package:cached_network_image/cached_network_image.dart';
 // Flutter imports:
 import 'package:flutter/material.dart';
 
-// Package imports:
-import 'package:cached_network_image/cached_network_image.dart';
-
 import '../../../../../../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import '../../defines.dart';
-import 'ripple_avatar.dart';
 // import 'package:zego_uikit/src/services/defines/user.dart' as zego_package;
 import '../../../services/defines/user.dart' as zego_local;
 import '../../../services/uikit_service.dart';
+import '../../defines.dart';
+import 'ripple_avatar.dart';
 // Project imports:
 
 class ZegoAvatar extends StatelessWidget {

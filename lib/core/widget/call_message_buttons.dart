@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/functions/global/button_availability.dart';
 import 'package:fourtyninehub/common/functions/helper/launch_url.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
@@ -26,6 +27,8 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
+
+import '../../res/assets/assets.dart';
 
 class CallMessageButtons extends StatefulWidget {
   const CallMessageButtons(
@@ -60,7 +63,7 @@ class _CallMessageButtonsState extends State<CallMessageButtons> {
         builder: (context, snap) {
           print(snap.data);
           return Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            // crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(
                 flex: 3,
@@ -69,7 +72,10 @@ class _CallMessageButtonsState extends State<CallMessageButtons> {
                           context.read<UserCubit>().isLoggedIn)
                       ? AppColors.PRIMARY_COLOR
                       : AppColors.DARK_GRAY_COLOR,
-                  icon: const Icon(Icons.call),
+                  icon: SvgPicture.asset(
+                    Assets.phoneIcon
+                  ),
+                  // icon: const Icon(Icons.call),
                   onPressed: !context.read<UserCubit>().isLoggedIn
                       ? () => context.push(Routes.LOGIN)
                       : snap.data == true
@@ -185,7 +191,8 @@ class _CallMessageButtonsState extends State<CallMessageButtons> {
                           context.read<UserCubit>().isLoggedIn)
                       ? AppColors.PRIMARY_COLOR
                       : AppColors.DARK_GRAY_COLOR,
-                  icon: const Icon(Icons.email),
+                  icon: SvgPicture.asset(Assets.mailIcon),
+                  // icon: const Icon(Icons.email),
                   onPressed: !context.read<UserCubit>().isLoggedIn
                       ? () => context.push(Routes.LOGIN)
                       : snap.data == true
@@ -214,22 +221,19 @@ class _CallMessageButtonsState extends State<CallMessageButtons> {
               ),
               if (widget.hasReport == true) ...[
                 const Sizer(width: 5),
-                Expanded(
-                  flex: 3,
-                  child: IconButton(
-                    color: AppColors.SECONDARY_COLOR,
-                    icon: const Icon(Icons.report),
-                    onPressed: !context.read<UserCubit>().isLoggedIn
-                        ? () => context.push(Routes.LOGIN)
-                        : () {
-                            bottomSheet(
-                                context: context,
-                                widget: ReportView(
-                                  id: widget.id,
-                                  categoryId: widget.subcategoryId,
-                                ));
-                          },
-                  ),
+                IconButton(
+                  color: AppColors.SECONDARY_COLOR,
+                  icon: const Icon(Icons.report),
+                  onPressed: !context.read<UserCubit>().isLoggedIn
+                      ? () => context.push(Routes.LOGIN)
+                      : () {
+                          bottomSheet(
+                              context: context,
+                              widget: ReportView(
+                                id: widget.id,
+                                categoryId: widget.subcategoryId,
+                              ));
+                        },
                 ),
               ]
             ],

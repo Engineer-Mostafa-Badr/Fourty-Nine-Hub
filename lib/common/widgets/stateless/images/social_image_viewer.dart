@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 
 import '../../../../res/style/styles.dart';
 import '../labels/label.dart';

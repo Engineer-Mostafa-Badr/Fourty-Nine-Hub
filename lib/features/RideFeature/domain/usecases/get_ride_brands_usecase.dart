@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_statistics_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/repositories/ride_repository.dart';
 
 import '../../../../../core/abstract/use_case.dart';

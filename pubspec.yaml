@@ -143,6 +143,7 @@ dependencies:
   zego_uikit_prebuilt_call: ^4.16.22
   sentry_flutter: ^8.13.2
   circular_menu: ^4.0.0
+  fluttertoast:
 dependency_overrides:
   #  camera_android_camerax: 0.6.10+1
   http: ^0.13.3
@@ -188,6 +189,7 @@ flutter:
     - assets/lembi.mp3
     - assets/ChatSounds/
     - assets/drawerIcons/
+    - assets/onBoarding/
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

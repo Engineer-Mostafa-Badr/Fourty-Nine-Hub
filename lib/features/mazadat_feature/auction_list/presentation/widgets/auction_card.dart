@@ -4,6 +4,7 @@ import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart'
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/features/mazadat_feature/auction_list/domain/entities/auction_entity.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../../../../common/functions/helper/numbers_helper.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../res/style/app_colors.dart';

@@ -6,6 +6,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/common/functions/global/upload_images.dart';
 import 'package:fourtyninehub/common/functions/helper/file_picker_helper.dart';
@@ -19,7 +20,6 @@ import 'package:fourtyninehub/features/account_taps/my_adds/domain/entity/edit_m
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/entity/my_ads_auction.dart';
 import 'package:fourtyninehub/features/account_taps/my_adds/domain/usecases/edit_my_ads_use_case.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
-
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/ad_properties_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/create_ad_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/selection_entity.dart';
@@ -31,19 +31,17 @@ import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entit
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/get_cities.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/usecases/get_governorates.dart';
-
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:path_provider/path_provider.dart';
-import '../../../../../core/error/failure.dart';
 
+import '../../../../../core/error/failure.dart';
 import '../../../../../routes/routes.dart';
 import '../../../../account_taps/my_adds/domain/usecases/fetch_my_ads_by_id_usecase.dart';
 import '../../domain/entities/categorization_entity.dart';
 import '../../domain/usecases/create_ad_usecase.dart';
 import '../../domain/usecases/get_ad_properties_usecase.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 part 'create_ad_state.dart';
 

@@ -3,34 +3,24 @@ import 'dart:async';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 
 // Package imports:
 
 // Project imports:
 import '../../zego_uikit/src/services/uikit_service.dart';
+import 'controller/audio_video.dart';
+import 'controller/co.host.dart';
+import 'controller/message.dart';
+import 'controller/minimize.dart';
+import 'controller/pk.dart';
+import 'controller/private/private.dart';
+import 'controller/room.dart';
+import 'controller/screen.dart';
+import 'controller/swiping.dart';
+import 'controller/user.dart';
 import 'events.dart';
 import 'live_streaming.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
-
-import 'controller/audio_video.dart';
-
-import 'controller/co.host.dart';
-
-import 'controller/message.dart';
-
-import 'controller/minimize.dart';
-
-import 'controller/room.dart';
-
-import 'controller/user.dart';
-
-import 'controller/screen.dart';
-
-import 'controller/pk.dart';
-
-import 'controller/swiping.dart';
-
-import 'controller/private/private.dart';
 
 /// Used to control the live streaming functionality.
 ///

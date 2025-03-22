@@ -104,6 +104,7 @@ class _NotificationViewState extends State<NotificationView> {
               appBar: const HomeAppbar(
                 color: Colors.red,
                 inNotifications: true,
+                isWithBackArrow: true,
               ),
               body: Padding(
                 padding: const EdgeInsets.all(8.0),

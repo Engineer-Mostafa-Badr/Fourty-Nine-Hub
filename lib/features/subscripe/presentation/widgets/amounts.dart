@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -32,25 +30,43 @@ class _SubscriptoinAmountsWidgetState extends State<SubscriptoinAmountsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          LocaleKeys.insufficientAmount.localize,
-          style: Styles.headerText(color: Colors.red, fontSize: 40),
-        ),
-        const Sizer(),
-        Text(
-          LocaleKeys.selectAmountToCharge.localize,
-          style: Styles.mediumText(),
-        ),
-        const Sizer(),
-        Expanded(
-          child: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 0,
-                childAspectRatio: 1 / 0.4),
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 19.5,
+        right: 19.5,
+        top: 8,
+        bottom: 16,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Label(
+            text: LocaleKeys.insufficientAmount.localize,
+            style: Styles.headerText(
+              color: Colors.red,
+              fontSize: 40,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          Text(
+            LocaleKeys.selectAmountToCharge.localize,
+            style: Styles.mediumText(),
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          GridView.builder(
+            physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 8,
+              crossAxisSpacing: 4,
+              childAspectRatio: 169 / 32,
+            ),
             padding: EdgeInsets.zero,
             itemCount: widget.amounts.length,
             itemBuilder: (context, index) {
@@ -70,31 +86,85 @@ class _SubscriptoinAmountsWidgetState extends State<SubscriptoinAmountsWidget> {
                     },
                   ),
                   Expanded(
-                      child: BadgedLabel(
-                    label: widget.amounts[index].amount.toString(),
-                    overFlow: TextOverflow.ellipsis,
-                    max: 1,
-                    padding: EdgeInsets.all(20.w),
-                  ))
+                    child: Container(
+                      // width: double.infinity,
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      decoration: ShapeDecoration(
+                        color: const Color(0xFF0B1035),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                      ),
+                      child: Center(
+                        child: Label(
+                          text: widget.amounts[index].amount.toString(),
+                          style: Styles.mediumText(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
+                  // Expanded(
+                  //   child: BadgedLabel(
+                  //     label: widget.amounts[index].amount.toString(),
+                  //     overFlow: TextOverflow.ellipsis,
+                  //     max: 1,
+                  //     padding: const EdgeInsets.all(0),
+                  //     margin: 0,
+                  //   ),
+                  // ),
                 ],
               );
             },
           ),
-        ),
-        const Sizer(),
-        ElevatedAppButton(
-          label: LocaleKeys.chargeNow.localize,
-          onPressed: () {
-            if (groupValue != null) {
-              context.push(Routes.PAYMENT,
-                  extra: PaymobLink(
-                      amountId: newIndex,
-                      // providerId: "667331f44fbaddc4357d612b",
-                      amount: newAmount));
-            }
-          },
-        ),
-      ],
+          const SizedBox(
+            height: 8,
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedAppButton(
+                  label: LocaleKeys.chargeNow.localize,
+                  radius: 15,
+                  textStyle: Styles.mediumText(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 36,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    if (groupValue != null) {
+                      context.push(Routes.PAYMENT,
+                          extra: PaymobLink(
+                              amountId: newIndex,
+                              // providerId: "667331f44fbaddc4357d612b",
+                              amount: newAmount));
+                    }
+                  },
+                ),
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              Expanded(
+                child: ElevatedAppButton(
+                  label: LocaleKeys.cancel.localize,
+                  backColor: const Color(0xffD9D9D9),
+                  radius: 15,
+                  textStyle: Styles.mediumText(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 36,
+                  ),
+                  onPressed: () {
+                    context.pop();
+                  },
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+        ],
+      ),
     );
   }
 }
