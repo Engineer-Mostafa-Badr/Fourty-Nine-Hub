@@ -1,0 +1,66 @@
+import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_request_trip_entity.dart';
+
+class RideRequestTripModel extends RideRequestTripEntity {
+  RideRequestTripModel({
+    required super.id,
+    required super.userId,
+    required super.riderId,
+    required super.subCategoryId,
+    required super.carTypeId,
+    required super.from,
+    required super.to,
+    required super.startCoordinates,
+    required super.targetCoordinates,
+    required super.distance,
+    required super.duration,
+    required super.passengers,
+    required super.price,
+    required super.paymentMethod,
+    required super.status,
+    required super.autoAccept,
+    required super.isPremium,
+    required super.isUserGetCashback,
+    required super.isRiderGetCashback,
+    required super.freeTripForDriver,
+    required super.createdAt,
+    required super.updatedAt,
+    required super.expireAt,
+    required super.rating,
+  });
+
+  factory RideRequestTripModel.fromJson(Map<String, dynamic> json) {
+
+    return RideRequestTripModel(
+      id: json['_id'] ?? '', // Handle null by providing an empty string
+      userId: json['userId'] ?? '',
+      riderId: json['riderId'] ?? '',
+      subCategoryId: json['subCategoryId'] ?? '',
+      carTypeId: json['carTypeId'] ?? '',
+      from: json['fromTitle'] ?? 'Unknown',
+      to: json['toTitle'] ?? 'Unknown',
+      startCoordinates: (json['startLocation']?['coordinates'] as List<dynamic>?)
+          ?.map((coord) => (coord as num?)?.toDouble() ?? 0.0)
+          .toList() ??
+          [0.0, 0.0], // Default empty coordinates
+      targetCoordinates: (json['targetLocation']?['coordinates'] as List<dynamic>?)
+          ?.map((coord) => (coord as num?)?.toDouble() ?? 0.0)
+          .toList() ??
+          [0.0, 0.0], // Default empty coordinates
+      distance: (json['distance'] as num?)?.toDouble() ?? 0.0, // Default to 0.0
+      duration: json['duration'] ?? 0, // Default to 0
+      passengers: json['passengers'] ?? 1, // Default to 1 passenger
+      price: (json['price'] as num?)?.toDouble() ?? 0.0, // Default to 0.0
+      paymentMethod: json['paymentMethod'] ?? 'Cash', // Default payment method
+      status: json['status'] ?? 'Pending', // Default status
+      autoAccept: json['autoAccept'] ?? false, // Default to false
+      isPremium: json['isPremium'] ?? false, // Default to false
+      isUserGetCashback: json['isUserGetCashback'] ?? false, // Default to false
+      isRiderGetCashback: json['isRiderGetCashback'] ?? false, // Default to false
+      freeTripForDriver: json['freeTripForDriver'] ?? false, // Default to false
+      createdAt: json['createdAt'] != null ? DateTime.tryParse(json['createdAt']) ?? DateTime.now() : DateTime.now(),
+      updatedAt: json['updatedAt'] != null ? DateTime.tryParse(json['updatedAt']) ?? DateTime.now() : DateTime.now(),
+      expireAt: json['expireAt'] != null ? DateTime.tryParse(json['expireAt']) ?? DateTime.now() : DateTime.now(),
+      rating: (json['rate'] as num?)?.toDouble() ?? 0.0, // Default rating to 0.0
+    );
+  }
+}

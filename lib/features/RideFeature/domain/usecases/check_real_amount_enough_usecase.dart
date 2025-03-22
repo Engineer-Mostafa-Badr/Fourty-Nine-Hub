@@ -10,7 +10,7 @@ final RideRepository _repo;
 CheckRealAmountEnoughUseCase(this._repo);
 
   @override
-  Future<Either<Failure, bool>> call(double params) {
-    return _repo.checkRealAmountEnough(params);
+  Future<Either<Failure, bool>> call(double params) async{
+    return await _repo.checkRealAmountEnough(params);
   }
 }

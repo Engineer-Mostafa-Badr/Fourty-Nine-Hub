@@ -325,7 +325,9 @@ class _PaymentViewState extends State<PaymentView> {
                             backgroundColor: Colors.green,
                           ),
                         );
-                        context.go(Routes.HOME);
+                        // context.go(Routes.HOME);
+                        context.pop();
+                        context.pop();
                       }
                     },
                     child: Text(
