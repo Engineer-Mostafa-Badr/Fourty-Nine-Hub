@@ -71,4 +71,34 @@ class RegisterRideSpecialEntity {
       }
     };
   }
+
+  // fromJson factory method
+  factory RegisterRideSpecialEntity.fromJson(Map<String, dynamic> json) {
+    final driverInfo = json["driverInfo"];
+    final identificationDetails = driverInfo["identificationDetails"];
+    final contactInfo = driverInfo["contactInfo"];
+    final vehicleInfo = json["vehicleInfo"];
+    final features = vehicleInfo["features"];
+    final serviceSettings = json["serviceSettings"];
+
+    return RegisterRideSpecialEntity(
+      driverFirstName: driverInfo["firstName"],
+      driverLastName: driverInfo["lastName"],
+      birthday: driverInfo["dateOfBirth"],
+      driverLicenseNumber: identificationDetails["driverLicenseNumber"],
+      idNumber: identificationDetails["nationalIdNumber"],
+      phone: contactInfo["phoneNumber"],
+      city: contactInfo["city"],
+      vehicleBrand: vehicleInfo["brand"],
+      vehicleModel: vehicleInfo["model"],
+      vehicleColor: vehicleInfo["color"],
+      vehicleYear: vehicleInfo["year"],
+      plateInfo: vehicleInfo["plateDetails"],
+      airConditioner: features["hasAirConditioner"],
+      smoker: features["allowsSmoking"],
+      pricingPerKm: serviceSettings["pricingPerKm"],
+      workingType: serviceSettings["workingType"],
+      subcategoryIds: List<String>.from(serviceSettings["subcategoryIds"]),
+    );
+  }
 }

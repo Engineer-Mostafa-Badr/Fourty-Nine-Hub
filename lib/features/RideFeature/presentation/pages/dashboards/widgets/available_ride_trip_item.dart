@@ -5,6 +5,7 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/utils/time_utils.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
 
 import '../../../../../../res/assets/assets.dart';
@@ -50,10 +51,10 @@ class AvailableRideTripItem extends StatelessWidget {
                   style: Styles.mediumText(),
                 ),
                 const SizedBox(height: 4),
-                //  Label(
-                //   text: '${(tripEntity.duration/120).toStringAsFixed(0)} Hour',
-                //   style: const TextStyle(fontWeight: FontWeight.w300),
-                // ),
+                 Label(
+                  text: TimeUtils.getRelativeTime(tripEntity.createdAt),
+                  style: const TextStyle(fontWeight: FontWeight.w300),
+                ),
               ],
             ),
           ),
@@ -99,7 +100,7 @@ class AvailableRideTripItem extends StatelessWidget {
                               color: AppColors.SECONDARY_COLOR_DARK2)),
                       TextSpan(
                           text:
-                              // ' - ${tripEntity.distance / 1000} '
+                              ' - ${tripEntity.distance / 1000} '
                                   '${LocaleKeys.KM.tr()}'),
                     ],
                   ),

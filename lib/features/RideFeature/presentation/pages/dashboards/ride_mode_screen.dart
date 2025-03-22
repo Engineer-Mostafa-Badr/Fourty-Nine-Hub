@@ -16,11 +16,13 @@ import 'widgets/available_trips_widget.dart';
 import 'widgets/past_trips_widget.dart';
 import 'widgets/settings_widget.dart';
 import 'widgets/truk_bus_widget.dart';
+
 class RideModeParams{
   final String modeType;
   final bool? isSocket;
   const RideModeParams({required this.modeType, this.isSocket});
 }
+
 class RideModeScreen extends StatefulWidget {
   final RideModeParams params;
   const RideModeScreen({super.key, required this.params});
@@ -31,12 +33,15 @@ class RideModeScreen extends StatefulWidget {
 
 class _RideModeScreenState extends State<RideModeScreen> {
   final ScrollController _scrollController = ScrollController();
+  late ScrollController _availableTripsScrollController;
   int _selectedIndex = 0;
 
   @override
   void initState() {
     print("widget.params.isSocket ${widget.params.isSocket}");
     super.initState();
+    _availableTripsScrollController = ScrollController()..addListener(_onScroll);
+
     // _country = CountryPickerUtils.getCountryByName('Egypt');
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final dashboardCubit = context.read<DashboardsCubit>();
@@ -46,6 +51,14 @@ class _RideModeScreenState extends State<RideModeScreen> {
       }
     });
   }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      context.read<DashboardsCubit>().getAvailableRideTrips(context);
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -123,6 +136,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                  cubit.isLoadingMore?
                                  const Center(child: CircularProgressIndicator()):
                                  state.availableRideTrips != null?ListView.separated(
+                                   controller: _availableTripsScrollController,
                                      itemBuilder: (context, index) =>
                                          AvailableRideTripItem(
                                          tripEntity: state.availableRideTrips![index]),

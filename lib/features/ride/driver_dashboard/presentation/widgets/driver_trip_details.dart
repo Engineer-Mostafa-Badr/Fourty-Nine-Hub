@@ -26,7 +26,7 @@ class DriverTripDetails extends StatelessWidget {
       required this.createOffer});
 
   @override
-  Widget build(Build  Context context) {
+  Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     return Container(
       height: height * .8,
