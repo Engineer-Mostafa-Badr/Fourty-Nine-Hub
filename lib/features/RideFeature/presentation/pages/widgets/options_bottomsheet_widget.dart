@@ -72,119 +72,119 @@ class _OptionsBottomsheetWidgetState extends State<OptionsBottomsheetWidget> {
                             width: double.infinity,
                             label: context.isArabic? "تفعيل" : "Apply",
                             onPressed: () {
-                              if (widget.selectedCategoryName == "Captain") {
-                                if(widget.rideCubit.isComfort && !widget.rideCubit.isComfortIsAdded){
-                                  state.rideExpectedPrice?.priceForCaptain += state.rideExpectedPrice?.comfort ?? 0.0;
-                                  widget.rideCubit.isComfortIsAdded = true;
-                                }
-                                else if(widget.rideCubit.isComfort && widget.rideCubit.isComfortIsAdded){
-                                  state.rideExpectedPrice?.priceForCaptain -= state.rideExpectedPrice?.comfort ?? 0.0;
-                                  widget.rideCubit.isComfortIsAdded = false;
-                                }
-
-                                if(widget.rideCubit.isNonSmoker && !widget.rideCubit.isNonSmokerIsAdded){
-                                  state.rideExpectedPrice?.priceForCaptain += state.rideExpectedPrice?.nonSmoking ?? 0.0;
-                                  widget.rideCubit.isNonSmokerIsAdded = true;
-                                }
-                                else if(widget.rideCubit.isNonSmoker && widget.rideCubit.isNonSmokerIsAdded){
-                                  state.rideExpectedPrice?.priceForCaptain -= state.rideExpectedPrice?.nonSmoking ?? 0.0;
-                                  widget.rideCubit.isNonSmokerIsAdded = false;
-                                }
-
-                                if(widget.rideCubit.isAutoAccept && !widget.rideCubit.isAutoAcceptIsAdded){
-                                  state.rideExpectedPrice?.priceForCaptain += state.rideExpectedPrice?.autoAccept ?? 0.0;
-                                  widget.rideCubit.isAutoAcceptIsAdded = true;
-                                }
-                                else if(widget.rideCubit.isAutoAcceptIsAdded && widget.rideCubit.isAutoAccept){
-                                  state.rideExpectedPrice?.priceForCaptain -= state.rideExpectedPrice?.autoAccept ?? 0.0;
-                                  widget.rideCubit.isAutoAcceptIsAdded = false;
-                                }
-                              }
-                              else if (widget.selectedCategoryName == "Scooter") {
-                                if(widget.rideCubit.isComfort && !widget.rideCubit.isComfortIsAdded){
-                                  state.rideExpectedPrice?.priceForScooter += state.rideExpectedPrice?.comfort ?? 0.0;
-                                  widget.rideCubit.isComfortIsAdded = true;
-                                }
-                                else if(widget.rideCubit.isComfort && widget.rideCubit.isComfortIsAdded){
-                                  state.rideExpectedPrice?.priceForScooter -= state.rideExpectedPrice?.comfort ?? 0.0;
-                                  widget.rideCubit.isComfortIsAdded = false;
-                                }
-
-                                if(widget.rideCubit.isNonSmoker && !widget.rideCubit.isNonSmokerIsAdded){
-                                  state.rideExpectedPrice?.priceForScooter += state.rideExpectedPrice?.nonSmoking ?? 0.0;
-                                  widget.rideCubit.isNonSmokerIsAdded = true;
-                                }
-                                else if(widget.rideCubit.isNonSmoker && widget.rideCubit.isNonSmokerIsAdded){
-                                  state.rideExpectedPrice?.priceForScooter -= state.rideExpectedPrice?.nonSmoking ?? 0.0;
-                                  widget.rideCubit.isNonSmokerIsAdded = false;
-                                }
-
-                                if(widget.rideCubit.isAutoAccept && !widget.rideCubit.isAutoAcceptIsAdded){
-                                  state.rideExpectedPrice?.priceForScooter += state.rideExpectedPrice?.autoAccept ?? 0.0;
-                                  widget.rideCubit.isAutoAcceptIsAdded = true;
-                                }
-                                else if(widget.rideCubit.isAutoAcceptIsAdded && widget.rideCubit.isAutoAccept){
-                                  state.rideExpectedPrice?.priceForScooter -= state.rideExpectedPrice?.autoAccept ?? 0.0;
-                                  widget.rideCubit.isAutoAcceptIsAdded = false;
-                                }
-                              }
-                              else if (widget.selectedCategoryName == "Taxi") {
-                                if(widget.rideCubit.isComfort && !widget.rideCubit.isComfortIsAdded){
-                                  state.rideExpectedPrice?.priceForTaxi += state.rideExpectedPrice?.comfort ?? 0.0;
-                                  widget.rideCubit.isComfortIsAdded = true;
-                                }
-                                else if(widget.rideCubit.isComfort && widget.rideCubit.isComfortIsAdded){
-                                  state.rideExpectedPrice?.priceForTaxi -= state.rideExpectedPrice?.comfort ?? 0.0;
-                                  widget.rideCubit.isComfortIsAdded = false;
-                                }
-
-                                if(widget.rideCubit.isNonSmoker && !widget.rideCubit.isNonSmokerIsAdded){
-                                  state.rideExpectedPrice?.priceForTaxi += state.rideExpectedPrice?.nonSmoking ?? 0.0;
-                                  widget.rideCubit.isNonSmokerIsAdded = true;
-                                }
-                                else if(widget.rideCubit.isNonSmoker && widget.rideCubit.isNonSmokerIsAdded){
-                                  state.rideExpectedPrice?.priceForTaxi -= state.rideExpectedPrice?.nonSmoking ?? 0.0;
-                                  widget.rideCubit.isNonSmokerIsAdded = false;
-                                }
-
-                                if(widget.rideCubit.isAutoAccept && !widget.rideCubit.isAutoAcceptIsAdded){
-                                  state.rideExpectedPrice?.priceForTaxi += state.rideExpectedPrice?.autoAccept ?? 0.0;
-                                  widget.rideCubit.isAutoAcceptIsAdded = true;
-                                }
-                                else if(widget.rideCubit.isAutoAcceptIsAdded && widget.rideCubit.isAutoAccept){
-                                  state.rideExpectedPrice?.priceForTaxi -= state.rideExpectedPrice?.autoAccept ?? 0.0;
-                                  widget.rideCubit.isAutoAcceptIsAdded = false;
-                                }
-                              }
-                              else if (widget.selectedCategoryName == "Suv") {
-                                if(widget.rideCubit.isComfort && !widget.rideCubit.isComfortIsAdded){
-                                  state.rideExpectedPrice?.priceForSUV += state.rideExpectedPrice?.comfort ?? 0.0;
-                                  widget.rideCubit.isComfortIsAdded = true;
-                                }
-                                else if(widget.rideCubit.isComfort && widget.rideCubit.isComfortIsAdded){
-                                  state.rideExpectedPrice?.priceForSUV -= state.rideExpectedPrice?.comfort ?? 0.0;
-                                  widget.rideCubit.isComfortIsAdded = false;
-                                }
-
-                                if(widget.rideCubit.isNonSmoker && !widget.rideCubit.isNonSmokerIsAdded){
-                                  state.rideExpectedPrice?.priceForSUV += state.rideExpectedPrice?.nonSmoking ?? 0.0;
-                                  widget.rideCubit.isNonSmokerIsAdded = true;
-                                }
-                                else if(widget.rideCubit.isNonSmoker && widget.rideCubit.isNonSmokerIsAdded){
-                                  state.rideExpectedPrice?.priceForSUV -= state.rideExpectedPrice?.nonSmoking ?? 0.0;
-                                  widget.rideCubit.isNonSmokerIsAdded = false;
-                                }
-
-                                if(widget.rideCubit.isAutoAccept && !widget.rideCubit.isAutoAcceptIsAdded){
-                                  state.rideExpectedPrice?.priceForSUV += state.rideExpectedPrice?.autoAccept ?? 0.0;
-                                  widget.rideCubit.isAutoAcceptIsAdded = true;
-                                }
-                                else if(widget.rideCubit.isAutoAcceptIsAdded && widget.rideCubit.isAutoAccept){
-                                  state.rideExpectedPrice?.priceForSUV -= state.rideExpectedPrice?.autoAccept ?? 0.0;
-                                  widget.rideCubit.isAutoAcceptIsAdded = false;
-                                }
-                              }
-                              widget.rideCubit.emitRefreshState();
+                              // if (widget.selectedCategoryName == "Captain") {
+                              //   if(widget.rideCubit.isComfort && !widget.rideCubit.isComfortIsAdded){
+                              //     state.rideExpectedPrice?.priceForCaptain += state.rideExpectedPrice?.comfort ?? 0.0;
+                              //     widget.rideCubit.isComfortIsAdded = true;
+                              //   }
+                              //   else if(widget.rideCubit.isComfort && widget.rideCubit.isComfortIsAdded){
+                              //     state.rideExpectedPrice?.priceForCaptain -= state.rideExpectedPrice?.comfort ?? 0.0;
+                              //     widget.rideCubit.isComfortIsAdded = false;
+                              //   }
+                              //
+                              //   if(widget.rideCubit.isNonSmoker && !widget.rideCubit.isNonSmokerIsAdded){
+                              //     state.rideExpectedPrice?.priceForCaptain += state.rideExpectedPrice?.nonSmoking ?? 0.0;
+                              //     widget.rideCubit.isNonSmokerIsAdded = true;
+                              //   }
+                              //   else if(widget.rideCubit.isNonSmoker && widget.rideCubit.isNonSmokerIsAdded){
+                              //     state.rideExpectedPrice?.priceForCaptain -= state.rideExpectedPrice?.nonSmoking ?? 0.0;
+                              //     widget.rideCubit.isNonSmokerIsAdded = false;
+                              //   }
+                              //
+                              //   if(widget.rideCubit.isAutoAccept && !widget.rideCubit.isAutoAcceptIsAdded){
+                              //     state.rideExpectedPrice?.priceForCaptain += state.rideExpectedPrice?.autoAccept ?? 0.0;
+                              //     widget.rideCubit.isAutoAcceptIsAdded = true;
+                              //   }
+                              //   else if(widget.rideCubit.isAutoAcceptIsAdded && widget.rideCubit.isAutoAccept){
+                              //     state.rideExpectedPrice?.priceForCaptain -= state.rideExpectedPrice?.autoAccept ?? 0.0;
+                              //     widget.rideCubit.isAutoAcceptIsAdded = false;
+                              //   }
+                              // }
+                              // else if (widget.selectedCategoryName == "Scooter") {
+                              //   if(widget.rideCubit.isComfort && !widget.rideCubit.isComfortIsAdded){
+                              //     state.rideExpectedPrice?.priceForScooter += state.rideExpectedPrice?.comfort ?? 0.0;
+                              //     widget.rideCubit.isComfortIsAdded = true;
+                              //   }
+                              //   else if(widget.rideCubit.isComfort && widget.rideCubit.isComfortIsAdded){
+                              //     state.rideExpectedPrice?.priceForScooter -= state.rideExpectedPrice?.comfort ?? 0.0;
+                              //     widget.rideCubit.isComfortIsAdded = false;
+                              //   }
+                              //
+                              //   if(widget.rideCubit.isNonSmoker && !widget.rideCubit.isNonSmokerIsAdded){
+                              //     state.rideExpectedPrice?.priceForScooter += state.rideExpectedPrice?.nonSmoking ?? 0.0;
+                              //     widget.rideCubit.isNonSmokerIsAdded = true;
+                              //   }
+                              //   else if(widget.rideCubit.isNonSmoker && widget.rideCubit.isNonSmokerIsAdded){
+                              //     state.rideExpectedPrice?.priceForScooter -= state.rideExpectedPrice?.nonSmoking ?? 0.0;
+                              //     widget.rideCubit.isNonSmokerIsAdded = false;
+                              //   }
+                              //
+                              //   if(widget.rideCubit.isAutoAccept && !widget.rideCubit.isAutoAcceptIsAdded){
+                              //     state.rideExpectedPrice?.priceForScooter += state.rideExpectedPrice?.autoAccept ?? 0.0;
+                              //     widget.rideCubit.isAutoAcceptIsAdded = true;
+                              //   }
+                              //   else if(widget.rideCubit.isAutoAcceptIsAdded && widget.rideCubit.isAutoAccept){
+                              //     state.rideExpectedPrice?.priceForScooter -= state.rideExpectedPrice?.autoAccept ?? 0.0;
+                              //     widget.rideCubit.isAutoAcceptIsAdded = false;
+                              //   }
+                              // }
+                              // else if (widget.selectedCategoryName == "Taxi") {
+                              //   if(widget.rideCubit.isComfort && !widget.rideCubit.isComfortIsAdded){
+                              //     state.rideExpectedPrice?.priceForTaxi += state.rideExpectedPrice?.comfort ?? 0.0;
+                              //     widget.rideCubit.isComfortIsAdded = true;
+                              //   }
+                              //   else if(widget.rideCubit.isComfort && widget.rideCubit.isComfortIsAdded){
+                              //     state.rideExpectedPrice?.priceForTaxi -= state.rideExpectedPrice?.comfort ?? 0.0;
+                              //     widget.rideCubit.isComfortIsAdded = false;
+                              //   }
+                              //
+                              //   if(widget.rideCubit.isNonSmoker && !widget.rideCubit.isNonSmokerIsAdded){
+                              //     state.rideExpectedPrice?.priceForTaxi += state.rideExpectedPrice?.nonSmoking ?? 0.0;
+                              //     widget.rideCubit.isNonSmokerIsAdded = true;
+                              //   }
+                              //   else if(widget.rideCubit.isNonSmoker && widget.rideCubit.isNonSmokerIsAdded){
+                              //     state.rideExpectedPrice?.priceForTaxi -= state.rideExpectedPrice?.nonSmoking ?? 0.0;
+                              //     widget.rideCubit.isNonSmokerIsAdded = false;
+                              //   }
+                              //
+                              //   if(widget.rideCubit.isAutoAccept && !widget.rideCubit.isAutoAcceptIsAdded){
+                              //     state.rideExpectedPrice?.priceForTaxi += state.rideExpectedPrice?.autoAccept ?? 0.0;
+                              //     widget.rideCubit.isAutoAcceptIsAdded = true;
+                              //   }
+                              //   else if(widget.rideCubit.isAutoAcceptIsAdded && widget.rideCubit.isAutoAccept){
+                              //     state.rideExpectedPrice?.priceForTaxi -= state.rideExpectedPrice?.autoAccept ?? 0.0;
+                              //     widget.rideCubit.isAutoAcceptIsAdded = false;
+                              //   }
+                              // }
+                              // else if (widget.selectedCategoryName == "Suv") {
+                              //   if(widget.rideCubit.isComfort && !widget.rideCubit.isComfortIsAdded){
+                              //     state.rideExpectedPrice?.priceForSUV += state.rideExpectedPrice?.comfort ?? 0.0;
+                              //     widget.rideCubit.isComfortIsAdded = true;
+                              //   }
+                              //   else if(widget.rideCubit.isComfort && widget.rideCubit.isComfortIsAdded){
+                              //     state.rideExpectedPrice?.priceForSUV -= state.rideExpectedPrice?.comfort ?? 0.0;
+                              //     widget.rideCubit.isComfortIsAdded = false;
+                              //   }
+                              //
+                              //   if(widget.rideCubit.isNonSmoker && !widget.rideCubit.isNonSmokerIsAdded){
+                              //     state.rideExpectedPrice?.priceForSUV += state.rideExpectedPrice?.nonSmoking ?? 0.0;
+                              //     widget.rideCubit.isNonSmokerIsAdded = true;
+                              //   }
+                              //   else if(widget.rideCubit.isNonSmoker && widget.rideCubit.isNonSmokerIsAdded){
+                              //     state.rideExpectedPrice?.priceForSUV -= state.rideExpectedPrice?.nonSmoking ?? 0.0;
+                              //     widget.rideCubit.isNonSmokerIsAdded = false;
+                              //   }
+                              //
+                              //   if(widget.rideCubit.isAutoAccept && !widget.rideCubit.isAutoAcceptIsAdded){
+                              //     state.rideExpectedPrice?.priceForSUV += state.rideExpectedPrice?.autoAccept ?? 0.0;
+                              //     widget.rideCubit.isAutoAcceptIsAdded = true;
+                              //   }
+                              //   else if(widget.rideCubit.isAutoAcceptIsAdded && widget.rideCubit.isAutoAccept){
+                              //     state.rideExpectedPrice?.priceForSUV -= state.rideExpectedPrice?.autoAccept ?? 0.0;
+                              //     widget.rideCubit.isAutoAcceptIsAdded = false;
+                              //   }
+                              // }
+                              // widget.rideCubit.emitRefreshState();
                               Navigator.pop(context);
                             },
                             backColor: AppColors.PRIMARY_COLOR),

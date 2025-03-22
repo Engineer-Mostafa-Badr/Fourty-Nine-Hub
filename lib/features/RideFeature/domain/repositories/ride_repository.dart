@@ -14,10 +14,12 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/expected_pric
 import 'package:fourtyninehub/features/RideFeature/domain/entities/expected_price_params.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride_not_special_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride_special_entity.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/request_trip_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/request_trip_params.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_category_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_request_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/running_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/accept_trip_by_driver_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_pending_trip_by_client_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_client.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_rider.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/complete_trip_use_case.dart';
@@ -48,7 +50,8 @@ abstract class RideRepository {
   Future<Either<Failure, CheckDriverTypeEntity>> checkDriverType();
   Future<Either<Failure, bool>> registerRideNotSpecial(RegisterRideNotSpecialEntity params);
   Future<Either<Failure, bool>> registerRideSpecial(RegisterRideSpecialEntity params);
-  Future<Either<Failure, bool>> requestTrip(RequestTripEntity params);
+  Future<Either<Failure, RideRequestTripEntity>> requestTrip(RequestTripUseCaseParams params);
+  Future<Either<Failure, RideRequestTripEntity>> retrieveClientLatestTrip();
   Future<Either<Failure, bool>> checkRealAmountEnough(double params);
   Future<Either<Failure, RideExpectedPriceEntity>> getExpectedPrice(RideExpectedPriceParams params);
   Future<Either<Failure, List<DriversInSubcategoryEntity>>> getDriversInSubcategory(String subCategoryId);
@@ -70,6 +73,7 @@ abstract class RideRepository {
   Future<Either<Failure, bool>> completeTrip(CompleteTripUseCaseParams params);
   Future<Either<Failure, bool>> cancelTripByRider(CancelTripByRiderUseCaseParams params);
   Future<Either<Failure, bool>> cancelTripByClient(CancelTripByClientUseCaseParams params);
+  Future<Either<Failure, bool>> cancelPendingTripByClient(CancelPendingTripByClientUseCaseParams params);
   Future<Either<Failure, bool>> recordingTrip(RecordingTripUseCaseParams params);
   Future<Either<Failure, bool>> updateTripPriceFromClient(UpdateTripPriceFromClientUseCaseParams params);
   Future<Either<Failure, ActivityTripEntity>> getAllActivityTrips(GetAllActivityTripsUseCaseParams params);

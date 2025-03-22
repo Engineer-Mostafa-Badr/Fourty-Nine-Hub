@@ -15,11 +15,13 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/expected_pric
 import 'package:fourtyninehub/features/RideFeature/domain/entities/expected_price_params.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride_not_special_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride_special_entity.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/request_trip_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/request_trip_params.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_category_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_color_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_request_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/running_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/repositories/ride_repository.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_pending_trip_by_client_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_car_years_and_types_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/features/ride/driver_dashboard/domain/entities/driver_statistics_entity.dart';
@@ -80,8 +82,13 @@ class RideRepositoryImplementation extends RideRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> requestTrip(RequestTripEntity params) async{
+  Future<Either<Failure, RideRequestTripEntity>> requestTrip(RequestTripUseCaseParams params) async{
     return await rideRemoteDataSource.requestTrip(params);
+  }
+
+  @override
+  Future<Either<Failure, RideRequestTripEntity>> retrieveClientLatestTrip() async{
+    return await rideRemoteDataSource.retrieveClientLatestTrip();
   }
 
   @override
@@ -191,6 +198,11 @@ class RideRepositoryImplementation extends RideRepository {
   @override
   Future<Either<Failure, bool>> cancelTripByClient(CancelTripByClientUseCaseParams params) async {
     return await rideRemoteDataSource.cancelTripByClient(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> cancelPendingTripByClient(CancelPendingTripByClientUseCaseParams params) async {
+    return await rideRemoteDataSource.cancelPendingTripByClient(params);
   }
 
   @override

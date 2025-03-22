@@ -37,8 +37,10 @@ class _AddStopsWidgetState extends State<AddStopsWidget> {
                   text: state.currentLocation?.address,
                   onPressed: () async {
                     context.push(Routes.RIDEOPENSTREETMAPSEARCHANDPICK, extra: RideOpenStreetMapSearchAndPickParams(
-                      rideCubit: context.read<RideCubit>(),
-                      isFrom: true,
+                      onPicked: (pickedData) async {
+                        context.read<RideCubit>().updateFromLocation(lat: pickedData.latLong.latitude, lng: pickedData.latLong.longitude, address: pickedData.addressName,);
+                        context.pop();
+                        },
                     ));
                   },
                 ),
@@ -48,8 +50,11 @@ class _AddStopsWidgetState extends State<AddStopsWidget> {
                   text: state.toLocation?.address,
                   onPressed: () async {
                     context.push(Routes.RIDEOPENSTREETMAPSEARCHANDPICK, extra: RideOpenStreetMapSearchAndPickParams(
-                      rideCubit: context.read<RideCubit>(),
-                      isTo: true,
+                      onPicked: (pickedData) async {
+                        context.read<RideCubit>().updateToLocation(lat: pickedData.latLong.latitude, lng: pickedData.latLong.longitude, address: pickedData.addressName,);
+                        await context.read<RideCubit>().fetchRideExpectedPrice(id: 'id');
+                        context.pop();
+                      },
                     ));
                   },
                   onAddPressed: () {
@@ -66,8 +71,11 @@ class _AddStopsWidgetState extends State<AddStopsWidget> {
                     text: state.wayPointOne?.address,
                     onPressed: () async {
                       context.push(Routes.RIDEOPENSTREETMAPSEARCHANDPICK, extra: RideOpenStreetMapSearchAndPickParams(
-                        rideCubit: context.read<RideCubit>(),
-                        isToOneWay: true,
+                        onPicked: (pickedData) async {
+                          context.read<RideCubit>().updateWayPointOne(lat: pickedData.latLong.latitude, lng: pickedData.latLong.longitude, address: pickedData.addressName,);
+                          await context.read<RideCubit>().fetchRideExpectedPrice(id: 'id');
+                          context.pop();
+                        },
                       ));
                     },
                     onAddPressed: () {
@@ -85,8 +93,11 @@ class _AddStopsWidgetState extends State<AddStopsWidget> {
                     text: state.wayPointTwo?.address,
                     onPressed: () async {
                       context.push(Routes.RIDEOPENSTREETMAPSEARCHANDPICK, extra: RideOpenStreetMapSearchAndPickParams(
-                        rideCubit: context.read<RideCubit>(),
-                        isToTwoWay: true,
+                        onPicked: (pickedData) async {
+                          context.read<RideCubit>().updateWayPointTwo(lat: pickedData.latLong.latitude, lng: pickedData.latLong.longitude, address: pickedData.addressName,);
+                          await context.read<RideCubit>().fetchRideExpectedPrice(id: 'id');
+                          context.pop();
+                        },
                       ));
                     },
                   ),

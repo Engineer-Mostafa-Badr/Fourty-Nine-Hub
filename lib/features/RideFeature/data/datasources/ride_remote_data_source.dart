@@ -15,6 +15,7 @@ import 'package:fourtyninehub/features/RideFeature/data/models/driver_statistics
 import 'package:fourtyninehub/features/RideFeature/data/models/drivers_in_subcategory_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/ride_color_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/ride_model.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/ride_request_trip_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/running_trips_model.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/activity_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/completed_trips_entity.dart';
@@ -31,10 +32,12 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/expected_pric
 import 'package:fourtyninehub/features/RideFeature/domain/entities/expected_price_params.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride_not_special_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride_special_entity.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/request_trip_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/request_trip_params.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_category_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_request_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/running_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/accept_trip_by_driver_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_pending_trip_by_client_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_client.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_rider.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/complete_trip_use_case.dart';
@@ -66,7 +69,8 @@ abstract class RideRemoteDataSource {
   Future<Either<Failure, CheckDriverTypeEntity>> checkDriverType();
   Future<Either<Failure, bool>> registerRideNotSpecial(RegisterRideNotSpecialEntity params);
   Future<Either<Failure, bool>> registerRideSpecial(RegisterRideSpecialEntity params);
-  Future<Either<Failure, bool>> requestTrip(RequestTripEntity params);
+  Future<Either<Failure, RideRequestTripEntity>> requestTrip(RequestTripUseCaseParams params);
+  Future<Either<Failure, RideRequestTripEntity>> retrieveClientLatestTrip();
   Future<Either<Failure, bool>> checkRealAmountEnough(double params);
   Future<Either<Failure, List<DriversInSubcategoryEntity>>> getDriversInSubcategory(String subCategoryId);
   Future<Either<Failure, RideExpectedPriceEntity>> getExpectedPrice(RideExpectedPriceParams params);
@@ -101,6 +105,8 @@ abstract class RideRemoteDataSource {
   Future<Either<Failure, bool>> cancelTripByRider(CancelTripByRiderUseCaseParams params);
 
   Future<Either<Failure, bool>> cancelTripByClient(CancelTripByClientUseCaseParams params);
+
+  Future<Either<Failure, bool>> cancelPendingTripByClient(CancelPendingTripByClientUseCaseParams params);
 
   Future<Either<Failure, bool>> recordingTrip(RecordingTripUseCaseParams params);
 
@@ -222,15 +228,34 @@ class RideRemoteDataSourceImplementation
   }
 
   @override
-  Future<Either<Failure, bool>> requestTrip(RequestTripEntity params) async {
+  Future<Either<Failure, RideRequestTripEntity>> requestTrip(RequestTripUseCaseParams params) async {
     try {
       final response = await _apiConsumer.post(
-        EndPoints.requestTrip(params.id),
+        EndPoints.requestTrip(params.subcategoryId),
         data: params.toJson(),
       );
 
       return response.fold((failure) => Left(failure), (data) {
-        return Right(data['status']??false);
+        log('requested trip id before : ${data['data']['trip']['_id']}');
+        RideRequestTripModel rideRequestTripModel = RideRequestTripModel.fromJson(data['data']['trip']);
+        log('requested trip id after : ${rideRequestTripModel.id}');
+        return Right(rideRequestTripModel);
+      });
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, RideRequestTripEntity>> retrieveClientLatestTrip() async {
+    try {
+      final response = await _apiConsumer.get(
+        EndPoints.retrieveClientLatestTrip,
+      );
+
+      return response.fold((failure) => Left(failure), (data) {
+        RideRequestTripModel rideRequestTripModel = RideRequestTripModel.fromJson(data['data']['latestTrip']);
+        return Right(rideRequestTripModel);
       });
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
@@ -601,6 +626,22 @@ class RideRemoteDataSourceImplementation
       final response = await _apiConsumer.put(
         EndPoints.cancelTripByClient(params.tripId),
         data: params.toJson(),
+      );
+      return response.fold((failure) => Left(failure), (data) {
+        return Right(data['status']);
+      });
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> cancelPendingTripByClient(
+    CancelPendingTripByClientUseCaseParams params,
+  ) async {
+    try {
+      final response = await _apiConsumer.put(
+        EndPoints.cancelPendingTripByClient(params.tripId),
       );
       return response.fold((failure) => Left(failure), (data) {
         return Right(data['status']);

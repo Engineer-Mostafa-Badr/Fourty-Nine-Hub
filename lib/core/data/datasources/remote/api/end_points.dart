@@ -1217,9 +1217,10 @@ class EndPoints {
   static String getDriversInSubcategory(String subCategoryId) {
     return '/ride/riders/drivers/$subCategoryId';
   }
-  static String requestTrip(String id) {
-    return '/ride/trips/newTrip/$id';
+  static String requestTrip(String subcategoryId) {
+    return '/ride/trips/newTrip/$subcategoryId';
   }
+  static String retrieveClientLatestTrip = '/ride/client/trips/latest';
   static String getExpectedPrice(String id) {
     return '/ride/trips/expected/price/$id';
   }
@@ -1286,6 +1287,10 @@ class EndPoints {
 
   static String cancelTripByClient(String tripId){
     return '/ride/trips/cancel-by-client/$tripId';
+  }
+
+  static String cancelPendingTripByClient(String tripId){
+    return '/ride/client/trips/pending/cancel/$tripId';
   }
 
   static String recordingTrip(String tripId){

@@ -2,6 +2,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/activity_trip
 import 'package:fourtyninehub/features/RideFeature/domain/entities/completed_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/expected_price_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/get_location_from_address_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_request_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/running_trips_entity.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 
@@ -57,6 +58,7 @@ class RideState {
   final GetLocationFromAddressEntity? wayPointOne;
   final GetLocationFromAddressEntity? wayPointTwo;
   final RideExpectedPriceEntity? rideExpectedPrice;
+  RideRequestTripEntity? requestedTrip;
   final List<CompletedTripsEntity>? completedTrips;
   final List<RunningTripsEntity>? runningTrips;
   final ActivityTripEntity ? activityTrips;
@@ -85,7 +87,7 @@ class RideState {
   final bool? isUploadCriminalRecord;
   final bool? isUploadTechnicalExamination;
 
-  const RideState({
+  RideState({
     this.status = RideStates.initState,
     this.failure,
     this.personalPicture,
@@ -109,6 +111,7 @@ class RideState {
     this.wayPointOne,
     this.wayPointTwo,
     this.rideExpectedPrice,
+    this.requestedTrip,
     this.completedTrips,
     this.runningTrips,
     this.activityTrips,
@@ -167,6 +170,7 @@ class RideState {
     GetLocationFromAddressEntity? wayPointOne,
     GetLocationFromAddressEntity? wayPointTwo,
     RideExpectedPriceEntity? rideExpectedPrice,
+    RideRequestTripEntity? requestedTrip,
     List<CompletedTripsEntity>? completedTrips,
     List<RunningTripsEntity>? runningTrips,
     ActivityTripEntity ? activityTrips,
@@ -235,6 +239,7 @@ class RideState {
       wayPointOne: wayPointOne ?? this.wayPointOne,
       wayPointTwo: wayPointTwo ?? this.wayPointTwo,
       rideExpectedPrice: rideExpectedPrice ?? this.rideExpectedPrice,
+      requestedTrip: requestedTrip ?? this.requestedTrip,
       completedTrips: completedTrips ?? this.completedTrips,
       runningTrips: runningTrips ?? this.runningTrips,
       activityTrips: activityTrips ?? this.activityTrips,

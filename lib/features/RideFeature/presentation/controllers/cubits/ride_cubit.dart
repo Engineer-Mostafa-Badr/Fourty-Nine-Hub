@@ -11,8 +11,11 @@ import 'package:fourtyninehub/core/utils/ride_method_helper.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_info_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_picture_optional_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride_special_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/request_trip_params.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_color_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_request_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/sub_category_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_pending_trip_by_client_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/check_real_amount_enough_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_driver_picture_optional.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_brands_usecase.dart';
@@ -34,6 +37,8 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_expe
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_governorates.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_shipping_categories_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/register_ride_special_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/request_trip_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/retrieve_client_latest_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
@@ -54,13 +59,12 @@ import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entit
 class RideCubit extends Cubit<RideState> {
 
   bool isComfort = false;
-  bool isComfortIsAdded = false;
+  // bool isComfortIsAdded = false;
   bool isNonSmoker = false;
-  bool isNonSmokerIsAdded = false;
+  // bool isNonSmokerIsAdded = false;
   bool isAutoAccept = false;
-  bool isAutoAcceptIsAdded = false;
+  // bool isAutoAcceptIsAdded = false;
   bool isRecord = false;
-
   bool showWaypointOne = false;
   bool showWaypointTwo = false;
 
@@ -80,6 +84,10 @@ class RideCubit extends Cubit<RideState> {
   final GetAllRunningTripsUseCase getAllRunningTripsUseCase;
   final GetAllActivityTripsUseCase getAllActivityTripsUseCase;
   final CheckRealAmountEnoughUseCase checkRealAmountEnoughUseCase;
+  final RequestTripUseCase requestTripUseCase;
+  final CancelPendingTripByClientUseCase cancelPendingTripByClientUseCase;
+  final RetrieveClientLatestTripUseCase retrieveClientLatestTripUseCase;
+
 
   RideCubit(
     this.getRideCategories,
@@ -97,7 +105,10 @@ class RideCubit extends Cubit<RideState> {
       this.getAllRunningTripsUseCase,
       this.getAllActivityTripsUseCase,
       this.checkRealAmountEnoughUseCase,
-  ) : super(const RideState()){
+      this.requestTripUseCase,
+      this.cancelPendingTripByClientUseCase,
+      this.retrieveClientLatestTripUseCase,
+  ) : super(RideState()){
     _fetchUserLocation();
   }
 
@@ -250,6 +261,22 @@ class RideCubit extends Cubit<RideState> {
     );
   }
 
+  double getTotalPrice(double price, {bool isScooter = false}) {
+    double totalPrice = price;
+    if (!isScooter) {
+      if (isComfort) {
+        totalPrice += state.rideExpectedPrice?.comfort ?? 0;
+      }
+      if (isNonSmoker) {
+        totalPrice += state.rideExpectedPrice?.nonSmoking ?? 0;
+      }
+      if (isAutoAccept) {
+        totalPrice += state.rideExpectedPrice?.autoAccept ?? 0;
+      }
+    }
+    return totalPrice;
+  }
+
   Future<void> fetchRideExpectedPrice({required String id}) async {
     emit(state.copyWith(status: RideStates.loading));
 
@@ -283,6 +310,97 @@ class RideCubit extends Cubit<RideState> {
     return result.fold(
       (failure) => false,
       (isEnough) => isEnough,
+    );
+  }
+
+  Future<void> requestTrip({
+    required String subcategoryId,
+    required double price,
+    required String fromTitle,
+    required String toTitle,
+    required double distance,
+    required int duration,
+    required List<double> startLocation,
+    required List<double> targetLocation,
+    required List<double>? wayPointOne,
+    required List<double>? wayPointTwo,
+    required int calculateB,
+    required String paymentMethod,
+    required int passengers,
+    required bool comfort,
+    required bool nonSmoker,
+    required bool autoAccept,
+    required bool isPremium,
+  }) async {
+    final Either<Failure, RideRequestTripEntity> result = await requestTripUseCase(
+      RequestTripUseCaseParams(
+        subcategoryId: subcategoryId,
+        price: price,
+        fromTitle: fromTitle,
+        toTitle: toTitle,
+        distance: distance,
+        duration: duration,
+        startLocation: startLocation,
+        targetLocation: targetLocation,
+        wayPointOne: wayPointOne,
+        wayPointTwo: wayPointTwo,
+        calculateB: calculateB,
+        paymentMethod: paymentMethod,
+        passengers: passengers,
+        comfort: comfort,
+        nonSmoker: nonSmoker,
+        autoAccept: autoAccept,
+        isPremium: isPremium,
+      ),
+    );
+
+    result.fold(
+          (failure) => emit(state.copyWith(status: RideStates.error, failure: failure)),
+          (rideRequestTrip) => emit(state.copyWith(status: RideStates.success, requestedTrip: rideRequestTrip)),
+    );
+  }
+
+  Future<void> retrieveClientLatestTrip() async {
+    emit(state.copyWith(status: RideStates.loading));
+
+    final Either<Failure, RideRequestTripEntity> result = await retrieveClientLatestTripUseCase(const NoParams());
+
+    result.fold(
+          (failure) => emit(state.copyWith(status: RideStates.error, failure: failure)),
+          (rideRequestTrip){
+            state.requestedTrip = rideRequestTrip;
+            GetLocationFromAddressEntity currentLocation = GetLocationFromAddressEntity(
+              lat: state.requestedTrip!.startCoordinates![0],
+              lng: state.requestedTrip!.startCoordinates![1],
+              address: state.requestedTrip!.from!,
+            );
+            GetLocationFromAddressEntity toLocation = GetLocationFromAddressEntity(
+              lat: state.requestedTrip!.targetCoordinates![0],
+              lng: state.requestedTrip!.targetCoordinates![1],
+              address: state.requestedTrip!.to!,
+            );
+            emit(state.copyWith(status: RideStates.success, requestedTrip: rideRequestTrip, currentLocation: currentLocation, toLocation: toLocation));
+          },
+    );
+  }
+
+  Future<void> cancelPendingTripByClient({required String tripId}) async {
+    // emit(state.copyWith(status: RideStates.loading));
+
+    final Either<Failure, bool> result = await cancelPendingTripByClientUseCase(
+      CancelPendingTripByClientUseCaseParams(
+        tripId: tripId,
+      ),
+    );
+
+    result.fold(
+          (failure) => emit(state.copyWith(status: RideStates.error, failure: failure)),
+          (isCanceled){
+            if(isCanceled){
+              state.requestedTrip = null;
+            }
+            emit(state.copyWith(status: RideStates.success, requestedTrip: state.requestedTrip));
+          },
     );
   }
 
