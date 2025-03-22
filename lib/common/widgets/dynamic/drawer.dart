@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
@@ -252,11 +253,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                         ),
                                       );
 
-                                      // bottomSheet(
-                                      //     backColor: Theme.of(context)
-                                      //         .scaffoldBackgroundColor,
-                                      //     context: context,
-                                      //     widget: const LogoutWidget());
                                     }),
                               ],
                             ),
@@ -322,14 +318,14 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     context.push(Routes.SPOTLIGHT);
                                   },
                                 ),
-                                drawerRollWidget(
-                                  label: LocaleKeys.meet.localize,
-                                  image: Assets.meet,
-                                  onTap: () {
-                                    context.pop();
-                                    context.push(Routes.MEETINGROOM);
-                                  },
-                                ),
+                                // drawerRollWidget(
+                                //   label: LocaleKeys.meet.localize,
+                                //   image: Assets.meet,
+                                //   onTap: () {
+                                //     context.pop();
+                                //     context.push(Routes.MEETINGROOM);
+                                //   },
+                                // ),
                                 drawerRollWidget(
                                   label: LocaleKeys.live.localize,
                                   image: Assets.liveIcon,
@@ -386,6 +382,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   height: 100.h,
                   isCircle: true,
                   icon: Icons.person,
+                  color: AppColors.PRIMARY_COLOR,
                   onPressed: () {
                     context.pop();
                     context.push(Routes.LOGIN);
@@ -408,6 +405,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     height: 100.h,
                     isCircle: true,
                     icon: Icons.person_add,
+                    color: AppColors.PRIMARY_COLOR,
                     onPressed: () {
                       context.pop();
                       context.push(Routes.REGISTER);
@@ -990,7 +988,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     context.read<CustomPageCubit>().state.activate!.customPage,
                 onChanged: (value) async {
                   await context.read<CustomPageCubit>().updateActivate(value);
-                  Restart.restartApp();
+                  Phoenix.rebirth(context);
+                  // Restart.restartApp();
                 },
                 // activeColor: Colors.white,
                 // inactiveThumbColor: Colors.white,
@@ -1008,23 +1007,17 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              CustomSwitchButton(
-                value: context
-                    .read<FloatingNavigatorCubit>()
-                    .floatingNavigatorStatus,
-                onChanged: (value) async {
-                  if (context.read<FloatingNavigatorCubit>().state
-                      is ActiveFloatNavigatorStatusState) {
-                    context
-                        .read<FloatingNavigatorCubit>()
-                        .unActiveFloatingNavigator();
-                  }
-                  if (context.read<FloatingNavigatorCubit>().state
-                      is UnActiveFloatNavigatorStatusState) {
-                    context
-                        .read<FloatingNavigatorCubit>()
-                        .activeFloatingNavigator();
-                  }
+              BlocBuilder<FloatingNavigatorCubit, FloatingNavigatorState>(
+                builder: (context, state) {
+                  var floatingNavigatorCubit =
+                      context.read<FloatingNavigatorCubit>();
+                  return CustomSwitchButton(
+                    value: floatingNavigatorCubit
+                        .floatingNavigatorEnable,
+                    onChanged: (value) async {
+                      floatingNavigatorCubit.changeFloatingNavigatorEnable();
+                    },
+                  );
                 },
               ),
               SizedBox(

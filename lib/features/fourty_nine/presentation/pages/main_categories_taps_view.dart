@@ -1,22 +1,25 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
 import 'package:fourtyninehub/core/localization/locales.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:go_router/go_router.dart';
-import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_taps_cubit/main_categories_taps_cubit.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/subcategory_card.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../core/widget/custom_scaffold.dart';
+import '../../../../service_locator/service_locator.dart';
+import '../../../ads_feature/ads/presentation/pages/marriage_ads_view.dart';
+import '../../../subcategories/presentation/cubit/subcategories_cubit.dart';
 
 class MainCategoriesGridView extends StatefulWidget {
   const MainCategoriesGridView({super.key, this.isAppBarShow = true});
@@ -112,6 +115,11 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                               : controller.mainCategories[i].name.toString();
                         });
                         print(labelName);
+                        // if (controller.mainCategories[i].id ==
+                        //     '62c8b5b09332225799fe335e') {
+                        //   context.push(Routes.MARRIAGESUBCATEGORIES,
+                        //       extra: controller.mainCategories[i]);
+                        // }
                       },
                       padding: EdgeInsets.zero,
                       labelPadding: const EdgeInsetsDirectional.only(end: 10),
@@ -159,9 +167,26 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
             const Sizer(),
             BlocBuilder<MainCategoriesTapsCubit, MainCategoriesTapsState>(
               builder: (context, state) {
+                final controller = context.read<MainCategoriesTapsCubit>();
+
+                if (controller.mainCategories[state.selectedIndex].id ==
+                    '62c8b5b09332225799fe335e') {
+                  return BlocProvider(
+                    create: (context) => serviceLocator<SubcategoriesCubit>(),
+                    child: Expanded(
+                      child: MarriageSubCategoriesView(
+                        mainCategory:
+                            controller.mainCategories[state.selectedIndex],
+                        inGridView: true,
+                      ),
+                    ),
+                  );
+                  // return Container();
+                }
                 if (state.subCategories != null &&
                     state.subCategories!.isNotEmpty) {
-                  final controller = context.read<MainCategoriesTapsCubit>();
+                  // final controller = context.read<MainCategoriesTapsCubit>();
+
                   return Expanded(
                     child: GridView.builder(
                       padding: EdgeInsets.all(24.w),

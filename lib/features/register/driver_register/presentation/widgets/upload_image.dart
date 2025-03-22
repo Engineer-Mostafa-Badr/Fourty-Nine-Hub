@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class UploadImageWidget extends StatefulWidget {
   final String label;

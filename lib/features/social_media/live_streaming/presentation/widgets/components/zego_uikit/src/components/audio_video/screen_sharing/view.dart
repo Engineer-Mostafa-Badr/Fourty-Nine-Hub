@@ -3,9 +3,9 @@ import 'dart:core';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
-
 // Package imports:
 import 'package:native_device_orientation/native_device_orientation.dart';
+
 import '../../../../zego_uikit.dart';
 import '../../internal/type_transform.dart';
 

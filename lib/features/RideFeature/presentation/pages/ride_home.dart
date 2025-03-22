@@ -5,12 +5,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
+import 'package:fourtyninehub/core/constants/registration_status.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_info_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/loading_info_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/record_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/upload_rider_images.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/expired_trips_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/osm_search_and_pick.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/running_trips_screen.dart';
@@ -18,18 +24,15 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/bo
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/bottom_sheet/custom_reserve_ride_bottomsheet.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/top_card_request.dart';
 import 'package:fourtyninehub/helpers/subscription_method.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/custom_ride_button.dart';
 import 'package:latlong2/latlong.dart';
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
-import '../../../../common/widgets/form/text_fields/form_text_field.dart';
 import '../../../../common/widgets/stateless/appbar/nested_appbar.dart';
 import '../../../../common/widgets/stateless/dynamic/shared_scaffold.dart';
-import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
-import '../../../../res/style/styles.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'widgets/add_stops_widget.dart';
 import 'widgets/bottom_sheet/custom_bottom_sheet.dart';
-import 'widgets/country_dropdown.dart';
 import 'widgets/fare_bottom_sheet_widget.dart';
 import 'widgets/options_bottomsheet_widget.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -50,7 +53,6 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
   // String? _selectedCountry;
   final MapController _mapController = MapController();
 
-
   @override
   void initState() {
     super.initState();
@@ -58,6 +60,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final rideCubit = context.read<RideCubit>();
       if (!rideCubit.isClosed) {
+        rideCubit.initHome(context);
         // rideCubit.retrieveClientLatestTrip();
         rideCubit.fetchRideCategories(UserCubit.to.state.data?.id ?? "");
         rideCubit.fetchShippingCategories(UserCubit.to.state.data?.id ?? "");
@@ -239,31 +242,32 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     // _selectedCountry = context.isArabic ? 'القاهرة' : 'Cairo';
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Form(
-        key: _formKey,
-        child: SafeArea(
-          child: SharedScaffold(
-            mainCategoryId: 2,
-            body: NestedAppbar(
-              scrollController: _scrollController,
-              appBars: const [],
-              body: BlocBuilder<RideCubit, RideState>(
-                builder: (context, state) {
-                  return Stack(
+    return BlocBuilder<RideCubit, RideState>(
+      builder: (context,state) {
+        var cubit = context.read<RideCubit>();
+        return Scaffold(
+          resizeToAvoidBottomInset: false,
+          body: cubit.loadingHomeData==true?const Center(child: CircularProgressIndicator()):Form(
+            key: _formKey,
+            child: SafeArea(
+              child: SharedScaffold(
+                mainCategoryId: 2,
+                body: NestedAppbar(
+                  scrollController: _scrollController,
+                  appBars: const [],
+                  body: Stack(
                     children: [
                       _buildTopImage(),
                       state.requestedTrip == null ? _buildBottomSheet() : const SizedBox.shrink(),
                       state.requestedTrip == null ? _carTruckBtn() : const SizedBox.shrink(),
                     ],
-                  );
-                }
+                  ),
+                ),
               ),
             ),
           ),
-        ),
-      ),
+        );
+      }
     );
   }
 
@@ -347,84 +351,131 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
     return polyline.map((point) => LatLng(point[1], point[0])).toList();
   }
 
-  Widget _carTruckBtn(){
-    return GestureDetector(
-      onTap: () {
-        customBottomSheet(context,
-            context.read<RideCubit>(),
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                spacing: 10,
-                children: [
-                  AppButton(
-                      radius: 15,
-                      label: LocaleKeys.ride.tr(),
-                      onPressed: () {
-                        if(context.isUserLoggedIn){
-                        context.push(Routes.welcomeRideRegister);
-                        }
-                        else{
-                          context.push(Routes.LOGIN);
-                        }
-                      },
-                      backColor: AppColors.PRIMARY_COLOR,
-                      width: double.infinity),
-                  AppButton(
-                      radius: 15,
-                      label: LocaleKeys.shipping.tr(),
-                      onPressed: () {
-                        if(context.isUserLoggedIn){
-                          // context.push(Routes.welcomeShippingRegister);
-                        }
-                        else{
-                          context.push(Routes.LOGIN);
-                        }
-                      },
-                      backColor: AppColors.PRIMARY_COLOR,
-                      width: double.infinity),
-                ],
+  Widget _carTruckBtn({LoadingInfoEntity? loadingInfo, DriverInfoEntity? driverInfo}) {
+    if (loadingInfo == null && driverInfo == null) {
+      return GestureDetector(
+        onTap: () {
+          customBottomSheet(context, context.read<RideCubit>(),
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  spacing: 10,
+                  children: [
+                    AppButton(
+                        radius: 15,
+                        label: LocaleKeys.ride.tr(),
+                        onPressed: () {
+                          context.read<RideCubit>().onNavigateToWelcomeScreen(fromShipping: false, context: context);
+                        },
+                        backColor: AppColors.PRIMARY_COLOR,
+                        width: double.infinity),
+                    AppButton(
+                        radius: 15,
+                        label: LocaleKeys.shipping.tr(),
+                        onPressed: () {
+                          context.read<RideCubit>().onNavigateToWelcomeScreen(fromShipping: true, context: context);
+                        },
+                        backColor: AppColors.PRIMARY_COLOR,
+                        width: double.infinity),
+                  ],
+                ),
+              ),
+              title: '');
+        },
+        child: Container(
+          margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+          width: double.infinity,
+          height: 50,
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              colors: [Color(0xFF0B1035), Color(0xFF161F68), Color(0xFF1B2781), Color(0xFF1E2B8E), Color(0xFF1F2D95), Color(0xFF0B1035)],
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+            ),
+            borderRadius: BorderRadius.circular(15),
+            boxShadow: [
+              BoxShadow(color: Colors.black.withOpacity(0.3), spreadRadius: 2, blurRadius: 5, offset: const Offset(0, 3)),
+            ],
+          ),
+          child: Center(
+            child: Text(
+              LocaleKeys.carTruckRegister.tr(),
+              style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+            ),
+          ),
+        ),
+      );
+    } else {
+      return Container(
+        margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+        width: double.infinity,
+        height: 75,
+        child: Row(
+          children: [
+            Expanded(
+              child: CustomRideButton(
+                onPressed: () {
+                  context.push(Routes.rideModeScreen, extra: RideModeParams(modeType: 'ride', isSocket: driverInfo?.driverType == 'socket' ? true : false));
+
+                  if (driverInfo == null) {
+                    context.read<RideCubit>().onNavigateToWelcomeScreen(fromShipping: false, context: context);
+                  }
+                },
+                onTap: () {
+                  context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: false, isSocket: driverInfo?.driverType == 'socket' ? true : false));
+                  if (driverInfo != null && driverInfo.status == RegistrationStatus.pending.status) {
+                    return;
+                  } else if (driverInfo != null && driverInfo.status == RegistrationStatus.rejected.status) {
+                    context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: false, isSocket: driverInfo.driverType == 'socket' ? true : false));
+                  } else if (driverInfo != null && driverInfo.status == RegistrationStatus.initial.status) {
+                    context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: false, isSocket: driverInfo.driverType == 'socket' ? true : false));
+                  }else{
+                    context.push(Routes.rideModeScreen, extra: RideModeParams(modeType: 'ride', isSocket: driverInfo?.driverType == 'socket' ? true : false));
+                  }
+                },
+                isRed: (driverInfo != null && (driverInfo.status != RegistrationStatus.rejected.status)) ? true : false,
+                isPending: driverInfo != null && (driverInfo.status == RegistrationStatus.pending.status),
+                isDisabled: driverInfo != null && (driverInfo.status != RegistrationStatus.approved.status),
+                text: LocaleKeys.rideMode.tr(),
+                status: driverInfo?.status ?? '',
               ),
             ),
-            title: '');
-      },
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16),
-        width: double.infinity,
-        height: 40,
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [
-              Color(0xFF0B1035),
-              Color(0xFF161F68),
-              Color(0xFF1B2781),
-              Color(0xFF1E2B8E),
-              Color(0xFF1F2D95),
-              Color(0xFF0B1035)
-            ],
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
-          ),
-          borderRadius: BorderRadius.circular(15),
-          boxShadow: [
-            BoxShadow(
-                color: Colors.black.withOpacity(0.3),
-                spreadRadius: 2,
-                blurRadius: 5,
-                offset: const Offset(0, 3)),
+            const SizedBox(
+              width: 10,
+            ),
+            Expanded(
+              child: CustomRideButton(
+                onPressed: () {
+                  if (loadingInfo == null) {
+                    print("object");
+                    context.read<RideCubit>().onNavigateToWelcomeScreen(fromShipping: true, context: context);
+                  } else {
+                    print("loadingInfo.toJson()${loadingInfo.toJson()}");
+                  }
+                },
+                onTap: () {
+                  print("loadingInfo.toJson()${loadingInfo?.toJson()}");
+                  if (loadingInfo != null && loadingInfo.status == RegistrationStatus.pending.status) {
+                    return;
+                  } else if (loadingInfo != null && loadingInfo.status == RegistrationStatus.rejected.status) {
+                    context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: true, isSocket: false));
+                  } else if (loadingInfo != null && loadingInfo.status == RegistrationStatus.initial.status) {
+                    context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: true, isSocket: false));
+                  }
+                },
+                isRed: (loadingInfo != null && (loadingInfo.status != RegistrationStatus.rejected.status)) ? true : false,
+                isDisabled: loadingInfo != null &&
+                    (loadingInfo.status == RegistrationStatus.pending.status ||
+                        loadingInfo.status == RegistrationStatus.rejected.status ||
+                        loadingInfo.status == RegistrationStatus.initial.status),
+                text: LocaleKeys.trukMode.tr(),
+                status: loadingInfo?.status ?? '',
+              ),
+            ),
           ],
         ),
-        child: Center(
-          child: Text(
-            LocaleKeys.carTruckRegister.tr(),
-            style: const TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.bold),
-          ),
-        ),
-      ),
-    );
+      );
+    }
   }
 
   Widget _buildTopImage() {
@@ -551,11 +602,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 return Column(
                   spacing: 8,
                   children: [
-                    _buildCategoryList(
-                        "ride", state.rideCategory?.subCategories ?? []),
-                    _buildCategoryList(
-                        "shipping", state.shippingCategory?.subCategories ?? []
-                    ),
+                    _buildCategoryList("ride", state.rideCategory?.subCategories ?? []),
+                    _buildCategoryList("shipping", state.shippingCategory?.subCategories ?? []),
                     _customLocationField(
                       isTo: false,
                       color: Colors.green,
@@ -583,7 +631,6 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         ));
                       },
                     ),
-
                     _fareField(),
                     SizedBox(
                       height: 40,
@@ -713,7 +760,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 return GestureDetector(
                   onTap: () {
                     setState(() {
-                      if (_selectedCategoryType == type && _selectedCategoryIndex == index) {
+                      if (_selectedCategoryType == type &&
+                          _selectedCategoryIndex == index) {
                         _selectedCategoryType = null;
                         _selectedCategoryIndex = null;
                       } else {

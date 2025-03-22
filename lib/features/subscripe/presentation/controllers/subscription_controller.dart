@@ -70,9 +70,10 @@ class SubscriptionController {
       //List<WalletTypes> wallets = [];
 
       showLoadingDialog(context);
-      Navigator.of(context).pop(); // Close loading dialog
 
       final plansResponse = await _getSubscriptionPlansUseCase(subCategoryId);
+      Navigator.of(context).pop(); // Close loading dialog
+
       plansResponse.fold((l) {
         showErrorMessage(context, Labels.errorHappened);
         _isBottomSheetShown = false; // Reset flag on error
@@ -80,6 +81,7 @@ class SubscriptionController {
         bottomSheet(
           context: context,
           backColor: Theme.of(context).scaffoldBackgroundColor,
+          isScrollControlled: true,
           widget: SubscriptionPlansWidget(
             showRegular: showRegular ?? true,
             title: title,

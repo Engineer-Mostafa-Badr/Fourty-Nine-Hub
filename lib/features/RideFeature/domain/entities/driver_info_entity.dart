@@ -1,5 +1,7 @@
 class DriverInfoEntity{
   bool? isApproved;
+  String? status;
+  String? driverType;
   bool? isUploadDriverId;
   bool? isUploadDriverImage;
   bool? isUploadDriverLicense;
@@ -12,6 +14,8 @@ class DriverInfoEntity{
 
   DriverInfoEntity({
     this.isApproved=false,
+    this.status='',
+    this.driverType='non-socket',
     this.isUploadDriverId=false,
     this.isUploadDriverImage=false,
     this.isUploadDriverLicense=false,
@@ -22,4 +26,20 @@ class DriverInfoEntity{
     this.isUploadCriminalRecord=false,
     this.isUploadTechnicalExamination=false,
   });
+
+  //toJson
+  Map<String, dynamic> toJson() => {
+    'isApproved': isApproved,
+    'status': status,
+    'driverType': driverType,
+    'isUploadDriverId': isUploadDriverId,
+    'isUploadDriverImage': isUploadDriverImage,
+    'isUploadDriverLicense': isUploadDriverLicense,
+    'isUploadConfirmIdentifier': isUploadConfirmIdentifier,
+    'isUploadCarImage': isUploadCarImage,
+    'isUploadCarLicense': isUploadCarLicense,
+    'isUploadDrugAnalysis': isUploadDrugAnalysis,
+    'isUploadCriminalRecord': isUploadCriminalRecord,
+    'isUploadTechnicalExamination': isUploadTechnicalExamination,
+  };
 }

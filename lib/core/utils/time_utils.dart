@@ -58,4 +58,28 @@ class TimeUtils {
 
     return monthNames[month - 1];
   }
+
+
+
+  static String getRelativeTime(String utcDateTimeString) {
+    // Parse the UTC datetime string
+    DateTime utcDateTime = DateTime.parse(utcDateTimeString);
+
+    // Get the current time
+    DateTime now = DateTime.now().toUtc();
+
+    // Calculate the difference
+    Duration difference = now.difference(utcDateTime);
+
+    // If less than 1 minute
+    if (difference.inMinutes < 1) {
+      int seconds = difference.inSeconds;
+      return '$seconds\nsecond';
+    }
+    // If 1 minute or more
+    else {
+      int minutes = difference.inMinutes;
+      return '$minutes\nminute';
+    }
+  }
 }

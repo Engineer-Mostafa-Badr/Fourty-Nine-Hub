@@ -3,12 +3,12 @@ import 'dart:async';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 
 // Package imports:
 
 // Project imports:
 import 'defines.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/zego_uikit.dart';
 
 /// @nodoc
 class ZegoLiveStreamingInRoomMessageEnableProperty {

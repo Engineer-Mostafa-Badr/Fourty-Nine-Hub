@@ -12,11 +12,12 @@ class GiftWalletModel extends GiftWalletEntity {
     required super.fiveYears,
     required super.createdAt,
     required super.updatedAt,
-    required super.currency,
     required super.fiveYearsTransfer,
     required super.tenYearsTransfer,
     required super.fiveYearsLeft,
     required super.tenYearsLeft,
+    required super.currencyEn,
+    required super.currencyAr,
   });
   factory GiftWalletModel.fromJson(Map<String, dynamic> json) {
     return GiftWalletModel(
@@ -30,7 +31,8 @@ class GiftWalletModel extends GiftWalletEntity {
       tenYearsComplete: json['tenYearsComplete'] ?? false,
       createdAt: json['createdAt'] ?? '',
       updatedAt: json['updatedAt'] ?? '',
-      currency: json['currency'] ?? '',
+      currencyEn: json['currencyEn'] ?? '',
+      currencyAr: json['currencyAr'] ?? '',
       fiveYearsTransfer: json['fiveYearsTransfer'] ?? false,
       tenYearsTransfer: json['tenYearsTransfer'] ?? false,
       fiveYearsLeft: json['fiveYearsLeft'] ?? 0,

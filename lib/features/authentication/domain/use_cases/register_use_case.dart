@@ -18,6 +18,7 @@ class RegisterUseCase extends UseCase<void, RegisterParams> {
 }
 
 class RegisterParams extends Equatable {
+  final String userName;
   final String firstName;
   final String lastName;
   final String email;
@@ -29,6 +30,7 @@ class RegisterParams extends Equatable {
   final bool isMale;
 
   const RegisterParams({
+    required this.userName,
     required this.firstName,
     required this.lastName,
     required this.email,
@@ -41,6 +43,7 @@ class RegisterParams extends Equatable {
   });
 
   Future<Map<String, dynamic>> toJson() async => {
+        'username': userName,
         'firstName': firstName,
         'lastName': lastName,
         if(birthday!=null&&(birthday?.isNotEmpty??false))'birthday': birthday,

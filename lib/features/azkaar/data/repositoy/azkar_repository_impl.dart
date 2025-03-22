@@ -27,7 +27,6 @@ class AzkarRepositoryImpl extends AzkarRepository {
 
   @override
   Future<Either<Failure, List<AzkarSearchEntity>>> searchAzkar(SearchAzkarParams params) {
-    // TODO: implement searchAzkar
-    throw UnimplementedError();
+    return _remoteDataSource.searchAzkar(params);
   }
 }

@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/features/mazadat_feature/auction_list/domain/entities/auction_entity.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../common/functions/helper/auth_helper.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
-
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/widget/custom_scaffold.dart';

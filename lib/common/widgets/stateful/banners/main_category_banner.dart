@@ -107,29 +107,30 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                             ? widget.removeFavorite
                                 ? Container()
                                 : PositionedDirectional(
-                          top: 10.h,
-                          end: 10.w,
-                            child: IconAppButton(
-                              icon: widget.category.isFavorite == false
-                                  ? Icons.favorite_outline
-                                  : Icons.favorite,
-                              onPressed: () async {
-                                final result =
-                                await widget.onFavorite();
-                                print("resutlt=$result");
-                                if (result == true) {
-                                  print(result);
-                                  setState(() {
-                                    widget.category.isFavorite =
-                                    !widget.category.isFavorite!;
-                                    print(widget.category.isFavorite);
-                                    widget.isFavorite = result;
-                                    print("===================$result");
-                                  });
-                                }
-                              },
-                              color: AppColors.SECONDARY_COLOR,
-                            ),)
+                                    top: 10.h,
+                                    end: 10.w,
+                                    child: IconAppButton(
+                                      icon: widget.category.isFavorite == false
+                                          ? Icons.favorite_outline
+                                          : Icons.favorite,
+                                      onPressed: () async {
+                                        final result =
+                                            await widget.onFavorite();
+                                        print("resutlt=$result");
+                                        if (result == true) {
+                                          print(result);
+                                          setState(() {
+                                            widget.category.isFavorite =
+                                                !widget.category.isFavorite!;
+                                            print(widget.category.isFavorite);
+                                            widget.isFavorite = result;
+                                            print("===================$result");
+                                          });
+                                        }
+                                      },
+                                      color: AppColors.SECONDARY_COLOR,
+                                    ),
+                                  )
                             : const SizedBox.shrink(),
                       ],
                     ),
@@ -142,7 +143,9 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                           ? widget.category.nameEn!
                           : widget.category.name ?? "",
                       style: TextStyle(
-                          color: context.isDarkMode? Colors.white : AppColors.PRIMARY_COLOR,
+                          color: context.isDarkMode
+                              ? Colors.white
+                              : AppColors.PRIMARY_COLOR,
                           fontWeight: FontWeight.bold,
                           fontSize: widget.fontSize ?? 30.sp),
                     ),
@@ -223,12 +226,12 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
           )
         : CachedNetworkImage(
             imageUrl: widget.category.banner,
-            width: MediaQuery.sizeOf(context).width,
-            height: MediaQuery.sizeOf(context).height * 0.09,
+            width: double.infinity,
+            height: 70,
             imageBuilder: (context, i) => Container(
-              padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 10.w),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.r),
+                borderRadius: BorderRadius.circular(20),
                 color: widget.category.banner.isNotEmpty
                     ? Colors.transparent
                     : AppColors.PRIMARY_COLOR,
@@ -249,10 +252,10 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                   PositionedDirectional(end: 0, child: _buildRegisterButton()),
                   Label(
                     text: widget.category.name ?? "",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 40.sp),
+                    style: Styles.headerText(
+                      fontSize: 48,
+                      color: Colors.white,
+                    ),
                   ),
                   PositionedDirectional(
                     start: 0,

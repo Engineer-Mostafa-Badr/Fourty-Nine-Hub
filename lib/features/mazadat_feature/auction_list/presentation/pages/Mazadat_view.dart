@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/mazadat_feature/auction_list/presentation/cubit/auction_list_cubit.dart';
+
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../../res/style/styles.dart';
 import '../../../../../res/style/app_colors.dart';
+import '../../../../../res/style/styles.dart';
 import '../widgets/auction_card.dart';
 
 class MazadatView extends StatelessWidget {

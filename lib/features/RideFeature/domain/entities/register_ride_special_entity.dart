@@ -40,23 +40,65 @@ class RegisterRideSpecialEntity {
   //toJson
   Map<String, dynamic> toJson() {
     return {
-      "driverFirstName": driverFirstName,
-      "driverLastName": driverLastName,
-      "vehicleModel": vehicleModel,
-      "vehicleBrand": vehicleBrand,
-      "vehicleYear": vehicleYear,
-      "subcategoryIds": subcategoryIds,
-      "pricingPerKm": double.parse(pricingPerKm),
-      "phone": phone,
-      "smoker": smoker,
-      "airConditioner": airConditioner,
-      "city": city,
-      "plateInfo": plateInfo,
-      "idNumber": idNumber,
-      "workingType": workingType,
-      "vehicleColor": vehicleColor,
-      "birthday": birthday,
-      "driverLicenseNumber": driverLicenseNumber
+      "driverInfo": {
+        "firstName": driverFirstName,
+        "lastName": driverLastName,
+        "dateOfBirth": birthday,
+        "identificationDetails": {
+          "driverLicenseNumber": driverLicenseNumber,
+          "nationalIdNumber": idNumber,
+        },
+        "contactInfo": {
+          "phoneNumber": phone,
+          "city": city,
+        }
+      },
+      "vehicleInfo": {
+        "brand": vehicleBrand,
+        "model": vehicleModel,
+        "color": vehicleColor,
+        "year": vehicleYear,
+        "plateDetails": plateInfo,
+        "features": {
+          "hasAirConditioner": airConditioner,
+          "allowsSmoking": smoker,
+        }
+      },
+      "serviceSettings": {
+        "pricingPerKm": pricingPerKm,
+        "workingType": workingType,
+        "subcategoryIds": subcategoryIds,
+      }
     };
+  }
+
+  // fromJson factory method
+  factory RegisterRideSpecialEntity.fromJson(Map<String, dynamic> json) {
+    final driverInfo = json["driverInfo"];
+    final identificationDetails = driverInfo["identificationDetails"];
+    final contactInfo = driverInfo["contactInfo"];
+    final vehicleInfo = json["vehicleInfo"];
+    final features = vehicleInfo["features"];
+    final serviceSettings = json["serviceSettings"];
+
+    return RegisterRideSpecialEntity(
+      driverFirstName: driverInfo["firstName"],
+      driverLastName: driverInfo["lastName"],
+      birthday: driverInfo["dateOfBirth"],
+      driverLicenseNumber: identificationDetails["driverLicenseNumber"],
+      idNumber: identificationDetails["nationalIdNumber"],
+      phone: contactInfo["phoneNumber"],
+      city: contactInfo["city"],
+      vehicleBrand: vehicleInfo["brand"],
+      vehicleModel: vehicleInfo["model"],
+      vehicleColor: vehicleInfo["color"],
+      vehicleYear: vehicleInfo["year"],
+      plateInfo: vehicleInfo["plateDetails"],
+      airConditioner: features["hasAirConditioner"],
+      smoker: features["allowsSmoking"],
+      pricingPerKm: serviceSettings["pricingPerKm"],
+      workingType: serviceSettings["workingType"],
+      subcategoryIds: List<String>.from(serviceSettings["subcategoryIds"]),
+    );
   }
 }

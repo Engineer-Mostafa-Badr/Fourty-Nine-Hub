@@ -7,7 +7,6 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/register/driver_register/presentation/widgets/upload_image.dart';
 
 import '../../../../../../core/widget/custom_switch_button.dart';
-import '../../../../../../core/widget/custom_switch_button.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../cubit/driver_register_cubit.dart';
 

@@ -1,8 +1,10 @@
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/constants/subscription_status.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -17,12 +19,12 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MobileAdCard extends StatefulWidget {
   final AdEntity item;
@@ -232,7 +234,7 @@ class _MobileAdCardState extends State<MobileAdCard> {
                 children: [
                   Row(
                     children: [
-                      AvaialbleTripsButton(
+                      if(widget.item.userSubscriptionStatus==SubscriptionStatus.notSubscribed.status)AvaialbleTripsButton(
                         title: LocaleKeys.request.localize,
                         color:AppColors.SECONDARY_COLOR,
                         padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 5),
@@ -318,32 +320,30 @@ class _MobileAdCardState extends State<MobileAdCard> {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.all(10.w),
-      color: status == 'premium'
+      color: status == SubscriptionStatus.premium.status
           ? Colors.amber
-          : status == 'regular'
-              ? Colors.grey
-              : Colors.grey,
+          :Colors.grey,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          if (status == 'premium' || status == 'regular') ...[
+          if (status !=SubscriptionStatus.notSubscribed.status) ...[
             Icon(
               Icons.workspace_premium_outlined,
               size: 55.w,
-              color: status == 'premium'
+              color: status == SubscriptionStatus.premium.status
                   ? AppColors.SECONDARY_COLOR
-                  : status == 'regular'
-                      ? AppColors.PRIMARY_COLOR
-                      : null,
+                  : status == SubscriptionStatus.regular.status
+                  ? AppColors.PRIMARY_COLOR
+                  : null,
             ),
             const Sizer(width: 5)
           ],
           Label(
-            text: status == 'premium'
+            text: status == SubscriptionStatus.premium.status
                 ? LocaleKeys.premiumSubscription.localize
-                : status == 'regular'
-                    ? LocaleKeys.regularRequest.localize
-                    : LocaleKeys.notSubscribed.localize,
+                : status == SubscriptionStatus.regular.status
+                ? LocaleKeys.regularRequest.localize
+                : LocaleKeys.notSubscribed.localize,
             style: Styles.mediumText(
                 color: Colors.white, fontSize: 35, fontWeight: FontWeight.bold),
             maxLines: 1,

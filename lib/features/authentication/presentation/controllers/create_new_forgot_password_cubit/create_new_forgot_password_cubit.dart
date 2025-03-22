@@ -16,12 +16,13 @@ class CreateNewForgotPasswordCubit extends Cubit<CreateNewForgotPasswordState> {
     this._createNewForgetPasswordUseCase,
   ) : super(CreateNewForgotPasswordInitial());
 
-  Future<void> createPassword(String email) async {
+  Future<void> createPassword(Map<String,dynamic> emailOrUserId) async {
     if (formKey.currentState!.validate()) {
       emit(CreateNewForgotPasswordLoading());
       final result = await _createNewForgetPasswordUseCase.call(
         CreateNewForgetParams(
-          email: email,
+          email: emailOrUserId['email'],
+          userId: emailOrUserId['userId'],
           newPassword: newPasswordController.text,
           newPasswordConfirmation: confirmPasswordController.text,
         ),

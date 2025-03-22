@@ -5,6 +5,8 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/check_real_am
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_activity_trips.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_completed_trips_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_running_trips_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_cost_per_km_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_loading_info_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_location_from_address_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_expexted_price_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_governorates.dart';
@@ -12,9 +14,12 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_driver_pi
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_brands_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_car_colors_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_driver_information.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_governorates.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_models_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_shipping_categories_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/loading_register_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/make_request_trip_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/recording_trip_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/register_ride_not_special_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/register_ride_special_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/request_trip_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/retrieve_client_latest_trip_use_case.dart';
@@ -82,10 +87,28 @@ class RideServiceLocatorUpdated {
     serviceLocator.registerLazySingleton<RequestTripUseCase>(() => RequestTripUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<CancelPendingTripByClientUseCase>(() => CancelPendingTripByClientUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<RetrieveClientLatestTripUseCase>(() => RetrieveClientLatestTripUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetCostPerKmUseCase>(() =>
+        GetCostPerKmUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<RegisterRideNotSpecialUseCase>(() =>
+        RegisterRideNotSpecialUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<LoadingRegisterUseCase>(() =>
+        LoadingRegisterUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetLoadingInfoUseCase>(() =>
+        GetLoadingInfoUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<MakeRequestTripUseCase>(() =>
+        MakeRequestTripUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<RecordingTripUseCase>(() =>
+        RecordingTripUseCase(serviceLocator()));
 
     // ---------------------------------- cubits ----------------------------------
 
     serviceLocator.registerLazySingleton<RideCubit>(() => RideCubit(
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

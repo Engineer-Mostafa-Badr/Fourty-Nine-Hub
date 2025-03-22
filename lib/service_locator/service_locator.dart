@@ -66,6 +66,7 @@ import 'package:sqflite/sqflite.dart';
 
 import '../core/data/datasources/local/shared_preferences/local_storage_consumer.dart';
 import '../core/localization/localization_service.dart';
+import '../features/OnBoarding/Presentation/Controllers/on_boarding_cubit.dart';
 import '../features/social_media/tinder/presentation/cubit/gift_cubit.dart';
 import '../firebase_options.dart';
 import 'account_service_locator.dart';
@@ -80,6 +81,7 @@ import 'health_service_locator.dart';
 import 'installment_service_locator.dart';
 import 'live_service_locator.dart';
 import 'meeting_service_locator.dart';
+import 'ride_dashboard_service_locator_updated.dart';
 import 'social_service_locator.dart';
 import 'subscribe_service_locator.dart';
 
@@ -97,6 +99,7 @@ class DI {
 
     _callFeatureInjector();
     // //preloading
+    serviceLocator.registerLazySingleton(() => OnBoardingCubit());
     serviceLocator.registerLazySingleton(() => PreloadBloc());
     serviceLocator.registerLazySingleton<ReelsCubit>(
       () => ReelsCubit(
@@ -331,6 +334,8 @@ class DI {
     SocialServiceLocator.execute(serviceLocator: serviceLocator);
     // Ride Updated
     RideServiceLocatorUpdated.execute(serviceLocator: serviceLocator);
+    // Ride Updated
+    RideDashboardServiceLocatorUpdated.execute(serviceLocator: serviceLocator);
     // Club Voice
     ClubVoiceServiceLocator.execute(serviceLocator: serviceLocator);
     // Stream

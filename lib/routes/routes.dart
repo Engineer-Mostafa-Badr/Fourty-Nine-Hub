@@ -5,10 +5,12 @@ abstract class Routes {
 
   static const HOME = '/';
   static const RIDE_HOME = '/RideHome';
+  static const onBoardingScreen = '/OnBoardingScreen';
   static const CUSTOMPAGE = '/CustomPage';
   static const editPage = '/editPage';
   static const RIDEACTIVITY = '/RIDEACTIVITY';
-  static const RIDEOPENSTREETMAPSEARCHANDPICK = '/RIDEOPENSTREETMAPSEARCHANDPICK';
+  static const RIDEOPENSTREETMAPSEARCHANDPICK =
+      '/RIDEOPENSTREETMAPSEARCHANDPICK';
   static const RIDERUNNINGTRIPS = '/RIDERUNNINGTRIPS';
   static const RIDEEXPIREDTRIPE = '/RIDEEXPIREDTRIPS';
   static const PAGEPREVIEW = '/CustomPage/PagePreview';
@@ -33,6 +35,8 @@ abstract class Routes {
   static const LUCKYWHEEL = '/LuckyWheel';
   static const COMPETITIONS = '/Competitions';
   static const WINNERS = '/Winners';
+  static const WINNERSCASHBACK = '/WinnersCashback';
+  static const WINNERSGift = '/WinnersGift';
   static const WALLET = '/Wallet';
   static const BALANCE = '/Balance';
   static const GIFT = '/Gift';
@@ -215,7 +219,8 @@ abstract class Routes {
   static const moreInfoScreen = '/MoreInfoScreen';
   static const truckWelcomeRideRegister = '/TruckWelcomeRideRegister';
 
-  static const truckPersonalInformationScreen = '/TruckPersonalInformationScreen';
+  static const truckPersonalInformationScreen =
+      '/TruckPersonalInformationScreen';
   static const truckDriversLicenseScreen = '/TruckDriversLicenseScreen';
   static const truckPersonalDocumentsScreen = '/TruckPersonalDocumentsScreen';
   static const truckVehicleInformationScreen = '/TruckVehicleInformationScreen';
@@ -232,6 +237,20 @@ abstract class Routes {
   static const rideModeScreen = '/RideModeScreen';
   static const rideDashboardDetailsScreen = '/RideDashboardDetailsScreen';
   static const rideLoadingRequestScreen = '/rideLoadingRequestScreen';
+  static const supportRideScreen = '/SupportRideScreen';
+  static const supportClientDetailsScreen = '/SupportClientDetailsScreen';
+  static const emergencyContactsScreen = '/EmergencyContactsScreen';
+  static const rideArrivedScreen = '/RideArrivedScreen';
+  static const ratingDriverScreen = '/RatingDriverScreen';
+  static const completeRideScreen = '/CompleteRideScreen';
+
+  // Change Password
+  static const CHANGEPASSWORD = '/ChangePassword';
+  static const CHANGEPASSWORDSECOND = '/ChangePasswordSecond';
+  static const VERIFICATION = '/Verification';
+
+  // Cashback
+  static const CASHBACK = '/Cashback';
 }
 
 abstract class Paths {
@@ -239,10 +258,12 @@ abstract class Paths {
 
   static const HOME = '/';
   static const RIDEHOME = 'RideHome';
+  static const onBoardingScreen = 'OnBoardingScreen';
   static const CUSTOMPAGE = 'CustomPage';
   static const PAGEPREVIEW = 'PagePreview';
   static const RIDEACTIVITY = 'RIDEACTIVITY';
-  static const RIDEOPENSTREETMAPSEARCHANDPICK = 'RIDEOPENSTREETMAPSEARCHANDPICK';
+  static const RIDEOPENSTREETMAPSEARCHANDPICK =
+      'RIDEOPENSTREETMAPSEARCHANDPICK';
   static const RIDERUNNINGTRIPS = 'RIDERUNNINGTRIPS';
   static const RIDEEXPIREDTRIPE = 'RIDEEXPIREDTRIPS';
   static const UploadRiderImages = 'UploadRiderImages';
@@ -264,6 +285,8 @@ abstract class Paths {
   static const LUCKYWHEEL = 'LuckyWheel';
   static const COMPETITIONS = 'Competitions';
   static const WINNERS = 'Winners';
+  static const WINNERSCASHBACK = 'WinnersCashback';
+  static const WINNERSGift = 'WinnersGift';
   static const WALLET = 'Wallet';
   static const BALANCE = 'Balance';
   static const GIFT = 'Gift';
@@ -436,7 +459,8 @@ abstract class Paths {
   static const vehicleInformationScreen = 'VehicleInformationScreen';
   static const moreInfoScreen = 'MoreInfoScreen';
   static const truckWelcomeRideRegister = 'TruckWelcomeRideRegister';
-  static const truckPersonalInformationScreen = 'TruckPersonalInformationScreen';
+  static const truckPersonalInformationScreen =
+      'TruckPersonalInformationScreen';
   static const truckDriversLicenseScreen = 'TruckDriversLicenseScreen';
   static const truckPersonalDocumentsScreen = 'TruckPersonalDocumentsScreen';
   static const truckVehicleInformationScreen = 'TruckVehicleInformationScreen';
@@ -453,4 +477,18 @@ abstract class Paths {
   static const rideModeScreen = 'RideModeScreen';
   static const rideDashboardDetailsScreen = 'RideDashboardDetailsScreen';
   static const rideLoadingRequestScreen = 'rideLoadingRequestScreen';
+  static const supportRideScreen = 'SupportRideScreen';
+  static const supportClientDetailsScreen = 'SupportClientDetailsScreen';
+  static const emergencyContactsScreen = 'EmergencyContactsScreen';
+  static const rideArrivedScreen = 'RideArrivedScreen';
+  static const ratingDriverScreen = 'RatingDriverScreen';
+  static const completeRideScreen = 'CompleteRideScreen';
+
+  // Change Password
+  static const CHANGEPASSWORD = 'ChangePassword';
+  static const CHANGEPASSWORDSECOND = 'ChangePasswordSecond';
+  static const VERIFICATION = 'Verification';
+
+  // Cashback
+  static const CASHBACK = 'CashBack';
 }

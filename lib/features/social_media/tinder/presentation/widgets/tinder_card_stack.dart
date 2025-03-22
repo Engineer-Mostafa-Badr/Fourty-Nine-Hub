@@ -1,9 +1,10 @@
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'dart:developer';
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';

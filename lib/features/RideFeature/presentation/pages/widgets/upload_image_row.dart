@@ -9,6 +9,7 @@ class UploadImageRow extends StatelessWidget {
   final bool? disableUpload;
   @override
   Widget build(BuildContext context) {
+    print("disableUpload$disableUpload");
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -25,7 +26,7 @@ class UploadImageRow extends StatelessWidget {
             const SizedBox(width: 5),
             ClickableWidget(
               onTap:
-              disableUpload==true?null:
+              // disableUpload==true?null:
               onTap,
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),

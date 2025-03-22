@@ -17,21 +17,24 @@ class CreateNewForgetPasswordUseCase
 }
 
 class CreateNewForgetParams extends Equatable {
-  final String email;
+  final String? email;
+  final String? userId;
   final String newPassword;
   final String newPasswordConfirmation;
 
   const CreateNewForgetParams({
-    required this.email,
+    this.email,
+    this.userId,
     required this.newPassword,
     required this.newPasswordConfirmation,
   });
-
-  Map<String, dynamic> toJson() => {
-        'email': email,
-        'newPassword': newPassword,
-        'confirmNewPassword': newPasswordConfirmation,
-      };
+  //
+  // Map<String, dynamic> toJson() => {
+  //       'email': email,
+  //       'userId': userId,
+  //       'newPassword': newPassword,
+  //       'confirmNewPassword': newPasswordConfirmation,
+  //     };
 
   @override
   List<Object?> get props => [

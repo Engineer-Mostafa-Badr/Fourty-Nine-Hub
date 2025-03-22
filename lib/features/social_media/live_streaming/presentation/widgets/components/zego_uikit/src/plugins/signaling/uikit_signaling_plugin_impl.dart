@@ -3,7 +3,6 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-
 // Package imports:
 import 'package:zego_callkit/zego_callkit.dart';
 import 'package:zego_plugin_adapter/zego_plugin_adapter.dart';

@@ -1,8 +1,10 @@
 import 'package:fourtyninehub/features/RideFeature/domain/entities/activity_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/completed_trips_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/cost_per_km_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/expected_price_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/get_location_from_address_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_request_trip_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/loading_info_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/running_trips_entity.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 
@@ -63,6 +65,7 @@ class RideState {
   final List<RunningTripsEntity>? runningTrips;
   final ActivityTripEntity ? activityTrips;
   final List<SubCategoryEntityUpdated>? rideSubCategories;
+  final List<SubCategoryEntityUpdated>? shippingSubCategories;
   final List<GovernorateEntity>? govs;
   final List<RideColorEntity>? colors;
   final List<String>? brands;
@@ -73,8 +76,10 @@ class RideState {
   final bool? hasAirCondition;
   final RideColorEntity? selectedColors;
   final String? selectedGov;
+  final String? registerType;
   final String? selectedPlan;
   final DriverInfoEntity? driverInfo;
+  final LoadingInfoEntity? loaderInfo;
   final DriverPictureOptionalEntity? pictureOptional;
   final bool? isApproved;
   final bool? isUploadDriverId;
@@ -86,6 +91,8 @@ class RideState {
   final bool? isUploadDrugAnalysis;
   final bool? isUploadCriminalRecord;
   final bool? isUploadTechnicalExamination;
+  final bool? isShipping;
+  final CostPerKmEntity? costPerKm;
 
   RideState({
     this.status = RideStates.initState,
@@ -103,7 +110,9 @@ class RideState {
     this.vehicleBackPicture,
     this.vehiclePicture,
     this.rideCategory,
+    this.loaderInfo,
     this.rideSubCategories,
+    this.shippingSubCategories,
     this.shippingCategory,
     this.governorates,
     this.currentLocation,
@@ -114,10 +123,12 @@ class RideState {
     this.requestedTrip,
     this.completedTrips,
     this.runningTrips,
+    this.costPerKm,
     this.activityTrips,
     this.govs,
     this.brands,
     this.models,
+    this.registerType='socket',
     this.driverInfo,
     this.colors,
     this.isSmoking=false,
@@ -138,6 +149,7 @@ class RideState {
     this.isUploadDrugAnalysis,
     this.isUploadCriminalRecord,
     this.isUploadTechnicalExamination,
+    this.isShipping,
   });
 
   RideState copyWith({
@@ -157,11 +169,14 @@ class RideState {
     XFile? vehiclePicture,
     RideCategoryEntityUpdated? rideCategory,
     DriverInfoEntity? driverInfo,
+    LoadingInfoEntity? loaderInfo,
     DriverPictureOptionalEntity? pictureOptional,
     List<SubCategoryEntityUpdated>? rideSubCategories,
+    List<SubCategoryEntityUpdated>? shippingSubCategories,
     List<GovernorateEntity>? govs,
     List<String>? brands,
     List<String>? models,
+    CostPerKmEntity? costPerKm,
     List<RideColorEntity>? colors,
     RideCategoryEntityUpdated? shippingCategory,
     List<GovernorateEntity>? governorates,
@@ -177,6 +192,8 @@ class RideState {
     String? selectedModel,
     String? selectedBrand,
     bool? isSmoking,
+    String? registerType,
+    bool? isShipping,
     bool? hasAirCondition,
     RideColorEntity? selectedColors,
     String? selectedGov,
@@ -195,6 +212,7 @@ class RideState {
     return RideState(
       status: status ?? this.status,
       failure: failure ?? this.failure,
+      registerType: registerType ?? this.registerType,
       personalPicture: personalPicture ?? this.personalPicture,
       driverLicensePicture: driverLicensePicture ?? this.driverLicensePicture,
       backOfDriverLicensePicture: backOfDriverLicensePicture ?? this.backOfDriverLicensePicture,
@@ -243,6 +261,10 @@ class RideState {
       completedTrips: completedTrips ?? this.completedTrips,
       runningTrips: runningTrips ?? this.runningTrips,
       activityTrips: activityTrips ?? this.activityTrips,
+      costPerKm: costPerKm ?? this.costPerKm,
+      shippingSubCategories: shippingSubCategories ?? this.shippingSubCategories,
+      isShipping: isShipping ?? this.isShipping,
+      loaderInfo: loaderInfo ?? this.loaderInfo,
     );
   }
 }
