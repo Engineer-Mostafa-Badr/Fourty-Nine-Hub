@@ -134,6 +134,7 @@ class MarriageAdsListViewItem extends StatelessWidget {
                       Expanded(
                         child: SizedBox(
                           height: 30,
+                          width: 141,
                           child: AvaialbleTripsButton(
                             title: LocaleKeys.request.localize,
                             color: AppColors.SECONDARY_COLOR_DARK2,
@@ -201,6 +202,9 @@ class MarriageAdsListViewItem extends StatelessWidget {
                             },
                           ),
                         ),
+                      ),
+                     const SizedBox(
+                        width: 32,
                       ),
                       Expanded(
                         child: CallMessageButtons(

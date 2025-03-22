@@ -43,16 +43,18 @@ abstract class Assets {
   static String mailIcon = 'assets/icons/mail_icon.svg';
   static String refreshIcon = 'assets/icons/refresh_icon.svg';
   static String searchIcon = 'assets/icons/search_icon.svg';
-  static String captainTripsIcon= 'assets/icons/captain_trips_icon.svg';
+  static String captainTripsIcon = 'assets/icons/captain_trips_icon.svg';
   static String doctorBookingsIcon = 'assets/icons/doctor_bookings_icon.svg';
   static String followRequestIcon = 'assets/icons/follow_request_icon.svg';
   static String clicksOnLiveIcon = 'assets/icons/clicks_on_live_icon.svg';
   static String friendRequestsIcon = 'assets/icons/friend_requests_icon.svg';
   static String liveLickesIcon = 'assets/icons/live_lickes_icon.svg';
   static String restauranOrdersIcon = 'assets/icons/restauran_orders_icon.svg';
-  static String shippingDriverTripsIcon = 'assets/icons/shipping_driver_trips_icon.svg';
+  static String shippingDriverTripsIcon =
+      'assets/icons/shipping_driver_trips_icon.svg';
   static String storyLikesIcon = 'assets/icons/story_likes_icon.svg';
   static String storyViewsIcon = 'assets/icons/story_views_icon.svg';
+  static String image2Icon = 'assets/icons/image_2_icon.svg';
 
   // lottie
   static String loveReaction = 'assets/lottie/love_reaction.json';
@@ -332,7 +334,6 @@ abstract class Assets {
   static String rideUsageIcon = 'assets/icons/ride_usage_icon.svg';
   static String userShippingTripsIcon = 'assets/icons/user_shipping_trips.svg';
   static String viewCountIcon = 'assets/icons/view_count_icon.svg';
-
 
   static String onBoarding1 = 'assets/onBoarding/onBoarding1.svg';
   static String onBoarding2 = 'assets/onBoarding/onBoarding2.svg';
