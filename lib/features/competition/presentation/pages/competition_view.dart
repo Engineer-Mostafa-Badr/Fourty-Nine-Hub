@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../common/functions/helper/randome_color.dart';
 import '../../../../common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../res/strings/labels.dart';
@@ -12,7 +13,6 @@ import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
 import '../../../account_taps/wallet/domain/entities/competition_entity.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CompetitionView extends StatelessWidget {
   final List<CompetitionEntity> list;

@@ -11,25 +11,21 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_info_e
 import 'package:fourtyninehub/features/RideFeature/domain/entities/loading_info_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/record_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/upload_rider_images.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/expired_trips_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/osm_search_and_pick.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/running_trips_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/custom_ride_button.dart';
 import 'package:latlong2/latlong.dart';
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
-import '../../../../common/widgets/form/text_fields/form_text_field.dart';
 import '../../../../common/widgets/stateless/appbar/nested_appbar.dart';
 import '../../../../common/widgets/stateless/dynamic/shared_scaffold.dart';
-import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
-import '../../../../res/style/styles.dart';
-import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'widgets/add_stops_widget.dart';
 import 'widgets/bottom_sheet/custom_bottom_sheet.dart';
-import 'widgets/country_dropdown.dart';
 import 'widgets/fare_bottom_sheet_widget.dart';
-import 'widgets/map_section.dart';
 import 'widgets/options_bottomsheet_widget.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -91,7 +87,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                   appBars: const [],
                   body: Stack(
                     children: [
-                      _buildTopMap(state, context),
+                      _buildTopImage(),
                       _buildBottomSheet(),
                       _carTruckBtn(driverInfo: context.read<RideCubit>().state.driverInfo, loadingInfo: context.read<RideCubit>().state.loaderInfo),
                     ],
@@ -210,8 +206,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
   }
 
   Widget _carTruckBtn({LoadingInfoEntity? loadingInfo, DriverInfoEntity? driverInfo}) {
-    // if (loadingInfo == null && driverInfo == null)
-    if(true){
+    if (loadingInfo == null && driverInfo == null) {
       return GestureDetector(
         onTap: () {
           customBottomSheet(context, context.read<RideCubit>(),
@@ -224,8 +219,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         radius: 15,
                         label: LocaleKeys.ride.tr(),
                         onPressed: () {
-                          context.push(Routes.rideModeScreen,extra: 'ride');
-                          // context.read<RideCubit>().onNavigateToWelcomeScreen(fromShipping: false, context: context);
+                          context.read<RideCubit>().onNavigateToWelcomeScreen(fromShipping: false, context: context);
                         },
                         backColor: AppColors.PRIMARY_COLOR,
                         width: double.infinity),
@@ -233,8 +227,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         radius: 15,
                         label: LocaleKeys.shipping.tr(),
                         onPressed: () {
-                          context.push(Routes.rideModeScreen,extra: 'truk');
-                          // context.read<RideCubit>().onNavigateToWelcomeScreen(fromShipping: true, context: context);
+                          context.read<RideCubit>().onNavigateToWelcomeScreen(fromShipping: true, context: context);
                         },
                         backColor: AppColors.PRIMARY_COLOR,
                         width: double.infinity),
@@ -276,24 +269,29 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
             Expanded(
               child: CustomRideButton(
                 onPressed: () {
+                  context.push(Routes.rideModeScreen, extra: RideModeParams(modeType: 'ride', isSocket: driverInfo?.driverType == 'socket' ? true : false));
+
                   if (driverInfo == null) {
                     context.read<RideCubit>().onNavigateToWelcomeScreen(fromShipping: false, context: context);
                   }
                 },
-                onTap: (){
-                  if(driverInfo != null &&driverInfo.status == RegistrationStatus.pending.status){
+                onTap: () {
+                  context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: false, isSocket: driverInfo?.driverType == 'socket' ? true : false));
+                  if (driverInfo != null && driverInfo.status == RegistrationStatus.pending.status) {
                     return;
-                  }else if (driverInfo != null &&driverInfo.status == RegistrationStatus.rejected.status){
-                    context.push(Routes.UploadRiderImages,extra: UploadRiderImagesParams(isShipping: false,isSocket:driverInfo.driverType=='socket'?true:false ));
-                  }else if (driverInfo != null &&driverInfo.status == RegistrationStatus.initial.status){
-                    context.push(Routes.UploadRiderImages,extra: UploadRiderImagesParams(isShipping: false,isSocket:driverInfo.driverType=='socket'?true:false ));
+                  } else if (driverInfo != null && driverInfo.status == RegistrationStatus.rejected.status) {
+                    context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: false, isSocket: driverInfo.driverType == 'socket' ? true : false));
+                  } else if (driverInfo != null && driverInfo.status == RegistrationStatus.initial.status) {
+                    context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: false, isSocket: driverInfo.driverType == 'socket' ? true : false));
+                  }else{
+                    context.push(Routes.rideModeScreen, extra: RideModeParams(modeType: 'ride', isSocket: driverInfo?.driverType == 'socket' ? true : false));
                   }
                 },
-                isRed: (driverInfo != null&&(driverInfo.status != RegistrationStatus.rejected.status)) ? true : false,
-          isPending: driverInfo != null && (driverInfo.status == RegistrationStatus.pending.status),
+                isRed: (driverInfo != null && (driverInfo.status != RegistrationStatus.rejected.status)) ? true : false,
+                isPending: driverInfo != null && (driverInfo.status == RegistrationStatus.pending.status),
                 isDisabled: driverInfo != null && (driverInfo.status != RegistrationStatus.approved.status),
-                text: LocaleKeys.ride.tr(),
-                status: driverInfo?.status??'',
+                text: LocaleKeys.rideMode.tr(),
+                status: driverInfo?.status ?? '',
               ),
             ),
             const SizedBox(
@@ -305,23 +303,27 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                   if (loadingInfo == null) {
                     print("object");
                     context.read<RideCubit>().onNavigateToWelcomeScreen(fromShipping: true, context: context);
-                  }else{
+                  } else {
                     print("loadingInfo.toJson()${loadingInfo.toJson()}");
                   }
                 },
-                onTap: (){
+                onTap: () {
                   print("loadingInfo.toJson()${loadingInfo?.toJson()}");
-                  if(loadingInfo != null &&loadingInfo.status == RegistrationStatus.pending.status){
+                  if (loadingInfo != null && loadingInfo.status == RegistrationStatus.pending.status) {
                     return;
-                  }else if (loadingInfo != null &&loadingInfo.status == RegistrationStatus.rejected.status){
-                    context.push(Routes.UploadRiderImages,extra: UploadRiderImagesParams(isShipping: true,isSocket:false ));
-                  }else if (loadingInfo != null &&loadingInfo.status == RegistrationStatus.initial.status){
-                    context.push(Routes.UploadRiderImages,extra: UploadRiderImagesParams(isShipping: true,isSocket:false ));
+                  } else if (loadingInfo != null && loadingInfo.status == RegistrationStatus.rejected.status) {
+                    context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: true, isSocket: false));
+                  } else if (loadingInfo != null && loadingInfo.status == RegistrationStatus.initial.status) {
+                    context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: true, isSocket: false));
                   }
                 },
-                isRed: (loadingInfo != null&&(loadingInfo.status != RegistrationStatus.rejected.status)) ? true : false,
-                isDisabled: loadingInfo != null && (loadingInfo.status == RegistrationStatus.pending.status||loadingInfo.status == RegistrationStatus.rejected.status||loadingInfo.status == RegistrationStatus.initial.status),
-                text: LocaleKeys.shipping.tr(), status: loadingInfo?.status??'',
+                isRed: (loadingInfo != null && (loadingInfo.status != RegistrationStatus.rejected.status)) ? true : false,
+                isDisabled: loadingInfo != null &&
+                    (loadingInfo.status == RegistrationStatus.pending.status ||
+                        loadingInfo.status == RegistrationStatus.rejected.status ||
+                        loadingInfo.status == RegistrationStatus.initial.status),
+                text: LocaleKeys.trukMode.tr(),
+                status: loadingInfo?.status ?? '',
               ),
             ),
           ],
@@ -471,7 +473,10 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         Expanded(
                             flex: 2,
                             child: AppButton(
-                                radius: 15, label: LocaleKeys.request.tr(), onPressed: () {}, backColor: AppColors.PRIMARY_COLOR, width: MediaQuery.of(context).size.width)),
+                                radius: 15, label: LocaleKeys.request.tr(), onPressed: () {
+                                  Navigator.of(context).push(MaterialPageRoute(builder: (_)=>const VoiceNoteRecorder()));
+                                  // context.read<RideCubit>().makeRequestTrips();
+                                }, backColor: AppColors.PRIMARY_COLOR, width: MediaQuery.of(context).size.width)),
                       ],
                     )
                   ],

@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/edit_doctor_personal_info/edit_doctor_personal_info_cubit.dart';
-import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/doctor_entity.dart';
-import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/personal_info/edit_doctor_address.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/personal_info/edit_doctor_name_field.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/personal_info/edit_doctor_phone_field.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/widgets/personal_info/edit_doctor_speciality_filed.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/features/health_feature/doctor_details/domain/entities/doctor_entity.dart';
 
+import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 
 class EditDoctorPersonalInfoView extends StatefulWidget {

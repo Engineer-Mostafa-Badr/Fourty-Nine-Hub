@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -8,7 +9,6 @@ import 'package:fourtyninehub/features/health_feature/doctor_details/presentatio
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/divider.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/rate_card.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 

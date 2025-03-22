@@ -1,12 +1,11 @@
 // Dart imports:
 import 'dart:async';
 
+// Package imports:
+import 'package:file_picker/file_picker.dart';
 // Flutter imports:
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-
-// Package imports:
-import 'package:file_picker/file_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:zego_express_engine/zego_express_engine.dart';

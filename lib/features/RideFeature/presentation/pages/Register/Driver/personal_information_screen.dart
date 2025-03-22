@@ -343,14 +343,7 @@ class PersonalInformationScreen extends StatelessWidget {
                       ),
                     ),
                     const Sizer(),
-                    state.isLoadingSubmit
-                        ? const Center(
-                            child: SizedBox(
-                                height: 44,
-                                child: CircularProgressIndicator(
-                                  color: AppColors.PRIMARY_COLOR,
-                                )))
-                        : InkWell(
+                    InkWell(
                             onTap: () {
                               state.isShipping==true?cubit.onLoadingRegister(context):state.registerType=='socket'?cubit.onRegister(context):cubit.onNoSocketRegister(context);
                             },

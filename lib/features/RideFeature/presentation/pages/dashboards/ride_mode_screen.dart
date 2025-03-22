@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/available_ride_trip_item.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/stateless/appbar/nested_appbar.dart';
@@ -16,9 +17,15 @@ import 'widgets/past_trips_widget.dart';
 import 'widgets/settings_widget.dart';
 import 'widgets/truk_bus_widget.dart';
 
-class RideModeScreen extends StatefulWidget {
+class RideModeParams{
   final String modeType;
-  const RideModeScreen({super.key, required this.modeType});
+  final bool? isSocket;
+  const RideModeParams({required this.modeType, this.isSocket});
+}
+
+class RideModeScreen extends StatefulWidget {
+  final RideModeParams params;
+  const RideModeScreen({super.key, required this.params});
 
   @override
   State<RideModeScreen> createState() => _RideModeScreenState();
@@ -26,69 +33,32 @@ class RideModeScreen extends StatefulWidget {
 
 class _RideModeScreenState extends State<RideModeScreen> {
   final ScrollController _scrollController = ScrollController();
+  late ScrollController _availableTripsScrollController;
   int _selectedIndex = 0;
-  List<String> images = [
-    Assets.redCar,
-    Assets.blackCar,
-    Assets.redCar,
-    Assets.blackCar,
-    Assets.redCar,
-    Assets.blackCar,
-    Assets.redCar,
-    Assets.blackCar,
-  ];
-  List<String> titles = [
-    "Women",
-    "Captain",
-    "Women",
-    "Captain",
-    "Women",
-    "Captain",
-    "Women",
-    "Captain",
-  ];
-  List<String> columnTitle = [
-    "142 Street 53",
-    "142 Street 53",
-    "142 Street 53",
-    "142 Street 53",
-    "142 Street 53",
-    "142 Street 53",
-    "142 Street 53",
-    "142 Street 53",
-  ];
-  List<String> columnDate = [
-    "Feb 13 - 12:41 PM",
-    "Feb 13 - 12:41 PM",
-    "Feb 13 - 12:41 PM",
-    "Feb 13 - 12:41 PM",
-    "Feb 13 - 12:41 PM",
-    "Feb 13 - 12:41 PM",
-    "Feb 13 - 12:41 PM",
-    "Feb 13 - 12:41 PM",
-  ];
-  List<String> columnPrice = [
-    "150 EGP",
-    "150 EGP",
-    "150 EGP",
-    "150 EGP",
-    "150 EGP",
-    "150 EGP",
-    "150 EGP",
-    "150 EGP",
-  ];
+
   @override
   void initState() {
+    print("widget.params.isSocket ${widget.params.isSocket}");
     super.initState();
+    _availableTripsScrollController = ScrollController()..addListener(_onScroll);
+
     // _country = CountryPickerUtils.getCountryByName('Egypt');
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final dashboardCubit = context.read<DashboardsCubit>();
       if (!dashboardCubit.isClosed) {
-        dashboardCubit.getAvailableTrips('667382a7f87288ce577e723b', context);
+        widget.params.isSocket == true ? dashboardCubit.loadAvailableRideTrips(context) : dashboardCubit.getAvailableTrips('667382a7f87288ce577e723b', context);
         // dashboardCubit.getPastTrips(context);
       }
     });
   }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      context.read<DashboardsCubit>().getAvailableRideTrips(context);
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -103,6 +73,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
             appBars: const [],
             body: BlocBuilder<DashboardsCubit, DashboardsState>(
               builder: (context, state) {
+                var cubit = context.read<DashboardsCubit>();
                 return DefaultTabController(
                   length: 4,
                   child: Column(
@@ -118,9 +89,9 @@ class _RideModeScreenState extends State<RideModeScreen> {
                             children: [
                               const Icon(Icons.arrow_back),
                               Text(
-                                  widget.modeType == 'ride'
+                                  widget.params.modeType == 'ride'
                                       ? LocaleKeys.rideMode.tr()
-                                      : widget.modeType == 'truk'
+                                      : widget.params.modeType == 'truk'
                                           ? LocaleKeys.trukMode.tr()
                                           : LocaleKeys.busMode.tr(),
                                   style: const TextStyle(
@@ -137,10 +108,10 @@ class _RideModeScreenState extends State<RideModeScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             _buildTabItem(0, LocaleKeys.availableTrips.tr()),
-                            if (widget.modeType == 'ride')
+                            if (widget.params.modeType == 'ride')
                               _buildTabItem(1, LocaleKeys.runningTrips.tr()),
                             _buildTabItem(2, LocaleKeys.pastTrips.tr()),
-                            if (widget.modeType != 'ride')
+                            if (widget.params.modeType != 'ride')
                               _buildTabItem(4, LocaleKeys.loadingRequest.tr()),
                             _buildFilterIcon(),
                           ],
@@ -161,11 +132,23 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                 //             child: Text("Error: ${state.failure}"))
                                 //         :
                                 // !state.isSuccess ||
-                                 state.availableTrips == null
+                                 widget.params.isSocket==true?
+                                 cubit.isLoadingMore?
+                                 const Center(child: CircularProgressIndicator()):
+                                 state.availableRideTrips != null?ListView.separated(
+                                   controller: _availableTripsScrollController,
+                                     itemBuilder: (context, index) =>
+                                         AvailableRideTripItem(
+                                         tripEntity: state.availableRideTrips![index]),
+                                     itemCount: state.availableRideTrips!.length,
+                                     separatorBuilder:
+                                         (BuildContext context, int index) =>
+                                     const SizedBox(height: 15)):const SizedBox.shrink()
+                                :state.availableTrips == null
                                     ? Container()
-                                    : ListView.separated(
+                                    :  ListView.separated(
                                         itemBuilder: (context, index) =>
-                                            widget.modeType == 'ride'
+                                            widget.params.modeType == 'ride'
                                                 ? AvailableTripsWidget(
                                                     isWithAnotherPrice: true,
                                                     tripEntity: state
@@ -200,7 +183,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                         : ListView.builder(
                                             itemBuilder: (context, index) =>
                                                 PastTripsWidget(
-                                                    modeType: widget.modeType,
+                                                    modeType: widget.params.modeType,
                                                     tripEntity: state
                                                         .pastTrips![index]),
                                             itemCount: state.pastTrips!.length,
@@ -209,7 +192,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                         )
                       else if (_selectedIndex == 3)
                         Expanded(
-                            child: SettingsWidget(modeType: widget.modeType))
+                            child: SettingsWidget(modeType: widget.params.modeType))
                       else if (_selectedIndex == 4)
                         Expanded(
                           child: Padding(

@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/enums/week_days.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/health_feature/booking/domain/usecases/doctor_cancel_appointment_use_case.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/entities/doctor_appointment_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/doctor_accept_appointment_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/doctor_reject_appointment.dart';
@@ -16,7 +17,6 @@ import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/us
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/doctor_info_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/earned_mony_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/usecases/doctor_info_usecase.dart';
-import 'package:fourtyninehub/features/health_feature/booking/domain/usecases/doctor_cancel_appointment_use_case.dart';
 
 part 'doctor_dashboard_state.dart';
 

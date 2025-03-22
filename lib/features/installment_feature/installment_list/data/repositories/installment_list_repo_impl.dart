@@ -1,7 +1,5 @@
 import 'package:dartz/dartz.dart';
-
 import 'package:fourtyninehub/core/error/failure.dart';
-
 import 'package:fourtyninehub/features/installment_feature/installment_list/domain/entities/installment_entity.dart';
 
 import '../../domain/repositories/installment_list_repo.dart';
