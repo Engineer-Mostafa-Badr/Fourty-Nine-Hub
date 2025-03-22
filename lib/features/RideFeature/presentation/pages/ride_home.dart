@@ -353,54 +353,57 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
 
   Widget _carTruckBtn({LoadingInfoEntity? loadingInfo, DriverInfoEntity? driverInfo}) {
     if (loadingInfo == null && driverInfo == null) {
-      return GestureDetector(
-        onTap: () {
-          customBottomSheet(context, context.read<RideCubit>(),
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Column(
-                  spacing: 10,
-                  children: [
-                    AppButton(
-                        radius: 15,
-                        label: LocaleKeys.ride.tr(),
-                        onPressed: () {
-                          context.read<RideCubit>().onNavigateToWelcomeScreen(fromShipping: false, context: context);
-                        },
-                        backColor: AppColors.PRIMARY_COLOR,
-                        width: double.infinity),
-                    AppButton(
-                        radius: 15,
-                        label: LocaleKeys.shipping.tr(),
-                        onPressed: () {
-                          context.read<RideCubit>().onNavigateToWelcomeScreen(fromShipping: true, context: context);
-                        },
-                        backColor: AppColors.PRIMARY_COLOR,
-                        width: double.infinity),
-                  ],
+      return SizedBox(
+        height: 48,
+        child: GestureDetector(
+          onTap: () {
+            customBottomSheet(context, context.read<RideCubit>(),
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    spacing: 10,
+                    children: [
+                      AppButton(
+                          radius: 15,
+                          label: LocaleKeys.ride.tr(),
+                          onPressed: () {
+                            context.read<RideCubit>().onNavigateToWelcomeScreen(fromShipping: false, context: context);
+                          },
+                          backColor: AppColors.PRIMARY_COLOR,
+                          width: double.infinity),
+                      AppButton(
+                          radius: 15,
+                          label: LocaleKeys.shipping.tr(),
+                          onPressed: () {
+                            context.read<RideCubit>().onNavigateToWelcomeScreen(fromShipping: true, context: context);
+                          },
+                          backColor: AppColors.PRIMARY_COLOR,
+                          width: double.infinity),
+                    ],
+                  ),
                 ),
+                title: '');
+          },
+          child: Container(
+            margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+            width: double.infinity,
+            height: 50,
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [Color(0xFF0B1035), Color(0xFF161F68), Color(0xFF1B2781), Color(0xFF1E2B8E), Color(0xFF1F2D95), Color(0xFF0B1035)],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
               ),
-              title: '');
-        },
-        child: Container(
-          margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-          width: double.infinity,
-          height: 50,
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [Color(0xFF0B1035), Color(0xFF161F68), Color(0xFF1B2781), Color(0xFF1E2B8E), Color(0xFF1F2D95), Color(0xFF0B1035)],
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: [
+                BoxShadow(color: Colors.black.withOpacity(0.3), spreadRadius: 2, blurRadius: 5, offset: const Offset(0, 3)),
+              ],
             ),
-            borderRadius: BorderRadius.circular(15),
-            boxShadow: [
-              BoxShadow(color: Colors.black.withOpacity(0.3), spreadRadius: 2, blurRadius: 5, offset: const Offset(0, 3)),
-            ],
-          ),
-          child: Center(
-            child: Text(
-              LocaleKeys.carTruckRegister.tr(),
-              style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+            child: Center(
+              child: Text(
+                LocaleKeys.carTruckRegister.tr(),
+                style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+              ),
             ),
           ),
         ),
