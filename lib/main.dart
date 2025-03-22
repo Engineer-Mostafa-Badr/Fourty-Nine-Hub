@@ -408,9 +408,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             ..getFloatingNavigatorStatus()
             ..getEnableFloatingNavigatorStatus(),
         ),
-        BlocProvider(
-          create: (context) => serviceLocator<DashboardsCubit>(),
-        ),
+        
         BlocProvider(
           create: (context) => ChoiceRulerCubit()
             ..getChoiceRulerStatus()

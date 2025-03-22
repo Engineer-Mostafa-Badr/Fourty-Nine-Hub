@@ -276,6 +276,7 @@ import 'package:fourtyninehub/main.dart';
 import 'package:go_router/go_router.dart';
 
 import '../features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
+import '../features/RideFeature/presentation/controllers/dashboards_cubit/dashboards_cubit.dart';
 import '../features/RideFeature/presentation/pages/Register/Driver/drivers_license_screen.dart';
 import '../features/RideFeature/presentation/pages/Register/Driver/more_info_screen.dart';
 import '../features/RideFeature/presentation/pages/Register/Driver/personal_documents_screen.dart';
@@ -486,17 +487,22 @@ class AppPages {
               GoRoute(
                 path: Paths.RIDERUNNINGTRIPS,
                 name: Routes.RIDERUNNINGTRIPS,
-                builder: (context, state) => RunningTripScreen(params: state.extra as RunningTripParams),
+                builder: (context, state) =>
+                    RunningTripScreen(params: state.extra as RunningTripParams),
               ),
               GoRoute(
                 path: Paths.RIDEEXPIREDTRIPE,
                 name: Routes.RIDEEXPIREDTRIPE,
-                builder: (context, state) => ExpiredTripsScreen(params: state.extra as ExpiredTripsScreenParams,),
+                builder: (context, state) => ExpiredTripsScreen(
+                  params: state.extra as ExpiredTripsScreenParams,
+                ),
               ),
               GoRoute(
                 path: Paths.RIDEOPENSTREETMAPSEARCHANDPICK,
                 name: Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
-                builder: (context, state) => RideOpenStreetMapSearchAndPick(params: state.extra as RideOpenStreetMapSearchAndPickParams,),
+                builder: (context, state) => RideOpenStreetMapSearchAndPick(
+                  params: state.extra as RideOpenStreetMapSearchAndPickParams,
+                ),
               ),
               GoRoute(
                 path: Paths.EditFoodView,
@@ -996,7 +1002,7 @@ class AppPages {
                     GoRoute(
                         path: Paths.PRIVACY,
                         name: Routes.PRIVACY,
-                        builder: (context, state) =>  PrivacyView()),
+                        builder: (context, state) => PrivacyView()),
                     GoRoute(
                         path: Paths.POLICY,
                         name: Routes.POLICY,
@@ -2679,7 +2685,9 @@ class AppPages {
                 path: Paths.UploadRiderImages,
                 name: Routes.UploadRiderImages,
                 builder: (context, state) {
-                  return UploadRiderImages(params: state.extra as UploadRiderImagesParams?,);
+                  return UploadRiderImages(
+                    params: state.extra as UploadRiderImagesParams?,
+                  );
                 },
               ),
               GoRoute(
@@ -2955,8 +2963,10 @@ class AppPages {
               GoRoute(
                 path: Paths.rideModeScreen,
                 name: Routes.rideModeScreen,
-                builder: (context, state) =>
-                    RideModeScreen(modeType: state.extra as String),
+                builder: (context, state) => BlocProvider(
+                  create: (context) => serviceLocator<DashboardsCubit>(),
+                  child: RideModeScreen(modeType: state.extra as String),
+                ),
               ),
               GoRoute(
                   path: Paths.rideDashboardDetailsScreen,
@@ -2964,7 +2974,8 @@ class AppPages {
                   builder: (context, state) => MultiBlocProvider(
                         providers: [
                           BlocProvider(
-                            create: (context) => serviceLocator<RideCubit>(),
+                            create: (context) =>
+                                serviceLocator<DashboardsCubit>(),
                           ),
                         ],
                         child: RideDashboardDetailsScreen(
@@ -2984,32 +2995,32 @@ class AppPages {
               GoRoute(
                 path: Paths.supportRideScreen,
                 name: Routes.supportRideScreen,
-                builder: (context, state) =>  SupportRideScreen(),
+                builder: (context, state) => SupportRideScreen(),
               ),
               GoRoute(
                 path: Paths.supportClientDetailsScreen,
                 name: Routes.supportClientDetailsScreen,
-                builder: (context, state) =>  SupportClientDetailsScreen(),
+                builder: (context, state) => SupportClientDetailsScreen(),
               ),
               GoRoute(
                 path: Paths.emergencyContactsScreen,
                 name: Routes.emergencyContactsScreen,
-                builder: (context, state) =>  EmergencyContactsScreen(),
+                builder: (context, state) => EmergencyContactsScreen(),
               ),
               GoRoute(
                 path: Paths.rideArrivedScreen,
                 name: Routes.rideArrivedScreen,
-                builder: (context, state) =>  RideArrivedScreen(),
+                builder: (context, state) => RideArrivedScreen(),
               ),
               GoRoute(
                 path: Paths.ratingDriverScreen,
                 name: Routes.ratingDriverScreen,
-                builder: (context, state) =>  RatingDriverScreen(),
+                builder: (context, state) => RatingDriverScreen(),
               ),
               GoRoute(
                 path: Paths.completeRideScreen,
                 name: Routes.completeRideScreen,
-                builder: (context, state) =>  CompleteRideScreen(),
+                builder: (context, state) => CompleteRideScreen(),
               ),
             ],
           ),

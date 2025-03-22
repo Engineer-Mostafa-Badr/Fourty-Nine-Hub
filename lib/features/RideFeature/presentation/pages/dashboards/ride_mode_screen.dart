@@ -27,56 +27,56 @@ class RideModeScreen extends StatefulWidget {
 class _RideModeScreenState extends State<RideModeScreen> {
   final ScrollController _scrollController = ScrollController();
   int _selectedIndex = 0;
-  List<String> images = [
-    Assets.redCar,
-    Assets.blackCar,
-    Assets.redCar,
-    Assets.blackCar,
-    Assets.redCar,
-    Assets.blackCar,
-    Assets.redCar,
-    Assets.blackCar,
-  ];
-  List<String> titles = [
-    "Women",
-    "Captain",
-    "Women",
-    "Captain",
-    "Women",
-    "Captain",
-    "Women",
-    "Captain",
-  ];
-  List<String> columnTitle = [
-    "142 Street 53",
-    "142 Street 53",
-    "142 Street 53",
-    "142 Street 53",
-    "142 Street 53",
-    "142 Street 53",
-    "142 Street 53",
-    "142 Street 53",
-  ];
-  List<String> columnDate = [
-    "Feb 13 - 12:41 PM",
-    "Feb 13 - 12:41 PM",
-    "Feb 13 - 12:41 PM",
-    "Feb 13 - 12:41 PM",
-    "Feb 13 - 12:41 PM",
-    "Feb 13 - 12:41 PM",
-    "Feb 13 - 12:41 PM",
-    "Feb 13 - 12:41 PM",
-  ];
-  List<String> columnPrice = [
-    "150 EGP",
-    "150 EGP",
-    "150 EGP",
-    "150 EGP",
-    "150 EGP",
-    "150 EGP",
-    "150 EGP",
-    "150 EGP",
-  ];
+  // List<String> images = [
+  //   Assets.redCar,
+  //   Assets.blackCar,
+  //   Assets.redCar,
+  //   Assets.blackCar,
+  //   Assets.redCar,
+  //   Assets.blackCar,
+  //   Assets.redCar,
+  //   Assets.blackCar,
+  // ];
+  // List<String> titles = [
+  //   "Women",
+  //   "Captain",
+  //   "Women",
+  //   "Captain",
+  //   "Women",
+  //   "Captain",
+  //   "Women",
+  //   "Captain",
+  // ];
+  // List<String> columnTitle = [
+  //   "142 Street 53",
+  //   "142 Street 53",
+  //   "142 Street 53",
+  //   "142 Street 53",
+  //   "142 Street 53",
+  //   "142 Street 53",
+  //   "142 Street 53",
+  //   "142 Street 53",
+  // ];
+  // List<String> columnDate = [
+  //   "Feb 13 - 12:41 PM",
+  //   "Feb 13 - 12:41 PM",
+  //   "Feb 13 - 12:41 PM",
+  //   "Feb 13 - 12:41 PM",
+  //   "Feb 13 - 12:41 PM",
+  //   "Feb 13 - 12:41 PM",
+  //   "Feb 13 - 12:41 PM",
+  //   "Feb 13 - 12:41 PM",
+  // ];
+  // List<String> columnPrice = [
+  //   "150 EGP",
+  //   "150 EGP",
+  //   "150 EGP",
+  //   "150 EGP",
+  //   "150 EGP",
+  //   "150 EGP",
+  //   "150 EGP",
+  //   "150 EGP",
+  // ];
   @override
   void initState() {
     super.initState();
@@ -85,7 +85,8 @@ class _RideModeScreenState extends State<RideModeScreen> {
       final dashboardCubit = context.read<DashboardsCubit>();
       if (!dashboardCubit.isClosed) {
         dashboardCubit.getAvailableTrips('667382a7f87288ce577e723b', context);
-        // dashboardCubit.getPastTrips(context);
+        dashboardCubit.getPastTrips(context,'non-tracking');
+        dashboardCubit.getSettings(context);
       }
     });
   }
@@ -140,76 +141,97 @@ class _RideModeScreenState extends State<RideModeScreen> {
                             if (widget.modeType == 'ride')
                               _buildTabItem(1, LocaleKeys.runningTrips.tr()),
                             _buildTabItem(2, LocaleKeys.pastTrips.tr()),
-                            if (widget.modeType != 'ride')
+                            if (widget.modeType == 'truk')
                               _buildTabItem(4, LocaleKeys.loadingRequest.tr()),
                             _buildFilterIcon(),
                           ],
                         ),
                       ),
                       const SizedBox(height: 10),
+                      // Available Trips
                       if (_selectedIndex == 0)
                         Expanded(
                           child: Padding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 16.0),
-                            child:
-                                // state.isLoading
-                                //     ? const Center(
-                                //         child: CircularProgressIndicator())
+                            child: state.isLoadingAvailable
+                                ? const Center(
+                                    child: CircularProgressIndicator())
+                                :
                                 //     : state.isError
                                 //         ? Center(
                                 //             child: Text("Error: ${state.failure}"))
                                 //         :
                                 // !state.isSuccess ||
-                                 state.availableTrips == null
+                                state.availableTrips == null
                                     ? Container()
                                     : ListView.separated(
-                                        itemBuilder: (context, index) =>
-                                            widget.modeType == 'ride'
-                                                ? AvailableTripsWidget(
-                                                    isWithAnotherPrice: true,
+                                        itemBuilder: (context, index) => widget
+                                                    .modeType ==
+                                                'ride'
+                                            ? AvailableTripsWidget(
+                                                isWithAnotherPrice: true,
+                                                tripEntity: state
+                                                    .availableTrips![index])
+                                            : widget.modeType == 'bus'
+                                                ? TrukBusWidget(
                                                     tripEntity: state
-                                                        .availableTrips![index])
-                                                : const TrukBusWidget(),
+                                                        .availableTrips![index],isWithAnotherPrice: true,
+                                                    modeType: 'bus',
+                                                  )
+                                                :  const TrukBusWidget(),
                                         itemCount: state.availableTrips!.length,
                                         separatorBuilder:
                                             (BuildContext context, int index) =>
                                                 const SizedBox(height: 15)),
                           ),
                         )
+                      // running Trips
                       else if (_selectedIndex == 1)
                         Expanded(
                             child: DynamicMapWithPolyline(
                                 url: getMapUrl(context, type: "mapBox"),
                                 apiKey: getApiKey(context, type: "mapBox")))
+                      // Past Trips
                       else if (_selectedIndex == 2)
                         Expanded(
                           child: Padding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 16.0),
-                            child: 
-                            // state.isLoading
-                            //     ? const Center(
-                            //         child: CircularProgressIndicator())
-                            //     : state.isError
-                            //         ? Center(
-                            //             child: Text("Error: ${state.failure}"))
-                            //         : !state.isSuccess ||
-                                            state.pastTrips == null
-                                        ? Container()
-                                        : ListView.builder(
-                                            itemBuilder: (context, index) =>
-                                                PastTripsWidget(
-                                                    modeType: widget.modeType,
-                                                    tripEntity: state
-                                                        .pastTrips![index]),
-                                            itemCount: state.pastTrips!.length,
-                                          ),
+                            child: state.isLoadingPast
+                                ? const Center(
+                                    child: CircularProgressIndicator())
+                                :
+                                //     : state.isError
+                                //         ? Center(
+                                //             child: Text("Error: ${state.failure}"))
+                                //         : !state.isSuccess ||
+                                state.pastTrips == null
+                                    ? Container()
+                                    : ListView.builder(
+                                        itemBuilder: (context, index) =>
+                                            PastTripsWidget(
+                                                modeType: widget.modeType,
+                                                tripEntity:
+                                                    state.pastTrips![index]),
+                                        itemCount: state.pastTrips!.length,
+                                      ),
                           ),
                         )
+                      // Settings
                       else if (_selectedIndex == 3)
                         Expanded(
-                            child: SettingsWidget(modeType: widget.modeType))
+                            child: state.isLoadingSettings
+                                ? const Center(
+                                    child: CircularProgressIndicator())
+                                :
+                                //     : state.isError
+                                //         ? Center(
+                                //             child: Text("Error: ${state.failure}"))
+                                //         :
+                                // !state.isSuccess ||
+                                 SettingsWidget(modeType: widget.modeType,settings:state.settings))
+                      // Ride or Loading Trips
                       else if (_selectedIndex == 4)
                         Expanded(
                           child: Padding(
