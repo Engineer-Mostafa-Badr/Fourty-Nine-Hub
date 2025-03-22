@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/upload_image_row.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -102,35 +103,68 @@ class _UploadRiderImagesState extends State<UploadRiderImages> {
           height: 40,
         )],
         if(state.pictureOptional!=null&&state.pictureOptional?.openDrugAnalysis==true&&state.registerType=='socket')...[UploadImageRow(title: "Drag analysis",onTap: ()=>context.push(Routes.drugAnalysisScreen),disableUpload: (state.isUploadDrugAnalysis==true),),
-          if(state.pictureOptional?.drugAnalysisAddress.isNotEmpty??false)...[const SizedBox(height: 10,),Label(
-            text: "${LocaleKeys.address.localize} ${state.pictureOptional?.drugAnalysisAddress??''}",
-            style: Styles.headerText(
-              fontWeight: FontWeight.w500,
+          if(state.pictureOptional?.drugAnalysisPhone.isNotEmpty??false)...[const SizedBox(height: 10,),
+            RichText(
+              text: TextSpan(children: [
+                TextSpan(
+                    text: "${LocaleKeys.phone.localize} : ",
+                    style:
+                    Styles.mediumText(
+                        color: AppColors.SECONDARY_COLOR)),
+                TextSpan(
+                    text: state.pictureOptional?.drugAnalysisPhone??'',
+                    style: Styles.mediumText())
+              ]),
             ),
-          ),],
-          if(state.pictureOptional?.drugAnalysisPhone.isNotEmpty??false)...[const SizedBox(height: 10,),Label(
-            text: "${LocaleKeys.phone.localize} ${state.pictureOptional?.drugAnalysisPhone??''}",
-            style: Styles.headerText(
-              fontWeight: FontWeight.w500,
+            ],
+          if(state.pictureOptional?.drugAnalysisAddress.isNotEmpty??false)...[const SizedBox(height: 10,),
+            RichText(
+              text: TextSpan(children: [
+                TextSpan(
+                    text: "${LocaleKeys.address.localize} : ",
+                    style:
+                    Styles.mediumText(
+                        color: AppColors.SECONDARY_COLOR)),
+                TextSpan(
+                    text: state.pictureOptional?.drugAnalysisAddress??'',
+                    style: Styles.mediumText())
+              ]),
             ),
-          )],
+          ],
           const SizedBox(
             height: 40,
           )],
         if(state.pictureOptional!=null&&state.pictureOptional?.openTechnicalExamination==true&&state.registerType=='socket')...[
           UploadImageRow(title: LocaleKeys.technicalExamination.localize,onTap: ()=>context.push(Routes.technicalExaminationScreen),disableUpload:(state.isUploadTechnicalExamination==true),),
-          if(state.pictureOptional?.technicalExaminationAddress.isNotEmpty??false)...[const SizedBox(height: 10,),Label(
-            text: "${LocaleKeys.address.localize} ${state.pictureOptional?.technicalExaminationAddress??''}",
-            style: Styles.headerText(
-              fontWeight: FontWeight.w500,
+          if(state.pictureOptional?.technicalExaminationPhone.isNotEmpty??false)...[const SizedBox(height: 10,),
+            RichText(
+              text: TextSpan(children: [
+                TextSpan(
+                    text: "${LocaleKeys.phone.localize} : ",
+                    style:
+                    Styles.mediumText(
+                        color: AppColors.SECONDARY_COLOR)),
+                TextSpan(
+                    text: state.pictureOptional?.technicalExaminationPhone??'',
+                    style: Styles.mediumText())
+              ]),
             ),
-          )],
-          if(state.pictureOptional?.technicalExaminationPhone.isNotEmpty??false)...[const SizedBox(height: 10,),Label(
-            text: "${LocaleKeys.phone.localize} ${state.pictureOptional?.technicalExaminationPhone??''}",
-            style: Styles.headerText(
-              fontWeight: FontWeight.w500,
+          ],
+          if(state.pictureOptional?.technicalExaminationAddress.isNotEmpty??false)...[const SizedBox(height: 10,),
+            RichText(
+              text: TextSpan(children: [
+                TextSpan(
+                    text: "${LocaleKeys.address.localize} : ",
+                    style:
+                    Styles.mediumText(
+                        color: AppColors.SECONDARY_COLOR)),
+                TextSpan(
+                    text: state.pictureOptional?.technicalExaminationAddress??'',
+                    style: Styles.mediumText())
+              ]),
             ),
-          )],
+            ],
+
         ]
       ]
     );
