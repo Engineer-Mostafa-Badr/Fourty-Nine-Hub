@@ -17,6 +17,7 @@ import '../widgets/register_floating_action_button.dart';
 
 class WelcomeRideRegister extends StatefulWidget {
   const WelcomeRideRegister({super.key});
+
   @override
   State<WelcomeRideRegister> createState() => _WelcomeRideRegisterState();
 }

@@ -81,6 +81,7 @@ class RideState {
   final DriverInfoEntity? driverInfo;
   final LoadingInfoEntity? loaderInfo;
   final DriverPictureOptionalEntity? pictureOptional;
+  final List<String>? savedRideSubCategories;
   final bool? isApproved;
   final bool? isUploadDriverId;
   final bool? isUploadDriverImage;
@@ -111,6 +112,7 @@ class RideState {
     this.vehiclePicture,
     this.rideCategory,
     this.loaderInfo,
+    this.savedRideSubCategories,
     this.rideSubCategories,
     this.shippingSubCategories,
     this.shippingCategory,
@@ -172,6 +174,7 @@ class RideState {
     LoadingInfoEntity? loaderInfo,
     DriverPictureOptionalEntity? pictureOptional,
     List<SubCategoryEntityUpdated>? rideSubCategories,
+    List<String>? savedRideSubCategories,
     List<SubCategoryEntityUpdated>? shippingSubCategories,
     List<GovernorateEntity>? govs,
     List<String>? brands,
@@ -265,6 +268,7 @@ class RideState {
       shippingSubCategories: shippingSubCategories ?? this.shippingSubCategories,
       isShipping: isShipping ?? this.isShipping,
       loaderInfo: loaderInfo ?? this.loaderInfo,
+      savedRideSubCategories: savedRideSubCategories ?? this.savedRideSubCategories,
     );
   }
 }

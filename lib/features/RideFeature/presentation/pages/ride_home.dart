@@ -259,7 +259,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                     children: [
                       _buildTopImage(),
                       state.requestedTrip == null ? _buildBottomSheet() : const SizedBox.shrink(),
-                      state.requestedTrip == null ? _carTruckBtn() : const SizedBox.shrink(),
+                      state.requestedTrip == null ? _carTruckBtn(loadingInfo: state.loaderInfo,driverInfo: state.driverInfo) : const SizedBox.shrink(),
                     ],
                   ),
                 ),
@@ -602,6 +602,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
             ),
             child: BlocBuilder<RideCubit, RideState>(
               builder: (context, state) {
+                var cubit = context.read<RideCubit>();
                 return Column(
                   spacing: 8,
                   children: [
@@ -680,30 +681,33 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                   width: MediaQuery.of(context).size.width)),
                           Expanded(
                               flex: 2,
-                              child: AppButton(
+                              child: state.isLoadingSubmit?const Center(child: CircularProgressIndicator()):AppButton(
                                   radius: 15,
                                   label: LocaleKeys.request.tr(),
                                   onPressed: () async {
                                     if(context.isUserLoggedIn){
-                                      if(state.toLocation != null && state.currentLocation != null){
-                                        showModalBottomSheet(
-                                          context: context,
-                                          isScrollControlled: true,
-                                          backgroundColor: Colors.transparent,
-                                          builder: (context) => CustomReserveRideBottomSheet (rideCubit: context.read<RideCubit>(), selectedCategoryId: state.rideCategory?.subCategories[_selectedCategoryIndex!].subCategoryId ?? '', isPremium: false,),
-                                        );
-                                      }
-                                      else {
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                              context.isArabic? "يرجى تحديد الموقع" : "Please select location", // Ensure you define this key in your localization file
-                                              textAlign: TextAlign.center,
+                                      bool canRequest = await cubit.makeRequestTrips();
+                                      if(canRequest == true){
+                                        if(state.toLocation != null && state.currentLocation != null){
+                                          showModalBottomSheet(
+                                            context: context,
+                                            isScrollControlled: true,
+                                            backgroundColor: Colors.transparent,
+                                            builder: (context) => CustomReserveRideBottomSheet (rideCubit: context.read<RideCubit>(), selectedCategoryId: state.rideCategory?.subCategories[_selectedCategoryIndex!].subCategoryId ?? '', isPremium: false,),
+                                          );
+                                        }
+                                        else {
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                context.isArabic? "يرجى تحديد الموقع" : "Please select location", // Ensure you define this key in your localization file
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              backgroundColor: Colors.red,
+                                              duration: const Duration(seconds: 2),
                                             ),
-                                            backgroundColor: Colors.red,
-                                            duration: const Duration(seconds: 2),
-                                          ),
-                                        );
+                                          );
+                                        }
                                       }
                                     }
                                     else{
