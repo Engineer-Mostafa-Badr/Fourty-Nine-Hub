@@ -1,8 +1,9 @@
 import 'dart:async';
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:camera/camera.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
-import 'dart:io';
 
 part 'camera_picker_state.dart';
 

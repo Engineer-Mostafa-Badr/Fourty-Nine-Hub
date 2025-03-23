@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/competition/domain/entity/competition_entity.dart';
@@ -11,7 +12,6 @@ import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/localization/locales.dart';
 import '../../../../../res/style/styles.dart';
 import 'donut_chart_painter.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BuildItemListView extends StatelessWidget {
   const BuildItemListView(

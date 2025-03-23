@@ -6,6 +6,7 @@ import 'package:fourtyninehub/features/authentication/domain/use_cases/create_ne
 import 'package:fourtyninehub/features/authentication/domain/use_cases/create_normal_chat_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_profile_views_by_user_id_usecase.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_profile_views_usecase.dart';
+
 // import 'package:fourtyninehub/features/authentication/domain/use_cases/get_unreaded_chats_counter_usecase.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_welcome_gift_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/google_sign_in_use_case.dart';
@@ -30,14 +31,17 @@ import '../features/authentication/domain/repositories/auth_repository.dart';
 import '../features/authentication/domain/repositories/user_repository.dart';
 import '../features/authentication/domain/use_cases/apple_sign_in_usecase.dart';
 import '../features/authentication/domain/use_cases/attach_token_use_case.dart';
+import '../features/authentication/domain/use_cases/change_password_use_case.dart';
 import '../features/authentication/domain/use_cases/get_tokens_use_case.dart';
 import '../features/authentication/domain/use_cases/get_user_use_case.dart';
 import '../features/authentication/domain/use_cases/login_use_case.dart';
+import '../features/authentication/domain/use_cases/register_by_phone_use_case.dart';
 import '../features/authentication/domain/use_cases/register_use_case.dart';
 import '../features/authentication/domain/use_cases/save_tokens_use_case.dart';
 import '../features/authentication/domain/use_cases/send_forget_password_question_use_case.dart';
 import '../features/authentication/domain/use_cases/sign_out_usecase.dart';
 import '../features/authentication/domain/use_cases/verify_otp_use_case.dart';
+import '../features/authentication/domain/use_cases/verify_questions_use_case.dart';
 import '../features/authentication/presentation/controllers/login_cubit/login_cubit.dart';
 import '../features/authentication/presentation/controllers/register_cubit/register_cubit.dart';
 import '../features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -117,6 +121,7 @@ class AuthServiceLocator {
     // serviceLocator.registerFactory<CacheService>(() => CacheServiceImpl());
     serviceLocator.registerFactory(() => GetTokensUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => RegisterUseCase(serviceLocator()));
+    serviceLocator.registerFactory(() => RegisterByPhoneUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => VerifyOTPUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => ResendOTPUseCase(serviceLocator()));
     serviceLocator.registerFactory(() => SignOutUseCase(serviceLocator()));
@@ -136,12 +141,17 @@ class AuthServiceLocator {
     //     .registerFactory(() => FacebookSignInUseCase(serviceLocator()));
     serviceLocator
         .registerFactory(() => SendForgetPasswordOTPUseCase(serviceLocator()));
-    serviceLocator
-        .registerFactory(() => SendForgetPasswordQuestionUseCase(serviceLocator()));
+    serviceLocator.registerFactory(
+        () => SendForgetPasswordQuestionUseCase(serviceLocator()));
     serviceLocator.registerFactory(
         () => VerifyForgetPasswordOTPUseCase(serviceLocator()));
     serviceLocator.registerFactory(
+        () => VerifyQuestionsUseCase(serviceLocator()));
+    serviceLocator.registerFactory(
         () => CreateNewForgetPasswordUseCase(serviceLocator()));
+
+    serviceLocator
+        .registerFactory(() => ChangePasswordUseCase(serviceLocator()));
 
     // auth cubits
     serviceLocator.registerFactory<LoginCubit>(
@@ -185,6 +195,8 @@ class AuthServiceLocator {
       () => ForgotPasswordCubit(
         serviceLocator(),
         serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
       ),
     );
     serviceLocator.registerFactory(
@@ -200,6 +212,7 @@ class AuthServiceLocator {
 
     serviceLocator.registerFactory<RegisterCubit>(
       () => RegisterCubit(
+        serviceLocator(),
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),

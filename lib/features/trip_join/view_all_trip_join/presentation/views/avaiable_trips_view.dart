@@ -14,17 +14,6 @@ import 'package:fourtyninehub/res/style/styles.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
 
-import '../../../../RideFeature/presentation/pages/activity_trip_screen.dart';
-import '../../../../RideFeature/presentation/pages/expired_trips_screen.dart';
-import '../../../../RideFeature/presentation/pages/receipt_trip_screen.dart';
-import '../../../../RideFeature/presentation/pages/ride_details_screen.dart';
-import '../../../../RideFeature/presentation/pages/create_loading_trip_screen.dart';
-import '../../../../RideFeature/presentation/pages/running_trips_screen.dart';
-import '../../../../RideFeature/presentation/pages/widgets/custom_ride_button.dart';
-import '../../../presentation/views/widgets/on_boarding_trip.dart';
-import '../../../presentation/views/widgets/pick_me_screen.dart';
-import '../../../presentation/views/widgets/trip_join_screen.dart';
-
 
 class AvailableTripsView extends StatefulWidget {
   const AvailableTripsView({

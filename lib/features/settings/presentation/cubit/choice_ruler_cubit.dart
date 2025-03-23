@@ -15,7 +15,7 @@ class ChoiceRulerCubit extends Cubit<ChoiceRulerState> {
 
   Future<void> getChoiceRulerEnabledStatus() async {
     choiceRulerEnabled = await CacheManager.getEnabledChoiceRuler();
-    changeChoiceRulerStatus(forceValue: choiceRulerEnabled);
+    await CacheManager.isChoiceRulerOpen(choiceRulerEnabled);
     emit(GetEnableChoiceRulerStatusState());
   }
 
@@ -28,7 +28,7 @@ class ChoiceRulerCubit extends Cubit<ChoiceRulerState> {
     choiceRulerEnabled = forceValue ?? !choiceRulerEnabled;
     await CacheManager.isChoiceRulerEnabledOpen(choiceRulerEnabled);
     await changeChoiceRulerStatus(forceValue: choiceRulerEnabled);
-    if (state is ActiveChoiceRulerStatusState) {
+    if (state is EnableChoiceRulerStatusState) {
       emit(DisAbleChoiceRulerStatusState());
     } else {
       emit(EnableChoiceRulerStatusState());
@@ -36,7 +36,11 @@ class ChoiceRulerCubit extends Cubit<ChoiceRulerState> {
   }
 
   Future<void> changeChoiceRulerStatus({bool? forceValue}) async {
-    choiceRulerStatus = forceValue ?? !choiceRulerStatus;
+    if (choiceRulerEnabled) {
+      choiceRulerStatus = forceValue ?? !choiceRulerStatus;
+    } else {
+      choiceRulerStatus = false;
+    }
     await CacheManager.isChoiceRulerOpen(choiceRulerStatus);
     if (state is ActiveChoiceRulerStatusState) {
       emit(UnActiveChoiceRulerStatusState());
@@ -44,24 +48,4 @@ class ChoiceRulerCubit extends Cubit<ChoiceRulerState> {
       emit(ActiveChoiceRulerStatusState());
     }
   }
-
-// Future<void> unActiveChoiceRuler() async {
-//     choiceRulerStatus = true;
-//     await CacheManager.isChoiceRulerOpen(choiceRulerStatus);
-//     emit(UnActiveChoiceRulerStatusState());
-//     print(choiceRulerStatus);
-//     print('getChoiceRuler saved to ${await CacheManager.getChoiceRuler()}');
-//
-// }
-
-// Future<void> disAbleChoiceRuler() async {
-//   choiceRulerEnabled = true;
-//   await CacheManager.isChoiceRulerEnabledOpen(choiceRulerEnabled);
-//   await unActiveChoiceRuler();
-//
-//   emit(DisAbleChoiceRulerStatusState());
-//   print(choiceRulerEnabled);
-//   print(
-//       'getEnabledChoiceRuler saved to ${await CacheManager.getEnabledChoiceRuler()}');
-// }
 }

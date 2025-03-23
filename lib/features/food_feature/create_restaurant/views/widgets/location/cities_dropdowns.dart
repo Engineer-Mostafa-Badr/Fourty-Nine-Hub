@@ -1,13 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/utils/media_query_values.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/styles.dart';
@@ -36,9 +36,9 @@ class CreateRestaurantCitiesDropdowns extends StatelessWidget {
                     color: AppColors.PRIMARY_COLOR,
                   ),
                   style: Styles.mediumText(),
-        
+
                   decoration: InputDecoration(
-                    
+
                     fillColor: AppColors.BG_GRAY_COLOR,
                     enabledBorder: OutlineInputBorder(
                       borderRadius: const BorderRadius.all(Radius.circular(10)),

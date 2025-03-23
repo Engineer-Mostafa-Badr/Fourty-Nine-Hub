@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_entity.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:fourtyninehub/features/mazadat_feature/auction_details/domain/usecases/send_bidding_usecase.dart';
 import 'package:fourtyninehub/features/mazadat_feature/auction_details/presentation/cubit/auction_details_cubit.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/dynamic/carousel_slider.dart';
 import '../../../../../common/widgets/stateless/images/square_image.dart';

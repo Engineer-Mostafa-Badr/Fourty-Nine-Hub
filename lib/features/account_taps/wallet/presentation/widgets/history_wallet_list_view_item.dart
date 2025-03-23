@@ -2,18 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/utils/date_time.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet/wallet_history_entity.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class HistoryWalletListViewItem extends StatelessWidget {
-  const HistoryWalletListViewItem({super.key, required this.history});
+  const HistoryWalletListViewItem(
+      {super.key,
+      required this.isReceived,
+      required this.amount,
+      required this.date});
 
-  final WalletHistoryEntity? history;
+  final bool isReceived;
+  final String? amount;
+  final String? date;
 
   @override
   Widget build(BuildContext context) {
-    final bool isReceived = history?.received == true;
+    // final bool isReceived = history?.received == true;
 
     return Padding(
       padding: const EdgeInsets.only(
@@ -33,8 +38,7 @@ class HistoryWalletListViewItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Label(
-                text:
-                    '${isReceived ? '+' : '-'}${history?.transactionAmount ?? '---'}',
+                text: '${isReceived ? '+' : '-'}$amount',
                 style: Styles.mediumText(
                   fontWeight: FontWeight.w700,
                 ),
@@ -43,7 +47,7 @@ class HistoryWalletListViewItem extends StatelessWidget {
                 height: 6,
               ),
               Label(
-                text: formatDateTime(history?.createdAt ?? '', context),
+                text: formatDateTime(date ?? '', context),
                 style: Styles.mediumText(
                     fontWeight: FontWeight.w300, fontSize: 20),
               ),

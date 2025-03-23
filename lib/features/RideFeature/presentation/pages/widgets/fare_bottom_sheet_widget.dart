@@ -15,7 +15,7 @@ class FareBottomSheetWidget extends StatelessWidget {
     required this.rideCubit,
     required this.selectedCategoryPrice, required this.selectedCategoryName,
   }) : _controller = TextEditingController(
-    text: selectedCategoryPrice > 0 ? selectedCategoryPrice.toString() : '',
+    text: selectedCategoryPrice > 0 ? selectedCategoryPrice.toInt().toString() : '',
   );
 
   final RideCubit rideCubit;
@@ -31,7 +31,7 @@ class FareBottomSheetWidget extends StatelessWidget {
       value: rideCubit,
       child: BlocBuilder<RideCubit, RideState>(
         builder: (context, state) {
-          return Form( // Wrap in a Form widget
+          return Form(
             key: _formKey,
             child: Column(
               children: [
@@ -84,10 +84,9 @@ class FareBottomSheetWidget extends StatelessWidget {
                 ),const SizedBox(height: 20),
                 AppButton(
                   width: double.infinity,
-                  label: LocaleKeys.done.tr(),
+                  label: context.isArabic? "ارسال" : "Send",
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-
                       if (selectedCategoryName == "Captain") {
                         state.rideExpectedPrice?.priceForCaptain = double.parse(_controller.text);
                       }

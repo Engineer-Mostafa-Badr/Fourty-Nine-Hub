@@ -44,10 +44,10 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecas
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/connect_me_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/delete_chat_use_case.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/disconnect_me_usecase.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chat_last_seen_usecase.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/getGroupsChats_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/getSeenHistoryUseCase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chat_last_seen_usecase.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_chats_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_online_offline_status_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/get_user_usecase.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/usecases/listen_to_new_chat_use_case.dart';

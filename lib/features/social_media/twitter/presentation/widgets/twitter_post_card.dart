@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -18,13 +20,12 @@ import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/twit
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_post_details.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/const.dart';
 import '../../../../../../res/style/styles.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 // ignore: must_be_immutable
 class TwitterPostCard extends StatefulWidget {

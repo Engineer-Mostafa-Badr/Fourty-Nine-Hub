@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -14,10 +15,8 @@ import 'package:fourtyninehub/features/lucky_wheel/domain/entities/wheel_wallet_
 import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/spin_wheel_cubit/spin_wheel_cubit.dart';
 import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/wheel_cubit/wheel_cubit.dart';
 import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/wheel_wallet_cubit/wheel_wallet_cubit.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+
 import '../../../../core/enums/wheel.dart';
 import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../res/style/styles.dart';

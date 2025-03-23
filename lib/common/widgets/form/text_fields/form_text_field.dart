@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
@@ -126,7 +125,7 @@ class FormTextField extends StatelessWidget {
             constraints: constraints,
             hintText: hint,
             filled: true,
-            fillColor: AppColors.GREYFIELD,
+            fillColor: fillColor ?? AppColors.GREYFIELD,
             labelText: label,
             hintStyle: style ??
                Styles.mediumText(fontSize: 12,color: AppColors.GREY_DARK_COLOR),

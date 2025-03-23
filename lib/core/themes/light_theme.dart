@@ -18,6 +18,33 @@ ThemeData get lightTheme => ThemeData(
       switchTheme: const SwitchThemeData(
         trackColor: WidgetStatePropertyAll<Color>(AppColors.SECONDARY_COLOR),
       ),
+      datePickerTheme: DatePickerThemeData(
+        headerBackgroundColor: AppColors.PRIMARY_COLOR,
+        headerForegroundColor: AppColors.AUTH_CONTAINER_COLOR,
+        backgroundColor: AppColors.AUTH_CONTAINER_COLOR,
+        dayForegroundColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return AppColors.AUTH_CONTAINER_COLOR; // Text color when selected
+          }
+          return AppColors.PRIMARY_COLOR; // Default text color
+        }),
+        dayBackgroundColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return AppColors.PRIMARY_COLOR; // Background color when selected
+          }
+          return Colors.transparent; // Default background
+        }),
+        cancelButtonStyle: ButtonStyle(
+          foregroundColor: WidgetStateProperty.resolveWith(
+            (states) => AppColors.PRIMARY_COLOR,
+          ),
+        ),
+        confirmButtonStyle: ButtonStyle(
+          foregroundColor: WidgetStateProperty.resolveWith(
+                (states) => AppColors.PRIMARY_COLOR,
+          ),
+        ),
+      ),
       textTheme: const TextTheme(
         displayMedium: TextStyle(color: AppColors.QUANTITY_COLOR),
         // displaySmall: TextStyle(color: AppColors.DARK_GRAY_COLOR),
@@ -65,7 +92,8 @@ ThemeData get lightTheme => ThemeData(
       bottomAppBarTheme: const BottomAppBarTheme(),
       canvasColor: Colors.black38,
       bannerTheme: const MaterialBannerThemeData(),
-      bottomNavigationBarTheme: const BottomNavigationBarThemeData(backgroundColor: Colors.transparent),
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          backgroundColor: Colors.transparent),
       cardColor: Colors.white,
       dialogTheme: const DialogTheme(),
       bottomSheetTheme: const BottomSheetThemeData(),

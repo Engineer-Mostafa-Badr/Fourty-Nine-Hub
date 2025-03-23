@@ -33,9 +33,9 @@ class GiftCubit extends Cubit<GiftState> {
       emit(state.copyWith(failure: l, status: GiftStates.error));
     }, (data) {
       log('///////////////////////////////////////');
-      log(data.giftWallet.userId);
+      // log(data.giftWallet.userId);
       log('///////////////////////////////////////');
-      emit(state.copyWith(gift: data));
+      // emit(state.copyWith(gift: data));
     });
   }
 

@@ -1,13 +1,14 @@
 import 'dart:developer';
 
+import 'package:floating_draggable_widget/floating_draggable_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:go_router/go_router.dart';
-import 'package:floating_draggable_widget/floating_draggable_widget.dart';
 
+import '../../common/widgets/dynamic/drawer.dart';
 import '../../common/widgets/stateless/labels/label.dart';
 import '../../features/settings/presentation/cubit/choice_ruler_cubit.dart';
 import '../../features/settings/presentation/cubit/floating_navigator_cubit.dart';
@@ -23,7 +24,7 @@ class CustomScaffold extends StatefulWidget {
     this.backgroundColor,
     this.floatingActionButtonLocation,
     this.floatingActionButton,
-    this.drawer,
+    this.drawer = const DrawerWidget(),
     this.bottomNavigationBar,
     this.appBar,
     this.extendBody = false,
@@ -82,9 +83,6 @@ class _CustomScaffoldState extends State<CustomScaffold>
             ),
             floatingWidget: GestureDetector(
               onTap: () {
-                // setState(() {
-                //   floatNavigator = !floatNavigator;
-                // });
                 floatingNavigatorCubit.changeFloatingNavigator();
               },
               child: Column(
@@ -206,7 +204,8 @@ class _CustomScaffoldState extends State<CustomScaffold>
                             drawerRollWidget(
                               label: LocaleKeys.ride.localize,
                               image: Assets.rideIcon,
-                              onTap: () => context.push(Routes.RIDE),
+                              onTap: () => context.push(Routes.onBoardingScreen),
+                              // onTap: () => context.push(Routes.RIDE),
                             ),
                             drawerRollWidget(
                               label: LocaleKeys.loading.localize,
@@ -270,6 +269,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                 color: Colors.transparent,
                 child: ClickableWidget(
                   onTap: () {
+                    // choiceRulerCubit.changeChoiceRulerStatus();
                     floatingNavigatorCubit.changeFloatingNavigator();
                   },
                   child: Container(
@@ -365,12 +365,11 @@ class MainScaffold extends StatelessWidget {
                 floatingActionButton: floatingActionButton,
                 drawer: drawer,
                 onDrawerChanged: (value) {
-                  choiceRulerCubit.changeChoiceRulerStatus();
+                  choiceRulerCubit.changeChoiceRulerStatus(forceValue: !value);
 
-                  print('choiceRulerCubit.state ${choiceRulerCubit.state}');
-
-                  // cubit.choiceRulerStatus = value;
-                  // print('isRulerOpen ${cubit.choiceRulerStatus}');
+                  // choiceRulerCubit.changeChoiceRulerStatus();
+                  print('choiceRulerCubit.state ${choiceRulerCubit.state} value $value');
+                  print('onDrawerChanged open $value');
                 },
                 bottomNavigationBar: bottomNavigationBar,
                 body: Padding(
@@ -406,9 +405,9 @@ class MainScaffold extends StatelessWidget {
                 floatingActionButton: floatingActionButton,
                 drawer: drawer,
                 onDrawerChanged: (value) {
-                  choiceRulerCubit.changeChoiceRulerStatus();
-                  print('choiceRulerCubit.state ${choiceRulerCubit.state}');
-                },
+                  choiceRulerCubit.changeChoiceRulerStatus(forceValue: !value);
+                  print('choiceRulerCubit.state ${choiceRulerCubit.state} value $value');
+                  print('onDrawerChanged open $value');                },
                 bottomNavigationBar: bottomNavigationBar,
                 body: Stack(
                   alignment: Alignment.centerLeft,

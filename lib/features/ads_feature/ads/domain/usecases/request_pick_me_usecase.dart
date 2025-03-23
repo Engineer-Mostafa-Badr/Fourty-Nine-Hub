@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+
 import '../../../../../../core/abstract/use_case.dart';
 import '../repositories/ads_repo.dart';
 import 'request_come_with_me_usecase.dart';

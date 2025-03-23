@@ -4,9 +4,9 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/life_event_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/pages/life_event.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 

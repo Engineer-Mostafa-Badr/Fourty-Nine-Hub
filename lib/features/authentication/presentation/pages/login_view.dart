@@ -10,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
+import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -31,7 +32,6 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../common/widgets/form/text_fields/form_text_field.dart';
 import '../../../../common/widgets/stateful/banners/back_appbar.dart';
 import '../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../common/widgets/stateless/buttons/default_button.dart';
@@ -86,23 +86,27 @@ class _LoginViewState extends State<LoginView> {
           // print("Print here ${isVeryfied}");
 
           showErrorMessage(context, getFailureMessage(state.failure, context));
-
         } else if (state is OTPSent) {
           showSuccessMessage(context, LocaleKeys.oTP.localize);
           context.go(
             Routes.VERIFYMAIL,
             extra: registerCubit.emailTextController.text,
           );
+        } else if (state is RegisterByPhone) {
+          context.go(
+            Routes.HOME,
+          );
         } else if (state is RegisterSuccess) {
           await context.read<UserCubit>().setLogin(true);
-         await context.read<UserCubit>().getUser();
+          await context.read<UserCubit>().getUser();
           context.go(Routes.HOME);
         }
       },
       child: BlocListener<LoginCubit, LoginState>(
         listener: (context, state) async {
           if (state is LoginError) {
-            String  isVerified = getFailureMessage(state.failure, context).toString();
+            String isVerified =
+                getFailureMessage(state.failure, context).toString();
             print("Print here $isVerified");
             if (isVerified == "Email not verified") {
               context.go(
@@ -119,9 +123,7 @@ class _LoginViewState extends State<LoginView> {
                 context,
               ),
             );
-          }
-
-          else if (state is LoginSuccess) {
+          } else if (state is LoginSuccess) {
             // await CacheManager.saveAccessToken(
             //     state.userTokensEntity.accessToken);
             // await CacheManager.saveRefreshToken(
@@ -157,7 +159,7 @@ class _LoginViewState extends State<LoginView> {
             showSuccessMessage(context, LocaleKeys.welcomeBack.localize);
           }
         },
-        child:Scaffold(
+        child: Scaffold(
           resizeToAvoidBottomInset: true,
           appBar: const BackAppBar(),
           body: SingleChildScrollView(
@@ -324,31 +326,28 @@ class _LoginWidgetState extends State<LoginWidget> {
 
     return Column(
       children: [
-        FormTextField(
-          constraints: BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
+        DefaultTextFormField(
+          currentController: loginCubit.emailTextController,
+          borderColor: Colors.black,
           // fillColor: const Color(0xFFEEEEEE),
-          borderRadius: BorderRadius.circular(20.r),
-          // style: TextStyle(fontSize: 30.sp, color: AppColors.QUANTITY_COLOR),
-          controller: loginCubit.emailTextController,
-          hint: LocaleKeys.emailOrPhone.localize,
-
-          prefix: Icon(
+          hint:
+              '${LocaleKeys.email.localize} / ${LocaleKeys.phoneNumber.localize}',
+          prefixIcon: Icon(
             Icons.email,
             color: AppColors.GREY_DARK_COLOR,
             size: 40.w,
           ),
-          action: (v) {},
+          // action: (v) {},
         ),
         const Sizer(),
-        FormTextField(
-          constraints: BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
-          fillColor: const Color(0xFFEEEEEE),
-          borderRadius: BorderRadius.circular(20.r),
-          style: TextStyle(fontSize: 30.sp, color: AppColors.QUANTITY_COLOR),
-          controller: loginCubit.passwordTextController,
+        DefaultTextFormField(
+          // constraints: BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
+          // fillColor: const Color(0xFFEEEEEE),
+          borderColor: Colors.black,
+          currentController: loginCubit.passwordTextController,
           hint: LocaleKeys.password.localize,
-          obsecure: obsecure,
-          prefix: GestureDetector(
+          obscureText: obsecure,
+          prefixIcon: GestureDetector(
             onTap: () {
               setState(() {
                 obsecure = !obsecure;
@@ -360,14 +359,15 @@ class _LoginWidgetState extends State<LoginWidget> {
               size: 40.w,
             ),
           ),
-          action: (v) {},
+          // action: (v) {},
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             TextAppButton(
                 style: Styles.smallText(
-                    fontSize: 40.sp, color: Theme.of(context).primaryColor),
+                  fontSize: 24,
+                 color: Theme.of(context).primaryColor),
                 label: LocaleKeys.forgetPassword.localize,
                 onPressed: () => context.push(Routes.FORGOTPASSWORD)),
           ],
@@ -478,62 +478,72 @@ class _RegisterWidgetState extends State<RegisterWidget> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                FormTextField(
-                  constraints: BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
-                  fillColor: const Color(0xFFEEEEEE),
-                  borderRadius: BorderRadius.circular(20.r),
-                  controller: registerCubit.firstNameController,
-                  // label: 'E-mail or phone number',
-                  style: const TextStyle(color: AppColors.QUANTITY_COLOR),
-                  hint: LocaleKeys.firstName.localize,
-                  prefix: Icon(
+                DefaultTextFormField(
+                  // fillColor: const Color(0xFFEEEEEE),
+                  borderColor: Colors.black,
+                  currentController: registerCubit.userNameController,
+                  hint: LocaleKeys.userName.localize,
+                  prefixIcon: Icon(
                     Icons.person_2_rounded,
                     color: AppColors.GREY_DARK_COLOR,
                     size: 40.w,
                   ),
-                  action: (v) {},
+                  // action: (v) {},
                 ),
 
                 Sizer(
                   height: 30.h,
                 ),
-                FormTextField(
-                  constraints: BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
-                  fillColor: const Color(0xFFEEEEEE),
-                  borderRadius: BorderRadius.circular(20.r),
-                  controller: registerCubit.lastNameController,
+                DefaultTextFormField(
+                  // fillColor: const Color(0xFFEEEEEE),
+                  borderColor: Colors.black,
+                  currentController: registerCubit.firstNameController,
+                  hint: LocaleKeys.firstName.localize,
+                  prefixIcon: Icon(
+                    Icons.person_2_rounded,
+                    color: AppColors.GREY_DARK_COLOR,
+                    size: 40.w,
+                  ),
+                  // action: (v) {},
+                ),
+
+                Sizer(
+                  height: 30.h,
+                ),
+                DefaultTextFormField(
+                  // fillColor: const Color(0xFFEEEEEE),
+                  borderColor: Colors.black,
+                  currentController: registerCubit.lastNameController,
                   style: const TextStyle(color: AppColors.QUANTITY_COLOR),
                   // label: 'E-mail or phone number',
                   hint: LocaleKeys.lastName.localize,
-                  prefix: Icon(
+                  prefixIcon: Icon(
                     Icons.person_2_rounded,
                     color: AppColors.GREY_DARK_COLOR,
                     size: 40.w,
                   ),
-                  action: (v) {},
                 ),
                 Sizer(
                   height: 30.h,
                 ),
-                BirthDatePicker(controller: registerCubit.birthDateTextController, ),
+                BirthDatePicker(
+                  controller: registerCubit.birthDateTextController,
+                ),
 
                 Sizer(
                   height: 30.h,
                 ),
-                FormTextField(
-                  constraints: BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
-                  fillColor: const Color(0xFFEEEEEE),
-                  borderRadius: BorderRadius.circular(20.r),
-                  controller: registerCubit.emailTextController,
-                  // label: 'E-mail or phone number',
-                  style: const TextStyle(color: AppColors.QUANTITY_COLOR),
-                  hint: LocaleKeys.emailOrPhone.localize,
-                  prefix: Icon(
+                DefaultTextFormField(
+                  borderColor: Colors.black,
+                  // fillColor: const Color(0xFFEEEEEE),
+                  currentController: registerCubit.emailTextController,
+                  hint:
+                      '${LocaleKeys.email.localize} / ${LocaleKeys.phoneNumber.localize}',
+                  prefixIcon: Icon(
                     Icons.email,
                     color: AppColors.GREY_DARK_COLOR,
                     size: 40.w,
                   ),
-                  action: (v) {},
                 ),
                 Sizer(
                   height: 30.h,
@@ -599,16 +609,13 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 Sizer(
                   height: 30.h,
                 ),
-                FormTextField(
-                  style: const TextStyle(color: AppColors.QUANTITY_COLOR),
-                  constraints: BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
-                  fillColor: const Color(0xFFEEEEEE),
-                  borderRadius: BorderRadius.circular(20.r),
-                  controller: registerCubit.passwordTextController,
-                  // label: 'Password',
+                DefaultTextFormField(
+                  // fillColor: const Color(0xFFEEEEEE),
+                  borderColor: Colors.black,
+                  currentController: registerCubit.passwordTextController,
                   hint: LocaleKeys.password.localize,
-                  obsecure: obsecure,
-                  prefix: GestureDetector(
+                  obscureText: obsecure,
+                  prefixIcon: GestureDetector(
                     onTap: () {
                       setState(() {
                         obsecure = !obsecure;
@@ -620,22 +627,19 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                       size: 40.w,
                     ),
                   ),
-                  action: (v) {},
                 ),
                 Sizer(
                   height: 30.h,
                 ),
-                FormTextField(
-                  style: const TextStyle(color: AppColors.QUANTITY_COLOR),
-                  constraints: BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
-                  fillColor: const Color(0xFFEEEEEE),
-                  borderRadius: BorderRadius.circular(20.r),
-                  controller: registerCubit.confirmPasswordTextController,
-                  // label: 'Password',
+                DefaultTextFormField(
+                  // fillColor: const Color(0xFFEEEEEE),
+                  borderColor: Colors.black,
+                  currentController:
+                      registerCubit.confirmPasswordTextController,
                   hint:
                       '${LocaleKeys.confirm.localize} ${LocaleKeys.password.localize}',
-                  obsecure: obsecure,
-                  prefix: GestureDetector(
+                  obscureText: obsecure,
+                  prefixIcon: GestureDetector(
                     onTap: () {
                       setState(() {
                         obsecure = !obsecure;
@@ -647,24 +651,19 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                       size: 40.w,
                     ),
                   ),
-                  action: (v) {},
                 ),
                 Sizer(
                   height: 30.h,
                 ),
-                FormTextField(
+                DefaultTextFormField(
                   validator: (p0) {
                     return null;
                   },
-                  constraints: BoxConstraints(maxHeight: 52.h, minHeight: 52.h),
-                  fillColor: const Color(0xFFEEEEEE),
-                  borderRadius: BorderRadius.circular(20.r),
-                  // controller: registerCubit.firstNameController,
-                  // label: 'E-mail or phone number',
-                  controller: registerCubit.referralId,
-                  style: const TextStyle(color: AppColors.QUANTITY_COLOR),
+                  borderColor: Colors.black,
+                  // fillColor: const Color(0xFFEEEEEE),
+                  currentController: registerCubit.referralId,
                   hint: LocaleKeys.code.localize,
-                  prefix: Container(
+                  prefixIcon: Container(
                     margin: const EdgeInsets.all(9),
                     width: 20,
                     height: 20.h,
@@ -678,7 +677,6 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                       size: 40.w,
                     ),
                   ),
-                  action: (v) {},
                 ),
                 Sizer(
                   height: 60.h,
@@ -691,10 +689,10 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                       style: Styles.mediumText(fontWeight: FontWeight.w600),
                     ),
                     ClickableWidget(
-                      onTap: (){
+                      onTap: () {
                         AdInterstitialTop.loadIntersitialAd();
                         AdInterstitialTop.showInterstitialAd();
-                        context.push(Routes.POLICY,extra: true);
+                        context.push(Routes.POLICY, extra: true);
                       },
                       child: Text(
                         LocaleKeys.conditions.localize,

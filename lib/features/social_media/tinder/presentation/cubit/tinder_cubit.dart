@@ -27,6 +27,7 @@ import 'package:fourtyninehub/features/social_media/tinder/domain/use_case/uploa
 import 'package:fourtyninehub/features/subscripe/presentation/controllers/subscription_controller.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../../../fourty_nine/domain/use_cases/get_main_category_details_usecase.dart';
 import '../../data/models/near_by_model.dart';
 import 'tinder_state.dart';

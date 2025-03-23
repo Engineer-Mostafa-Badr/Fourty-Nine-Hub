@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+
 import '../../../../../core/data/datasources/json_parser.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../../res/assets/jsons.dart';

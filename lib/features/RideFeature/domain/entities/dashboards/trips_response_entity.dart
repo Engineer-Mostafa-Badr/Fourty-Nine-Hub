@@ -1,20 +1,17 @@
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/trip_entity.dart';
 
+import 'pagination_entity.dart';
+
 class TripsResponseEntity {
   final bool status;
-  final List<TripEntity> trips;
-  // final Pagination pagination;
+  final TripDataEntity data;
 
-  TripsResponseEntity({
-    required this.status,
-    required this.trips,
-    // required this.pagination,
-  });
+  TripsResponseEntity({required this.status, required this.data});
 }
 
-// class Pagination {
-//   final int countItem;
-//   final int pageCount;
+class TripDataEntity {
+  final List<TripEntity> trips;
+  final PaginationEntity pagination;
 
-//   Pagination({required this.countItem, required this.pageCount});
-// }
+  TripDataEntity({required this.trips, required this.pagination});
+}

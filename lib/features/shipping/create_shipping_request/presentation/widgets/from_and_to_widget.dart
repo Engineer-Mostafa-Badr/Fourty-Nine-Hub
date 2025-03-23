@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -14,7 +15,6 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import 'select_shipping_destination.dart';
 import 'shipping_details_widget.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FromAndToWidget extends StatelessWidget {
   const FromAndToWidget({super.key});

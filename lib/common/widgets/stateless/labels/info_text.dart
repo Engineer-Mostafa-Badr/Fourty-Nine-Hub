@@ -20,6 +20,9 @@ class AppInfoText extends StatelessWidget {
           Assets.icon,
           height: iconHeight ?? 30,
         ),
+        const SizedBox(
+          width: 8,
+        ),
         Expanded(
           child: Text(
             text,

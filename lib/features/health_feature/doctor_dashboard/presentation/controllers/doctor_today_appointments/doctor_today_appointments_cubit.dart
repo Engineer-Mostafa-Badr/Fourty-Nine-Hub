@@ -5,9 +5,9 @@ import 'package:fourtyninehub/core/enums/week_days.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/health_feature/booking/domain/usecases/doctor_cancel_appointment_use_case.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/entities/doctor_appointment_entity.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/domain/usecases/get_doctor_appointments_by_day.dart';
-import 'package:fourtyninehub/features/health_feature/booking/domain/usecases/doctor_cancel_appointment_use_case.dart';
 
 part 'doctor_today_appointments_state.dart';
 

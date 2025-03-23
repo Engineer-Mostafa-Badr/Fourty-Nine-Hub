@@ -11,7 +11,7 @@ import '../../widgets/info_column_widget.dart';
 
 class PastTripsWidget extends StatefulWidget {
   final String modeType;
-  final TripEntity tripEntity;
+  final TripEntity? tripEntity;
   const PastTripsWidget(
       {super.key, required this.modeType, required this.tripEntity});
 
@@ -33,48 +33,65 @@ class _PastTripsWidgetState extends State<PastTripsWidget> {
           children: [
             CarContainer(
               title: context.isArabic
-                  ? widget.tripEntity.subCategoryId.nameAr
-                  : widget.tripEntity.subCategoryId.nameEn,
-              image: Assets.redCar,
+                  ? widget.tripEntity?.subCategory?.nameAr ?? ''
+                  : widget.tripEntity?.subCategory?.nameEn ?? '',
+              image: widget.tripEntity!.subCategory!
+                                    .pictureUrl//Assets.redCar,
             ),
             const SizedBox(width: 16),
             PriceColumn(
-                title: widget.tripEntity.fromTitle,
+                title:
+                    widget.tripEntity?.tripDetails?.startLocation.title ?? '',
                 date: "Feb 13 - 12:41 PM",
-                price: widget.tripEntity.price.toStringAsFixed(0)),
+                price:
+                    widget.tripEntity?.tripDetails?.price.toStringAsFixed(0) ??
+                        '0.0'),
             const Spacer(),
-            Column(
-              children: [
-                Container(
-                  alignment: AlignmentDirectional.topEnd,
-                  height: 55,
-                  width: 55,
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                          image: AssetImage(Assets.personalImage))),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
+            SizedBox(
+              width: 70,
+              child: Column(
+                children: [
+                  Container(
+                    alignment: AlignmentDirectional.topEnd,
+                    height: 55,
+                    width: 55,
                     decoration: BoxDecoration(
-                        color: AppColors.colorGreyLight,
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      spacing: 1,
-                      children: [
-                        const Icon(Icons.star,
-                            size: 12, color: AppColors.YELLOW_COLOR),
-                        Text(widget.tripEntity.rate ?? '3.8',
-                            style: const TextStyle(
-                                fontSize: 10, fontWeight: FontWeight.w500)),
-                      ],
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                            image: widget.tripEntity?.clientDetails
+                                        ?.profilePictureUrl ==
+                                    null
+                                ? AssetImage(Assets.personalImage)
+                                : NetworkImage(widget.tripEntity!.clientDetails!
+                                    .profilePictureUrl) as ImageProvider)),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      decoration: BoxDecoration(
+                          color: AppColors.colorGreyLight,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        spacing: 1,
+                        children: [
+                          const Icon(Icons.star,
+                              size: 12, color: AppColors.YELLOW_COLOR),
+                          Text(
+                              "${widget.tripEntity?.rating?.yourRating.rating ?? '0.0'}",
+                              style: const TextStyle(
+                                  fontSize: 10, fontWeight: FontWeight.w500)),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                Text(widget.tripEntity.userId.firstName, //'Ahmed',
-                    style: const TextStyle(
-                        fontSize: 12, fontWeight: FontWeight.w600)),
-              ],
+                  Text(
+                      widget.tripEntity?.clientDetails?.firstName ??
+                          '', //'Ahmed',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                          fontSize: 12, fontWeight: FontWeight.w600)),
+                ],
+              ),
             ),
           ],
         ),

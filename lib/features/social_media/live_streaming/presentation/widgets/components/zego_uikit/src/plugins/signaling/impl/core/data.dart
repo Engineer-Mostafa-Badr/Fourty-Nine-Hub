@@ -3,7 +3,6 @@ import 'dart:async';
 
 // Flutter imports:
 import 'package:flutter/services.dart';
-
 // Package imports:
 import 'package:zego_callkit/zego_callkit.dart';
 import 'package:zego_plugin_adapter/zego_plugin_adapter.dart';

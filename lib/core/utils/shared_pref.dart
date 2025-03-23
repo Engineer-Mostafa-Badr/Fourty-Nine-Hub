@@ -22,6 +22,8 @@ class CacheManager {
 
   static const isChoiceRuler = 'isChoiceRuler';
   static const isChoiceRulerEnabled = 'isChoiceRulerEnabled';
+  static const showOnboarding = 'showOnboarding';
+
   // static const themeLightKey = 'lightTheme';
 
   // Save access token
@@ -115,6 +117,17 @@ class CacheManager {
       return false;
     }
   }
+
+  static Future<bool> isShowOnboarding(bool value) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      print('isShowOnboarding $value');
+
+      return await prefs.setBool(showOnboarding, value);
+    } catch (e) {
+      return false;
+    }
+  }
   static Future<bool> isFloatingNavigatorEnabledOpen(bool value) async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -166,6 +179,15 @@ class CacheManager {
       final prefs = await SharedPreferences.getInstance();
       print('isChoiceRulerEnabled ${prefs.getBool(isChoiceRulerEnabled)}');
       return prefs.getBool(isChoiceRulerEnabled) ?? true;
+    } catch (e) {
+      return false;
+    }
+  }
+  static Future<bool> getShowOnboarding() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      print('isShowOnboarding ${prefs.getBool(showOnboarding)}');
+      return prefs.getBool(showOnboarding) ?? false;
     } catch (e) {
       return false;
     }

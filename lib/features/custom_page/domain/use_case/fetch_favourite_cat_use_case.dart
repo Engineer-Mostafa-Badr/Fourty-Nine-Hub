@@ -3,15 +3,15 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/custom_page/domain/reposiory/custom_page_repository.dart';
 
-import '../entity/favourite_categ_entity.dart';
+import '../entity/custom_page_categories_entity.dart';
 
-class FetchFavouriteCatUseCase extends UseCase<FavouriteCatEntity, NoParams> {
+class FetchCustomPageCategoriesUseCase extends UseCase<List<CustomPageCategoriesEntity>, NoParams> {
   final CustomPageRepository _customPageRepository;
 
-  FetchFavouriteCatUseCase(this._customPageRepository);
+  FetchCustomPageCategoriesUseCase(this._customPageRepository);
 
   @override
-  Future<Either<Failure, FavouriteCatEntity>> call(NoParams params) async {
+  Future<Either<Failure, List<CustomPageCategoriesEntity>>> call(NoParams params) async {
     return await _customPageRepository.fetchFavouriteCat();
   }
 }

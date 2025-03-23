@@ -8,6 +8,7 @@ import 'package:fourtyninehub/features/custom_page/data/model/sub_tab_model.dart
 import 'package:fourtyninehub/features/custom_page/domain/entity/activate_entity.dart';
 
 import '../../../../core/error/failure.dart';
+import '../../domain/entity/custom_page_categories_entity.dart';
 import '../../domain/entity/favourite_categ_entity.dart';
 import '../../domain/entity/navigate_bar_entity.dart';
 import '../../domain/entity/social_page_entity.dart';
@@ -25,7 +26,7 @@ abstract class CustomPageRemoteDataSource {
   Future<Either<Failure, bool>> updateSubTab(SubTabParams params);
   Future<Either<Failure, NavigateBarEntity>> fetchNavigateBar();
   Future<Either<Failure, bool>> updateNavigateBar(NavigateBarParams params);
-  Future<Either<Failure, FavouriteCatEntity>> fetchFavouriteCat();
+  Future<Either<Failure, List<CustomPageCategoriesEntity>>> fetchFavouriteCat();
   Future<Either<Failure, bool>> updateFavouriteCat(FavouriteCatParams params);
   Future<Either<Failure, ActivateEntity>> fetchActivate();
   Future<Either<Failure, bool>> updateActivate({required bool customPage});
@@ -102,12 +103,18 @@ class CustomPageRemoteDataSourceImpl extends CustomPageRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, FavouriteCatEntity>> fetchFavouriteCat() async {
-    var response = await _apiConsumer.get(EndPoints.favouriteCat);
+  Future<Either<Failure, List<CustomPageCategoriesEntity>>> fetchFavouriteCat() async {
+    var response = await _apiConsumer.get(EndPoints.customPageCat);
 
     return response.fold(
       (failure) => Left(failure),
-      (response) => Right(FavouriteCatModel.fromJson(response['data'])),
+      (response) {
+        final data = response['data'] as List;
+        final categories = data
+            .map((json) => CustomPageCategoriesModel.fromJson(json))
+            .toList();
+        return Right(categories);
+      },
     );
   }
 
@@ -115,7 +122,7 @@ class CustomPageRemoteDataSourceImpl extends CustomPageRemoteDataSource {
   Future<Either<Failure, bool>> updateFavouriteCat(
       FavouriteCatParams params) async {
     var response =
-        await _apiConsumer.put(EndPoints.favouriteCat, data: params.toJson());
+        await _apiConsumer.put(EndPoints.customPageCat, data: params.toJson());
 
     return response.fold(
       (failure) => Left(failure),
