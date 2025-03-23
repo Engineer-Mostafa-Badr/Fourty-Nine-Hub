@@ -22,8 +22,20 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import '../widgets/close_widget.dart';
 import '../widgets/upload_file_widget.dart';
 
-class PersonalInformationScreen extends StatelessWidget {
+class PersonalInformationScreen extends StatefulWidget {
   const PersonalInformationScreen({super.key});
+
+  @override
+  State<PersonalInformationScreen> createState() => _PersonalInformationScreenState();
+}
+
+class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
+
+  @override
+  void initState() {
+    context.read<RideCubit>().onSetSavedData();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +59,7 @@ class PersonalInformationScreen extends StatelessWidget {
                       spacing: 4,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        closeWidget(context),
+                        closeWidget(context:context,onAcceptSaveData: ()=>cubit.onSaveRegisterData(context)),
                         Label(
                           text: LocaleKeys.personalInformation.localize,
                           style: Styles.headerText(

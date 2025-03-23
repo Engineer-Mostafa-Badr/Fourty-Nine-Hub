@@ -4,10 +4,12 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:fourtyninehub/common/functions/global/upload_image.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/core/service/storage.dart';
 import 'package:fourtyninehub/core/utils/loading_method_helper.dart';
 import 'package:fourtyninehub/core/utils/ride_method_helper.dart';
 import 'package:fourtyninehub/core/utils/upload_record.dart';
@@ -218,8 +220,23 @@ class RideCubit extends Cubit<RideState> {
       (failure) {
         emit(state.copyWith(status: RideStates.error, failure: failure));
       },
-      (rideCategory) {
-        emit(state.copyWith(status: RideStates.success, rideCategory: rideCategory, rideSubCategories: rideCategory.subCategories));
+      (rideCategory) async {
+        RegisterRideSpecialEntity? data = await Storage().getDriverEntity();
+        List<SubCategoryEntityUpdated>? rideSubCategories = rideCategory.subCategories;
+        print("data?.isShipping111${data?.isShipping}");
+        if (data?.isShipping == false) {
+          print("data?.isShipping${data?.isShipping}");
+          for (var item in rideSubCategories) {
+            if (data?.subcategoryIds.contains(item.subCategoryId) ?? false) {
+              item.isSelected = true;
+              item.isEnabled = true;
+            }else{
+              item.isSelected = false;
+              item.isEnabled = false;
+            }
+          }
+        }
+        emit(state.copyWith(status: RideStates.success, rideCategory: rideCategory, rideSubCategories: rideSubCategories));
       },
     );
   }
@@ -1313,6 +1330,58 @@ class RideCubit extends Cubit<RideState> {
       emit(state.copyWith(status: RideStates.success, isUploadTechnicalExamination: true));
     }
   }
+
+  onSaveRegisterData(BuildContext context) async {
+    RegisterRideSpecialEntity params = RegisterRideSpecialEntity(
+        driverFirstName: rideNameController.text,
+        driverLastName: rideSurNameController.text,
+        airConditioner: state.hasAirCondition ?? false,
+        birthday: rideDateOfBirthController.text,
+        city: state.selectedGov ?? '',
+        driverLicenseNumber: ridePersonalDocLicenseNumController.text,
+        idNumber: ridePersonalDocIdNumController.text,
+        phone: ridePhoneNumberController.text,
+        plateInfo: rideVehiclePlateNumberController.text,
+        pricingPerKm: ridePricingPerKmController.text,
+        smoker: state.isSmoking ?? false,
+        vehicleBrand: state.selectedBrand ?? '',
+        vehicleColor: state.selectedColors?.id ?? '',
+        vehicleModel: state.selectedModel ?? '',
+        vehicleYear: rideVehicleProductionYearController.text,
+        workingType: state.selectedPlan ?? '',
+        personalPicture: state.personalPicture?.path,
+        isShipping: state.isShipping,
+        subcategoryIds: (state.rideSubCategories ?? []).where((e) => e.isEnabled == true).toList().map((e) => e.subCategoryId).toList());
+    await Storage().saveDriverEntity(params);
+    context.go(Routes.RIDE_HOME);
+  }
+
+  onSetSavedData() async {
+    RegisterRideSpecialEntity? data = await Storage().getDriverEntity();
+    print("data?.personalPicture${data?.personalPicture}");
+    rideNameController.text = data?.driverFirstName??'';
+    rideSurNameController.text = data?.driverLastName??'';
+    rideDateOfBirthController.text = data?.birthday??'';
+    ridePersonalDocLicenseNumController.text = data?.driverLicenseNumber??'';
+    ridePersonalDocIdNumController.text = data?.idNumber??'';
+    rideVehiclePlateNumberController.text = data?.plateInfo??'';
+    ridePhoneNumberController.text = data?.phone??'';
+    ridePricingPerKmController.text = data?.pricingPerKm??'';
+    rideVehicleProductionYearController.text = data?.vehicleYear??'';
+    print('state.colors?.firstWhere((e) => e.id == data?.vehicleColor)${state.colors?.firstWhere((e) => e.id == data?.vehicleColor)}');
+    emit(state.copyWith(
+        hasAirCondition:data?.airConditioner,
+        selectedGov:data?.city,
+        isSmoking:data?.smoker,
+        selectedBrand:data?.vehicleBrand,
+        selectedColors:(state.colors!=null||(state.colors?.isNotEmpty??false))?state.colors?.firstWhere((e) => e.id == data?.vehicleColor):null,
+        selectedModel:data?.vehicleModel,
+        selectedPlan:data?.workingType,
+        personalPicture:XFile(data?.personalPicture??''),
+        savedRideSubCategories:data?.subcategoryIds??[],
+    ));
+  }
+
 
   bool isLoadingSubmitRegister = false;
 

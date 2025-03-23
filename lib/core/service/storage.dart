@@ -9,7 +9,7 @@ class Storage{
   // Save driver entity to SharedPreferences
   Future<bool> saveDriverEntity(RegisterRideSpecialEntity entity) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String entityJson = jsonEncode(entity.toJson());
+    final String entityJson = jsonEncode(entity.toCacheJson());
     return await prefs.setString(Constants.rideSpecialDriver, entityJson);
   }
 
