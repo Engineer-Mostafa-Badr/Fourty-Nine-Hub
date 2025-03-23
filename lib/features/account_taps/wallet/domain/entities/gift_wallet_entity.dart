@@ -5,8 +5,8 @@ class GiftWalletEntity {
   final bool isActive;
   final bool tenYearsComplete;
   final bool fiveYearsComplete;
-  final int? tenYears;
-  final int? fiveYears;
+  final num? tenYears;
+  final num? fiveYears;
   final String createdAt;
   final String updatedAt;
   final String currencyEn;
@@ -15,7 +15,6 @@ class GiftWalletEntity {
   final bool? tenYearsTransfer;
   final num? fiveYearsLeft;
   final num? tenYearsLeft;
-
 
   GiftWalletEntity({
     required this.id,

@@ -197,6 +197,7 @@ class AccountServiceLocator {
         serviceLocator<GetGiftCompetitionsUseCase>(),
         serviceLocator<TransferFiveBalanceUseCase>(),
         serviceLocator<TransferTenBalanceUseCase>(),
+        serviceLocator<RequestWithdrawUseCase>(),
       ),
     );
 

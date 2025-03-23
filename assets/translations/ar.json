@@ -289,7 +289,7 @@
   "competitions": "المسابقات",
   "requestWithdraw": "طلب سحب",
   "requestTransaction": "طلب للمعاملات الشخصية",
-  "requestTransaction2": "طلب معاملة",
+  "requestTransfer": "طلب معاملة",
   "years": "سنوات",
   "transfer": "تحويل",
   "save": "حفظ",
@@ -1430,5 +1430,6 @@
   "insideAppYouWillGetInterest": "داخل التطبيق ستحصل على فائدة",
   "after5YearsAnd10Years": "بعد 5 سنوات و10 سنوات",
   "areYouSureOfTransferMoney": "هل أنت متأكد من تحويل الأموال؟",
-  "areYouSureYouWantToRemoveThisImage": "هل انت متاكد من حذف هذه الصورة؟"
+  "areYouSureYouWantToRemoveThisImage": "هل انت متاكد من حذف هذه الصورة؟",
+  "received": "تم الاستلام"
 }

@@ -291,7 +291,7 @@ abstract class  LocaleKeys {
   static const competitions = 'competitions';
   static const requestWithdraw = 'requestWithdraw';
   static const requestTransaction = 'requestTransaction';
-  static const requestTransaction2 = 'requestTransaction2';
+  static const requestTransfer = 'requestTransfer';
   static const years = 'years';
   static const transfer = 'transfer';
   static const save = 'save';
@@ -1423,5 +1423,6 @@ abstract class  LocaleKeys {
   static const after5YearsAnd10Years = 'after5YearsAnd10Years';
   static const areYouSureOfTransferMoney = 'areYouSureOfTransferMoney';
   static const areYouSureYouWantToRemoveThisImage = 'areYouSureYouWantToRemoveThisImage';
+  static const received = 'received';
 
 }

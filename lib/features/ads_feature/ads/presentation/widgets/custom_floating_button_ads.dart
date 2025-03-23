@@ -17,6 +17,7 @@ class CustomFloatingButtonAds extends StatelessWidget {
       onTap: onPressed,
       child: Container(
         height: 44,
+        alignment: AlignmentDirectional.center,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: ShapeDecoration(
           color: const Color(0xFF0B1035),

@@ -6,7 +6,6 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/core/localization/locales.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 
 import '../../../../../core/enums/wallet_types_enums.dart';
@@ -17,11 +16,13 @@ class HeaderTotalAccountWidget extends StatelessWidget {
   final String balance;
   final double? target;
   final WalletTypes type;
+  final String currency;
   const HeaderTotalAccountWidget({
     super.key,
     required this.balance,
     this.target,
     required this.type,
+    required this.currency,
   });
 
   @override
@@ -81,9 +82,7 @@ class HeaderTotalAccountWidget extends StatelessWidget {
                         return Transform.translate(
                           offset: Offset(0, 0.h),
                           child: Label(
-                            text: context.locale == Locales.english
-                                ? state.currency?.currencyEn ?? ''
-                                : state.currency?.currencyAr ?? '',
+                            text: currency,
                             style: Styles.headerText(
                               color: Colors.white,
                               fontSize: 20,

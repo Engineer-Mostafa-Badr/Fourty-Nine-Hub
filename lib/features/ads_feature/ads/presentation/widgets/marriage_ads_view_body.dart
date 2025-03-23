@@ -36,8 +36,8 @@ class MarriageAdsViewBody extends StatelessWidget {
         state.mainCategory == null
             ? Container()
             : Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: MainCategoryBanner(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: MainCategoryBanner(
                   fromHome: false,
                   category:
                       context.read<SubcategoriesCubit>().state.mainCategory!,
@@ -49,7 +49,7 @@ class MarriageAdsViewBody extends StatelessWidget {
                     // return result;
                   },
                 ),
-            ),
+              ),
         const SizedBox(
           height: 16,
         ),
@@ -72,7 +72,9 @@ class MarriageAdsViewBody extends StatelessWidget {
               Expanded(
                 child: HeaderButtonWidget(
                   title: LocaleKeys.myAds.localize,
-                  onPressed: () {},
+                  onPressed: () {
+                    context.go(Routes.MYADDS);
+                  },
                 ),
               ),
             ],
@@ -89,7 +91,7 @@ class MarriageAdsViewBody extends StatelessWidget {
                 child: FilterButtonItem(
                   title: LocaleKeys.filter.localize,
                   onTap: () async {
-                    dynamic data = await context.push(
+                    context.push(
                       Routes.FILTERADS,
                       extra: CategorizationEntity(
                         mainCategory: state.mainCategory!,
@@ -211,15 +213,16 @@ class MarriageAdsViewBody extends StatelessWidget {
               return Padding(
                 padding: EdgeInsetsDirectional.only(
                   start: index == 0 ? 16.0 : 0,
-                    end: index==state.subCategories!.length-1? 16.0: 0,),
-                child: ClickableWidget(
-                onTap: () async {
-                  await controller.changeSubCatIndex(index);
-                },
-                child: SubCategoryListViewItem(
-                  subCategory: state.subCategories?[index],
+                  end: index == state.subCategories!.length - 1 ? 16.0 : 0,
                 ),
-                              ),
+                child: ClickableWidget(
+                  onTap: () async {
+                    await controller.changeSubCatIndex(index);
+                  },
+                  child: SubCategoryListViewItem(
+                    subCategory: state.subCategories?[index],
+                  ),
+                ),
               );
             },
             separatorBuilder: (BuildContext context, int index) =>
@@ -234,15 +237,20 @@ class MarriageAdsViewBody extends StatelessWidget {
         Expanded(
           child: state.status == SubcategoriesStates.loadingAds
               ? const CustomLoading()
-              : state.ads == null? const SizedBox() : state.ads!.isEmpty? CustomEmptyWidget(label: LocaleKeys.noAds.localize,):
-          Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: MarriageAdsListView(
-                    scrollController: _scrollController,
-                    controller: controller,
-                    state: state,
-                  ),
-              ),
+              : state.ads == null
+                  ? const SizedBox()
+                  : state.ads!.isEmpty
+                      ? CustomEmptyWidget(
+                          label: LocaleKeys.noAds.localize,
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: MarriageAdsListView(
+                            scrollController: _scrollController,
+                            controller: controller,
+                            state: state,
+                          ),
+                        ),
         ),
       ],
     );
