@@ -135,7 +135,7 @@ class _CreateRestaurantFormState extends State<CreateRestaurantForm> {
                           )
                       ],
                     ),
-                    Sizer(height: 20.h),
+                    Sizer(height: 32.h),
                     const CreateResturantSubcategoryDropdown(),
                     Sizer(height: 20.h),
                     const CreateRestaurantNameField(),
@@ -148,7 +148,7 @@ class _CreateRestaurantFormState extends State<CreateRestaurantForm> {
                     Sizer(height: 20.h),
                     if (widget.from != 'update')
                       const CreateRestaurantLicensePhotoPicker(),
-                    Sizer(height: 20.h),
+                    Sizer(height: 30.h),
                     CreateRestaurantGovernorateDropdown(
                       onSelected: (value) {
                         if (value != null) {

@@ -7,6 +7,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/food_category_entity.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class CreateResturantSubcategoryDropdown extends StatelessWidget {
@@ -26,38 +27,51 @@ class CreateResturantSubcategoryDropdown extends StatelessWidget {
               BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
                   builder: (context, st) {
                 return DropdownButtonFormField<FoodCategoryEntity>(
-                  dropdownColor: Theme.of(context).scaffoldBackgroundColor,
+                  icon: const Icon(
+                    Icons.keyboard_arrow_down_outlined,
+                    color: AppColors.PRIMARY_COLOR,
+                  ),
+                  dropdownColor: AppColors.BG_GRAY_COLOR,
                   decoration: InputDecoration(
-                    fillColor: Colors.transparent,
+                    fillColor: AppColors.BG_GRAY_COLOR,
                     isDense: true,
                     constraints: BoxConstraints.loose(
                       Size.fromHeight(90.h),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderRadius: const BorderRadius.all(Radius.circular(8)),
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
                       borderSide: BorderSide(
                         color:
                             st is ValidationState && (st.isSubCategory ?? true)
                                 ? Colors.red
-                                : Colors.grey,
+                                : Colors.transparent,
                       ),
                     ),
                     border: OutlineInputBorder(
-                      borderRadius: const BorderRadius.all(Radius.circular(8)),
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
                       borderSide: BorderSide(
                         color:
                             st is ValidationState && (st.isSubCategory ?? true)
                                 ? Colors.red
-                                : Colors.grey,
+                                : Colors.transparent,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      borderSide: BorderSide(
+                        color:
+                            st is ValidationState && (st.isSubCategory ?? true)
+                                ? Colors.red
+                                : Colors.transparent,
                       ),
                     ),
                     errorBorder: OutlineInputBorder(
-                      borderRadius: const BorderRadius.all(Radius.circular(8)),
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
                       borderSide: BorderSide(
                         color:
                             st is ValidationState && (st.isSubCategory ?? true)
                                 ? Colors.red
-                                : Colors.grey,
+                                : Colors.transparent,
                       ),
                     ),
                   ),
@@ -66,8 +80,11 @@ class CreateResturantSubcategoryDropdown extends StatelessWidget {
                           value: e,
                           child: Text(
                             (context.isArabic ? e.nameAr : e.nameEn) ?? "",
-                            style: Styles
-                                .mediumText(color: Theme.of(context).textTheme.bodyMedium?.color), // Add your desired text style here
+                            style: Styles.mediumText(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.color), // Add your desired text style here
                           )))
                       .toList(),
                   onChanged: (value) {
@@ -75,7 +92,7 @@ class CreateResturantSubcategoryDropdown extends StatelessWidget {
                       createResturantCubit.selectSubcategory(value);
                     }
                   },
-                  menuMaxHeight: MediaQuery.of(context).size.height / 1.5,
+                  menuMaxHeight: MediaQuery.of(context).size.height / 2,
                   isExpanded: true,
                   hint: Text(
                     LocaleKeys.selecteSubcategory.tr(),

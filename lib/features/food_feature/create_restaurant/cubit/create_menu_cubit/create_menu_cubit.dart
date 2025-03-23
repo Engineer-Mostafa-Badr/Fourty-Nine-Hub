@@ -70,6 +70,7 @@ class RestaurantMenuCubit extends Cubit<RestaurantMenuState> {
         subcategoryId! != '') {
       emit(RestaurantUpLoadPhototLoading("Uploading Image..."));
       await UploadFile().uploadImage(
+        useWeChatPicker: true,
         subCategoryId: context
                 .read<CreateRestaurantCubit>()
                 .createRestaurantParams
@@ -89,9 +90,11 @@ class RestaurantMenuCubit extends Cubit<RestaurantMenuState> {
   String imageId = "";
 
   Future<void> uploadMealImage(BuildContext context, {subcategoryId}) async {
+       print("========================================   IN UPLOAD MEAL ========================================");
     await _uploadImage(context, subcategoryId: subcategoryId,
         onUploaded: (media) {
-      imageId = media.mediaId[0];
+          print("========================================${media.mediaId}========================================");
+      imageId = media.mediaId;
       emit(RestaurantMenuImagePicked(media.file.path));
     });
   }

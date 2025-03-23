@@ -23,7 +23,7 @@ Color scaffoldDarkColor(BuildContext context) {
 }
 
 Color cardDarkColor(BuildContext context) {
-  return context.isDarkMode ? Colors.white.withOpacity(0.04) : Colors.white;
+  return context.isDarkMode ? Colors.white.withOpacity(0.04) : AppColors.PRIMARY_COLOR;
 }
 
 class FoodCartView extends StatefulWidget {

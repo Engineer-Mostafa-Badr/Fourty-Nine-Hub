@@ -539,10 +539,16 @@ abstract class  LocaleKeys {
   static const KM = 'KM';
   static const repeat = 'repeat';
   static const totalPrice = 'totalPrice';
+ 
   static const brand = 'brand';
   static const model = 'model';
   static const publish = 'publish';
+  static const welcome_pick_me =   'welcome_pick_me';
+  static const publish_perimum ='publish_permiun'; 
   static const youCantLeaveFieldEmpty = 'youCantLeaveFieldEmpty';
+  static const toolHelp =  'tool_help_question';
+
+  
   static const addressMustBeAtLeast10Chars = 'addressMustBeAtLeast10Chars';
   static const searchFind = 'searchFind';
   static const markAllNotificationAsSeen = 'markAllNotificationAsSeen';

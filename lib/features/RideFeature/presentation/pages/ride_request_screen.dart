@@ -26,6 +26,7 @@ class RideRequestScreen extends StatelessWidget {
               child: TopCardRequest(
                 driverName: "IBRAHEM",
                 driverRating: 4.0,
+                
                 ratingCount: 10,
                 totalTrips: 1500,
                 carModel: "Hyundai Verna",

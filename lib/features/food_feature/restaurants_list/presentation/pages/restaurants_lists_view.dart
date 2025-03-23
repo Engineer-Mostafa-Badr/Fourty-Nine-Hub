@@ -94,7 +94,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
       shrinkWrap: true,
       children: [
         const MealBanner(),
-        if (!(state.isResturant?.isRestaurant ?? false))
+      //  if (!(state.isResturant?.isRestaurant ?? false))
           _buildRegisterRestaurantPrompt(state),
         const Sizer(),
         Padding(

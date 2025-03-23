@@ -10,6 +10,7 @@ class DynamicMapWithPolyline extends StatefulWidget {
   final String apiKey;
   final String url;
   final bool useGoogleMaps;
+  final bool showNavBar;
   final double? latitude;
   final double? longitude;
   final List<LatLng>? polylineString;
@@ -18,6 +19,7 @@ class DynamicMapWithPolyline extends StatefulWidget {
     super.key,
     required this.apiKey,
     required this.url,
+    this.showNavBar = true,
     this.useGoogleMaps = false,
     this.latitude,
     this.longitude,
@@ -190,6 +192,7 @@ class _DynamicMapWithPolyline extends State<DynamicMapWithPolyline> {
         : [];
 
     return CustomScaffold(
+      showNavBAr: widget.showNavBar,
       body: Stack(
         children: [
           widget.useGoogleMaps

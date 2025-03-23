@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/utils/media_query_values.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../../../../../res/style/app_colors.dart';
 
 class CreateRestaurantGovernorateDropdown extends StatelessWidget {
   const CreateRestaurantGovernorateDropdown(
@@ -30,43 +33,61 @@ class CreateRestaurantGovernorateDropdown extends StatelessWidget {
                   BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
                       builder: (context, st) {
                     return DropdownButtonFormField(
-                      dropdownColor: Theme.of(context).scaffoldBackgroundColor,
+                      icon: const Icon(
+                        Icons.keyboard_arrow_down_outlined,
+                        color: AppColors.PRIMARY_COLOR,
+                      ),
+                      style: Styles.mediumText(),
+                      dropdownColor: AppColors.BG_GRAY_COLOR,
                       decoration: InputDecoration(
-                        fillColor: Colors.transparent,
+                        fillColor: AppColors.BG_GRAY_COLOR,
                         enabledBorder: OutlineInputBorder(
                           borderRadius:
-                              const BorderRadius.all(Radius.circular(8)),
+                              const BorderRadius.all(Radius.circular(10)),
                           borderSide: BorderSide(
                             color: st is ValidationState &&
                                     (st.isSubCategory ?? true)
                                 ? Colors.red
-                                : Colors.grey,
+                                : Colors.transparent,
                           ),
                         ),
-                        constraints:
-                            BoxConstraints.loose(Size.fromHeight(90.h)),
                         border: OutlineInputBorder(
                           borderRadius:
-                              const BorderRadius.all(Radius.circular(8)),
+                              const BorderRadius.all(Radius.circular(10)),
                           borderSide: BorderSide(
                             color: st is ValidationState &&
-                                    (st.isGovernorate ?? true)
+                                    (st.isSubCategory ?? true)
                                 ? Colors.red
-                                : Colors.grey,
+                                : Colors.transparent,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10)),
+                          borderSide: BorderSide(
+                            color: st is ValidationState &&
+                                    (st.isSubCategory ?? true)
+                                ? Colors.red
+                                : Colors.transparent,
                           ),
                         ),
                         errorBorder: OutlineInputBorder(
                           borderRadius:
-                              const BorderRadius.all(Radius.circular(8)),
+                              const BorderRadius.all(Radius.circular(10)),
                           borderSide: BorderSide(
                             color: st is ValidationState &&
-                                    (st.isGovernorate ?? true)
+                                    (st.isSubCategory ?? true)
                                 ? Colors.red
-                                : Colors.grey,
+                                : Colors.transparent,
                           ),
                         ),
                       ),
-                      hint: Text(LocaleKeys.selectGovernorate.tr()),
+                      hint: Text(
+                        LocaleKeys.selectGovernorate.localize,
+                        style: Styles
+                            .mediumText(), // You can adjust this hint style as needed
+                      ),
+                      menuMaxHeight: context.height / 2,
                       items: state.governorates.map((e) {
                         return DropdownMenuItem(
                           value: e,

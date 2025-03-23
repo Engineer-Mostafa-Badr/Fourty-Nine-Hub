@@ -26,6 +26,7 @@ abstract class Assets {
   static String continueEditing = 'assets/icons/continieEditing.svg';
   static String discardPost = 'assets/icons/discardPost.svg';
   static String likeIcon = 'assets/icons/like_icon.svg';
+  static String cameraSvg= "assets/icons/Icon (2).svg";
   static String commentIcon = 'assets/icons/comment_icon.svg';
   static String sendIcon = 'assets/icons/send_icon.svg';
   static String shareIcon = 'assets/icons/share_icon.svg';
@@ -282,4 +283,6 @@ abstract class Assets {
   static String edit = 'assets/icons/edit.png';
   static String option = 'assets/icons/option.png';
   static String update = 'assets/icons/update.png';
+  // pick me 
+ // static String carIcon =""
 }
