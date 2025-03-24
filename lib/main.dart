@@ -61,24 +61,24 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  final locationService = LocationService();
-
-  locationService.startLocationTracking();
-
-  // Listen for new locations (only when moved at least 300m)
-  locationService.locationUpdates.listen((position) {
-    Fluttertoast.showToast(
-        msg: "New location (moved at least 300m): ${position.latitude}, ${position.longitude}",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.green,
-        textColor: Colors.white,
-        fontSize: 16.0
-    );
-    print('New location (moved at least 300m): ${position.latitude}, ${position.longitude}');
-    // Do something with the new location
-  });
+  // final locationService = LocationService();
+  //
+  // locationService.startLocationTracking();
+  //
+  // // Listen for new locations (only when moved at least 300m)
+  // locationService.locationUpdates.listen((position) {
+  //   Fluttertoast.showToast(
+  //       msg: "New location (moved at least 300m): ${position.latitude}, ${position.longitude}",
+  //       toastLength: Toast.LENGTH_SHORT,
+  //       gravity: ToastGravity.BOTTOM,
+  //       timeInSecForIosWeb: 1,
+  //       backgroundColor: Colors.green,
+  //       textColor: Colors.white,
+  //       fontSize: 16.0
+  //   );
+  //   print('New location (moved at least 300m): ${position.latitude}, ${position.longitude}');
+  //   // Do something with the new location
+  // });
 
 
   await CacheServiceImpl.init();
