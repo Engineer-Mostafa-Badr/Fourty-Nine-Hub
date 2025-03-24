@@ -1,5 +1,6 @@
 import 'package:flutter/src/widgets/basic.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/controllers/ride_register/ride_register_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/creminal_record_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/drug_analysis.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/technical_examination_screen.dart';
@@ -2725,7 +2726,7 @@ class AppPages {
                           getLatLongFromAddressRemoteDataSource:
                               serviceLocator()),
                     ),
-                  ], child: const WelcomeRideRegister());
+                  ], child: WelcomeRideRegister(isShipping: state.extra as bool,));
                 },
               ),
               GoRoute(
@@ -2741,7 +2742,9 @@ class AppPages {
                 path: Paths.personalInformationScreen,
                 name: Routes.personalInformationScreen,
                 builder: (context, state) {
-                  return const PersonalInformationScreen();
+                  return BlocProvider(
+                      create: (context) => serviceLocator<RideRegisterCubit>(),
+                      child: PersonalInformationScreen(params: state.extra as RideFeatureRegisterParams,));
                 },
               ),
               GoRoute(

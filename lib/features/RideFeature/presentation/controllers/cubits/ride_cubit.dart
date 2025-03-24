@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:collection/collection.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -54,6 +55,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/register_ride
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/request_trip_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/retrieve_client_latest_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/personal_information_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/upload_rider_images.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
@@ -253,7 +255,7 @@ class RideCubit extends Cubit<RideState> {
         emit(state.copyWith(status: RideStates.error, failure: failure));
       },
       (data) {
-        isSuccess = data;
+         isSuccess = data;
         emit(state.copyWith(status: RideStates.success));
       },
     );
@@ -366,7 +368,14 @@ class RideCubit extends Cubit<RideState> {
 
     result.fold(
       (failure) => emit(state.copyWith(status: RideStates.error, failure: failure)),
-      (governorates) => emit(state.copyWith(status: RideStates.success, governorates: governorates)),
+      (governorates) async {
+        RegisterRideSpecialEntity? data = await Storage().getDriverEntity();
+        GovernorateEntity? selectedCity;
+        if(data?.city!=null&&(data?.city.isNotEmpty??false)){
+          selectedCity = governorates.firstWhereOrNull((element) => element.id == data?.city);
+        }
+        emit(state.copyWith(status: RideStates.success, governorates: governorates,city: selectedCity));
+      },
     );
   }
 
@@ -605,7 +614,7 @@ class RideCubit extends Cubit<RideState> {
 
   loadRegisterData(BuildContext context) async {
     emit(state.copyWith(status: RideStates.loading));
-    await Future.wait([fetchGovs(), fetchBrands(), fetchColors(context)]);
+    await Future.wait([fetchGovs(), fetchBrands(context), fetchColors(context)]);
     emit(state.copyWith(status: RideStates.success));
   }
 
@@ -614,16 +623,30 @@ class RideCubit extends Cubit<RideState> {
 
     result.fold(
       (failure) => emit(state.copyWith(status: RideStates.error, failure: failure)),
-      (governorates) => emit(state.copyWith(status: RideStates.success, govs: governorates)),
+      (governorates) async {
+        RegisterRideSpecialEntity? cachedData = await Storage().getDriverEntity();
+        String? cityId = cachedData?.city;
+        GovernorateEntity? selectedCity;
+        if (cityId != null && (cityId.isNotEmpty)) {
+          selectedCity=governorates.firstWhere((element) => element.id == cityId);
+          onSelectGov(cityId);
+        }
+        emit(state.copyWith(status: RideStates.success, govs: governorates,city: selectedCity));
+      },
     );
   }
 
-  Future<void> fetchBrands() async {
+  Future<void> fetchBrands(BuildContext context) async {
     final Either<Failure, List<String>> result = await getRideBrandsUseCase(const NoParams());
 
     result.fold(
       (failure) => emit(state.copyWith(status: RideStates.error, failure: failure)),
-      (data) => emit(state.copyWith(status: RideStates.success, brands: data)),
+      (data) async {
+        RegisterRideSpecialEntity? cachedData = await Storage().getDriverEntity();
+        String? brand = cachedData?.vehicleBrand;
+        if(brand!=null&&(brand.isNotEmpty))await onSelectBrand(brand, context);
+        emit(state.copyWith(status: RideStates.success, brands: data,selectedBrand: brand));
+      },
     );
   }
 
@@ -666,8 +689,13 @@ class RideCubit extends Cubit<RideState> {
       (failure) {
         emit(state.copyWith(status: RideStates.error, failure: failure));
       },
-      (data) {
+      (data) async {
         models.addAll(data);
+        // RegisterRideSpecialEntity? cachedData = await Storage().getDriverEntity();
+        // String? model = cachedData?.vehicleModel;
+        // if (model != null && (model.isNotEmpty)) {
+        //   onSelectModel(model);
+        // }
         emit(state.copyWith(status: RideStates.success, models: data));
       },
     );
@@ -680,8 +708,15 @@ class RideCubit extends Cubit<RideState> {
       (failure) {
         emit(state.copyWith(status: RideStates.error, failure: failure));
       },
-      (data) {
-        emit(state.copyWith(status: RideStates.success, colors: data));
+      (data) async {
+        RegisterRideSpecialEntity? cachedData = await Storage().getDriverEntity();
+        String? color = cachedData?.vehicleColor;
+        RideColorEntity? selectedColor;
+        if (color != null && (color.isNotEmpty)) {
+          selectedColor=data.firstWhere((element) => element.id == color);
+          onSelectColor(selectedColor);
+        }
+        emit(state.copyWith(status: RideStates.success, colors: data,color: selectedColor));
       },
     );
   }
@@ -803,25 +838,37 @@ class RideCubit extends Cubit<RideState> {
 
     if ((state.rideSubCategories ?? []).any((element) => categoriesToCheck.contains(element.subCategoryId) && element.isSelected == true)) {
       emit(state.copyWith(registerType: 'socket', isShipping: false));
-      context.push(Routes.personalInformationScreen);
+      context.push(Routes.personalInformationScreen,extra:RideFeatureRegisterParams(
+          isSocket:true,
+          isShipping:false,
+          subCategoriesId:(state.rideSubCategories ?? []).where((e) => e.isEnabled == true).toList().map((e) => e.subCategoryId).toList()
+      ));
     } else {
       emit(state.copyWith(registerType: 'noSocket', isShipping: false));
-      context.push(Routes.personalInformationScreen);
+      context.push(Routes.personalInformationScreen,extra:RideFeatureRegisterParams(
+          isSocket:false,
+          isShipping:false,
+          subCategoriesId:(state.rideSubCategories ?? []).where((e) => e.isEnabled == true).toList().map((e) => e.subCategoryId).toList()
+      ));
     }
   }
 
   onSubmitSelectShippingSubCategories(BuildContext context) async {
     emit(state.copyWith(registerType: 'noSocket', isShipping: true));
-    context.push(Routes.personalInformationScreen);
+    context.push(Routes.personalInformationScreen,extra:RideFeatureRegisterParams(
+        isSocket:false,
+        isShipping:true,
+        subCategoriesId: (state.shippingSubCategories ?? []).where((e) => e.isEnabled == true).toList().map((e) => e.subCategoryId).toList()
+    ));
   }
 
   onNavigateToWelcomeScreen({required bool fromShipping, required BuildContext context}) {
     if (fromShipping == true) {
       emit(state.copyWith(isShipping: true, status: RideStates.success));
-      context.push(Routes.welcomeRideRegister, extra: state.shippingSubCategories);
+      context.push(Routes.welcomeRideRegister, extra: fromShipping);
     } else {
       emit(state.copyWith(isShipping: false, status: RideStates.success));
-      context.push(Routes.welcomeRideRegister, extra: state.rideSubCategories);
+      context.push(Routes.welcomeRideRegister, extra: fromShipping);
     }
   }
 
@@ -1368,7 +1415,6 @@ class RideCubit extends Cubit<RideState> {
     ridePhoneNumberController.text = data?.phone??'';
     ridePricingPerKmController.text = data?.pricingPerKm??'';
     rideVehicleProductionYearController.text = data?.vehicleYear??'';
-    print('state.colors?.firstWhere((e) => e.id == data?.vehicleColor)${state.colors?.firstWhere((e) => e.id == data?.vehicleColor)}');
     emit(state.copyWith(
         hasAirCondition:data?.airConditioner,
         selectedGov:data?.city,
@@ -1381,6 +1427,8 @@ class RideCubit extends Cubit<RideState> {
         savedRideSubCategories:data?.subcategoryIds??[],
     ));
   }
+
+  //model brand color city plan
 
 
   bool isLoadingSubmitRegister = false;

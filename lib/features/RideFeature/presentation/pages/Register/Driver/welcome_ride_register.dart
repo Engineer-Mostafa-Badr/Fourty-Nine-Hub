@@ -16,8 +16,8 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import '../widgets/register_floating_action_button.dart';
 
 class WelcomeRideRegister extends StatefulWidget {
-  const WelcomeRideRegister({super.key});
-
+  const WelcomeRideRegister({super.key, required this.isShipping});
+  final bool isShipping;
   @override
   State<WelcomeRideRegister> createState() => _WelcomeRideRegisterState();
 }

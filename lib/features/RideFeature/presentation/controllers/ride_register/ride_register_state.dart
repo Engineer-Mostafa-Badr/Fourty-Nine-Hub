@@ -13,12 +13,11 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_info_e
 import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_picture_optional_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_color_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/sub_category_entity.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../../../domain/entities/ride_category_entity.dart';
 
-enum RideStates {
+enum RideRegisterStates {
   initState,
   loading,
   loadingSubmit,
@@ -28,17 +27,17 @@ enum RideStates {
   success,
 }
 
-extension RideStatex on RideState {
-  bool get isInitial => status == RideStates.initState;
-  bool get isLoading => status == RideStates.loading;
-  bool get isLoadingModels => status == RideStates.loadingModels;
-  bool get isLoadingSubmit => status == RideStates.loadingSubmit;
-  bool get isError => status == RideStates.error;
-  bool get isSuccess => status == RideStates.success;
+extension RideRegisterStatex on RideRegisterState {
+  bool get isInitial => status == RideRegisterStates.initState;
+  bool get isLoading => status == RideRegisterStates.loading;
+  bool get isLoadingModels => status == RideRegisterStates.loadingModels;
+  bool get isLoadingSubmit => status == RideRegisterStates.loadingSubmit;
+  bool get isError => status == RideRegisterStates.error;
+  bool get isSuccess => status == RideRegisterStates.success;
 }
 
-class RideState {
-  final RideStates status;
+class RideRegisterState {
+  final RideRegisterStates status;
   final Failure? failure;
   final XFile? personalPicture;
   final XFile? driverLicensePicture;
@@ -97,8 +96,8 @@ class RideState {
   final bool? isShipping;
   final CostPerKmEntity? costPerKm;
 
-  RideState({
-    this.status = RideStates.initState,
+  RideRegisterState({
+    this.status = RideRegisterStates.initState,
     this.failure,
     this.personalPicture,
     this.driverLicensePicture,
@@ -158,8 +157,8 @@ class RideState {
     this.isShipping,
   });
 
-  RideState copyWith({
-    RideStates? status,
+  RideRegisterState copyWith({
+    RideRegisterStates? status,
     Failure? failure,
     XFile? personalPicture,
     XFile? driverLicensePicture,
@@ -218,7 +217,7 @@ class RideState {
     bool? isUploadCriminalRecord,
     bool? isUploadTechnicalExamination,
   }) {
-    return RideState(
+    return RideRegisterState(
       status: status ?? this.status,
       failure: failure ?? this.failure,
       registerType: registerType ?? this.registerType,
