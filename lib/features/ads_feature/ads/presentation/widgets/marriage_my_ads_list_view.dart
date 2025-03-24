@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/marriage_ads_list_view_item.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/marriage_my_ads_list_view_item.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcategories_cubit.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 
-import '../../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../../core/localization/locale_keys.g.dart';
-import '../../../../../res/style/styles.dart';
-
-class MarriageAdsListView extends StatelessWidget {
-  const MarriageAdsListView({
+class MarriageMyAds extends StatelessWidget {
+  const MarriageMyAds({
     super.key,
     required ScrollController scrollController,
     required this.controller,
@@ -22,18 +21,18 @@ class MarriageAdsListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: ListView.builder(
         controller: _scrollController,
-        itemCount: controller.marriageAds.length,
+        itemCount: controller.mrriageMyAds.length,
         physics: const BouncingScrollPhysics(),
         itemBuilder: (context, index) => Padding(
           padding: const EdgeInsets.only(bottom: 8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              MarriageAdsListViewItem(
-                marriageAds: controller.marriageAds[index],
+              MarriageMyAdsListViewItem(
+                marriageAds: controller.mrriageMyAds[index],
                 state: state,
               ),
               Padding(

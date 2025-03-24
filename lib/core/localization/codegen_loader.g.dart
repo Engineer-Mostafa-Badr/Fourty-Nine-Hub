@@ -305,7 +305,7 @@ class CodegenLoader extends AssetLoader{
   "competitions": "المسابقات",
   "requestWithdraw": "طلب سحب",
   "requestTransaction": "طلب للمعاملات الشخصية",
-  "requestTransaction2": "طلب معاملة",
+  "requestTransfer": "طلب معاملة",
   "years": "سنوات",
   "transfer": "تحويل",
   "save": "حفظ",
@@ -1445,7 +1445,11 @@ class CodegenLoader extends AssetLoader{
   "anyMoneyYouSubscribe": "أي مبلغ تشترك فيه",
   "insideAppYouWillGetInterest": "داخل التطبيق ستحصل على فائدة",
   "after5YearsAnd10Years": "بعد 5 سنوات و10 سنوات",
-  "areYouSureOfTransferMoney": "هل أنت متأكد من تحويل الأموال؟"
+  "areYouSureOfTransferMoney": "هل أنت متأكد من تحويل الأموال؟",
+  "areYouSureYouWantToRemoveThisImage": "هل انت متاكد من حذف هذه الصورة؟",
+  "received": "تم الاستلام",
+  "noRequests": "لا يوجد طلبات",
+  "relevantAds": "الإعلانات ذات الصلة"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -1737,9 +1741,9 @@ static const Map<String,dynamic> _en = {
   "showMore": "Show More",
   "history": "History",
   "competitions": "Competitions",
-  "requestWithdraw": "Request Withdraw",
+  "requestWithdraw": "Request Withdrawal",
   "requestTransaction": "request for personal transaction",
-  "requestTransaction2": "Request Transfer",
+  "requestTransfer": "Request Transfer",
   "years": "Years",
   "transfer": "Transfer",
   "cancel": "Cancel",
@@ -2895,7 +2899,11 @@ static const Map<String,dynamic> _en = {
   "anyMoneyYouSubscribe": "Any money you subscribe",
   "insideAppYouWillGetInterest": "inside app, you will get interest",
   "after5YearsAnd10Years": "after 5 years and 10 years",
-  "areYouSureOfTransferMoney": "Are you sure of transfer money?"
+  "areYouSureOfTransferMoney": "Are you sure of transfer money?",
+  "areYouSureYouWantToRemoveThisImage": "Are you sure you want to remove this image?",
+  "received": "Received",
+  "noRequests": "No requests",
+  "relevantAds": "Relevant Ads"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

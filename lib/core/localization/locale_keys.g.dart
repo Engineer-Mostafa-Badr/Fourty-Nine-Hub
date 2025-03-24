@@ -1424,5 +1424,6 @@ abstract class  LocaleKeys {
   static const areYouSureOfTransferMoney = 'areYouSureOfTransferMoney';
   static const areYouSureYouWantToRemoveThisImage = 'areYouSureYouWantToRemoveThisImage';
   static const received = 'received';
+  static const noRequests = 'noRequests';
 
 }

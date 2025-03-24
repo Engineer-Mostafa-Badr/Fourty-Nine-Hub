@@ -4,10 +4,10 @@ import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/widget/call_message_buttons.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/custom_marriage_button_sheet.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/marriage_call_message_buttons.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcategories_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
@@ -129,6 +129,7 @@ class MarriageAdsListViewItem extends StatelessWidget {
                       // ),
 
                       Expanded(
+                        flex: 5,
                         child: SizedBox(
                           height: 30,
                           width: 141,
@@ -169,12 +170,14 @@ class MarriageAdsListViewItem extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        width: 32,
+                      const Spacer(
+                        flex: 1,
                       ),
                       Expanded(
-                        child: CallMessageButtons(
+                        flex: 6,
+                        child: MarriageCallMessageButtons(
                           otherUserId: marriageAds.userId ?? '',
+                          startPadding: 16,
                           subcategoryId: state
                                   .subCategories?[state.subCategories
                                           ?.indexWhere((element) =>

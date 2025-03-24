@@ -1431,5 +1431,7 @@
   "after5YearsAnd10Years": "بعد 5 سنوات و10 سنوات",
   "areYouSureOfTransferMoney": "هل أنت متأكد من تحويل الأموال؟",
   "areYouSureYouWantToRemoveThisImage": "هل انت متاكد من حذف هذه الصورة؟",
-  "received": "تم الاستلام"
+  "received": "تم الاستلام",
+  "noRequests": "لا يوجد طلبات",
+  "relevantAds": "الإعلانات ذات الصلة"
 }

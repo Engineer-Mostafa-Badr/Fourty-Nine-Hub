@@ -198,6 +198,7 @@ class AccountServiceLocator {
         serviceLocator<TransferFiveBalanceUseCase>(),
         serviceLocator<TransferTenBalanceUseCase>(),
         serviceLocator<RequestWithdrawUseCase>(),
+        serviceLocator<RequestWithdrawWheelUseCase>(),
       ),
     );
 

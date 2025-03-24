@@ -40,7 +40,9 @@ abstract class Assets {
   static String starRedIcon = 'assets/icons/star_red_icon.svg';
   static String mapPinIcon = 'assets/icons/map_pin_icon.svg';
   static String phoneIcon = 'assets/icons/phone_icon.svg';
+  static String phoneIconRed = 'assets/icons/phone_icon_red.svg';
   static String mailIcon = 'assets/icons/mail_icon.svg';
+  static String mailIconRed = 'assets/icons/mail_icon_red.svg';
   static String refreshIcon = 'assets/icons/refresh_icon.svg';
   static String searchIcon = 'assets/icons/search_icon.svg';
   static String captainTripsIcon = 'assets/icons/captain_trips_icon.svg';

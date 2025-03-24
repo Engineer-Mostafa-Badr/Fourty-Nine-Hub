@@ -1448,5 +1448,7 @@
   "after5YearsAnd10Years": "after 5 years and 10 years",
   "areYouSureOfTransferMoney": "Are you sure of transfer money?",
   "areYouSureYouWantToRemoveThisImage": "Are you sure you want to remove this image?",
-  "received": "Received"
+  "received": "Received",
+  "noRequests": "No requests",
+  "relevantAds": "Relevant Ads"
 }
