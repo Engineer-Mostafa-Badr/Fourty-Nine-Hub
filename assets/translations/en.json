@@ -1450,5 +1450,15 @@
   "areYouSureYouWantToRemoveThisImage": "Are you sure you want to remove this image?",
   "received": "Received",
   "noRequests": "No requests",
-  "relevantAds": "Relevant Ads"
+  "relevantAds": "Relevant Ads",
+  "addNewCard": "Add new card",
+  "hideCardForm": "Hide Card Form",
+  "payWithCard": "Pay With Card",
+  "saveCard": "Save Card",
+  "paymentNumber": "Payment Number",
+  "paymentLink": "Payment Link",
+  "noLinkAvailable": "No link available",
+  "noNumberAvailable": "No number available",
+  "qrCode": "QR Code",
+  "youMustUploadTheImage":"You must upload the image"
 }

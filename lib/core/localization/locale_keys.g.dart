@@ -1425,5 +1425,16 @@ abstract class  LocaleKeys {
   static const areYouSureYouWantToRemoveThisImage = 'areYouSureYouWantToRemoveThisImage';
   static const received = 'received';
   static const noRequests = 'noRequests';
+  static const relevantAds = 'relevantAds';
+  static const addNewCard = 'addNewCard';
+  static const hideCardForm = 'hideCardForm';
+  static const payWithCard = 'payWithCard';
+  static const saveCard = 'saveCard';
+  static const paymentNumber = 'paymentNumber';
+  static const paymentLink = 'paymentLink';
+  static const noLinkAvailable = 'noLinkAvailable';
+  static const noNumberAvailable = 'noNumberAvailable';
+  static const qrCode = 'qrCode';
+  static const youMustUploadTheImage = 'youMustUploadTheImage';
 
 }

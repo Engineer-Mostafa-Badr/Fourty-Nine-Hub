@@ -6,6 +6,8 @@ import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/payment/domain/entities/fawry_card_token_response_entity.dart';
 import 'package:fourtyninehub/features/payment/domain/entities/fawry_delete_card_entity.dart';
 import 'package:fourtyninehub/features/payment/domain/entities/fawry_multi_payment_response.dart';
@@ -84,13 +86,14 @@ class PaymentCubit extends Cubit<PaymentState> {
   Future<void> uploadProfileImage({required BuildContext context}) async {
     emit(state.copyWith(uploadStatus: StateStatus.loading));
     final result = await UploadFile().uploadImage(
-      subCategoryId: "66742736963f11f31c67b51d",
+      subCategoryId: "66b6167938e6690c102ffa9c",
       onUploaded: (media) {
         emit(state.copyWith(
             uploadedImage: File(media.file.path),
             uploadStatus: StateStatus.success,
             imageMediaId: media.mediaId));
-      }, context: context,
+      },
+      context: context,
     );
     if (result != null) {
     } else {

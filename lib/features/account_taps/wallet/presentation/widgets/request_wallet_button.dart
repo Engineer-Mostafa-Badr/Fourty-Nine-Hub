@@ -43,9 +43,13 @@ class RequestWalletButton extends StatelessWidget {
               ? const Color(0xffF33D49)
               : const Color(0xB3F33D49),
           onPressed: () {
+            // TODO: review this:
+
             if (amount >= target) {
+              // اذا كان المبلغ الخاص بي اكبر من اقل سحب
               if (UserCubit.to.state.data?.phone == null ||
                   UserCubit.to.state.data!.phone!.isEmpty) {
+                // اذا لم يكن لي رقم هاتف
                 bottomSheet(
                   context: context,
                   // isScrollControlled: true,
@@ -54,6 +58,7 @@ class RequestWalletButton extends StatelessWidget {
                   widget: const CustomBottomSheetPhoneIsRequired(),
                 );
               } else {
+                // اذا كان لي رقم هاتف
                 context.read<WalletTwoCubit>().requestWithdrawal(
                       context,
                       amount: amount.toString(),

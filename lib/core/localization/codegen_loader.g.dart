@@ -1449,7 +1449,9 @@ class CodegenLoader extends AssetLoader{
   "areYouSureYouWantToRemoveThisImage": "هل انت متاكد من حذف هذه الصورة؟",
   "received": "تم الاستلام",
   "noRequests": "لا يوجد طلبات",
-  "relevantAds": "الإعلانات ذات الصلة"
+  "relevantAds": "الإعلانات ذات الصلة",
+  "addNewCard": "اضافة بطاقة جديدة",
+  "hideCardForm": "اخفاء نموذج البطاقة"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -2903,7 +2905,9 @@ static const Map<String,dynamic> _en = {
   "areYouSureYouWantToRemoveThisImage": "Are you sure you want to remove this image?",
   "received": "Received",
   "noRequests": "No requests",
-  "relevantAds": "Relevant Ads"
+  "relevantAds": "Relevant Ads",
+  "addNewCard": "Add new card",
+  "hideCardForm": "Hide Card Form"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

@@ -123,11 +123,12 @@ class WalletViewBody extends StatelessWidget {
                                 // state.wallet?.realAmount != null &&
                                 //         state.wallet!.realAmount! >= 500
                                 RequestWalletButton(
-                                  amount: state.wallet?.realAmount ?? 0,
-                                  target: 500,
-                                  isWaitingApproval:
-                                      state.wallet?.isWaitingApproval ?? false,
-                                ),
+                                    amount: state.wallet?.realAmount ?? 0,
+                                    target: 500,
+                                    // TODO: Edit this
+                                    isWaitingApproval: false
+                                    // state.wallet?.isWaitingApproval ?? false,
+                                    ),
                                 const SizedBox(
                                   height: 16,
                                 ),
@@ -164,7 +165,7 @@ class WalletViewBody extends StatelessWidget {
                                 //   subCategories: state,
                                 // ),
                                 Label(
-                                  text: 'History',
+                                  text: LocaleKeys.history.localize,
                                   style: Styles.headerText(
                                     fontSize: 32,
                                     fontWeight: FontWeight.w700,

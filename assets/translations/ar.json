@@ -1433,5 +1433,15 @@
   "areYouSureYouWantToRemoveThisImage": "هل انت متاكد من حذف هذه الصورة؟",
   "received": "تم الاستلام",
   "noRequests": "لا يوجد طلبات",
-  "relevantAds": "الإعلانات ذات الصلة"
+  "relevantAds": "الإعلانات ذات الصلة",
+  "addNewCard": "اضافة بطاقة جديدة",
+  "hideCardForm": "اخفاء نموذج البطاقة",
+  "payWithCard": "الدفع بالبطاقة",
+  "saveCard": "حفظ البطاقة",
+  "paymentNumber": "رقم الدفع",
+  "paymentLink": "رابط الدفع",
+  "noLinkAvailable": "لا يوجد رابط متاح",
+  "noNumberAvailable": "لا يوجد رقم متاح",
+  "qrCode": "رمز الاستجابة السريع",
+  "youMustUploadTheImage": "يجب عليك تحميل الصورة"
 }
