@@ -180,13 +180,12 @@ class _AdDetailsViewState extends State<AdDetailsView> {
         children: [
           Expanded(
             child: AppButton(
+              label: LocaleKeys.deleteRequest.localize,
               height: 38,
               backColor: AppColors.SECONDARY_COLOR_DARK2,
               onPressed: () async {
-                context.push(Routes.ADRequests,
-                    extra: AdRequestParams(id: widget.id, userName: ''));
+                // TODO: delete request
               },
-              label: LocaleKeys.deleteRequest.localize,
               style: Styles.headerText(
                 fontWeight: FontWeight.w500,
                 color: Colors.white,

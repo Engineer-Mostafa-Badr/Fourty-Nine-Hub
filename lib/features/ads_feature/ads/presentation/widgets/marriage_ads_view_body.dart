@@ -82,7 +82,9 @@ class MarriageAdsViewBody extends StatelessWidget {
                   title: LocaleKeys.myAds.localize,
                   isOpened: context.read<SubcategoriesCubit>().isMyAdsOpen,
                   onPressed: () {
-                    context.read<SubcategoriesCubit>().toggleMyAds();
+                    // TODO: EDIT THIS
+                    // context.read<SubcategoriesCubit>().toggleMyAds();
+                    context.push(Routes.MYADDS);
                   },
                 ),
               ),
