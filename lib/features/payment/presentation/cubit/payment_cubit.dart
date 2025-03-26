@@ -8,6 +8,7 @@ import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/payment/domain/entities/fawry_card_token_response_entity.dart';
 import 'package:fourtyninehub/features/payment/domain/entities/fawry_delete_card_entity.dart';
 import 'package:fourtyninehub/features/payment/domain/entities/fawry_multi_payment_response.dart';
@@ -26,6 +27,7 @@ import 'package:fourtyninehub/features/payment/domain/use_cases/insta_pay_use_ca
 import 'package:fourtyninehub/features/payment/domain/use_cases/multi_payment_use_case.dart';
 import 'package:fourtyninehub/features/payment/domain/use_cases/pay_with_token_use_case.dart';
 import 'package:fourtyninehub/features/payment/domain/use_cases/paymob_use_case.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 
 part 'payment_state.dart';
 
@@ -101,28 +103,39 @@ class PaymentCubit extends Cubit<PaymentState> {
     }
   }
 
-  Future<void> postInstaPay({
+  Future<void> postInstaPay(
+    context, {
     required String receiptId,
     required String amountId,
     required String paymentProviderId,
+    required String phoneNumber,
   }) async {
     emit(state.copyWith(status: StateStatus.loading));
 
-    final response = await instaPayUseCase(InstaPayParams(
-      receiptId: receiptId,
-      amountId: amountId,
-      paymentProviderId: paymentProviderId,
-    ));
+    showLoadingDialog(context);
+
+    final response = await instaPayUseCase(
+      InstaPayParams(
+        receiptId: receiptId,
+        amountId: amountId,
+        paymentProviderId: paymentProviderId,
+        phoneNumber: phoneNumber,
+      ),
+    );
 
     response.fold(
       (failure) {
+        Navigator.pop(context);
         emit(state.copyWith(failure: failure, status: StateStatus.error));
       },
       (data) {
+        Navigator.pop(context);
         emit(state.copyWith(
           instaPayResponseData: data,
           status: StateStatus.success,
         ));
+        showSuccessMessage(context, LocaleKeys.paymentSuccessful.localize);
+        context.go(Routes.HOME);
         print("InstaPay Data: ${data.message}");
       },
     );

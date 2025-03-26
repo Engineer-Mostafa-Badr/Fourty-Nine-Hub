@@ -1460,5 +1460,12 @@
   "noLinkAvailable": "No link available",
   "noNumberAvailable": "No number available",
   "qrCode": "QR Code",
-  "youMustUploadTheImage":"You must upload the image"
+  "youMustUploadTheImage":"You must upload the image",
+  "selectAPaymentMethods": "Select a payment method",
+  "selectTheAmount": "Select the amount",
+  "enterWithdrawalAmount": "Enter withdrawal amount",
+  "pleaseEnterAnAmount": "Please enter an amount",
+  "theAmountMustBeGreateThan500": "The amount must be greater than 500",
+  "theAmountMustBeLessThan": "The amount must be less than",
+  "pleaseEnterPhoneNumber": "Please enter phone number"
 }

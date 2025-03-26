@@ -123,12 +123,14 @@ class WalletViewBody extends StatelessWidget {
                                 // state.wallet?.realAmount != null &&
                                 //         state.wallet!.realAmount! >= 500
                                 RequestWalletButton(
-                                    amount: state.wallet?.realAmount ?? 0,
-                                    target: 500,
-                                    // TODO: Edit this
-                                    isWaitingApproval: false
-                                    // state.wallet?.isWaitingApproval ?? false,
-                                    ),
+                                  amount: state.wallet?.realAmount ?? 0,
+                                  currancy: context.isArabic
+                                      ? state.wallet!.currencyAr
+                                      : state.wallet!.currencyEn,
+                                  target: 500,
+                                  isWaitingApproval:
+                                      state.wallet?.isWaitingApproval ?? false,
+                                ),
                                 const SizedBox(
                                   height: 16,
                                 ),

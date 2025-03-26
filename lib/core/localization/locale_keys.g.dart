@@ -1436,5 +1436,12 @@ abstract class  LocaleKeys {
   static const noNumberAvailable = 'noNumberAvailable';
   static const qrCode = 'qrCode';
   static const youMustUploadTheImage = 'youMustUploadTheImage';
+  static const selectAPaymentMethods = 'selectAPaymentMethods';
+  static const selectTheAmount = 'selectTheAmount';
+  static const enterWithdrawalAmount = 'enterWithdrawalAmount';
+  static const pleaseEnterAnAmount = 'pleaseEnterAnAmount';
+  static const theAmountMustBeGreateThan500 = 'theAmountMustBeGreateThan500';
+  static const theAmountMustBeLessThan = 'theAmountMustBeLessThan';
+  static const pleaseEnterPhoneNumber = 'pleaseEnterPhoneNumber';
 
 }

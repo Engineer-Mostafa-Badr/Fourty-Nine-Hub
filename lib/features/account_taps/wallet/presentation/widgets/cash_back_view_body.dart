@@ -4,7 +4,9 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/cashback_cubit/cashback_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/cashback_histories_list_view.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/header_total_account_widget.dart';
@@ -21,12 +23,20 @@ class CashbackViewBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
-      child: BlocBuilder<CashbackCubit, CashbackState>(
+      child: BlocConsumer<CashbackCubit, CashbackState>(
+        listener: (context, state) {
+          if (state.buttonRequestSuccess == true) {
+            showSuccessMessage(context, LocaleKeys.requestSentSuccess.localize);
+            context.read<CashbackCubit>().getCashback(context, isRefresh: true);
+          }
+          if (state.buttonRequestSuccess == false) {
+            showErrorMessage(context,
+                state.messageFailure ?? LocaleKeys.somethingWentWrong.localize);
+          }
+        },
         builder: (context, state) {
           if (state.status.isLoading || state.status.isInitial) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const CustomLoading();
           } else if (state.status.isSuccess) {
             final cashback = state.cashback!;
             final histories = state.histories!;
@@ -93,7 +103,9 @@ class CashbackViewBody extends StatelessWidget {
               title: state.messageFailure ??
                   LocaleKeys.somethingWentWrong.localize,
               onPressed: () {
-                context.read<CashbackCubit>().getCashback(context);
+                context
+                    .read<CashbackCubit>()
+                    .getCashback(context, isRefresh: true);
               },
             );
           }

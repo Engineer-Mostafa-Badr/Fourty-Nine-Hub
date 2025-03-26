@@ -1443,5 +1443,12 @@
   "noLinkAvailable": "لا يوجد رابط متاح",
   "noNumberAvailable": "لا يوجد رقم متاح",
   "qrCode": "رمز الاستجابة السريع",
-  "youMustUploadTheImage": "يجب عليك تحميل الصورة"
+  "youMustUploadTheImage": "يجب عليك تحميل الصورة",
+  "selectAPaymentMethods": "اختر طريقة الدفع",
+  "selectTheAmount": "اختر المبلغ",
+  "enterWithdrawalAmount": "أدخل مبلغ السحب",
+  "pleaseEnterAnAmount": "من فضلك ادخل المبلغ",
+  "theAmountMustBeGreateThan500":  "يجب أن يكون المبلغ أكبر من 500",
+  "theAmountMustBeLessThan": "يجب أن يكون المبلغ اقل من",
+  "pleaseEnterPhoneNumber": "من فضلك ادخل رقم الجوال"
 }

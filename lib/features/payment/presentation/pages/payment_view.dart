@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -45,6 +46,7 @@ class PaymentView extends StatefulWidget {
 class _PaymentViewState extends State<PaymentView> {
   String _selectedPaymentMethod = '';
   String? _selectedProviderId;
+  String phoneNumber = '';
 
   @override
   void initState() {
@@ -57,12 +59,7 @@ class _PaymentViewState extends State<PaymentView> {
       appBar: BackAppBar(
         label: LocaleKeys.paymentOptions.localize,
       ),
-      body: BlocConsumer<PaymentCubit, PaymentState>(
-        listener: (context, state) {
-          if (state.uploadStatus == StateStatus.error) {
-            showErrorMessage(context, LocaleKeys.somethingWentWrong.localize);
-          }
-        },
+      body: BlocBuilder<PaymentCubit, PaymentState>(
         builder: (context, state) {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -313,9 +310,10 @@ class _PaymentViewState extends State<PaymentView> {
           items: phoneNumbers,
           displayStringForItem: (item) => item,
           onItemSelected: (value) {
-            // if (value != null) {
-            bankNameController.text = value;
-            // }
+            if (value != null) {
+              bankNameController.text = value;
+              phoneNumber = value;
+            }
           },
           selectedItem: null,
           // selectedItem: ,
@@ -452,7 +450,29 @@ class _PaymentViewState extends State<PaymentView> {
             const SizedBox(
               height: 8,
             ),
-            BlocBuilder<PaymentCubit, PaymentState>(
+            BlocConsumer<PaymentCubit, PaymentState>(
+              listener: (context, state) {
+                // if (state.status == StateStatus.success) {
+                //   print("99111");
+                //   ScaffoldMessenger.of(context).showSnackBar(
+                //     SnackBar(
+                //       content: Text(state.instaPayResponseData?.message ??
+                //           LocaleKeys.paymentSuccessful.localize),
+                //       backgroundColor: Colors.green,
+                //     ),
+                //   );
+                //   // context.go(Routes.HOME);
+                // }
+                if (state.status == StateStatus.error) {
+                  showErrorMessage(
+                    context,
+                    getFailureMessage(
+                      state.failure!,
+                      context,
+                    ),
+                  );
+                }
+              },
               builder: (context, state) {
                 return SizedBox(
                   height: 48,
@@ -465,23 +485,19 @@ class _PaymentViewState extends State<PaymentView> {
                       // Snackbar: "Your bill has been sent successfully, waiting for administration approval."
                       print("${state.imageMediaId}");
                       print(" the provider $_selectedProviderId");
+                      if (phoneNumbers.isEmpty) {
+                        showErrorMessage(context,
+                            LocaleKeys.pleaseEnterPhoneNumber.localize);
+                        return;
+                      }
                       if (state.imageMediaId != null) {
                         cubit.postInstaPay(
-                            receiptId: state.imageMediaId!,
-                            amountId: widget.amountId,
-                            paymentProviderId: _selectedProviderId!);
-                        if (state.status == StateStatus.success) {
-                          print("99111");
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                  state.instaPayResponseData?.message ??
-                                      LocaleKeys.paymentSuccessful.localize),
-                              backgroundColor: Colors.green,
-                            ),
-                          );
-                          context.go(Routes.HOME);
-                        }
+                          context,
+                          receiptId: state.imageMediaId!,
+                          amountId: widget.amountId,
+                          paymentProviderId: _selectedProviderId!,
+                          phoneNumber: phoneNumber,
+                        );
                       } else {
                         showErrorMessage(
                           context,

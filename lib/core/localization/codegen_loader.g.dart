@@ -1451,7 +1451,22 @@ class CodegenLoader extends AssetLoader{
   "noRequests": "لا يوجد طلبات",
   "relevantAds": "الإعلانات ذات الصلة",
   "addNewCard": "اضافة بطاقة جديدة",
-  "hideCardForm": "اخفاء نموذج البطاقة"
+  "hideCardForm": "اخفاء نموذج البطاقة",
+  "payWithCard": "الدفع بالبطاقة",
+  "saveCard": "حفظ البطاقة",
+  "paymentNumber": "رقم الدفع",
+  "paymentLink": "رابط الدفع",
+  "noLinkAvailable": "لا يوجد رابط متاح",
+  "noNumberAvailable": "لا يوجد رقم متاح",
+  "qrCode": "رمز الاستجابة السريع",
+  "youMustUploadTheImage": "يجب عليك تحميل الصورة",
+  "selectAPaymentMethods": "اختر طريقة الدفع",
+  "selectTheAmount": "اختر المبلغ",
+  "enterWithdrawalAmount": "أدخل مبلغ السحب",
+  "pleaseEnterAnAmount": "من فضلك ادخل المبلغ",
+  "theAmountMustBeGreateThan500": "يجب أن يكون المبلغ أكبر من 500",
+  "theAmountMustBeLessThan": "يجب أن يكون المبلغ اقل من",
+  "pleaseEnterPhoneNumber": "من فضلك ادخل رقم الجوال"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -2907,7 +2922,22 @@ static const Map<String,dynamic> _en = {
   "noRequests": "No requests",
   "relevantAds": "Relevant Ads",
   "addNewCard": "Add new card",
-  "hideCardForm": "Hide Card Form"
+  "hideCardForm": "Hide Card Form",
+  "payWithCard": "Pay With Card",
+  "saveCard": "Save Card",
+  "paymentNumber": "Payment Number",
+  "paymentLink": "Payment Link",
+  "noLinkAvailable": "No link available",
+  "noNumberAvailable": "No number available",
+  "qrCode": "QR Code",
+  "youMustUploadTheImage": "You must upload the image",
+  "selectAPaymentMethods": "Select a payment method",
+  "selectTheAmount": "Select the amount",
+  "enterWithdrawalAmount": "Enter withdrawal amount",
+  "pleaseEnterAnAmount": "Please enter an amount",
+  "theAmountMustBeGreateThan500": "The amount must be greater than 500",
+  "theAmountMustBeLessThan": "The amount must be less than",
+  "pleaseEnterPhoneNumber": "Please enter phone number"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

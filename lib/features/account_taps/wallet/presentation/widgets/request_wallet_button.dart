@@ -6,8 +6,10 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_two_cubit/wallet_two_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_bottom_sheet_phone_is_required.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/request_withdrawal_bottom_sheet_wallet.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 class RequestWalletButton extends StatelessWidget {
   const RequestWalletButton({
@@ -15,11 +17,13 @@ class RequestWalletButton extends StatelessWidget {
     required this.target,
     required this.amount,
     required this.isWaitingApproval,
+    required this.currancy,
   });
 
   final num target;
   final num amount;
   final bool isWaitingApproval;
+  final String currancy;
 
   @override
   Widget build(BuildContext context) {
@@ -43,8 +47,6 @@ class RequestWalletButton extends StatelessWidget {
               ? const Color(0xffF33D49)
               : const Color(0xB3F33D49),
           onPressed: () {
-            // TODO: review this:
-
             if (amount >= target) {
               // اذا كان المبلغ الخاص بي اكبر من اقل سحب
               if (UserCubit.to.state.data?.phone == null ||
@@ -59,11 +61,22 @@ class RequestWalletButton extends StatelessWidget {
                 );
               } else {
                 // اذا كان لي رقم هاتف
-                context.read<WalletTwoCubit>().requestWithdrawal(
-                      context,
-                      amount: amount.toString(),
-                      phone: UserCubit.to.state.data!.phone!,
-                    );
+                bottomSheet(
+                  context: context,
+                  widget: BlocProvider(
+                    create: (context) => serviceLocator<WalletTwoCubit>(),
+                    child: RequestWithdrawalBottomSheetWallet(
+                      currancy: currancy,
+                      totalAmount: amount,
+                    ),
+                  ),
+                );
+                // context.read<WalletTwoCubit>().requestWithdrawal(
+                //       context,
+                //       amount: amount.toString(),
+                //       phone: UserCubit.to.state.data!.phone!,
+                //       method: '',
+                //     );
               }
             }
           },
