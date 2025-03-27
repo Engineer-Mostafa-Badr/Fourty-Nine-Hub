@@ -1450,5 +1450,10 @@
   "pleaseEnterAnAmount": "من فضلك ادخل المبلغ",
   "theAmountMustBeGreateThan500":  "يجب أن يكون المبلغ أكبر من 500",
   "theAmountMustBeLessThan": "يجب أن يكون المبلغ اقل من",
-  "pleaseEnterPhoneNumber": "من فضلك ادخل رقم الجوال"
+  "pleaseEnterPhoneNumber": "من فضلك ادخل رقم الجوال",
+  "welcomeToDoctorRegistration": "مرحبا بك في صفحة تسجيل الأطباء",
+  "profilePhoto": "صورة الملف الشخصي",
+  "addressIsRequired": "العنوان مطلوب",
+  "priceIsRequired": "السعر مطلوب",
+  "examineDurationIsRequired": "مدة الاختبار مطلوبة"
 }

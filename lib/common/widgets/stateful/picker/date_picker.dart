@@ -19,19 +19,22 @@ class DatePickerField extends StatefulWidget {
   final Color? borderColor;
   final Widget? icon;
   final Function(DateTime?) onDateSelected;
+  final Color? backgroundColor;
 
-  const DatePickerField(
-      {super.key,
-      this.title,
-      this.borderWidth,
-      required this.initialDate,
-      this.textStyle,
-      this.isAuthentcation = false,
-      required this.minDate,
-      this.borderColor,
-      required this.maxDate,
-      required this.onDateSelected,
-      this.icon});
+  const DatePickerField({
+    super.key,
+    this.title,
+    this.borderWidth,
+    required this.initialDate,
+    this.textStyle,
+    this.isAuthentcation = false,
+    required this.minDate,
+    this.borderColor,
+    required this.maxDate,
+    required this.onDateSelected,
+    this.icon,
+    this.backgroundColor,
+  });
 
   @override
   State<DatePickerField> createState() => _DatePickerFieldState();
@@ -51,7 +54,6 @@ class _DatePickerFieldState extends State<DatePickerField> {
               initialDate: widget.initialDate,
               firstDate: widget.minDate,
               lastDate: widget.maxDate,
-
             );
             if (picked != null && picked != _selectedDate) {
               setState(() {
@@ -80,8 +82,9 @@ class _DatePickerFieldState extends State<DatePickerField> {
         }
       },
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 15.h),
+        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 15.h),
         decoration: BoxDecoration(
+          color: widget.backgroundColor,
           border: Border.all(
               width: widget.borderWidth ?? .5,
               color: widget.borderColor ?? Colors.black),

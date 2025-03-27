@@ -1443,5 +1443,10 @@ abstract class  LocaleKeys {
   static const theAmountMustBeGreateThan500 = 'theAmountMustBeGreateThan500';
   static const theAmountMustBeLessThan = 'theAmountMustBeLessThan';
   static const pleaseEnterPhoneNumber = 'pleaseEnterPhoneNumber';
+  static const welcomeToDoctorRegistration = 'welcomeToDoctorRegistration';
+  static const profilePhoto = 'profilePhoto';
+  static const addressIsRequired = 'addressIsRequired';
+  static const priceIsRequired = 'priceIsRequired';
+  static const examineDurationIsRequired = 'examineDurationIsRequired';
 
 }

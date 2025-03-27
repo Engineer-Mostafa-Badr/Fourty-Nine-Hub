@@ -5,6 +5,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/custom_dropdown_health.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class CreateDoctorCitiesDropdowns extends StatelessWidget {
@@ -19,7 +20,26 @@ class CreateDoctorCitiesDropdowns extends StatelessWidget {
           current is CreateDoctorCitiesLoaded ||
           current is CreateDoctorCitiesLoading,
       builder: (context, state) {
+        if (state is CreateDoctorCitiesLoading) {
+          return const Center(child: CircularProgressIndicator());
+        }
         if (state is CreateDoctorCitiesLoaded) {
+          return CustomDropdownHealth<CityEntity>(
+            items: state.cities,
+            onItemSelected: (value) {
+              if (value != null) {
+                createDoctorCubit.selectCity(value);
+              }
+            },
+            // (value) {
+            //   if (value != null) {
+            //     createDoctorCubit.selectSubcategory(value);
+            //   }
+            // },
+            displayStringForItem: (value) =>
+                context.isArabic ? value.nameAr : value.nameEn,
+            hint: LocaleKeys.city.localize,
+          );
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

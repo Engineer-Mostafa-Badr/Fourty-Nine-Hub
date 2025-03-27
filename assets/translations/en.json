@@ -1467,5 +1467,10 @@
   "pleaseEnterAnAmount": "Please enter an amount",
   "theAmountMustBeGreateThan500": "The amount must be greater than 500",
   "theAmountMustBeLessThan": "The amount must be less than",
-  "pleaseEnterPhoneNumber": "Please enter phone number"
+  "pleaseEnterPhoneNumber": "Please enter phone number",
+  "welcomeToDoctorRegistration": "Welcome to Doctor Registration",
+  "profilePhoto": "Profile Photo",
+  "addressIsRequired": "Address is required",
+  "priceIsRequired": "Price is required",
+  "examineDurationIsRequired": "Examine duration is required"
 }

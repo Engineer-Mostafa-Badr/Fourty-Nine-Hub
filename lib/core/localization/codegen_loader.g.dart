@@ -1466,7 +1466,9 @@ class CodegenLoader extends AssetLoader{
   "pleaseEnterAnAmount": "من فضلك ادخل المبلغ",
   "theAmountMustBeGreateThan500": "يجب أن يكون المبلغ أكبر من 500",
   "theAmountMustBeLessThan": "يجب أن يكون المبلغ اقل من",
-  "pleaseEnterPhoneNumber": "من فضلك ادخل رقم الجوال"
+  "pleaseEnterPhoneNumber": "من فضلك ادخل رقم الجوال",
+  "welcomeToDoctorRegistration": "مرحبا بك في صفحة تسجيل الأطباء",
+  "profilePhoto": "صورة الملف الشخصي"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -2937,7 +2939,9 @@ static const Map<String,dynamic> _en = {
   "pleaseEnterAnAmount": "Please enter an amount",
   "theAmountMustBeGreateThan500": "The amount must be greater than 500",
   "theAmountMustBeLessThan": "The amount must be less than",
-  "pleaseEnterPhoneNumber": "Please enter phone number"
+  "pleaseEnterPhoneNumber": "Please enter phone number",
+  "welcomeToDoctorRegistration": "Welcome to Doctor Registration",
+  "profilePhoto": "Profile Photo"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }
