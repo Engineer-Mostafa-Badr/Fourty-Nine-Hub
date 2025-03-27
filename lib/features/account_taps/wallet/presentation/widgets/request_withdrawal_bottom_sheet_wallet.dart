@@ -91,6 +91,7 @@ class _RequestWithdrawalBottomSheetWalletState
         return Form(
           key: _formKey,
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Label(
@@ -199,7 +200,6 @@ class _RequestWithdrawalBottomSheetWalletState
   }
 }
 
-// تعديل PaymentMethodItem ليقبل لون الحدود
 class PaymentMethodItem extends StatelessWidget {
   final String title;
   final VoidCallback onTap;
@@ -207,12 +207,12 @@ class PaymentMethodItem extends StatelessWidget {
   final Color? borderColor;
 
   const PaymentMethodItem({
-    Key? key,
+    super.key,
     required this.title,
     required this.onTap,
     this.isSelected = false,
     this.borderColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -233,6 +233,7 @@ class PaymentMethodItem extends StatelessWidget {
         child: Label(
           text: title,
           maxLines: 2,
+          textAlign: TextAlign.center,
           style: Styles.headerText(
             fontSize: 32,
             fontWeight: FontWeight.w700,
