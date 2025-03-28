@@ -6,6 +6,7 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 
 import '../../../../../core/enums/wallet_types_enums.dart';
@@ -70,7 +71,7 @@ class HeaderTotalAccountWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Label(
-                      text: _formatBalance(context, balance),
+                      text: FormatNumbers().formatNumberByComma(context, balance),
                       style: Styles.headerText(
                         color: Colors.white,
                         fontSize: 40,
@@ -129,24 +130,24 @@ class HeaderTotalAccountWidget extends StatelessWidget {
     );
   }
 
-  String _formatBalance(BuildContext context, String? balance) {
-    if (balance == null || balance.isEmpty) {
-      return "0"; // Fallback value if balance is null or empty
-    }
-
-    try {
-      // return double.parse(balance).floor().toString();
-      final NumberFormat formatter;
-      if (context.isArabic) {
-        formatter = NumberFormat('#,###');
-      } else {
-        formatter = NumberFormat('#,###', 'en');
-      }
-
-      return formatter.format(num.parse(balance));
-    } catch (e) {
-      // If parsing fails, return a fallback value or handle the error as needed
-      return "0";
-    }
-  }
+  // String _formatBalance(BuildContext context, String? balance) {
+  //   if (balance == null || balance.isEmpty) {
+  //     return "0"; // Fallback value if balance is null or empty
+  //   }
+  //
+  //   try {
+  //     // return double.parse(balance).floor().toString();
+  //     final NumberFormat formatter;
+  //     if (context.isArabic) {
+  //       formatter = NumberFormat('#,###');
+  //     } else {
+  //       formatter = NumberFormat('#,###', 'en');
+  //     }
+  //
+  //     return formatter.format(num.parse(balance));
+  //   } catch (e) {
+  //     // If parsing fails, return a fallback value or handle the error as needed
+  //     return "0";
+  //   }
+  // }
 }

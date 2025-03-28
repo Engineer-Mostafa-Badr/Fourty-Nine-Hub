@@ -1455,5 +1455,7 @@
   "profilePhoto": "صورة الملف الشخصي",
   "addressIsRequired": "العنوان مطلوب",
   "priceIsRequired": "السعر مطلوب",
-  "examineDurationIsRequired": "مدة الاختبار مطلوبة"
+  "examineDurationIsRequired": "مدة الاختبار مطلوبة",
+  "likedBy": "أعجب به",
+  "others": "آخرون"
 }

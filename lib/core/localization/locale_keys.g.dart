@@ -1448,5 +1448,7 @@ abstract class  LocaleKeys {
   static const addressIsRequired = 'addressIsRequired';
   static const priceIsRequired = 'priceIsRequired';
   static const examineDurationIsRequired = 'examineDurationIsRequired';
+  static const likedBy = 'likedBy';
+  static const others = 'others';
 
 }

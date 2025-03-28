@@ -58,6 +58,14 @@ abstract class Assets {
   static String storyViewsIcon = 'assets/icons/story_views_icon.svg';
   static String image2Icon = 'assets/icons/image_2_icon.svg';
   static String calendarIcon = 'assets/icons/calendar_icon.svg';
+  static String facebookIcon = 'assets/icons/facebook_icon.svg';
+  static String instagramIcon = 'assets/icons/instagram_icon.svg';
+  static String twitterIcon = 'assets/icons/Twitter_icon.svg';
+  static String homeIcon = 'assets/icons/home_icon.svg';
+  static String createIcon = 'assets/icons/create_icon.svg';
+  static String profile2Icon = 'assets/icons/profile_icon.svg';
+  static String verifiedAccountMarkIcon = 'assets/icons/verified_account_mark_icon.svg';
+  static String musicNoteIcon = 'assets/icons/music_note.svg';
 
   // lottie
   static String loveReaction = 'assets/lottie/love_reaction.json';

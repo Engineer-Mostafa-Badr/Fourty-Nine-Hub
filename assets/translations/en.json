@@ -776,7 +776,7 @@
   "adSoldout": "Are you sure, you want to set this AD as soldout?",
   "viewAll": "View All",
   "addACaption": "Add a caption...",
-  "and": "And",
+  "and": "and",
   "otherContacts": "Other Contacts",
   "registered": "Registered",
   "add": "Add",
@@ -1472,5 +1472,7 @@
   "profilePhoto": "Profile Photo",
   "addressIsRequired": "Address is required",
   "priceIsRequired": "Price is required",
-  "examineDurationIsRequired": "Examine duration is required"
+  "examineDurationIsRequired": "Examine duration is required",
+  "likedBy": "Liked by",
+  "others": "others"
 }
