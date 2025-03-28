@@ -1458,5 +1458,9 @@ abstract class  LocaleKeys {
   static const examineDurationIsRequired = 'examineDurationIsRequired';
   static const likedBy = 'likedBy';
   static const others = 'others';
+  static const noOfRequests = 'noOfRequests';
+  static const modify = 'modify';
+  static const restaurantPhoto = 'restaurantPhoto';
+  static const areYouSureUpdate = 'areYouSureUpdate';
 
 }

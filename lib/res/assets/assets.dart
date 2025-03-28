@@ -346,6 +346,12 @@ abstract class Assets {
   static String userShippingTripsIcon = 'assets/icons/user_shipping_trips.svg';
   static String viewCountIcon = 'assets/icons/view_count_icon.svg';
 
+  static String phoneRed = 'assets/icons/phone_red.svg';
+  static String mailRed = 'assets/icons/mail_red.svg';
+  static String reportRed = 'assets/icons/report_red.svg';
+  static String arrowUp = 'assets/icons/arrow_up.svg';
+
+
   static String onBoarding1 = 'assets/onBoarding/onBoarding1.svg';
   static String onBoarding2 = 'assets/onBoarding/onBoarding2.svg';
   static String onBoarding3 = 'assets/onBoarding/onBoarding3.svg';

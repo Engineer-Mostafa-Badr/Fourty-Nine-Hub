@@ -140,11 +140,11 @@ class _CreateRestaurantFormState extends State<CreateRestaurantForm> {
                     Sizer(height: 20.h),
                     const CreateRestaurantNameField(),
                     Sizer(height: 20.h),
-                    const CreateRestaurantNumberField(),
+                     CreateRestaurantNumberField(restaurantNumber: widget.restaurantId! ),
                     Sizer(height: 20.h),
-                    CreateRestaurantProfilePhotoPicker(
-                      subcategoryId: widget.subcategoryId,
-                    ),
+                    // CreateRestaurantProfilePhotoPicker(
+                    //   subcategoryId: widget.subcategoryId,
+                    // ),
                     Sizer(height: 20.h),
                     if (widget.from != 'update')
                       const CreateRestaurantLicensePhotoPicker(),
@@ -189,9 +189,9 @@ class _CreateRestaurantFormState extends State<CreateRestaurantForm> {
                                 var res = await context
                                     .read<CreateRestaurantCubit>()
                                     .updateRestaurant1(context);
-                                if (res == 'success') {
-                                  Navigator.pop(context);
-                                }
+                                // if (res == 'success') {
+                                //   Navigator.pop(context);
+                                // }
                               },
                               label: LocaleKeys.update.tr(),
                               textStyle: Styles.headerText(color: Colors.white),

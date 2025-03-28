@@ -1465,5 +1465,11 @@
   "priceIsRequired": "السعر مطلوب",
   "examineDurationIsRequired": "مدة الاختبار مطلوبة",
   "likedBy": "أعجب به",
-  "others": "آخرون"
+  "others": "آخرون",
+  "noOfRequests": "عدد الطلبات",
+  "modify": "تعديل",
+  "restaurantPhoto": "صورة المطعم",
+  "areYouSureUpdate": "Are you sure you want to update"
+
+
 }

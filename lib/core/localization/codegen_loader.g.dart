@@ -1481,7 +1481,11 @@ class CodegenLoader extends AssetLoader{
   "priceIsRequired": "السعر مطلوب",
   "examineDurationIsRequired": "مدة الاختبار مطلوبة",
   "likedBy": "أعجب به",
-  "others": "آخرون"
+  "others": "آخرون",
+  "noOfRequests": "عدد الطلبات",
+  "modify": "تعديل",
+  "restaurantPhoto": "صورة المطعم",
+  "areYouSureUpdate": "Are you sure you want to update"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -2931,6 +2935,10 @@ static const Map<String,dynamic> _en = {
   "anyMoneyYouSubscribe": "Any money you subscribe",
   "insideAppYouWillGetInterest": "inside app, you will get interest",
   "after5YearsAnd10Years": "after 5 years and 10 years",
+  "noOfRequests": "No.of requests",
+  "modify": "Modify",
+  "restaurantPhoto": "Restaurant photo",
+  "areYouSureUpdate": "Are you sure you want to update",
   "areYouSureOfTransferMoney": "Are you sure of transfer money?",
   "areYouSureYouWantToRemoveThisImage": "Are you sure you want to remove this image?",
   "received": "Received",
