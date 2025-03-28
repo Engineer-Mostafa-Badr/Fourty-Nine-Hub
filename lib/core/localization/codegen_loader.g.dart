@@ -1154,7 +1154,6 @@ class CodegenLoader extends AssetLoader{
   "welcomeToRideRegister": "مرحبًا بك في تسجيل الرحلات",
   "tripIsComplete": "تم اكتمال الرحلة",
   "successCancelTrip": "تم إلغاء الرحلة بنجاح",
-  "openGoogleMap": "افتح خرائط جوجل",
   "start": "ابدأ",
   "inLocation": "في الموقع",
   "InvalidOTP": "رمز التحقق غير صحيح",
@@ -1328,6 +1327,15 @@ class CodegenLoader extends AssetLoader{
   "rate": "تقييم",
   "rideDetails": "تفاصيل الرحلة",
   "options": "الخيارات",
+  "thereIsNoTripsInThisList": "لا يوجد رحلات في هذه القائمة.",
+  "welcomeToCaptainShare": "مرحباً بك في الكابتن شير",
+  "lady": "سيدة",
+  "ladyDriver": "سائقة",
+  "oneWayOneCaptain": "اتجاه واحد - كابتن واحد!",
+  "joinAvailableTripsNearYouNow": "انضم إلى الرحلات المتاحة بالقرب منك الآن.",
+  "browseRecentlyCompletedTrips": "تصفح الرحلات المنجزة مؤخرًا.",
+  "openGoogleMap ": "افتح خرائط جوجل",
+  "goToFirstClient": "انتقل إلى العميل الأول",
   "tryAgain": "مرة اخري",
   "YouhaveenteredOTPCodeWrong": "لقد ادخلت رمز التحقق خطا",
   "cancelTheRide": "إلغاء الرحلة",
@@ -2951,7 +2959,17 @@ static const Map<String,dynamic> _en = {
   "priceIsRequired": "Price is required",
   "examineDurationIsRequired": "Examine duration is required",
   "likedBy": "Liked by",
-  "others": "others"
+  "others": "others",
+  "thereIsNoTripsInThisList": "There is no trips in this list.",
+  "welcomeToCaptainShare": "Welcome to Captain Share!",
+  "lady": "Lady",
+  "ladyDriver": "Lady Driver",
+  "exploreTripsThatAreActiveAtTheMoment": "Explore trips that are active at the moment.",
+  "allYourBookingsInOnePlace": "All your bookings in one place!",
+  "joinAvailableTripsNearYouNow": " Join available trips near you now. ",
+  "browseRecentlyCompletedTrips": "Browse recently completed trips.",
+  "oneWayOneCaptain": "One Way - One Captain!",
+  "goToFirstClient": "Go to first client"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

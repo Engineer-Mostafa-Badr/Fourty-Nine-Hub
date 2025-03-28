@@ -1130,7 +1130,6 @@ abstract class  LocaleKeys {
   static const welcomeToRideRegister = 'welcomeToRideRegister';
   static const tripIsComplete = 'tripIsComplete';
   static const successCancelTrip = 'successCancelTrip';
-  static const openGoogleMap = 'openGoogleMap';
   static const start = 'start';
   static const inLocation = 'inLocation';
   static const InvalidOTP = 'InvalidOTP';
@@ -1304,6 +1303,15 @@ abstract class  LocaleKeys {
   static const rate = 'rate';
   static const rideDetails = 'rideDetails';
   static const options = 'options';
+  static const thereIsNoTripsInThisList = 'thereIsNoTripsInThisList';
+  static const welcomeToCaptainShare = 'welcomeToCaptainShare';
+  static const lady = 'lady';
+  static const ladyDriver = 'ladyDriver';
+  static const oneWayOneCaptain = 'oneWayOneCaptain';
+  static const joinAvailableTripsNearYouNow = 'joinAvailableTripsNearYouNow';
+  static const browseRecentlyCompletedTrips = 'browseRecentlyCompletedTrips';
+  static const openGoogleMap  = 'openGoogleMap ';
+  static const goToFirstClient = 'goToFirstClient';
   static const tryAgain = 'tryAgain';
   static const YouhaveenteredOTPCodeWrong = 'YouhaveenteredOTPCodeWrong';
   static const cancelTheRide = 'cancelTheRide';

@@ -252,7 +252,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                           content: const LogoutWidget(),
                                         ),
                                       );
-
                                     }),
                               ],
                             ),
@@ -348,6 +347,20 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   onTap: () {
                                     context.pop();
                                     context.push(Routes.CHAT);
+                                  },
+                                ),
+                                drawerRollWidget(
+                                  label: "trip join ",
+                                  image: Assets.loading,
+                                  onTap: () {
+                                    context.push(Routes.newTripJoinScreen);
+                                  },
+                                ),
+                                drawerRollWidget(
+                                  label: "Ride Mode",
+                                  image: Assets.loading,
+                                  onTap: () {
+                                    context.push(Routes.newRideModeScreen);
                                   },
                                 ),
                               ],
@@ -1012,8 +1025,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   var floatingNavigatorCubit =
                       context.read<FloatingNavigatorCubit>();
                   return CustomSwitchButton(
-                    value: floatingNavigatorCubit
-                        .floatingNavigatorEnable,
+                    value: floatingNavigatorCubit.floatingNavigatorEnable,
                     onChanged: (value) async {
                       floatingNavigatorCubit.changeFloatingNavigatorEnable();
                     },
