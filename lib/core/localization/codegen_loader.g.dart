@@ -1468,7 +1468,12 @@ class CodegenLoader extends AssetLoader{
   "theAmountMustBeLessThan": "يجب أن يكون المبلغ اقل من",
   "pleaseEnterPhoneNumber": "من فضلك ادخل رقم الجوال",
   "welcomeToDoctorRegistration": "مرحبا بك في صفحة تسجيل الأطباء",
-  "profilePhoto": "صورة الملف الشخصي"
+  "profilePhoto": "صورة الملف الشخصي",
+  "addressIsRequired": "العنوان مطلوب",
+  "priceIsRequired": "السعر مطلوب",
+  "examineDurationIsRequired": "مدة الاختبار مطلوبة",
+  "likedBy": "أعجب به",
+  "others": "آخرون"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -2248,7 +2253,7 @@ static const Map<String,dynamic> _en = {
   "adSoldout": "Are you sure, you want to set this AD as soldout?",
   "viewAll": "View All",
   "addACaption": "Add a caption...",
-  "and": "And",
+  "and": "and",
   "otherContacts": "Other Contacts",
   "registered": "Registered",
   "add": "Add",
@@ -2941,7 +2946,12 @@ static const Map<String,dynamic> _en = {
   "theAmountMustBeLessThan": "The amount must be less than",
   "pleaseEnterPhoneNumber": "Please enter phone number",
   "welcomeToDoctorRegistration": "Welcome to Doctor Registration",
-  "profilePhoto": "Profile Photo"
+  "profilePhoto": "Profile Photo",
+  "addressIsRequired": "Address is required",
+  "priceIsRequired": "Price is required",
+  "examineDurationIsRequired": "Examine duration is required",
+  "likedBy": "Liked by",
+  "others": "others"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }
