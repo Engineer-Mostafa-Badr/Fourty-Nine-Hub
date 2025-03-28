@@ -1445,7 +1445,11 @@ class CodegenLoader extends AssetLoader{
   "anyMoneyYouSubscribe": "أي مبلغ تشترك فيه",
   "insideAppYouWillGetInterest": "داخل التطبيق ستحصل على فائدة",
   "after5YearsAnd10Years": "بعد 5 سنوات و10 سنوات",
-  "areYouSureOfTransferMoney": "هل أنت متأكد من تحويل الأموال؟"
+  "areYouSureOfTransferMoney": "هل أنت متأكد من تحويل الأموال؟",
+  "noOfRequests": "عدد الطلبات",
+  "modify": "تعديل",
+  "restaurantPhoto": "صورة المطعم",
+  "areYouSureUpdate": "Are you sure you want to update"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -2895,7 +2899,11 @@ static const Map<String,dynamic> _en = {
   "anyMoneyYouSubscribe": "Any money you subscribe",
   "insideAppYouWillGetInterest": "inside app, you will get interest",
   "after5YearsAnd10Years": "after 5 years and 10 years",
-  "areYouSureOfTransferMoney": "Are you sure of transfer money?"
+  "areYouSureOfTransferMoney": "Are you sure of transfer money?",
+  "noOfRequests": "No.of requests",
+  "modify": "Modify",
+  "restaurantPhoto": "Restaurant photo",
+  "areYouSureUpdate": "Are you sure you want to update"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

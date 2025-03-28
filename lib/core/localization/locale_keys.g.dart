@@ -1422,5 +1422,9 @@ abstract class  LocaleKeys {
   static const insideAppYouWillGetInterest = 'insideAppYouWillGetInterest';
   static const after5YearsAnd10Years = 'after5YearsAnd10Years';
   static const areYouSureOfTransferMoney = 'areYouSureOfTransferMoney';
+  static const noOfRequests = 'noOfRequests';
+  static const modify = 'modify';
+  static const restaurantPhoto = 'restaurantPhoto';
+  static const areYouSureUpdate = 'areYouSureUpdate';
 
 }

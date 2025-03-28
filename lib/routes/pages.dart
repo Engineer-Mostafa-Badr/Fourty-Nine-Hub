@@ -486,14 +486,14 @@ class AppPages {
                   child: RestaurantDashboardView(payload: state.extra),
                 ),
               ),
-              GoRoute(
-                path: Paths.RESTAURANTORDERS,
-                name: Routes.RESTAURANTORDERS,
-                builder: (context, state) => BlocProvider(
-                    create: (context) =>
-                        serviceLocator<RestaurantDashboardCubit>(),
-                    child: const RestaurantDashboardOrders()),
-              ),
+              // GoRoute(
+              //   path: Paths.RESTAURANTORDERS,
+              //   name: Routes.RESTAURANTORDERS,
+              //   builder: (context, state) => BlocProvider(
+              //       create: (context) =>
+              //           serviceLocator<RestaurantDashboardCubit>(),
+              //       child: const RestaurantDashboardOrders()),
+              // ),
               GoRoute(
                 path: Paths.RIDEACTIVITY,
                 name: Routes.RIDEACTIVITY,
