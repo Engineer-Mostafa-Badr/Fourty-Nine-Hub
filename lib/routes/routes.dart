@@ -221,8 +221,6 @@ abstract class Routes {
       '/TruckPersonalInformationScreen';
   static const truckWelcomeRideRegister = '/TruckWelcomeRideRegister';
 
-  static const truckPersonalInformationScreen =
-      '/TruckPersonalInformationScreen';
   static const truckDriversLicenseScreen = '/TruckDriversLicenseScreen';
   static const truckPersonalDocumentsScreen = '/TruckPersonalDocumentsScreen';
   static const truckVehicleInformationScreen = '/TruckVehicleInformationScreen';
@@ -246,7 +244,6 @@ abstract class Routes {
   static const connectionCallScreen = '/ConnectionCallScreen';
   static const safetyRideScreen = '/SafetyRideScreen';
   static const rideFindingScreen = '/RideFindingScreen';
-  static const rideModeScreen = '/RideModeScreen';
   static const rideDashboardDetailsScreen = '/RideDashboardDetailsScreen';
   static const rideLoadingRequestScreen = '/rideLoadingRequestScreen';
   static const supportRideScreen = '/SupportRideScreen';
@@ -324,6 +321,7 @@ abstract class Paths {
   static const ONETIMEDOCUMENTMESSAGEVIEW = 'OneTimeDocumentMessageView';
   static const FORWARDMESSAGESVIEW = 'ForwardMessagesView';
   static const CHATROOMCAMERAPICKER = 'CameraPicker';
+  static const truckPersonalInformationScreen = 'TruckPersonalInformationScreen';
   static const MEDIASLIDER = 'MediaSlider';
   static const REELS = 'Reels';
   static const MUSICREELS = 'MUSICREELS';
@@ -470,8 +468,6 @@ abstract class Paths {
   static const personalDocumentsScreen = 'PersonalDocumentsScreen';
   static const vehicleInformationScreen = 'VehicleInformationScreen';
   static const moreInfoScreen = 'MoreInfoScreen';
-  static const truckPersonalInformationScreen =
-      'TruckPersonalInformationScreen';
   static const truckWelcomeRideRegister = 'TruckWelcomeRideRegister';
   static const truckDriversLicenseScreen = 'TruckDriversLicenseScreen';
   static const truckPersonalDocumentsScreen = 'TruckPersonalDocumentsScreen';
@@ -496,7 +492,6 @@ abstract class Paths {
   static const safetyRideScreen = 'SafetyRideScreen';
   static const rideFindingScreen = 'RideFindingScreen';
   static const RideStatusScreen = 'RideStatusScreen';
-  static const rideModeScreen = 'RideModeScreen';
   static const rideDashboardDetailsScreen = 'RideDashboardDetailsScreen';
   static const rideLoadingRequestScreen = 'rideLoadingRequestScreen';
   static const supportRideScreen = 'SupportRideScreen';

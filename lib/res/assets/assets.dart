@@ -120,10 +120,6 @@ abstract class Assets {
       'assets/icons/profile_social_app_bar_icon.svg';
   static String cupIcon = 'assets/icons/cup_icon.svg';
   static String crownIcon = 'assets/icons/crown_icon.svg';
-  static String createPostAppBarIcon =
-      'assets/icons/create_post_app_bar_icon.svg';
-  static String profileSocialAppBarIcon =
-      'assets/icons/profile_social_app_bar_icon.svg';
 
   static String cupImage = 'assets/icons/cup_image.png';
   static String twitterLogo = 'assets/icons/twitterLogo.png';
@@ -367,7 +363,6 @@ abstract class Assets {
   static String menuIcon = 'assets/icons/menuIcon.svg';
   static String locationTripIcon = 'assets/icons/locationTripIcon.svg';
   static String shadowTripIcon = 'assets/icons/shadowTripIcon.svg';
-  static String ideaIcon = 'assets/icons/IdeaIcon.svg';
   static String pickMeIcon = 'assets/icons/pickMeIcon.png';
   static String captainInfoIcon = 'assets/icons/captainInfoIcon.svg';
   static String tripInfoIcon = 'assets/icons/tripInfoIcon.svg';
