@@ -251,6 +251,14 @@ abstract class Routes {
 
   // Cashback
   static const CASHBACK = '/Cashback';
+
+  static const newTripJoinScreen = '/NewTripJoinScreen';
+  static const captainShareScreen = '/CaptainShareScreen';
+  static const captainShareInfoScreen = '/CaptainShareInfoScreen';
+  static const tripJoinInfoScreen = '/TripJoinInfoScreen';
+  static const pickMeInfoScreen = '/PickMeInfoScreen';
+  static const newRouteScreen = '/NewRouteScreen';
+  static const runningAndPastTripsScreen = '/RunningAndPastTripsScreen';
 }
 
 abstract class Paths {
@@ -491,4 +499,12 @@ abstract class Paths {
 
   // Cashback
   static const CASHBACK = 'CashBack';
+
+  static const newTripJoinScreen = '/NewTripJoinScreen';
+  static const captainShareScreen = '/CaptainShareScreen';
+  static const captainShareInfoScreen = '/CaptainShareInfoScreen';
+  static const tripJoinInfoScreen = '/TripJoinInfoScreen';
+  static const pickMeInfoScreen = '/PickMeInfoScreen';
+  static const newRouteScreen = '/NewRouteScreen';
+  static const runningAndPastTripsScreen = '/RunningAndPastTripsScreen';
 }

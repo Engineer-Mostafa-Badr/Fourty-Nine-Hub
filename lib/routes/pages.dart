@@ -122,6 +122,13 @@ import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/spin
 import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/wheel_wallet_cubit/wheel_wallet_cubit.dart';
 import 'package:fourtyninehub/features/married/presentation/pages/married_view.dart';
 import 'package:fourtyninehub/features/mazadat_feature/create_auction/presentation/cubit/create_auction_cubit.dart';
+import 'package:fourtyninehub/features/new_trip_join/captainshare/screen/captain_share_info_screen.dart';
+import 'package:fourtyninehub/features/new_trip_join/driver/screen/ride_mode_screen.dart';
+import 'package:fourtyninehub/features/new_trip_join/driver/screen/running_and_past_trips_screen.dart';
+import 'package:fourtyninehub/features/new_trip_join/presentation/view/screen/new_route_screen.dart';
+import 'package:fourtyninehub/features/new_trip_join/presentation/view/screen/new_trip_join_screen.dart';
+import 'package:fourtyninehub/features/new_trip_join/presentation/view/screen/pick_me_info_screen.dart';
+import 'package:fourtyninehub/features/new_trip_join/presentation/view/screen/trip_Join_info_screen.dart';
 import 'package:fourtyninehub/features/payment/presentation/cubit/payment_cubit.dart';
 import 'package:fourtyninehub/features/quraan/presentation/cubit/quraan_cubit.dart';
 import 'package:fourtyninehub/features/requests_history/presentation/cubit/request_history_ride_cubit.dart';
@@ -299,7 +306,7 @@ import '../features/RideFeature/presentation/pages/connection_call_screen.dart';
 import '../features/RideFeature/presentation/pages/create_loading_trip_screen.dart';
 import '../features/RideFeature/presentation/pages/current_ride_home.dart';
 import '../features/RideFeature/presentation/pages/dashboards/ride_dashboard_details_screen.dart';
-import '../features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';
+//import '../features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';
 import '../features/RideFeature/presentation/pages/osm_search_and_pick.dart';
 import '../features/RideFeature/presentation/pages/rating_client_screen.dart';
 import '../features/RideFeature/presentation/pages/ride_finding_screen.dart';
@@ -3011,14 +3018,14 @@ class AppPages {
                   child: const RideFindingScreen(),
                 ),
               ),
-              GoRoute(
-                path: Paths.rideModeScreen,
-                name: Routes.rideModeScreen,
-                builder: (context, state) => BlocProvider(
-                  create: (context) => serviceLocator<DashboardsCubit>(),
-                  child: RideModeScreen(params: state.extra as RideModeParams),
-                ),
-              ),
+              // GoRoute(
+              //   path: Paths.rideModeScreen,
+              //   name: Routes.rideModeScreen,
+              //   builder: (context, state) => BlocProvider(
+              //     create: (context) => serviceLocator<DashboardsCubit>(),
+              //     child: RideModeScreen(params: state.extra as RideModeParams),
+              //   ),
+              // ),
               GoRoute(
                   path: Paths.rideDashboardDetailsScreen,
                   name: Routes.rideDashboardDetailsScreen,
@@ -3073,6 +3080,96 @@ class AppPages {
                 name: Routes.completeRideScreen,
                 builder: (context, state) => CompleteRideScreen(),
               ),
+              GoRoute(
+                  path: Paths.newTripJoinScreen,
+                  name: Routes.newTripJoinScreen,
+                  builder: (context, state) {
+                    return MultiBlocProvider(providers: [
+                      BlocProvider<DestGetLatAndLongCubit>(
+                        create: (context) => DestGetLatAndLongCubit(
+                            getLatLongFromAddressRemoteDataSource:
+                            serviceLocator()),
+                      ),
+                    ], child: const NewTripJoinScreen());
+                  },),
+              GoRoute(
+                  path: Paths.captainShareInfoScreen,
+                  name: Routes.captainShareInfoScreen,
+                  builder: (context, state) {
+                    return MultiBlocProvider(providers: [
+                      BlocProvider<DestGetLatAndLongCubit>(
+                        create: (context) => DestGetLatAndLongCubit(
+                            getLatLongFromAddressRemoteDataSource:
+                            serviceLocator()),
+                      ),
+                    ], child: const CaptainShareInfoScreen());
+                  },),
+              GoRoute(
+                  path: Paths.tripJoinInfoScreen,
+                  name: Routes.tripJoinInfoScreen,
+                  builder: (context, state) {
+                    return MultiBlocProvider(providers: [
+                      BlocProvider<DestGetLatAndLongCubit>(
+                        create: (context) => DestGetLatAndLongCubit(
+                            getLatLongFromAddressRemoteDataSource:
+                            serviceLocator()),
+                      ),
+                    ], child: const TripJoinInfoScreen());
+                  },),
+              GoRoute(
+                  path: Paths.pickMeInfoScreen,
+                  name: Routes.pickMeInfoScreen,
+                  builder: (context, state) {
+                    return MultiBlocProvider(providers: [
+                      BlocProvider<DestGetLatAndLongCubit>(
+                        create: (context) => DestGetLatAndLongCubit(
+                            getLatLongFromAddressRemoteDataSource:
+                            serviceLocator()),
+                      ),
+                    ], child: const PickMeInfoScreen());
+                  },),
+              GoRoute(
+                  path: Paths.newRouteScreen,
+                  name: Routes.newRouteScreen,
+                  builder: (context, state) {
+                    return MultiBlocProvider(providers: [
+                      BlocProvider<DestGetLatAndLongCubit>(
+                        create: (context) => DestGetLatAndLongCubit(
+                            getLatLongFromAddressRemoteDataSource:
+                            serviceLocator()),
+                      ),
+                    ], child: const NewRouteScreen());
+                  },),
+              GoRoute(
+                  path: Paths.rideModeScreen,
+                  name: Routes.rideModeScreen,
+                  builder: (context, state) {
+                    return MultiBlocProvider(
+                      providers: [
+                        BlocProvider<DestGetLatAndLongCubit>(
+                          create: (context) => DestGetLatAndLongCubit(
+                              getLatLongFromAddressRemoteDataSource:
+                              serviceLocator()),
+                        ),
+                      ],
+                      child: const RideModeScreen(),
+                    );
+                  },),
+              GoRoute(
+                  path: Paths.runningAndPastTripsScreen,
+                  name: Routes.runningAndPastTripsScreen,
+                  builder: (context, state) {
+                    return MultiBlocProvider(
+                      providers: [
+                        BlocProvider<DestGetLatAndLongCubit>(
+                          create: (context) => DestGetLatAndLongCubit(
+                              getLatLongFromAddressRemoteDataSource:
+                              serviceLocator()),
+                        ),
+                      ],
+                      child: const RunningAndPastTripsScreen(),
+                    );
+                  },),
             ],
           ),
         ]);

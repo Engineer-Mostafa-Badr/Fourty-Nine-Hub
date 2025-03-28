@@ -168,6 +168,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 //     onTap: () =>
                                 //         context.push(Routes.FAVOURITE)),
 
+
                                 // drawerListTile(
                                 //     image: Assets.history,
                                 //     label: LocaleKeys.requestHistory.localize,
@@ -342,12 +343,27 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     context.push(Routes.SNAP);
                                   },
                                 ),
+
                                 drawerRollWidget(
                                   label: LocaleKeys.chat.localize,
                                   image: Assets.whatsApp,
                                   onTap: () {
                                     context.pop();
                                     context.push(Routes.CHAT);
+                                  },
+                                ),
+                                drawerRollWidget(
+                                  label: "trip join ",
+                                  image: Assets.loading,
+                                  onTap: () {
+                                    context.push(Routes.newTripJoinScreen);
+                                  },
+                                ),
+                                drawerRollWidget(
+                                  label: "Ride Mode",
+                                  image: Assets.loading,
+                                  onTap: () {
+                                    context.push(Routes.rideModeScreen);
                                   },
                                 ),
                               ],
@@ -964,13 +980,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         ),
                         Expanded(
                           child: Label(
-                            text: ' ${user?.wallet ?? 0}',
+                            text: '${user?.wallet ?? 0}',
                             style: Styles.mediumText(
-                              decoration: TextDecoration.underline,
-                              color: context.isDarkMode
-                                  ? Colors.white
-                                  : Colors.black,
-                            ),
+                                decoration: TextDecoration.underline),
                           ),
                         )
                       ],
