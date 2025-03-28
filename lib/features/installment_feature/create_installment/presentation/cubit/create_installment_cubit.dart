@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-
 import 'package:flutter/material.dart';
 
 import '../../../../../core/enums/base_status_enum.dart';

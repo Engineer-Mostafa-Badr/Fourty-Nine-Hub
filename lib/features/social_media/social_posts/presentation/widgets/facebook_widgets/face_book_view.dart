@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/insta_reel_card.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_facebook_suggest_people.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/facebook_reels.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/normal_post_screen.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/create_post_banner.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_advirtesement_card.dart';
-import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/facebook_tweet_card.dart';
-import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
-import 'package:fourtyninehub/features/social_media/stories/presentation/pages/facebook_stories.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/build_facebook_suggest_people.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/facebook_reels.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/normal_post_screen.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/posts/create_post_banner.dart';
+import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
+import 'package:fourtyninehub/features/social_media/stories/presentation/pages/facebook_stories.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class FaceBookView extends StatefulWidget {
   const FaceBookView({super.key});

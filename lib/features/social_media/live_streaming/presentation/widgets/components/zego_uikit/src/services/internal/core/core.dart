@@ -3,13 +3,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io' show Platform;
 
+// Package imports:
+import 'package:file_picker/file_picker.dart';
 // Flutter imports:
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-// Package imports:
-import 'package:file_picker/file_picker.dart';
+import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/services/services.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 import 'package:zego_express_engine/zego_express_engine.dart';
 
@@ -22,15 +22,11 @@ import '../core/data/stream.dart';
 import '../core/data/user.dart';
 import '../core/event/event.dart';
 import '../core/event_handler.dart';
-import 'package:fourtyninehub/features/social_media/live_streaming/presentation/widgets/components/zego_uikit/src/services/services.dart';
+
 part 'data/data.dart';
-
 part 'defines.dart';
-
-part 'media.dart';
-
 part 'error.dart';
-
+part 'media.dart';
 part 'message.dart';
 
 /// @nodoc

@@ -1,7 +1,6 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
-
 // Package imports:
 
 // Project imports:

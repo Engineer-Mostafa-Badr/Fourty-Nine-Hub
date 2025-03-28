@@ -89,7 +89,7 @@ class CustomRideButton extends StatelessWidget {
                     child: Text(
                       text,
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 20,
                         fontWeight: FontWeight.w600,
                         color: isDisabled ? Colors.grey[400] : Colors.white,
                         shadows: isDisabled

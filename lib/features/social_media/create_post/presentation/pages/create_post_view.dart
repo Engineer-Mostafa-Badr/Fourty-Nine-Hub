@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/create_post/domain/entities/activity_entity.dart';
+import 'package:fourtyninehub/features/social_media/create_post/domain/entities/feeling_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/life_event_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/entities/place_entity.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/pages/build_life_event_view.dart';
+import 'package:fourtyninehub/features/social_media/create_post/presentation/pages/select_activity_view.dart';
+import 'package:fourtyninehub/features/social_media/create_post/presentation/pages/select_feeling_view.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_colors_ballet.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_create_post.dart';
 import 'package:fourtyninehub/features/social_media/create_post/presentation/widgets/build_create_post_app_bar.dart';
@@ -17,23 +24,17 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/pa
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:giphy_get/giphy_get.dart';
+import 'package:go_router/go_router.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:snapping_bottom_sheet/snapping_bottom_sheet.dart';
+
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../cubit/create_post_cubit.dart';
-import 'package:snapping_bottom_sheet/snapping_bottom_sheet.dart';
-import 'package:giphy_get/giphy_get.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:fourtyninehub/features/social_media/create_post/domain/entities/activity_entity.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/pages/select_activity_view.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/features/social_media/create_post/presentation/pages/select_feeling_view.dart';
-import 'package:fourtyninehub/features/social_media/create_post/domain/entities/feeling_entity.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:go_router/go_router.dart';
-import 'package:fourtyninehub/routes/routes.dart';
 
 class CreatePostView extends StatefulWidget {
   const CreatePostView({super.key, this.lifeEvent});

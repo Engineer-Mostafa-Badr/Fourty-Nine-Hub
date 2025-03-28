@@ -1,6 +1,5 @@
 import 'package:flutter/src/widgets/basic.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/creminal_record_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/drug_analysis.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/technical_examination_screen.dart';
@@ -62,12 +61,12 @@ import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cub
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/get_available_trips_for_drivers/cubit/get_available_trips_for_drivers_cubit.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/get_currency/cubit/get_currency_cubit.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/views/carpool_view.dart';
+import 'package:fourtyninehub/features/carpool/create_carpool/presentation/cubits/cubit/create_car_pool_cubit.dart';
 import 'package:fourtyninehub/features/carpool/join_trip/presentation/cubits/cubit/join_trip_car_pool_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/custom_page.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/page_preview.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_menu_cubit/create_menu_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
-import 'package:fourtyninehub/features/carpool/create_carpool/presentation/cubits/cubit/create_car_pool_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/cusine_restaurants/presentation/cubit/cusine_restaurants_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/edit_food/presentation/cubit/edit_food_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/edit_food/presentation/pages/edit_food_view.dart';
@@ -80,7 +79,6 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/presentatio
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_taps_cubit/main_categories_taps_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/slider_cubit.dart/slider_cubit.dart';
-import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/booking/presentation/cubit/all_appointments_cubit/all_appointments_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/booking/presentation/pages/all_appointments.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
@@ -154,6 +152,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/check
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/create_trip_request_ride_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/delete_driver_ride_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_cateogry_rider_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_destination_point_ride_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_driver_info_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_driver_info_shipping_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_driver_ride_cubit.dart';
@@ -161,6 +160,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_e
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_location_from_lat_lng_ride_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_reasons_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_route_rider_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_starting_point_ride_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_trip_info_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/picture_optional_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/raise_fare_cubit.dart';
@@ -186,20 +186,18 @@ import 'package:fourtyninehub/features/settings/presentation/pages/verification_
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/get_requests_for_loading_model/get_requests_for_loading_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/driverStatistics_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/get_all_trip_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_destination_point_ride_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_starting_point_ride_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/trip_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/create_shipping_view.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/dahsboard_driver_screen.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/register_shipping_screen.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/trip_rating_screen.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/attachments_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/broadcasts/presentation/pages/broadcast_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/broadcasts/presentation/pages/see_all_broadcasts.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_profile/presentation/pages/chat_profile_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/attachments_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/camera_picker/camera_picker.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/chat_room_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/contacts_view.dart';
@@ -282,11 +280,13 @@ import 'package:go_router/go_router.dart';
 import '../features/OnBoarding/Presentation/Controllers/on_boarding_cubit.dart';
 import '../features/OnBoarding/Presentation/Screens/on_boarding_screen.dart';
 import '../features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
+import '../features/RideFeature/presentation/controllers/dashboards_cubit/dashboards_cubit.dart';
 import '../features/RideFeature/presentation/pages/Register/Driver/drivers_license_screen.dart';
 import '../features/RideFeature/presentation/pages/Register/Driver/more_info_screen.dart';
 import '../features/RideFeature/presentation/pages/Register/Driver/personal_documents_screen.dart';
 import '../features/RideFeature/presentation/pages/Register/Driver/personal_information_screen.dart';
 import '../features/RideFeature/presentation/pages/Register/Driver/vehicle_information_screen.dart';
+import '../features/RideFeature/presentation/pages/Register/Driver/welcome_ride_register.dart';
 import '../features/RideFeature/presentation/pages/Register/TruckDriver/truck_drivers_license_screen.dart';
 import '../features/RideFeature/presentation/pages/Register/TruckDriver/truck_more_info_screen.dart';
 import '../features/RideFeature/presentation/pages/Register/TruckDriver/truck_personal_documents_screen.dart';
@@ -294,17 +294,15 @@ import '../features/RideFeature/presentation/pages/Register/TruckDriver/truck_pe
 import '../features/RideFeature/presentation/pages/Register/TruckDriver/truck_vehicle_information_screen.dart';
 import '../features/RideFeature/presentation/pages/Register/TruckDriver/truck_welcome_ride_register.dart';
 import '../features/RideFeature/presentation/pages/Register/complete_register_screen.dart';
-import '../features/RideFeature/presentation/pages/Register/Driver/welcome_ride_register.dart';
 import '../features/RideFeature/presentation/pages/connection_call_screen.dart';
+import '../features/RideFeature/presentation/pages/create_loading_trip_screen.dart';
 import '../features/RideFeature/presentation/pages/current_ride_home.dart';
 import '../features/RideFeature/presentation/pages/dashboards/ride_dashboard_details_screen.dart';
 import '../features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';
-import '../features/RideFeature/presentation/pages/rating_client_screen.dart';
-import '../features/RideFeature/presentation/pages/ride_details_screen.dart';
-import '../features/RideFeature/presentation/pages/ride_finding_screen.dart';
 import '../features/RideFeature/presentation/pages/osm_search_and_pick.dart';
+import '../features/RideFeature/presentation/pages/rating_client_screen.dart';
+import '../features/RideFeature/presentation/pages/ride_finding_screen.dart';
 import '../features/RideFeature/presentation/pages/ride_home.dart';
-import '../features/RideFeature/presentation/pages/create_loading_trip_screen.dart';
 import '../features/RideFeature/presentation/pages/ride_loading_request_screen.dart';
 import '../features/RideFeature/presentation/pages/ride_request_screen.dart';
 import '../features/RideFeature/presentation/pages/ride_status_screen.dart';
@@ -388,9 +386,9 @@ import '../features/shipping/create_shipping_request/presentation/cubit/get_all_
 import '../features/shipping/create_shipping_request/presentation/cubit/get_my_trip_cubit.dart';
 import '../features/social_media/club_house/presentation/pages/audio_stream_screen.dart';
 import '../features/social_media/club_house/presentation/pages/club_house_home_screen.dart';
+import '../features/social_media/create_post/presentation/pages/create_life_event.dart';
 import '../features/social_media/create_post/presentation/pages/create_post_view.dart';
 import '../features/social_media/create_post/presentation/pages/life_event.dart';
-import '../features/social_media/create_post/presentation/pages/create_life_event.dart';
 import '../features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import '../features/social_media/social_posts/presentation/pages/Social_home.dart';
 import '../features/social_media/social_posts/presentation/pages/other_account_view.dart';
@@ -1049,7 +1047,7 @@ class AppPages {
                     GoRoute(
                         path: Paths.PRIVACY,
                         name: Routes.PRIVACY,
-                        builder: (context, state) =>  PrivacyView()),
+                        builder: (context, state) => PrivacyView()),
                     GoRoute(
                         path: Paths.POLICY,
                         name: Routes.POLICY,
@@ -2734,7 +2732,9 @@ class AppPages {
                 path: Paths.UploadRiderImages,
                 name: Routes.UploadRiderImages,
                 builder: (context, state) {
-                  return UploadRiderImages(params: state.extra as UploadRiderImagesParams?,);
+                  return UploadRiderImages(
+                    params: state.extra as UploadRiderImagesParams?,
+                  );
                 },
               ),
               GoRoute(
@@ -3010,8 +3010,10 @@ class AppPages {
               GoRoute(
                 path: Paths.rideModeScreen,
                 name: Routes.rideModeScreen,
-                builder: (context, state) =>
-                    RideModeScreen(modeType: state.extra as String),
+                builder: (context, state) => BlocProvider(
+                  create: (context) => serviceLocator<DashboardsCubit>(),
+                  child: RideModeScreen(params: state.extra as RideModeParams),
+                ),
               ),
               GoRoute(
                   path: Paths.rideDashboardDetailsScreen,
@@ -3019,7 +3021,8 @@ class AppPages {
                   builder: (context, state) => MultiBlocProvider(
                         providers: [
                           BlocProvider(
-                            create: (context) => serviceLocator<RideCubit>(),
+                            create: (context) =>
+                                serviceLocator<DashboardsCubit>(),
                           ),
                         ],
                         child: RideDashboardDetailsScreen(

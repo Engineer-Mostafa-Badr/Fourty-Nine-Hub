@@ -1,4 +1,5 @@
 import 'package:fourtyninehub/features/subcategories/data/models/sub_category_model.dart';
+
 import 'driver_model.dart';
 
 class RequestHistoryRideModel {

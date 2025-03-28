@@ -10,24 +10,26 @@ import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
+import '../../../../domain/entities/dashboards/settings_dashboard_entity.dart';
 import '../../widgets/bottom_sheet/custom_bottom_sheet.dart';
 import '../../widgets/fare_bottom_sheet_widget.dart';
 import 'update_personal_info_widget.dart';
 
 class SettingsWidget extends StatefulWidget {
   final String modeType;
-  const SettingsWidget({super.key, required this.modeType});
+  final SettingsDashboardEntity? settings;
+  const SettingsWidget({super.key, required this.modeType, this.settings});
 
   @override
   State<SettingsWidget> createState() => _SettingsWidgetState();
 }
 
 class _SettingsWidgetState extends State<SettingsWidget> {
-  bool isReady = false;
-  bool isCaptainShare = false;
-  bool isCaptain = false;
-  bool isIntercity = false;
-  bool isPremium = false;
+  late bool isReady;
+  late bool isCaptainShare;
+  late bool isCaptain;
+  late bool isIntercity;
+  late bool isPremium;
   var planController = ExpansionTileController();
   var cityController = ExpansionTileController();
   List<String> subscriptionPlans = [
@@ -46,8 +48,20 @@ class _SettingsWidgetState extends State<SettingsWidget> {
     'Ismailia',
     'Menoufia',
   ];
-  String planTrailing = 'Percentage';
-  String cityTrailing = 'Cairo';
+  late String planTrailing;
+  late String cityTrailing;
+  @override
+  void initState() {
+    super.initState();
+    planTrailing = widget.settings?.subscriptionType.tr() ?? '';
+    cityTrailing = widget.settings?.city.tr() ?? '';
+    isReady = widget.settings?.isReady ?? false;
+    isCaptainShare = false;
+    isCaptain = false;
+    isIntercity = false;
+    isPremium = false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -159,11 +173,16 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                         customBottomSheet(context, context.read<RideCubit>(),
                             child: Padding(
                               padding: const EdgeInsets.all(12.0),
-                              child: FareBottomSheetWidget(rideCubit: context.read<RideCubit>(), selectedCategoryPrice: 44, selectedCategoryName: 'aaa',),
+                              child: FareBottomSheetWidget(
+                                rideCubit: context.read<RideCubit>(),
+                                selectedCategoryPrice: 44,
+                                selectedCategoryName: 'aaa',
+                              ),
                             ),
                             title: LocaleKeys.acceptAnothePrice.tr());
                       },
-                      child: Text('20 ${'change'.tr()}',
+                      child: Text(
+                          '${widget.settings?.pricingPerKm??0} ${'change'.tr()}',
                           style: const TextStyle(fontSize: 12)))
                 ],
               ),
@@ -178,7 +197,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                         fontSize: 14, fontWeight: FontWeight.w500)),
                 const Spacer(),
                 RatingBar(
-                  initialRating: 2.5,
+                  initialRating: widget.settings?.rating.averageRating ?? 2.5,
                   ignoreGestures: true,
                   itemPadding: const EdgeInsets.symmetric(horizontal: 3),
                   ratingWidget: RatingWidget(
@@ -190,8 +209,9 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                   onRatingUpdate: (double value) {},
                 ),
                 const SizedBox(width: 5),
-                const Text('2.5',
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700))
+                Text(widget.settings?.rating.averageRating.toString() ?? '2.5',
+                    style: const TextStyle(
+                        fontSize: 12, fontWeight: FontWeight.w700))
               ],
             ),
           ),
@@ -203,7 +223,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                 Text(LocaleKeys.totalProfit.tr(), //'Total Profit',
                     style: const TextStyle(
                         fontSize: 14, fontWeight: FontWeight.w500)),
-                Text('1050 ${LocaleKeys.egp.tr()}',
+                Text('${widget.settings?.profit??'0'} ${LocaleKeys.egp.tr()}',
                     style: const TextStyle(
                         fontSize: 14, fontWeight: FontWeight.w500))
               ],
@@ -217,8 +237,8 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                 Text(LocaleKeys.totalTrips.tr(), //'Total Trips',
                     style: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.w500)),
-                const Text('38',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500))
+                 Text(widget.settings?.countTrips.toString()??'',//'38',
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500))
               ],
             ),
           ),

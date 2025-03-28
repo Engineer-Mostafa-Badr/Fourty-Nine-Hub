@@ -3,6 +3,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/completed_tri
 import 'package:fourtyninehub/features/RideFeature/domain/entities/cost_per_km_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/expected_price_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/get_location_from_address_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_request_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/loading_info_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/running_trips_entity.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
@@ -56,7 +57,10 @@ class RideState {
   final List<GovernorateEntity>? governorates;
   final GetLocationFromAddressEntity? currentLocation;
   final GetLocationFromAddressEntity? toLocation;
+  final GetLocationFromAddressEntity? wayPointOne;
+  final GetLocationFromAddressEntity? wayPointTwo;
   final RideExpectedPriceEntity? rideExpectedPrice;
+  RideRequestTripEntity? requestedTrip;
   final List<CompletedTripsEntity>? completedTrips;
   final List<RunningTripsEntity>? runningTrips;
   final ActivityTripEntity ? activityTrips;
@@ -77,6 +81,7 @@ class RideState {
   final DriverInfoEntity? driverInfo;
   final LoadingInfoEntity? loaderInfo;
   final DriverPictureOptionalEntity? pictureOptional;
+  final List<String>? savedRideSubCategories;
   final bool? isApproved;
   final bool? isUploadDriverId;
   final bool? isUploadDriverImage;
@@ -90,7 +95,7 @@ class RideState {
   final bool? isShipping;
   final CostPerKmEntity? costPerKm;
 
-  const RideState({
+  RideState({
     this.status = RideStates.initState,
     this.failure,
     this.personalPicture,
@@ -107,13 +112,17 @@ class RideState {
     this.vehiclePicture,
     this.rideCategory,
     this.loaderInfo,
+    this.savedRideSubCategories,
     this.rideSubCategories,
     this.shippingSubCategories,
     this.shippingCategory,
     this.governorates,
     this.currentLocation,
     this.toLocation,
+    this.wayPointOne,
+    this.wayPointTwo,
     this.rideExpectedPrice,
+    this.requestedTrip,
     this.completedTrips,
     this.runningTrips,
     this.costPerKm,
@@ -165,6 +174,7 @@ class RideState {
     LoadingInfoEntity? loaderInfo,
     DriverPictureOptionalEntity? pictureOptional,
     List<SubCategoryEntityUpdated>? rideSubCategories,
+    List<String>? savedRideSubCategories,
     List<SubCategoryEntityUpdated>? shippingSubCategories,
     List<GovernorateEntity>? govs,
     List<String>? brands,
@@ -175,7 +185,10 @@ class RideState {
     List<GovernorateEntity>? governorates,
     GetLocationFromAddressEntity? currentLocation,
     GetLocationFromAddressEntity? toLocation,
+    GetLocationFromAddressEntity? wayPointOne,
+    GetLocationFromAddressEntity? wayPointTwo,
     RideExpectedPriceEntity? rideExpectedPrice,
+    RideRequestTripEntity? requestedTrip,
     List<CompletedTripsEntity>? completedTrips,
     List<RunningTripsEntity>? runningTrips,
     ActivityTripEntity ? activityTrips,
@@ -244,7 +257,10 @@ class RideState {
       governorates: governorates ?? this.governorates,
       currentLocation: currentLocation ?? this.currentLocation,
       toLocation: toLocation ?? this.toLocation,
+      wayPointOne: wayPointOne ?? this.wayPointOne,
+      wayPointTwo: wayPointTwo ?? this.wayPointTwo,
       rideExpectedPrice: rideExpectedPrice ?? this.rideExpectedPrice,
+      requestedTrip: requestedTrip ?? this.requestedTrip,
       completedTrips: completedTrips ?? this.completedTrips,
       runningTrips: runningTrips ?? this.runningTrips,
       activityTrips: activityTrips ?? this.activityTrips,
@@ -252,6 +268,7 @@ class RideState {
       shippingSubCategories: shippingSubCategories ?? this.shippingSubCategories,
       isShipping: isShipping ?? this.isShipping,
       loaderInfo: loaderInfo ?? this.loaderInfo,
+      savedRideSubCategories: savedRideSubCategories ?? this.savedRideSubCategories,
     );
   }
 }

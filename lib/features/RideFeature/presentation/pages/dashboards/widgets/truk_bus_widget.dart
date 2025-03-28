@@ -12,14 +12,19 @@ import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/styles.dart';
+import '../../../../domain/entities/dashboards/trip_entity.dart';
 import '../../widgets/dialog_widget/show_custom_dialog_trip.dart';
 import '../../widgets/font_manager.dart';
 
 class TrukBusWidget extends StatelessWidget {
   final bool isWithAnotherPrice;
   final String modeType;
+  final TripEntity? tripEntity;
   const TrukBusWidget(
-      {super.key, this.isWithAnotherPrice = false, this.modeType = 'truk'});
+      {super.key,
+      this.isWithAnotherPrice = false,
+      this.modeType = 'truk',
+      this.tripEntity});
 
   @override
   Widget build(BuildContext context) {
@@ -62,14 +67,9 @@ class TrukBusWidget extends StatelessWidget {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 4.0),
                                 child: Row(children: [
-                                  SvgPicture.asset(
-                                    Assets.star2,
-                                    width: 8,
-                                    height: 8,
-                                  ),
-                                  const Sizer(
-                                    width: 4,
-                                  ),
+                                  SvgPicture.asset(Assets.star2,
+                                      width: 8, height: 8),
+                                  const Sizer(width: 4),
                                   Label(text: '4.5', style: Styles.smallText())
                                 ]))))
                   ],
@@ -103,7 +103,8 @@ class TrukBusWidget extends StatelessWidget {
                               Expanded(
                                   flex: 8,
                                   child: Label(
-                                      text: 'Tariaq Bedon Esm Tariaq Bedon Esm',
+                                      text: tripEntity?.tripDetails?.startLocation.title ??
+                                          'Tariaq Bedon Esm Tariaq Bedon Esm',
                                       style: Styles.headerText()))
                             ]),
                             Row(spacing: 5, children: [
@@ -114,7 +115,8 @@ class TrukBusWidget extends StatelessWidget {
                               Expanded(
                                   flex: 8,
                                   child: Label(
-                                      text: 'Open Air Mall - Madinaty',
+                                      text: tripEntity?.tripDetails?.targetLocation.title ??
+                                          'Open Air Mall - Madinaty',
                                       style: Styles.mediumText(
                                           fontWeight: FontWeight.w300)))
                             ]),
@@ -136,12 +138,12 @@ class TrukBusWidget extends StatelessWidget {
                   Label(
                     text: modeType == 'truk'
                         ? "${LocaleKeys.cargoDescription.tr()} : Car"
-                        : '${LocaleKeys.passenger.tr()} : 10',
+                        : '${LocaleKeys.passenger.tr()} : ${tripEntity?.tripDetails?.passengers ?? 0}',
                     style: Styles.mediumText(fontSize: 32),
                   ),
                   Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                     Label(
-                        text: '300',
+                        text: tripEntity?.tripDetails?.price.toStringAsFixed(1) ?? '300',
                         style: Styles.mediumText(fontWeight: FontWeight.w700)),
                     const Sizer(width: 4),
                     Label(
@@ -200,7 +202,7 @@ class TrukBusWidget extends StatelessWidget {
                                         top: Radius.circular(15))),
                                 isScrollControlled: true,
                                 builder: (BuildContext context) =>
-                                    const EditPriceWidget(),
+                                    EditPriceWidget(tripEntity: tripEntity),
                               );
                             } else {
                               showCustomDialogTrip(

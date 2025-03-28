@@ -1,5 +1,6 @@
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/constants/constants.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_available_ride_trips_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_balance_history_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_history_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/main_category_use_case.dart';
@@ -1232,29 +1233,30 @@ class EndPoints {
   static String createCarPool = '/carpool/create';
 
   static String getRideCategories(String userId) {
-    return '/ride/get-thumbnail-ride?userId=$userId';
+    return '/ride/get-thumbnail-ride';
   }
 
   static String getShippingCategories(String userId) {
-    return '/loading/driver/subcategory?userId=$userId';
+    return '/loading/driver/subcategory';
   }
+
   static String getDriversInSubcategory(String subCategoryId) {
     return '/ride/riders/drivers/$subCategoryId';
   }
-
-  static String requestTrip(String id) {
-    return '/ride/trips/newTrip/$id';
+  static String requestTrip(String subcategoryId) {
+    return '/ride/trips/newTrip/$subcategoryId';
   }
-
+  static String retrieveClientLatestTrip = '/ride/client/trips/latest';
   static String getExpectedPrice(String id) {
     return '/ride/trips/expected/price/$id';
   }
   static String getAvailableTrips(String subCategoryId) {
-    return '/ride/trips/user?limit=10&page=1&subCategory=$subCategoryId';
+    return '/ride/driver/trips/available/not-tracking?limit=10&page=1';
   }
-  static String getPastTrips(int page) {
-    return '/ride/trips/rider?limit=20&page=$page';
+  static String getPastTrips(int page,String type) {
+    return '/ride/driver/trips/past?tripType=$type&limit=20&page=$page';
   }
+  static String getSettingsDashboard = '/ride/driver/info/settings';
   static String deleteRideRegistration = '/ride/riders';
   static String getRideBrands = '/ride/riders/brands';
   static String getRideModels = '/ride/riders/models';
@@ -1265,6 +1267,7 @@ class EndPoints {
   static String getRideDriverPictureOptional = '/ride/info/picture-optional';
   static String getCostPerKm = '/ride/driver/info/fair-cost';
   static String getLoadingInfo = '/loading/driver/info?subCategory=62c8baad8e28a58a3edf5805';
+  static String makeTripRequest = '/ride/trips/request';
 
   static String updateDriverLocation() {
     return '/ride/update-driver-location';
@@ -1322,11 +1325,19 @@ class EndPoints {
     return '/ride/trips/cancel-by-client/$tripId';
   }
 
-  static String recordingTrip(String tripId) {
+  static String cancelPendingTripByClient(String tripId){
+    return '/ride/client/trips/pending/cancel/$tripId';
+  }
+
+  static String recordingTrip(String tripId){
     return '/ride/trips/record-voice/$tripId';
   }
 
   static String updateTripPriceFromClient(String tripId) {
     return '/ride/client/trips/offer/$tripId';
+  }
+
+  static String getAvailableRideTrips(AvailableRideTripsUseCaseParams params) {
+    return '/ride/driver/trips/available/tracking?page=${params.page}&limit=${params.limit}';
   }
 }

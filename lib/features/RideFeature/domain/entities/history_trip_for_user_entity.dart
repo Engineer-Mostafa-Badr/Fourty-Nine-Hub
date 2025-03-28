@@ -1,8 +1,8 @@
 import 'package:fourtyninehub/features/RideFeature/data/models/helpers/category.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/helpers/currency.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/helpers/location.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/helpers/rider.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/helpers/user.dart';
-import 'package:fourtyninehub/features/RideFeature/data/models/helpers/location.dart';
 
 class HistoryTripForUserEntity {
   final String? id;
