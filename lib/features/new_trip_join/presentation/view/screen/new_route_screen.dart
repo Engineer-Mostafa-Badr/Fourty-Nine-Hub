@@ -5,6 +5,8 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 
 import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/utils/handle_cashback.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../widget/alert_text_widget.dart';
@@ -14,18 +16,29 @@ import '../widget/price_and_seat_widget.dart';
 import '../widget/switch_widget.dart';
 import '../widget/welcome_text_widget.dart';
 
-class NewRouteScreen extends StatelessWidget {
+class NewRouteScreen extends StatefulWidget {
   const NewRouteScreen({super.key});
 
   @override
+  State<NewRouteScreen> createState() => _NewRouteScreenState();
+}
+
+class _NewRouteScreenState extends State<NewRouteScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       appBar: HomeAppbar(
+        key: _scaffoldKey,
         isWithBackArrow: false,
         language: true,
         leading: IconButton(
-          icon: const Icon(Icons.menu),
-          onPressed: () {},
+          icon: const Icon(Icons.menu), // The menu icon
+          onPressed: () {
+            HandleCashback.setCount('drawerCount', context);
+            _scaffoldKey.currentState?.openDrawer(); // Open the drawer
+          },
         ),
       ),
       body: const NewRouteBody(),

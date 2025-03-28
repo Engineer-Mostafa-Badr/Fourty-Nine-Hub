@@ -2,23 +2,38 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/utils/handle_cashback.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../routes/routes.dart';
 import '../../presentation/view/widget/trip_option_widget.dart';
 
-class RideModeScreen extends StatelessWidget {
+class RideModeScreen extends StatefulWidget {
   const RideModeScreen({super.key});
 
   @override
+  State<RideModeScreen> createState() => _RideModeScreenState();
+}
+
+class _RideModeScreenState extends State<RideModeScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return CustomScaffold(
+      key: _scaffoldKey,
       appBar: HomeAppbar(
         isWithBackArrow: false,
         language: true,
-        isMenu: true,
-        inNotifications: true,
+        leading: IconButton(
+          icon: const Icon(Icons.menu), // The menu icon
+          onPressed: () {
+            HandleCashback.setCount('drawerCount', context);
+            _scaffoldKey.currentState?.openDrawer(); // Open the drawer
+          },
+        ),
       ),
       body: RideModeBody(),
     );
@@ -35,12 +50,32 @@ class RideModeBody extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 20.h),
+          Row(
+            children: [
+              IconButton(
+                onPressed: () {
+                  context.pop();
+                },
+                icon: const Icon(
+                  Icons.arrow_back,
+                ),
+              ),
+              Text(
+                'Ride Mode',
+                style: TextStyle(
+                  fontSize: 35.sp,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+            ],
+          ),
           RideModeButton(
             onTap: () {
               context.push(Routes.runningAndPastTripsScreen);
             },
           ),
+          SizedBox(height: 20.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.start,

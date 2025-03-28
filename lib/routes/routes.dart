@@ -215,6 +215,7 @@ abstract class Routes {
   static const truckVehicleInformationScreen = '/TruckVehicleInformationScreen';
   static const truckMoreInfoScreen = '/TruckMoreInfoScreen';
   static const completeRegisterScreen = '/CompleteRegisterScreen';
+
   static const newTripJoinScreen = '/NewTripJoinScreen';
   static const captainShareScreen = '/CaptainShareScreen';
   static const captainShareInfoScreen = '/CaptainShareInfoScreen';
@@ -223,6 +224,7 @@ abstract class Routes {
   static const newRouteScreen = '/NewRouteScreen';
   static const rideModeScreen = '/RideModeScreen';
   static const runningAndPastTripsScreen = '/RunningAndPastTripsScreen';
+  static const captainRideDetails = '/CaptainRideDetails';
 }
 
 abstract class Paths {
@@ -428,6 +430,7 @@ abstract class Paths {
   static const truckVehicleInformationScreen = 'TruckVehicleInformationScreen';
   static const truckMoreInfoScreen = 'TruckMoreInfoScreen';
   static const completeRegisterScreen = 'CompleteRegisterScreen';
+
   static const newTripJoinScreen = 'NewTripJoinScreen';
   static const captainShareScreen = 'CaptainShareScreen';
   static const captainShareInfoScreen = 'CaptainShareInfoScreen';
@@ -436,4 +439,5 @@ abstract class Paths {
   static const newRouteScreen = 'NewRouteScreen';
   static const rideModeScreen = 'RideModeScreen';
   static const runningAndPastTripsScreen = 'RunningAndPastTripsScreen';
+  static const captainRideDetails = 'CaptainRideDetails';
 }

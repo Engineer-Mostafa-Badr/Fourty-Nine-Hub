@@ -267,4 +267,5 @@ abstract class Assets {
   static String car = 'assets/icons/car.png';
   static String pickMeImage = 'assets/icons/pickmeImage.png';
   static String addIcon = 'assets/icons/addIcon.svg';
+  static String carIcon = 'assets/icons/carIcon.svg';
 }
