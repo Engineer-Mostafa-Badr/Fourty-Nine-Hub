@@ -10,14 +10,14 @@ import '../../../../res/assets/assets.dart';
 import '../../../../routes/routes.dart';
 import '../../presentation/view/widget/trip_option_widget.dart';
 
-class RideModeScreen extends StatefulWidget {
-  const RideModeScreen({super.key});
+class NewRideModeScreen extends StatefulWidget {
+  const NewRideModeScreen({super.key});
 
   @override
-  State<RideModeScreen> createState() => _RideModeScreenState();
+  State<NewRideModeScreen> createState() => _NewRideModeScreenState();
 }
 
-class _RideModeScreenState extends State<RideModeScreen> {
+class _NewRideModeScreenState extends State<NewRideModeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -35,13 +35,13 @@ class _RideModeScreenState extends State<RideModeScreen> {
           },
         ),
       ),
-      body: RideModeBody(),
+      body: const NewRideModeBody(),
     );
   }
 }
 
-class RideModeBody extends StatelessWidget {
-  const RideModeBody({super.key});
+class NewRideModeBody extends StatelessWidget {
+  const NewRideModeBody({super.key});
 
   @override
   Widget build(BuildContext context) {

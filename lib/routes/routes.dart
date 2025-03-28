@@ -260,6 +260,7 @@ abstract class Routes {
 
   // Cashback
   static const CASHBACK = '/Cashback';
+  static const newRideModeScreen = '/NewRideModeScreen';
 }
 
 abstract class Paths {
@@ -321,7 +322,8 @@ abstract class Paths {
   static const ONETIMEDOCUMENTMESSAGEVIEW = 'OneTimeDocumentMessageView';
   static const FORWARDMESSAGESVIEW = 'ForwardMessagesView';
   static const CHATROOMCAMERAPICKER = 'CameraPicker';
-  static const truckPersonalInformationScreen = 'TruckPersonalInformationScreen';
+  static const truckPersonalInformationScreen =
+      'TruckPersonalInformationScreen';
   static const MEDIASLIDER = 'MediaSlider';
   static const REELS = 'Reels';
   static const MUSICREELS = 'MUSICREELS';
@@ -500,6 +502,7 @@ abstract class Paths {
   static const rideArrivedScreen = 'RideArrivedScreen';
   static const ratingDriverScreen = 'RatingDriverScreen';
   static const completeRideScreen = 'CompleteRideScreen';
+  static const newRideModeScreen = 'NewRideModeScreen';
 
   // Change Password
   static const CHANGEPASSWORD = 'ChangePassword';

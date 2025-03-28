@@ -370,6 +370,7 @@ import '../features/mazadat_feature/create_auction/presentation/pages/create_auc
 import '../features/new_trip_join/captainshare/screen/captain_share_info_screen.dart';
 import '../features/new_trip_join/captainshare/screen/captain_share_screen.dart';
 import '../features/new_trip_join/driver/screen/captain_ride_details.dart';
+import '../features/new_trip_join/driver/screen/ride_mode_screen.dart';
 import '../features/new_trip_join/driver/screen/running_and_past_trips_screen.dart';
 import '../features/new_trip_join/presentation/view/screen/new_route_screen.dart';
 import '../features/new_trip_join/presentation/view/screen/new_trip_join_screen.dart';
@@ -474,8 +475,7 @@ class AppPages {
                 name: Routes.onBoardingScreen,
                 builder: (context, state) => BlocProvider(
                   child: const OnBoardingScreen(),
-                  create: (context) =>
-                      serviceLocator<OnBoardingCubit>(),
+                  create: (context) => serviceLocator<OnBoardingCubit>(),
                 ),
               ),
               GoRoute(
@@ -3185,6 +3185,22 @@ class AppPages {
                       ),
                     ],
                     child: const CaptainRideDetails(),
+                  );
+                },
+              ),
+              GoRoute(
+                path: Paths.newRideModeScreen,
+                name: Routes.newRideModeScreen,
+                builder: (context, state) {
+                  return MultiBlocProvider(
+                    providers: [
+                      BlocProvider<DestGetLatAndLongCubit>(
+                        create: (context) => DestGetLatAndLongCubit(
+                            getLatLongFromAddressRemoteDataSource:
+                                serviceLocator()),
+                      ),
+                    ],
+                    child: const NewRideModeScreen(),
                   );
                 },
               ),
