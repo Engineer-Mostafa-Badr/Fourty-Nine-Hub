@@ -23,6 +23,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/register_ride
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/register_ride_special_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/request_trip_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/retrieve_client_latest_trip_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_socket_location_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/ride_register/ride_register_cubit.dart';
 import 'package:get_it/get_it.dart';
@@ -100,10 +101,13 @@ class RideServiceLocatorUpdated {
         MakeRequestTripUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<RecordingTripUseCase>(() =>
         RecordingTripUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<UpdateSocketLocationUseCase>(() =>
+        UpdateSocketLocationUseCase(serviceLocator()));
 
     // ---------------------------------- cubits ----------------------------------
 
-    serviceLocator.registerLazySingleton<RideCubit>(() => RideCubit(
+    serviceLocator.registerFactory<RideCubit>(() => RideCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
@@ -129,7 +133,9 @@ class RideServiceLocatorUpdated {
           serviceLocator(),
           serviceLocator(),
         ));
-    serviceLocator.registerLazySingleton<RideRegisterCubit>(() => RideRegisterCubit(
+    serviceLocator.registerFactory<RideRegisterCubit>(() => RideRegisterCubit(
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

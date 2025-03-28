@@ -1,21 +1,4 @@
-import 'package:fourtyninehub/features/RideFeature/domain/entities/activity_trip_entity.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/completed_trips_entity.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/cost_per_km_entity.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/expected_price_entity.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/get_location_from_address_entity.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_request_trip_entity.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/loading_info_entity.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/running_trips_entity.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
-
-import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_info_entity.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_picture_optional_entity.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_color_entity.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/sub_category_entity.dart';
-
-import '../../../../../core/error/failure.dart';
-import '../../../domain/entities/ride_category_entity.dart';
+part of 'ride_register_cubit.dart';
 
 enum RideRegisterStates {
   initState,

@@ -11,7 +11,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
-Widget closeWidget({required BuildContext context, required Function onAcceptSaveData}) {
+Widget closeWidget({required BuildContext context, required Function onAcceptSaveData, required Function closeRemoveData}) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
@@ -132,9 +132,7 @@ Widget closeWidget({required BuildContext context, required Function onAcceptSav
                           style: Styles.headerText(
                             color: AppColors.AUTH_CONTAINER_COLOR,
                           ),
-                          onPressed: () {
-                            context.push(Routes.welcomeRideRegister);
-                          },
+                          onPressed: closeRemoveData,
                           radius: 15,
                           backColor: AppColors.PRIMARY_COLOR,
                           color: Colors.white,

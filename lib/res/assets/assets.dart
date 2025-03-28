@@ -346,4 +346,8 @@ abstract class Assets {
   static String onBoarding10 = 'assets/onBoarding/onBoarding10.svg';
   static String onBoarding11 = 'assets/onBoarding/onBoarding11.svg';
   static String onBoarding12 = 'assets/onBoarding/onBoarding12.svg';
+
+
+  static const String arrowUp = 'assets/icons/arrow-up.svg';
+  static const String arrowDown = 'assets/icons/arrow-up.svg';
 }

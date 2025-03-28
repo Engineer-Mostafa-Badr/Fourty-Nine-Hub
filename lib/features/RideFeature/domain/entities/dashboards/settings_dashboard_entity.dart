@@ -1,7 +1,10 @@
 // driver_status.dart
+import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/setting_subcategory_model.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/setting_subcategory_entity.dart';
+
 class SettingsDashboardEntity {
   final bool isReady;
-  final List<String> categoryIds;
+  final List<SettingSubcategoryEntity> categoryIds;
   final String subscriptionType;
   final double pricingPerKm;
   final String city;
@@ -29,7 +32,9 @@ class SettingsDashboardEntity {
   factory SettingsDashboardEntity.fromJson(Map<String, dynamic> json) {
     return SettingsDashboardEntity(
       isReady: json['isReady'],
-      categoryIds: List<String>.from(json['categoryIds']),
+      categoryIds: (json['categoryIds'] as List)
+          .map((e) => SettingSubcategoryModel.fromJson(e))
+          .toList(),
       subscriptionType: json['subscriptionType'],
       pricingPerKm: json['pricingPerKm'].toDouble(),
       city: json['city'],

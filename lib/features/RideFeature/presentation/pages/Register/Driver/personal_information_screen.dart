@@ -9,7 +9,6 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/utils/hex_color_helper.dart';
 import 'package:fourtyninehub/core/widget/custom_switch_list_title.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/ride_register/ride_register_cubit.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/controllers/ride_register/ride_register_state.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/widgets/register_expansion_tile.dart';
 
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -40,7 +39,8 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
 
   @override
   void initState() {
-    context.read<RideRegisterCubit>().onSetSavedData(widget.params);
+    print("widget.params.subCategoriesId: ${widget.params.subCategoriesId}");
+    context.read<RideRegisterCubit>().loadRegisterData(context,widget.params);
     super.initState();
   }
 
@@ -48,11 +48,14 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<RideRegisterCubit, RideRegisterState>(builder: (context, state) {
       var cubit = context.read<RideRegisterCubit>();
+      print("state.city${state.city}");
+      print("state.city${state.selectedGov}");
+      print("state.selectedPlan${state.selectedPlan}");
       return PopScope(
         canPop: false,
         child: CustomScaffold(
           appBar: const HomeAppbar(),
-          body: Form(
+          body: cubit.loadingRegister==true?const Center(child: CircularProgressIndicator()):Form(
             key: context.read<RideRegisterCubit>().formKey,
             child: Column(
               children: [
@@ -68,7 +71,27 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                         spacing: 4,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          closeWidget(context:context,onAcceptSaveData: ()=>cubit.onSaveRegisterData(context)),
+                          closeWidget(context:context,onAcceptSaveData: () {
+                            if(widget.params.isShipping==true){
+                              cubit.onSaveRegisterLoaderData(context,widget.params.subCategoriesId);
+                            }else{
+                              if(widget.params.isSocket==false){
+                                cubit.onSaveRegisterNoSocketData(context,widget.params.subCategoriesId);
+                              }else{
+                                cubit.onSaveRegisterData(context,widget.params.subCategoriesId);
+                              }
+                            }
+                          }, closeRemoveData: (){
+                            if(widget.params.isShipping==true){
+                              cubit.onRemoveLoaderData(context);
+                            }else{
+                              if(widget.params.isSocket==false){
+                                cubit.onRemoveNoSocketData(context);
+                              }else{
+                                cubit.onRemoveDriverData(context);
+                              }
+                            }
+                          }),
                           Label(
                             text: LocaleKeys.personalInformation.localize,
                             style: Styles.headerText(
@@ -289,21 +312,21 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                             },
                           ),
                           if(state.registerType=='socket')...[const Sizer(),
-                          DefaultTextFormField(
-                            currentController: cubit.rideVehicleLicenseNumController,
-                            hint: context.isArabic ? "رقم ترخيص السيارة" : "Vehicle License Number",
-                            label: context.isArabic ? "رقم ترخيص السيارة" : "Vehicle License Number",
-                            fillColor: AppColors.GREYBG,
-                            borderColor: Colors.transparent,
-                            keyboardType: TextInputType.number,
-                            validator: (v) {
-                              if (v == null || v.isEmpty) {
-                                return LocaleKeys.required.localize;
-                              }
-                              return null;
-                            },
-                          ),
-                          const Sizer(),
+                          // DefaultTextFormField(
+                          //   currentController: cubit.rideVehicleLicenseNumController,
+                          //   hint: context.isArabic ? "رقم ترخيص السيارة" : "Vehicle License Number",
+                          //   label: context.isArabic ? "رقم ترخيص السيارة" : "Vehicle License Number",
+                          //   fillColor: AppColors.GREYBG,
+                          //   borderColor: Colors.transparent,
+                          //   keyboardType: TextInputType.number,
+                          //   validator: (v) {
+                          //     if (v == null || v.isEmpty) {
+                          //       return LocaleKeys.required.localize;
+                          //     }
+                          //     return null;
+                          //   },
+                          // ),
+                          // const Sizer(),
                           RegisterExpansionTile(
                             initialTitle: Label(
                                 text: (state.selectedPlan != null || (state.selectedPlan?.isNotEmpty ?? false)) ? state.selectedPlan == 'percentage' ? 'Percentage' : 'Subscribe Package' : ''),
@@ -355,12 +378,14 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                               cubit.onChangeAirCondition();
                             },
                           )],
-                          if(state.registerType=='socket'||state.isShipping==true)...[const Sizer(),RegisterExpansionTile(
+                          if(state.registerType=='socket'||state.isShipping==true)...[const Sizer(),
+
+                            RegisterExpansionTile(
                             title: Label(
-                              text: (state.selectedGov != null || (state.selectedGov?.isNotEmpty ?? false)) ? state.selectedGov ?? '' : LocaleKeys.favoriteCity.localize,
+                              text: (state.selectedGov != null && (state.selectedGov?.isNotEmpty ?? false)) ? state.selectedGov ?? '' : LocaleKeys.favoriteCity.localize,
                             ),
                             initialTitle: Label(
-                              text: (state.city != null ) ? context.isArabic? state.city?.nameAr ?? '' : state.city?.nameEn ?? '' : LocaleKeys.favoriteCity.localize,
+                              text: (state.selectedGov != null && (state.selectedGov?.isNotEmpty ?? false)) ? state.selectedGov??'' : LocaleKeys.favoriteCity.localize,
                             ),
                             onChange: (Widget selectedItem) {
                               cubit.onSelectGov((selectedItem as Label).text);
@@ -403,7 +428,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                       // const Sizer(),
                       InkWell(
                               onTap: () {
-                                state.isShipping==true?cubit.onLoadingRegister(context):state.registerType=='socket'?cubit.onRegister(context):cubit.onNoSocketRegister(context);
+                                state.isShipping==true?cubit.onLoadingRegister(context,widget.params.subCategoriesId[0],widget.params.isSocket,widget.params.isShipping):state.registerType=='socket'?cubit.onRegister(context,widget.params.subCategoriesId,widget.params.isSocket,widget.params.isShipping):cubit.onNoSocketRegister(context,widget.params.subCategoriesId[0],widget.params.isSocket,widget.params.isShipping);
                               },
                               child: Container(
                                 height: 44,

@@ -57,21 +57,14 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     // _country = CountryPickerUtils.getCountryByName('Egypt');
-    WidgetsBinding.instance.addPostFrameCallback((_) {
       final rideCubit = context.read<RideCubit>();
-      if (!rideCubit.isClosed) {
         rideCubit.initHome(context);
-        // rideCubit.retrieveClientLatestTrip();
-        rideCubit.fetchRideCategories(UserCubit.to.state.data?.id ?? "");
-        rideCubit.fetchShippingCategories(UserCubit.to.state.data?.id ?? "");
-        rideCubit.fetchRideGovernorates();
-      }
 
+    // rideCubit.emitDriverLocation(context);
       // Check if there's an active trip and show the modal if needed
       if (rideCubit.state.requestedTrip != null) {
         _showDriversOffersBottomSheet();
       }
-    });
   }
 
   void _showDriversOffersBottomSheet() async {
@@ -245,22 +238,26 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
     return BlocBuilder<RideCubit, RideState>(
       builder: (context,state) {
         var cubit = context.read<RideCubit>();
-        return Scaffold(
-          resizeToAvoidBottomInset: false,
-          body: cubit.loadingHomeData==true?const Center(child: CircularProgressIndicator()):Form(
-            key: _formKey,
-            child: SafeArea(
-              child: SharedScaffold(
-                mainCategoryId: 2,
-                body: NestedAppbar(
-                  scrollController: _scrollController,
-                  appBars: const [],
-                  body: Stack(
-                    children: [
-                      _buildTopImage(),
-                      state.requestedTrip == null ? _buildBottomSheet() : const SizedBox.shrink(),
-                      state.requestedTrip == null ? _carTruckBtn(loadingInfo: state.loaderInfo,driverInfo: state.driverInfo) : const SizedBox.shrink(),
-                    ],
+        return PopScope(
+          canPop: false,
+          onPopInvokedWithResult: (c,v)=>context.go(Routes.HOME),
+          child: Scaffold(
+            resizeToAvoidBottomInset: false,
+            body: cubit.loadingHomeData==true?const Center(child: CircularProgressIndicator()):Form(
+              key: _formKey,
+              child: SafeArea(
+                child: SharedScaffold(
+                  mainCategoryId: 2,
+                  body: NestedAppbar(
+                    scrollController: _scrollController,
+                    appBars: const [],
+                    body: Stack(
+                      children: [
+                        _buildTopImage(),
+                        state.requestedTrip == null ? _buildBottomSheet() : const SizedBox.shrink(),
+                        state.requestedTrip == null ? _carTruckBtn(loadingInfo: state.loaderInfo,driverInfo: state.driverInfo) : const SizedBox.shrink(),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -367,6 +364,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                           radius: 15,
                           label: LocaleKeys.ride.tr(),
                           onPressed: () {
+                            context.pop();
                             context.read<RideCubit>().onNavigateToWelcomeScreen(fromShipping: false, context: context);
                           },
                           backColor: AppColors.PRIMARY_COLOR,
@@ -375,6 +373,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                           radius: 15,
                           label: LocaleKeys.shipping.tr(),
                           onPressed: () {
+                            context.pop();
                             context.read<RideCubit>().onNavigateToWelcomeScreen(fromShipping: true, context: context);
                           },
                           backColor: AppColors.PRIMARY_COLOR,
@@ -418,14 +417,22 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
             Expanded(
               child: CustomRideButton(
                 onPressed: () {
-                  context.push(Routes.rideModeScreen, extra: RideModeParams(modeType: 'ride', isSocket: driverInfo?.driverType == 'socket' ? true : false));
-
                   if (driverInfo == null) {
                     context.read<RideCubit>().onNavigateToWelcomeScreen(fromShipping: false, context: context);
+                  }else{
+                    if (driverInfo.status == RegistrationStatus.pending.status) {
+                      return;
+                    } else if (driverInfo.status == RegistrationStatus.rejected.status) {
+                      context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: false, isSocket: driverInfo.driverType == 'socket' ? true : false));
+                    } else if (driverInfo.status == RegistrationStatus.initial.status) {
+                      context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: false, isSocket: driverInfo.driverType == 'socket' ? true : false));
+                    }else{
+                      context.push(Routes.rideModeScreen, extra: RideModeParams(modeType: 'ride', isSocket: driverInfo?.driverType == 'socket' ? true : false));
+                    }
                   }
                 },
                 onTap: () {
-                  context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: false, isSocket: driverInfo?.driverType == 'socket' ? true : false));
+                  // context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: false, isSocket: driverInfo?.driverType == 'socket' ? true : false));
                   if (driverInfo != null && driverInfo.status == RegistrationStatus.pending.status) {
                     return;
                   } else if (driverInfo != null && driverInfo.status == RegistrationStatus.rejected.status) {
@@ -454,6 +461,16 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                     context.read<RideCubit>().onNavigateToWelcomeScreen(fromShipping: true, context: context);
                   } else {
                     print("loadingInfo.toJson()${loadingInfo.toJson()}");
+                    if (loadingInfo.status == RegistrationStatus.pending.status) {
+                      return;
+                    } else if (loadingInfo.status == RegistrationStatus.rejected.status) {
+                      context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: true, isSocket: false));
+                    } else if (loadingInfo.status == RegistrationStatus.initial.status) {
+                      context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: true, isSocket: false));
+                    }else{
+                      context.push(Routes.rideModeScreen, extra: RideModeParams(modeType: 'ride', isSocket: driverInfo?.driverType == 'socket' ? true : false));
+                    }
+
                   }
                 },
                 onTap: () {
@@ -464,6 +481,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                     context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: true, isSocket: false));
                   } else if (loadingInfo != null && loadingInfo.status == RegistrationStatus.initial.status) {
                     context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: true, isSocket: false));
+                  }else{
+                    context.push(Routes.rideModeScreen, extra: RideModeParams(modeType: 'ride', isSocket: driverInfo?.driverType == 'socket' ? true : false));
                   }
                 },
                 isRed: (loadingInfo != null && (loadingInfo.status != RegistrationStatus.rejected.status)) ? true : false,

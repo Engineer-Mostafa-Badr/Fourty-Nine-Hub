@@ -496,6 +496,8 @@ class FourtyNineServiceLocator {
         serviceLocator(),
         serviceLocator(),
         serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
       ),
     );
 
