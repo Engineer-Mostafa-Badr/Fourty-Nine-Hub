@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
+import '../../../../../routes/routes.dart';
 
 class PickMeInfoScreen extends StatelessWidget {
   const PickMeInfoScreen({super.key});
@@ -12,18 +14,27 @@ class PickMeInfoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: ElevatedButton(
-        onPressed: () {},
-        style: ElevatedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
+      floatingActionButton: GestureDetector(
+        onTap: () {
+          context.push(Routes.pickMeInfoScreen);
+        },
+        child: Container(
+          width: 300.w,
+          height: 80.h,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15.0),
+            color: AppColors.PRIMARY_COLOR,
           ),
-          backgroundColor: Color(0xff0B1035),
-        ),
-        child: const Text(
-          "Create Ride! ",
-          style: TextStyle(color: Colors.white, fontSize: 14),
+          child: Center(
+            child: Text(
+              "Start Journey!",
+              style: TextStyle(
+                fontSize: 32.sp,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
         ),
       ),
       appBar: HomeAppbar(
@@ -62,9 +73,13 @@ class PickMeInfoInfoBody extends StatelessWidget {
           SvgPicture.asset(Assets.pickMeInfoIcon),
           SizedBox(height: 30.h),
           const RowTextWidget(text: "Don't have a car?!"),
+          SizedBox(height: 15.h),
           const RowTextWidget(text: 'Tired from the expensive price.'),
+          SizedBox(height: 15.h),
           const RowTextWidget(text: 'Advertise your daily repeat trip.'),
+          SizedBox(height: 15.h),
           const RowTextWidget(text: 'Wait for car owners to contact you.'),
+          SizedBox(height: 15.h),
           const RowTextWidget(text: 'Share your trip & save money.'),
         ],
       ),
@@ -74,35 +89,41 @@ class PickMeInfoInfoBody extends StatelessWidget {
 
 class RowTextWidget extends StatelessWidget {
   final String text;
-  const RowTextWidget({super.key, required this.text});
+  final double fontSize;
+
+  const RowTextWidget({
+    super.key,
+    required this.text,
+    this.fontSize = 32,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 8.h),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center, // توسيط كل العناصر
+      children: [
+        Flexible(
+          child: Icon(
             Icons.circle,
-            size: 15.r,
             color: Colors.black,
+            size: fontSize * 0.3, // حجم الأيقونة مناسب للنص
           ),
-          SizedBox(width: 8.w),
-          Flexible(
-            child: Text(
-              text,
-              textAlign: TextAlign.center, // توسيط النص على اليمين
-              style: const TextStyle(
-                fontSize: 18, // ضبط الحجم ليكون قريبًا من الصورة
-                fontWeight: FontWeight.w700,
-                color: AppColors.black,
-              ),
+        ),
+        SizedBox(width: 10.w),
+        Center(
+          // يضمن بقاء النص في المنتصف تمامًا
+          child: Text(
+            text,
+            textAlign:
+                TextAlign.center, // يجعل النص في المنتصف داخل الـ Expanded
+            style: TextStyle(
+              fontSize: fontSize.sp,
+              fontWeight: FontWeight.w700,
+              color: Colors.black,
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

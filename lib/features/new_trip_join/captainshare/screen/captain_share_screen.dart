@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
-import '../../../../../core/utils/handle_cashback.dart';
-import '../widget/captain_share_body.dart';
-import '../widget/route_button_widget.dart';
+import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
+import '../../../../core/utils/handle_cashback.dart';
+import '../../presentation/view/widget/captain_share_body.dart';
+import '../../presentation/view/widget/route_button_widget.dart';
 
 class CaptainShareScreen extends StatefulWidget {
   const CaptainShareScreen({super.key});

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class TabItemWidget extends StatelessWidget {
@@ -24,10 +25,11 @@ class TabItemWidget extends StatelessWidget {
         clipBehavior: Clip.none,
         children: [
           Container(
-            width: 90,
-            height: 50,
+            //   padding: EdgeInsets.symmetric(horizontal: 30.w),
+            width: 150.w,
+            height: 80.h,
             decoration: BoxDecoration(
-              color: isSelected ? Colors.red.shade300 : Colors.white,
+              color: isSelected ? Color(0XFFF88B92) : Colors.white,
               borderRadius: BorderRadius.circular(12),
               boxShadow: const [
                 BoxShadow(
@@ -41,7 +43,7 @@ class TabItemWidget extends StatelessWidget {
               style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
-                  color: isSelected ? Colors.white : Colors.black),
+                  color: isSelected ? Colors.black : const Color(0xff727272)),
             ),
           ),
           Positioned(top: -8, right: -8, child: SvgPicture.asset(icon)),

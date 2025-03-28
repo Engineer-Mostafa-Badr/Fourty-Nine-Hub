@@ -314,6 +314,13 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     context.push(Routes.newTripJoinScreen);
                                   },
                                 ),
+                                drawerRollWidget(
+                                  label: "Ride Mode",
+                                  image: Assets.loading,
+                                  onTap: () {
+                                    context.push(Routes.rideModeScreen);
+                                  },
+                                ),
                               ],
                             ),
                           ),

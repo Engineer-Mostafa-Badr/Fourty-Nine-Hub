@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../res/assets/assets.dart';
 import '../../../../../routes/routes.dart';
 
 class RouteButtonWidget extends StatelessWidget {
@@ -13,37 +16,52 @@ class RouteButtonWidget extends StatelessWidget {
     return Row(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 1),
-          child: ElevatedButton(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
+          padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 1),
+          child: GestureDetector(
+            onTap: () {
+              context.push(Routes.captainShareInfoScreen);
+            },
+            child: Container(
+              height: 50.h,
+              width: 70.w,
+              decoration: const BoxDecoration(
+                color: Color(0xff0B1035),
+                shape: BoxShape.circle,
               ),
-              backgroundColor: Color(0xff0B1035),
-            ),
-            child: const Text(
-              "+ Create Route",
-              style: TextStyle(color: Colors.white, fontSize: 14),
+              child: const Icon(
+                size: 19,
+                Icons.question_mark,
+                color: Colors.white,
+              ),
             ),
           ),
         ),
         const Spacer(),
         GestureDetector(
           onTap: () {
-            context.push(Routes.captainShareInfoScreen);
+            context.push(Routes.newRouteScreen);
           },
           child: Container(
-            height: 35,
-            width: 35,
+            width: 344.w,
+            height: 75.h,
             decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(15)),
               color: Color(0xff0B1035),
-              shape: BoxShape.circle,
             ),
-            child: const Icon(
-              Icons.question_mark,
-              color: Colors.white,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SvgPicture.asset(Assets.addIcon),
+                SizedBox(width: 10.w),
+                Text(
+                  "Create Route",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 28.sp,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ],
             ),
           ),
         ),

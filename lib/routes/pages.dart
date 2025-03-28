@@ -329,8 +329,11 @@ import '../features/mazadat_feature/auction_details/presentation/pages/Mazad_det
 import '../features/mazadat_feature/auction_list/presentation/cubit/auction_list_cubit.dart';
 import '../features/mazadat_feature/auction_list/presentation/pages/Mazadat_view.dart';
 import '../features/mazadat_feature/create_auction/presentation/pages/create_auction_view.dart';
-import '../features/new_trip_join/presentation/view/screen/captain_share_info_screen.dart';
-import '../features/new_trip_join/presentation/view/screen/captain_share_screen.dart';
+import '../features/new_trip_join/captainshare/screen/captain_share_info_screen.dart';
+import '../features/new_trip_join/captainshare/screen/captain_share_screen.dart';
+import '../features/new_trip_join/driver/screen/ride_mode_screen.dart';
+import '../features/new_trip_join/driver/screen/running_and_past_trips_screen.dart';
+import '../features/new_trip_join/presentation/view/screen/new_route_screen.dart';
 import '../features/new_trip_join/presentation/view/screen/new_trip_join_screen.dart';
 import '../features/new_trip_join/presentation/view/screen/pick_me_info_screen.dart';
 import '../features/new_trip_join/presentation/view/screen/trip_Join_info_screen.dart';
@@ -1575,13 +1578,14 @@ class AppPages {
                             ),
                         routes: [
                           GoRoute(
-                              path: Paths.FOODCART,
-                              name: Routes.FOODCART,
-                              builder: (context, state) => BlocProvider(
-                                    create: (context) => serviceLocator<
-                                        RestaurantDetailsCubit>(),
-                                    child: const FoodCartView(),
-                                  ))
+                            path: Paths.FOODCART,
+                            name: Routes.FOODCART,
+                            builder: (context, state) => BlocProvider(
+                              create: (context) =>
+                                  serviceLocator<RestaurantDetailsCubit>(),
+                              child: const FoodCartView(),
+                            ),
+                          )
                         ])
                   ]),
               GoRoute(
@@ -2812,6 +2816,51 @@ class AppPages {
                               serviceLocator()),
                     ),
                   ], child: const PickMeInfoScreen());
+                },
+              ),
+              GoRoute(
+                path: Paths.newRouteScreen,
+                name: Routes.newRouteScreen,
+                builder: (context, state) {
+                  return MultiBlocProvider(providers: [
+                    BlocProvider<DestGetLatAndLongCubit>(
+                      create: (context) => DestGetLatAndLongCubit(
+                          getLatLongFromAddressRemoteDataSource:
+                              serviceLocator()),
+                    ),
+                  ], child: const NewRouteScreen());
+                },
+              ),
+              GoRoute(
+                path: Paths.rideModeScreen,
+                name: Routes.rideModeScreen,
+                builder: (context, state) {
+                  return MultiBlocProvider(
+                    providers: [
+                      BlocProvider<DestGetLatAndLongCubit>(
+                        create: (context) => DestGetLatAndLongCubit(
+                            getLatLongFromAddressRemoteDataSource:
+                                serviceLocator()),
+                      ),
+                    ],
+                    child: const RideModeScreen(),
+                  );
+                },
+              ),
+              GoRoute(
+                path: Paths.runningAndPastTripsScreen,
+                name: Routes.runningAndPastTripsScreen,
+                builder: (context, state) {
+                  return MultiBlocProvider(
+                    providers: [
+                      BlocProvider<DestGetLatAndLongCubit>(
+                        create: (context) => DestGetLatAndLongCubit(
+                            getLatLongFromAddressRemoteDataSource:
+                                serviceLocator()),
+                      ),
+                    ],
+                    child: const RunningAndPastTripsScreen(),
+                  );
                 },
               ),
             ],

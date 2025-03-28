@@ -220,6 +220,9 @@ abstract class Routes {
   static const captainShareInfoScreen = '/CaptainShareInfoScreen';
   static const tripJoinInfoScreen = '/TripJoinInfoScreen';
   static const pickMeInfoScreen = '/PickMeInfoScreen';
+  static const newRouteScreen = '/NewRouteScreen';
+  static const rideModeScreen = '/RideModeScreen';
+  static const runningAndPastTripsScreen = '/RunningAndPastTripsScreen';
 }
 
 abstract class Paths {
@@ -430,4 +433,7 @@ abstract class Paths {
   static const captainShareInfoScreen = 'CaptainShareInfoScreen';
   static const tripJoinInfoScreen = 'TripJoinInfoScreen';
   static const pickMeInfoScreen = 'PickMeInfoScreen';
+  static const newRouteScreen = 'NewRouteScreen';
+  static const rideModeScreen = 'RideModeScreen';
+  static const runningAndPastTripsScreen = 'RunningAndPastTripsScreen';
 }

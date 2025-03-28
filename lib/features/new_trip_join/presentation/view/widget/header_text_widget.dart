@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HeaderTextWidget extends StatelessWidget {
   const HeaderTextWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Text(
+    return Text(
       "One Way - One Captain!",
       style: TextStyle(
-        color: Colors.red,
+        color: const Color(0xffFF0808),
         fontWeight: FontWeight.bold,
-        fontSize: 16,
+        fontSize: 30.sp,
       ),
     );
   }

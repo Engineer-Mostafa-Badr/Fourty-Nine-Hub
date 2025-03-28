@@ -12,6 +12,7 @@ class TripOptionWidget extends StatelessWidget {
   final Color? textColor;
   final Color? containerColor;
   final Color? borderColor;
+  final String? icon;
 
   const TripOptionWidget({
     Key? key,
@@ -22,6 +23,7 @@ class TripOptionWidget extends StatelessWidget {
     this.textColor,
     this.containerColor,
     this.borderColor,
+    this.icon,
   }) : super(key: key);
 
   @override
@@ -30,7 +32,7 @@ class TripOptionWidget extends StatelessWidget {
       onTap: onTap,
       child: Column(
         children: [
-          SizedBox(height: 30.h),
+          SizedBox(height: 8.h),
           Stack(
             alignment: Alignment.center,
             children: [
@@ -53,7 +55,9 @@ class TripOptionWidget extends StatelessWidget {
                         width: 5.w,
                       ),
                     ),
-                    child: Image.asset(Assets.pickMeIcon)),
+                    child: Image.asset(
+                      icon ?? Assets.pickMeIcon,
+                    )),
               ),
             ],
           ),

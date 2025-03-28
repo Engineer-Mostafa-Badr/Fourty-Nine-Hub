@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../routes/routes.dart';
@@ -11,14 +10,9 @@ class NewTripJoinBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: EdgeInsets.all(15.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: const EdgeInsets.only(left: 10),
-            child: Icon(Icons.arrow_back),
-          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -32,13 +26,15 @@ class NewTripJoinBody extends StatelessWidget {
               ),
               TripOptionWidget(
                 imagePath: Assets.locationTripIcon,
-                title: 'Pick me',
+                title: 'Trip Join',
+                icon: Assets.car,
                 onTap: () {},
               ),
               TripOptionWidget(
                 imagePath: Assets.locationTripIcon,
-                title: 'Trip Join',
+                title: 'Pick me',
                 onTap: () {},
+                icon: Assets.pickMeImage,
               ),
             ],
           ),

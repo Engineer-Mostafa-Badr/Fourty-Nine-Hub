@@ -1353,5 +1353,19 @@ abstract class LocaleKeys {
   static const rideDetails = 'rideDetails';
   static const options = 'options';
   static const noSmoker = 'noSmoker';
+
   static const thereIsNoTripsInThisList = 'thereIsNoTripsInThisList';
+  static const welcomeToCaptainShare = 'welcomeToCaptainShare';
+  static const lady = 'lady';
+  static const ladyDriver = 'ladyDriver';
+  static const exploreTripsThatAreActiveAtTheMoment =
+      'exploreTripsThatAreActiveAtTheMoment';
+  static const allYourBookingsInOnePlace = 'allYourBookingsInOnePlace';
+  static const joinAvailableTripsNearYouNow = 'joinAvailableTripsNearYouNow';
+  static const browseRecentlyCompletedTrips = 'browseRecentlyCompletedTrips';
+  static const oneWayOneCaptain = 'oneWayOneCaptain';
+  static const rideMode = 'rideMode';
+  static const pastTrips = 'pastTrips';
+  static const reportClient = 'reportClient';
+  static const goToFirstClient = 'goToFirstClient';
 }

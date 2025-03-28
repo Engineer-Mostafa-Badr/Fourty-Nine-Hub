@@ -1313,4 +1313,15 @@
   "options": "الخيارات",
   "noSmoker": "سائق غير مدخن",
   "thereIsNoTripsInThisList.": "لا يوجد رحلات في هذه القائمة.",
+  "welcomeToCaptainShare": "مرحباً بك في الكابتن شير",
+  "lady": "سيدة",
+  "ladyDriver": "سائقة",
+  "oneWayOneCaptain": "اتجاه واحد - كابتن واحد!",
+  "rideMode": "وضع الركوب",
+  "pastTrips": "الرحلات السابقة",
+  "joinAvailableTripsNearYouNow": "انضم إلى الرحلات المتاحة بالقرب منك الآن.",
+  "browseRecentlyCompletedTrips": "تصفح الرحلات المنجزة مؤخرًا.",
+  "openGoogleMap ": "افتح خرائط جوجل",
+  "reportClient": "تقرير العميل",
+  "goToFirstClient": "انتقل إلى العميل الأول"
 }

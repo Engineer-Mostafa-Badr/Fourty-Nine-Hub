@@ -257,4 +257,14 @@ abstract class Assets {
   static String captainInfoIcon = 'assets/icons/captainInfoIcon.svg';
   static String tripInfoIcon = 'assets/icons/tripInfoIcon.svg';
   static String pickMeInfoIcon = 'assets/icons/pickMeInfoIcon.svg';
+  static String visaIcon = 'assets/icons/visa.svg';
+  static String freeIcon = 'assets/icons/freeIcon.svg';
+  static String circleBlue = 'assets/icons/circleBlue.svg';
+  static String circleGreen = 'assets/icons/circleGreen.svg';
+  static String frameIcon = 'assets/icons/frameIcon.svg';
+  static String bookedWoman = 'assets/icons/bookedWoman.svg';
+  static String bookedMan = 'assets/icons/bookedMan.svg';
+  static String car = 'assets/icons/car.png';
+  static String pickMeImage = 'assets/icons/pickmeImage.png';
+  static String addIcon = 'assets/icons/addIcon.svg';
 }

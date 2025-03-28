@@ -1329,5 +1329,17 @@
   "carTruckRegister": "Car/Truck Register",
   "options": "Options",
   "noSmoker": "Non smoker Driver",
-  "thereIsNoTripsInThisList": "There is no trips in this list."
+  "thereIsNoTripsInThisList": "There is no trips in this list.",
+  "welcomeToCaptainShare": "Welcome to Captain Share!",
+  "lady": "Lady",
+  "ladyDriver": "Lady Driver",
+  "exploreTripsThatAreActiveAtTheMoment": "Explore trips that are active at the moment.",
+  "allYourBookingsInOnePlace": "All your bookings in one place!",
+  "joinAvailableTripsNearYouNow": " Join available trips near you now. ",
+  "browseRecentlyCompletedTrips": "Browse recently completed trips.",
+  "oneWayOneCaptain": "One Way - One Captain!",
+  "rideMode": "Ride Mode",
+  "pastTrips": "Past Trips",
+  "reportClient": "Report Client",
+  "goToFirstClient": "Go to first client"
 }
