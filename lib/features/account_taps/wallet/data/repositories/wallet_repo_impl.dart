@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/data/models/wallet/wallet_model.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/gift_competitions_entity.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet/wallet_history_entity.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet/wallet_subscription_entity.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/add_subscribe_use_case.dart';
@@ -8,6 +9,7 @@ import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_w
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/main_category_use_case.dart';
 
 import '../../../../../core/error/failure.dart';
+import '../../domain/entities/gift_and_competition_entity.dart';
 import '../../domain/entities/wallet/main_category_entity.dart';
 import '../../domain/repositories/wallet_repo.dart';
 import '../datasources/wallet_remote_datasource.dart';
@@ -54,5 +56,10 @@ class WalletRepoImpl implements WalletRepo {
   @override
   Future<Either<Failure, bool>> addSubscription(AddSubscriptionParams params) {
     return _remoteDataSource.addSubscription(params);
+  }
+
+  @override
+  Future<Either<Failure, GiftAndCompetitionEntity>> getGiftCompetitions() {
+    return _remoteDataSource.getGiftCompetitions();
   }
 }

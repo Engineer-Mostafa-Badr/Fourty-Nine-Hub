@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_static_maps_controller/google_static_maps_controller.dart';
+
 import '../../../../res/style/const.dart';
 
 class StaticMapWidget extends StatelessWidget {

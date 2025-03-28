@@ -10,6 +10,7 @@ import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/preload_cubit/preload_bloc.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/shared/tiktok_option_sheet.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
@@ -60,23 +61,23 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
           //               // color: Colors.red,
           //               child: IconButton(
           //                   onPressed: () {
-          //                     if (context.read<PreloadBloc>().state.controllers[
+          //                     if (context.read<ReelsCubit>().state.controllers[
           //                             context
-          //                                 .read<PreloadBloc>()
+          //                                 .read<ReelsCubit>()
           //                                 .state
           //                                 .focusedIndex] !=
           //                         null) {
           //                       context
-          //                           .read<PreloadBloc>()
+          //                           .read<ReelsCubit>()
           //                           .state
           //                           .controllers[context
-          //                               .read<PreloadBloc>()
+          //                               .read<ReelsCubit>()
           //                               .state
           //                               .focusedIndex]
           //                           ?.pause();
           //                     }
-          //                     context.read<PreloadBloc>().resetFocusedIndex(
-          //                         context.read<PreloadBloc>().state.focusedIndex);
+          //                     context.read<ReelsCubit>().resetFocusedIndex(
+          //                         context.read<ReelsCubit>().state.focusedIndex);
           //                     Navigator.pop(context);
           //                   },
           //                   icon: Icon(
@@ -104,17 +105,17 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                 AdInterstitialTop.loadIntersitialAd();
                 AdInterstitialTop.showInterstitialAd();
                 if (context
-                    .read<PreloadBloc>()
+                    .read<ReelsCubit>()
                     .state
                     .controllers[
-                        context.read<PreloadBloc>().state.focusedIndex]!
+                        context.read<ReelsCubit>().state.focusedIndex]!
                     .value
                     .isPlaying) {
                   context
-                      .read<PreloadBloc>()
+                      .read<ReelsCubit>()
                       .state
                       .controllers[
-                          context.read<PreloadBloc>().state.focusedIndex]
+                          context.read<ReelsCubit>().state.focusedIndex]
                       ?.pause();
                 }
                 if (context.isUserLoggedIn) {
@@ -144,17 +145,17 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
             children: [
               _buildTab(LocaleKeys.Spotlight.localize, 0, onTap: () {
                 if (context
-                    .read<PreloadBloc>()
+                    .read<ReelsCubit>()
                     .state
                     .controllers[
-                        context.read<PreloadBloc>().state.focusedIndex]!
+                        context.read<ReelsCubit>().state.focusedIndex]!
                     .value
                     .isPlaying) {
                   context
-                      .read<PreloadBloc>()
+                      .read<ReelsCubit>()
                       .state
                       .controllers[
-                          context.read<PreloadBloc>().state.focusedIndex]
+                          context.read<ReelsCubit>().state.focusedIndex]
                       ?.pause();
                 }
                 setState(() {
@@ -167,17 +168,17 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                 AdInterstitialTop.loadIntersitialAd();
                 AdInterstitialTop.showInterstitialAd();
                 if (context
-                    .read<PreloadBloc>()
+                    .read<ReelsCubit>()
                     .state
                     .controllers[
-                        context.read<PreloadBloc>().state.focusedIndex]!
+                        context.read<ReelsCubit>().state.focusedIndex]!
                     .value
                     .isPlaying) {
                   context
-                      .read<PreloadBloc>()
+                      .read<ReelsCubit>()
                       .state
                       .controllers[
-                          context.read<PreloadBloc>().state.focusedIndex]
+                          context.read<ReelsCubit>().state.focusedIndex]
                       ?.pause();
                 }
                 setState(() {
@@ -231,17 +232,17 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
               // Search Icon with custom SVG
               _buildSearchIcon(onTap: () {
                 if (context
-                    .read<PreloadBloc>()
+                    .read<ReelsCubit>()
                     .state
                     .controllers[
-                        context.read<PreloadBloc>().state.focusedIndex]!
+                        context.read<ReelsCubit>().state.focusedIndex]!
                     .value
                     .isPlaying) {
                   context
-                      .read<PreloadBloc>()
+                      .read<ReelsCubit>()
                       .state
                       .controllers[
-                          context.read<PreloadBloc>().state.focusedIndex]
+                          context.read<ReelsCubit>().state.focusedIndex]
                       ?.pause();
                 }
                 context.push(Routes.Tinder);

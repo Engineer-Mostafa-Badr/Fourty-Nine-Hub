@@ -6,26 +6,49 @@ import '../../../../core/utils/shared_pref.dart';
 part 'floating_navigator_state.dart';
 
 class FloatingNavigatorCubit extends Cubit<FloatingNavigatorState> {
-  FloatingNavigatorCubit() : super(UnActiveFloatNavigatorStatusState());
+  FloatingNavigatorCubit() : super(InitFloatNavigatorStatusState());
 
   static FloatingNavigatorCubit get(context) => BlocProvider.of(context);
 
-  bool floatingNavigatorStatus = true;
+  bool floatingNavigatorStatus = false;
+  bool floatingNavigatorEnable = true;
 
-  Future<void> activeFloatingNavigator() async {
-    floatingNavigatorStatus = false;
-    await CacheManager.isFloatingNavigatorOpen(floatingNavigatorStatus);
-    emit(ActiveFloatNavigatorStatusState());
-    print(floatingNavigatorStatus);
-    print('getFloatingNavigator saved to ${await CacheManager.getFloatingNavigator()}');
+
+  Future<void> getEnableFloatingNavigatorStatus() async {
+    floatingNavigatorEnable = await CacheManager.getFloatingNavigatorEnable();
+    emit(GetEnableFloatNavigatorState());
   }
 
-  Future<void> unActiveFloatingNavigator() async {
-    floatingNavigatorStatus = true;
-    await CacheManager.isFloatingNavigatorOpen(floatingNavigatorStatus);
-    emit(UnActiveFloatNavigatorStatusState());
-    print(floatingNavigatorStatus);
-    print('getFloatingNavigator saved to ${await CacheManager.getFloatingNavigator()}');
+  Future<void> getFloatingNavigatorStatus() async {
+    floatingNavigatorStatus = await CacheManager.getFloatingNavigator();
+    emit(GetFloatNavigatorStatusState());
   }
 
+  Future<void> changeFloatingNavigator({bool? forceValue}) async {
+    floatingNavigatorStatus = !floatingNavigatorStatus;
+    await CacheManager.isFloatingNavigatorOpen(floatingNavigatorStatus);
+    if (state is ActiveFloatNavigatorStatusState) {
+      emit(UnActiveFloatNavigatorStatusState());
+    } else {
+      emit(ActiveFloatNavigatorStatusState());
+    }
+    print(floatingNavigatorStatus);
+    print(
+        'getFloatingNavigator saved to ${await CacheManager
+            .getFloatingNavigator()}');
+  }
+
+  Future<void> changeFloatingNavigatorEnable({bool? forceValue}) async {
+    floatingNavigatorEnable = !floatingNavigatorEnable;
+    await CacheManager.isFloatingNavigatorEnabledOpen(floatingNavigatorEnable);
+    if (state is EnableFloatNavigatorState) {
+      emit(DisAbleFloatNavigatorState());
+    } else {
+      emit(EnableFloatNavigatorState());
+    }
+    print(floatingNavigatorEnable);
+    print(
+        'getFloatingNavigator saved to ${await CacheManager
+            .getFloatingNavigatorEnable()}');
+  }
 }

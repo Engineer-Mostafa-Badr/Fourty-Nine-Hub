@@ -142,8 +142,6 @@ class MyAdsTripJoin extends StatelessWidget {
                                 .showSubscriptionPlans(
                               wallets: [
                                 WalletTypes.mainWallet,
-                                WalletTypes.giftWallet,
-                                WalletTypes.balance,
                               ],
                               subCategoryId: tripJoinCardEntity.categoryId.id,
                               title: LocaleKeys.tripJoinAds.localize,

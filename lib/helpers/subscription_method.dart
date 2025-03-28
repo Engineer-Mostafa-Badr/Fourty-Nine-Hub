@@ -6,12 +6,12 @@ class SubscriptionMethod {
   subscribe({
     required String subscribeId,
     required String title,
+    bool? showRegular,
   }) {
     serviceLocator<SubscriptionController>().showSubscriptionPlans(
+      showRegular: showRegular,
       wallets: [
         WalletTypes.mainWallet,
-        WalletTypes.giftWallet,
-        WalletTypes.balance,
       ],
       subCategoryId: subscribeId,
       title: title,

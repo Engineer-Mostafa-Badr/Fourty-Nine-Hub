@@ -4,8 +4,6 @@ import 'package:fourtyninehub/features/social_media/live_streaming/presentation/
 import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/controller/stream_state.dart';
 
-import '../../../../../core/widget/custom_scaffold.dart';
-
 class VideoStreamTabBar extends StatefulWidget {
   const VideoStreamTabBar({super.key});
 
@@ -43,7 +41,7 @@ class _VideoStreamTabBarState extends State<VideoStreamTabBar> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
+    return Scaffold(
       body: BlocBuilder<StreamCubit, StreamState>(
         builder: (context, state) {
           final cubit = context.read<StreamCubit>();

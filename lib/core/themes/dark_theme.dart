@@ -5,11 +5,42 @@ import '../../res/style/app_colors.dart';
 import '../../res/style/styles.dart';
 
 ThemeData get darkTheme => ThemeData(
+      useMaterial3: true,
       brightness: Brightness.dark,
       primaryColor: AppColors.AUTH_CONTAINER_COLOR,
       scaffoldBackgroundColor: AppColors.QUANTITY_COLOR,
-
-      appBarTheme: const AppBarTheme(
+      // timePickerTheme: TimePickerThemeData(
+      //   backgroundColor: AppColors.QUANTITY_COLOR,
+      //   hourMinuteColor: AppColors.AUTH_CONTAINER_COLOR,
+      // ),
+  datePickerTheme: DatePickerThemeData(
+    headerBackgroundColor: AppColors.PRIMARY_COLOR,
+    headerForegroundColor: AppColors.AUTH_CONTAINER_COLOR,
+    backgroundColor: AppColors.QUANTITY_COLOR,
+    dayForegroundColor: WidgetStateProperty.resolveWith((states) {
+      if (states.contains(WidgetState.selected)) {
+        return AppColors.AUTH_CONTAINER_COLOR; // Text color when selected
+      }
+      return AppColors.AUTH_CONTAINER_COLOR; // Default text color
+    }),
+    dayBackgroundColor: WidgetStateProperty.resolveWith((states) {
+      if (states.contains(WidgetState.selected)) {
+        return AppColors.PRIMARY_COLOR; // Background color when selected
+      }
+      return Colors.transparent; // Default background
+    }),
+    cancelButtonStyle: ButtonStyle(
+      foregroundColor: WidgetStateProperty.resolveWith(
+            (states) => AppColors.AUTH_CONTAINER_COLOR,
+      ),
+    ),
+    confirmButtonStyle: ButtonStyle(
+      foregroundColor: WidgetStateProperty.resolveWith(
+            (states) => AppColors.AUTH_CONTAINER_COLOR,
+      ),
+    ),
+  ),
+  appBarTheme: const AppBarTheme(
         color: AppColors.QUANTITY_COLOR,
         iconTheme: IconThemeData(
           color: AppColors.AUTH_CONTAINER_COLOR,

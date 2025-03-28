@@ -18,6 +18,7 @@ class RideMethodHelper {
     response.fold(
           (l) {},
           (r) async {
+        print("rtttttttttt$r");
         onSuccess(r);
       },
     );
@@ -37,35 +38,52 @@ class RideMethodHelper {
     return bytes.length;
   }
 
-  Future<void> sendBinaryFileData({
+  Future<bool> sendBinaryFileData({
     required XFile file,
     required String signedUrl,
   }) async {
     log(signedUrl, name: "signedUrlsignedUrl");
     Uint8List image = await file.readAsBytes();
-
-    Options options = Options(contentType: file.mimeType, headers: {
+    print("objectadsad${image.length}");
+    Options options = Options(headers: {
       'Accept': "*/*",
-      'Content-Type': 'application/octet-stream',
-      'Content-Length': image.length,
+      'Content-Type': 'application/octet-stream','Content-Length': image.length,
       'Connection': 'keep-alive',
       'User-Agent': 'ClinicPlush',
     });
 
     var response = await Dio().put(signedUrl,
-        data: Stream.fromIterable(image.map((e) => [e])), options: options);
-    log(response.data.toString(), name: "uploadImage");
-    log(response.statusCode.toString(), name: "uploadImage");
+        data: Stream.value(image), options: options);
+    print( "response123456 ${response.statusCode}");
+
+    return response.statusCode == 200;
   }
 
-  successUploadImage({Map<String, dynamic>? data, required String url}) async {
-    await serviceLocator<ApiConsumer>().put(url,data: data);
+  Future<bool> successUploadImage({Map<String, dynamic>? data, required String url}) async {
+    var response = await serviceLocator<ApiConsumer>().put(url,data: data);
+    print("reessponse$response");
+    bool isSuccess = false;
+    response.fold(
+          (l) {
+        print("rtttttttttt11$l");
+
+      },
+          (r) async {
+        print("rtttttttttt11$r");
+        isSuccess= r['data']!=null||r['message']=="success";
+      },
+    );
+    print("isSuccess$isSuccess");
+    return isSuccess;
   }
+
 
   uploadDriverId(
       {required XFile idImageInFront,
       required XFile idImageInBehind,
-      required String idExpiryDate}) async {
+      required String idExpiryDate,
+  required Function(bool isSuccess) onSuccessUploaded
+      }) async {
     getSignUrl(
       data: {
         "expireDate": idExpiryDate,
@@ -80,20 +98,27 @@ class RideMethodHelper {
       },
       url: "${EndPoints.developmentBaseUrl}/ride/info/id",
       onSuccess: (data) async {
+        print("data['data']['idBehindData']['signedUrl']${data['data']['idBehindData']['signedUrl']}");
         await sendBinaryFileData(
-            file: XFile(idImageInFront.path),
+            file: XFile(idImageInBehind.path),
             signedUrl: data['data']['idBehindData']['signedUrl'])
             .then(
               (value) async {
+            print("data['data']['idFrontData']['signedUrl']${data['data']['idFrontData']['signedUrl']}");
             await sendBinaryFileData(
-                file: XFile(idImageInBehind.path),
+                file: XFile(idImageInFront.path),
                 signedUrl: data['data']['idFrontData']['signedUrl'])
                 .then(
                   (value) async {
-                await successUploadImage(data: {
-                  "frontMediaId": data['data']['idFrontData']['mediaId'],
-                  "behindMediaId": data['data']['idBehindData']['mediaId']
-                }, url: "${EndPoints.developmentBaseUrl}/ride/info/success-upload");
+                if(value){
+                  bool response = await successUploadImage(data: {
+                    "frontMediaId": data['data']['idFrontData']['mediaId'],
+                    "behindMediaId": data['data']['idBehindData']['mediaId']
+                  }, url: "${EndPoints.developmentBaseUrl}/ride/info/success-upload");
+                  onSuccessUploaded(response);
+                }else{
+                  onSuccessUploaded(false);
+                }
               },
             );
           },
@@ -104,6 +129,7 @@ class RideMethodHelper {
 
   uploadDriverImage({
     required XFile driverImage,
+    required Function(bool isSuccess) onSuccessUploaded
   }) async {
     getSignUrl(
       data: {
@@ -117,10 +143,11 @@ class RideMethodHelper {
         await sendBinaryFileData(
             file: XFile(driverImage.path),
             signedUrl: data['data']['undefinedData']['signedUrl']);
-        await successUploadImage(data: {
+        bool response = await successUploadImage(data: {
           "mediaId": data['data']['undefinedData']['mediaId'],
           "type": "Ride" // Loading or Ride
         }, url: "${EndPoints.developmentBaseUrl}/ride/info/success-driver-picture");
+        onSuccessUploaded(response);
       },
     );
   }
@@ -128,7 +155,9 @@ class RideMethodHelper {
   uploadDriverLicense(
       {required XFile drivingImageInFront,
         required XFile drivingImageBehind,
-        required String drivingExpiryDate}
+        required String drivingExpiryDate,
+        required Function(bool isSuccess) onSuccessUploaded
+      }
       ) async {
     getSignUrl(
       data: {
@@ -139,7 +168,7 @@ class RideMethodHelper {
         },
         "drivingLicenseBehind": {
           "type": await getFileExtension((File(drivingImageBehind.path))),
-          "size": await getFileSize(File(drivingImageInFront.path))
+          "size": await getFileSize(File(drivingImageBehind.path))
         }
       },
       url: "${EndPoints.developmentBaseUrl}/ride/info/driving-license",
@@ -155,12 +184,17 @@ class RideMethodHelper {
                 ['signedUrl'])
                 .then(
                   (value) async {
-                await successUploadImage(data: {
-                  "frontMediaId": data['data']['drivingLicenseFrontData']
-                  ['mediaId'],
-                  "behindMediaId": data['data']['drivingLicenseBehindData']
-                  ['mediaId']
-                }, url: "${EndPoints.developmentBaseUrl}/ride/info/success-upload");
+                    if(value){
+                      bool response = await successUploadImage(data: {
+                        "frontMediaId": data['data']['drivingLicenseFrontData']
+                        ['mediaId'],
+                        "behindMediaId": data['data']['drivingLicenseBehindData']
+                        ['mediaId']
+                      }, url: "${EndPoints.developmentBaseUrl}/ride/info/success-upload");
+                      onSuccessUploaded(response);
+                    }else{
+                      onSuccessUploaded(false);
+                    }
               },
             );
           },
@@ -171,6 +205,7 @@ class RideMethodHelper {
 
   confirmIdentity({
     required XFile verifyUserImage,
+    required Function(bool isSuccess) onSuccessUploaded
   }) async {
     getSignUrl(
       data: {
@@ -186,9 +221,10 @@ class RideMethodHelper {
         await sendBinaryFileData(
             file: XFile(File(verifyUserImage.path).path),
             signedUrl: data['data']['confirmIdentityData']['signedUrl']);
-        await successUploadImage(
+        bool response = await successUploadImage(
             url:
             "${EndPoints.developmentBaseUrl}/ride/info/documents/${data['data']['confirmIdentityData']['mediaId']}");
+        onSuccessUploaded(response);
       },
     );
   }
@@ -196,7 +232,8 @@ class RideMethodHelper {
   uploadCarLicense({
     required XFile carLicenseFrontImage,
     required XFile carLicenseBehindImage,
-    required String licenseExpiryDate
+    required String licenseExpiryDate,
+    required Function(bool isSuccess) onSuccessUploaded
 }) async {
     getSignUrl(
       data: {
@@ -223,12 +260,18 @@ class RideMethodHelper {
                 ['signedUrl'])
                 .then(
                   (value) async {
-                await successUploadImage(data: {
-                  "frontMediaId": data['data']['carLicenseFrontData']
-                  ['mediaId'],
-                  "behindMediaId": data['data']['carLicenseBehindData']
-                  ['mediaId']
-                }, url: "${EndPoints.developmentBaseUrl}/ride/info/success-upload");
+                    if(value){
+                      bool response = await successUploadImage(data: {
+                        "frontMediaId": data['data']['carLicenseFrontData']
+                        ['mediaId'],
+                        "behindMediaId": data['data']['carLicenseBehindData']
+                        ['mediaId']
+                      }, url: "${EndPoints.developmentBaseUrl}/ride/info/success-upload");
+                      onSuccessUploaded(response);
+                    }else{
+                      onSuccessUploaded(false);
+                    }
+
               },
             );
           },
@@ -240,6 +283,7 @@ class RideMethodHelper {
 
   uploadCarImage({
     required XFile carImage,
+    required Function(bool isSuccess) onSuccessUploaded
 }) async {
     getSignUrl(
       data: {
@@ -255,11 +299,22 @@ class RideMethodHelper {
       onSuccess: (data) async {
         await sendBinaryFileData(
             file: XFile(carImage.path),
-            signedUrl: data['data'][0]['signedUrl']);
-        await successUploadImage(
-          data: {"mediaId": data['data'][0]['mediaId']},
-          url: "${EndPoints.developmentBaseUrl}/ride/info/success-car-images",
-        );
+            signedUrl: data['data'][0]['signedUrl']).then((value) async {
+              if(value){
+                log('uploadCarImageSuccessAAA $value');
+                bool response = await successUploadImage(
+                  data: {"mediaId": data['data'][0]['mediaId']},
+                  url: "${EndPoints.developmentBaseUrl}/ride/info/success-car-images",
+                );
+                log('uploadCarImageSuccess $response');
+                onSuccessUploaded(response);
+              }else{
+                log('uploadCarImageSuccessBBB $value');
+                onSuccessUploaded(false);
+              }
+
+        });
+
         log("criminalRecordData");
       },
     );
@@ -267,7 +322,8 @@ class RideMethodHelper {
 
   uploadDrugAnalysis({
     required XFile dragAnalysis,
-    required String dragAnalysisDate
+    required String dragAnalysisDate,
+    required Function(bool isSuccess) onSuccessUploaded
   }) async {
     getSignUrl(
       data: {
@@ -283,9 +339,10 @@ class RideMethodHelper {
         await sendBinaryFileData(
             file: XFile(dragAnalysis.path),
             signedUrl: data['data']['drugAnalysisData']['signedUrl']);
-        await successUploadImage(
+        bool response = await successUploadImage(
             url:
             "${EndPoints.developmentBaseUrl}/ride/info/documents/${data['data']['drugAnalysisData']['mediaId']}");
+        onSuccessUploaded(response);
         log("drugAnalysisData");
       },
     );
@@ -293,7 +350,8 @@ class RideMethodHelper {
 
   uploadTechnicalExamination({
     required XFile technicalExaminationImage,
-    required String technicalExaminationDate
+    required String technicalExaminationDate,
+    required Function(bool isSuccess) onSuccessUploaded
   }) async {
     getSignUrl(
       data: {
@@ -309,17 +367,20 @@ class RideMethodHelper {
         await sendBinaryFileData(
             file: XFile(technicalExaminationImage.path),
             signedUrl: data['data']['technicalExaminationData']['signedUrl']);
-        await successUploadImage(
+        bool response = await successUploadImage(
             url:
             "${EndPoints.developmentBaseUrl}/ride/info/documents/${data['data']['technicalExaminationData']['mediaId']}");
         log("technicalExaminationData");
+        onSuccessUploaded(response);
       },
     );
   }
 
   uploadCriminalRecord({
     required XFile criminalRecordImage,
-    required String criminalRecordDate
+    required String criminalRecordDate,
+    required Function(bool isSuccess) onSuccessUploaded
+
   }) async {
     getSignUrl(
       data: {
@@ -335,10 +396,11 @@ class RideMethodHelper {
         await sendBinaryFileData(
             file: XFile(criminalRecordImage.path),
             signedUrl: data['data']['criminalRecordData']['signedUrl']);
-        await successUploadImage(
+        bool response = await successUploadImage(
             url:
             "${EndPoints.developmentBaseUrl}/ride/info/documents/${data['data']['criminalRecordData']['mediaId']}");
         log("criminalRecordData");
+        onSuccessUploaded(response);
       },
     );
   }

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -53,10 +52,10 @@ class _FacebookBodyState extends State<FacebookBody> with TickerProviderStateMix
                       mainAxisAlignment: MainAxisAlignment.center,
                       children:[
                         SvgPicture.asset(Assets.home,width: 18,height: 18,),
-                        SizedBox(width: 10),
-                        Text(LocaleKeys.home.localize,style:TextStyle(
+                        const SizedBox(width: 10),
+                        Text(LocaleKeys.home.localize,style:const TextStyle(
                             color: Colors.black,
-                            fontSize: 16,
+                            fontSize: 12,
                             fontWeight:FontWeight.w700
                         ))
                       ]
@@ -70,10 +69,10 @@ class _FacebookBodyState extends State<FacebookBody> with TickerProviderStateMix
                       mainAxisAlignment: MainAxisAlignment.center,
                       children:[
                         SvgPicture.asset(Assets.people,width: 18,height: 18,),
-                        SizedBox(width: 10),
-                        Text(LocaleKeys.people.localize,style:TextStyle(
+                        const SizedBox(width: 10),
+                        Text(LocaleKeys.people.localize,style:const TextStyle(
                             color: Colors.black,
-                            fontSize: 16,
+                            fontSize: 12,
                             fontWeight:FontWeight.w700
                         ))
                       ]
@@ -87,12 +86,12 @@ class _FacebookBodyState extends State<FacebookBody> with TickerProviderStateMix
                       mainAxisAlignment: MainAxisAlignment.center,
                       children:[
                         SvgPicture.asset(Assets.profile,width: 18,height: 18,),
-                        SizedBox(width: 10),
-                        Text(LocaleKeys.profile.localize,style:TextStyle(
+                        const SizedBox(width: 10),
+                        Text(LocaleKeys.profile.localize,style:const TextStyle(
                             color: Colors.black,
-                            fontSize: 16,
+                            fontSize: 12,
                             fontWeight:FontWeight.w700
-                        ))
+                        ),overflow: TextOverflow.ellipsis,)
                       ]
                   ),
                   // text: LocaleKeys.profile.localize,
@@ -101,7 +100,7 @@ class _FacebookBodyState extends State<FacebookBody> with TickerProviderStateMix
           Expanded(child: TabBarView(
               controller: tabController,
               children: [
-                FaceBookView(),
+                const FaceBookView(),
                 Container(),
                 Container(),
               ]))

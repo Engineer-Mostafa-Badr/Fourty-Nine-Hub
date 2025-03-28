@@ -10,6 +10,7 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 
 import '../../../../res/style/app_colors.dart';
 
+// ignore: must_be_immutable
 class ActivityTripScreen extends StatelessWidget {
    ActivityTripScreen({super.key});
 
@@ -76,72 +77,72 @@ class ActivityTripScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         // crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Label(text: LocaleKeys.upcoming.localize,
-            style: const TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 16,
-            ),
-          ),
-          const SizedBox(height: 16,),
-          Container(
-            height: 116,
-            decoration: BoxDecoration(
-              color: AppColors.whiteColor,
-              borderRadius: BorderRadius.circular(15),
-              border: Border.all(
-                width: 1,
-                color: AppColors.cF7F7F7,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.black.withOpacity(0.25),
-                  offset: const Offset(0, 4),
-                  blurRadius: 4,
-                ),
-              ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(child:  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Label(
-                        text: LocaleKeys.youHaveNoUpcomingTrips.localize,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 20,
-                        ),
-                        maxLines: 3,
-                      ),
-                      const SizedBox(height: 4,),
-                      Label(
-                        text: LocaleKeys.reserveYourRide.localize,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
-                  ),),
-                  Expanded(child:  Align(
-                    alignment: Alignment.centerRight,
-                    child: Image.asset(
-                      Assets.greyCar,
-                      width: 120, // Adjust width as needed
-                      height: 80, // Adjust height as needed
-                      fit: BoxFit.contain, // Ensures proper fitting
-                    ),
-                  ),),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: 24,),
+          // Label(text: LocaleKeys.upcoming.localize,
+          //   style: const TextStyle(
+          //     fontWeight: FontWeight.w600,
+          //     fontSize: 16,
+          //   ),
+          // ),
+          // const SizedBox(height: 16,),
+          // Container(
+          //   height: 116,
+          //   decoration: BoxDecoration(
+          //     color: AppColors.whiteColor,
+          //     borderRadius: BorderRadius.circular(15),
+          //     border: Border.all(
+          //       width: 1,
+          //       color: AppColors.cF7F7F7,
+          //     ),
+          //     boxShadow: [
+          //       BoxShadow(
+          //         color: AppColors.black.withOpacity(0.25),
+          //         offset: const Offset(0, 4),
+          //         blurRadius: 4,
+          //       ),
+          //     ],
+          //   ),
+          //   child: Padding(
+          //     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+          //     child: Row(
+          //       crossAxisAlignment: CrossAxisAlignment.center,
+          //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //       children: [
+          //         Expanded(child:  Column(
+          //           crossAxisAlignment: CrossAxisAlignment.start,
+          //           mainAxisAlignment: MainAxisAlignment.center,
+          //           children: [
+          //             Label(
+          //               text: LocaleKeys.youHaveNoUpcomingTrips.localize,
+          //               style: const TextStyle(
+          //                 fontWeight: FontWeight.w600,
+          //                 fontSize: 20,
+          //               ),
+          //               maxLines: 3,
+          //             ),
+          //             const SizedBox(height: 4,),
+          //             Label(
+          //               text: LocaleKeys.reserveYourRide.localize,
+          //               style: const TextStyle(
+          //                 fontWeight: FontWeight.w600,
+          //                 fontSize: 16,
+          //               ),
+          //             ),
+          //           ],
+          //         ),),
+          //         Expanded(child:  Align(
+          //           alignment: Alignment.centerRight,
+          //           child: Image.asset(
+          //             Assets.greyCar,
+          //             width: 120, // Adjust width as needed
+          //             height: 80, // Adjust height as needed
+          //             fit: BoxFit.contain, // Ensures proper fitting
+          //           ),
+          //         ),),
+          //       ],
+          //     ),
+          //   ),
+          // ),
+          // const SizedBox(height: 24,),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -151,82 +152,82 @@ class ActivityTripScreen extends StatelessWidget {
                     fontSize: 20
                 ),
               ),
-              Container(
-                height: 32,
-                width: 32,
-                decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColors.cF3F3F3
-                ),
-                child: SvgPicture.asset(Assets.filter,
-                  fit: BoxFit.scaleDown,
-                ),
-              ),
+              // Container(
+              //   height: 32,
+              //   width: 32,
+              //   decoration: const BoxDecoration(
+              //       shape: BoxShape.circle,
+              //       color: AppColors.cF3F3F3
+              //   ),
+              //   child: SvgPicture.asset(Assets.filter,
+              //     fit: BoxFit.scaleDown,
+              //   ),
+              // ),
             ],
           ),
-          const SizedBox(height: 16,),
+          // const SizedBox(height: 16,),
 
-          Container(
-            // height: 116,
-            decoration: BoxDecoration(
-              color: AppColors.whiteColor,
-              borderRadius: BorderRadius.circular(15),
-              border: Border.all(
-                width: 1,
-                color: AppColors.cF7F7F7,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.black.withOpacity(0.25),
-                  offset: const Offset(0, 4),
-                  blurRadius: 4,
-                ),
-              ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-              child: Column(
-                spacing: 2,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  /// Image takes full width
-                  SizedBox(
-                    width: double.infinity,
-                    child: Image.asset(
-                      Assets.map2,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  const Label(
-                    text: "142 Street 53",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 18,
-                    ),
-                  ),
-                  const Label(
-                    text: "Feb 13 - 12:41 PM",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w300,
-                      fontSize: 14,
-                    ),
-                  ),
-                  const Label(
-                    text: "150 EGP",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14,
-                    ),
-                  ),
-                  const SizedBox(height: 6,),
-                  const Align(
-                    alignment: Alignment.centerLeft,
-                    child: RebookWidget(),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          // Container(
+          //   // height: 116,
+          //   decoration: BoxDecoration(
+          //     color: AppColors.whiteColor,
+          //     borderRadius: BorderRadius.circular(15),
+          //     border: Border.all(
+          //       width: 1,
+          //       color: AppColors.cF7F7F7,
+          //     ),
+          //     boxShadow: [
+          //       BoxShadow(
+          //         color: AppColors.black.withOpacity(0.25),
+          //         offset: const Offset(0, 4),
+          //         blurRadius: 4,
+          //       ),
+          //     ],
+          //   ),
+          //   child: Padding(
+          //     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+          //     child: Column(
+          //       spacing: 2,
+          //       crossAxisAlignment: CrossAxisAlignment.start,
+          //       children: [
+          //         /// Image takes full width
+          //         SizedBox(
+          //           width: double.infinity,
+          //           child: Image.asset(
+          //             Assets.map2,
+          //             fit: BoxFit.cover,
+          //           ),
+          //         ),
+          //         const Label(
+          //           text: "142 Street 53",
+          //           style: TextStyle(
+          //             fontWeight: FontWeight.w600,
+          //             fontSize: 18,
+          //           ),
+          //         ),
+          //         const Label(
+          //           text: "Feb 13 - 12:41 PM",
+          //           style: TextStyle(
+          //             fontWeight: FontWeight.w300,
+          //             fontSize: 14,
+          //           ),
+          //         ),
+          //         const Label(
+          //           text: "150 EGP",
+          //           style: TextStyle(
+          //             fontWeight: FontWeight.w600,
+          //             fontSize: 14,
+          //           ),
+          //         ),
+          //         const SizedBox(height: 6,),
+          //         const Align(
+          //           alignment: Alignment.centerLeft,
+          //           child: RebookWidget(),
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
           ListView.builder(
               shrinkWrap: true,
               itemCount: images.length,

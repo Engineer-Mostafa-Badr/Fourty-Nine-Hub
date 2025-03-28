@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
-import 'package:video_thumbnail/video_thumbnail.dart' as thumb;
+
 import 'package:camera/camera.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
@@ -14,6 +14,8 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 // import 'package:gallery_saver/gallery_saver.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:video_thumbnail/video_thumbnail.dart' as thumb;
+
 import '../../../../../../core/utils/custom_show_dialog.dart';
 import '../../../../../../core/widget/custom_scaffold.dart';
 import '../../shared/filter_utiles.dart';

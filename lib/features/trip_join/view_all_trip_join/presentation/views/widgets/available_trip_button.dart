@@ -12,6 +12,7 @@ class AvaialbleTripsButton extends StatelessWidget {
     this.noFill = false,
     this.icon,
     this.padding,
+    this.radius = 5,
   });
   final void Function()? onTap;
   final Color? color;
@@ -19,6 +20,7 @@ class AvaialbleTripsButton extends StatelessWidget {
   final bool noFill;
   final IconData? icon;
   final EdgeInsetsGeometry? padding;
+  final double radius;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -27,7 +29,7 @@ class AvaialbleTripsButton extends StatelessWidget {
         padding: padding ?? EdgeInsets.symmetric(vertical: 5.h),
         decoration: BoxDecoration(
           color: noFill ? null : color,
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: BorderRadius.circular(radius),
           border: Border.all(color: color ?? Colors.transparent),
         ),
         child: Row(

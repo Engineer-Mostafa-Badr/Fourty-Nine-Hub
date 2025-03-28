@@ -26,18 +26,12 @@ class CustomSwitchButton extends StatelessWidget {
     return Switch(
       value: value,
       onChanged: onChanged,
-      // activeColor: activeColor ?? Colors.green,
-      // inactiveThumbColor: inactiveThumbColor ?? AppColors.PRIMARY_COLOR,
-      // trackColor: trackColor ??
-      //     WidgetStatePropertyAll(Theme.of(context).scaffoldBackgroundColor),
       thumbColor: const WidgetStatePropertyAll(AppColors.PRIMARY_COLOR),
       trackOutlineColor: value
           ? const WidgetStatePropertyAll(Colors.transparent)
           : const WidgetStatePropertyAll(AppColors.PRIMARY_COLOR),
-
       inactiveTrackColor: Theme.of(context).scaffoldBackgroundColor,
       activeTrackColor: HexColor('4CDA64'),
-      // trackOutlineColor: WidgetStatePropertyAll(HexColor('ff3308')),
     );
   }
 }

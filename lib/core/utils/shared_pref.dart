@@ -18,6 +18,12 @@ class CacheManager {
   static const selectedCategoryView = 'selectedCategoryView';
   static const RIDESOCKETPARTMODEL = 'RIDESOCKETPARTMODEL';
   static const isFloatingNavigator = 'isFloatingNavigator';
+  static const isFloatingNavigatorEnabled = 'isFloatingNavigatorEnabled';
+
+  static const isChoiceRuler = 'isChoiceRuler';
+  static const isChoiceRulerEnabled = 'isChoiceRulerEnabled';
+  static const showOnboarding = 'showOnboarding';
+
   // static const themeLightKey = 'lightTheme';
 
   // Save access token
@@ -90,6 +96,48 @@ class CacheManager {
       return false;
     }
   }
+  static Future<bool> isChoiceRulerOpen(bool value) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      print('isChoiceRulerOpen $value');
+
+      return await prefs.setBool(isChoiceRuler, value);
+    } catch (e) {
+      return false;
+    }
+  }
+
+  static Future<bool> isChoiceRulerEnabledOpen(bool value) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      print('isChoiceRulerEnabledOpen $value');
+
+      return await prefs.setBool(isChoiceRulerEnabled, value);
+    } catch (e) {
+      return false;
+    }
+  }
+
+  static Future<bool> isShowOnboarding(bool value) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      print('isShowOnboarding $value');
+
+      return await prefs.setBool(showOnboarding, value);
+    } catch (e) {
+      return false;
+    }
+  }
+  static Future<bool> isFloatingNavigatorEnabledOpen(bool value) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      print('isFloatingNavigatorEnabledOpen $value');
+
+      return await prefs.setBool(isFloatingNavigatorEnabled, value);
+    } catch (e) {
+      return false;
+    }
+  }
 
   static Future<bool> getMode() async {
     try {
@@ -102,7 +150,44 @@ class CacheManager {
   static Future<bool> getFloatingNavigator() async {
     try {
       final prefs = await SharedPreferences.getInstance();
+      print('isFloatingNavigator ${prefs.getBool(isFloatingNavigator)}');
       return prefs.getBool(isFloatingNavigator) ?? false;
+    } catch (e) {
+      return false;
+    }
+  }
+  static Future<bool> getFloatingNavigatorEnable() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      print('isFloatingNavigatorEnabled ${prefs.getBool(isFloatingNavigatorEnabled)}');
+      return prefs.getBool(isFloatingNavigatorEnabled) ?? true;
+    } catch (e) {
+      return false;
+    }
+  }
+  static Future<bool> getChoiceRuler() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      print('isChoiceRuler ${prefs.getBool(isChoiceRuler)}');
+      return prefs.getBool(isChoiceRuler) ?? true;
+    } catch (e) {
+      return false;
+    }
+  }
+  static Future<bool> getEnabledChoiceRuler() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      print('isChoiceRulerEnabled ${prefs.getBool(isChoiceRulerEnabled)}');
+      return prefs.getBool(isChoiceRulerEnabled) ?? true;
+    } catch (e) {
+      return false;
+    }
+  }
+  static Future<bool> getShowOnboarding() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      print('isShowOnboarding ${prefs.getBool(showOnboarding)}');
+      return prefs.getBool(showOnboarding) ?? false;
     } catch (e) {
       return false;
     }

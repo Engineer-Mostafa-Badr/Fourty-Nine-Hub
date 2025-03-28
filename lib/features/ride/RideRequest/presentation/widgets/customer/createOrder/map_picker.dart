@@ -5,15 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/helpers/BitmapDescriptor.dart';
-import '../../../../../../../common/widgets/stateless/buttons/app_button.dart';
-import '../../../../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../../../../res/style/styles.dart';
 import 'package:go_router/go_router.dart';
-
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../../../common/widgets/stateless/buttons/app_button.dart';
+import '../../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../../res/style/app_colors.dart';
+import '../../../../../../../res/style/styles.dart';
 
 class MapPicker extends StatefulWidget {
   final Function(CameraPosition)? onMoving;

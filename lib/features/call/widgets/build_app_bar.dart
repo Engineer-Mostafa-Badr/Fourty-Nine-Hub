@@ -1,10 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/authentication/data/models/user_model.dart';
 import 'package:fourtyninehub/features/call/presentation/controller/send_call_controller.dart/send_call_cubit.dart';
 import 'package:fourtyninehub/features/call/presentation/controller/send_call_controller.dart/send_call_states.dart';
 import 'package:fourtyninehub/features/call/widgets/call_control_button.dart';
-import 'dart:async';
 
 class CallTimer extends StatefulWidget {
   const CallTimer({super.key});

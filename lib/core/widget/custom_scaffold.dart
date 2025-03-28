@@ -1,22 +1,19 @@
+import 'package:floating_draggable_widget/floating_draggable_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/features/notifications/presentation/cubits/firebase_notfications_cubit/firebase_notfications_cubit.dart';
 import 'package:go_router/go_router.dart';
-import 'package:floating_draggable_widget/floating_draggable_widget.dart';
 
+import '../../common/widgets/dynamic/drawer.dart';
 import '../../common/widgets/stateless/labels/label.dart';
+import '../../features/settings/presentation/cubit/choice_ruler_cubit.dart';
 import '../../features/settings/presentation/cubit/floating_navigator_cubit.dart';
-import '../../features/settings/presentation/cubit/settings_cubit.dart';
 import '../../res/assets/assets.dart';
 import '../../res/style/app_colors.dart';
-import '../../res/style/styles.dart';
 import '../../routes/routes.dart';
 import '../localization/locale_keys.g.dart';
-import '../utils/hex_color_helper.dart';
-import '../utils/shared_pref.dart';
 
 class CustomScaffold extends StatefulWidget {
   const CustomScaffold({
@@ -25,7 +22,7 @@ class CustomScaffold extends StatefulWidget {
     this.backgroundColor,
     this.floatingActionButtonLocation,
     this.floatingActionButton,
-    this.drawer,
+    this.drawer = const DrawerWidget(),
     this.bottomNavigationBar,
     this.appBar,
     this.extendBody = false,
@@ -54,121 +51,115 @@ class CustomScaffold extends StatefulWidget {
 
 class _CustomScaffoldState extends State<CustomScaffold>
     with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 3),
-    )..repeat(reverse: true);
-
-    _animation = Tween<double>(begin: 0, end: 200).animate(_controller);
-  }
-
-  bool floatNavigator = false;
+  // bool floatNavigator = false;
 
   @override
   Widget build(BuildContext context) {
-    var floatingNavigatorCubit = FloatingNavigatorCubit.get(context);
     return BlocBuilder<FloatingNavigatorCubit, FloatingNavigatorState>(
       builder: (context, state) {
-        if (floatingNavigatorCubit.floatingNavigatorStatus) {
+        var floatingNavigatorCubit = FloatingNavigatorCubit.get(context);
+        if (floatingNavigatorCubit.floatingNavigatorEnable) {
           return FloatingDraggableWidget(
-            mainScreenWidget: mainScaffold(),
+            mainScreenWidget: MainScaffold(
+              backgroundColor: widget.backgroundColor,
+              floatingActionButtonLocation: widget.floatingActionButtonLocation,
+              floatingActionButton: widget.floatingActionButton,
+              drawer: widget.drawer,
+              bottomNavigationBar: widget.bottomNavigationBar,
+              body: widget.body,
+              appBar: widget.appBar,
+              extendBody: widget.extendBody,
+              extendBodyBehindAppBar: widget.extendBodyBehindAppBar,
+              bottomSheet: widget.bottomSheet,
+              resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
+              enableCustomAppBar: widget.enableCustomAppBar,
+              rulerWidget: rulerWidget(),
+            ),
             floatingWidget: GestureDetector(
               onTap: () {
-                setState(() {
-                  floatNavigator = !floatNavigator;
-                });
+                floatingNavigatorCubit.changeFloatingNavigator();
               },
               child: Column(
                 children: [
-                  Expanded(
-                    child: Container(
-                      width: 60.w,
-                      // height: 50.h,
-                      decoration: BoxDecoration(
-                          color: AppColors.SECONDARY_COLOR,
-                          borderRadius: BorderRadius.circular(15.r)),
-                      child: const Icon(
-                        Icons.swap_horiz_rounded,
-                        color: Colors.white,
+                  Container(
+                    width: 32,
+                    height: 32,
+                    decoration: BoxDecoration(
+                        color: AppColors.SECONDARY_COLOR,
+                        borderRadius: BorderRadius.circular(15.r)),
+                    child: const Icon(
+                      Icons.swap_horiz_rounded,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 32,
+                    height: 28,
+                    child: FittedBox(
+                      child: Label(
+                        text: 'Move',
                       ),
                     ),
                   ),
-                  FittedBox(
-                      child: const Label(
-                    text: 'Move',
-                  ))
                 ],
               ),
             ),
             floatingWidgetHeight: 60,
-            floatingWidgetWidth: 60,
+            floatingWidgetWidth: 50,
             autoAlign: true,
           );
         } else {
-          return mainScaffold();
+          return MainScaffold(
+            backgroundColor: widget.backgroundColor,
+            floatingActionButtonLocation: widget.floatingActionButtonLocation,
+            floatingActionButton: widget.floatingActionButton,
+            drawer: widget.drawer,
+            bottomNavigationBar: widget.bottomNavigationBar,
+            body: widget.body,
+            appBar: widget.appBar,
+            extendBody: widget.extendBody,
+            extendBodyBehindAppBar: widget.extendBodyBehindAppBar,
+            bottomSheet: widget.bottomSheet,
+            resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
+            enableCustomAppBar: widget.enableCustomAppBar,
+            rulerWidget: rulerWidget(),
+          );
         }
       },
     );
   }
 
-  Widget mainScaffold() {
-    return Stack(
-      alignment: Alignment.centerLeft,
-      children: [
-        widget.enableCustomAppBar
-            ? Scaffold(
-                backgroundColor: AppColors.PRIMARY_COLOR,
-                floatingActionButtonLocation:
-                    widget.floatingActionButtonLocation,
-                floatingActionButton: widget.floatingActionButton,
-                drawer: widget.drawer,
-                bottomNavigationBar: widget.bottomNavigationBar,
-                body: Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: widget.backgroundColor ?? Theme.of(context).scaffoldBackgroundColor,
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(50.r),
-                      ),
-                    ),
-                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                    child: widget.body,
-                  ),
-                ),
-                appBar: widget.appBar,
-                extendBody: widget.extendBody,
-                extendBodyBehindAppBar: widget.extendBodyBehindAppBar,
-                bottomSheet: widget.bottomSheet,
-                resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
-              )
-            : Scaffold(
-                backgroundColor: widget.backgroundColor,
-                floatingActionButtonLocation:
-                    widget.floatingActionButtonLocation,
-                floatingActionButton: widget.floatingActionButton,
-                drawer: widget.drawer,
-                bottomNavigationBar: widget.bottomNavigationBar,
-                body: widget.body,
-                appBar: widget.appBar,
-                extendBody: widget.extendBody,
-                extendBodyBehindAppBar: widget.extendBodyBehindAppBar,
-                bottomSheet: widget.bottomSheet,
-                resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
-              ),
-        PositionedDirectional(
+  Widget drawerRollWidget({
+    required String label,
+    required String image,
+    EdgeInsetsGeometry? padding,
+    required void Function()? onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 40.h,
+        height: 40.h,
+        padding: padding ?? const EdgeInsets.all(0),
+        child: Image.asset(
+          image,
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
+  }
+
+  Widget rulerWidget() {
+    return BlocBuilder<FloatingNavigatorCubit, FloatingNavigatorState>(
+      builder: (context, state) {
+        var floatingNavigatorCubit = FloatingNavigatorCubit.get(context);
+        return PositionedDirectional(
           start: 0,
           child: Row(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              floatNavigator
+              floatingNavigatorCubit.floatingNavigatorStatus
                   ? Container(
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -206,13 +197,15 @@ class _CustomScaffoldState extends State<CustomScaffold>
                             drawerRollWidget(
                               label: LocaleKeys.ride.localize,
                               image: Assets.rideIcon,
-                              onTap: () => context.push(Routes.RIDE),
+                              onTap: () => context.push(Routes.onBoardingScreen),
+                              // onTap: () => context.push(Routes.RIDE),
                             ),
                             drawerRollWidget(
                               label: LocaleKeys.loading.localize,
                               image: Assets.loading,
-                              onTap: () {},
-                              // onTap: () => context.push(Routes.RIDE),
+                              // onTap: () {},
+                              onTap: () =>
+                                  context.push(Routes.createLoadingTripScreen),
                             ),
                             drawerRollWidget(
                               label: LocaleKeys.health.localize,
@@ -239,11 +232,11 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               image: Assets.spotlight,
                               onTap: () => context.push(Routes.SPOTLIGHT),
                             ),
-                            drawerRollWidget(
-                              label: LocaleKeys.meet.localize,
-                              image: Assets.meet,
-                              onTap: () => context.push(Routes.MEETINGROOM),
-                            ),
+                            // drawerRollWidget(
+                            //   label: LocaleKeys.meet.localize,
+                            //   image: Assets.meet,
+                            //   onTap: () => context.push(Routes.MEETINGROOM),
+                            // ),
                             drawerRollWidget(
                               label: LocaleKeys.live.localize,
                               image: Assets.liveIcon,
@@ -257,6 +250,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                             drawerRollWidget(
                               label: LocaleKeys.chat.localize,
                               image: Assets.whatsApp,
+                              padding: const EdgeInsets.all(2),
                               onTap: () => context.push(Routes.CHAT),
                             ),
                           ],
@@ -268,10 +262,8 @@ class _CustomScaffoldState extends State<CustomScaffold>
                 color: Colors.transparent,
                 child: ClickableWidget(
                   onTap: () {
-                    setState(() {
-                      floatNavigator = !floatNavigator;
-                      print('taped $floatNavigator');
-                    });
+                    // choiceRulerCubit.changeChoiceRulerStatus();
+                    floatingNavigatorCubit.changeFloatingNavigator();
                   },
                   child: Container(
                     width: 40,
@@ -283,7 +275,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                       width: 10,
                       decoration: BoxDecoration(
                         color: Colors.red,
-                        border: BorderDirectional(
+                        border: const BorderDirectional(
                           end: BorderSide(
                             color: AppColors.PRIMARY_COLOR,
                             width: 2,
@@ -310,31 +302,124 @@ class _CustomScaffoldState extends State<CustomScaffold>
               ),
             ],
           ),
-        ),
-      ],
+        );
+      },
     );
   }
+}
 
-  Widget drawerRollWidget(
-      {required String label,
-      required String image,
-      required void Function()? onTap}) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Column(
-        children: [
-          Image.asset(
-            image,
-            width: 40.h,
-            height: 40.h,
-            fit: BoxFit.cover,
-          ),
-          // Label(
-          //     text: label,
-          //     style: Styles.mediumText(
-          //         fontWeight: FontWeight.w400, color: Colors.black)),
-        ],
-      ),
+class MainScaffold extends StatelessWidget {
+  const MainScaffold({
+    super.key,
+    required this.body,
+    this.backgroundColor,
+    this.floatingActionButtonLocation,
+    this.floatingActionButton,
+    this.drawer,
+    this.bottomNavigationBar,
+    this.appBar,
+    this.extendBody = false,
+    this.extendBodyBehindAppBar = false,
+    this.enableCustomAppBar = false,
+    this.bottomSheet,
+    this.resizeToAvoidBottomInset,
+    required this.rulerWidget,
+  });
+
+  final Widget body;
+  final Color? backgroundColor;
+  final FloatingActionButtonLocation? floatingActionButtonLocation;
+  final Widget? floatingActionButton;
+  final Widget? drawer;
+  final Widget? bottomNavigationBar;
+  final PreferredSizeWidget? appBar;
+  final bool extendBody;
+  final bool extendBodyBehindAppBar;
+  final bool? resizeToAvoidBottomInset;
+  final Widget? bottomSheet;
+  final bool enableCustomAppBar;
+  final Widget rulerWidget;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<FloatingNavigatorCubit, FloatingNavigatorState>(
+      builder: (context, state) {
+        var floatingNavigatorCubit = FloatingNavigatorCubit.get(context);
+        return BlocBuilder<ChoiceRulerCubit, ChoiceRulerState>(
+          builder: (context, state) {
+            var choiceRulerCubit = context.read<ChoiceRulerCubit>();
+            if (enableCustomAppBar) {
+              return Scaffold(
+                backgroundColor: AppColors.PRIMARY_COLOR,
+                floatingActionButtonLocation: floatingActionButtonLocation,
+                floatingActionButton: floatingActionButton,
+                drawer: drawer,
+                onDrawerChanged: (value) {
+                  choiceRulerCubit.changeChoiceRulerStatus(forceValue: !value);
+
+                  // choiceRulerCubit.changeChoiceRulerStatus();
+                  print('choiceRulerCubit.state ${choiceRulerCubit.state} value $value');
+                  print('onDrawerChanged open $value');
+                },
+                bottomNavigationBar: bottomNavigationBar,
+                body: Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: backgroundColor ??
+                          Theme.of(context).scaffoldBackgroundColor,
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(50.r),
+                      ),
+                    ),
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                    child: Stack(
+                      alignment: Alignment.centerLeft,
+                      children: [
+                        body,
+                        if (choiceRulerCubit.choiceRulerStatus ||
+                            floatingNavigatorCubit.floatingNavigatorStatus)
+                          rulerWidget,
+                      ],
+                    ),
+                  ),
+                ),
+                appBar: appBar,
+                extendBody: extendBody,
+                extendBodyBehindAppBar: extendBodyBehindAppBar,
+                bottomSheet: bottomSheet,
+                resizeToAvoidBottomInset: resizeToAvoidBottomInset,
+              );
+            } else {
+              return Scaffold(
+                backgroundColor: backgroundColor,
+                floatingActionButtonLocation: floatingActionButtonLocation,
+                floatingActionButton: floatingActionButton,
+                drawer: drawer,
+                onDrawerChanged: (value) {
+                  choiceRulerCubit.changeChoiceRulerStatus(forceValue: !value);
+                  print('choiceRulerCubit.state ${choiceRulerCubit.state} value $value');
+                  print('onDrawerChanged open $value');                },
+                bottomNavigationBar: bottomNavigationBar,
+                body: Stack(
+                  alignment: Alignment.centerLeft,
+                  children: [
+                    body,
+                    if (choiceRulerCubit.choiceRulerStatus ||
+                        floatingNavigatorCubit.floatingNavigatorStatus)
+                      rulerWidget,
+                  ],
+                ),
+                appBar: appBar,
+                extendBody: extendBody,
+                extendBodyBehindAppBar: extendBodyBehindAppBar,
+                bottomSheet: bottomSheet,
+                resizeToAvoidBottomInset: resizeToAvoidBottomInset,
+              );
+            }
+          },
+        );
+      },
     );
   }
 }

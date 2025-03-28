@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 
-import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../stateless/labels/label.dart';
 
 class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool automaticallyImplyLeading;
   final String? label;
+  final String? subTitle;
   final Color? backColor;
   final Color? iconColor;
   final Color? textColor;
@@ -27,6 +28,7 @@ class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.leading,
     this.textColor,
     this.enableCustomAppBar = false,
+    this.subTitle,
   });
 
   @override
@@ -55,6 +57,18 @@ class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
                   color: enableCustomAppBar ? Colors.white : textColor))
           : null,
       actions: actions,
+      bottom: PreferredSize(
+        preferredSize: const Size.fromHeight(16.0), // here the desired height
+        child: Row(
+          children: [
+            const Sizer(width: 40,),
+            Label(
+                text: subTitle ?? '',
+                style: Styles.mediumText().copyWith(
+                    color: enableCustomAppBar ? Colors.white : textColor)),
+          ],
+        ),
+      ),
     );
   }
 

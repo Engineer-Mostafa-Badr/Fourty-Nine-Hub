@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/drawer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
@@ -9,7 +10,6 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_states.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
@@ -17,15 +17,12 @@ import 'package:fourtyninehub/features/custom_page/presentation/page/widget/serv
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/instgram_view.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/preload_cubit/preload_bloc.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
-import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/secrets/controller/secrets_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:restart_app/restart_app.dart';
+
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../social_media/social_posts/presentation/pages/Social_home.dart';
 import '../../../../social_media/stories/presentation/cubit/stories_cubit.dart';
@@ -38,10 +35,14 @@ class PagePreview extends StatefulWidget {
   State<PagePreview> createState() => _PagePreviewState();
 }
 
-class _PagePreviewState extends State<PagePreview> {
+class _PagePreviewState extends State<PagePreview> with TickerProviderStateMixin{
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
   initState() {
     serviceLocator<MainCategoriesCubit>().loadData();
+
+    super.initState();
   }
 
   @override
@@ -70,9 +71,37 @@ class _PagePreviewState extends State<PagePreview> {
               },
             ),
             bottom: TabBar(
+
+              dividerColor: Colors.transparent,
+              indicator: BoxDecoration(
+                color: Colors.red.withOpacity(0.1), // Light red background
+                borderRadius: BorderRadius.circular(8), // Rounded corners
+              ),
+              labelStyle: const TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.red,
+              ),
+                unselectedLabelStyle: const TextStyle(
+              fontWeight: FontWeight.bold,
+              color: AppColors.LIGHT_GRAY_COLOR2,
+            ),
               tabs: [
-                Tab(text: LocaleKeys.social.tr()),
-                Tab(text: LocaleKeys.service.tr()),
+                Tab(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Text(
+                      LocaleKeys.social.tr(),
+                    ),
+                  ),
+                ),
+                Tab(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Text(
+                      LocaleKeys.service.tr(),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -94,6 +123,9 @@ class _PagePreviewState extends State<PagePreview> {
                         create: (context) => serviceLocator<CustomPageCubit>()
                           ..fetchSocialPage(),
                       ),
+                      // BlocProvider(
+                      //   create: (context) => ThumbnailsCubit(serviceLocator()),
+                      // ),
                     ],
                     child: BlocBuilder<InstagramCubit, InstagramState>(
                       builder: (BuildContext context, state) {
@@ -124,6 +156,7 @@ class _PagePreviewState extends State<PagePreview> {
                     ),
                   ),
                   const ServicePagePreview(),
+                  // Container()
                 ],
               ),
               Visibility(
@@ -147,7 +180,9 @@ class _PagePreviewState extends State<PagePreview> {
                             await context
                                 .read<CustomPageCubit>()
                                 .updateActivate(true);
-                            Restart.restartApp();
+                            // Restart.restartApp();
+                            Phoenix.rebirth(context);
+
                           },
                         ),
                         CustomElevatedButton(
@@ -155,7 +190,9 @@ class _PagePreviewState extends State<PagePreview> {
                             await context
                                 .read<CustomPageCubit>()
                                 .updateActivate(false);
-                            Restart.restartApp();
+                            Phoenix.rebirth(context);
+
+                            // Restart.restartApp();
                           },
                           child: Text(
                             LocaleKeys.saveWithOutActivate.localize,

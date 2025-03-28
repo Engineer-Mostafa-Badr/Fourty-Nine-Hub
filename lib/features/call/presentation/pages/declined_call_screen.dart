@@ -1,10 +1,9 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/authentication/data/models/user_model.dart';
 import 'package:fourtyninehub/features/call/widgets/declined_app_bar.dart';
 import 'package:fourtyninehub/features/call/widgets/declined_btns.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:audioplayers/audioplayers.dart';
-import 'package:flutter/services.dart';
 
 class DeclinedCallScreen extends StatefulWidget {
   final UserModel receiver;

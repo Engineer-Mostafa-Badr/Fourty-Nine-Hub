@@ -20,7 +20,6 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import '../../../../../core/widget/custom_switch_button.dart';
-import '../../../../../core/widget/custom_switch_button.dart';
 
 class CarPoolNewRouteInfo extends StatefulWidget {
   const CarPoolNewRouteInfo({super.key});

@@ -2,21 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/custom_floating_action_button.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_states.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/edit_page_cubit/edit_page_cubit.dart';
-import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
 
+import '../../../../../ads/interstitial_ad_model.dart';
+import '../../../../../common/widgets/stateful/banners/main_category_banner.dart';
 import '../../../../../core/messages/messages.dart';
-import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
+import '../../../domain/entity/custom_page_categories_entity.dart';
 import '../../../domain/entity/favourite_categ_entity.dart';
 import '../../../domain/use_case/update_favourite_cat_use_case.dart';
+import 'custom_page_category_card.dart';
 
 class FavouriteCategory extends StatefulWidget {
   const FavouriteCategory({super.key});
@@ -26,75 +28,74 @@ class FavouriteCategory extends StatefulWidget {
 }
 
 class _FavouriteCategoryState extends State<FavouriteCategory> {
-  // A map to keep track of selected categories
-  Map<String, bool> _categoriesMap = {};
-
-  // Method to initialize categories based on UserPreferences
-  Map<String, bool> _initFavouriteCategories(FavouriteCatEntity preferences) {
-    return {
-      "Home Service": preferences.homeService.enabled,
-      "Craft": preferences.craft.enabled,
-      "Real Estate": preferences.realEstate.enabled,
-      "Cars": preferences.cars.enabled,
-      "Smoking": preferences.smoking.enabled,
-      "Home Essentials": preferences.homeEssentials.enabled,
-      "Technology": preferences.technology.enabled,
-      "Projects": preferences.projects.enabled,
-      "Computers Cameras": preferences.computersCameras.enabled,
-      "Musical Instruments": preferences.musicalInstruments.enabled,
-      "Travel Tourism": preferences.travelTourism.enabled,
-      "Libraries": preferences.libraries.enabled,
-      "Fashion Beauty": preferences.fashionBeauty.enabled,
-      "Animals": preferences.animals.enabled,
-      "Farming": preferences.farming.enabled,
-      "Government Services": preferences.governmentServices.enabled,
-      "Social": preferences.industry.enabled,
-      "Jobs": preferences.jobs.enabled,
-      "Fitness": preferences.fitness.enabled,
-      "Marriage": preferences.marriage.enabled,
-    };
-  }
-
-  List<String> _getLocalizedNames(FavouriteCatEntity preferences) {
-    final isArabic = Localizations.localeOf(context).languageCode == 'ar';
-
-    return [
-      isArabic
-          ? preferences.homeService.nameAr
-          : preferences.homeService.nameEn,
-      isArabic ? preferences.craft.nameAr : preferences.craft.nameEn,
-      isArabic ? preferences.realEstate.nameAr : preferences.realEstate.nameEn,
-      isArabic ? preferences.cars.nameAr : preferences.cars.nameEn,
-      isArabic ? preferences.smoking.nameAr : preferences.smoking.nameEn,
-      isArabic
-          ? preferences.homeEssentials.nameAr
-          : preferences.homeEssentials.nameEn,
-      isArabic ? preferences.technology.nameAr : preferences.technology.nameEn,
-      isArabic ? preferences.projects.nameAr : preferences.projects.nameEn,
-      isArabic
-          ? preferences.computersCameras.nameAr
-          : preferences.computersCameras.nameEn,
-      isArabic
-          ? preferences.musicalInstruments.nameAr
-          : preferences.musicalInstruments.nameEn,
-      isArabic
-          ? preferences.travelTourism.nameAr
-          : preferences.travelTourism.nameEn,
-      isArabic ? preferences.libraries.nameAr : preferences.libraries.nameEn,
-      isArabic
-          ? preferences.fashionBeauty.nameAr
-          : preferences.fashionBeauty.nameEn,
-      isArabic ? preferences.animals.nameAr : preferences.animals.nameEn,
-      isArabic ? preferences.farming.nameAr : preferences.farming.nameEn,
-      isArabic
-          ? preferences.governmentServices.nameAr
-          : preferences.governmentServices.nameEn,
-      isArabic ? preferences.industry.nameAr : preferences.industry.nameEn,
-      isArabic ? preferences.jobs.nameAr : preferences.jobs.nameEn,
-      isArabic ? preferences.marriage.nameAr : preferences.marriage.nameEn,
-      isArabic ? preferences.fitness.nameAr : preferences.fitness.nameEn,
-    ];
-  }
+  // // A map to keep track of selected categories
+  // Map<String, bool> _categoriesMap = {};
+  //
+  // // Method to initialize categories based on UserPreferences
+  // Map<String, bool> _initFavouriteCategories(CustomPageCategoriesEntity preferences) {
+  //   return {
+  //     "Home Service": preferences.homeService.enabled,
+  //     "Craft": preferences.craft.enabled,
+  //     "Real Estate": preferences.realEstate.enabled,
+  //     "Cars": preferences.cars.enabled,
+  //     "Smoking": preferences.smoking.enabled,
+  //     "Home Essentials": preferences.homeEssentials.enabled,
+  //     "Technology": preferences.technology.enabled,
+  //     "Projects": preferences.projects.enabled,
+  //     "Computers Cameras": preferences.computersCameras.enabled,
+  //     "Musical Instruments": preferences.musicalInstruments.enabled,
+  //     "Travel Tourism": preferences.travelTourism.enabled,
+  //     "Libraries": preferences.libraries.enabled,
+  //     "Fashion Beauty": preferences.fashionBeauty.enabled,
+  //     "Animals": preferences.animals.enabled,
+  //     "Farming": preferences.farming.enabled,
+  //     "Government Services": preferences.governmentServices.enabled,
+  //     "Social": preferences.industry.enabled,
+  //     "Jobs": preferences.jobs.enabled,
+  //     "Fitness": preferences.fitness.enabled,
+  //     "Marriage": preferences.marriage.enabled,
+  //   };
+  // }
+  //
+  // List<String> _getLocalizedNames(FavouriteCatEntity preferences) {
+  //   final isArabic = Localizations.localeOf(context).languageCode == 'ar';
+  //   return [
+  //     isArabic
+  //         ? preferences.homeService.nameAr
+  //         : preferences.homeService.nameEn,
+  //     isArabic ? preferences.craft.nameAr : preferences.craft.nameEn,
+  //     isArabic ? preferences.realEstate.nameAr : preferences.realEstate.nameEn,
+  //     isArabic ? preferences.cars.nameAr : preferences.cars.nameEn,
+  //     isArabic ? preferences.smoking.nameAr : preferences.smoking.nameEn,
+  //     isArabic
+  //         ? preferences.homeEssentials.nameAr
+  //         : preferences.homeEssentials.nameEn,
+  //     isArabic ? preferences.technology.nameAr : preferences.technology.nameEn,
+  //     isArabic ? preferences.projects.nameAr : preferences.projects.nameEn,
+  //     isArabic
+  //         ? preferences.computersCameras.nameAr
+  //         : preferences.computersCameras.nameEn,
+  //     isArabic
+  //         ? preferences.musicalInstruments.nameAr
+  //         : preferences.musicalInstruments.nameEn,
+  //     isArabic
+  //         ? preferences.travelTourism.nameAr
+  //         : preferences.travelTourism.nameEn,
+  //     isArabic ? preferences.libraries.nameAr : preferences.libraries.nameEn,
+  //     isArabic
+  //         ? preferences.fashionBeauty.nameAr
+  //         : preferences.fashionBeauty.nameEn,
+  //     isArabic ? preferences.animals.nameAr : preferences.animals.nameEn,
+  //     isArabic ? preferences.farming.nameAr : preferences.farming.nameEn,
+  //     isArabic
+  //         ? preferences.governmentServices.nameAr
+  //         : preferences.governmentServices.nameEn,
+  //     isArabic ? preferences.industry.nameAr : preferences.industry.nameEn,
+  //     isArabic ? preferences.jobs.nameAr : preferences.jobs.nameEn,
+  //     isArabic ? preferences.marriage.nameAr : preferences.marriage.nameEn,
+  //     isArabic ? preferences.fitness.nameAr : preferences.fitness.nameEn,
+  //   ];
+  // }
 
   bool isNextShow = true;
   late ScrollController controller;
@@ -125,45 +126,87 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
         child: BlocBuilder<CustomPageCubit, CustomPageState>(
           builder: (BuildContext context, state) {
             if (state.status == CustomPageStates.success) {
-              if (_categoriesMap.isEmpty) {
-                _categoriesMap = _initFavouriteCategories(state.favourite!);
-              }
-              final localizedNames = _getLocalizedNames(state.favourite!);
+              // if (_categoriesMap.isEmpty) {
+              //   _categoriesMap = _initFavouriteCategories(state.favourite!);
+              // }
+              // final localizedNames = _getLocalizedNames(state.favourite!);
               return Column(
                 children: [
                   ListTile(
                     subtitle: Text(LocaleKeys.favouriteDescription.localize),
                   ),
                   Expanded(
-                    child: ListView.builder(
+                    child: GridView.builder(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: .65,
+                        mainAxisSpacing: 16,
+                        crossAxisSpacing: 16,
+                      ),
                       controller: controller,
-                      itemCount: _categoriesMap.length,
+                      itemCount: state.favourite!.length,
                       itemBuilder: (context, index) {
-                        final categoryName = localizedNames[index];
-                        final isSelected =
-                            _categoriesMap.values.elementAt(index);
+                        // final categoryName = localizedNames[index];
+                        // final isSelected =
+                        //     _categoriesMap.values.elementAt(index);
+                        var currentCategory = state.favourite![index];
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: InkWell(
+                            onTap: () {
+                              AdInterstitialTop.loadIntersitialAd();
+                              AdInterstitialTop.showInterstitialAd();
+                              // HandleCashback.setCount(
+                              //     'mainCategoriesCount', context);
+                              // if (state.data![index].id ==
+                              //     '62c8b5b09332225799fe335e') {
+                              //   context.push(Routes.MARRIAGESUBCATEGORIES,
+                              //       extra: state.data![index]);
+                              // } else {
+                              //   context.push(Routes.SUBCATEGORIES,
+                              //       extra: state.data![index]);
+                              // }
+                            },
+                            child: CustomPageCategoryCard(
+                              category: currentCategory,
+                              onFavorite: () async {
+                                // var result = await controller
+                                //     .toggleFavoriteMedicalService(
+                                //     state.data![index].id);
+                                // print("result$result");
+                                // return result;
+                              },
+                            ),
+                          ),
+                        );
                         return ListTile(
                           leading: Checkbox(
                             shape: const CircleBorder(),
-                            value: isSelected,
+                            value: state.favourite![index].enabled,
                             checkColor:
                                 Theme.of(context).scaffoldBackgroundColor,
                             activeColor: Theme.of(context).primaryColor,
                             onChanged: (bool? value) {
                               setState(() {
-                                _categoriesMap[_categoriesMap.keys
-                                    .elementAt(index)] = value ?? false;
+                                // currentCategory.enabled = value ?? false;
+                                // _categoriesMap[_categoriesMap.keys
+                                //     .elementAt(index)] = value ?? false;
                               });
                             },
                           ),
                           title: Text(
-                            categoryName,
+                            context.isArabic
+                                ? currentCategory.nameAr
+                                : currentCategory.nameEn,
                             style: Styles.mediumText(
                                 fontSize: 65.sp,
                                 fontWeight: FontWeight.w400,
                                 color: Theme.of(context).primaryColor),
                           ),
-                          selected: isSelected,
+                          selected: state.favourite![index].enabled,
                         );
                       },
                     ),
@@ -196,90 +239,90 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
             builder: (BuildContext context, Object? state) {
               return CustomFloatingActionButton(
                 onPressed: () {
-                  // Collect selected categories
-                  final selectedCategories = _categoriesMap.entries
-                      .where((entry) => entry.value == true)
-                      .map((entry) => entry.key)
-                      .toList();
-
-                  if (selectedCategories.length >= 3 &&
-                      selectedCategories.length <= 8) {
-                    context
-                        .read<CustomPageCubit>()
-                        .updateFavouriteCat(FavouriteCatParams(
-                          animals: _categoriesMap["Animals"] ?? false,
-                          cars: _categoriesMap["Cars"] ?? false,
-                          collectiblesGifts:
-                              _categoriesMap["Collectibles Gifts"] ?? false,
-                          computersCameras:
-                              _categoriesMap["Computers Cameras"] ?? false,
-                          craft: _categoriesMap["Craft"] ?? false,
-                          dating: _categoriesMap["Dating"] ?? false,
-                          discountsOffers:
-                              _categoriesMap["Discounts Offers"] ?? false,
-                          doctorJob: _categoriesMap["Doctor Job"] ?? false,
-                          electricalDevices:
-                              _categoriesMap["Electrical Devices"] ?? false,
-                          equipment: _categoriesMap["Equipment"] ?? false,
-                          farming: _categoriesMap["Farming"] ?? false,
-                          fashionBeauty:
-                              _categoriesMap["Fashion Beauty"] ?? false,
-                          governmentServices:
-                              _categoriesMap["Government Services"] ?? false,
-                          homeEssentials:
-                              _categoriesMap["Home Essentials"] ?? false,
-                          homeService: _categoriesMap["Home Service"] ?? false,
-                          marketingSales:
-                              _categoriesMap["Marketing Sales"] ?? false,
-                          medicalService:
-                              _categoriesMap["Medical Service"] ?? false,
-                          mobilesTablets:
-                              _categoriesMap["Mobiles Tablets"] ?? false,
-                          packaging: _categoriesMap["Packaging"] ?? false,
-                          ports: _categoriesMap["Ports"] ?? false,
-                          projects: _categoriesMap["Projects"] ?? false,
-                          rawMaterials:
-                              _categoriesMap["Raw Materials"] ?? false,
-                          realEstate: _categoriesMap["Real Estate"] ?? false,
-                          remnants: _categoriesMap["Remnants"] ?? false,
-                          smoking: _categoriesMap["Smoking"] ?? false,
-                          social: _categoriesMap["Social"] ?? false,
-                          spareParts: _categoriesMap["Spare Parts"] ?? false,
-                          technology: _categoriesMap["Technology"] ?? false,
-                          vehicles: _categoriesMap["Vehicles"] ?? false,
-                          wholesaleTrade:
-                              _categoriesMap["Wholesale Trade"] ?? false,
-                          // Adding the missing fields
-                          accessories: _categoriesMap["Accessories"] ?? false,
-                          accountantJob:
-                              _categoriesMap["Accountant Job"] ?? false,
-                          charitys: _categoriesMap["Charitys"] ?? false,
-                          education: _categoriesMap["Education"] ?? false,
-                          engineerJob: _categoriesMap["Engineer Job"] ?? false,
-                          events: _categoriesMap["Events"] ?? false,
-                          fitness: _categoriesMap["Fitness"] ?? false,
-                          handmades: _categoriesMap["Handmades"] ?? false,
-                          healthyTools:
-                              _categoriesMap["Healthy Tools"] ?? false,
-                          jewelryWatches:
-                              _categoriesMap["Jewelry Watches"] ?? false,
-                          libraries: _categoriesMap["Libraries"] ?? false,
-                          musicalInstruments:
-                              _categoriesMap["Musical Instruments"] ?? false,
-                          scenery: _categoriesMap["Scenery"] ?? false,
-                          talent: _categoriesMap["Talent"] ?? false,
-                          travelTourism:
-                              _categoriesMap["Travel Tourism"] ?? false,
-                          otherJob: _categoriesMap["Other Job"] ?? false,
-                        ));
-                  } else {
-                    // Show a message if the selection is not valid
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(LocaleKeys.atLeast3atMost8items.localize),
-                      ),
-                    );
-                  }
+                  // // Collect selected categories
+                  // final selectedCategories = _categoriesMap.entries
+                  //     .where((entry) => entry.value == true)
+                  //     .map((entry) => entry.key)
+                  //     .toList();
+                  //
+                  // if (selectedCategories.length >= 3 &&
+                  //     selectedCategories.length <= 8) {
+                  //   // context
+                  //   //     .read<CustomPageCubit>()
+                  //   //     .updateFavouriteCat(FavouriteCatParams(
+                  //   //   animals: _categoriesMap["Animals"] ?? false,
+                  //   //   cars: _categoriesMap["Cars"] ?? false,
+                  //   //   collectiblesGifts:
+                  //   //       _categoriesMap["Collectibles Gifts"] ?? false,
+                  //   //   computersCameras:
+                  //   //       _categoriesMap["Computers Cameras"] ?? false,
+                  //   //   craft: _categoriesMap["Craft"] ?? false,
+                  //   //   dating: _categoriesMap["Dating"] ?? false,
+                  //   //   discountsOffers:
+                  //   //       _categoriesMap["Discounts Offers"] ?? false,
+                  //   //   doctorJob: _categoriesMap["Doctor Job"] ?? false,
+                  //   //   electricalDevices:
+                  //   //       _categoriesMap["Electrical Devices"] ?? false,
+                  //   //   equipment: _categoriesMap["Equipment"] ?? false,
+                  //   //   farming: _categoriesMap["Farming"] ?? false,
+                  //   //   fashionBeauty:
+                  //   //       _categoriesMap["Fashion Beauty"] ?? false,
+                  //   //   governmentServices:
+                  //   //       _categoriesMap["Government Services"] ?? false,
+                  //   //   homeEssentials:
+                  //   //       _categoriesMap["Home Essentials"] ?? false,
+                  //   //   homeService: _categoriesMap["Home Service"] ?? false,
+                  //   //   marketingSales:
+                  //   //       _categoriesMap["Marketing Sales"] ?? false,
+                  //   //   medicalService:
+                  //   //       _categoriesMap["Medical Service"] ?? false,
+                  //   //   mobilesTablets:
+                  //   //       _categoriesMap["Mobiles Tablets"] ?? false,
+                  //   //   packaging: _categoriesMap["Packaging"] ?? false,
+                  //   //   ports: _categoriesMap["Ports"] ?? false,
+                  //   //   projects: _categoriesMap["Projects"] ?? false,
+                  //   //   rawMaterials:
+                  //   //       _categoriesMap["Raw Materials"] ?? false,
+                  //   //   realEstate: _categoriesMap["Real Estate"] ?? false,
+                  //   //   remnants: _categoriesMap["Remnants"] ?? false,
+                  //   //   smoking: _categoriesMap["Smoking"] ?? false,
+                  //   //   social: _categoriesMap["Social"] ?? false,
+                  //   //   spareParts: _categoriesMap["Spare Parts"] ?? false,
+                  //   //   technology: _categoriesMap["Technology"] ?? false,
+                  //   //   vehicles: _categoriesMap["Vehicles"] ?? false,
+                  //   //   wholesaleTrade:
+                  //   //       _categoriesMap["Wholesale Trade"] ?? false,
+                  //   //   // Adding the missing fields
+                  //   //   accessories: _categoriesMap["Accessories"] ?? false,
+                  //   //   accountantJob:
+                  //   //       _categoriesMap["Accountant Job"] ?? false,
+                  //   //   charitys: _categoriesMap["Charitys"] ?? false,
+                  //   //   education: _categoriesMap["Education"] ?? false,
+                  //   //   engineerJob: _categoriesMap["Engineer Job"] ?? false,
+                  //   //   events: _categoriesMap["Events"] ?? false,
+                  //   //   fitness: _categoriesMap["Fitness"] ?? false,
+                  //   //   handmades: _categoriesMap["Handmades"] ?? false,
+                  //   //   healthyTools:
+                  //   //       _categoriesMap["Healthy Tools"] ?? false,
+                  //   //   jewelryWatches:
+                  //   //       _categoriesMap["Jewelry Watches"] ?? false,
+                  //   //   libraries: _categoriesMap["Libraries"] ?? false,
+                  //   //   musicalInstruments:
+                  //   //       _categoriesMap["Musical Instruments"] ?? false,
+                  //   //   scenery: _categoriesMap["Scenery"] ?? false,
+                  //   //   talent: _categoriesMap["Talent"] ?? false,
+                  //   //   travelTourism:
+                  //   //       _categoriesMap["Travel Tourism"] ?? false,
+                  //   //   otherJob: _categoriesMap["Other Job"] ?? false,
+                  //   // ));
+                  // } else {
+                  //   // Show a message if the selection is not valid
+                  //   ScaffoldMessenger.of(context).showSnackBar(
+                  //     SnackBar(
+                  //       content: Text(LocaleKeys.atLeast3atMost8items.localize),
+                  //     ),
+                  //   );
+                  // }
                 },
                 text: LocaleKeys.next.localize,
               );

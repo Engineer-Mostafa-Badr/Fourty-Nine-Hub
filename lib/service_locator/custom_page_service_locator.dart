@@ -66,8 +66,8 @@ class CustomPageServiceLocator {
       ),
     );
 
-    serviceLocator.registerLazySingleton<FetchFavouriteCatUseCase>(
-      () => FetchFavouriteCatUseCase(
+    serviceLocator.registerLazySingleton<FetchCustomPageCategoriesUseCase>(
+      () => FetchCustomPageCategoriesUseCase(
         serviceLocator(),
       ),
     );

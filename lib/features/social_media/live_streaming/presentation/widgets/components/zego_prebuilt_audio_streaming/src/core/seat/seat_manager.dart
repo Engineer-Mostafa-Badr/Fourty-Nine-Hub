@@ -2,11 +2,10 @@
 import 'dart:async';
 import 'dart:convert';
 
-// Flutter imports:
-import 'package:flutter/cupertino.dart';
-
 // Package imports:
 import 'package:collection/collection.dart';
+// Flutter imports:
+import 'package:flutter/cupertino.dart';
 
 import '../../../../zego_prebuilt_live_streaming/src/components/utils/toast.dart';
 import '../../../../zego_uikit/zego_uikit.dart';

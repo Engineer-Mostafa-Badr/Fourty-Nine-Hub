@@ -1,26 +1,23 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
-import 'package:fourtyninehub/common/widgets/stateless/custom_sheet/custom_vertical_sheet_item.dart';
-import 'package:fourtyninehub/common/widgets/stateless/custom_sheet/sheet_vertical_item.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/account_taps/privacy/domain/entities/privacy_status_enum.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/edit_profile/domain/entities/edit_profile_entity.dart';
 import 'package:fourtyninehub/features/social_media/edit_profile/presentation/cubit/edit_profile_cubit.dart';
-import 'package:fourtyninehub/features/social_media/edit_profile/presentation/widgets/privact_icon.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 import '../../../../../common/widgets/form/text_fields/default_text_form_field.dart';
 import '../../../../../common/widgets/stateful/picker/date_picker.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
+import '../../../../RideFeature/presentation/pages/widgets/country_dropdown.dart';
+import '../widgets/gover_dropdown.dart';
 
 class EditProfileView extends StatefulWidget {
   const EditProfileView({
@@ -37,36 +34,47 @@ class _EditProfileViewState extends State<EditProfileView> {
   final phoneTextController = TextEditingController();
 
   final cityTextController = TextEditingController();
-  final countryTextController = TextEditingController();
   final birthDateTextController = TextEditingController();
-
   final jobTextController = TextEditingController();
   final referrerTextController = TextEditingController();
   final bioTextController = TextEditingController();
   final statusController = TextEditingController();
+  String country = 'country'.tr();
 
   @override
   void initState() {
     print(context.read<UserCubit>().state.data);
+    context.read<EditProfileCubit>().fetchRideGovernorates();
     userNameTextController.text =
-        "${context.read<UserCubit>().state.data?.username}" ??
-            '';
+        "${context.read<UserCubit>().state.data?.username}" ?? '';
     nameTextController.text =
         "${context.read<UserCubit>().state.data?.firstName} ${context.read<UserCubit>().state.data?.lastName}" ??
             '';
     phoneTextController.text =
         context.read<UserCubit>().state.data?.phone ?? '';
     cityTextController.text = context.read<UserCubit>().state.data?.city ?? '';
-    countryTextController.text =
-        context.read<UserCubit>().state.data?.country ?? '';
-
-    birthDateTextController.text =
-        context.read<UserCubit>().state.data?.birthday.toString() ?? '';
+    country = context.read<UserCubit>().state.data?.country ?? '';
+    context.read<EditProfileCubit>().state.selectedCountry = country;
+    // DateFormat('hh:mm a')
+    //     .format(DateTime.parse(
+    //     context.read<UserCubit>().state.data!.birthday.toString().substring(0, 19)))
+    //     .toString();
+    birthDateTextController.text = DateFormat('dd/MM/yyyy')
+            .format(DateTime.parse(context
+                .read<UserCubit>()
+                .state
+                .data!
+                .birthday
+                .toString()
+                .substring(0, 19)))
+            .toString() ??
+        '';
     jobTextController.text = context.read<UserCubit>().state.data?.job ?? '';
     bioTextController.text = context.read<UserCubit>().state.data?.bio ?? '';
     context
         .read<EditProfileCubit>()
         .initGender(context.read<UserCubit>().state.data?.gender ?? '');
+
     super.initState();
   }
 
@@ -122,47 +130,6 @@ class _EditProfileViewState extends State<EditProfileView> {
                   hint: LocaleKeys.name.localize,
                 ),
 
-                // FormTextField(
-                //     hint: '${LocaleKeys.name.localize} ....',
-                //     action: (v) {
-                //       setState(() {});
-                //     },
-                //     prefix: const Icon(Icons.edit),
-                //     controller: nameTextController),
-                // const Sizer(),
-                // Row(
-                //   children: [
-                //     Text(
-                //       LocaleKeys.bio.localize,
-                //       style: Styles.headerText(fontSize: 30),
-                //     ),
-                //     const Sizer(),
-                //     if (state.selectedBioPrivacy != null)
-                //       Text(
-                //         '(${state.selectedBioPrivacy == 'public' ? LocaleKeys.public.localize : state.selectedBioPrivacy == 'friends' ? LocaleKeys.friends.localize : state.selectedBioPrivacy == 'followers' ? LocaleKeys.followers.localize : state.selectedBioPrivacy == 'friendsAndFollowers' ? LocaleKeys.friendsAndFollowers.localize : state.selectedBioPrivacy == 'onlyMe' ? LocaleKeys.onlyMe.localize : ''})',
-                //         style: Styles.headerText(fontSize: 22),
-                //       ),
-                //   ],
-                // ),
-                // const Sizer(),
-                // Row(
-                //   children: [
-                //     Expanded(
-                //       child: FormTextField(
-                //           hint: '${LocaleKeys.bio.localize} ....',
-                //           action: (v) {
-                //             setState(() {});
-                //           },
-                //           prefix: const Icon(Icons.edit),
-                //           controller: bioTextController),
-                //     ),
-                //     PrivacyIcon(
-                //       selectPrivacy: (name) {
-                //         controller.selectBioPrivacy(privacy: name);
-                //       },
-                //     ),
-                //   ],
-                // ),
                 const Sizer(),
                 Row(
                   children: [
@@ -202,38 +169,6 @@ class _EditProfileViewState extends State<EditProfileView> {
                     // })
                   ],
                 ),
-                // const Sizer(),
-                // Row(
-                //   children: [
-                //     Text(
-                //       LocaleKeys.job.localize,
-                //       style: Styles.headerText(fontSize: 30),
-                //     ),
-                //     const Sizer(),
-                //     if (state.selectedJobPrivacy != null)
-                //       Text(
-                //         '(${state.selectedJobPrivacy == 'public' ? LocaleKeys.public.localize : state.selectedJobPrivacy == 'friends' ? LocaleKeys.friends.localize : state.selectedJobPrivacy == 'followers' ? LocaleKeys.followers.localize : state.selectedJobPrivacy == 'friendsAndFollowers' ? LocaleKeys.friendsAndFollowers.localize : state.selectedJobPrivacy == 'onlyMe' ? LocaleKeys.onlyMe.localize : ''})',
-                //         style: Styles.headerText(fontSize: 22),
-                //       ),
-                //   ],
-                // ),
-                // const Sizer(),
-                // Row(
-                //   children: [
-                //     Expanded(
-                //       child: FormTextField(
-                //           hint: '${LocaleKeys.job.localize} ....',
-                //           action: (v) {
-                //             setState(() {});
-                //           },
-                //           prefix: const Icon(Icons.work),
-                //           controller: jobTextController),
-                //     ),
-                //     PrivacyIcon(selectPrivacy: (name) {
-                //       controller.selectJobPrivacy(privacy: name);
-                //     })
-                //   ],
-                // ),
                 const Sizer(),
                 Text(
                   LocaleKeys.birthDate.localize,
@@ -241,72 +176,59 @@ class _EditProfileViewState extends State<EditProfileView> {
                 ),
                 const Sizer(),
                 DatePickerField(
-                  initialDate: DateTime.now(),
-                  minDate: DateTime.now().subtract(const Duration(days: 10)),
-                  maxDate: DateTime.now().subtract(const Duration(days: 10)),
+                  initialDate: DateTime(2000, 1, 1),
+                  minDate: DateTime(1950, 1, 1),
+                  maxDate: DateTime.now(),
                   onDateSelected: (DateTime? date) {
                     print(date.toString());
                     birthDateTextController.text =
-                        '${date!.year}-${date.month}-${date.day}';
+                        '${date!.day}/${date.month}/${date.year}';
+                    DateFormat format = DateFormat("dd/MM/yyyy");
+                    DateTime dateTime =
+                        format.parse(birthDateTextController.text);
+                    print(dateTime.toString());
                   },
                   icon: const Icon(Icons.keyboard_arrow_down_outlined),
                   borderColor: AppColors.PRIMARY_COLOR,
                   borderWidth: 1,
                   title: birthDateTextController.text,
                 ),
-                // DefaultTextFormField(
-                //   hint: LocaleKeys.birthDate.localize,
-                //   currentController: birthDateTextController,
-                //   onTap: () async {
-                //     // showDatePicker(context: context, firstDate: t, lastDate: lastDate)
-                //   },
-                //   enabled: false,
-                //   fillColor: Colors.transparent,
-                //   // prefixIcon: const Icon(Icons.family_restroom,color: Colors.green,),
-                //   suffixIcon: const Icon(Icons.keyboard_arrow_down_outlined),
+                const Sizer(),
+                Text(
+                  LocaleKeys.country.localize,
+                  style: Styles.headerText(fontSize: 30),
+                ),
+                const Sizer(),
+                GoverDropdown(
+                  country: country,
+                ),
+
+                // Row(
+                //   children: [
+                //     Expanded(
+                //       child: DefaultTextFormField(
+                //         fillColor: Colors.transparent,
+                //         currentController: countryTextController,
+                //         hint: LocaleKeys.country.localize,
+                //         onTap: () async {},
+                //         enabled: false,
+                //         // prefixIcon: const Icon(Icons.family_restroom,color: Colors.green,),
+                //         suffixIcon:
+                //             const Icon(Icons.keyboard_arrow_down_outlined),
+                //       ),
+                //       // FormTextField(
+                //       //     hint: '${LocaleKeys.country.localize} ....',
+                //       //     action: (v) {
+                //       //       setState(() {});
+                //       //     },
+                //       //     prefix: const Icon(Icons.language),
+                //       //     controller: countryTextController),
+                //     ),
+                //     // PrivacyIcon(selectPrivacy: (name) {
+                //     //   controller.selectCountryPrivacy(privacy: name);
+                //     // })
+                //   ],
                 // ),
-                const Sizer(),
-                Row(
-                  children: [
-                    Text(
-                      LocaleKeys.country.localize,
-                      style: Styles.headerText(fontSize: 30),
-                    ),
-                    // const Sizer(),
-                    // if (state.selectedCountryPrivacy != null)
-                    //   Text(
-                    //     '(${state.selectedCountryPrivacy == 'public' ? LocaleKeys.public.localize : state.selectedCountryPrivacy == 'friends' ? LocaleKeys.friends.localize : state.selectedCountryPrivacy == 'followers' ? LocaleKeys.followers.localize : state.selectedCountryPrivacy == 'friendsAndFollowers' ? LocaleKeys.friendsAndFollowers.localize : state.selectedCountryPrivacy == 'onlyMe' ? LocaleKeys.onlyMe.localize : ''})',
-                    //     style: Styles.headerText(fontSize: 22),
-                    //   ),
-                  ],
-                ),
-                const Sizer(),
-                Row(
-                  children: [
-                    Expanded(
-                      child: DefaultTextFormField(
-                        fillColor: Colors.transparent,
-                        currentController: countryTextController,
-                        hint: LocaleKeys.country.localize,
-                        onTap: () async {},
-                        enabled: false,
-                        // prefixIcon: const Icon(Icons.family_restroom,color: Colors.green,),
-                        suffixIcon:
-                            const Icon(Icons.keyboard_arrow_down_outlined),
-                      ),
-                      // FormTextField(
-                      //     hint: '${LocaleKeys.country.localize} ....',
-                      //     action: (v) {
-                      //       setState(() {});
-                      //     },
-                      //     prefix: const Icon(Icons.language),
-                      //     controller: countryTextController),
-                    ),
-                    // PrivacyIcon(selectPrivacy: (name) {
-                    //   controller.selectCountryPrivacy(privacy: name);
-                    // })
-                  ],
-                ),
                 // const Sizer(),
                 // Row(
                 //   children: [
@@ -479,26 +401,29 @@ class _EditProfileViewState extends State<EditProfileView> {
                       )
                     : InkWell(
                         onTap: () async {
+                          DateFormat format = DateFormat("dd/MM/yyyy");
+                          DateTime dateTime =
+                              format.parse(birthDateTextController.text);
                           await controller.editProfile(
-                          EditProfileEntity(
+                            EditProfileEntity(
                               state.selectedBioPrivacy ?? 'public',
                               state.selectedPhonePrivacy ?? 'public',
                               state.selectedJobPrivacy ?? 'public',
                               state.selectedCountryPrivacy ?? 'public',
                               state.selectedCityPrivacy ?? 'public',
-                              firstName:
-                                  nameTextController.text.split(' ')[0],
+                              firstName: nameTextController.text.split(' ')[0],
                               lastName: nameTextController.text.split(' ')[1],
                               bio: bioTextController.text,
                               phone: phoneTextController.text,
                               job: jobTextController.text,
-                              country: countryTextController.text,
+                              country: state.selectedCountry!,
                               city: cityTextController.text,
-                              birthday: birthDateTextController.text,
+                              birthday: dateTime.toString(),
                               maritalPrivacy:
                                   state.selectedStatusPrivacy ?? 'public',
                               maritalStatus: state.selectedStatus ?? 'single',
-                              isMale: state.isMale,),
+                              isMale: state.isMale,
+                            ),
                           );
                         },
                         child: Container(

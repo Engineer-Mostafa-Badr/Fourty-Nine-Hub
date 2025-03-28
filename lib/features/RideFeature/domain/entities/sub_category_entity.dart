@@ -5,6 +5,8 @@ class SubCategoryEntityUpdated {
   final String picture;
   final int driverCount;
   final bool isFavorite;
+  bool? isSelected;
+  bool? isEnabled;
   final bool subscribedPremium;
 
   SubCategoryEntityUpdated({
@@ -15,5 +17,7 @@ class SubCategoryEntityUpdated {
     required this.driverCount,
     required this.isFavorite,
     required this.subscribedPremium,
+    this.isSelected=false,
+    this.isEnabled=true,
   });
 }

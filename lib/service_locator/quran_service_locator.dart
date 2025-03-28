@@ -12,6 +12,8 @@ import 'package:fourtyninehub/features/quraan/domain/use_case/fetch_surah_use_ca
 import 'package:fourtyninehub/features/quraan/presentation/cubit/quraan_cubit.dart';
 import 'package:get_it/get_it.dart';
 
+import '../features/azkaar/domain/use_case/search_azkar_usecase.dart';
+
 class QuranServiceLocator {
   static Future<void> execute({required GetIt serviceLocator}) async {
     serviceLocator.registerLazySingleton<QuranRemoteDataSource>(
@@ -53,8 +55,13 @@ class QuranServiceLocator {
         () => FetchDetailsAzkarUseCase(
               serviceLocator(),
             ));
+    serviceLocator
+        .registerLazySingleton<SearchAzkarUseCase>(() => SearchAzkarUseCase(
+              serviceLocator(),
+            ));
 
     serviceLocator.registerFactory<AzkarCubit>(() => AzkarCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
         ));

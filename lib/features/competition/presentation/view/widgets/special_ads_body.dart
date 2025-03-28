@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/features/competition/presentation/view/widgets/build_item_list_view.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '../../../../../service_locator/service_locator.dart';
 import '../../cubit/competition_cubit/competition_cubit.dart';
 import '../../cubit/competition_cubit/competition_state.dart';

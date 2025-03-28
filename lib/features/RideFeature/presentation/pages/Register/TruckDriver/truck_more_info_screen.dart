@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-
-import 'package:go_router/go_router.dart';
-
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
-import 'package:fourtyninehub/core/widget/custom_switch_list_title.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 
 import '../widgets/close_widget.dart';
 import '../widgets/register_expansion_tile.dart';
@@ -35,46 +30,44 @@ class TruckMoreInfoScreen extends StatelessWidget {
       'Ismailia',
       'Menoufia',
     ];
-    TextEditingController pricingPerKmController = TextEditingController();
-
     return CustomScaffold(
       appBar: const HomeAppbar(),
-      floatingActionButton: registerFloatingActionButton(
-        context,
-        index: 5,
-        onTap: () => context.push(Routes.completeRegisterScreen),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            spacing: 4,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              closeWidget(context),
-              Label(
-                text: LocaleKeys.moreInfo.localize,
-                style: Styles.headerText(
-                  fontWeight: FontWeight.w500,
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 32,left: 16,right: 16,),
+                child: Column(
+                  spacing: 4,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    closeWidget(context:context,onAcceptSaveData: (){}),
+                    Label(
+                      text: LocaleKeys.moreInfo.localize,
+                      style: Styles.headerText(
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const Sizer(),
+                    RegisterExpansionTile(
+                      title: Label(text: LocaleKeys.favoriteCity.localize),
+                      onChange: (Widget selectedItem) {
+                        // print("Selected Item: ${(selectedItem as Label).text}");
+                      }, length: favoriteCity.length,
+                      children: List.generate(favoriteCity.length,
+                          (index) => Label(text: favoriteCity[index])),
+                    ),
+                  ],
                 ),
               ),
-              const Sizer(),
-              RegisterExpansionTile(
-                title: Label(text: LocaleKeys.favoriteCity.localize),
-                children: List.generate(favoriteCity.length,
-                    (index) => Label(text: favoriteCity[index])),
-                onChange: (Widget selectedItem) {
-                  // print("Selected Item: ${(selectedItem as Label).text}");
-                },
-              ),
-              const Sizer(),
-              DefaultTextFormField(
-                currentController: pricingPerKmController,
-                hint: LocaleKeys.pricingPerKm.localize,
-              ),
-            ],
+            ),
           ),
-        ),
+          RegisterNextRow(
+            index: 5,
+            onTap: () => context.push(Routes.completeRegisterScreen),
+          ),
+        ],
       ),
     );
   }

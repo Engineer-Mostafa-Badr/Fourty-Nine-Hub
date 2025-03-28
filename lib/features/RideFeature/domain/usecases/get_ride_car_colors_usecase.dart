@@ -1,7 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/car_years_and_types_entity.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_statistics_entity.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_color_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_color_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/repositories/ride_repository.dart';
 

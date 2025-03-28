@@ -1,7 +1,18 @@
+import 'package:flutter/src/widgets/basic.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/creminal_record_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/drug_analysis.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/technical_examination_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/upload_rider_images.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/activity_trip_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/complete_ride_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/expired_trips_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/rating_driver_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_arrived_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/running_trips_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/emergency_contacts_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/support_client_details_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/support_screen/support_ride_screen.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/favourite_view.dart';
 import 'package:fourtyninehub/features/account_taps/contact_us/presentation/cubit/contact_us_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/contact_us/presentation/pages/contact_us_view.dart';
@@ -12,8 +23,14 @@ import 'package:fourtyninehub/features/account_taps/share_app/presentation/pages
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet_history_entity.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Balance_Cubit/balance_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_two_cubit/wallet_two_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/balance_wallet_view.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/cashback_view.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/gift_view.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/gift_view.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/gift_wallet_view.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/winners_gift_view.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/winners_gift_view.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/cubit/ad_details_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/pages/ad_details_view.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_requests/presentation/cubit/ad_requests_cubit.dart';
@@ -44,12 +61,12 @@ import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cub
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/get_available_trips_for_drivers/cubit/get_available_trips_for_drivers_cubit.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/cubits/get_currency/cubit/get_currency_cubit.dart';
 import 'package:fourtyninehub/features/carpool/avaliable_routes/presentation/views/carpool_view.dart';
+import 'package:fourtyninehub/features/carpool/create_carpool/presentation/cubits/cubit/create_car_pool_cubit.dart';
 import 'package:fourtyninehub/features/carpool/join_trip/presentation/cubits/cubit/join_trip_car_pool_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/custom_page.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/page_preview.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_menu_cubit/create_menu_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
-import 'package:fourtyninehub/features/carpool/create_carpool/presentation/cubits/cubit/create_car_pool_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/cusine_restaurants/presentation/cubit/cusine_restaurants_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/edit_food/presentation/cubit/edit_food_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/edit_food/presentation/pages/edit_food_view.dart';
@@ -62,7 +79,6 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/presentatio
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_taps_cubit/main_categories_taps_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/slider_cubit.dart/slider_cubit.dart';
-import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/thumbnails/thumbnails_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/booking/presentation/cubit/all_appointments_cubit/all_appointments_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/booking/presentation/pages/all_appointments.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
@@ -136,6 +152,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/check
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/create_trip_request_ride_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/delete_driver_ride_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_cateogry_rider_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_destination_point_ride_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_driver_info_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_driver_info_shipping_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_driver_ride_cubit.dart';
@@ -143,6 +160,7 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_e
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_location_from_lat_lng_ride_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_reasons_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_route_rider_cubit.dart';
+import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_starting_point_ride_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_trip_info_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/picture_optional_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/raise_fare_cubit.dart';
@@ -161,24 +179,25 @@ import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/updat
 import 'package:fourtyninehub/features/ride/RideRequest/presentation/pages/update_driver_shipping_screen.dart';
 import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
 import 'package:fourtyninehub/features/search/presentation/pages/search_view.dart';
+import 'package:fourtyninehub/features/settings/presentation/pages/change_password_second_view.dart';
+import 'package:fourtyninehub/features/settings/presentation/pages/change_password_view.dart';
 import 'package:fourtyninehub/features/settings/presentation/pages/settings_view.dart';
+import 'package:fourtyninehub/features/settings/presentation/pages/verification_view.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/data/models/get_requests_for_loading_model/get_requests_for_loading_model.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/driverStatistics_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/get_all_trip_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_destination_point_ride_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/presentation/cubit/get_starting_point_ride_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/shipping_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/cubit/trip_cubit.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/create_shipping_view.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/dahsboard_driver_screen.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/register_shipping_screen.dart';
 import 'package:fourtyninehub/features/shipping/create_shipping_request/presentation/pages/trip_rating_screen.dart';
-import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/attachments_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/broadcasts/presentation/pages/broadcast_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/broadcasts/presentation/pages/see_all_broadcasts.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_profile/presentation/pages/chat_profile_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/attachments_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/camera_picker/camera_picker.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/chat_room_view.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/pages/contacts_view.dart';
@@ -258,20 +277,36 @@ import 'package:fourtyninehub/features/zoom/presentation/widgets/join_meeting_sc
 import 'package:fourtyninehub/main.dart';
 import 'package:go_router/go_router.dart';
 
+import '../features/OnBoarding/Presentation/Controllers/on_boarding_cubit.dart';
+import '../features/OnBoarding/Presentation/Screens/on_boarding_screen.dart';
 import '../features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
+import '../features/RideFeature/presentation/controllers/dashboards_cubit/dashboards_cubit.dart';
 import '../features/RideFeature/presentation/pages/Register/Driver/drivers_license_screen.dart';
 import '../features/RideFeature/presentation/pages/Register/Driver/more_info_screen.dart';
 import '../features/RideFeature/presentation/pages/Register/Driver/personal_documents_screen.dart';
 import '../features/RideFeature/presentation/pages/Register/Driver/personal_information_screen.dart';
 import '../features/RideFeature/presentation/pages/Register/Driver/vehicle_information_screen.dart';
+import '../features/RideFeature/presentation/pages/Register/Driver/welcome_ride_register.dart';
 import '../features/RideFeature/presentation/pages/Register/TruckDriver/truck_drivers_license_screen.dart';
 import '../features/RideFeature/presentation/pages/Register/TruckDriver/truck_more_info_screen.dart';
 import '../features/RideFeature/presentation/pages/Register/TruckDriver/truck_personal_documents_screen.dart';
 import '../features/RideFeature/presentation/pages/Register/TruckDriver/truck_personal_information_screen.dart';
 import '../features/RideFeature/presentation/pages/Register/TruckDriver/truck_vehicle_information_screen.dart';
+import '../features/RideFeature/presentation/pages/Register/TruckDriver/truck_welcome_ride_register.dart';
 import '../features/RideFeature/presentation/pages/Register/complete_register_screen.dart';
-import '../features/RideFeature/presentation/pages/Register/welcome_ride_register.dart';
+import '../features/RideFeature/presentation/pages/connection_call_screen.dart';
+import '../features/RideFeature/presentation/pages/create_loading_trip_screen.dart';
+import '../features/RideFeature/presentation/pages/current_ride_home.dart';
+import '../features/RideFeature/presentation/pages/dashboards/ride_dashboard_details_screen.dart';
+import '../features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';
+import '../features/RideFeature/presentation/pages/osm_search_and_pick.dart';
+import '../features/RideFeature/presentation/pages/rating_client_screen.dart';
+import '../features/RideFeature/presentation/pages/ride_finding_screen.dart';
 import '../features/RideFeature/presentation/pages/ride_home.dart';
+import '../features/RideFeature/presentation/pages/ride_loading_request_screen.dart';
+import '../features/RideFeature/presentation/pages/ride_request_screen.dart';
+import '../features/RideFeature/presentation/pages/ride_status_screen.dart';
+import '../features/RideFeature/presentation/pages/safety_ride_screen.dart';
 import '../features/account_taps/account/presentation/cubit/cubit/favourite_drawer_cubit.dart';
 import '../features/account_taps/account/presentation/cubit/managers/favourite_categories_cubit.dart';
 import '../features/account_taps/account/presentation/cubit/managers/favourite_subcategories_cubit.dart';
@@ -285,11 +320,14 @@ import '../features/account_taps/policies/presentation/pages/policy_view.dart';
 import '../features/account_taps/share_app/presentation/cubit/share_app_cubit.dart';
 import '../features/account_taps/transfer_money/presentation/pages/transfer_money_view.dart';
 import '../features/account_taps/wallet/presentation/cubit/Gift_Cubit/gift_cubit.dart';
+import '../features/account_taps/wallet/presentation/cubit/subscription_wallet_cubit/subscription_wallet_cubit.dart';
 import '../features/account_taps/wallet/presentation/pages/wallet_history.dart';
 import '../features/account_taps/wallet/presentation/pages/wallet_view.dart';
+import '../features/account_taps/wallet/presentation/pages/winners_cashback_view.dart';
 import '../features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
 import '../features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
 import '../features/ads_feature/create_company_ad/presentation/pages/create_company_ad.dart';
+import '../features/authentication/domain/entities/forget_password_questions_entity.dart';
 import '../features/authentication/presentation/controllers/create_new_forgot_password_cubit/create_new_forgot_password_cubit.dart';
 import '../features/authentication/presentation/controllers/forgot_password_cubit/forgot_password_cubit.dart';
 import '../features/authentication/presentation/controllers/verify_forgot_password_otp/verify_forgot_password_otp_cubit.dart';
@@ -356,9 +394,9 @@ import '../features/shipping/create_shipping_request/presentation/cubit/get_all_
 import '../features/shipping/create_shipping_request/presentation/cubit/get_my_trip_cubit.dart';
 import '../features/social_media/club_house/presentation/pages/audio_stream_screen.dart';
 import '../features/social_media/club_house/presentation/pages/club_house_home_screen.dart';
+import '../features/social_media/create_post/presentation/pages/create_life_event.dart';
 import '../features/social_media/create_post/presentation/pages/create_post_view.dart';
 import '../features/social_media/create_post/presentation/pages/life_event.dart';
-import '../features/social_media/create_post/presentation/pages/create_life_event.dart';
 import '../features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import '../features/social_media/social_posts/presentation/pages/Social_home.dart';
 import '../features/social_media/social_posts/presentation/pages/other_account_view.dart';
@@ -388,9 +426,9 @@ class AppPages {
                 BlocProvider(
                   create: (context) => serviceLocator<SliderCubit>(),
                 ),
-                BlocProvider(
-                  create: (context) => serviceLocator<ThumbnailsCubit>(),
-                ),
+                // BlocProvider(
+                //   create: (context) => serviceLocator<ThumbnailsCubit>(),
+                // ),
               ],
               child: const FourtyNineView(),
             ),
@@ -420,10 +458,10 @@ class AppPages {
                           BlocProvider(
                             create: (context) => serviceLocator<SliderCubit>(),
                           ),
-                          BlocProvider(
-                            create: (context) =>
-                                serviceLocator<ThumbnailsCubit>(),
-                          ),
+                          // BlocProvider(
+                          //   create: (context) =>
+                          //       serviceLocator<ThumbnailsCubit>(),
+                          // ),
                         ],
                         child: PagePreview(
                           state: state.extra as dynamic,
@@ -431,6 +469,15 @@ class AppPages {
                       ),
                     ),
                   ]),
+              GoRoute(
+                path: Routes.onBoardingScreen,
+                name: Routes.onBoardingScreen,
+                builder: (context, state) => BlocProvider(
+                  child: const OnBoardingScreen(),
+                  create: (context) =>
+                      serviceLocator<OnBoardingCubit>(),
+                ),
+              ),
               GoRoute(
                 path: Paths.RestaurantDashboard,
                 name: Routes.RestaurantDashboard,
@@ -463,12 +510,22 @@ class AppPages {
               GoRoute(
                 path: Paths.RIDERUNNINGTRIPS,
                 name: Routes.RIDERUNNINGTRIPS,
-                builder: (context, state) => RunningTripScreen(),
+                builder: (context, state) =>
+                    RunningTripScreen(params: state.extra as RunningTripParams),
               ),
               GoRoute(
                 path: Paths.RIDEEXPIREDTRIPE,
                 name: Routes.RIDEEXPIREDTRIPE,
-                builder: (context, state) => ExpiredTripsScreen(),
+                builder: (context, state) => ExpiredTripsScreen(
+                  params: state.extra as ExpiredTripsScreenParams,
+                ),
+              ),
+              GoRoute(
+                path: Paths.RIDEOPENSTREETMAPSEARCHANDPICK,
+                name: Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
+                builder: (context, state) => RideOpenStreetMapSearchAndPick(
+                  params: state.extra as RideOpenStreetMapSearchAndPickParams,
+                ),
               ),
               GoRoute(
                 path: Paths.EditFoodView,
@@ -728,7 +785,7 @@ class AppPages {
                     BlocProvider<CreateNewForgotPasswordCubit>(
                   create: (_) => serviceLocator(),
                   child: CreateNewForgetPasswordView(
-                    email: state.extra as String,
+                    emailOrUserId: state.extra as Map<String, dynamic>,
                   ),
                 ),
               ),
@@ -849,6 +906,16 @@ class AppPages {
                 builder: (context, state) => const Winners(),
               ),
               GoRoute(
+                path: Paths.WINNERSCASHBACK,
+                name: Routes.WINNERSCASHBACK,
+                builder: (context, state) => const WinnersCashbackView(),
+              ),
+              GoRoute(
+                path: Paths.WINNERSGift,
+                name: Routes.WINNERSGift,
+                builder: (context, state) => const WinnersGiftView(),
+              ),
+              GoRoute(
                 path: Paths.QURAAN,
                 name: Routes.QURAAN,
                 builder: (context, state) => BlocProvider<QuranCubit>(
@@ -877,8 +944,17 @@ class AppPages {
               GoRoute(
                   path: Paths.WALLET,
                   name: Routes.WALLET,
-                  builder: (context, state) => BlocProvider<WalletCubit>(
-                        create: (_) => serviceLocator(),
+                  builder: (context, state) => MultiBlocProvider(
+                        providers: [
+                          BlocProvider(
+                            create: (_) => serviceLocator<WalletTwoCubit>()
+                              ..getAllDataWalletScreen(context),
+                          ),
+                          BlocProvider(
+                            create: (_) =>
+                                serviceLocator<SubscriptionWalletCubit>(),
+                          ),
+                        ],
                         child: const WalletView(
                             // type: state.extra as WalletTypes,
                             ),
@@ -899,6 +975,14 @@ class AppPages {
                       builder: (context, state) => const TransferMoneyView(),
                     ),
                   ]),
+
+              // CashBack
+              GoRoute(
+                path: Paths.CASHBACK,
+                name: Routes.CASHBACK,
+                builder: (context, state) => const CashbackView(),
+              ),
+
               GoRoute(
                 path: Paths.BALANCE,
                 name: Routes.BALANCE,
@@ -907,12 +991,50 @@ class AppPages {
                   child: const BalanceWalletView(),
                 ),
               ),
+
+              // Gift
               GoRoute(
                 path: Paths.GIFT,
                 name: Routes.GIFT,
-                builder: (context, state) => BlocProvider<WalletCubit>(
-                  create: (_) => serviceLocator(),
-                  child: const GiftWalletView(),
+                builder: (context, state) => const GiftView(),
+              ),
+              // GoRoute(
+              //   path: Paths.GIFT,
+              //   name: Routes.GIFT,
+              //   builder: (context, state) => BlocProvider<WalletCubit>(
+              //     create: (_) => serviceLocator(),
+              //     child: const GiftWalletView(),
+              //   ),
+              // ),
+
+              // Winners
+              // GoRoute(
+              //   path: Paths.WINNERS,
+              //   name: Routes.WINNERS,
+              //   builder: (context, state) => GiftView(),
+              // ),
+
+              // Change Password
+              GoRoute(
+                path: Paths.CHANGEPASSWORD,
+                name: Routes.CHANGEPASSWORD,
+                builder: (context, state) => const ChangePasswordView(),
+              ),
+
+              GoRoute(
+                path: Paths.CHANGEPASSWORDSECOND,
+                name: Routes.CHANGEPASSWORDSECOND,
+                builder: (context, state) => const ChangePasswordSecondView(),
+              ),
+
+              GoRoute(
+                path: Paths.VERIFICATION,
+                name: Routes.VERIFICATION,
+                builder: (context, state) => BlocProvider(
+                  create: (context) => serviceLocator<ForgotPasswordCubit>(),
+                  child: VerificationView(
+                    questions: state.extra as ForgetPasswordQuestionsEntity,
+                  ),
                 ),
               ),
 
@@ -933,7 +1055,7 @@ class AppPages {
                     GoRoute(
                         path: Paths.PRIVACY,
                         name: Routes.PRIVACY,
-                        builder: (context, state) => const PrivacyView()),
+                        builder: (context, state) => PrivacyView()),
                     GoRoute(
                         path: Paths.POLICY,
                         name: Routes.POLICY,
@@ -1155,7 +1277,9 @@ class AppPages {
                             name: Routes.EDITPROFILE,
                             builder: (context, state) =>
                                 BlocProvider<EditProfileCubit>(
-                                    create: (_) => serviceLocator(),
+                                    create: (_) =>
+                                        serviceLocator<EditProfileCubit>()
+                                          ..fetchRideGovernorates(),
                                     child: const EditProfileView()),
                           ),
                         ]),
@@ -2476,6 +2600,9 @@ class AppPages {
                       create: (context) => JoinTripCarPoolCubit(
                           joinTripCarpoolUsecase: serviceLocator()),
                     ),
+                    BlocProvider<AdvertisementCubit>(
+                      create: (context) => serviceLocator<AdvertisementCubit>(),
+                    ),
                   ],
                   child: const AvailableTripsView(),
                 ),
@@ -2611,16 +2738,19 @@ class AppPages {
                 },
               ),
               GoRoute(
+                path: Paths.UploadRiderImages,
+                name: Routes.UploadRiderImages,
+                builder: (context, state) {
+                  return UploadRiderImages(
+                    params: state.extra as UploadRiderImagesParams?,
+                  );
+                },
+              ),
+              GoRoute(
                 path: Paths.personalInformationScreen,
                 name: Routes.personalInformationScreen,
                 builder: (context, state) {
-                  return MultiBlocProvider(providers: [
-                    BlocProvider<DestGetLatAndLongCubit>(
-                      create: (context) => DestGetLatAndLongCubit(
-                          getLatLongFromAddressRemoteDataSource:
-                              serviceLocator()),
-                    ),
-                  ], child: const PersonalInformationScreen());
+                  return const PersonalInformationScreen();
                 },
               ),
               GoRoute(
@@ -2634,6 +2764,27 @@ class AppPages {
                               serviceLocator()),
                     ),
                   ], child: const DriversLicenseScreen());
+                },
+              ),
+              GoRoute(
+                path: Paths.drugAnalysisScreen,
+                name: Routes.drugAnalysisScreen,
+                builder: (context, state) {
+                  return const DragAnalyticsScreen();
+                },
+              ),
+              GoRoute(
+                path: Paths.criminalRecordScreen,
+                name: Routes.criminalRecordScreen,
+                builder: (context, state) {
+                  return const CriminalRecordScreen();
+                },
+              ),
+              GoRoute(
+                path: Paths.technicalExaminationScreen,
+                name: Routes.technicalExaminationScreen,
+                builder: (context, state) {
+                  return const TechnicalExaminationScreen();
                 },
               ),
               GoRoute(
@@ -2675,6 +2826,20 @@ class AppPages {
                   ], child: const MoreInfoScreen());
                 },
               ),
+              GoRoute(
+                path: Paths.truckWelcomeRideRegister,
+                name: Routes.truckWelcomeRideRegister,
+                builder: (context, state) {
+                  return MultiBlocProvider(providers: [
+                    BlocProvider<DestGetLatAndLongCubit>(
+                      create: (context) => DestGetLatAndLongCubit(
+                          getLatLongFromAddressRemoteDataSource:
+                              serviceLocator()),
+                    ),
+                  ], child: const TruckWelcomeRideRegister());
+                },
+              ),
+
               GoRoute(
                 path: Paths.truckPersonalInformationScreen,
                 name: Routes.truckPersonalInformationScreen,
@@ -2752,6 +2917,166 @@ class AppPages {
                     ),
                   ], child: const CompleteRegisterScreen());
                 },
+              ),
+              GoRoute(
+                path: Paths.createLoadingTripScreen,
+                name: Routes.createLoadingTripScreen,
+                builder: (context, state) {
+                  return MultiBlocProvider(providers: [
+                    BlocProvider<DestGetLatAndLongCubit>(
+                      create: (context) => DestGetLatAndLongCubit(
+                          getLatLongFromAddressRemoteDataSource:
+                              serviceLocator()),
+                    ),
+                  ], child: const CreateLoadingTripScreen());
+                },
+              ),
+              GoRoute(
+                path: Paths.CURRENTRIDEHOME,
+                name: Routes.CURRENTRIDEHOME,
+                builder: (context, state) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider(
+                      create: (context) => serviceLocator<RideCubit>(),
+                    ),
+                  ],
+                  child: const CurrentRideScreen(),
+                ),
+              ),
+              GoRoute(
+                path: Paths.RideREGUESTHOME,
+                name: Routes.RideRequestHOME,
+                builder: (context, state) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider(
+                      create: (context) => serviceLocator<RideCubit>(),
+                    ),
+                  ],
+                  child: const RideRequestScreen(),
+                ),
+              ),
+              GoRoute(
+                path: Paths.RideStatusScreen,
+                name: Routes.RideStatusScreen,
+                builder: (context, state) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider(
+                      create: (context) => serviceLocator<RideCubit>(),
+                    ),
+                  ],
+                  child: const RideStatusScreen(),
+                ),
+              ),
+              GoRoute(
+                path: Paths.ratingClientScreen,
+                name: Routes.ratingClientScreen,
+                builder: (context, state) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider(
+                      create: (context) => serviceLocator<RideCubit>(),
+                    ),
+                  ],
+                  child: RatingClientScreen(),
+                ),
+              ),
+
+              GoRoute(
+                path: Paths.connectionCallScreen,
+                name: Routes.connectionCallScreen,
+                builder: (context, state) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider(
+                      create: (context) => serviceLocator<RideCubit>(),
+                    ),
+                  ],
+                  child: const ConnectionCallScreen(),
+                ),
+              ),
+              GoRoute(
+                path: Paths.safetyRideScreen,
+                name: Routes.safetyRideScreen,
+                builder: (context, state) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider(
+                      create: (context) => serviceLocator<RideCubit>(),
+                    ),
+                  ],
+                  child: const SafetyRideScreen(),
+                ),
+              ),
+              GoRoute(
+                path: Paths.rideFindingScreen,
+                name: Routes.rideFindingScreen,
+                builder: (context, state) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider(
+                      create: (context) => serviceLocator<RideCubit>(),
+                    ),
+                  ],
+                  child: const RideFindingScreen(),
+                ),
+              ),
+              GoRoute(
+                path: Paths.rideModeScreen,
+                name: Routes.rideModeScreen,
+                builder: (context, state) => BlocProvider(
+                  create: (context) => serviceLocator<DashboardsCubit>(),
+                  child: RideModeScreen(params: state.extra as RideModeParams),
+                ),
+              ),
+              GoRoute(
+                  path: Paths.rideDashboardDetailsScreen,
+                  name: Routes.rideDashboardDetailsScreen,
+                  builder: (context, state) => MultiBlocProvider(
+                        providers: [
+                          BlocProvider(
+                            create: (context) =>
+                                serviceLocator<DashboardsCubit>(),
+                          ),
+                        ],
+                        child: RideDashboardDetailsScreen(
+                            modeType: state.extra as String),
+                      )),
+              GoRoute(
+                  path: Paths.rideLoadingRequestScreen,
+                  name: Routes.rideLoadingRequestScreen,
+                  builder: (context, state) => MultiBlocProvider(
+                        providers: [
+                          BlocProvider(
+                            create: (context) => serviceLocator<RideCubit>(),
+                          ),
+                        ],
+                        child: const RideLoadingRequestScreen(),
+                      )),
+              GoRoute(
+                path: Paths.supportRideScreen,
+                name: Routes.supportRideScreen,
+                builder: (context, state) => SupportRideScreen(),
+              ),
+              GoRoute(
+                path: Paths.supportClientDetailsScreen,
+                name: Routes.supportClientDetailsScreen,
+                builder: (context, state) => SupportClientDetailsScreen(),
+              ),
+              GoRoute(
+                path: Paths.emergencyContactsScreen,
+                name: Routes.emergencyContactsScreen,
+                builder: (context, state) => EmergencyContactsScreen(),
+              ),
+              GoRoute(
+                path: Paths.rideArrivedScreen,
+                name: Routes.rideArrivedScreen,
+                builder: (context, state) => RideArrivedScreen(),
+              ),
+              GoRoute(
+                path: Paths.ratingDriverScreen,
+                name: Routes.ratingDriverScreen,
+                builder: (context, state) => RatingDriverScreen(),
+              ),
+              GoRoute(
+                path: Paths.completeRideScreen,
+                name: Routes.completeRideScreen,
+                builder: (context, state) => CompleteRideScreen(),
               ),
               GoRoute(
                 path: Paths.newTripJoinScreen,

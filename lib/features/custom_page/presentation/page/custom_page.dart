@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -15,7 +16,6 @@ import 'package:go_router/go_router.dart';
 import 'package:restart_app/restart_app.dart';
 
 import '../../../../core/widget/custom_scaffold.dart';
-import '../../../../core/widget/custom_switch_button.dart';
 import '../../../../core/widget/custom_switch_button.dart';
 
 class CustomPage extends StatefulWidget {
@@ -130,12 +130,10 @@ class ActivatePageBlocConsumer extends StatelessWidget {
                 value: state.activate?.customPage ?? false,
                 onChanged: (v) {
                   controller.updateActivate(v);
-                  Restart.restartApp();
+                  // Restart.restartApp();
+                  Phoenix.rebirth(context);
+
                 },
-                // activeColor: Colors.red,
-                // inactiveThumbColor: Colors.black,
-                // activeTrackColor: Colors.grey,
-                // inactiveTrackColor: Colors.grey,
               ),
             ],
           ),

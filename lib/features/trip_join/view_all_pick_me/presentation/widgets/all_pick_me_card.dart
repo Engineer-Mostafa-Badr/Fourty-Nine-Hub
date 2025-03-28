@@ -149,7 +149,57 @@ class AllPickMeCard extends StatelessWidget {
                         child: AvaialbleTripsButton(
                           title: LocaleKeys.regularRequest.localize,
                           color: AppColors.SECONDARY_COLOR,
-                          onTap: requestOnTap,
+                          onTap: (){
+                            showModalBottomSheet(
+                              backgroundColor: context.isDarkMode
+                                  ? AppColors.DARK_BLUE_COLOR.withOpacity(0.95)
+                                  : AppColors.LIGHT_COLOR,
+                              context: context,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(32.0),
+                                  topRight: Radius.circular(32.0),
+                                ),
+                              ),
+                              isDismissible: true,
+                              isScrollControlled: true,
+                              builder: (BuildContext context) {
+                                return AnimatedPadding(
+                                  padding: MediaQuery.of(context).viewInsets,
+                                  duration: const Duration(milliseconds: 50),
+                                  child: Container(
+                                    height: 150.h,
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: 10.h,
+                                      horizontal: 10,
+                                    ),
+                                    child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Expanded(
+                                          flex: 3,
+                                          child: AvaialbleTripsButton(
+                                            title: LocaleKeys.premiumRequest.localize,
+                                            color:AppColors.SECONDARY_COLOR,
+                                            padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 5),
+                                            onTap: premuimRequestOnTap),
+                                        ),
+                                        const Sizer(width: 5),
+                                        Expanded(
+                                          flex: 3,
+                                          child: AvaialbleTripsButton(
+                                            title: LocaleKeys.request.localize,
+                                            color:AppColors.PRIMARY_COLOR,
+                                            padding: const EdgeInsets.symmetric(horizontal: 15,vertical: 5),
+                                            onTap: reportOnTap),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          },
                         ),
                       ),
                       const Sizer(),

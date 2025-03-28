@@ -2,11 +2,13 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/image_picker_placeholder.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/custom_image_picker_health.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class CreateDoctorProfilePhotoPicker extends StatefulWidget {
@@ -26,15 +28,33 @@ class _CreateDoctorProfilePhotoPickerState
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Label(
-          text: context.isArabic ? 'الصورة الشخصية' : 'Profile Photo',
-          style: Styles.headerText(),
+          text: LocaleKeys.profilePhoto.localize,
+          style: Styles.headerText(
+            height: 1.60,
+          ),
         ),
-        const Sizer(),
+        const SizedBox(
+          height: 8,
+        ),
         BlocBuilder<CreateDoctorCubit, CreateDoctorState>(
             buildWhen: (previous, current) =>
                 current is CreateDoctorUploadProfileImage ||
                 current is CreateDoctorInitial,
             builder: (context, state) {
+              return CustomImagePickerHealth(
+                isUploaded: state is CreateDoctorUploadProfileImage,
+                onTap: () async {
+                  if (state is CreateDoctorUploadProfileImage) {
+                    await createDoctorCubit.uploadProfileImage(
+                      context: context,
+                    );
+                  } else {
+                    await createDoctorCubit.uploadProfileImage(
+                      context: context,
+                    );
+                  }
+                },
+              );
               if (state is CreateDoctorUploadProfileImage) {
                 return Wrap(runSpacing: 10, spacing: 10, children: [
                   ImagePickerPlaceholder(
@@ -44,7 +64,8 @@ class _CreateDoctorProfilePhotoPickerState
                   ),
                   InkWell(
                     onTap: () async {
-                      await createDoctorCubit.uploadProfileImage(context: context);
+                      await createDoctorCubit.uploadProfileImage(
+                          context: context);
                     },
                     child: BlocBuilder<CreateDoctorCubit, CreateDoctorState>(
                         builder: (context, state) {

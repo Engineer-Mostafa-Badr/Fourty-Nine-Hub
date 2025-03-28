@@ -2,12 +2,14 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
 import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
@@ -29,6 +31,7 @@ import '../../../features/competition/presentation/cubit/competition_cubit/compe
 import '../../../features/competition/presentation/cubit/competition_cubit/competition_state.dart';
 import '../../../features/competition/presentation/view/special_ads_view.dart';
 import '../../../features/custom_page/presentation/cubit/custom_page_cubit.dart';
+import '../../../features/settings/presentation/cubit/floating_navigator_cubit.dart';
 import '../../../features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../../../res/assets/assets.dart';
 import '../../../res/style/app_colors.dart';
@@ -119,7 +122,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     onTap: () {
                                       AdInterstitialTop.loadIntersitialAd();
                                       AdInterstitialTop.showInterstitialAd();
-
+                                      context.pop();
                                       return context.push(Routes.QURAAN);
                                     }),
                                 drawerListTile(
@@ -128,6 +131,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     onTap: () {
                                       AdInterstitialTop.loadIntersitialAd();
                                       AdInterstitialTop.showInterstitialAd();
+                                      context.pop();
+
                                       return context.push(Routes.AZKAAR);
                                     }),
                                 // drawerListTile(
@@ -186,7 +191,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     // icon: Icons.settings,
                                     image: Assets.settings_icon,
                                     label: LocaleKeys.settings.localize,
-                                    onTap: () => context.push(Routes.SETTINGS)),
+                                    onTap: () {
+                                      context.pop();
+                                      context.push(Routes.SETTINGS);
+                                    }),
 
                                 drawerListTile(
                                     // icon: Icons.privacy_tip,
@@ -195,6 +203,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     onTap: () {
                                       AdInterstitialTop.loadIntersitialAd();
                                       AdInterstitialTop.showInterstitialAd();
+
+                                      context.pop();
                                       return context.push(Routes.PRIVACY);
                                     }),
 
@@ -204,19 +214,26 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     onTap: () {
                                       AdInterstitialTop.loadIntersitialAd();
                                       AdInterstitialTop.showInterstitialAd();
-                                      return context.push(Routes.POLICY);
+                                      context.pop();
+                                      return context.push(Routes.POLICY,
+                                          extra: false);
                                     }),
                                 drawerListTile(
                                     // icon: Icons.share,
                                     image: Assets.share_app_icon,
                                     label: LocaleKeys.shareApp.localize,
-                                    onTap: () => context.push(Routes.SHAREAPP)),
+                                    onTap: () {
+                                      context.pop();
+                                      context.push(Routes.SHAREAPP);
+                                    }),
                                 drawerListTile(
                                     // icon: Icons.message,
                                     image: Assets.contact_us_icon,
                                     label: LocaleKeys.contactUs.localize,
-                                    onTap: () =>
-                                        context.push(Routes.CONTACTUS)),
+                                    onTap: () {
+                                      context.pop();
+                                      context.push(Routes.CONTACTUS);
+                                    }),
 
                                 drawerListTile(
                                     // icon: Icons.logout,
@@ -236,11 +253,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                         ),
                                       );
 
-                                      // bottomSheet(
-                                      //     backColor: Theme.of(context)
-                                      //         .scaffoldBackgroundColor,
-                                      //     context: context,
-                                      //     widget: const LogoutWidget());
                                     }),
                               ],
                             ),
@@ -251,61 +263,92 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 drawerRollWidget(
-                                  label: LocaleKeys.ride.localize,
-                                  image: Assets.rideIcon,
-                                  onTap: () => context.push(Routes.RIDE),
-                                ),
+                                    label: LocaleKeys.ride.localize,
+                                    image: Assets.rideIcon,
+                                    onTap: () {
+                                      context.pop();
+                                      context.push(Routes.RIDE);
+                                    }),
                                 drawerRollWidget(
                                   label: LocaleKeys.loading.localize,
                                   image: Assets.loading,
                                   // onTap: () {},
-                                  onTap: () =>
-                                      context.push(Routes.welcomeRideRegister),
+                                  onTap: () {
+                                    context.pop();
+                                    context.push(Routes.welcomeRideRegister);
+                                  },
                                 ),
                                 drawerRollWidget(
                                   label: LocaleKeys.health.localize,
                                   image: Assets.healthIcon,
-                                  onTap: () => context.push(Routes.VISITA),
+                                  onTap: () {
+                                    context.pop();
+                                    context.push(Routes.VISITA);
+                                  },
                                 ),
                                 drawerRollWidget(
                                   label: LocaleKeys.meal.localize,
                                   image: Assets.meal,
-                                  onTap: () => context.push(Routes.FOOD),
+                                  onTap: () {
+                                    context.pop();
+                                    context.push(Routes.FOOD);
+                                  },
                                 ),
                                 drawerRollWidget(
                                   label: LocaleKeys.find.localize,
                                   image: Assets.find,
-                                  onTap: () => context.push(Routes.Tinder),
+                                  onTap: () {
+                                    context.pop();
+                                    context.push(Routes.Tinder);
+                                  },
                                 ),
                                 drawerRollWidget(
                                   label: LocaleKeys.reel.localize,
                                   image: Assets.reel,
-                                  onTap: () => context.push(Routes.REELS),
+                                  onTap: () {
+                                    context.pop();
+                                    context.push(Routes.REELS);
+                                  },
                                 ),
                                 drawerRollWidget(
                                   label: LocaleKeys.spotlight.localize,
                                   image: Assets.spotlight,
-                                  onTap: () => context.push(Routes.SPOTLIGHT),
+                                  onTap: () {
+                                    context.pop();
+                                    context.push(Routes.SPOTLIGHT);
+                                  },
                                 ),
-                                drawerRollWidget(
-                                  label: LocaleKeys.meet.localize,
-                                  image: Assets.meet,
-                                  onTap: () => context.push(Routes.MEETINGROOM),
-                                ),
+                                // drawerRollWidget(
+                                //   label: LocaleKeys.meet.localize,
+                                //   image: Assets.meet,
+                                //   onTap: () {
+                                //     context.pop();
+                                //     context.push(Routes.MEETINGROOM);
+                                //   },
+                                // ),
                                 drawerRollWidget(
                                   label: LocaleKeys.live.localize,
                                   image: Assets.liveIcon,
-                                  onTap: () => context.push(Routes.LIVE),
+                                  onTap: () {
+                                    context.pop();
+                                    context.push(Routes.LIVE);
+                                  },
                                 ),
                                 drawerRollWidget(
                                   label: LocaleKeys.snap.localize,
                                   image: Assets.snap,
-                                  onTap: () => context.push(Routes.SNAP),
+                                  onTap: () {
+                                    context.pop();
+                                    context.push(Routes.SNAP);
+                                  },
                                 ),
                                 drawerRollWidget(
                                   label: LocaleKeys.chat.localize,
                                   image: Assets.whatsApp,
-                                  onTap: () => context.push(Routes.CHAT),
+                                  onTap: () {
+                                    context.pop();
+                                    context.push(Routes.CHAT);
+                                  },
                                 ),
                                 drawerRollWidget(
                                   label: "trip join ",
@@ -353,11 +396,18 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   height: 100.h,
                   isCircle: true,
                   icon: Icons.person,
-                  onPressed: () => context.push(Routes.LOGIN),
+                  color: AppColors.PRIMARY_COLOR,
+                  onPressed: () {
+                    context.pop();
+                    context.push(Routes.LOGIN);
+                  },
                 ),
                 Label(
-                    text: LocaleKeys.login.localize,
-                    style: Styles.mediumText()),
+                  text: LocaleKeys.login.localize,
+                  style: Styles.mediumText(
+                    color: context.isDarkMode ? Colors.white : Colors.black,
+                  ),
+                ),
               ],
             ),
           ),
@@ -369,10 +419,17 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     height: 100.h,
                     isCircle: true,
                     icon: Icons.person_add,
-                    onPressed: () => context.push(Routes.REGISTER)),
+                    color: AppColors.PRIMARY_COLOR,
+                    onPressed: () {
+                      context.pop();
+                      context.push(Routes.REGISTER);
+                    }),
                 Label(
-                    text: LocaleKeys.register.localize,
-                    style: Styles.mediumText()),
+                  text: LocaleKeys.register.localize,
+                  style: Styles.mediumText(
+                    color: context.isDarkMode ? Colors.white : Colors.black,
+                  ),
+                ),
               ],
             ),
           ),
@@ -542,11 +599,15 @@ class _DrawerWidgetState extends State<DrawerWidget> {
             text: label,
             style: Styles.mediumText(
               fontWeight: FontWeight.w500,
+              color: context.isDarkMode ? Colors.white : Colors.black,
             )),
         subtitle: (description != null)
             ? Label(
                 text: description,
-                style: Styles.mediumText(fontWeight: FontWeight.w300))
+                style: Styles.mediumText(
+                  fontWeight: FontWeight.w300,
+                  color: context.isDarkMode ? Colors.white : Colors.black,
+                ))
             : null,
         trailing: Icon(
           Icons.arrow_forward_ios,
@@ -571,8 +632,12 @@ class _DrawerWidgetState extends State<DrawerWidget> {
             fit: BoxFit.cover,
           ),
           Label(
-              text: label,
-              style: Styles.mediumText(fontWeight: FontWeight.w400)),
+            text: label,
+            style: Styles.mediumText(
+              fontWeight: FontWeight.w400,
+              color: context.isDarkMode ? Colors.white : Colors.black,
+            ),
+          ),
         ],
       ),
     );
@@ -767,11 +832,16 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             children: <Widget>[
                               Container(
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: HexColor('F9F9F9')),
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: context.isDarkMode
+                                      ? AppColors.LIGHT_GRAY_COLOR2
+                                      : HexColor('f9f9f9'),
+                                ),
                                 child: ListTile(
                                   leading: const Icon(Icons.photo_library),
-                                  title: const Text('Gallery'),
+                                  title: const Label(
+                                    text: 'Gallery',
+                                  ),
                                   onTap: () async {
                                     // Navigator.pop(context);
                                     await context.read<UserCubit>().uploadPhoto(
@@ -782,11 +852,14 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               ),
                               Container(
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: HexColor('F9F9F9')),
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: context.isDarkMode
+                                      ? AppColors.LIGHT_GRAY_COLOR2
+                                      : HexColor('f9f9f9'),
+                                ),
                                 child: ListTile(
                                   leading: const Icon(Icons.camera_alt),
-                                  title: const Text('Camera'),
+                                  title: const Label(text: 'Camera'),
                                   onTap: () async {
                                     // Navigator.pop(context);
                                     await context.read<UserCubit>().uploadPhoto(
@@ -798,10 +871,13 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                               Container(
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(20),
-                                    color: HexColor('D9D9D9')),
+                                    color: context.isDarkMode
+                                        ? AppColors.DARK_GRAY_COLOR
+                                        : AppColors.BG_GRAY_COLOR),
                                 child: ListTile(
                                   // leading: const Icon(Icons.camera_alt),
-                                  title: Center(child: const Text('Cancel')),
+                                  title: const Center(
+                                      child: Label(text: 'Cancel')),
                                   onTap: () async {
                                     Navigator.pop(context);
 
@@ -844,6 +920,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                       },
                       child: Image.asset(
                         Assets.cameraOutlined,
+                        color: context.isDarkMode ? Colors.white : Colors.black,
                         width: 40.w,
                       ),
                     )
@@ -859,7 +936,11 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     children: [
                       Label(
                         text: _getFirstTwoWords(user?.fullName ?? ''),
-                        style: Styles.mediumText(fontWeight: FontWeight.bold),
+                        style: Styles.mediumText(
+                          fontWeight: FontWeight.bold,
+                          color:
+                              context.isDarkMode ? Colors.white : Colors.black,
+                        ),
                       ),
                       const SizedBox(
                         width: 5,
@@ -897,9 +978,13 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         ),
                         Expanded(
                           child: Label(
-                            text: '${user?.wallet ?? 0}',
+                            text: ' ${user?.wallet ?? 0}',
                             style: Styles.mediumText(
-                                decoration: TextDecoration.underline),
+                              decoration: TextDecoration.underline,
+                              color: context.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
                           ),
                         )
                       ],
@@ -910,14 +995,15 @@ class _DrawerWidgetState extends State<DrawerWidget> {
             ],
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               CustomSwitchButton(
                 value:
                     context.read<CustomPageCubit>().state.activate!.customPage,
                 onChanged: (value) async {
                   await context.read<CustomPageCubit>().updateActivate(value);
-                  Restart.restartApp();
+                  Phoenix.rebirth(context);
+                  // Restart.restartApp();
                 },
                 // activeColor: Colors.white,
                 // inactiveThumbColor: Colors.white,
@@ -930,6 +1016,28 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 width: 4.w,
               ),
               Label(text: LocaleKeys.customPage.localize),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              BlocBuilder<FloatingNavigatorCubit, FloatingNavigatorState>(
+                builder: (context, state) {
+                  var floatingNavigatorCubit =
+                      context.read<FloatingNavigatorCubit>();
+                  return CustomSwitchButton(
+                    value: floatingNavigatorCubit
+                        .floatingNavigatorEnable,
+                    onChanged: (value) async {
+                      floatingNavigatorCubit.changeFloatingNavigatorEnable();
+                    },
+                  );
+                },
+              ),
+              SizedBox(
+                width: 4.w,
+              ),
+              Label(text: LocaleKeys.floatingNavigator.localize),
             ],
           ),
         ],

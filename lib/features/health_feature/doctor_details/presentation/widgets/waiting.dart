@@ -12,13 +12,13 @@ class DoctorDetailsWaitingTimeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final doctorDetailsCubit = context.read<DoctorDetailsCubit>();
-    if (doctorDetailsCubit.doctor.waitingTime.isNotEmpty) {
+    if (doctorDetailsCubit.state.doctor?.waitingTime.isNotEmpty??false) {
       return Column(
         children: [
           DoctorDetailsInfoCard(
               icon: Icons.access_time,
               label:
-                  '${LocaleKeys.waitingTime.localize}: ${doctorDetailsCubit.doctor.waitingTime} ${LocaleKeys.minuteLoc.localize}'),
+                  '${LocaleKeys.waitingTime.localize}: ${doctorDetailsCubit.state.doctor?.waitingTime??''} ${LocaleKeys.minuteLoc.localize}'),
           const DoctorDetailsDivider(),
         ],
       );

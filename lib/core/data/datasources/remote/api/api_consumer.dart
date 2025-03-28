@@ -101,7 +101,8 @@ class BaseApiConsumer extends ApiConsumer {
         options: Options(headers: {
           ...?headers,
           "x-api-key":
-              "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91", // Your custom header
+              "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91",
+          // Your custom header
         }),
       );
 
@@ -123,7 +124,8 @@ class BaseApiConsumer extends ApiConsumer {
             headers: {
               ...?headers,
               "x-api-key":
-                  "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91", // Your custom header
+                  "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91",
+              // Your custom header
             },
           ),
         );
@@ -145,7 +147,8 @@ class BaseApiConsumer extends ApiConsumer {
         options: Options(headers: {
           ...?headers,
           "x-api-key":
-              "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91", // Your custom header
+              "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91",
+          // Your custom header
         }),
         queryParameters: queryParameters,
       );
@@ -180,14 +183,9 @@ class BaseApiConsumer extends ApiConsumer {
           options: Options(headers: {
             ...?headers,
             "x-api-key":
-                "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91", // Your custom header
-          })
-          // options: Options(headers: {
-          //   "Authorization":
-          //       'Bearer ${}'
-          // }
-          // )
-          );
+                "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91",
+            // Your custom header
+          }));
       log(result.toString(), name: url);
       // log(_dio.options.headers['Authorization'], name: "Authorization$url");
       print('Welcome ${result.data['status']}');
@@ -239,7 +237,8 @@ class BaseApiConsumer extends ApiConsumer {
         options: Options(headers: {
           ...?headers,
           "x-api-key":
-              "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91", // Your custom header
+              "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91",
+          // Your custom header
         }),
       );
       log(result.data.toString(), name: "url");
@@ -282,7 +281,8 @@ class BaseApiConsumer extends ApiConsumer {
           options: Options(headers: {
             ...?headers,
             "x-api-key":
-                "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91", // Your custom header
+                "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91",
+            // Your custom header
           }));
       log(result.data.toString(), name: "url");
       if (getSuccessState(result.data)) {

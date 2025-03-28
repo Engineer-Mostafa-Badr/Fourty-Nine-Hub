@@ -14,8 +14,10 @@ class SearchTextFormField extends MainTextFormField {
     super.enabled,
     super.style,
     super.borderColor,
+    super.hintStyle,
     Color? hintColor,
     SvgPicture? icon,
+    Color? cursorColor = AppColors.ACCENT_COLOR,
     super.onEditComplete,
     super.onChanged,
   }) : super(
@@ -26,7 +28,7 @@ class SearchTextFormField extends MainTextFormField {
           hintColor: hintColor ?? AppColors.PRIMARY_COLOR_DARK,
           prefixIcon:
               Icon(Icons.search, color: hintColor ?? AppColors.QUANTITY_COLOR),
-          cursorColor: AppColors.ACCENT_COLOR,
+          cursorColor: cursorColor,
           suffixIcon: icon,
         );
 }

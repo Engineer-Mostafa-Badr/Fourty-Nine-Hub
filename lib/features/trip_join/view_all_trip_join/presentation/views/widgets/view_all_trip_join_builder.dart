@@ -183,7 +183,7 @@ class _ViewAllTripJoinCardBuilderState
       print("=========0=========");
       await serviceLocator<SubscriptionController>().showSubscriptionPlans(
         wallets: [
-          tripJoinCardEntity.paymentMethod?.toWalletType ?? WalletTypes.balance
+          tripJoinCardEntity.paymentMethod?.toWalletType ?? WalletTypes.mainWallet
         ],
         subCategoryId: subCategoryId,
         title: title,
@@ -200,7 +200,7 @@ class _ViewAllTripJoinCardBuilderState
         tripJoinCardEntity.isApproved == false) {
       await serviceLocator<SubscriptionController>().showSubscriptionPlans(
         wallets: [
-          tripJoinCardEntity.paymentMethod?.toWalletType ?? WalletTypes.balance
+          tripJoinCardEntity.paymentMethod?.toWalletType ?? WalletTypes.mainWallet
         ],
         subCategoryId: subCategoryId,
         title: title,

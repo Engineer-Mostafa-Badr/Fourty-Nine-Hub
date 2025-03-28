@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -20,6 +18,7 @@ showAreYouSure({
   showAnimatedDialog(
     context,
     AlertDialog(
+      backgroundColor: Colors.white,
       content: AreYouSure(
         title: title,
         subTitle: subTitle,
@@ -40,49 +39,75 @@ showAreYouSure({
 class AreYouSure extends StatelessWidget {
   final String title, subTitle;
   final Function action;
+  final EdgeInsetsGeometry? padding;
 
-  const AreYouSure(
-      {super.key,
-      required this.title,
-      required this.subTitle,
-      required this.action});
+  const AreYouSure({
+    super.key,
+    required this.title,
+    required this.subTitle,
+    required this.action,
+    this.padding,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-        // shrinkWrap: true,
-      mainAxisSize: MainAxisSize.min,
-        children: [
-      Label(
-        text: title,
-        style: Styles.headerText().copyWith(color: AppColors.SECONDARY_COLOR),
-      ),
-      const Sizer(),
-      Label(
-        text: subTitle,
-        maxLines: 2,
-        style: Styles.mediumText(),
-      ),
-      const Sizer(),
-      Row(
-        children: [
-          Expanded(
-              child: AppButton(
-                  color: AppColors.AUTH_CONTAINER_COLOR,
-                  label: LocaleKeys.ok.localize,
-                  onPressed: () {
-                    action();
-                    context.pop();
-                  })),
-          const Sizer(),
-          Expanded(
-              child: AppButton(
-                  color: AppColors.QUANTITY_COLOR,
-                  backColor: AppColors.LIGHT_GRAY_COLOR,
-                  label: LocaleKeys.close.localize,
-                  onPressed: () => context.pop())),
-        ],
-      )
-    ]);
+    return Padding(
+      padding: padding ?? EdgeInsets.zero,
+      child: Column(
+          // shrinkWrap: true,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Label(
+              text: title,
+              style: Styles.headerText(
+                fontWeight: FontWeight.w700,
+                color: AppColors.SECONDARY_COLOR_DARK2,
+              ),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Label(
+              text: subTitle,
+              maxLines: 2,
+              style: Styles.mediumText(
+                fontSize: 32,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            const SizedBox(
+              height: 24,
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: AppButton(
+                      backColor: AppColors.SECONDARY_COLOR_DARK2,
+                      label: LocaleKeys.ok.localize,
+                      style: Styles.headerText(
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        action();
+                        context.pop();
+                      }),
+                ),
+                const SizedBox(
+                  width: 11,
+                ),
+                Expanded(
+                  child: AppButton(
+                      backColor: const Color(0xFFD9D9D9),
+                      label: LocaleKeys.close.localize,
+                      style: Styles.headerText(
+                        fontWeight: FontWeight.w500,
+                      ),
+                      onPressed: () => context.pop()),
+                ),
+              ],
+            )
+          ]),
+    );
   }
 }

@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/subscripe/presentation/widgets/amounts.da
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 
+import '../../domain/entities/subscription_amount_entity.dart';
 import '../../domain/usecases/check_if_user_subscribed_usecase.dart';
 import '../../domain/usecases/get_subscription_plans_usecase.dart';
 import '../../domain/usecases/subscribe_usecase.dart';
@@ -69,9 +70,10 @@ class SubscriptionController {
       //List<WalletTypes> wallets = [];
 
       showLoadingDialog(context);
-      Navigator.of(context).pop(); // Close loading dialog
 
       final plansResponse = await _getSubscriptionPlansUseCase(subCategoryId);
+      Navigator.of(context).pop(); // Close loading dialog
+
       plansResponse.fold((l) {
         showErrorMessage(context, Labels.errorHappened);
         _isBottomSheetShown = false; // Reset flag on error
@@ -79,6 +81,7 @@ class SubscriptionController {
         bottomSheet(
           context: context,
           backColor: Theme.of(context).scaffoldBackgroundColor,
+          isScrollControlled: true,
           widget: SubscriptionPlansWidget(
             showRegular: showRegular ?? true,
             title: title,
@@ -86,9 +89,7 @@ class SubscriptionController {
             subCategoryId: subCategoryId,
             paymentMenthods: wallets ??
                 [
-                  WalletTypes.balance,
                   WalletTypes.mainWallet,
-                  WalletTypes.giftWallet
                 ],
           ),
         );
@@ -99,7 +100,7 @@ class SubscriptionController {
   }
 
   Future<void> showActiveSubscriptionAmounts(
-      {required WalletTypes walletType}) async {
+      {required WalletTypes walletType, num? price}) async {
     final response =
         await _getActiveSubscriptionAmountsUseCase(const NoParams());
     response.fold(
@@ -107,14 +108,28 @@ class SubscriptionController {
         context,
         Labels.errorHappened,
       ),
-      (data) => bottomSheet(
+      (data) {
+        List<SubscriptionAmountEntity> tempData = [];
+        if (price != null) {
+          for (var element in data) {
+            if (element.amount > price) {
+              tempData.add(element);
+            }
+          }
+        }
+        else{
+          tempData = data;
+        }
+
+        bottomSheet(
         context: context,
         widget: SubscriptoinAmountsWidget(
-          amounts: data,
+          amounts: tempData,
           walletType: walletType,
         ),
-      ),
+      );}
     );
+
   }
 
   //payment method

@@ -1,17 +1,18 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locales.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+
 import '../../../../../../core/enums/base_status_enum.dart';
 import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../core/messages/messages.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../domain/entities/company_ad_entity.dart';
 import '../../cubit/create_company_ad_cubit.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BuildItemTextPost extends StatelessWidget {
   BuildItemTextPost(

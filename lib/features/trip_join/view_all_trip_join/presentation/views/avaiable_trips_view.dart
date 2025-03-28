@@ -14,17 +14,6 @@ import 'package:fourtyninehub/res/style/styles.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
 
-import '../../../../RideFeature/presentation/pages/activity_trip_screen.dart';
-import '../../../../RideFeature/presentation/pages/expired_trips_screen.dart';
-import '../../../../RideFeature/presentation/pages/receipt_trip_screen.dart';
-import '../../../../RideFeature/presentation/pages/ride_details_screen.dart';
-import '../../../../RideFeature/presentation/pages/ride_personal_more_info_screen.dart';
-import '../../../../RideFeature/presentation/pages/running_trips_screen.dart';
-import '../../../../RideFeature/presentation/pages/widgets/custom_ride_button.dart';
-import '../../../presentation/views/widgets/on_boarding_trip.dart';
-import '../../../presentation/views/widgets/pick_me_screen.dart';
-import '../../../presentation/views/widgets/trip_join_screen.dart';
-
 
 class AvailableTripsView extends StatefulWidget {
   const AvailableTripsView({
@@ -69,7 +58,7 @@ class _AvailableTripsViewState extends State<AvailableTripsView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ElevatedButton(onPressed: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=> RunningTripScreen()));
+                // Navigator.push(context, MaterialPageRoute(builder: (context)=> RunningTripScreen()));
               }, child: Text("Move")),
               Center(
                 child: Text(
