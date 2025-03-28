@@ -346,4 +346,14 @@ abstract class Assets {
   static String onBoarding10 = 'assets/onBoarding/onBoarding10.svg';
   static String onBoarding11 = 'assets/onBoarding/onBoarding11.svg';
   static String onBoarding12 = 'assets/onBoarding/onBoarding12.svg';
+
+
+  static String tripJoinCaptainShare = 'assets/images/trip_join/captain_share.png';
+  static String tripJoinIconSelected = 'assets/images/trip_join/trip_join.png';
+  static String tripJoinPickMe = 'assets/images/trip_join/pick_me.png';
+  static String maleUser = 'assets/images/trip_join/male_user.png';
+  static String femaleUser = 'assets/images/trip_join/female_user.png';
+  static String tripJoinCarIcon = 'assets/icons/trip_join_car_icon.png';
+  static String tripJoinBabySeatIcon = 'assets/icons/baby_car_seat.png';
+
 }
