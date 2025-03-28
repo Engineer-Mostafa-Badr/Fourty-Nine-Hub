@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -11,6 +12,7 @@ import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/create_ad_widgets/trip_join_ad_buttons.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/create_ad_widgets/trip_join_bottom_section.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/infoButton.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
@@ -55,6 +57,7 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
   ];
   int seatNum = 1;
   var phoneController = TextEditingController();
+  String? selectedCountry;
 
   @override
   Widget build(BuildContext context) {
@@ -86,26 +89,28 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                           Container(
                             height: 442.h,
                           ),
-                          DropdownMenu(
-                            inputDecorationTheme: InputDecorationTheme(
-                              fillColor: AppColors.BG_GRAY_COLOR,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20),
-                                borderSide:const BorderSide(color: AppColors.BG_GRAY_COLOR,)
-                              )
-                            ),
-                              menuStyle: MenuStyle(
-                                backgroundColor: MaterialStateProperty.all(
-                                    AppColors.BG_GRAY_COLOR),
-                              ),
-                              width: MediaQuery.of(context).size.width * 0.92,
-                              hintText: LocaleKeys.speciality.localize,
-                              dropdownMenuEntries: countries
-                                  .map((e) => DropdownMenuEntry(
-                                      value: e,
-                                      label: context.isArabic ? e : e))
-                                  .toList(),
-                              onSelected: (value) {}),
+                          // DropdownMenu(
+                          //   inputDecorationTheme: InputDecorationTheme(
+                          //     fillColor: AppColors.BG_GRAY_COLOR,
+                          //
+                          //     border: OutlineInputBorder(
+                          //       borderRadius: BorderRadius.circular(20),
+                          //       borderSide:const BorderSide(color: AppColors.BG_GRAY_COLOR,)
+                          //     )
+                          //   ),
+                          //     menuStyle: MenuStyle(
+                          //       backgroundColor: MaterialStateProperty.all(
+                          //           AppColors.BG_GRAY_COLOR),
+                          //     ),
+                          //     width: MediaQuery.of(context).size.width * 0.92,
+                          //     hintText: LocaleKeys.speciality.localize,
+                          //     dropdownMenuEntries: countries
+                          //         .map((e) => DropdownMenuEntry(
+                          //             value: e,
+                          //             label: context.isArabic ? e : e))
+                          //         .toList(),
+                          //     onSelected: (value) {}),
+                          _BuildDrobMenu(),
                           const Sizer(),
                           StartTextFieldAndFindButton(
                             hint: LocaleKeys.from.localize,
@@ -158,17 +163,16 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                       ),
                     ),
                   ),
-
                 ],
               ),
             )));
   }
 
-  void _showDropdownMenu(
-      {required BuildContext context,
-      required Offset position,
-      required List items,
-      }) async {
+  void _showDropdownMenu({
+    required BuildContext context,
+    required Offset position,
+    required List items,
+  }) async {
     final RenderBox overlay =
         Overlay.of(context).context.findRenderObject() as RenderBox;
 
@@ -189,8 +193,7 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
           .toList(),
     );
 
-    if (selected != null) {
-    }
+    if (selected != null) {}
   }
 
   _buildMenuButton(
@@ -210,14 +213,59 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
               style: Styles.mediumText(),
             ),
             GestureDetector(
-              child:const Icon(Icons.keyboard_arrow_down),
+              child: const Icon(Icons.keyboard_arrow_down),
               onTapDown: (details) => _showDropdownMenu(
-                  context: context,
-                  position: details.globalPosition,
-                  items: items,),
+                context: context,
+                position: details.globalPosition,
+                items: items,
+              ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  _BuildDrobMenu() {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(horizontal:14),
+      decoration: BoxDecoration(
+        color: AppColors.colorGreyLight,
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Row(
+        children: [
+          Image.asset(Assets.tripJoinEathIcon,width: 24,),
+          const Sizer(width:20 ,),
+          Expanded(
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton(
+                dropdownColor: AppColors.BG_GRAY_COLOR,
+                style: Styles.mediumText(),
+                hint: Label(
+                  text: 'Country',
+                  style: Styles.mediumText(),
+                ),
+                value: selectedCountry,
+                icon:
+                    const Icon(Icons.keyboard_arrow_down, color: Colors.black),
+                items: countries
+                    .map((e) => DropdownMenuItem(
+                        value: e,
+                        child: Text(e,
+                            style: Styles.mediumText(
+                            ))))
+                    .toList(),
+                onChanged: (value) {
+                  setState(() {
+                    selectedCountry = value!;
+                  });
+                },
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

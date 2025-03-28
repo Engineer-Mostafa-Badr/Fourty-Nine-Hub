@@ -123,6 +123,7 @@ import 'package:fourtyninehub/features/lucky_wheel/presentation/controllers/whee
 import 'package:fourtyninehub/features/married/presentation/pages/married_view.dart';
 import 'package:fourtyninehub/features/mazadat_feature/create_auction/presentation/cubit/create_auction_cubit.dart';
 import 'package:fourtyninehub/features/new_trip_join/captainshare/screen/captain_share_info_screen.dart';
+import 'package:fourtyninehub/features/new_trip_join/captainshare/screen/captain_share_screen.dart';
 import 'package:fourtyninehub/features/new_trip_join/driver/screen/ride_mode_screen.dart';
 import 'package:fourtyninehub/features/new_trip_join/driver/screen/running_and_past_trips_screen.dart';
 import 'package:fourtyninehub/features/new_trip_join/presentation/view/screen/new_route_screen.dart';
@@ -3091,6 +3092,18 @@ class AppPages {
                             serviceLocator()),
                       ),
                     ], child: const NewTripJoinScreen());
+                  },),
+              GoRoute(
+                  path: Paths.captainShareScreen,
+                  name: Routes.captainShareScreen,
+                  builder: (context, state) {
+                    return MultiBlocProvider(providers: [
+                      BlocProvider<DestGetLatAndLongCubit>(
+                        create: (context) => DestGetLatAndLongCubit(
+                            getLatLongFromAddressRemoteDataSource:
+                            serviceLocator()),
+                      ),
+                    ], child: const CaptainShareScreen());
                   },),
               GoRoute(
                   path: Paths.captainShareInfoScreen,
