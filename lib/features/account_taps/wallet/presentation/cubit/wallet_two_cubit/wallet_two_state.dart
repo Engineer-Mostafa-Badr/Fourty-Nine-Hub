@@ -15,15 +15,21 @@ class WalletTwoState {
   final List<WalletHistoryEntity>? walletHistory;
   final List<WalletSubscriptionEntity>? subscription;
   final List<MainCategoryWalletEntity>? mainCategory;
+  final bool buttonRequestLoading;
+  final bool? buttonRequestSuccess;
+  final String? buttonRequestErrMessage;
   final String? failureMessage;
 
-  const WalletTwoState( {
-    this.status = WalletTwoStates.loading,
+  const WalletTwoState({
+    this.status = WalletTwoStates.initial,
     this.wallet,
     this.walletHistory,
     this.subscription,
     this.mainCategory,
-    this.failureMessage
+    this.failureMessage,
+    this.buttonRequestLoading = false,
+    this.buttonRequestSuccess,
+    this.buttonRequestErrMessage,
   });
 
   WalletTwoState copyWith({
@@ -33,6 +39,9 @@ class WalletTwoState {
     List<WalletSubscriptionEntity>? subscription,
     List<MainCategoryWalletEntity>? mainCategory,
     String? failureMessage,
+    bool? buttonRequestLoading,
+    bool? buttonRequestSuccess,
+    String? buttonRequestErrMessage,
   }) {
     return WalletTwoState(
       status: status ?? this.status,
@@ -41,9 +50,12 @@ class WalletTwoState {
       subscription: subscription ?? this.subscription,
       mainCategory: mainCategory ?? this.mainCategory,
       failureMessage: failureMessage ?? this.failureMessage,
+      buttonRequestLoading: buttonRequestLoading ?? this.buttonRequestLoading,
+      buttonRequestSuccess: buttonRequestSuccess ?? this.buttonRequestSuccess,
+      buttonRequestErrMessage:
+          buttonRequestErrMessage ?? this.buttonRequestErrMessage,
     );
   }
-
 }
 
 // final class WalletTwoInitial extends WalletTwoState {}

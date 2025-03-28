@@ -92,195 +92,224 @@ class _SocialHomeViewState extends State<SocialHomeView>
       appBar: const HomeAppbar(isWithBackArrow: true),
       body: Column(
         children: [
-          isShowExplain ? Column(
-            children: [
-              InkWell(
-                onTap: (){
-                  context.push(Routes.GIFT);
-                },
-                child: Label(
-                  text:
-                  'Get money if you post, view,like\nand seen on any interface you like!',
-                  style: Styles.headerText(
-                    color: AppColors.SECONDARY_COLOR,
-                    shadows: const [
-                      Shadow(
-                        color: Colors.black12,
-                        offset: Offset(0, 4),
-                        blurRadius: 4,
+          isShowExplain
+              ? Column(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        context.push(Routes.GIFT);
+                      },
+                      child: Label(
+                        text:
+                            'Get money if you post, view,like\nand seen on any interface you like!',
+                        style: Styles.headerText(
+                          color: AppColors.SECONDARY_COLOR,
+                          shadows: const [
+                            Shadow(
+                              color: Colors.black12,
+                              offset: Offset(0, 4),
+                              blurRadius: 4,
+                            ),
+                            Shadow(
+                              color: Colors.black12,
+                              offset: Offset(0, 4),
+                              blurRadius: 4,
+                            ),
+                          ],
+                        ),
                       ),
-                      Shadow(
-                        color: Colors.black12,
-                        offset: Offset(0, 4),
-                        blurRadius: 4,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const Sizer(),
-            ],
-          ):Container(),
+                    ),
+                    const Sizer(),
+                  ],
+                )
+              : Container(),
           Expanded(
             child: DefaultTabController(
               length: 3,
               initialIndex: widget.params?.index ?? 0,
               child: Scaffold(
-                  backgroundColor: Theme
-                      .of(context)
-                      .scaffoldBackgroundColor,
+                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                   appBar: widget.params?.hideAppBar == true
                       ? null
                       : TabBar(
-                    padding: EdgeInsets.zero,
-                    labelStyle: const TextStyle(fontSize: 17),
-                    unselectedLabelColor: Colors.grey,
-                    dividerColor: Colors.transparent,
-                    indicatorColor: context.isDarkMode
-                        ? Colors.white
-                        : AppColors.PRIMARY_COLOR,
-                    labelColor: context.isDarkMode
-                        ? Colors.white
-                        : AppColors.PRIMARY_COLOR,
-                    tabs: [
-
-                      Tab(
-                        icon: Stack(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: SvgPicture.asset(
-                                Assets.facebookAppBarIcon,
-                                height: 35,
-                                width: 35,
+                          padding: EdgeInsets.zero,
+                          labelStyle: Styles.headerText(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w700,
+                            height: 1.83,
+                          ),
+                          unselectedLabelColor: Colors.grey,
+                          dividerColor: Colors.transparent,
+                          indicatorColor: context.isDarkMode
+                              ? Colors.white
+                              : AppColors.PRIMARY_COLOR,
+                          labelColor: context.isDarkMode
+                              ? Colors.white
+                              : AppColors.PRIMARY_COLOR,
+                          tabs: [
+                            Tab(
+                              icon: Stack(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      width: 35.83,
+                                      height: 35.83,
+                                      padding: const EdgeInsets.all(8.0),
+                                      decoration: const ShapeDecoration(
+                                        color: Color(0xFF0B1035),
+                                        shape: OvalBorder(),
+                                      ),
+                                      child: SvgPicture.asset(
+                                        Assets.facebookIcon,
+                                        // height: 35,
+                                        // width: 35,
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: 0,
+                                    right: 0,
+                                    child: InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          isShowExplain = !isShowExplain;
+                                        });
+                                      },
+                                      child: SvgPicture.asset(
+                                        Assets.idea,
+                                        height: 20,
+                                        width: 20,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
+                              height: 78,
+                              text: LocaleKeys.Face.localize,
+                              iconMargin: EdgeInsets.zero,
                             ),
-                            Positioned(
-                              top: 0,
-                              right: 0,
-                              child: InkWell(
-                                onTap: (){
-                                  setState(() {
-                                    isShowExplain = !isShowExplain;
-                                  });
-                                },
-                                child: SvgPicture.asset(
-                                  Assets.idea,
-                                  height: 20,
-                                  width: 20,
-                                ),
+                            Tab(
+                              icon: Stack(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      width: 35.83,
+                                      height: 35.83,
+                                      padding: const EdgeInsets.all(8.0),
+                                      decoration: const ShapeDecoration(
+                                        color: Color(0xFF0B1035),
+                                        shape: OvalBorder(),
+                                      ),
+                                      child: SvgPicture.asset(
+                                        Assets.instagramIcon,
+                                        // height: 35,
+                                        // width: 35,
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: 0,
+                                    right: 0,
+                                    child: InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          isShowExplain = !isShowExplain;
+                                        });
+                                      },
+                                      child: SvgPicture.asset(
+                                        Assets.idea,
+                                        height: 20,
+                                        width: 20,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
+                              height: 78,
+                              text: LocaleKeys.Insta.localize,
+                              iconMargin: EdgeInsets.zero,
+                            ),
+                            Tab(
+                              icon: Stack(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      width: 35.83,
+                                      height: 35.83,
+                                      padding: const EdgeInsets.all(8.0),
+                                      decoration: const ShapeDecoration(
+                                        color: Color(0xFF0B1035),
+                                        shape: OvalBorder(),
+                                      ),
+                                      child: SvgPicture.asset(
+                                        Assets.twitterIcon,
+                                        // height: 35,
+                                        // width: 35,
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: 0,
+                                    right: 0,
+                                    child: InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          isShowExplain = !isShowExplain;
+                                        });
+                                      },
+                                      child: SvgPicture.asset(
+                                        Assets.idea,
+                                        height: 20,
+                                        width: 20,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              height: 78,
+                              text: LocaleKeys.tweet.localize,
+                              iconMargin: EdgeInsets.zero,
                             ),
                           ],
                         ),
-                        height: 78,
-                        text: LocaleKeys.Face.localize,
-                      ),
-                      Tab(
-                        icon: Stack(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: SvgPicture.asset(
-                                Assets.instagramAppBarIcon,
-                                height: 35,
-                                width: 35,
-                              ),
-                            ),
-                            Positioned(
-                              top: 0,
-                              right: 0,
-                              child: InkWell(
-                                onTap: (){
-                                  setState(() {
-                                    isShowExplain = !isShowExplain;
-                                  });
-                                },
-                                child: SvgPicture.asset(
-                                  Assets.idea,
-                                  height: 20,
-                                  width: 20,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        height: 78,
-                        text: LocaleKeys.Insta.localize,
-                      ),
-
-                      Tab(
-                        icon: Stack(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: SvgPicture.asset(
-                                Assets.twitterAppBarIcon,
-                                height: 35,
-                                width: 35,
-                              ),
-                            ),
-                            Positioned(
-                              top: 0,
-                              right: 0,
-                              child: InkWell(
-                                onTap: (){
-                                  setState(() {
-                                    isShowExplain = !isShowExplain;
-                                  });
-                                },
-                                child: SvgPicture.asset(
-                                  Assets.idea,
-                                  height: 20,
-                                  width: 20,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        height: 78,
-                        text: LocaleKeys.tweet.localize,
-                      ),
-                    ],
-                  ),
                   drawer: widget.params?.hideAppBar == true
                       ? null
                       : const DrawerWidget(),
                   bottomNavigationBar: widget.params?.hideAppBar == true
                       ? null
                       : BottomNavigator(
-                    scrollController: scrollController,
-                    isScrollingDown: _isScrollingDown,
-                    mainCategory: 2,
-                    index: 2,
-                  ),
+                          scrollController: scrollController,
+                          isScrollingDown: _isScrollingDown,
+                          mainCategory: 2,
+                          index: 2,
+                        ),
                   floatingActionButton:
-                  _isScrollingDown || widget.params?.hideAppBar == true
-                      ? null
-                      : const FloatingButton(
-                    changeView: 2,
-                  ),
+                      _isScrollingDown || widget.params?.hideAppBar == true
+                          ? null
+                          : const FloatingButton(
+                              changeView: 2,
+                            ),
                   floatingActionButtonLocation:
-                  _isScrollingDown || widget.params?.hideAppBar == true
-                      ? null
-                      : FloatingActionButtonLocation.centerDocked,
+                      _isScrollingDown || widget.params?.hideAppBar == true
+                          ? null
+                          : FloatingActionButtonLocation.centerDocked,
                   body: TabBarView(
                     children: [
                       BlocBuilder<UserCubit, BasicState<UserEntity>>(
                           builder: (context, state) {
-                            return context
-                                .read<UserCubit>()
-                                .isLoggedIn
-                                ? Scaffold(
+                        return context.read<UserCubit>().isLoggedIn
+                            ? Scaffold(
                                 body: FacebookBody(
-                                  scrollController: scrollController,
-                                ))
-                                : NestedAppbar(
+                                scrollController: scrollController,
+                              ))
+                            : NestedAppbar(
                                 scrollController: ScrollController(),
                                 appBars: [
                                   SliverAppBar(
-                                    backgroundColor: Theme
-                                        .of(context)
+                                    backgroundColor: Theme.of(context)
                                         .scaffoldBackgroundColor,
                                     automaticallyImplyLeading: false,
                                     floating: true,
@@ -288,8 +317,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
                                     flexibleSpace: const CreatePostBanner(),
                                   ),
                                   SliverAppBar(
-                                    backgroundColor: Theme
-                                        .of(context)
+                                    backgroundColor: Theme.of(context)
                                         .scaffoldBackgroundColor,
                                     automaticallyImplyLeading: false,
                                     // floating: true,
@@ -300,13 +328,12 @@ class _SocialHomeViewState extends State<SocialHomeView>
                                 body: FacebookGlobalBody(
                                   scrollController: scrollController,
                                 ));
-                          }),
+                      }),
                       MultiBlocProvider(
                         providers: [
                           BlocProvider(
                             create: (context) =>
-                            serviceLocator<InstagramCubit>()
-                              ..loadData(),
+                                serviceLocator<InstagramCubit>()..loadData(),
                           ),
                           BlocProvider(
                             create: (context) => serviceLocator<StoryCubit>(),
@@ -325,66 +352,54 @@ class _SocialHomeViewState extends State<SocialHomeView>
   }
 
   Widget _buildTabBar() {
-    final user = context
-        .read<UserCubit>()
-        .state
-        .data;
+    final user = context.read<UserCubit>().state.data;
     return Container(
         padding: EdgeInsets.all(10.r),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: List.generate(
             2,
-                (i) =>
-                GestureDetector(
-                  onTap: () {
-                    if (i == 1) {
-                      context
-                          .read<UserCubit>()
-                          .isLoggedIn
-                          ? context.push(Routes.OTHERSACCOUNT, extra: user?.id)
-                          : context.push(Routes.LOGIN);
-                    }
-                  },
-                  child: Container(
-                      decoration: i == 0
-                          ? BoxDecoration(
+            (i) => GestureDetector(
+              onTap: () {
+                if (i == 1) {
+                  context.read<UserCubit>().isLoggedIn
+                      ? context.push(Routes.OTHERSACCOUNT, extra: user?.id)
+                      : context.push(Routes.LOGIN);
+                }
+              },
+              child: Container(
+                  decoration: i == 0
+                      ? BoxDecoration(
                           border: Border(
                               bottom: BorderSide(
-                                  color: Theme
-                                      .of(context)
-                                      .primaryColor,
+                                  color: Theme.of(context).primaryColor,
                                   width: 2)))
-                          : null,
-                      child: Row(
-                        children: [
-                          Icon(
-                            i == 0 ? Icons.home : Icons.person,
+                      : null,
+                  child: Row(
+                    children: [
+                      Icon(
+                        i == 0 ? Icons.home : Icons.person,
+                        color: i == 0
+                            ? Theme.of(context).primaryColor
+                            : Colors.grey,
+                        size: 40.w,
+                      ),
+                      SizedBox(
+                        width: 8.w,
+                      ),
+                      Label(
+                        text: i == 0
+                            ? LocaleKeys.home.localize
+                            : LocaleKeys.profile.localize,
+                        style: Styles.headerText(
                             color: i == 0
-                                ? Theme
-                                .of(context)
-                                .primaryColor
+                                ? Theme.of(context).primaryColor
                                 : Colors.grey,
-                            size: 40.w,
-                          ),
-                          SizedBox(
-                            width: 8.w,
-                          ),
-                          Label(
-                            text: i == 0
-                                ? LocaleKeys.home.localize
-                                : LocaleKeys.profile.localize,
-                            style: Styles.headerText(
-                                color: i == 0
-                                    ? Theme
-                                    .of(context)
-                                    .primaryColor
-                                    : Colors.grey,
-                                fontSize: 30),
-                          )
-                        ],
-                      )),
-                ),
+                            fontSize: 30),
+                      )
+                    ],
+                  )),
+            ),
           ),
         ));
   }

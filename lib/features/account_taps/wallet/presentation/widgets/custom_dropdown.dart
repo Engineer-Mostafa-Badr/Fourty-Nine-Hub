@@ -13,7 +13,11 @@ class CustomDropdown<T> extends StatefulWidget {
     this.buttonDecoration,
     this.buttonTextStyle,
     this.itemTextStyle,
-    required this.displayStringForItem, // إضافة هذه الدالة
+    required this.displayStringForItem,
+    this.textAlign,
+    this.openedIcon,
+    this.closedIcon,
+    this.iconColor,
   });
 
   final List<T> items;
@@ -26,8 +30,11 @@ class CustomDropdown<T> extends StatefulWidget {
   final BoxDecoration? buttonDecoration;
   final TextStyle? buttonTextStyle;
   final TextStyle? itemTextStyle;
-  final String Function(T item)
-      displayStringForItem; // دالة لتحويل العنصر إلى نص
+  final String Function(T item) displayStringForItem;
+  final TextAlign? textAlign;
+  final IconData? openedIcon;
+  final IconData? closedIcon;
+  final Color? iconColor;
 
   @override
   _CustomDropdownState<T> createState() => _CustomDropdownState<T>();
@@ -186,21 +193,21 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>>
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Expanded(
-                child: Center(
-                  child: Text(
-                    _getDisplayText(),
-                    style: widget.buttonTextStyle ??
-                        const TextStyle(
-                          fontSize: 16,
-                          color: Colors.white,
-                        ),
-                    textAlign: TextAlign.center,
-                  ),
+                child: Text(
+                  _getDisplayText(),
+                  style: widget.buttonTextStyle ??
+                      const TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                      ),
+                  textAlign: widget.textAlign ?? TextAlign.center,
                 ),
               ),
               Icon(
-                isOpen ? Icons.arrow_drop_up : Icons.arrow_drop_down,
-                color: Colors.white,
+                isOpen
+                    ? (widget.openedIcon ?? Icons.arrow_drop_up)
+                    : (widget.closedIcon ?? Icons.arrow_drop_down),
+                color: widget.iconColor ?? Colors.white,
               ),
             ],
           ),

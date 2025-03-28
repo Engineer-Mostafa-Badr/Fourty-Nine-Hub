@@ -128,7 +128,7 @@ class MyTextField extends StatelessWidget {
                 borderSide: const BorderSide(
                   color: AppColors.LIGHT_GRAY_COLOR,
                 ),
-                borderRadius: borderRadius ?? BorderRadius.circular(10),
+                borderRadius: borderRadius ?? BorderRadius.circular(15),
               ),
         focusedBorder: noBorder
             ? InputBorder.none
@@ -136,13 +136,13 @@ class MyTextField extends StatelessWidget {
                 borderSide: const BorderSide(
                   color: AppColors.PRIMARY_COLOR,
                 ),
-                borderRadius: borderRadius ?? BorderRadius.circular(10),
+                borderRadius: borderRadius ?? BorderRadius.circular(15),
               ),
         errorBorder: OutlineInputBorder(
           borderSide: const BorderSide(
             color: Colors.red,
           ),
-          borderRadius: borderRadius ?? BorderRadius.circular(10),
+          borderRadius: borderRadius ?? BorderRadius.circular(15),
         ),
         focusedErrorBorder: noBorder
             ? InputBorder.none
@@ -150,7 +150,7 @@ class MyTextField extends StatelessWidget {
                 borderSide: const BorderSide(
                   color: Colors.red,
                 ),
-                borderRadius: borderRadius ?? BorderRadius.circular(10),
+                borderRadius: borderRadius ?? BorderRadius.circular(15),
               ),
       ),
     );

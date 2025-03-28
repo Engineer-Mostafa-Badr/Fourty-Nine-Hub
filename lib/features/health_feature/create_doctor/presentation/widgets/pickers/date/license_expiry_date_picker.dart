@@ -1,8 +1,11 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateful/picker/date_picker.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class CreateDoctorLicenseExpiryDatePicker extends StatelessWidget {
@@ -12,8 +15,14 @@ class CreateDoctorLicenseExpiryDatePicker extends StatelessWidget {
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
     return DatePickerField(
-      title: context.isArabic ? 'تاريخ انتهاء الترخيص' : 'License Expiry Date',
-      textStyle: Styles.mediumText(),
+      title: LocaleKeys.licenseExpiryDate.localize,
+      backgroundColor: const Color(0xFFD9D9D9),
+      borderColor: const Color(0xFFD9D9D9),
+      textStyle: Styles.mediumText(
+        fontSize: 32,
+        height: 1.60,
+      ),
+      icon: SvgPicture.asset(Assets.calendarIcon),
       initialDate: now,
       minDate: now,
       maxDate: DateTime(now.year + 5, now.month, now.day),
