@@ -17,6 +17,9 @@ class GiftTwoState {
   final String? errMessage;
   final bool? buttonRequestFiveLoading;
   final bool? buttonRequestTenLoading;
+  final bool buttonRequestCompetitionLoading;
+  final bool? buttonRequestCompetitionSuccess;
+  final String? buttonRequestCompetitionErrMessage;
 
   const GiftTwoState({
     this.status = GiftTwoStates.initial,
@@ -26,8 +29,10 @@ class GiftTwoState {
     this.errMessage,
     this.buttonRequestFiveLoading,
     this.buttonRequestTenLoading,
-
-});
+    this.buttonRequestCompetitionLoading = false,
+    this.buttonRequestCompetitionSuccess,
+    this.buttonRequestCompetitionErrMessage,
+  });
 
   GiftTwoState copyWith({
     GiftTwoStates? status,
@@ -37,16 +42,28 @@ class GiftTwoState {
     String? errMessage,
     bool? buttonRequestFiveLoading,
     bool? buttonRequestTenLoading,
+    bool? buttonRequestCompetitionLoading,
+    bool? buttonRequestCompetitionSuccess,
+    String? buttonRequestCompetitionErrMessage,
   }) {
     return GiftTwoState(
-      status: status ?? this.status,
-      giftAndCompetitionEntity: giftAndCompetitionEntity?? this.giftAndCompetitionEntity,
-      // giftEntity: giftEntity ?? this.giftEntity,
-      // giftCompetitionEntity: giftCompetitionEntity ?? this.giftCompetitionEntity,
-      errMessage: errMessage ?? this.errMessage,
-        buttonRequestFiveLoading: buttonRequestFiveLoading ?? this.buttonRequestFiveLoading,
-        buttonRequestTenLoading: buttonRequestTenLoading ?? this.buttonRequestTenLoading
-    );
+        status: status ?? this.status,
+        giftAndCompetitionEntity:
+            giftAndCompetitionEntity ?? this.giftAndCompetitionEntity,
+        // giftEntity: giftEntity ?? this.giftEntity,
+        // giftCompetitionEntity: giftCompetitionEntity ?? this.giftCompetitionEntity,
+        errMessage: errMessage ?? this.errMessage,
+        buttonRequestFiveLoading:
+            buttonRequestFiveLoading ?? this.buttonRequestFiveLoading,
+        buttonRequestTenLoading:
+            buttonRequestTenLoading ?? this.buttonRequestTenLoading,
+        buttonRequestCompetitionLoading: buttonRequestCompetitionLoading ??
+            this.buttonRequestCompetitionLoading,
+        buttonRequestCompetitionSuccess: buttonRequestCompetitionSuccess ??
+            this.buttonRequestCompetitionSuccess,
+        buttonRequestCompetitionErrMessage:
+            buttonRequestCompetitionErrMessage ??
+                this.buttonRequestCompetitionErrMessage);
   }
 }
 

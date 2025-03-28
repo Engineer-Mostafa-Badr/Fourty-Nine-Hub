@@ -12,6 +12,7 @@ class GiftCompetitionEntity {
     required this.amount,
     required this.descriptionGiftWalletEn,
     required this.descriptionGiftWalletAr,
+    required this.awaitApproval,
   });
 
   final String? id;
@@ -26,6 +27,7 @@ class GiftCompetitionEntity {
   final String? descriptionGiftWalletAr;
   final int? countOfRequest;
   final num? amount;
+  final bool? awaitApproval;
 }
 
 // class CompetitionId {

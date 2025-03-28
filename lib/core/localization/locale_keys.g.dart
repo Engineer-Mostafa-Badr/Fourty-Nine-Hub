@@ -291,7 +291,7 @@ abstract class  LocaleKeys {
   static const competitions = 'competitions';
   static const requestWithdraw = 'requestWithdraw';
   static const requestTransaction = 'requestTransaction';
-  static const requestTransaction2 = 'requestTransaction2';
+  static const requestTransfer = 'requestTransfer';
   static const years = 'years';
   static const transfer = 'transfer';
   static const save = 'save';
@@ -1422,5 +1422,33 @@ abstract class  LocaleKeys {
   static const insideAppYouWillGetInterest = 'insideAppYouWillGetInterest';
   static const after5YearsAnd10Years = 'after5YearsAnd10Years';
   static const areYouSureOfTransferMoney = 'areYouSureOfTransferMoney';
+  static const areYouSureYouWantToRemoveThisImage = 'areYouSureYouWantToRemoveThisImage';
+  static const received = 'received';
+  static const noRequests = 'noRequests';
+  static const relevantAds = 'relevantAds';
+  static const addNewCard = 'addNewCard';
+  static const hideCardForm = 'hideCardForm';
+  static const payWithCard = 'payWithCard';
+  static const saveCard = 'saveCard';
+  static const paymentNumber = 'paymentNumber';
+  static const paymentLink = 'paymentLink';
+  static const noLinkAvailable = 'noLinkAvailable';
+  static const noNumberAvailable = 'noNumberAvailable';
+  static const qrCode = 'qrCode';
+  static const youMustUploadTheImage = 'youMustUploadTheImage';
+  static const selectAPaymentMethods = 'selectAPaymentMethods';
+  static const selectTheAmount = 'selectTheAmount';
+  static const enterWithdrawalAmount = 'enterWithdrawalAmount';
+  static const pleaseEnterAnAmount = 'pleaseEnterAnAmount';
+  static const theAmountMustBeGreateThan500 = 'theAmountMustBeGreateThan500';
+  static const theAmountMustBeLessThan = 'theAmountMustBeLessThan';
+  static const pleaseEnterPhoneNumber = 'pleaseEnterPhoneNumber';
+  static const welcomeToDoctorRegistration = 'welcomeToDoctorRegistration';
+  static const profilePhoto = 'profilePhoto';
+  static const addressIsRequired = 'addressIsRequired';
+  static const priceIsRequired = 'priceIsRequired';
+  static const examineDurationIsRequired = 'examineDurationIsRequired';
+  static const likedBy = 'likedBy';
+  static const others = 'others';
 
 }

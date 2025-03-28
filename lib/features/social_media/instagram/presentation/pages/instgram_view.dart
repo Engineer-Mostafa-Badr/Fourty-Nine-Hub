@@ -5,6 +5,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -63,46 +64,50 @@ class _InstagramViewState extends State<InstagramView> {
       child: BlocBuilder<UserCubit, BasicState<UserEntity>>(
         builder: (context, state) {
           return
-            // context.read<UserCubit>().isLoggedIn
-            // ?
-            SingleChildScrollView(
-              child: Column(
-                children: [
-                  _buildTabBar(context),
-                  const Sizer(),
-                  const StoresInstagramWidget(),
-                  const Sizer(),
-                  const InstagramPostWidget(
-                    mechan: false,
-                    multiImage: true,
-                  ),
-                  const Sizer(),
-                  const InstagramAdWidget(),
-                  const Sizer(),
-                  const ReelSliderWidget(),
-                  const Sizer(),
-                  const InstagramAdSliderWidget(),
-                  const Sizer(),
-                  const InstagramPostWidget(
-                    mechan: true,
-                    multiImage: false,
-                  ),
-                  const Sizer(),
+              // context.read<UserCubit>().isLoggedIn
+              // ?
+              SingleChildScrollView(
+            child: Column(
+              children: [
+                _buildTabBar(context),
+                const SizedBox(
+                  height: 16
+                ),
+                const StoresInstagramWidget(),
+                const SizedBox(
+                  height: 16,
+                ),
+                const InstagramPostWidget(
+                  mechan: false,
+                  multiImage: true,
+                ),
+                const Sizer(),
+                const InstagramAdWidget(),
+                const Sizer(),
+                const ReelSliderWidget(),
+                const Sizer(),
+                const InstagramAdSliderWidget(),
+                const Sizer(),
+                const InstagramPostWidget(
+                  mechan: true,
+                  multiImage: false,
+                ),
+                const Sizer(),
 
-                  const Sizer(),
-                  const InstagramVideoPostWidget(),
-                  const Sizer(),
-                  const InstagramForYouSliderWidget(),
-                  const Sizer(
-                    height: 60,
-                  )
-                  // Expanded(
-                  //   child:
-                  //       InstagramPosts(scrollController: scrollController),
-                  // ),
-                ],
-              ),
-            );
+                const Sizer(),
+                const InstagramVideoPostWidget(),
+                const Sizer(),
+                const InstagramForYouSliderWidget(),
+                const Sizer(
+                  height: 60,
+                ),
+                // Expanded(
+                //   child:
+                //       InstagramPosts(scrollController: scrollController),
+                // ),
+              ],
+            ),
+          );
           // : Column(
           //     children: [
           //       _buildTabBar(context),
@@ -119,9 +124,9 @@ class _InstagramViewState extends State<InstagramView> {
   Widget _buildTabBar(BuildContext context) {
     final user = context.read<UserCubit>().state.data;
     List<Map<String, String>> icons = [
-      {"Home": Assets.homeSocialAppBar},
-      {"Create": Assets.createPostAppBarIcon},
-      {"Profile": Assets.profileSocialAppBarIcon}
+      {"Home": Assets.homeIcon},
+      {"Create": Assets.createIcon},
+      {"Profile": Assets.profile2Icon}
     ];
     int selectedIndex = 0;
     return Container(
@@ -134,8 +139,8 @@ class _InstagramViewState extends State<InstagramView> {
             (index) {
               return Expanded(
                 child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 18),
-                  width: double.infinity,
+                  // margin: const EdgeInsets.symmetric(horizontal: 18),
+                  // width: double.infinity,
                   child: GestureDetector(
                     onTap: () {
                       if (index == 1) {
@@ -152,26 +157,38 @@ class _InstagramViewState extends State<InstagramView> {
                     child: Column(
                       children: [
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             SvgPicture.asset(
                               icons[index].values.first.toString(),
+                              colorFilter: ColorFilter.mode(
+                                  selectedIndex == index
+                                      ? const Color(0xFF0B1035)
+                                      : const Color(0xffD9D9D9),
+                                  BlendMode.srcIn
+                              ),
                             ),
-                            const Sizer(),
-                            Text(
-                              icons[index].keys.first.toString(),
+                            const SizedBox(
+                              width: 8,
+                            ),
+                            Label(
+                          text:    icons[index].keys.first.toString(),
                               style: Styles.headerText(
-                                  fontWeight: FontWeight.w400),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 32,
+                                color: selectedIndex == index? const Color(0xFF0B1035) : const Color(0xffD9D9D9),
+                              ),
                             )
                           ],
                         ),
-                        const Sizer(
-                          height: 5,
+                        const SizedBox(
+                          height: 18,
                         ),
                         if (selectedIndex == index)
                           Container(
                             width: double.infinity,
                             height: 2,
-                            color: Colors.red,
+                            color: const Color(0xff0B1035),
                           )
                       ],
                     ),

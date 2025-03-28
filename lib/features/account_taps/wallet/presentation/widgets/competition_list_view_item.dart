@@ -28,7 +28,7 @@ class CompetitionListViewItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if(luckyWheel != null) {
+    if (luckyWheel != null) {
       return Column(
         children: [
           Label(
@@ -51,7 +51,7 @@ class CompetitionListViewItem extends StatelessWidget {
                   currentPoints: luckyWheel!.point,
                   totalPoints: luckyWheel!.limit.toInt(),
                   price: luckyWheel!.amount,
-                  percentage: luckyWheel!.point / luckyWheel!.limit,
+                  percentage: (luckyWheel!.amount / luckyWheel!.limit) * 100,
                 ),
                 const SizedBox(
                   height: 4,
@@ -105,7 +105,7 @@ class CompetitionListViewItem extends StatelessWidget {
                   height: 16,
                 ),
                 CustomButtonWalletAndGiftAndCashback(
-                  title: LocaleKeys.requestTransaction2.localize,
+                  title: LocaleKeys.requestTransfer.localize,
                   //'Request Transfer',
                   onPressed: onPressed,
                   status: luckyWheel!.point > luckyWheel!.limit,
@@ -168,11 +168,8 @@ class CompetitionListViewItem extends StatelessWidget {
                 currency: currency,
                 currentPoints: competition.countOfRequest!,
                 totalPoints: competition.maxRequests!,
-                price:
-                    competition.countOfRequest! * competition.pricePerRequest!,
-                percentage: ((competition.countOfRequest! *
-                        competition.pricePerRequest!) /
-                    competition.withdrawLimit!),
+                price: competition.amount!,
+                percentage: (competition.amount! / competition.withdrawLimit!),
               ),
               const SizedBox(
                 height: 4,
@@ -232,12 +229,20 @@ class CompetitionListViewItem extends StatelessWidget {
               const SizedBox(
                 height: 16,
               ),
-              CustomButtonWalletAndGiftAndCashback(
-                title: LocaleKeys.requestTransaction2.localize,
-                //'Request Transfer',
-                onPressed: onPressed,
-                status: competition.countOfRequest! > competition.maxRequests!,
-              ),
+              competition.awaitApproval!
+                  ? CustomButtonWalletAndGiftAndCashback(
+                      title: LocaleKeys.waitingApproval.localize,
+                      //'Request Transfer',
+                      onPressed: () {},
+                      status: false,
+                    )
+                  : CustomButtonWalletAndGiftAndCashback(
+                      title: LocaleKeys.requestTransfer.localize,
+                      //'Request Transfer',
+                      onPressed: onPressed,
+                      status: competition.countOfRequest! >
+                          competition.maxRequests!,
+                    ),
               const SizedBox(
                 height: 8,
               ),
