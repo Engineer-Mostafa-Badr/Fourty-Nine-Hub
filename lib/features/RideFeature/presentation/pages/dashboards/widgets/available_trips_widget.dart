@@ -21,7 +21,6 @@ class AvailableTripsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
       width: context.screenWidth,
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -46,12 +45,13 @@ class AvailableTripsWidget extends StatelessWidget {
                   ),
                 ),
                 Label(
-                  text: tripEntity.userId.firstName, //'Ahmed',
+                  text: tripEntity.clientDetails!.firstName, //'Ahmed',
                   style: Styles.mediumText(),
                 ),
                 const SizedBox(height: 4),
-                 Label(
-                  text: '${(tripEntity.duration/120).toStringAsFixed(0)} Hour',
+                Label(
+                  text:
+                      '${(tripEntity.tripDetails!.duration / 120).toStringAsFixed(0)} Hour',
                   style: const TextStyle(fontWeight: FontWeight.w300),
                 ),
               ],
@@ -63,7 +63,7 @@ class AvailableTripsWidget extends StatelessWidget {
               spacing: 4,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(spacing: 5,children: [
+                Row(spacing: 5, children: [
                   Expanded(
                     flex: 1,
                     child: Image.asset(Assets.rideFrom, width: 24, height: 24),
@@ -71,25 +71,27 @@ class AvailableTripsWidget extends StatelessWidget {
                   Expanded(
                     flex: 9,
                     child: Label(
-                      text:tripEntity.fromTitle, //'Tariaq Bedon Esm',
+                      text: tripEntity.tripDetails!.startLocation.title, //'Tariaq Bedon Esm',
                       style: Styles.headerText(),
                     ),
                   )
                 ]),
-                Row(spacing: 5,children: [
+                Row(spacing: 5, children: [
                   Expanded(
                       flex: 1,
                       child: Image.asset(Assets.rideTo, width: 24, height: 24)),
                   Expanded(
                       flex: 9,
                       child: Label(
-                          text: tripEntity.toTitle,//'Open Air Mall - Madinaty',
+                          text:
+                              tripEntity.tripDetails!.targetLocation.title,//'Open Air Mall - Madinaty',
                           style:
                               Styles.mediumText(fontWeight: FontWeight.w300)))
                 ]),
-               const SizedBox(height: 5), RichText(
+                const SizedBox(height: 5),
+                RichText(
                   text: TextSpan(
-                    text: '${tripEntity.price} ',
+                    text: '${tripEntity.tripDetails!.price} ',
                     style: const TextStyle(color: AppColors.black),
                     children: <TextSpan>[
                       TextSpan(
@@ -99,7 +101,7 @@ class AvailableTripsWidget extends StatelessWidget {
                               color: AppColors.SECONDARY_COLOR_DARK2)),
                       TextSpan(
                           text:
-                              ' - ${tripEntity.distance / 1000} ${LocaleKeys.KM.tr()}'),
+                              ' - ${tripEntity.tripDetails!.distance / 1000} ${LocaleKeys.KM.tr()}'),
                     ],
                   ),
                 ),
@@ -120,14 +122,14 @@ class AvailableTripsWidget extends StatelessWidget {
                       child: AppButton(
                         radius: 15,
                         height: 30,
-                        label: !tripEntity.autoAccept
+                        label: !tripEntity.tripDetails!.autoAccept
                             ? LocaleKeys.acceptAnothePrice.tr()
                             : LocaleKeys.refuse.tr(),
                         style: Styles.mediumText(
                             color: Colors.white,
-                            fontSize: !tripEntity.autoAccept ? 23 : 28),
+                            fontSize: !tripEntity.tripDetails!.autoAccept ? 23 : 28),
                         onPressed: () {
-                          if (!tripEntity.autoAccept) {
+                          if (!tripEntity.tripDetails!.autoAccept) {
                             showModalBottomSheet(
                               backgroundColor: AppColors.whiteColor,
                               context: context,
@@ -136,7 +138,7 @@ class AvailableTripsWidget extends StatelessWidget {
                                       top: Radius.circular(15))),
                               isScrollControlled: true,
                               builder: (BuildContext context) =>
-                                  const EditPriceWidget(),
+                                  EditPriceWidget(tripEntity: tripEntity),
                             );
                           } else {
                             showCustomDialogTrip(

@@ -54,6 +54,7 @@ class LoadingMethodHelper {
 
     var response = await Dio().put(signedUrl,
         data: Stream.value(image), options: options);
+    print( "response123456 $response");
 
     return response.statusCode == 200;
   }
@@ -103,6 +104,7 @@ class LoadingMethodHelper {
             signedUrl: data['data']['idBehindData']['signedUrl'])
             .then(
               (value) async {
+                print("valllllue${value}");
             print("data['data']['idFrontData']['signedUrl']${data['data']['idFrontData']['signedUrl']}");
             await sendBinaryFileData(
                 file: XFile(idImageInFront.path),

@@ -14,7 +14,7 @@ import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/cat
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/selection_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/presentation/pages/widgets/filter_ad_dynamic_inputs.dart';
-import 'package:fourtyninehub/features/ads_feature/filter_ads/presentation/pages/widgets/header_filter.dart';
+import 'package:fourtyninehub/features/ads_feature/filter_ads/presentation/pages/widgets/custom_header_form.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
@@ -72,7 +72,7 @@ class _FilterAdsViewState extends State<FilterAdsView> {
                   // shrinkWrap: true,
                   // padding: const EdgeInsets.all(16.0),
                   children: [
-                    HeaderFilter(
+                    CustomHeaderForm(
                       categorization: widget.categorization,
                     ),
                     const SizedBox(

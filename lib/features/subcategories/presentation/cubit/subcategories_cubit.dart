@@ -35,9 +35,32 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
 
   String _mainCategoryId = '';
 
+  bool isMyAdsOpen = false;
+  bool isRequestLogOpen = false;
+
+  void toggleMyAds() {
+    if (!isMyAdsOpen) {
+      isMyAdsOpen = true;
+      isRequestLogOpen = false;
+    } else {
+      isMyAdsOpen = false;
+    }
+    emit(state.copyWith());
+  }
+
+  void toggleRequestLog() {
+    if (!isRequestLogOpen) {
+      isRequestLogOpen = true;
+      isMyAdsOpen = false;
+    } else {
+      isRequestLogOpen = false;
+    }
+    emit(state.copyWith());
+  }
+
   init({required String mainCategoryId}) {
     _mainCategoryId = mainCategoryId;
-    print('_mainCategoryId $_mainCategoryId');
+
   }
 
   changeSubCatIndex(int index) async {
@@ -64,20 +87,19 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
   Future<void> getMainCategoryDetails() async {
     // if (user != null) {
     final response =
-    await _getMainCategoryDetailsUseCase('62c8b5b09332225799fe335e');
+        await _getMainCategoryDetailsUseCase('62c8b5b09332225799fe335e');
     response.fold(
-            (failure) =>
-            emit(state.copyWith(status: SubcategoriesStates.error)),
-            (data) {
-          print("state.mainCategory?.nameEn ${data.nameEn}");
-          mainCategory = data;
+        (failure) => emit(state.copyWith(status: SubcategoriesStates.error)),
+        (data) {
+      print("state.mainCategory?.nameEn ${data.nameEn}");
+      mainCategory = data;
 
-          print("mainCategory ${mainCategory?.nameEn}");
-          emit(state.copyWith(
-              mainCategory: data, status: SubcategoriesStates.initState));
-          print("state.mainCategory?.nameEn ${state.mainCategory?.nameEn}");
-          print("mainCategory ${mainCategory?.nameEn}");
-        });
+      print("mainCategory ${mainCategory?.nameEn}");
+      emit(state.copyWith(
+          mainCategory: data, status: SubcategoriesStates.initState));
+      print("state.mainCategory?.nameEn ${state.mainCategory?.nameEn}");
+      print("mainCategory ${mainCategory?.nameEn}");
+    });
   }
 
   loadData(String id) async {
@@ -101,9 +123,8 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
         paginationParams: paginationParams,
         userId: user ?? ''));
     response.fold(
-            (failure) =>
-            emit(state.copyWith(
-                failure: failure, status: SubcategoriesStates.error)), (r) {
+        (failure) => emit(state.copyWith(
+            failure: failure, status: SubcategoriesStates.error)), (r) {
       data = r;
       emit(state.copyWith(subCategories: r));
     });
@@ -144,10 +165,33 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
         paginationParams: PaginationParams(page: 1, limit: 200),
         userId: user ?? ''));
     response.fold(
-            (failure) =>
-            emit(state.copyWith(
-                failure: failure, status: SubcategoriesStates.error)), (
-        r) async {
+        (failure) => emit(state.copyWith(
+            failure: failure, status: SubcategoriesStates.error)), (r) async {
+      if (r.isNotEmpty)
+        await loadFilterData(
+            model: FilterModel(limit: 15, page: 1, subCategoryId: r[0].id),
+            filter: "user");
+      data = r;
+      r.first.isSelected = true;
+      emit(state.copyWith(subCategories: r));
+    });
+
+    return data;
+  }
+
+  Future<List<SubCategoryEntity>> getMyMarriage(String id) async {
+    List<SubCategoryEntity> data = [];
+    // emit(state.copyWith(status: SubcategoriesStates.loading));
+    // await UserCubit.to.getUser();
+    final user = UserCubit.to.state.data?.id;
+    print('useeeerId===>$user}');
+    final response = await _getSubcategoriesUsecase(GetSubCategoriesParams(
+        mainCategoryId: id,
+        paginationParams: PaginationParams(page: 1, limit: 200),
+        userId: user ?? ''));
+    response.fold(
+        (failure) => emit(state.copyWith(
+            failure: failure, status: SubcategoriesStates.error)), (r) async {
       if (r.isNotEmpty)
         await loadFilterData(
             model: FilterModel(limit: 15, page: 1, subCategoryId: r[0].id),
@@ -190,7 +234,7 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
   }
 
   final PagingController<int, AdModel> adsPagingController =
-  PagingController(firstPageKey: 1);
+      PagingController(firstPageKey: 1);
 
   void loadInitialData({required String subCategoryId}) async {
     print("Yaneeeeeeee");
@@ -215,11 +259,12 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
   }
 
   List<AdModel> marriageAds = [];
+  List<AdModel> mrriageMyAds = [];
+  List<AdModel> adsRequestsLog = [];
   bool isLoadingMore = false;
   bool hasMoreData = true;
   int currentPage = 1;
   int pageSize = 10;
-
   Future getMarriageAds({
     required String subCategoryId,
   }) async {
@@ -237,11 +282,9 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
         userId: userId));
 
     response.fold(
-          (failure) =>
-          emit(
-              state.copyWith(
-                  failure: failure, status: SubcategoriesStates.error)),
-          (data) {
+      (failure) => emit(
+          state.copyWith(failure: failure, status: SubcategoriesStates.error)),
+      (data) async {
         marriageAds.addAll(data);
 
         if (data.length < pageSize) {
@@ -272,6 +315,8 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
     print("state.status${state.status}");
     emit(state.copyWith(status: SubcategoriesStates.loadingAds));
     print("state.status${state.status}");
+    await filterMyAds(model: model, filter: filter);
+    await getRequestsLog(model: model, filter: filter);
     await filterAds(model: model, filter: filter);
     emit(state.copyWith(status: SubcategoriesStates.adsSuccess));
     print("state.status${state.status}");
@@ -306,11 +351,9 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
         filter: filter);
     final response = await _filterAdUseCase(filterModel);
     response.fold(
-          (failure) =>
-          emit(
-              state.copyWith(
-                  failure: failure, status: SubcategoriesStates.error)),
-          (data) {
+      (failure) => emit(
+          state.copyWith(failure: failure, status: SubcategoriesStates.error)),
+      (data) {
         marriageAds.addAll(data);
 
         if (data.length < pageSize) {
@@ -322,6 +365,82 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
         isLoadingMore = false;
         print("objectmarriageAds${marriageAds.length}");
         emit(state.copyWith(ads: data, status: SubcategoriesStates.adsSuccess));
+      },
+    );
+  }
+
+  filterMyAds({
+    required FilterModel model,
+    required String filter,
+  }) async {
+    print("objectasdsad");
+    // if (!hasMoreData || isLoadingMore) return;
+
+    // isLoadingMore = true;
+
+    print("object");
+    print(filter);
+    print("objectHiiiiiiiiiiii");
+
+    FilterModel filterModel = FilterModel(
+        price: model.price,
+        props: model.props,
+        cityId: model.cityId,
+        governorateId: model.governorateId,
+        limit: 15,
+        page: currentPage,
+        subCategoryId: model.subCategoryId,
+        filter: filter);
+    final response = await _filterAdUseCase(filterModel);
+    response.fold(
+      (failure) => emit(
+          state.copyWith(failure: failure, status: SubcategoriesStates.error)),
+      (data) {
+        mrriageMyAds.addAll(data);
+
+        // if (data.length < pageSize) {
+        //   hasMoreData = false;
+        // } else {
+        //   currentPage++;
+        // }
+
+        // isLoadingMore = false;
+        print("objectmarriageAds${marriageAds.length}");
+        emit(state.copyWith(myAds: data));
+      },
+    );
+  }
+
+  getRequestsLog({
+    required FilterModel model,
+    required String filter,
+  }) async {
+    print("objectasdsad");
+    // if (!hasMoreData || isLoadingMore) return;
+
+    // isLoadingMore = true;
+
+    print("object");
+    print(filter);
+    print("objectHiiiiiiiiiiii");
+
+    FilterModel filterModel = FilterModel(
+        price: model.price,
+        props: model.props,
+        cityId: model.cityId,
+        governorateId: model.governorateId,
+        limit: 15,
+        page: currentPage,
+        subCategoryId: model.subCategoryId,
+        filter: filter);
+    final response = await _filterAdUseCase(filterModel);
+    response.fold(
+      (failure) => emit(
+          state.copyWith(failure: failure, status: SubcategoriesStates.error)),
+      (data) {
+        adsRequestsLog.addAll(data);
+
+        emit(state.copyWith(adsRequestsLog: data));
       },
     );
   }

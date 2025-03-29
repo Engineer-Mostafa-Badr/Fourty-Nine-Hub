@@ -4,35 +4,40 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 
 import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
+import '../../../../domain/entities/dashboards/settings_dashboard_entity.dart';
+import '../../../../domain/usecases/dashboards/update_settings_dashboard_usecase.dart';
+import '../../../controllers/dashboards_cubit/dashboards_cubit.dart';
 import '../../widgets/bottom_sheet/custom_bottom_sheet.dart';
 import '../../widgets/fare_bottom_sheet_widget.dart';
 import 'update_personal_info_widget.dart';
 
 class SettingsWidget extends StatefulWidget {
   final String modeType;
-  const SettingsWidget({super.key, required this.modeType});
+  final SettingsDashboardEntity? settings;
+  const SettingsWidget({super.key, required this.modeType, this.settings});
 
   @override
   State<SettingsWidget> createState() => _SettingsWidgetState();
 }
 
 class _SettingsWidgetState extends State<SettingsWidget> {
-  bool isReady = false;
-  bool isCaptainShare = false;
-  bool isCaptain = false;
-  bool isIntercity = false;
-  bool isPremium = false;
+  late bool isReady;
+  late bool isCaptainShare;
+  late bool isCaptain;
+  late bool isIntercity;
+  late bool isPremium;
   var planController = ExpansionTileController();
   var cityController = ExpansionTileController();
   List<String> subscriptionPlans = [
-    'percentage'.tr(),
-    'subscribePackage'.tr(),
+    'percentage',
+    'subscribePackage',
   ];
   List<String> favoriteCity = [
     'Cairo',
@@ -46,8 +51,20 @@ class _SettingsWidgetState extends State<SettingsWidget> {
     'Ismailia',
     'Menoufia',
   ];
-  String planTrailing = 'Percentage';
-  String cityTrailing = 'Cairo';
+  late String planTrailing;
+  late String cityTrailing;
+  @override
+  void initState() {
+    super.initState();
+    planTrailing = widget.settings?.subscriptionType ?? '';
+    cityTrailing = widget.settings?.city ?? '';
+    isReady = widget.settings?.isReady ?? false;
+    isCaptainShare = false;
+    isCaptain = widget.settings?.categoryIds[0].isActive ?? false;
+    isIntercity = widget.settings?.categoryIds[1].isActive ?? false;
+    isPremium = widget.settings?.categoryIds[2].isActive ?? false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -75,9 +92,13 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                   });
                 }),
             switchWidget(
-                title: Assets.greyCar,
+                title: widget
+                    .settings?.categoryIds[0].pictureUrl, //Assets.greyCar,
                 isText: false,
-                subText: LocaleKeys.captain.tr(),
+                subText: context.isArabic
+                    ? widget.settings?.categoryIds[0].nameAr
+                    : widget.settings?.categoryIds[0]
+                        .nameEn, //LocaleKeys.captain.tr(),
                 valuee: isCaptain,
                 onChanged: (value) {
                   setState(() {
@@ -85,9 +106,13 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                   });
                 }),
             switchWidget(
-                title: Assets.greyCar,
+                title: widget
+                    .settings?.categoryIds[1].pictureUrl, //Assets.greyCar,
                 isText: false,
-                subText: LocaleKeys.intercity.tr(),
+                subText: context.isArabic
+                    ? widget.settings?.categoryIds[1].nameAr
+                    : widget.settings?.categoryIds[1]
+                        .nameEn, //LocaleKeys.intercity.tr(),
                 valuee: isIntercity,
                 onChanged: (value) {
                   setState(() {
@@ -95,9 +120,13 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                   });
                 }),
             switchWidget(
-                title: Assets.greyCar,
+                title: widget
+                    .settings?.categoryIds[2].pictureUrl, //Assets.greyCar,
                 isText: false,
-                subText: LocaleKeys.premium.tr(), //'Premium',
+                subText: context.isArabic
+                    ? widget.settings?.categoryIds[2].nameAr
+                    : widget.settings?.categoryIds[2]
+                        .nameEn, //LocaleKeys.premium.tr(), //'Premium',
                 valuee: isPremium,
                 onChanged: (value) {
                   setState(() {
@@ -107,7 +136,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
             _expansionTileWidget(
               controller: planController,
               title: LocaleKeys.subscriptionPlan.tr(), //'Subscription plan',
-              trailing: planTrailing,
+              trailing: planTrailing.tr(),
               childrenList: List.generate(
                 subscriptionPlans.length,
                 (index) => InkWell(
@@ -121,14 +150,14 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                       subscriptionPlans.length,
                       (index) => Align(
                           alignment: AlignmentDirectional.topEnd,
-                          child: Label(text: subscriptionPlans[index])))[index],
+                          child: Label(text: subscriptionPlans[index].tr())))[index],
                 ),
               ),
             ),
             _expansionTileWidget(
               controller: cityController,
               title: LocaleKeys.favoriteCity.tr(), //'Favorite city',
-              trailing: cityTrailing,
+              trailing: cityTrailing.tr(),
               childrenList: List.generate(
                 favoriteCity.length,
                 (index) => InkWell(
@@ -156,14 +185,19 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                           fontSize: 14, fontWeight: FontWeight.w500)),
                   GestureDetector(
                       onTap: () {
-                        customBottomSheet(context, context.read<RideCubit>(),
+                        customBottomSheet2(context,
                             child: Padding(
                               padding: const EdgeInsets.all(12.0),
-                              child: FareBottomSheetWidget(rideCubit: context.read<RideCubit>(), selectedCategoryPrice: 44, selectedCategoryName: 'aaa',),
+                              child: FareBottomSheetWidget(
+                                rideCubit: context.read<RideCubit>(),
+                                selectedCategoryPrice: 44,
+                                selectedCategoryName: 'aaa',
+                              ),
                             ),
                             title: LocaleKeys.acceptAnothePrice.tr());
                       },
-                      child: Text('20 ${'change'.tr()}',
+                      child: Text(
+                          '${widget.settings?.pricingPerKm ?? 0} ${'change'.tr()}',
                           style: const TextStyle(fontSize: 12)))
                 ],
               ),
@@ -178,7 +212,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                         fontSize: 14, fontWeight: FontWeight.w500)),
                 const Spacer(),
                 RatingBar(
-                  initialRating: 2.5,
+                  initialRating: widget.settings?.rating.averageRating ?? 2.5,
                   ignoreGestures: true,
                   itemPadding: const EdgeInsets.symmetric(horizontal: 3),
                   ratingWidget: RatingWidget(
@@ -190,8 +224,9 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                   onRatingUpdate: (double value) {},
                 ),
                 const SizedBox(width: 5),
-                const Text('2.5',
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700))
+                Text(widget.settings?.rating.averageRating.toString() ?? '2.5',
+                    style: const TextStyle(
+                        fontSize: 12, fontWeight: FontWeight.w700))
               ],
             ),
           ),
@@ -203,7 +238,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                 Text(LocaleKeys.totalProfit.tr(), //'Total Profit',
                     style: const TextStyle(
                         fontSize: 14, fontWeight: FontWeight.w500)),
-                Text('1050 ${LocaleKeys.egp.tr()}',
+                Text('${widget.settings?.profit ?? '0'} ${LocaleKeys.egp.tr()}',
                     style: const TextStyle(
                         fontSize: 14, fontWeight: FontWeight.w500))
               ],
@@ -217,8 +252,9 @@ class _SettingsWidgetState extends State<SettingsWidget> {
                 Text(LocaleKeys.totalTrips.tr(), //'Total Trips',
                     style: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.w500)),
-                const Text('38',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500))
+                Text(widget.settings?.countTrips.toString() ?? '', //'38',
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w500))
               ],
             ),
           ),
@@ -236,10 +272,46 @@ class _SettingsWidgetState extends State<SettingsWidget> {
           UpdatePersonalInfoWidget(
               title: LocaleKeys.vehicleInspection.tr(), exdIn: 6),
           const SizedBox(height: 16),
-          AppButton(
-              label: LocaleKeys.deleteRegistration.tr(),
-              backColor: AppColors.SECONDARY_COLOR_DARK2,
-              onPressed: () {}),
+          Row(
+            spacing: 5,
+            children: [
+              Expanded(
+                flex: 2,
+                child: AppButton(
+                    label: LocaleKeys.deleteRegistration.tr(),
+                    backColor: AppColors.SECONDARY_COLOR_DARK2,
+                    onPressed: () {}),
+              ),
+              Expanded(
+                flex: 2,
+                child: AppButton(
+                    label: LocaleKeys.update.tr(),
+                    backColor: AppColors.PRIMARY_COLOR,
+                    onPressed: () {
+                      context.read<DashboardsCubit>().updateSettings(
+                          context,
+                          UpdateSettingsDashboardUsecaseParam(
+                              isReady: isReady,
+                              subscriptionPlan: planTrailing,
+                              favoriteCity: cityTrailing,
+                              subCategoriesActive: [
+                                SubCategoriesActive(
+                                    subcategoryId:
+                                        widget.settings!.categoryIds[0].id,
+                                    isActive: isCaptain),
+                                SubCategoriesActive(
+                                    subcategoryId:
+                                        widget.settings!.categoryIds[1].id,
+                                    isActive: isIntercity),
+                                SubCategoriesActive(
+                                    subcategoryId:
+                                        widget.settings!.categoryIds[2].id,
+                                    isActive: isPremium),
+                              ]));
+                    }),
+              ),
+            ],
+          ),
         ],
       ),
     );
@@ -290,7 +362,7 @@ class _SettingsWidgetState extends State<SettingsWidget> {
               ? Text(title ?? '',
                   style: const TextStyle(
                       fontSize: 14, fontWeight: FontWeight.w500))
-              : Image.asset(title ?? '', width: 60, height: 25),
+              : Image.network(title ?? '', width: 60, height: 25),
           const Spacer(),
           Text(subText ?? '',
               style:

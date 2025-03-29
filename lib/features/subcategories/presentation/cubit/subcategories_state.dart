@@ -8,7 +8,8 @@ class SubcategoriesState {
   String? city;
   String? governorate;
   final FilterModel? filterModel;
-
+  final List<AdModel>? myAds;
+  final List<AdModel>? adsRequestsLog;
 
   final List<SubCategoryEntity>? subCategories;
   final List<SubCategoryEntity>? customPageSubCategories;
@@ -17,15 +18,16 @@ class SubcategoriesState {
   SubcategoriesState(
       {this.failure,
       this.subCategories,
-      this.customPageSubCategories,
-        this.ads,
-        this.city = '',
-        this.governorate = '',
-        this.filterModel,
-
-        this.mainCategory,
+      this.ads,
+      this.city = '',
+      this.governorate = '',
+        this.customPageSubCategories,
+      this.filterModel,
+      this.myAds,
+      this.adsRequestsLog,
+      this.mainCategory,
       this.marriageSubCategories,
-      this.subCatIndex=0,
+      this.subCatIndex = 0,
       this.status = SubcategoriesStates.loading});
 
   SubcategoriesState copyWith({
@@ -40,6 +42,8 @@ class SubcategoriesState {
     List<SubCategoryEntity>? customPageSubCategories,
     List<SubCategoryEntity>? marriageSubCategories,
     List<AdModel>? ads,
+    List<AdModel>? myAds,
+    List<AdModel>? adsRequestsLog,
   }) {
     return SubcategoriesState(
       failure: failure ?? this.failure,
@@ -49,16 +53,15 @@ class SubcategoriesState {
       customPageSubCategories: customPageSubCategories ?? this.customPageSubCategories,
       subCatIndex: subCatIndex ?? this.subCatIndex,
       mainCategory: mainCategory ?? this.mainCategory,
-      marriageSubCategories: marriageSubCategories ?? this.marriageSubCategories,
+      marriageSubCategories:
+          marriageSubCategories ?? this.marriageSubCategories,
+      myAds: myAds ?? this.myAds,
+      adsRequestsLog: adsRequestsLog ?? this.adsRequestsLog,
     );
   }
 }
 
-enum SubcategoriesStates {
-  loading,
-  loadingAds,
-  adsSuccess,
-  initState, error }
+enum SubcategoriesStates { loading, loadingAds, adsSuccess, initState, error }
 
 extension SubcategoriesStateX on SubcategoriesState {
   bool get isLoading => status == SubcategoriesStates.loading;

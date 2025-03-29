@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/features/social_media/edit_profile/domain/entities/edit_profile_entity.dart';
 import 'package:fourtyninehub/features/social_media/edit_profile/domain/repositories/edit_profile_repo.dart';
+
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 

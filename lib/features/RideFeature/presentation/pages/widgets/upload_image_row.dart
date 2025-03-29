@@ -9,6 +9,7 @@ class UploadImageRow extends StatelessWidget {
   final bool? disableUpload;
   @override
   Widget build(BuildContext context) {
+    print("disableUpload$disableUpload");
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [

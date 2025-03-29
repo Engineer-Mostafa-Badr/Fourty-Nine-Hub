@@ -1,31 +1,34 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import 'font_manager.dart';
 
-
 class BottomCardRequest extends StatefulWidget {
   final int driversCount;
-  final int price;
   final VoidCallback onCancel;
+  final RideCubit rideCubit;
 
   const BottomCardRequest({
-    Key? key,
+    super.key,
     required this.driversCount,
-    required this.price,
     required this.onCancel,
-  }) : super(key: key);
+    required this.rideCubit,
+  });
 
   @override
   State<BottomCardRequest> createState() => _BottomCardRequestState();
 }
 
 class _BottomCardRequestState extends State<BottomCardRequest> {
-  bool isAutomatic = true;
+  bool isAutomatic = false;
 
   @override
   Widget build(BuildContext context) {
@@ -33,119 +36,126 @@ class _BottomCardRequestState extends State<BottomCardRequest> {
 
     final Color cardColor = isDark ? const Color(0xff2C2C2C) : Colors.white;
     final Color textColor = isDark ? Colors.white : Colors.black87;
-    // final Color subTextColor = isDark ? Colors.grey.shade300 : Colors.black54;
-    final Color switchActiveTrack = isDark ? Colors.grey.shade700 : Colors.white;
+    const Color switchActiveTrack = Colors.green;
+    const Color switchInactiveTrack = Colors.white;
+    const Color switchThumbColor = Color(0xFF0D0D26); // Dark navy color
 
-    return Card(
-      elevation: 5,
-      margin: EdgeInsets.zero,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(16),
-          topRight: Radius.circular(16),
-        ),
-      ),
-      color: cardColor,
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              height: 35,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  _buildStackedAvatars(),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Row(
-                      children: [
-                        Text(
-                          "${widget.driversCount} ",
-                          style: TextStyle(
-                            fontSize: FontSize.s14,
-                            fontWeight: FontWeight.bold,
-                            color: textColor,
-                          ),
-                        ),
-                        Text(
-                          LocaleKeys.driversDisplayYourRequest.localize,
-                          style: TextStyle(
-                            fontSize: FontSize.s14,
-                            fontWeight: FontWeight.bold,
-                            color: textColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Expanded(
-                  child: Row(
+    return BlocProvider.value(
+      value: widget.rideCubit,
+      child: Builder(
+        builder: (context) {
+          return BlocBuilder <RideCubit, RideState>(
+            builder: (context, state) {
+              return Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
+                      Container(
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: const Color(0xffF5F5F5),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            _buildStackedAvatars(),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    "${widget.driversCount} ",
+                                    style: TextStyle(
+                                      fontSize: FontSize.s14,
+                                      fontWeight: FontWeight.bold,
+                                      color: textColor,
+                                    ),
+                                  ),
+                                  Text(
+                                    LocaleKeys.driversDisplayYourRequest.localize,
+                                    style: TextStyle(
+                                      fontSize: FontSize.s14,
+                                      fontWeight: FontWeight.bold,
+                                      color: textColor,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 16),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Row(
+                        children: [
+                          ConstrainedBox(
+                            constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.75),
+                            child: Text(
+                              "${LocaleKeys.acceptTheNearestDriverFor.tr()} ${state.requestedTrip?.price?.toInt().toString() ?? "0"} ${context.isArabic ? "ج.م تلقائيا" : "EGP Automatically"}",
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: textColor,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                          const Spacer(),
+                          Switch(
+                            value: isAutomatic,
+                            onChanged: (val) {
+                              setState(() {
+                                isAutomatic = val;
+                              });
+                            },
+                            activeColor: switchThumbColor,
+                            inactiveThumbColor: switchThumbColor,
+                            activeTrackColor: switchActiveTrack,
+                            inactiveTrackColor: switchInactiveTrack,
+                            trackOutlineColor: MaterialStateProperty.resolveWith<Color?>(
+                                  (Set<MaterialState> states) {
+                                return states.contains(MaterialState.selected)
+                                    ? Colors.transparent
+                                    : Colors.black;
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      // Cancel Button
+                      SizedBox(
+                        width: double.infinity,
+                        child: TextButton(
+                          onPressed: widget.onCancel,
+                          style: TextButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            backgroundColor: const Color(0xFFF5F5F5), // Light gray background
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30), // More rounded corners
+                            ),
+                          ),
+                          child: Text(
+                            LocaleKeys.cancelOrder.tr(),
+                            style: const TextStyle(
+                              fontSize: 18,
+                              color: Colors.red, // Red text color
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
 
-                      Text(
-                        " ${widget.price} ",
-                        style: TextStyle(
-                          fontSize: FontSize.s14,
-                          color: textColor,
-                        ),
-                      ),
-                      Text(
-                        LocaleKeys.acceptTheNearestDriverFor.tr(),
-                        style: TextStyle(
-                          fontSize: FontSize.s14,
-                          color: textColor,
-                        ),
-                      ),
                     ],
                   ),
-                ),
-
-                Switch(
-                  value: isAutomatic,
-                  onChanged: (val) {
-                    setState(() {
-                      isAutomatic = val;
-                    });
-                  },
-                  activeColor: AppColors.PRIMARY_COLOR,
-                  activeTrackColor: switchActiveTrack,
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            // Cancel Button
-            SizedBox(
-              width: double.infinity,
-              child: OutlinedButton(
-                onPressed: widget.onCancel,
-                style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  foregroundColor: Colors.red,
-                  side: const BorderSide(color: Colors.red),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                child: Text(
-                  LocaleKeys.cancelOrder.tr(),
-                  style: TextStyle(
-                    fontSize: FontSize.s16,
-                    color: textColor,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+                );
+            }
+          );
+        }
       ),
     );
   }
@@ -153,34 +163,35 @@ class _BottomCardRequestState extends State<BottomCardRequest> {
   // Build overlapping driver avatars
   Widget _buildStackedAvatars() {
     final images = [
-      "https://maps.gstatic.com/tactile/pane/default_geocode-2x.png",
-      "https://maps.gstatic.com/tactile/pane/default_geocode-2x.png",
-      "https://maps.gstatic.com/tactile/pane/default_geocode-2x.png",
+      "https://w7.pngwing.com/pngs/129/292/png-transparent-female-avatar-girl-face-woman-user-flat-classy-users-icon.png",
+      "https://w7.pngwing.com/pngs/129/292/png-transparent-female-avatar-girl-face-woman-user-flat-classy-users-icon.png",
+      "https://w7.pngwing.com/pngs/129/292/png-transparent-female-avatar-girl-face-woman-user-flat-classy-users-icon.png",
     ];
 
     return SizedBox(
-      width: 60,
+      width: 80,
       child: Stack(
+        clipBehavior: Clip.none,
         children: [
           Positioned(
-            left: 0,
+            left: 28,
             child: CircleAvatar(
-              radius: 14,
-              backgroundImage: NetworkImage(images[0]),
+              radius: 20,
+              backgroundImage: NetworkImage(images[2]),
             ),
           ),
           Positioned(
-            left: 20,
+            left: 14,
             child: CircleAvatar(
-              radius: 14,
+              radius: 20,
               backgroundImage: NetworkImage(images[1]),
             ),
           ),
           Positioned(
-            left: 40,
+            left: 0,
             child: CircleAvatar(
-              radius: 14,
-              backgroundImage: NetworkImage(images[2]),
+              radius: 20,
+              backgroundImage: NetworkImage(images[0]),
             ),
           ),
         ],
@@ -188,5 +199,3 @@ class _BottomCardRequestState extends State<BottomCardRequest> {
     );
   }
 }
-
-

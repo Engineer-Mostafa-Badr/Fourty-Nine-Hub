@@ -44,7 +44,7 @@ class TruckDriversLicenseScreen extends StatelessWidget {
                   spacing: 4,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    closeWidget(context),
+                    closeWidget(context:context,onAcceptSaveData: (){}),
                     Label(
                       text: LocaleKeys.driversLicense.localize,
                       style: Styles.headerText(

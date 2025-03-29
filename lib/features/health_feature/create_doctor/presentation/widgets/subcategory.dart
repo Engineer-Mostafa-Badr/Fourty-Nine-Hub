@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/custom_dropdown_health.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
@@ -19,6 +20,17 @@ class CreateDoctorSubcategoryDropdown extends StatelessWidget {
           current is CreateDoctorSubCategoriesLoaded,
       builder: (context, state) {
         if (state is CreateDoctorSubCategoriesLoaded) {
+          return CustomDropdownHealth<SubCategoryEntity>(
+            items: state.subCategories,
+            onItemSelected: (value) {
+              if (value != null) {
+                createDoctorCubit.selectSubcategory(value);
+              }
+            },
+            displayStringForItem: (value) =>
+                context.isArabic ? value.nameAr : value.nameEn,
+            hint: LocaleKeys.speciality.tr(),
+          );
           return DropdownMenu<SubCategoryEntity>(
               expandedInsets: EdgeInsets.zero,
               inputDecorationTheme: InputDecorationTheme(

@@ -19,28 +19,22 @@ class RecordRideCubit extends Cubit<RiderState> {
 
   // Start recording
   Future<void> startRecord() async {
-    log('startRecord');
+    log('startRecorddd${await record.hasPermission()}');
     try {
-      // Check for microphone permission
+      log('record.hasPermission');
       if (await record.hasPermission()) {
+        log('record.hasPermission');
         Directory tempDir = await getTemporaryDirectory();
         String tempPath =
             '${tempDir.path}/audio_${DateTime.now().millisecondsSinceEpoch}.wav';
-
-        // Start recording
         await record.start(
           path: tempPath,
-          // encoder: AudioEncoder.aacEld,
         );
-
-        // Optionally, update state to reflect recording status
-        // emit(RecordingStarted(tempPath)); // You can define this state to indicate recording
       } else {
         throw Exception('Microphone permission not granted');
       }
     } catch (e) {
       log('Error starting record: $e');
-      // emit(RecordingError('Failed to start recording: $e')); // Emit error state
     }
   }
 

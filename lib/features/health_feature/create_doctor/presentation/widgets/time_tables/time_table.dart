@@ -3,6 +3,8 @@ import 'package:fourtyninehub/common/functions/helper/time_of_day_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/enums/week_days.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/doctor_day_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -23,20 +25,21 @@ class Timetable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        border: Border.all(width: .5),
-        borderRadius: BorderRadius.circular(UIConst.radius),
-      ),
+      // padding: const EdgeInsets.all(10),
+      // decoration: BoxDecoration(
+      //   border: Border.all(width: .5),
+      //   borderRadius: BorderRadius.circular(UIConst.radius),
+      // ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title,
-              style: Styles.headerText(
-                  color: context.isDarkMode
-                      ? Colors.white
-                      : AppColors.BARRIER_COLOR)),
-          const Sizer(),
+          Text(
+            title,
+            style: Styles.headerText(height: 1.60),
+          ),
+          const SizedBox(
+            height: 8,
+          ),
           _WeekWidget(
             timetale: timetale,
           ),
@@ -71,23 +74,30 @@ class _WeekWidgetState extends State<_WeekWidget> {
 
   Widget _buildDayWidget(DoctorDayEntity time) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5.h),
+      padding: const EdgeInsetsDirectional.only(start: 8, bottom: 8),
       child: Row(
         children: [
           Expanded(
             child: Row(
               children: [
-                Checkbox(
-                    value: time.isAvailable,
-                    activeColor: AppColors.PRIMARY_COLOR,
-                    checkColor: Colors.white,
-                    onChanged: (v) {
-                      setState(() {
-                        time.isAvailable = v!;
-                        print(v);
-                        print(time.isAvailable);
-                      });
-                    }),
+                SizedBox(
+                  height: 24,
+                  width: 24,
+                  child: Checkbox(
+                      value: time.isAvailable,
+                      activeColor: Colors.grey,
+                      checkColor: Colors.white,
+                      onChanged: (v) {
+                        setState(() {
+                          time.isAvailable = v!;
+                          print(v);
+                          print(time.isAvailable);
+                        });
+                      }),
+                ),
+                const SizedBox(
+                  width: 4,
+                ),
                 Expanded(
                   child: Text(
                     time.day.toLocalizedString(context),
@@ -137,48 +147,67 @@ class _WeekWidgetState extends State<_WeekWidget> {
                 }
               });
             },
-            child: context.isArabic
-                ? RichText(
-                    text: TextSpan(
-                      text: 'من   ',
-                      style: Styles.mediumText(
+            child: RichText(
+              text: TextSpan(
+                text: '${LocaleKeys.from.localize} ',
+                style: Styles.mediumText(
+                  color: context.isDarkMode
+                      ? Colors.white
+                      : AppColors.PRIMARY_COLOR,
+                ),
+                children: [
+                  TextSpan(
+                    text: formatTimeOfDayLocalized(time.from, context),
+                    style: Styles.mediumText(
                         color: context.isDarkMode
                             ? Colors.white
-                            : AppColors.PRIMARY_COLOR,
-                      ),
-                      children: [
-                        TextSpan(
-                          text: formatTimeOfDayLocalized(time.from, context),
-                          style: Styles.mediumText(
-                              color: context.isDarkMode
-                                  ? Colors.white
-                                  : AppColors.DARK_GRAY_COLOR),
-                        ),
-                      ],
-                    ),
-                  )
-                : RichText(
-                    text: TextSpan(
-                      text: "from   ",
-                      style: Styles.mediumText(
-                        color: context.isDarkMode
-                            ? Colors.white
-                            : AppColors.PRIMARY_COLOR,
-                      ),
-                      children: [
-                        TextSpan(
-                          text: formatTimeOfDayLocalized(time.from, context),
-                          style: Styles.mediumText(
-                              color: context.isDarkMode
-                                  ? Colors.white
-                                  : AppColors.DARK_GRAY_COLOR),
-                        ),
-                      ],
-                    ),
+                            : AppColors.DARK_GRAY_COLOR),
                   ),
+                ],
+              ),
+            ),
+            // context.isArabic
+            //     ? RichText(
+            //         text: TextSpan(
+            //           text: 'من   ',
+            //           style: Styles.mediumText(
+            //             color: context.isDarkMode
+            //                 ? Colors.white
+            //                 : AppColors.PRIMARY_COLOR,
+            //           ),
+            //           children: [
+            //             TextSpan(
+            //               text: formatTimeOfDayLocalized(time.from, context),
+            //               style: Styles.mediumText(
+            //                   color: context.isDarkMode
+            //                       ? Colors.white
+            //                       : AppColors.DARK_GRAY_COLOR),
+            //             ),
+            //           ],
+            //         ),
+            //       )
+            //     : RichText(
+            //         text: TextSpan(
+            //           text: "from   ",
+            //           style: Styles.mediumText(
+            //             color: context.isDarkMode
+            //                 ? Colors.white
+            //                 : AppColors.PRIMARY_COLOR,
+            //           ),
+            //           children: [
+            //             TextSpan(
+            //               text: formatTimeOfDayLocalized(time.from, context),
+            //               style: Styles.mediumText(
+            //                   color: context.isDarkMode
+            //                       ? Colors.white
+            //                       : AppColors.DARK_GRAY_COLOR),
+            //             ),
+            //           ],
+            //         ),
+            //       ),
           ),
-          Sizer(
-            width: 50.w,
+          const Sizer(
+            width: 20,
           ),
           InkWell(
             onTap: () {
@@ -203,45 +232,65 @@ class _WeekWidgetState extends State<_WeekWidget> {
                 }
               });
             },
-            child: context.isArabic
-                ? RichText(
-                    text: TextSpan(
-                      text: 'إلي   ',
-                      style: Styles.mediumText(
+            child: RichText(
+              text: TextSpan(
+                text: '${LocaleKeys.to.localize} ',
+                style: Styles.mediumText(
+                  color: context.isDarkMode
+                      ? Colors.white
+                      : AppColors.PRIMARY_COLOR,
+                ),
+                children: [
+                  TextSpan(
+                    text: formatTimeOfDayLocalized(time.to, context),
+                    style: Styles.mediumText(
                         color: context.isDarkMode
                             ? Colors.white
-                            : AppColors.PRIMARY_COLOR,
-                      ),
-                      children: [
-                        TextSpan(
-                          text: formatTimeOfDayLocalized(time.to, context),
-                          style: Styles.mediumText(
-                              color: context.isDarkMode
-                                  ? Colors.white
-                                  : AppColors.DARK_GRAY_COLOR),
-                        ),
-                      ],
-                    ),
-                  )
-                : RichText(
-                    text: TextSpan(
-                      text: "to   ",
-                      style: Styles.mediumText(
-                        color: context.isDarkMode
-                            ? Colors.white
-                            : AppColors.PRIMARY_COLOR,
-                      ),
-                      children: [
-                        TextSpan(
-                          text: formatTimeOfDayLocalized(time.to, context),
-                          style: Styles.mediumText(
-                              color: context.isDarkMode
-                                  ? Colors.white
-                                  : AppColors.DARK_GRAY_COLOR),
-                        ),
-                      ],
-                    ),
+                            : AppColors.DARK_GRAY_COLOR),
                   ),
+                ],
+              ),
+            ),
+            // context.isArabic
+            //     ? RichText(
+            //         text: TextSpan(
+            //           text: 'إلي   ',
+            //           style: Styles.mediumText(
+            //             color: context.isDarkMode
+            //                 ? Colors.white
+            //                 : AppColors.PRIMARY_COLOR,
+            //           ),
+            //           children: [
+            //             TextSpan(
+            //               text: formatTimeOfDayLocalized(time.to, context),
+            //               style: Styles.mediumText(
+            //                   color: context.isDarkMode
+            //                       ? Colors.white
+            //                       : AppColors.DARK_GRAY_COLOR),
+            //             ),
+            //           ],
+            //         ),
+            //       )
+            //     : RichText(
+            //         text: TextSpan(
+            //           text: "to   ",
+            //           style: Styles.mediumText(
+            //             color: context.isDarkMode
+            //                 ? Colors.white
+            //                 : AppColors.PRIMARY_COLOR,
+            //           ),
+            //           children: [
+            //             TextSpan(
+            //               text: formatTimeOfDayLocalized(time.to, context),
+            //               style: Styles.mediumText(
+            //                   color: context.isDarkMode
+            //                       ? Colors.white
+            //                       : AppColors.DARK_GRAY_COLOR),
+            //             ),
+            //           ],
+            //         ),
+
+            //       ),
           ),
         ],
       ),

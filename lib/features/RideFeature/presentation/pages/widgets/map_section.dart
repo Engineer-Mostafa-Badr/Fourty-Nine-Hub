@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 
@@ -64,7 +65,7 @@ class _MapSectionState extends State<MapSection> {
           child: CustomRideButton(
             text: LocaleKeys.carTruckRegister.tr(),
             onPressed: () {
-              context.push(Routes.rideModeScreen, extra: 'truk');
+              context.push(Routes.rideModeScreen, extra: const RideModeParams(modeType: 'truk'));
               // customBottomSheet(context,
               //     child: Padding(
               //       padding: const EdgeInsets.all(12.0),

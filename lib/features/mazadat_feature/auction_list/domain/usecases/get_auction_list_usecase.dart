@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+
 import '../../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 import '../../../../food_feature/restaurants_list/domain/usecases/get_nearby_restaurants_usecase.dart';

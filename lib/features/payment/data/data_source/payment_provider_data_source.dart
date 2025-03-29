@@ -217,6 +217,7 @@ class PaymentProviderRemoteDataSourceImpl
         'receiptId': params.receiptId,
         'amountId': params.amountId,
         'paymentProviderId': params.paymentProviderId,
+        'phoneNumber': params.phoneNumber,
       },
     );
     return response.fold(

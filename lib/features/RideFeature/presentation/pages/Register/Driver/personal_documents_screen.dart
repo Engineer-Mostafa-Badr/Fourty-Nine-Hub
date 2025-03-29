@@ -155,9 +155,7 @@ class PersonalDocumentsScreen extends StatelessWidget {
                       ),
                     ),
                     const Sizer(),
-                    context.read<RideCubit>().state.isLoadingSubmit?const Center(child: SizedBox(
-                        height: 44,
-                        child: CircularProgressIndicator(color: AppColors.PRIMARY_COLOR,))):InkWell(
+                    InkWell(
                       onTap: () {
                         print("object");
                         context.read<RideCubit>().onSubmitUploadingId(context);

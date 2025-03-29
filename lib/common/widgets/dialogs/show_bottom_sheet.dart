@@ -155,17 +155,19 @@ bottomSheet({
         return AnimatedBottomSheet(
           backgroundColor: backColor,
           asAlertDialog: asAlertDialog,
-          child: SizedBox(
+          child: Container(
             width: double.infinity,
-            // padding: EdgeInsets.all(30.w),
-            // margin: EdgeInsets.all(kToolbarHeight),
-            // decoration: BoxDecoration(
-            //   borderRadius: BorderRadius.only(
-            //     topLeft: Radius.circular(20.r),
-            //     topRight: Radius.circular(20.r),
-            //   ),
-            //   color: backColor ?? Theme.of(context).scaffoldBackgroundColor,
-            // ),
+            padding: const EdgeInsets.all(16),
+            // margin: const EdgeInsets.all(kToolbarHeight),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: const Radius.circular(20),
+                topRight: const Radius.circular(20),
+                bottomLeft: Radius.circular(asAlertDialog ? 20 : 0),
+                bottomRight: Radius.circular(asAlertDialog ? 20 : 0),
+              ),
+              color: backColor ?? Theme.of(context).scaffoldBackgroundColor,
+            ),
             child: widget,
           ),
         );
