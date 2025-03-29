@@ -1252,12 +1252,19 @@ class EndPoints {
   static String getExpectedPrice(String id) {
     return '/ride/trips/expected/price/$id';
   }
-  static String getAvailableTrips(String subCategoryId) {
-    return '/ride/driver/trips/available/not-tracking?limit=10&page=1';
+  static String getAvailableTrips(AvailableRideTripsUseCaseParams params) {
+    return '/ride/driver/trips/available/not-tracking?limit=${params.limit}&page=${params.page}';
   }
   static String getPastTrips(int page,String type) {
     return '/ride/driver/trips/past?tripType=$type&limit=20&page=$page';
   }
+  static String createNewOffer(String id) {
+    return '/ride/offers/new/offer/$id';
+  }
+  static String updateDriverRating(String id) {
+    return '/ride/trip/rating/$id/client';
+  }
+  static String createDriverRating = '/ride/trip/rating/driver';
   static String getSettingsDashboard = '/ride/driver/info/settings';
   static String deleteRideRegistration = '/ride/riders';
   static String getRideBrands = '/ride/riders/brands';
