@@ -7,32 +7,35 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../../../res/assets/assets.dart';
+import '../../../../domain/entities/dashboards/trip_entity.dart';
 import '../../widgets/font_manager.dart';
+
 class EditPriceWidget extends StatefulWidget {
-  const EditPriceWidget({super.key});
+  final TripEntity? tripEntity;
+  const EditPriceWidget({super.key, this.tripEntity});
 
   @override
   State<EditPriceWidget> createState() => _EditPriceWidgetState();
 }
 
-int price = 79;
-
 class _EditPriceWidgetState extends State<EditPriceWidget> {
+  int price = 0;
+  @override
+  void initState() {
+    super.initState();
+    price = widget.tripEntity?.tripDetails?.price.toInt() ?? 0;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Theme.of(context).scaffoldBackgroundColor,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black26,
-            blurRadius: 10,
-            spreadRadius: 2,
-          ),
-        ],
-      ),
+          color: Theme.of(context).scaffoldBackgroundColor,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: const [
+            BoxShadow(color: Colors.black26, blurRadius: 10, spreadRadius: 2)
+          ]),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -54,7 +57,7 @@ class _EditPriceWidgetState extends State<EditPriceWidget> {
               }),
               Column(
                 children: [
-                   Text(
+                  Text(
                     LocaleKeys.offerPrice.tr(),
                     style: const TextStyle(
                         fontSize: FontSize.s14, fontWeight: FontWeight.w600),
@@ -72,25 +75,26 @@ class _EditPriceWidgetState extends State<EditPriceWidget> {
               }),
             ],
           ),
-          const SizedBox(height: 15),
-          Container(
-            width: double.infinity,
-            height: 40,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: AppColors.buttonDialog,
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: Text(
-              LocaleKeys.raiseFare.localize,
-              style: const TextStyle(
-                  fontSize: FontSize.s16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white),
-            ),
-          ),
+          // const SizedBox(height: 15),
+          // Container(
+          //   width: double.infinity,
+          //   height: 40,
+          //   alignment: Alignment.center,
+          //   decoration: BoxDecoration(
+          //     color: AppColors.buttonDialog,
+          //     borderRadius: BorderRadius.circular(15),
+          //   ),
+          //   child: Text(
+          //     LocaleKeys.raiseFare.localize,
+          //     style: const TextStyle(
+          //         fontSize: FontSize.s16,
+          //         fontWeight: FontWeight.bold,
+          //         color: Colors.white),
+          //   ),
+          // ),
           const SizedBox(height: 16),
-          Align(alignment: AlignmentDirectional.bottomStart,
+          Align(
+            alignment: AlignmentDirectional.bottomStart,
             child: Text(LocaleKeys.Payment.localize,
                 style: const TextStyle(
                     fontSize: FontSize.s12,
@@ -122,9 +126,11 @@ class _EditPriceWidgetState extends State<EditPriceWidget> {
             ],
           ),
           const SizedBox(height: 8),
-          _locationRow("Tariaq Bedon Esm", Colors.blue, true),
+          _locationRow(widget.tripEntity?.tripDetails?.startLocation.title ?? "Tariaq Bedon Esm",
+              Colors.blue, true),
           const SizedBox(height: 15),
-          _locationRow("Open Air Mall - Madinaty", Colors.green, false),
+          _locationRow(widget.tripEntity?.tripDetails?.targetLocation.title ?? "Open Air Mall - Madinaty",
+              Colors.green, false),
           const SizedBox(height: 25),
           AppButton(
             backColor: AppColors.PRIMARY_COLOR,
@@ -150,21 +156,28 @@ class _EditPriceWidgetState extends State<EditPriceWidget> {
   }
 
   Widget _locationRow(String location, Color color, bool isFrom) {
-    return Row(
+    return Row(crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          height: 20,
-          width: 20,
-          decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: AppColors.whiteColor,
-              border: Border.all(color: color, width: 4)),
+        Expanded(
+          flex: 1,
+          child: Container(
+            margin: const EdgeInsets.only(top: 3),
+            height: 20,
+            width: 20,
+            decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColors.whiteColor,
+                border: Border.all(color: color, width: 4)),
+          ),
         ),
         const SizedBox(width: 8),
-        Text(location,
-            style: isFrom
-                ? const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)
-                : const TextStyle(fontWeight: FontWeight.w300)),
+        Expanded(
+          flex: 9,
+          child: Text(location,
+              style: isFrom
+                  ? const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)
+                  : const TextStyle(fontWeight: FontWeight.w300)),
+        ),
       ],
     );
   }

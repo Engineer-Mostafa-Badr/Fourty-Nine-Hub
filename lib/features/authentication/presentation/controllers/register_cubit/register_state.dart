@@ -8,6 +8,7 @@ final class RegisterInitial extends RegisterState {}
 final class RegisterLoading extends RegisterState {}
 
 final class OTPSent extends RegisterState {}
+final class RegisterByPhone extends RegisterState {}
 
 final class RegisterError extends RegisterState {
   final Failure failure;

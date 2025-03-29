@@ -5,10 +5,11 @@ import 'package:fourtyninehub/features/social_media/create_post/domain/entities/
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/creat_twitter_usecase.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/friends-followers_usecase.dart';
 import 'package:fourtyninehub/features/social_media/create_post/domain/usecases/get_sub_activities_usecase.dart';
+
 import '../../../../../core/error/failure.dart';
 import '../entities/activity_entity.dart';
-import '../entities/life_event_entity.dart';
 import '../entities/feeling_entity.dart';
+import '../entities/life_event_entity.dart';
 
 abstract class CreatePostRepo {
   Future<Either<Failure, List<FeelingEntity>>> getFeelingsList(PaginationParams params);

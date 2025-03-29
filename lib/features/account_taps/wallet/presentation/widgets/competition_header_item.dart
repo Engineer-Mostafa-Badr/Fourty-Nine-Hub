@@ -26,7 +26,12 @@ class CompetitionHeaderItem extends StatelessWidget {
             shape: OvalBorder(),
           ),
           child: Center(
-            child: SvgPicture.asset(svgPath),
+            child: svgPath.isEmpty
+                ? const Icon(
+                    Icons.image_not_supported_outlined,
+                    color: Colors.grey,
+                  )
+                : SvgPicture.asset(svgPath),
           ),
         ),
         const SizedBox(
@@ -38,6 +43,8 @@ class CompetitionHeaderItem extends StatelessWidget {
         ),
         Label(
           text: title,
+          maxLines: 2,
+          textAlign: TextAlign.center,
           style: Styles.mediumText(
             fontSize: 20,
             color: Colors.black.withValues(alpha: 128),

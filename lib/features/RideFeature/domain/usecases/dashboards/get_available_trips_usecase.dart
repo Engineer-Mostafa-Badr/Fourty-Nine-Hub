@@ -4,9 +4,10 @@ import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 import '../../entities/dashboards/trips_response_entity.dart';
 import '../../repositories/trip_repository.dart';
+import 'get_available_ride_trips_use_case.dart';
 
 class GetAvailableTripsUsecase 
-    extends UseCase<TripsResponseEntity, String>{
+    extends UseCase<TripsResponseEntity, AvailableRideTripsUseCaseParams>{
   final TripRepository repository;
 
   GetAvailableTripsUsecase(this.repository);

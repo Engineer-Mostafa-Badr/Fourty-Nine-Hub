@@ -21,6 +21,7 @@ class ChargeWalletButtonBloc extends StatelessWidget {
         if (state is ChargeWalletSuccess) {
           bottomSheet(
             context: context,
+            isScrollControlled: true,
             widget: SubscriptoinAmountsWidget(
               amounts: state.amounts,
               walletType: WalletTypes.mainWallet,
@@ -38,13 +39,15 @@ class ChargeWalletButtonBloc extends StatelessWidget {
           );
         } else {
           return CustomButtonWalletAndGiftAndCashback(
-              title: LocaleKeys.chargeWallet.localize,
-              color: Colors.green,
-              onpressed: () async {
-                context.read<ChargeWalletCubit>().showActiveSubscriptionAmounts(
-                      walletType: WalletTypes.mainWallet,
-                    );
-              });
+            title: LocaleKeys.chargeWallet.localize,
+            activeColor: Colors.green,
+            onPressed: () async {
+              context.read<ChargeWalletCubit>().showActiveSubscriptionAmounts(
+                    walletType: WalletTypes.mainWallet,
+                  );
+            },
+            status: true,
+          );
           // return AppButton(
           //   label: LocaleKeys.chargeWallet.localize,
           //   backColor: Colors.green,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /*
 class AnimatedBottomSheet extends StatefulWidget {
@@ -119,7 +118,7 @@ class _AnimatedBottomSheetState extends State<AnimatedBottomSheet>
           child: Opacity(
             opacity: _animation.value,
             child: Padding(
-              padding:  EdgeInsets.all(widget.asAlertDialog ?16:0),
+              padding: EdgeInsets.all(widget.asAlertDialog ? 16 : 0),
               child: Container(
                 decoration: BoxDecoration(
                   color: widget.backgroundColor ??
@@ -158,15 +157,17 @@ bottomSheet({
           asAlertDialog: asAlertDialog,
           child: Container(
             width: double.infinity,
-            padding: EdgeInsets.all(30.w),
-            // margin: EdgeInsets.all(kToolbarHeight),
-            // decoration: BoxDecoration(
-            //   borderRadius: BorderRadius.only(
-            //     topLeft: Radius.circular(20.r),
-            //     topRight: Radius.circular(20.r),
-            //   ),
-            //   color: backColor ?? Theme.of(context).scaffoldBackgroundColor,
-            // ),
+            padding: const EdgeInsets.all(16),
+            // margin: const EdgeInsets.all(kToolbarHeight),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: const Radius.circular(20),
+                topRight: const Radius.circular(20),
+                bottomLeft: Radius.circular(asAlertDialog ? 20 : 0),
+                bottomRight: Radius.circular(asAlertDialog ? 20 : 0),
+              ),
+              color: backColor ?? Theme.of(context).scaffoldBackgroundColor,
+            ),
             child: widget,
           ),
         );

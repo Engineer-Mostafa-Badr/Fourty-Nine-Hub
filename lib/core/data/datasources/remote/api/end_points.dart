@@ -1,5 +1,6 @@
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/constants/constants.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_available_ride_trips_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_balance_history_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_history_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/main_category_use_case.dart';
@@ -40,8 +41,11 @@ import '../../../../../features/account_taps/my_adds/domain/usecases/edit_my_ads
 import '../../../../../features/account_taps/my_adds/domain/usecases/get_all_counts_ads_usecase.dart';
 import '../../../../../features/account_taps/my_adds/domain/usecases/get_all_counts_usecase.dart';
 import '../../../../../features/account_taps/my_adds/domain/usecases/update_my_ads_usecase.dart';
+import '../../../../../features/account_taps/wallet/domain/usecases/get_winners_cashback_use_case.dart';
 import '../../../../../features/ads_feature/create_company_ad/data/models/fetch_post_company_advertise_params.dart';
 import '../../../../../features/azkaar/domain/use_case/search_azkar_usecase.dart';
+import '../../../../../features/food_feature/restaurant_dashboard/domain/usecases/get_restaurant_orders_usecase.dart';
+import '../../../../../features/subcategories/domain/usecases/get_custom_page_sub_categories_use_case.dart';
 
 class EndPoints {
   //logout
@@ -56,12 +60,14 @@ class EndPoints {
   static const getProfile = '/users/profile';
   static const getCountries = '/ride/countries';
   static const register = '/auth/register';
+  static const registerByPhone = '/auth/register/phone-number';
   static const testGift = '/test/gift';
   static const verifyOTP = '/auth/verify/email';
   static const getWelcomeGift = '/auth/welcome-gift';
   static const socialLogin = '/auth/social/login';
   static const resendOTP = '/auth/resend-reset-code';
   static const resendVerificationOTP = '/auth/resend-verification-code';
+  static const checkAnswersQuestions = '/auth/check-answers-questions';
   static const refreshToken = '/auth/refresh/token';
   static const agoraGenerateToken = '/stream-services/agora/channel';
   static const whatsAppAgoraToken =
@@ -96,6 +102,7 @@ class EndPoints {
   static answerQuestion(String id) => '/infosAndQuestions/answer/$id';
   static const sliderItems = '/sliders/to-app';
   static const competition = '/subscriber/competitionsSubscriber';
+  static const getGiftAndCompetitions = '/subscriber/competitions';
   static const winnerCompetition = '/subscriber/winners';
   static String loggedUserId = UserCubit.to.state.data?.id ?? '';
   static String getMainCategoryDetails(String id) =>
@@ -111,7 +118,11 @@ class EndPoints {
   static String toggleSubCategoryToFavorites(String id) =>
       '/favorite-sub-category/$id';
 
-  static const getGift = '/subscriber/competitions';
+  static const getGift = '/gift-wallet/wallet';
+  static String getWinnersGift(PaginationParams params) {
+    return '/winners/competitions/gift?page=${params.page}&limit=${params.limit}';
+  }
+
   static const requestWithdrawWheel = '/wheels/withdrawal';
   static String requestWithdrawCompetition(String id) {
     return '/subscriber/request-withdrawal/$id';
@@ -121,6 +132,10 @@ class EndPoints {
 
   static String getHistoryBalance(BalanceHistoryParams params) {
     return '/user-transactions/balance?page=${params.page}&limit=${params.limit}';
+  }
+
+  static String getWinnersCashback(GetWinnersCashbackUseCaseParams params) {
+    return '/cashback/winners?page=${params.page}&limit=${params.limit}';
   }
 
   static String getHistoryWallet(WalletHistoryParams params) =>
@@ -160,8 +175,10 @@ class EndPoints {
   static const socialPage = '/navigators/socialPage';
   static const subTab = '/navigators/subTap';
   static const navigateBar = '/navigators/navigatorsBar';
-  static const favouriteCat = '/navigators/navigateCategories';
+  static const customPageCat = '/navigators/navigateCategories';
+  static const updateCustomPageCat = '/navigators/customPage-subcategories';
   static const activate = '/navigators/customPage';
+  static customPageSubCat(String mainCategoryId) => '/navigators/subcategories/$mainCategoryId';
 
   // Star
   static String   allStar(StarPaginationParams params) =>
@@ -223,6 +240,8 @@ class EndPoints {
   static const sendForgetPasswordOTP = '/auth/forget-password';
   static const verifyForgetPasswordOTP = '/auth/verify/otp';
   static const createNewForgetPassword = '/auth/reset-password';
+  static const createNewForgetPasswordByQuestions = '/auth/reset-password-questions';
+  static const changePassword = '/auth/change-password';
   static const notifications = '/notifications';
   static const unreadNotificationsCount = '/notifications/unread/count';
   static const privacy = '/privacy/personal';
@@ -253,7 +272,6 @@ class EndPoints {
 
   static String searchAzkar(SearchAzkarParams params) =>
       '/azkar/search-azkar?page=${params.page}&limit=${params.limit}';
-
 
   static String notificationsSeen(String id) => '/notifications/$id';
 
@@ -430,8 +448,8 @@ class EndPoints {
   static const getAllTripBySubCategory =
       '$developmentBaseUrl/loading/trip/driver/subcategory';
   static const carPlate = '/loading/driver/info/car-plate';
-  static getRestaurantOrders(PaginationParams params) =>
-      '/food/get-restaurant-orders?page=${params.page}&limit=${params.limit}';
+  static getRestaurantOrders(PaginationOrderFoodParams params) =>
+      '/food/get-restaurant-orders?page=${params.page}&limit=${params.limit}&completed=${params.isCompleted}';
   static const makeRatingDriver = '/loading/rating-driver/makeRating';
   static const getDriverData = '$developmentBaseUrl/loading/driver/info';
   static const updateDriver = '$developmentBaseUrl/loading/driver';
@@ -447,6 +465,7 @@ class EndPoints {
   static const getRestaurantStatistics = '/restaurants/statistics';
   static deleteRestaurant(String id) => '/restaurants/delete-restaurant/$id';
   static const updateRestaurant = '/restaurants/update-restaurant-info';
+  static const completeOrder = '/food/set-order-is-completed/';
   static const favoriteCategory = '$developmentBaseUrl/favorite-category';
   static const reasons = '$developmentBaseUrl/cancellation/reasons';
   static const sendOfferPremium =
@@ -526,6 +545,9 @@ class EndPoints {
 
   static String mainSubCategories({required GetSubCategoriesParams params}) {
     return '/categories/subcategories/${params.mainCategoryId}?userId=${params.userId}';
+  }
+  static String customPageSubCategories({required GetCustomPageSubCategoriesParams params}) {
+    return '/navigators/navigateCategories-enable/${params.mainCategoryId??'62c8b5779332225799fe3304'}';
   }
 
   static const riderInfoRegister = '/ride/riders/register';
@@ -1219,27 +1241,37 @@ class EndPoints {
   static String createCarPool = '/carpool/create';
 
   static String getRideCategories(String userId) {
-    return '/ride/get-thumbnail-ride?userId=$userId';
+    return '/ride/get-thumbnail-ride';
   }
 
   static String getShippingCategories(String userId) {
-    return '/loading/driver/subcategory?userId=$userId';
+    return '/loading/driver/subcategory';
   }
+
   static String getDriversInSubcategory(String subCategoryId) {
     return '/ride/riders/drivers/$subCategoryId';
   }
-  static String requestTrip(String id) {
-    return '/ride/trips/newTrip/$id';
+  static String requestTrip(String subcategoryId) {
+    return '/ride/trips/newTrip/$subcategoryId';
   }
+  static String retrieveClientLatestTrip = '/ride/client/trips/latest';
   static String getExpectedPrice(String id) {
     return '/ride/trips/expected/price/$id';
   }
-  static String getAvailableTrips(String subCategoryId) {
-    return '/ride/trips/user?limit=10&page=1&subCategory=$subCategoryId';
+  static String getAvailableTrips(AvailableRideTripsUseCaseParams params) {
+    return '/ride/driver/trips/available/not-tracking?limit=${params.limit}&page=${params.page}';
   }
-  static String getPastTrips(int page) {
-    return '/ride/trips/rider?limit=20&page=$page';
+  static String getPastTrips(int page,String type) {
+    return '/ride/driver/trips/past?tripType=$type&limit=20&page=$page';
   }
+  static String createNewOffer(String id) {
+    return '/ride/offers/new/offer/$id';
+  }
+  static String updateDriverRating(String id) {
+    return '/ride/trip/rating/$id/client';
+  }
+  static String createDriverRating = '/ride/trip/rating/driver';
+  static String getSettingsDashboard = '/ride/driver/info/settings';
   static String deleteRideRegistration = '/ride/riders';
   static String getRideBrands = '/ride/riders/brands';
   static String getRideModels = '/ride/riders/models';
@@ -1250,13 +1282,14 @@ class EndPoints {
   static String getRideDriverPictureOptional = '/ride/info/picture-optional';
   static String getCostPerKm = '/ride/driver/info/fair-cost';
   static String getLoadingInfo = '/loading/driver/info?subCategory=62c8baad8e28a58a3edf5805';
+  static String makeTripRequest = '/ride/trips/request';
 
-  static String updateDriverLocation(){
+  static String updateDriverLocation() {
     return '/ride/update-driver-location';
   }
 
   static String getAllRunningTrips({required int limit, required int page}) {
-      return '/ride/trips/all?limit=$limit&page=$page&status=started';
+    return '/ride/trips/all?limit=$limit&page=$page&status=started';
   }
 
   static String getAllCompletedTrips({required int limit, required int page}) {
@@ -1275,43 +1308,51 @@ class EndPoints {
     return '/ride/trips/rider?limit=$limit&page=$page';
   }
 
-  static String getLocationFromAddress(){
+  static String getLocationFromAddress() {
     return '/ride/trips/address/latAndLong';
   }
 
-  static String acceptTripByDriver(String tripId){
+  static String acceptTripByDriver(String tripId) {
     return '/ride/trips/accept/$tripId';
   }
 
-  static String rideInStartLocation(String id){
+  static String rideInStartLocation(String id) {
     return '/ride/trips/in-start-location/$id';
   }
 
-  static String startTrip(String tripId){
+  static String startTrip(String tripId) {
     return '/ride/trips/start/$tripId';
   }
 
-  static String partialPaymentInTrip(String tripId){
+  static String partialPaymentInTrip(String tripId) {
     return '/ride/payment/partial-payment/$tripId';
   }
 
-  static String completeTripForRide(String tripId){
+  static String completeTripForRide(String tripId) {
     return '/ride/trips/complete/$tripId';
   }
 
-  static String cancelTripByRider(String tripId){
+  static String cancelTripByRider(String tripId) {
     return '/ride/trips/cancel-by-rider/$tripId';
   }
 
-  static String cancelTripByClient(String tripId){
+  static String cancelTripByClient(String tripId) {
     return '/ride/trips/cancel-by-client/$tripId';
+  }
+
+  static String cancelPendingTripByClient(String tripId){
+    return '/ride/client/trips/pending/cancel/$tripId';
   }
 
   static String recordingTrip(String tripId){
     return '/ride/trips/record-voice/$tripId';
   }
 
-  static String updateTripPriceFromClient(String tripId){
+  static String updateTripPriceFromClient(String tripId) {
     return '/ride/client/trips/offer/$tripId';
+  }
+
+  static String getAvailableRideTrips(AvailableRideTripsUseCaseParams params) {
+    return '/ride/driver/trips/available/tracking?page=${params.page}&limit=${params.limit}';
   }
 }

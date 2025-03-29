@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
@@ -79,7 +78,7 @@ class FormTextField extends StatelessWidget {
       SizedBox(
         height: height ?? 40,
         child: TextFormField(
-          readOnly: readOnly??false,
+          readOnly: readOnly ?? false,
           // style:
           //     textStyle ?? Styles.mediumText(color: AppColors.QUANTITY_COLOR),
           textAlignVertical: textAlignVertical,
@@ -126,10 +125,11 @@ class FormTextField extends StatelessWidget {
             constraints: constraints,
             hintText: hint,
             filled: true,
-            fillColor: AppColors.GREYFIELD,
+            fillColor: fillColor ?? AppColors.GREYFIELD,
             labelText: label,
             hintStyle: style ??
-               Styles.mediumText(fontSize: 12,color: AppColors.GREY_DARK_COLOR),
+                Styles.mediumText(
+                    fontSize: 14, color: AppColors.GREY_DARK_COLOR),
             // labelStyle: style ??
             //     TextStyle(fontSize: 30.sp, color: AppColors.QUANTITY_COLOR),
             prefixIcon: prefix,
@@ -167,7 +167,6 @@ class FormTextField extends StatelessWidget {
           ),
         ),
       ),
-
       if (info != null)
         Container(
             margin: const EdgeInsets.only(top: 5),

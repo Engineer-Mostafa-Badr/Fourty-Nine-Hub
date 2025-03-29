@@ -9,11 +9,17 @@ import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/domain/
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_statistics_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_2_model.dart';
 
+import '../../domain/entity/complete_order_entity.dart';
+import '../../domain/entity/order_food_entity.dart';
+import '../../domain/usecases/complete_order_restaurant_usecase.dart';
 import '../../domain/usecases/delete_restaurant_usecase.dart';
+import '../../domain/usecases/get_restaurant_orders_usecase.dart';
+import '../models/complete_order_model.dart';
+import '../models/order_food_model.dart';
 
 abstract class RestaurantDashboardRemoteDataSource {
-  Future<Either<Failure, RestaurantOrdersModel>> getRestaurantOrders(
-      PaginationParams params);
+  Future<Either<Failure, GetFoodRequestEntity>> getRestaurantOrders(
+      PaginationOrderFoodParams params);
   Future<Either<Failure, bool>> changeActiveStatus();
   Future<Either<Failure, bool>> deleteRestaurant(DeleteResturantParams params);
   Future<Either<Failure, bool>> updateRestaurant(UpdateRestaurantParams params);
@@ -21,6 +27,8 @@ abstract class RestaurantDashboardRemoteDataSource {
   Future<Either<Failure, RestaurantStatistics>> getRestaurantStatistics();
   Future<Either<Failure, bool>> cancelOrder({required int id});
   Future<Either<Failure, bool>> approveOrder({required int id});
+  Future<Either<Failure, CompleteOrderEntity>> completeOrder({required CompleteOrderParams params});
+
 }
 
 class RestaurantDashboardRemoteDataSourceImpl
@@ -42,15 +50,34 @@ class RestaurantDashboardRemoteDataSourceImpl
   Future<Either<Failure, bool>> changeActiveStatus() async {
     return const Right(true);
   }
-
-  @override
-  Future<Either<Failure, RestaurantOrdersModel>> getRestaurantOrders(
-      PaginationParams params) async {
-    final response =
-        await _apiServices.get(EndPoints.getRestaurantOrders(params));
-    return response.fold((failure) => Left(failure),
-        (data) => Right(RestaurantOrdersModel.fromJson(data)));
+  void debugApiResponse(dynamic data) {
+    print("API Response: ${data.toString()}");
   }
+  @override
+  Future<Either<Failure, GetFoodRequestEntity>> getRestaurantOrders(
+      PaginationOrderFoodParams params) async {
+    final response = await _apiServices.get(EndPoints.getRestaurantOrders(params));
+
+    return response.fold(
+          (failure) {
+        print("API Call Failed: ${failure.toString()}");
+        return Left(failure);
+      },
+          (data) {
+        debugApiResponse(data);
+        return Right(GetFoodRequestModel.fromJson(data));
+      },
+    );
+  }
+
+
+  // Future<Either<Failure, GetFoodRequestEntity>> getRestaurantOrders(
+  //     PaginationOrderFoodParams params) async {
+  //   final response =
+  //       await _apiServices.get(EndPoints.getRestaurantOrders(params));
+  //   return response.fold((failure) => Left(failure),
+  //       (data) => Right(GetFoodRequestModel.fromJson(data)));
+  // }
 
   @override
   Future<Either<Failure, Restaurant2Model>> getRestaurantInfo() async {
@@ -90,12 +117,23 @@ class RestaurantDashboardRemoteDataSourceImpl
   @override
   Future<Either<Failure, bool>> updateRestaurant(params) async {
     final response = await _apiServices.put(EndPoints.updateRestaurant,
-        data: params.toJson(),
-        queryParameters: {"subCategory": params.subcategoryId});
+        data: params.toJson(),);
+        // queryParameters: {"subCategory": params.subcategoryId});
     return response.fold((l) {
       return Left(l);
     }, (data) {
       return Right(data['status']);
+    });
+  }
+
+  @override
+  Future<Either<Failure, CompleteOrderEntity>> completeOrder({required CompleteOrderParams params}) async{
+    final response = await _apiServices.put("${EndPoints.completeOrder}${params.orderId}");
+    return response.fold((l) {
+      return Left(l);
+    }, (data) {
+      final blockHealthModel = CompleteOrderModel.fromJson(data);
+      return Right(blockHealthModel);
     });
   }
 }

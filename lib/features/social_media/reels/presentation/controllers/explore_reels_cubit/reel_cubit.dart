@@ -6,10 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/isolates/get_video_isolate.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/reels/data/data_sources/reels_remote_data_source.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/add_comments_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/get_comments_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/like_model.dart';
@@ -30,12 +29,11 @@ import 'package:fourtyninehub/features/social_media/reels/domain/use_case/toggle
 import 'package:fourtyninehub/features/social_media/reels/domain/use_case/upload_reel_use_case.dart';
 import 'package:fourtyninehub/features/social_media/reels/domain/use_case/upload_video_reel_use_case.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/pages/recording/media_preview.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/shared/constants.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
+
 import '../../../data/models/new_reels_model.dart';
-import 'package:fourtyninehub/features/social_media/reels/data/data_sources/reels_remote_data_source.dart';
 
 part 'reel_state.dart';
 

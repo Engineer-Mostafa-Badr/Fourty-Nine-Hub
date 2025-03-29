@@ -1,19 +1,22 @@
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/balance/balance_data_entity.dart';
 
 class BalanceDataModel extends BalanceDataEntity {
-  BalanceDataModel(
-      {required super.balance,
-      required super.tenYears,
-      required super.fiveYears,
-      required super.createdAt,
-      required super.openBalance,
-      required super.fiveYearsTransfer,
-      required super.tenYearsTransfer,
-      required super.fiveYearsLeft,
-      required super.tenYearsLeft,
-      required super.fiveYearsComplete,
-      required super.tenYearsComplete,
-      required super.currency});
+  BalanceDataModel({
+    required super.balance,
+    required super.tenYears,
+    required super.fiveYears,
+    required super.createdAt,
+    required super.openBalance,
+    required super.fiveYearsTransfer,
+    required super.tenYearsTransfer,
+    required super.fiveYearsLeft,
+    required super.tenYearsLeft,
+    required super.fiveYearsComplete,
+    required super.tenYearsComplete,
+    required super.currencyEn,
+    required super.currencyAr,
+    required super.isWaitingApproval,
+  });
 
   factory BalanceDataModel.fromJson(Map<String, dynamic> json) {
     return BalanceDataModel(
@@ -28,7 +31,9 @@ class BalanceDataModel extends BalanceDataEntity {
       tenYearsTransfer: json['tenYearsTransfer'] ?? false,
       fiveYearsLeft: json['fiveYearsLeft'] ?? 0,
       tenYearsLeft: json['tenYearsLeft'] ?? 0,
-      currency: json['currency'] ?? '',
+      currencyEn: json['currencyEn'] ?? '',
+      currencyAr: json['currencyAr'] ?? '',
+      isWaitingApproval: json['isWaitingApproval'] ?? false,
     );
   }
 }

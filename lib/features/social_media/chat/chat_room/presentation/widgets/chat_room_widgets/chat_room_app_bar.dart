@@ -1180,7 +1180,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                     ),
                     leading: Radio<int>(
                       value: 0,
-                      activeColor: AppColors.PRIMARY_COLOR_DARK,
+                      // activeColor: AppColors.PRIMARY_COLOR_DARK,
                       groupValue: selectedOption,
                       onChanged: (int? value) {
                         setState(() {
@@ -1199,7 +1199,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                     ),
                     leading: Radio<int>(
                       value: 1,
-                      activeColor: AppColors.PRIMARY_COLOR_DARK,
+                      // activeColor: AppColors.PRIMARY_COLOR_DARK,
                       groupValue: selectedOption,
                       onChanged: (int? value) {
                         setState(() {

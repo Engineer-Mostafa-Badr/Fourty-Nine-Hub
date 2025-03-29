@@ -3,7 +3,7 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet/wallet_subscription_entity.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/expandable_subscription.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/my_subscription_list_view.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class MySubscriptionSection extends StatefulWidget {
@@ -27,7 +27,6 @@ class _MySubscriptionSectionState extends State<MySubscriptionSection> {
       ),
       padding: const EdgeInsets.all(8.0),
       child: Column(
-        // mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Center(
@@ -40,40 +39,30 @@ class _MySubscriptionSectionState extends State<MySubscriptionSection> {
             Padding(
               padding: const EdgeInsets.only(bottom: 8),
               child: Label(
-                text: 'Active',
+                text: LocaleKeys.active.localize,
                 style: Styles.mediumText(
                   fontWeight: FontWeight.w600,
                 ),
               ),
             ),
-          _isExpanded
-              ? Column(
-                  // Add your expanded content here
-                  children: widget.subscriptions
-                      .where((s) => s.isActive == true)
-                      .map(
-                        (s) => ExpandableSubscription(
-                          subscription: s,
-                        ),
-                      )
-                      .toList(),
-
-                  // children: List.generate(5, (index) {
-                  //   return const ExpandableSubscription();
-                  // }),
-                )
-              : const SizedBox(),
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            height: _isExpanded ? MediaQuery.sizeOf(context).height * 0.3 : 0,
+            child: _isExpanded
+                ? MySubscriptionListView(subscriptions: widget.subscriptions)
+                : null,
+          ),
           Row(
             children: [
               if (!_isExpanded)
                 Label(
-                  text: 'Active Subscription',
+                  text: LocaleKeys.active.localize,
                   style: Styles.mediumText(
                     fontWeight: FontWeight.w600,
                   ),
                 ),
               const Spacer(),
-              InkWell(
+              GestureDetector(
                 onTap: () {
                   setState(() {
                     _isExpanded = !_isExpanded;
@@ -82,7 +71,9 @@ class _MySubscriptionSectionState extends State<MySubscriptionSection> {
                 child: Row(
                   children: [
                     Label(
-                      text: _isExpanded ? 'Show Less' : 'Show More',
+                      text: _isExpanded
+                          ? LocaleKeys.showLess.localize
+                          : LocaleKeys.showMore.localize,
                       style: Styles.smallText(
                         fontWeight: FontWeight.w300,
                         fontSize: 24,

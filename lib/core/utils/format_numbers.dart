@@ -1,15 +1,38 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 
 class FormatNumbers{
-  String formatNumber(num number) {
+  String formatNumber(num number, {int decimals = 1}) {
     if (number >= 1000 && number < 1000000) {
-      return '${(number / 1000).toStringAsFixed(1)}K';
+      return '${(number / 1000).toStringAsFixed(decimals)}K';
     } else if (number >= 1000000 && number < 1000000000) {
-      return '${(number / 1000000).toStringAsFixed(1)}M';
+      return '${(number / 1000000).toStringAsFixed(decimals)}M';
     } else if (number >= 1000000000) {
-      return '${(number / 1000000000).toStringAsFixed(1)}B';
+      return '${(number / 1000000000).toStringAsFixed(decimals)}B';
     } else {
       return number.toStringAsFixed(0);
+    }
+  }
+
+  String formatNumberByComma(BuildContext context, String? balance) {
+    if (balance == null || balance.isEmpty) {
+      return "0"; // Fallback value if balance is null or empty
+    }
+
+    try {
+      // return double.parse(balance).floor().toString();
+      final NumberFormat formatter;
+      if (context.isArabic) {
+        formatter = NumberFormat('#,###');
+      } else {
+        formatter = NumberFormat('#,###', 'en');
+      }
+
+      return formatter.format(num.parse(balance));
+    } catch (e) {
+      // If parsing fails, return a fallback value or handle the error as needed
+      return "0";
     }
   }
 }

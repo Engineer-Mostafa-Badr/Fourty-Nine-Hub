@@ -153,7 +153,8 @@ class AdvertisementCubit extends Cubit<AdsState> {
     });
   }
 
-  final PagingController<int, AdModel> adsPagingController = PagingController(firstPageKey: 1);
+  final PagingController<int, AdModel> adsPagingController =
+      PagingController(firstPageKey: 1);
   getAds(
       {required String subCategoryId,
       required String filter,
@@ -189,19 +190,15 @@ class AdvertisementCubit extends Cubit<AdsState> {
       }
     });
   }
-  getMarriageAds(
-      {required String subCategoryId,
-      required int page}) async {
+
+  getMarriageAds({required String subCategoryId, required int page}) async {
     final userId = UserCubit.to.isLoggedIn ? UserCubit.to.state.data?.id : '';
 
     if (page == 1) {
       adsPagingController.itemList = [];
     }
     final response = await _getAdsUseCase(GetAdsParams(
-        subCategoryId: subCategoryId,
-        page: page,
-        limit: 10,
-        userId: userId));
+        subCategoryId: subCategoryId, page: page, limit: 10, userId: userId));
     response
         .fold((l) => emit(state.copyWith(failure: l, status: AdsStates.error)),
             (data) async {

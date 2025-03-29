@@ -1,10 +1,11 @@
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet/main_category_entity.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet/wallet_entity.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet/wallet_history_entity.dart';
@@ -13,6 +14,8 @@ import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_s
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_history_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_wallet_usecase.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/main_category_use_case.dart';
+
+import '../../../domain/usecases/request_withdraw_wallet_use_case.dart';
 part 'wallet_two_state.dart';
 
 class WalletTwoCubit extends Cubit<WalletTwoState> {
@@ -21,21 +24,100 @@ class WalletTwoCubit extends Cubit<WalletTwoState> {
     this._walletHistoryUseCase,
     this._subscriptionWalletUseCase,
     this._mainCategoryUseCase,
+    this._requestWithdrawWalletUseCase,
     // this._subCategoryUseCase,
     // this._deleteSubscriptionUseCase,
     // this._addSubscriptionUseCase,
-  ) : super(WalletTwoInitial());
+  ) : super(const WalletTwoState(status: WalletTwoStates.initial));
 
   final GetWalletUseCase _getWalletUseCase;
   final GetWalletHistoryUseCase _walletHistoryUseCase;
   final GetSubscriptionWalletUseCase _subscriptionWalletUseCase;
   final MainCategoryUseCase _mainCategoryUseCase;
-  // final SubCategoryUseCase _subCategoryUseCase;
-  // final DeleteSubscriptionUseCase _deleteSubscriptionUseCase;
-  // final AddSubscriptionUseCase _addSubscriptionUseCase;
+  final RequestWithdrawWalletUseCase _requestWithdrawWalletUseCase;
 
-  Future<void> getAllDataWalletScreen() async {
-    emit(WalletTwoLoading());
+  final int limit = 30;
+  bool hasReachedMax = false;
+  int page = 1;
+  List<WalletHistoryEntity> histories = [];
+  bool isLoading = false;
+
+  Future<void> requestWithdrawal(
+    context, {
+    required String amount,
+    required String phone,
+    required String method,
+  }) async {
+    showLoadingDialog(context);
+    // buttonRequestLoading = true;
+    emit(state.copyWith(
+      buttonRequestLoading: true,
+    ));
+    final response = await _requestWithdrawWalletUseCase.call(
+      RequestWithdrawParams(amount: amount, phone: phone, method: method),
+    );
+    response.fold(
+      (failure) {
+        // buttonRequestLoading = false;
+        Navigator.pop(context);
+        emit(
+          state.copyWith(
+            // status: WalletTwoStates.failure,
+            // failureMessage: getFailureMessage(failure, context),
+            buttonRequestLoading: false,
+            buttonRequestSuccess: false,
+            buttonRequestErrMessage: getFailureMessage(failure, context),
+          ),
+        );
+      },
+      (data) {
+        // buttonRequestLoading = false;
+        // if (data) {
+        //   emit(
+        //     state.copyWith(
+        //       // status: WalletTwoStates.failure,
+        //       // failureMessage: getFailureMessage(failure, context),
+        //       buttonRequestLoading: false,
+        //       buttonRequestSuccess: false,
+        //     ),
+        //   );
+        // }
+        Navigator.pop(context);
+        emit(
+          state.copyWith(
+            buttonRequestLoading: false,
+            buttonRequestSuccess: true,
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> getHistories() async {
+    isLoading = true;
+    final walletHistoryResponse = await _walletHistoryUseCase.call(
+      WalletHistoryParams(
+        page: 1,
+        limit: 10,
+      ),
+    );
+    walletHistoryResponse.fold(
+      (l) {
+        isLoading = false;
+      },
+      (h) {
+        histories.addAll(h);
+        page = page + 1;
+        if (h.length != limit) {
+          hasReachedMax = true;
+        }
+        isLoading = false;
+      },
+    );
+  }
+
+  Future<void> getAllDataWalletScreen(context) async {
+    emit(state.copyWith(status: WalletTwoStates.loading));
 
     try {
       // Fetch Wallet
@@ -49,12 +131,18 @@ class WalletTwoCubit extends Cubit<WalletTwoState> {
       final walletHistoryResponse = await _walletHistoryUseCase.call(
         WalletHistoryParams(
           page: 1,
-          limit: 10,
+          limit: 0,
         ),
       );
       final walletHistory = walletHistoryResponse.fold(
         (failure) => throw failure,
-        (histories) => histories,
+        (histories) {
+          this.histories = histories;
+          if (histories.length != limit) {
+            hasReachedMax = true;
+          }
+          return histories;
+        },
       );
 
       // Fetch Wallet Subscription
@@ -89,20 +177,34 @@ class WalletTwoCubit extends Cubit<WalletTwoState> {
       // );
 
       // Emit success state with all data
+      // emit(
+      //   WalletTwoSuccess(
+      //     wallet: wallet,
+      //     walletHistory: walletHistory,
+      //     subscription: subscription,
+      //     mainCategory: mainCategory,
+      //   ),
+      // );
+      emit(state.copyWith(
+        status: WalletTwoStates.success,
+        wallet: wallet,
+        walletHistory: walletHistory,
+        subscription: subscription,
+        mainCategory: mainCategory,
+      ));
+    } catch (failure) {
+      // emit(
+      //   WalletTwoError(
+      //       failure: ServerFailure(
+      //     message: e.toString(),
+      //   )),
+      // );
+      String message = getFailureMessage(failure as Failure, context);
       emit(
-        WalletTwoSuccess(
-          wallet: wallet,
-          walletHistory: walletHistory,
-          subscription: subscription,
-          mainCategory: mainCategory,
+        state.copyWith(
+          status: WalletTwoStates.failure,
+          failureMessage: message,
         ),
-      );
-    } catch (e) {
-      emit(
-        WalletTwoError(
-            failure: ServerFailure(
-          message: e.toString(),
-        )),
       );
     }
   }

@@ -1,5 +1,7 @@
 import 'package:fourtyninehub/features/RideFeature/data/repositories/ride_repository_imp.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/repositories/ride_repository.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_pending_trip_by_client_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/check_real_amount_enough_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_activity_trips.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_completed_trips_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_running_trips_usecase.dart';
@@ -15,8 +17,12 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_driv
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_models_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_shipping_categories_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/loading_register_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/make_request_trip_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/recording_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/register_ride_not_special_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/register_ride_special_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/request_trip_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/retrieve_client_latest_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:get_it/get_it.dart';
 
@@ -76,6 +82,11 @@ class RideServiceLocatorUpdated {
         GetAllRunningTripsUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetAllActivityTripsUseCase>(() =>
         GetAllActivityTripsUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<CheckRealAmountEnoughUseCase>(() =>
+        CheckRealAmountEnoughUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<RequestTripUseCase>(() => RequestTripUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<CancelPendingTripByClientUseCase>(() => CancelPendingTripByClientUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<RetrieveClientLatestTripUseCase>(() => RetrieveClientLatestTripUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetCostPerKmUseCase>(() =>
         GetCostPerKmUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<RegisterRideNotSpecialUseCase>(() =>
@@ -84,10 +95,20 @@ class RideServiceLocatorUpdated {
         LoadingRegisterUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetLoadingInfoUseCase>(() =>
         GetLoadingInfoUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<MakeRequestTripUseCase>(() =>
+        MakeRequestTripUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<RecordingTripUseCase>(() =>
+        RecordingTripUseCase(serviceLocator()));
 
     // ---------------------------------- cubits ----------------------------------
 
     serviceLocator.registerLazySingleton<RideCubit>(() => RideCubit(
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

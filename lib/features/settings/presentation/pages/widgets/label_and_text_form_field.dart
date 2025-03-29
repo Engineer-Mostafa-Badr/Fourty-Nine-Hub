@@ -22,7 +22,7 @@ class LabelAndTextFormField extends StatelessWidget {
           padding: const EdgeInsetsDirectional.only(start: 11),
           child: Label(
             text: label,
-            style: Styles.headerText(fontSize: 32),
+            style: Styles.mediumText(fontSize: 26),
           ),
         ),
         const SizedBox(

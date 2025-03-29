@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/authentication/domain/use_cases/create_ne
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_profile_views_usecase.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/google_sign_in_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/login_use_case.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/register_by_phone_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/register_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/resend_otp_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/send_forget_password_otp_use_case.dart';
@@ -23,6 +24,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entiti
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../domain/entities/forget_password_questions_entity.dart';
+import '../../domain/use_cases/change_password_use_case.dart';
 import '../models/forget_password_questions_model.dart';
 
 class AuthRepositoryImpl extends AuthRepository {
@@ -231,8 +233,20 @@ class AuthRepositoryImpl extends AuthRepository {
 
   @override
   Future<Either<Failure, String>> verifyQuestions(VerifyQuestionsParams params) {
-    // TODO: implement verifyQuestions
-    throw UnimplementedError();
+    return _remoteDataSource.verifyQuestions(params);
+
+  }
+
+  @override
+  Future<Either<Failure, UserTokensEntity>> changePassword(ChangePasswordParams params) {
+    return _remoteDataSource.changePassword(params);
+
+  }
+
+  @override
+  Future<Either<Failure, void>> registerByPhone(RegisterByPhoneParams params) {
+    return _remoteDataSource.registerByPhone(params);
+
   }
 }
 //enum: ['google', 'facebook', 'local', 'apple']

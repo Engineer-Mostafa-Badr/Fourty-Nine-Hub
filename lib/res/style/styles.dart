@@ -4,22 +4,24 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 
 abstract class Styles {
 // text
-  static TextStyle smallText({
-    double fontSize = 22,
-    Color? color,
-    TextDecoration? decoration,
-    double decorationThickness = 0,
-    List<Shadow>? shadows,
-    FontWeight fontWeight = FontWeight.w400,
-  }) {
+  static TextStyle smallText(
+      {double fontSize = 22,
+      Color? color,
+      TextDecoration? decoration,
+      double decorationThickness = 0,
+      List<Shadow>? shadows,
+      double? height,
+      FontWeight fontWeight = FontWeight.w400}) {
     return TextStyle(
-        fontSize: fontSize.sp,
-        color: color,
-        decorationThickness: decorationThickness,
-        decoration: decoration,
-        shadows: shadows,
-        decorationColor: color ?? AppColors.PRIMARY_COLOR,
-        fontWeight: fontWeight);
+      fontSize: fontSize.sp,
+      color: color,
+      decorationThickness: decorationThickness,
+      decoration: decoration,
+      shadows: shadows,
+      decorationColor: color ?? AppColors.PRIMARY_COLOR,
+      fontWeight: fontWeight,
+      height: height,
+    );
   }
 
   static TextStyle mediumText(
@@ -29,17 +31,20 @@ abstract class Styles {
       TextDecoration? decoration,
       List<Shadow>? shadows,
       FontStyle? fontStyle,
+      double? height,
       FontWeight fontWeight = FontWeight.w400}) {
     return TextStyle(
-        fontSize: fontSize.sp,
-        color: color,
-        fontStyle: fontStyle,
-        // overflow: TextOverflow.ellipsis,
-        shadows: shadows,
-        decorationThickness: decorationThickness,
-        decoration: decoration,
-        decorationColor: color,
-        fontWeight: fontWeight);
+      fontSize: fontSize.sp,
+      color: color,
+      fontStyle: fontStyle,
+      // overflow: TextOverflow.ellipsis,
+      shadows: shadows,
+      decorationThickness: decorationThickness,
+      decoration: decoration,
+      decorationColor: color,
+      fontWeight: fontWeight,
+      height: height,
+    );
   }
 
   static TextStyle headerText(
@@ -49,6 +54,7 @@ abstract class Styles {
       List<Shadow>? shadows,
       double decorationThickness = 0,
       Color? color,
+      double? height,
       FontWeight fontWeight = FontWeight.w600}) {
     return TextStyle(
       fontSize: fontSize.sp,
@@ -58,6 +64,7 @@ abstract class Styles {
       decoration: decoration,
       color: color,
       decorationThickness: decorationThickness,
+      height: height,
     );
   }
 }

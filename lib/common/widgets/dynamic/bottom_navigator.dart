@@ -169,14 +169,16 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
           color: Colors.transparent,
         ),
         child: Padding(
-          padding:  EdgeInsets.symmetric(horizontal: 20.w),
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
           child: Container(
             // padding: const EdgeInsets.only(bottom: 20, top: 10),
             decoration: BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(12)),
               boxShadow: const [
-                BoxShadow(color: Colors.black12, blurRadius: 5, spreadRadius: 2),
+                BoxShadow(
+                    color: Colors.black12, blurRadius: 5, spreadRadius: 2),
               ],
             ),
             child: Row(
@@ -188,7 +190,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                 return Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      if(index != 2) {
+                      if (index != 2) {
                         widget.onTap(index);
                       }
                     },
@@ -224,36 +226,36 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                       // ),
                       padding: EdgeInsetsDirectional.zero,
                       child: ClickableWidget(
-                        child: index != 2?Container(
-                          padding: const EdgeInsets.symmetric(vertical: 16.0),
+                        child: index != 2
+                            ? Container(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16.0),
 
-                          child: Expanded(
-                            child: SvgPicture.asset(
-                              widget.items[index].image!,
-                              height: widget.items[index].height * 1.8.h,
-                            ),
-                          ),
-                        ):Container(),
+                                child: SvgPicture.asset(
+                                  widget.items[index].image!,
+                                  height: widget.items[index].height * 1.8.h,
+                                ),
+                              )
+                            : Container(),
                       ),
                       // index == 2 // Index for "health"
                       //     ? Image.asset(
                       //   widget.items[index].image!,
                       //   height: widget.items[index].height * 1.8.h,
                       //   height: widget.items[index].height * 2.h, // Adjust height for middle item
-                        // height: 32, // Adjust height for middle item
-                        // width: 32, // Adjust height for middle item
+                      // height: 32, // Adjust height for middle item
+                      // width: 32, // Adjust height for middle item
                       // )
                       //     : Image.asset(
                       //   widget.items[index].image!,
                       //   color: index != 1 ? AppColors.PRIMARY_COLOR : null,
                       //   height: widget.items[index].height * 1.8.h,
                       //   height: 32,
-                        // width: 32, // Adjust height for middle item
-                        //
-                        // height: widget.items[index].height * 1.8.h,
+                      // width: 32, // Adjust height for middle item
+                      //
+                      // height: widget.items[index].height * 1.8.h,
                       // ),
                     ),
-
                   ),
                 );
               }),

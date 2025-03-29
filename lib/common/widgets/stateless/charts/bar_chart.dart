@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BarData {
   final String label;

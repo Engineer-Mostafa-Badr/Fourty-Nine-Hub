@@ -496,7 +496,7 @@ class _StatusPrivacyScreenState extends State<StatusPrivacyScreen> {
 
     return RadioListTile<String>(
       contentPadding: const EdgeInsets.all(0),
-      activeColor: AppColors.PRIMARY_COLOR_DARK,
+      // activeColor: AppColors.PRIMARY_COLOR_DARK,
       title: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

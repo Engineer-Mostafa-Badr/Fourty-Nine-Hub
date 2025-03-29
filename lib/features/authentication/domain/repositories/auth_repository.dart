@@ -6,6 +6,7 @@ import 'package:fourtyninehub/features/authentication/domain/entities/user_token
 import 'package:fourtyninehub/features/authentication/domain/use_cases/create_new_forget_password_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_profile_views_usecase.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/login_use_case.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/register_by_phone_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/resend_otp_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/update_profile_view_usecase.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/verify_otp_use_case.dart';
@@ -14,6 +15,7 @@ import 'package:fourtyninehub/features/authentication/domain/use_cases/create_no
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 
 import '../entities/forget_password_questions_entity.dart';
+import '../use_cases/change_password_use_case.dart';
 import '../use_cases/register_use_case.dart';
 import '../use_cases/send_forget_password_otp_use_case.dart';
 import '../use_cases/verify_forget_password_otp_use_case.dart';
@@ -52,6 +54,9 @@ abstract class AuthRepository {
   Future<Either<Failure, void>> verifyForgetPasswordOTP(
       VerifyForgetOTPParams params);
 
+  Future<Either<Failure, UserTokensEntity>> changePassword(ChangePasswordParams params);
+
+
   Future<Either<Failure, void>> createNewForgetPassword(
       CreateNewForgetParams params);
 
@@ -82,4 +87,6 @@ abstract class AuthRepository {
       GetProfileViewsParams params);
 
   bool attachToken(UserTokensEntity? token);
+
+  Future<Either<Failure, void>> registerByPhone(RegisterByPhoneParams params);
 }

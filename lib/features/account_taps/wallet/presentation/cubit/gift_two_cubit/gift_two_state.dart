@@ -1,28 +1,95 @@
 part of 'gift_two_cubit.dart';
 
-sealed class GiftTwoState extends Equatable {
-  const GiftTwoState();
+enum GiftTwoStates { loading, initial, failure, success }
 
-  @override
-  List<Object> get props => [];
+extension GiftTwoStateX on GiftTwoStates {
+  bool get isInitial => this == GiftTwoStates.initial;
+  bool get isLoading => this == GiftTwoStates.loading;
+  bool get isSuccess => this == GiftTwoStates.success;
+  bool get isFailure => this == GiftTwoStates.failure;
 }
 
-final class GiftTwoInitial extends GiftTwoState {}
+class GiftTwoState {
+  final GiftTwoStates status;
+  final GiftAndCompetitionEntity? giftAndCompetitionEntity;
+  // final GiftWalletEntity? giftEntity;
+  // final List<GiftCompetitionEntity>? giftCompetitionEntity;
+  final String? errMessage;
+  final bool? buttonRequestFiveLoading;
+  final bool? buttonRequestTenLoading;
+  final bool buttonRequestCompetitionLoading;
+  final bool? buttonRequestCompetitionSuccess;
+  final String? buttonRequestCompetitionErrMessage;
 
-final class GiftTwoLoading extends GiftTwoState {}
-
-final class GiftTwoSuccess extends GiftTwoState {
-  // final GiftEntity giftEntity;
-  final WheelWalletEntity wheelWalletEntity;
-
-  const GiftTwoSuccess({
-    // required this.giftEntity,
-    required this.wheelWalletEntity,
+  const GiftTwoState({
+    this.status = GiftTwoStates.initial,
+    this.giftAndCompetitionEntity,
+    // this.giftEntity,
+    // this.giftCompetitionEntity,
+    this.errMessage,
+    this.buttonRequestFiveLoading,
+    this.buttonRequestTenLoading,
+    this.buttonRequestCompetitionLoading = false,
+    this.buttonRequestCompetitionSuccess,
+    this.buttonRequestCompetitionErrMessage,
   });
+
+  GiftTwoState copyWith({
+    GiftTwoStates? status,
+    GiftAndCompetitionEntity? giftAndCompetitionEntity,
+    // GiftWalletEntity? giftEntity,
+    // List<GiftCompetitionEntity>? giftCompetitionEntity,
+    String? errMessage,
+    bool? buttonRequestFiveLoading,
+    bool? buttonRequestTenLoading,
+    bool? buttonRequestCompetitionLoading,
+    bool? buttonRequestCompetitionSuccess,
+    String? buttonRequestCompetitionErrMessage,
+  }) {
+    return GiftTwoState(
+        status: status ?? this.status,
+        giftAndCompetitionEntity:
+            giftAndCompetitionEntity ?? this.giftAndCompetitionEntity,
+        // giftEntity: giftEntity ?? this.giftEntity,
+        // giftCompetitionEntity: giftCompetitionEntity ?? this.giftCompetitionEntity,
+        errMessage: errMessage ?? this.errMessage,
+        buttonRequestFiveLoading:
+            buttonRequestFiveLoading ?? this.buttonRequestFiveLoading,
+        buttonRequestTenLoading:
+            buttonRequestTenLoading ?? this.buttonRequestTenLoading,
+        buttonRequestCompetitionLoading: buttonRequestCompetitionLoading ??
+            this.buttonRequestCompetitionLoading,
+        buttonRequestCompetitionSuccess: buttonRequestCompetitionSuccess ??
+            this.buttonRequestCompetitionSuccess,
+        buttonRequestCompetitionErrMessage:
+            buttonRequestCompetitionErrMessage ??
+                this.buttonRequestCompetitionErrMessage);
+  }
 }
 
-final class GiftTwoFailure extends GiftTwoState {
-  final String message;
-
-  const GiftTwoFailure({required this.message});
-}
+// sealed class GiftTwoState extends Equatable {
+//   const GiftTwoState();
+//
+//   @override
+//   List<Object> get props => [];
+// }
+//
+// final class GiftTwoInitial extends GiftTwoState {}
+//
+// final class GiftTwoLoading extends GiftTwoState {}
+//
+// final class GiftTwoSuccess extends GiftTwoState {
+//   final GiftWalletEntity giftEntity;
+//   final List<GiftCompetitionEntity> giftCompetitionEntity;
+//
+//   const GiftTwoSuccess({
+//     required this.giftEntity,
+//     required this.giftCompetitionEntity,
+//   });
+// }
+//
+// final class GiftTwoFailure extends GiftTwoState {
+//   final String message;
+//
+//   const GiftTwoFailure({required this.message});
+// }

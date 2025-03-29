@@ -1,3 +1,5 @@
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+
 class RegisterRideSpecialEntity {
   final String driverFirstName;
   final String driverLastName;
@@ -8,6 +10,7 @@ class RegisterRideSpecialEntity {
   final String pricingPerKm;
   final String phone;
   final bool smoker;
+  final bool? isShipping;
   final bool airConditioner;
   final String city;
   final String plateInfo;
@@ -16,6 +19,7 @@ class RegisterRideSpecialEntity {
   final String vehicleColor;
   final String birthday;
   final String driverLicenseNumber;
+  final String? personalPicture;
 
   RegisterRideSpecialEntity({
     required this.driverFirstName,
@@ -35,6 +39,8 @@ class RegisterRideSpecialEntity {
     required this.vehicleColor,
     required this.birthday,
     required this.driverLicenseNumber,
+    this.personalPicture,
+    this.isShipping,
   });
 
   //toJson
@@ -70,5 +76,74 @@ class RegisterRideSpecialEntity {
         "subcategoryIds": subcategoryIds,
       }
     };
+  }
+
+  //toJson
+  Map<String, dynamic> toCacheJson() {
+    return {
+      "driverInfo": {
+        "firstName": driverFirstName,
+        "lastName": driverLastName,
+        "dateOfBirth": birthday,
+        "identificationDetails": {
+          "driverLicenseNumber": driverLicenseNumber,
+          "nationalIdNumber": idNumber,
+        },
+        "contactInfo": {
+          "phoneNumber": phone,
+          "city": city,
+        }
+      },
+      "vehicleInfo": {
+        "brand": vehicleBrand,
+        "model": vehicleModel,
+        "color": vehicleColor,
+        "year": vehicleYear,
+        "plateDetails": plateInfo,
+        "features": {
+          "hasAirConditioner": airConditioner,
+          "allowsSmoking": smoker,
+        }
+      },
+      "serviceSettings": {
+        "pricingPerKm": pricingPerKm,
+        "workingType": workingType,
+        "subcategoryIds": subcategoryIds,
+      },
+      "personalPicture":personalPicture,
+      "isShipping":isShipping
+    };
+  }
+
+  // fromJson factory method
+  factory RegisterRideSpecialEntity.fromJson(Map<String, dynamic> json) {
+    final driverInfo = json["driverInfo"];
+    final identificationDetails = driverInfo["identificationDetails"];
+    final contactInfo = driverInfo["contactInfo"];
+    final vehicleInfo = json["vehicleInfo"];
+    final features = vehicleInfo["features"];
+    final serviceSettings = json["serviceSettings"];
+
+    return RegisterRideSpecialEntity(
+      driverFirstName: driverInfo["firstName"],
+      driverLastName: driverInfo["lastName"],
+      birthday: driverInfo["dateOfBirth"],
+      driverLicenseNumber: identificationDetails["driverLicenseNumber"],
+      idNumber: identificationDetails["nationalIdNumber"],
+      phone: contactInfo["phoneNumber"],
+      city: contactInfo["city"],
+      vehicleBrand: vehicleInfo["brand"],
+      vehicleModel: vehicleInfo["model"],
+      vehicleColor: vehicleInfo["color"],
+      vehicleYear: vehicleInfo["year"],
+      plateInfo: vehicleInfo["plateDetails"],
+      airConditioner: features["hasAirConditioner"],
+      smoker: features["allowsSmoking"],
+      pricingPerKm: serviceSettings["pricingPerKm"],
+      workingType: serviceSettings["workingType"],
+      subcategoryIds: List<String>.from(serviceSettings["subcategoryIds"]),
+      personalPicture:json["personalPicture"],
+      isShipping:json["isShipping"],
+    );
   }
 }

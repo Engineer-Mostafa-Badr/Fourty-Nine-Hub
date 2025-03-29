@@ -3,8 +3,8 @@ import 'dart:async';
 
 // Flutter imports:
 import 'package:flutter/material.dart';
-import '../../../services/defines/user.dart' as zego_local;
 
+import '../../../services/defines/user.dart' as zego_local;
 import '../../../services/uikit_service.dart';
 import 'ripple_animation.dart';
 

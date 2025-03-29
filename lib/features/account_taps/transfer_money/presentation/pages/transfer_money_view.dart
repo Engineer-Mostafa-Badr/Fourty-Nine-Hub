@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
-import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/core/widget/custom_failure_widget.dart';
 import 'package:fourtyninehub/features/account_taps/transfer_money/domain/use_case/transfer_money_use_case.dart';
 import 'package:fourtyninehub/features/account_taps/transfer_money/presentation/cubit/transfer_money_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/transfer_money/presentation/cubit/transfer_money_state.dart';
 import 'package:fourtyninehub/features/account_taps/transfer_money/presentation/pages/transfer_money_success.dart';
-
-import '../../../../../common/widgets/dynamic/sizer.dart';
-import '../../../../../common/widgets/form/text_fields/form_text_field.dart';
+import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
+import '../../../../../common/widgets/form/text_fields/search_text_form_field.dart';
 import '../../../../../common/widgets/stateless/dynamic/are_you_sure.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
-import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
+import '../../../../food_feature/create_restaurant/views/widgets/mneu/name/price_text_form_field.dart';
 import '../../domain/entities/user_transfer_money_entity.dart';
 
 class TransferMoneyView extends StatefulWidget {
@@ -42,9 +41,9 @@ class _TransferMoneyViewState extends State<TransferMoneyView> {
   }
 
   bool isUsernameInFilteredUsers(
-      String? username, List<UserTransferMoneyEntity>? filteredUsers) {
-    if (username == null || filteredUsers == null) return false;
-    return filteredUsers.any((user) => user.userName == username);
+      String? email, List<UserTransferMoneyEntity>? filteredUsers) {
+    if (email == null || filteredUsers == null) return false;
+    return filteredUsers.any((user) => user.email == email);
   }
 
   @override
@@ -57,7 +56,7 @@ class _TransferMoneyViewState extends State<TransferMoneyView> {
         create: (BuildContext context) => serviceLocator()..loadData(),
         child: BlocConsumer<TransferMoneyCubit, TransferMoneyState>(
           listener: (BuildContext context, state) {
-            if (state.status == StateStatus.success) {
+            if (state.isTransferSuccess) {
               showSuccessMessage(
                   context, LocaleKeys.moneySuccessfully.localize);
               Navigator.push(
@@ -72,7 +71,7 @@ class _TransferMoneyViewState extends State<TransferMoneyView> {
                 selectedUsername = null;
               });
             }
-            if (state.status == StateStatus.error) {
+            if (state.isTransferError) {
               showErrorMessage(
                 context,
                 getFailureMessage(
@@ -90,75 +89,155 @@ class _TransferMoneyViewState extends State<TransferMoneyView> {
                   .contains(searchController.text.toLowerCase());
             }).toList();
 
-            return ListView(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(5),
-                  margin: const EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Form(
-                    key: formKey,
-                    child: Stack(
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            FormTextField(
-                              textStyle: Styles.mediumText(
-                                color:
-                                    Theme.of(context).scaffoldBackgroundColor,
+            if (state.isLoading) {
+              return const CustomLoading();
+            } else if (state.isSuccess ||
+                state.isTransferSuccess ||
+                state.isTransferError ||
+                state.isTransferLoading) {
+              return Padding(
+                padding: const EdgeInsets.only(left: 16, right: 16),
+                child: Stack(
+                  children: [
+                    // SearchAnchor.bar(
+                    //   suggestionsBuilder: (context, controller) {
+                    //     final String input = controller.value.text;
+                    //     return filteredUsers!
+                    //         .where((user) => user.email.contains(input))
+                    //         .map(
+                    //           (filteredUser) => InkWell(
+                    //             onTap: () {
+                    //               controller.closeView(filteredUser.email);
+                    //               print(filteredUser.email);
+                    //             },
+                    //             child: Label(
+                    //               text: filteredUser.email,
+                    //             ),
+                    //           ),
+                    //         );
+                    //   },
+                    //   barBackgroundColor: WidgetStateProperty.all(Colors.white),
+                    //   viewBackgroundColor: Colors.grey,
+                    //   // elevation: WidgetStateProperty.all(0),
+                    //   // shape: WidgetStateProperty.all(RoundedRectangleBorder(
+                    //   //   borderRadius: BorderRadius.circular(15),
+                    //   // )),
+
+                    // ),
+                    // UserSearchField(
+                    //   controller: searchController,
+                    //   onEmailSelected: (value) {},
+                    //   onSearchChanged: (value) {},
+                    //   suggestions:
+                    //       filteredUsers?.map((user) => user.email).toList() ?? [],
+                    // ),
+                    Form(
+                      key: formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: 44,
+                            child: SearchTextFormField(
+                              cursorColor: null,
+                              hintStyle: Styles.headerText(
+                                fontSize: 32,
                               ),
-                              constraints: BoxConstraints(
-                                maxHeight: 52.h,
-                                minHeight: 52.h,
+                              currentController: searchController,
+                              style: Styles.headerText(
+                                fontSize: 32,
+                                color: Colors.black,
                               ),
-                              fillColor: Theme.of(context).primaryColor,
-                              borderRadius: BorderRadius.circular(20.r),
-                              style: TextStyle(
-                                fontSize: 30.sp,
-                                color:
-                                    Theme.of(context).scaffoldBackgroundColor,
-                              ),
-                              controller: searchController,
-                              hint: LocaleKeys.search.localize,
-                              action: (value) {
+                              currentFocusNode: null,
+                              margin: EdgeInsets.zero,
+                              borderColor: Colors.black,
+                              hint: LocaleKeys.transferTo.localize,
+                              onChanged: (value) {
                                 setState(() {
                                   // Show the list when the search text is not empty
                                   showUserList = value.isNotEmpty;
                                 });
                               },
                             ),
-                            const Sizer(),
-                            FormTextField(
-                              textStyle: Styles.mediumText(
-                                color:
-                                    Theme.of(context).scaffoldBackgroundColor,
-                              ),
-                              type: TextInputType.number,
-                              constraints: BoxConstraints(
-                                maxHeight: 52.h,
-                                minHeight: 52.h,
-                              ),
-                              fillColor: Theme.of(context).primaryColor,
-                              borderRadius: BorderRadius.circular(20.r),
-                              style: TextStyle(
-                                fontSize: 30.sp,
-                                color:
-                                    Theme.of(context).scaffoldBackgroundColor,
-                              ),
-                              controller: amountController,
+                          ),
+                          // FormTextField(
+                          //   height: 44,
+                          //   textStyle: Styles.headerText(
+                          //     fontSize: 32,
+                          //     color: Colors.black,
+                          //   ),
+                          //   enabled: true,
+                          //
+                          //   // constraints: BoxConstraints(
+                          //   //   maxHeight: 52.h,
+                          //   //   minHeight: 52.h,
+                          //   // ),
+                          //   fillColor: Colors.white,
+                          //   borderRadius: BorderRadius.circular(15),
+                          //   noBorder: true,
+                          //   style: Styles.headerText(
+                          //     fontSize: 32,
+                          //   ),
+                          //   controller: searchController,
+                          //   hint: LocaleKeys.transferTo.localize,
+                          //   action: (value) {
+                          //     setState(() {
+                          //       // Show the list when the search text is not empty
+                          //       showUserList = value.isNotEmpty;
+                          //     });
+                          //   },
+                          // ),
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          SizedBox(
+                            height: 44,
+                            child: PriceTextFormField(
+                              currentController: amountController,
                               hint: LocaleKeys.amount.localize,
-                              action: (v) {},
+                              hintStyle: Styles.headerText(
+                                  fontSize: 32, color: Colors.black),
+                              fillColor: Colors.white,
+                              style: Styles.headerText(
+                                  fontSize: 32, color: Colors.black),
+                              borderColor: Colors.black,
                             ),
-                            const Sizer(),
+                          ),
+                          // FormTextField(
+                          //   textStyle: Styles.mediumText(
+                          //     color: Theme.of(context).scaffoldBackgroundColor,
+                          //   ),
+                          //   type: TextInputType.number,
+                          //   constraints: BoxConstraints(
+                          //     maxHeight: 52.h,
+                          //     minHeight: 52.h,
+                          //   ),
+                          //   fillColor: Theme.of(context).primaryColor,
+                          //   borderRadius: BorderRadius.circular(20.r),
+                          //   style: TextStyle(
+                          //     fontSize: 30.sp,
+                          //     color: Theme.of(context).scaffoldBackgroundColor,
+                          //   ),
+                          //   controller: amountController,
+                          //   hint: LocaleKeys.amount.localize,
+                          //   action: (v) {},
+                          // ),
+                          const SizedBox(
+                            height: 32,
+                          ),
+                          if (state.isTransferLoading)
+                            const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          if (!state.isTransferLoading)
                             AppButton(
                               label: LocaleKeys.confirm.localize,
-                              style: Styles.mediumText(
-                                fontSize: 60.sp,
-                                color: AppColors.AUTH_CONTAINER_COLOR,
+                              style: Styles.headerText(
+                                fontSize: 32,
+                                color: Colors.white,
                               ),
+                              height: 44,
+                              radius: 15,
                               onPressed: () {
                                 if (formKey.currentState!.validate()) {
                                   if (selectedUsername == null ||
@@ -169,6 +248,34 @@ class _TransferMoneyViewState extends State<TransferMoneyView> {
                                         LocaleKeys.selectValidUser.localize);
                                   } else if (int.parse(amountController.text) <
                                       state.wallet!.realAmount!) {
+                                    return bottomSheet(
+                                      context: context,
+                                      isFloating: true,
+                                      asAlertDialog: true,
+                                      widget: AreYouSure(
+                                        padding: const EdgeInsets.only(
+                                          left: 16,
+                                          right: 16,
+                                          bottom: 27,
+                                          top: 28,
+                                        ),
+                                        title: LocaleKeys.alert.localize,
+                                        subTitle: LocaleKeys
+                                            .areYouSureOfTransferMoney.localize,
+                                        action: () {
+                                          context
+                                              .read<TransferMoneyCubit>()
+                                              .transferMoney(
+                                                params: TransferMoneyParams(
+                                                  receiverUsername:
+                                                      selectedUsername!,
+                                                  amount: int.parse(
+                                                      amountController.text),
+                                                ),
+                                              );
+                                        },
+                                      ),
+                                    );
                                     return showAreYouSure(
                                         title: LocaleKeys.alert.localize,
                                         subTitle: LocaleKeys
@@ -195,53 +302,73 @@ class _TransferMoneyViewState extends State<TransferMoneyView> {
                                 }
                               },
                             ),
-                          ],
-                        ),
-                        if (showUserList &&
-                            filteredUsers != null &&
-                            filteredUsers.isNotEmpty)
-                          Positioned(
-                            top: 100.h,
-                            left: 0,
-                            right: 0,
-                            child: Container(
-                              width: double.infinity,
-                              height: 300.h,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20.r),
-                                color: Theme.of(context).primaryColor,
+                        ],
+                      ),
+                    ),
+                    if (showUserList &&
+                        filteredUsers != null &&
+                        filteredUsers.isNotEmpty)
+                      Positioned(
+                        top: 47,
+                        left: 0,
+                        right: 0,
+                        child: Container(
+                          width: double.infinity,
+                          height: MediaQuery.sizeOf(context).height * 0.3,
+                          decoration: ShapeDecoration(
+                            color: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              side: const BorderSide(
+                                width: 2,
+                                strokeAlign: BorderSide.strokeAlignCenter,
                               ),
-                              child: ListView.builder(
-                                itemCount: filteredUsers.length,
-                                itemBuilder: (context, index) {
-                                  var user = filteredUsers[index];
-                                  // String fullName =
-                                  //     '${capitalize(user.firstName)} ${capitalize(user.lastName)}';
-                                  return ListTile(
-                                    title: Text(
-                                      user.email,
-                                      style: Styles.mediumText(
-                                          color: Theme.of(context)
-                                              .scaffoldBackgroundColor),
-                                    ),
-                                    onTap: () {
-                                      setState(() {
-                                        searchController.text = user.email;
-                                        selectedUsername = user.userName;
-                                        showUserList = false;
-                                      });
-                                    },
-                                  );
-                                },
-                              ),
+                              borderRadius: BorderRadius.circular(15),
                             ),
                           ),
-                      ],
-                    ),
-                  ),
+                          // decoration: BoxDecoration(
+                          //   borderRadius: BorderRadius.circular(20.r),
+                          //   color: Theme.of(context).primaryColor,
+                          // ),
+                          child: ListView.builder(
+                            itemCount: filteredUsers.length,
+                            itemBuilder: (context, index) {
+                              var user = filteredUsers[index];
+                              // String fullName =
+                              //     '${capitalize(user.firstName)} ${capitalize(user.lastName)}';
+                              return ListTile(
+                                title: Text(
+                                  user.email,
+                                  style: Styles.headerText(),
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    searchController.text = user.email;
+                                    selectedUsername = user.email;
+                                    showUserList = false;
+                                  });
+                                },
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
-              ],
-            );
+              );
+            } else {
+              final String messageFailure;
+              if (state.failure == null) {
+                messageFailure = LocaleKeys.somethingWentWrong.localize;
+              } else {
+                messageFailure = getFailureMessage(state.failure!, context);
+              }
+              return CustomFailureWidget(
+                title: messageFailure,
+                onPressed: () {
+                  context.read<TransferMoneyCubit>().loadData();
+                },
+              );
+            }
           },
         ),
       ),

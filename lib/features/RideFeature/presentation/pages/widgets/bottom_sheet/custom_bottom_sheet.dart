@@ -31,11 +31,15 @@ Future<dynamic> customBottomSheet(context, RideCubit rideCubit,
             mainAxisSize: MainAxisSize.min,
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+                padding: const EdgeInsets.fromLTRB(0, 12, 0, 0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const SizedBox(),
+                    IconButton(
+                      icon: const SizedBox(),
+                      onPressed: () {
+                      },
+                    ),
                     Text(title,style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w600)),
                     IconButton(
                       icon: SvgPicture.asset('assets/icons/close.svg'),
@@ -52,5 +56,51 @@ Future<dynamic> customBottomSheet(context, RideCubit rideCubit,
           ),
         )
     ),
+  );
+}
+Future<dynamic> customBottomSheet2(context,
+    {required child, height = 150, required String title}) {
+  return showModalBottomSheet(
+    backgroundColor: AppColors.whiteColor,
+    context: context,
+    shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(15))),
+    isScrollControlled: true,
+    builder: (context) => Container(
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(25),
+            topRight: Radius.circular(25),
+          ),
+          color: AppColors.whiteColor,
+        ),
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom + 25,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const SizedBox(),
+                  Text(title,style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w600)),
+                  IconButton(
+                    icon: SvgPicture.asset('assets/icons/close.svg'),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+    
+                ],
+              ),
+            ),
+            child,
+          ],
+        ),
+      ),
   );
 }

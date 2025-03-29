@@ -18,6 +18,61 @@ ThemeData get lightTheme => ThemeData(
       switchTheme: const SwitchThemeData(
         trackColor: WidgetStatePropertyAll<Color>(AppColors.SECONDARY_COLOR),
       ),
+      radioTheme: RadioThemeData(
+        fillColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return AppColors.PRIMARY_COLOR;
+          }
+          return AppColors.BG_GRAY_COLOR;
+        }),
+      ),
+      timePickerTheme: TimePickerThemeData(
+        backgroundColor: AppColors.AUTH_CONTAINER_COLOR,
+        dialHandColor: AppColors.PRIMARY_COLOR,
+        dialBackgroundColor: AppColors.PRIMARY_COLOR.withValues(alpha: .15),
+        dayPeriodBorderSide: const BorderSide(color: AppColors.PRIMARY_COLOR),
+        dayPeriodColor: AppColors.PRIMARY_COLOR.withValues(alpha: .15),
+        dayPeriodTextColor: AppColors.PRIMARY_COLOR,
+        hourMinuteTextColor: AppColors.PRIMARY_COLOR,
+        hourMinuteColor: AppColors.PRIMARY_COLOR.withValues(alpha: .15),
+        cancelButtonStyle: ButtonStyle(
+          foregroundColor: WidgetStateProperty.resolveWith(
+            (states) => AppColors.PRIMARY_COLOR,
+          ),
+        ),
+        confirmButtonStyle: ButtonStyle(
+          foregroundColor: WidgetStateProperty.resolveWith(
+            (states) => AppColors.PRIMARY_COLOR,
+          ),
+        ),
+      ),
+      datePickerTheme: DatePickerThemeData(
+        headerBackgroundColor: AppColors.PRIMARY_COLOR,
+        headerForegroundColor: AppColors.AUTH_CONTAINER_COLOR,
+        backgroundColor: AppColors.AUTH_CONTAINER_COLOR,
+        dayForegroundColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return AppColors.AUTH_CONTAINER_COLOR; // Text color when selected
+          }
+          return AppColors.PRIMARY_COLOR; // Default text color
+        }),
+        dayBackgroundColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return AppColors.PRIMARY_COLOR; // Background color when selected
+          }
+          return Colors.transparent; // Default background
+        }),
+        cancelButtonStyle: ButtonStyle(
+          foregroundColor: WidgetStateProperty.resolveWith(
+            (states) => AppColors.PRIMARY_COLOR,
+          ),
+        ),
+        confirmButtonStyle: ButtonStyle(
+          foregroundColor: WidgetStateProperty.resolveWith(
+            (states) => AppColors.PRIMARY_COLOR,
+          ),
+        ),
+      ),
       textTheme: const TextTheme(
         displayMedium: TextStyle(color: AppColors.QUANTITY_COLOR),
         // displaySmall: TextStyle(color: AppColors.DARK_GRAY_COLOR),
@@ -60,7 +115,8 @@ ThemeData get lightTheme => ThemeData(
       bottomAppBarTheme: const BottomAppBarTheme(),
       canvasColor: Colors.black38,
       bannerTheme: const MaterialBannerThemeData(),
-      bottomNavigationBarTheme: const BottomNavigationBarThemeData(backgroundColor: Colors.transparent),
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          backgroundColor: Colors.transparent),
       cardColor: Colors.white,
       dialogTheme: const DialogTheme(),
       bottomSheetTheme: const BottomSheetThemeData(),
