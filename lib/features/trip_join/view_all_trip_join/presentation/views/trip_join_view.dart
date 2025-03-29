@@ -7,6 +7,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
+import 'package:fourtyninehub/features/new_trip_join/presentation/view/widget/trip_option_widget.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/cards/display_trip_join_card.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_bottom_sheet/show_bottom_sheet.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_dialog/dialog_content.dart';
@@ -19,14 +20,50 @@ import 'package:fourtyninehub/res/style/styles.dart';
 class TripJoinView extends StatefulWidget {
   const TripJoinView({super.key});
 
+
   @override
   State<TripJoinView> createState() => _TripJoinViewState();
 }
 
-class _TripJoinViewState extends State<TripJoinView> {
+class _TripJoinViewState extends State<TripJoinView>with TickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String _displayedCategory = LocaleKeys.availableTrips;
-  List categories=['','',''];
+
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+  late Animation<double> _positionAnimation;
+  late TabController tabController;
+  @override
+  void initState() {
+    super.initState();
+    tabController = TabController(length: 3, vsync: this);
+    tabController.addListener(() {
+      setState(() {});
+    });
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 700),
+    );
+
+    _scaleAnimation = Tween<double>(
+        begin: 0.6, end: 1.2) // تكبير أكبر من البقية
+        .animate(
+        CurvedAnimation(parent: _controller, curve: Curves.easeOutBack));
+
+    _positionAnimation = Tween<double>(begin: 200, end: 0) // يبدأ من تحت الشاشة
+        .animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
+
+    // تأخير بسيط ثم تشغيل الأنيميشن
+    Future.delayed(const Duration(milliseconds: 250), () {
+      _controller.forward();
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,24 +100,46 @@ class _TripJoinViewState extends State<TripJoinView> {
                             padding:
                                 EdgeInsets.symmetric(vertical: 15.h,
                                 ),
-                            child: Row(
+                            child:Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                _buildCategoryIcons(
-                                    image: Assets.tripJoinCaptainShare,
-                                    title: context.isArabic
-                                        ? "مشاركة كابتن"
-                                        : "Captain\n Share"),
-                                _buildCategoryIcons(
-                                    image: Assets.tripJoinIconSelected,
-                                    title: context.isArabic ? "جاي معاك" : "Trip Join"),
-                                _buildCategoryIcons(
-                                    image: Assets.tripJoinPickMe,
-                                    title: context.isArabic ? "وصلني معاك" : "Pick me"),
+                              children: [TripOptionWidget(
+                                imagePath: Assets.locationTripIcon,
+                                title: 'Captain\nShare',
+                                onTap: () {},
+                              ),
+                                AnimatedBuilder(
+                                  animation: _controller,
+                                  builder: (context, child) {
+                                    return Transform.translate(
+                                      offset: Offset(0, _positionAnimation.value),
+                                      child: Transform.scale(
+                                        scale: _scaleAnimation.value,
+                                        child: child,
+                                      ),
+                                    );
+                                  },
+                                  child: TripOptionWidget(
+                                    borderColor: Colors.red,
+                                    containerColor: Colors.white,
+                                    iconColor: const Color(0xffF33D49),
+                                    textColor: const Color(0xffF33D49),
+                                    imagePath: Assets.locationTripIcon,
+                                    title: 'Trip Join',
+                                    onTap: () {},
+                                    icon: Assets.car,
+                                  ),
+                                ),
+                                TripOptionWidget(
+                                  imagePath: Assets.locationTripIcon,
+                                  title: 'Pick me',
+                                  onTap: () {},
+                                  icon: Assets.pickMeImage,
+                                ),
                               ],
                             ),
                           ),
+                          const Sizer(),
                           _buildStatusCategories(),
                           Sizer(
                             height: 10.h,
@@ -157,33 +216,10 @@ class _TripJoinViewState extends State<TripJoinView> {
                     ),
                   ),
                 ),
-                TripJoinFloatingActionButton(),
+                const TripJoinFloatingActionButton(),
               ],
             )));
   }
-
-  _buildCategoryIcons({
-    required String image,
-    required String title,
-  }) {
-    return GestureDetector(
-      onTap: () {},
-      child: Container(
-        child: Column(
-          children: [
-            Image.asset(
-              image,
-            ),
-            Text(
-              title,
-              style: Styles.headerText(),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   _buildStatusCategories() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -192,9 +228,11 @@ class _TripJoinViewState extends State<TripJoinView> {
         Expanded(
           child: _buildCategory(
               title: LocaleKeys.availableTrips,
-              selected: _displayedCategory == LocaleKeys.availableTrips
-                  ? true
-                  : false),
+              index: 0,
+              // selected: _displayedCategory == LocaleKeys.availableTrips
+              //     ? true
+              //     : false
+          ),
         ),
         const Sizer(
           width: 10,
@@ -202,9 +240,11 @@ class _TripJoinViewState extends State<TripJoinView> {
         Expanded(
           child: _buildCategory(
               title: LocaleKeys.rideRequest,
-              selected: _displayedCategory == LocaleKeys.rideRequest
-                  ? true
-                  : false),
+              index: 1,
+              // selected: _displayedCategory == LocaleKeys.rideRequest
+              //     ? true
+              //     : false
+          ),
         ),
         const Sizer(
           width: 10,
@@ -212,20 +252,23 @@ class _TripJoinViewState extends State<TripJoinView> {
         Expanded(
           child: _buildCategory(
               title: LocaleKeys.myAds,
-              selected:
-                  _displayedCategory == LocaleKeys.myAds ? true : false),
+              index: 2,
+              // selected:
+              //     _displayedCategory == LocaleKeys.myAds ? true : false
+          ),
         ),
       ],
     );
   }
 
-  _buildCategory({required String title, required bool selected,}) {
+  _buildCategory({required String title, required int index,}) {
+    bool selected=tabController.index == index;
     return GestureDetector(
-      onTap: () {
+      onTap:(){
+        tabController.animateTo(index);
         setState(() {
-          _displayedCategory = title;
-        });
-      },
+      _displayedCategory = title;
+      }); } ,
       child: Stack(
         children: [
           Container(

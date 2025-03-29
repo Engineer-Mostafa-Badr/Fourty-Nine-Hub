@@ -373,6 +373,7 @@ abstract class Assets {
   static String femaleUser = 'assets/images/trip_join/female_user.png';
   static String tripJoinCarIcon = 'assets/icons/trip_join_car_icon.png';
   static String tripJoinBabySeatIcon = 'assets/icons/baby_car_seat.png';
+  static String tripJoinEathIcon = 'assets/icons/earth_icon.png';
 
 
   // new trip join icon

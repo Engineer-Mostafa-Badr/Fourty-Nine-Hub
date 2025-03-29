@@ -24,7 +24,6 @@ class _TripJoinBottomSectionState extends State<TripJoinBottomSection> {
   bool isChecked = false;
   TimeOfDay? time;
   int seatNum = 1;
-  List<int> seats = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +64,7 @@ class _TripJoinBottomSectionState extends State<TripJoinBottomSection> {
                 CustomRow(
                   children: [
                     IconButton(
-                      visualDensity: VisualDensity(
+                      visualDensity:const  VisualDensity(
                           horizontal: -4, vertical: -4),
                       onPressed: () async {
                         time = await showTimePicker(
@@ -109,11 +108,11 @@ class _TripJoinBottomSectionState extends State<TripJoinBottomSection> {
                       ),
                     ),
 
-                    Text('${LocaleKeys.seat.localize} ',
+                    Text(LocaleKeys.seat.localize,
                         style: Styles.headerText()),
                     Image.asset(Assets.tripJoinBabySeatIcon,height: 40.h,),
                     Text(
-                      'Seat',
+                      LocaleKeys.seat.localize,
                       style: Styles.headerText(fontWeight: FontWeight.bold),
                     ),
 
@@ -150,13 +149,13 @@ class _TripJoinBottomSectionState extends State<TripJoinBottomSection> {
     final selected = await showMenu<String>(
       color: AppColors.colorGreyLight,
       context: context,
-      position: RelativeRect.fill,
-        //(
-        // position.dx,
-        // position.dy-50,
-        // overlay.size.width - position.dx,
-        // overlay.size.height - position.dy,
-      //),
+      position: RelativeRect.fromLTRB
+        (
+        position.dx,
+        position.dy-50,
+        overlay.size.width - position.dx,
+        overlay.size.height - position.dy,
+      ),
       items: items
           .map((brand) =>
           PopupMenuItem<String>(
