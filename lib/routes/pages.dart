@@ -29,9 +29,7 @@ import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/ca
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/gift_view.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/gift_wallet_view.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/cubit/ad_details_cubit.dart';
-import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/pages/ad_details_view.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_requests/presentation/cubit/ad_requests_cubit.dart';
-import 'package:fourtyninehub/features/ads_feature/ad_requests/presentation/pages/ad_requests_view.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_view.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/marriage_ads_view.dart';
@@ -236,7 +234,7 @@ import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/t
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_cubit.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/pages/be_star_view.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/pages/widgets/star_winner_view.dart';
+import 'package:fourtyninehub/features/star_feature/presentation/pages/all_winner_view.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
 import 'package:fourtyninehub/features/ten_percent/presentation/cubit/ten_percent_cubit.dart';
 import 'package:fourtyninehub/features/ten_percent/presentation/pages/ten_percent_view.dart';
@@ -318,6 +316,8 @@ import '../features/account_taps/transfer_money/presentation/pages/transfer_mone
 import '../features/account_taps/wallet/presentation/cubit/Gift_Cubit/gift_cubit.dart';
 import '../features/account_taps/wallet/presentation/pages/wallet_history.dart';
 import '../features/account_taps/wallet/presentation/pages/wallet_view.dart';
+import '../features/ads_feature/ad_details/presentation/pages/ad_details_view.dart';
+import '../features/ads_feature/ad_requests/presentation/pages/ad_requests_view.dart';
 import '../features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
 import '../features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
 import '../features/ads_feature/create_company_ad/presentation/pages/create_company_ad.dart';
@@ -386,6 +386,11 @@ import '../features/social_media/social_posts/presentation/cubit/social_posts_cu
 import '../features/social_media/social_posts/presentation/pages/Social_home.dart';
 import '../features/social_media/social_posts/presentation/pages/other_account_view.dart';
 import '../features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
+import '../features/social_media/twitter/presentation/pages/twitter_post_details_notify.dart';
+import '../features/social_media/twitter/presentation/pages/twitter_view.dart';
+import '../features/star_feature/presentation/pages/get_all_talents.dart';
+import '../features/star_feature/presentation/pages/my_talent.dart';
+import '../features/star_feature/presentation/pages/widgets/all_winner_grid_view.dart';
 import '../features/subcategories/presentation/cubit/subcategories_cubit.dart';
 import '../features/youtube/presentation/pages/play_video.dart';
 import '../features/youtube/presentation/pages/youtube.dart';
@@ -411,11 +416,17 @@ class AppPages {
                 BlocProvider(
                   create: (context) => serviceLocator<SliderCubit>(),
                 ),
+                BlocProvider(
+                  create: (context) =>
+                      serviceLocator<StarCubit>()..getAllTalent(),
+                ),
                 // BlocProvider(
                 //   create: (context) => serviceLocator<ThumbnailsCubit>(),
                 // ),
               ],
               child: const FourtyNineView(),
+              // child: const BeStarView(),
+              // child: const GetAllTalents(),
             ),
             routes: [
               GoRoute(
@@ -471,6 +482,16 @@ class AppPages {
                 ),
               ),
               GoRoute(
+                path: Paths.MY_TALENT,
+                name: Routes.MY_TALENT,
+                builder: (context, state) => BlocProvider(
+                  create: (context) => serviceLocator<StarCubit>()
+                    ..loadInitialData()
+                    ..getAllTalent(),
+                  child: const MyTalentView(),
+                ),
+              ),
+              GoRoute(
                 path: Paths.RESTAURANTORDERS,
                 name: Routes.RESTAURANTORDERS,
                 builder: (context, state) => BlocProvider(
@@ -486,17 +507,22 @@ class AppPages {
               GoRoute(
                 path: Paths.RIDERUNNINGTRIPS,
                 name: Routes.RIDERUNNINGTRIPS,
-                builder: (context, state) => RunningTripScreen(params: state.extra as RunningTripParams),
+                builder: (context, state) =>
+                    RunningTripScreen(params: state.extra as RunningTripParams),
               ),
               GoRoute(
                 path: Paths.RIDEEXPIREDTRIPE,
                 name: Routes.RIDEEXPIREDTRIPE,
-                builder: (context, state) => ExpiredTripsScreen(params: state.extra as ExpiredTripsScreenParams,),
+                builder: (context, state) => ExpiredTripsScreen(
+                  params: state.extra as ExpiredTripsScreenParams,
+                ),
               ),
               GoRoute(
                 path: Paths.RIDEOPENSTREETMAPSEARCHANDPICK,
                 name: Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
-                builder: (context, state) => RideOpenStreetMapSearchAndPick(params: state.extra as RideOpenStreetMapSearchAndPickParams,),
+                builder: (context, state) => RideOpenStreetMapSearchAndPick(
+                  params: state.extra as RideOpenStreetMapSearchAndPickParams,
+                ),
               ),
               GoRoute(
                 path: Paths.EditFoodView,
@@ -871,11 +897,11 @@ class AppPages {
                 },
                 routes: const [],
               ),
-              GoRoute(
-                path: Paths.WINNERS,
-                name: Routes.WINNERS,
-                builder: (context, state) => const Winners(),
-              ),
+              // GoRoute(
+              //   path: Paths.WINNERS,
+              //   name: Routes.WINNERS,
+              //   builder: (context, state) => const WinnersView(),
+              // ),
               GoRoute(
                 path: Paths.QURAAN,
                 name: Routes.QURAAN,
@@ -949,7 +975,7 @@ class AppPages {
               GoRoute(
                 path: Paths.GIFT,
                 name: Routes.GIFT,
-                builder: (context, state) => GiftView(),
+                builder: (context, state) => const GiftView(),
               ),
               // GoRoute(
               //   path: Paths.GIFT,
@@ -996,7 +1022,7 @@ class AppPages {
                     GoRoute(
                         path: Paths.PRIVACY,
                         name: Routes.PRIVACY,
-                        builder: (context, state) =>  PrivacyView()),
+                        builder: (context, state) => PrivacyView()),
                     GoRoute(
                         path: Paths.POLICY,
                         name: Routes.POLICY,
@@ -1085,12 +1111,10 @@ class AppPages {
                     path: Paths.InstagramSuggestPeople,
                     name: Routes.InstagramSuggestPeople,
                     routes: const [],
-                    builder: (context, state) {
-                      return BlocProvider<InstagramCubit>(
-                        create: (_) => serviceLocator(),
-                        child: const InstagramAllDiscoverPeople(),
-                      );
-                    },
+                    builder: (context, state) => BlocProvider<InstagramCubit>(
+                      create: (_) => serviceLocator(),
+                      child: const InstagramAllDiscoverPeople(),
+                    ),
                   ),
                 ],
                 builder: (context, state) => MultiBlocProvider(
@@ -1401,12 +1425,9 @@ class AppPages {
               GoRoute(
                   path: Paths.VISITA,
                   name: Routes.VISITA,
-                  builder: (context, state) {
-                    return BlocProvider<HealthCubit>(
+                  builder: (context, state) => BlocProvider<HealthCubit>(
                       create: (_) => serviceLocator<HealthCubit>()..loadData(),
-                      child: const HealthView(),
-                    );
-                  },
+                      child: const HealthView()),
                   routes: [
                     GoRoute(
                       path: Paths.CREATERESTURANT,
@@ -2360,7 +2381,7 @@ class AppPages {
                     builder: (context, state) {
                       return BlocProvider<StarCubit>(
                           create: (_) => serviceLocator(),
-                          child: const StarWinnerView());
+                          child: const AllWinnerView());
                     },
                   ),
                 ],
@@ -2679,7 +2700,9 @@ class AppPages {
                 path: Paths.UploadRiderImages,
                 name: Routes.UploadRiderImages,
                 builder: (context, state) {
-                  return UploadRiderImages(params: state.extra as UploadRiderImagesParams?,);
+                  return UploadRiderImages(
+                    params: state.extra as UploadRiderImagesParams?,
+                  );
                 },
               ),
               GoRoute(
@@ -2984,32 +3007,32 @@ class AppPages {
               GoRoute(
                 path: Paths.supportRideScreen,
                 name: Routes.supportRideScreen,
-                builder: (context, state) =>  SupportRideScreen(),
+                builder: (context, state) => SupportRideScreen(),
               ),
               GoRoute(
                 path: Paths.supportClientDetailsScreen,
                 name: Routes.supportClientDetailsScreen,
-                builder: (context, state) =>  SupportClientDetailsScreen(),
+                builder: (context, state) => SupportClientDetailsScreen(),
               ),
               GoRoute(
                 path: Paths.emergencyContactsScreen,
                 name: Routes.emergencyContactsScreen,
-                builder: (context, state) =>  EmergencyContactsScreen(),
+                builder: (context, state) => const EmergencyContactsScreen(),
               ),
               GoRoute(
                 path: Paths.rideArrivedScreen,
                 name: Routes.rideArrivedScreen,
-                builder: (context, state) =>  RideArrivedScreen(),
+                builder: (context, state) => const RideArrivedScreen(),
               ),
               GoRoute(
                 path: Paths.ratingDriverScreen,
                 name: Routes.ratingDriverScreen,
-                builder: (context, state) =>  RatingDriverScreen(),
+                builder: (context, state) => RatingDriverScreen(),
               ),
               GoRoute(
                 path: Paths.completeRideScreen,
                 name: Routes.completeRideScreen,
-                builder: (context, state) =>  CompleteRideScreen(),
+                builder: (context, state) => const CompleteRideScreen(),
               ),
             ],
           ),

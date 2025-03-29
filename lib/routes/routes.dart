@@ -5,6 +5,7 @@ abstract class Routes {
 
   static const HOME = '/';
   static const RIDE_HOME = '/RideHome';
+  static const MY_TALENT = '/MyTalent';
   static const CUSTOMPAGE = '/CustomPage';
   static const editPage = '/editPage';
   static const RIDEACTIVITY = '/RIDEACTIVITY';
@@ -247,6 +248,7 @@ abstract class Routes {
 
   // Cashback
   static const CASHBACK = '/Cashback';
+
 }
 
 abstract class Paths {
@@ -254,6 +256,8 @@ abstract class Paths {
 
   static const HOME = '/';
   static const RIDEHOME = 'RideHome';
+  static const MY_TALENT = 'MyTalent';
+  static const WINNERS = 'Winners';
   static const CUSTOMPAGE = 'CustomPage';
   static const PAGEPREVIEW = 'PagePreview';
   static const RIDEACTIVITY = 'RIDEACTIVITY';
@@ -278,7 +282,6 @@ abstract class Paths {
   static const CREATECOMPANYAD = 'CreateCompanyAd';
   static const LUCKYWHEEL = 'LuckyWheel';
   static const COMPETITIONS = 'Competitions';
-  static const WINNERS = 'Winners';
   static const WALLET = 'Wallet';
   static const BALANCE = 'Balance';
   static const GIFT = 'Gift';

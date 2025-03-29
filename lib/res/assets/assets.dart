@@ -1,5 +1,7 @@
 abstract class Assets {
   static String spinWheel = 'assets/images/spin.png';
+  static String cameraAddTalent = 'assets/49-New-icons/camera.png';
+  static String uploadIcon = 'assets/49-New-icons/upload_icon.png';
   static String starIcon = 'assets/images/star.svg';
   static String addImage = 'assets/images/addImage.svg';
   static String icon = 'assets/images/icon.png';
@@ -218,7 +220,7 @@ abstract class Assets {
 
   static String transferMoneyByMobileIcon =
       'assets/icons/transfer_money_by_mobile_icon.svg';
-  static String uploadIcon = 'assets/icons/upload_icon.svg';
+  // static String uploadIcon = 'assets/icons/upload_icon.svg';
   static String historyClockGreen = 'assets/icons/history_clock_green.svg';
   static String historyClockRed = 'assets/icons/history_clock_red.svg';
   static String historyGraphGreen = 'assets/icons/history_graph_green.svg';
@@ -282,4 +284,9 @@ abstract class Assets {
   static String edit = 'assets/icons/edit.png';
   static String option = 'assets/icons/option.png';
   static String update = 'assets/icons/update.png';
+
+  // star feature
+  static String crown = 'assets/49-New-icons/crown.png';
+  static String starGold = 'assets/49-New-icons/star_gold.png';
+  static String winners = "assets/49-New-icons/winners.png";
 }

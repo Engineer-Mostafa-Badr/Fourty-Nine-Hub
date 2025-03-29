@@ -4,13 +4,14 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 
 abstract class Styles {
 // text
-  static TextStyle smallText(
-      {double fontSize = 22,
-      Color? color,
-      TextDecoration? decoration,
-      double decorationThickness = 0,
-      List<Shadow>? shadows,
-      FontWeight fontWeight = FontWeight.w400}) {
+  static TextStyle smallText({
+    double fontSize = 22,
+    Color? color,
+    TextDecoration? decoration,
+    double decorationThickness = 0,
+    List<Shadow>? shadows,
+    FontWeight fontWeight = FontWeight.w400,
+  }) {
     return TextStyle(
         fontSize: fontSize.sp,
         color: color,
@@ -23,7 +24,7 @@ abstract class Styles {
 
   static TextStyle mediumText(
       {double fontSize = 28,
-      Color? color=Colors.black,
+      Color? color = Colors.black,
       double decorationThickness = 0,
       TextDecoration? decoration,
       List<Shadow>? shadows,
