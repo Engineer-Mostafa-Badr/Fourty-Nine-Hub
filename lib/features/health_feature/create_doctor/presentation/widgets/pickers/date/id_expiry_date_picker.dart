@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateful/picker/date_picker.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/custom_date_text_field_health.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -24,6 +28,12 @@ class CreateDoctorIDExpiryDatePicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
+    CustomDateTextFieldHealth(
+      controller: TextEditingController(),
+      hintText: LocaleKeys.idExpiryDate.localize,
+      keyboardType: TextInputType.datetime,
+      onTap: () {},
+    );
     return FormField(
       validator: validator,
       builder: (field) {
@@ -31,13 +41,20 @@ class CreateDoctorIDExpiryDatePicker extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             DatePickerField(
+              backgroundColor: const Color(0xFFD9D9D9),
               isAuthentcation: isAuthentcation,
               borderWidth: borderWidth,
-              borderColor: field.hasError ? Colors.red : borderColor,
-              title: title ??
-                  (context.isArabic ? 'تاريخ انتهاء الهوية' : 'ID Expiry Date'),
+              borderColor:
+                  field.hasError ? Colors.red : const Color(0xFFD9D9D9),
+              icon: SvgPicture.asset(Assets.calendarIcon),
+              title: title ?? LocaleKeys.idExpiryDate.localize,
+              // (context.isArabic ? 'تاريخ انتهاء الهوية' : 'ID Expiry Date'),
               initialDate: now,
-              textStyle: textStyle ?? Styles.mediumText(),
+              textStyle: textStyle ??
+                  Styles.mediumText(
+                    fontSize: 32,
+                    height: 1.60,
+                  ),
               minDate: now,
               maxDate: DateTime(now.year + 5, now.month, now.day),
               onDateSelected: (date) {

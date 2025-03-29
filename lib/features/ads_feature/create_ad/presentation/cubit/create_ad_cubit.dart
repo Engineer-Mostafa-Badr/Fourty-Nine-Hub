@@ -74,7 +74,8 @@ class CreateAdCubit extends Cubit<CreateAdState> {
       this._adsByIdUseCase)
       : super(CreateAdState());
 
-  void loadData({required String subCategoryId,required bool fromMarriage}) async {
+  void loadData(
+      {required String subCategoryId, required bool fromMarriage}) async {
     emit(state.copyWith(status: CreateAdStates.loading));
     print("fromMarriage$fromMarriage");
 
@@ -86,7 +87,9 @@ class CreateAdCubit extends Cubit<CreateAdState> {
   }
 
   void loadDataInEdit(
-      {required String subCategoryId, required String id,required bool fromMarriage}) async {
+      {required String subCategoryId,
+      required String id,
+      required bool fromMarriage}) async {
     // emit(state.copyWith(status: CreateAdStates.loading));
     print("fromMarriage$fromMarriage");
     await Future.wait([
@@ -97,8 +100,10 @@ class CreateAdCubit extends Cubit<CreateAdState> {
     // emit(state.copyWith(status: CreateAdStates.success));
   }
 
-  Future<void> getAdProperties({required String subCategoryId,required bool? fromMarriage}) async {
-    final response = await _getAdPropertiesUsecase(GetAdPropertiesParams(id: subCategoryId, fromMarriage: fromMarriage));
+  Future<void> getAdProperties(
+      {required String subCategoryId, required bool? fromMarriage}) async {
+    final response = await _getAdPropertiesUsecase(
+        GetAdPropertiesParams(id: subCategoryId, fromMarriage: fromMarriage));
     response.fold(
         (failure) => emit(
             state.copyWith(failure: failure, status: CreateAdStates.error)),
@@ -166,15 +171,16 @@ class CreateAdCubit extends Cubit<CreateAdState> {
     print(values[index].nameAr);
     print(values[index].nameEn);
   }
+
   bool loadImage = false;
-   pickImage(
+  pickImage(
       {bool isGallery = true,
-        required String subCategoryId,
-        required BuildContext context,
-        required Function(UploadFileEntity) onUploaded}) async {
-     loadImage = true;
-     emit(state.copyWith(status: CreateAdStates.uploadImage));
-     print("objectUpload0");
+      required String subCategoryId,
+      required BuildContext context,
+      required Function(UploadFileEntity) onUploaded}) async {
+    loadImage = true;
+    emit(state.copyWith(status: CreateAdStates.uploadImage));
+    print("objectUpload0");
 
     final file = await FilePickerHelper()
         .pickImage(isGallery: isGallery)
@@ -199,7 +205,7 @@ class CreateAdCubit extends Cubit<CreateAdState> {
         int size = bytes.length;
         // get signed url
         final signedURLResponse =
-        await serviceLocator<ApiConsumer>().post(EndPoints.mediaUrl, data: {
+            await serviceLocator<ApiConsumer>().post(EndPoints.mediaUrl, data: {
           "type": "image/${file.mimeType ?? 'png'}",
           "size": size,
           "subcategoryId": subCategoryId
@@ -221,7 +227,7 @@ class CreateAdCubit extends Cubit<CreateAdState> {
             rotate: 360,
           );
           await sendBinaryFileData(
-              file: result!, signedUrl: data['data']['signedUrl'])
+                  file: result!, signedUrl: data['data']['signedUrl'])
               .then((value) async {
             print("amdl;maldmaslkd");
             final mediaId = data['data']['mediaId'];
@@ -242,6 +248,7 @@ class CreateAdCubit extends Cubit<CreateAdState> {
 
     return null;
   }
+
   Future<void> sendBinaryFileData(
       {required XFile file, required String signedUrl}) async {
     print("signedUrl$signedUrl");
@@ -263,24 +270,32 @@ class CreateAdCubit extends Cubit<CreateAdState> {
     await Dio().put(signedUrl, data: image, options: options);
     print("aasl;das;ld,");
   }
-  void uploadImage({required String subCategoryId,required BuildContext context}) async {
+
+  void uploadImage(
+      {required String subCategoryId, required BuildContext context}) async {
     loadImage = true;
     emit(state.copyWith(status: CreateAdStates.uploadImage));
     UploadImages uploadFile = UploadImages();
-    final mediaResponse = await uploadFile.uploadImage( subCategoryId: subCategoryId,
-        context:context,
-        onUploaded: (UploadImagesEntity media) {
-          // context.pop();
-          final images = state.images ?? [];
-          final files = state.files ?? [];
-          images.addAll(media.mediaIds);
-          files.addAll(media.files);
-          print("objectUpload1");
-          loadImage = false;
+    final mediaResponse = await uploadFile
+        .uploadImage(
+            subCategoryId: subCategoryId,
+            context: context,
+            onUploaded: (UploadImagesEntity media) {
+              // context.pop();
+              final images = state.images ?? [];
+              final files = state.files ?? [];
+              images.addAll(media.mediaIds);
+              files.addAll(media.files);
+              print("objectUpload1");
+              loadImage = false;
 
-          emit(state.copyWith(
-            images: images,files:files, status: CreateAdStates.initState,));
-        }).then((value) {
+              emit(state.copyWith(
+                images: images,
+                files: files,
+                status: CreateAdStates.initState,
+              ));
+            })
+        .then((value) {
       if (value == null) {
         emit(state.copyWith(status: CreateAdStates.initState));
       }
@@ -332,9 +347,10 @@ class CreateAdCubit extends Cubit<CreateAdState> {
     print(categorize.subCategory.hasAuction);
 
     String type = '';
-    if(categorize.fromMarriage==true){
-      type='user';
-    }else if (categorize.mainCategory.nameEn == 'Dating' && state.isMale == true) {
+    if (categorize.fromMarriage == true) {
+      type = 'user';
+    } else if (categorize.mainCategory.nameEn == 'Dating' &&
+        state.isMale == true) {
       type = 'male';
     } else if (categorize.mainCategory.nameEn == 'Dating' &&
         state.isMale == false) {
@@ -380,7 +396,7 @@ class CreateAdCubit extends Cubit<CreateAdState> {
         // isUser: categorize.subCategory.hasAuction==true?state.isSale:state.isUser,
         description: description ?? '',
         phone: phone ?? '',
-        images: state.images?? [],
+        images: state.images ?? [],
         price: num.parse(price ?? "0"),
         active: true,
         createdAt: DateTime.now(),
@@ -404,9 +420,10 @@ class CreateAdCubit extends Cubit<CreateAdState> {
     }
   }
 
-  void filterAds(
-      {required CategorizationEntity categorize,
-      required BuildContext context,}) async {
+  void filterAds({
+    required CategorizationEntity categorize,
+    required BuildContext context,
+  }) async {
     if (true) {
       print("ss");
       List<CreateAdEntity> details = [];
@@ -419,7 +436,8 @@ class CreateAdCubit extends Cubit<CreateAdState> {
                 type: state.filterAdProperties![i].type)));
       }
       String priceId = (state.filterAdProperties != null &&
-              state.filterAdProperties!.isNotEmpty&&categorize.fromMarriage==false)
+              state.filterAdProperties!.isNotEmpty &&
+              categorize.fromMarriage == false)
           ? state.filterAdProperties
                   ?.firstWhere((element) =>
                       element.nameAr == 'السعر' || element.nameAr == 'الراتب')
@@ -432,9 +450,10 @@ class CreateAdCubit extends Cubit<CreateAdState> {
                   element.value.nameAr.isNotEmpty && element.propId != priceId)
               .toList()
           : [];
-      CreateAdEntity? price = (details.isNotEmpty&&categorize.fromMarriage==false)
-          ? details.firstWhere((element) => element.propId == priceId)
-          : null;
+      CreateAdEntity? price =
+          (details.isNotEmpty && categorize.fromMarriage == false)
+              ? details.firstWhere((element) => element.propId == priceId)
+              : null;
       for (var item in selectedDetails) {
         print(item.toJson());
       }
@@ -447,7 +466,7 @@ class CreateAdCubit extends Cubit<CreateAdState> {
           limit: 10,
           page: 1,
           subCategoryId: categorize.subCategory.id);
-      if(categorize.fromMarriage==true){
+      if (categorize.fromMarriage == true) {
         context.pop(model);
         return;
       }
@@ -474,7 +493,7 @@ class CreateAdCubit extends Cubit<CreateAdState> {
           limit: 10,
           page: 1,
           subCategoryId: categorize.subCategory.id);
-      if(categorize.fromMarriage==true){
+      if (categorize.fromMarriage == true) {
         context.pop(model);
         return;
       }
@@ -522,7 +541,7 @@ class CreateAdCubit extends Cubit<CreateAdState> {
     required String phone,
     required num price,
   }) async {
-    print('state.images ${state.images?? []}');
+    print('state.images ${state.images ?? []}');
     // final List<Map<String, dynamic>> props = [];
     // final List<Map<String, dynamic>> props2 = [];
     // final existingProps = state.myAdById!.props;
@@ -648,8 +667,7 @@ class CreateAdCubit extends Cubit<CreateAdState> {
       city: (state.city?.isEmpty ?? true)
           ? state.myAdById?.cityDataId
           : state.city,
-      images: state.images??
-          state.myAdById!.images.map((e) => e.id).toList(),
+      images: state.images ?? state.myAdById!.images.map((e) => e.id).toList(),
     ));
     response.fold(
         (failure) => emit(

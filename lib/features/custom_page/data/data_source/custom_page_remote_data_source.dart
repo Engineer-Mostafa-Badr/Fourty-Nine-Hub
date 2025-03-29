@@ -6,30 +6,44 @@ import 'package:fourtyninehub/features/custom_page/data/model/navigate_bar_model
 import 'package:fourtyninehub/features/custom_page/data/model/social_page_model.dart';
 import 'package:fourtyninehub/features/custom_page/data/model/sub_tab_model.dart';
 import 'package:fourtyninehub/features/custom_page/domain/entity/activate_entity.dart';
+import 'package:fourtyninehub/features/custom_page/domain/entity/custom_page_sub_categories_entity.dart';
 
 import '../../../../core/error/failure.dart';
 import '../../domain/entity/custom_page_categories_entity.dart';
-import '../../domain/entity/favourite_categ_entity.dart';
 import '../../domain/entity/navigate_bar_entity.dart';
 import '../../domain/entity/social_page_entity.dart';
 import '../../domain/entity/sub_tab_entity.dart';
-import '../../domain/use_case/update_favourite_cat_use_case.dart';
 import '../../domain/use_case/update_navigate_bar_use_case.dart';
 import '../../domain/use_case/update_social_page_use_case.dart';
 import '../../domain/use_case/update_sub_tab_use_case.dart';
-import '../model/favourite_cat_model.dart';
+import '../model/custom_page_cat_model.dart';
+import '../model/custom_page_sub_cat_model.dart';
+import '../model/update_custom_page_categorise_model.dart';
 
 abstract class CustomPageRemoteDataSource {
   Future<Either<Failure, SocialPageEntity>> fetchSocialPage();
+
   Future<Either<Failure, bool>> updateSocialPage(SocialPageParams params);
+
   Future<Either<Failure, SubTabEntity>> fetchSubTab();
+
   Future<Either<Failure, bool>> updateSubTab(SubTabParams params);
+
   Future<Either<Failure, NavigateBarEntity>> fetchNavigateBar();
+
   Future<Either<Failure, bool>> updateNavigateBar(NavigateBarParams params);
-  Future<Either<Failure, List<CustomPageCategoriesEntity>>> fetchFavouriteCat();
-  Future<Either<Failure, bool>> updateFavouriteCat(FavouriteCatParams params);
+
+  Future<Either<Failure, List<CustomPageCategoriesEntity>>> fetchFavouriteCat(bool refresh);
+
+  Future<Either<Failure, bool>> updateFavouriteCat(
+      List<UpdateCustomPageCategoriesModel> params);
+
   Future<Either<Failure, ActivateEntity>> fetchActivate();
+
   Future<Either<Failure, bool>> updateActivate({required bool customPage});
+
+  Future<Either<Failure, List<CustomPageSubCategoriesEntity>>>
+  fetchFavouriteSubCat(String mainCategoryId);
 }
 
 class CustomPageRemoteDataSourceImpl extends CustomPageRemoteDataSource {
@@ -42,8 +56,8 @@ class CustomPageRemoteDataSourceImpl extends CustomPageRemoteDataSource {
     var response = await _apiConsumer.get(EndPoints.socialPage);
 
     return response.fold(
-      (failure) => Left(failure),
-      (response) => Right(SocialPageModel.fromJson(response['data'])),
+          (failure) => Left(failure),
+          (response) => Right(SocialPageModel.fromJson(response['data'])),
     );
   }
 
@@ -51,11 +65,11 @@ class CustomPageRemoteDataSourceImpl extends CustomPageRemoteDataSource {
   Future<Either<Failure, bool>> updateSocialPage(
       SocialPageParams params) async {
     var response =
-        await _apiConsumer.put(EndPoints.socialPage, data: params.toJson());
+    await _apiConsumer.put(EndPoints.socialPage, data: params.toJson());
 
     return response.fold(
-      (failure) => Left(failure),
-      (response) => Right(response['status']),
+          (failure) => Left(failure),
+          (response) => Right(response['status']),
     );
   }
 
@@ -64,19 +78,19 @@ class CustomPageRemoteDataSourceImpl extends CustomPageRemoteDataSource {
     var response = await _apiConsumer.get(EndPoints.subTab);
 
     return response.fold(
-      (failure) => Left(failure),
-      (response) => Right(SubTabModel.fromJson(response['data'])),
+          (failure) => Left(failure),
+          (response) => Right(SubTabModel.fromJson(response['data'])),
     );
   }
 
   @override
   Future<Either<Failure, bool>> updateSubTab(SubTabParams params) async {
     var response =
-        await _apiConsumer.put(EndPoints.subTab, data: params.toJson());
+    await _apiConsumer.put(EndPoints.subTab, data: params.toJson());
 
     return response.fold(
-      (failure) => Left(failure),
-      (response) => Right(response['status']),
+          (failure) => Left(failure),
+          (response) => Right(response['status']),
     );
   }
 
@@ -85,8 +99,8 @@ class CustomPageRemoteDataSourceImpl extends CustomPageRemoteDataSource {
     var response = await _apiConsumer.get(EndPoints.navigateBar);
 
     return response.fold(
-      (failure) => Left(failure),
-      (response) => Right(NavigateBarModel.fromJson(response['data'])),
+          (failure) => Left(failure),
+          (response) => Right(NavigateBarModel.fromJson(response['data'])),
     );
   }
 
@@ -94,21 +108,21 @@ class CustomPageRemoteDataSourceImpl extends CustomPageRemoteDataSource {
   Future<Either<Failure, bool>> updateNavigateBar(
       NavigateBarParams params) async {
     var response =
-        await _apiConsumer.put(EndPoints.navigateBar, data: params.toJson());
+    await _apiConsumer.put(EndPoints.navigateBar, data: params.toJson());
 
     return response.fold(
-      (failure) => Left(failure),
-      (response) => Right(response['status']),
+          (failure) => Left(failure),
+          (response) => Right(response['status']),
     );
   }
 
   @override
-  Future<Either<Failure, List<CustomPageCategoriesEntity>>> fetchFavouriteCat() async {
-    var response = await _apiConsumer.get(EndPoints.customPageCat);
-
+  Future<Either<Failure, List<CustomPageCategoriesEntity>>>
+  fetchFavouriteCat(bool refresh) async {
+    var response = await _apiConsumer.get(EndPoints.customPageCat,refresh: refresh);
     return response.fold(
-      (failure) => Left(failure),
-      (response) {
+          (failure) => Left(failure),
+          (response) {
         final data = response['data'] as List;
         final categories = data
             .map((json) => CustomPageCategoriesModel.fromJson(json))
@@ -120,13 +134,17 @@ class CustomPageRemoteDataSourceImpl extends CustomPageRemoteDataSource {
 
   @override
   Future<Either<Failure, bool>> updateFavouriteCat(
-      FavouriteCatParams params) async {
-    var response =
-        await _apiConsumer.put(EndPoints.customPageCat, data: params.toJson());
+      List<UpdateCustomPageCategoriesModel> params) async {
+    print("params $params");
+    List<Map<String, dynamic>> data = params.map((e) => e.toJson()).toList();
+    print("data $data");
+
+    var response = await _apiConsumer.put(EndPoints.updateCustomPageCat,
+        data: {"mainCategories": data,});
 
     return response.fold(
-      (failure) => Left(failure),
-      (response) => Right(response['status']),
+          (failure) => Left(failure),
+          (response) => Right(response['status']),
     );
   }
 
@@ -135,8 +153,8 @@ class CustomPageRemoteDataSourceImpl extends CustomPageRemoteDataSource {
     var response = await _apiConsumer.get(EndPoints.activate);
 
     return response.fold(
-      (failure) => Left(failure),
-      (response) => Right(ActivateModel.fromJson(response['data'])),
+          (failure) => Left(failure),
+          (response) => Right(ActivateModel.fromJson(response['data'])),
     );
   }
 
@@ -147,8 +165,26 @@ class CustomPageRemoteDataSourceImpl extends CustomPageRemoteDataSource {
         .put(EndPoints.activate, data: {"customPage": customPage});
 
     return response.fold(
-      (failure) => Left(failure),
-      (response) => Right(response['status']),
+          (failure) => Left(failure),
+          (response) => Right(response['status']),
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<CustomPageSubCategoriesModel>>>
+  fetchFavouriteSubCat(String mainCategoryId) async {
+    var response =
+    await _apiConsumer.get(EndPoints.customPageSubCat(mainCategoryId));
+
+    return response.fold(
+          (failure) => Left(failure),
+          (response) {
+        final data = response['data']['mainCategories'] as List;
+        final categories = data
+            .map((json) => CustomPageSubCategoriesModel.fromJson(json))
+            .toList();
+        return Right(categories);
+      },
     );
   }
 }

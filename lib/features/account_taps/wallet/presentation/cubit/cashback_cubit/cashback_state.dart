@@ -19,6 +19,7 @@ class CashbackState {
   final BalanceDataEntity? cashback;
   final List<BalanceHistoryEntity>? histories;
   final bool isLoadingButton;
+  final bool? buttonRequestSuccess;
   final String? messageFailure;
   final bool hasReachedMax;
   final int page;
@@ -28,6 +29,7 @@ class CashbackState {
     this.cashback,
     this.histories,
     this.isLoadingButton = false,
+    this.buttonRequestSuccess,
     this.messageFailure,
     this.hasReachedMax = false,
     this.page = 1,
@@ -38,6 +40,7 @@ class CashbackState {
     BalanceDataEntity? cashback,
     List<BalanceHistoryEntity>? histories,
     bool? isLoadingButton,
+    bool? buttonRequestSuccess,
     String? messageFailure,
     bool? hasReachedMax,
     int? page,
@@ -47,6 +50,7 @@ class CashbackState {
         cashback: cashback ?? this.cashback,
         histories: histories ?? this.histories,
         isLoadingButton: isLoadingButton ?? this.isLoadingButton,
+        buttonRequestSuccess: buttonRequestSuccess ?? this.buttonRequestSuccess,
         messageFailure: messageFailure ?? this.messageFailure,
         hasReachedMax: hasReachedMax ?? this.hasReachedMax,
         page: page ?? this.page,

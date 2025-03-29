@@ -7,6 +7,7 @@ import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 import 'package:fourtyninehub/features/trip_join/helpers/print_helper.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
+import 'package:tf_dio_cache/tf_dio_cache.dart';
 
 // import 'dart:convert';
 // import 'package:flutter/services.dart' show rootBundle;
@@ -21,6 +22,7 @@ abstract class ApiConsumer {
     Map<String, dynamic>? headers,
     Map<String, dynamic>? queryParameters,
     Map<String, dynamic>? data,
+    bool refresh = false,
   });
 
   Future<Either<Failure, Map<String, dynamic>>> post(
@@ -53,7 +55,6 @@ abstract class ApiConsumer {
   });
 
   void attachToken(UserTokensEntity? token);
-
   bool get isTokenAttached;
 
   void removeTokenFromHeader();
@@ -61,7 +62,6 @@ abstract class ApiConsumer {
 
 class BaseApiConsumer extends ApiConsumer {
   final Dio _dio;
-
   // final AuthLocalDataSource _authLocalDataSource;
 
   UserTokensEntity? _token;
@@ -173,21 +173,30 @@ class BaseApiConsumer extends ApiConsumer {
   }
 
   @override
-  Future<Either<Failure, Map<String, dynamic>>> get(String url,
-      {Map<String, dynamic>? queryParameters,
-      Map<String, dynamic>? data,
-      Map<String, dynamic>? headers}) async {
+  Future<Either<Failure, Map<String, dynamic>>> get(
+    String url, {
+    Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? data,
+    Map<String, dynamic>? headers,
+    bool refresh = false,
+  }) async {
     try {
       log(data.toString());
-      final result = await _dio.get(url,
-          data: data,
-          queryParameters: queryParameters,
+      final result = await _dio.get(
+        url,
+        data: data,
+        queryParameters: queryParameters,
+        options: buildCacheOptions(
+          const Duration(hours: 3),
+          maxStale: const Duration(days: 7),
+          forceRefresh: refresh,
           options: Options(headers: {
             ...?headers,
             "x-api-key":
                 "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91",
-            // Your custom header
-          }));
+          }),
+        ),
+      );
       log(result.toString(), name: url);
       // log(_dio.options.headers['Authorization'], name: "Authorization$url");
       print('Welcome ${result.data['status']}');

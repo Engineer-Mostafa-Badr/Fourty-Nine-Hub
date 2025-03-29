@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
+import '../../../../core/utils/handle_cashback.dart';
 import '../../../../res/assets/assets.dart';
-import '../../../../res/style/app_colors.dart';
 import '../widget/my_running_tab_widget.dart';
+import '../widget/past_trips_widget.dart';
+import '../../../../core/widget/custom_scaffold.dart';
 
 class RunningAndPastTripsScreen extends StatefulWidget {
   const RunningAndPastTripsScreen({super.key});
@@ -19,6 +20,7 @@ class RunningAndPastTripsScreen extends StatefulWidget {
 class _RunningAndPastTripsScreenState extends State<RunningAndPastTripsScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -30,12 +32,18 @@ class _RunningAndPastTripsScreenState extends State<RunningAndPastTripsScreen>
   }
 
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const HomeAppbar(
+    return CustomScaffold(
+      key: _scaffoldKey,
+      appBar: HomeAppbar(
         isWithBackArrow: false,
         language: true,
-        isMenu: true,
-        inNotifications: true,
+        leading: IconButton(
+          icon: const Icon(Icons.menu), // The menu icon
+          onPressed: () {
+            HandleCashback.setCount('drawerCount', context);
+            _scaffoldKey.currentState?.openDrawer(); // Open the drawer
+          },
+        ),
       ),
       body: RunningAndPastTripsBody(
         tabController: _tabController,
@@ -58,7 +66,14 @@ class RunningAndPastTripsBody extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 15),
-        const SizedBox(height: 10),
+        IconButton(
+          onPressed: () {
+            context.pop();
+          },
+          icon: const Icon(
+            Icons.arrow_back,
+          ),
+        ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: TabBarRowRideModeWidget(
@@ -223,272 +238,4 @@ class _TabBarContentRideModeWidgetState
       ],
     );
   }
-}
-
-class AvailableRideModeWidget extends StatelessWidget {
-  final String? statusDriver;
-  final bool? cancelButton;
-  final String? requestType;
-  const AvailableRideModeWidget({
-    super.key,
-    this.statusDriver,
-    this.cancelButton,
-    this.requestType,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          margin: const EdgeInsets.all(15),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      "Lady/ Lady Driver   ",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.red),
-                    ),
-                    RichText(
-                      text: const TextSpan(
-                        text: "50 ",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: Colors.black,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: "EGP",
-                            style: TextStyle(color: Colors.red, fontSize: 12),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      children: [
-                        Text(
-                          context.isArabic ? "محجوز" : "Booked",
-                          style: TextStyle(
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        SvgPicture.asset(Assets.bookedWoman),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Text(
-                          context.isArabic ? "محجوز" : "Booked",
-                          style: TextStyle(
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        SvgPicture.asset(Assets.bookedWoman),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Text(
-                          context.isArabic ? "محجوز" : "Booked",
-                          style: TextStyle(
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        SvgPicture.asset(Assets.bookedWoman),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Text(context.isArabic ? "مقعد" : "Seat",
-                            style: TextStyle(
-                                fontSize: 20.sp,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.PRIMARY_COLOR)),
-                        const SizedBox(height: 4),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 10),
-                          child: Text(
-                            statusDriver ?? "",
-                            style: TextStyle(
-                              fontSize: 20.sp,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.PRIMARY_COLOR,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 2),
-                const Row(
-                  children: [
-                    Icon(Icons.circle, color: Colors.red, size: 12),
-                    Expanded(
-                      child: Divider(
-                        color: AppColors.PRIMARY_COLOR,
-                        thickness: 2,
-                      ),
-                    ),
-                    Icon(Icons.circle, color: Colors.red, size: 12),
-                    Expanded(
-                      child: Divider(
-                        color: AppColors.PRIMARY_COLOR,
-                        thickness: 2,
-                      ),
-                    ),
-                    Icon(Icons.circle, color: Colors.red, size: 12),
-                    Expanded(
-                      child: Divider(
-                        color: AppColors.PRIMARY_COLOR,
-                        thickness: 2,
-                      ),
-                    ),
-                    Icon(Icons.circle, color: Colors.blue, size: 12),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    SvgPicture.asset(Assets.circleGreen),
-                    const SizedBox(width: 4),
-                    const Text(
-                      "Giza, Egypt",
-                      style: TextStyle(
-                        color: AppColors.PRIMARY_COLOR,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Row(
-                  children: [
-                    SvgPicture.asset(Assets.circleBlue),
-                    const SizedBox(width: 4),
-                    const Text(
-                      "Giza, Egypt",
-                      style: TextStyle(
-                        color: AppColors.PRIMARY_COLOR,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                  ],
-                ),
-                //      const SizedBox(height: 8),
-                Row(
-                  children: [
-                    const Text(
-                      '10 mins ago',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: AppColors.PRIMARY_COLOR,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const Spacer(),
-                    TextButton(
-                      onPressed: () {},
-                      child: Text(
-                        requestType ?? "",
-                        style: TextStyle(
-                          fontSize: 24.sp,
-                          color: AppColors.PRIMARY_COLOR,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    cancelButton == true
-                        ? ElevatedButton(
-                            style: ButtonStyle(
-                                backgroundColor: WidgetStateProperty.all(
-                                    AppColors.SECONDARY_COLOR)),
-                            onPressed: () {},
-                            child: const Text(
-                              "Cancel",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          )
-                        : const SizedBox(),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-        Positioned(
-          bottom: 15,
-          left: 160,
-          child: SvgPicture.asset(
-            Assets.frameIcon,
-            width: 50,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class PastTripsWidget extends StatelessWidget {
-  final List<String> content;
-  const PastTripsWidget({super.key, required this.content});
-
-  @override
-  Widget build(BuildContext context) {
-    return content.isEmpty
-        ? _emptyMessage()
-        : const SingleChildScrollView(
-            child: Column(
-              children: [
-                AvailableRideModeWidget(
-                  cancelButton: false,
-                  statusDriver: "Expired",
-                  requestType: 'Regular',
-                ),
-                AvailableRideModeWidget(
-                  statusDriver: "Expired",
-                  requestType: 'Regular',
-                ),
-              ],
-            ),
-          );
-  }
-}
-
-Widget _emptyMessage() {
-  return Center(
-    child: Text(
-      'Your running trip right now.',
-      style: const TextStyle(fontSize: 16, color: Colors.grey),
-    ),
-  );
 }

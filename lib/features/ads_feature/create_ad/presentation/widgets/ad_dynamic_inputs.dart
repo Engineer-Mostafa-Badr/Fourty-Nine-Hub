@@ -1,19 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/ad_properties_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/selection_entity.dart';
+import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/pages/create_ad_dropdown_menu.dart';
+import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/widgets/create_ad_text_form_field.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:go_router/go_router.dart';
-
-import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
-import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/app_colors.dart';
 
 class AdDynamicInputWidget extends StatefulWidget {
@@ -46,6 +40,7 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: 4,
       children: [
         if (widget.property.adPropertyType.isText) _buildTextFieldWidget(),
         if (widget.property.adPropertyType.isSelect) _buildSelectFieldWidget(),
@@ -59,25 +54,24 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Label(
+        Padding(
+          padding: const EdgeInsetsDirectional.only(start: 16),
+          child: Label(
             text: getLang() == 'ar'
                 ? widget.property.nameAr
-                : widget.property.nameEn),
-        TextFormField(
-          maxLines: null,
+                : widget.property.nameEn,
+            style: Styles.mediumText(fontSize: 32),
+          ),
+        ),
+        const SizedBox(
+          height: 4,
+        ),
+        CreateAdTextFormField(
+          hintText: getLang() == 'ar'
+              ? widget.property.nameAr
+              : widget.property.nameEn,
           onChanged: (v) => widget.onTextChanged(v),
-          style: Styles.headerText(fontSize: 26),
-          decoration: InputDecoration(
-              fillColor: Colors.white,
-              contentPadding: const EdgeInsets.all(5),
-              hintText: getLang() == 'ar'
-                  ? widget.property.nameAr
-                  : widget.property.nameEn,
-              hintStyle: Styles.mediumText(),
-              prefix: Sizer(
-                width: 20.w,
-              )),
-          // keyboardType: TextInputType.number,
+          keyboardType: TextInputType.text,
           validator: (value) {
             if ((value == null || value.isEmpty)) {
               return LocaleKeys.required.localize;
@@ -86,6 +80,29 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
             }
           },
         ),
+        // TextFormField(
+        //   maxLines: null,
+        //   onChanged: (v) => widget.onTextChanged(v),
+        //   style: Styles.headerText(fontSize: 26),
+        //   decoration: InputDecoration(
+        //       fillColor: Colors.white,
+        //       contentPadding: const EdgeInsets.all(5),
+        //       hintText: getLang() == 'ar'
+        //           ? widget.property.nameAr
+        //           : widget.property.nameEn,
+        //       hintStyle: Styles.mediumText(),
+        //       prefix: Sizer(
+        //         width: 20.w,
+        //       )),
+        //   // keyboardType: TextInputType.number,
+        //   validator: (value) {
+        //     if ((value == null || value.isEmpty)) {
+        //       return LocaleKeys.required.localize;
+        //     } else {
+        //       return null;
+        //     }
+        //   },
+        // ),
       ],
     );
   }
@@ -94,88 +111,143 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Label(
+        Padding(
+          padding: const EdgeInsetsDirectional.only(start: 16),
+          child: Label(
             text: getLang() == 'ar'
                 ? widget.property.nameAr
-                : widget.property.nameEn),
-        InkWell(
-          onTap: () {
-            bottomSheet(
-                context: context,
-                isScrollControlled: true,
-                widget: _buildOptionsSheet(
-                    action: (SelectionEntity v) {
-                      widget.onChanged(v);
-                      context.pop();
-                    },
-                    values: widget.property.values));
-          },
-          child: Container(
-            width: double.infinity,
-            padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 5),
-            // margin: EdgeInsets.all(5),
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.black),
-              borderRadius: BorderRadius.circular(5),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Label(
-                      text: getLang() == 'ar'
-                          ? value?.nameAr ?? ''
-                          : value?.nameEn ?? ''),
-                ),
-                const Icon(Icons.arrow_drop_down)
-              ],
-            ),
+                : widget.property.nameEn,
+            style: Styles.mediumText(fontSize: 32),
           ),
         ),
+        const SizedBox(
+          height: 4,
+        ),
+        CreateAdDropdownMenu<SelectionEntity>(
+          hint: getLang() == 'ar' ? value?.nameAr ?? '' : value?.nameEn ?? '',
+          // items: state.cities
+          //                 ?.map<DropdownMenuItem<CityEntity>>(
+          //                     (CityEntity city) {
+          //               return DropdownMenuItem<CityEntity>(
+          //                 value: city,
+          //                 child: Text(city.nameEn),
+          //               );
+          //             }).toList(),
+          items: widget.property.values
+              .map<DropdownMenuItem<SelectionEntity>>((e) => DropdownMenuItem(
+                    child: Text(e.nameEn),
+                    value: e,
+                  ))
+              .toList(),
+          onChange: (SelectionEntity? newValue) {
+            if (newValue != null) {
+              value = newValue;
+              widget.onChanged(newValue);
+              setState(() {});
+            }
+          },
+          value: value,
+        ),
+        // InkWell(
+        //   onTap: () {
+        //     bottomSheet(
+        //         context: context,
+        //         isScrollControlled: true,
+        //         widget: _buildOptionsSheet(
+        //             action: (SelectionEntity v) {
+        //               widget.onChanged(v);
+        //               context.pop();
+        //             },
+        //             values: widget.property.values));
+        //   },
+        //   child: Container(
+        //     width: double.infinity,
+        //     padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 5),
+        //     // margin: EdgeInsets.all(5),
+        //     decoration: BoxDecoration(
+        //       border: Border.all(color: Colors.black),
+        //       borderRadius: BorderRadius.circular(5),
+        //     ),
+        //     child: Row(
+        //       children: [
+        //         Expanded(
+        //           child: Label(
+        //               text: getLang() == 'ar'
+        //                   ? value?.nameAr ?? ''
+        //                   : value?.nameEn ?? ''),
+        //         ),
+        //         const Icon(Icons.arrow_drop_down)
+        //       ],
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }
 
-  Widget _buildOptionsSheet({
-    required Function(SelectionEntity v) action,
-    required List<SelectionEntity> values,
-  }) {
-    return CustomScaffold(
-      appBar: BackAppBar(
-        label: LocaleKeys.select.localize,
-      ),
-      body: ListView.builder(
-          itemCount: values.length,
-          itemBuilder: (context, index) {
-            final v = values[index];
-            return ListTile(
-              onTap: () {
-                action(v);
-                value = v;
-                setState(() {});
-              },
-              title: Label(text: getLang() == 'ar' ? v.nameAr : v.nameEn),
-            );
-          }),
-    );
-  }
+  // Widget _buildOptionsSheet({
+  //   required Function(SelectionEntity v) action,
+  //   required List<SelectionEntity> values,
+  // }) {
+  //   return CustomScaffold(
+  //     appBar: BackAppBar(
+  //       label: LocaleKeys.select.localize,
+  //     ),
+  //     body: ListView.builder(
+  //         itemCount: values.length,
+  //         itemBuilder: (context, index) {
+  //           final v = values[index];
+  //           return ListTile(
+  //             onTap: () {
+  //               action(v);
+  //               value = v;
+  //               setState(() {});
+  //             },
+  //             title: Label(text: getLang() == 'ar' ? v.nameAr : v.nameEn),
+  //           );
+  //         }),
+  //   );
+  // }
 
   Widget _buildNumberFieldWidget() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Label(
+        Padding(
+          padding: const EdgeInsetsDirectional.only(start: 16),
+          child: Label(
             text: getLang() == 'ar'
                 ? widget.property.nameAr
-                : widget.property.nameEn),
-        FormTextField(
-          label: getLang() == 'ar'
+                : widget.property.nameEn,
+            style: Styles.mediumText(fontSize: 32),
+          ),
+        ),
+        const SizedBox(
+          height: 4,
+        ),
+        CreateAdTextFormField(
+          onChanged: (String v) => widget.onTextChanged(v),
+          hintText: getLang() == 'ar'
               ? widget.property.nameAr
               : widget.property.nameEn,
-          type: TextInputType.number,
-          height: kToolbarHeight * .8,
-          hint: 'Type here',
-          action: (String v) => widget.onTextChanged(v),
+          keyboardType: TextInputType.number,
+          validator: (value) {
+            if ((value == null || value.isEmpty)) {
+              return LocaleKeys.required.localize;
+            } else {
+              return null;
+            }
+          },
         ),
+        // FormTextField(
+        //   label: getLang() == 'ar'
+        //       ? widget.property.nameAr
+        //       : widget.property.nameEn,
+        //   type: TextInputType.number,
+        //   height: kToolbarHeight * .8,
+        //   hint: 'Type here',
+        //   action: (String v) => widget.onTextChanged(v),
+        // ),
       ],
     );
   }
@@ -184,35 +256,76 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Label(
+        Padding(
+          padding: const EdgeInsetsDirectional.only(start: 16),
+          child: Label(
             text: getLang() == 'ar'
                 ? widget.property.nameAr
-                : widget.property.nameEn),
-        RichText(
-            text: TextSpan(
-                children: widget.property.values.map((e) {
-          return WidgetSpan(
+                : widget.property.nameEn,
+            style: Styles.mediumText(fontSize: 32),
+          ),
+        ),
+        const SizedBox(
+          height: 4,
+        ),
+        Row(
+          spacing: 8,
+          children: widget.property.values.map((e) {
+            return Expanded(
               child: InkWell(
-            onTap: () {
-              widget.onChanged(e);
-              value = e;
-              setState(() {});
-            },
-            child: Container(
-              padding: const EdgeInsets.all(5),
-              margin: const EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                border: Border.all(
-                    color:
-                        value == e ? AppColors.SECONDARY_COLOR : Colors.grey),
-                borderRadius: BorderRadius.circular(5),
+                onTap: () {
+                  widget.onChanged(e);
+                  value = e;
+                  setState(() {});
+                },
+                child: Container(
+                  height: 42,
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.all(5),
+                  // margin: const EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    color: const Color(0xffF5F5F5),
+                    border: value == e
+                        ? Border.all(
+                            color: AppColors.SECONDARY_COLOR_DARK2,
+                          )
+                        : null,
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Label(
+                    text: getLang() == 'ar' ? e.nameAr : e.nameEn,
+                    style: Styles.mediumText(fontSize: 32),
+                  ),
+                ),
               ),
-              child: Label(
-                text: getLang() == 'ar' ? e.nameAr : e.nameEn,
-              ),
-            ),
-          ));
-        }).toList())),
+            );
+          }).toList(),
+        ),
+        // RichText(
+        //     text: TextSpan(
+        //         children: widget.property.values.map((e) {
+        //   return WidgetSpan(
+        //       child: InkWell(
+        //     onTap: () {
+        //       widget.onChanged(e);
+        //       value = e;
+        //       setState(() {});
+        //     },
+        //     child: Container(
+        //       padding: const EdgeInsets.all(5),
+        //       margin: const EdgeInsets.all(5),
+        //       decoration: BoxDecoration(
+        //         border: Border.all(
+        //             color:
+        //                 value == e ? AppColors.SECONDARY_COLOR : Colors.grey),
+        //         borderRadius: BorderRadius.circular(5),
+        //       ),
+        //       child: Label(
+        //         text: getLang() == 'ar' ? e.nameAr : e.nameEn,
+        //       ),
+        //     ),
+        //   ));
+        // }).toList())),
       ],
     );
   }

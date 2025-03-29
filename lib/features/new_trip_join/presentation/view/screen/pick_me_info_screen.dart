@@ -1,19 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
+import '../../../../../core/utils/handle_cashback.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../routes/routes.dart';
 
-class PickMeInfoScreen extends StatelessWidget {
+class PickMeInfoScreen extends StatefulWidget {
   const PickMeInfoScreen({super.key});
 
   @override
+  State<PickMeInfoScreen> createState() => _PickMeInfoScreenState();
+}
+
+class _PickMeInfoScreenState extends State<PickMeInfoScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       floatingActionButton: GestureDetector(
         onTap: () {
           context.push(Routes.pickMeInfoScreen);
@@ -42,7 +51,10 @@ class PickMeInfoScreen extends StatelessWidget {
         language: true,
         leading: IconButton(
           icon: const Icon(Icons.menu), // The menu icon
-          onPressed: () {},
+          onPressed: () {
+            HandleCashback.setCount('drawerCount', context);
+            _scaffoldKey.currentState?.openDrawer(); // Open the drawer
+          },
         ),
       ),
       body: const PickMeInfoInfoBody(),

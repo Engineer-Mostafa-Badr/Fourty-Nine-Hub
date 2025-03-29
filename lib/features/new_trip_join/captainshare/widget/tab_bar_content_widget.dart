@@ -6,6 +6,7 @@ import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../driver/screen/running_and_past_trips_screen.dart';
+import '../../driver/widget/available_ride_mode_widget.dart';
 
 class TabBarContentWidget extends StatefulWidget {
   final TabController tabController;

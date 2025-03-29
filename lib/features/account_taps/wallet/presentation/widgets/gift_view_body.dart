@@ -21,7 +21,10 @@ class GiftViewBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+      padding: const EdgeInsets.only(
+        left: 16,
+        right: 16,
+      ),
       child: BlocBuilder<GiftTwoCubit, GiftTwoState>(
         builder: (context, state) {
           if (state.status.isLoading || state.status.isInitial) {
@@ -36,6 +39,9 @@ class GiftViewBody extends StatelessWidget {
                   HeaderTotalAccountWidget(
                     balance: gift.giftWallet.amount
                         .toString(), //wheelWalletEntity.amount.toString(),
+                    currency: context.isArabic
+                        ? gift.giftWallet.currencyAr
+                        : gift.giftWallet.currencyEn,
                     // state.wallet?.realAmount?.toStringAsFixed(2) ?? '',
                     type: WalletTypes.giftWallet,
                   ),
@@ -54,7 +60,8 @@ class GiftViewBody extends StatelessWidget {
                     height: 16,
                   ),
                   InvestmentSection(
-                   giftWalletEntity: gift.giftWallet,
+                    giftWalletEntity: gift.giftWallet,
+                    yearsToDate: gift.yearsToDate,
                   ),
                   // المسافة بين العنصرين هنا تم تحويلها إلى داخل الـ
                   // InvestmentSection
@@ -65,8 +72,9 @@ class GiftViewBody extends StatelessWidget {
                   CompetitionsSection(
                     competitions: gift.competitionsWallet,
                     luckyWheel: gift.wheelWallet,
-                    currency: context.isArabic? gift.giftWallet.currencyAr : gift.giftWallet.currencyEn,
-
+                    currency: context.isArabic
+                        ? gift.giftWallet.currencyAr
+                        : gift.giftWallet.currencyEn,
                   ),
                 ],
               ),

@@ -5,12 +5,14 @@ class SubCategoryEntity extends Equatable {
   final String nameEn;
   final String nameAr;
   final String pictureUrl;
+  final bool isActive;
 
   const SubCategoryEntity({
     required this.id,
     required this.nameEn,
     required this.nameAr,
     required this.pictureUrl,
+    required this.isActive,
   });
 
   @override

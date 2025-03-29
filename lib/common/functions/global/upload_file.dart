@@ -26,7 +26,8 @@ import '../helper/file_picker_helper.dart';
 class UploadFile {
   Future<Either<Failure, bool>?> uploadImage(
       {bool isGallery = true,
-      required String subCategoryId, bool? hasLoading,
+      required String subCategoryId,
+      bool? hasLoading,
       required BuildContext context,
       required Function(UploadFileEntity) onUploaded}) async {
     final file = await FilePickerHelper()
@@ -50,7 +51,7 @@ class UploadFile {
           ],
         );
 
-        XFile finalFile = XFile(croppedFile?.path??'');
+        XFile finalFile = XFile(croppedFile?.path ?? '');
         final tempDir = await getTemporaryDirectory();
         final uniqueFileName =
             'compressed_${DateTime.now().millisecondsSinceEpoch}_${finalFile.name}';
@@ -64,7 +65,7 @@ class UploadFile {
           quality: 50,
           rotate: 360,
         );
-        if(result == null) {
+        if (result == null) {
           context.pop();
         }
 
@@ -81,7 +82,7 @@ class UploadFile {
         signedURLResponse.fold((l) {
           print(l.toString());
         }, (data) async {
-          if(hasLoading!=false)showLoadingDialog(context);
+          if (hasLoading != false) showLoadingDialog(context);
 
           log("responseData: ${jsonEncode(data)}");
           final tempDir = await getTemporaryDirectory();
@@ -114,8 +115,7 @@ class UploadFile {
             return const Right(true);
             // });
           });
-          if(hasLoading!=false)context.pop();
-
+          if (hasLoading != false) context.pop();
         });
       }
     });
@@ -426,5 +426,8 @@ class UploadFileEntity {
   final String mediaId;
   final XFile file;
 
-  UploadFileEntity({required this.mediaId, required this.file});
+  UploadFileEntity({
+    required this.mediaId,
+    required this.file,
+  });
 }

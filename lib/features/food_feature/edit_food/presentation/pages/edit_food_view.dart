@@ -282,6 +282,18 @@ class _EditFoodViewState extends State<EditFoodView>
                   ]),
               child: Row(
                 children: [
+                  Image.network(
+                    meal.picture ?? "",
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Icon(
+                        Icons.broken_image, // You can replace this with any other icon
+                        size: 50,
+                        color: Colors.grey,
+                      );
+                    },
+                  ),
+
                   Expanded(
                     child: Text(
                       meal.foodName ?? '',
@@ -315,22 +327,84 @@ class _EditFoodViewState extends State<EditFoodView>
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            // Row(
+            //   children: [
+            //     Expanded(
+            //       flex: 2,
+            //       child: GestureDetector(
+            //         onTap: () async {
+            //           await context.read<EditFoodCubit>().uploadProfileImage(
+            //               context: context,
+            //                 subcategoryId: '62c8babb8e28a58a3edf581d',
+            //               );
+            //         },
+            //         child: BlocBuilder<EditFoodCubit, EditFoodState>(
+            //           builder: (context, state) {
+            //             if (state.imagePath != null && state.imagePath != '') {
+            //               imagePath = state.imagePath ?? '';
+            //               print("imagePath$imagePath");
+            //               return ImagePickerPlaceholder(
+            //                 image: Image.file(
+            //                   File(imagePath),
+            //                   fit: BoxFit.cover,
+            //                 ),
+            //               );
+            //             }
+            //             return SizedBox(
+            //               height: 195.h,
+            //               child: ImagePickerPlaceholder(
+            //                 title: LocaleKeys.photoForMeal.tr(),
+            //               ),
+            //             );
+            //           },
+            //         ),
+            //       ),
+            //     ),
+            //     const SizedBox(width: 10),
+            //     Expanded(
+            //       flex: 3,
+            //       child: Column(
+            //         children: [
+            //           _buildTextFormField(
+            //             controller: foodNameController,
+            //             hintText: LocaleKeys.itemName.localize,
+            //             validatorMessage: LocaleKeys.emptyFieldNotValid.tr(),
+            //             keyboardType: TextInputType.text,
+            //           ),
+            //           const SizedBox(height: 10),
+            //           _buildTextFormField(
+            //             controller: priceController,
+            //             hintText: LocaleKeys.price.localize,
+            //             validatorMessage: LocaleKeys.emptyFieldNotValid.tr(),
+            //             keyboardType: const TextInputType.numberWithOptions(
+            //                 decimal: true),
+            //             inputFormatters: [
+            //               FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
+            //             ],
+            //           ),
+            //         ],
+            //       ),
+            //     ),
+            //   ],
+            // ),
             Row(
               children: [
+                // Image Picker
                 Expanded(
                   flex: 2,
                   child: GestureDetector(
                     onTap: () async {
-                      await context.read<EditFoodCubit>().uploadMealImage(
-                            context,
-                            subcategoryId: '62c8babb8e28a58a3edf581d',
-                          );
+                      await context.read<EditFoodCubit>().uploadProfileImage(
+                        context: context,
+                        subcategoryId: '62c8babb8e28a58a3edf581d',
+                      );
                     },
                     child: BlocBuilder<EditFoodCubit, EditFoodState>(
                       builder: (context, state) {
-                        if (state.imagePath != null && state.imagePath != '') {
-                          imagePath = state.imagePath ?? '';
-                          print("imagePath$imagePath");
+                        if (state.files != null && state.files!.isNotEmpty) {  // ✅ Prevents null error
+                          final imagePath = state.files!.last.path;
+                          print("Selected image path: $imagePath");
+
                           return ImagePickerPlaceholder(
                             image: Image.file(
                               File(imagePath),
@@ -348,24 +422,29 @@ class _EditFoodViewState extends State<EditFoodView>
                     ),
                   ),
                 ),
-                const SizedBox(width: 10),
+
+                const SizedBox(width: 10), // Spacing
+
+                // Title & Price Input Fields
                 Expanded(
                   flex: 3,
                   child: Column(
                     children: [
+                      // Food Name Input
                       _buildTextFormField(
                         controller: foodNameController,
                         hintText: LocaleKeys.itemName.localize,
                         validatorMessage: LocaleKeys.emptyFieldNotValid.tr(),
                         keyboardType: TextInputType.text,
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: 10), // Spacing
+
+                      // Price Input
                       _buildTextFormField(
                         controller: priceController,
                         hintText: LocaleKeys.price.localize,
                         validatorMessage: LocaleKeys.emptyFieldNotValid.tr(),
-                        keyboardType: const TextInputType.numberWithOptions(
-                            decimal: true),
+                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
                         inputFormatters: [
                           FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
                         ],
@@ -375,6 +454,8 @@ class _EditFoodViewState extends State<EditFoodView>
                 ),
               ],
             ),
+
+
             const SizedBox(height: 10),
             ElevatedAppButton(
               onPressed: _onAddOrUpdatePressed,
