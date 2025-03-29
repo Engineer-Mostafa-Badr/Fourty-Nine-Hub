@@ -131,7 +131,7 @@ dependencies:
   top_snackbar_flutter: ^3.1.0
   transparent_image: ^2.0.1
   url_launcher: 6.2.6
-  video_player: ^2.9.1
+  video_player: ^2.9.3
   video_thumbnail: null
   visibility_detector: ^0.4.0+2
   voice_message_package: ^2.2.1
@@ -143,6 +143,7 @@ dependencies:
   zego_uikit_prebuilt_call: ^4.16.22
   sentry_flutter: ^8.13.2
   circular_menu: ^4.0.0
+  timeago: ^3.7.0
   tf_dio_cache: ^1.0.2
   fluttertoast:
 dependency_overrides:

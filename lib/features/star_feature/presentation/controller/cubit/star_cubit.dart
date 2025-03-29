@@ -17,14 +17,14 @@ class StarCubit extends Cubit<StarState> {
   final FetchMylStarUseCase _fetchMylStarUseCase;
   final FetchWinnerStarUseCase _fetchWinnerStarUseCase;
   final UploadMyStarUseCase _uploadMyStarUseCase;
-  final DeleteMyStarUseCase _deleteMyStarUseCase;
+  final DeleteMyStarUseCase _deleteMyTalentUseCase;
   final FetchBannerUseCase _bannerUseCase;
 
   StarCubit(
       this._allStarUseCase,
       this._fetchMylStarUseCase,
       this._uploadMyStarUseCase,
-      this._deleteMyStarUseCase,
+      this._deleteMyTalentUseCase,
       this._fetchWinnerStarUseCase,
       this._bannerUseCase)
       : super(StarState());
@@ -44,7 +44,7 @@ class StarCubit extends Cubit<StarState> {
     star.clear();
     currentPage = 1;
     hasMoreData = true;
-    await fetchAllStar();
+    await getAllTalent(refresh: true);
   }
 
   void loadInitialDataWinner() async {
@@ -55,7 +55,14 @@ class StarCubit extends Cubit<StarState> {
     await fetchWinnerStar();
   }
 
-  Future<void> fetchAllStar() async {
+  Future<void> getAllTalent({bool refresh = false}) async {
+    if (refresh) {
+      star.clear();
+      currentPage = 1;
+      hasMoreData = true;
+      isLoadingMore = false;
+    }
+
     if (!hasMoreData || isLoadingMore) return;
 
     isLoadingMore = true;
@@ -68,7 +75,11 @@ class StarCubit extends Cubit<StarState> {
       (failure) =>
           emit(state.copyWith(failure: failure, status: StarStates.error)),
       (data) {
-        star.addAll(data);
+        if (refresh) {
+          star = data;
+        } else {
+          star.addAll(data);
+        }
 
         if (data.length < pageSize) {
           hasMoreData = false;
@@ -155,6 +166,8 @@ class StarCubit extends Cubit<StarState> {
       (data) {
         emit(state.copyWith(
           status: StarStates.uploadSuccess,
+          
+
         ));
       },
     );
@@ -178,12 +191,12 @@ class StarCubit extends Cubit<StarState> {
     );
   }
 
-  Future<void> deleteMyStar({
+  Future<void> deleteMyTalent({
     required String id,
   }) async {
     emit(state.copyWith(status: StarStates.loading));
 
-    final response = await _deleteMyStarUseCase(id);
+    final response = await _deleteMyTalentUseCase(id);
 
     response.fold(
       (failure) {

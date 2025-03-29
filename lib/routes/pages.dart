@@ -32,9 +32,7 @@ import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/gi
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/winners_gift_view.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/winners_gift_view.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/cubit/ad_details_cubit.dart';
-import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/pages/ad_details_view.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_requests/presentation/cubit/ad_requests_cubit.dart';
-import 'package:fourtyninehub/features/ads_feature/ad_requests/presentation/pages/ad_requests_view.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_view.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/marriage_ads_view.dart';
@@ -238,7 +236,7 @@ import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/t
 import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/twitter_view.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_cubit.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/pages/be_star_view.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/pages/widgets/star_winner_view.dart';
+import 'package:fourtyninehub/features/star_feature/presentation/pages/all_winner_view.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/pages/subcategories_view.dart';
 import 'package:fourtyninehub/features/ten_percent/presentation/cubit/ten_percent_cubit.dart';
 import 'package:fourtyninehub/features/ten_percent/presentation/pages/ten_percent_view.dart';
@@ -325,6 +323,8 @@ import '../features/account_taps/wallet/presentation/cubit/subscription_wallet_c
 import '../features/account_taps/wallet/presentation/pages/wallet_history.dart';
 import '../features/account_taps/wallet/presentation/pages/wallet_view.dart';
 import '../features/account_taps/wallet/presentation/pages/winners_cashback_view.dart';
+import '../features/ads_feature/ad_details/presentation/pages/ad_details_view.dart';
+import '../features/ads_feature/ad_requests/presentation/pages/ad_requests_view.dart';
 import '../features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
 import '../features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
 import '../features/ads_feature/create_company_ad/presentation/pages/create_company_ad.dart';
@@ -407,6 +407,11 @@ import '../features/social_media/social_posts/presentation/cubit/social_posts_cu
 import '../features/social_media/social_posts/presentation/pages/Social_home.dart';
 import '../features/social_media/social_posts/presentation/pages/other_account_view.dart';
 import '../features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
+import '../features/social_media/twitter/presentation/pages/twitter_post_details_notify.dart';
+import '../features/social_media/twitter/presentation/pages/twitter_view.dart';
+import '../features/star_feature/presentation/pages/get_all_talents.dart';
+import '../features/star_feature/presentation/pages/my_talent.dart';
+import '../features/star_feature/presentation/pages/widgets/all_winner_grid_view.dart';
 import '../features/subcategories/presentation/cubit/subcategories_cubit.dart';
 import '../features/subcategories/presentation/pages/custom_page_sub_categories_view.dart';
 import '../features/youtube/presentation/pages/play_video.dart';
@@ -433,11 +438,17 @@ class AppPages {
                 BlocProvider(
                   create: (context) => serviceLocator<SliderCubit>(),
                 ),
+                BlocProvider(
+                  create: (context) =>
+                      serviceLocator<StarCubit>()..getAllTalent(),
+                ),
                 // BlocProvider(
                 //   create: (context) => serviceLocator<ThumbnailsCubit>(),
                 // ),
               ],
               child: const FourtyNineView(),
+              // child: const BeStarView(),
+              // child: const GetAllTalents(),
             ),
             routes: [
               GoRoute(
@@ -499,6 +510,16 @@ class AppPages {
                     ),
                   ],
                   child: RestaurantDashboardView(payload: state.extra),
+                ),
+              ),
+              GoRoute(
+                path: Paths.MY_TALENT,
+                name: Routes.MY_TALENT,
+                builder: (context, state) => BlocProvider(
+                  create: (context) => serviceLocator<StarCubit>()
+                    ..loadInitialData()
+                    ..getAllTalent(),
+                  child: const MyTalentView(),
                 ),
               ),
               // GoRoute(
@@ -996,11 +1017,11 @@ class AppPages {
                 },
                 routes: const [],
               ),
-              GoRoute(
-                path: Paths.WINNERS,
-                name: Routes.WINNERS,
-                builder: (context, state) => const Winners(),
-              ),
+              // GoRoute(
+              //   path: Paths.WINNERS,
+              //   name: Routes.WINNERS,
+              //   builder: (context, state) => const Winners(),
+              // ),
               GoRoute(
                 path: Paths.WINNERSCASHBACK,
                 name: Routes.WINNERSCASHBACK,
@@ -1240,12 +1261,10 @@ class AppPages {
                     path: Paths.InstagramSuggestPeople,
                     name: Routes.InstagramSuggestPeople,
                     routes: const [],
-                    builder: (context, state) {
-                      return BlocProvider<InstagramCubit>(
-                        create: (_) => serviceLocator(),
-                        child: const InstagramAllDiscoverPeople(),
-                      );
-                    },
+                    builder: (context, state) => BlocProvider<InstagramCubit>(
+                      create: (_) => serviceLocator(),
+                      child: const InstagramAllDiscoverPeople(),
+                    ),
                   ),
                 ],
                 builder: (context, state) => MultiBlocProvider(
@@ -1557,12 +1576,9 @@ class AppPages {
               GoRoute(
                   path: Paths.VISITA,
                   name: Routes.VISITA,
-                  builder: (context, state) {
-                    return BlocProvider<HealthCubit>(
+                  builder: (context, state) => BlocProvider<HealthCubit>(
                       create: (_) => serviceLocator<HealthCubit>()..loadData(),
-                      child: const HealthView(),
-                    );
-                  },
+                      child: const HealthView()),
                   routes: [
                     GoRoute(
                       path: Paths.CREATERESTURANT,
@@ -2517,7 +2533,7 @@ class AppPages {
                     builder: (context, state) {
                       return BlocProvider<StarCubit>(
                           create: (_) => serviceLocator(),
-                          child: const StarWinnerView());
+                          child: const AllWinnerView());
                     },
                   ),
                 ],

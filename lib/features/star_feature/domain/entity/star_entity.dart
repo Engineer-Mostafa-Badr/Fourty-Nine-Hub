@@ -34,6 +34,22 @@ class StarEntity {
 class MediaUrlEntity {
   final String id;
   final String mediaKey;
+  final Duration? duration;
+  final String? mediaType;
 
-  MediaUrlEntity({required this.id, required this.mediaKey});
+  MediaUrlEntity({
+    required this.id, 
+    required this.mediaKey, 
+    this.duration,
+    this.mediaType,
+  });
+
+  bool get isVideo => mediaType?.toLowerCase().contains('video') ?? false;
+
+  String get formattedDuration {
+    if (duration == null) return '';
+    final minutes = duration!.inMinutes;
+    final seconds = duration!.inSeconds % 60;
+    return '$minutes:${seconds.toString().padLeft(2, '0')}';
+  }
 }

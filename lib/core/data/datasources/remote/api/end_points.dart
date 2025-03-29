@@ -181,7 +181,7 @@ class EndPoints {
   static customPageSubCat(String mainCategoryId) => '/navigators/subcategories/$mainCategoryId';
 
   // Star
-  static String allStar(StarPaginationParams params) =>
+  static String   allStar(StarPaginationParams params) =>
       '/talent/?page=${params.page}&limit=${params.limit}';
   static String winnerStar(StarPaginationParams params) =>
       '/talent/all-winner?page=${params.page}&limit=${params.limit}';
