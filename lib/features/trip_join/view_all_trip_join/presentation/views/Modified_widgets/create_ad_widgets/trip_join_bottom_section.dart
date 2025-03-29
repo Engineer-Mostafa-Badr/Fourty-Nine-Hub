@@ -44,7 +44,7 @@ class _TripJoinBottomSectionState extends State<TripJoinBottomSection> {
                     Text('0.0 ${LocaleKeys.KM.localize}',
                         style: Styles.headerText()),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 35.0.h),
+                      padding: EdgeInsets.symmetric(horizontal: 16.0),
                       child: Text(
                           '${20} ',
                           style: Styles.headerText(
