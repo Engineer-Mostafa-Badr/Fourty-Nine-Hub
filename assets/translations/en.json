@@ -1474,5 +1474,7 @@
   "priceIsRequired": "Price is required",
   "examineDurationIsRequired": "Examine duration is required",
   "likedBy": "Liked by",
-  "others": "others"
+  "others": "others",
+  "suggestReels": "Suggest reels",
+  "watchAll": "watch all"
 }

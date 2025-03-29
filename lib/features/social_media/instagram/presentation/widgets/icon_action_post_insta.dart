@@ -20,7 +20,6 @@ class IconsActionPostInsta extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 14),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           IconAndValueWidget(
             icon: const Icon(

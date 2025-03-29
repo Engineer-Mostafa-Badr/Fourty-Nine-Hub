@@ -11,11 +11,11 @@ import 'package:fourtyninehub/features/authentication/domain/entities/user_entit
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/create_post_instagram_screen.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_ad_slider_widget.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_ad_widget.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/post_ad_instagram.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_for_you_slider_widget.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_post_widget.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/post_image_instagram.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_video_post_widget.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/reel_slider_widget.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/suggest_reels_instagram_section.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/stores_instagram_widget.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -70,27 +70,79 @@ class _InstagramViewState extends State<InstagramView> {
             child: Column(
               children: [
                 _buildTabBar(context),
-                const SizedBox(
-                  height: 16
-                ),
+                const SizedBox(height: 16),
                 const StoresInstagramWidget(),
                 const SizedBox(
                   height: 16,
                 ),
-                const InstagramPostWidget(
-                  mechan: false,
-                  multiImage: true,
+                const PostImageInstagram(
+                  isMenchan: false,
+                  userImageUrl: testImage,
+                  images: [
+                    testImage,
+                    testImage2,
+                    testImage,
+                  ],
+                  userName: 'Ruffles',
+                  isReal: false,
+                  country: 'New York, USA',
+                  songName: 'Dance Monkey',
                 ),
-                const Sizer(),
-                const InstagramAdWidget(),
-                const Sizer(),
-                const ReelSliderWidget(),
+                const SizedBox(
+                  height: 16,
+                ),
+                const PostAdInstagram(
+                  images: [testImage],
+                  userImageUrl: testImage2,
+                  userName: 'joshua_l',
+                  isReal: false,
+                  country: 'Sponsored',
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                const PostImageInstagram(
+                  isMenchan: true,
+                  userImageUrl: testImage,
+                  images: [
+                    testImage,
+                    testImage2,
+                    testImage,
+                  ],
+                  userName: 'Ruffles',
+                  isReal: false,
+                  country: 'New York, USA',
+                  songName: 'Dance Monkey',
+                  numberUserNamesMenchan: 2,
+                  userNameMenchan: 'janegoodallinst',
+                  userImageMenchan: testImage2,
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                const SuggestReelsInstagramSection(
+                  vediosSuggestReels: [
+                    testVideoUrl,
+                    testVideoUrl2,
+                    testVideoUrl3,
+                    testVideoUrl,
+                    testVideoUrl2,
+                    testVideoUrl3,
+                  ],
+                ),
                 const Sizer(),
                 const InstagramAdSliderWidget(),
                 const Sizer(),
-                const InstagramPostWidget(
-                  mechan: true,
-                  multiImage: false,
+                const PostImageInstagram(
+                  isMenchan: true,
+                  images: [
+                    testImage,
+                    testImage2,
+                  ],
+                  isReal: false,
+                  userImageUrl: testImage,
+                  userName: 'joshua_l',
+                  country: 'Tokyo, Japan',
                 ),
                 const Sizer(),
 
@@ -165,18 +217,19 @@ class _InstagramViewState extends State<InstagramView> {
                                   selectedIndex == index
                                       ? const Color(0xFF0B1035)
                                       : const Color(0xffD9D9D9),
-                                  BlendMode.srcIn
-                              ),
+                                  BlendMode.srcIn),
                             ),
                             const SizedBox(
                               width: 8,
                             ),
                             Label(
-                          text:    icons[index].keys.first.toString(),
+                              text: icons[index].keys.first.toString(),
                               style: Styles.headerText(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 32,
-                                color: selectedIndex == index? const Color(0xFF0B1035) : const Color(0xffD9D9D9),
+                                color: selectedIndex == index
+                                    ? const Color(0xFF0B1035)
+                                    : const Color(0xffD9D9D9),
                               ),
                             )
                           ],

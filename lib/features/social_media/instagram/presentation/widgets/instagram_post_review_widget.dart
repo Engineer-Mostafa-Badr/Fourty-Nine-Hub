@@ -7,7 +7,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/description_post.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/icon_action_post_insta.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_post_widget.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/post_image_instagram.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/liked_by_widget.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';

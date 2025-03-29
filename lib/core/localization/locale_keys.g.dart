@@ -1450,5 +1450,7 @@ abstract class  LocaleKeys {
   static const examineDurationIsRequired = 'examineDurationIsRequired';
   static const likedBy = 'likedBy';
   static const others = 'others';
+  static const suggestReels = 'suggestReels';
+  static const watchAll = 'watchAll';
 
 }
