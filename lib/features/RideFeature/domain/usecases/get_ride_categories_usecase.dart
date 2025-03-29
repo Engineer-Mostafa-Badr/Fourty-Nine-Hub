@@ -9,7 +9,14 @@ class GetRideCategoriesUseCase {
 
   GetRideCategoriesUseCase(this.repository);
 
-  Future<Either<Failure, RideCategoryEntityUpdated>> call(String userId) {
-    return repository.getRideCategories(userId);
+  Future<Either<Failure, RideCategoryEntityUpdated>> call(GetRideCategoriesParams params) {
+    return repository.getRideCategories(params);
   }
+}
+
+class GetRideCategoriesParams{
+  final bool refresh;
+  final String userId;
+
+  GetRideCategoriesParams({required this.refresh, required this.userId});
 }

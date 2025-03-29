@@ -84,6 +84,7 @@ import 'meeting_service_locator.dart';
 import 'ride_dashboard_service_locator_updated.dart';
 import 'social_service_locator.dart';
 import 'subscribe_service_locator.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_socket_location_usecase.dart';
 
 final serviceLocator = GetIt.instance;
 
@@ -191,6 +192,9 @@ class DI {
     serviceLocator.registerLazySingleton<GetGiftsUseCase>(
       () => GetGiftsUseCase(serviceLocator()),
     );
+    // serviceLocator.registerLazySingleton<UpdateSocketLocationUseCase>(
+    //   () => UpdateSocketLocationUseCase(serviceLocator()),
+    // );
 
     // // Register the TinderRepository
     serviceLocator.registerLazySingleton<TinderRepository>(

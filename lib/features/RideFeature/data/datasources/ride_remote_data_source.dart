@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/socket/socket_data_source.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/activity_trip_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/car_years_and_types_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/check_driver_type_model.dart';
@@ -43,6 +44,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride
 import 'package:fourtyninehub/features/RideFeature/domain/entities/request_trip_params.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_category_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_offer_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_offer_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_request_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_color_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/running_trips_entity.dart';
@@ -57,14 +59,18 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_histo
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_running_trips_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_car_years_and_types_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_location_from_address_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_categories_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/partial_payment_in_trip.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/recording_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/rider_in_start_location_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/start_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_driver_location_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_socket_location_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_trip_price_from_client_use_case.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/data/models/governrate_model.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
+import 'package:icons_launcher/utils/cli_logger.dart';
+import 'package:fourtyninehub/shared_web_socket.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 
 import '../../../../core/data/datasources/remote/api/api_consumer.dart';
@@ -78,9 +84,9 @@ import '../../../../shared_web_socket.dart';
 
 abstract class RideRemoteDataSource {
   ////////////////////Nasr////////////////////
-  Future<Either<Failure, RideCategoryEntityUpdated>> getRideCategories(String userId);
-
-  Future<Either<Failure, RideCategoryEntityUpdated>> getShippingCategories(String userId);
+  Future<Either<Failure, RideCategoryEntityUpdated>> getRideCategories(GetRideCategoriesParams params);
+  Future<Either<Failure, bool>> listenToUpdateLocation(UpdateSocketLocationParams params);
+  Future<Either<Failure, RideCategoryEntityUpdated>> getShippingCategories(GetRideCategoriesParams params);
   Future<Either<Failure, CheckDriverTypeEntity>> checkDriverType();
   Future<Either<Failure, bool>> registerRideNotSpecial(RegisterRideNotSpecialEntity params);
   Future<Either<Failure, bool>> registerRideSpecial(RegisterRideSpecialEntity params);
@@ -97,7 +103,7 @@ abstract class RideRemoteDataSource {
   Future<Either<Failure, List<CarYearsAndTypesEntity>>> getCarYearsAndTypes(GetCarYearsAndTypesParams params);
   Future<Either<Failure, List<RideColorEntity>>> getRideCarColors();
   Future<Either<Failure, List<GovernorateEntity>>> getGovernorates();
-  Future<Either<Failure, DriverInfoEntity>> getRideDriverInfo();
+  Future<Either<Failure, DriverInfoEntity>> getRideDriverInfo(bool refresh);
   Future<Either<Failure, DriverPictureOptionalEntity>> getDriverPictureOptional();
 
   Future<Either<Failure, bool>> updateDriverLocation(UpdateDriverLocationUseCaseParams params);
@@ -135,31 +141,26 @@ abstract class RideRemoteDataSource {
   Future<Either<Failure, List<HistoryTripForRiderEntity>>> getAllHistoryTripsForRider(GetAllHistoryTripsForRiderUseCaseParams params);
   Future<Either<Failure, CostPerKmEntity>> getCostPerKm();
   Future<Either<Failure, bool>> loadingRegister(LoadingRegisterEntity params);
-  Future<Either<Failure, LoadingInfoEntity>> getLoadingInfo();
+  Future<Either<Failure, LoadingInfoEntity>> getLoadingInfo(bool refresh);
   Future<Either<Failure, bool>> makeRequestTrip();
   Future<Either<Failure, List<AvailableRideTripEntity>>> getAvailableRideTrips(AvailableRideTripsUseCaseParams params);
 
   void listenToRideOffers(Function(RideOfferEntity offer) params);
 }
 
-class RideRemoteDataSourceImplementation
-    implements RideRemoteDataSource {
+class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
   final ApiConsumer _apiConsumer;
 
   RideRemoteDataSourceImplementation(this._apiConsumer);
 
   ////////////////////Nasr////////////////////
   @override
-  Future<Either<Failure, RideCategoryEntityUpdated>> getRideCategories(
-      String userId) async {
+  Future<Either<Failure, RideCategoryEntityUpdated>> getRideCategories(GetRideCategoriesParams params) async {
     try {
-      final response = await _apiConsumer.get(
-        EndPoints.getRideCategories(userId),
-      );
+      final response = await _apiConsumer.get(EndPoints.getRideCategories(params.userId), refresh: params.refresh);
 
       return response.fold((failure) => Left(failure), (data) {
-        RideCategoryModelUpdated rideCategoryModel = RideCategoryModelUpdated
-            .fromJson(data['data']);
+        RideCategoryModelUpdated rideCategoryModel = RideCategoryModelUpdated.fromJson(data['data']);
         return Right(rideCategoryModel);
       });
     } catch (e) {
@@ -168,16 +169,12 @@ class RideRemoteDataSourceImplementation
   }
 
   @override
-  Future<Either<Failure, RideCategoryEntityUpdated>> getShippingCategories(
-      String userId) async {
+  Future<Either<Failure, RideCategoryEntityUpdated>> getShippingCategories(GetRideCategoriesParams params) async {
     try {
-      final response = await _apiConsumer.get(
-        EndPoints.getShippingCategories(userId),
-      );
+      final response = await _apiConsumer.get(EndPoints.getShippingCategories(params.userId), refresh: params.refresh);
 
       return response.fold((failure) => Left(failure), (data) {
-        RideCategoryModelUpdated rideCategoryModel = RideCategoryModelUpdated
-            .fromJson(data['data']);
+        RideCategoryModelUpdated rideCategoryModel = RideCategoryModelUpdated.fromJson(data['data']);
         return Right(rideCategoryModel);
       });
     } catch (e) {
@@ -210,7 +207,7 @@ class RideRemoteDataSourceImplementation
       );
 
       return response.fold((failure) => Left(failure), (data) {
-        return Right(data['status']??false);
+        return Right(data['status'] ?? false);
       });
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
@@ -226,7 +223,7 @@ class RideRemoteDataSourceImplementation
       );
 
       return response.fold((failure) => Left(failure), (data) {
-        return Right(data['status']??false);
+        return Right(data['status'] ?? false);
       });
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
@@ -241,9 +238,7 @@ class RideRemoteDataSourceImplementation
       );
 
       return response.fold((failure) => Left(failure), (data) {
-        return Right((data['data'] as List)
-            .map((e) => DriversInSubcategoryModel.fromJson(e))
-            .toList());
+        return Right((data['data'] as List).map((e) => DriversInSubcategoryModel.fromJson(e)).toList());
       });
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
@@ -290,13 +285,11 @@ class RideRemoteDataSourceImplementation
     try {
       final response = await _apiConsumer.post(
         EndPoints.checkWalletEnough,
-        data: {
-          "amount" : params
-        },
+        data: {"amount": params},
       );
 
       return response.fold((failure) => Left(failure), (data) {
-        return Right(data['data']??false);
+        return Right(data['data'] ?? false);
       });
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
@@ -346,7 +339,7 @@ class RideRemoteDataSourceImplementation
       );
 
       return response.fold((failure) => Left(failure), (data) {
-        return Right(data['status']??false);
+        return Right(data['status'] ?? false);
       });
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
@@ -356,15 +349,10 @@ class RideRemoteDataSourceImplementation
   @override
   Future<Either<Failure, List<String>>> getRideBrands() async {
     try {
-      final response = await _apiConsumer.post(
-        EndPoints.getRideBrands,
-        data: {
-          "brand" : ""
-        }
-      );
+      final response = await _apiConsumer.post(EndPoints.getRideBrands, data: {"brand": ""});
 
       return response.fold((failure) => Left(failure), (data) {
-        return Right((data['data']!=null||data['data'].isNotEmpty)?List<String>.from(data['data'].map((e) => e['brand'].toString())):[]);
+        return Right((data['data'] != null || data['data'].isNotEmpty) ? List<String>.from(data['data'].map((e) => e['brand'].toString())) : []);
       });
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
@@ -374,15 +362,10 @@ class RideRemoteDataSourceImplementation
   @override
   Future<Either<Failure, List<String>>> getRideModels(String brand) async {
     try {
-      final response = await _apiConsumer.get(
-          EndPoints.getRideModels,
-          queryParameters: {
-            "brand" : brand
-          }
-      );
+      final response = await _apiConsumer.get(EndPoints.getRideModels, queryParameters: {"brand": brand});
 
       return response.fold((failure) => Left(failure), (data) {
-        return Right((data['data']!=null||data['data'].isNotEmpty)?List<String>.from(data['data'].map((e) => e['model'].toString())):[]);
+        return Right((data['data'] != null || data['data'].isNotEmpty) ? List<String>.from(data['data'].map((e) => e['model'].toString())) : []);
       });
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
@@ -392,15 +375,10 @@ class RideRemoteDataSourceImplementation
   @override
   Future<Either<Failure, List<CarYearsAndTypesEntity>>> getCarYearsAndTypes(GetCarYearsAndTypesParams params) async {
     try {
-      final response = await _apiConsumer.get(
-        EndPoints.getCarYearsAndTypes,
-        queryParameters: params.toJson()
-      );
+      final response = await _apiConsumer.get(EndPoints.getCarYearsAndTypes, queryParameters: params.toJson());
 
       return response.fold((failure) => Left(failure), (data) {
-        return Right((data['data'] as List)
-            .map((e) => CarsYearsAndTypesModel.fromJson(e))
-            .toList());
+        return Right((data['data'] as List).map((e) => CarsYearsAndTypesModel.fromJson(e)).toList());
       });
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
@@ -411,13 +389,11 @@ class RideRemoteDataSourceImplementation
   Future<Either<Failure, List<RideColorEntity>>> getRideCarColors() async {
     try {
       final response = await _apiConsumer.get(
-          EndPoints.getRideCarColors,
+        EndPoints.getRideCarColors,
       );
 
       return response.fold((failure) => Left(failure), (data) {
-        return Right((data['data'] as List)
-            .map((e) => RideColorModel.fromJson(e))
-            .toList());
+        return Right((data['data'] as List).map((e) => RideColorModel.fromJson(e)).toList());
       });
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
@@ -432,9 +408,7 @@ class RideRemoteDataSourceImplementation
       );
 
       return response.fold((failure) => Left(failure), (data) {
-        return Right((data['data'] as List)
-            .map((e) => GovernorateModel.fromJson(e))
-            .toList());
+        return Right((data['data'] as List).map((e) => GovernorateModel.fromJson(e)).toList());
       });
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
@@ -442,11 +416,9 @@ class RideRemoteDataSourceImplementation
   }
 
   @override
-  Future<Either<Failure, DriverInfoEntity>> getRideDriverInfo() async {
+  Future<Either<Failure, DriverInfoEntity>> getRideDriverInfo(bool refresh) async {
     try {
-      final response = await _apiConsumer.get(
-        EndPoints.getRideDriverInfo,
-      );
+      final response = await _apiConsumer.get(EndPoints.getRideDriverInfo, refresh: refresh);
 
       return response.fold((failure) => Left(failure), (data) {
         return Right(DriverInfoModel.fromJson(data['data']));
@@ -472,8 +444,7 @@ class RideRemoteDataSourceImplementation
   }
 
   @override
-  Future<Either<Failure, bool>> updateDriverLocation(
-      UpdateDriverLocationUseCaseParams params) async {
+  Future<Either<Failure, bool>> updateDriverLocation(UpdateDriverLocationUseCaseParams params) async {
     try {
       final response = await _apiConsumer.post(
         EndPoints.updateDriverLocation(),
@@ -488,8 +459,7 @@ class RideRemoteDataSourceImplementation
   }
 
   @override
-  Future<Either<Failure, List<RunningTripsEntity>>> getAllRunningTrips(
-      GetAllRunningTripsUseCaseParams params) async {
+  Future<Either<Failure, List<RunningTripsEntity>>> getAllRunningTrips(GetAllRunningTripsUseCaseParams params) async {
     try {
       final response = await _apiConsumer.get(
         EndPoints.getAllRunningTrips(limit: params.limit, page: params.page),
@@ -511,8 +481,7 @@ class RideRemoteDataSourceImplementation
   }
 
   @override
-  Future<Either<Failure, List<CompletedTripsEntity>>> getAllCompletedTrips(
-      GetAllCompletedTripsUseCaseParams params) async {
+  Future<Either<Failure, List<CompletedTripsEntity>>> getAllCompletedTrips(GetAllCompletedTripsUseCaseParams params) async {
     try {
       final response = await _apiConsumer.get(
         EndPoints.getAllCompletedTrips(limit: params.limit, page: params.page),
@@ -534,8 +503,7 @@ class RideRemoteDataSourceImplementation
   }
 
   @override
-  Future<Either<Failure, GetLocationFromAddressEntity>> getLocationFromAddress(
-      GetLocationFromAddressUseCaseParams params) async {
+  Future<Either<Failure, GetLocationFromAddressEntity>> getLocationFromAddress(GetLocationFromAddressUseCaseParams params) async {
     try {
       final response = await _apiConsumer.get(
         EndPoints.getLocationFromAddress(),
@@ -551,8 +519,7 @@ class RideRemoteDataSourceImplementation
   }
 
   @override
-  Future<Either<Failure, bool>> acceptTripByDriver(
-      AcceptTripByDriverUseCaseParams params) async {
+  Future<Either<Failure, bool>> acceptTripByDriver(AcceptTripByDriverUseCaseParams params) async {
     try {
       final response = await _apiConsumer.put(
         EndPoints.acceptTripByDriver(params.tripId),
@@ -566,8 +533,7 @@ class RideRemoteDataSourceImplementation
   }
 
   @override
-  Future<Either<Failure, bool>> riderInStartLocation(
-      RiderInStartLocationUseCaseParams params) async {
+  Future<Either<Failure, bool>> riderInStartLocation(RiderInStartLocationUseCaseParams params) async {
     try {
       final response = await _apiConsumer.put(
         EndPoints.rideInStartLocation(params.id),
@@ -596,8 +562,7 @@ class RideRemoteDataSourceImplementation
   }
 
   @override
-  Future<Either<Failure, bool>> partialPaymentInTrip(
-      PartialPaymentInTripUseCaseParams params) async {
+  Future<Either<Failure, bool>> partialPaymentInTrip(PartialPaymentInTripUseCaseParams params) async {
     try {
       final response = await _apiConsumer.put(
         EndPoints.partialPaymentInTrip(params.tripId),
@@ -612,8 +577,7 @@ class RideRemoteDataSourceImplementation
   }
 
   @override
-  Future<Either<Failure, bool>> completeTrip(
-      CompleteTripUseCaseParams params) async {
+  Future<Either<Failure, bool>> completeTrip(CompleteTripUseCaseParams params) async {
     try {
       final response = await _apiConsumer.put(
         EndPoints.completeTripForRide(params.tripId),
@@ -627,8 +591,7 @@ class RideRemoteDataSourceImplementation
   }
 
   @override
-  Future<Either<Failure, bool>> cancelTripByRider(
-      CancelTripByRiderUseCaseParams params) async {
+  Future<Either<Failure, bool>> cancelTripByRider(CancelTripByRiderUseCaseParams params) async {
     try {
       final response = await _apiConsumer.put(
         EndPoints.cancelTripByRider(params.tripId),
@@ -643,8 +606,7 @@ class RideRemoteDataSourceImplementation
   }
 
   @override
-  Future<Either<Failure, bool>> cancelTripByClient(
-      CancelTripByClientUseCaseParams params) async {
+  Future<Either<Failure, bool>> cancelTripByClient(CancelTripByClientUseCaseParams params) async {
     try {
       final response = await _apiConsumer.put(
         EndPoints.cancelTripByClient(params.tripId),
@@ -675,8 +637,7 @@ class RideRemoteDataSourceImplementation
   }
 
   @override
-  Future<Either<Failure, bool>> recordingTrip(
-      RecordingTripUseCaseParams params) async {
+  Future<Either<Failure, bool>> recordingTrip(RecordingTripUseCaseParams params) async {
     try {
       final response = await _apiConsumer.put(
         EndPoints.recordingTrip(params.tripId),
@@ -691,8 +652,7 @@ class RideRemoteDataSourceImplementation
   }
 
   @override
-  Future<Either<Failure, bool>> updateTripPriceFromClient(
-      UpdateTripPriceFromClientUseCaseParams params) async {
+  Future<Either<Failure, bool>> updateTripPriceFromClient(UpdateTripPriceFromClientUseCaseParams params) async {
     try {
       final response = await _apiConsumer.put(
         EndPoints.updateTripPriceFromClient(params.tripId),
@@ -707,8 +667,7 @@ class RideRemoteDataSourceImplementation
   }
 
   @override
-  Future<Either<Failure, ActivityTripEntity>> getAllActivityTrips(
-      GetAllActivityTripsUseCaseParams params) async {
+  Future<Either<Failure, ActivityTripEntity>> getAllActivityTrips(GetAllActivityTripsUseCaseParams params) async {
     try {
       final response = await _apiConsumer.get(
         EndPoints.getAllActivityTrips(limit: params.limit, page: params.page),
@@ -722,8 +681,7 @@ class RideRemoteDataSourceImplementation
   }
 
   @override
-  Future<Either<Failure, List<HistoryTripForUserEntity>>> getAllHistoryTripsForUser() async{
-
+  Future<Either<Failure, List<HistoryTripForUserEntity>>> getAllHistoryTripsForUser() async {
     try {
       final response = await _apiConsumer.get(
         EndPoints.getAllHistoryTripsForUser(),
@@ -762,7 +720,7 @@ class RideRemoteDataSourceImplementation
   }
 
   @override
-  Future<Either<Failure, CostPerKmEntity>> getCostPerKm() async{
+  Future<Either<Failure, CostPerKmEntity>> getCostPerKm() async {
     try {
       final response = await _apiConsumer.get(
         EndPoints.getCostPerKm,
@@ -784,7 +742,7 @@ class RideRemoteDataSourceImplementation
       );
 
       return response.fold((failure) => Left(failure), (data) {
-        return Right(data['status']??false);
+        return Right(data['status'] ?? false);
       });
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
@@ -792,11 +750,9 @@ class RideRemoteDataSourceImplementation
   }
 
   @override
-  Future<Either<Failure, LoadingInfoEntity>> getLoadingInfo() async {
+  Future<Either<Failure, LoadingInfoEntity>> getLoadingInfo(bool refresh) async {
     try {
-      final response = await _apiConsumer.get(
-        EndPoints.getLoadingInfo,
-      );
+      final response = await _apiConsumer.get(EndPoints.getLoadingInfo, refresh: refresh);
 
       return response.fold((failure) => Left(failure), (data) {
         return Right(LoadingInfoModel.fromJson(data['data']));
@@ -805,6 +761,7 @@ class RideRemoteDataSourceImplementation
       return Left(ServerFailure(message: e.toString()));
     }
   }
+
   @override
   Future<Either<Failure, bool>> makeRequestTrip() async {
     try {
@@ -813,7 +770,7 @@ class RideRemoteDataSourceImplementation
       );
 
       return response.fold((failure) => Left(failure), (data) {
-        return Right(data['status']??false);
+        return Right(data['status'] ?? false);
       });
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
@@ -828,13 +785,27 @@ class RideRemoteDataSourceImplementation
       );
 
       return response.fold((failure) => Left(failure), (data) {
-        return Right((data['data']['trips'] as List)
-            .map((e) => AvailableRideTripModel.fromJson(e))
-            .toList());
+        return Right((data['data']['trips'] as List).map((e) => AvailableRideTripModel.fromJson(e)).toList());
       });
     } catch (e) {
       print("e.toString ${e.toString()}");
       return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> listenToUpdateLocation(UpdateSocketLocationParams params) async {
+    try {
+      CliLogger.info('Listen To Update Location');
+      SharedWebSocket.socket!.emit(SocketIOEvents.updateDriverLocation, {
+        "location": {"longitude": params.longitude, "latitude": params.latitude}
+      });
+      CliLogger.info("SocketIOEvents.updateDriverLocation${SocketIOEvents.updateDriverLocation}");
+
+      return const Right(true);
+    } catch (e) {
+      CliLogger.error('can\'t Update Location error $e');
+      return const Left(ServerFailure(message: "can't Update Location "));
     }
   }
 
@@ -867,4 +838,3 @@ class RideRemoteDataSourceImplementation
     }
   }
 }
-

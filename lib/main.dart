@@ -60,14 +60,14 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  final locationService = LocationService();
-
-  locationService.startLocationTracking();
-
-  // Listen for new locations (only when moved at least 300m)
+  // final locationService = LocationService();
+  //
+  // locationService.startLocationTracking();
+  //
+  // // Listen for new locations (only when moved at least 300m)
   // locationService.locationUpdates.listen((position) {
   //   Fluttertoast.showToast(
-  //       msg: "New location (moved at least 300m): ${position.latitude}, ${position.longitude}",
+  //       msg: "New location (moved at least 1m): ${position.latitude}, ${position.longitude}",
   //       toastLength: Toast.LENGTH_SHORT,
   //       gravity: ToastGravity.BOTTOM,
   //       timeInSecForIosWeb: 1,
@@ -75,8 +75,8 @@ void main() async {
   //       textColor: Colors.white,
   //       fontSize: 16.0
   //   );
-  //   print('New location (moved at least 300m): ${position.latitude}, ${position.longitude}');
-  //   // Do something with the new location
+  //   print('New location (moved at least 1m): ${position.latitude}, ${position.longitude}');
+    // Do something with the new location
   // });
 
 
@@ -203,9 +203,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           create: (BuildContext context) =>
               serviceLocator<MainCategoriesCubit>()..loadData(),
         ),
-        BlocProvider(
-          create: (BuildContext context) => serviceLocator<RideCubit>(),
-        ),
+        // BlocProvider(
+        //   create: (BuildContext context) => serviceLocator<RideCubit>(),
+        // ),
         BlocProvider(
           create: (context) => ThemeCubit(),
         ),

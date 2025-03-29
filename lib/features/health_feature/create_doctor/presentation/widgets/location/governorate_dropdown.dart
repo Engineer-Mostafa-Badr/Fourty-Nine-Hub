@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/custom_dropdown_health.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -26,6 +27,18 @@ class CreateDoctorGovernorateDropdown extends StatelessWidget {
           current is CreateDoctorGovernoratesLoaded,
       builder: (context, state) {
         if (state is CreateDoctorGovernoratesLoaded) {
+          return CustomDropdownHealth<GovernorateEntity>(
+            items: state.governorates,
+            onItemSelected: onSelected!,
+            // (value) {
+            //   if (value != null) {
+            //     createDoctorCubit.selectSubcategory(value);
+            //   }
+            // },
+            displayStringForItem: (value) =>
+                context.isArabic ? value.nameAr : value.nameEn,
+            hint: LocaleKeys.governorate.tr(),
+          );
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

@@ -43,7 +43,7 @@ class TruckVehicleInformationScreen extends StatelessWidget {
                   spacing: 4,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    closeWidget(context),
+                    closeWidget(context:context,onAcceptSaveData: (){}, closeRemoveData: (){}),
                     Label(
                       text: LocaleKeys.vehicleInformation.localize,
                       style: Styles.headerText(

@@ -33,17 +33,18 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_compl
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_history_trips_for_rider_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_running_trips_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_location_from_address_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_categories_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/partial_payment_in_trip.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/recording_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/rider_in_start_location_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/start_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_driver_location_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_socket_location_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_trip_price_from_client_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_color_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_car_years_and_types_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_available_ride_trips_use_case.dart';
-import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/available_ride_trip_model.dart';
 import '../../../../core/error/failure.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_statistics_entity.dart';
 
@@ -51,12 +52,12 @@ abstract class RideRepository {
 
   /////////////////////////////////Nasr/////////////////////////////////
 
-  Future<Either<Failure, RideCategoryEntityUpdated>> getRideCategories(String userId);
-  Future<Either<Failure, RideCategoryEntityUpdated>> getShippingCategories(String userId);
+  Future<Either<Failure, RideCategoryEntityUpdated>> getRideCategories(GetRideCategoriesParams params);
+  Future<Either<Failure, RideCategoryEntityUpdated>> getShippingCategories(GetRideCategoriesParams params);
   Future<Either<Failure, CheckDriverTypeEntity>> checkDriverType();
   Future<Either<Failure, bool>> registerRideNotSpecial(RegisterRideNotSpecialEntity params);
   Future<Either<Failure, bool>> loadingRegister(LoadingRegisterEntity params);
-  Future<Either<Failure, LoadingInfoEntity>> getLoadingInfo();
+  Future<Either<Failure, LoadingInfoEntity>> getLoadingInfo(bool refresh);
   Future<Either<Failure, bool>> registerRideSpecial(RegisterRideSpecialEntity params);
   Future<Either<Failure, RideRequestTripEntity>> requestTrip(RequestTripUseCaseParams params);
   Future<Either<Failure, RideRequestTripEntity>> retrieveClientLatestTrip();
@@ -90,8 +91,9 @@ abstract class RideRepository {
   Future<Either<Failure, ActivityTripEntity>> getAllActivityTrips(GetAllActivityTripsUseCaseParams params);
   Future<Either<Failure, List<HistoryTripForUserEntity>>> getAllHistoryTripsForUser();
   Future<Either<Failure, List<HistoryTripForRiderEntity>>> getAllHistoryTripsForRider(GetAllHistoryTripsForRiderUseCaseParams params);
-  Future<Either<Failure, DriverInfoEntity>> getRideDriverInfo();
+  Future<Either<Failure, DriverInfoEntity>> getRideDriverInfo(bool refresh);
   Future<Either<Failure, DriverPictureOptionalEntity>> getDriverPictureOptional();
   Future<Either<Failure, List<AvailableRideTripEntity>>> getAvailableRideTrips(AvailableRideTripsUseCaseParams params);
   void listenToRideOffers(Function(RideOfferEntity offer) params);
+  Future<Either<Failure, bool>> listenToUpdateLocation(UpdateSocketLocationParams params);
 }

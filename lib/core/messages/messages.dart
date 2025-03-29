@@ -6,6 +6,7 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart'
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/pages.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -103,7 +104,9 @@ showSuccessMessage(
   );
 }
 
-void showSuccessDialog(BuildContext context, String text) => showAnimatedDialog(context,AlertDialog(
+void showSuccessDialog(BuildContext context, String text) => showAnimatedDialog(
+      context,
+      AlertDialog(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5),
         ),
@@ -146,70 +149,71 @@ void showSuccessDialog(BuildContext context, String text) => showAnimatedDialog(
 //     );
 
 Future<void> showPermissionDialog({required String message}) async =>
-    showAnimatedDialog(AppPages.router.configuration.navigatorKey.currentContext!, AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5),
-          ),
-          content: Text(
-            message,
-            style: TextStyle(
-              fontSize: 16.sp,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          contentPadding: const EdgeInsets.only(
-            right: 20,
-            left: 20,
-            top: 20,
-            bottom: 40,
-          ),
-          actions: [
-            TextAppButton(
-              label: LocaleKeys.openAppSettings.tr(),
-              onPressed: () async {
-                await openAppSettings();
-                AppPages.router.configuration.navigatorKey.currentContext!.pop();
-              },
-            ),
-          ],
+    showAnimatedDialog(
+      AppPages.router.configuration.navigatorKey.currentContext!,
+      AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5),
         ),
+        content: Text(
+          message,
+          style: TextStyle(
+            fontSize: 16.sp,
+          ),
+          textAlign: TextAlign.center,
+        ),
+        contentPadding: const EdgeInsets.only(
+          right: 20,
+          left: 20,
+          top: 20,
+          bottom: 40,
+        ),
+        actions: [
+          TextAppButton(
+            label: LocaleKeys.openAppSettings.tr(),
+            onPressed: () async {
+              await openAppSettings();
+              AppPages.router.configuration.navigatorKey.currentContext!.pop();
+            },
+          ),
+        ],
+      ),
     );
-    // await showDialog(
-    //   context: AppPages.router.configuration.navigatorKey.currentContext!,
-    //   builder: (_) => AlertDialog(
-    //     shape: RoundedRectangleBorder(
-    //       borderRadius: BorderRadius.circular(5),
-    //     ),
-    //     content: Text(
-    //       message,
-    //       style: TextStyle(
-    //         fontSize: 16.sp,
-    //       ),
-    //       textAlign: TextAlign.center,
-    //     ),
-    //     contentPadding: const EdgeInsets.only(
-    //       right: 20,
-    //       left: 20,
-    //       top: 20,
-    //       bottom: 40,
-    //     ),
-    //     actions: [
-    //       TextAppButton(
-    //         label: LocaleKeys.openAppSettings.tr(),
-    //         onPressed: () async {
-    //           await openAppSettings();
-    //           AppPages.router.configuration.navigatorKey.currentContext!.pop();
-    //         },
-    //       ),
-    //     ],
-    //   ),
-    // );
+// await showDialog(
+//   context: AppPages.router.configuration.navigatorKey.currentContext!,
+//   builder: (_) => AlertDialog(
+//     shape: RoundedRectangleBorder(
+//       borderRadius: BorderRadius.circular(5),
+//     ),
+//     content: Text(
+//       message,
+//       style: TextStyle(
+//         fontSize: 16.sp,
+//       ),
+//       textAlign: TextAlign.center,
+//     ),
+//     contentPadding: const EdgeInsets.only(
+//       right: 20,
+//       left: 20,
+//       top: 20,
+//       bottom: 40,
+//     ),
+//     actions: [
+//       TextAppButton(
+//         label: LocaleKeys.openAppSettings.tr(),
+//         onPressed: () async {
+//           await openAppSettings();
+//           AppPages.router.configuration.navigatorKey.currentContext!.pop();
+//         },
+//       ),
+//     ],
+//   ),
+// );
 
 void showLoadingDialog(BuildContext context,
         {String? message,
         bool canPop = false,
         bool barrierDismissible = false}) =>
-
     showAnimatedDialog(
       context,
       barrierDismissible: barrierDismissible,
@@ -217,7 +221,7 @@ void showLoadingDialog(BuildContext context,
         canPop: canPop,
         child: AlertDialog(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5),
+            borderRadius: BorderRadius.circular(15),
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -226,9 +230,7 @@ void showLoadingDialog(BuildContext context,
               Sizer(height: 20.h),
               Text(
                 message ?? Labels.loading,
-                style: TextStyle(
-                  fontSize: 16.sp,
-                ),
+                style: Styles.headerText(),
                 textAlign: TextAlign.center,
               ),
             ],
@@ -242,38 +244,38 @@ void showLoadingDialog(BuildContext context,
         ),
       ),
     );
-    // showDialog(
-    //   context: context,
-    //   barrierDismissible: barrierDismissible,
-    //   builder: (_) => PopScope(
-    //     canPop: canPop,
-    //     child: AlertDialog(
-    //       shape: RoundedRectangleBorder(
-    //         borderRadius: BorderRadius.circular(5),
-    //       ),
-    //       content: Column(
-    //         mainAxisSize: MainAxisSize.min,
-    //         children: [
-    //           const CircularProgressIndicator.adaptive(),
-    //           Sizer(height: 20.h),
-    //           Text(
-    //             message ?? Labels.loading,
-    //             style: TextStyle(
-    //               fontSize: 16.sp,
-    //             ),
-    //             textAlign: TextAlign.center,
-    //           ),
-    //         ],
-    //       ),
-    //       contentPadding: const EdgeInsets.only(
-    //         right: 20,
-    //         left: 20,
-    //         top: 20,
-    //         bottom: 40,
-    //       ),
-    //     ),
-    //   ),
-    // );
+// showDialog(
+//   context: context,
+//   barrierDismissible: barrierDismissible,
+//   builder: (_) => PopScope(
+//     canPop: canPop,
+//     child: AlertDialog(
+//       shape: RoundedRectangleBorder(
+//         borderRadius: BorderRadius.circular(5),
+//       ),
+//       content: Column(
+//         mainAxisSize: MainAxisSize.min,
+//         children: [
+//           const CircularProgressIndicator.adaptive(),
+//           Sizer(height: 20.h),
+//           Text(
+//             message ?? Labels.loading,
+//             style: TextStyle(
+//               fontSize: 16.sp,
+//             ),
+//             textAlign: TextAlign.center,
+//           ),
+//         ],
+//       ),
+//       contentPadding: const EdgeInsets.only(
+//         right: 20,
+//         left: 20,
+//         top: 20,
+//         bottom: 40,
+//       ),
+//     ),
+//   ),
+// );
 
 void showConfirmDialog(
   BuildContext context,
@@ -285,9 +287,9 @@ void showConfirmDialog(
   TextStyle? cancelTextStyle,
   TextStyle? confirmTextStyle,
 }) {
-
-
-  showAnimatedDialog(context,AlertDialog(
+  showAnimatedDialog(
+      context,
+      AlertDialog(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
@@ -329,8 +331,7 @@ void showConfirmDialog(
             ],
           )
         ],
-      )
-  );
+      ));
   // showDialog(
   //   context: context,
   //   builder: (_) => AlertDialog(

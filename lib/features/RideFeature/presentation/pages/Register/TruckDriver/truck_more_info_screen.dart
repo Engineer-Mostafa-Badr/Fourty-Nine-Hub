@@ -42,7 +42,7 @@ class TruckMoreInfoScreen extends StatelessWidget {
                   spacing: 4,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    closeWidget(context),
+                    closeWidget(context:context,onAcceptSaveData: (){}, closeRemoveData: (){}),
                     Label(
                       text: LocaleKeys.moreInfo.localize,
                       style: Styles.headerText(

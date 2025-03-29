@@ -76,8 +76,11 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
           AppPages.router.routerDelegate.navigatorKey.currentContext!
               .pushNamed(Routes.LOGIN);
         }
+        print("Error");
+
         res = 'fail';
       }, (data) {
+        print("Success");
         res = 'success';
         emit(CreateRestaurantSuccess(LocaleKeys
             .youHaveSubmittedYourRegistrationSuccessfullyWaitingForAdministrationApproval
@@ -104,7 +107,47 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
     return res;
   }
 
-  updateRestaurant1(context) async {
+  updateRestaurant1(BuildContext context, [String? phoneNumber]) async {
+    CreateRestaurantParams params = createRestaurantParams;
+
+    Map<String, dynamic> data = {
+      if (phoneNumber != null) "phone": phoneNumber, // Only update if provided
+      if (params.name != null) "name": params.name,
+      if (params.subcategoryId != null) "subcategoryId": params.subcategoryId,
+      if (params.restaurantMedia != null) "restaurantMedia": params.restaurantMedia,
+      if (params.government != null) "government": params.government,
+      if (params.city != null) "city": params.city,
+    };
+
+    if (data.isEmpty) {
+      _validationUpdateState();
+      return;
+    }
+
+    final result = await _updateRestaurantUseCase(
+      UpdateRestaurantParams(
+        city: params.city,
+        government: params.government,
+        subcategoryId: params.subcategoryId,
+        name: params.name,
+        number: phoneNumber ?? params.number, // Use new phone number if provided
+        restaurantMedia: params.restaurantMedia,
+      ),
+    );
+
+    return result.fold(
+          (failure) {
+        showErrorMessage(context, getFailureMessage(failure, context));
+      },
+          (success) {
+            loadData();
+            emit(CreateRestaurantFinish());
+        Navigator.pop(context); // Close the dialog on success
+      },
+    );
+  }
+
+  updateRestaurant12(context) async {
     CreateRestaurantParams params = createRestaurantParams;
 
     // List<Map<String, dynamic>> mneu = [];
@@ -366,7 +409,7 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
         context: context,
         onUploaded: (media) {
           restaurantImages.add(media.file);
-          restaurantImagesIds.add(media.mediaId[0]);
+          restaurantImagesIds.add(media.mediaId);
           createRestaurantParams.restaurantMedia = restaurantImagesIds;
 
           emit(CreateRestaurantUploadProfileImage(restaurantImages));
@@ -375,7 +418,7 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
 
   Future<void> uploadLicenseFirstPageImage({required BuildContext context}) async {
     await _uploadImage(onUploaded: (media) {
-      licensRestaurantImagesIds.add(media.mediaId[0]);
+      licensRestaurantImagesIds.add(media.mediaId);
       createRestaurantParams.licenseMedia = licensRestaurantImagesIds;
 
       emit(CreateRestaurantUploadLicenseFirstPageImage(media.file));
@@ -384,7 +427,7 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
 
   Future<void> uploadLicenseSecondPageImage({required BuildContext context}) async {
     await _uploadImage(onUploaded: (media) {
-      licensRestaurantImagesIds.add(media.mediaId[0]);
+      licensRestaurantImagesIds.add(media.mediaId);
       createRestaurantParams.licenseMedia = licensRestaurantImagesIds;
 
       emit(CreateRestaurantUploadLicenseSecondPageImage(media.file));
@@ -393,7 +436,7 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
 
   Future<void> uploadLicenseThiredPageImage({required BuildContext context}) async {
     await _uploadImage(onUploaded: (media) {
-      licensRestaurantImagesIds.add(media.mediaId[0]);
+      licensRestaurantImagesIds.add(media.mediaId);
       createRestaurantParams.licenseMedia = licensRestaurantImagesIds;
 
       emit(CreateRestaurantUploadLicenseThiredPageImage(media.file));

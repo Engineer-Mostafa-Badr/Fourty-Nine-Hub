@@ -17,7 +17,11 @@ class SubcategoriesServiceLocator {
     serviceLocator.registerLazySingleton<GetSubCategoriesUseCase>(
         () => GetSubCategoriesUseCase(serviceLocator()));
     // --------------------Cubit ---------------------------
-    serviceLocator.registerFactory<SubcategoriesCubit>(
-        () => SubcategoriesCubit(serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator(), serviceLocator()));
+    serviceLocator.registerFactory<SubcategoriesCubit>(() => SubcategoriesCubit(
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator()));
   }
 }

@@ -70,6 +70,8 @@ class RideState {
   final List<SubCategoryEntityUpdated>? shippingSubCategories;
   final List<GovernorateEntity>? govs;
   final List<RideColorEntity>? colors;
+  final RideColorEntity? color;
+  final GovernorateEntity? city;
   final List<String>? brands;
   final List<String>? models;
   final String? selectedModel;
@@ -83,6 +85,7 @@ class RideState {
   final DriverInfoEntity? driverInfo;
   final LoadingInfoEntity? loaderInfo;
   final DriverPictureOptionalEntity? pictureOptional;
+  final List<String>? savedRideSubCategories;
   final bool? isApproved;
   final bool? isUploadDriverId;
   final bool? isUploadDriverImage;
@@ -113,6 +116,7 @@ class RideState {
     this.vehiclePicture,
     this.rideCategory,
     this.loaderInfo,
+    this.savedRideSubCategories,
     this.rideSubCategories,
     this.shippingSubCategories,
     this.shippingCategory,
@@ -133,6 +137,8 @@ class RideState {
     this.registerType='socket',
     this.driverInfo,
     this.colors,
+    this.color,
+    this.city,
     this.isSmoking=false,
     this.hasAirCondition=false,
     this.selectedModel,
@@ -175,14 +181,17 @@ class RideState {
     LoadingInfoEntity? loaderInfo,
     DriverPictureOptionalEntity? pictureOptional,
     List<SubCategoryEntityUpdated>? rideSubCategories,
+    List<String>? savedRideSubCategories,
     List<SubCategoryEntityUpdated>? shippingSubCategories,
     List<GovernorateEntity>? govs,
     List<String>? brands,
     List<String>? models,
     CostPerKmEntity? costPerKm,
     List<RideColorEntity>? colors,
+    RideColorEntity? color,
     RideCategoryEntityUpdated? shippingCategory,
     List<GovernorateEntity>? governorates,
+    GovernorateEntity? city,
     GetLocationFromAddressEntity? currentLocation,
     GetLocationFromAddressEntity? toLocation,
     GetLocationFromAddressEntity? wayPointOne,
@@ -218,6 +227,8 @@ class RideState {
       failure: failure ?? this.failure,
       registerType: registerType ?? this.registerType,
       personalPicture: personalPicture ?? this.personalPicture,
+      color: color ?? this.color,
+      city: city ?? this.city,
       driverLicensePicture: driverLicensePicture ?? this.driverLicensePicture,
       backOfDriverLicensePicture: backOfDriverLicensePicture ?? this.backOfDriverLicensePicture,
       selfieDriverLicensePicture: selfieDriverLicensePicture ?? this.selfieDriverLicensePicture,
@@ -269,6 +280,7 @@ class RideState {
       shippingSubCategories: shippingSubCategories ?? this.shippingSubCategories,
       isShipping: isShipping ?? this.isShipping,
       loaderInfo: loaderInfo ?? this.loaderInfo,
+      savedRideSubCategories: savedRideSubCategories ?? this.savedRideSubCategories,
       rideOffers: rideOffers ?? this.rideOffers,
     );
   }

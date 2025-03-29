@@ -16,7 +16,10 @@ class CustomFloatingButtonAds extends StatelessWidget {
     return InkWell(
       onTap: onPressed,
       child: Container(
-        height: 44,
+        // height: 44,
+        // constraints: BoxConstraints(
+        //   minWidth: 120,
+        // ),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: ShapeDecoration(
           color: const Color(0xFF0B1035),

@@ -269,6 +269,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    // _selectedCountry = context.isArabic ? 'القاهرة' : 'Cairo';
     return BlocBuilder<RideCubit, RideState>(
       builder: (context,state) {
         var cubit = context.read<RideCubit>();
@@ -285,22 +286,26 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
             }
           });
         }
-        return Scaffold(
-          resizeToAvoidBottomInset: false,
-          body: cubit.loadingHomeData==true?const Center(child: CircularProgressIndicator()):Form(
-            key: _formKey,
-            child: SafeArea(
-              child: SharedScaffold(
-                mainCategoryId: 2,
-                body: NestedAppbar(
-                  scrollController: _scrollController,
-                  appBars: const [],
-                  body: Stack(
-                    children: [
-                      _buildTopImage(),
-                      state.requestedTrip == null ? _buildBottomSheet() : state.requestedTrip!.status == TripState.completed ? _buildBottomSheet() : const SizedBox.shrink(),
-                      state.requestedTrip == null ? _carTruckBtn() : state.requestedTrip!.status == TripState.completed ? _carTruckBtn() : const SizedBox.shrink(),
-                    ],
+        return PopScope(
+          canPop: false,
+          onPopInvokedWithResult: (c,v)=>context.go(Routes.HOME),
+          child: Scaffold(
+            resizeToAvoidBottomInset: false,
+            body: cubit.loadingHomeData==true?const Center(child: CircularProgressIndicator()):Form(
+              key: _formKey,
+              child: SafeArea(
+                child: SharedScaffold(
+                  mainCategoryId: 2,
+                  body: NestedAppbar(
+                    scrollController: _scrollController,
+                    appBars: const [],
+                    body: Stack(
+                      children: [
+                        _buildTopImage(),
+                        state.requestedTrip == null ? _buildBottomSheet() : state.requestedTrip!.status == TripState.completed ? _buildBottomSheet() : const SizedBox.shrink(),
+                        state.requestedTrip == null ? _carTruckBtn() : state.requestedTrip!.status == TripState.completed ? _carTruckBtn() : const SizedBox.shrink(),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -312,7 +317,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
   }
 
   Widget _buildTopMap(RideState state, BuildContext context) {
-    List<LatLng> routePoints = _convertPolylineToLatLng(state.rideExpectedPrice?.polyline ?? []);
+    List<LatLng> routePoints =
+        _convertPolylineToLatLng(state.rideExpectedPrice?.polyline ?? []);
 
     if (state.currentLocation != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -343,17 +349,20 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
             markers: [
               if (state.currentLocation != null)
                 Marker(
-                  point: LatLng(state.currentLocation!.lat!, state.currentLocation!.lng!),
+                  point: LatLng(
+                      state.currentLocation!.lat!, state.currentLocation!.lng!),
                   width: 40,
                   height: 40,
-                  child: const Icon(Icons.location_pin, color: Colors.blue, size: 40),
+                  child: const Icon(Icons.location_pin,
+                      color: Colors.blue, size: 40),
                 ),
               if (state.toLocation != null)
                 Marker(
                   point: LatLng(state.toLocation!.lat!, state.toLocation!.lng!),
                   width: 40,
                   height: 40,
-                  child: const Icon(Icons.location_pin, color: Colors.red, size: 40),
+                  child: const Icon(Icons.location_pin,
+                      color: Colors.red, size: 40),
                 ),
               if (state.wayPointOne != null)
                 Marker(
@@ -391,7 +400,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
     return polyline.map((point) => LatLng(point[1], point[0])).toList();
   }
 
-  Widget _carTruckBtn({LoadingInfoEntity? loadingInfo, DriverInfoEntity? driverInfo}) {
+  Widget _carTruckBtn(
+      {LoadingInfoEntity? loadingInfo, DriverInfoEntity? driverInfo}) {
     if (loadingInfo == null && driverInfo == null) {
       return SizedBox(
         height: 48,
@@ -407,6 +417,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                           radius: 15,
                           label: LocaleKeys.ride.tr(),
                           onPressed: () {
+                            context.pop();
                             context.read<RideCubit>().onNavigateToWelcomeScreen(fromShipping: false, context: context);
                           },
                           backColor: AppColors.PRIMARY_COLOR,
@@ -415,6 +426,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                           radius: 15,
                           label: LocaleKeys.shipping.tr(),
                           onPressed: () {
+                            context.pop();
                             context.read<RideCubit>().onNavigateToWelcomeScreen(fromShipping: true, context: context);
                           },
                           backColor: AppColors.PRIMARY_COLOR,
@@ -458,14 +470,22 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
             Expanded(
               child: CustomRideButton(
                 onPressed: () {
-                  context.push(Routes.rideModeScreen, extra: RideModeParams(modeType: 'ride', isSocket: driverInfo?.driverType == 'socket' ? true : false));
-
                   if (driverInfo == null) {
                     context.read<RideCubit>().onNavigateToWelcomeScreen(fromShipping: false, context: context);
+                  }else{
+                    if (driverInfo.status == RegistrationStatus.pending.status) {
+                      return;
+                    } else if (driverInfo.status == RegistrationStatus.rejected.status) {
+                      context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: false, isSocket: driverInfo.driverType == 'socket' ? true : false));
+                    } else if (driverInfo.status == RegistrationStatus.initial.status) {
+                      context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: false, isSocket: driverInfo.driverType == 'socket' ? true : false));
+                    }else{
+                      context.push(Routes.rideModeScreen, extra: RideModeParams(modeType: 'ride', isSocket: driverInfo?.driverType == 'socket' ? true : false));
+                    }
                   }
                 },
                 onTap: () {
-                  context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: false, isSocket: driverInfo?.driverType == 'socket' ? true : false));
+                  // context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: false, isSocket: driverInfo?.driverType == 'socket' ? true : false));
                   if (driverInfo != null && driverInfo.status == RegistrationStatus.pending.status) {
                     return;
                   } else if (driverInfo != null && driverInfo.status == RegistrationStatus.rejected.status) {
@@ -494,6 +514,16 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                     context.read<RideCubit>().onNavigateToWelcomeScreen(fromShipping: true, context: context);
                   } else {
                     print("loadingInfo.toJson()${loadingInfo.toJson()}");
+                    if (loadingInfo.status == RegistrationStatus.pending.status) {
+                      return;
+                    } else if (loadingInfo.status == RegistrationStatus.rejected.status) {
+                      context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: true, isSocket: false));
+                    } else if (loadingInfo.status == RegistrationStatus.initial.status) {
+                      context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: true, isSocket: false));
+                    }else{
+                      context.push(Routes.rideModeScreen, extra: RideModeParams(modeType: 'ride', isSocket: driverInfo?.driverType == 'socket' ? true : false));
+                    }
+
                   }
                 },
                 onTap: () {
@@ -504,6 +534,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                     context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: true, isSocket: false));
                   } else if (loadingInfo != null && loadingInfo.status == RegistrationStatus.initial.status) {
                     context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: true, isSocket: false));
+                  }else{
+                    context.push(Routes.rideModeScreen, extra: RideModeParams(modeType: 'ride', isSocket: driverInfo?.driverType == 'socket' ? true : false));
                   }
                 },
                 isRed: (loadingInfo != null && (loadingInfo.status != RegistrationStatus.rejected.status)) ? true : false,
@@ -607,7 +639,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                           context.push(Routes.LOGIN);
                         }
                       },
-                      child: _tripsWidget(LocaleKeys.activity.tr(), color: AppColors.GREYCARD)),
+                      child: _tripsWidget(LocaleKeys.activity.tr(),
+                          color: AppColors.GREYCARD)),
                 ),
                 Expanded(
                   child: ClickableWidget(
@@ -617,7 +650,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                           ));
 
                       },
-                      child: _tripsWidget(LocaleKeys.runningTrips.tr(), color: AppColors.GREYCARD)),
+                      child: _tripsWidget(LocaleKeys.runningTrips.tr(),
+                          color: AppColors.GREYCARD)),
                 ),
                 Expanded(
                   child: ClickableWidget(
@@ -626,13 +660,15 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                             rideCubit: context.read<RideCubit>(),
                           ));
                       },
-                      child: _tripsWidget(LocaleKeys.expiredTrips.tr(), color: AppColors.GREYCARD)),
+                      child: _tripsWidget(LocaleKeys.expiredTrips.tr(),
+                          color: AppColors.GREYCARD)),
                 ),
               ],
             ),
           ),
           Container(
-            padding: const EdgeInsets.only(left: 10, right: 10, bottom: 16, top: 8),
+            padding:
+                const EdgeInsets.only(left: 10, right: 10, bottom: 16, top: 8),
             decoration: BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,
               borderRadius: const BorderRadius.only(
@@ -642,11 +678,14 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
             ),
             child: BlocBuilder<RideCubit, RideState>(
               builder: (context, state) {
+                var cubit = context.read<RideCubit>();
                 return Column(
                   spacing: 8,
                   children: [
-                    _buildCategoryList("ride", state.rideCategory?.subCategories ?? []),
-                    _buildCategoryList("shipping", state.shippingCategory?.subCategories ?? []),
+                    _buildCategoryList(
+                        "ride", state.rideCategory?.subCategories ?? []),
+                    _buildCategoryList("shipping",
+                        state.shippingCategory?.subCategories ?? []),
                     _customLocationField(
                       isTo: false,
                       color: Colors.green,
@@ -726,30 +765,33 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                   width: MediaQuery.of(context).size.width)),
                           Expanded(
                               flex: 2,
-                              child: AppButton(
+                              child: state.isLoadingSubmit?const Center(child: CircularProgressIndicator()):AppButton(
                                   radius: 15,
                                   label: LocaleKeys.request.tr(),
                                   onPressed: () async {
                                     if(context.isUserLoggedIn){
-                                      if(state.toLocation != null && state.currentLocation != null){
-                                        showModalBottomSheet(
-                                          context: context,
-                                          isScrollControlled: true,
-                                          backgroundColor: Colors.transparent,
-                                          builder: (context) => CustomReserveRideBottomSheet (rideCubit: context.read<RideCubit>(), selectedCategoryId: state.rideCategory?.subCategories[_selectedCategoryIndex!].subCategoryId ?? '', isPremium: false,),
-                                        );
-                                      }
-                                      else {
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                              context.isArabic? "يرجى تحديد الموقع" : "Please select location", // Ensure you define this key in your localization file
-                                              textAlign: TextAlign.center,
+                                      bool canRequest = await cubit.makeRequestTrips();
+                                      if(canRequest == true){
+                                        if(state.toLocation != null && state.currentLocation != null){
+                                          showModalBottomSheet(
+                                            context: context,
+                                            isScrollControlled: true,
+                                            backgroundColor: Colors.transparent,
+                                            builder: (context) => CustomReserveRideBottomSheet (rideCubit: context.read<RideCubit>(), selectedCategoryId: state.rideCategory?.subCategories[_selectedCategoryIndex!].subCategoryId ?? '', isPremium: false,),
+                                          );
+                                        }
+                                        else {
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                context.isArabic? "يرجى تحديد الموقع" : "Please select location", // Ensure you define this key in your localization file
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              backgroundColor: Colors.red,
+                                              duration: const Duration(seconds: 2),
                                             ),
-                                            backgroundColor: Colors.red,
-                                            duration: const Duration(seconds: 2),
-                                          ),
-                                        );
+                                          );
+                                        }
                                       }
                                     }
                                     else{
