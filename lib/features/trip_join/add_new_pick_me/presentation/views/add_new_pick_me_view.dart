@@ -11,7 +11,8 @@ class AddNewPickMeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SharedScaffold(
+    return
+     SharedScaffold(
       body: const AddNewPickMeBody(),
       mainCategoryId: 1,
     );

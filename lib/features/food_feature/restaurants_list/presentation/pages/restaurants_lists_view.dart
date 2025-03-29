@@ -89,13 +89,13 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
 
   Widget _buildLoggedInView(RestaurantsListState state) {
     return ListView(
-      padding: EdgeInsets.all(10.w),
+      padding: EdgeInsets.all(10.w),  
       controller: _scrollController,
       shrinkWrap: true,
       children: [
         const MealBanner(),
-      //  if (!(state.isResturant?.isRestaurant ?? false))
-          _buildRegisterRestaurantPrompt(state),
+        if (!(state.isResturant?.isRestaurant ?? false))
+            _buildRegisterRestaurantPrompt(state),
         const Sizer(),
         Padding(
           padding: EdgeInsets.all(10.w),

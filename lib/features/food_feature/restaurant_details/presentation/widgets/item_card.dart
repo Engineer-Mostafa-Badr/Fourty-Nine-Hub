@@ -84,7 +84,7 @@ class _ItemCardState extends State<ItemCard> {
           Positioned.fill(
             child: Container(
               decoration: BoxDecoration(
-                  color: cardDarkColor(context),
+                  color: cardDarkColor(context, isRestruantItem: true),
                   borderRadius: BorderRadius.circular(12)),
               child: Padding(
                 padding: const EdgeInsets.all(4.0),

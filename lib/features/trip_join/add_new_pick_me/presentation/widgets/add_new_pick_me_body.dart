@@ -32,40 +32,57 @@ class AddNewPickMeBody extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           children: [
-               //  ...welcomeTextdontOwnCar(context),
-          Row(children: [
-            IconButton(
-              icon: Icon(Icons.arrow_back,color:AppColors.black ,size: 25,),
-              onPressed: () {
-                Navigator.pop(context);
-              },
+            //  ...welcomeTextdontOwnCar(context),
+            Row(
+              children: [
+                IconButton(
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: AppColors.black,
+                    size: 25,
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                5.horizontalSpace,
+                Text(
+                  LocaleKeys.pickMe.localize,
+                  style: TextStyle(
+                      fontSize: 32.sp,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.black),
+                ),
+              ],
             ),
-            5.horizontalSpace,
-            Text(LocaleKeys.pickMe.localize,style: TextStyle(fontSize: 25.sp,fontWeight: FontWeight.w700,color: AppColors.black),),
-          ],),
-                  const Sizer(),
-               Padding(
-                 padding:  EdgeInsets.symmetric(horizontal: 15.0.w),
-                 child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                   children: [
-                                 Text(LocaleKeys.welcome_pick_me.localize,style: TextStyle(fontSize: 25.sp,fontWeight: FontWeight.w600,color: AppColors.colorRed),),
-                                     Spacer(),
-                     HelpTooltip(
-                                   message: 'Create a ride & add your trip. wait for car owners to contact you. Share trip & save money!',
-                                 ),
-                                
-                   ],
-                 ),
-               ),
-                  const Sizer(),
-                  const _MapSection(),
+            const Sizer(),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 15.0.w),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Text(
+                    LocaleKeys.welcome_pick_me.localize,
+                    style: TextStyle(
+                        fontSize: 36.sp,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.colorRed),
+                  ),
+                  Spacer(),
+                  HelpTooltip(
+                    message:
+                        'Create a ride & add your trip. wait for car owners to contact you. Share trip & save money!',
+                  ),
+                ],
+              ),
+            ),
+            const Sizer(),
+            const _MapSection(),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 20.h),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-             
                   const Sizer(height: 20),
                   CountryDropdown(),
                   const Sizer(height: 20),
@@ -123,7 +140,7 @@ class _MapSection extends StatelessWidget {
           return SizedBox(
             height: 200,
             child: DynamicMapWithPolyline(
-                showNavBar: false,
+              showNavBar: false,
               polylineString: priceDistanceCubit.tripInfoEntity?.polyline,
               useGoogleMaps: destGetLatLongCubit.type == "google",
               url: _getMapUrl(context, isStart: false),
@@ -139,7 +156,7 @@ class _MapSection extends StatelessWidget {
           return SizedBox(
             height: 200,
             child: DynamicMapWithPolyline(
-                showNavBar: false,
+              showNavBar: false,
               useGoogleMaps: destGetLatLongCubit.type == "google",
               latitude: destGetLatLongCubit.endLat,
               longitude: destGetLatLongCubit.endLong,
@@ -160,7 +177,7 @@ class _MapSection extends StatelessWidget {
               return SizedBox(
                 height: 200,
                 child: DynamicMapWithPolyline(
-                    showNavBar: false,
+                  showNavBar: false,
                   polylineString: priceDistanceCubit.tripInfoEntity?.polyline,
                   useGoogleMaps: getLatLongCubit.type == "google",
                   url: _getMapUrl(context, isStart: true),
@@ -176,7 +193,7 @@ class _MapSection extends StatelessWidget {
               return SizedBox(
                 height: 200,
                 child: DynamicMapWithPolyline(
-                    showNavBar: false,
+                  showNavBar: false,
                   useGoogleMaps: getLatLongCubit.type == "google",
                   latitude: getLatLongCubit.startLat,
                   longitude: getLatLongCubit.startLong,

@@ -38,9 +38,9 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
   final GetCitiesUseCase _getCitiesUseCase;
   final CreateRestaurantUseCase _createREstaurant;
   final ApiConsumer apiConsumer;
-XFile? licenseFirstPage;
-XFile? licenseSecondPage;
-XFile? licenseThirdPage;
+  XFile? licenseFirstPage;
+  XFile? licenseSecondPage;
+  XFile? licenseThirdPage;
 
   CreateRestaurantCubit(
       this._shareCubit,
@@ -84,10 +84,12 @@ XFile? licenseThirdPage;
         }
         res = 'fail';
       }, (data) {
+    
         res = 'success';
         emit(CreateRestaurantSuccess(LocaleKeys
             .youHaveSubmittedYourRegistrationSuccessfullyWaitingForAdministrationApproval
             .tr()));
+    
         Navigator.pop(context);
 
         AppPages.router.routerDelegate.navigatorKey.currentContext!
@@ -95,6 +97,7 @@ XFile? licenseThirdPage;
             .loadData();
 
         AppPages.router.routerDelegate.pop();
+
         return res;
       });
     } else {
@@ -156,7 +159,7 @@ XFile? licenseThirdPage;
         restaurantMedia: params.restaurantMedia,
       ),
     );
- 
+
     return result.fold(
       (Failure failure) {
         showErrorMessage(context, getFailureMessage(failure, context));
@@ -376,16 +379,16 @@ XFile? licenseThirdPage;
     required BuildContext context,
     int? index,
   }) async {
-      print("========================================   IN UPLOAD Profile ========================================");
+    print(
+        "========================================   IN UPLOAD Profile ========================================");
     await _uploadImage(
         subcategoryId: subcategoryId,
         context: context,
         onUploaded: (media) {
-             print("========================================${media.mediaId}========================================");
+          print(
+              "========================================${media.mediaId}========================================");
           if (index != null) {
             if (index >= 0 && index < restaurantImages.length) {
-                
-
               restaurantImages[index] = media.file;
               restaurantImagesIds[index] = media.mediaId;
               log("after :${restaurantImagesIds[index]}");
@@ -400,41 +403,46 @@ XFile? licenseThirdPage;
           emit(CreateRestaurantUploadProfileImage(restaurantImages));
         });
   }
-Future<void> uploadLicenseFirstPageImage({required BuildContext context}) async {
-  await _uploadImage(
-    context: context,
-    onUploaded: (media) {
-      licenseFirstPage = media.file;
-      licensRestaurantImagesIds.add(media.mediaId);
-      createRestaurantParams.licenseMedia = licensRestaurantImagesIds;
-      emit(CreateRestaurantRefreshUI());
-    },
-  );
-}
 
-Future<void> uploadLicenseSecondPageImage({required BuildContext context}) async {
-  await _uploadImage(
-    context: context,
-    onUploaded: (media) {
-      licenseSecondPage = media.file;
-      licensRestaurantImagesIds.add(media.mediaId);
-      createRestaurantParams.licenseMedia = licensRestaurantImagesIds;
-      emit(CreateRestaurantRefreshUI());
-    },
-  );
-}
+  Future<void> uploadLicenseFirstPageImage(
+      {required BuildContext context}) async {
+    await _uploadImage(
+      context: context,
+      onUploaded: (media) {
+        licenseFirstPage = media.file;
+        licensRestaurantImagesIds.add(media.mediaId);
+        createRestaurantParams.licenseMedia = licensRestaurantImagesIds;
+        emit(CreateRestaurantRefreshUI());
+      },
+    );
+  }
 
-Future<void> uploadLicenseThiredPageImage({required BuildContext context}) async {
-  await _uploadImage(
-    context: context,
-    onUploaded: (media) {
-      licenseThirdPage = media.file;
-      licensRestaurantImagesIds.add(media.mediaId);
-      createRestaurantParams.licenseMedia = licensRestaurantImagesIds;
-      emit(CreateRestaurantRefreshUI());
-    },
-  );
-}
+  Future<void> uploadLicenseSecondPageImage(
+      {required BuildContext context}) async {
+    await _uploadImage(
+      context: context,
+      onUploaded: (media) {
+        licenseSecondPage = media.file;
+        licensRestaurantImagesIds.add(media.mediaId);
+        createRestaurantParams.licenseMedia = licensRestaurantImagesIds;
+        emit(CreateRestaurantRefreshUI());
+      },
+    );
+  }
+
+  Future<void> uploadLicenseThiredPageImage(
+      {required BuildContext context}) async {
+    await _uploadImage(
+      context: context,
+      onUploaded: (media) {
+        licenseThirdPage = media.file;
+        licensRestaurantImagesIds.add(media.mediaId);
+        createRestaurantParams.licenseMedia = licensRestaurantImagesIds;
+        emit(CreateRestaurantRefreshUI());
+      },
+    );
+  }
+
   final name = TextEditingController();
   final number = TextEditingController();
   final phoneController = TextEditingController();
