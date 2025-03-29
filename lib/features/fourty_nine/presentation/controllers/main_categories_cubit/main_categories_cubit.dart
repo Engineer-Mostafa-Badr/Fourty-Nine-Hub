@@ -13,6 +13,7 @@ import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/utils/location_tracker.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/setting_subcategory_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/settings_dashboard_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/sub_category_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_settings_dashboard_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_socket_location_usecase.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -308,7 +309,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     // Check if isReady is true
     if (data.data.isReady == true) {
       // Check if any category is active
-      List<SettingSubcategoryEntity> categories = data.data.categoryIds;
+      List<SubCategoryEntity> categories = data.data.categoryIds;
       return categories.any((category) => category.isActive == true);
     }
     return false;

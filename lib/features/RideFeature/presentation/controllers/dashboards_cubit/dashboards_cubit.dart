@@ -33,6 +33,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   final CreateNewOfferDashboardUsecase createNewOfferDashboardUsecase;
   final CreateDriverRatingUsecase createDriverRatingUsecase;
   final UpdateDriverRatingUsecase updateDriverRatingUsecase;
+  final CreateRiderOfferUseCase createRiderOfferUseCase;
   DashboardsCubit(
     this.getAvailableTripsUsecase,
     this.getPastTripsUsecase,
@@ -42,6 +43,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     this.createNewOfferDashboardUsecase,
     this.createDriverRatingUsecase,
     this.updateDriverRatingUsecase,
+    this.createRiderOfferUseCase,
   ) : super(const DashboardsState());
   List<TripEntity> availableTripsNonSocket = [];
   Future<void> getAvailableTrips(BuildContext context) async {
@@ -49,10 +51,9 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     //   return;
     // }
     if (!hasMoreData || isLoadingMore) return;
-  final CreateRiderOfferUseCase createRiderOfferUseCase;
-  DashboardsCubit(this.getAvailableTripsUsecase, this.getPastTripsUsecase, this.availableRideTripsUseCase, this.getSettingsDashboardUsecase, this.updateSettingsDashboardUsecase,
-      this.createRiderOfferUseCase)
-      : super(const DashboardsState());
+  // DashboardsCubit(this.getAvailableTripsUsecase, this.getPastTripsUsecase, this.availableRideTripsUseCase, this.getSettingsDashboardUsecase, this.updateSettingsDashboardUsecase,
+  //     this.createRiderOfferUseCase)
+  //     : super(const DashboardsState());
 
   Future<void> getAvailableTrips(String subCateoryId, BuildContext context) async {
     if (isClosed) {
@@ -64,7 +65,6 @@ class DashboardsCubit extends Cubit<DashboardsState> {
         await getAvailableTripsUsecase(AvailableRideTripsUseCaseParams(
             page: currentPage, limit: pageSize));
 
-    final Either<Failure, TripsResponseEntity> result = await getAvailableTripsUsecase(subCateoryId);
 
     // if (isClosed) return;
     result.fold(
@@ -93,6 +93,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
         // emit(state.copyWith(status: DashboardsStates.success, availableTrips: availableTrips.data.trips));
       },
     );
+  }
   }
 
   void loadAvailableRideTrips(BuildContext context) async {

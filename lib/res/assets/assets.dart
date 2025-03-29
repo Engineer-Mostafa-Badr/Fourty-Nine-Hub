@@ -366,7 +366,6 @@ abstract class Assets {
   static String onBoarding12 = 'assets/onBoarding/onBoarding12.svg';
 
 
-  static const String arrowUp = 'assets/icons/arrow-up.svg';
   static const String arrowDown = 'assets/icons/arrow-up.svg';
 
   // new trip join icon

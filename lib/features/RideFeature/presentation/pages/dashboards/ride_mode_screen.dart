@@ -266,10 +266,11 @@ class _RideModeScreenState extends State<RideModeScreen> {
           setState(() {
             _selectedIndex = index;
           });
-          if (index == 0)
+          if (index == 0) {
             widget.params.isSocket == true
                 ? context.read<DashboardsCubit>().loadAvailableRideTrips(context)
-                : context.read<DashboardsCubit>().getAvailableTrips('667382a7f87288ce577e723b', context);
+                : context.read<DashboardsCubit>().getAvailableTrips(context);
+          }
         },
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 6),
