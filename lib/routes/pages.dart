@@ -279,6 +279,7 @@ import 'package:go_router/go_router.dart';
 
 import '../features/OnBoarding/Presentation/Controllers/on_boarding_cubit.dart';
 import '../features/OnBoarding/Presentation/Screens/on_boarding_screen.dart';
+import '../features/RideFeature/domain/entities/dashboards/trip_entity.dart';
 import '../features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import '../features/RideFeature/presentation/controllers/dashboards_cubit/dashboards_cubit.dart';
 import '../features/RideFeature/presentation/pages/Register/Driver/drivers_license_screen.dart';
@@ -3026,7 +3027,7 @@ class AppPages {
                           ),
                         ],
                         child: RideDashboardDetailsScreen(
-                            modeType: state.extra as String),
+                            tripEntity: state.extra as TripEntity),
                       )),
               GoRoute(
                   path: Paths.rideLoadingRequestScreen,

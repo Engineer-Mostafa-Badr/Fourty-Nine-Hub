@@ -6,7 +6,7 @@ import 'sub_category_model.dart';
 import 'trip_details_model.dart';
 
 class TripModel extends TripEntity {
-  const TripModel({
+   TripModel({
     required ClientDetailsModel? clientDetails,
     required DriverDetailsModel? driverDetails,
     required SubCategoryModel? subCategory,
