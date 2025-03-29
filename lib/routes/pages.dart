@@ -3213,18 +3213,18 @@ class AppPages {
                   ], child: const NewTripJoinScreen());
                 },
               ),
-              GoRoute(
-                  path: Paths.newTripJoinScreen,
-                  name: Routes.newTripJoinScreen,
-                  builder: (context, state) {
-                    return MultiBlocProvider(providers: [
-                      BlocProvider<DestGetLatAndLongCubit>(
-                        create: (context) => DestGetLatAndLongCubit(
-                            getLatLongFromAddressRemoteDataSource:
-                            serviceLocator()),
-                      ),
-                    ], child: const NewTripJoinScreen());
-                  },),
+              // GoRoute(
+              //     path: Paths.newTripJoinScreen,
+              //     name: Routes.newTripJoinScreen,
+              //     builder: (context, state) {
+              //       return MultiBlocProvider(providers: [
+              //         BlocProvider<DestGetLatAndLongCubit>(
+              //           create: (context) => DestGetLatAndLongCubit(
+              //               getLatLongFromAddressRemoteDataSource:
+              //               serviceLocator()),
+              //         ),
+              //       ], child: const NewTripJoinScreen());
+              //     },),
               GoRoute(
                   path: Paths.captainShareInfoScreen,
                   name: Routes.captainShareInfoScreen,
