@@ -21,9 +21,7 @@ class AvailableTripsFloatingActionButton extends StatelessWidget {
         // width: 120, // عرض الزر الجديد
         height: 56, // ارتفاع الزر الجديد
         child: RawMaterialButton(
-          onPressed: () {
-            context.read<UserCubit>().isLoggedIn?context.push(Routes.TRIP_JOIN):context.push(Routes.LOGIN);
-          },
+          onPressed: () {},
           fillColor: AppColors.PRIMARY_COLOR,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(

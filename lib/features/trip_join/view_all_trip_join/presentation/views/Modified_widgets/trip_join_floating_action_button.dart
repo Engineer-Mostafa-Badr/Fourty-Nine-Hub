@@ -6,8 +6,8 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
-class AvailableTripsFloatingActionButton extends StatelessWidget {
-  const AvailableTripsFloatingActionButton({
+class TripJoinFloatingActionButton extends StatelessWidget {
+  const TripJoinFloatingActionButton({
     super.key,
   });
 
@@ -22,12 +22,12 @@ class AvailableTripsFloatingActionButton extends StatelessWidget {
         height: 56, // ارتفاع الزر الجديد
         child: RawMaterialButton(
           onPressed: () {
-            context.read<UserCubit>().isLoggedIn?context.push(Routes.TRIP_JOIN):context.push(Routes.LOGIN);
+            context.push(Routes.TRIP_JOIN);
           },
           fillColor: AppColors.PRIMARY_COLOR,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(
-                28), // نصف القطر لجعل الشكل دائريًا جزئيًا
+                28),
           ),
           elevation: 4.0,
           child: Padding(
@@ -38,12 +38,12 @@ class AvailableTripsFloatingActionButton extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Icon(Icons.add, color: Colors.white, size: 24),
-                const SizedBox(width: 8), // مسافة بين الأيقونة والنص
+                const SizedBox(width: 8),
                 Text(
                   context.isArabic ? "أعلن عن سيارتك" : "Advertise your car",
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 14, // حجم النص أكبر قليلاً
+                    fontSize: 14,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

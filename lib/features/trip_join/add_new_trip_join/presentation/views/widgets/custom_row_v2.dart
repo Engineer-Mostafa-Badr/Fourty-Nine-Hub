@@ -20,7 +20,7 @@ class CustomRow extends StatelessWidget {
           child: children[2],
         ),
         Expanded(
-          flex: 2,
+          flex: 1,
           child: children[3],
         ),
       ],
