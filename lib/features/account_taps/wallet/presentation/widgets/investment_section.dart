@@ -12,9 +12,14 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class InvestmentSection extends StatefulWidget {
-  const InvestmentSection({super.key, required this.giftWalletEntity,});
+  const InvestmentSection({
+    super.key,
+    required this.giftWalletEntity,
+    required this.yearsToDate,
+  });
 
   final GiftWalletEntity giftWalletEntity;
+  final String yearsToDate;
 
   @override
   State<InvestmentSection> createState() => _InvestmentSectionState();
@@ -84,27 +89,45 @@ class _InvestmentSectionState extends State<InvestmentSection> {
                   child: Column(
                     children: [
                       InvestmentItem(
-                        totalYears: 5,
-                        currentYears: widget.giftWalletEntity.fiveYears??0,
-                        currency: context.isArabic? widget.giftWalletEntity.currencyAr : widget.giftWalletEntity.currencyEn,
-                        price: 0,
+                        totalYears: '5',
+                        currentYears: widget.yearsToDate,
+                        currency: context.isArabic
+                            ? widget.giftWalletEntity.currencyAr
+                            : widget.giftWalletEntity.currencyEn,
+                        price: widget.giftWalletEntity.fiveYears ?? 0,
                         onPressed: () {
-                          context.read<GiftTwoCubit>().requestTransferFiveYears(context);
+                          context
+                              .read<GiftTwoCubit>()
+                              .requestTransferFiveYears(context);
                         },
-                        isLoading: context.read<GiftTwoCubit>().state.buttonRequestFiveLoading??false,
+                        isLoading: context
+                                .read<GiftTwoCubit>()
+                                .state
+                                .buttonRequestFiveLoading ??
+                            false,
+                        isComplete: widget.giftWalletEntity.fiveYearsComplete,
                       ),
                       const SizedBox(
                         height: 12,
                       ),
                       InvestmentItem(
-                        totalYears: 10,
-                        currentYears: widget.giftWalletEntity.tenYears??0,
-                        currency: context.isArabic? widget.giftWalletEntity.currencyAr : widget.giftWalletEntity.currencyEn,
-                        price: 0,
+                        totalYears: '10',
+                        currentYears: widget.yearsToDate,
+                        currency: context.isArabic
+                            ? widget.giftWalletEntity.currencyAr
+                            : widget.giftWalletEntity.currencyEn,
+                        price: widget.giftWalletEntity.tenYears ?? 0,
                         onPressed: () {
-                          context.read<GiftTwoCubit>().requestTransferTenYears(context);
+                          context
+                              .read<GiftTwoCubit>()
+                              .requestTransferTenYears(context);
                         },
-                        isLoading: context.read<GiftTwoCubit>().state.buttonRequestTenLoading??false,
+                        isLoading: context
+                                .read<GiftTwoCubit>()
+                                .state
+                                .buttonRequestTenLoading ??
+                            false,
+                        isComplete: widget.giftWalletEntity.tenYearsComplete,
                       ),
                     ],
                   ),

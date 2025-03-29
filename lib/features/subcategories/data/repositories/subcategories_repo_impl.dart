@@ -5,6 +5,8 @@ import 'package:fourtyninehub/features/subcategories/domain/entities/sub_categor
 import 'package:fourtyninehub/features/subcategories/domain/repositories/subcategories_repo.dart';
 import 'package:fourtyninehub/features/subcategories/domain/usecases/get_sub_categories_use_case.dart';
 
+import '../../domain/usecases/get_custom_page_sub_categories_use_case.dart';
+
 class SubcategoriesRepoImpl implements SubcategoriesRepo {
   final SubcategoriesRemoteDataSource _remoteDataSource;
 
@@ -29,5 +31,10 @@ class SubcategoriesRepoImpl implements SubcategoriesRepo {
   @override
   Future<Either<Failure, bool>> deleteFavoriteCategory(String sucategoryId) {
     return _remoteDataSource.deleteFavoriteCategory(sucategoryId);
+  }
+
+  @override
+  Future<Either<Failure, List<SubCategoryEntity>>> getCustomPageSubcategories(GetCustomPageSubCategoriesParams params) {
+    return _remoteDataSource.getCustomPageSubcategories(params);
   }
 }

@@ -1,24 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/widget/call_message_buttons.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cubit.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/premium_request_button.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/request_button.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/custom_marriage_button_sheet.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/marriage_call_message_buttons.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcategories_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../res/assets/assets.dart';
@@ -93,12 +87,15 @@ class MarriageAdsListViewItem extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       SvgPicture.asset(Assets.mapPinIcon),
-                    const  SizedBox(
+                      const SizedBox(
                         width: 4,
                       ),
                       Label(
                         text: 'Giza , Egypt',
-                        style: Styles.headerText(fontSize: 24, color: Colors.black,),
+                        style: Styles.headerText(
+                          fontSize: 24,
+                          color: Colors.black,
+                        ),
                       ),
                     ],
                   ),
@@ -132,8 +129,10 @@ class MarriageAdsListViewItem extends StatelessWidget {
                       // ),
 
                       Expanded(
+                        flex: 5,
                         child: SizedBox(
                           height: 30,
+                          width: 141,
                           child: AvaialbleTripsButton(
                             title: LocaleKeys.request.localize,
                             color: AppColors.SECONDARY_COLOR_DARK2,
@@ -141,70 +140,44 @@ class MarriageAdsListViewItem extends StatelessWidget {
                             // padding: const EdgeInsets.symmetric(
                             //     horizontal: 15, vertical: 5,),
                             onTap: () {
-                              showModalBottomSheet(
-                                backgroundColor: context.isDarkMode
-                                    ? AppColors.DARK_BLUE_COLOR.withOpacity(0.95)
-                                    : AppColors.LIGHT_COLOR,
+                              bottomSheet(
                                 context: context,
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(32.0),
-                                    topRight: Radius.circular(32.0),
-                                  ),
+                                widget: CustomMarriageButtonSheet(
+                                  marriageAds: marriageAds,
                                 ),
-                                isDismissible: true,
-                                isScrollControlled: true,
-                                builder: (BuildContext context) {
-                                  return BlocProvider.value(
-                                    value: serviceLocator<AdvertisementCubit>(),
-                                    child: AnimatedPadding(
-                                      padding: MediaQuery.of(context).viewInsets,
-                                      duration: const Duration(milliseconds: 50),
-                                      child: Container(
-                                        height: 150.h,
-                                        padding: EdgeInsets.symmetric(
-                                          vertical: 10.h,
-                                          horizontal: 10,
-                                        ),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Expanded(
-                                              flex: 3,
-                                              child: PremiumRequestButton(
-                                                adId: marriageAds.id,
-                                                subCategoryId:
-                                                    marriageAds.subCategoryId ?? '',
-                                                subscriptionStatus: marriageAds
-                                                        .subscriptionStatus ??
-                                                    '',
-                                              ),
-                                            ),
-                                            const Sizer(width: 5),
-                                            Expanded(
-                                              flex: 3,
-                                              child: RequestButton(
-                                                adId: marriageAds.id,
-                                                subscriptionStatus: marriageAds
-                                                        .subscriptionStatus ??
-                                                    '',
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                },
                               );
+                              // showModalBottomSheet(
+                              //   backgroundColor: context.isDarkMode
+                              //       ? AppColors.DARK_BLUE_COLOR
+                              //           .withOpacity(0.95)
+                              //       : AppColors.LIGHT_COLOR,
+                              //   context: context,
+                              //   shape: const RoundedRectangleBorder(
+                              //     borderRadius: BorderRadius.only(
+                              //       topLeft: Radius.circular(32.0),
+                              //       topRight: Radius.circular(32.0),
+                              //     ),
+                              //   ),
+                              //   isDismissible: true,
+                              //   isScrollControlled: true,
+                              //   builder: (BuildContext context) {
+                              //     return CustomMarriageButtonSheet(
+                              //       marriageAds: marriageAds,
+                              //     );
+                              //   },
+                              // );
                             },
                           ),
                         ),
                       ),
+                      const Spacer(
+                        flex: 1,
+                      ),
                       Expanded(
-                        child: CallMessageButtons(
+                        flex: 6,
+                        child: MarriageCallMessageButtons(
                           otherUserId: marriageAds.userId ?? '',
+                          startPadding: 16,
                           subcategoryId: state
                                   .subCategories?[state.subCategories
                                           ?.indexWhere((element) =>

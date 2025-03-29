@@ -26,7 +26,8 @@ class InstagramForYouSliderWidget extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const SuggestedForYouInstagramScreen(),
+                        builder: (context) =>
+                            const SuggestedForYouInstagramScreen(),
                       ));
                 },
                 child: Text(
@@ -54,7 +55,8 @@ class InstagramForYouSliderWidget extends StatelessWidget {
                       padding: const EdgeInsets.all(5),
                       decoration: BoxDecoration(
                           border: Border.all(
-                              color: Colors.black.withValues(alpha: 0.2)),
+                            color: Colors.black.withValues(alpha: 0.2),
+                          ),
                           borderRadius: BorderRadius.circular(10)),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
@@ -82,31 +84,36 @@ class InstagramForYouSliderWidget extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Stack(
-              clipBehavior: Clip.none,
-              children: [
-                Positioned(
-                  right: 14,
-                  child: Container(
-                    width: 25,
-                    height: 25,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.green,
-                    ),
-                  ),
-                ),
-                Container(
-                  width: 25,
-                  height: 25,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.blue,
-                  ),
-                ),
-              ],
-            ),
-            const Sizer(),
-            Text("Followed by micaljohan,\nanthonymark + 67 morea", style: TextStyle(fontSize: 15, color: Colors.black.withOpacity(0.6)),)
+                                      clipBehavior: Clip.none,
+                                      children: [
+                                        Positioned(
+                                          right: 14,
+                                          child: Container(
+                                            width: 25,
+                                            height: 25,
+                                            decoration: const BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Colors.green,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          width: 25,
+                                          height: 25,
+                                          decoration: const BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: Colors.blue,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const Sizer(),
+                                    Text(
+                                      "Followed by micaljohan,\nanthonymark + 67 morea",
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color: Colors.black.withOpacity(0.6)),
+                                    )
                                   ],
                                 )
                               ],

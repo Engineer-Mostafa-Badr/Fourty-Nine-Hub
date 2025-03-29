@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../core/utils/handle_cashback.dart';
 import '../../presentation/view/widget/captain_share_body.dart';
@@ -28,7 +29,7 @@ class _CaptainShareScreenState extends State<CaptainShareScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       key: _scaffoldKey,
       floatingActionButton: const RouteButtonWidget(),
       appBar: HomeAppbar(

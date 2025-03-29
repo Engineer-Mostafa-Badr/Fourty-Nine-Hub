@@ -19,7 +19,6 @@ class _NewTripJoinScreenState extends State<NewTripJoinScreen> {
   Widget build(BuildContext context) {
     return CustomScaffold(
       appBar: HomeAppbar(
-        showChat: true,
         isWithBackArrow: false,
         language: true,
         leading: IconButton(

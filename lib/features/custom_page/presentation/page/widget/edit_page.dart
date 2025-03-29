@@ -14,7 +14,7 @@ import 'package:fourtyninehub/features/custom_page/presentation/page/widget/soci
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
-import 'favourite_category.dart';
+import 'custom_Page_categories.dart';
 
 class EditPage extends StatefulWidget {
   const EditPage({super.key});

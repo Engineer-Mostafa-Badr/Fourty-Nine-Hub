@@ -4,21 +4,30 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
+import '../../../../core/utils/handle_cashback.dart';
+import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../routes/routes.dart';
 import '../../../trip_join/add_new_trip_join/presentation/views/widgets/button.dart';
 import '../../presentation/view/screen/pick_me_info_screen.dart';
 
-class CaptainShareInfoScreen extends StatelessWidget {
+class CaptainShareInfoScreen extends StatefulWidget {
   const CaptainShareInfoScreen({super.key});
 
   @override
+  State<CaptainShareInfoScreen> createState() => _CaptainShareInfoScreenState();
+}
+
+class _CaptainShareInfoScreenState extends State<CaptainShareInfoScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       floatingActionButton: GestureDetector(
         onTap: () {
-          context.push(Routes.tripJoinInfoScreen);
+          context.push(Routes.captainShareScreen);
         },
         child: Container(
           width: 300.w,
@@ -44,7 +53,10 @@ class CaptainShareInfoScreen extends StatelessWidget {
         language: true,
         leading: IconButton(
           icon: const Icon(Icons.menu), // The menu icon
-          onPressed: () {},
+          onPressed: () {
+            HandleCashback.setCount('drawerCount', context);
+            _scaffoldKey.currentState?.openDrawer(); // Open the drawer
+          },
         ),
       ),
       body: const CaptainShareInfoBody(),

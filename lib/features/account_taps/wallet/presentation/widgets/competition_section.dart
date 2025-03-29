@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wheel_wallet_entity.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/gift_two_cubit/gift_two_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/competition_header_item.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/competition_list_view_item.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
@@ -35,7 +38,7 @@ class CompetitionsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<GiftCompetitionEntity> firstThreeCompetitions =
-    getFirstThreeCompetitions(competitions);
+        getFirstThreeCompetitions(competitions);
     return Column(
       children: [
         Label(
@@ -52,8 +55,7 @@ class CompetitionsSection extends StatelessWidget {
             Expanded(
               child: CompetitionHeaderItem(
                 title: LocaleKeys.luckyWheel.localize,
-                value: FormatNumbers()
-                    .formatNumber(luckyWheel.amount),
+                value: FormatNumbers().formatNumber(luckyWheel.amount),
                 svgPath: Assets.luckyWheelIcon,
               ),
             ),
@@ -62,8 +64,7 @@ class CompetitionsSection extends StatelessWidget {
                 return Expanded(
                   child: CompetitionHeaderItem(
                     title: context.isArabic ? c.nameAr! : c.nameEn!,
-                    value: FormatNumbers()
-                        .formatNumber(c.countOfRequest! * c.pricePerRequest!),
+                    value: FormatNumbers().formatNumber(c.amount ?? 0),
                     svgPath: competitionIcons[c.id] ?? '',
                   ),
                 );
@@ -83,11 +84,12 @@ class CompetitionsSection extends StatelessWidget {
                 child: CompetitionHeaderItem(
                   title: LocaleKeys.more.localize,
                   value: FormatNumbers().formatNumber(competitions
-                      .map((c) {
-                        return c.countOfRequest! * c.pricePerRequest!;
-                      })
-                      .toList()
-                      .reduce((value, element) => value + element) + luckyWheel.amount),
+                          .map((c) {
+                            return c.amount ?? 0;
+                          })
+                          .toList()
+                          .reduce((value, element) => value + element) +
+                      luckyWheel.amount),
                   svgPath: Assets.moreIcon,
                 ),
               ),
@@ -102,13 +104,17 @@ class CompetitionsSection extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           itemCount: competitions.length + 1,
           itemBuilder: (context, index) {
-            if(index == 0) {
+            if (index == 0) {
               return CompetitionListViewItem(
                 competition: competitions[index],
                 luckyWheel: luckyWheel,
                 currency: currency,
-                onPressed: () {
-                  // context.read<Cubit>().getHistories(context);
+                onPressed: () async {
+                  showLoadingDialog(context);
+                  await context.read<GiftTwoCubit>().requestTransferLuckyWheel(
+                        context,
+                      );
+                  Navigator.pop(context);
                 },
               );
             }
@@ -117,8 +123,13 @@ class CompetitionsSection extends StatelessWidget {
               competition: competitions[competitionIndex],
               luckyWheel: null,
               currency: currency,
-              onPressed: () {
-                // context.read<Cubit>().getHistories(context);
+              onPressed: () async {
+                showLoadingDialog(context);
+                await context.read<GiftTwoCubit>().requestTransferCompetition(
+                      context,
+                      competitionId: competitions[competitionIndex].id!,
+                    );
+                Navigator.pop(context);
               },
             );
           },

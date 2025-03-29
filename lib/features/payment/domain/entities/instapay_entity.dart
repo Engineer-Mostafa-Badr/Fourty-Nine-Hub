@@ -56,10 +56,12 @@ class InstaPayParams {
   final String receiptId;
   final String amountId;
   final String paymentProviderId;
+  final String phoneNumber;
 
   InstaPayParams({
     required this.receiptId,
     required this.amountId,
     required this.paymentProviderId,
+    required this.phoneNumber,
   });
 }

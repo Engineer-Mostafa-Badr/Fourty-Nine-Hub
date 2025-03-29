@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
-import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -11,9 +7,6 @@ import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/ad_
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/selection_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:go_router/go_router.dart';
-
-import '../../../../../../core/widget/custom_scaffold.dart';
 
 class FilterAdDynamicInputWidget extends StatefulWidget {
   final AdPropertiesEntity property;
@@ -73,7 +66,8 @@ class _FilterAdDynamicInputWidgetState
             height: 42,
             child: TextFormField(
               maxLines: null,
-              onChanged: (v) => widget.onTextChanged(v, true, widget.property.type),
+              onChanged: (v) =>
+                  widget.onTextChanged(v, true, widget.property.type),
               style: Styles.mediumText(fontSize: 32),
               decoration: InputDecoration(
                 fillColor: const Color(0xffF5F5F5),
@@ -169,7 +163,9 @@ class _FilterAdDynamicInputWidgetState
                         });
                       }
                     },
-                    items: widget.property.values.map<DropdownMenuItem<SelectionEntity>>((SelectionEntity item) {
+                    items: widget.property.values
+                        .map<DropdownMenuItem<SelectionEntity>>(
+                            (SelectionEntity item) {
                       return DropdownMenuItem<SelectionEntity>(
                         value: item,
                         alignment: AlignmentDirectional.centerStart,
@@ -280,9 +276,9 @@ class _FilterAdDynamicInputWidgetState
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Label(
-              text: getLang() == 'ar'
-                  ? widget.property.nameAr
-                  : widget.property.nameEn,
+            text: getLang() == 'ar'
+                ? widget.property.nameAr
+                : widget.property.nameEn,
             style: Styles.mediumText(fontSize: 32),
           ),
           const SizedBox(
@@ -300,9 +296,10 @@ class _FilterAdDynamicInputWidgetState
                     keyboardType: TextInputType.number,
                     style: Styles.mediumText(fontSize: 32),
                     decoration: InputDecoration(
-                        fillColor: const Color(0xffF5F5F5),
-                        filled: true,
-                        contentPadding: const EdgeInsetsDirectional.only(start: 16),
+                      fillColor: const Color(0xffF5F5F5),
+                      filled: true,
+                      contentPadding:
+                          const EdgeInsetsDirectional.only(start: 16),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15.0),
                         borderSide: BorderSide.none,
@@ -323,11 +320,11 @@ class _FilterAdDynamicInputWidgetState
                         borderRadius: BorderRadius.circular(15.0),
                         borderSide: BorderSide.none,
                       ),
-                        hintStyle: Styles.mediumText(fontSize: 32),
+                      hintStyle: Styles.mediumText(fontSize: 32),
                       hintText: LocaleKeys.from.localize,
                       // prefix: Sizer(
-                        //   width: 20.w,
-                        // ),
+                      //   width: 20.w,
+                      // ),
                     ),
                     validator: (value) {
                       if ((value == null || value.isEmpty)) {
@@ -343,54 +340,56 @@ class _FilterAdDynamicInputWidgetState
                 width: 8,
               ),
               Expanded(
-                  child: SizedBox(
-                    height: 42,
-                    child: TextFormField(
-                                  maxLines: 1,
-                                  onChanged: (v) =>
-                      widget.onTextChanged(v, false, widget.property.type),
-                                  keyboardType: TextInputType.number,
-                      style: Styles.mediumText(fontSize: 32),
-                      decoration: InputDecoration(
-                        fillColor: const Color(0xffF5F5F5),
-                        filled: true,
-                        contentPadding: const EdgeInsetsDirectional.only(start: 16),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                          borderSide: BorderSide.none,
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                          borderSide: BorderSide.none,
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                          borderSide: BorderSide.none,
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                          borderSide: BorderSide.none,
-                        ),
-                        focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                          borderSide: BorderSide.none,
-                        ),
-
-                        hintText: LocaleKeys.to.localize,
-                        hintStyle: Styles.mediumText(fontSize: 32),
-                        // prefix: Sizer(
-                        //   width: 20.w,
-                        // ),
+                child: SizedBox(
+                  height: 42,
+                  child: TextFormField(
+                    maxLines: 1,
+                    onChanged: (v) =>
+                        widget.onTextChanged(v, false, widget.property.type),
+                    keyboardType: TextInputType.number,
+                    style: Styles.mediumText(fontSize: 32),
+                    decoration: InputDecoration(
+                      fillColor: const Color(0xffF5F5F5),
+                      filled: true,
+                      contentPadding:
+                          const EdgeInsetsDirectional.only(start: 16),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                        borderSide: BorderSide.none,
                       ),
-                                  validator: (value) {
-                    if ((value == null || value.isEmpty)) {
-                      return LocaleKeys.required.localize;
-                    } else {
-                      return null;
-                    }
-                                  },
-                                ),
-                  ),),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                        borderSide: BorderSide.none,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                        borderSide: BorderSide.none,
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                        borderSide: BorderSide.none,
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                        borderSide: BorderSide.none,
+                      ),
+
+                      hintText: LocaleKeys.to.localize,
+                      hintStyle: Styles.mediumText(fontSize: 32),
+                      // prefix: Sizer(
+                      //   width: 20.w,
+                      // ),
+                    ),
+                    validator: (value) {
+                      if ((value == null || value.isEmpty)) {
+                        return LocaleKeys.required.localize;
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                ),
+              ),
             ],
           )
         ],
@@ -405,12 +404,14 @@ class _FilterAdDynamicInputWidgetState
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Label(
-              text: getLang() == 'ar'
-                  ? widget.property.nameAr
-                  : widget.property.nameEn,
+            text: getLang() == 'ar'
+                ? widget.property.nameAr
+                : widget.property.nameEn,
             style: Styles.mediumText(fontSize: 32),
           ),
-          const SizedBox(height: 4,),
+          const SizedBox(
+            height: 4,
+          ),
           Row(
             spacing: 8,
             children: widget.property.values.map((e) {
@@ -428,11 +429,11 @@ class _FilterAdDynamicInputWidgetState
                     // margin: const EdgeInsets.all(5),
                     decoration: BoxDecoration(
                       color: const Color(0xffF5F5F5),
-                      border: value == e?
-                      Border.all(
-                        color:
-                        AppColors.SECONDARY_COLOR_DARK2,
-                      ) : null,
+                      border: value == e
+                          ? Border.all(
+                              color: AppColors.SECONDARY_COLOR_DARK2,
+                            )
+                          : null,
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: Label(

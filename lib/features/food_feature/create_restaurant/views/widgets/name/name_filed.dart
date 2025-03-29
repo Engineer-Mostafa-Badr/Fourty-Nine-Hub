@@ -84,11 +84,12 @@ class CreateRestaurantNameField extends StatelessWidget {
 }
 
 class CreateRestaurantNumberField extends StatelessWidget {
-  const CreateRestaurantNumberField({super.key});
-
+  const CreateRestaurantNumberField({super.key, required this.restaurantNumber});
+  final String restaurantNumber ;
   @override
   Widget build(BuildContext context) {
     final restaurantLoginCubit = context.read<CreateRestaurantCubit>();
+    restaurantLoginCubit.phoneController.text = restaurantNumber; // Set value
     return BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
         builder: (context, state) {
       return Column(

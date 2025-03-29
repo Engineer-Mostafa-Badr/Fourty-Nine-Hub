@@ -272,7 +272,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
   }
 
   Widget _buildTopMap(RideState state, BuildContext context) {
-    List<LatLng> routePoints = _convertPolylineToLatLng(state.rideExpectedPrice?.polyline ?? []);
+    List<LatLng> routePoints =
+        _convertPolylineToLatLng(state.rideExpectedPrice?.polyline ?? []);
 
     if (state.currentLocation != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -303,17 +304,20 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
             markers: [
               if (state.currentLocation != null)
                 Marker(
-                  point: LatLng(state.currentLocation!.lat!, state.currentLocation!.lng!),
+                  point: LatLng(
+                      state.currentLocation!.lat!, state.currentLocation!.lng!),
                   width: 40,
                   height: 40,
-                  child: const Icon(Icons.location_pin, color: Colors.blue, size: 40),
+                  child: const Icon(Icons.location_pin,
+                      color: Colors.blue, size: 40),
                 ),
               if (state.toLocation != null)
                 Marker(
                   point: LatLng(state.toLocation!.lat!, state.toLocation!.lng!),
                   width: 40,
                   height: 40,
-                  child: const Icon(Icons.location_pin, color: Colors.red, size: 40),
+                  child: const Icon(Icons.location_pin,
+                      color: Colors.red, size: 40),
                 ),
               if (state.wayPointOne != null)
                 Marker(
@@ -351,7 +355,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
     return polyline.map((point) => LatLng(point[1], point[0])).toList();
   }
 
-  Widget _carTruckBtn({LoadingInfoEntity? loadingInfo, DriverInfoEntity? driverInfo}) {
+  Widget _carTruckBtn(
+      {LoadingInfoEntity? loadingInfo, DriverInfoEntity? driverInfo}) {
     if (loadingInfo == null && driverInfo == null) {
       return SizedBox(
         height: 48,
@@ -418,27 +423,62 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
             Expanded(
               child: CustomRideButton(
                 onPressed: () {
-                  context.push(Routes.rideModeScreen, extra: RideModeParams(modeType: 'ride', isSocket: driverInfo?.driverType == 'socket' ? true : false));
+                  context.push(Routes.rideModeScreen,
+                      extra: RideModeParams(
+                          modeType: 'ride',
+                          isSocket: driverInfo?.driverType == 'socket'
+                              ? true
+                              : false));
 
                   if (driverInfo == null) {
-                    context.read<RideCubit>().onNavigateToWelcomeScreen(fromShipping: false, context: context);
+                    context.read<RideCubit>().onNavigateToWelcomeScreen(
+                        fromShipping: false, context: context);
                   }
                 },
                 onTap: () {
-                  context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: false, isSocket: driverInfo?.driverType == 'socket' ? true : false));
-                  if (driverInfo != null && driverInfo.status == RegistrationStatus.pending.status) {
+                  context.push(Routes.UploadRiderImages,
+                      extra: UploadRiderImagesParams(
+                          isShipping: false,
+                          isSocket: driverInfo?.driverType == 'socket'
+                              ? true
+                              : false));
+                  if (driverInfo != null &&
+                      driverInfo.status == RegistrationStatus.pending.status) {
                     return;
-                  } else if (driverInfo != null && driverInfo.status == RegistrationStatus.rejected.status) {
-                    context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: false, isSocket: driverInfo.driverType == 'socket' ? true : false));
-                  } else if (driverInfo != null && driverInfo.status == RegistrationStatus.initial.status) {
-                    context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: false, isSocket: driverInfo.driverType == 'socket' ? true : false));
-                  }else{
-                    context.push(Routes.rideModeScreen, extra: RideModeParams(modeType: 'ride', isSocket: driverInfo?.driverType == 'socket' ? true : false));
+                  } else if (driverInfo != null &&
+                      driverInfo.status == RegistrationStatus.rejected.status) {
+                    context.push(Routes.UploadRiderImages,
+                        extra: UploadRiderImagesParams(
+                            isShipping: false,
+                            isSocket: driverInfo.driverType == 'socket'
+                                ? true
+                                : false));
+                  } else if (driverInfo != null &&
+                      driverInfo.status == RegistrationStatus.initial.status) {
+                    context.push(Routes.UploadRiderImages,
+                        extra: UploadRiderImagesParams(
+                            isShipping: false,
+                            isSocket: driverInfo.driverType == 'socket'
+                                ? true
+                                : false));
+                  } else {
+                    context.push(Routes.rideModeScreen,
+                        extra: RideModeParams(
+                            modeType: 'ride',
+                            isSocket: driverInfo?.driverType == 'socket'
+                                ? true
+                                : false));
                   }
                 },
-                isRed: (driverInfo != null && (driverInfo.status != RegistrationStatus.rejected.status)) ? true : false,
-                isPending: driverInfo != null && (driverInfo.status == RegistrationStatus.pending.status),
-                isDisabled: driverInfo != null && (driverInfo.status != RegistrationStatus.approved.status),
+                isRed: (driverInfo != null &&
+                        (driverInfo.status !=
+                            RegistrationStatus.rejected.status))
+                    ? true
+                    : false,
+                isPending: driverInfo != null &&
+                    (driverInfo.status == RegistrationStatus.pending.status),
+                isDisabled: driverInfo != null &&
+                    (driverInfo.status != RegistrationStatus.approved.status),
                 text: LocaleKeys.rideMode.tr(),
                 status: driverInfo?.status ?? '',
               ),
@@ -451,26 +491,41 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 onPressed: () {
                   if (loadingInfo == null) {
                     print("object");
-                    context.read<RideCubit>().onNavigateToWelcomeScreen(fromShipping: true, context: context);
+                    context.read<RideCubit>().onNavigateToWelcomeScreen(
+                        fromShipping: true, context: context);
                   } else {
                     print("loadingInfo.toJson()${loadingInfo.toJson()}");
                   }
                 },
                 onTap: () {
                   print("loadingInfo.toJson()${loadingInfo?.toJson()}");
-                  if (loadingInfo != null && loadingInfo.status == RegistrationStatus.pending.status) {
+                  if (loadingInfo != null &&
+                      loadingInfo.status == RegistrationStatus.pending.status) {
                     return;
-                  } else if (loadingInfo != null && loadingInfo.status == RegistrationStatus.rejected.status) {
-                    context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: true, isSocket: false));
-                  } else if (loadingInfo != null && loadingInfo.status == RegistrationStatus.initial.status) {
-                    context.push(Routes.UploadRiderImages, extra: UploadRiderImagesParams(isShipping: true, isSocket: false));
+                  } else if (loadingInfo != null &&
+                      loadingInfo.status ==
+                          RegistrationStatus.rejected.status) {
+                    context.push(Routes.UploadRiderImages,
+                        extra: UploadRiderImagesParams(
+                            isShipping: true, isSocket: false));
+                  } else if (loadingInfo != null &&
+                      loadingInfo.status == RegistrationStatus.initial.status) {
+                    context.push(Routes.UploadRiderImages,
+                        extra: UploadRiderImagesParams(
+                            isShipping: true, isSocket: false));
                   }
                 },
-                isRed: (loadingInfo != null && (loadingInfo.status != RegistrationStatus.rejected.status)) ? true : false,
+                isRed: (loadingInfo != null &&
+                        (loadingInfo.status !=
+                            RegistrationStatus.rejected.status))
+                    ? true
+                    : false,
                 isDisabled: loadingInfo != null &&
                     (loadingInfo.status == RegistrationStatus.pending.status ||
-                        loadingInfo.status == RegistrationStatus.rejected.status ||
-                        loadingInfo.status == RegistrationStatus.initial.status),
+                        loadingInfo.status ==
+                            RegistrationStatus.rejected.status ||
+                        loadingInfo.status ==
+                            RegistrationStatus.initial.status),
                 text: LocaleKeys.trukMode.tr(),
                 status: loadingInfo?.status ?? '',
               ),
@@ -567,7 +622,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                           context.push(Routes.LOGIN);
                         }
                       },
-                      child: _tripsWidget(LocaleKeys.activity.tr(), color: AppColors.GREYCARD)),
+                      child: _tripsWidget(LocaleKeys.activity.tr(),
+                          color: AppColors.GREYCARD)),
                 ),
                 Expanded(
                   child: ClickableWidget(
@@ -577,7 +633,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                           ));
 
                       },
-                      child: _tripsWidget(LocaleKeys.runningTrips.tr(), color: AppColors.GREYCARD)),
+                      child: _tripsWidget(LocaleKeys.runningTrips.tr(),
+                          color: AppColors.GREYCARD)),
                 ),
                 Expanded(
                   child: ClickableWidget(
@@ -586,13 +643,15 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                             rideCubit: context.read<RideCubit>(),
                           ));
                       },
-                      child: _tripsWidget(LocaleKeys.expiredTrips.tr(), color: AppColors.GREYCARD)),
+                      child: _tripsWidget(LocaleKeys.expiredTrips.tr(),
+                          color: AppColors.GREYCARD)),
                 ),
               ],
             ),
           ),
           Container(
-            padding: const EdgeInsets.only(left: 10, right: 10, bottom: 16, top: 8),
+            padding:
+                const EdgeInsets.only(left: 10, right: 10, bottom: 16, top: 8),
             decoration: BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,
               borderRadius: const BorderRadius.only(
@@ -606,8 +665,10 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 return Column(
                   spacing: 8,
                   children: [
-                    _buildCategoryList("ride", state.rideCategory?.subCategories ?? []),
-                    _buildCategoryList("shipping", state.shippingCategory?.subCategories ?? []),
+                    _buildCategoryList(
+                        "ride", state.rideCategory?.subCategories ?? []),
+                    _buildCategoryList("shipping",
+                        state.shippingCategory?.subCategories ?? []),
                     _customLocationField(
                       isTo: false,
                       color: Colors.green,

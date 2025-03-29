@@ -16,7 +16,7 @@ class UploadMyStarUseCase extends UseCase<bool, StarParams> {
 
 class StarParams {
   final String title;
-  final List<String>? mediaUrl;
+  final String mediaUrl;
   final String description;
   final String type;
 
