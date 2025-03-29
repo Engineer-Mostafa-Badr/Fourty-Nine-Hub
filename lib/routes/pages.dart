@@ -6,6 +6,7 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/D
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/upload_rider_images.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/activity_trip_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/complete_ride_screen.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/expired_trips_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/rating_driver_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_arrived_screen.dart';
