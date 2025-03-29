@@ -1,10 +1,9 @@
 // driver_status.dart
-import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/setting_subcategory_model.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/setting_subcategory_entity.dart';
+import 'sub_category_entity.dart';
 
 class SettingsDashboardEntity {
   final bool isReady;
-  final List<SettingSubcategoryEntity> categoryIds;
+  final List<SubCategoryEntity> categoryIds;
   final String subscriptionType;
   final double pricingPerKm;
   final String city;
@@ -28,24 +27,6 @@ class SettingsDashboardEntity {
     required this.isApproved,
     required this.isRejected,
   });
-
-  factory SettingsDashboardEntity.fromJson(Map<String, dynamic> json) {
-    return SettingsDashboardEntity(
-      isReady: json['isReady'],
-      categoryIds: (json['categoryIds'] as List)
-          .map((e) => SettingSubcategoryModel.fromJson(e))
-          .toList(),
-      subscriptionType: json['subscriptionType'],
-      pricingPerKm: json['pricingPerKm'].toDouble(),
-      city: json['city'],
-      rating: RatingSettingsEntity.fromJson(json['rating']),
-      profit: json['profit'].toDouble(),
-      countTrips: json['countTrips'],
-      isActive: json['isActive'],
-      isApproved: json['isApproved'],
-      isRejected: json['isRejected'],
-    );
-  }
 }
 
 // rating.dart
@@ -54,13 +35,6 @@ class RatingSettingsEntity {
   final int totalRatings;
 
   RatingSettingsEntity({required this.averageRating, required this.totalRatings});
-
-  factory RatingSettingsEntity.fromJson(Map<String, dynamic> json) {
-    return RatingSettingsEntity(
-      averageRating: json['averageRating'].toDouble(),
-      totalRatings: json['totalRatings'],
-    );
-  }
 }
 
 // driver_status_response.dart
@@ -69,11 +43,4 @@ class SettingsDashboardEntityResponse {
   final SettingsDashboardEntity data;
 
   SettingsDashboardEntityResponse({required this.status, required this.data});
-
-  factory SettingsDashboardEntityResponse.fromJson(Map<String, dynamic> json) {
-    return SettingsDashboardEntityResponse(
-      status: json['status'],
-      data: SettingsDashboardEntity.fromJson(json['data']),
-    );
-  }
 }

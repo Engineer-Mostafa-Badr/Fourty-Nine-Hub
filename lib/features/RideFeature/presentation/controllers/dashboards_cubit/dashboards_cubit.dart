@@ -15,8 +15,11 @@ import '../../../../../core/error/failure.dart';
 import '../../../domain/entities/dashboards/settings_dashboard_entity.dart';
 import '../../../domain/entities/dashboards/trip_entity.dart';
 import '../../../domain/entities/dashboards/trips_response_entity.dart';
+import '../../../domain/usecases/dashboards/create_driver_rating_usecase.dart';
+import '../../../domain/usecases/dashboards/create_new_offer_dashboard_usecase.dart';
 import '../../../domain/usecases/dashboards/get_past_trips_usecase.dart';
 import '../../../domain/usecases/dashboards/get_settings_dashboard_usecase.dart';
+import '../../../domain/usecases/dashboards/update_driver_rating_usecase.dart';
 import '../../../domain/usecases/dashboards/update_settings_dashboard_usecase.dart';
 
 part 'dashboards_state.dart';
@@ -27,6 +30,25 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   final GetPastTripsUsecase getPastTripsUsecase;
   final GetSettingsDashboardUsecase getSettingsDashboardUsecase;
   final UpdateSettingsDashboardUsecase updateSettingsDashboardUsecase;
+  final CreateNewOfferDashboardUsecase createNewOfferDashboardUsecase;
+  final CreateDriverRatingUsecase createDriverRatingUsecase;
+  final UpdateDriverRatingUsecase updateDriverRatingUsecase;
+  DashboardsCubit(
+    this.getAvailableTripsUsecase,
+    this.getPastTripsUsecase,
+    this.availableRideTripsUseCase,
+    this.getSettingsDashboardUsecase,
+    this.updateSettingsDashboardUsecase,
+    this.createNewOfferDashboardUsecase,
+    this.createDriverRatingUsecase,
+    this.updateDriverRatingUsecase,
+  ) : super(const DashboardsState());
+  List<TripEntity> availableTripsNonSocket = [];
+  Future<void> getAvailableTrips(BuildContext context) async {
+    // if (isClosed) {
+    //   return;
+    // }
+    if (!hasMoreData || isLoadingMore) return;
   final CreateRiderOfferUseCase createRiderOfferUseCase;
   DashboardsCubit(this.getAvailableTripsUsecase, this.getPastTripsUsecase, this.availableRideTripsUseCase, this.getSettingsDashboardUsecase, this.updateSettingsDashboardUsecase,
       this.createRiderOfferUseCase)
@@ -37,18 +59,38 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       return;
     }
     emit(state.copyWith(status: DashboardsStates.loadingAvailable));
+    isLoadingMore = true;
+    final Either<Failure, TripsResponseEntity> result =
+        await getAvailableTripsUsecase(AvailableRideTripsUseCaseParams(
+            page: currentPage, limit: pageSize));
 
     final Either<Failure, TripsResponseEntity> result = await getAvailableTripsUsecase(subCateoryId);
 
-    if (isClosed) return;
+    // if (isClosed) return;
     result.fold(
       (failure) {
-        log("Failure ${getFailureMessage(failure, context)}");
+        showErrorMessage(context, getFailureMessage(failure, context));
+        isLoadingMore = false;
+        log("objectavailableRideTripsEEEE");
+        log("Failure");
         emit(state.copyWith(status: DashboardsStates.error, failure: failure));
       },
       (availableTrips) {
         log("Suzccess");
-        emit(state.copyWith(status: DashboardsStates.success, availableTrips: availableTrips.data.trips));
+        List<TripEntity> availableRideTrips = [];
+        availableRideTrips.addAll(state.availableTrips ?? []);
+        availableRideTrips.addAll(availableTrips.data.trips);
+        if (availableTrips.data.trips.length < pageSize) {
+          hasMoreData = false;
+        } else {
+          currentPage++;
+        }
+        isLoadingMore = false;
+        availableTripsNonSocket = availableRideTrips;
+        emit(state.copyWith(
+            status: DashboardsStates.success,
+            availableTrips: availableRideTrips));
+        // emit(state.copyWith(status: DashboardsStates.success, availableTrips: availableTrips.data.trips));
       },
     );
   }
@@ -95,7 +137,9 @@ class DashboardsCubit extends Cubit<DashboardsState> {
           currentPage++;
         }
         isLoadingMore = false;
-        emit(state.copyWith(status: DashboardsStates.success, availableRideTrips: availableRideTrips));
+        emit(state.copyWith(
+            status: DashboardsStates.success,
+            availableRideTrips: availableRideTrips));
       },
     );
   }
@@ -106,7 +150,8 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     }
     emit(state.copyWith(status: DashboardsStates.loadingPast));
 
-    final Either<Failure, TripsResponseEntity> result = await getPastTripsUsecase(type);
+    final Either<Failure, TripsResponseEntity> result =
+        await getPastTripsUsecase(type);
 
     if (isClosed) return;
     result.fold(
@@ -127,7 +172,8 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     }
     emit(state.copyWith(status: DashboardsStates.loadingSettings));
 
-    final Either<Failure, SettingsDashboardEntityResponse> result = await getSettingsDashboardUsecase(const NoParams());
+    final Either<Failure, SettingsDashboardEntityResponse> result =
+        await getSettingsDashboardUsecase(const NoParams());
 
     if (isClosed) return;
     result.fold(
@@ -148,7 +194,8 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     }
     emit(state.copyWith(status: DashboardsStates.loadingSettings));
 
-    final Either<Failure, bool> result = await updateSettingsDashboardUsecase(param);
+    final Either<Failure, bool> result =
+        await updateSettingsDashboardUsecase(param);
 
     if (isClosed) return;
     result.fold(
@@ -158,16 +205,40 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       },
       (settings) {
         log("Suzccess");
-        emit(state.copyWith(status: DashboardsStates.success));
-        if (settings) {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text('Updated Successful.'),
-          ));
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text('Some thing went error!'),
-          ));
-        }
+        // emit(state.copyWith(status: DashboardsStates.success));
+        // if (settings) {
+        //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        //     content: Text('Updated Successful.'),
+        //   ));
+        // } else {
+        //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        //     content: Text('Some thing went error!'),
+        //   ));
+        // }
+        getSettings(context);
+      },
+    );
+  }
+
+  Future<void> createNewOffer(
+      BuildContext context, CreateNewOfferDashboardUsecaseParam param) async {
+    if (isClosed) {
+      return;
+    }
+    emit(state.copyWith(status: DashboardsStates.loadingCreateOffer));
+
+    final Either<Failure, bool> result =
+        await createNewOfferDashboardUsecase(param);
+
+    if (isClosed) return;
+    result.fold(
+      (failure) {
+        log("Failure ${getFailureMessage(failure, context)}");
+        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
+      },
+      (settings) {
+        log("Suzccess");
+        emit(state.copyWith(status: DashboardsStates.successOffer));
       },
     );
   }
@@ -178,5 +249,58 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     response.fold((l) => emit(state.copyWith(failure: l, status: DashboardsStates.error)), (data) {
       emit(state.copyWith(status: DashboardsStates.success));
     });
+  }
+
+  Future<void> createDriverRating(
+      BuildContext context, CreateUpdateDriverRatingUsecaseParam param) async {
+    if (isClosed) {
+      return;
+    }
+    emit(state.copyWith(status: DashboardsStates.loadingRating));
+
+    final Either<Failure, bool> result = await createDriverRatingUsecase(param);
+
+    if (isClosed) return;
+    result.fold(
+      (failure) {
+        log("Failure ${getFailureMessage(failure, context)}");
+        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
+      },
+      (settings) {
+        log("Suzccess");
+        emit(state.copyWith(status: DashboardsStates.successRating));
+      },
+    );
+  }
+
+  Future<void> updateDriverRating(
+      BuildContext context, CreateUpdateDriverRatingUsecaseParam param) async {
+    if (isClosed) {
+      return;
+    }
+    emit(state.copyWith(status: DashboardsStates.loadingRating));
+
+    final Either<Failure, bool> result = await updateDriverRatingUsecase(param);
+
+    if (isClosed) return;
+    result.fold(
+      (failure) {
+        log("Failure ${getFailureMessage(failure, context)}");
+        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
+      },
+      (settings) {
+        log("Suzccess");
+        emit(state.copyWith(status: DashboardsStates.successRating));
+      },
+    );
+  }
+
+  Future<void> refuseTrip(BuildContext context, String id) async {
+    emit(state.copyWith(status: DashboardsStates.loadingAvailable));
+    availableTripsNonSocket
+        .removeWhere((element) => element.tripDetails!.id == id);
+    emit(state.copyWith(
+        status: DashboardsStates.successOffer,
+        availableTrips: availableTripsNonSocket));
   }
 }

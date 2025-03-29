@@ -1,11 +1,12 @@
 // driver_status_model.dart
-import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/setting_subcategory_model.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/settings_dashboard_entity.dart';
+
+import 'sub_category_model.dart';
 
 class SettingsDashboardModel extends SettingsDashboardEntity {
   SettingsDashboardModel({
     required super.isReady,
-    required super.categoryIds,
+    required List<SubCategoryModel> super.categoryIds,
     required super.subscriptionType,
     required super.pricingPerKm,
     required super.city,
@@ -19,10 +20,9 @@ class SettingsDashboardModel extends SettingsDashboardEntity {
 
   factory SettingsDashboardModel.fromJson(Map<String, dynamic> json) {
     return SettingsDashboardModel(
-      isReady: json['isReady'],
-      categoryIds: (json['categoryIds'] as List)
-          .map((e) => SettingSubcategoryModel.fromJson(e))
-          .toList(),
+       isReady: json['isReady'],
+      categoryIds: List<SubCategoryModel>.from(
+          (json['categoryIds'] as List).map((x) => SubCategoryModel.fromJson(x))),
       subscriptionType: json['subscriptionType'],
       pricingPerKm: json['pricingPerKm'].toDouble(),
       city: json['city'],
@@ -36,7 +36,6 @@ class SettingsDashboardModel extends SettingsDashboardEntity {
   }
 }
 
-// rating_model.dart
 class RatingSettingsModel extends RatingSettingsEntity {
   RatingSettingsModel({required super.averageRating, required super.totalRatings});
 
@@ -48,13 +47,12 @@ class RatingSettingsModel extends RatingSettingsEntity {
   }
 }
 
-// driver_status_response_model.dart
-class DriverStatusResponseModel extends SettingsDashboardEntityResponse {
-  DriverStatusResponseModel(
+class SettingsDashboardResponseModel extends SettingsDashboardEntityResponse {
+  SettingsDashboardResponseModel(
       {required super.status, required SettingsDashboardModel super.data});
 
-  factory DriverStatusResponseModel.fromJson(Map<String, dynamic> json) {
-    return DriverStatusResponseModel(
+  factory SettingsDashboardResponseModel.fromJson(Map<String, dynamic> json) {
+    return SettingsDashboardResponseModel(
       status: json['status'],
       data: SettingsDashboardModel.fromJson(json['data']),
     );

@@ -15,7 +15,7 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../carpool/add_new_route/presentation/widgets/dynamic_map_test.dart';
 import '../../controllers/dashboards_cubit/dashboards_cubit.dart';
 import '../widgets/map_section.dart';
-import 'widgets/available_trips_widget.dart';
+import 'widgets/not_ready_available_trips_widget.dart';
 import 'widgets/past_trips_widget.dart';
 import 'widgets/settings_widget.dart';
 import 'widgets/truk_bus_widget.dart';
@@ -43,22 +43,28 @@ class _RideModeScreenState extends State<RideModeScreen> {
   void initState() {
     print("widget.params.isSocket ${widget.params.isSocket}");
     super.initState();
-    _availableTripsScrollController = ScrollController()..addListener(_onScroll);
+    _availableTripsScrollController = ScrollController()
+      ..addListener(_onScroll);
 
-    // _country = CountryPickerUtils.getCountryByName('Egypt');
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final dashboardCubit = context.read<DashboardsCubit>();
       if (!dashboardCubit.isClosed) {
-        widget.params.isSocket == true ? dashboardCubit.loadAvailableRideTrips(context) : dashboardCubit.getAvailableTrips('667382a7f87288ce577e723b', context);
-        dashboardCubit.getPastTrips(context, 'non-tracking');
+        widget.params.isSocket == true
+            ? dashboardCubit.loadAvailableRideTrips(context)
+            : dashboardCubit.getAvailableTrips(context);
+        dashboardCubit.getPastTrips(context,
+            widget.params.isSocket == true ? "tracking" : 'non-tracking');
         dashboardCubit.getSettings(context);
       }
     });
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
-      context.read<DashboardsCubit>().getAvailableRideTrips(context);
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      widget.params.isSocket == true
+          ? context.read<DashboardsCubit>().getAvailableRideTrips(context)
+          : context.read<DashboardsCubit>().getAvailableTrips(context);
     }
   }
 
@@ -91,12 +97,14 @@ class _RideModeScreenState extends State<RideModeScreen> {
                             children: [
                               const Icon(Icons.arrow_back),
                               Text(
-                                  widget.params.modeType == 'ride'
+                                  widget.params.isSocket == true
                                       ? LocaleKeys.rideMode.tr()
-                                      : widget.params.modeType == 'truk'
-                                          ? LocaleKeys.trukMode.tr()
-                                          : LocaleKeys.busMode.tr(),
-                                  style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
+                                      // : widget.params.modeType == 'truk'?
+                                      : LocaleKeys.trukMode.tr(),
+                                  // : LocaleKeys.busMode.tr(),
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 16)),
                             ],
                           ),
                         ),
@@ -108,9 +116,11 @@ class _RideModeScreenState extends State<RideModeScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             _buildTabItem(0, LocaleKeys.availableTrips.tr()),
-                            if (widget.params.modeType == 'ride') _buildTabItem(1, LocaleKeys.runningTrips.tr()),
+                            if (widget.params.isSocket == true)
+                              _buildTabItem(1, LocaleKeys.runningTrips.tr()),
                             _buildTabItem(2, LocaleKeys.pastTrips.tr()),
-                            if (widget.params.modeType == 'truk') _buildTabItem(4, LocaleKeys.loadingRequest.tr()),
+                            if (widget.params.isSocket == false)
+                              _buildTabItem(4, LocaleKeys.loadingRequest.tr()),
                             _buildFilterIcon(),
                           ],
                         ),
@@ -119,35 +129,65 @@ class _RideModeScreenState extends State<RideModeScreen> {
                       // Available Trips
                       if (_selectedIndex == 0)
                         Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                            child: state.isLoadingAvailable
-                                ? const Center(child: CircularProgressIndicator())
-                                    : widget.params.isSocket == true
-                                        ? cubit.isLoadingMore
-                                            ? const Center(child: CircularProgressIndicator())
-                                            : state.availableRideTrips != null
-                                                ? ListView.separated(
-                                                    controller: _availableTripsScrollController,
-                                                    itemBuilder: (context, index) => AvailableRideTripItem(tripEntity: state.availableRideTrips![index]),
-                                                    itemCount: state.availableRideTrips!.length,
-                                                    separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 15))
-                                                : const SizedBox.shrink()
-                                        : state.availableTrips == null
-                                            ? Container()
-                                            : ListView.separated(
-                                                itemBuilder: (context, index) => widget.params.modeType == 'ride'
-                                                    ? AvailableTripsWidget(isWithAnotherPrice: true, tripEntity: state.availableTrips![index])
-                                                    : widget.params.modeType == 'bus'
-                                                        ? TrukBusWidget(
-                                                            tripEntity: state.availableTrips![index],
-                                                            isWithAnotherPrice: true,
-                                                            modeType: 'bus',
-                                                          )
-                                                        : const TrukBusWidget(),
-                                                itemCount: state.availableTrips!.length,
-                                                separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 15)),
-                          ),
+                          child: (state.settings?.isReady ?? true)
+                              ? Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16.0),
+                                  child: state.isLoadingAvailable
+                                      ? const Center(
+                                          child: CircularProgressIndicator())
+                                      :
+                                      //     : state.isError
+                                      //         ? Center(
+                                      //             child: Text("Error: ${state.failure}"))
+                                      //         :
+                                      // !state.isSuccess ||
+                                      widget.params.isSocket == true
+                                          ? cubit.isLoadingMore
+                                              ? const Center(
+                                                  child:
+                                                      CircularProgressIndicator())
+                                              : state.availableRideTrips != null
+                                                  ? ListView.separated(
+                                                      controller:
+                                                          _availableTripsScrollController,
+                                                      itemBuilder: (context, index) =>
+                                                          AvailableRideTripItem(
+                                                              tripEntity: state.availableRideTrips![
+                                                                  index]),
+                                                      itemCount: state
+                                                          .availableRideTrips!
+                                                          .length,
+                                                      separatorBuilder:
+                                                          (BuildContext context, int index) =>
+                                                              const SizedBox(
+                                                                  height: 15))
+                                                  : const SizedBox.shrink()
+                                          : state.availableTrips == null
+                                              ? Container()
+                                              : ListView.separated(
+                                                  controller:
+                                                      _availableTripsScrollController,
+                                                  itemBuilder: (context, index) =>
+                                                      TrukBusWidget(
+                                                        tripEntity: state
+                                                                .availableTrips![
+                                                            index],
+                                                        isWithAnotherPrice:
+                                                            !state
+                                                                .availableTrips![
+                                                                    index]
+                                                                .tripDetails!
+                                                                .autoAccept,
+                                                        modeType: 'bus',
+                                                      ),
+                                                  // : const TrukBusWidget(),
+                                                  itemCount: state
+                                                      .availableTrips!.length,
+                                                  separatorBuilder: (BuildContext context, int index) =>
+                                                      const SizedBox(height: 15)),
+                                )
+                              : const NotReadyAvailableTripsWidget(),
                         )
                       // running Trips
                       else if (_selectedIndex == 1)
@@ -167,7 +207,15 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                 state.pastTrips == null
                                     ? Container()
                                     : ListView.builder(
-                                        itemBuilder: (context, index) => PastTripsWidget(modeType: widget.params.modeType, tripEntity: state.pastTrips![index]),
+                                        itemBuilder: (context, index) =>
+                                            PastTripsWidget(
+                                                modeType:
+                                                    widget.params.isSocket ==
+                                                            true
+                                                        ? 'ride'
+                                                        : 'truk',
+                                                tripEntity:
+                                                    state.pastTrips![index]),
                                         itemCount: state.pastTrips!.length,
                                       ),
                           ),
@@ -183,7 +231,11 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                 //             child: Text("Error: ${state.failure}"))
                                 //         :
                                 // !state.isSuccess ||
-                                SettingsWidget(modeType: widget.params.modeType, settings: state.settings))
+                                SettingsWidget(
+                                    modeType: widget.params.isSocket == true
+                                        ? 'ride'
+                                        : 'truk',
+                                    settings: state.settings))
                       // Ride or Loading Trips
                       else if (_selectedIndex == 4)
                         Expanded(

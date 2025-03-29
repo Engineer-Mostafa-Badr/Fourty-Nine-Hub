@@ -16,6 +16,7 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/enti
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant_mneu.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/is_resturant_usecase.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:image_picker/image_picker.dart';
 
 part 'edit_food_state.dart';
 
@@ -113,26 +114,63 @@ class EditFoodCubit extends Cubit<EditFoodState> {
   }
 
   // ================================= upload images =================================
-  Future<void> _uploadImage(BuildContext context,
-      {required dynamic Function(UploadFileEntity) onUploaded,
-      String? subcategoryId}) async {
-    await UploadFile().uploadImage(
-      subCategoryId: subcategoryId ?? '',
-      onUploaded: (value) {
-        onUploaded(value);
-      }, context: context,
+  // Future<void> _uploadImage(BuildContext context,
+  //     {required dynamic Function(UploadFileEntity) onUploaded,
+  //     String? subcategoryId}) async {
+  //   await UploadFile().uploadImage(
+  //     subCategoryId: subcategoryId ?? '',
+  //     onUploaded: (value) {
+  //       onUploaded(value);
+  //     }, context: context,
+  //   );
+  // }
+  Future<void> _uploadImage(
+      {required dynamic Function(UploadFileEntity) onUploaded,required BuildContext context,
+        subcategoryId}) async {
+    // if (createRestaurantParams.subcategoryId != null ||
+    //     createRestaurantParams.subcategoryId != "" ||
+    //     subcategoryId != null) {
+    //   emit(state.copyWith(uploadImageError:LocaleKeys.uploadingImage.tr()));
+      await UploadFile().uploadImage(
+        subCategoryId: subcategoryId ?? '',
+        // createRestaurantParams.subcategoryId ?? subcategoryId ?? '',
+        onUploaded: (value) {
+          onUploaded(value);
+        }, context: context,
+      );
+      // emit(CreateRestaurantCloseLoading());
+    // } else {
+    //   emit(state.copyWith(uploadImageError:LocaleKeys.selectSubcategoryFirst.tr()));
+    // }
+  }
+  List<XFile> restaurantImages = [];
+  List<String> restaurantImagesIds = [];
+
+  Future<void> uploadProfileImage({subcategoryId, required BuildContext context}) async {
+    await _uploadImage(
+      subcategoryId: subcategoryId,
+      context: context,
+      onUploaded: (media) {
+        restaurantImages.add(media.file);
+        restaurantImagesIds.add(media.mediaId);
+
+        // Store the image ID
+        imageId = media.mediaId;
+
+        emit(state.copyWith(files: restaurantImages, imagePath: media.file.path));
+      },
     );
   }
 
   String imageId = "";
 
-  Future<void> uploadMealImage(BuildContext context, {subcategoryId}) async {
-    await _uploadImage(context, subcategoryId: subcategoryId,
-        onUploaded: (media) {
-      imageId = media.mediaId[0];
-      emit(state.copyWith(imagePath: media.file.path));
-    });
-  }
+  // Future<void> uploadMealImage(BuildContext context, {subcategoryId}) async {
+  //   await _uploadImage(context, subcategoryId: subcategoryId,
+  //       onUploaded: (media) {
+  //     imageId = media.mediaId;
+  //     emit(state.copyWith(imagePath: media.file.path));
+  //   });
+  // }
 
   UserEntity? user;
   Future<void> _getUser() async {
@@ -167,9 +205,10 @@ class EditFoodCubit extends Cubit<EditFoodState> {
     AddFoodParams params = AddFoodParams(
       foodName: menuItem.foodName ?? '',
       price: menuItem.price ?? 0.0,
-      photo: menuItem.photo ?? '',
-      subcategory: state.isResturant!.subCategoryId!,
+      photo: imageId,  // Use the stored image ID here
+      // subcategory: state.isResturant!.subCategoryId!,
     );
+    print("Here ${ menuItem.photo}");
     final response = await _addFoodUseCase(params);
     return response.fold(
       (failure) {},

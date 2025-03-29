@@ -6,8 +6,8 @@ import '../../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../../create_ad/domain/entities/categorization_entity.dart';
 
-class HeaderFilter extends StatelessWidget {
-  const HeaderFilter({
+class CustomHeaderForm extends StatelessWidget {
+  const CustomHeaderForm({
     super.key,
     required this.categorization,
   });

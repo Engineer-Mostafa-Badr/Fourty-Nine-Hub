@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -15,14 +16,16 @@ class InvestmentItem extends StatelessWidget {
     required this.price,
     required this.currency,
     required this.isLoading,
+    required this.isComplete,
   });
 
   final void Function() onPressed;
-  final int totalYears;
-  final int currentYears;
+  final String totalYears;
+  final String currentYears;
   final num price;
   final String currency;
   final bool isLoading;
+  final bool isComplete;
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +36,7 @@ class InvestmentItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Label(
-              text:
-                  '$currentYears / $totalYears ${LocaleKeys.years.localize}',
+              text: '$currentYears / $totalYears ${LocaleKeys.years.localize}',
               style: Styles.mediumText(fontSize: 32),
             ),
             const SizedBox(
@@ -48,14 +50,25 @@ class InvestmentItem extends StatelessWidget {
             ),
           ],
         ),
-        isLoading
-            ? const CircularProgressIndicator()
-            : CustomButtonWalletAndGiftAndCashback(
-                title: LocaleKeys.transfer.localize,
-                onPressed: onPressed,
+        isComplete
+            ? AppButton(
+                label: LocaleKeys.received.localize,
+                style: Styles.headerText(color: Colors.white, fontSize: 32),
+                onPressed: () {},
+                backColor: Colors.green,
                 padding: 24,
-                status: totalYears == currentYears,
-              ),
+              )
+            : isLoading
+                ? const Padding(
+                    padding: EdgeInsetsDirectional.only(end: 26),
+                    child: CircularProgressIndicator(),
+                  )
+                : CustomButtonWalletAndGiftAndCashback(
+                    title: LocaleKeys.transfer.localize,
+                    onPressed: onPressed,
+                    padding: 24,
+                    status: int.parse(currentYears) > int.parse(totalYears),
+                  )
       ],
     );
   }

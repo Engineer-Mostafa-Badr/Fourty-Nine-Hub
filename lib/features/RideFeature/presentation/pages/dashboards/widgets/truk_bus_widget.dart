@@ -1,20 +1,18 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/widgets/edit_price_widget.dart';
 
 import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../../domain/entities/dashboards/trip_entity.dart';
-import '../../widgets/dialog_widget/show_custom_dialog_trip.dart';
-import '../../widgets/font_manager.dart';
+import '../../../controllers/dashboards_cubit/dashboards_cubit.dart';
+import '../../widgets/fare_bottom_sheet_widget.dart';
 
 class TrukBusWidget extends StatelessWidget {
   final bool isWithAnotherPrice;
@@ -45,15 +43,20 @@ class TrukBusWidget extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 12.0),
                       child: Container(
-                        width: 50,
-                        height: 50,
-                        decoration: const BoxDecoration(shape: BoxShape.circle),
-                        clipBehavior: Clip.antiAliasWithSaveLayer,
-                        child: Image.asset(
-                          Assets.maleImagePlaceholder,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                          width: 50,
+                          height: 50,
+                          decoration:
+                              const BoxDecoration(shape: BoxShape.circle),
+                          clipBehavior: Clip.antiAliasWithSaveLayer,
+                          child: tripEntity?.clientDetails!.profilePictureUrl ==
+                                  null
+                              ? Image.asset(
+                                  Assets.maleImagePlaceholder,
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.network(
+                                  tripEntity!.clientDetails!.profilePictureUrl,
+                                )),
                     ),
                     Positioned(
                         top: 0,
@@ -70,12 +73,20 @@ class TrukBusWidget extends StatelessWidget {
                                   SvgPicture.asset(Assets.star2,
                                       width: 8, height: 8),
                                   const Sizer(width: 4),
-                                  Label(text: '4.5', style: Styles.smallText())
+                                  Label(
+                                      text: tripEntity!
+                                          .clientDetails!.rating!.rating
+                                          .toString(),
+                                      style: Styles.smallText())
                                 ]))))
                   ],
                 ),
-                Label(text: 'Ahmed', style: Styles.mediumText()),
-                Label(text: '(50)', style: Styles.smallText())
+                Label(
+                    text: tripEntity!.clientDetails!.firstName, //'Ahmed',
+                    style: Styles.mediumText()),
+                Label(
+                    text: '(${tripEntity!.clientDetails!.rating!.rating})',
+                    style: Styles.smallText())
               ])),
           const Sizer(width: 32),
           Expanded(
@@ -94,45 +105,56 @@ class TrukBusWidget extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(spacing: 5, children: [
-                              Expanded(
-                                flex: 1,
-                                child: Image.asset(Assets.rideFrom,
-                                    width: 24, height: 24),
-                              ),
-                              Expanded(
-                                  flex: 8,
-                                  child: Label(
-                                      text: tripEntity?.tripDetails?.startLocation.title ??
-                                          'Tariaq Bedon Esm Tariaq Bedon Esm',
-                                      style: Styles.headerText()))
-                            ]),
-                            Row(spacing: 5, children: [
-                              Expanded(
+                            Row(
+                              spacing: 5,
+                              children: [
+                                Expanded(
                                   flex: 1,
-                                  child: Image.asset(Assets.rideTo,
-                                      width: 24, height: 24)),
-                              Expanded(
-                                  flex: 8,
-                                  child: Label(
-                                      text: tripEntity?.tripDetails?.targetLocation.title ??
-                                          'Open Air Mall - Madinaty',
-                                      style: Styles.mediumText(
-                                          fontWeight: FontWeight.w300)))
-                            ]),
+                                  child: Image.asset(Assets.rideFrom,
+                                      width: 24, height: 24),
+                                ),
+                                Expanded(
+                                    flex: 8,
+                                    child: Label(
+                                        text: tripEntity?.tripDetails
+                                                ?.startLocation.title ??
+                                            'Cairo International Airport',
+                                        style: Styles.headerText()))
+                              ],
+                            ),
+                            Row(
+                              spacing: 5,
+                              children: [
+                                Expanded(
+                                    flex: 1,
+                                    child: Image.asset(Assets.rideTo,
+                                        width: 24, height: 24)),
+                                Expanded(
+                                    flex: 8,
+                                    child: Label(
+                                        text: tripEntity?.tripDetails
+                                                ?.targetLocation.title ??
+                                            'Cairo International Airport',
+                                        style: Styles.mediumText(
+                                            fontWeight: FontWeight.w300)))
+                              ],
+                            ),
                           ],
                         ),
                       ),
                       Expanded(
                           flex: 3,
-                          child: Column(children: [
-                            Image.asset(Assets.rideIcon, width: 40, height: 40),
-                            Label(
-                                text: modeType == 'truk'
-                                    ? LocaleKeys.transporte.tr()
-                                    : LocaleKeys.bus.tr(),
-                                style: Styles.mediumText(fontSize: 25))
-                          ]))
+                          child: Column(
+                            children: [
+                              Image.asset(Assets.rideIcon,
+                                  width: 40, height: 40),
+                              Label(
+                                  text: modeType == 'truk'
+                                      ? LocaleKeys.transporte.tr()
+                                      : LocaleKeys.bus.tr(),
+                                  style: Styles.mediumText(fontSize: 25))
+                            ],
+                          )),
                     ],
                   ),
                   Label(
@@ -141,17 +163,23 @@ class TrukBusWidget extends StatelessWidget {
                         : '${LocaleKeys.passenger.tr()} : ${tripEntity?.tripDetails?.passengers ?? 0}',
                     style: Styles.mediumText(fontSize: 32),
                   ),
-                  Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                    Label(
-                        text: tripEntity?.tripDetails?.price.toStringAsFixed(1) ?? '300',
-                        style: Styles.mediumText(fontWeight: FontWeight.w700)),
-                    const Sizer(width: 4),
-                    Label(
-                        text: LocaleKeys.egp.tr(),
-                        style: Styles.mediumText(
-                            color: AppColors.SECONDARY_COLOR,
-                            fontWeight: FontWeight.w700))
-                  ]),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Label(
+                          text: tripEntity?.tripDetails?.price
+                                  .toStringAsFixed(1) ??
+                              '300',
+                          style:
+                              Styles.mediumText(fontWeight: FontWeight.w700)),
+                      const Sizer(width: 4),
+                      Label(
+                          text: LocaleKeys.egp.tr(),
+                          style: Styles.mediumText(
+                              color: AppColors.SECONDARY_COLOR,
+                              fontWeight: FontWeight.w700))
+                    ],
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -178,7 +206,8 @@ class TrukBusWidget extends StatelessWidget {
                           radius: 15,
                           label: LocaleKeys.Accept.tr(),
                           onPressed: () {},
-                          backColor: AppColors.PRIMARY_COLOR,
+                          backColor: AppColors.PRIMARY_COLOR.withOpacity(
+                              tripEntity!.state!.isButtonEnabled ? 1 : 0.7),
                         ),
                       ),
                       const Sizer(),
@@ -193,56 +222,66 @@ class TrukBusWidget extends StatelessWidget {
                               color: Colors.white,
                               fontSize: isWithAnotherPrice ? 23 : 28),
                           onPressed: () {
-                            if (isWithAnotherPrice) {
-                              showModalBottomSheet(
-                                backgroundColor: AppColors.whiteColor,
-                                context: context,
-                                shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.vertical(
-                                        top: Radius.circular(15))),
-                                isScrollControlled: true,
-                                builder: (BuildContext context) =>
-                                    EditPriceWidget(tripEntity: tripEntity),
-                              );
-                            } else {
-                              showCustomDialogTrip(
-                                  context,
-                                  Column(
-                                    spacing: 12,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text(
-                                        LocaleKeys.alert.localize,
-                                        style: const TextStyle(
-                                          fontSize: 20,
-                                          color: Colors.red,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      Text(
-                                          'You have got a free trip today from 49',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: FontSize.s16,
-                                            color: context.isDarkMode
-                                                ? Colors.white
-                                                : Colors.black,
-                                          )),
-                                      AppButton(
-                                          width: context.screenWidth / 1.9,
-                                          label: 'Go to Ride',
-                                          backColor:
-                                              AppColors.SECONDARY_COLOR_DARK2,
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          }),
-                                      const SizedBox(height: 16),
-                                    ],
-                                  ));
+                            if (tripEntity!.state!.isButtonEnabled) {
+                              if (isWithAnotherPrice) {
+                                showModalBottomSheet(
+                                    backgroundColor: AppColors.whiteColor,
+                                    context: context,
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.vertical(
+                                            top: Radius.circular(15))),
+                                    isScrollControlled: true,
+                                    builder: (BuildContext context) =>
+                                        FareBottomSheetWidget2(id:  tripEntity!.tripDetails!.id,
+                                            selectedCategoryPrice:
+                                                tripEntity!.tripDetails!.price,
+                                           dashboardsCubit: context.read<DashboardsCubit>(),)
+                                    //EditPriceWidget(tripEntity: tripEntity),
+                                    );
+                              } else {
+                                // showCustomDialogTrip(
+                                //     context,
+                                //     Column(
+                                //       spacing: 12,
+                                //       mainAxisSize: MainAxisSize.min,
+                                //       children: [
+                                //         Text(
+                                //           LocaleKeys.alert.localize,
+                                //           style: const TextStyle(
+                                //             fontSize: 20,
+                                //             color: Colors.red,
+                                //             fontWeight: FontWeight.bold,
+                                //           ),
+                                //         ),
+                                //         Text(
+                                //             'You have got a free trip today from 49',
+                                //             textAlign: TextAlign.center,
+                                //             style: TextStyle(
+                                //               fontWeight: FontWeight.w500,
+                                //               fontSize: FontSize.s16,
+                                //               color: context.isDarkMode
+                                //                   ? Colors.white
+                                //                   : Colors.black,
+                                //             )),
+                                //         AppButton(
+                                //             width: context.screenWidth / 1.9,
+                                //             label: 'Go to Ride',
+                                //             backColor:
+                                //                 AppColors.SECONDARY_COLOR_DARK2,
+                                //             onPressed: () {
+                                //               Navigator.of(context).pop();
+                                //             }),
+                                //         const SizedBox(height: 16),
+                                //       ],
+                                //     ));
+                                context.read<DashboardsCubit>().refuseTrip(
+                                    context, tripEntity!.tripDetails!.id);
+                              }
                             }
                           },
-                          backColor: AppColors.SECONDARY_COLOR_DARK2,
+                          backColor: AppColors.SECONDARY_COLOR_DARK2
+                              .withOpacity(
+                                  tripEntity!.state!.isButtonEnabled ? 1 : 0.7),
                         ),
                       ),
                     ],

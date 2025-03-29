@@ -269,7 +269,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
   }
 
   Widget _buildTopMap(RideState state, BuildContext context) {
-    List<LatLng> routePoints = _convertPolylineToLatLng(state.rideExpectedPrice?.polyline ?? []);
+    List<LatLng> routePoints =
+        _convertPolylineToLatLng(state.rideExpectedPrice?.polyline ?? []);
 
     if (state.currentLocation != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -300,17 +301,20 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
             markers: [
               if (state.currentLocation != null)
                 Marker(
-                  point: LatLng(state.currentLocation!.lat!, state.currentLocation!.lng!),
+                  point: LatLng(
+                      state.currentLocation!.lat!, state.currentLocation!.lng!),
                   width: 40,
                   height: 40,
-                  child: const Icon(Icons.location_pin, color: Colors.blue, size: 40),
+                  child: const Icon(Icons.location_pin,
+                      color: Colors.blue, size: 40),
                 ),
               if (state.toLocation != null)
                 Marker(
                   point: LatLng(state.toLocation!.lat!, state.toLocation!.lng!),
                   width: 40,
                   height: 40,
-                  child: const Icon(Icons.location_pin, color: Colors.red, size: 40),
+                  child: const Icon(Icons.location_pin,
+                      color: Colors.red, size: 40),
                 ),
               if (state.wayPointOne != null)
                 Marker(
@@ -348,7 +352,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
     return polyline.map((point) => LatLng(point[1], point[0])).toList();
   }
 
-  Widget _carTruckBtn({LoadingInfoEntity? loadingInfo, DriverInfoEntity? driverInfo}) {
+  Widget _carTruckBtn(
+      {LoadingInfoEntity? loadingInfo, DriverInfoEntity? driverInfo}) {
     if (loadingInfo == null && driverInfo == null) {
       return SizedBox(
         height: 48,
@@ -586,7 +591,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                           context.push(Routes.LOGIN);
                         }
                       },
-                      child: _tripsWidget(LocaleKeys.activity.tr(), color: AppColors.GREYCARD)),
+                      child: _tripsWidget(LocaleKeys.activity.tr(),
+                          color: AppColors.GREYCARD)),
                 ),
                 Expanded(
                   child: ClickableWidget(
@@ -596,7 +602,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                           ));
 
                       },
-                      child: _tripsWidget(LocaleKeys.runningTrips.tr(), color: AppColors.GREYCARD)),
+                      child: _tripsWidget(LocaleKeys.runningTrips.tr(),
+                          color: AppColors.GREYCARD)),
                 ),
                 Expanded(
                   child: ClickableWidget(
@@ -605,13 +612,15 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                             rideCubit: context.read<RideCubit>(),
                           ));
                       },
-                      child: _tripsWidget(LocaleKeys.expiredTrips.tr(), color: AppColors.GREYCARD)),
+                      child: _tripsWidget(LocaleKeys.expiredTrips.tr(),
+                          color: AppColors.GREYCARD)),
                 ),
               ],
             ),
           ),
           Container(
-            padding: const EdgeInsets.only(left: 10, right: 10, bottom: 16, top: 8),
+            padding:
+                const EdgeInsets.only(left: 10, right: 10, bottom: 16, top: 8),
             decoration: BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,
               borderRadius: const BorderRadius.only(
@@ -625,8 +634,10 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 return Column(
                   spacing: 8,
                   children: [
-                    _buildCategoryList("ride", state.rideCategory?.subCategories ?? []),
-                    _buildCategoryList("shipping", state.shippingCategory?.subCategories ?? []),
+                    _buildCategoryList(
+                        "ride", state.rideCategory?.subCategories ?? []),
+                    _buildCategoryList("shipping",
+                        state.shippingCategory?.subCategories ?? []),
                     _customLocationField(
                       isTo: false,
                       color: Colors.green,

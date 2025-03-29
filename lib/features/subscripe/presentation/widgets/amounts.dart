@@ -32,11 +32,11 @@ class _SubscriptoinAmountsWidgetState extends State<SubscriptoinAmountsWidget> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(
-        left: 19.5,
-        right: 19.5,
-        top: 8,
-        bottom: 16,
-      ),
+          // left: 19.5,
+          // right: 19.5,
+          // top: 8,
+          // bottom: 16,
+          ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

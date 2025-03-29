@@ -10,6 +10,7 @@ class GiftAndCompetitionEntity {
   final bool wheelWinner;
   final bool isFIVE;
   final bool isTen;
+  final String yearsToDate;
 
   GiftAndCompetitionEntity({
     required this.giftWallet,
@@ -18,5 +19,6 @@ class GiftAndCompetitionEntity {
     required this.wheelWinner,
     required this.isFIVE,
     required this.isTen,
+    required this.yearsToDate,
   });
 }

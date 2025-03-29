@@ -6,7 +6,10 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/image_picker_placeholder.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/custom_image_picker_health.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class CreateDoctorLicensePhotoPicker extends StatelessWidget {
@@ -19,59 +22,118 @@ class CreateDoctorLicensePhotoPicker extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Label(
-          text: context.isArabic
-              ? 'قم بتحميل الترخيص  (الوجه والظهر)'
-              : 'Upload Your License (Front and Back)',
-          style: Styles.headerText(),
+          text: LocaleKeys.licenseFrontAndBack.localize,
+          style: Styles.headerText(height: 1.60),
         ),
-        const Sizer(),
+        const SizedBox(
+          height: 8,
+        ),
         Row(
           children: [
-            InkWell(
-              onTap: () async {
-                await createDoctorCubit.uploadPracticingFrontImage(context: context);
-              },
-              child: BlocBuilder<CreateDoctorCubit, CreateDoctorState>(
-                buildWhen: (previous, current) =>
-                    current is CreateDoctorUploadPracticingFrontImage ||
-                    current is CreateDoctorInitial,
-                builder: (context, state) {
-                  if (state is CreateDoctorUploadPracticingFrontImage) {
-                    return ImagePickerPlaceholder(
-                      image: Image.file(
-                        File(state.file.path),
-                      ),
+            Column(
+              children: [
+                BlocBuilder<CreateDoctorCubit, CreateDoctorState>(
+                  buildWhen: (previous, current) =>
+                      current is CreateDoctorUploadPracticingFrontImage ||
+                      current is CreateDoctorInitial,
+                  builder: (context, state) {
+                    return CustomImagePickerHealth(
+                      isUploaded:
+                          state is CreateDoctorUploadPracticingFrontImage,
+                      onTap: () async {
+                        await createDoctorCubit.uploadPracticingFrontImage(
+                            context: context);
+                      },
                     );
-                  }
-                  return ImagePickerPlaceholder(
-                    title: context.isArabic ? 'الوجه' : 'Front',
-                  );
-                },
-              ),
+                    // if (state is CreateDoctorUploadPracticingFrontImage) {
+                    //   return ImagePickerPlaceholder(
+                    //     image: Image.file(
+                    //       File(state.file.path),
+                    //     ),
+                    //   );
+                    // }
+                    // return ImagePickerPlaceholder(
+                    //   title: context.isArabic ? 'الوجه' : 'Front',
+                    // );
+                  },
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
+                Label(
+                  text: LocaleKeys.front.localize,
+                  style: Styles.mediumText(
+                    fontSize: 24,
+                    height: 1.60,
+                  ),
+                ),
+              ],
             ),
-            const Sizer(),
-            InkWell(
-              onTap: () async {
-                await createDoctorCubit.uploadPracticingBehindImage(context: context);
-              },
-              child: BlocBuilder<CreateDoctorCubit, CreateDoctorState>(
-                buildWhen: (previous, current) =>
-                    current is CreateDoctorUploadPracticingBehindImage ||
-                    current is CreateDoctorInitial,
-                builder: (context, state) {
-                  if (state is CreateDoctorUploadPracticingBehindImage) {
-                    return ImagePickerPlaceholder(
-                      image: Image.file(
-                        File(state.file.path),
-                      ),
+            const SizedBox(
+              width: 16,
+            ),
+            Column(
+              children: [
+                BlocBuilder<CreateDoctorCubit, CreateDoctorState>(
+                  buildWhen: (previous, current) =>
+                      current is CreateDoctorUploadPracticingBehindImage ||
+                      current is CreateDoctorInitial,
+                  builder: (context, state) {
+                    return CustomImagePickerHealth(
+                      isUploaded:
+                          state is CreateDoctorUploadPracticingBehindImage,
+                      onTap: () async {
+                        await createDoctorCubit.uploadPracticingBehindImage(
+                            context: context);
+                      },
                     );
-                  }
-                  return ImagePickerPlaceholder(
-                    title: context.isArabic ? 'الخلف' : 'Back',
-                  );
-                },
-              ),
+                    // if (state is CreateDoctorUploadPracticingFrontImage) {
+                    //   return ImagePickerPlaceholder(
+                    //     image: Image.file(
+                    //       File(state.file.path),
+                    //     ),
+                    //   );
+                    // }
+                    // return ImagePickerPlaceholder(
+                    //   title: context.isArabic ? 'الوجه' : 'Front',
+                    // );
+                  },
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
+                Label(
+                  text: LocaleKeys.back.localize,
+                  style: Styles.mediumText(
+                    fontSize: 24,
+                    height: 1.60,
+                  ),
+                ),
+              ],
             ),
+            // InkWell(
+            //   onTap: () async {
+            //     await createDoctorCubit.uploadPracticingBehindImage(
+            //         context: context);
+            //   },
+            //   child: BlocBuilder<CreateDoctorCubit, CreateDoctorState>(
+            //     buildWhen: (previous, current) =>
+            //         current is CreateDoctorUploadPracticingBehindImage ||
+            //         current is CreateDoctorInitial,
+            //     builder: (context, state) {
+            //       if (state is CreateDoctorUploadPracticingBehindImage) {
+            //         return ImagePickerPlaceholder(
+            //           image: Image.file(
+            //             File(state.file.path),
+            //           ),
+            //         );
+            //       }
+            //       return ImagePickerPlaceholder(
+            //         title: context.isArabic ? 'الخلف' : 'Back',
+            //       );
+            //     },
+            //   ),
+            // ),
           ],
         ),
       ],

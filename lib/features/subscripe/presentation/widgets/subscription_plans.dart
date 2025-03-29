@@ -63,25 +63,60 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Row(
-                children: [
-                  Label(
-                    text: widget.title ?? "",
-                    textAlign: TextAlign.center,
-                    style: Styles.headerText(
-                      fontWeight: FontWeight.w800,
-                      fontSize: 40,
+              Text.rich(
+                textAlign: TextAlign.center,
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: widget.title ?? '',
+                      style: Styles.headerText(
+                        fontWeight: FontWeight.w800,
+                        fontSize: 40,
+                      ),
                     ),
-                  ),
-                  Label(
-                    text: LocaleKeys.subscription.localize,
-                    style: Styles.headerText(
-                      fontWeight: FontWeight.w800,
-                      fontSize: 40,
+                    const TextSpan(
+                      text: "  ",),
+                    TextSpan(
+                      text: LocaleKeys.subscription.localize,
+                      style: Styles.headerText(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 30,
+                      ),
                     ),
-                  ),
-                ],
+                  ]
+                ),
               ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.center,
+              //   children: [
+              //
+              //     Expanded(
+              //       flex: 2,
+              //       child: Label(
+              //         text: widget.title ?? '',
+              //         textAlign: TextAlign.center,
+              //         style: Styles.headerText(
+              //           fontWeight: FontWeight.w800,
+              //           fontSize: 40,
+              //         ),
+              //         maxLines: 3,
+              //       ),
+              //     ),
+              //     const SizedBox(
+              //       width: 8,
+              //     ),
+              //     Expanded(
+              //       child: Label(
+              //         text: LocaleKeys.subscription.localize,
+              //         style: Styles.headerText(
+              //           fontWeight: FontWeight.w500,
+              //           fontSize: 30,
+              //         ),
+              //       ),
+              //     ),
+              //
+              //   ],
+              // ),
               const SizedBox(height: 8),
               // DropdownButtonHideUnderline(
               //   child: DropdownMenu<WalletTypes>(
@@ -196,7 +231,7 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                         ),
                         child: Center(
                           child: Label(
-                            text: LocaleKeys.premiumSubscription.localize,
+                            text: LocaleKeys.premium.localize,
                             textAlign: TextAlign.center,
                             style: Styles.headerText(
                               fontSize: 28,

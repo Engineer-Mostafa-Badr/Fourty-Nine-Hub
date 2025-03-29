@@ -60,7 +60,6 @@ abstract class ApiConsumer {
   });
 
   void attachToken(UserTokensEntity? token);
-
   bool get isTokenAttached;
 
   void removeTokenFromHeader();
@@ -68,7 +67,6 @@ abstract class ApiConsumer {
 
 class BaseApiConsumer extends ApiConsumer {
   final Dio _dio;
-
   // final AuthLocalDataSource _authLocalDataSource;
 
   UserTokensEntity? _token;
