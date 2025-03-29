@@ -1,5 +1,7 @@
 abstract class Assets {
   static String spinWheel = 'assets/images/spin.png';
+  static String cameraAddTalent = 'assets/49-New-icons/camera.png';
+  static String uploadIcon = 'assets/49-New-icons/upload_icon.png';
   static String starIcon = 'assets/images/star.svg';
   static String addImage = 'assets/images/addImage.svg';
   static String icon = 'assets/images/icon.png';
@@ -26,6 +28,7 @@ abstract class Assets {
   static String continueEditing = 'assets/icons/continieEditing.svg';
   static String discardPost = 'assets/icons/discardPost.svg';
   static String likeIcon = 'assets/icons/like_icon.svg';
+  static String cameraSvg= "assets/icons/Icon (2).svg";
   static String commentIcon = 'assets/icons/comment_icon.svg';
   static String sendIcon = 'assets/icons/send_icon.svg';
   static String shareIcon = 'assets/icons/share_icon.svg';
@@ -174,10 +177,8 @@ abstract class Assets {
   static String threeDots = 'assets/images/three_dots.svg';
   static String mobile = 'assets/images/mobile_icon.svg';
   static String visa = 'assets/images/visa.png';
-  static String instagramCommentIcon =
-      'assets/icons/instagram_comment_icon.png';
-  static String instagramSharePostIcon =
-      'assets/icons/instagram_share_post_icon.png';
+  static String instagramCommentIcon = 'assets/icons/instagram_comment_icon.png';
+  static String instagramSharePostIcon = 'assets/icons/instagram_share_post_icon.png';
   static String instagramHideIcon = 'assets/icons/instagram_hide_icon.svg';
 
   // reactions
@@ -260,7 +261,7 @@ abstract class Assets {
 
   static String transferMoneyByMobileIcon =
       'assets/icons/transfer_money_by_mobile_icon.svg';
-  static String uploadIcon = 'assets/icons/upload_icon.svg';
+  // static String uploadIcon = 'assets/icons/upload_icon.svg';
   static String historyClockGreen = 'assets/icons/history_clock_green.svg';
   static String historyClockRed = 'assets/icons/history_clock_red.svg';
   static String historyGraphGreen = 'assets/icons/history_graph_green.svg';
@@ -292,7 +293,7 @@ abstract class Assets {
   static String cameraIcon = 'assets/icons/camera_icon.svg';
   static String star = 'assets/images/star.png';
   static String tripJoinImage = 'assets/images/tripJoinImage.jpg';
-  static String azkarPrayer = 'assets/drawerIcons/azkar_prayer.png';
+  static  String azkarPrayer='assets/drawerIcons/azkar_prayer.png';
 
   //! audio
   static String notificationAudioApp = 'audio/notification.mp3';
@@ -366,6 +367,17 @@ abstract class Assets {
   static String onBoarding12 = 'assets/onBoarding/onBoarding12.svg';
 
 
+  static String tripJoinCaptainShare = 'assets/images/trip_join/captain_share.png';
+  static String tripJoinIconSelected = 'assets/images/trip_join/trip_join.png';
+  static String tripJoinPickMe = 'assets/images/trip_join/pick_me.png';
+  static String maleUser = 'assets/images/trip_join/male_user.png';
+  static String femaleUser = 'assets/images/trip_join/female_user.png';
+  static String tripJoinCarIcon = 'assets/icons/trip_join_car_icon.png';
+  static String tripJoinBabySeatIcon = 'assets/icons/baby_car_seat.png';
+  static String tripJoinEathIcon = 'assets/icons/earth_icon.png';
+
+
+
   static const String arrowDown = 'assets/icons/arrow-up.svg';
 
   // new trip join icon
@@ -387,4 +399,9 @@ abstract class Assets {
   static String pickMeImage = 'assets/icons/pickmeImage.png';
   static String addIcon = 'assets/icons/addIcon.svg';
   static String carIcon = 'assets/icons/carIcon.svg';
+
+  // star feature
+  static String crown = 'assets/49-New-icons/crown.png';
+  static String starGold = 'assets/49-New-icons/star_gold.png';
+  static String winners = "assets/49-New-icons/winners.png";
 }

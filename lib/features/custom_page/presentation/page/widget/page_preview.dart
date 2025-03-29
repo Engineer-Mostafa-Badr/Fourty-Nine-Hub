@@ -21,7 +21,6 @@ import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/t
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:restart_app/restart_app.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../social_media/social_posts/presentation/pages/Social_home.dart';
@@ -29,13 +28,16 @@ import '../../../../social_media/stories/presentation/cubit/stories_cubit.dart';
 
 class PagePreview extends StatefulWidget {
   const PagePreview({super.key, this.state, this.isButtonsVisible = false});
+
   final bool? state;
   final bool isButtonsVisible;
+
   @override
   State<PagePreview> createState() => _PagePreviewState();
 }
 
-class _PagePreviewState extends State<PagePreview> with TickerProviderStateMixin{
+class _PagePreviewState extends State<PagePreview>
+    with TickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -71,7 +73,6 @@ class _PagePreviewState extends State<PagePreview> with TickerProviderStateMixin
               },
             ),
             bottom: TabBar(
-
               dividerColor: Colors.transparent,
               indicator: BoxDecoration(
                 color: Colors.red.withOpacity(0.1), // Light red background
@@ -81,10 +82,10 @@ class _PagePreviewState extends State<PagePreview> with TickerProviderStateMixin
                 fontWeight: FontWeight.bold,
                 color: Colors.red,
               ),
-                unselectedLabelStyle: const TextStyle(
-              fontWeight: FontWeight.bold,
-              color: AppColors.LIGHT_GRAY_COLOR2,
-            ),
+              unselectedLabelStyle: const TextStyle(
+                fontWeight: FontWeight.bold,
+                color: AppColors.LIGHT_GRAY_COLOR2,
+              ),
               tabs: [
                 Tab(
                   child: Padding(
@@ -138,8 +139,9 @@ class _PagePreviewState extends State<PagePreview> with TickerProviderStateMixin
                                 child: social.social?.face == true
                                     ? SocialHomeView(
                                         payload: SocialParams(
-                                            userId: social.social?.userId ?? '',
-                                            hideAppBar: true),
+                                          userId: social.social?.userId ?? '',
+                                          hideAppBar: true,
+                                        ),
                                       )
                                     : social.social?.insta == true
                                         ? const InstagramView(
@@ -182,7 +184,6 @@ class _PagePreviewState extends State<PagePreview> with TickerProviderStateMixin
                                 .updateActivate(true);
                             // Restart.restartApp();
                             Phoenix.rebirth(context);
-
                           },
                         ),
                         CustomElevatedButton(

@@ -17,7 +17,7 @@ class StarWinnerModel extends StarWinnerEntity {
       user: UserStarModel.fromJson(json['talentId']),
       profit: json['profit'] ?? 0,
       numberOfWins: json['numberOfWins'] ?? 0,
-      createAt: json['createAt'] ?? '',
+      createAt: json['createdAt'] ?? '',
       createdAt: json['createdAt'] ?? '',
     );
   }

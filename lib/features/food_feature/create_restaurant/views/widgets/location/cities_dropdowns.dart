@@ -4,9 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/utils/media_query_values.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
+
+import '../../../../../../res/style/app_colors.dart';
+import '../../../../../../res/style/styles.dart';
 
 class CreateRestaurantCitiesDropdowns extends StatelessWidget {
   const CreateRestaurantCitiesDropdowns({super.key});
@@ -26,37 +30,60 @@ class CreateRestaurantCitiesDropdowns extends StatelessWidget {
               BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
                   builder: (context, st) {
                 return DropdownButtonFormField<CityEntity>(
-                  dropdownColor: Theme.of(context).scaffoldBackgroundColor,
+                   dropdownColor: AppColors.BG_GRAY_COLOR,
+                  icon: const Icon(
+                    Icons.keyboard_arrow_down_outlined,
+                    color: AppColors.PRIMARY_COLOR,
+                  ),
+                  style: Styles.mediumText(),
+
                   decoration: InputDecoration(
-                    fillColor: Colors.transparent,
+
+                    fillColor: AppColors.BG_GRAY_COLOR,
                     enabledBorder: OutlineInputBorder(
-                      borderRadius: const BorderRadius.all(Radius.circular(8)),
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
                       borderSide: BorderSide(
-                        color: st is ValidationState && (st.isCity ?? true)
-                            ? Colors.red
-                            : Colors.grey,
+                        color:
+                            st is ValidationState && (st.isSubCategory ?? true)
+                                ? Colors.red
+                                : Colors.transparent,
                       ),
                     ),
                     border: OutlineInputBorder(
-                      borderRadius: const BorderRadius.all(Radius.circular(8)),
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
                       borderSide: BorderSide(
-                        color: st is ValidationState && (st.isCity ?? true)
-                            ? Colors.red
-                            : Colors.grey,
+                        color:
+                            st is ValidationState && (st.isSubCategory ?? true)
+                                ? Colors.red
+                                : Colors.transparent,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      borderSide: BorderSide(
+                        color:
+                            st is ValidationState && (st.isSubCategory ?? true)
+                                ? Colors.red
+                                : Colors.transparent,
                       ),
                     ),
                     errorBorder: OutlineInputBorder(
-                      borderRadius: const BorderRadius.all(Radius.circular(8)),
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
                       borderSide: BorderSide(
-                        color: st is ValidationState && (st.isCity ?? true)
-                            ? Colors.red
-                            : Colors.grey,
+                        color:
+                            st is ValidationState && (st.isSubCategory ?? true)
+                                ? Colors.red
+                                : Colors.transparent,
                       ),
                     ),
                     isDense: true,
                     constraints: BoxConstraints.loose(Size.fromHeight(90.h)),
                   ),
-                  hint: Text(LocaleKeys.selectCity.tr()),
+                  hint: Text(
+                    LocaleKeys.selectCity.tr(),
+                    style: Styles.mediumText(),
+                  ),
+                  menuMaxHeight: context.height/2,
                   items: state.cities.map((e) {
                     return DropdownMenuItem<CityEntity>(
                       value: e,

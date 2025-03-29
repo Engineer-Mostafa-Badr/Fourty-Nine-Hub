@@ -131,18 +131,21 @@ dependencies:
   top_snackbar_flutter: ^3.1.0
   transparent_image: ^2.0.1
   url_launcher: 6.2.6
-  video_player: ^2.9.1
+  video_player: ^2.9.3
   video_thumbnail: null
   visibility_detector: ^0.4.0+2
   voice_message_package: ^2.2.1
   web_socket_channel: ^2.4.5
   webview_flutter: ^4.8.0
+  wechat_assets_picker: ^9.5.0
   widget_and_text_animator: null
   zego_express_engine: ^3.16.2
   zego_uikit_signaling_plugin: ^2.8.8
   zego_uikit_prebuilt_call: ^4.16.22
   sentry_flutter: ^8.13.2
   circular_menu: ^4.0.0
+  timeago: ^3.7.0
+  tf_dio_cache: ^1.0.2
   fluttertoast:
   tf_dio_cache: ^1.0.2
 dependency_overrides:
@@ -176,6 +179,7 @@ flutter:
     - assets/translations/
     - assets/settings/
     - assets/images/reactions/
+    - assets/images/trip_join/
     - assets/images/
     - assets/49-New-icons/
     - assets/pdf/

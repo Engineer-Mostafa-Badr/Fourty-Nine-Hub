@@ -540,10 +540,16 @@ abstract class  LocaleKeys {
   static const KM = 'KM';
   static const repeat = 'repeat';
   static const totalPrice = 'totalPrice';
+ 
   static const brand = 'brand';
   static const model = 'model';
   static const publish = 'publish';
+  static const welcome_pick_me =   'welcome_pick_me';
+  static const publish_perimum ='publish_permiun'; 
   static const youCantLeaveFieldEmpty = 'youCantLeaveFieldEmpty';
+  static const toolHelp =  'tool_help_question';
+
+  
   static const addressMustBeAtLeast10Chars = 'addressMustBeAtLeast10Chars';
   static const searchFind = 'searchFind';
   static const markAllNotificationAsSeen = 'markAllNotificationAsSeen';
@@ -1304,14 +1310,6 @@ abstract class  LocaleKeys {
   static const rideDetails = 'rideDetails';
   static const options = 'options';
   static const thereIsNoTripsInThisList = 'thereIsNoTripsInThisList';
-  static const welcomeToCaptainShare = 'welcomeToCaptainShare';
-  static const lady = 'lady';
-  static const ladyDriver = 'ladyDriver';
-  static const oneWayOneCaptain = 'oneWayOneCaptain';
-  static const joinAvailableTripsNearYouNow = 'joinAvailableTripsNearYouNow';
-  static const browseRecentlyCompletedTrips = 'browseRecentlyCompletedTrips';
-  static const openGoogleMap  = 'openGoogleMap ';
-  static const goToFirstClient = 'goToFirstClient';
   static const tryAgain = 'tryAgain';
   static const YouhaveenteredOTPCodeWrong = 'YouhaveenteredOTPCodeWrong';
   static const cancelTheRide = 'cancelTheRide';
@@ -1348,8 +1346,6 @@ abstract class  LocaleKeys {
   static const theClientDidNotShow = 'theClientDidNotShow';
   static const whyDoYouWantToCancel = 'whyDoYouWantToCancel';
   static const acceptAnothePrice = 'acceptAnothePrice';
-  static const pastTrips = 'pastTrips';
-  static const rideMode = 'rideMode';
   static const captainWithYou = 'captainWithYou';
   static const youRateClient = 'youRateClient';
   static const clientRateYou = 'clientRateYou';
@@ -1381,7 +1377,6 @@ abstract class  LocaleKeys {
   static const busWithYou = 'busWithYou';
   static const trukWithYou = 'trukWithYou';
   static const passenger = 'passenger';
-  static const noSmoker = 'noSmoker';
   static const choiceRuler = 'choiceRuler';
   static const loadingRequest = 'loadingRequest';
   static const rideRequest = 'rideRequest';
@@ -1402,7 +1397,6 @@ abstract class  LocaleKeys {
   static const investment = 'investment';
   static const completeRegistration = 'completeRegistration';
   static const addEmergencyContacts = 'addEmergencyContacts';
-  static const reportClient = 'reportClient';
   static const rateTheClient = 'rateTheClient';
   static const beforeTheTrip = 'beforeTheTrip';
   static const identityVerification = 'identityVerification';
@@ -1429,6 +1423,18 @@ abstract class  LocaleKeys {
   static const anyMoneyYouSubscribe = 'anyMoneyYouSubscribe';
   static const insideAppYouWillGetInterest = 'insideAppYouWillGetInterest';
   static const after5YearsAnd10Years = 'after5YearsAnd10Years';
+  static const noSmoker = 'noSmoker';
+  static const welcomeToCaptainShare = 'welcomeToCaptainShare';
+  static const lady = 'lady';
+  static const ladyDriver = 'ladyDriver';
+  static const oneWayOneCaptain = 'oneWayOneCaptain';
+  static const rideMode = 'rideMode';
+  static const pastTrips = 'pastTrips';
+  static const joinAvailableTripsNearYouNow = 'joinAvailableTripsNearYouNow';
+  static const browseRecentlyCompletedTrips = 'browseRecentlyCompletedTrips';
+  static const openGoogleMap  = 'openGoogleMap ';
+  static const reportClient = 'reportClient';
+  static const goToFirstClient = 'goToFirstClient';
   static const areYouSureOfTransferMoney = 'areYouSureOfTransferMoney';
   static const areYouSureYouWantToRemoveThisImage = 'areYouSureYouWantToRemoveThisImage';
   static const received = 'received';

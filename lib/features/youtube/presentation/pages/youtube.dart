@@ -67,10 +67,11 @@ class _YouTubeViewState extends State<YouTubeView> {
 
   Widget _buildVideosList(ScrollController scrollController) {
     return ListView.separated(
-        controller: scrollController,
-        shrinkWrap: true,
-        itemBuilder: (context, index) => const YoutubeVideoCard(),
-        separatorBuilder: (context, index) => const Sizer(),
-        itemCount: 8);
+      controller: scrollController,
+      shrinkWrap: true,
+      itemBuilder: (context, index) => const YoutubeVideoCard(),
+      separatorBuilder: (context, index) => const Sizer(),
+      itemCount: 8,
+    );
   }
 }

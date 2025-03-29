@@ -63,6 +63,10 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     this._currencyUseCase,
     this.updateSocketLocationUseCase,
     this._anyCashBackUseCase,
+    this._categoriesCustomPageUseCase,
+    this._getQuestionUseCase,
+    this._answerQuestionUseCase,
+    this._getMainCategoryDetailsUseCase,
     this.getSettingsDashboardUsecase,
     this._categoriesCustomPageUseCase, this._getQuestionUseCase, this._answerQuestionUseCase, this._getMainCategoryDetailsUseCase,
   ) : super(MainCategoriesState());
@@ -76,16 +80,17 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
 
   Future<void> getMainCategoryDetails() async {
     // if (user != null) {
-    final response = await _getMainCategoryDetailsUseCase('62c8b5b09332225799fe335e');
-    response.fold(
-            (failure) => emit(state.copyWith(status: StateStatus.error)),
-            (data) {
-          emit(state.copyWith(
-            marriageMainCategory: data,
-          ));
-        });
+    final response =
+        await _getMainCategoryDetailsUseCase('62c8b5b09332225799fe335e');
+    response.fold((failure) => emit(state.copyWith(status: StateStatus.error)),
+        (data) {
+      emit(state.copyWith(
+        marriageMainCategory: data,
+      ));
+    });
     // }
   }
+
   Future<void> loadData() async {
     emit(state.copyWith(status: StateStatus.loading));
     await UserCubit.to.getUser();
@@ -98,7 +103,6 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
       print('userId1$user');
       final result = await _getMainCategoriesUseCase(
           MainCategoriesParams(page: 1, limit: 100, userId: user ?? ''));
-
       result.fold(
         (failure) {
           emit(state.copyWith(
@@ -110,7 +114,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
         },
         (r) async {
           _fourtyNineSharedData.mainCategories = r;
-          CliLogger.info('main categories loaded : ${r.length}');
+          CliLogger.info('main categories loaded in loadData : ${r.length}');
           // CliLogger.info('shared main categories loaded : ${_fourtyNineSharedData.mainCategories.length}');
           // emit(state.copyWith(status: StateStatus.loading));
           emit(state.copyWith(status: StateStatus.success, data: r));
@@ -144,8 +148,8 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     getCurrency();
     if (_fourtyNineSharedData.mainCategories.isEmpty) {
       final user = UserCubit.to.state.data?.id;
-      print('userId1$user');
-      print('userId1$user');
+      print('userId2 $user');
+      print('userId@ $user');
       final result = await _categoriesCustomPageUseCase(
           MainCategoriesParams(page: 1, limit: 100, userId: user ?? ''));
 
@@ -160,7 +164,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
         },
         (r) {
           _fourtyNineSharedData.mainCategories = r;
-          CliLogger.info('main categories loaded : ${r.length}');
+          CliLogger.info('custom page categories loaded : ${r.length}');
           // CliLogger.info('shared main categories loaded : ${_fourtyNineSharedData.mainCategories.length}');
           // emit(state.copyWith(status: StateStatus.loading));
           emit(state.copyWith(status: StateStatus.success, customPage: r));
@@ -168,7 +172,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
       );
     } else {
       final user = UserCubit.to.state.data;
-      print('userId2${user?.id ?? ''}');
+      print('userId2 ${user?.id ?? ''}');
       // emit(state.copyWith(status: StateStatus.loading));
       final result = await _categoriesCustomPageUseCase(
           MainCategoriesParams(page: 1, limit: 100, userId: user?.id ?? ''));
@@ -179,7 +183,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
           status: StateStatus.error,
         )),
         (r) {
-          // _fourtyNineSharedData.mainCategories = r;
+          _fourtyNineSharedData.mainCategories = r;
           // emit(state.copyWith(status: StateStatus.loading));
           emit(state.copyWith(status: StateStatus.success, customPage: r));
         },
@@ -199,6 +203,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     });
     return result;
   }
+
   Future<void> getQuestion() async {
     final response = await _getQuestionUseCase(const NoParams());
     response.fold(
@@ -209,22 +214,20 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     });
   }
 
-  Future<void> answerQuestion({
-    required String id,
-    required String answer,
-    required BuildContext context
-  }) async {
-    final response = await _answerQuestionUseCase(AnswerQuestionParams(id: id,answer: answer));
-    response.fold(
-        (failure) {
-          context.pop();
-          showErrorMessage(context, getFailureMessage(failure, context));
+  Future<void> answerQuestion(
+      {required String id,
+      required String answer,
+      required BuildContext context}) async {
+    final response = await _answerQuestionUseCase(
+        AnswerQuestionParams(id: id, answer: answer));
+    response.fold((failure) {
+      context.pop();
+      showErrorMessage(context, getFailureMessage(failure, context));
 
-          emit(state.copyWith(failure: failure, status: StateStatus.error));
-        },
-        (data) {
-          context.pop();
-          showSuccessMessage(context, LocaleKeys.successSubmit.localize);
+      emit(state.copyWith(failure: failure, status: StateStatus.error));
+    }, (data) {
+      context.pop();
+      showSuccessMessage(context, LocaleKeys.successSubmit.localize);
       emit(state.copyWith(status: StateStatus.success));
     });
   }

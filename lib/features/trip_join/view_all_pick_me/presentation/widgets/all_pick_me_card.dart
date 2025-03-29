@@ -203,15 +203,15 @@ class AllPickMeCard extends StatelessWidget {
                         ),
                       ),
                       const Sizer(),
-                      Expanded(
-                        child: CallMessageButtons(
-                          otherUserId: pickMeCardEntity.userId!,
-                          subcategoryId: pickMeCardEntity.categoryId ?? '',
-                          phone: pickMeCardEntity.phone!,
-                          id: pickMeCardEntity.id!,
-                          hasReport: true,
-                        ),
-                      ),
+                      // Expanded(
+                      //   child: CallMessageButtons(
+                      //     otherUserId: pickMeCardEntity.userId!,
+                      //     subcategoryId: pickMeCardEntity.categoryId ?? '',
+                      //     phone: pickMeCardEntity.phone!,
+                      //     id: pickMeCardEntity.id!,
+                      //     hasReport: true,
+                      //   ),
+                      // ),
                     ],
                   ),
 

@@ -23,6 +23,7 @@ final class CreateRestaurantSuccess extends CreateRestaurantState {
 
   CreateRestaurantSuccess(this.message);
 }
+final class CreateRestaurantRefreshUI extends CreateRestaurantState {}
 
 final class CreateResturantError extends CreateRestaurantState {
   final String message;
