@@ -140,7 +140,7 @@ class _CreateRestaurantFormState extends State<CreateRestaurantForm> {
                     Sizer(height: 20.h),
                     const CreateRestaurantNameField(),
                     Sizer(height: 20.h),
-                     CreateRestaurantNumberField(restaurantNumber: widget.restaurantId! ),
+                     CreateRestaurantNumberField(restaurantNumber: '' ),
                     Sizer(height: 20.h),
                     // CreateRestaurantProfilePhotoPicker(
                     //   subcategoryId: widget.subcategoryId,
