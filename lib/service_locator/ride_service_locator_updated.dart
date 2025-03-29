@@ -138,10 +138,10 @@ class RideServiceLocatorUpdated {
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
         ));
     serviceLocator.registerFactory<RideRegisterCubit>(() => RideRegisterCubit(
-          serviceLocator(),
-          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

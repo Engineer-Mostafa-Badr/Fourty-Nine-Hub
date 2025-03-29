@@ -303,7 +303,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                       children: [
                         _buildTopImage(),
                         state.requestedTrip == null ? _buildBottomSheet() : state.requestedTrip!.status == TripState.completed ? _buildBottomSheet() : const SizedBox.shrink(),
-                        state.requestedTrip == null ? _carTruckBtn() : state.requestedTrip!.status == TripState.completed ? _carTruckBtn() : const SizedBox.shrink(),
+                        state.requestedTrip == null ? _carTruckBtn(driverInfo: state.driverInfo,loadingInfo: state.loaderInfo) : state.requestedTrip!.status == TripState.completed ? _carTruckBtn(driverInfo: state.driverInfo,loadingInfo: state.loaderInfo) : const SizedBox.shrink(),
                       ],
                     ),
                   ),
@@ -741,7 +741,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                           context: context,
                                           isScrollControlled: true,
                                           backgroundColor: Colors.transparent,
-                                          builder: (context) => CustomReserveRideBottomSheet (rideCubit: context.read<RideCubit>(), selectedCategoryId: state.rideCategory?.subCategories[_selectedCategoryIndex!].subCategoryId ?? '', isPremium: true,),
+                                          builder: (context) => CustomReserveRideBottomSheet (rideCubit: context.watch<RideCubit>(), selectedCategoryId: state.rideCategory?.subCategories[_selectedCategoryIndex!].subCategoryId ?? '', isPremium: true,),
                                         );
                                       }
                                       else {
@@ -770,28 +770,25 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                   label: LocaleKeys.request.tr(),
                                   onPressed: () async {
                                     if(context.isUserLoggedIn){
-                                      bool canRequest = await cubit.makeRequestTrips();
-                                      if(canRequest == true){
-                                        if(state.toLocation != null && state.currentLocation != null){
-                                          showModalBottomSheet(
-                                            context: context,
-                                            isScrollControlled: true,
-                                            backgroundColor: Colors.transparent,
-                                            builder: (context) => CustomReserveRideBottomSheet (rideCubit: context.read<RideCubit>(), selectedCategoryId: state.rideCategory?.subCategories[_selectedCategoryIndex!].subCategoryId ?? '', isPremium: false,),
-                                          );
-                                        }
-                                        else {
-                                          ScaffoldMessenger.of(context).showSnackBar(
-                                            SnackBar(
-                                              content: Text(
-                                                context.isArabic? "يرجى تحديد الموقع" : "Please select location", // Ensure you define this key in your localization file
-                                                textAlign: TextAlign.center,
-                                              ),
-                                              backgroundColor: Colors.red,
-                                              duration: const Duration(seconds: 2),
+                                      if(state.toLocation != null && state.currentLocation != null){
+                                        showModalBottomSheet(
+                                          context: context,
+                                          isScrollControlled: true,
+                                          backgroundColor: Colors.transparent,
+                                          builder: (context) => CustomReserveRideBottomSheet (rideCubit: context.read<RideCubit>(), selectedCategoryId: state.rideCategory?.subCategories[_selectedCategoryIndex!].subCategoryId ?? '', isPremium: false,),
+                                        );
+                                      }
+                                      else {
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              context.isArabic? "يرجى تحديد الموقع" : "Please select location", // Ensure you define this key in your localization file
+                                              textAlign: TextAlign.center,
                                             ),
-                                          );
-                                        }
+                                            backgroundColor: Colors.red,
+                                            duration: const Duration(seconds: 2),
+                                          ),
+                                        );
                                       }
                                     }
                                     else{
