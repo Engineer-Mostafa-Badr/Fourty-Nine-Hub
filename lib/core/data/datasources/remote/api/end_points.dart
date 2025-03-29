@@ -44,6 +44,7 @@ import '../../../../../features/account_taps/my_adds/domain/usecases/update_my_a
 import '../../../../../features/account_taps/wallet/domain/usecases/get_winners_cashback_use_case.dart';
 import '../../../../../features/ads_feature/create_company_ad/data/models/fetch_post_company_advertise_params.dart';
 import '../../../../../features/azkaar/domain/use_case/search_azkar_usecase.dart';
+import '../../../../../features/food_feature/restaurant_dashboard/domain/usecases/get_restaurant_orders_usecase.dart';
 
 class EndPoints {
   //logout
@@ -444,8 +445,8 @@ class EndPoints {
   static const getAllTripBySubCategory =
       '$developmentBaseUrl/loading/trip/driver/subcategory';
   static const carPlate = '/loading/driver/info/car-plate';
-  static getRestaurantOrders(PaginationParams params) =>
-      '/food/get-restaurant-orders?page=${params.page}&limit=${params.limit}';
+  static getRestaurantOrders(PaginationOrderFoodParams params) =>
+      '/food/get-restaurant-orders?page=${params.page}&limit=${params.limit}&completed=${params.isCompleted}';
   static const makeRatingDriver = '/loading/rating-driver/makeRating';
   static const getDriverData = '$developmentBaseUrl/loading/driver/info';
   static const updateDriver = '$developmentBaseUrl/loading/driver';
@@ -461,6 +462,7 @@ class EndPoints {
   static const getRestaurantStatistics = '/restaurants/statistics';
   static deleteRestaurant(String id) => '/restaurants/delete-restaurant/$id';
   static const updateRestaurant = '/restaurants/update-restaurant-info';
+  static const completeOrder = '/food/set-order-is-completed/';
   static const favoriteCategory = '$developmentBaseUrl/favorite-category';
   static const reasons = '$developmentBaseUrl/cancellation/reasons';
   static const sendOfferPremium =
@@ -1233,20 +1235,20 @@ class EndPoints {
   static String createCarPool = '/carpool/create';
 
   static String getRideCategories(String userId) {
-    return '/ride/get-thumbnail-ride${userId.isNotEmpty ?"userId=$userId":""}';
+    return '/ride/get-thumbnail-ride';
   }
 
   static String getShippingCategories(String userId) {
-    return '/loading/driver/subcategory?userId=$userId';
+    return '/loading/driver/subcategory';
   }
+
   static String getDriversInSubcategory(String subCategoryId) {
     return '/ride/riders/drivers/$subCategoryId';
   }
-
-  static String requestTrip(String id) {
-    return '/ride/trips/newTrip/$id';
+  static String requestTrip(String subcategoryId) {
+    return '/ride/trips/newTrip/$subcategoryId';
   }
-
+  static String retrieveClientLatestTrip = '/ride/client/trips/latest';
   static String getExpectedPrice(String id) {
     return '/ride/trips/expected/price/$id';
   }
@@ -1332,7 +1334,11 @@ class EndPoints {
     return '/ride/trips/cancel-by-client/$tripId';
   }
 
-  static String recordingTrip(String tripId) {
+  static String cancelPendingTripByClient(String tripId){
+    return '/ride/client/trips/pending/cancel/$tripId';
+  }
+
+  static String recordingTrip(String tripId){
     return '/ride/trips/record-voice/$tripId';
   }
 

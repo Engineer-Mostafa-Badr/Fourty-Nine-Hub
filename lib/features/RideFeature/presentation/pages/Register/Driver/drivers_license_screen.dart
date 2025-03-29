@@ -9,16 +9,12 @@ import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubi
 import 'package:go_router/go_router.dart';
 
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import '../widgets/close_widget.dart';
-import '../widgets/register_floating_action_button.dart';
 import '../widgets/upload_file_widget.dart';
 
 class DriversLicenseScreen extends StatelessWidget {

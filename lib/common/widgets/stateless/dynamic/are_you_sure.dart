@@ -18,6 +18,7 @@ showAreYouSure({
   showAnimatedDialog(
     context,
     AlertDialog(
+      backgroundColor: Colors.white,
       content: AreYouSure(
         title: title,
         subTitle: subTitle,
@@ -40,13 +41,13 @@ class AreYouSure extends StatelessWidget {
   final Function action;
   final EdgeInsetsGeometry? padding;
 
-  const AreYouSure(
-      {super.key,
-      required this.title,
-      required this.subTitle,
-      required this.action,
-        this.padding,
-      });
+  const AreYouSure({
+    super.key,
+    required this.title,
+    required this.subTitle,
+    required this.action,
+    this.padding,
+  });
 
   @override
   Widget build(BuildContext context) {

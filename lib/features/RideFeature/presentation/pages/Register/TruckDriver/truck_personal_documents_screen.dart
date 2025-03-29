@@ -38,7 +38,7 @@ class TruckPersonalDocumentsScreen extends StatelessWidget {
                   spacing: 4,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    closeWidget(context),
+                    closeWidget(context:context,onAcceptSaveData: (){}),
                     Label(
                       text: LocaleKeys.personalDocuments.localize,
                       style: Styles.headerText(

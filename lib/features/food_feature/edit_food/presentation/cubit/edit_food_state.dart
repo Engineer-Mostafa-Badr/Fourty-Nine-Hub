@@ -30,6 +30,7 @@ class EditFoodState {
   final bool connected;
   final List<RestaurantMenu>? meals;
   final IsRestaurantModel? isResturant;
+  final List<XFile>? files;
   const EditFoodState({
     this.status = EditFoodStates.loading,
     this.failure,
@@ -39,6 +40,7 @@ class EditFoodState {
     this.connected = true,
     this.successMessage,
     this.isResturant,
+    this.files,
   });
   EditFoodState copyWith({
     EditFoodStates? status,
@@ -49,6 +51,7 @@ class EditFoodState {
     String? imagePath,
     String? successMessage,
     IsRestaurantModel? isResturant,
+    List<XFile>? files,
   }) {
     return EditFoodState(
       status: status ?? this.status,
@@ -59,6 +62,7 @@ class EditFoodState {
       meals: meals ?? this.meals,
       successMessage: successMessage ?? this.successMessage,
       isResturant: isResturant ?? this.isResturant,
+      files: files ?? this.files,
     );
   }
 }

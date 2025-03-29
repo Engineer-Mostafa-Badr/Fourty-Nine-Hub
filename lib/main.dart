@@ -60,11 +60,11 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  final locationService = LocationService();
-
-  locationService.startLocationTracking();
-
-  // Listen for new locations (only when moved at least 300m)
+  // final locationService = LocationService();
+  //
+  // locationService.startLocationTracking();
+  //
+  // // Listen for new locations (only when moved at least 300m)
   // locationService.locationUpdates.listen((position) {
   //   Fluttertoast.showToast(
   //       msg: "New location (moved at least 300m): ${position.latitude}, ${position.longitude}",

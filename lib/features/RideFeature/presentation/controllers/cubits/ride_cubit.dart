@@ -4,10 +4,12 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:fourtyninehub/common/functions/global/upload_image.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/core/service/storage.dart';
 import 'package:fourtyninehub/core/utils/loading_method_helper.dart';
 import 'package:fourtyninehub/core/utils/ride_method_helper.dart';
 import 'package:fourtyninehub/core/utils/upload_record.dart';
@@ -18,8 +20,12 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/loading_info_
 import 'package:fourtyninehub/features/RideFeature/domain/entities/loading_register_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride_not_special_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride_special_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/request_trip_params.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_color_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_request_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/sub_category_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_pending_trip_by_client_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/check_real_amount_enough_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_cost_per_km_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_driver_picture_optional.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_loading_info_usecase.dart';
@@ -45,6 +51,8 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/make_request_
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/recording_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/register_ride_not_special_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/register_ride_special_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/request_trip_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/retrieve_client_latest_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/upload_rider_images.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -62,12 +70,14 @@ import 'package:record/record.dart';
 
 class RideCubit extends Cubit<RideState> {
   bool isComfort = false;
-  bool isComfortIsAdded = false;
+  // bool isComfortIsAdded = false;
   bool isNonSmoker = false;
-  bool isNonSmokerIsAdded = false;
+  // bool isNonSmokerIsAdded = false;
   bool isAutoAccept = false;
-  bool isAutoAcceptIsAdded = false;
+  // bool isAutoAcceptIsAdded = false;
   bool isRecord = false;
+  bool showWaypointOne = false;
+  bool showWaypointTwo = false;
 
   final GetRideCategoriesUseCase getRideCategories;
   final GetShippingCategoriesUsecase getShippingCategoriesUsecase;
@@ -84,6 +94,11 @@ class RideCubit extends Cubit<RideState> {
   final GetAllCompletedTripsUseCase getAllCompletedTripsUseCase;
   final GetAllRunningTripsUseCase getAllRunningTripsUseCase;
   final GetAllActivityTripsUseCase getAllActivityTripsUseCase;
+  final CheckRealAmountEnoughUseCase checkRealAmountEnoughUseCase;
+  final RequestTripUseCase requestTripUseCase;
+  final CancelPendingTripByClientUseCase cancelPendingTripByClientUseCase;
+  final RetrieveClientLatestTripUseCase retrieveClientLatestTripUseCase;
+
   final GetCostPerKmUseCase getCostPerKmUseCase;
   final LoadingRegisterUseCase loadingRegisterUseCase;
   final GetLoadingInfoUseCase getLoadingInfoUseCase;
@@ -106,12 +121,16 @@ class RideCubit extends Cubit<RideState> {
     this.getAllCompletedTripsUseCase,
     this.getAllRunningTripsUseCase,
     this.getAllActivityTripsUseCase,
+      this.checkRealAmountEnoughUseCase,
+      this.requestTripUseCase,
+      this.cancelPendingTripByClientUseCase,
+      this.retrieveClientLatestTripUseCase,
     this.getCostPerKmUseCase,
     this.loadingRegisterUseCase,
     this.getLoadingInfoUseCase,
     this.makeRequestTripUseCase,
     this.recordingTripUseCase,
-  ) : super(const RideState());
+  ) : super( RideState());
 
   bool loadingHomeData = false;
   Future<void> initHome(BuildContext context) async {
@@ -124,7 +143,7 @@ class RideCubit extends Cubit<RideState> {
       getCostPerKm(),
       fetchLoaderInfo(context),
       fetchRideDriverPictureOptional(context),
-      fetchRideCategories(UserCubit.to.state.data?.id ?? "", context),
+      fetchRideCategories(UserCubit.to.state.data?.id ?? ""),
       fetchShippingCategories(UserCubit.to.state.data?.id ?? ""),
       fetchRideGovernorates(),
     ]);
@@ -190,7 +209,7 @@ class RideCubit extends Cubit<RideState> {
   TextEditingController ridePricingPerKmController = TextEditingController();
   TextEditingController rideCarModelController = TextEditingController();
 
-  Future<void> fetchRideCategories(String userId, BuildContext context) async {
+  Future<void> fetchRideCategories(String userId) async {
     if (isClosed) return; // Prevents state emission if the cubit is already disposed.
     emit(state.copyWith(status: RideStates.loading));
 
@@ -201,8 +220,23 @@ class RideCubit extends Cubit<RideState> {
       (failure) {
         emit(state.copyWith(status: RideStates.error, failure: failure));
       },
-      (rideCategory) {
-        emit(state.copyWith(status: RideStates.success, rideCategory: rideCategory, rideSubCategories: rideCategory.subCategories));
+      (rideCategory) async {
+        RegisterRideSpecialEntity? data = await Storage().getDriverEntity();
+        List<SubCategoryEntityUpdated>? rideSubCategories = rideCategory.subCategories;
+        print("data?.isShipping111${data?.isShipping}");
+        if (data?.isShipping == false) {
+          print("data?.isShipping${data?.isShipping}");
+          for (var item in rideSubCategories) {
+            if (data?.subcategoryIds.contains(item.subCategoryId) ?? false) {
+              item.isSelected = true;
+              item.isEnabled = true;
+            }else{
+              item.isSelected = false;
+              item.isEnabled = false;
+            }
+          }
+        }
+        emit(state.copyWith(status: RideStates.success, rideCategory: rideCategory, rideSubCategories: rideSubCategories));
       },
     );
   }
@@ -336,12 +370,38 @@ class RideCubit extends Cubit<RideState> {
     );
   }
 
+  double getTotalPrice(double price, {bool isScooter = false}) {
+    double totalPrice = price;
+    if (!isScooter) {
+      if (isComfort) {
+        totalPrice += state.rideExpectedPrice?.comfort ?? 0;
+      }
+      if (isNonSmoker) {
+        totalPrice += state.rideExpectedPrice?.nonSmoking ?? 0;
+      }
+      if (isAutoAccept) {
+        totalPrice += state.rideExpectedPrice?.autoAccept ?? 0;
+      }
+    }
+    return totalPrice;
+  }
+
   Future<void> fetchRideExpectedPrice({required String id}) async {
     emit(state.copyWith(status: RideStates.loading));
 
     final Either<Failure, RideExpectedPriceEntity> result = await getRideExpectedPriceUseCase(
       RideExpectedPriceParams(
-          startLocation: [state.currentLocation!.lat!, state.currentLocation!.lng!], targetLocation: [state.toLocation!.lat!, state.toLocation!.lng!], comfort: false, id: id),
+        startLocation:[state.currentLocation!.lat!, state.currentLocation!.lng!],
+        targetLocation: [state.toLocation!.lat!, state.toLocation!.lng!],
+        // startLocation: [30.0445439,31.2326909],
+        // targetLocation: [30.1186853,31.3609478],
+        comfort: isComfort,
+        nonSmoking: isNonSmoker,
+        autoAccept: isAutoAccept,
+        wayPointOne: (state.wayPointOne != null) ? [state.wayPointOne!.lat!, state.wayPointOne!.lng!] : null,
+        wayPointTwo: (state.wayPointTwo != null) ? [state.wayPointTwo!.lat!, state.wayPointTwo!.lng!] : null,
+        id: id
+      ),
     );
 
     log(result.toString());
@@ -349,6 +409,107 @@ class RideCubit extends Cubit<RideState> {
     result.fold(
       (failure) => emit(state.copyWith(status: RideStates.error, failure: failure)),
       (rideExpectedPrice) => emit(state.copyWith(status: RideStates.success, rideExpectedPrice: rideExpectedPrice)),
+    );
+  }
+
+  Future<bool> checkRealAmountIsEnough({required double price}) async{
+
+    final Either<Failure, bool> result = await checkRealAmountEnoughUseCase(price);
+
+    return result.fold(
+      (failure) => false,
+      (isEnough) => isEnough,
+    );
+  }
+
+  Future<void> requestTrip({
+    required String subcategoryId,
+    required double price,
+    required String fromTitle,
+    required String toTitle,
+    required double distance,
+    required int duration,
+    required List<double> startLocation,
+    required List<double> targetLocation,
+    required List<double>? wayPointOne,
+    required List<double>? wayPointTwo,
+    required int calculateB,
+    required String paymentMethod,
+    required int passengers,
+    required bool comfort,
+    required bool nonSmoker,
+    required bool autoAccept,
+    required bool isPremium,
+  }) async {
+    final Either<Failure, RideRequestTripEntity> result = await requestTripUseCase(
+      RequestTripUseCaseParams(
+        subcategoryId: subcategoryId,
+        price: price,
+        fromTitle: fromTitle,
+        toTitle: toTitle,
+        distance: distance,
+        duration: duration,
+        startLocation: startLocation,
+        targetLocation: targetLocation,
+        wayPointOne: wayPointOne,
+        wayPointTwo: wayPointTwo,
+        calculateB: calculateB,
+        paymentMethod: paymentMethod,
+        passengers: passengers,
+        comfort: comfort,
+        nonSmoker: nonSmoker,
+        autoAccept: autoAccept,
+        isPremium: isPremium,
+      ),
+    );
+
+    result.fold(
+          (failure) => emit(state.copyWith(status: RideStates.error, failure: failure)),
+          (rideRequestTrip) => emit(state.copyWith(status: RideStates.success, requestedTrip: rideRequestTrip)),
+    );
+  }
+
+  Future<void> retrieveClientLatestTrip() async {
+    emit(state.copyWith(status: RideStates.loading));
+
+    final Either<Failure, RideRequestTripEntity> result = await retrieveClientLatestTripUseCase(const NoParams());
+
+    result.fold(
+          (failure) => emit(state.copyWith(status: RideStates.error, failure: failure)),
+          (rideRequestTrip){
+            state.requestedTrip = rideRequestTrip;
+            GetLocationFromAddressEntity currentLocation = GetLocationFromAddressEntity(
+              lat: state.requestedTrip!.startCoordinates![0],
+              lng: state.requestedTrip!.startCoordinates![1],
+              address: state.requestedTrip!.from!,
+            );
+            GetLocationFromAddressEntity toLocation = GetLocationFromAddressEntity(
+              lat: state.requestedTrip!.targetCoordinates![0],
+              lng: state.requestedTrip!.targetCoordinates![1],
+              address: state.requestedTrip!.to!,
+            );
+            emit(state.copyWith(status: RideStates.success, requestedTrip: rideRequestTrip, currentLocation: currentLocation, toLocation: toLocation));
+          },
+    );
+  }
+
+  Future<void> cancelPendingTripByClient({required String tripId}) async {
+    // emit(state.copyWith(status: RideStates.loading));
+
+    final Either<Failure, bool> result = await cancelPendingTripByClientUseCase(
+      CancelPendingTripByClientUseCaseParams(
+        tripId: tripId,
+      ),
+    );
+
+    result.fold(
+          (failure) => emit(state.copyWith(status: RideStates.error, failure: failure)),
+          (isCanceled){
+            if(isCanceled){
+              state.requestedTrip = null;
+            }
+            emit(state.copyWith(status: RideStates.success, requestedTrip: state.requestedTrip));
+          },
     );
   }
 
@@ -418,6 +579,28 @@ class RideCubit extends Cubit<RideState> {
     );
 
     emit(state.copyWith(status: RideStates.success, toLocation: toLocation));
+  }
+
+  void updateWayPointOne({required double lat, required double lng, required String address}) {
+
+    GetLocationFromAddressEntity wayPointOne = GetLocationFromAddressEntity(
+      lat: lat,
+      lng: lng,
+      address: address,
+    );
+
+    emit(state.copyWith(status: RideStates.success, wayPointOne: wayPointOne));
+  }
+
+  void updateWayPointTwo({required double lat, required double lng, required String address}) {
+
+    GetLocationFromAddressEntity wayPointTwo = GetLocationFromAddressEntity(
+      lat: lat,
+      lng: lng,
+      address: address,
+    );
+
+    emit(state.copyWith(status: RideStates.success, wayPointTwo: wayPointTwo));
   }
 
   loadRegisterData(BuildContext context) async {
@@ -1147,6 +1330,58 @@ class RideCubit extends Cubit<RideState> {
       emit(state.copyWith(status: RideStates.success, isUploadTechnicalExamination: true));
     }
   }
+
+  onSaveRegisterData(BuildContext context) async {
+    RegisterRideSpecialEntity params = RegisterRideSpecialEntity(
+        driverFirstName: rideNameController.text,
+        driverLastName: rideSurNameController.text,
+        airConditioner: state.hasAirCondition ?? false,
+        birthday: rideDateOfBirthController.text,
+        city: state.selectedGov ?? '',
+        driverLicenseNumber: ridePersonalDocLicenseNumController.text,
+        idNumber: ridePersonalDocIdNumController.text,
+        phone: ridePhoneNumberController.text,
+        plateInfo: rideVehiclePlateNumberController.text,
+        pricingPerKm: ridePricingPerKmController.text,
+        smoker: state.isSmoking ?? false,
+        vehicleBrand: state.selectedBrand ?? '',
+        vehicleColor: state.selectedColors?.id ?? '',
+        vehicleModel: state.selectedModel ?? '',
+        vehicleYear: rideVehicleProductionYearController.text,
+        workingType: state.selectedPlan ?? '',
+        personalPicture: state.personalPicture?.path,
+        isShipping: state.isShipping,
+        subcategoryIds: (state.rideSubCategories ?? []).where((e) => e.isEnabled == true).toList().map((e) => e.subCategoryId).toList());
+    await Storage().saveDriverEntity(params);
+    context.go(Routes.RIDE_HOME);
+  }
+
+  onSetSavedData() async {
+    RegisterRideSpecialEntity? data = await Storage().getDriverEntity();
+    print("data?.personalPicture${data?.personalPicture}");
+    rideNameController.text = data?.driverFirstName??'';
+    rideSurNameController.text = data?.driverLastName??'';
+    rideDateOfBirthController.text = data?.birthday??'';
+    ridePersonalDocLicenseNumController.text = data?.driverLicenseNumber??'';
+    ridePersonalDocIdNumController.text = data?.idNumber??'';
+    rideVehiclePlateNumberController.text = data?.plateInfo??'';
+    ridePhoneNumberController.text = data?.phone??'';
+    ridePricingPerKmController.text = data?.pricingPerKm??'';
+    rideVehicleProductionYearController.text = data?.vehicleYear??'';
+    print('state.colors?.firstWhere((e) => e.id == data?.vehicleColor)${state.colors?.firstWhere((e) => e.id == data?.vehicleColor)}');
+    emit(state.copyWith(
+        hasAirCondition:data?.airConditioner,
+        selectedGov:data?.city,
+        isSmoking:data?.smoker,
+        selectedBrand:data?.vehicleBrand,
+        selectedColors:(state.colors!=null||(state.colors?.isNotEmpty??false))?state.colors?.firstWhere((e) => e.id == data?.vehicleColor):null,
+        selectedModel:data?.vehicleModel,
+        selectedPlan:data?.workingType,
+        personalPicture:XFile(data?.personalPicture??''),
+        savedRideSubCategories:data?.subcategoryIds??[],
+    ));
+  }
+
 
   bool isLoadingSubmitRegister = false;
 

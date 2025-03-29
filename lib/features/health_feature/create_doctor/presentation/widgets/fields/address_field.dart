@@ -4,6 +4,7 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
+import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/custom_text_field_health.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class CreateDoctorAddressField extends StatelessWidget {
@@ -11,6 +12,17 @@ class CreateDoctorAddressField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return CustomTextFieldHealth(
+      hintText: LocaleKeys.address.localize,
+      controller: context.read<CreateDoctorCubit>().addressController,
+      keyboardType: TextInputType.name,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return LocaleKeys.addressIsRequired.localize;
+        }
+        return null;
+      },
+    );
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -21,9 +33,7 @@ class CreateDoctorAddressField extends StatelessWidget {
         TextFormField(
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return context.isArabic
-                  ? 'برجاء ادخال العنوان'
-                  : 'Please enter address';
+              return LocaleKeys.addressIsRequired.localize;
             }
             return null;
           },

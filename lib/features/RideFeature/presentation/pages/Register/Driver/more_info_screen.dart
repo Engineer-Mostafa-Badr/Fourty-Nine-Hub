@@ -36,7 +36,7 @@ class MoreInfoScreen extends StatelessWidget {
                     spacing: 4,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      closeWidget(context),
+                      closeWidget(context:context,onAcceptSaveData:()=>cubit.onSaveRegisterData(context)),
                       Label(
                         text: LocaleKeys.moreInfo.localize,
                         style: Styles.headerText(

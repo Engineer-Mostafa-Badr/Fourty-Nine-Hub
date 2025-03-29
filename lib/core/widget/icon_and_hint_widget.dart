@@ -5,9 +5,14 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class IconAndHintWidget extends StatelessWidget {
-  const IconAndHintWidget({super.key, required this.text});
+  const IconAndHintWidget({
+    super.key,
+    required this.text,
+    this.textStyle,
+  });
 
   final String text;
+  final TextStyle? textStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -17,9 +22,11 @@ class IconAndHintWidget extends StatelessWidget {
         const SizedBox(
           width: 8,
         ),
-        Label(
-          text: text,
-          style: Styles.mediumText(fontSize: 20),
+        Expanded(
+          child: Label(
+            text: text,
+            style: textStyle ?? Styles.mediumText(fontSize: 20),
+          ),
         )
       ],
     );

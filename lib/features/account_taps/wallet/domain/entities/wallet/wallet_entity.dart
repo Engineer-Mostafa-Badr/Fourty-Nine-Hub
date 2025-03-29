@@ -1,9 +1,13 @@
 class WalletEntity {
   final num? realAmount;
-  final String currency;
+  final bool isWaitingApproval;
+  final String currencyEn;
+  final String currencyAr;
 
   WalletEntity({
     required this.realAmount,
-    required this.currency,
+    required this.isWaitingApproval,
+    required this.currencyEn,
+    required this.currencyAr,
   });
 }

@@ -40,19 +40,32 @@ abstract class Assets {
   static String starRedIcon = 'assets/icons/star_red_icon.svg';
   static String mapPinIcon = 'assets/icons/map_pin_icon.svg';
   static String phoneIcon = 'assets/icons/phone_icon.svg';
+  static String phoneIconRed = 'assets/icons/phone_icon_red.svg';
   static String mailIcon = 'assets/icons/mail_icon.svg';
+  static String mailIconRed = 'assets/icons/mail_icon_red.svg';
   static String refreshIcon = 'assets/icons/refresh_icon.svg';
   static String searchIcon = 'assets/icons/search_icon.svg';
-  static String captainTripsIcon= 'assets/icons/captain_trips_icon.svg';
+  static String captainTripsIcon = 'assets/icons/captain_trips_icon.svg';
   static String doctorBookingsIcon = 'assets/icons/doctor_bookings_icon.svg';
   static String followRequestIcon = 'assets/icons/follow_request_icon.svg';
   static String clicksOnLiveIcon = 'assets/icons/clicks_on_live_icon.svg';
   static String friendRequestsIcon = 'assets/icons/friend_requests_icon.svg';
   static String liveLickesIcon = 'assets/icons/live_lickes_icon.svg';
   static String restauranOrdersIcon = 'assets/icons/restauran_orders_icon.svg';
-  static String shippingDriverTripsIcon = 'assets/icons/shipping_driver_trips_icon.svg';
+  static String shippingDriverTripsIcon =
+      'assets/icons/shipping_driver_trips_icon.svg';
   static String storyLikesIcon = 'assets/icons/story_likes_icon.svg';
   static String storyViewsIcon = 'assets/icons/story_views_icon.svg';
+  static String image2Icon = 'assets/icons/image_2_icon.svg';
+  static String calendarIcon = 'assets/icons/calendar_icon.svg';
+  static String facebookIcon = 'assets/icons/facebook_icon.svg';
+  static String instagramIcon = 'assets/icons/instagram_icon.svg';
+  static String twitterIcon = 'assets/icons/Twitter_icon.svg';
+  static String homeIcon = 'assets/icons/home_icon.svg';
+  static String createIcon = 'assets/icons/create_icon.svg';
+  static String profile2Icon = 'assets/icons/profile_icon.svg';
+  static String verifiedAccountMarkIcon = 'assets/icons/verified_account_mark_icon.svg';
+  static String musicNoteIcon = 'assets/icons/music_note.svg';
 
   // lottie
   static String loveReaction = 'assets/lottie/love_reaction.json';
@@ -333,6 +346,11 @@ abstract class Assets {
   static String userShippingTripsIcon = 'assets/icons/user_shipping_trips.svg';
   static String viewCountIcon = 'assets/icons/view_count_icon.svg';
 
+  static String phoneRed = 'assets/icons/phone_red.svg';
+  static String mailRed = 'assets/icons/mail_red.svg';
+  static String reportRed = 'assets/icons/report_red.svg';
+  static String arrowUp = 'assets/icons/arrow_up.svg';
+
 
   static String onBoarding1 = 'assets/onBoarding/onBoarding1.svg';
   static String onBoarding2 = 'assets/onBoarding/onBoarding2.svg';
@@ -346,4 +364,24 @@ abstract class Assets {
   static String onBoarding10 = 'assets/onBoarding/onBoarding10.svg';
   static String onBoarding11 = 'assets/onBoarding/onBoarding11.svg';
   static String onBoarding12 = 'assets/onBoarding/onBoarding12.svg';
+
+  // new trip join icon
+  static String menuIcon = 'assets/icons/menuIcon.svg';
+  static String locationTripIcon = 'assets/icons/locationTripIcon.svg';
+  static String shadowTripIcon = 'assets/icons/shadowTripIcon.svg';
+  static String pickMeIcon = 'assets/icons/pickMeIcon.png';
+  static String captainInfoIcon = 'assets/icons/captainInfoIcon.svg';
+  static String tripInfoIcon = 'assets/icons/tripInfoIcon.svg';
+  static String pickMeInfoIcon = 'assets/icons/pickMeInfoIcon.svg';
+  static String visaIcon = 'assets/icons/visa.svg';
+  static String freeIcon = 'assets/icons/freeIcon.svg';
+  static String circleBlue = 'assets/icons/circleBlue.svg';
+  static String circleGreen = 'assets/icons/circleGreen.svg';
+  static String frameIcon = 'assets/icons/frameIcon.svg';
+  static String bookedWoman = 'assets/icons/bookedWoman.svg';
+  static String bookedMan = 'assets/icons/bookedMan.svg';
+  static String car = 'assets/icons/car.png';
+  static String pickMeImage = 'assets/icons/pickmeImage.png';
+  static String addIcon = 'assets/icons/addIcon.svg';
+  static String carIcon = 'assets/icons/carIcon.svg';
 }

@@ -35,7 +35,11 @@ Future<dynamic> customBottomSheet(context, RideCubit rideCubit,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const SizedBox(),
+                    IconButton(
+                      icon: const SizedBox(),
+                      onPressed: () {
+                      },
+                    ),
                     Text(title,style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w600)),
                     IconButton(
                       icon: SvgPicture.asset('assets/icons/close.svg'),
