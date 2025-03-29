@@ -45,6 +45,7 @@ import '../../../../../features/account_taps/wallet/domain/usecases/get_winners_
 import '../../../../../features/ads_feature/create_company_ad/data/models/fetch_post_company_advertise_params.dart';
 import '../../../../../features/azkaar/domain/use_case/search_azkar_usecase.dart';
 import '../../../../../features/food_feature/restaurant_dashboard/domain/usecases/get_restaurant_orders_usecase.dart';
+import '../../../../../features/subcategories/domain/usecases/get_custom_page_sub_categories_use_case.dart';
 
 class EndPoints {
   //logout
@@ -175,7 +176,9 @@ class EndPoints {
   static const subTab = '/navigators/subTap';
   static const navigateBar = '/navigators/navigatorsBar';
   static const customPageCat = '/navigators/navigateCategories';
+  static const updateCustomPageCat = '/navigators/customPage-subcategories';
   static const activate = '/navigators/customPage';
+  static customPageSubCat(String mainCategoryId) => '/navigators/subcategories/$mainCategoryId';
 
   // Star
   static String allStar(StarPaginationParams params) =>
@@ -542,6 +545,9 @@ class EndPoints {
 
   static String mainSubCategories({required GetSubCategoriesParams params}) {
     return '/categories/subcategories/${params.mainCategoryId}?userId=${params.userId}';
+  }
+  static String customPageSubCategories({required GetCustomPageSubCategoriesParams params}) {
+    return '/navigators/navigateCategories-enable/${params.mainCategoryId??'62c8b5779332225799fe3304'}';
   }
 
   static const riderInfoRegister = '/ride/riders/register';

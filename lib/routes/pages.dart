@@ -341,6 +341,10 @@ import '../features/authentication/presentation/pages/register/register_verify_o
 import '../features/azkaar/presentation/pages/azkar_view.dart';
 import '../features/competition/presentation/pages/competition_view.dart';
 import '../features/competition/presentation/pages/winners.dart';
+import '../features/custom_page/data/model/custom_page_cat_model.dart';
+import '../features/custom_page/domain/entity/custom_page_categories_entity.dart';
+import '../features/custom_page/presentation/cubit/custom_page_cubit.dart';
+import '../features/custom_page/presentation/page/widget/navigator_subcategories_view.dart';
 import '../features/food_feature/cusine_restaurants/presentation/pages/cusine_restaurants_view.dart';
 import '../features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import '../features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
@@ -404,6 +408,7 @@ import '../features/social_media/social_posts/presentation/pages/Social_home.dar
 import '../features/social_media/social_posts/presentation/pages/other_account_view.dart';
 import '../features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
 import '../features/subcategories/presentation/cubit/subcategories_cubit.dart';
+import '../features/subcategories/presentation/pages/custom_page_sub_categories_view.dart';
 import '../features/youtube/presentation/pages/play_video.dart';
 import '../features/youtube/presentation/pages/youtube.dart';
 import '../features/zoom/presentation/pages/meeting_room.dart';
@@ -475,8 +480,9 @@ class AppPages {
                 path: Routes.onBoardingScreen,
                 name: Routes.onBoardingScreen,
                 builder: (context, state) => BlocProvider(
+                  create: (context) => serviceLocator<OnBoardingCubit>()
+                    ..changeOnboardingData(0),
                   child: const OnBoardingScreen(),
-                  create: (context) => serviceLocator<OnBoardingCubit>(),
                 ),
               ),
               GoRoute(
@@ -638,86 +644,175 @@ class AppPages {
                     child: const MainCategoriesGridView()),
               ),
               GoRoute(
-                  path: Paths.SUBCATEGORIES,
-                  name: Routes.SUBCATEGORIES,
-                  builder: (context, state) => BlocProvider.value(
-                        value: serviceLocator<SubcategoriesCubit>(),
-                        child: SubCategoriesView(
-                          mainCategory: state.extra as MainCategoryEntity,
-                        ),
-                      ),
-                  routes: [
-                    GoRoute(
-                        path: Paths.ADS,
-                        name: Routes.ADS,
-                        builder: (context, state) => BlocProvider(
-                              create: (_) =>
-                                  serviceLocator<AdvertisementCubit>(),
-                              child: AdsView(
-                                params: state.extra as AdsViewParams,
-                              ),
+                path: Paths.SUBCATEGORIES,
+                name: Routes.SUBCATEGORIES,
+                builder: (context, state) => BlocProvider.value(
+                  value: serviceLocator<SubcategoriesCubit>(),
+                  child: SubCategoriesView(
+                    mainCategory: state.extra as MainCategoryEntity,
+                  ),
+                ),
+                routes: [
+                  GoRoute(
+                      path: Paths.ADS,
+                      name: Routes.ADS,
+                      builder: (context, state) => BlocProvider(
+                            create: (_) => serviceLocator<AdvertisementCubit>(),
+                            child: AdsView(
+                              params: state.extra as AdsViewParams,
                             ),
-                        routes: [
-                          GoRoute(
-                              path: Paths.ADdetails,
-                              name: Routes.ADdetails,
-                              routes: [
-                                GoRoute(
-                                    path: Paths.ADRequests,
-                                    name: Routes.ADRequests,
-                                    builder: (context, state) =>
-                                        BlocProvider<AdRequestsCubit>(
-                                          create: (_) => serviceLocator(),
-                                          child: AdRequestsView(
-                                              payload: state.extra),
-                                        ))
-                              ],
-                              builder: (context, state) =>
-                                  BlocProvider<AdDetailsCubit>(
-                                    create: (_) => serviceLocator(),
-                                    child: AdDetailsView(payload: state.extra),
-                                  )),
-                          GoRoute(
-                            path: Paths.CREATEAD,
-                            name: Routes.CREATEAD,
-                            builder: (context, state) => BlocProvider.value(
-                                value: serviceLocator<CreateAdCubit>(),
-                                child: CreateAdView(
-                                  categorization:
-                                      state.extra as CategorizationEntity,
-                                )),
                           ),
-                          GoRoute(
-                            path: Paths.FILTERADS,
-                            name: Routes.FILTERADS,
-                            builder: (context, state) => BlocProvider.value(
-                                value: serviceLocator<CreateAdCubit>(),
-                                child: FilterAdsView(
-                                  categorization:
-                                      state.extra as CategorizationEntity,
-                                )),
-                          ),
-                          GoRoute(
-                            path: Paths.GOVERNORATEFILTERADS,
-                            name: Routes.GOVERNORATEFILTERADS,
-                            builder: (context, state) => BlocProvider.value(
-                                value: serviceLocator<CreateAdCubit>(),
-                                child: GovernorateFilterAdsView(
-                                  categorization:
-                                      state.extra as CategorizationEntity,
-                                )),
-                          ),
-                          // CreateCompanyAdView
-                          GoRoute(
-                            path: Paths.CREATECOMPANYAD,
-                            name: Routes.CREATECOMPANYAD,
+                      routes: [
+                        GoRoute(
+                            path: Paths.ADdetails,
+                            name: Routes.ADdetails,
+                            routes: [
+                              GoRoute(
+                                  path: Paths.ADRequests,
+                                  name: Routes.ADRequests,
+                                  builder: (context, state) =>
+                                      BlocProvider<AdRequestsCubit>(
+                                        create: (_) => serviceLocator(),
+                                        child: AdRequestsView(
+                                            payload: state.extra),
+                                      ))
+                            ],
                             builder: (context, state) =>
-                                BlocProvider<CreateCompanyAdCubit>(
-                                    create: (_) => serviceLocator()..loadData(),
-                                    child: const CreateCompanyAdView()),
-                          ),
-                        ]),
-                  ]),
+                                BlocProvider<AdDetailsCubit>(
+                                  create: (_) => serviceLocator(),
+                                  child: AdDetailsView(payload: state.extra),
+                                )),
+                        GoRoute(
+                          path: Paths.CREATEAD,
+                          name: Routes.CREATEAD,
+                          builder: (context, state) => BlocProvider.value(
+                              value: serviceLocator<CreateAdCubit>(),
+                              child: CreateAdView(
+                                categorization:
+                                    state.extra as CategorizationEntity,
+                              )),
+                        ),
+                        GoRoute(
+                          path: Paths.FILTERADS,
+                          name: Routes.FILTERADS,
+                          builder: (context, state) => BlocProvider.value(
+                              value: serviceLocator<CreateAdCubit>(),
+                              child: FilterAdsView(
+                                categorization:
+                                    state.extra as CategorizationEntity,
+                              )),
+                        ),
+                        GoRoute(
+                          path: Paths.GOVERNORATEFILTERADS,
+                          name: Routes.GOVERNORATEFILTERADS,
+                          builder: (context, state) => BlocProvider.value(
+                              value: serviceLocator<CreateAdCubit>(),
+                              child: GovernorateFilterAdsView(
+                                categorization:
+                                    state.extra as CategorizationEntity,
+                              )),
+                        ),
+                        // CreateCompanyAdView
+                        GoRoute(
+                          path: Paths.CREATECOMPANYAD,
+                          name: Routes.CREATECOMPANYAD,
+                          builder: (context, state) =>
+                              BlocProvider<CreateCompanyAdCubit>(
+                                  create: (_) => serviceLocator()..loadData(),
+                                  child: const CreateCompanyAdView()),
+                        ),
+                      ]),
+                ],
+              ),
+              GoRoute(
+                path: Paths.CustomPageSubCategoriesView,
+                name: Routes.CustomPageSubCategoriesView,
+                builder: (context, state) => BlocProvider.value(
+                  value: serviceLocator<SubcategoriesCubit>(),
+                  child: CustomPageSubCategoriesView(
+                    mainCategory: state.extra as MainCategoryEntity,
+                  ),
+                ),
+                // routes: [
+                //   GoRoute(
+                //       path: Paths.ADS,
+                //       name: Routes.ADS,
+                //       builder: (context, state) => BlocProvider(
+                //             create: (_) =>
+                //                 serviceLocator<AdvertisementCubit>(),
+                //             child: AdsView(
+                //               params: state.extra as AdsViewParams,
+                //             ),
+                //           ),
+                //       routes: [
+                //         GoRoute(
+                //             path: Paths.ADdetails,
+                //             name: Routes.ADdetails,
+                //             routes: [
+                //               GoRoute(
+                //                   path: Paths.ADRequests,
+                //                   name: Routes.ADRequests,
+                //                   builder: (context, state) =>
+                //                       BlocProvider<AdRequestsCubit>(
+                //                         create: (_) => serviceLocator(),
+                //                         child: AdRequestsView(
+                //                             payload: state.extra),
+                //                       ))
+                //             ],
+                //             builder: (context, state) =>
+                //                 BlocProvider<AdDetailsCubit>(
+                //                   create: (_) => serviceLocator(),
+                //                   child: AdDetailsView(payload: state.extra),
+                //                 )),
+                //         GoRoute(
+                //           path: Paths.CREATEAD,
+                //           name: Routes.CREATEAD,
+                //           builder: (context, state) => BlocProvider.value(
+                //               value: serviceLocator<CreateAdCubit>(),
+                //               child: CreateAdView(
+                //                 categorization:
+                //                     state.extra as CategorizationEntity,
+                //               )),
+                //         ),
+                //         GoRoute(
+                //           path: Paths.FILTERADS,
+                //           name: Routes.FILTERADS,
+                //           builder: (context, state) => BlocProvider.value(
+                //               value: serviceLocator<CreateAdCubit>(),
+                //               child: FilterAdsView(
+                //                 categorization:
+                //                     state.extra as CategorizationEntity,
+                //               )),
+                //         ),
+                //         GoRoute(
+                //           path: Paths.GOVERNORATEFILTERADS,
+                //           name: Routes.GOVERNORATEFILTERADS,
+                //           builder: (context, state) => BlocProvider.value(
+                //               value: serviceLocator<CreateAdCubit>(),
+                //               child: GovernorateFilterAdsView(
+                //                 categorization:
+                //                     state.extra as CategorizationEntity,
+                //               )),
+                //         ),
+                //         // CreateCompanyAdView
+                //         GoRoute(
+                //           path: Paths.CREATECOMPANYAD,
+                //           name: Routes.CREATECOMPANYAD,
+                //           builder: (context, state) =>
+                //               BlocProvider<CreateCompanyAdCubit>(
+                //                   create: (_) => serviceLocator()..loadData(),
+                //                   child: const CreateCompanyAdView()),
+                //         ),
+                //       ]),
+                // ],
+              ),
+              GoRoute(
+                path: Paths.NavigatorSubCategoriesView,
+                name: Routes.NavigatorSubCategoriesView,
+                builder: (context, state) => NavigatorSubCategoriesView(
+                  mainCategory: state.extra as CustomPageCategoriesEntity,
+                ),
+              ),
               GoRoute(
                 path: Paths.MARRIAGESUBCATEGORIES,
                 name: Routes.MARRIAGESUBCATEGORIES,
@@ -1194,7 +1289,6 @@ class AppPages {
                   name: Routes.SOCIAL,
                   builder: (context, state) {
                     final params = state.extra as dynamic;
-
                     return SocialHomeView(
                       payload: params ??
                           SocialParams(userId: '', index: 0, hideAppBar: false),
