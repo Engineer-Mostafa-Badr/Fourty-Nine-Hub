@@ -31,11 +31,11 @@ class PrivacyView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      backgroundColor: Theme.of(context).primaryColor,
+      // backgroundColor: Theme.of(context).primaryColor,
+      enableCustomAppBar: true,
       appBar: BackAppBar(
         label: LocaleKeys.privacy.localize,
-        textColor: Colors.white,
-        iconColor: Colors.white,
+        enableCustomAppBar: true,
       ),
       body: context.read<UserCubit>().isLoggedIn
           ? BlocProvider<PrivacyCubit>(
@@ -51,1023 +51,1013 @@ class PrivacyView extends StatelessWidget {
                   if (state.status == PrivacyStates.success) {
                     return Padding(
                       padding: const EdgeInsets.only(top: 8.0),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        decoration: BoxDecoration(
-                          color: HexColor('F2F1F7'),
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(50.r),
-                          ),
-                        ),
-                        clipBehavior: Clip.antiAliasWithSaveLayer,
-                        child: SingleChildScrollView(
-                          child: Column(
-                            spacing: 8,
-                            children: [
-                              const SizedBox(
-                                height: 8,
-                              ),
-                              PrivacyMultiSelectItem(
-                                label: LocaleKeys.country.localize,
-                                privacy: state.personalPrivacyEntity?.country ?? '',
-                                name:  mapPrivacyFeatureToString(PrivacyFeature.country),
-                                onChoose: (PrivacyStatus value, List<String>? selectedUsers) {
-                                  PrivacyFeature feature = PrivacyFeature.country;
+                      child: SingleChildScrollView(
+                        child: Column(
+                          spacing: 8,
+                          children: [
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            PrivacyMultiSelectItem(
+                              label: LocaleKeys.country.localize,
+                              privacy: state.personalPrivacyEntity?.country ?? '',
+                              name:  mapPrivacyFeatureToString(PrivacyFeature.country),
+                              onChoose: (PrivacyStatus value, List<String>? selectedUsers) {
+                                PrivacyFeature feature = PrivacyFeature.country;
 
-                                  if (value == PrivacyStatus.onlyWith) {
-                                    context.read<PrivacyCubit>().updateOnlyWithPrivacy(
-                                      params: UpdateOnlyWithPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
+                                if (value == PrivacyStatus.onlyWith) {
+                                  context.read<PrivacyCubit>().updateOnlyWithPrivacy(
+                                    params: UpdateOnlyWithPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else if (value == PrivacyStatus.exceptFrom) {
+                                  context.read<PrivacyCubit>().updateExceptFromPrivacy(
+                                    params: UpdateExceptFromPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else {
+                                  String mappedPrivacy = mapPrivacyStatusToString(value);
+
+                                  // 🔹 Ensure 'except-from' is not sent
+                                  if (mappedPrivacy == "except-from") {
+                                    mappedPrivacy = "only-me"; // Change this to an appropriate default value
                                   }
-                                  else if (value == PrivacyStatus.exceptFrom) {
-                                    context.read<PrivacyCubit>().updateExceptFromPrivacy(
-                                      params: UpdateExceptFromPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else {
-                                    String mappedPrivacy = mapPrivacyStatusToString(value);
 
-                                    // 🔹 Ensure 'except-from' is not sent
-                                    if (mappedPrivacy == "except-from") {
-                                      mappedPrivacy = "only-me"; // Change this to an appropriate default value
-                                    }
+                                  print("The Value I send: $mappedPrivacy");
 
-                                    print("The Value I send: $mappedPrivacy");
+                                  context.read<PrivacyCubit>().updateDataPersonalPrivacy(
+                                    params: UpdatePersonalPrivacyParams(
+                                      feature: mapPrivacyFeatureToString(feature), // The feature being updated
+                                      newPrivacyOption: mappedPrivacy, // The new privacy option
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                              },
+                            ),
 
-                                    context.read<PrivacyCubit>().updateDataPersonalPrivacy(
-                                      params: UpdatePersonalPrivacyParams(
-                                        feature: mapPrivacyFeatureToString(feature), // The feature being updated
-                                        newPrivacyOption: mappedPrivacy, // The new privacy option
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                },
-                              ),
+                            PrivacyMultiSelectItem(
+                              label: LocaleKeys.phone.localize,
+                              name:  mapPrivacyFeatureToString(PrivacyFeature.phoneNumber),
+                              privacy:
+                                  state.personalPrivacyEntity?.phoneNumber ??
+                                      '',
+                              onChoose: (PrivacyStatus value, List<String>? selectedUsers) {
+                                PrivacyFeature feature = PrivacyFeature.phoneNumber;
 
-                              PrivacyMultiSelectItem(
-                                label: LocaleKeys.phone.localize,
-                                name:  mapPrivacyFeatureToString(PrivacyFeature.phoneNumber),
-                                privacy:
-                                    state.personalPrivacyEntity?.phoneNumber ??
-                                        '',
-                                onChoose: (PrivacyStatus value, List<String>? selectedUsers) {
-                                  PrivacyFeature feature = PrivacyFeature.phoneNumber;
-
-                                  if (value == PrivacyStatus.onlyWith) {
-                                    context.read<PrivacyCubit>().updateOnlyWithPrivacy(
-                                      params: UpdateOnlyWithPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else if (value == PrivacyStatus.exceptFrom) {
-                                    context.read<PrivacyCubit>().updateExceptFromPrivacy(
-                                      params: UpdateExceptFromPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else {
+                                if (value == PrivacyStatus.onlyWith) {
+                                  context.read<PrivacyCubit>().updateOnlyWithPrivacy(
+                                    params: UpdateOnlyWithPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else if (value == PrivacyStatus.exceptFrom) {
+                                  context.read<PrivacyCubit>().updateExceptFromPrivacy(
+                                    params: UpdateExceptFromPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else {
 
 
-                                    context
-                                        .read<PrivacyCubit>()
-                                        .updateDataPersonalPrivacy(
-                                      params: UpdatePersonalPrivacyParams(
-                                        feature: mapPrivacyFeatureToString(feature), // The feature being updated
-                                        newPrivacyOption: mapPrivacyStatusToString(value),
-                                      ),
-                                    );
-                                  }
-                                },
-                              ),
-                              PrivacyMultiSelectItem(
-                                label: LocaleKeys.email.localize,
-                                privacy:
-                                    state.personalPrivacyEntity?.email ?? '',
-                                onChoose: (PrivacyStatus value,
-                                   List<String>? selectedUsers) {
-                                  PrivacyFeature feature = PrivacyFeature.email;
-                                  if (value == PrivacyStatus.onlyWith) {
-                                    context.read<PrivacyCubit>().updateOnlyWithPrivacy(
-                                      params: UpdateOnlyWithPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else if (value == PrivacyStatus.exceptFrom) {
-                                    context.read<PrivacyCubit>().updateExceptFromPrivacy(
-                                      params: UpdateExceptFromPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else {
+                                  context
+                                      .read<PrivacyCubit>()
+                                      .updateDataPersonalPrivacy(
+                                    params: UpdatePersonalPrivacyParams(
+                                      feature: mapPrivacyFeatureToString(feature), // The feature being updated
+                                      newPrivacyOption: mapPrivacyStatusToString(value),
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                            PrivacyMultiSelectItem(
+                              label: LocaleKeys.email.localize,
+                              privacy:
+                                  state.personalPrivacyEntity?.email ?? '',
+                              onChoose: (PrivacyStatus value,
+                                 List<String>? selectedUsers) {
+                                PrivacyFeature feature = PrivacyFeature.email;
+                                if (value == PrivacyStatus.onlyWith) {
+                                  context.read<PrivacyCubit>().updateOnlyWithPrivacy(
+                                    params: UpdateOnlyWithPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else if (value == PrivacyStatus.exceptFrom) {
+                                  context.read<PrivacyCubit>().updateExceptFromPrivacy(
+                                    params: UpdateExceptFromPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else {
 
-                                    context
-                                        .read<PrivacyCubit>()
-                                        .updateDataPersonalPrivacy(
-                                      params: UpdatePersonalPrivacyParams(
-                                        feature: mapPrivacyFeatureToString(feature), // The feature being updated
-                                        newPrivacyOption: mapPrivacyStatusToString(value),
-                                      ),
-                                    );
-                                  }
-                                },
-                              ),
-                              PrivacyMultiSelectItem(
-                                label: LocaleKeys.birthDate.localize,
-                                privacy:
-                                    state.personalPrivacyEntity?.birthDay ?? '',
-                                onChoose: (PrivacyStatus value,
-                                   List<String>? selectedUsers) {
-                                  PrivacyFeature feature = PrivacyFeature.birthDay;
+                                  context
+                                      .read<PrivacyCubit>()
+                                      .updateDataPersonalPrivacy(
+                                    params: UpdatePersonalPrivacyParams(
+                                      feature: mapPrivacyFeatureToString(feature), // The feature being updated
+                                      newPrivacyOption: mapPrivacyStatusToString(value),
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                            PrivacyMultiSelectItem(
+                              label: LocaleKeys.birthDate.localize,
+                              privacy:
+                                  state.personalPrivacyEntity?.birthDay ?? '',
+                              onChoose: (PrivacyStatus value,
+                                 List<String>? selectedUsers) {
+                                PrivacyFeature feature = PrivacyFeature.birthDay;
 
-                                  if (value == PrivacyStatus.onlyWith) {
-                                    context.read<PrivacyCubit>().updateOnlyWithPrivacy(
-                                      params: UpdateOnlyWithPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else if (value == PrivacyStatus.exceptFrom) {
-                                    context.read<PrivacyCubit>().updateExceptFromPrivacy(
-                                      params: UpdateExceptFromPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else {
+                                if (value == PrivacyStatus.onlyWith) {
+                                  context.read<PrivacyCubit>().updateOnlyWithPrivacy(
+                                    params: UpdateOnlyWithPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else if (value == PrivacyStatus.exceptFrom) {
+                                  context.read<PrivacyCubit>().updateExceptFromPrivacy(
+                                    params: UpdateExceptFromPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else {
 
-                                    context
-                                        .read<PrivacyCubit>()
-                                        .updateDataPersonalPrivacy(
-                                      params: UpdatePersonalPrivacyParams(
-                                        feature: mapPrivacyFeatureToString(feature), // The feature being updated
-                                        newPrivacyOption: mapPrivacyStatusToString(value),
-                                      ),
-                                    );
-                                  }
-                                },
-                              ),
+                                  context
+                                      .read<PrivacyCubit>()
+                                      .updateDataPersonalPrivacy(
+                                    params: UpdatePersonalPrivacyParams(
+                                      feature: mapPrivacyFeatureToString(feature), // The feature being updated
+                                      newPrivacyOption: mapPrivacyStatusToString(value),
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
 
-                              PrivacyMultiSelectItem(
-                                label: LocaleKeys.job.localize,
-                                privacy: state.personalPrivacyEntity?.job ?? '',
-                                onChoose: (PrivacyStatus value,
-                                   List<String>? selectedUsers) {
-                                  PrivacyFeature feature = PrivacyFeature.job;
+                            PrivacyMultiSelectItem(
+                              label: LocaleKeys.job.localize,
+                              privacy: state.personalPrivacyEntity?.job ?? '',
+                              onChoose: (PrivacyStatus value,
+                                 List<String>? selectedUsers) {
+                                PrivacyFeature feature = PrivacyFeature.job;
 
-                                  if (value == PrivacyStatus.onlyWith) {
-                                    context.read<PrivacyCubit>().updateOnlyWithPrivacy(
-                                      params: UpdateOnlyWithPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else if (value == PrivacyStatus.exceptFrom) {
-                                    context.read<PrivacyCubit>().updateExceptFromPrivacy(
-                                      params: UpdateExceptFromPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else {
+                                if (value == PrivacyStatus.onlyWith) {
+                                  context.read<PrivacyCubit>().updateOnlyWithPrivacy(
+                                    params: UpdateOnlyWithPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else if (value == PrivacyStatus.exceptFrom) {
+                                  context.read<PrivacyCubit>().updateExceptFromPrivacy(
+                                    params: UpdateExceptFromPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else {
 
-                                    context
-                                        .read<PrivacyCubit>()
-                                        .updateDataPersonalPrivacy(
-                                      params: UpdatePersonalPrivacyParams(
-                                        feature: mapPrivacyFeatureToString(feature), // The feature being updated
-                                        newPrivacyOption: mapPrivacyStatusToString(value),
-                                      ),
-                                    );
-                                  }
-                                },
-                              ),
-
-
-                              PrivacyMultiSelectItem(
-                                label: LocaleKeys.city.localize,
-                                privacy:
-                                    state.personalPrivacyEntity?.city ?? '',
-                                onChoose: (PrivacyStatus value, List<String>? selectedUsers) {
-                                  PrivacyFeature feature = PrivacyFeature.language;
-
-                                  if (value == PrivacyStatus.onlyWith) {
-                                    context.read<PrivacyCubit>().updateOnlyWithPrivacy(
-                                      params: UpdateOnlyWithPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else if (value == PrivacyStatus.exceptFrom) {
-                                    context.read<PrivacyCubit>().updateExceptFromPrivacy(
-                                      params: UpdateExceptFromPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else {
+                                  context
+                                      .read<PrivacyCubit>()
+                                      .updateDataPersonalPrivacy(
+                                    params: UpdatePersonalPrivacyParams(
+                                      feature: mapPrivacyFeatureToString(feature), // The feature being updated
+                                      newPrivacyOption: mapPrivacyStatusToString(value),
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
 
 
-                                    context.read<PrivacyCubit>().updateDataPersonalPrivacy(
-                                      params: UpdatePersonalPrivacyParams(
-                                        feature: mapPrivacyFeatureToString(feature), // The feature being updated
-                                        newPrivacyOption: mapPrivacyStatusToString(value),
-                                      ),
-                                    );
-                                  }
-                                },
-                                // onChoose: (PrivacyStatus value,
-                                //    List<String>? selectedUsers) {
-                                //   PrivacyFeature feature = PrivacyFeature.city;
-                                //   if (value == PrivacyStatus.onlyWith) {
-                                //     context.read<PrivacyCubit>().updateOnlyWithPrivacy(
-                                //       params: UpdateOnlyWithPrivacyParams(
-                                //         allowedUsers: selectedUsers ?? [],
-                                //         feature: mapPrivacyFeatureToString(feature),
-                                //       ),
-                                //     ).then((_) {
-                                //       context.read<PrivacyCubit>().loadData();
-                                //     });
-                                //   }
-                                //   else if (value == PrivacyStatus.exceptFrom) {
-                                //     context.read<PrivacyCubit>().updateExceptFromPrivacy(
-                                //       params: UpdateExceptFromPrivacyParams(
-                                //         allowedUsers: selectedUsers ?? [],
-                                //         feature: mapPrivacyFeatureToString(feature),
-                                //       ),
-                                //     ).then((_) {
-                                //       context.read<PrivacyCubit>().loadData();
-                                //     });
-                                //   }
-                                //   else {
-                                //     String mappedPrivacy =
-                                //     mapPrivacyStatusToString(value);
-                                //
-                                //     if (mappedPrivacy == "except-from") {
-                                //       mappedPrivacy = "only-me";
-                                //     }
-                                //     context
-                                //         .read<PrivacyCubit>()
-                                //         .updateDataPersonalPrivacy(
-                                //       params: UpdatePersonalPrivacyParams(
-                                //         privacyCountry: state
-                                //             .personalPrivacyEntity
-                                //             ?.country ??
-                                //             '',
-                                //         privacyEmail: state
-                                //             .personalPrivacyEntity
-                                //             ?.email ??
-                                //             '',
-                                //         privacyPhone: state
-                                //             .personalPrivacyEntity
-                                //             ?.phoneNumber ??
-                                //             '',
-                                //         privacyGender: state
-                                //             .personalPrivacyEntity
-                                //             ?.gender ??
-                                //             '',
-                                //         privacyCity:
-                                //         mappedPrivacy,
-                                //         privacyJob: state
-                                //             .personalPrivacyEntity?.job ??
-                                //             '',
-                                //         privacyBirthDay: state
-                                //             .personalPrivacyEntity
-                                //             ?.birthDay ??
-                                //             '',
-                                //         privacyLanguage: state
-                                //             .personalPrivacyEntity
-                                //             ?.language ??
-                                //             '',
-                                //       ),
-                                //     );
-                                //   }
-                                // },
-                              ),
+                            PrivacyMultiSelectItem(
+                              label: LocaleKeys.city.localize,
+                              privacy:
+                                  state.personalPrivacyEntity?.city ?? '',
+                              onChoose: (PrivacyStatus value, List<String>? selectedUsers) {
+                                PrivacyFeature feature = PrivacyFeature.language;
 
-                              PrivacyMultiSelectItem(
-                                label: LocaleKeys.gender.localize,
-                                privacy:
-                                    state.personalPrivacyEntity?.gender ?? '',
-                                onChoose: (PrivacyStatus value,
-                                   List<String>? selectedUsers) {
-                                  PrivacyFeature feature = PrivacyFeature.gender;
-
-                                  if (value == PrivacyStatus.onlyWith) {
-                                    context.read<PrivacyCubit>().updateOnlyWithPrivacy(
-                                      params: UpdateOnlyWithPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else if (value == PrivacyStatus.exceptFrom) {
-                                    context.read<PrivacyCubit>().updateExceptFromPrivacy(
-                                      params: UpdateExceptFromPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else {
-
-                                    context
-                                        .read<PrivacyCubit>()
-                                        .updateDataPersonalPrivacy(
-                                      params: UpdatePersonalPrivacyParams(
-                                        feature: mapPrivacyFeatureToString(feature), // The feature being updated
-                                        newPrivacyOption: mapPrivacyStatusToString(value),
-                                      ),
-                                    );
-                                  }
-                                },
-                              ),
-                              PrivacyMultiSelectItem(
-                                label: LocaleKeys.language.localize,
-                                privacy:
-                                    state.personalPrivacyEntity?.language ?? '',
-                                onChoose: (PrivacyStatus value,
-                                   List<String>? selectedUsers) {
-                                  PrivacyFeature feature = PrivacyFeature.language;
-
-                                  if (value == PrivacyStatus.onlyWith) {
-                                    context.read<PrivacyCubit>().updateOnlyWithPrivacy(
-                                      params: UpdateOnlyWithPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else if (value == PrivacyStatus.exceptFrom) {
-                                    context.read<PrivacyCubit>().updateExceptFromPrivacy(
-                                      params: UpdateExceptFromPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else {
-
-                                    context
-                                        .read<PrivacyCubit>()
-                                        .updateDataPersonalPrivacy(
-                                      params: UpdatePersonalPrivacyParams(
-                                        feature: mapPrivacyFeatureToString(feature), // The feature being updated
-                                        newPrivacyOption: mapPrivacyStatusToString(value),
-                                      ),
-                                    );
-                                  }
-                                },
-                              ),
-                              // not made
-                              // PrivacyMultiSelectItem(
-                              //     label: LocaleKeys.socialStatus.localize,
-                              //     privacy:
-                              //         state.privacy?.privacySocialStatus ?? '',
-                              //     onChoose: (PrivacyStatus value,
-                              //        List<String>?
-                              //             selectedUsers) {}),
+                                if (value == PrivacyStatus.onlyWith) {
+                                  context.read<PrivacyCubit>().updateOnlyWithPrivacy(
+                                    params: UpdateOnlyWithPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else if (value == PrivacyStatus.exceptFrom) {
+                                  context.read<PrivacyCubit>().updateExceptFromPrivacy(
+                                    params: UpdateExceptFromPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else {
 
 
-                              PrivacyMultiSelectItem(
-                                label: LocaleKeys.lastSeen.localize,
-                                privacy: state.communicationPrivacyEntity?.lastSeen ?? '',
-                                onChoose: (PrivacyStatus value,
-                                   List<String>? selectedUsers) {
-                                  PrivacyFeature feature = PrivacyFeature.lastSeen;
+                                  context.read<PrivacyCubit>().updateDataPersonalPrivacy(
+                                    params: UpdatePersonalPrivacyParams(
+                                      feature: mapPrivacyFeatureToString(feature), // The feature being updated
+                                      newPrivacyOption: mapPrivacyStatusToString(value),
+                                    ),
+                                  );
+                                }
+                              },
+                              // onChoose: (PrivacyStatus value,
+                              //    List<String>? selectedUsers) {
+                              //   PrivacyFeature feature = PrivacyFeature.city;
+                              //   if (value == PrivacyStatus.onlyWith) {
+                              //     context.read<PrivacyCubit>().updateOnlyWithPrivacy(
+                              //       params: UpdateOnlyWithPrivacyParams(
+                              //         allowedUsers: selectedUsers ?? [],
+                              //         feature: mapPrivacyFeatureToString(feature),
+                              //       ),
+                              //     ).then((_) {
+                              //       context.read<PrivacyCubit>().loadData();
+                              //     });
+                              //   }
+                              //   else if (value == PrivacyStatus.exceptFrom) {
+                              //     context.read<PrivacyCubit>().updateExceptFromPrivacy(
+                              //       params: UpdateExceptFromPrivacyParams(
+                              //         allowedUsers: selectedUsers ?? [],
+                              //         feature: mapPrivacyFeatureToString(feature),
+                              //       ),
+                              //     ).then((_) {
+                              //       context.read<PrivacyCubit>().loadData();
+                              //     });
+                              //   }
+                              //   else {
+                              //     String mappedPrivacy =
+                              //     mapPrivacyStatusToString(value);
+                              //
+                              //     if (mappedPrivacy == "except-from") {
+                              //       mappedPrivacy = "only-me";
+                              //     }
+                              //     context
+                              //         .read<PrivacyCubit>()
+                              //         .updateDataPersonalPrivacy(
+                              //       params: UpdatePersonalPrivacyParams(
+                              //         privacyCountry: state
+                              //             .personalPrivacyEntity
+                              //             ?.country ??
+                              //             '',
+                              //         privacyEmail: state
+                              //             .personalPrivacyEntity
+                              //             ?.email ??
+                              //             '',
+                              //         privacyPhone: state
+                              //             .personalPrivacyEntity
+                              //             ?.phoneNumber ??
+                              //             '',
+                              //         privacyGender: state
+                              //             .personalPrivacyEntity
+                              //             ?.gender ??
+                              //             '',
+                              //         privacyCity:
+                              //         mappedPrivacy,
+                              //         privacyJob: state
+                              //             .personalPrivacyEntity?.job ??
+                              //             '',
+                              //         privacyBirthDay: state
+                              //             .personalPrivacyEntity
+                              //             ?.birthDay ??
+                              //             '',
+                              //         privacyLanguage: state
+                              //             .personalPrivacyEntity
+                              //             ?.language ??
+                              //             '',
+                              //       ),
+                              //     );
+                              //   }
+                              // },
+                            ),
 
-                                  if (value == PrivacyStatus.onlyWith) {
-                                    context.read<PrivacyCubit>().updateOnlyWithPrivacy(
-                                      params: UpdateOnlyWithPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else if (value == PrivacyStatus.exceptFrom) {
-                                    context.read<PrivacyCubit>().updateExceptFromPrivacy(
-                                      params: UpdateExceptFromPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else {
-                                    context
-                                        .read<PrivacyCubit>()
-                                        .updateDataCommunicationPrivacy(
-                                      params:
-                                      UpdateCommunicationPrivacyParams(
-                                        feature: mapPrivacyFeatureToString(feature), // The feature being updated
-                                        newPrivacyOption: mapPrivacyStatusToString(value),
-                                      ),
-                                    );
-                                  }
-                                },
-                              ),
+                            PrivacyMultiSelectItem(
+                              label: LocaleKeys.gender.localize,
+                              privacy:
+                                  state.personalPrivacyEntity?.gender ?? '',
+                              onChoose: (PrivacyStatus value,
+                                 List<String>? selectedUsers) {
+                                PrivacyFeature feature = PrivacyFeature.gender;
 
-                              PrivacyMultiSelectItem(
-                                label: LocaleKeys.friendsList.localize,
-                                privacy: state
-                                        .connectionPrivacyEntity?.friendsList ??
-                                    '',
-                                onChoose: (PrivacyStatus value,
-                                   List<String>? selectedUsers) {
-                                  PrivacyFeature feature = PrivacyFeature.friendsList;
+                                if (value == PrivacyStatus.onlyWith) {
+                                  context.read<PrivacyCubit>().updateOnlyWithPrivacy(
+                                    params: UpdateOnlyWithPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else if (value == PrivacyStatus.exceptFrom) {
+                                  context.read<PrivacyCubit>().updateExceptFromPrivacy(
+                                    params: UpdateExceptFromPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else {
 
-                                  if (value == PrivacyStatus.onlyWith) {
-                                    context.read<PrivacyCubit>().updateOnlyWithPrivacy(
-                                      params: UpdateOnlyWithPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else if (value == PrivacyStatus.exceptFrom) {
-                                    context.read<PrivacyCubit>().updateExceptFromPrivacy(
-                                      params: UpdateExceptFromPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else {
-                                    context
-                                        .read<PrivacyCubit>()
-                                        .updateDataConnectionPrivacy(
-                                      params: UpdateConnectionPrivacyParams(
-                                        feature: mapPrivacyFeatureToString(feature), // The feature being updated
-                                        newPrivacyOption: mapPrivacyStatusToString(value),
+                                  context
+                                      .read<PrivacyCubit>()
+                                      .updateDataPersonalPrivacy(
+                                    params: UpdatePersonalPrivacyParams(
+                                      feature: mapPrivacyFeatureToString(feature), // The feature being updated
+                                      newPrivacyOption: mapPrivacyStatusToString(value),
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                            PrivacyMultiSelectItem(
+                              label: LocaleKeys.language.localize,
+                              privacy:
+                                  state.personalPrivacyEntity?.language ?? '',
+                              onChoose: (PrivacyStatus value,
+                                 List<String>? selectedUsers) {
+                                PrivacyFeature feature = PrivacyFeature.language;
 
-                                      ),
-                                    );
-                                  }
-                                },
-                              ),
-                              PrivacyMultiSelectItem(
-                                label: LocaleKeys.followerList.localize,
-                                privacy: state.connectionPrivacyEntity
-                                        ?.followerList ??
-                                    '',
-                                onChoose: (PrivacyStatus value,
-                                   List<String>? selectedUsers) {
-                                  PrivacyFeature feature = PrivacyFeature.followerList;
+                                if (value == PrivacyStatus.onlyWith) {
+                                  context.read<PrivacyCubit>().updateOnlyWithPrivacy(
+                                    params: UpdateOnlyWithPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else if (value == PrivacyStatus.exceptFrom) {
+                                  context.read<PrivacyCubit>().updateExceptFromPrivacy(
+                                    params: UpdateExceptFromPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else {
 
-                                  if (value == PrivacyStatus.onlyWith) {
-                                    context.read<PrivacyCubit>().updateOnlyWithPrivacy(
-                                      params: UpdateOnlyWithPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else if (value == PrivacyStatus.exceptFrom) {
-                                    context.read<PrivacyCubit>().updateExceptFromPrivacy(
-                                      params: UpdateExceptFromPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else {
-                                    context
-                                        .read<PrivacyCubit>()
-                                        .updateDataConnectionPrivacy(
-                                      params: UpdateConnectionPrivacyParams(
-                                        feature: mapPrivacyFeatureToString(feature), // The feature being updated
-                                        newPrivacyOption: mapPrivacyStatusToString(value),
-                                      ),
-                                    );
-                                  }
-                                },
-                              ),
-                              // PrivacyMultiSelectItem(
-                              //     label: LocaleKeys.activity.localize,
-                              //     privacy: state.privacy?.privacyActivity ?? '',
-                              //     onChoose: (PrivacyStatus value,
-                              //        List<String>?
-                              //             selectedUsers) {}),
-                              PrivacyMultiSelectItem(
-                                label: LocaleKeys.call.localize,
-                                privacy: state.communicationPrivacyEntity
-                                        ?.receiveCalls ??
-                                    '',
-                                onChoose: (PrivacyStatus value,
-                                   List<String>? selectedUsers) {
-                                  PrivacyFeature feature = PrivacyFeature.receiveCalls;
+                                  context
+                                      .read<PrivacyCubit>()
+                                      .updateDataPersonalPrivacy(
+                                    params: UpdatePersonalPrivacyParams(
+                                      feature: mapPrivacyFeatureToString(feature), // The feature being updated
+                                      newPrivacyOption: mapPrivacyStatusToString(value),
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                            // not made
+                            // PrivacyMultiSelectItem(
+                            //     label: LocaleKeys.socialStatus.localize,
+                            //     privacy:
+                            //         state.privacy?.privacySocialStatus ?? '',
+                            //     onChoose: (PrivacyStatus value,
+                            //        List<String>?
+                            //             selectedUsers) {}),
 
-                                  if (value == PrivacyStatus.onlyWith) {
-                                    context.read<PrivacyCubit>().updateOnlyWithPrivacy(
-                                      params: UpdateOnlyWithPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else if (value == PrivacyStatus.exceptFrom) {
-                                    context.read<PrivacyCubit>().updateExceptFromPrivacy(
-                                      params: UpdateExceptFromPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else {
+
+                            PrivacyMultiSelectItem(
+                              label: LocaleKeys.lastSeen.localize,
+                              privacy: state.communicationPrivacyEntity?.lastSeen ?? '',
+                              onChoose: (PrivacyStatus value,
+                                 List<String>? selectedUsers) {
+                                PrivacyFeature feature = PrivacyFeature.lastSeen;
+
+                                if (value == PrivacyStatus.onlyWith) {
+                                  context.read<PrivacyCubit>().updateOnlyWithPrivacy(
+                                    params: UpdateOnlyWithPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else if (value == PrivacyStatus.exceptFrom) {
+                                  context.read<PrivacyCubit>().updateExceptFromPrivacy(
+                                    params: UpdateExceptFromPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else {
                                   context
                                       .read<PrivacyCubit>()
                                       .updateDataCommunicationPrivacy(
-                                        params:
-                                            UpdateCommunicationPrivacyParams(
-                                              feature: mapPrivacyFeatureToString(feature), // The feature being updated
-                                              newPrivacyOption: mapPrivacyStatusToString(value),
-                                        ),
-                                      );
-                                  }
-                                },
-                              ),
+                                    params:
+                                    UpdateCommunicationPrivacyParams(
+                                      feature: mapPrivacyFeatureToString(feature), // The feature being updated
+                                      newPrivacyOption: mapPrivacyStatusToString(value),
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
 
-                              ///
-                              PrivacyMultiSelectItem(
-                                label: LocaleKeys.anonymousMessage.localize,
-                                privacy: state.communicationPrivacyEntity
-                                        ?.receiveAnonymousMessages ??
-                                    '',
-                                onChoose: (PrivacyStatus value,
-                                   List<String>? selectedUsers) {
-                                  PrivacyFeature feature = PrivacyFeature.receiveAnonymousMessages;
+                            PrivacyMultiSelectItem(
+                              label: LocaleKeys.friendsList.localize,
+                              privacy: state
+                                      .connectionPrivacyEntity?.friendsList ??
+                                  '',
+                              onChoose: (PrivacyStatus value,
+                                 List<String>? selectedUsers) {
+                                PrivacyFeature feature = PrivacyFeature.friendsList;
 
-                                  if (value == PrivacyStatus.onlyWith) {
-                                    context.read<PrivacyCubit>().updateOnlyWithPrivacy(
-                                      params: UpdateOnlyWithPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else if (value == PrivacyStatus.exceptFrom) {
-                                    context.read<PrivacyCubit>().updateExceptFromPrivacy(
-                                      params: UpdateExceptFromPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else {
-                                    context
-                                        .read<PrivacyCubit>()
-                                        .updateDataCommunicationPrivacy(
+                                if (value == PrivacyStatus.onlyWith) {
+                                  context.read<PrivacyCubit>().updateOnlyWithPrivacy(
+                                    params: UpdateOnlyWithPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else if (value == PrivacyStatus.exceptFrom) {
+                                  context.read<PrivacyCubit>().updateExceptFromPrivacy(
+                                    params: UpdateExceptFromPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else {
+                                  context
+                                      .read<PrivacyCubit>()
+                                      .updateDataConnectionPrivacy(
+                                    params: UpdateConnectionPrivacyParams(
+                                      feature: mapPrivacyFeatureToString(feature), // The feature being updated
+                                      newPrivacyOption: mapPrivacyStatusToString(value),
+
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                            PrivacyMultiSelectItem(
+                              label: LocaleKeys.followerList.localize,
+                              privacy: state.connectionPrivacyEntity
+                                      ?.followerList ??
+                                  '',
+                              onChoose: (PrivacyStatus value,
+                                 List<String>? selectedUsers) {
+                                PrivacyFeature feature = PrivacyFeature.followerList;
+
+                                if (value == PrivacyStatus.onlyWith) {
+                                  context.read<PrivacyCubit>().updateOnlyWithPrivacy(
+                                    params: UpdateOnlyWithPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else if (value == PrivacyStatus.exceptFrom) {
+                                  context.read<PrivacyCubit>().updateExceptFromPrivacy(
+                                    params: UpdateExceptFromPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else {
+                                  context
+                                      .read<PrivacyCubit>()
+                                      .updateDataConnectionPrivacy(
+                                    params: UpdateConnectionPrivacyParams(
+                                      feature: mapPrivacyFeatureToString(feature), // The feature being updated
+                                      newPrivacyOption: mapPrivacyStatusToString(value),
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                            // PrivacyMultiSelectItem(
+                            //     label: LocaleKeys.activity.localize,
+                            //     privacy: state.privacy?.privacyActivity ?? '',
+                            //     onChoose: (PrivacyStatus value,
+                            //        List<String>?
+                            //             selectedUsers) {}),
+                            PrivacyMultiSelectItem(
+                              label: LocaleKeys.call.localize,
+                              privacy: state.communicationPrivacyEntity
+                                      ?.receiveCalls ??
+                                  '',
+                              onChoose: (PrivacyStatus value,
+                                 List<String>? selectedUsers) {
+                                PrivacyFeature feature = PrivacyFeature.receiveCalls;
+
+                                if (value == PrivacyStatus.onlyWith) {
+                                  context.read<PrivacyCubit>().updateOnlyWithPrivacy(
+                                    params: UpdateOnlyWithPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else if (value == PrivacyStatus.exceptFrom) {
+                                  context.read<PrivacyCubit>().updateExceptFromPrivacy(
+                                    params: UpdateExceptFromPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else {
+                                context
+                                    .read<PrivacyCubit>()
+                                    .updateDataCommunicationPrivacy(
                                       params:
-                                      UpdateCommunicationPrivacyParams(
-                                        feature: mapPrivacyFeatureToString(feature), // The feature being updated
-                                        newPrivacyOption: mapPrivacyStatusToString(value),
+                                          UpdateCommunicationPrivacyParams(
+                                            feature: mapPrivacyFeatureToString(feature), // The feature being updated
+                                            newPrivacyOption: mapPrivacyStatusToString(value),
                                       ),
                                     );
-                                  }
-                                },
-                              ),
-                              PrivacyMultiSelectItem(
-                                label: LocaleKeys.greetMessage.localize,
-                                privacy: state.communicationPrivacyEntity
-                                        ?.receiveGreetMessages ??
-                                    '',
-                                onChoose: (PrivacyStatus value,
-                                   List<String>? selectedUsers) {
-                                  PrivacyFeature feature = PrivacyFeature.receiveGreetMessages;
+                                }
+                              },
+                            ),
 
-                                  if (value == PrivacyStatus.onlyWith) {
-                                    context.read<PrivacyCubit>().updateOnlyWithPrivacy(
-                                      params: UpdateOnlyWithPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else if (value == PrivacyStatus.exceptFrom) {
-                                    context.read<PrivacyCubit>().updateExceptFromPrivacy(
-                                      params: UpdateExceptFromPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else {
-                                    context
-                                        .read<PrivacyCubit>()
-                                        .updateDataCommunicationPrivacy(
-                                      params:
-                                      UpdateCommunicationPrivacyParams(
-                                        feature: mapPrivacyFeatureToString(feature), // The feature being updated
-                                        newPrivacyOption: mapPrivacyStatusToString(value),
-                                      ),
-                                    );
-                                  }
-                                },
-                              ),
-                              PrivacyMultiSelectItem(
-                                label: LocaleKeys.socialMessage.localize,
-                                privacy: state.communicationPrivacyEntity
-                                        ?.receiveSocialMessages ??
-                                    '',
-                                onChoose: (PrivacyStatus value,
-                                   List<String>? selectedUsers) {
-                                  PrivacyFeature feature = PrivacyFeature.receiveSocialMessages;
+                            ///
+                            PrivacyMultiSelectItem(
+                              label: LocaleKeys.anonymousMessage.localize,
+                              privacy: state.communicationPrivacyEntity
+                                      ?.receiveAnonymousMessages ??
+                                  '',
+                              onChoose: (PrivacyStatus value,
+                                 List<String>? selectedUsers) {
+                                PrivacyFeature feature = PrivacyFeature.receiveAnonymousMessages;
 
-                                  if (value == PrivacyStatus.onlyWith) {
-                                    context.read<PrivacyCubit>().updateOnlyWithPrivacy(
-                                      params: UpdateOnlyWithPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else if (value == PrivacyStatus.exceptFrom) {
-                                    context.read<PrivacyCubit>().updateExceptFromPrivacy(
-                                      params: UpdateExceptFromPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else {
-                                    context
-                                        .read<PrivacyCubit>()
-                                        .updateDataCommunicationPrivacy(
-                                      params:
-                                      UpdateCommunicationPrivacyParams(
-                                        feature: mapPrivacyFeatureToString(feature), // The feature being updated
-                                        newPrivacyOption: mapPrivacyStatusToString(value),
-                                      ),
-                                    );
-                                  }
-                                },
-                              ),
+                                if (value == PrivacyStatus.onlyWith) {
+                                  context.read<PrivacyCubit>().updateOnlyWithPrivacy(
+                                    params: UpdateOnlyWithPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else if (value == PrivacyStatus.exceptFrom) {
+                                  context.read<PrivacyCubit>().updateExceptFromPrivacy(
+                                    params: UpdateExceptFromPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else {
+                                  context
+                                      .read<PrivacyCubit>()
+                                      .updateDataCommunicationPrivacy(
+                                    params:
+                                    UpdateCommunicationPrivacyParams(
+                                      feature: mapPrivacyFeatureToString(feature), // The feature being updated
+                                      newPrivacyOption: mapPrivacyStatusToString(value),
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                            PrivacyMultiSelectItem(
+                              label: LocaleKeys.greetMessage.localize,
+                              privacy: state.communicationPrivacyEntity
+                                      ?.receiveGreetMessages ??
+                                  '',
+                              onChoose: (PrivacyStatus value,
+                                 List<String>? selectedUsers) {
+                                PrivacyFeature feature = PrivacyFeature.receiveGreetMessages;
 
-                              ///
+                                if (value == PrivacyStatus.onlyWith) {
+                                  context.read<PrivacyCubit>().updateOnlyWithPrivacy(
+                                    params: UpdateOnlyWithPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else if (value == PrivacyStatus.exceptFrom) {
+                                  context.read<PrivacyCubit>().updateExceptFromPrivacy(
+                                    params: UpdateExceptFromPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else {
+                                  context
+                                      .read<PrivacyCubit>()
+                                      .updateDataCommunicationPrivacy(
+                                    params:
+                                    UpdateCommunicationPrivacyParams(
+                                      feature: mapPrivacyFeatureToString(feature), // The feature being updated
+                                      newPrivacyOption: mapPrivacyStatusToString(value),
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                            PrivacyMultiSelectItem(
+                              label: LocaleKeys.socialMessage.localize,
+                              privacy: state.communicationPrivacyEntity
+                                      ?.receiveSocialMessages ??
+                                  '',
+                              onChoose: (PrivacyStatus value,
+                                 List<String>? selectedUsers) {
+                                PrivacyFeature feature = PrivacyFeature.receiveSocialMessages;
 
-                              PrivacyMultiSelectItem(
-                                label: LocaleKeys.randomAppearance.localize,
-                                privacy: state.connectionPrivacyEntity
-                                        ?.randomAppearance ??
-                                    '',
-                                onChoose: (PrivacyStatus value,
-                                   List<String>? selectedUsers) {
-                                  PrivacyFeature feature = PrivacyFeature.randomAppearance;
+                                if (value == PrivacyStatus.onlyWith) {
+                                  context.read<PrivacyCubit>().updateOnlyWithPrivacy(
+                                    params: UpdateOnlyWithPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else if (value == PrivacyStatus.exceptFrom) {
+                                  context.read<PrivacyCubit>().updateExceptFromPrivacy(
+                                    params: UpdateExceptFromPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else {
+                                  context
+                                      .read<PrivacyCubit>()
+                                      .updateDataCommunicationPrivacy(
+                                    params:
+                                    UpdateCommunicationPrivacyParams(
+                                      feature: mapPrivacyFeatureToString(feature), // The feature being updated
+                                      newPrivacyOption: mapPrivacyStatusToString(value),
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
 
-                                  if (value == PrivacyStatus.onlyWith) {
-                                    context.read<PrivacyCubit>().updateOnlyWithPrivacy(
-                                      params: UpdateOnlyWithPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else if (value == PrivacyStatus.exceptFrom) {
-                                    context.read<PrivacyCubit>().updateExceptFromPrivacy(
-                                      params: UpdateExceptFromPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else {
-                                    context
-                                        .read<PrivacyCubit>()
-                                        .updateDataConnectionPrivacy(
-                                      params: UpdateConnectionPrivacyParams(
-                                        feature: mapPrivacyFeatureToString(feature), // The feature being updated
-                                        newPrivacyOption: mapPrivacyStatusToString(value),
-                                      ),
-                                    );
-                                  }
-                                },
-                              ),
+                            ///
 
-                              PrivacyMultiSelectItem(
-                                label: LocaleKeys.friendRequest.localize,
-                                privacy: state.connectionPrivacyEntity
-                                        ?.friendRequests ??
-                                    '',
-                                onChoose: (PrivacyStatus value,
-                                   List<String>? selectedUsers) {
-                                  PrivacyFeature feature = PrivacyFeature.friendRequests;
+                            PrivacyMultiSelectItem(
+                              label: LocaleKeys.randomAppearance.localize,
+                              privacy: state.connectionPrivacyEntity
+                                      ?.randomAppearance ??
+                                  '',
+                              onChoose: (PrivacyStatus value,
+                                 List<String>? selectedUsers) {
+                                PrivacyFeature feature = PrivacyFeature.randomAppearance;
 
-                                  if (value == PrivacyStatus.onlyWith) {
-                                    context.read<PrivacyCubit>().updateOnlyWithPrivacy(
-                                      params: UpdateOnlyWithPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else if (value == PrivacyStatus.exceptFrom) {
-                                    context.read<PrivacyCubit>().updateExceptFromPrivacy(
-                                      params: UpdateExceptFromPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else {
-                                    context
-                                        .read<PrivacyCubit>()
-                                        .updateDataConnectionPrivacy(
-                                      params: UpdateConnectionPrivacyParams(
-                                        feature: mapPrivacyFeatureToString(feature), // The feature being updated
-                                        newPrivacyOption: mapPrivacyStatusToString(value),
-                                      ),
-                                    );
-                                  }
-                                },
-                              ),
+                                if (value == PrivacyStatus.onlyWith) {
+                                  context.read<PrivacyCubit>().updateOnlyWithPrivacy(
+                                    params: UpdateOnlyWithPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else if (value == PrivacyStatus.exceptFrom) {
+                                  context.read<PrivacyCubit>().updateExceptFromPrivacy(
+                                    params: UpdateExceptFromPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else {
+                                  context
+                                      .read<PrivacyCubit>()
+                                      .updateDataConnectionPrivacy(
+                                    params: UpdateConnectionPrivacyParams(
+                                      feature: mapPrivacyFeatureToString(feature), // The feature being updated
+                                      newPrivacyOption: mapPrivacyStatusToString(value),
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
 
+                            PrivacyMultiSelectItem(
+                              label: LocaleKeys.friendRequest.localize,
+                              privacy: state.connectionPrivacyEntity
+                                      ?.friendRequests ??
+                                  '',
+                              onChoose: (PrivacyStatus value,
+                                 List<String>? selectedUsers) {
+                                PrivacyFeature feature = PrivacyFeature.friendRequests;
 
-                              PrivacyMultiSelectItem(
-                                label: LocaleKeys.followRequest.localize,
-                                privacy: state.connectionPrivacyEntity?.followerRequests ?? '',
-                                onChoose: (PrivacyStatus value, List<String>? selectedUsers) {
-                                  PrivacyFeature feature = PrivacyFeature.followerRequests;
-
-                                  if (value == PrivacyStatus.onlyWith) {
-                                    context.read<PrivacyCubit>().updateOnlyWithPrivacy(
-                                      params: UpdateOnlyWithPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else if (value == PrivacyStatus.exceptFrom) {
-                                    context.read<PrivacyCubit>().updateExceptFromPrivacy(
-                                      params: UpdateExceptFromPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else {
-
-
-                                    context.read<PrivacyCubit>().updateDataConnectionPrivacy(
-                                      params: UpdateConnectionPrivacyParams(
-                                        feature: mapPrivacyFeatureToString(feature), // The feature being updated
-                                        newPrivacyOption: mapPrivacyStatusToString(value),
-                                      ),
-                                    );
-                                  }
-                                },
-                              ),
-
-                              ///
-                              PrivacyMultiSelectItem(
-                                label: LocaleKeys.showPosts.localize,
-                                privacy: state.mediaPrivacyEntity?.showPosts ?? '',
-                                onChoose: (PrivacyStatus value, List<String>? selectedUsers) {
-                                  PrivacyFeature feature = PrivacyFeature.showPosts;
-
-                                  if (value == PrivacyStatus.onlyWith) {
-                                    context.read<PrivacyCubit>().updateOnlyWithPrivacy(
-                                      params: UpdateOnlyWithPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else if (value == PrivacyStatus.exceptFrom) {
-                                    context.read<PrivacyCubit>().updateExceptFromPrivacy(
-                                      params: UpdateExceptFromPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else {
+                                if (value == PrivacyStatus.onlyWith) {
+                                  context.read<PrivacyCubit>().updateOnlyWithPrivacy(
+                                    params: UpdateOnlyWithPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else if (value == PrivacyStatus.exceptFrom) {
+                                  context.read<PrivacyCubit>().updateExceptFromPrivacy(
+                                    params: UpdateExceptFromPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else {
+                                  context
+                                      .read<PrivacyCubit>()
+                                      .updateDataConnectionPrivacy(
+                                    params: UpdateConnectionPrivacyParams(
+                                      feature: mapPrivacyFeatureToString(feature), // The feature being updated
+                                      newPrivacyOption: mapPrivacyStatusToString(value),
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
 
 
-                                    context.read<PrivacyCubit>().updateDataMediaPrivacy(
-                                      params: UpdateMediaPrivacyParams(
-                                        feature: mapPrivacyFeatureToString(feature), // The feature being updated
-                                        newPrivacyOption: mapPrivacyStatusToString(value),
-                                      ),
-                                    );
-                                  }
-                                },
-                              ),
-                              PrivacyMultiSelectItem(
-                                label: LocaleKeys.showStories.localize,
-                                privacy: state.mediaPrivacyEntity?.showStories ?? '',
-                                onChoose: (PrivacyStatus value, List<String>? selectedUsers) {
-                                  PrivacyFeature feature = PrivacyFeature.showStories;
+                            PrivacyMultiSelectItem(
+                              label: LocaleKeys.followRequest.localize,
+                              privacy: state.connectionPrivacyEntity?.followerRequests ?? '',
+                              onChoose: (PrivacyStatus value, List<String>? selectedUsers) {
+                                PrivacyFeature feature = PrivacyFeature.followerRequests;
 
-                                  if (value == PrivacyStatus.onlyWith) {
-                                    context.read<PrivacyCubit>().updateOnlyWithPrivacy(
-                                      params: UpdateOnlyWithPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else if (value == PrivacyStatus.exceptFrom) {
-                                    context.read<PrivacyCubit>().updateExceptFromPrivacy(
-                                      params: UpdateExceptFromPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else {
+                                if (value == PrivacyStatus.onlyWith) {
+                                  context.read<PrivacyCubit>().updateOnlyWithPrivacy(
+                                    params: UpdateOnlyWithPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else if (value == PrivacyStatus.exceptFrom) {
+                                  context.read<PrivacyCubit>().updateExceptFromPrivacy(
+                                    params: UpdateExceptFromPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else {
 
 
-                                    context.read<PrivacyCubit>().updateDataMediaPrivacy(
-                                      params: UpdateMediaPrivacyParams(
-                                        feature: mapPrivacyFeatureToString(feature), // The feature being updated
-                                        newPrivacyOption: mapPrivacyStatusToString(value),
-                                      ),
-                                    );
-                                  }
-                                },
-                              ),
-                              PrivacyMultiSelectItem(
-                                label: LocaleKeys.showReels.localize,
-                                privacy: state.mediaPrivacyEntity?.showReels ?? '',
-                                onChoose: (PrivacyStatus value, List<String>? selectedUsers) {
-                                  PrivacyFeature feature = PrivacyFeature.showReels;
+                                  context.read<PrivacyCubit>().updateDataConnectionPrivacy(
+                                    params: UpdateConnectionPrivacyParams(
+                                      feature: mapPrivacyFeatureToString(feature), // The feature being updated
+                                      newPrivacyOption: mapPrivacyStatusToString(value),
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
 
-                                  if (value == PrivacyStatus.onlyWith) {
-                                    context.read<PrivacyCubit>().updateOnlyWithPrivacy(
-                                      params: UpdateOnlyWithPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else if (value == PrivacyStatus.exceptFrom) {
-                                    context.read<PrivacyCubit>().updateExceptFromPrivacy(
-                                      params: UpdateExceptFromPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else {
+                            ///
+                            PrivacyMultiSelectItem(
+                              label: LocaleKeys.showPosts.localize,
+                              privacy: state.mediaPrivacyEntity?.showPosts ?? '',
+                              onChoose: (PrivacyStatus value, List<String>? selectedUsers) {
+                                PrivacyFeature feature = PrivacyFeature.showPosts;
 
-
-                                    context.read<PrivacyCubit>().updateDataMediaPrivacy(
-                                      params: UpdateMediaPrivacyParams(
-                                        feature: mapPrivacyFeatureToString(feature), // The feature being updated
-                                        newPrivacyOption: mapPrivacyStatusToString(value),
-                                      ),
-                                    );
-                                  }
-                                },
-                              ),
-                              PrivacyMultiSelectItem(
-                                label: LocaleKeys.writeComments.localize,
-                                privacy: state.mediaPrivacyEntity?.writeComments ?? '',
-                                onChoose: (PrivacyStatus value, List<String>? selectedUsers) {
-                                   PrivacyFeature feature = PrivacyFeature.writeComments;
-
-                                  if (value == PrivacyStatus.onlyWith) {
-                                    context.read<PrivacyCubit>().updateOnlyWithPrivacy(
-                                      params: UpdateOnlyWithPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else if (value == PrivacyStatus.exceptFrom) {
-                                    context.read<PrivacyCubit>().updateExceptFromPrivacy(
-                                      params: UpdateExceptFromPrivacyParams(
-                                        allowedUsers: selectedUsers ?? [],
-                                        feature: mapPrivacyFeatureToString(feature),
-                                      ),
-                                    ).then((_) {
-                                      context.read<PrivacyCubit>().loadData();
-                                    });
-                                  }
-                                  else {
+                                if (value == PrivacyStatus.onlyWith) {
+                                  context.read<PrivacyCubit>().updateOnlyWithPrivacy(
+                                    params: UpdateOnlyWithPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else if (value == PrivacyStatus.exceptFrom) {
+                                  context.read<PrivacyCubit>().updateExceptFromPrivacy(
+                                    params: UpdateExceptFromPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else {
 
 
-                                    context.read<PrivacyCubit>().updateDataMediaPrivacy(
-                                      params: UpdateMediaPrivacyParams(
-                                        feature: mapPrivacyFeatureToString(feature), // The feature being updated
-                                        newPrivacyOption: mapPrivacyStatusToString(value),
-                                      ),
-                                    );
-                                  }
-                                },
-                              ),
+                                  context.read<PrivacyCubit>().updateDataMediaPrivacy(
+                                    params: UpdateMediaPrivacyParams(
+                                      feature: mapPrivacyFeatureToString(feature), // The feature being updated
+                                      newPrivacyOption: mapPrivacyStatusToString(value),
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                            PrivacyMultiSelectItem(
+                              label: LocaleKeys.showStories.localize,
+                              privacy: state.mediaPrivacyEntity?.showStories ?? '',
+                              onChoose: (PrivacyStatus value, List<String>? selectedUsers) {
+                                PrivacyFeature feature = PrivacyFeature.showStories;
 
-                              const SizedBox(
-                                height: 8,
-                              ),
-                            ],
-                          ),
+                                if (value == PrivacyStatus.onlyWith) {
+                                  context.read<PrivacyCubit>().updateOnlyWithPrivacy(
+                                    params: UpdateOnlyWithPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else if (value == PrivacyStatus.exceptFrom) {
+                                  context.read<PrivacyCubit>().updateExceptFromPrivacy(
+                                    params: UpdateExceptFromPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else {
+
+
+                                  context.read<PrivacyCubit>().updateDataMediaPrivacy(
+                                    params: UpdateMediaPrivacyParams(
+                                      feature: mapPrivacyFeatureToString(feature), // The feature being updated
+                                      newPrivacyOption: mapPrivacyStatusToString(value),
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                            PrivacyMultiSelectItem(
+                              label: LocaleKeys.showReels.localize,
+                              privacy: state.mediaPrivacyEntity?.showReels ?? '',
+                              onChoose: (PrivacyStatus value, List<String>? selectedUsers) {
+                                PrivacyFeature feature = PrivacyFeature.showReels;
+
+                                if (value == PrivacyStatus.onlyWith) {
+                                  context.read<PrivacyCubit>().updateOnlyWithPrivacy(
+                                    params: UpdateOnlyWithPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else if (value == PrivacyStatus.exceptFrom) {
+                                  context.read<PrivacyCubit>().updateExceptFromPrivacy(
+                                    params: UpdateExceptFromPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else {
+
+
+                                  context.read<PrivacyCubit>().updateDataMediaPrivacy(
+                                    params: UpdateMediaPrivacyParams(
+                                      feature: mapPrivacyFeatureToString(feature), // The feature being updated
+                                      newPrivacyOption: mapPrivacyStatusToString(value),
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                            PrivacyMultiSelectItem(
+                              label: LocaleKeys.writeComments.localize,
+                              privacy: state.mediaPrivacyEntity?.writeComments ?? '',
+                              onChoose: (PrivacyStatus value, List<String>? selectedUsers) {
+                                 PrivacyFeature feature = PrivacyFeature.writeComments;
+
+                                if (value == PrivacyStatus.onlyWith) {
+                                  context.read<PrivacyCubit>().updateOnlyWithPrivacy(
+                                    params: UpdateOnlyWithPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else if (value == PrivacyStatus.exceptFrom) {
+                                  context.read<PrivacyCubit>().updateExceptFromPrivacy(
+                                    params: UpdateExceptFromPrivacyParams(
+                                      allowedUsers: selectedUsers ?? [],
+                                      feature: mapPrivacyFeatureToString(feature),
+                                    ),
+                                  ).then((_) {
+                                    context.read<PrivacyCubit>().loadData();
+                                  });
+                                }
+                                else {
+
+
+                                  context.read<PrivacyCubit>().updateDataMediaPrivacy(
+                                    params: UpdateMediaPrivacyParams(
+                                      feature: mapPrivacyFeatureToString(feature), // The feature being updated
+                                      newPrivacyOption: mapPrivacyStatusToString(value),
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+
+                            const SizedBox(
+                              height: 8,
+                            ),
+                          ],
                         ),
                       ),
                     );

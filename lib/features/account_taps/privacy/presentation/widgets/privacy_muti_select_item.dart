@@ -47,7 +47,6 @@ class _PrivacyMultiSelectItemState extends State<PrivacyMultiSelectItem> {
         borderRadius: BorderRadius.circular(10.0),
           onTap: () async {
             PrivacyStatus currentStatus = privacyToPrivacyStatus(widget.privacy);
-
             final res = await showDialog(
               context: context,
               builder: (context) => AlertDialog(
@@ -58,16 +57,16 @@ class _PrivacyMultiSelectItemState extends State<PrivacyMultiSelectItem> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Label(text: 'Here ${widget.privacy}'),
-                        Label(text: 'Here ${widget.name}'),
-
-                        Label(text: 'Who Can See My ${widget.label}'),
+                        // Label(text: 'Here ${widget.privacy}'),
+                        // Label(text: 'Here ${widget.name}'),
+                        //
+                        // Label(text: 'Who Can See My ${widget.label}'),
                         _buildPrivacyOption(context, setState, title: 'Public', value: PrivacyStatus.public, currentStatus: currentStatus),
-                        _buildPrivacyOption(context, setState, title: 'Friends', value: PrivacyStatus.friends, currentStatus: currentStatus),
                         _buildPrivacyOption(context, setState, title: 'Contacts', value: PrivacyStatus.contacts, currentStatus: currentStatus),
+                        _buildPrivacyOption(context, setState, title: 'Friends', value: PrivacyStatus.friends, currentStatus: currentStatus),
                         _buildPrivacyOption(context, setState, title: 'Followers', value: PrivacyStatus.followers, currentStatus: currentStatus),
-                        _buildPrivacyOption(context, setState, title: 'Only Me', value: PrivacyStatus.onlyMe, currentStatus: currentStatus),
                         _buildPrivacyOption(context, setState, title: 'Friends And Followers', value: PrivacyStatus.friendsAndFollowers, currentStatus: currentStatus),
+                        _buildPrivacyOption(context, setState, title: 'Only Me', value: PrivacyStatus.onlyMe, currentStatus: currentStatus),
                         _buildPrivacyOption(context, setState, title: 'Only With', value: PrivacyStatus.onlyWith, currentStatus: currentStatus, showUserDialog: true),
                         _buildPrivacyOption(context, setState, title: 'Except From', value: PrivacyStatus.exceptFrom, currentStatus: currentStatus, showUserDialog: true),
                       ],
@@ -123,7 +122,6 @@ class _PrivacyMultiSelectItemState extends State<PrivacyMultiSelectItem> {
     return RadioListTile<PrivacyStatus>(
       value: value,
       groupValue: currentStatus,
-      activeColor: Colors.grey,
       onChanged: (selectedValue) async {
         // Use a local variable for currentStatus to avoid mutation
         PrivacyStatus newStatus = selectedValue!;

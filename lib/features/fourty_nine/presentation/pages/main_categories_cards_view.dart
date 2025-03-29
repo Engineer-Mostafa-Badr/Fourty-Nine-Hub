@@ -42,17 +42,17 @@ class _MainCategoriesFlipCardsViewState
   void didChangeDependencies() {
     super.didChangeDependencies();
     labelName = context.locale == Locales.english
-        ? mainCategoriesCubit.state.data != null
-            ? mainCategoriesCubit.state.data![0].nameEn.toString()
+        ? mainCategoriesCubit.state.customPage != null
+            ? mainCategoriesCubit.state.customPage![0].nameEn.toString()
             : widget.data![0].nameEn.toString()
-        : mainCategoriesCubit.state.data != null
-            ? mainCategoriesCubit.state.data![0].name.toString()
+        : mainCategoriesCubit.state.customPage != null
+            ? mainCategoriesCubit.state.customPage![0].name.toString()
             : widget.data![0].name.toString();
   }
 
   @override
   Widget build(BuildContext context) {
-    var mainCategories = mainCategoriesCubit.state.data ?? [];
+    var mainCategories = mainCategoriesCubit.state.customPage ?? [];
     // mainCategories = widget.data!;
 
     return CustomScaffold(
@@ -71,9 +71,9 @@ class _MainCategoriesFlipCardsViewState
               onSwipe: (previousIndex, currentIndex, direction) {
                 setState(() {
                   labelName = context.locale == Locales.english
-                      ? mainCategoriesCubit.state.data![currentIndex!].nameEn
+                      ? mainCategoriesCubit.state.customPage![currentIndex!].nameEn
                           .toString()
-                      : mainCategoriesCubit.state.data![currentIndex!].name
+                      : mainCategoriesCubit.state.customPage![currentIndex!].name
                           .toString();
                 });
                 return true;
@@ -87,7 +87,7 @@ class _MainCategoriesFlipCardsViewState
                           extra: mainCategories[index]);
                     }else{
                       context.push(
-                        Routes.SUBCATEGORIES,
+                        Routes.CustomPageSubCategoriesView,
                         extra: mainCategories[index],
                       );
                     }

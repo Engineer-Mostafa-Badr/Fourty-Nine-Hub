@@ -13,6 +13,34 @@ ThemeData get darkTheme => ThemeData(
       //   backgroundColor: AppColors.QUANTITY_COLOR,
       //   hourMinuteColor: AppColors.AUTH_CONTAINER_COLOR,
       // ),
+  radioTheme: RadioThemeData(
+    fillColor: WidgetStateProperty.resolveWith((states) {
+      if (states.contains(WidgetState.selected)) {
+        return AppColors.PRIMARY_COLOR;
+      }
+      return AppColors.BG_GRAY_COLOR;
+    }),
+  ),
+  timePickerTheme: TimePickerThemeData(
+    backgroundColor: AppColors.QUANTITY_COLOR,
+    dialHandColor: AppColors.AUTH_CONTAINER_COLOR,
+    dialBackgroundColor: AppColors.PRIMARY_COLOR.withValues(alpha: .5),
+    dayPeriodBorderSide: const BorderSide(color: AppColors.AUTH_CONTAINER_COLOR),
+    dayPeriodColor: AppColors.PRIMARY_COLOR.withValues(alpha: .5),
+    dayPeriodTextColor: AppColors.AUTH_CONTAINER_COLOR,
+    hourMinuteTextColor: AppColors.AUTH_CONTAINER_COLOR,
+    hourMinuteColor: AppColors.PRIMARY_COLOR.withValues(alpha: .5),
+    cancelButtonStyle: ButtonStyle(
+      foregroundColor: WidgetStateProperty.resolveWith(
+            (states) => AppColors.AUTH_CONTAINER_COLOR,
+      ),
+    ),
+    confirmButtonStyle: ButtonStyle(
+      foregroundColor: WidgetStateProperty.resolveWith(
+            (states) => AppColors.AUTH_CONTAINER_COLOR,
+      ),
+    ),
+  ),
   datePickerTheme: DatePickerThemeData(
     headerBackgroundColor: AppColors.PRIMARY_COLOR,
     headerForegroundColor: AppColors.AUTH_CONTAINER_COLOR,

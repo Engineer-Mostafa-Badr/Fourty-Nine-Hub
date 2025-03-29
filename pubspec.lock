@@ -2831,6 +2831,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.0"
+  tf_dio_cache:
+    dependency: "direct main"
+    description:
+      name: tf_dio_cache
+      sha256: "6e4a7b0edea91f1b1bae95cd9ffbddce5211417aa3acfcc4210afef1e7b144a0"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
   timezone:
     dependency: transitive
     description:

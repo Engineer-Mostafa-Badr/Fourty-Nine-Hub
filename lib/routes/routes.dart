@@ -21,6 +21,8 @@ abstract class Routes {
   static const EditFoodView = '/EditFoodView';
   static const MAINCATEGORIESTREE = '/MainCategoriesTree';
   static const SUBCATEGORIES = '/Subcategories';
+  static const CustomPageSubCategoriesView = '/CustomPageSubCategoriesView';
+  static const NavigatorSubCategoriesView = '/NavigatorSubCategoriesView';
   static const MARRIAGESUBCATEGORIES = '/MarriageSubcategories';
   static const ADS = '/Subcategories/ADS';
   static const FILTERADS = '/Subcategories/ADS/FilterAds';
@@ -273,6 +275,8 @@ abstract class Paths {
   static const EditFoodView = 'EditFoodView';
   static const MAINCATEGORIESTREE = 'MainCategoriesTree';
   static const SUBCATEGORIES = 'Subcategories';
+  static const CustomPageSubCategoriesView = 'CustomPageSubCategoriesView';
+  static const NavigatorSubCategoriesView = 'NavigatorSubCategoriesView';
   static const MARRIAGESUBCATEGORIES = 'MarriageSubcategories';
   static const FILTERADS = 'FilterAds';
   static const GOVERNORATEFILTERADS = 'GovernorateFilterAds';
