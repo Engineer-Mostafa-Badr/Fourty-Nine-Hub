@@ -10,5 +10,4 @@ abstract class TripRepository {
    Future<Either<Failure, TripsResponseEntity>> getPastTrips(String params);
    Future<Either<Failure, SettingsDashboardEntityResponse>> getSettings();
    Future<Either<Failure, bool>> updateSettings(UpdateSettingsDashboardUsecaseParam params);
-   
 }

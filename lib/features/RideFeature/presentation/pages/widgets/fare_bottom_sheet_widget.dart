@@ -81,7 +81,8 @@ class FareBottomSheetWidget extends StatelessWidget {
 
                 return null;
               },
-                ),const SizedBox(height: 20),
+                ),
+                const SizedBox(height: 20,),
                 AppButton(
                   width: double.infinity,
                   label: context.isArabic? "ارسال" : "Send",

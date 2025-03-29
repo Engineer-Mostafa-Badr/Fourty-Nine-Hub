@@ -23,6 +23,19 @@ class RideRequestTripEntity {
   final DateTime? updatedAt;
   final DateTime? expireAt;
   final double? rating;
+  final double? driverIsArrivingIn;
+  final String? driverId;
+  final String? driverUserId;
+  final String? driverFirstName;
+  final String? driverProfilePicture;
+  final String? driverPhoneNumber;
+  final double? driverRating;
+  final int? driverRatingCount;
+  final String? vehicleModel;
+  final String? vehicleColor;
+  final String? vehicleBrand;
+  final String? vehiclePicture;
+  final String? vehiclePlateNumber;
 
-  RideRequestTripEntity({required this.id, required this.userId, required this.riderId, required this.subCategoryId, required this.carTypeId, required this.from, required this.to, required this.startCoordinates, required this.targetCoordinates, required this.distance, required this.duration, required this.passengers, required this.price, required this.paymentMethod, required this.status, required this.autoAccept, required this.isPremium, required this.isUserGetCashback, required this.isRiderGetCashback, required this.freeTripForDriver, required this.createdAt, required this.updatedAt, required this.expireAt, required this.rating});
+  RideRequestTripEntity({required this.id, required this.userId, required this.riderId, required this.subCategoryId, required this.carTypeId, required this.from, required this.to, required this.startCoordinates, required this.targetCoordinates, required this.distance, required this.duration, required this.passengers, required this.price, required this.paymentMethod, required this.status, required this.autoAccept, required this.isPremium, required this.isUserGetCashback, required this.isRiderGetCashback, required this.freeTripForDriver, required this.createdAt, required this.updatedAt, required this.expireAt, required this.rating, required this.driverIsArrivingIn, required this.driverFirstName, required this.driverId,  required this.driverPhoneNumber, required this.driverProfilePicture,  required this.driverRating, required this.driverRatingCount, required this.vehicleModel, required this.vehicleColor, required this.vehicleBrand, required this.vehiclePicture, required this.vehiclePlateNumber,  required this.driverUserId,});
 }

@@ -1,5 +1,6 @@
 import 'package:fourtyninehub/features/RideFeature/data/repositories/ride_repository_imp.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/repositories/ride_repository.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/accept_offer_by_client_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_pending_trip_by_client_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/check_real_amount_enough_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_activity_trips.dart';
@@ -16,6 +17,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_car_
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_driver_information.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_models_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_shipping_categories_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/listen_to_ride_offers_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/loading_register_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/make_request_trip_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/recording_trip_use_case.dart';
@@ -99,10 +101,16 @@ class RideServiceLocatorUpdated {
         MakeRequestTripUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<RecordingTripUseCase>(() =>
         RecordingTripUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<ListenToRideOffersUseCase>(() =>
+        ListenToRideOffersUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<AcceptOfferByClientUseCase>(() =>
+        AcceptOfferByClientUseCase(serviceLocator()));
 
     // ---------------------------------- cubits ----------------------------------
 
     serviceLocator.registerLazySingleton<RideCubit>(() => RideCubit(
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

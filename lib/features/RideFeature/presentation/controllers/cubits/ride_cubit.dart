@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -20,8 +21,10 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride
 import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride_special_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/request_trip_params.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_color_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_offer_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_request_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/sub_category_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/accept_offer_by_client_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_pending_trip_by_client_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/check_real_amount_enough_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_cost_per_km_use_case.dart';
@@ -44,6 +47,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_runni
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_location_from_address_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_expexted_price_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_shipping_categories_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/listen_to_ride_offers_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/loading_register_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/make_request_trip_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/recording_trip_use_case.dart';
@@ -59,9 +63,12 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../../../../../core/data/datasources/remote/socket/socket_data_source.dart';
 import '../../../../../core/error/failure.dart';
+import '../../../../../shared_web_socket.dart';
 import '../../../domain/entities/ride_category_entity.dart';
 import '../../../domain/usecases/get_ride_categories_usecase.dart';
 import 'package:record/record.dart';
@@ -76,6 +83,10 @@ class RideCubit extends Cubit<RideState> {
   bool isRecord = false;
   bool showWaypointOne = false;
   bool showWaypointTwo = false;
+
+  bool hasShownBottomSheet = false;
+
+  final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
 
   final GetRideCategoriesUseCase getRideCategories;
   final GetShippingCategoriesUsecase getShippingCategoriesUsecase;
@@ -96,6 +107,8 @@ class RideCubit extends Cubit<RideState> {
   final RequestTripUseCase requestTripUseCase;
   final CancelPendingTripByClientUseCase cancelPendingTripByClientUseCase;
   final RetrieveClientLatestTripUseCase retrieveClientLatestTripUseCase;
+  final AcceptOfferByClientUseCase acceptOfferByClientUseCase;
+  final ListenToRideOffersUseCase listenToRideOffersUseCase;
 
   final GetCostPerKmUseCase getCostPerKmUseCase;
   final LoadingRegisterUseCase loadingRegisterUseCase;
@@ -119,16 +132,22 @@ class RideCubit extends Cubit<RideState> {
     this.getAllCompletedTripsUseCase,
     this.getAllRunningTripsUseCase,
     this.getAllActivityTripsUseCase,
-      this.checkRealAmountEnoughUseCase,
-      this.requestTripUseCase,
-      this.cancelPendingTripByClientUseCase,
-      this.retrieveClientLatestTripUseCase,
+    this.checkRealAmountEnoughUseCase,
+    this.requestTripUseCase,
+    this.cancelPendingTripByClientUseCase,
+    this.retrieveClientLatestTripUseCase,
     this.getCostPerKmUseCase,
     this.loadingRegisterUseCase,
     this.getLoadingInfoUseCase,
     this.makeRequestTripUseCase,
     this.recordingTripUseCase,
-  ) : super( RideState());
+    this.listenToRideOffersUseCase,
+    this.acceptOfferByClientUseCase,
+  ) : super( RideState(
+    rideOffers: [],
+  )){
+    listenToRideOffers();
+  }
 
   bool loadingHomeData = false;
   Future<void> initHome(BuildContext context) async {
@@ -136,7 +155,7 @@ class RideCubit extends Cubit<RideState> {
     emit(state.copyWith(status: RideStates.loading));
     await Future.wait([
       _fetchUserLocation(),
-      _fetchUserLocation(),
+      retrieveClientLatestTrip(),
       fetchRideDriverInfo(context),
       getCostPerKm(),
       fetchLoaderInfo(context),
@@ -453,13 +472,34 @@ class RideCubit extends Cubit<RideState> {
   }
 
   Future<void> retrieveClientLatestTrip() async {
-    emit(state.copyWith(status: RideStates.loading));
 
     final Either<Failure, RideRequestTripEntity> result = await retrieveClientLatestTripUseCase(const NoParams());
 
     result.fold(
           (failure) => emit(state.copyWith(status: RideStates.error, failure: failure)),
           (rideRequestTrip){
+            state.requestedTrip = rideRequestTrip;
+            GetLocationFromAddressEntity currentLocation = GetLocationFromAddressEntity(
+              lat: state.requestedTrip!.startCoordinates![0],
+              lng: state.requestedTrip!.startCoordinates![1],
+              address: state.requestedTrip!.from!,
+            );
+            GetLocationFromAddressEntity toLocation = GetLocationFromAddressEntity(
+              lat: state.requestedTrip!.targetCoordinates![0],
+              lng: state.requestedTrip!.targetCoordinates![1],
+              address: state.requestedTrip!.to!,
+            );
+            emit(state.copyWith(status: RideStates.success, requestedTrip: rideRequestTrip, currentLocation: currentLocation, toLocation: toLocation));
+          },
+    );
+  }
+
+  Future<void> acceptOfferByClient({required String offerId}) async {
+    final Either<Failure, RideRequestTripEntity> result = await acceptOfferByClientUseCase(offerId);
+
+    result.fold(
+          (failure) => emit(state.copyWith(status: RideStates.error, failure: failure)),
+          (rideRequestTrip) {
             state.requestedTrip = rideRequestTrip;
             GetLocationFromAddressEntity currentLocation = GetLocationFromAddressEntity(
               lat: state.requestedTrip!.startCoordinates![0],
@@ -1539,5 +1579,25 @@ class RideCubit extends Cubit<RideState> {
       log('Error stopping record: $e');
       return null;
     }
+  }
+
+  void removeRideOfferFromRideOffers(RideOfferEntity offer) {
+    offer.isExpired = true;
+    emit(state.copyWith(status: RideStates.success));
+  }
+
+  void listenToRideOffers() {
+    listenToRideOffersUseCase((offer) {
+      final updatedOffers = List<RideOfferEntity>.from(state.rideOffers)..add(offer);
+
+      emit(state.copyWith(status: RideStates.success, rideOffers: updatedOffers));
+    });
+  }
+
+
+  @override
+  Future<void> close() {
+    SharedWebSocket.socket!.off(SocketIOListeners.rideSendOffer);
+    return super.close();
   }
 }

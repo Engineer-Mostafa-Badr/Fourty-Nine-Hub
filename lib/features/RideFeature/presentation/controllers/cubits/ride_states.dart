@@ -3,6 +3,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/completed_tri
 import 'package:fourtyninehub/features/RideFeature/domain/entities/cost_per_km_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/expected_price_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/get_location_from_address_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_offer_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_request_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/loading_info_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/running_trips_entity.dart';
@@ -62,6 +63,7 @@ class RideState {
   final RideExpectedPriceEntity? rideExpectedPrice;
   RideRequestTripEntity? requestedTrip;
   final List<CompletedTripsEntity>? completedTrips;
+  List<RideOfferEntity> rideOffers;
   final List<RunningTripsEntity>? runningTrips;
   final ActivityTripEntity ? activityTrips;
   final List<SubCategoryEntityUpdated>? rideSubCategories;
@@ -150,6 +152,7 @@ class RideState {
     this.isUploadCriminalRecord,
     this.isUploadTechnicalExamination,
     this.isShipping,
+    required this.rideOffers,
   });
 
   RideState copyWith({
@@ -208,6 +211,7 @@ class RideState {
     bool? isUploadDrugAnalysis,
     bool? isUploadCriminalRecord,
     bool? isUploadTechnicalExamination,
+    List<RideOfferEntity>? rideOffers,
   }) {
     return RideState(
       status: status ?? this.status,
@@ -265,6 +269,7 @@ class RideState {
       shippingSubCategories: shippingSubCategories ?? this.shippingSubCategories,
       isShipping: isShipping ?? this.isShipping,
       loaderInfo: loaderInfo ?? this.loaderInfo,
+      rideOffers: rideOffers ?? this.rideOffers,
     );
   }
 }

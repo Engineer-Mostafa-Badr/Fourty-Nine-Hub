@@ -1340,4 +1340,8 @@ class EndPoints {
   static String getAvailableRideTrips(AvailableRideTripsUseCaseParams params) {
     return '/ride/driver/trips/available/tracking?page=${params.page}&limit=${params.limit}';
   }
+
+  static String acceptOfferByClient(String offerId) {
+    return 'https://7a06-2a09-bac5-30c4-254b-00-3b7-47.ngrok-free.app/api/v1/ride/offers/accept/offer/$offerId';
+  }
 }

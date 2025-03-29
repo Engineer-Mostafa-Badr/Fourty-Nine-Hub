@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
@@ -17,6 +18,7 @@ import 'package:fourtyninehub/features/RideFeature/data/models/history_trip_for_
 import 'package:fourtyninehub/features/RideFeature/data/models/loading_info_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/ride_color_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/ride_model.dart';
+import 'package:fourtyninehub/features/RideFeature/data/models/ride_offer_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/ride_request_trip_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/running_trips_model.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/activity_trip_entity.dart';
@@ -40,6 +42,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride
 import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride_special_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/request_trip_params.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_category_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_offer_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_request_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_color_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/running_trips_entity.dart';
@@ -62,12 +65,16 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_driver
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_trip_price_from_client_use_case.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/data/models/governrate_model.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
+import 'package:icons_launcher/utils/cli_logger.dart';
 
 import '../../../../core/data/datasources/remote/api/api_consumer.dart';
 import '../../../../core/data/datasources/remote/api/end_points.dart';
+import '../../../../core/data/datasources/remote/socket/socket_data_source.dart';
 import '../../../../core/error/failure.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_available_ride_trips_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/available_ride_trip_model.dart';
+
+import '../../../../shared_web_socket.dart';
 
 abstract class RideRemoteDataSource {
   ////////////////////Nasr////////////////////
@@ -79,6 +86,7 @@ abstract class RideRemoteDataSource {
   Future<Either<Failure, bool>> registerRideSpecial(RegisterRideSpecialEntity params);
   Future<Either<Failure, RideRequestTripEntity>> requestTrip(RequestTripUseCaseParams params);
   Future<Either<Failure, RideRequestTripEntity>> retrieveClientLatestTrip();
+  Future<Either<Failure, RideRequestTripEntity>> acceptOfferByClient(String offerId);
   Future<Either<Failure, bool>> checkRealAmountEnough(double params);
   Future<Either<Failure, List<DriversInSubcategoryEntity>>> getDriversInSubcategory(String subCategoryId);
   Future<Either<Failure, RideExpectedPriceEntity>> getExpectedPrice(RideExpectedPriceParams params);
@@ -130,6 +138,8 @@ abstract class RideRemoteDataSource {
   Future<Either<Failure, LoadingInfoEntity>> getLoadingInfo();
   Future<Either<Failure, bool>> makeRequestTrip();
   Future<Either<Failure, List<AvailableRideTripEntity>>> getAvailableRideTrips(AvailableRideTripsUseCaseParams params);
+
+  void listenToRideOffers(Function(RideOfferEntity offer) params);
 }
 
 class RideRemoteDataSourceImplementation
@@ -824,6 +834,35 @@ class RideRemoteDataSourceImplementation
       });
     } catch (e) {
       print("e.toString ${e.toString()}");
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  void listenToRideOffers(Function(RideOfferEntity offer) params) {
+    try {
+      SharedWebSocket.socket!.on(SocketIOListeners.rideSendOffer, (data) {
+        // // final decodedData = jsonDecode(data);
+        // CliLogger.info("offer data :  $decodedData");
+        // params(RideOfferModel.fromJson(decodedData));
+        CliLogger.info("offer data :  $data");
+        params(RideOfferModel.fromJson(data['formattedNewTripOffer']));
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to offer error $e");
+    }
+  }
+
+  @override
+  Future<Either<Failure, RideRequestTripEntity>> acceptOfferByClient(String offerId) async {
+    try {
+      final response = await _apiConsumer.put(
+        EndPoints.acceptOfferByClient(offerId),
+      );
+      return response.fold((failure) => Left(failure), (data) {
+        return Right(RideRequestTripModel.fromJson(data['data']['tripDetails']));
+      });
+    } catch (e) {
       return Left(ServerFailure(message: e.toString()));
     }
   }

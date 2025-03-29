@@ -22,6 +22,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride
 import 'package:fourtyninehub/features/RideFeature/domain/entities/request_trip_params.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_category_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_color_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_offer_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_request_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/running_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/repositories/ride_repository.dart';
@@ -262,5 +263,15 @@ class RideRepositoryImplementation extends RideRepository {
   Future<Either<Failure, List<AvailableRideTripEntity>>> getAvailableRideTrips(AvailableRideTripsUseCaseParams params) async {
     final data = await rideRemoteDataSource.getAvailableRideTrips(params);
     return data;
+  }
+
+  @override
+  void listenToRideOffers(Function(RideOfferEntity offer) params) {
+    rideRemoteDataSource.listenToRideOffers(params);
+  }
+
+  @override
+  Future<Either<Failure, RideRequestTripEntity>> acceptOfferByClient(String params) {
+    return rideRemoteDataSource.acceptOfferByClient(params);
   }
 }

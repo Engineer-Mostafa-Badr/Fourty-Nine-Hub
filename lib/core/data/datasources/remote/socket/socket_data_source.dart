@@ -62,6 +62,7 @@ abstract class SocketIOListeners {
   static const String pinMessage = 'pinMessage';
   static const String unPinMessage = 'unPinMessage';
   static const String sendPoint = 'Stream:SendPoint';
+  static const String rideSendOffer = 'RIDE:UPDATED_OFFER';
 }
 
 abstract class SocketIOEvents {
