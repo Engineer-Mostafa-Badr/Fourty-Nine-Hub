@@ -204,6 +204,11 @@ class _CustomScaffoldState extends State<CustomScaffold>
                             drawerRollWidget(
                               label: LocaleKeys.ride.localize,
                               image: Assets.rideIcon,
+                              // onTap: () => showTimePicker(
+                              //   context: context,
+                              //   initialTime:
+                              //       const TimeOfDay(hour: 0, minute: 0),
+                              // ),
                               onTap: () => context.push(Routes.onBoardingScreen),
                               // onTap: () => context.push(Routes.RIDE),
                             ),
@@ -368,7 +373,8 @@ class MainScaffold extends StatelessWidget {
                   choiceRulerCubit.changeChoiceRulerStatus(forceValue: !value);
 
                   // choiceRulerCubit.changeChoiceRulerStatus();
-                  print('choiceRulerCubit.state ${choiceRulerCubit.state} value $value');
+                  print(
+                      'choiceRulerCubit.state ${choiceRulerCubit.state} value $value');
                   print('onDrawerChanged open $value');
                 },
                 bottomNavigationBar: bottomNavigationBar,
@@ -406,8 +412,10 @@ class MainScaffold extends StatelessWidget {
                 drawer: drawer,
                 onDrawerChanged: (value) {
                   choiceRulerCubit.changeChoiceRulerStatus(forceValue: !value);
-                  print('choiceRulerCubit.state ${choiceRulerCubit.state} value $value');
-                  print('onDrawerChanged open $value');                },
+                  print(
+                      'choiceRulerCubit.state ${choiceRulerCubit.state} value $value');
+                  print('onDrawerChanged open $value');
+                },
                 bottomNavigationBar: bottomNavigationBar,
                 body: Stack(
                   alignment: Alignment.centerLeft,

@@ -1,5 +1,7 @@
 import 'package:fourtyninehub/features/star_feature/domain/entity/user_star_entity.dart';
 
+import '../../../../core/utils/duration_helper.dart';
+
 class StarWinnerEntity {
   final String id;
   final UserStarEntity user;
@@ -8,9 +10,11 @@ class StarWinnerEntity {
 
   String? createdAt;
   String? createAt;
-  // Duration get publishedDuration => DateTime.now().difference(createdAt!);
-  //
-  // String get sinceTime => DurationHelper().getTimeDifference(createdAt!);
+  // Duration get publishedDuration =>
+  //     DateTime.now().difference(DateTime.parse(createdAt!));
+  // //
+  // String get sinceTime =>
+  //     DurationHelper().getTimeDifference(DateTime.parse(createdAt!));
 
   StarWinnerEntity({
     required this.id,

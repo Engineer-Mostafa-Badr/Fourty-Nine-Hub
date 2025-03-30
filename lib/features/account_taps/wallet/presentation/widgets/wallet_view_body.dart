@@ -3,19 +3,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/charge_wallet_cubit/charge_wallet_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/fetch_sub_category_wallet/fetch_sub_category_wallet_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_two_cubit/wallet_two_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/button_wallet_and_bill.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/charge_wallet_button_bloc.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/icon_and_hint_widget.dart';
+import 'package:fourtyninehub/core/widget/icon_and_hint_widget.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/header_total_account_widget.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/my_subscription_section.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/select_categories_wallet_section.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/with_drawal_button.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/request_wallet_button.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -52,7 +53,19 @@ class WalletViewBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
-      child: BlocBuilder<WalletTwoCubit, WalletTwoState>(
+      child: BlocConsumer<WalletTwoCubit, WalletTwoState>(
+        listener: (context, state) {
+          if (state.buttonRequestSuccess == false) {
+            showErrorMessage(
+              context,
+              state.buttonRequestErrMessage ??
+                  LocaleKeys.somethingWentWrong.localize,
+            );
+          }
+          if (state.buttonRequestSuccess == true) {
+            showSuccessMessage(context, LocaleKeys.requestSentSuccess.localize);
+          }
+        },
         builder: (context, state) {
           if (state.status.isLoading || state.status.isInitial) {
             return const Center(
@@ -86,6 +99,9 @@ class WalletViewBody extends StatelessWidget {
                                 HeaderTotalAccountWidget(
                                   balance:
                                       state.wallet?.realAmount.toString() ?? '',
+                                  currency: context.isArabic
+                                      ? state.wallet!.currencyAr
+                                      : state.wallet!.currencyEn,
                                   // state.wallet?.realAmount?.toStringAsFixed(2) ?? '',
                                   type: WalletTypes.mainWallet,
                                 ),
@@ -106,12 +122,14 @@ class WalletViewBody extends StatelessWidget {
                                 ),
                                 // state.wallet?.realAmount != null &&
                                 //         state.wallet!.realAmount! >= 500
-                                WithDrawalButton(
-                                  state: state.wallet?.realAmount != null &&
-                                      state.wallet!.realAmount! >= 500,
-                                  amount:
-                                      state.wallet?.realAmount.toString() ?? '',
-                                  phone: UserCubit.to.state.data!.phone!,
+                                RequestWalletButton(
+                                  amount: state.wallet?.realAmount ?? 0,
+                                  currancy: context.isArabic
+                                      ? state.wallet!.currencyAr
+                                      : state.wallet!.currencyEn,
+                                  target: 500,
+                                  isWaitingApproval:
+                                      state.wallet?.isWaitingApproval ?? false,
                                 ),
                                 const SizedBox(
                                   height: 16,
@@ -149,7 +167,7 @@ class WalletViewBody extends StatelessWidget {
                                 //   subCategories: state,
                                 // ),
                                 Label(
-                                  text: 'History',
+                                  text: LocaleKeys.history.localize,
                                   style: Styles.headerText(
                                     fontSize: 32,
                                     fontWeight: FontWeight.w700,

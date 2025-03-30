@@ -1,5 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/utils/format_numbers.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/description_post.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/icon_action_post_insta.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_post_widget.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/liked_by_widget.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
@@ -9,115 +19,41 @@ class InstagramPostReviewWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Icon(
-                Icons.favorite,
-                size: 35,
-                color: Color(0xffFE0135),
-              ),
-              const Sizer(
-                width: 6,
-              ),
-              const Text(
-                "34.6 k",
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.w900),
-              ),
-              const Sizer(
-                width: 20,
-              ),
-              Image.asset(
-                Assets.instagramCommentIcon,
-                width: 30,
-              ),
-              const Sizer(width: 6,),
-              const Text(
-                "34.6",
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.w900),
-              ),
-              const Sizer(
-                width: 20,
-              ),
-              Image.asset(
-                Assets.instagramSharePostIcon,
-                width: 30,
-              ),
-              const Sizer(width: 6,),
-              const Text(
-                "34.6",
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.w900),
-              ),
-              const Spacer(),
-              const Icon(
-                Icons.bookmark_border_outlined,
-                size: 35,
-              )
-            ],
-          ),
-          const Sizer(),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Column(
-              children: [
-                Row(
-            children: [
-              Row(
-            children: [
-              Container(
-                width: 25,
-                height: 25,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.red
-                ),
-              ),
-              const Sizer(),
-              Text.rich(TextSpan(children: [
-                const TextSpan(
-                    text: "Liked by ",
-                    style: TextStyle(fontSize: 18)),
-                TextSpan(
-                    text: "craig_love",
-                    style: Styles.headerText(fontWeight: FontWeight.w900)),
-
-                const TextSpan(
-                    text: " and 44,686 others",
-                    style: TextStyle(fontSize: 18))
-              ])),
-            ],
-          ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 6),
-            child: Text.rich(TextSpan(children: [
-              TextSpan(
-                      text: "craig_love",
-                      style: Styles.headerText(fontWeight: FontWeight.w900)),
-              const TextSpan(
-                text: " Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ",
-                style: TextStyle(fontSize: 18))
-            ])),
-          ),
-          const Sizer(
-            height: 10,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 6),
-            child: Row(
-              children: [
-                Text(
-                  "September 19",
-                  style: TextStyle(fontSize: 17, color: Colors.black.withOpacity(0.4)),
-                ),
-              ],
+        const IconsActionPostInsta(
+          likes: 34666,
+          comments: 567,
+          shares: 2021,
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        const LikedByWidget(
+          imageUrl: testImage2,
+          name: 'craig_love',
+          others: 44686,
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        const DescriptionPost(
+          name: 'Username',
+          description:
+              'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec leo lacus, bibendum sed consectetur sed, elementum at tellus. Sed vel ultricies eros. Nulla in lectus nulla. Nunc tristique leo sit amet leo congue, vel vulputate nulla ornare. Donec ultrices varius suscipit. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Ut eget varius purus. Duis ut efficitur mi.',
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Label(
+            text: 'September 19',
+            style: Styles.mediumText(
+              color: const Color(0x66000000),
             ),
-          )
-              ],
-            ),
-          )
+          ),
+        ),
       ],
     );
   }

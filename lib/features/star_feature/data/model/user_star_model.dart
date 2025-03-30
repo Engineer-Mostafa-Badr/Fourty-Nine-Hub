@@ -1,12 +1,15 @@
 import 'package:fourtyninehub/features/star_feature/domain/entity/user_star_entity.dart';
 
 class UserStarModel extends UserStarEntity {
-  UserStarModel(
-      {required super.id,
-      required super.firstName,
-      required super.lastName,
-      required super.email,
-      required super.image});
+  UserStarModel({
+    required super.id,
+    required super.firstName,
+    required super.lastName,
+    required super.email,
+    required super.image,
+    required super.viewNumber,
+    required super.averageRating,
+  });
 
   factory UserStarModel.fromJson(Map<String, dynamic> json) {
     return UserStarModel(
@@ -23,6 +26,8 @@ class UserStarModel extends UserStarEntity {
       image: json['userId'] != null
           ? json['userId']['USER_PROFILE']['profilePictureKey']['mediaKey']
           : json['USER_PROFILE']['profilePictureKey']['mediaKey'] ?? '',
+      viewNumber: json['viewNumber  '] ?? 0,
+      averageRating: json['averageRating'] ?? 0,
     );
   }
 }

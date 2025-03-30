@@ -24,10 +24,13 @@ class JsonParser implements ApiConsumer {
   }
 
   @override
-  Future<Either<Failure, Map<String, dynamic>>> get(String url,
-      {Map<String, dynamic>? queryParameters,
-      Map<String, dynamic>? data,
-      Map<String, dynamic>? headers}) async {
+  Future<Either<Failure, Map<String, dynamic>>> get(
+    String url, {
+    Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? data,
+    Map<String, dynamic>? headers,
+    bool refresh = false,
+  }) async {
     try {
       final response = jsonDecode(await rootBundle.loadString(url));
 
