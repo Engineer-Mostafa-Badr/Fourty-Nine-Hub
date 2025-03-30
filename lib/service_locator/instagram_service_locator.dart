@@ -8,6 +8,7 @@ import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/ge
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_reels_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_user_media_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_reels_usecase.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/create_post_instagram_cubit/create_post_instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:get_it/get_it.dart';
 
@@ -70,5 +71,9 @@ class InstagramServiceLocator {
           serviceLocator(),
           serviceLocator(),
         ));
+
+    serviceLocator.registerFactory<CreatePostInstagramCubit>(
+      () => CreatePostInstagramCubit(),
+    );
   }
 }

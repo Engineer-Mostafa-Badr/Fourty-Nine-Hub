@@ -1452,5 +1452,8 @@ abstract class  LocaleKeys {
   static const others = 'others';
   static const suggestReels = 'suggestReels';
   static const watchAll = 'watchAll';
+  static const myStory = 'myStory';
+  static const recents = 'recents';
+  static const selectMultiple = 'selectMultiple';
 
 }

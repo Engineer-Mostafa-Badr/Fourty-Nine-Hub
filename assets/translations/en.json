@@ -1476,5 +1476,8 @@
   "likedBy": "Liked by",
   "others": "others",
   "suggestReels": "Suggest reels",
-  "watchAll": "watch all"
+  "watchAll": "watch all",
+  "myStory": "My story",
+  "recents": "Recents",
+  "selectMultiple": "SELECT MULTIPLE"
 }

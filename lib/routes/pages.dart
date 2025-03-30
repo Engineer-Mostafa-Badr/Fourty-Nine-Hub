@@ -220,6 +220,7 @@ import 'package:fourtyninehub/features/social_media/edit_profile/presentation/pa
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/Post/create_post_instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/Post/get_posts_instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/add_story_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/instgram_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_all_discover_people.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_home_screen.dart';
@@ -466,8 +467,7 @@ class AppPages {
                 name: Routes.onBoardingScreen,
                 builder: (context, state) => BlocProvider(
                   child: const OnBoardingScreen(),
-                  create: (context) =>
-                      serviceLocator<OnBoardingCubit>(),
+                  create: (context) => serviceLocator<OnBoardingCubit>(),
                 ),
               ),
               GoRoute(
@@ -1113,6 +1113,12 @@ class AppPages {
                               child: const MyAddsView(),
                             )),
                   ]),
+
+              GoRoute(
+                path: Paths.ADDSTORYINSTAGRAM,
+                name: Routes.ADDSTORYINSTAGRAM,
+                builder: (context, state) => const AddStoryView(),
+              ),
 
               GoRoute(
                 path: Paths.INSTAGRAM,

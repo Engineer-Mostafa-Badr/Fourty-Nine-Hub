@@ -293,6 +293,8 @@ abstract class Assets {
   static String star = 'assets/images/star.png';
   static String tripJoinImage = 'assets/images/tripJoinImage.jpg';
   static String azkarPrayer = 'assets/drawerIcons/azkar_prayer.png';
+  static String imageWhiteIcon = 'assets/icons/image_white_icon.svg';
+  static String expandIcon = 'assets/icons/expand_icon.svg';
 
   //! audio
   static String notificationAudioApp = 'audio/notification.mp3';

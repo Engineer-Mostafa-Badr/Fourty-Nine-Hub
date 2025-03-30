@@ -7,9 +7,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
+import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/create_post_instagram_screen.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/create_post_instagram_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_ad_slider_widget.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/post_ad_instagram.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_for_you_slider_widget.dart';
@@ -68,10 +71,15 @@ class _InstagramViewState extends State<InstagramView> {
               // ?
               SingleChildScrollView(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildTabBar(context),
-                const SizedBox(height: 16),
-                const StoresInstagramWidget(),
+                // const SizedBox(height: 16),
+                // const StoresInstagramWidget(),
+                const SizedBox(
+                  height: 82,
+                  child: ChatStories(),
+                ),
                 const SizedBox(
                   height: 16,
                 ),
@@ -199,7 +207,16 @@ class _InstagramViewState extends State<InstagramView> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => CreatePostInstagramScreen(),
+                            builder: (context) =>
+                                const CreatePostInstagramView(),
+                          ),
+                        );
+                      }
+                      if (index == 2) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Placeholder(),
                           ),
                         );
                       }

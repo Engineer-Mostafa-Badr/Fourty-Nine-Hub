@@ -47,6 +47,7 @@ abstract class Routes {
   static const OTHERSACCOUNT = '/Social/OthersAccount';
   static const INSTAGRAMPROFILE = '/Instagram/InstagramProfile';
   static const InstagramSuggestPeople = '/Instagram/InstagramSuggestPeople';
+  static const ADDSTORYINSTAGRAM = '/AddStoryInstagram';
   static const EDITPROFILE = '/Social/OthersAccount/EditProfile';
   static const REELS = '/Social/REELS';
   static const MUSICREELS = '/Social/REELS/MUSICREELS';
@@ -298,6 +299,7 @@ abstract class Paths {
   static const OTHERSACCOUNT = 'OthersAccount';
   static const INSTAGRAMPROFILE = 'InstagramProfile';
   static const InstagramSuggestPeople = 'InstagramSuggestPeople';
+  static const ADDSTORYINSTAGRAM = 'AddStoryInstagram';
   static const MAZADAT = 'Mazadat';
   static const IMAGESPAGEVIEW = 'ImagesPageView';
   static const SHOWIMAGESVIEW = 'ShowImagesView';
