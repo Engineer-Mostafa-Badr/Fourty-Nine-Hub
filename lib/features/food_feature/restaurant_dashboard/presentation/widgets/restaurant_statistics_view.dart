@@ -57,60 +57,7 @@ class _RestaurantStatisticsViewState extends State<RestaurantStatisticsView> {
               LocaleKeys.noOfRequests.localize,
               state.statistics?.data.totalOrders.ceil().toString() ?? "N/A",
             ),
-            // Container(
-            //   decoration: BoxDecoration(
-            //     color: Colors.grey,
-            //   ),
-            //   child: Text("Modify"),
-            // ),
-            // // Governorate Dropdown
-            // if (state.governorates != null && state.governorates!.isNotEmpty)
-            //   DropdownButton<String>(
-            //     dropdownColor: Colors.white,
-            //     value: selectedGovernorateId,
-            //     hint: Text("Select Governorate"),
-            //     items: state.governorates!.map((gov) {
-            //       return DropdownMenuItem(
-            //         value: gov.id,
-            //         child: Text(gov.nameEn),
-            //       );
-            //     }).toList(),
-            //     onChanged: (value) {
-            //       setState(() {
-            //         selectedGovernorateId = value;
-            //         selectedCityId = null; // Reset city when governorate changes
-            //       });
-            //
-            //       if (value != null) {
-            //         context.read<RestaurantDashboardCubit>().getCities(value);
-            //       }
-            //     },
-            //   ),
-            //
-            // // City Dropdown (Only show if a governorate is selected)
-            // if (selectedGovernorateId != null && state.cities != null)
-            //   DropdownButton<String>(
-            //     dropdownColor: Colors.white,
-            //     value: selectedCityId,
-            //     hint: Text("Select City"),
-            //     items: state.cities!.map((city) {
-            //       return DropdownMenuItem(
-            //         value: city.id,
-            //         child: Text(city.nameEn),
-            //       );
-            //     }).toList(),
-            //     onChanged: (value) {
-            //       setState(() {
-            //         selectedCityId = value;
-            //       });
-            //
-            //       print("Selected Governorate: $selectedGovernorateId");
-            //       print("Selected City: $selectedCityId");
-            //     },
-            //   ),
 
-
-            // GestureDetector for updating number
             _buildStatisticColumn(
               LocaleKeys.restaurantNumber.localize,
               state.info?.number?.toString() ?? "N/A",
@@ -122,7 +69,7 @@ class _RestaurantStatisticsViewState extends State<RestaurantStatisticsView> {
 
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: AppColors.cF3F3F3,
+                  color:context.isDarkMode ? AppColors.PRIMARY_COLOR_DARK : AppColors.cF3F3F3,
                   borderRadius: BorderRadius.circular(15),
                 ),
                 padding: const EdgeInsets.all(10),
@@ -173,10 +120,9 @@ class _RestaurantStatisticsViewState extends State<RestaurantStatisticsView> {
               onTap: () => _showModifyBottomSheet(context),
               // Call bottom sheet method
               child: Container(
-
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: AppColors.cF3F3F3,
+                  color:context.isDarkMode ? AppColors.PRIMARY_COLOR_DARK : AppColors.cF3F3F3,
                   borderRadius: BorderRadius.circular(15),
                 ),
                 padding: const EdgeInsets.all(10),
@@ -236,9 +182,10 @@ class _RestaurantStatisticsViewState extends State<RestaurantStatisticsView> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text(
+                   Text(
                     "Update Phone Number",
                     style: TextStyle(
+                      color:context.isDarkMode ? AppColors.PRIMARY_COLOR_DARK : AppColors.cF3F3F3,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
@@ -425,7 +372,9 @@ class _ModifyBottomSheetState extends State<ModifyBottomSheet> {
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                           decoration: BoxDecoration(
-                            color: AppColors.cD9D9D9,
+                            // color: AppColors.cD9D9D9,
+                            color:context.isDarkMode ? AppColors.PRIMARY_COLOR_DARK : AppColors.cF3F3F3,
+
                             border: Border.all(color: Colors.grey),
                             borderRadius: BorderRadius.circular(8),
                           ),
@@ -458,7 +407,9 @@ class _ModifyBottomSheetState extends State<ModifyBottomSheet> {
                             children: state.governorates!.map((gov) {
                               return ListTile(
                                 title: Label(text:gov.nameEn,
-                                  style: const TextStyle(
+                                  style:  TextStyle(
+                                      color:context.isDarkMode ? AppColors.PRIMARY_COLOR_DARK : AppColors.cF3F3F3,
+
                                       fontWeight: FontWeight.w600,
                                       fontSize: 14
                                   ),
@@ -495,7 +446,8 @@ class _ModifyBottomSheetState extends State<ModifyBottomSheet> {
                         child: Container(
                           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                           decoration: BoxDecoration(
-                          color: AppColors.cD9D9D9,
+                            color:context.isDarkMode ? AppColors.PRIMARY_COLOR_DARK : AppColors.cF3F3F3,
+
                             border: Border.all(color: Colors.grey),
                             borderRadius: BorderRadius.circular(8),
                           ),
@@ -519,7 +471,8 @@ class _ModifyBottomSheetState extends State<ModifyBottomSheet> {
                         Container(
                           height: 255, // Fixed size container
                           decoration: BoxDecoration(
-                            color: AppColors.cD9D9D9,
+                            color:context.isDarkMode ? AppColors.PRIMARY_COLOR_DARK : AppColors.cF3F3F3,
+
                             border: Border.all(color: Colors.grey),
                             borderRadius: BorderRadius.circular(8),
                           ),

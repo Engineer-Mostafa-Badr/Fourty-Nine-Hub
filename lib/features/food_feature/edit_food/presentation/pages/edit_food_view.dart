@@ -634,6 +634,7 @@ class _EditFoodViewState extends State<EditFoodView>
     List<TextInputFormatter>? inputFormatters,
   }) {
     return TextFormField(
+      style: TextStyle(color: AppColors.black),
       validator: (value) {
         if (value == null || value.isEmpty) {
           setState(() {
