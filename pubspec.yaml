@@ -137,6 +137,7 @@ dependencies:
   voice_message_package: ^2.2.1
   web_socket_channel: ^2.4.5
   webview_flutter: ^4.8.0
+  wechat_assets_picker: ^9.5.0
   widget_and_text_animator: null
   zego_express_engine: ^3.16.2
   zego_uikit_signaling_plugin: ^2.8.8

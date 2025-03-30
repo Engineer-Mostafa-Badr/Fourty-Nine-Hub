@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart' as gmaps;
 import 'package:latlong2/latlong.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart' as gmaps;
+
+import '../../../../../core/widget/custom_scaffold.dart';
 
 class DynamicMapWithPolyline extends StatefulWidget {
   final String apiKey;
   final String url;
   final bool useGoogleMaps;
+  final bool showNavBar;
   final double? latitude;
   final double? longitude;
   final List<LatLng>? polylineString;
@@ -16,6 +19,7 @@ class DynamicMapWithPolyline extends StatefulWidget {
     super.key,
     required this.apiKey,
     required this.url,
+    this.showNavBar = true,
     this.useGoogleMaps = false,
     this.latitude,
     this.longitude,
@@ -187,7 +191,8 @@ class _DynamicMapWithPolyline extends State<DynamicMapWithPolyline> {
         ? widget.polylineString!
         : [];
 
-    return Scaffold(
+    return CustomScaffold(
+      showNavBAr: widget.showNavBar,
       body: Stack(
         children: [
           widget.useGoogleMaps

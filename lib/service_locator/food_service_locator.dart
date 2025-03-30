@@ -160,6 +160,7 @@ class FoodServiceLocator {
               serviceLocator(),
               serviceLocator(),
               serviceLocator(),
+              serviceLocator()
             ));
     serviceLocator
         .registerFactory<CusineRestaurantsCubit>(() => CusineRestaurantsCubit(

@@ -1182,12 +1182,9 @@ class EndPoints {
   }
 
   // gecoding google api url
-  static String geocodingUrl =
-      'https://maps.googleapis.com/maps/api/geocode/json';
-
+  static String geocodingUrl ='https://maps.googleapis.com/maps/api/geocode/json';
   // trip join
-  static String tripJoinExpectedPrice =
-      "/ride/come-with-you/trip/expectedPrice";
+  static String tripJoinExpectedPrice ="/ride/come-with-you/trip/expectedPrice";
   static String getCarBrand = "/ride/riders/brands";
   static String getCarModelByBrand = "/ride/riders/models";
   static String getCarYearType = "/ride/riders/car-years-and-types";
