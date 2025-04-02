@@ -16,32 +16,42 @@ class TopNavigationBarProfileInstagarm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        TabBar(controller: tabController, onTap: onTap, tabs: [
-          Tab(
-            height: 44,
-            child: SvgPicture.asset(
-              tabController.index == 0
-                  ? Assets.appsBlackIcon
-                  : Assets.appsGreyIcon,
+        TabBar(
+          controller: tabController,
+          onTap: onTap,
+          dividerHeight: 0,
+          indicatorColor: Colors.black,
+          indicatorSize: TabBarIndicatorSize.tab,
+          indicatorPadding: EdgeInsets.symmetric(horizontal: 20),
+          indicatorWeight: 2,
+          padding: const EdgeInsets.only(bottom: 4),
+          tabs: [
+            Tab(
+              height: 44,
+              child: SvgPicture.asset(
+                tabController.index == 0
+                    ? Assets.appsBlackIcon
+                    : Assets.appsGreyIcon,
+              ),
             ),
-          ),
-          Tab(
-            height: 44,
-            child: SvgPicture.asset(
-              tabController.index == 1
-                  ? Assets.videoIcon
-                  : Assets.videoGreyIcon,
+            Tab(
+              height: 44,
+              child: SvgPicture.asset(
+                tabController.index == 1
+                    ? Assets.videoIcon
+                    : Assets.videoGreyIcon,
+              ),
             ),
-          ),
-          Tab(
-            height: 44,
-            child: SvgPicture.asset(
-              tabController.index == 2
-                  ? Assets.profile2BlackIcon
-                  : Assets.profile2GreyIcon,
+            Tab(
+              height: 44,
+              child: SvgPicture.asset(
+                tabController.index == 2
+                    ? Assets.profile2BlackIcon
+                    : Assets.profile2GreyIcon,
+              ),
             ),
-          ),
-        ]),
+          ],
+        ),
       ],
     );
   }

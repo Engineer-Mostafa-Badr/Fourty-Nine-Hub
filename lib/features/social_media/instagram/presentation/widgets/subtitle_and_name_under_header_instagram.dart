@@ -43,7 +43,7 @@ class SubTitleAndNameUnderHeaderInstagram extends StatelessWidget {
                 Assets.facebook2Icon,
               ),
               Label(
-                text: 'ahmed mohamed',
+                text: ' ahmed mohamed',
                 style: Styles.headerText(
                   fontSize: 24,
                   height: 1.33,

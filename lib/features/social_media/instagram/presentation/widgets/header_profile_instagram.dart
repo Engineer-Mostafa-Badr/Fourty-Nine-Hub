@@ -49,28 +49,24 @@ class HeaderProfileInstagram extends StatelessWidget {
               ),
             ],
           ),
-          const Spacer(),
+          const Spacer(
+            flex: 2,
+          ),
           const ValueAndTitleHeaderProfileInstagram(
             value: '2',
             title: 'Post',
           ),
-          const SizedBox(
-            width: 15,
-          ),
+          const Spacer(),
           const ValueAndTitleHeaderProfileInstagram(
             value: '12',
             title: 'Friend',
           ),
-          const SizedBox(
-            width: 15,
-          ),
+           const Spacer(),
           const ValueAndTitleHeaderProfileInstagram(
             value: '23',
             title: 'Follower',
           ),
-          const SizedBox(
-            width: 15,
-          ),
+          const Spacer(),
           const ValueAndTitleHeaderProfileInstagram(
             value: '23',
             title: 'view',

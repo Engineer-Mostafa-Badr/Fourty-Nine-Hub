@@ -79,13 +79,14 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
   Future<List<AssetEntity>> _fetchAllImages() async {
     final List<AssetPathEntity> albums = await PhotoManager.getAssetPathList(
         // type: RequestType.fromTypes([RequestType.image, RequestType.video]), // جلب الصور فقط
-        type: RequestType.image);
+        type: RequestType.image,
+        );
 
     if (albums.isNotEmpty) {
       final AssetPathEntity album = albums.first; // اختر الألبوم الأول
       List<AssetEntity> allImages = [];
       int page = 0; // ابدأ من الصفحة الأولى
-      const int pageSize = 100;
+      const int pageSize = 20;
 
       while (true) {
         // جلب الصور في الصفحة الحالية
