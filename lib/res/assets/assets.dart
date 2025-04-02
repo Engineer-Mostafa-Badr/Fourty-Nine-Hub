@@ -64,8 +64,17 @@ abstract class Assets {
   static String homeIcon = 'assets/icons/home_icon.svg';
   static String createIcon = 'assets/icons/create_icon.svg';
   static String profile2Icon = 'assets/icons/profile_icon.svg';
-  static String verifiedAccountMarkIcon = 'assets/icons/verified_account_mark_icon.svg';
+  static String verifiedAccountMarkIcon =
+      'assets/icons/verified_account_mark_icon.svg';
   static String musicNoteIcon = 'assets/icons/music_note.svg';
+  static String aMailIcon = 'assets/icons/a_mail_icon.svg';
+  static String facebook2Icon = 'assets/icons/facebook_2_icon.svg';
+  static String appsBlackIcon = 'assets/icons/apps_black_icon.svg';
+  static String appsGreyIcon = 'assets/icons/apps_grey_icon.svg';
+  static String videoGreyIcon = 'assets/icons/video_grey_icon.svg';
+  static String videoIcon = 'assets/icons/video_icon.svg';
+  static String profile2BlackIcon = 'assets/icons/profile_2_black_icon.svg';
+  static String profile2GreyIcon = 'assets/icons/profile_2_grey_icon.svg';
 
   // lottie
   static String loveReaction = 'assets/lottie/love_reaction.json';

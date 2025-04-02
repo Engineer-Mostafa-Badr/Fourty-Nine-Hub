@@ -179,16 +179,17 @@ class PostBodyCreatePostInstagram extends StatelessWidget {
           ),
         ),
         Expanded(
-            child: PostBodyCreatePostInstagramGridView(
-          images: context.read<CreatePostInstagramCubit>().state.images,
-          multiSelect:
-              context.read<CreatePostInstagramCubit>().state.multiSelect,
-          selectedMeda:
-              context.read<CreatePostInstagramCubit>().state.selectedMeda,
-          onTap: (index) {
-            context.read<CreatePostInstagramCubit>().onTapImage(index);
-          },
-        )),
+          child: PostBodyCreatePostInstagramGridView(
+            images: context.read<CreatePostInstagramCubit>().state.images,
+            multiSelect:
+                context.read<CreatePostInstagramCubit>().state.multiSelect,
+            selectedMeda:
+                context.read<CreatePostInstagramCubit>().state.selectedMeda,
+            onTap: (index) {
+              context.read<CreatePostInstagramCubit>().onTapImage(index);
+            },
+          ),
+        ),
       ],
     );
   }

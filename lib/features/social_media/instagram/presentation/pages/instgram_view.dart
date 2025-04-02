@@ -13,6 +13,7 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/create_post_instagram_screen.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/create_post_instagram_view.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/profile_instagram_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_ad_slider_widget.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/post_ad_instagram.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_for_you_slider_widget.dart';
@@ -203,6 +204,7 @@ class _InstagramViewState extends State<InstagramView> {
                   // width: double.infinity,
                   child: GestureDetector(
                     onTap: () {
+                      // يقوم بنقلك لصفحة انشاء منشور او ريلز للانستقرام
                       if (index == 1) {
                         Navigator.push(
                           context,
@@ -212,11 +214,12 @@ class _InstagramViewState extends State<InstagramView> {
                           ),
                         );
                       }
+                      // يقوم بتحويلك لصفحة الملف الشخصي
                       if (index == 2) {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const Placeholder(),
+                            builder: (context) => const ProfileInstagramView(),
                           ),
                         );
                       }

@@ -60,25 +60,24 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  final locationService = LocationService();
+  // final locationService = LocationService();
 
-  locationService.startLocationTracking();
+  // locationService.startLocationTracking();
 
-  // Listen for new locations (only when moved at least 300m)
-  locationService.locationUpdates.listen((position) {
-    Fluttertoast.showToast(
-        msg: "New location (moved at least 300m): ${position.latitude}, ${position.longitude}",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.green,
-        textColor: Colors.white,
-        fontSize: 16.0
-    );
-    print('New location (moved at least 300m): ${position.latitude}, ${position.longitude}');
-    // Do something with the new location
-  });
-
+  // // Listen for new locations (only when moved at least 300m)
+  // locationService.locationUpdates.listen((position) {
+  //   Fluttertoast.showToast(
+  //       msg: "New location (moved at least 300m): ${position.latitude}, ${position.longitude}",
+  //       toastLength: Toast.LENGTH_SHORT,
+  //       gravity: ToastGravity.BOTTOM,
+  //       timeInSecForIosWeb: 1,
+  //       backgroundColor: Colors.green,
+  //       textColor: Colors.white,
+  //       fontSize: 16.0
+  //   );
+  //   print('New location (moved at least 300m): ${position.latitude}, ${position.longitude}');
+  //   // Do something with the new location
+  // });
 
   await CacheServiceImpl.init();
   await DI.execute();
@@ -130,7 +129,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
-
   @override
   void initState() {
     super.initState();
@@ -261,7 +259,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             ..getFloatingNavigatorStatus()
             ..getEnableFloatingNavigatorStatus(),
         ),
-        
+
         BlocProvider(
           create: (context) => ChoiceRulerCubit()
             ..getChoiceRulerStatus()
