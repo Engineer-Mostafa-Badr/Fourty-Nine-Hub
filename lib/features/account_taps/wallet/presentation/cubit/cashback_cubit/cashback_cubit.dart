@@ -14,7 +14,8 @@ part 'cashback_state.dart';
 class CashbackCubit extends Cubit<CashbackState> {
   CashbackCubit(
     this._balanceUseCases,
-    this._balanceHistoryUseCase, this._withdrawBalanceUseCase,
+    this._balanceHistoryUseCase,
+    this._withdrawBalanceUseCase,
   ) : super(const CashbackState(status: CashbackStates.initial));
 
   final GetBalanceUseCases _balanceUseCases;
@@ -25,24 +26,37 @@ class CashbackCubit extends Cubit<CashbackState> {
 
   Future<void> requestWithdrawal(context) async {
     emit(state.copyWith(
-      isLoadingButton: true
+      isLoadingButton: true,
+      buttonRequestSuccess: null,
     ));
     final response = await _withdrawBalanceUseCase(const NoParams());
     response.fold((l) {
       emit(state.copyWith(
-        status: CashbackStates.failure,
+        // status: CashbackStates.failure,
         messageFailure: getFailureMessage(l, context),
         isLoadingButton: false,
+        buttonRequestSuccess: false,
       ));
     }, (data) {
       emit(state.copyWith(
-          isLoadingButton: false
+        isLoadingButton: false,
+        buttonRequestSuccess: true,
       ));
     });
   }
 
-  Future<void> getCashback(context) async {
-    if (state.page == 1) emit(state.copyWith(status: CashbackStates.loading));
+  Future<void> getCashback(context, {bool isRefresh = false}) async {
+    if (state.page == 1 || isRefresh) {
+      emit(const CashbackState(
+        status: CashbackStates.loading,
+      ));
+      // emit(
+      //   state.copyWith(
+      //     status: CashbackStates.loading,
+      //     buttonRequestSuccess: null,
+      //   ),
+      // );
+    }
 
     final response = await _balanceUseCases.call(const NoParams());
     response.fold((f) {

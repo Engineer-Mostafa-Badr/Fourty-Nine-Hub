@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/stateless/images/image_picker_placeholder.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_dropdown.dart';
 import 'package:fourtyninehub/features/payment/presentation/cubit/payment_cubit.dart';
+import 'package:fourtyninehub/features/payment/presentation/pages/widgets/button_upload_image.dart';
 import 'package:fourtyninehub/features/payment/presentation/pages/widgets/payment_fawry_widget.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -41,6 +46,7 @@ class PaymentView extends StatefulWidget {
 class _PaymentViewState extends State<PaymentView> {
   String _selectedPaymentMethod = '';
   String? _selectedProviderId;
+  String phoneNumber = '';
 
   @override
   void initState() {
@@ -50,73 +56,83 @@ class _PaymentViewState extends State<PaymentView> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: AppBar(
-        title: Text(LocaleKeys.paymentOptions.localize),
+      appBar: BackAppBar(
+        label: LocaleKeys.paymentOptions.localize,
       ),
       body: BlocBuilder<PaymentCubit, PaymentState>(
         builder: (context, state) {
-          return SingleChildScrollView(
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: _buildCustomCard(
-                        onTap: () async {
-                          final cubit = context.read<PaymentCubit>();
-                          final url = cubit.state.paymobData?.data;
-                          if (url != null) {
-                            await launchUrl(Uri.parse(url));
-                          }
-                        },
-                        title: 'Paymob',
-                        titleId: 'Paymob',
-                        icon: Image.asset(
-                          Assets.paymob,
-                          fit: BoxFit.cover,
-                          height: 30.h,
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _buildCustomCard(
+                          onTap: () async {
+                            final cubit = context.read<PaymentCubit>();
+                            final url = cubit.state.paymobData?.data;
+                            if (url != null) {
+                              await launchUrl(Uri.parse(url));
+                            }
+                          },
+                          title: 'Paymob',
+                          titleId: 'Paymob',
+                          icon: Image.asset(
+                            Assets.paymob,
+                            fit: BoxFit.cover,
+                            height: 30.h,
+                          ),
+                          color: Colors.blue,
+                          details:
+                              LocaleKeys.enterYourCreditCardDetails.localize,
+                          context: context,
                         ),
-                        color: Colors.blue,
-                        details: LocaleKeys.enterYourCreditCardDetails.localize,
-                        context: context,
                       ),
-                    ),
-                    Expanded(
-                      child: _buildCustomCard(
-                        title: 'Fawry',
-                        titleId: 'Fawry',
-                        icon: Image.asset(
-                          Assets.fawry,
-                          fit: BoxFit.cover,
-                          height: 30.h,
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      Expanded(
+                        child: _buildCustomCard(
+                          title: 'Fawry',
+                          titleId: 'Fawry',
+                          icon: Image.asset(
+                            Assets.fawry,
+                            fit: BoxFit.cover,
+                            height: 30.h,
+                          ),
+                          color: Colors.orange,
+                          details: LocaleKeys.enterPaymobLink.localize,
+                          context: context,
                         ),
-                        color: Colors.orange,
-                        details: LocaleKeys.enterPaymobLink.localize,
-                        context: context,
                       ),
-                    ),
-                    Expanded(
-                      child: _buildCustomCard(
-                        title: 'InstaPay',
-                        titleId: 'manual',
-                        icon: Image.asset(
-                          Assets.instaPay,
-                          fit: BoxFit.cover,
-                          height: 50.h,
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      Expanded(
+                        child: _buildCustomCard(
+                          title: 'InstaPay',
+                          titleId: 'manual',
+                          icon: Image.asset(
+                            Assets.instaPay,
+                            fit: BoxFit.cover,
+                            height: 50.h,
+                          ),
+                          color: Colors.deepPurple,
+                          details: LocaleKeys.enterBankAccountDetails.localize,
+                          context: context,
                         ),
-                        color: Colors.deepPurple,
-                        details: LocaleKeys.enterBankAccountDetails.localize,
-                        context: context,
                       ),
-                    ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  _buildPaymentBody(context),
+                  if (_selectedPaymentMethod == 'Credit Card') ...[
+                    SizedBox(height: 20.h),
                   ],
-                ),
-                SizedBox(height: 20.h),
-                _buildPaymentBody(context),
-                if (_selectedPaymentMethod == 'Credit Card') ...[
-                  SizedBox(height: 20.h),
                 ],
-              ],
+              ),
             ),
           );
         },
@@ -157,7 +173,7 @@ class _PaymentViewState extends State<PaymentView> {
       },
       child: Container(
         height: 150.h,
-        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+        // margin: const EdgeInsets.symmetric(horizontal: 8.0),
         padding: const EdgeInsets.all(12.0),
         decoration: BoxDecoration(
           color: Colors.white,
@@ -206,7 +222,12 @@ class _PaymentViewState extends State<PaymentView> {
         return _bankTransferPayment();
       default:
         return Center(
-          child: Text(LocaleKeys.pleaseSelectPaymentMethod.localize),
+          child: Label(
+            text: LocaleKeys.pleaseSelectPaymentMethod.localize,
+            style: Styles.headerText(
+              color: Colors.grey,
+            ),
+          ),
         );
     }
   }
@@ -236,112 +257,270 @@ class _PaymentViewState extends State<PaymentView> {
         phoneNumbers.add(bank.metadata!.phone2);
       }
     }
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: [
-          DropdownButtonFormField<String>(
-            decoration: InputDecoration(
-              //fillColor: Colors.white,
-              labelText: LocaleKeys.phoneNumber.localize,
-            ),
-            dropdownColor: Theme.of(context).scaffoldBackgroundColor,
-            items: phoneNumbers.map((phone) {
-              return DropdownMenuItem<String>(
-                value: phone,
-                child: Text(phone),
-              );
-            }).toList(),
-            onChanged: (value) {
-              if (value != null) {
-                bankNameController.text = value;
-              }
-            },
-          ),
-          SizedBox(height: 25.h),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.PRIMARY_COLOR,
-            ),
-            onPressed: () {},
-            child: Text(
-              "${widget.amount}",
-              style: TextStyle(color: AppColors.LIGHT_COLOR, fontSize: 20.sp),
-            ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(height: 20.h),
-              Label(
-                text: LocaleKeys.snapCopyOfBillPayment.localize,
-                style: Styles.headerText(),
+    return Column(
+      children: [
+        // DropdownButtonHideUnderline(
+        //   child: Container(
+        //     width: double.infinity,
+        //     height: 42,
+        //     decoration: BoxDecoration(
+        //       borderRadius: BorderRadius.circular(15),
+        //       color: const Color(0xffF5F5F5),
+        //     ),
+        //     child: Theme(
+        //       data: Theme.of(context).copyWith(
+        //         canvasColor: const Color(0xFFE0E0E0),
+        //       ),
+        //       child: ButtonTheme(
+        //         alignedDropdown: true,
+        //         child: DropdownButton<String>(
+        //           value: null,
+        //           isExpanded: true,
+        //           icon: const Icon(Icons.keyboard_arrow_down_rounded),
+        //           menuMaxHeight: 300,
+        //           elevation: 2,
+        //           dropdownColor: const Color(0xFFE0E0E0),
+        //           borderRadius: BorderRadius.circular(15),
+        //           itemHeight: 50,
+        //           underline: Container(),
+        //           onChanged: (String? value) {
+        //             if (value != null) {
+        //               bankNameController.text = value;
+        //             }
+        //           },
+        //           items: phoneNumbers.map((phone) {
+        //             return DropdownMenuItem<String>(
+        //               value: phone,
+        //               child: Text(phone),
+        //             );
+        //           }).toList(),
+        //           hint: Padding(
+        //             padding: const EdgeInsets.symmetric(horizontal: 16),
+        //             child: Label(
+        //               text: LocaleKeys.phoneNumber.localize,
+        //               style: Styles.mediumText(fontSize: 32),
+        //             ),
+        //           ),
+        //         ),
+        //       ),
+        //     ),
+        //   ),
+        // ),
+        CustomDropdown<String>(
+          items: phoneNumbers,
+          displayStringForItem: (item) => item,
+          onItemSelected: (value) {
+            if (value != null) {
+              bankNameController.text = value;
+              phoneNumber = value;
+            }
+          },
+          selectedItem: null,
+          // selectedItem: ,
+          itemBuilder: (item) => ListTile(
+            title: Label(
+              text: item,
+              style: Styles.headerText(
+                height: 1.60,
               ),
-              SizedBox(
-                height: 10.h,
+            ),
+          ),
+          dropdownDecoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(15),
+            border: Border.all(color: Colors.black, width: 2),
+          ),
+          buttonDecoration: BoxDecoration(
+            color: const Color(0xffF3F3F3),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: const Color(0xff7D569E), width: 1),
+          ),
+          iconColor: const Color(0xff7D569E),
+          closedIcon: Icons.keyboard_arrow_down_outlined,
+          openedIcon: Icons.keyboard_arrow_up_outlined,
+          hint: LocaleKeys.phoneNumber.localize,
+          textAlign: TextAlign.start,
+          buttonTextStyle: Styles.headerText(
+            fontSize: 32,
+            color: const Color(0xFF7D569E),
+            height: 1.60,
+          ),
+          // itemTextStyle: Styles.headerText(color: Colors.white),
+        ),
+        // DropdownButtonFormField<String>(
+        //   decoration: InputDecoration(
+        //     //fillColor: Colors.white,
+        //     labelText: LocaleKeys.phoneNumber.localize,
+        //   ),
+        //   dropdownColor: Theme.of(context).scaffoldBackgroundColor,
+        //   items: phoneNumbers.map((phone) {
+        //     return DropdownMenuItem<String>(
+        //       value: phone,
+        //       child: Text(phone),
+        //     );
+        //   }).toList(),
+        //   onChanged: (value) {
+        //     if (value != null) {
+        //       bankNameController.text = value;
+        //     }
+        //   },
+        // ),
+        const SizedBox(height: 32),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.c0B1035,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+          ),
+          onPressed: () {},
+          child: Label(
+            text: "${widget.amount}",
+            style: Styles.headerText(
+              fontSize: 32,
+              fontWeight: FontWeight.w700,
+              color: Colors.white,
+              height: 1.6,
+            ),
+          ),
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(
+              height: 16,
+            ),
+            Label(
+              text: LocaleKeys.snapCopyOfBillPayment.localize,
+              style: Styles.headerText(
+                fontWeight: FontWeight.bold,
+                fontSize: 32,
+                height: 1.60,
               ),
-              InkWell(
-                onTap: () async {
-                  await cubit.uploadProfileImage(context: context);
-                },
-                child: BlocBuilder<PaymentCubit, PaymentState>(
-                  buildWhen: (previous, current) =>
-                      previous.uploadedImage != current.uploadedImage ||
-                      previous.uploadStatus != current.uploadStatus,
-                  builder: (context, state) {
-                    if (state.uploadStatus == StateStatus.loading) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (state.uploadStatus == StateStatus.success &&
-                        state.uploadedImage != null) {
-                      return Image.file(state.uploadedImage!);
-                    }
-                    return const ImagePickerPlaceholder();
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            BlocBuilder<PaymentCubit, PaymentState>(
+              buildWhen: (previous, current) =>
+                  previous.uploadedImage != current.uploadedImage ||
+                  previous.uploadStatus != current.uploadStatus,
+              builder: (context, state) {
+                if (state.uploadStatus == StateStatus.loading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                return ButtonUploadImage(
+                  height: 48,
+                  icon: state.uploadStatus == StateStatus.success &&
+                          state.uploadedImage != null
+                      ? const Icon(
+                          Icons.check_circle_outline_rounded,
+                          color: Colors.grey,
+                        )
+                      : SvgPicture.asset(
+                          Assets.uploadIcon,
+                        ),
+                  label: LocaleKeys.uploadImage.localize,
+                  onPressed: () async {
+                    await cubit.uploadProfileImage(context: context);
                   },
-                ),
-              ),
-              SizedBox(
-                height: 10.h,
-              ),
-              BlocBuilder<PaymentCubit, PaymentState>(
-                builder: (context, state) {
-                  return ElevatedButton(
+                );
+              },
+            ),
+            // InkWell(
+            //   onTap: () async {
+            //     await cubit.uploadProfileImage(context: context);
+            //   },
+            //   child: BlocBuilder<PaymentCubit, PaymentState>(
+            //     buildWhen: (previous, current) =>
+            //         previous.uploadedImage != current.uploadedImage ||
+            //         previous.uploadStatus != current.uploadStatus,
+            //     builder: (context, state) {
+            //       if (state.uploadStatus == StateStatus.loading) {
+            //         return const Center(child: CircularProgressIndicator());
+            //       } else if (state.uploadStatus == StateStatus.success &&
+            //           state.uploadedImage != null) {
+            //         return Image.file(state.uploadedImage!);
+            //       }
+            //       return const ImagePickerPlaceholder();
+            //     },
+            //   ),
+            // ),
+            const SizedBox(
+              height: 8,
+            ),
+            BlocConsumer<PaymentCubit, PaymentState>(
+              listener: (context, state) {
+                // if (state.status == StateStatus.success) {
+                //   print("99111");
+                //   ScaffoldMessenger.of(context).showSnackBar(
+                //     SnackBar(
+                //       content: Text(state.instaPayResponseData?.message ??
+                //           LocaleKeys.paymentSuccessful.localize),
+                //       backgroundColor: Colors.green,
+                //     ),
+                //   );
+                //   // context.go(Routes.HOME);
+                // }
+                if (state.status == StateStatus.error) {
+                  showErrorMessage(
+                    context,
+                    getFailureMessage(
+                      state.failure!,
+                      context,
+                    ),
+                  );
+                }
+              },
+              builder: (context, state) {
+                return SizedBox(
+                  height: 48,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)),
+                    ),
                     onPressed: () {
                       // Snackbar: "Your bill has been sent successfully, waiting for administration approval."
                       print("${state.imageMediaId}");
                       print(" the provider $_selectedProviderId");
+                      if (phoneNumbers.isEmpty) {
+                        showErrorMessage(context,
+                            LocaleKeys.pleaseEnterPhoneNumber.localize);
+                        return;
+                      }
                       if (state.imageMediaId != null) {
                         cubit.postInstaPay(
-                            receiptId: state.imageMediaId!,
-                            amountId: widget.amountId,
-                            paymentProviderId: _selectedProviderId!);
-                      }
-                      if (state.status == StateStatus.success) {
-                        print("99111");
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(state.instaPayResponseData?.message ??
-                                LocaleKeys.paymentSuccessful.localize),
-                            backgroundColor: Colors.green,
-                          ),
+                          context,
+                          receiptId: state.imageMediaId!,
+                          amountId: widget.amountId,
+                          paymentProviderId: _selectedProviderId!,
+                          phoneNumber: phoneNumber,
                         );
-                        // context.go(Routes.HOME);
-                        context.pop();
-                        context.pop();
+                      } else {
+                        showErrorMessage(
+                          context,
+                          LocaleKeys.youMustUploadTheImage.localize,
+                        );
                       }
                     },
-                    child: Text(
-                      LocaleKeys.sendReviewApproval.localize,
+                    child: Label(
+                      text: LocaleKeys.sendReviewApproval.localize,
                       style: Styles.mediumText(
-                          color: AppColors.AUTH_CONTAINER_COLOR),
+                        fontSize: 32,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.AUTH_CONTAINER_COLOR,
+                        height: 1.60,
+                      ),
                     ),
-                  );
-                },
-              ),
-            ],
-          ),
-        ],
-      ),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

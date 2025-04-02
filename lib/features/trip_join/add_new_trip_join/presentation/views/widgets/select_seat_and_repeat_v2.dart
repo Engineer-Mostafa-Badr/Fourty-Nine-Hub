@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/trip_join_view/trip_join_view_cubit.dart';
@@ -34,13 +35,21 @@ class _SelectSeatAndRepeatV2State extends State<SelectSeatAndRepeatV2> {
     return CustomRow(
       children: [
         DropdownButton(
+          dropdownColor: Color.fromRGBO(225, 225, 225, 1),
+          borderRadius: BorderRadius.circular(15),
+          menuWidth: 100.w,
+          enableFeedback: false,
+          padding: EdgeInsets.symmetric(horizontal: 10.w),
+          alignment: Alignment.center,
+          underline: SizedBox.shrink(),
           items: [1, 2, 3, 4, 5, 6]
               .map((e) => DropdownMenuItem(
+                  alignment: AlignmentDirectional.center,
                   value: e,
                   child: Text(
                     e.toString(),
-                    style: const TextStyle(
-                      color: Colors.white,
+                    style: TextStyle(
+                      color: Colors.black,
                     ),
                   )))
               .toList(),

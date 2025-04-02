@@ -13,7 +13,7 @@ class PastTripsWidget extends StatefulWidget {
   final String modeType;
   final TripEntity? tripEntity;
   const PastTripsWidget(
-      {super.key, required this.modeType, required this.tripEntity});
+      {super.key, required this.modeType,required  this.tripEntity});
 
   @override
   State<PastTripsWidget> createState() => _PastTripsWidgetState();
@@ -21,10 +21,16 @@ class PastTripsWidget extends StatefulWidget {
 
 class _PastTripsWidgetState extends State<PastTripsWidget> {
   @override
+  initState() {
+    super.initState();
+    widget.tripEntity!.modeType =  widget.modeType;
+  }
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.push(Routes.rideDashboardDetailsScreen, extra: widget.modeType);
+        
+        context.push(Routes.rideDashboardDetailsScreen, extra: widget.tripEntity);
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16),

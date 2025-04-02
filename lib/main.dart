@@ -57,27 +57,28 @@ bool isActivate = false;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await CacheManager.init();
+//  await  initPickMeFeature();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  final locationService = LocationService();
-
-  locationService.startLocationTracking();
-
-  // Listen for new locations (only when moved at least 300m)
-  locationService.locationUpdates.listen((position) {
-    Fluttertoast.showToast(
-        msg: "New location (moved at least 300m): ${position.latitude}, ${position.longitude}",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.green,
-        textColor: Colors.white,
-        fontSize: 16.0
-    );
-    print('New location (moved at least 300m): ${position.latitude}, ${position.longitude}');
-    // Do something with the new location
-  });
+  // final locationService = LocationService();
+  //
+  // locationService.startLocationTracking();
+  //
+  // // Listen for new locations (only when moved at least 300m)
+  // locationService.locationUpdates.listen((position) {
+  //   Fluttertoast.showToast(
+  //       msg: "New location (moved at least 300m): ${position.latitude}, ${position.longitude}",
+  //       toastLength: Toast.LENGTH_SHORT,
+  //       gravity: ToastGravity.BOTTOM,
+  //       timeInSecForIosWeb: 1,
+  //       backgroundColor: Colors.green,
+  //       textColor: Colors.white,
+  //       fontSize: 16.0
+  //   );
+  //   print('New location (moved at least 300m): ${position.latitude}, ${position.longitude}');
+  //   // Do something with the new location
+  // });
 
 
   await CacheServiceImpl.init();
@@ -88,6 +89,7 @@ void main() async {
     (value) {
       if (value == LocationPermission.denied) {
         Geolocator.requestPermission();
+
       }
     },
   );
@@ -261,7 +263,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             ..getFloatingNavigatorStatus()
             ..getEnableFloatingNavigatorStatus(),
         ),
-        
+
         BlocProvider(
           create: (context) => ChoiceRulerCubit()
             ..getChoiceRulerStatus()

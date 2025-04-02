@@ -15,127 +15,123 @@ import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/starting_location/starting_location_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/trip_join_view/trip_join_view_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/widgets/button.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 
-class PublishButtonV3UserTrip extends StatefulWidget {
+import '../../../../../res/style/app_colors.dart';
+
+class PublishButtonV3UserTrip extends StatelessWidget {
   const PublishButtonV3UserTrip({
     super.key,
     required this.formKey,
+    this.text,
+    this.color = AppColors.PRIMARY_COLOR,
   });
+
   final GlobalKey<FormState> formKey;
-  @override
-  State<PublishButtonV3UserTrip> createState() =>
-      _PublishButtonV3UserTripState();
-}
-
-class _PublishButtonV3UserTripState extends State<PublishButtonV3UserTrip> {
-  late final TripJoinViewCubit tripJoinViewCubit;
-  late final StartingLocationCubit startingCubit;
-  late final DestinationLocationCubit destinationCubit;
-
-  // late final FetchCarBrandsCubit fetchCarBrandsCubit;
-  // late final FetchCarModelsCubit fetchCarModelCubit;
-  late final AddNewPickMeTripCubit addNewPickMeTripCubit;
-  late final FetchPriceDistanceCubit fetchPriceDistanceCubit;
-  @override
-  void initState() {
-    tripJoinViewCubit = context.read<TripJoinViewCubit>();
-    startingCubit = context.read<StartingLocationCubit>();
-    destinationCubit = context.read<DestinationLocationCubit>();
-    // fetchCarBrandsCubit = context.read<FetchCarBrandsCubit>();
-    // fetchCarModelCubit = context.read<FetchCarModelsCubit>();
-    addNewPickMeTripCubit = context.read<AddNewPickMeTripCubit>();
-    fetchPriceDistanceCubit = context.read<FetchPriceDistanceCubit>();
-    super.initState();
-  }
+  final Color color;
+  final String? text;
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<AddNewPickMeTripCubit, AddNewPickMeTripState>(
-        listener: (context, state) {
-          if (state is AddNewPickMeTripSuccess) {
-            Future.delayed(const Duration(seconds: 1)).then((value) {
-              context.pushAndRemoveUntil(
-                  Routes.AVAILABLE_TRIPS, (route) => true);
-            });
-          }
-          if (state is AddNewPickMeTripFailure) {
-            showErrorMessage(context, state.errorMessage);
-          }
-        },
-        child: Stack(
-          children: [
-            CustomButton(
+      listener: (context, state) {
+        if (state is AddNewPickMeTripSuccess) {
+          Future.delayed(const Duration(seconds: 1)).then((_) {
+            context.pushAndRemoveUntil(Routes.AVAILABLE_TRIPS, (route) => true);
+          });
+        }
+        if (state is AddNewPickMeTripFailure) {
+          showErrorMessage(context, state.errorMessage);
+        }
+      },
+      child: Stack(
+        children: [
+          InkWell(
+            onTap: () async {
+              if (formKey.currentState!.validate()) {
+                await _submitPickMeTrip(context);
+              }
+            },
+            child: Container(
               height: 80.h,
-              onTap: () async {
-                if (widget.formKey.currentState!.validate()) {
-                  await fetchData();
-                  // pr('${publishTripJoinCubit.tripJoinPublishParam}');
-                  // return;
-                }
-              },
-              title: LocaleKeys.publish.localize,
-            ),
-            Positioned.directional(
-              top: 0,
-              end: 20,
-              textDirection:
-                  context.isArabic ? TextDirection.rtl : TextDirection.ltr,
-              child: SizedBox(
-                height: 80.h,
-                child:
-                    BlocBuilder<AddNewPickMeTripCubit, AddNewPickMeTripState>(
-                  builder: (context, state) {
-                    if (state is AddNewPickMeTripLoading) {
-                      return const Center(
-                        child: CircularProgressIndicator(color: Colors.white),
-                      );
-                    }
-                    if (state is AddNewPickMeTripSuccess) {
-                      return Center(
-                        child: Icon(Icons.check,
-                            color: Colors.green[400], size: 30),
-                      );
-                    }
-                    return const SizedBox();
-                  },
-                ),
+        
+              //  padding: EdgeInsets.symmetric(vertical: 7.5.h, horizontal: 30.w),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: color,
               ),
-            )
-          ],
-        ));
+              alignment: Alignment.center,
+              child: Text(
+              text??  LocaleKeys.publish.localize,
+                style: Styles.headerText(color: Colors.white),
+              ),
+            ),
+          ),
+          Positioned.directional(
+            top: 0,
+            end: 20,
+            textDirection:
+                context.isArabic ? TextDirection.rtl : TextDirection.ltr,
+            child: SizedBox(
+              height: 80.h,
+              child: BlocBuilder<AddNewPickMeTripCubit, AddNewPickMeTripState>(
+                buildWhen: (previous, current) =>
+                    previous.runtimeType != current.runtimeType,
+                builder: (context, state) {
+                  if (state is AddNewPickMeTripLoading) {
+                    return const Center(
+                      child: CircularProgressIndicator(color: Colors.white),
+                    );
+                  }
+                  if (state is AddNewPickMeTripSuccess) {
+                    return Center(
+                      child:
+                          Icon(Icons.check, color: Colors.green[400], size: 30),
+                    );
+                  }
+                  return const SizedBox();
+                },
+              ),
+            ),
+          )
+        ],
+      ),
+    );
   }
 
-  Future<void> fetchData() async {
-    AddNewPickMeParam addNewPickMeParam = AddNewPickMeParam(
+  Future<void> _submitPickMeTrip(BuildContext context) async {
+    final tripJoinViewCubit = context.read<TripJoinViewCubit>();
+    final fetchPriceDistanceCubit = context.read<FetchPriceDistanceCubit>();
+    final getLatAndLongCubit = context.read<GetLatAndLongCubit>();
+    final destGetLatAndLongCubit = context.read<DestGetLatAndLongCubit>();
+    final addNewPickMeTripCubit = context.read<AddNewPickMeTripCubit>();
+
+    final tripInfo = fetchPriceDistanceCubit.tripInfoEntity;
+
+    final AddNewPickMeParam addNewPickMeParam = AddNewPickMeParam(
       categoryId: "62ea008d69ea29c91dfc3908",
-      distance: fetchPriceDistanceCubit.tripInfoEntity?.distance,
-      duration: fetchPriceDistanceCubit.tripInfoEntity?.duration ?? 0,
-      fromAr: fetchPriceDistanceCubit.tripInfoEntity?.originAddress ?? '',
-      // fromEn: startingCubit.startingLocation?.address ?? ' ',
+      distance: tripInfo?.distance,
+      duration: tripInfo?.duration ?? 0,
+      fromAr: tripInfo?.originAddress ?? '',
       isRepeat: tripJoinViewCubit.repeate,
       passengers: tripJoinViewCubit.numberOfSeats,
       phone: tripJoinViewCubit.phoneNumber,
-      price: fetchPriceDistanceCubit.tripInfoEntity?.price,
-      time: _timeStamp(),
-      toAr: fetchPriceDistanceCubit.tripInfoEntity?.destinationAddress ?? '',
-      // toEn: destinationCubit.destinationLocation?.address ?? ' ',
-      fromEn: BlocProvider.of<GetLatAndLongCubit>(context).fromEn,
-      toEn: BlocProvider.of<DestGetLatAndLongCubit>(context).toEn,
+      price: tripInfo?.price,
+      time: _getTimeStamp(tripJoinViewCubit),
+      toAr: tripInfo?.destinationAddress ?? '',
+      fromEn: getLatAndLongCubit.fromEn,
+      toEn: destGetLatAndLongCubit.toEn,
     );
-    print(
-      "addNewPickMeParam ----------$addNewPickMeParam /n",
-    );
+
     await addNewPickMeTripCubit.addNewPickMeTrip(
         addNewPickMeParam: addNewPickMeParam);
   }
 
-  int _timeStamp() {
-    int year = tripJoinViewCubit.tripJoinDate.year;
-    int month = tripJoinViewCubit.tripJoinDate.month;
-    int day = tripJoinViewCubit.tripJoinDate.day;
-    int hour = tripJoinViewCubit.tripJoinTimeOfDay.hour;
-    int minute = tripJoinViewCubit.tripJoinTimeOfDay.minute;
-    return DateTime(year, month, day, hour, minute).millisecondsSinceEpoch;
+  int _getTimeStamp(TripJoinViewCubit tripJoinViewCubit) {
+    final date = tripJoinViewCubit.tripJoinDate;
+    final time = tripJoinViewCubit.tripJoinTimeOfDay;
+    return DateTime(date.year, date.month, date.day, time.hour, time.minute)
+        .millisecondsSinceEpoch;
   }
 }

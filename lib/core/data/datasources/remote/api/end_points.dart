@@ -45,6 +45,7 @@ import '../../../../../features/account_taps/wallet/domain/usecases/get_winners_
 import '../../../../../features/ads_feature/create_company_ad/data/models/fetch_post_company_advertise_params.dart';
 import '../../../../../features/azkaar/domain/use_case/search_azkar_usecase.dart';
 import '../../../../../features/food_feature/restaurant_dashboard/domain/usecases/get_restaurant_orders_usecase.dart';
+import '../../../../../features/subcategories/domain/usecases/get_custom_page_sub_categories_use_case.dart';
 
 class EndPoints {
   //logout
@@ -175,10 +176,12 @@ class EndPoints {
   static const subTab = '/navigators/subTap';
   static const navigateBar = '/navigators/navigatorsBar';
   static const customPageCat = '/navigators/navigateCategories';
+  static const updateCustomPageCat = '/navigators/customPage-subcategories';
   static const activate = '/navigators/customPage';
+  static customPageSubCat(String mainCategoryId) => '/navigators/subcategories/$mainCategoryId';
 
   // Star
-  static String allStar(StarPaginationParams params) =>
+  static String   allStar(StarPaginationParams params) =>
       '/talent/?page=${params.page}&limit=${params.limit}';
   static String winnerStar(StarPaginationParams params) =>
       '/talent/all-winner?page=${params.page}&limit=${params.limit}';
@@ -542,6 +545,9 @@ class EndPoints {
 
   static String mainSubCategories({required GetSubCategoriesParams params}) {
     return '/categories/subcategories/${params.mainCategoryId}?userId=${params.userId}';
+  }
+  static String customPageSubCategories({required GetCustomPageSubCategoriesParams params}) {
+    return '/navigators/navigateCategories-enable/${params.mainCategoryId??'62c8b5779332225799fe3304'}';
   }
 
   static const riderInfoRegister = '/ride/riders/register';
@@ -1176,12 +1182,9 @@ class EndPoints {
   }
 
   // gecoding google api url
-  static String geocodingUrl =
-      'https://maps.googleapis.com/maps/api/geocode/json';
-
+  static String geocodingUrl ='https://maps.googleapis.com/maps/api/geocode/json';
   // trip join
-  static String tripJoinExpectedPrice =
-      "/ride/come-with-you/trip/expectedPrice";
+  static String tripJoinExpectedPrice ="/ride/come-with-you/trip/expectedPrice";
   static String getCarBrand = "/ride/riders/brands";
   static String getCarModelByBrand = "/ride/riders/models";
   static String getCarYearType = "/ride/riders/car-years-and-types";
@@ -1252,12 +1255,19 @@ class EndPoints {
   static String getExpectedPrice(String id) {
     return '/ride/trips/expected/price/$id';
   }
-  static String getAvailableTrips(String subCategoryId) {
-    return '/ride/driver/trips/available/not-tracking?limit=10&page=1';
+  static String getAvailableTrips(AvailableRideTripsUseCaseParams params) {
+    return '/ride/driver/trips/available/not-tracking?limit=${params.limit}&page=${params.page}';
   }
   static String getPastTrips(int page,String type) {
     return '/ride/driver/trips/past?tripType=$type&limit=20&page=$page';
   }
+  static String createNewOffer(String id) {
+    return '/ride/offers/new/offer/$id';
+  }
+  static String updateDriverRating(String id) {
+    return '/ride/trip/rating/$id/client';
+  }
+  static String createDriverRating = '/ride/trip/rating/driver';
   static String getSettingsDashboard = '/ride/driver/info/settings';
   static String deleteRideRegistration = '/ride/riders';
   static String getRideBrands = '/ride/riders/brands';

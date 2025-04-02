@@ -13,7 +13,8 @@ class GiftCompetitionModel extends GiftCompetitionEntity {
       required super.countOfRequest,
       required super.amount,
       required super.descriptionGiftWalletEn,
-      required super.descriptionGiftWalletAr});
+      required super.descriptionGiftWalletAr,
+      required super.awaitApproval});
 
   factory GiftCompetitionModel.fromJson(Map<String, dynamic> json) {
     return GiftCompetitionModel(
@@ -24,11 +25,14 @@ class GiftCompetitionModel extends GiftCompetitionEntity {
       nameEn: json['competition_id']["nameEn"],
       descriptionEn: json['competition_id']["descriptionEn"],
       descriptionAr: json['competition_id']["descriptionAr"],
-      descriptionGiftWalletEn: json["competition_id"]["descriptionGiftWalletEn"],
-      descriptionGiftWalletAr: json["competition_id"]["descriptionGiftWalletAr"],
+      descriptionGiftWalletEn: json["competition_id"]
+          ["descriptionGiftWalletEn"],
+      descriptionGiftWalletAr: json["competition_id"]
+          ["descriptionGiftWalletAr"],
       nameAr: json['competition_id']["nameAr"],
       countOfRequest: json["countOfRequest"],
       amount: json["amount"],
+      awaitApproval: json["awaitApproval"],
     );
   }
 }

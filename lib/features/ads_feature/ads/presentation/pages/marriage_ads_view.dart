@@ -104,10 +104,11 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
       var controller = context.read<SubcategoriesCubit>();
       if (state.isLoading) {
         return Container(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            width: double.infinity,
-            height: double.infinity,
-            child: const CustomLoading(),);
+          color: Theme.of(context).scaffoldBackgroundColor,
+          width: double.infinity,
+          height: double.infinity,
+          child: const CustomLoading(),
+        );
       } else if (widget.inGridView) {
         return Scaffold(
           floatingActionButton: CustomFloatingActionButton(
@@ -486,17 +487,21 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
             centerTitle: false,
           ),
           floatingActionButton: CustomFloatingButtonAds(
-            title: "${LocaleKeys.add.localize} ${LocaleKeys.ad.localize} ${context.isArabic ? "${context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameAr}" : "${context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameEn}"}",
+            title:
+                "${LocaleKeys.add.localize} ${LocaleKeys.ad.localize} ${context.isArabic ? "${context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameAr}" : "${context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameEn}"}",
             onPressed: () {
               if (AuthHelper().isLoggedIn()) {
-                context.push(Routes.CREATEAD,
-                    extra: CategorizationEntity(
-                        mainCategory: widget.mainCategory,
-                        subCategory: state.subCategories![state.subCategories
+                context.push(
+                  Routes.CREATEAD,
+                  extra: CategorizationEntity(
+                    mainCategory: widget.mainCategory,
+                    subCategory: state.subCategories![state.subCategories
                             ?.indexWhere(
                                 (element) => element.isSelected == true) ??
-                            0],
-                        fromMarriage: true));
+                        0],
+                    fromMarriage: true,
+                  ),
+                );
               } else {
                 context.push(Routes.LOGIN);
               }

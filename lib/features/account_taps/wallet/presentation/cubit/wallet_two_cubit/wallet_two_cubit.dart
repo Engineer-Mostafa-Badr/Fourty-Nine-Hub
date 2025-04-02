@@ -1,9 +1,11 @@
 import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet/main_category_entity.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet/wallet_entity.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet/wallet_history_entity.dart';
@@ -34,8 +36,6 @@ class WalletTwoCubit extends Cubit<WalletTwoState> {
   final MainCategoryUseCase _mainCategoryUseCase;
   final RequestWithdrawWalletUseCase _requestWithdrawWalletUseCase;
 
-  bool buttonRequestLoading = false;
-
   final int limit = 30;
   bool hasReachedMax = false;
   int page = 1;
@@ -46,24 +46,49 @@ class WalletTwoCubit extends Cubit<WalletTwoState> {
     context, {
     required String amount,
     required String phone,
+    required String method,
   }) async {
-    buttonRequestLoading = true;
+    showLoadingDialog(context);
+    // buttonRequestLoading = true;
+    emit(state.copyWith(
+      buttonRequestLoading: true,
+    ));
     final response = await _requestWithdrawWalletUseCase.call(
-      RequestWithdrawParams(amount: amount, phone: phone),
+      RequestWithdrawParams(amount: amount, phone: phone, method: method),
     );
     response.fold(
       (failure) {
-        buttonRequestLoading = false;
+        // buttonRequestLoading = false;
+        Navigator.pop(context);
         emit(
-          WalletTwoState(
-            status: WalletTwoStates.failure,
-            failureMessage: getFailureMessage(failure, context),
+          state.copyWith(
+            // status: WalletTwoStates.failure,
+            // failureMessage: getFailureMessage(failure, context),
+            buttonRequestLoading: false,
+            buttonRequestSuccess: false,
+            buttonRequestErrMessage: getFailureMessage(failure, context),
           ),
         );
       },
       (data) {
-        buttonRequestLoading = false;
-        emit(WalletTwoState());
+        // buttonRequestLoading = false;
+        // if (data) {
+        //   emit(
+        //     state.copyWith(
+        //       // status: WalletTwoStates.failure,
+        //       // failureMessage: getFailureMessage(failure, context),
+        //       buttonRequestLoading: false,
+        //       buttonRequestSuccess: false,
+        //     ),
+        //   );
+        // }
+        Navigator.pop(context);
+        emit(
+          state.copyWith(
+            buttonRequestLoading: false,
+            buttonRequestSuccess: true,
+          ),
+        );
       },
     );
   }
@@ -92,7 +117,7 @@ class WalletTwoCubit extends Cubit<WalletTwoState> {
   }
 
   Future<void> getAllDataWalletScreen(context) async {
-    emit(const WalletTwoState(status: WalletTwoStates.loading));
+    emit(state.copyWith(status: WalletTwoStates.loading));
 
     try {
       // Fetch Wallet
@@ -160,7 +185,7 @@ class WalletTwoCubit extends Cubit<WalletTwoState> {
       //     mainCategory: mainCategory,
       //   ),
       // );
-      emit(WalletTwoState(
+      emit(state.copyWith(
         status: WalletTwoStates.success,
         wallet: wallet,
         walletHistory: walletHistory,
@@ -176,7 +201,7 @@ class WalletTwoCubit extends Cubit<WalletTwoState> {
       // );
       String message = getFailureMessage(failure as Failure, context);
       emit(
-        WalletTwoState(
+        state.copyWith(
           status: WalletTwoStates.failure,
           failureMessage: message,
         ),

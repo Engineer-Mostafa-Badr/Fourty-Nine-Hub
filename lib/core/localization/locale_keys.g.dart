@@ -291,7 +291,7 @@ abstract class  LocaleKeys {
   static const competitions = 'competitions';
   static const requestWithdraw = 'requestWithdraw';
   static const requestTransaction = 'requestTransaction';
-  static const requestTransaction2 = 'requestTransaction2';
+  static const requestTransfer = 'requestTransfer';
   static const years = 'years';
   static const transfer = 'transfer';
   static const save = 'save';
@@ -540,10 +540,16 @@ abstract class  LocaleKeys {
   static const KM = 'KM';
   static const repeat = 'repeat';
   static const totalPrice = 'totalPrice';
+ 
   static const brand = 'brand';
   static const model = 'model';
   static const publish = 'publish';
+  static const welcome_pick_me =   'welcome_pick_me';
+  static const publish_perimum ='publish_permiun'; 
   static const youCantLeaveFieldEmpty = 'youCantLeaveFieldEmpty';
+  static const toolHelp =  'tool_help_question';
+
+  
   static const addressMustBeAtLeast10Chars = 'addressMustBeAtLeast10Chars';
   static const searchFind = 'searchFind';
   static const markAllNotificationAsSeen = 'markAllNotificationAsSeen';
@@ -1130,7 +1136,6 @@ abstract class  LocaleKeys {
   static const welcomeToRideRegister = 'welcomeToRideRegister';
   static const tripIsComplete = 'tripIsComplete';
   static const successCancelTrip = 'successCancelTrip';
-  static const openGoogleMap = 'openGoogleMap';
   static const start = 'start';
   static const inLocation = 'inLocation';
   static const InvalidOTP = 'InvalidOTP';
@@ -1304,6 +1309,7 @@ abstract class  LocaleKeys {
   static const rate = 'rate';
   static const rideDetails = 'rideDetails';
   static const options = 'options';
+  static const thereIsNoTripsInThisList = 'thereIsNoTripsInThisList';
   static const tryAgain = 'tryAgain';
   static const YouhaveenteredOTPCodeWrong = 'YouhaveenteredOTPCodeWrong';
   static const cancelTheRide = 'cancelTheRide';
@@ -1340,8 +1346,6 @@ abstract class  LocaleKeys {
   static const theClientDidNotShow = 'theClientDidNotShow';
   static const whyDoYouWantToCancel = 'whyDoYouWantToCancel';
   static const acceptAnothePrice = 'acceptAnothePrice';
-  static const pastTrips = 'pastTrips';
-  static const rideMode = 'rideMode';
   static const captainWithYou = 'captainWithYou';
   static const youRateClient = 'youRateClient';
   static const clientRateYou = 'clientRateYou';
@@ -1373,7 +1377,6 @@ abstract class  LocaleKeys {
   static const busWithYou = 'busWithYou';
   static const trukWithYou = 'trukWithYou';
   static const passenger = 'passenger';
-  static const noSmoker = 'noSmoker';
   static const choiceRuler = 'choiceRuler';
   static const loadingRequest = 'loadingRequest';
   static const rideRequest = 'rideRequest';
@@ -1394,7 +1397,6 @@ abstract class  LocaleKeys {
   static const investment = 'investment';
   static const completeRegistration = 'completeRegistration';
   static const addEmergencyContacts = 'addEmergencyContacts';
-  static const reportClient = 'reportClient';
   static const rateTheClient = 'rateTheClient';
   static const beforeTheTrip = 'beforeTheTrip';
   static const identityVerification = 'identityVerification';
@@ -1421,7 +1423,47 @@ abstract class  LocaleKeys {
   static const anyMoneyYouSubscribe = 'anyMoneyYouSubscribe';
   static const insideAppYouWillGetInterest = 'insideAppYouWillGetInterest';
   static const after5YearsAnd10Years = 'after5YearsAnd10Years';
+  static const noSmoker = 'noSmoker';
+  static const welcomeToCaptainShare = 'welcomeToCaptainShare';
+  static const lady = 'lady';
+  static const ladyDriver = 'ladyDriver';
+  static const oneWayOneCaptain = 'oneWayOneCaptain';
+  static const rideMode = 'rideMode';
+  static const pastTrips = 'pastTrips';
+  static const joinAvailableTripsNearYouNow = 'joinAvailableTripsNearYouNow';
+  static const browseRecentlyCompletedTrips = 'browseRecentlyCompletedTrips';
+  static const openGoogleMap  = 'openGoogleMap ';
+  static const reportClient = 'reportClient';
+  static const goToFirstClient = 'goToFirstClient';
   static const areYouSureOfTransferMoney = 'areYouSureOfTransferMoney';
+  static const areYouSureYouWantToRemoveThisImage = 'areYouSureYouWantToRemoveThisImage';
+  static const received = 'received';
+  static const noRequests = 'noRequests';
+  static const relevantAds = 'relevantAds';
+  static const addNewCard = 'addNewCard';
+  static const hideCardForm = 'hideCardForm';
+  static const payWithCard = 'payWithCard';
+  static const saveCard = 'saveCard';
+  static const paymentNumber = 'paymentNumber';
+  static const paymentLink = 'paymentLink';
+  static const noLinkAvailable = 'noLinkAvailable';
+  static const noNumberAvailable = 'noNumberAvailable';
+  static const qrCode = 'qrCode';
+  static const youMustUploadTheImage = 'youMustUploadTheImage';
+  static const selectAPaymentMethods = 'selectAPaymentMethods';
+  static const selectTheAmount = 'selectTheAmount';
+  static const enterWithdrawalAmount = 'enterWithdrawalAmount';
+  static const pleaseEnterAnAmount = 'pleaseEnterAnAmount';
+  static const theAmountMustBeGreateThan500 = 'theAmountMustBeGreateThan500';
+  static const theAmountMustBeLessThan = 'theAmountMustBeLessThan';
+  static const pleaseEnterPhoneNumber = 'pleaseEnterPhoneNumber';
+  static const welcomeToDoctorRegistration = 'welcomeToDoctorRegistration';
+  static const profilePhoto = 'profilePhoto';
+  static const addressIsRequired = 'addressIsRequired';
+  static const priceIsRequired = 'priceIsRequired';
+  static const examineDurationIsRequired = 'examineDurationIsRequired';
+  static const likedBy = 'likedBy';
+  static const others = 'others';
   static const noOfRequests = 'noOfRequests';
   static const modify = 'modify';
   static const restaurantPhoto = 'restaurantPhoto';

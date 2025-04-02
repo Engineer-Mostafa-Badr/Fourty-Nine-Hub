@@ -129,6 +129,8 @@ abstract class AppColors {
       blurRadius: 6,
     ),
   ];
+
+  static var textSecondary;
   static Color getSecondryColor(BuildContext context) {
     return context.isDarkMode
         ? AppColors.SECONDARY_COLOR_DARK
