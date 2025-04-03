@@ -75,23 +75,23 @@ class _EditPriceWidgetState extends State<EditPriceWidget> {
               }),
             ],
           ),
-          const SizedBox(height: 15),
-          Container(
-            width: double.infinity,
-            height: 40,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: AppColors.buttonDialog,
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: Text(
-              LocaleKeys.raiseFare.localize,
-              style: const TextStyle(
-                  fontSize: FontSize.s16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white),
-            ),
-          ),
+          // const SizedBox(height: 15),
+          // Container(
+          //   width: double.infinity,
+          //   height: 40,
+          //   alignment: Alignment.center,
+          //   decoration: BoxDecoration(
+          //     color: AppColors.buttonDialog,
+          //     borderRadius: BorderRadius.circular(15),
+          //   ),
+          //   child: Text(
+          //     LocaleKeys.raiseFare.localize,
+          //     style: const TextStyle(
+          //         fontSize: FontSize.s16,
+          //         fontWeight: FontWeight.bold,
+          //         color: Colors.white),
+          //   ),
+          // ),
           const SizedBox(height: 16),
           Align(
             alignment: AlignmentDirectional.bottomStart,

@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/usecases/add_food_usecase.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/usecases/change_quantity_usecase.dart';
@@ -9,10 +11,13 @@ import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/us
 import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/usecases/delete_food_from_cart_usecase.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_details/domain/usecases/delete_food_usecase.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant_mneu.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/toggle_restaurant_favourite_use_case.dart';
 
 import '../../../../../core/data/datasources/remote/api/api_consumer.dart';
 import '../../../../../core/error/failure.dart';
 
+import '../../../../../res/style/app_colors.dart';
+import '../../../restaurants_list/domain/entities/restaurant.dart';
 import '../../data/models/cart_model.dart';
 import '../../data/models/selected_meal_model.dart';
 import '../../domain/usecases/add_to_cart_usecase.dart';
@@ -27,6 +32,7 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
   final AddToCartUseCase _addToCartUseCase;
   final DeleteFoodUseCase _deleteFoodUseCase;
   final AddFoodUseCase _addFoodUseCase;
+  final ToggleRestaurantFavouriteUseCase _toggleRestaurantFavouriteUseCase;
   final GetMealsUseCase _getMealsUseCase;
   final GetRestaurantDetailsUseCase _getRestaurantDetailsUseCase;
   final ChangeQuantityUseCase _changeQuantityUseCase;
@@ -42,7 +48,8 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
       this._addFoodUseCase,
       this._changeQuantityUseCase,
       this._deleteCartUseCase,
-      this._deleteFoodFromCartUseCase)
+      this._deleteFoodFromCartUseCase,
+      this._toggleRestaurantFavouriteUseCase)
       : super(const RestaurantDetailsState());
 
   loadInitialData({required String id}) async {
@@ -58,6 +65,7 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
   }
 
   bool isLoadingMore = false;
+  bool isFav = false;
   bool hasMoreData = true;
   int currentPage = 1;
   int pageSize = 10;
@@ -105,6 +113,11 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
       emit(state.copyWith(failure: l, status: RestaurantDetailsStates.error));
     }, (data) {
       result = true;
+      showCustomSnackBar(
+        context,
+        "Cart Update Successfully",
+        Icon(Icons.done_all_outlined, color: AppColors.CHECK_MARK_COLOR),
+      );
       emit(state.copyWith(status: RestaurantDetailsStates.success));
     });
     return result;
@@ -404,31 +417,53 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
     );
   }
 
-  Future<void> addRestaurantToFavorites(context, String restaurantId) async {
-    emit(state.copyWith(status: RestaurantDetailsStates.loading));
-
-    // Construct the full URL with the restaurantId
-    final url =
-        'https://49dev.com/api/v1/food/favorite-restaurant/$restaurantId';
-
-    final response = await apiConsumer.post(url);
-
-    response.fold(
-      (failure) {
-        // Handle the failure case
-        emit(state.copyWith(
-          status: RestaurantDetailsStates.error,
-          failure: failure,
-        ));
-      },
-      (data) {
-        // Handle the success case
-        emit(state.copyWith(
-          status: RestaurantDetailsStates.initState,
-          // message: data['message'] ?? 'Restaurant added to favorites',
-        ));
-        // showSuccessMessage(context, data['message'] ?? 'Restaurant added to favorites');
-      },
-    );
+  Future<bool> toggleFavoriteRestaurant(String id, BuildContext context) async {
+    print("ggggg");
+    final response = await _toggleRestaurantFavouriteUseCase(id);
+    bool result = false;
+    response.fold((failure) {
+      showCustomSnackBar(
+        context,
+        "Faild Update Favorites",
+        Icon(Icons.warning_amber_rounded, color: AppColors.PRIMARY_COLOR_DARK),
+      );
+    }, (data) {
+      showCustomSnackBar(
+        context,
+        "Favorites Update Successfully",
+        Icon(Icons.done_all_outlined, color: AppColors.CHECK_MARK_COLOR),
+      );
+      result = data;
+    });
+    return result;
   }
+}
+
+showCustomSnackBar(BuildContext context, String message, Icon icon) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      behavior: SnackBarBehavior.floating, // اجعل الـSnackbar عائمًا
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      backgroundColor: Colors.white,
+      content: Row(
+        children: [
+          icon,
+          16.verticalSpace,
+          Expanded(
+            child: Text(
+              message,
+              style: TextStyle(
+                color: Colors.black87,
+                fontWeight: FontWeight.w500,
+                fontSize: 30.sp,
+              ),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }

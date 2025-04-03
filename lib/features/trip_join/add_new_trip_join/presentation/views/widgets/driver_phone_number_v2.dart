@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/trip_join_view/trip_join_view_cubit.dart';
@@ -32,22 +33,43 @@ class _DriverPhoneNumberV2State extends State<DriverPhoneNumberV2> {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      // currentController: TextEditingController(),
-      decoration: InputDecoration(
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-        fillColor: Colors.transparent,
-        label: Text(LocaleKeys.phoneNumber.localize),
-        isDense: true, // Added this
-        contentPadding: const EdgeInsets.all(14),
+    return SizedBox(
+      height: 80.h,
+      child: TextFormField(
+        // currentController: TextEditingController(),
+        decoration: InputDecoration(
+          border: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.transparent),
+              borderRadius: BorderRadius.circular(15)),
+          enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.transparent),
+              borderRadius: BorderRadius.circular(15)),
+          focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.transparent),
+              borderRadius: BorderRadius.circular(15)),
+          disabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.transparent),
+              borderRadius: BorderRadius.circular(15)),
+          errorBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.transparent),
+              borderRadius: BorderRadius.circular(15)),
+          fillColor: Color.fromRGBO(245, 245, 245, 1),
+          isDense: true, // Added this
+          contentPadding: const EdgeInsets.all(14),
+          labelStyle: TextStyle(
+              color: Colors.black,
+              fontSize: 25.sp,
+              fontWeight: FontWeight.w400),
+          label: Text(LocaleKeys.phoneNumber.localize),
+        ),
+        keyboardType: TextInputType.phone,
+        onChanged: (value) {
+          tripJoinViewCubit.phoneNumber = value;
+        },
+        validator: (value) {
+          return _validateMobile(value);
+        },
       ),
-      keyboardType: TextInputType.phone,
-      onChanged: (value) {
-        tripJoinViewCubit.phoneNumber = value;
-      },
-      validator: (value) {
-        return _validateMobile(value);
-      },
     );
   }
 

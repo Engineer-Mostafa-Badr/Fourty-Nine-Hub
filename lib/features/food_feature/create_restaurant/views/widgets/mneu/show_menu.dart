@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:camera/camera.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +9,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
-import 'package:fourtyninehub/common/widgets/stateless/images/image_picker_placeholder.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_menu_cubit/create_menu_cubit.dart';
@@ -17,155 +20,244 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
-// ignore: must_be_immutable
+import '../photo/restaurant_photo_picker.dart';
+
+// استورد/انسخ هذه الدالة أو اجعلها في ملف:
+
 class ShowMneu extends StatelessWidget {
-  var subcategoryId;
-  var restaurantId;
+  final String? subcategoryId;
+  final String? restaurantId;
 
   ShowMneu({super.key, this.subcategoryId, this.restaurantId});
 
-  TextEditingController foodNameController = TextEditingController();
-  TextEditingController priceController = TextEditingController();
+  final TextEditingController foodNameController = TextEditingController();
+  final TextEditingController priceController = TextEditingController();
   String imagePath = "";
 
   @override
   Widget build(BuildContext context) {
-    final createRestaurantCubit = context.read<RestaurantMenuCubit>();
+    final menuCubit = context.read<RestaurantMenuCubit>();
+
     return BlocBuilder<RestaurantMenuCubit, RestaurantMenuState>(
       builder: (context, state) {
         return Form(
-          key: createRestaurantCubit.formKey,
+          key: menuCubit.formKey,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Label(
-                text: LocaleKeys.menu.localize,
-                style: Styles.headerText(color: Colors.red),
-              ),
-              if (createRestaurantCubit.menu.isNotEmpty) ...[
+              // إذا كانت قائمة الأطباق (menu) غير فارغة
+              if (menuCubit.menu.isNotEmpty) ...[
                 Center(
                   child: Wrap(
                     alignment: WrapAlignment.center,
                     runSpacing: 10,
                     spacing: 10,
                     children: [
-                      /// show data
-                      ...createRestaurantCubit.menu.map(
+                      // عرض القائمة
+                      ...menuCubit.menu.map(
                         (RestaurantMneuModel e) => Container(
                           width: MediaQuery.of(context).size.width,
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(width: .4)),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              ImagePickerPlaceholder(
-                                image: Image.file(
-                                  File(e.photoPath ?? ""),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              const Sizer(),
-                              Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Text(
-                                    e.foodName ?? "",
-                                    style: Styles.headerText(color: Colors.red),
-                                  ),
-                                  Sizer(height: 50.h),
-                                  Text(
-                                    "${e.price ?? ""}",
-                                    style: Styles.headerText(color: Colors.red),
-                                  ),
-                                  const Sizer(),
-                                  ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.red,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      minimumSize: const Size(100, 40),
-                                      maximumSize: const Size(100, 40),
-                                    ),
-                                    onPressed: () {
-                                      createRestaurantCubit.removeMenuItem(
-                                          context, e);
-                                    },
-                                    child: const Text(
-                                      "Remove",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  )
-                                ],
-                              )
-                            ],
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(width: .5, color: Colors.black),
                           ),
+                          child: Column(children: [
+                            Center(
+                              child: Label(
+                                text: LocaleKeys.menu.localize,
+                                style: Styles.headerText(color: Colors.red),
+                              ),
+                            ),
+                            16.verticalSpace,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // الصورة
+                                Column(
+                                  children: [
+                                    buildPhotoBox(
+                                        width: 200.w,
+                                        context: context,
+                                        isAddBox: false, // لأنها صورة موجودة
+                                        image: XFile(e.photoPath ?? ""),
+                                        onTap:
+                                            () {}, // لا يوجد منطق لتغيير الصورة
+                                        onDelete:
+                                            null // نحذف العنصر من الزر "Remove" أدناه
+                                        ),
+                                    8.verticalSpace,
+                                    Text(
+                                      context.isArabic ? "وجبة" : "Meal",
+                                      style: TextStyle(
+                                          fontSize: 24.sp,
+                                          fontWeight: FontWeight.w400),
+                                    )
+                                  ],
+                                ),
+                                const Sizer(),
+                                // باقي معلومات العنصر
+                                Expanded(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 24.w, vertical: 20.h),
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            color: AppColors.BG_GRAY_COLOR),
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              e.foodName ?? "",
+                                              style: Styles.mediumText(),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Sizer(),
+                                      Container(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 24.w, vertical: 20.h),
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            color: AppColors.BG_GRAY_COLOR),
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              "${e.price ?? ""}",
+                                              style: Styles.mediumText(),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const Sizer(),
+                                      ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor:
+                                              AppColors.SECONDARY_COLOR_DARK2,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          minimumSize: const Size(100, 40),
+                                          maximumSize: const Size(100, 40),
+                                        ),
+                                        onPressed: () {
+                                          menuCubit.removeMenuItem(context, e);
+                                        },
+                                        child: const Text(
+                                          "Remove",
+                                          style: TextStyle(color: Colors.black),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          ]),
                         ),
                       ),
                     ],
                   ),
                 ),
               ],
+
               const Sizer(),
+
+              // فورم إضافة عنصر جديد
               Container(
-                // height: MediaQuery.of(context).size.width * 0.5,
-                // width: MediaQuery.of(context).size.width,
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(width: 1, color: Colors.grey)),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(width: .5, color: Colors.black),
+                ),
                 child: SingleChildScrollView(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      Center(
+                        child: Label(
+                          text: LocaleKeys.menu.localize,
+                          style: Styles.headerText(color: Colors.red),
+                        ),
+                      ),
+                      16.verticalSpace,
+                      // صف يحوي صورة العنصر + حقول النص
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          // الصورة
                           Expanded(
                             flex: 2,
                             child: GestureDetector(
                               onTap: () async {
-                                await createRestaurantCubit.uploadMealImage(
-                                    context,
-                                    subcategoryId: subcategoryId);
+                                // استدعاء اختيار الصورة
+                                await menuCubit.uploadMealImage(
+                                  context,
+                                  subcategoryId: subcategoryId,
+                                );
                               },
-                              child: BlocBuilder<RestaurantMenuCubit,
-                                  RestaurantMenuState>(
-                                builder: (context, state) {
-                                  if (state is RestaurantMenuImagePicked) {
-                                    imagePath = state.imagePath;
-                                    return ImagePickerPlaceholder(
-                                      image: Image.file(
-                                        File(imagePath),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    );
-                                  }
-                                  return SizedBox(
-                                    // color: Colors.red,
-                                    height: 195.h,
-                                    child: ImagePickerPlaceholder(
-                                      // width: double.infinity,
-                                      title: LocaleKeys.photoForMeal.tr(),
-                                    ),
-                                  );
-                                },
+                              child: Column(
+                                children: [
+                                  BlocBuilder<RestaurantMenuCubit,
+                                      RestaurantMenuState>(
+                                    builder: (context, state) {
+                                      // إن كان لدينا صورةPicked، نحفظ path في imagePath
+                                      if (state is RestaurantMenuImagePicked) {
+                                        imagePath = state.imagePath;
+                                      }
+
+                                      // التحقق هل الصورة فارغة أم لا
+                                      final bool noImageYet = imagePath.isEmpty;
+
+                                      return buildPhotoBox(
+                                        width: 200.w,
+                                        context: context,
+                                        isAddBox: noImageYet,
+                                        image: noImageYet
+                                            ? null
+                                            : XFile(imagePath),
+                                        onTap: () async {
+                                          // نفس onTap أعلاه
+                                          await menuCubit.uploadMealImage(
+                                              context,
+                                              subcategoryId: subcategoryId);
+                                        },
+                                        onDelete:
+                                            null, // لا يوجد حذف للصورة قبل إضافة العنصر
+                                      );
+                                    },
+                                  ),
+                                  8.verticalSpace,
+                                  Text(
+                                    context.isArabic ? "وجبة" : "Meal",
+                                    style: TextStyle(
+                                        fontSize: 24.sp,
+                                        fontWeight: FontWeight.w400),
+                                  )
+                                ],
                               ),
                             ),
                           ),
-                          const Sizer(),
+                          const Sizer(
+                            width: 30,
+                          ),
+                          // حقول الاسم والسعر
                           Expanded(
-                            flex: 3,
+                            flex: 4,
                             child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 TextFormField(
+                                  style: Styles.mediumText(),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return LocaleKeys.emptyFieldNotValid.tr();
@@ -177,38 +269,52 @@ class ShowMneu extends StatelessWidget {
                                   decoration: InputDecoration(
                                     constraints: BoxConstraints.loose(
                                         Size.fromHeight(90.h)),
-                                    filled: false,
                                     contentPadding: const EdgeInsets.all(10),
                                     hintText: LocaleKeys.itemName.tr(),
-                                    hintStyle: Styles.mediumText(
-                                        color: AppColors.SECONDARY_COLOR,
-                                        fontSize: 32),
-                                    // Set the border color to grey
+                                    hintStyle: Styles.mediumText(),
+                                    fillColor: AppColors.BG_GRAY_COLOR,
                                     enabledBorder: OutlineInputBorder(
-                                      borderSide:
-                                          const BorderSide(color: Colors.grey),
-                                      borderRadius: BorderRadius.circular(8.0),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(10)),
+                                      borderSide: BorderSide(
+                                        color: Colors.transparent,
+                                      ),
                                     ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide:
-                                          const BorderSide(color: Colors.grey),
-                                      borderRadius: BorderRadius.circular(8.0),
+                                    focusedBorder: const OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(10)),
+                                      borderSide: BorderSide(
+                                        color: Colors.transparent,
+                                      ),
                                     ),
-                                    errorBorder: OutlineInputBorder(
-                                      borderSide:
-                                          const BorderSide(color: Colors.red),
-                                      // Keep red for error state
-                                      borderRadius: BorderRadius.circular(8.0),
+                                    border: OutlineInputBorder(
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(10)),
+                                      borderSide: BorderSide(
+                                        color: Colors.transparent,
+                                      ),
                                     ),
-                                    focusedErrorBorder: OutlineInputBorder(
-                                      borderSide:
-                                          const BorderSide(color: Colors.red),
-                                      borderRadius: BorderRadius.circular(8.0),
+                                    errorBorder: const OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(10)),
+                                      borderSide: BorderSide(
+                                        color: Colors.red,
+                                      ),
                                     ),
+                                    focusedErrorBorder:
+                                        const OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(10)),
+                                      borderSide: BorderSide(
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                    filled: true,
                                   ),
                                 ),
                                 const Sizer(),
                                 TextFormField(
+                                  style: Styles.mediumText(),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return LocaleKeys.emptyFieldNotValid.tr();
@@ -220,108 +326,141 @@ class ShowMneu extends StatelessWidget {
                                   keyboardType:
                                       const TextInputType.numberWithOptions(
                                           decimal: true),
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.allow(
-                                        RegExp(r"[0-9.]")),
-                                  ],
+                                  inputFormatters: [],
                                   decoration: InputDecoration(
                                     constraints: BoxConstraints.loose(
                                         Size.fromHeight(90.h)),
-                                    filled: false,
                                     contentPadding: const EdgeInsets.all(10),
                                     hintText: LocaleKeys.price.tr(),
-                                    hintStyle: Styles.mediumText(
-                                        color: AppColors.SECONDARY_COLOR,
-                                        fontSize: 32),
-                                    // Set the border color to grey
+                                    hintStyle: Styles.mediumText(),
+                                    fillColor: AppColors.BG_GRAY_COLOR,
                                     enabledBorder: OutlineInputBorder(
-                                      borderSide:
-                                          const BorderSide(color: Colors.grey),
-                                      borderRadius: BorderRadius.circular(8.0),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(10)),
+                                      borderSide: BorderSide(
+                                        color: Colors.transparent,
+                                      ),
                                     ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderSide:
-                                          const BorderSide(color: Colors.grey),
-                                      borderRadius: BorderRadius.circular(8.0),
+                                    focusedBorder: const OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(10)),
+                                      borderSide: BorderSide(
+                                        color: Colors.transparent,
+                                      ),
                                     ),
-                                    errorBorder: OutlineInputBorder(
-                                      borderSide:
-                                          const BorderSide(color: Colors.red),
-                                      // Keep red for error state
-                                      borderRadius: BorderRadius.circular(8.0),
+                                    border: OutlineInputBorder(
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(10)),
+                                      borderSide: BorderSide(
+                                        color: Colors.transparent,
+                                      ),
                                     ),
-                                    focusedErrorBorder: OutlineInputBorder(
-                                      borderSide:
-                                          const BorderSide(color: Colors.red),
-                                      borderRadius: BorderRadius.circular(8.0),
+                                    errorBorder: const OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(10)),
+                                      borderSide: BorderSide(
+                                        color: Colors.red,
+                                      ),
                                     ),
+                                    focusedErrorBorder:
+                                        const OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(10)),
+                                      borderSide: BorderSide(
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                    filled: true,
                                   ),
+                                ),
+                                const Sizer(),
+
+                                // زر الإضافة
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Center(
+                                      child: Container(
+                                        child: IconButton(
+                                          visualDensity: VisualDensity.compact,
+                                          onPressed: () {
+                                            final foodName =
+                                                foodNameController.text;
+                                            final price = double.tryParse(
+                                                priceController.text);
+
+                                            if (menuCubit.formKey.currentState
+                                                    ?.validate() ??
+                                                false) {
+                                              if (foodName.isNotEmpty &&
+                                                  price != null) {
+                                                final menuItem =
+                                                    RestaurantMneuModel(
+                                                  foodName: foodName,
+                                                  price: price,
+                                                  photoPath: imagePath,
+                                                  photo: menuCubit
+                                                      .imageId, // من الـcubit
+                                                );
+
+                                                context
+                                                    .read<RestaurantMenuCubit>()
+                                                    .addMenuItem(
+                                                        context, menuItem);
+
+                                                // نظف الحقول
+                                                foodNameController.clear();
+                                                priceController.clear();
+                                                imagePath = "";
+                                                menuCubit.imageId = "";
+
+                                                // قد تريد إعادة بناء واجهة الإضافة كي تعود الصورة لإيقونة
+                                                menuCubit.emit(
+                                                    RestaurantMenuImagePicked(
+                                                        ""));
+                                              }
+                                            }
+                                          },
+                                          icon: Icon(Icons.add),
+                                          color: Colors.black,
+                                        ),
+                                        width: 210.w,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color:
+                                              AppColors.SECONDARY_COLOR_DARK2,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 )
                               ],
                             ),
                           ),
                         ],
                       ),
-                      const Sizer(),
-                      ElevatedAppButton(
-                        onPressed: () async {
-                          // print("1222222dsvvs23");
-
-                          final foodName = foodNameController.text;
-                          final price = double.tryParse(priceController.text);
-                          if (foodName.isNotEmpty && price != null) {
-                            final menuItem = RestaurantMneuModel(
-                              // restaurantId:'66ff110be6f198a009c8017e' ,
-                              foodName: foodName,
-                              price: price,
-                              photoPath: imagePath,
-                              photo: createRestaurantCubit.imageId,
-                            );
-
-                            // print("1222222dsvvs23");
-
-                            context
-                                .read<RestaurantMenuCubit>()
-                                .addMenuItem(context, menuItem);
-
-                            // Clear the input fields
-                            foodNameController.clear();
-                            priceController.clear();
-                          }
-                        },
-                        label: '',
-                        backColor: AppColors.SECONDARY_COLOR,
-                        icon: Icons.add,
-
-                        // child: Container(
-                        //   alignment: Alignment.center,
-                        //   height: MediaQuery.of(context).size.width * .1,
-                        //   width: MediaQuery.of(context).size.width * .4,
-                        //   padding: const EdgeInsets.all(10),
-                        //   decoration: BoxDecoration(
-                        //       color: Colors.red,
-                        //       borderRadius: BorderRadius.circular(10),
-                        //       border: Border.all(width: .4)),
-                        //   child:
-                        // ),
-                      ),
                     ],
                   ),
                 ),
               ),
+
+              // في حال الخطأ - لم يضف أي عنصر
               BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
-                  builder: (context, state) {
-                return Visibility(
-                  visible: state is ValidationState && (state.isMneu ?? false),
-                  child: const Padding(
-                    padding: EdgeInsets.only(right: 5, left: 5, top: 5.0),
-                    child: Text(
-                      "You have to fill at least one item!",
-                      style: TextStyle(color: Colors.red),
+                builder: (context, restState) {
+                  return Visibility(
+                    visible: restState is ValidationState &&
+                        (restState.isMneu ?? false),
+                    child: const Padding(
+                      padding: EdgeInsets.only(right: 5, left: 5, top: 5.0),
+                      child: Text(
+                        "You have to fill at least one item!",
+                        style: TextStyle(color: Colors.red),
+                      ),
                     ),
-                  ),
-                );
-              })
+                  );
+                },
+              ),
             ],
           ),
         );

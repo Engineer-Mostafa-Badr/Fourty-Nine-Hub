@@ -747,7 +747,7 @@ Total : 2753 files,  230032 codes, 35759 comments, 25171 blanks, all 290962 line
 | [lib/features/competition/presentation/view/widgets/winner_card.dart](/lib/features/competition/presentation/view/widgets/winner_card.dart) | Dart | 67 | 7 | 5 | 79 |
 | [lib/features/custom_page/data/data_source/custom_page_remote_data_source.dart](/lib/features/custom_page/data/data_source/custom_page_remote_data_source.dart) | Dart | 123 | 0 | 25 | 148 |
 | [lib/features/custom_page/data/model/activate_model.dart](/lib/features/custom_page/data/model/activate_model.dart) | Dart | 12 | 0 | 3 | 15 |
-| [lib/features/custom_page/data/model/favourite_cat_model.dart](/lib/features/custom_page/data/model/favourite_cat_model.dart) | Dart | 104 | 0 | 3 | 107 |
+| [lib/features/custom_page/data/model/favourite_cat_model.dart](/lib/features/custom_page/data/model/custom_page_cat_model.dart) | Dart | 104 | 0 | 3 | 107 |
 | [lib/features/custom_page/data/model/navigate_bar_model.dart](/lib/features/custom_page/data/model/navigate_bar_model.dart) | Dart | 36 | 0 | 3 | 39 |
 | [lib/features/custom_page/data/model/social_page_model.dart](/lib/features/custom_page/data/model/social_page_model.dart) | Dart | 16 | 0 | 3 | 19 |
 | [lib/features/custom_page/data/model/sub_tab_model.dart](/lib/features/custom_page/data/model/sub_tab_model.dart) | Dart | 22 | 0 | 3 | 25 |
@@ -773,7 +773,7 @@ Total : 2753 files,  230032 codes, 35759 comments, 25171 blanks, all 290962 line
 | [lib/features/custom_page/presentation/page/custom_page.dart](/lib/features/custom_page/presentation/page/custom_page.dart) | Dart | 113 | 0 | 6 | 119 |
 | [lib/features/custom_page/presentation/page/widget/custom_page_botton_nav_bar.dart](/lib/features/custom_page/presentation/page/widget/custom_page_botton_nav_bar.dart) | Dart | 257 | 15 | 22 | 294 |
 | [lib/features/custom_page/presentation/page/widget/edit_page.dart](/lib/features/custom_page/presentation/page/widget/edit_page.dart) | Dart | 82 | 0 | 4 | 86 |
-| [lib/features/custom_page/presentation/page/widget/favourite_category.dart](/lib/features/custom_page/presentation/page/widget/favourite_category.dart) | Dart | 221 | 6 | 10 | 237 |
+| [lib/features/custom_page/presentation/page/widget/favourite_category.dart](/lib/features/custom_page/presentation/page/widget/custom_Page_categories.dart) | Dart | 221 | 6 | 10 | 237 |
 | [lib/features/custom_page/presentation/page/widget/navigate_bar.dart](/lib/features/custom_page/presentation/page/widget/navigate_bar.dart) | Dart | 160 | 2 | 6 | 168 |
 | [lib/features/custom_page/presentation/page/widget/page_preview.dart](/lib/features/custom_page/presentation/page/widget/page_preview.dart) | Dart | 82 | 0 | 4 | 86 |
 | [lib/features/custom_page/presentation/page/widget/service_page_preview copy.dart](/lib/features/custom_page/presentation/page/widget/service_page_preview%20copy.dart) | Dart | 529 | 27 | 16 | 572 |

@@ -8,28 +8,32 @@ class CustomButton extends StatelessWidget {
     super.key,
     this.onTap,
     this.height = 60,
+    this.color = AppColors.PRIMARY_COLOR,
     this.title = 'Find',
   });
   final void Function()? onTap;
   final double height;
+  
   final String title;
+  final Color color;
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
       splashColor: AppColors.PRIMARY_COLOR.withOpacity(0.6),
-      radius: 45,
+      radius: 15,
       child: Ink(
         decoration: BoxDecoration(
-          color: AppColors.PRIMARY_COLOR.withOpacity(0.6),
-          borderRadius: BorderRadius.circular(10),
+          color:color.withOpacity(0.6),
+          borderRadius: BorderRadius.circular(15),
         ),
         child: Container(
           height: height,
-          padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 15),
+          width: 200.w,
+          //  padding: EdgeInsets.symmetric(vertical: 7.5.h, horizontal: 30.w),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: AppColors.PRIMARY_COLOR,
+            borderRadius: BorderRadius.circular(15),
+            color: color,
           ),
           alignment: Alignment.center,
           child: Text(

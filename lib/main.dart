@@ -55,6 +55,7 @@ bool isActivate = false;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await CacheManager.init();
+//  await  initPickMeFeature();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -85,6 +86,7 @@ void main() async {
     (value) {
       if (value == LocationPermission.denied) {
         Geolocator.requestPermission();
+
       }
     },
   );

@@ -6,7 +6,7 @@ class FloatingActionButtonStar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton(
+    return FloatingActionButton.extended(
       onPressed: () {
         Navigator.push(
           context,
@@ -16,9 +16,15 @@ class FloatingActionButtonStar extends StatelessWidget {
         );
       },
       backgroundColor: Colors.red,
-      child: const Icon(
+      icon: const Icon(
         Icons.add,
         color: Colors.white,
+      ),
+      label: const Text(
+        'Add Talent',
+        style: TextStyle(
+          color: Colors.white,
+        ),
       ),
     );
   }

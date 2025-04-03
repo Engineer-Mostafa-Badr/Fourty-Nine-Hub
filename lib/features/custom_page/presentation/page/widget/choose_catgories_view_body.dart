@@ -58,7 +58,7 @@ class _ChooseCategoriesViwBodyState extends State<ChooseCategoriesViwBody> {
                   leading: Radio<int>(
                     value: index,
                     groupValue: _selectedItem,
-                    activeColor: Theme.of(context).primaryColor,
+                    // activeColor: Theme.of(context).primaryColor,
                     onChanged: (int? value) {
                       setState(() {
                         _selectedItem = value!;
