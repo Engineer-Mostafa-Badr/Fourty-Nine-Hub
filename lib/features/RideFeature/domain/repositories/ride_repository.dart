@@ -45,6 +45,8 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/ge
 import '../../../../core/error/failure.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_statistics_entity.dart';
 
+import '../usecases/make_non_tracking_request_trip_usecase.dart';
+
 abstract class RideRepository {
 
   /////////////////////////////////Nasr/////////////////////////////////
@@ -83,6 +85,7 @@ abstract class RideRepository {
   Future<Either<Failure, bool>> cancelPendingTripByClient(CancelPendingTripByClientUseCaseParams params);
   Future<Either<Failure, bool>> recordingTrip(RecordingTripUseCaseParams params);
   Future<Either<Failure, bool>> makeRequestTrip();
+  Future<Either<Failure, bool>> makeNonTrackingRequestTrip(MakeNonTrackingRequestTripUsecaseParam params);
   Future<Either<Failure, bool>> updateTripPriceFromClient(UpdateTripPriceFromClientUseCaseParams params);
   Future<Either<Failure, ActivityTripEntity>> getAllActivityTrips(GetAllActivityTripsUseCaseParams params);
   Future<Either<Failure, List<HistoryTripForUserEntity>>> getAllHistoryTripsForUser();

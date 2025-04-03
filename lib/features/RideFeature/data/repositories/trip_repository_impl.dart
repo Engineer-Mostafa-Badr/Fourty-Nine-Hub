@@ -42,6 +42,10 @@ class TripRepositoryImpl implements TripRepository {
   Future<Either<Failure, bool>> createNewOffer(CreateNewOfferDashboardUsecaseParam params) async{
     return await remoteDataSource.createNewOffer(params);
   }
+  @override
+  Future<Either<Failure, bool>> createNewOfferNonSocket(CreateNewOfferDashboardUsecaseParam params) async{
+    return await remoteDataSource.createNewOfferNonSocket(params);
+  }
 
   @override
   Future<Either<Failure, bool>> createDriverRating(CreateUpdateDriverRatingUsecaseParam params) async{

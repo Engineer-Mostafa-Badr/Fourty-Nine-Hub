@@ -33,6 +33,7 @@ import '../features/RideFeature/data/repositories/shipping_repository_imp.dart';
 import '../features/RideFeature/domain/repositories/shipping_repository.dart';
 import '../features/RideFeature/domain/usecases/create_loading_trip_usecase.dart';
 import '../features/RideFeature/domain/usecases/get_ride_categories_usecase.dart';
+import '../features/RideFeature/domain/usecases/make_non_tracking_request_trip_usecase.dart';
 
 class RideServiceLocatorUpdated {
   static void execute({required GetIt serviceLocator}) {
@@ -99,10 +100,13 @@ class RideServiceLocatorUpdated {
         MakeRequestTripUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<RecordingTripUseCase>(() =>
         RecordingTripUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<MakeNonTrackingRequestTripUsecase>(() =>
+        MakeNonTrackingRequestTripUsecase(serviceLocator()));
 
     // ---------------------------------- cubits ----------------------------------
 
-    serviceLocator.registerLazySingleton<RideCubit>(() => RideCubit(
+    serviceLocator.registerFactory<RideCubit>(() => RideCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

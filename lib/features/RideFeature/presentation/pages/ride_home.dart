@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,7 +12,6 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_info_e
 import 'package:fourtyninehub/features/RideFeature/domain/entities/loading_info_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/record_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/upload_rider_images.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/expired_trips_screen.dart';

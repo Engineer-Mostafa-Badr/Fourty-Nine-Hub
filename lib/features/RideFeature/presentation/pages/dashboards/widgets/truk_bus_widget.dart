@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 
 import '../../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../../res/assets/assets.dart';
@@ -12,6 +13,7 @@ import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/styles.dart';
 import '../../../../domain/entities/dashboards/trip_entity.dart';
 import '../../../controllers/dashboards_cubit/dashboards_cubit.dart';
+import '../../widgets/bottom_sheet/custom_bottom_sheet.dart';
 import '../../widgets/fare_bottom_sheet_widget.dart';
 
 class TrukBusWidget extends StatelessWidget {
@@ -26,6 +28,12 @@ class TrukBusWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DateTime dateTime = DateTime.parse(
+        tripEntity?.tripDetails?.createdAt ?? '2025-03-11T21:50:21.998Z');
+    String formattedDate =
+        "${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}";
+    String formattedTime =
+        "${dateTime.hour % 12 == 0 ? 12 : dateTime.hour % 12} ${dateTime.hour < 12 ? 'AM' : 'PM'}";
     return Container(
       padding: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
@@ -48,8 +56,10 @@ class TrukBusWidget extends StatelessWidget {
                           decoration:
                               const BoxDecoration(shape: BoxShape.circle),
                           clipBehavior: Clip.antiAliasWithSaveLayer,
-                          child: tripEntity?.clientDetails!.profilePictureUrl ==
-                                  null
+                          child: tripEntity?.clientDetails?.profilePictureUrl ==
+                                      null ||
+                                  tripEntity!
+                                      .clientDetails!.profilePictureUrl.isEmpty
                               ? Image.asset(
                                   Assets.maleImagePlaceholder,
                                   fit: BoxFit.cover,
@@ -75,7 +85,7 @@ class TrukBusWidget extends StatelessWidget {
                                   const Sizer(width: 4),
                                   Label(
                                       text: tripEntity!
-                                          .clientDetails!.rating!.rating
+                                          .clientDetails!.rating!.count
                                           .toString(),
                                       style: Styles.smallText())
                                 ]))))
@@ -85,7 +95,8 @@ class TrukBusWidget extends StatelessWidget {
                     text: tripEntity!.clientDetails!.firstName, //'Ahmed',
                     style: Styles.mediumText()),
                 Label(
-                    text: '(${tripEntity!.clientDetails!.rating!.rating})',
+                    text:
+                        '(${tripEntity!.clientDetails!.rating!.average ?? 0})',
                     style: Styles.smallText())
               ])),
           const Sizer(width: 32),
@@ -146,12 +157,24 @@ class TrukBusWidget extends StatelessWidget {
                           flex: 3,
                           child: Column(
                             children: [
-                              Image.asset(Assets.rideIcon,
-                                  width: 40, height: 40),
+                              tripEntity?.clientDetails?.profilePictureUrl ==
+                                          null ||
+                                      tripEntity!.clientDetails!
+                                          .profilePictureUrl.isEmpty
+                                  ? Image.asset(Assets.rideIcon,
+                                      width: 40, height: 40, fit: BoxFit.cover)
+                                  : Image.network(
+                                      tripEntity!.subCategory!.pictureUrl,
+                                      width: 40,
+                                      height: 40,
+                                      fit: BoxFit.contain),
                               Label(
-                                  text: modeType == 'truk'
-                                      ? LocaleKeys.transporte.tr()
-                                      : LocaleKeys.bus.tr(),
+                                  text: context.isArabic
+                                      ? (tripEntity?.subCategory?.nameAr ?? '')
+                                      : (tripEntity?.subCategory?.nameEn ?? ''),
+                                  // modeType == 'truk'
+                                  //     ? LocaleKeys.transporte.tr()
+                                  //     : LocaleKeys.bus.tr(),
                                   style: Styles.mediumText(fontSize: 25))
                             ],
                           )),
@@ -167,9 +190,7 @@ class TrukBusWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Label(
-                          text: tripEntity?.tripDetails?.price
-                                  .toStringAsFixed(1) ??
-                              '300',
+                          text: "${tripEntity?.tripDetails?.price ?? 300}",
                           style:
                               Styles.mediumText(fontWeight: FontWeight.w700)),
                       const Sizer(width: 4),
@@ -184,13 +205,13 @@ class TrukBusWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Label(
-                        text: '10 AM',
+                        text: formattedTime, //'10 AM',
                         style: Styles.mediumText(
                           fontWeight: FontWeight.w700,
                         ),
                       ),
                       Label(
-                        text: '20/2/2025',
+                        text: formattedDate, //'20/2/2025',
                         style: Styles.mediumText(
                           fontWeight: FontWeight.w700,
                         ),
@@ -224,20 +245,16 @@ class TrukBusWidget extends StatelessWidget {
                           onPressed: () {
                             if (tripEntity!.state!.isButtonEnabled) {
                               if (isWithAnotherPrice) {
-                                showModalBottomSheet(
-                                    backgroundColor: AppColors.whiteColor,
-                                    context: context,
-                                    shape: const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.vertical(
-                                            top: Radius.circular(15))),
-                                    isScrollControlled: true,
-                                    builder: (BuildContext context) =>
-                                        FareBottomSheetWidget2(id:  tripEntity!.tripDetails!.id,
-                                            selectedCategoryPrice:
-                                                tripEntity!.tripDetails!.price,
-                                           dashboardsCubit: context.read<DashboardsCubit>(),)
-                                    //EditPriceWidget(tripEntity: tripEntity),
-                                    );
+                                customBottomSheet2(context,
+                                    child: Padding(
+                                        padding: const EdgeInsets.all(12.0),
+                                        child: FareBottomSheetWidget2(
+                                          id: tripEntity!.tripDetails!.id,
+                                          selectedCategoryPrice:
+                                              tripEntity!.tripDetails!.price,
+                                          // dashboardsCubit:BlocProvider.of<DashboardsCubit>(context),
+                                        )),
+                                    title: LocaleKeys.acceptAnothePrice.tr());
                               } else {
                                 // showCustomDialogTrip(
                                 //     context,

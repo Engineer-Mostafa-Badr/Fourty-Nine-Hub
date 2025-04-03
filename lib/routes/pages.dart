@@ -3020,10 +3020,8 @@ class AppPages {
               GoRoute(
                 path: Paths.rideModeScreen,
                 name: Routes.rideModeScreen,
-                builder: (context, state) => BlocProvider(
-                  create: (context) => serviceLocator<DashboardsCubit>(),
-                  child: RideModeScreen(params: state.extra as RideModeParams),
-                ),
+                builder: (context, state) =>
+                    RideModeScreen(params: state.extra as RideModeParams),
               ),
               GoRoute(
                   path: Paths.rideDashboardDetailsScreen,

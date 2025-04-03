@@ -4,12 +4,21 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_available_ride_trips_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_available_trips_usecase.dart';
 
+import '../../../../../common/widgets/stateless/buttons/app_button.dart';
+import '../../../../../core/enums/wallet_types_enums.dart';
 import '../../../../../core/error/failure.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../helpers/subscription_method.dart';
+import '../../../../../res/style/app_colors.dart';
+import '../../../../../service_locator/service_locator.dart';
+import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
 import '../../../domain/entities/dashboards/settings_dashboard_entity.dart';
 import '../../../domain/entities/dashboards/trip_entity.dart';
 import '../../../domain/entities/dashboards/trips_response_entity.dart';
@@ -19,6 +28,8 @@ import '../../../domain/usecases/dashboards/get_past_trips_usecase.dart';
 import '../../../domain/usecases/dashboards/get_settings_dashboard_usecase.dart';
 import '../../../domain/usecases/dashboards/update_driver_rating_usecase.dart';
 import '../../../domain/usecases/dashboards/update_settings_dashboard_usecase.dart';
+import '../../pages/widgets/dialog_widget/show_custom_dialog_trip.dart';
+import '../../pages/widgets/font_manager.dart';
 
 part 'dashboards_state.dart';
 
@@ -29,6 +40,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   final GetSettingsDashboardUsecase getSettingsDashboardUsecase;
   final UpdateSettingsDashboardUsecase updateSettingsDashboardUsecase;
   final CreateNewOfferDashboardUsecase createNewOfferDashboardUsecase;
+  final CreateNewOfferNonSocketUsecase createNewOfferNonSocketUsecase;
   final CreateDriverRatingUsecase createDriverRatingUsecase;
   final UpdateDriverRatingUsecase updateDriverRatingUsecase;
   DashboardsCubit(
@@ -38,6 +50,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     this.getSettingsDashboardUsecase,
     this.updateSettingsDashboardUsecase,
     this.createNewOfferDashboardUsecase,
+    this.createNewOfferNonSocketUsecase,
     this.createDriverRatingUsecase,
     this.updateDriverRatingUsecase,
   ) : super(const DashboardsState());
@@ -129,7 +142,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       },
     );
   }
-
+  
   Future<void> getPastTrips(BuildContext context, String type) async {
     if (isClosed) {
       return;
@@ -231,6 +244,28 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       },
     );
   }
+  Future<void> createNewOfferNonSocket(
+      BuildContext context, CreateNewOfferDashboardUsecaseParam param) async {
+    if (isClosed) {
+      return;
+    }
+    emit(state.copyWith(status: DashboardsStates.loadingCreateOffer));
+
+    final Either<Failure, bool> result =
+        await createNewOfferNonSocketUsecase(param);
+
+    if (isClosed) return;
+    result.fold(
+      (failure) {
+        log("Failure ${getFailureMessage(failure, context)}");
+        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
+      },
+      (settings) {
+        log("Suzccess");
+        emit(state.copyWith(status: DashboardsStates.successOffer));
+      },
+    );
+  }
 
   Future<void> createDriverRating(
       BuildContext context, CreateUpdateDriverRatingUsecaseParam param) async {
@@ -283,5 +318,103 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     emit(state.copyWith(
         status: DashboardsStates.successOffer,
         availableTrips: availableTripsNonSocket));
+  }
+  
+  
+  showSubscribeDialog(BuildContext context, String subCategoryId) {
+    showCustomDialogTrip(
+        context,
+        Column(
+          spacing: 12,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              LocaleKeys.alert.localize,
+              style: const TextStyle(
+                fontSize: 20,
+                color: Colors.red,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text('Please Subscribe for more trips',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: FontSize.s16,
+                  color: context.isDarkMode ? Colors.white : Colors.black,
+                )),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                AppButton(
+                    width: context.screenWidth / 3.4,
+                    label: 'Close',
+                    backColor: AppColors.SECONDARY_COLOR_DARK2,
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    }),
+                const SizedBox(width: 16),
+                AppButton(
+                    width: context.screenWidth / 3.4,
+                    label: 'Subscribe',
+                    backColor: AppColors.PRIMARY_COLOR,
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      SubscriptionMethod().subscribe(subscribeId: subCategoryId, showRegular: true, title: '');
+                    }),
+              ],
+            ),
+            const SizedBox(height: 16),
+          ],
+        ));
+  }
+   showDebtDialog(BuildContext context, String subCategoryId) {
+    showCustomDialogTrip(
+        context,
+        Column(
+          spacing: 12,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              LocaleKeys.alert.localize,
+              style: const TextStyle(
+                fontSize: 20,
+                color: Colors.red,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text('Please pay the Debt for more trips',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: FontSize.s16,
+                  color: context.isDarkMode ? Colors.white : Colors.black,
+                )),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                AppButton(
+                    width: context.screenWidth / 3.4,
+                    label: 'Close',
+                    backColor: AppColors.SECONDARY_COLOR_DARK2,
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    }),
+                const SizedBox(width: 16),
+                AppButton(
+                    width: context.screenWidth / 3.4,
+                    label: 'Pay',
+                    backColor: AppColors.PRIMARY_COLOR,
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      serviceLocator<SubscriptionController>().showActiveSubscriptionAmounts(walletType: WalletTypes.mainWallet, price: 50);
+                    }),
+              ],
+            ),
+            const SizedBox(height: 16),
+          ],
+        ));
   }
 }

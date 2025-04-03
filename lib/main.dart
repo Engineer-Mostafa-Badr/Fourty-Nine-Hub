@@ -12,7 +12,6 @@ import 'package:fourtyninehub/common/theme/cubit/cubit.dart';
 import 'package:fourtyninehub/common/theme/cubit/states.dart';
 import 'package:fourtyninehub/core/localization/localization_service.dart';
 import 'package:fourtyninehub/core/themes/dark_theme.dart';
-import 'package:fourtyninehub/core/utils/location_tracker.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/call/presentation/controller/call_controller/call_cubit.dart';
@@ -46,7 +45,6 @@ import 'features/authentication/presentation/controllers/user_cubit/user_cubit.d
 import 'features/notifications/presentation/cubits/get_user_trips_notifications/get_user_trips_notifications_cubit.dart';
 import 'features/settings/presentation/cubit/choice_ruler_cubit.dart';
 import 'features/settings/presentation/cubit/floating_navigator_cubit.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'firebase_options.dart';
 import 'routes/pages.dart';
 
@@ -244,6 +242,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         // BlocProvider(
         //   create: (context) => AuthenticationRideCubit(),
         // ),
+        BlocProvider(
+                  create: (context) => serviceLocator<DashboardsCubit>(),
+        ),
         BlocProvider<GetServicesNotificationsCubit>(
           create: (context) => GetServicesNotificationsCubit(
             getNotficationsUseCase: serviceLocator(),

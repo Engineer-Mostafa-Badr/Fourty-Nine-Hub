@@ -33,12 +33,14 @@ class RideDashboardServiceLocatorUpdated {
     serviceLocator.registerLazySingleton<GetSettingsDashboardUsecase>(() => GetSettingsDashboardUsecase(serviceLocator()));
     serviceLocator.registerLazySingleton<UpdateSettingsDashboardUsecase>(() => UpdateSettingsDashboardUsecase(serviceLocator()));
     serviceLocator.registerLazySingleton<CreateNewOfferDashboardUsecase>(() => CreateNewOfferDashboardUsecase(serviceLocator()));
+    serviceLocator.registerLazySingleton<CreateNewOfferNonSocketUsecase>(() => CreateNewOfferNonSocketUsecase(serviceLocator()));
     serviceLocator.registerLazySingleton<CreateDriverRatingUsecase>(() => CreateDriverRatingUsecase(serviceLocator()));
     serviceLocator.registerLazySingleton<UpdateDriverRatingUsecase>(() => UpdateDriverRatingUsecase(serviceLocator()));
 
     // ---------------------------------- cubits ----------------------------------
 
     serviceLocator.registerLazySingleton<DashboardsCubit>(() => DashboardsCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

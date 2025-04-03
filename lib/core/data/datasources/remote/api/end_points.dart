@@ -1261,6 +1261,9 @@ class EndPoints {
   static String createNewOffer(String id) {
     return '/ride/offers/new/offer/$id';
   }
+  static String createNewOfferNonSocket(String id) {
+    return '/ride/non-tracking/offers/trip/$id';
+  }
   static String updateDriverRating(String id) {
     return '/ride/trip/rating/$id/client';
   }
@@ -1277,6 +1280,7 @@ class EndPoints {
   static String getCostPerKm = '/ride/driver/info/fair-cost';
   static String getLoadingInfo = '/loading/driver/info?subCategory=62c8baad8e28a58a3edf5805';
   static String makeTripRequest = '/ride/trips/request';
+  static String makeNonTrackingTripRequest = '/ride/non-tracking/trips/client';
 
   static String updateDriverLocation() {
     return '/ride/update-driver-location';

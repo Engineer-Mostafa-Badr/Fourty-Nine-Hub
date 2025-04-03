@@ -28,7 +28,6 @@ import 'package:fourtyninehub/features/RideFeature/domain/repositories/ride_repo
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_pending_trip_by_client_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_car_years_and_types_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
-import 'package:fourtyninehub/features/ride/driver_dashboard/domain/entities/driver_statistics_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/accept_trip_by_driver_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_client.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_rider.dart';
@@ -37,7 +36,6 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_activ
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_completed_trips_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_history_trips_for_rider_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_running_trips_usecase.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_car_years_and_types_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_location_from_address_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/partial_payment_in_trip.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/recording_trip_use_case.dart';
@@ -45,11 +43,11 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/rider_in_star
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/start_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_driver_location_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_trip_price_from_client_use_case.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 
 import '../../../../core/error/failure.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_available_ride_trips_use_case.dart';
-import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/available_ride_trip_model.dart';
+
+import '../../domain/usecases/make_non_tracking_request_trip_usecase.dart';
 
 class RideRepositoryImplementation extends RideRepository {
 
@@ -262,5 +260,10 @@ class RideRepositoryImplementation extends RideRepository {
   Future<Either<Failure, List<AvailableRideTripEntity>>> getAvailableRideTrips(AvailableRideTripsUseCaseParams params) async {
     final data = await rideRemoteDataSource.getAvailableRideTrips(params);
     return data;
+  }
+  
+  @override
+  Future<Either<Failure, bool>> makeNonTrackingRequestTrip(MakeNonTrackingRequestTripUsecaseParam params) async{
+    return await rideRemoteDataSource.makeNonTrackingRequestTrip(params);
   }
 }

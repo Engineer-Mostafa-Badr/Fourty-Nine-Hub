@@ -7,16 +7,16 @@ class ClientDetailsModel extends ClientDetailsEntity {
     required super.firstName,
     required super.profilePictureUrl,
     required super.gender,
-    required RatingModel? super.rating,
+    required RatingModell? super.rating,
   });
 
   factory ClientDetailsModel.fromJson(Map<String, dynamic> json) {
     return ClientDetailsModel(
       firstName: json['firstName'],
-      profilePictureUrl: json['profilePictureUrl'],
+      profilePictureUrl: json['profilePictureUrl']??'',
       gender: json['gender'],
       rating:
-          json['rating'] != null ? RatingModel.fromJson(json['rating']) : null,
+          json['rating'] != null ? RatingModell.fromJson(json['rating']) : null,
     );
   }
 }
@@ -28,6 +28,16 @@ class RatingModel extends RatingEntity {
     return RatingModel(
       rating: json['rating']?.toDouble(),
       comment: json['comment'],
+    );
+  }
+}
+class RatingModell extends RatingEntityy {
+  RatingModell({super.average, super.count});
+
+  factory RatingModell.fromJson(Map<String, dynamic> json) {
+    return RatingModell(
+      average: json['average']?.toDouble(),
+      count: json['count'],
     );
   }
 }
