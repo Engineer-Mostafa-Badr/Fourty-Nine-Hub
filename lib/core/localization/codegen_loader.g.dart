@@ -18,8 +18,6 @@ class CodegenLoader extends AssetLoader{
   "nnew": "جديد",
   "today": "اليوم",
   "tommorow": "غدًا",
-    "publish_permiun": "نشر مميز",
-     'tool_help_question':"أنشئ رحلة وأضف رحلتك. انتظر تواصل أصحاب السيارات معك. شارك الرحلة ووفّر المال!",
   "meeting": "اجتماع",
   "join": "انضمام",
   "schedule": "جدولة",
@@ -305,7 +303,6 @@ class CodegenLoader extends AssetLoader{
   "showMore": "إظهار المزيد",
   "history": "التأريخ",
   "competitions": "المسابقات",
-    "welcome_pick_me":"مرحباً بك في جاي معاك",
   "requestWithdraw": "طلب سحب",
   "requestTransaction": "طلب للمعاملات الشخصية",
   "requestTransfer": "طلب معاملة",
@@ -557,11 +554,14 @@ class CodegenLoader extends AssetLoader{
   "ownCar": "انت تملك سيارة\nشخص سيشارك الرحلة معك ويدفع نصف الثمن",
   "dontOwnCar": "انت لا تملك سيارة . شخص سيشارك الرحلة معك وتدفع نصف الثمن",
   "startingPoint": "من",
-  "destinationPoint": "الي",
+  "destinationPoint": "إلي",
   "KM": "كم",
   "repeat": "متكرر",
   "totalPrice": "السعر الإجمالي",
   "brand": "ماركة",
+  "publish_permiun": "نشر مميز",
+  "welcome_pick_me": "مرحباً بك في جاي معاك",
+  "tool_help_question": "أنشئ رحلة وأضف رحلتك. انتظر تواصل أصحاب السيارات معك. شارك الرحلة ووفّر المال!",
   "model": "  طراز",
   "publish": "نشر",
   "youCantLeaveFieldEmpty": "لا يمكن ترك هذا الجقل فارغا",
@@ -1488,7 +1488,10 @@ class CodegenLoader extends AssetLoader{
   "noOfRequests": "عدد الطلبات",
   "modify": "تعديل",
   "restaurantPhoto": "صورة المطعم",
-  "areYouSureUpdate": "Are you sure you want to update"
+  "areYouSureUpdate": "Are you sure you want to update",
+  "exploreTripsThatAreActiveAtTheMoment": "استكشف الرحلات النشطة في الوقت الحالي",
+  "youWillFindFewerDriversIfYouSelectThisOption": "ستجد عددًا أقل من السائقين إذا قمت بتحديد هذا الخيار",
+  "initiateRouteWaitFor1HourToGiveUserTimeToBookASeatInTheSameCarWithTheSameCaptain": "ابدأ المسار وانتظر لمدة ساعة لإعطاء المستخدم الوقت لحجز مقعد في نفس السيارة مع نفس القبطان."
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -1883,6 +1886,7 @@ static const Map<String,dynamic> _en = {
   "socialStatus": "Social Status",
   "job": "Job",
   "language": "Language",
+  "tool_help_question": "Create a ride & add your trip. wait for car owners to contact you. Share trip & save money!",
   "receiveMessages": "Receive Messages",
   "lastSeen": "Last Seen",
   "friendsList": "Friends List",
@@ -2033,12 +2037,12 @@ static const Map<String,dynamic> _en = {
   "destinationPoint": "To",
   "KM": "KM",
   "repeat": "Repeat",
-   'tool_help_question':'Create a ride & add your trip. wait for car owners to contact you. Share trip & save money!',
   "totalPrice": "Total Price",
   "brand": "Brand",
   "model": "Model",
-    "welcome_pick_me":"Welcome to Pick me!",
   "publish": "Publish",
+  "publish_permiun": "Permium Publish",
+  "welcome_pick_me": "Welcome to Pick me!",
   "youCantLeaveFieldEmpty": "You can't leave the field empty",
   "addressMustBeAtLeast10Chars": "Address must be at least 10 characters",
   "searchFind": "Find",
@@ -2881,7 +2885,6 @@ static const Map<String,dynamic> _en = {
   "totalProfit": "Total Profit",
   "totalTrips": "Total Trips",
   "writePhone": "Write your phone number",
-    "publish_permiun": "Permium Publish",
   "requestSent": "Request Sent",
   "waitingApproval": "Waiting Approval",
   "change": "Change",
@@ -2980,7 +2983,9 @@ static const Map<String,dynamic> _en = {
   "joinAvailableTripsNearYouNow": " Join available trips near you now. ",
   "browseRecentlyCompletedTrips": "Browse recently completed trips.",
   "oneWayOneCaptain": "One Way - One Captain!",
-  "goToFirstClient": "Go to first client"
+  "goToFirstClient": "Go to first client",
+  "youWillFindFewerDriversIfYouSelectThisOption": "You will find fewer drivers if you select this option!",
+  "initiateRouteWaitFor1HourToGiveUserTimeToBookASeatInTheSameCarWithTheSameCaptain": "Initiate route & wait for 1 hour to give user time to book a seat in the same car with the same captain."
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }
