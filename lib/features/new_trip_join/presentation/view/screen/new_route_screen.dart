@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 
 import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
-import '../../../../../core/utils/handle_cashback.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../widget/alert_text_widget.dart';
-import '../widget/new_route_text_widget.dart';
 import '../widget/premium_and_request_widget.dart';
 import '../widget/price_and_seat_widget.dart';
 import '../widget/switch_widget.dart';
@@ -34,10 +33,9 @@ class _NewRouteScreenState extends State<NewRouteScreen> {
         isWithBackArrow: false,
         language: true,
         leading: IconButton(
-          icon: const Icon(Icons.menu), // The menu icon
+          icon: const Icon(Icons.arrow_back), // The menu icon
           onPressed: () {
-            HandleCashback.setCount('drawerCount', context);
-            _scaffoldKey.currentState?.openDrawer(); // Open the drawer
+            Navigator.pop(context);
           },
         ),
       ),
@@ -64,8 +62,8 @@ class _NewRouteBodyState extends State<NewRouteBody> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const NewRouteTextWidget(),
-          SizedBox(height: 20.h),
+          //     const NewRouteTextWidget(),
+          SizedBox(height: 10.h),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
             child: WelcomeTextWidget(),
@@ -78,19 +76,19 @@ class _NewRouteBodyState extends State<NewRouteBody> {
             child: Column(
               children: [
                 SwitchWidget(
-                    title: "Comfort",
+                    title: LocaleKeys.comfort.localize,
                     value: isComfort,
                     onChanged: (val) {
                       setState(() => isComfort = val);
                     }),
                 SwitchWidget(
-                    title: "Lady",
+                    title: LocaleKeys.lady.localize,
                     value: isLady,
                     onChanged: (val) {
                       setState(() => isLady = val);
                     }),
                 SwitchWidget(
-                    title: "Lady Driver",
+                    title: LocaleKeys.ladyDriver.localize,
                     value: isLadyDriver,
                     onChanged: (val) {
                       setState(() => isLadyDriver = val);
@@ -99,11 +97,13 @@ class _NewRouteBodyState extends State<NewRouteBody> {
             ),
           ),
           if (isLadyDriver)
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 25),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25),
               child: Text(
-                "You will find fewer drivers if you select this option!",
-                style: TextStyle(
+                context.isArabic
+                    ? "ستجد عددًا أقل من السائقين إذا قمت بتحديد هذا الخيار"
+                    : 'You will find fewer drivers if you select this option!',
+                style: const TextStyle(
                   fontSize: 10,
                   color: AppColors.SECONDARY_COLOR,
                   fontWeight: FontWeight.w600,
@@ -120,10 +120,10 @@ class _NewRouteBodyState extends State<NewRouteBody> {
                   children: [
                     GestureDetector(
                       onTap: () => showPaymentAlert(context),
-                      child: const Text(
-                        "Payment Option",
+                      child: Text(
+                        LocaleKeys.paymentOption.localize,
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 32.sp,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -162,22 +162,31 @@ class _NewRouteBodyState extends State<NewRouteBody> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Center(
+                  Center(
                     child: Text(
-                      'Alert!',
-                      style: TextStyle(
+                      context.isArabic ? 'تحذير' : 'Alert!',
+                      style: const TextStyle(
                         fontSize: 18,
                         color: Colors.red,
                         fontWeight: FontWeight.w900,
                       ),
                     ),
                   ),
-                  const AlertTextWidget(
-                      text: "Payment in advance, charge your wallet."),
-                  const AlertTextWidget(
-                      text: "Payment in advance, charge your wallet."),
-                  const AlertTextWidget(
-                      text: "Payment in advance, charge your wallet."),
+                  SizedBox(height: 16.h),
+                  AlertTextWidget(
+                    text: context.isArabic
+                        ? "الدفع مقدمًا وشحن محفظتك."
+                        : "Payment in advance, charge your wallet.",
+                  ),
+                  AlertTextWidget(
+                      text: context.isArabic
+                          ? "سيتم الاحتفاظ بالمال حتى انتهاء الرحلة."
+                          : "Money will be holding till the ride ends."),
+                  AlertTextWidget(
+                    text: context.isArabic
+                        ? "لا يوجد أموال للكابتن."
+                        : "No cash for the captain.",
+                  ),
                   const SizedBox(height: 20),
                   Center(
                     child: ElevatedButton(
@@ -190,9 +199,9 @@ class _NewRouteBodyState extends State<NewRouteBody> {
                             horizontal: 100, vertical: 10),
                       ),
                       onPressed: () => Navigator.pop(context),
-                      child: const Text(
-                        "Close",
-                        style: TextStyle(
+                      child: Text(
+                        LocaleKeys.cancel.localize,
+                        style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                         ),

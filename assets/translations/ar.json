@@ -1456,7 +1456,7 @@
   "selectTheAmount": "اختر المبلغ",
   "enterWithdrawalAmount": "أدخل مبلغ السحب",
   "pleaseEnterAnAmount": "من فضلك ادخل المبلغ",
-  "theAmountMustBeGreateThan500":  "يجب أن يكون المبلغ أكبر من 500",
+  "theAmountMustBeGreateThan500": "يجب أن يكون المبلغ أكبر من 500",
   "theAmountMustBeLessThan": "يجب أن يكون المبلغ اقل من",
   "pleaseEnterPhoneNumber": "من فضلك ادخل رقم الجوال",
   "welcomeToDoctorRegistration": "مرحبا بك في صفحة تسجيل الأطباء",
@@ -1465,5 +1465,8 @@
   "priceIsRequired": "السعر مطلوب",
   "examineDurationIsRequired": "مدة الاختبار مطلوبة",
   "likedBy": "أعجب به",
-  "others": "آخرون"
+  "others": "آخرون",
+  "exploreTripsThatAreActiveAtTheMoment": "استكشف الرحلات النشطة في الوقت الحالي",
+  "youWillFindFewerDriversIfYouSelectThisOption": "ستجد عددًا أقل من السائقين إذا قمت بتحديد هذا الخيار",
+  "initiateRouteWaitFor1HourToGiveUserTimeToBookASeatInTheSameCarWithTheSameCaptain": "ابدأ المسار وانتظر لمدة ساعة لإعطاء المستخدم الوقت لحجز مقعد في نفس السيارة مع نفس القبطان."
 }

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
-import '../../driver/screen/running_and_past_trips_screen.dart';
 import '../../driver/widget/available_ride_mode_widget.dart';
 
 class TabBarContentWidget extends StatefulWidget {
@@ -20,9 +20,15 @@ class TabBarContentWidget extends StatefulWidget {
 class _TabBarContentWidgetState extends State<TabBarContentWidget> {
   final List<String> hints = [
     "Explore trips that are active at the moment.",
-    "Manage and review your bookings here.",
-    "Check your ongoing trips and track progress.",
-    "See your past trips and history."
+    "All your bookings in one place!",
+    "Join available trips near you now.",
+    "Browse recently completed trips."
+  ];
+  final List<String> hintsArabic = [
+    "استكشف الرحلات النشطة في الوقت الحالي",
+    "جميع حجوزاتك في مكان واحد!",
+    "انضم إلى الرحلات المتاحة بالقرب منك الآن.",
+    "تصفح الرحلات المنجزة مؤخرًا."
   ];
 
   final List<List<String>> tabContents = [
@@ -50,7 +56,7 @@ class _TabBarContentWidgetState extends State<TabBarContentWidget> {
               builder: (context, child) {
                 int index = widget.tabController.index;
                 return Text(
-                  hints[index],
+                  context.isArabic ? hintsArabic[index] : hints[index],
                   style: TextStyle(
                     color: const Color(0xffFF0808),
                     fontSize: 25.sp,
@@ -86,28 +92,30 @@ class AvailableTripsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return content.isEmpty
         ? _emptyMessage()
-        : const SingleChildScrollView(
+        : SingleChildScrollView(
             child: Column(
               children: [
                 OneWayWidget(
-                  requestType: 'Regular',
+                  requestType: LocaleKeys.regular.localize,
                   cancelButton: true,
-                  statusDriver: "In Progress",
+                  statusDriver: LocaleKeys.expired.localize,
                 ),
                 OneWayWidget(
-                  requestType: 'Comfort',
-                  statusDriver: "In Progress",
+                  requestType: LocaleKeys.comfort.localize,
+                  statusDriver: LocaleKeys.expired.localize,
                 ),
+                SizedBox(height: 100.h),
               ],
             ),
           );
   }
 }
 
-class OneWayWidget extends StatelessWidget {
+class OneWayWidget extends StatefulWidget {
   final String? statusDriver;
   final bool? cancelButton;
   final String? requestType;
+
   const OneWayWidget({
     super.key,
     this.statusDriver,
@@ -116,14 +124,25 @@ class OneWayWidget extends StatelessWidget {
   });
 
   @override
+  _OneWayWidgetState createState() => _OneWayWidgetState();
+}
+
+class _OneWayWidgetState extends State<OneWayWidget> {
+  bool isContainerVisible = false; // لتخزين حالة ظهور الـ Container
+
+  @override
   Widget build(BuildContext context) {
     return Stack(
+      clipBehavior: Clip.none,
       children: [
         Container(
-          margin: const EdgeInsets.all(15),
+          margin: const EdgeInsets.symmetric(horizontal: 7, vertical: 8),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(),
+            border: Border.all(
+              color:
+                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+            ),
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
@@ -133,23 +152,27 @@ class OneWayWidget extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      "Normal",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.red),
+                    Text(
+                      LocaleKeys.normal.localize,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red,
+                      ),
                     ),
                     RichText(
-                      text: const TextSpan(
+                      text: TextSpan(
                         text: "50 ",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
-                          color: Colors.black,
                         ),
                         children: [
                           TextSpan(
-                            text: "EGP",
-                            style: TextStyle(color: Colors.red, fontSize: 12),
+                            text: context.isArabic ? "جنيه مصري" : "EGP",
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 12,
+                            ),
                           ),
                         ],
                       ),
@@ -162,9 +185,13 @@ class OneWayWidget extends StatelessWidget {
                   children: [
                     Column(
                       children: [
-                        Text("Booked",
-                            style: TextStyle(
-                                fontSize: 20.sp, fontWeight: FontWeight.bold)),
+                        Text(
+                          LocaleKeys.booked.localize,
+                          style: TextStyle(
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                         const SizedBox(height: 4),
                         SvgPicture.asset(Assets.bookedMan),
                       ],
@@ -172,41 +199,60 @@ class OneWayWidget extends StatelessWidget {
                     Column(
                       children: [
                         Text(
-                          "Free",
+                          LocaleKeys.free.localize,
                           style: TextStyle(
                             fontSize: 20.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
                         const SizedBox(height: 4),
-                        SvgPicture.asset(Assets.freeIcon),
+                        SvgPicture.asset(
+                          Assets.freeIcon,
+                          color:
+                              context.isDarkMode ? Colors.white : Colors.black,
+                        ),
                       ],
                     ),
                     Column(
                       children: [
-                        Text("Free",
-                            style: TextStyle(
-                                fontSize: 20.sp, fontWeight: FontWeight.bold)),
+                        Text(
+                          LocaleKeys.free.localize,
+                          style: TextStyle(
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                         const SizedBox(height: 4),
-                        SvgPicture.asset(Assets.freeIcon),
+                        SvgPicture.asset(
+                          Assets.freeIcon,
+                          color:
+                              context.isDarkMode ? Colors.white : Colors.black,
+                        ),
                       ],
                     ),
                     Column(
                       children: [
-                        Text("Seat",
-                            style: TextStyle(
-                                fontSize: 20.sp,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.PRIMARY_COLOR)),
+                        Text(
+                          LocaleKeys.seat.localize,
+                          style: TextStyle(
+                            fontSize: 20.sp,
+                            fontWeight: FontWeight.bold,
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : AppColors.PRIMARY_COLOR,
+                          ),
+                        ),
                         const SizedBox(height: 4),
                         Padding(
-                          padding: const EdgeInsets.only(top: 10),
+                          padding: const EdgeInsets.only(top: 10, left: 5),
                           child: Text(
-                            statusDriver ?? "",
+                            widget.statusDriver ?? "",
                             style: TextStyle(
-                              fontSize: 20.sp,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.PRIMARY_COLOR,
+                              fontSize: 10,
+                              fontWeight: FontWeight.w900,
+                              color: context.isDarkMode
+                                  ? Colors.white
+                                  : AppColors.PRIMARY_COLOR,
                             ),
                           ),
                         ),
@@ -215,70 +261,84 @@ class OneWayWidget extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 2),
-                const Row(
-                  children: [
-                    Icon(Icons.circle, color: Colors.red, size: 12),
-                    Expanded(
-                      child: Divider(
-                        color: AppColors.PRIMARY_COLOR,
-                        thickness: 2,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.circle, color: Colors.red, size: 12),
+                      Expanded(
+                        child: Divider(
+                          color: context.isDarkMode
+                              ? Colors.white
+                              : AppColors.PRIMARY_COLOR,
+                          thickness: 2,
+                        ),
                       ),
-                    ),
-                    Icon(Icons.circle, color: Colors.green, size: 12),
-                    Expanded(
-                      child: Divider(
-                        color: AppColors.PRIMARY_COLOR,
-                        thickness: 2,
+                      const Icon(Icons.circle, color: Colors.green, size: 12),
+                      Expanded(
+                        child: Divider(
+                          color: context.isDarkMode
+                              ? Colors.white
+                              : AppColors.PRIMARY_COLOR,
+                          thickness: 2,
+                        ),
                       ),
-                    ),
-                    Icon(Icons.circle, color: Colors.green, size: 12),
-                    Expanded(
-                      child: Divider(
-                        color: AppColors.PRIMARY_COLOR,
-                        thickness: 2,
+                      const Icon(Icons.circle, color: Colors.green, size: 12),
+                      Expanded(
+                        child: Divider(
+                          color: context.isDarkMode
+                              ? Colors.white
+                              : AppColors.PRIMARY_COLOR,
+                          thickness: 2,
+                        ),
                       ),
-                    ),
-                    Icon(Icons.circle, color: Colors.blue, size: 12),
-                  ],
+                      const Icon(Icons.circle, color: Colors.blue, size: 12),
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Row(
                   children: [
                     SvgPicture.asset(Assets.circleGreen),
                     const SizedBox(width: 4),
-                    const Text(
-                      "Giza, Egypt",
+                    Text(
+                      context.isArabic ? "الجيزة، مصر" : "Giza, Egypt",
                       style: TextStyle(
-                        color: AppColors.PRIMARY_COLOR,
-                        fontSize: 14,
+                        color: context.isDarkMode
+                            ? Colors.white
+                            : AppColors.PRIMARY_COLOR,
+                        fontSize: 28.sp,
                         fontWeight: FontWeight.w900,
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 10.h),
                 Row(
                   children: [
                     SvgPicture.asset(Assets.circleBlue),
                     const SizedBox(width: 4),
-                    const Text(
-                      "Giza, Egypt",
+                    Text(
+                      context.isArabic ? "الجيزة، مصر" : "Giza, Egypt",
                       style: TextStyle(
-                        color: AppColors.PRIMARY_COLOR,
+                        color: context.isDarkMode
+                            ? Colors.white
+                            : AppColors.PRIMARY_COLOR,
                         fontSize: 14,
                         fontWeight: FontWeight.w900,
                       ),
                     ),
                   ],
                 ),
-                //   const SizedBox(height: 4),
                 Row(
                   children: [
-                    const Text(
-                      '10 mins ago',
+                    Text(
+                      context.isArabic ? "منذ 10 دقائق" : '10 mins ago',
                       style: TextStyle(
                         fontSize: 14,
-                        color: AppColors.PRIMARY_COLOR,
+                        color: context.isDarkMode
+                            ? Colors.white
+                            : AppColors.PRIMARY_COLOR,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -286,16 +346,18 @@ class OneWayWidget extends StatelessWidget {
                     TextButton(
                       onPressed: () {},
                       child: Text(
-                        requestType ?? "",
+                        widget.requestType ?? "",
                         style: TextStyle(
                           fontSize: 24.sp,
-                          color: AppColors.PRIMARY_COLOR,
+                          color: context.isDarkMode
+                              ? Colors.white
+                              : AppColors.PRIMARY_COLOR,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
                     ),
                     const SizedBox(width: 5),
-                    cancelButton == true
+                    widget.cancelButton == true
                         ? GestureDetector(
                             child: Container(
                               width: 120.w,
@@ -306,7 +368,7 @@ class OneWayWidget extends StatelessWidget {
                               ),
                               child: Center(
                                 child: Text(
-                                  "Cancel",
+                                  LocaleKeys.cancel.localize,
                                   style: TextStyle(
                                     fontSize: 22.sp,
                                     color: Colors.white,
@@ -323,14 +385,71 @@ class OneWayWidget extends StatelessWidget {
             ),
           ),
         ),
+
+        // الأيقونة التي عند الضغط عليها ستظهر الـ Container
         Positioned(
-          bottom: 15,
-          left: 160, // جعلها أسفل الكونتينر قليلاً
-          child: SvgPicture.asset(
-            Assets.frameIcon,
-            width: 50,
+          bottom: 9,
+          left: 170, // جعلها أسفل الكونتينر قليلاً
+          child: GestureDetector(
+            onTap: () {
+              setState(() {
+                isContainerVisible =
+                    !isContainerVisible; // تغيير الحالة عند الضغط
+              });
+            },
+            child: SvgPicture.asset(
+              Assets.frameIcon,
+              width: 50,
+            ),
           ),
         ),
+
+        // هنا يتم التحكم في ظهور الـ Container
+        // Visibility(
+        //   visible: isContainerVisible,
+        //   child: Positioned(
+        //     //  bottom: 20,
+        //     top: 220,
+        //     left: 30,
+        //     child: Container(
+        //       width:
+        //           MediaQuery.of(context).size.width - 60, // عرض الـ Container
+        //       padding: const EdgeInsets.all(20),
+        //       decoration: BoxDecoration(
+        //         color: Colors.blue, // لون الـ Container
+        //         borderRadius: BorderRadius.circular(20),
+        //       ),
+        //       child: Column(
+        //         children: [
+        //           Text(
+        //             "هذا هو الـ Container الذي يظهر فوق الكونتينر الأصلي",
+        //             style: TextStyle(color: Colors.white),
+        //           ),
+        //           Text(
+        //             "هذا هو الـ Container الذي يظهر فوق الكونتينر الأصلي",
+        //             style: TextStyle(color: Colors.white),
+        //           ),
+        //           Text(
+        //             "هذا هو الـ Container الذي يظهر فوق الكونتينر الأصلي",
+        //             style: TextStyle(color: Colors.white),
+        //           ),
+        //           Text(
+        //             "هذا هو الـ Container الذي يظهر فوق الكونتينر الأصلي",
+        //             style: TextStyle(color: Colors.white),
+        //           ),
+        //           Text(
+        //             "هذا هو الـ Container الذي يظهر فوق الكونتينر الأصلي",
+        //             style: TextStyle(color: Colors.white),
+        //           ),
+        //           Text(
+        //             "هذا هو الـ Container الذي يظهر فوق الكونتينر الأصلي",
+        //             style: TextStyle(color: Colors.white),
+        //           ),
+        //         ],
+        //       ),
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }
@@ -344,17 +463,19 @@ class BookingsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return content.isEmpty
         ? _emptyMessage()
-        : const SingleChildScrollView(
+        : SingleChildScrollView(
             child: Column(
               children: [
                 OneWayWidget(
-                  statusDriver: "In Progress",
                   cancelButton: true,
-                  requestType: "Comfort",
+                  statusDriver: LocaleKeys.expired.localize,
+                  requestType: LocaleKeys.regular.localize,
                 ),
                 OneWayWidget(
-                  requestType: "Regular",
+                  statusDriver: LocaleKeys.expired.localize,
+                  requestType: LocaleKeys.regular.localize,
                 ),
+                SizedBox(height: 100.h),
               ],
             ),
           );
@@ -369,19 +490,20 @@ class RunningTripsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return content.isEmpty
         ? _emptyMessage()
-        : const SingleChildScrollView(
+        : SingleChildScrollView(
             child: Column(
               children: [
                 AvailableRideModeWidget(
-                  requestType: 'Regular',
+                  requestType: LocaleKeys.regular.localize,
                   cancelButton: false,
-                  statusDriver: "Running",
+                  statusDriver: LocaleKeys.running.localize,
                 ),
                 AvailableRideModeWidget(
-                  requestType: 'Regular',
+                  requestType: LocaleKeys.regular.localize,
                   cancelButton: false,
-                  statusDriver: "Running",
+                  statusDriver: LocaleKeys.running.localize,
                 ),
+                SizedBox(height: 100.h),
               ],
             ),
           );
@@ -396,13 +518,13 @@ class ExpiredTripsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return content.isEmpty
         ? _emptyMessage()
-        : const SingleChildScrollView(
+        : SingleChildScrollView(
             child: Column(
               children: [
                 AvailableRideModeWidget(
-                  requestType: 'Regular',
+                  requestType: LocaleKeys.regular.localize,
                   cancelButton: false,
-                  statusDriver: "Expired",
+                  statusDriver: LocaleKeys.expired.localize,
                 ),
               ],
             ),
@@ -413,7 +535,7 @@ class ExpiredTripsWidget extends StatelessWidget {
 Widget _emptyMessage() {
   return Center(
     child: Text(
-      "There is no trips in this list.",
+      LocaleKeys.thereIsNoTripsInThisList.localize,
       style: TextStyle(
         fontSize: 28.sp,
         fontWeight: FontWeight.w600,

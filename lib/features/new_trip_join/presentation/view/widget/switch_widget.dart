@@ -37,12 +37,14 @@ class SwitchWidget extends StatelessWidget {
             hoverColor: AppColors.PRIMARY_COLOR,
             activeColor: AppColors.WHATS_APP_COLOR,
             activeTrackColor: AppColors.WHATS_APP_COLOR,
-            thumbColor: WidgetStateProperty.resolveWith<Color?>((states) {
-              if (states.contains(WidgetState.selected)) {
-                return AppColors.PRIMARY_COLOR;
-              }
-              return Colors.black;
-            }),
+            thumbColor: WidgetStateProperty.resolveWith<Color?>(
+              (states) {
+                if (states.contains(WidgetState.selected)) {
+                  return AppColors.PRIMARY_COLOR;
+                }
+                return Colors.black;
+              },
+            ),
           ),
         ],
       ),

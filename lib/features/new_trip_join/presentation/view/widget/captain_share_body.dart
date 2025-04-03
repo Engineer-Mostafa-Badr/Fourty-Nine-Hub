@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'dart:async'; // لتأخير بدء الأنيميشن
-
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'dart:async';
 import '../../../../../res/assets/assets.dart';
 import 'header_text_widget.dart';
 import '../../../captainshare/widget/tab_bar_content_widget.dart';
@@ -60,14 +59,6 @@ class _CaptainShareBodyState extends State<CaptainShareBody>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        IconButton(
-          onPressed: () {
-            context.pop();
-          },
-          icon: const Icon(
-            Icons.arrow_back,
-          ),
-        ),
         const SizedBox(height: 8),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -90,20 +81,19 @@ class _CaptainShareBodyState extends State<CaptainShareBody>
                 iconColor: const Color(0xffF33D49),
                 textColor: const Color(0xffF33D49),
                 imagePath: Assets.locationTripIcon,
-                title: 'Captain\nShare',
+                title: context.isArabic ? 'مشاركة كابتن' : 'Captain\nShare',
                 onTap: () {},
               ),
             ),
-            // العناصر الأخرى بدون أنيميشن
             TripOptionWidget(
               imagePath: Assets.locationTripIcon,
-              title: 'Trip Join',
+              title: context.isArabic ? "جاي معاك" : "Trip Join",
               onTap: () {},
               icon: Assets.car,
             ),
             TripOptionWidget(
               imagePath: Assets.locationTripIcon,
-              title: 'Pick me',
+              title: context.isArabic ? "وصلني معاك" : "Pick me",
               onTap: () {},
               icon: Assets.pickMeImage,
             ),
