@@ -43,10 +43,14 @@ class GoogleApiConsumer extends ApiConsumer {
       } else if (e.response?.statusCode == 400) {
         if (e.response?.data is Map &&
             e.response?.data['error_message'] is String) {
-          return ServerFailure(message: e.response?.data['error_message']);
+          return ServerFailure(message: e.response?.data['error_message'],
+            name: e.response?.data['name'] as String? ?? 'Unknown Error',
+          );
         } else {
           return const ServerFailure(
-              message: "Unkown Error, Please Try Again Later");
+              message: "Unkown Error, Please Try Again Later",
+            name:  'Unknown Error',
+          );
         }
       }
     }

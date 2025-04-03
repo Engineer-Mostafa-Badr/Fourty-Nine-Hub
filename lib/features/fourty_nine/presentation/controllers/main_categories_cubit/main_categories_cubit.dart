@@ -68,7 +68,6 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     this._answerQuestionUseCase,
     this._getMainCategoryDetailsUseCase,
     this.getSettingsDashboardUsecase,
-    this._categoriesCustomPageUseCase, this._getQuestionUseCase, this._answerQuestionUseCase, this._getMainCategoryDetailsUseCase,
   ) : super(MainCategoriesState());
 
   Future<void> loadDataCategory() async {

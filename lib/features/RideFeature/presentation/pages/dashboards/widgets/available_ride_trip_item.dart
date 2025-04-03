@@ -9,6 +9,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/utils/time_utils.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/dashboards_cubit/dashboards_cubit.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
@@ -109,7 +110,7 @@ class AvailableRideTripItem extends StatelessWidget {
                         ],
                       ),
                     ),
-                    Row(
+                    state.isLoadingAcceptOffer?const Center(child: CircularProgressIndicator()):Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(
@@ -117,7 +118,7 @@ class AvailableRideTripItem extends StatelessWidget {
                             height: 30,
                             radius: 15,
                             label: LocaleKeys.Accept.tr(),
-                            onPressed: () =>cubit.createOffer(tripId: tripEntity.id,price: tripEntity.price),
+                            onPressed: () =>cubit.createOffer(tripId: tripEntity.id,price: tripEntity.price, context: context, subCategoryId: tripEntity.subcategoryId),
                             backColor: AppColors.PRIMARY_COLOR,
                           ),
                         ),
@@ -142,7 +143,10 @@ class AvailableRideTripItem extends StatelessWidget {
                                           top: Radius.circular(15))),
                                   isScrollControlled: true,
                                   builder: (BuildContext context) =>
-                                      const EditPriceWidget(),
+                                      EditPriceWidget(price: tripEntity.price,tripEntity: tripEntity, onSendOffer: (num offer) {
+                                        context.pop();
+                                        cubit.createOffer(tripId: tripEntity.id, price: offer, context: context, subCategoryId: tripEntity.subcategoryId);
+                                      },),
                                 );
                               } else {
                                 showCustomDialogTrip(

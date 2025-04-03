@@ -356,6 +356,7 @@ class BaseApiConsumer extends ApiConsumer {
       if (e.response?.statusCode == 413) {
         return const ServerFailure(
           message: 'File size is too large',
+          name:  'Unknown Error',
         );
       } else if (e.response?.statusCode == 401) {
         if (error != null) {
@@ -366,6 +367,7 @@ class BaseApiConsumer extends ApiConsumer {
       } else if (errorData is Map && errorData['message'] is String) {
         return ServerFailure(
           message: errorData['message'] as String,
+          name: errorData['name'] as String? ?? 'Unknown Error',
           statusCode: e.response?.statusCode,
         );
       } else if (error != null) {
@@ -379,12 +381,14 @@ class BaseApiConsumer extends ApiConsumer {
         }
         return ServerFailure(
           message: error['message'] as String? ?? 'Unknown server error',
+          name: error['name'] as String? ?? 'Unknown Error',
           statusCode: e.response?.statusCode,
           errors: errors,
         );
       } else if (errorData is Map && errorData['data'] is String) {
         return ServerFailure(
           message: errorData['data'] as String,
+          name: errorData['name'] as String? ?? 'Unknown Error',
           statusCode: e.response?.statusCode,
         );
       }

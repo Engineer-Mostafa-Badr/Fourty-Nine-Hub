@@ -7,6 +7,7 @@ class Constants {
   static String zoomSubCategory = '66e308f2b21e9885fe787851';
   static String liveSubCategory = '66e30965b21e9885fe787853';
   static String reelSubCategory = '66684135dbb427ee42aa0141';
+  static String tubeSubCategory = '67e952dbbb085740a35d4281';
   static String rideSpecialDriver = 'ride_special_driver';
   static String rideNotSpecialDriver = 'ride_not_special_driver';
   static String loaderRegister = 'loaderRegister';
