@@ -12,6 +12,7 @@ import '../../../../../common/widgets/dynamic/bottom_painter.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../routes/routes.dart';
 import '../../../../../service_locator/service_locator.dart';
+import '../../../../fourty_nine/domain/entities/main_category_entity.dart';
 
 class CustomPageBottonNavBar extends StatelessWidget
     implements PreferredSizeWidget {
@@ -36,8 +37,11 @@ class CustomPageBottonNavBar extends StatelessWidget
           if (state.navigateBar == null) {
             return const SizedBox(); // or a loading indicator
           }
-
           final navigateBar = state.navigateBar!;
+          print(
+              'navigateBar ${navigateBar.marriage.nameEn} ${navigateBar.marriage.enabled}');
+          print(
+              'navigateBar ${navigateBar.ride.nameEn} ${navigateBar.ride.enabled}');
 
           // Build the visible items based on the navigateBar properties
           List<BottomItemModel> visibleItems = [
@@ -121,13 +125,13 @@ class CustomPageBottonNavBar extends StatelessWidget
                 image: Assets.live,
                 route: Routes.LIVE,
               ),
-            if (navigateBar.meet.enabled)
+            if (navigateBar.marriage.enabled)
               BottomItemModel(
                 icon: Icons.video_call,
-                label: 'meet',
+                label: 'marriage',
                 // Translated text
-                image: Assets.zoomMeeting,
-                route: Routes.ZOOM,
+                image: Assets.marriedSvg,
+                route: Routes.MARRIAGESUBCATEGORIES,
               ),
             if (navigateBar.spotlight.enabled)
               BottomItemModel(
@@ -164,6 +168,7 @@ class CustomPageBottonNavBar extends StatelessWidget
 class BottomItemModel {
   final IconData icon;
   final String label;
+  final dynamic extra;
   final String image;
   final String route;
   final double height;
@@ -174,12 +179,13 @@ class BottomItemModel {
     required this.label,
     required this.image,
     required this.route,
+    this.extra,
     this.height = 20,
     this.isVisible = true, // Default visibility is true
   });
 
   void action(BuildContext context) {
-    context.push(route);
+    context.push(route, extra: extra);
   }
 }
 

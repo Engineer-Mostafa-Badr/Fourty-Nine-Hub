@@ -175,8 +175,8 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                     create: (context) => serviceLocator<SubcategoriesCubit>(),
                     child: Expanded(
                       child: MarriageSubCategoriesView(
-                        mainCategory:
-                            controller.mainCategories[state.selectedIndex],
+                        // mainCategory:
+                        //     controller.mainCategories[state.selectedIndex],
                         inGridView: true,
                       ),
                     ),

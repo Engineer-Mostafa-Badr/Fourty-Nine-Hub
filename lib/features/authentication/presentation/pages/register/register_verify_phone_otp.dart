@@ -23,19 +23,19 @@ import '../../../../../routes/routes.dart';
 import '../../../../../service_locator/service_locator.dart';
 import '../../controllers/user_cubit/user_cubit.dart';
 
-class RegisterVerifyOTP extends StatefulWidget {
-  final String email;
+class RegisterVerifyPhoneOTP extends StatefulWidget {
+  final String phoneNumber;
 
-  const RegisterVerifyOTP({
+  const RegisterVerifyPhoneOTP({
     super.key,
-    required this.email,
+    required this.phoneNumber,
   });
 
   @override
-  State<RegisterVerifyOTP> createState() => _RegisterVerifyOTPState();
+  State<RegisterVerifyPhoneOTP> createState() => _RegisterVerifyPhoneOTPState();
 }
 
-class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
+class _RegisterVerifyPhoneOTPState extends State<RegisterVerifyPhoneOTP> {
   @override
   Widget build(BuildContext context) {
     final verifyOtpCubit = context.read<VerifyOtpCubit>();
@@ -148,7 +148,7 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
       child: CustomScaffold(
         enableCustomAppBar: true,
         appBar: const BackAppBar(
-          label: 'OTP Verify For Email',
+          label: 'OTP Verify For Phone',
           enableCustomAppBar: true,
         ),
         bottomSheet: SizedBox(
@@ -158,7 +158,7 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
             label: LocaleKeys.verify.localize,
             labelStyle: TextStyle(
                 fontSize: 60.sp.w, color: AppColors.AUTH_CONTAINER_COLOR),
-            onPressed: () => verifyOtpCubit.verifyOTP(widget.email),
+            onPressed: () => verifyOtpCubit.verifyPhoneOTP(widget.phoneNumber),
           ),
         ),
         body: Padding(
@@ -180,7 +180,7 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                     style: Styles.mediumText(color: Colors.black87),
                   ),
                   Label(
-                    text: widget.email,
+                    text: widget.phoneNumber,
                     style: Styles.mediumText(
                       fontWeight: FontWeight.bold,
                     ),
@@ -239,7 +239,7 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                       blurRadius: 10,
                     )
                   ],
-                  onCompleted: (v) => verifyOtpCubit.verifyOTP(widget.email),
+                  onCompleted: (v) => verifyOtpCubit.verifyPhoneOTP(widget.phoneNumber),
                   beforeTextPaste: (text) {
                     return true;
                   },

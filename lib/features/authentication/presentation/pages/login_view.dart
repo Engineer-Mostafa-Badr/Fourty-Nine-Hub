@@ -92,10 +92,108 @@ class _LoginViewState extends State<LoginView> {
             Routes.VERIFYMAIL,
             extra: registerCubit.emailTextController.text,
           );
-        } else if (state is RegisterByPhone) {
+        } else if (state is OTPPhoneSent) {
+          showSuccessMessage(context, LocaleKeys.oTP.localize);
           context.go(
-            Routes.HOME,
+            Routes.registerVerifyPhoneOTP,
+            extra: registerCubit.emailTextController.text,
           );
+        } else if (state is RegisterByPhone) {
+          await CacheManager.saveAccessToken(
+              state.userTokensEntity.accessToken);
+          await CacheManager.saveRefreshToken(
+              state.userTokensEntity.refreshToken);
+          context
+              .read<NotificationSocketIoCubit>()
+              .notificationListener(languageCode: 'en');
+          context
+              .read<NotificationSocketIoCubit>()
+              .clearAllNotificationsAndRefeatchAfterLogin(languageCode: 'en');
+
+          serviceLocator<UserCubit>()
+            ..setLogin(true)
+            ..attachToken()
+            ..getUser().then((value) async {
+              if (!mounted) return;
+
+              String? accessToken = await CacheManager.getAccessToken();
+              String? refreshToken = await CacheManager.getRefreshToken();
+
+              print('Refresh Token: $refreshToken');
+              print('Access Token: $accessToken');
+              print(serviceLocator<UserCubit>().state.data.toString());
+
+              Navigator.pop(context);
+              context.push(Routes.HOME);
+
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (mounted) {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Dialog(
+                        backgroundColor:
+                            Theme.of(context).scaffoldBackgroundColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24.0.r),
+                        ),
+                        child: Container(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Text(
+                                LocaleKeys.congratulations.localize,
+                                style: Styles.headerText(
+                                  color: AppColors.SECONDARY_COLOR,
+                                ),
+                              ),
+                              Sizer(),
+                              Text(
+                                LocaleKeys.giftApp.localize,
+                                textAlign: TextAlign.center,
+                                style: Styles.mediumText(),
+                              ),
+                              SizedBox(height: 40.h),
+                              SizedBox(
+                                height: 40,
+                                width: double.infinity,
+                                child: Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8),
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                            AppColors.SECONDARY_COLOR,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(16.0.r),
+                                        ),
+                                      ),
+                                      child: Label(
+                                        text: LocaleKeys.close.localize,
+                                        style: Styles.mediumText(
+                                          color: Theme.of(context)
+                                              .scaffoldBackgroundColor,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                }
+              });
+            });
         } else if (state is RegisterSuccess) {
           await context.read<UserCubit>().setLogin(true);
           await context.read<UserCubit>().getUser();
@@ -366,8 +464,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           children: [
             TextAppButton(
                 style: Styles.smallText(
-                  fontSize: 24,
-                 color: Theme.of(context).primaryColor),
+                    fontSize: 24, color: Theme.of(context).primaryColor),
                 label: LocaleKeys.forgetPassword.localize,
                 onPressed: () => context.push(Routes.FORGOTPASSWORD)),
           ],

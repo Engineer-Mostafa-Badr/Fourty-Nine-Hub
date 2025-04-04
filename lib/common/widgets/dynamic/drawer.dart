@@ -106,16 +106,16 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                         ),
                                       );
                                     }),
-                                // drawerListTile(
-                                //   image: Assets.microphone,
-                                //   label:
-                                //       LocaleKeys.advertiseYourCompany.localize,
-                                //   onTap: () {
-                                //     AdInterstitialTop.loadIntersitialAd();
-                                //     AdInterstitialTop.showInterstitialAd();
-                                //     return context.push(Routes.CREATECOMPANYAD);
-                                //   },
-                                // ),
+                                drawerListTile(
+                                  image: Assets.microphone,
+                                  label:
+                                      LocaleKeys.advertiseYourCompany.localize,
+                                  onTap: () {
+                                    AdInterstitialTop.loadIntersitialAd();
+                                    AdInterstitialTop.showInterstitialAd();
+                                    return context.push(Routes.CREATECOMPANYAD);
+                                  },
+                                ),
                                 drawerListTile(
                                     image: Assets.quran,
                                     label: LocaleKeys.quraan.localize,
@@ -274,7 +274,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   // onTap: () {},
                                   onTap: () {
                                     context.pop();
-                                    context.push(Routes.welcomeRideRegister);
+                                    context.push(Routes.createLoadingTripScreen);
                                   },
                                 ),
                                 drawerRollWidget(

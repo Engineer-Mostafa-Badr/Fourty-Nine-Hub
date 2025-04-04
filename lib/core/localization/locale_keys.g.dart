@@ -548,6 +548,7 @@ abstract class  LocaleKeys {
   static const searchFind = 'searchFind';
   static const markAllNotificationAsSeen = 'markAllNotificationAsSeen';
   static const requestLog = 'requestLog';
+  static const status = 'status';
   static const requestsHistory = 'requestsHistory';
   static const subscribe = 'subscribe';
   static const deleteRequest = 'deleteRequest';
@@ -1462,5 +1463,9 @@ abstract class  LocaleKeys {
   static const modify = 'modify';
   static const restaurantPhoto = 'restaurantPhoto';
   static const areYouSureUpdate = 'areYouSureUpdate';
+  static const otpCode = 'otpCode';
+  static const weHaveSentACodeTo = 'weHaveSentACodeTo';
+  static const oTPVerifyFor = 'oTPVerifyFor';
+  static const resendOtpSuccess = 'resendOtpSuccess';
 
 }

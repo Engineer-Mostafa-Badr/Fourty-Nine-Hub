@@ -79,7 +79,21 @@ class RegisterCubit extends Cubit<RegisterState> {
       emit(
         result.fold(
           (failure) => RegisterError(failure),
-          (_) => RegisterByPhone(),
+          (data) {
+            print("data.isPhoneVerified ${data.isPhoneVerified}");
+            print("data.tokensEntity.accessToken ${data.tokensEntity.accessToken}");
+            if (data.isPhoneVerified) {
+              _attachToken(data.tokensEntity); // attach to dio
+              _saveTokens(data.tokensEntity);
+              return RegisterByPhone(
+                userTokensEntity: data.tokensEntity,
+                isPhoneVerified: data.isPhoneVerified,
+              );
+            }
+            else{
+              return OTPPhoneSent();
+            }
+          },
         ),
       );
     } else if (_isEmail(emailTextController.text.trim())) {

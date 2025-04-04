@@ -6,8 +6,8 @@ import 'package:fourtyninehub/features/notifications/presentation/widgets/icon_w
 
 import '../../../../res/assets/assets.dart';
 
-class RequestLogIconBuilder extends StatelessWidget {
-  const RequestLogIconBuilder({
+class StatusIconBuilder extends StatelessWidget {
+  const StatusIconBuilder({
     super.key,
   });
 
@@ -18,7 +18,7 @@ class RequestLogIconBuilder extends StatelessWidget {
           context.watch<GetUnreadNotificationsCountCubit>();
       return CustomNotificationWidget(
         icon: Image.asset(
-          Assets.requestLog,
+          Assets.status,
           height: 30,
         ),
         //TODO Add request log count to backend

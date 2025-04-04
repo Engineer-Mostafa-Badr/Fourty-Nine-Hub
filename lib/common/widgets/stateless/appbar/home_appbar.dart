@@ -63,8 +63,6 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
     }
 
     return AppBar(
-      // toolbarHeight: 60,
-      // toolbarHeight: toolbarHeight,
       bottom: bottom,
       leading: IconButton(
         icon: Image.asset(

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_countdown_timer/countdown_timer_controller.dart';
@@ -9,10 +8,13 @@ import '../../../domain/use_cases/attach_token_use_case.dart';
 import '../../../domain/use_cases/resend_otp_use_case.dart';
 import '../../../domain/use_cases/save_tokens_use_case.dart';
 import '../../../domain/use_cases/verify_otp_use_case.dart';
+import '../../../domain/use_cases/verify_phone_otp_use_case.dart';
 
 part 'verify_otp_state.dart';
+
 class VerifyOtpCubit extends Cubit<VerifyOtpState> {
   final VerifyOTPUseCase _verifyOTPUseCase;
+  final VerifyPhoneOtpUseCase _verifyPhoneOTPUseCase;
   final SaveTokensUseCase _saveTokens;
   final AttachTokenUseCase _attachToken;
   final ResendOTPUseCase _resendOTPUseCase;
@@ -23,11 +25,12 @@ class VerifyOtpCubit extends Cubit<VerifyOtpState> {
   late CountdownTimerController controller;
 
   VerifyOtpCubit(
-      this._verifyOTPUseCase,
-      this._saveTokens,
-      this._attachToken,
-      this._resendOTPUseCase,
-      ) : super(VerifyOtpInitial()) {
+    this._verifyOTPUseCase,
+    this._verifyPhoneOTPUseCase,
+    this._saveTokens,
+    this._attachToken,
+    this._resendOTPUseCase,
+  ) : super(VerifyOtpInitial()) {
     _initializeTimer();
   }
 
@@ -43,11 +46,33 @@ class VerifyOtpCubit extends Cubit<VerifyOtpState> {
   void verifyOTP(String email) async {
     if (state is VerifyOtpLoading) return;
     emit(VerifyOtpLoading());
-    final result = await _verifyOTPUseCase(VerifyOTPParams(email: email, otp: otp));
+    final result =
+        await _verifyOTPUseCase(VerifyOTPParams(email: email, otp: otp));
     emit(
       result.fold(
-            (failure) => VerifyOtpError(failure),
-            (userToken) {
+        (failure) => VerifyOtpError(failure),
+        (userToken) {
+          _attachToken(userToken);
+          _saveTokens(userToken);
+          return VerifyOtpSuccess(userTokensEntity: userToken);
+        },
+      ),
+    );
+  }
+
+  void verifyPhoneOTP(String phoneNumber) async {
+    if (state is VerifyOtpLoading) return;
+    emit(VerifyOtpLoading());
+    final result = await _verifyPhoneOTPUseCase(
+      VerifyPhoneOTPParams(
+        phoneNumber: phoneNumber,
+        otp: otp,
+      ),
+    );
+    emit(
+      result.fold(
+        (failure) => VerifyOtpError(failure),
+        (userToken) {
           _attachToken(userToken);
           _saveTokens(userToken);
           return VerifyOtpSuccess(userTokensEntity: userToken);
@@ -68,10 +93,10 @@ class VerifyOtpCubit extends Cubit<VerifyOtpState> {
 
     final result = await _resendOTPUseCase(ResendOTPParams(email: email));
     result.fold(
-          (l) {
+      (l) {
         emit(ResendOtpError(l));
       },
-          (_) {
+      (_) {
         isTimeOff = false;
         _initializeTimer();
         emit(ResendOtpSuccess());
@@ -79,5 +104,4 @@ class VerifyOtpCubit extends Cubit<VerifyOtpState> {
       },
     );
   }
-
 }

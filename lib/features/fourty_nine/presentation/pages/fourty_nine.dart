@@ -1,5 +1,4 @@
 import 'package:auto_scroll_text/auto_scroll_text.dart';
-import 'package:circular_menu/circular_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,7 +16,6 @@ import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/widgets/animated_text.dart';
-import 'package:fourtyninehub/features/fourty_nine/presentation/widgets/custom_heart_button.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/firebase_notfications_cubit/firebase_notfications_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/notification_socket_io/notification_socket_io_cubit.dart';
 import 'package:fourtyninehub/features/notifications/presentation/widgets/notification_snackbar.dart';
@@ -39,6 +37,7 @@ import '../../../../routes/routes.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../widgets/announce_widget.dart';
 import '../widgets/exit_widget.dart';
+import '../widgets/favourite_screens_view.dart';
 
 class FourtyNineView extends StatefulWidget {
   const FourtyNineView({super.key});
@@ -159,15 +158,18 @@ class _FourtyNineViewState extends State<FourtyNineView>
       child: ExitWidget(
         child: CustomScaffold(
           key: _scaffoldKey,
-          appBar: HomeAppbar(
-            isWithBackArrow: false,
-            language: true,
-            leading: IconButton(
-              icon: const Icon(Icons.menu), // The menu icon
-              onPressed: () {
-                HandleCashback.setCount('drawerCount', context);
-                _scaffoldKey.currentState?.openDrawer(); // Open the drawer
-              },
+          appBar: const PreferredSize(
+            preferredSize: Size.fromHeight(30),
+            child: HomeAppbar(
+              isWithBackArrow: false,
+              language: true,
+              // leading: IconButton(
+              //   icon: const Icon(Icons.menu,size: 50,), // The menu icon
+              //   onPressed: () {
+              //     HandleCashback.setCount('drawerCount', context);
+              //     _scaffoldKey.currentState?.openDrawer(); // Open the drawer
+              //   },
+              // ),
             ),
           ),
           bottomNavigationBar: BottomNavigator(
@@ -192,7 +194,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
             children: [
               const AddBanner(),
               //carousel slider
-              const Sizer(),
+              // const Sizer(),
               const AnnounceWidget(),
               const Sizer(),
               !context.read<UserCubit>().isLoggedIn
@@ -274,28 +276,37 @@ class _FourtyNineViewState extends State<FourtyNineView>
                     return Shimmer.fromColors(
                       baseColor: Colors.grey[100]!,
                       highlightColor: Colors.white24,
-                      child: Column(
-                        children: List.generate(
-                            6,
-                            (index) => Padding(
-                                  padding: EdgeInsets.only(bottom: 15.h),
-                                  child: Container(
-                                    height: MediaQuery.of(context).size.height *
-                                        .15.h,
-                                    width: double.infinity,
-                                    margin:
-                                        EdgeInsets.symmetric(horizontal: 10.w),
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 10.w),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.AUTH_CONTAINER_COLOR,
-                                      borderRadius: BorderRadius.circular(20.r),
-                                      border: Border.all(color: Colors.grey),
-                                    ),
-                                  ),
-                                )),
+                      child: GridView.builder(
+                        gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisSpacing: 10,
+                            crossAxisCount: 2,
+                            childAspectRatio: 2 / 3),
+                        itemCount: 6,
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            child: Container(
+                              height: MediaQuery.of(context).size.height *
+                                  .15.h,
+                              width: double.infinity,
+                              margin:
+                              EdgeInsets.symmetric(horizontal: 10.w),
+                              padding:
+                              EdgeInsets.symmetric(horizontal: 10.w),
+                              decoration: BoxDecoration(
+                                color: AppColors.AUTH_CONTAINER_COLOR,
+                                borderRadius: BorderRadius.circular(20.r),
+                                border: Border.all(color: Colors.grey),
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     );
+
                   }
                   if (state.data != null) {
                     return GridView.builder(
@@ -366,8 +377,27 @@ class _FourtyNineViewState extends State<FourtyNineView>
             () => HandleCashback.setCount('threeDotsCount', context),
           ),
         ),
-        const Sizer(width: 32,),
-        CustomHeartButton(),
+        const Sizer(
+          width: 32,
+        ),
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const FavouriteScreensView()));
+          },
+          child: Container(
+            height: 40,
+            width: 40,
+            decoration: const BoxDecoration(
+              color: Color(0xFFD9D9D9),
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(Icons.favorite, color: Colors.red),
+          ),
+        ),
+        // CustomHeartButton(),
         // CircularMenu(
         //     radius: 70,
         //     backgroundWidget: Container(
@@ -429,7 +459,9 @@ class _FourtyNineViewState extends State<FourtyNineView>
         //         color: Colors.green,
         //       ),
         //     ]),
-        const Sizer(width: 32,),
+        const Sizer(
+          width: 32,
+        ),
         Expanded(
           child: _buildItemTabBar(
               const Icon(
@@ -487,6 +519,51 @@ class _FourtyNineViewState extends State<FourtyNineView>
   }
 
   Widget _buildStarWidget() {
+    return GestureDetector(
+      onTap: () {
+        AdInterstitialTop.loadIntersitialAd();
+        AdInterstitialTop.showInterstitialAd();
+        HandleCashback.setCount('beAStarCount', context);
+        context.push(Routes.BE_STAR);
+      },
+      child: Container(
+        height: kToolbarHeight * 2.h,
+        decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          borderRadius: BorderRadius.circular(40.r),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
+              spreadRadius: 5,
+              blurRadius: 5,
+              offset: const Offset(1, 1),
+            )
+          ],
+        ),
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Image.asset(
+              Assets.tube1,
+              fit: BoxFit.fill,
+              width: double.infinity,
+            ),
+            Container(
+              color: Colors.black38,
+            ),
+            Label(
+              text: LocaleKeys.tube.localize,
+              style: Styles.mediumText(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 45,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
     return SizedBox(
       height: kToolbarHeight * 2.h,
       width: double.infinity,

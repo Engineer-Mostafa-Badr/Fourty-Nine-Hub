@@ -20,7 +20,7 @@ class SocialIconBuilder extends StatelessWidget {
       return CustomNotificationWidget(
         icon: SvgPicture.asset(
           Assets.social,
-          height: 30.h,
+          height: 30,
           semanticsLabel: 'social',
         ),
         unreadCount: getUnreadNotificationsCountCubit

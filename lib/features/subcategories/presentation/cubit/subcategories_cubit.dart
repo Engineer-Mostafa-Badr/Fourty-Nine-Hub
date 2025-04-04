@@ -106,7 +106,7 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
     emit(state.copyWith(status: SubcategoriesStates.loading));
     await Future.wait([
       getMainCategoryDetails(),
-      getMarriageSubcategories(id),
+      getMarriageSubcategories(),
     ]);
     emit(state.copyWith(status: SubcategoriesStates.initState));
   }
@@ -154,14 +154,14 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
     return data;
   }
 
-  Future<List<SubCategoryEntity>> getMarriageSubcategories(String id) async {
+  Future<List<SubCategoryEntity>> getMarriageSubcategories() async {
     List<SubCategoryEntity> data = [];
     // emit(state.copyWith(status: SubcategoriesStates.loading));
     // await UserCubit.to.getUser();
     final user = UserCubit.to.state.data?.id;
     print('useeeerId===>$user}');
     final response = await _getSubcategoriesUsecase(GetSubCategoriesParams(
-        mainCategoryId: id,
+        mainCategoryId: '62c8b5b09332225799fe335e',
         paginationParams: PaginationParams(page: 1, limit: 200),
         userId: user ?? ''));
     response.fold(
@@ -244,7 +244,7 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
     hasMoreData = true;
     await Future.wait([
       getMainCategoryDetails(),
-      getMarriageSubcategories(subCategoryId),
+      getMarriageSubcategories(),
     ]);
     emit(state.copyWith(status: SubcategoriesStates.initState));
   }

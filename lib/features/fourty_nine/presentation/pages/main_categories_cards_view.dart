@@ -55,7 +55,7 @@ class _MainCategoriesFlipCardsViewState
     var mainCategories = mainCategoriesCubit.state.customPage ?? [];
     // mainCategories = widget.data!;
 
-    return CustomScaffold(
+    return Scaffold(
       appBar: widget.isAppBarShow
           ? BackAppBar(
               label: mainCategories.isNotEmpty ? labelName : '',

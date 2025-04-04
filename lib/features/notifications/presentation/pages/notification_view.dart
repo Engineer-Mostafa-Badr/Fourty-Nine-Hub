@@ -22,7 +22,7 @@ import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../res/style/styles.dart';
 import '../widgets/request_log_builder.dart';
-import '../widgets/request_log_icon_builder.dart';
+import '../widgets/status_icon_builder.dart';
 
 class NotificationView extends StatefulWidget {
   const NotificationView({super.key});
@@ -36,7 +36,7 @@ List<String> titles = [
   LocaleKeys.fourtyNineNotifications.localize,
   LocaleKeys.socialNotifications.localize,
   LocaleKeys.serviceNoifications.localize,
-  LocaleKeys.requestLog.localize,
+  LocaleKeys.status.localize,
 ];
 
 class _NotificationViewState extends State<NotificationView> {
@@ -125,7 +125,7 @@ class _NotificationViewState extends State<NotificationView> {
                         AppIconBuilder(),
                         SocialIconBuilder(),
                         ServicesIconBuilder(),
-                        RequestLogIconBuilder(),
+                        StatusIconBuilder(),
                       ],
                     ),
                     Expanded(
@@ -149,7 +149,7 @@ class _NotificationViewState extends State<NotificationView> {
                           GestureDetector(
                             onHorizontalDragStart: (_) {},
                             onHorizontalDragEnd: (_) {},
-                            child: const RequestLogBuilder(),
+                            child: const StatusRequestLogBuilder(),
                           ),
                         ],
                       ),

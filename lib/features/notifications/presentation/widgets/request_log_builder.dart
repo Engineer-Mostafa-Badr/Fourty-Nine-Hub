@@ -10,8 +10,8 @@ import '../../domain/entities/user_trip_entity.dart';
 import 'no_notifications_widget.dart';
 import 'notification_card_loading.dart';
 
-class RequestLogBuilder extends StatelessWidget {
-  const RequestLogBuilder({super.key});
+class StatusRequestLogBuilder extends StatelessWidget {
+  const StatusRequestLogBuilder({super.key});
 
   @override
   Widget build(BuildContext context) {

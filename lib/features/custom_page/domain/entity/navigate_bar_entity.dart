@@ -18,7 +18,7 @@ class NavigateBarEntity {
   final NavigateBarFeature live;
   final NavigateBarFeature loading;
   final NavigateBarFeature meal;
-  final NavigateBarFeature meet;
+  final NavigateBarFeature marriage;
   final NavigateBarFeature reel;
   final NavigateBarFeature ride;
   final NavigateBarFeature snap;
@@ -32,7 +32,7 @@ class NavigateBarEntity {
     required this.live,
     required this.loading,
     required this.meal,
-    required this.meet,
+    required this.marriage,
     required this.reel,
     required this.ride,
     required this.snap,
