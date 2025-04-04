@@ -36,7 +36,7 @@ class TruckPersonalInformationScreen extends StatelessWidget {
                   spacing: 4,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    closeWidget(context),
+                    closeWidget(context:context,onAcceptSaveData: (){}, closeRemoveData: (){}),
                     Label(
                       text: LocaleKeys.personalInformation.localize,
                       style: Styles.headerText(

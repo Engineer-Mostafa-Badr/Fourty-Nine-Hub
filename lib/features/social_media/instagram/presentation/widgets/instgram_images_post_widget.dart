@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/image_post_widget.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
@@ -20,6 +21,9 @@ class _InstgramImagesPostWidgetState extends State<InstgramImagesPostWidget> {
   Widget build(BuildContext context) {
     if (widget.images.length == 1) {
       log(widget.images.first);
+      return ImagePostWidget(
+        imageUrl: widget.images.first,
+      );
       return Container(
         height: 400,
         decoration: BoxDecoration(
@@ -40,29 +44,35 @@ class _InstgramImagesPostWidgetState extends State<InstgramImagesPostWidget> {
               },
               itemCount: widget.images.length,
               itemBuilder: (context, index) {
-                return Container(
-                  alignment: Alignment.topRight,
-                  padding: const EdgeInsets.all(8),
-                  height: 400,
-                  color: Colors.red,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Colors.black.withValues(alpha: 0.5),
-                    ),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-                    child: Text(
-                      "${currentIndex + 1}/${widget.images.length}",
-                      style: Styles.mediumText(
-                          color: Colors.white, fontWeight: FontWeight.w400),
-                    ),
-                  ),
+                return ImagePostWidget(
+                  imageUrl: widget.images[index],
                 );
+
+                // return Container(
+                //   alignment: Alignment.topRight,
+                //   padding: const EdgeInsets.all(8),
+                //   height: 400,
+                //   color: Colors.red,
+                //   child: Container(
+                //     decoration: BoxDecoration(
+                //       borderRadius: BorderRadius.circular(20),
+                //       color: Colors.black.withValues(alpha: 0.5),
+                //     ),
+                //     padding:
+                //         const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                //     child: Text(
+                //       "${currentIndex + 1}/${widget.images.length}",
+                //       style: Styles.mediumText(
+                //           color: Colors.white, fontWeight: FontWeight.w400),
+                //     ),
+                //   ),
+                // );
               },
             ),
           ),
-          const Sizer(),
+          const SizedBox(
+            height: 10,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -71,9 +81,9 @@ class _InstgramImagesPostWidgetState extends State<InstgramImagesPostWidget> {
                 (index) {
                   return AnimatedContainer(
                     margin: const EdgeInsets.symmetric(horizontal: 2),
-                    duration: const Duration(milliseconds: 500),
-                    width: 10,
-                    height: 10,
+                    duration: const Duration(milliseconds: 300),
+                    width: 6,
+                    height: 6,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: currentIndex == index

@@ -6,12 +6,13 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/app_colors.dart';
+import '../../../domain/entities/dashboards/trip_entity.dart';
 import 'widgets/problem_and_client_details.dart';
 import 'widgets/ride_details_rating_widget.dart';
 
 class RideDashboardDetailsScreen extends StatefulWidget {
-  final String modeType;
-  const RideDashboardDetailsScreen({super.key, required this.modeType});
+  final TripEntity tripEntity;
+  const RideDashboardDetailsScreen({super.key, required this.tripEntity});
 
   @override
   State<RideDashboardDetailsScreen> createState() =>
@@ -33,9 +34,9 @@ class _RideDashboardDetailsScreenState
           scrolledUnderElevation: 0,
           leadingWidth: 30,
           title: Label(
-              text: widget.modeType == 'ride'
+              text: widget.tripEntity.modeType == 'ride'
                   ? LocaleKeys.rideDetails.tr()
-                  : widget.modeType == 'truk'
+                  : widget.tripEntity.modeType == 'truk'
                       ? LocaleKeys.trukDetails.tr()
                       : LocaleKeys.busDetails.tr(),
               style:
@@ -60,9 +61,9 @@ class _RideDashboardDetailsScreenState
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Label(
-                                text: widget.modeType == 'ride'
+                                text: widget.tripEntity.modeType == 'ride'
                                     ? LocaleKeys.captainWithYou.tr()
-                                    : widget.modeType == 'truk'
+                                    : widget.tripEntity.modeType == 'truk'
                                         ? LocaleKeys.trukWithYou
                                             .tr() //"Truk ride with You"
                                         : LocaleKeys.busWithYou
@@ -79,7 +80,7 @@ class _RideDashboardDetailsScreenState
                               ),
                             ),
                             Label(
-                                text: "150 ${LocaleKeys.egp.tr()}",
+                                text: "${widget.tripEntity.tripDetails!.price} ${LocaleKeys.egp.tr()}",
                                 style: const TextStyle(
                                     fontWeight: FontWeight.w700, fontSize: 16)),
                           ]),
@@ -98,44 +99,44 @@ class _RideDashboardDetailsScreenState
                   ],
                 ),
               ),
-              if (widget.modeType != 'ride')
+              if (widget.tripEntity.modeType != 'ride')
                 Label(
-                    text: widget.modeType == 'bus'
+                    text: widget.tripEntity.modeType == 'bus'
                         ? "${LocaleKeys.passenger.tr()} : 10"
                         : "${LocaleKeys.cargoDescription.tr()} : Car",
                     style: const TextStyle(
                         fontWeight: FontWeight.w600, fontSize: 16)),
-              const Row(
+               Row(
                 spacing: 18,
                 children: [
-                  CustomColorCircleWidget(
+                  const CustomColorCircleWidget(
                     firstColor: AppColors.c19D176,
                   ),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
+                        // Label(
+                        //   text: "Cairo International Airport",
+                        //   style: TextStyle(
+                        //     fontWeight: FontWeight.w600,
+                        //     fontSize: 14,
+                        //   ),
+                        // ),
+                        // SizedBox(
+                        //   height: 2,
+                        // ),
                         Label(
-                          text: "Cairo International Airport",
-                          style: TextStyle(
+                          text: widget.tripEntity.tripDetails!.startLocation.title,
+                          style: const TextStyle(
                             fontWeight: FontWeight.w600,
-                            fontSize: 14,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 2,
-                        ),
-                        Label(
-                          text: "Heliopolis, El Nozha, Cairo Governora...",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
                             fontSize: 12,
                           ),
                         ),
                       ],
                     ),
                   ),
-                  Label(
+                  const Label(
                     text: "12:10 PM",
                     style: TextStyle(
                         color: AppColors.c5A5A5A,
@@ -144,37 +145,37 @@ class _RideDashboardDetailsScreenState
                   ),
                 ],
               ),
-              const Row(
+               Row(
                 spacing: 18,
                 children: [
-                  CustomColorCircleWidget(
+                  const CustomColorCircleWidget(
                     firstColor: AppColors.c3897F0,
                   ),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
+                        // Label(
+                        //   text: "Cairo International Airport",
+                        //   style: TextStyle(
+                        //     fontWeight: FontWeight.w600,
+                        //     fontSize: 14,
+                        //   ),
+                        // ),
+                        // SizedBox(
+                        //   height: 2,
+                        // ),
                         Label(
-                          text: "Cairo International Airport",
-                          style: TextStyle(
+                          text: widget.tripEntity.tripDetails!.targetLocation.title,
+                          style: const TextStyle(
                             fontWeight: FontWeight.w600,
-                            fontSize: 14,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 2,
-                        ),
-                        Label(
-                          text: "Heliopolis, El Nozha, Cairo Governora...",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
                             fontSize: 12,
                           ),
                         ),
                       ],
                     ),
                   ),
-                  Label(
+                  const Label(
                     text: "12:10 PM",
                     style: TextStyle(
                         color: AppColors.c5A5A5A,

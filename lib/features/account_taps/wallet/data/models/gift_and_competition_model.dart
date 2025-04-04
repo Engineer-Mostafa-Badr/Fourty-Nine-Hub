@@ -12,6 +12,7 @@ class GiftAndCompetitionModel extends GiftAndCompetitionEntity {
     required super.wheelWinner,
     required super.isFIVE,
     required super.isTen,
+    required super.yearsToDate,
   });
 
   factory GiftAndCompetitionModel.fromJson(Map<String, dynamic> json) {
@@ -24,6 +25,7 @@ class GiftAndCompetitionModel extends GiftAndCompetitionEntity {
       wheelWinner: json['wheelWinner'],
       isFIVE: json['isFIVE'],
       isTen: json['isTen'],
+      yearsToDate: json['yearsToDate'],
     );
   }
 }

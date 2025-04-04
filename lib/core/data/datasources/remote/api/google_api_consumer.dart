@@ -17,7 +17,8 @@ class GoogleApiConsumer extends ApiConsumer {
   Future<Either<Failure, Map<String, dynamic>>> get(String url,
       {Map<String, dynamic>? queryParameters,
       Map<String, dynamic>? data,
-      Map<String, dynamic>? headers}) async {
+      Map<String, dynamic>? headers,
+        bool refresh = false,}) async {
     try {
       // dio.options.baseUrl ;
       final result = await dio.get(url,
@@ -61,7 +62,8 @@ class GoogleApiConsumer extends ApiConsumer {
   Future<Either<Failure, Map<String, dynamic>>> delete(String url,
       {Map<String, dynamic>? data,
       Map<String, dynamic>? queryParameters,
-      Map<String, dynamic>? headers}) {
+      Map<String, dynamic>? headers,
+        bool refresh = false,}) {
     // TODO: implement delete
     throw UnimplementedError();
   }
@@ -75,7 +77,8 @@ class GoogleApiConsumer extends ApiConsumer {
       {Map<String, dynamic>? data,
       FormData? formData,
       Map<String, dynamic>? queryParameters,
-      Map<String, dynamic>? headers}) {
+      Map<String, dynamic>? headers,
+        bool refresh = false,}) {
     // TODO: implement post
     throw UnimplementedError();
   }
@@ -84,7 +87,8 @@ class GoogleApiConsumer extends ApiConsumer {
   Future<Either<Failure, Map<String, dynamic>>> put(String url,
       {Map<String, dynamic>? data,
       Map<String, dynamic>? queryParameters,
-      Map<String, dynamic>? headers}) {
+      Map<String, dynamic>? headers,
+        bool refresh = false,}) {
     // TODO: implement put
     throw UnimplementedError();
   }
@@ -93,7 +97,8 @@ class GoogleApiConsumer extends ApiConsumer {
   Future<Either<Failure, Map<String, dynamic>>> patch(String url,
       {Map<String, dynamic>? data,
       Map<String, dynamic>? queryParameters,
-      Map<String, dynamic>? headers}) {
+      Map<String, dynamic>? headers,
+        bool refresh = false,}) {
     // TODO: implement patch
     throw UnimplementedError();
   }

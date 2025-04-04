@@ -82,7 +82,8 @@ class RestaurantRemoteDataSourceImpl implements RestaurantRemoteDataSource {
       {required AddFoodParams params}) async {
     final response = await _apiConsumer.post(EndPoints.addFood,
         data: params.toJson(),
-        queryParameters: {"subCategory": params.subcategory});
+        // queryParameters: {"subCategory": params.subcategory}
+    );
     return response.fold((failure) => Left(failure),
         (data) => Right(RestaurantMneuModel.fromJson(data['data'])));
   }

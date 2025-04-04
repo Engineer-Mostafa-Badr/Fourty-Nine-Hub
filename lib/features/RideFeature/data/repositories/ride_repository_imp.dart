@@ -29,6 +29,8 @@ import 'package:fourtyninehub/features/RideFeature/domain/repositories/ride_repo
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_pending_trip_by_client_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_car_years_and_types_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_trip_auto_accept_by_client_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_categories_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_socket_location_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/features/ride/driver_dashboard/domain/entities/driver_statistics_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/accept_trip_by_driver_use_case.dart';
@@ -62,13 +64,13 @@ class RideRepositoryImplementation extends RideRepository {
   ////////////////////////////Nasr//////////////////////////
 
   @override
-  Future<Either<Failure, RideCategoryEntityUpdated>> getRideCategories(String userId) async {
-    return await rideRemoteDataSource.getRideCategories(userId);
+  Future<Either<Failure, RideCategoryEntityUpdated>> getRideCategories(GetRideCategoriesParams params) async {
+    return await rideRemoteDataSource.getRideCategories(params);
   }
 
   @override
-  Future<Either<Failure, RideCategoryEntityUpdated>> getShippingCategories(String userId) async {
-    return await rideRemoteDataSource.getShippingCategories(userId);
+  Future<Either<Failure, RideCategoryEntityUpdated>> getShippingCategories(GetRideCategoriesParams params) async {
+    return await rideRemoteDataSource.getShippingCategories(params);
   }
 
   @override
@@ -146,8 +148,8 @@ class RideRepositoryImplementation extends RideRepository {
   }
 
   @override
-  Future<Either<Failure, DriverInfoEntity>> getRideDriverInfo() async{
-    return await rideRemoteDataSource.getRideDriverInfo();
+  Future<Either<Failure, DriverInfoEntity>> getRideDriverInfo(bool refresh) async{
+    return await rideRemoteDataSource.getRideDriverInfo(refresh);
   }
 
   @override
@@ -251,8 +253,8 @@ class RideRepositoryImplementation extends RideRepository {
   }
 
   @override
-  Future<Either<Failure, LoadingInfoEntity>> getLoadingInfo() async{
-    return await rideRemoteDataSource.getLoadingInfo();
+  Future<Either<Failure, LoadingInfoEntity>> getLoadingInfo(bool refresh) async{
+    return await rideRemoteDataSource.getLoadingInfo(refresh);
   }
 
   @override
@@ -263,6 +265,12 @@ class RideRepositoryImplementation extends RideRepository {
   @override
   Future<Either<Failure, List<AvailableRideTripEntity>>> getAvailableRideTrips(AvailableRideTripsUseCaseParams params) async {
     final data = await rideRemoteDataSource.getAvailableRideTrips(params);
+    return data;
+  }
+
+  @override
+  Future<Either<Failure, bool>> listenToUpdateLocation(UpdateSocketLocationParams params) async {
+    final data = await rideRemoteDataSource.listenToUpdateLocation(params);
     return data;
   }
 

@@ -10,17 +10,17 @@ abstract class Styles {
       TextDecoration? decoration,
       double decorationThickness = 0,
       List<Shadow>? shadows,
-        double? height,
-        FontWeight fontWeight = FontWeight.w400}) {
+      double? height,
+      FontWeight fontWeight = FontWeight.w400}) {
     return TextStyle(
-        fontSize: fontSize.sp,
-        color: color,
-        decorationThickness: decorationThickness,
-        decoration: decoration,
-        shadows: shadows,
-        decorationColor: color ?? AppColors.PRIMARY_COLOR,
-        fontWeight: fontWeight,
-        height: height,
+      fontSize: fontSize.sp,
+      color: color,
+      decorationThickness: decorationThickness,
+      decoration: decoration,
+      shadows: shadows,
+      decorationColor: color ?? AppColors.PRIMARY_COLOR,
+      fontWeight: fontWeight,
+      height: height,
     );
   }
 
@@ -54,8 +54,8 @@ abstract class Styles {
       List<Shadow>? shadows,
       double decorationThickness = 0,
       Color? color,
-        double? height,
-        FontWeight fontWeight = FontWeight.w600}) {
+      double? height,
+      FontWeight fontWeight = FontWeight.w600}) {
     return TextStyle(
       fontSize: fontSize.sp,
       fontWeight: fontWeight,

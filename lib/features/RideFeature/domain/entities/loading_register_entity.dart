@@ -31,4 +31,18 @@ class LoadingRegisterEntity {
       "idNumber": idNumber,
     };
   }
+
+  //fromJson
+  factory LoadingRegisterEntity.fromJson(Map<String, dynamic> json) {
+    return LoadingRegisterEntity(
+      categoryId: json["categoryId"],
+      carModel: json["carModel"],
+      firstName: json["firstName"],
+      lastName: json["lastName"],
+      location: json["location"],
+      phone: json["phone"],
+      plateInformation: json["plateInformation"],
+      idNumber: json["idNumber"],
+    );
+  }
 }
