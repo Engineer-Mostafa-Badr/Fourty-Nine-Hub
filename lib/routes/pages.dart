@@ -1,5 +1,6 @@
 import 'package:flutter/src/widgets/basic.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/controllers/ride_register/ride_register_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/creminal_record_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/drug_analysis.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/technical_examination_screen.dart';
@@ -2852,20 +2853,21 @@ class AppPages {
                 name: Routes.welcomeRideRegister,
                 builder: (context, state) {
                   return MultiBlocProvider(providers: [
-                    BlocProvider<DestGetLatAndLongCubit>(
-                      create: (context) => DestGetLatAndLongCubit(
-                          getLatLongFromAddressRemoteDataSource:
-                              serviceLocator()),
+                    BlocProvider(
+                      create: (context) => serviceLocator<RideRegisterCubit>(),
                     ),
-                  ], child: const WelcomeRideRegister());
+                  ], child: WelcomeRideRegister(isShipping: state.extra as bool,));
                 },
               ),
               GoRoute(
                 path: Paths.UploadRiderImages,
                 name: Routes.UploadRiderImages,
                 builder: (context, state) {
-                  return UploadRiderImages(
-                    params: state.extra as UploadRiderImagesParams?,
+                  return BlocProvider(
+                    create: (context) => serviceLocator<RideRegisterCubit>(),
+                    child: UploadRiderImages(
+                      params: state.extra as UploadRiderImagesParams?,
+                    ),
                   );
                 },
               ),
@@ -2873,7 +2875,9 @@ class AppPages {
                 path: Paths.personalInformationScreen,
                 name: Routes.personalInformationScreen,
                 builder: (context, state) {
-                  return const PersonalInformationScreen();
+                  return BlocProvider(
+                      create: (context) => serviceLocator<RideRegisterCubit>(),
+                      child: PersonalInformationScreen(params: state.extra as RideFeatureRegisterParams,));
                 },
               ),
               GoRoute(
@@ -2886,7 +2890,7 @@ class AppPages {
                           getLatLongFromAddressRemoteDataSource:
                               serviceLocator()),
                     ),
-                  ], child: const DriversLicenseScreen());
+                  ], child: DriversLicenseScreen(params: state.extra as UploadRiderImagesParams,));
                 },
               ),
               GoRoute(
@@ -2920,7 +2924,7 @@ class AppPages {
                           getLatLongFromAddressRemoteDataSource:
                               serviceLocator()),
                     ),
-                  ], child: const PersonalDocumentsScreen());
+                  ], child: PersonalDocumentsScreen(params: state.extra as UploadRiderImagesParams));
                 },
               ),
               GoRoute(
@@ -2933,7 +2937,7 @@ class AppPages {
                           getLatLongFromAddressRemoteDataSource:
                               serviceLocator()),
                     ),
-                  ], child: const VehicleInformationScreen());
+                  ], child: VehicleInformationScreen(params: state.extra as UploadRiderImagesParams));
                 },
               ),
               GoRoute(
@@ -3038,7 +3042,7 @@ class AppPages {
                           getLatLongFromAddressRemoteDataSource:
                               serviceLocator()),
                     ),
-                  ], child: const CompleteRegisterScreen());
+                  ], child: CompleteRegisterScreen(params: state.extra as UploadRiderImagesParams,));
                 },
               ),
               GoRoute(

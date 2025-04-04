@@ -9,6 +9,7 @@ class RegisterExpansionTile extends StatefulWidget {
     required this.length,
     this.onChange,
     this.onSelect,
+    this.initialTitle,
   });
 
   final Widget title;
@@ -16,6 +17,7 @@ class RegisterExpansionTile extends StatefulWidget {
   final int length;
   final ValueChanged<Widget>? onChange;
   final Function(int id)? onSelect;
+  final Widget? initialTitle; // Add initialTitle property
 
   @override
   State<RegisterExpansionTile> createState() => _RegisterExpansionTileState();
@@ -28,7 +30,7 @@ class _RegisterExpansionTileState extends State<RegisterExpansionTile> {
   @override
   void initState() {
     super.initState();
-    selectedTitle = widget.title;
+    selectedTitle = widget.initialTitle ?? widget.title;
   }
 
   @override
@@ -40,7 +42,7 @@ class _RegisterExpansionTileState extends State<RegisterExpansionTile> {
       ),
       child: ExpansionTile(
         controller: controller,
-        title: selectedTitle, // Use// state variable
+        title: selectedTitle, // Use state variable
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         backgroundColor: AppColors.GREYBG,
         expandedAlignment: Alignment.centerLeft,
@@ -53,7 +55,7 @@ class _RegisterExpansionTileState extends State<RegisterExpansionTile> {
             height: 10,
           ),
           Container(
-            constraints: BoxConstraints(maxHeight: 250),
+            constraints: const BoxConstraints(maxHeight: 250),
             child: ListView(
               padding: const EdgeInsets.all(16.0),
               children: List.generate(
@@ -68,7 +70,7 @@ class _RegisterExpansionTileState extends State<RegisterExpansionTile> {
 
                       if (widget.onChange != null) {
                         widget.onChange!(widget.children[index]); // Notify parent
-                        if(widget.onSelect !=null){
+                        if (widget.onSelect != null) {
                           widget.onSelect!(index);
                         }
                       }

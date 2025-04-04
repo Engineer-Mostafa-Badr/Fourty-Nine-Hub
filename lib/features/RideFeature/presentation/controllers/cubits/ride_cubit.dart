@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:collection/collection.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -53,7 +54,9 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/register_ride
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/register_ride_special_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/request_trip_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/retrieve_client_latest_trip_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_socket_location_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/personal_information_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/upload_rider_images.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
@@ -104,6 +107,7 @@ class RideCubit extends Cubit<RideState> {
   final GetLoadingInfoUseCase getLoadingInfoUseCase;
   final MakeRequestTripUseCase makeRequestTripUseCase;
   final RecordingTripUseCase recordingTripUseCase;
+  final UpdateSocketLocationUseCase updateSocketLocationUseCase;
 
   RideCubit(
     this.getRideCategories,
@@ -130,6 +134,7 @@ class RideCubit extends Cubit<RideState> {
     this.getLoadingInfoUseCase,
     this.makeRequestTripUseCase,
     this.recordingTripUseCase,
+    this.updateSocketLocationUseCase,
   ) : super( RideState());
 
   bool loadingHomeData = false;
@@ -139,12 +144,16 @@ class RideCubit extends Cubit<RideState> {
     await Future.wait([
       _fetchUserLocation(),
       _fetchUserLocation(),
-      fetchRideDriverInfo(context),
+      fetchRideDriverInfo(context,false),
+      fetchRideDriverInfo(context,true),
       getCostPerKm(),
-      fetchLoaderInfo(context),
+      fetchLoaderInfo(context,false),
+      fetchLoaderInfo(context,true),
       fetchRideDriverPictureOptional(context),
-      fetchRideCategories(UserCubit.to.state.data?.id ?? ""),
-      fetchShippingCategories(UserCubit.to.state.data?.id ?? ""),
+      fetchRideCategories(UserCubit.to.state.data?.id??'',false),
+      fetchRideCategories(UserCubit.to.state.data?.id??'',true),
+      fetchShippingCategories(UserCubit.to.state.data?.id??'',false),
+      fetchShippingCategories(UserCubit.to.state.data?.id??'',true),
       fetchRideGovernorates(),
     ]);
     loadingHomeData = false;
@@ -168,7 +177,7 @@ class RideCubit extends Cubit<RideState> {
 
       emit(state.copyWith(status: RideStates.success, currentLocation: currentLocation));
     } catch (e) {
-      emit(state.copyWith(status: RideStates.error));
+      log('_fetchUserLocation ${e.toString()}');
     }
   }
 
@@ -209,51 +218,80 @@ class RideCubit extends Cubit<RideState> {
   TextEditingController ridePricingPerKmController = TextEditingController();
   TextEditingController rideCarModelController = TextEditingController();
 
-  Future<void> fetchRideCategories(String userId) async {
-    if (isClosed) return; // Prevents state emission if the cubit is already disposed.
+  Future<void> fetchRideCategories(String userId,bool refresh) async {
     emit(state.copyWith(status: RideStates.loading));
 
-    final Either<Failure, RideCategoryEntityUpdated> result = await getRideCategories(userId);
+    final Either<Failure, RideCategoryEntityUpdated> result = await getRideCategories(GetRideCategoriesParams(
+      userId: userId,
+      refresh: refresh
+    ));
 
-    if (isClosed) return; // Double-check before emitting a state
     result.fold(
       (failure) {
         emit(state.copyWith(status: RideStates.error, failure: failure));
       },
       (rideCategory) async {
-        RegisterRideSpecialEntity? data = await Storage().getDriverEntity();
-        List<SubCategoryEntityUpdated>? rideSubCategories = rideCategory.subCategories;
-        print("data?.isShipping111${data?.isShipping}");
-        if (data?.isShipping == false) {
-          print("data?.isShipping${data?.isShipping}");
-          for (var item in rideSubCategories) {
-            if (data?.subcategoryIds.contains(item.subCategoryId) ?? false) {
-              item.isSelected = true;
-              item.isEnabled = true;
-            }else{
-              item.isSelected = false;
-              item.isEnabled = false;
-            }
-          }
-        }
-        emit(state.copyWith(status: RideStates.success, rideCategory: rideCategory, rideSubCategories: rideSubCategories));
+        // RegisterRideSpecialEntity? rideSocketCachedData = await Storage().getDriverEntity();
+        // RegisterRideNotSpecialEntity? rideNonSocketCachedData = await Storage().getDriverNoSocketEntity();
+        // List<SubCategoryEntityUpdated>? rideSubCategories = rideCategory.subCategories;
+        // print("data?.isShipping111${rideSocketCachedData?.isShipping}");
+        //   print("rideSocketCachedData?.isShipping${rideSocketCachedData?.isShipping}");
+        //   for (var item in rideSubCategories) {
+        //     List<String> subcategoryIds = [];
+        //     subcategoryIds.addAll(rideSocketCachedData?.subcategoryIds??[]);
+        //     subcategoryIds.add(rideNonSocketCachedData?.subcategoryId??'');
+        //     if (subcategoryIds.contains(item.subCategoryId)) {
+        //       item.isSelected = true;
+        //       item.isEnabled = true;
+        //     }else{
+        //       item.isSelected = false;
+        //       item.isEnabled = false;
+        //     }
+        //   }
+        emit(state.copyWith(status: RideStates.success, rideCategory: rideCategory, rideSubCategories: rideCategory.subCategories));
       },
     );
   }
 
+  Future<void> fetchShippingCategories(String userId,bool refresh) async {
+    emit(state.copyWith(status: RideStates.loading));
+
+    final Either<Failure, RideCategoryEntityUpdated> result = await getShippingCategoriesUsecase(GetRideCategoriesParams(userId: userId, refresh: refresh));
+
+    result.fold(
+          (failure) => emit(state.copyWith(status: RideStates.error, failure: failure)),
+          (rideCategory) async {
+            // LoadingRegisterEntity? loadingCachedData = await Storage().getLoaderEntity();
+            // List<SubCategoryEntityUpdated>? rideSubCategories = rideCategory.subCategories;
+            // for (var item in rideSubCategories) {
+            //   List<String> subcategoryIds = [];
+            //   subcategoryIds.add(loadingCachedData?.categoryId??'');
+            //   if (subcategoryIds.contains(item.subCategoryId)) {
+            //     item.isSelected = true;
+            //     item.isEnabled = true;
+            //   }else{
+            //     item.isSelected = false;
+            //     item.isEnabled = false;
+            //   }
+            // }
+            emit(state.copyWith(status: RideStates.success, shippingCategory: rideCategory, shippingSubCategories: rideCategory.subCategories));
+            },
+    );
+  }
+
   Future<bool> makeRequestTrips() async {
-    if (isClosed) return false;
+    // if (isClosed) return false;
     emit(state.copyWith(status: RideStates.loadingSubmit));
     bool isSuccess = true;
     final Either<Failure, bool> result = await makeRequestTripUseCase(const NoParams());
 
-    if (isClosed) return false;
+    // if (isClosed) return false;
     result.fold(
       (failure) {
         emit(state.copyWith(status: RideStates.error, failure: failure));
       },
       (data) {
-        isSuccess = data;
+         isSuccess = data;
         emit(state.copyWith(status: RideStates.success));
       },
     );
@@ -275,11 +313,11 @@ class RideCubit extends Cubit<RideState> {
     );
   }
 
-  Future<void> fetchRideDriverInfo(BuildContext context) async {
+  Future<void> fetchRideDriverInfo(BuildContext context,bool refresh) async {
     if (isClosed) return; // Prevents state emission if the cubit is already disposed.
     emit(state.copyWith(status: RideStates.loading));
 
-    final Either<Failure, DriverInfoEntity> result = await getRideDriverInfoUseCase(const NoParams());
+    final Either<Failure, DriverInfoEntity> result = await getRideDriverInfoUseCase(refresh);
 
     if (isClosed) return; // Double-check before emitting a state
     result.fold(
@@ -306,11 +344,11 @@ class RideCubit extends Cubit<RideState> {
     );
   }
 
-  Future<void> fetchLoaderInfo(BuildContext context) async {
+  Future<void> fetchLoaderInfo(BuildContext context,bool refresh) async {
     if (isClosed) return; // Prevents state emission if the cubit is already disposed.
     emit(state.copyWith(status: RideStates.loading));
 
-    final Either<Failure, LoadingInfoEntity> result = await getLoadingInfoUseCase(const NoParams());
+    final Either<Failure, LoadingInfoEntity> result = await getLoadingInfoUseCase(refresh);
 
     if (isClosed) return; // Double-check before emitting a state
     result.fold(
@@ -327,7 +365,12 @@ class RideCubit extends Cubit<RideState> {
     if (params != null) emit(state.copyWith(isShipping: params.isShipping, registerType: params.isSocket == true ? 'socket' : 'noSocket'));
     emit(state.copyWith(status: RideStates.loading));
     await Future.wait(
-        [fetchRideDriverPictureOptional(context), (state.isShipping == true || params?.isShipping == true) ? fetchLoaderInfo(context) : fetchRideDriverInfo(context)]);
+        [fetchRideDriverPictureOptional(context),
+          if(state.isShipping == true || params?.isShipping == true)  fetchLoaderInfo(context,false),
+          if(state.isShipping == true || params?.isShipping == true)  fetchLoaderInfo(context,true),
+          if(state.isShipping == false || params?.isShipping == false) fetchRideDriverInfo(context,false),
+          if(state.isShipping == false || params?.isShipping == false) fetchRideDriverInfo(context,true)
+        ]);
     emit(state.copyWith(status: RideStates.success));
   }
 
@@ -348,16 +391,7 @@ class RideCubit extends Cubit<RideState> {
     );
   }
 
-  Future<void> fetchShippingCategories(String userId) async {
-    emit(state.copyWith(status: RideStates.loading));
 
-    final Either<Failure, RideCategoryEntityUpdated> result = await getShippingCategoriesUsecase(userId);
-
-    result.fold(
-      (failure) => emit(state.copyWith(status: RideStates.error, failure: failure)),
-      (rideCategory) => emit(state.copyWith(status: RideStates.success, shippingCategory: rideCategory, shippingSubCategories: rideCategory.subCategories)),
-    );
-  }
 
   Future<void> fetchRideGovernorates() async {
     emit(state.copyWith(status: RideStates.loading));
@@ -366,7 +400,14 @@ class RideCubit extends Cubit<RideState> {
 
     result.fold(
       (failure) => emit(state.copyWith(status: RideStates.error, failure: failure)),
-      (governorates) => emit(state.copyWith(status: RideStates.success, governorates: governorates)),
+      (governorates) async {
+        RegisterRideSpecialEntity? data = await Storage().getDriverEntity();
+        GovernorateEntity? selectedCity;
+        if(data?.city!=null&&(data?.city.isNotEmpty??false)){
+          selectedCity = governorates.firstWhereOrNull((element) => element.id == data?.city);
+        }
+        emit(state.copyWith(status: RideStates.success, governorates: governorates,city: selectedCity));
+      },
     );
   }
 
@@ -605,7 +646,7 @@ class RideCubit extends Cubit<RideState> {
 
   loadRegisterData(BuildContext context) async {
     emit(state.copyWith(status: RideStates.loading));
-    await Future.wait([fetchGovs(), fetchBrands(), fetchColors(context)]);
+    await Future.wait([fetchGovs(), fetchBrands(context), fetchColors(context)]);
     emit(state.copyWith(status: RideStates.success));
   }
 
@@ -614,16 +655,30 @@ class RideCubit extends Cubit<RideState> {
 
     result.fold(
       (failure) => emit(state.copyWith(status: RideStates.error, failure: failure)),
-      (governorates) => emit(state.copyWith(status: RideStates.success, govs: governorates)),
+      (governorates) async {
+        RegisterRideSpecialEntity? cachedData = await Storage().getDriverEntity();
+        String? cityId = cachedData?.city;
+        GovernorateEntity? selectedCity;
+        if (cityId != null && (cityId.isNotEmpty)) {
+          selectedCity=governorates.firstWhere((element) => element.id == cityId);
+          onSelectGov(cityId);
+        }
+        emit(state.copyWith(status: RideStates.success, govs: governorates,city: selectedCity));
+      },
     );
   }
 
-  Future<void> fetchBrands() async {
+  Future<void> fetchBrands(BuildContext context) async {
     final Either<Failure, List<String>> result = await getRideBrandsUseCase(const NoParams());
 
     result.fold(
       (failure) => emit(state.copyWith(status: RideStates.error, failure: failure)),
-      (data) => emit(state.copyWith(status: RideStates.success, brands: data)),
+      (data) async {
+        RegisterRideSpecialEntity? cachedData = await Storage().getDriverEntity();
+        String? brand = cachedData?.vehicleBrand;
+        if(brand!=null&&(brand.isNotEmpty))await onSelectBrand(brand, context);
+        emit(state.copyWith(status: RideStates.success, brands: data,selectedBrand: brand));
+      },
     );
   }
 
@@ -666,8 +721,13 @@ class RideCubit extends Cubit<RideState> {
       (failure) {
         emit(state.copyWith(status: RideStates.error, failure: failure));
       },
-      (data) {
+      (data) async {
         models.addAll(data);
+        // RegisterRideSpecialEntity? cachedData = await Storage().getDriverEntity();
+        // String? model = cachedData?.vehicleModel;
+        // if (model != null && (model.isNotEmpty)) {
+        //   onSelectModel(model);
+        // }
         emit(state.copyWith(status: RideStates.success, models: data));
       },
     );
@@ -680,8 +740,15 @@ class RideCubit extends Cubit<RideState> {
       (failure) {
         emit(state.copyWith(status: RideStates.error, failure: failure));
       },
-      (data) {
-        emit(state.copyWith(status: RideStates.success, colors: data));
+      (data) async {
+        RegisterRideSpecialEntity? cachedData = await Storage().getDriverEntity();
+        String? color = cachedData?.vehicleColor;
+        RideColorEntity? selectedColor;
+        if (color != null && (color.isNotEmpty)) {
+          selectedColor=data.firstWhere((element) => element.id == color);
+          onSelectColor(selectedColor);
+        }
+        emit(state.copyWith(status: RideStates.success, colors: data,color: selectedColor));
       },
     );
   }
@@ -803,25 +870,37 @@ class RideCubit extends Cubit<RideState> {
 
     if ((state.rideSubCategories ?? []).any((element) => categoriesToCheck.contains(element.subCategoryId) && element.isSelected == true)) {
       emit(state.copyWith(registerType: 'socket', isShipping: false));
-      context.push(Routes.personalInformationScreen);
+      context.push(Routes.personalInformationScreen,extra:RideFeatureRegisterParams(
+          isSocket:true,
+          isShipping:false,
+          subCategoriesId:(state.rideSubCategories ?? []).where((e) => e.isEnabled == true).toList().map((e) => e.subCategoryId).toList()
+      ));
     } else {
       emit(state.copyWith(registerType: 'noSocket', isShipping: false));
-      context.push(Routes.personalInformationScreen);
+      context.push(Routes.personalInformationScreen,extra:RideFeatureRegisterParams(
+          isSocket:false,
+          isShipping:false,
+          subCategoriesId:(state.rideSubCategories ?? []).where((e) => e.isEnabled == true).toList().map((e) => e.subCategoryId).toList()
+      ));
     }
   }
 
   onSubmitSelectShippingSubCategories(BuildContext context) async {
     emit(state.copyWith(registerType: 'noSocket', isShipping: true));
-    context.push(Routes.personalInformationScreen);
+    context.push(Routes.personalInformationScreen,extra:RideFeatureRegisterParams(
+        isSocket:false,
+        isShipping:true,
+        subCategoriesId: (state.shippingSubCategories ?? []).where((e) => e.isEnabled == true).toList().map((e) => e.subCategoryId).toList()
+    ));
   }
 
   onNavigateToWelcomeScreen({required bool fromShipping, required BuildContext context}) {
     if (fromShipping == true) {
       emit(state.copyWith(isShipping: true, status: RideStates.success));
-      context.push(Routes.welcomeRideRegister, extra: state.shippingSubCategories);
+      context.push(Routes.welcomeRideRegister, extra: fromShipping);
     } else {
       emit(state.copyWith(isShipping: false, status: RideStates.success));
-      context.push(Routes.welcomeRideRegister, extra: state.rideSubCategories);
+      context.push(Routes.welcomeRideRegister, extra: fromShipping);
     }
   }
 
@@ -996,7 +1075,7 @@ class RideCubit extends Cubit<RideState> {
                       state.loaderInfo?.isUploadDriverId == true &&
                       state.loaderInfo?.isUploadCarLicense == true &&
                       state.loaderInfo?.isUploadCarImage == true) {
-                    await fetchLoaderInfo(context);
+                    await fetchLoaderInfo(context,false);
                   }
                   showSuccessMessage(context, context.isArabic ? 'تم رفع الصور بنجاح' : "Successfully uploaded images");
                   context.pop();
@@ -1017,7 +1096,7 @@ class RideCubit extends Cubit<RideState> {
               state.driverInfo?.isUploadConfirmIdentifier == true &&
               state.driverInfo?.isUploadDriverImage == true &&
               state.driverInfo?.isUploadCarImage == true) {
-            await fetchRideDriverInfo(context);
+            await fetchRideDriverInfo(context,false);
             showSuccessMessage(context,
                 context.isArabic ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.' : "Successfully uploaded images, please wait for the approval of all data.");
           }
@@ -1066,7 +1145,7 @@ class RideCubit extends Cubit<RideState> {
                       state.loaderInfo?.isUploadDriverId == true &&
                       state.loaderInfo?.isUploadCarLicense == true &&
                       state.loaderInfo?.isUploadCarImage == true) {
-                    await fetchLoaderInfo(context);
+                    await fetchLoaderInfo(context,false);
                     showSuccessMessage(
                         context,
                         context.isArabic
@@ -1095,7 +1174,7 @@ class RideCubit extends Cubit<RideState> {
               state.driverInfo?.isUploadConfirmIdentifier == true &&
               state.driverInfo?.isUploadDriverImage == true &&
               state.driverInfo?.isUploadCarImage == true) {
-            await fetchRideDriverInfo(context);
+            await fetchRideDriverInfo(context,false);
             showSuccessMessage(context,
                 context.isArabic ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.' : "Successfully uploaded images, please wait for the approval of all data.");
           }
@@ -1116,7 +1195,7 @@ class RideCubit extends Cubit<RideState> {
               state.driverInfo?.isUploadConfirmIdentifier == true &&
               state.driverInfo?.isUploadDriverImage == true &&
               state.driverInfo?.isUploadCarImage == true) {
-            await fetchRideDriverInfo(context);
+            await fetchRideDriverInfo(context,false);
             showSuccessMessage(context,
                 context.isArabic ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.' : "Successfully uploaded images, please wait for the approval of all data.");
           }
@@ -1157,7 +1236,7 @@ class RideCubit extends Cubit<RideState> {
                     state.loaderInfo?.isUploadDriverId == true &&
                     state.loaderInfo?.isUploadCarLicense == true &&
                     state.loaderInfo?.isUploadCarImage == true) {
-                  await fetchLoaderInfo(context);
+                  await fetchLoaderInfo(context,false);
                   showSuccessMessage(context,
                       context.isArabic ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.' : "Successfully uploaded images, please wait for the approval of all data.");
                 }
@@ -1178,7 +1257,7 @@ class RideCubit extends Cubit<RideState> {
             state.driverInfo?.isUploadConfirmIdentifier == true &&
             state.driverInfo?.isUploadDriverImage == true &&
             state.driverInfo?.isUploadCarImage == true) {
-          await fetchRideDriverInfo(context);
+          await fetchRideDriverInfo(context,false);
           showSuccessMessage(context,
               context.isArabic ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.' : "Successfully uploaded images, please wait for the approval of all data.");
         }
@@ -1198,7 +1277,7 @@ class RideCubit extends Cubit<RideState> {
                     state.loaderInfo?.isUploadDriverId == true &&
                     state.loaderInfo?.isUploadCarLicense == true &&
                     state.loaderInfo?.isUploadCarImage == true) {
-                  await fetchLoaderInfo(context);
+                  await fetchLoaderInfo(context,false);
                   showSuccessMessage(context,
                       context.isArabic ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.' : "Successfully uploaded images, please wait for the approval of all data.");
                 }
@@ -1222,7 +1301,7 @@ class RideCubit extends Cubit<RideState> {
             state.driverInfo?.isUploadConfirmIdentifier == true &&
             state.driverInfo?.isUploadDriverImage == true &&
             state.driverInfo?.isUploadCarImage == true) {
-          await fetchRideDriverInfo(context);
+          await fetchRideDriverInfo(context,false);
           showSuccessMessage(context,
               context.isArabic ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.' : "Successfully uploaded images, please wait for the approval of all data.");
         }
@@ -1252,7 +1331,7 @@ class RideCubit extends Cubit<RideState> {
               state.driverInfo?.isUploadConfirmIdentifier == true &&
               state.driverInfo?.isUploadDriverImage == true &&
               state.driverInfo?.isUploadCarImage == true) {
-            await fetchRideDriverInfo(context);
+            await fetchRideDriverInfo(context,false);
             showSuccessMessage(context,
                 context.isArabic ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.' : "Successfully uploaded images, please wait for the approval of all data.");
           }
@@ -1283,7 +1362,7 @@ class RideCubit extends Cubit<RideState> {
               state.driverInfo?.isUploadConfirmIdentifier == true &&
               state.driverInfo?.isUploadDriverImage == true &&
               state.driverInfo?.isUploadCarImage == true) {
-            await fetchRideDriverInfo(context);
+            await fetchRideDriverInfo(context,false);
             showSuccessMessage(context,
                 context.isArabic ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.' : "Successfully uploaded images, please wait for the approval of all data.");
           }
@@ -1315,7 +1394,7 @@ class RideCubit extends Cubit<RideState> {
               state.driverInfo?.isUploadConfirmIdentifier == true &&
               state.driverInfo?.isUploadDriverImage == true &&
               state.driverInfo?.isUploadCarImage == true) {
-            await fetchRideDriverInfo(context);
+            await fetchRideDriverInfo(context,false);
             showSuccessMessage(context,
                 context.isArabic ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.' : "Successfully uploaded images, please wait for the approval of all data.");
           }
@@ -1353,6 +1432,7 @@ class RideCubit extends Cubit<RideState> {
         isShipping: state.isShipping,
         subcategoryIds: (state.rideSubCategories ?? []).where((e) => e.isEnabled == true).toList().map((e) => e.subCategoryId).toList());
     await Storage().saveDriverEntity(params);
+    await Storage().removeDriverNoSocketEntity();
     context.go(Routes.RIDE_HOME);
   }
 
@@ -1368,7 +1448,6 @@ class RideCubit extends Cubit<RideState> {
     ridePhoneNumberController.text = data?.phone??'';
     ridePricingPerKmController.text = data?.pricingPerKm??'';
     rideVehicleProductionYearController.text = data?.vehicleYear??'';
-    print('state.colors?.firstWhere((e) => e.id == data?.vehicleColor)${state.colors?.firstWhere((e) => e.id == data?.vehicleColor)}');
     emit(state.copyWith(
         hasAirCondition:data?.airConditioner,
         selectedGov:data?.city,
@@ -1381,6 +1460,8 @@ class RideCubit extends Cubit<RideState> {
         savedRideSubCategories:data?.subcategoryIds??[],
     ));
   }
+
+  //model brand color city plan
 
 
   bool isLoadingSubmitRegister = false;
@@ -1455,7 +1536,7 @@ class RideCubit extends Cubit<RideState> {
                   state.driverInfo?.isUploadConfirmIdentifier == true &&
                   state.driverInfo?.isUploadDriverImage == true &&
                   state.driverInfo?.isUploadCarImage == true) {
-                await fetchRideDriverInfo(context);
+                await fetchRideDriverInfo(context,false);
                 showSuccessMessage(context,
                     context.isArabic ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.' : "Successfully uploaded images, please wait for the approval of all data.");
               }
@@ -1467,7 +1548,7 @@ class RideCubit extends Cubit<RideState> {
               showErrorMessage(context, context.isArabic ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.' : 'An error occurred while uploading images. Please try again.');
             }
           });
-          await fetchRideDriverInfo(context);
+          await fetchRideDriverInfo(context,false);
           await fetchRideDriverPictureOptional(context);
           showSuccessMessage(context, context.isArabic ? "تم التسجيل بنجاح" : "Registered successfully");
           context.pushReplacement(Routes.UploadRiderImages);
@@ -1504,7 +1585,7 @@ class RideCubit extends Cubit<RideState> {
         },
         (data) async {
           isLoadingSubmitRegister = false;
-          await fetchRideDriverInfo(context);
+          await fetchRideDriverInfo(context,false);
           emit(state.copyWith(status: RideStates.success));
           showSuccessMessage(context, context.isArabic ? "تم التسجيل بنجاح" : "Registered successfully");
           context.pushReplacement(Routes.completeRegisterScreen);
@@ -1540,7 +1621,7 @@ class RideCubit extends Cubit<RideState> {
         },
         (data) async {
           isLoadingSubmitRegister = false;
-          await fetchLoaderInfo(context);
+          await fetchLoaderInfo(context,false);
           emit(state.copyWith(status: RideStates.success));
           showSuccessMessage(context, context.isArabic ? "تم التسجيل بنجاح" : "Registered successfully");
           context.pushReplacement(Routes.completeRegisterScreen);
@@ -1609,4 +1690,18 @@ class RideCubit extends Cubit<RideState> {
       return null;
     }
   }
+
+
+
+  Future<void> emitDriverLocation(BuildContext context) async {
+    final result = await updateSocketLocationUseCase(
+        UpdateSocketLocationParams(latitude: 31.241106, longitude: 30.047558)
+    );
+    result.fold(
+            (l) => emit(state.copyWith(failure: l, status: RideStates.error)),
+            (r) async {
+              if(r==true)showSuccessMessage(context, "Location Updated Successfully");
+        });
+  }
+
 }

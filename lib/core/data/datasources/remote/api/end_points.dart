@@ -182,13 +182,13 @@ class EndPoints {
 
   // Star
   static String   allStar(StarPaginationParams params) =>
-      '/talent/?page=${params.page}&limit=${params.limit}';
+      '/talent/?page=${params.page}&limit=${params.limit}&subCategory=${Constants.tubeSubCategory}';
   static String winnerStar(StarPaginationParams params) =>
-      '/talent/all-winner?page=${params.page}&limit=${params.limit}';
-  static const myStar = '/talent/my-talent';
-  static const uploadStar = '/talent/upload';
-  static const bannerTalent = '/talent/banner';
-  static String deleteMyStar({required String id}) => '/talent/$id';
+      '/talent/all-winner?page=${params.page}&limit=${params.limit}&subCategory=${Constants.tubeSubCategory}';
+  static String myStar = '/talent/my-talent?subCategory=${Constants.tubeSubCategory}';
+  static String uploadStar = '/talent/upload?subCategory=${Constants.tubeSubCategory}';
+  static String bannerTalent = '/talent/banner?subCategory=${Constants.tubeSubCategory}';
+  static String deleteMyStar({required String id}) => '/talent/$id?subCategory=${Constants.tubeSubCategory}';
 
   //My Ads
   static const myAdsAuction = '/ads/allMyAds/auction';
