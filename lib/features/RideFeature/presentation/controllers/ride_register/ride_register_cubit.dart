@@ -105,7 +105,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
         List<String> subcategoryIds = [];
         subcategoryIds.addAll(rideSocketCachedData?.subcategoryIds??[]);
         subcategoryIds.add(rideNonSocketCachedData?.subcategoryId??'');
-        if(subcategoryIds!=[]){
+        if(subcategoryIds==[]){
           log("subcategoryIds==[] $subcategoryIds");
         for (var item in rideSubCategories) {
             if (subcategoryIds.contains(item.subCategoryId)) {
@@ -140,7 +140,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
         subcategoryIds.add(loadingCachedData?.categoryId??'');
         log("subcategoryIds${subcategoryIds}");
         log("subcategoryIds${rideCategory.subCategories}");
-        if(subcategoryIds!=[]){
+        if(subcategoryIds==[]){
           log("subcategoryIdsTrue${rideCategory.subCategories}");
         for (var item in rideSubCategories) {
             if (subcategoryIds.contains(item.subCategoryId)) {

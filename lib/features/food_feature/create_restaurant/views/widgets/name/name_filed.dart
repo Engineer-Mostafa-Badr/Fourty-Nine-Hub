@@ -6,6 +6,9 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/cubit/create_resturant_cubit.dart';
 
+import '../../../../../../res/style/app_colors.dart';
+import '../../../../../../res/style/styles.dart';
+
 class CreateRestaurantNameField extends StatelessWidget {
   const CreateRestaurantNameField({super.key});
 
@@ -26,45 +29,48 @@ class CreateRestaurantNameField extends StatelessWidget {
               }
               return null;
             },
+            style: Styles.mediumText(),
             controller: restaurantLoginCubit.name,
             decoration: InputDecoration(
+              fillColor: AppColors.BG_GRAY_COLOR,
               enabledBorder: OutlineInputBorder(
-                borderRadius: const BorderRadius.all(Radius.circular(8)),
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
                 borderSide: BorderSide(
                   color: state is ValidationState && (state.isName ?? true)
                       ? Colors.red
-                      : Colors.grey,
+                      : Colors.transparent,
                 ),
               ),
               focusedBorder: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
+                borderRadius: BorderRadius.all(Radius.circular(10)),
                 borderSide: BorderSide(
-                  color: Colors.grey,
+                  color: Colors.transparent,
                 ),
               ),
               border: OutlineInputBorder(
-                borderRadius: const BorderRadius.all(Radius.circular(8)),
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
                 borderSide: BorderSide(
                   color: state is ValidationState && (state.isName ?? true)
                       ? Colors.red
-                      : Colors.grey,
+                      : Colors.transparent,
                 ),
               ),
               errorBorder: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
+                borderRadius: BorderRadius.all(Radius.circular(10)),
                 borderSide: BorderSide(
                   color: Colors.red,
                 ),
               ),
               focusedErrorBorder: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
+                borderRadius: BorderRadius.all(Radius.circular(10)),
                 borderSide: BorderSide(
                   color: Colors.red,
                 ),
               ),
-              filled: false,
+              filled: true,
               contentPadding: const EdgeInsets.all(10),
-              hintText: context.isArabic ? 'اسم المطعم' : 'Restaurant Name',
+              hintText: LocaleKeys.restaurantName.localize,
+              hintStyle: Styles.mediumText(),
             ),
           ),
           Visibility(
@@ -96,6 +102,8 @@ class CreateRestaurantNumberField extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TextFormField(
+          
+               style: Styles.mediumText(),
             onChanged: (value) =>
                 restaurantLoginCubit.saveNumberTextEditingController(),
             validator: (value) {
@@ -106,50 +114,49 @@ class CreateRestaurantNumberField extends StatelessWidget {
             },
             controller: restaurantLoginCubit.phoneController,
             decoration: InputDecoration(
+              
               // Border when the field is not focused
+              fillColor: AppColors.BG_GRAY_COLOR,
               enabledBorder: OutlineInputBorder(
-                borderRadius: const BorderRadius.all(Radius.circular(8)),
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
                 borderSide: BorderSide(
                   color: state is ValidationState && (state.isName ?? true)
                       ? Colors.red
-                      : Colors.grey, // Use grey as the default border color
+                      : Colors.transparent,
                 ),
               ),
-              // Border when the field is focused
               focusedBorder: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
+                borderRadius: BorderRadius.all(Radius.circular(10)),
                 borderSide: BorderSide(
-                  color: Colors.grey, // Grey border when focused
+                  color: Colors.transparent,
                 ),
               ),
-              // Default border (same as enabledBorder)
               border: OutlineInputBorder(
-                borderRadius: const BorderRadius.all(Radius.circular(8)),
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
                 borderSide: BorderSide(
-                  color: state is ValidationState && (state.isNumber ?? true)
+                  color: state is ValidationState && (state.isName ?? true)
                       ? Colors.red
-                      : Colors.grey,
+                      : Colors.transparent,
                 ),
               ),
-              // Error border when validation fails
               errorBorder: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
+                borderRadius: BorderRadius.all(Radius.circular(10)),
                 borderSide: BorderSide(
-                  color: Colors.red, // Red border when there's an error
+                  color: Colors.red,
                 ),
               ),
-              // Error border when focused and invalid
               focusedErrorBorder: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
+                borderRadius: BorderRadius.all(Radius.circular(10)),
                 borderSide: BorderSide(
-                  color:
-                      Colors.red, // Keep red border when focused with an error
+                  color: Colors.red,
                 ),
               ),
-              filled: false,
+              filled: true,
               contentPadding:
+
                   const EdgeInsets.all(10), // Padding inside the text field
-              hintText: LocaleKeys.restaurantNumber.tr(), // Hint text
+              hintText: LocaleKeys.restaurantNumber.tr(),
+                hintStyle: Styles.mediumText(), // Hint text
               // contentPadding: const EdgeInsets.all(10), // Padding inside the text field
               // hintText:context.isArabic?'رقم المطعم':'Restaurant Number' ,
             ),

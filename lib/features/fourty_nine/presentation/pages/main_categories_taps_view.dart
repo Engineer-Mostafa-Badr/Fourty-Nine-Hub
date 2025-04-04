@@ -226,7 +226,14 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
 }
 
 class MainCategoriesGrideViewSection extends StatefulWidget {
-  const MainCategoriesGrideViewSection({super.key});
+  const MainCategoriesGrideViewSection({
+    super.key,
+    required this.controller,
+    required this.state,
+  });
+
+  final MainCategoriesState state;
+  final MainCategoriesCubit controller;
 
   @override
   State<MainCategoriesGrideViewSection> createState() =>
@@ -236,57 +243,26 @@ class MainCategoriesGrideViewSection extends StatefulWidget {
 class _MainCategoriesGrideViewSectionState
     extends State<MainCategoriesGrideViewSection>
     with TickerProviderStateMixin {
-  late TabController _tabController;
   late ScrollController _scrollController;
   String labelName = "";
 
   @override
   void initState() {
-    _tabController = TabController(
-        length: context.read<MainCategoriesTapsCubit>().mainCategories.length,
-        vsync: this);
     _scrollController = ScrollController();
 
-    // Listen for tab changes
-    _tabController.addListener(() {
-      if (_tabController.indexIsChanging) {
-        _scrollToSelectedTab(_tabController.index);
-      }
-    });
     super.initState();
-  }
-
-  void _scrollToSelectedTab(int index) {
-    // Assuming each tab has a width of 140.w
-    double tabWidth = 235.w;
-    double targetScrollPosition = index * tabWidth;
-    _scrollController.animateTo(
-      targetScrollPosition,
-      duration: const Duration(milliseconds: 400),
-      curve: Curves.easeInOut,
-    );
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     labelName = context.locale == Locales.english
-        ? context
-            .read<MainCategoriesTapsCubit>()
-            .mainCategories[0]
-            .nameEn
-            .toString()
-        : context
-            .read<MainCategoriesTapsCubit>()
-            .mainCategories[0]
-            .name
-            .toString();
+        ? widget.state.customPage![0].nameEn.toString()
+        : widget.state.customPage![0].name.toString();
   }
 
   @override
   Widget build(BuildContext context) {
-    final controller = context.read<MainCategoriesTapsCubit>();
-
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.w),
       child: CustomScrollView(
@@ -294,55 +270,56 @@ class _MainCategoriesGrideViewSectionState
         shrinkWrap: true,
         controller: _scrollController,
         slivers: [
-          BlocBuilder<MainCategoriesTapsCubit, MainCategoriesTapsState>(
-            builder: (context, state) {
-              if (controller.mainCategories.isNotEmpty) {
-                final controller = context.read<MainCategoriesTapsCubit>();
-                final mainCategoriesController =
-                    context.read<MainCategoriesCubit>();
-                return SliverGrid.builder(
-                  itemCount: controller.mainCategories.length ?? 0,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisSpacing: 10,
-                      crossAxisCount: 2,
-                      childAspectRatio: 5 / 4),
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: InkWell(
-                        onTap: () {
-                          AdInterstitialTop.loadIntersitialAd();
-                          AdInterstitialTop.showInterstitialAd();
-                          HandleCashback.setCount(
-                              'mainCategoriesCount', context);
-                          if (controller.mainCategories[index].id ==
-                              '62c8b5b09332225799fe335e') {
-                            context.push(Routes.MARRIAGESUBCATEGORIES,
-                                extra: controller.mainCategories[index]);
-                          } else {
-                            context.push(Routes.SUBCATEGORIES,
-                                extra: controller.mainCategories[index]);
-                          }
+          Builder(builder: (context) {
+            if (widget.state.customPage!.isNotEmpty) {
+              // final mainCategoriesController =
+              //     context.read<MainCategoriesCubit>();
+              return SliverGrid.builder(
+                itemCount: widget.state.customPage!.length ?? 0,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisSpacing: 10,
+                    crossAxisCount: 2,
+                    childAspectRatio: 5 / 4),
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: InkWell(
+                      onTap: () {
+                        print(
+                            'mainCategory.id ${widget.state.customPage![index].id} in gredview test');
+                        AdInterstitialTop.loadIntersitialAd();
+                        AdInterstitialTop.showInterstitialAd();
+                        HandleCashback.setCount(
+                            'mainCategoriesCount', context);
+                        if (widget.state.customPage![index].id ==
+                            '62c8b5b09332225799fe335e') {
+                          context.push(Routes.MARRIAGESUBCATEGORIES,
+                              extra: widget.state.customPage![index]);
+                        } else {
+                          print(
+                              'mainCategory.id ${widget.state.customPage![index].id} in gredview');
+                          context.push(Routes.CustomPageSubCategoriesView,
+                              extra: widget.state.customPage?[index]??'62c8b5779332225799fe3304');
+                        }
+                      },
+                      child: MainCategoryBanner(
+                        category: widget.state.customPage![index],
+                        onFavorite: () async {
+                          var result = await widget.controller
+                              .toggleFavoriteMedicalService(
+                              widget.state.customPage![index].id);
+                          print("result$result");
+                          return result;
                         },
-                        child: MainCategoryBanner(
-                          category: controller.mainCategories[index],
-                          onFavorite: () async {
-                            var result = await mainCategoriesController
-                                .toggleFavoriteMedicalService(
-                                    controller.mainCategories[index].id);
-                            print("result$result");
-                            return result;
-                          },
-                        ),
                       ),
-                    );
-                  },
-                );
-              } else {
-                return const SliverToBoxAdapter(child: SizedBox.shrink());
-              }
-            },
-          ),
+                    ),
+                  );
+                },
+              );
+            } else {
+              return const SliverToBoxAdapter(child: SizedBox.shrink());
+            }
+          }),
         ],
       ),
     );

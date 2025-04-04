@@ -6,6 +6,7 @@ abstract class Routes {
   static const HOME = '/';
   static const RIDE_HOME = '/RideHome';
   static const onBoardingScreen = '/OnBoardingScreen';
+  static const MY_TALENT = '/MyTalent';
   static const CUSTOMPAGE = '/CustomPage';
   static const editPage = '/editPage';
   static const RIDEACTIVITY = '/RIDEACTIVITY';
@@ -21,6 +22,8 @@ abstract class Routes {
   static const EditFoodView = '/EditFoodView';
   static const MAINCATEGORIESTREE = '/MainCategoriesTree';
   static const SUBCATEGORIES = '/Subcategories';
+  static const CustomPageSubCategoriesView = '/CustomPageSubCategoriesView';
+  static const NavigatorSubCategoriesView = '/NavigatorSubCategoriesView';
   static const MARRIAGESUBCATEGORIES = '/MarriageSubcategories';
   static const ADS = '/Subcategories/ADS';
   static const FILTERADS = '/Subcategories/ADS/FilterAds';
@@ -217,9 +220,10 @@ abstract class Routes {
   static const personalDocumentsScreen = '/PersonalDocumentsScreen';
   static const vehicleInformationScreen = '/VehicleInformationScreen';
   static const moreInfoScreen = '/MoreInfoScreen';
+  static const truckWelcomeRideRegister = '/TruckWelcomeRideRegister';
+
   static const truckPersonalInformationScreen =
       '/TruckPersonalInformationScreen';
-  static const truckWelcomeRideRegister = '/TruckWelcomeRideRegister';
 
   static const truckDriversLicenseScreen = '/TruckDriversLicenseScreen';
   static const truckPersonalDocumentsScreen = '/TruckPersonalDocumentsScreen';
@@ -261,6 +265,8 @@ abstract class Routes {
   // Cashback
   static const CASHBACK = '/Cashback';
   static const newRideModeScreen = '/NewRideModeScreen';
+
+
 }
 
 abstract class Paths {
@@ -269,6 +275,8 @@ abstract class Paths {
   static const HOME = '/';
   static const RIDEHOME = 'RideHome';
   static const onBoardingScreen = 'OnBoardingScreen';
+  static const MY_TALENT = 'MyTalent';
+  static const WINNERS = 'Winners';
   static const CUSTOMPAGE = 'CustomPage';
   static const PAGEPREVIEW = 'PagePreview';
   static const RIDEACTIVITY = 'RIDEACTIVITY';
@@ -283,6 +291,8 @@ abstract class Paths {
   static const EditFoodView = 'EditFoodView';
   static const MAINCATEGORIESTREE = 'MainCategoriesTree';
   static const SUBCATEGORIES = 'Subcategories';
+  static const CustomPageSubCategoriesView = 'CustomPageSubCategoriesView';
+  static const NavigatorSubCategoriesView = 'NavigatorSubCategoriesView';
   static const MARRIAGESUBCATEGORIES = 'MarriageSubcategories';
   static const FILTERADS = 'FilterAds';
   static const GOVERNORATEFILTERADS = 'GovernorateFilterAds';
@@ -294,7 +304,6 @@ abstract class Paths {
   static const CREATECOMPANYAD = 'CreateCompanyAd';
   static const LUCKYWHEEL = 'LuckyWheel';
   static const COMPETITIONS = 'Competitions';
-  static const WINNERS = 'Winners';
   static const WINNERSCASHBACK = 'WinnersCashback';
   static const WINNERSGift = 'WinnersGift';
   static const WALLET = 'Wallet';
@@ -511,4 +520,5 @@ abstract class Paths {
 
   // Cashback
   static const CASHBACK = 'CashBack';
+
 }

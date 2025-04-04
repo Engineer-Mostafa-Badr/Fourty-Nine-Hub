@@ -42,7 +42,12 @@ class _StartTextFieldAndFindButonState
     return Form(
       key: formKey,
       child: Container(
-        height: 100.h,
+        height: 80.h,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: Color.fromRGBO(245, 245, 245, 1),
+          borderRadius: BorderRadius.circular(15),
+        ),
         margin: EdgeInsets.only(top: 10.h),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,13 +58,52 @@ class _StartTextFieldAndFindButonState
                   return TextFormField(
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20)),
-                      fillColor: Colors.transparent,
+                          borderSide: BorderSide(color: Colors.transparent),
+                          borderRadius: BorderRadius.circular(15)),
+                      enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent),
+                          borderRadius: BorderRadius.circular(15)),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent),
+                          borderRadius: BorderRadius.circular(15)),
+                      disabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent),
+                          borderRadius: BorderRadius.circular(15)),
+                      errorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent),
+                          borderRadius: BorderRadius.circular(15)),
+                      fillColor: Color.fromRGBO(245, 245, 245, 1),
                       isDense: true, // Added this
-                      contentPadding: const EdgeInsets.all(14),
+
                       suffixIcon: _getIcon(state),
+                      prefixIcon: Container(
+                        margin: EdgeInsets.symmetric(horizontal: 12.w),
+                        height: 16.w,
+                        width: 16.w,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Color.fromRGBO(56, 151, 240, 1)),
+                        child: Center(
+                          child: Container(
+                            height: 12.w,
+                            width: 12.w,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle, color: Colors.white),
+                          ),
+                        ),
+                      ),
+                      prefixIconConstraints: BoxConstraints(
+                          maxHeight: 28,
+                          maxWidth: 28,
+                          minWidth: 28,
+                          minHeight: 28),
                       labelText: LocaleKeys.startingPoint.localize,
+                      labelStyle: TextStyle(
+                          color: Colors.black,
+                          fontSize: 25.sp,
+                          fontWeight: FontWeight.w400),
                     ),
+                    cursorColor: AppColors.PRIMARY_COLOR,
                     controller: startingController,
                     // labelStyle: const TextStyle(color: Colors.black),
                     // hint: 'Find your starting Point..!',
@@ -80,7 +124,6 @@ class _StartTextFieldAndFindButonState
                       address: startingController.text);
                 }
               },
-              height: double.infinity,
             ),
           ],
         ),

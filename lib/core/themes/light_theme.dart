@@ -18,6 +18,34 @@ ThemeData get lightTheme => ThemeData(
       switchTheme: const SwitchThemeData(
         trackColor: WidgetStatePropertyAll<Color>(AppColors.SECONDARY_COLOR),
       ),
+      radioTheme: RadioThemeData(
+        fillColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return AppColors.PRIMARY_COLOR;
+          }
+          return AppColors.BG_GRAY_COLOR;
+        }),
+      ),
+      timePickerTheme: TimePickerThemeData(
+        backgroundColor: AppColors.AUTH_CONTAINER_COLOR,
+        dialHandColor: AppColors.PRIMARY_COLOR,
+        dialBackgroundColor: AppColors.PRIMARY_COLOR.withValues(alpha: .15),
+        dayPeriodBorderSide: const BorderSide(color: AppColors.PRIMARY_COLOR),
+        dayPeriodColor: AppColors.PRIMARY_COLOR.withValues(alpha: .15),
+        dayPeriodTextColor: AppColors.PRIMARY_COLOR,
+        hourMinuteTextColor: AppColors.PRIMARY_COLOR,
+        hourMinuteColor: AppColors.PRIMARY_COLOR.withValues(alpha: .15),
+        cancelButtonStyle: ButtonStyle(
+          foregroundColor: WidgetStateProperty.resolveWith(
+            (states) => AppColors.PRIMARY_COLOR,
+          ),
+        ),
+        confirmButtonStyle: ButtonStyle(
+          foregroundColor: WidgetStateProperty.resolveWith(
+            (states) => AppColors.PRIMARY_COLOR,
+          ),
+        ),
+      ),
       datePickerTheme: DatePickerThemeData(
         headerBackgroundColor: AppColors.PRIMARY_COLOR,
         headerForegroundColor: AppColors.AUTH_CONTAINER_COLOR,
@@ -41,7 +69,7 @@ ThemeData get lightTheme => ThemeData(
         ),
         confirmButtonStyle: ButtonStyle(
           foregroundColor: WidgetStateProperty.resolveWith(
-                (states) => AppColors.PRIMARY_COLOR,
+            (states) => AppColors.PRIMARY_COLOR,
           ),
         ),
       ),
@@ -63,16 +91,21 @@ ThemeData get lightTheme => ThemeData(
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppColors.GREY_LIGHT_COLOR,
-        hintStyle: Styles.headerText(
+        hintStyle: 
+        Styles.headerText(
             fontSize: 25,
             decoration: TextDecoration.none,
-            decorationThickness: 0),
+            decorationThickness: 0
+            ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
           borderSide: const BorderSide(
             color: AppColors.DIVIDER_GRAY_COLOR2,
           ),
         ),
+
+
+        
         enabledBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: AppColors.PRIMARY_COLOR),
         ),

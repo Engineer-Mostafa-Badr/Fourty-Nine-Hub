@@ -68,7 +68,7 @@ class _CountryDropdownState extends State<CountryDropdown> {
               contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
             ),
             menuHeight: 200,
-            trailingIcon: const Icon(Icons.arrow_drop_down),
+            trailingIcon: const Icon(Icons.keyboard_arrow_down),
           );
         }
     );
