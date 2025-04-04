@@ -28,6 +28,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/running_trips
 import 'package:fourtyninehub/features/RideFeature/domain/repositories/ride_repository.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_pending_trip_by_client_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_car_years_and_types_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_trip_auto_accept_by_client_use_case.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/features/ride/driver_dashboard/domain/entities/driver_statistics_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/accept_trip_by_driver_use_case.dart';
@@ -273,5 +274,10 @@ class RideRepositoryImplementation extends RideRepository {
   @override
   Future<Either<Failure, RideRequestTripEntity>> acceptOfferByClient(String params) {
     return rideRemoteDataSource.acceptOfferByClient(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateTripAutoAcceptByClient(UpdateTripAutoAcceptByClientUseCaseParams params) async{
+    return await rideRemoteDataSource.updateTripAutoAcceptByClient(params);
   }
 }

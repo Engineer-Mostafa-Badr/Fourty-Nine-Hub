@@ -28,8 +28,7 @@ class BottomCardRequest extends StatefulWidget {
 }
 
 class _BottomCardRequestState extends State<BottomCardRequest> {
-  bool isAutomatic = false;
-
+  // bool isAutomatic = false;
   @override
   Widget build(BuildContext context) {
     final bool isDark = context.isDarkMode;
@@ -106,11 +105,9 @@ class _BottomCardRequestState extends State<BottomCardRequest> {
                           ),
                           const Spacer(),
                           Switch(
-                            value: isAutomatic,
-                            onChanged: (val) {
-                              setState(() {
-                                isAutomatic = val;
-                              });
+                            value: state.requestedTrip?.autoAccept ?? false,
+                            onChanged: (isAutoAccept) async {
+                              await widget.rideCubit.updateTripAutoAcceptStatus(isAutoAccept: isAutoAccept);
                             },
                             activeColor: switchThumbColor,
                             inactiveThumbColor: switchThumbColor,

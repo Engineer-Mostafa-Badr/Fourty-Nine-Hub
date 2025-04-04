@@ -14,7 +14,7 @@ class RideRequestTripEntity {
   final double? price;
   final String? paymentMethod;
   final String? status;
-  final bool? autoAccept;
+  bool? autoAccept;
   final bool? isPremium;
   final bool? isUserGetCashback;
   final bool? isRiderGetCashback;
@@ -36,6 +36,7 @@ class RideRequestTripEntity {
   final String? vehicleBrand;
   final String? vehiclePicture;
   final String? vehiclePlateNumber;
+  final List<List<double>> polyline;
 
-  RideRequestTripEntity({required this.id, required this.userId, required this.riderId, required this.subCategoryId, required this.carTypeId, required this.from, required this.to, required this.startCoordinates, required this.targetCoordinates, required this.distance, required this.duration, required this.passengers, required this.price, required this.paymentMethod, required this.status, required this.autoAccept, required this.isPremium, required this.isUserGetCashback, required this.isRiderGetCashback, required this.freeTripForDriver, required this.createdAt, required this.updatedAt, required this.expireAt, required this.rating, required this.driverIsArrivingIn, required this.driverFirstName, required this.driverId,  required this.driverPhoneNumber, required this.driverProfilePicture,  required this.driverRating, required this.driverRatingCount, required this.vehicleModel, required this.vehicleColor, required this.vehicleBrand, required this.vehiclePicture, required this.vehiclePlateNumber,  required this.driverUserId,});
+  RideRequestTripEntity({required this.id, required this.userId, required this.riderId, required this.subCategoryId, required this.carTypeId, required this.from, required this.to, required this.startCoordinates, required this.targetCoordinates, required this.distance, required this.duration, required this.passengers, required this.price, required this.paymentMethod, required this.status, required this.autoAccept, required this.isPremium, required this.isUserGetCashback, required this.isRiderGetCashback, required this.freeTripForDriver, required this.createdAt, required this.updatedAt, required this.expireAt, required this.rating, required this.driverIsArrivingIn, required this.driverFirstName, required this.driverId,  required this.driverPhoneNumber, required this.driverProfilePicture,  required this.driverRating, required this.driverRatingCount, required this.vehicleModel, required this.vehicleColor, required this.vehicleBrand, required this.vehiclePicture, required this.vehiclePlateNumber,  required this.driverUserId, required this.polyline});
 }

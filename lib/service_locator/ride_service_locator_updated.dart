@@ -25,6 +25,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/register_ride
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/register_ride_special_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/request_trip_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/retrieve_client_latest_trip_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_trip_auto_accept_by_client_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:get_it/get_it.dart';
 
@@ -105,10 +106,14 @@ class RideServiceLocatorUpdated {
         ListenToRideOffersUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<AcceptOfferByClientUseCase>(() =>
         AcceptOfferByClientUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<UpdateTripAutoAcceptByClientUseCase>(() =>
+        UpdateTripAutoAcceptByClientUseCase(repository: serviceLocator()));
+
 
     // ---------------------------------- cubits ----------------------------------
 
     serviceLocator.registerLazySingleton<RideCubit>(() => RideCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

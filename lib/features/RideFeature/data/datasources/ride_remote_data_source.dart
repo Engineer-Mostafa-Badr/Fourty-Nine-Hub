@@ -62,6 +62,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/recording_tri
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/rider_in_start_location_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/start_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_driver_location_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_trip_auto_accept_by_client_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_trip_price_from_client_use_case.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/data/models/governrate_model.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
@@ -103,6 +104,8 @@ abstract class RideRemoteDataSource {
   Future<Either<Failure, bool>> updateDriverLocation(UpdateDriverLocationUseCaseParams params);
 
   Future<Either<Failure, List<RunningTripsEntity>>> getAllRunningTrips(GetAllRunningTripsUseCaseParams params);
+
+  Future<Either<Failure, bool>> updateTripAutoAcceptByClient(UpdateTripAutoAcceptByClientUseCaseParams params);
 
   Future<Either<Failure, List<CompletedTripsEntity>>> getAllCompletedTrips(GetAllCompletedTripsUseCaseParams params);
 
@@ -861,6 +864,21 @@ class RideRemoteDataSourceImplementation
       );
       return response.fold((failure) => Left(failure), (data) {
         return Right(RideRequestTripModel.fromJson(data['data']['tripDetails']));
+      });
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateTripAutoAcceptByClient(UpdateTripAutoAcceptByClientUseCaseParams params) async {
+    try {
+      final response = await _apiConsumer.put(
+        EndPoints.updateTripAutoAcceptByClient(),
+        data: params.toJson(),
+      );
+      return response.fold((failure) => Left(failure), (data) {
+        return Right(data['status']);
       });
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));

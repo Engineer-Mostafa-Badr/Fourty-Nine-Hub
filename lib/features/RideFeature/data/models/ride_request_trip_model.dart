@@ -39,6 +39,7 @@ class RideRequestTripModel extends RideRequestTripEntity {
     required super.vehicleColor,
     required super.vehiclePicture,
     required super.vehiclePlateNumber,
+    required super.polyline,
   });
 
   factory RideRequestTripModel.fromJson(Map<String, dynamic> json) {
@@ -87,6 +88,14 @@ class RideRequestTripModel extends RideRequestTripEntity {
       vehicleColor: json['vehicleDetails']?['color'] ?? '',
       vehiclePlateNumber: json['vehicleDetails']?['plateInfo'] ?? '',
       vehiclePicture: json['vehicleDetails']?['carPictureUrl'],
+      polyline: json['polyline'] != null
+          ? (json['polyline'] as List)
+          .map((e) =>
+          (e as List)
+              .map((p) => (p as num).toDouble())
+              .toList())
+          .toList()
+          : [],
     );
   }
 }

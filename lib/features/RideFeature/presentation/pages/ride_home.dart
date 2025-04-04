@@ -130,6 +130,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         ),
       ),
     );
+    context.read<RideCubit>().hasPendingShownBottomSheet = false;
   }
 
   void _showAcceptedTripBottomSheet() async {
@@ -224,6 +225,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         ),
       ),
     );
+    context.read<RideCubit>().hasAcceptedShownBottomSheet = false;
   }
 
   Widget _buildDriversOffers() {
@@ -269,25 +271,29 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<RideCubit, RideState>(
-      builder: (context,state) {
+    return BlocConsumer<RideCubit, RideState>(
+      listener: (context,state){
+        log("new state listener");
         var cubit = context.read<RideCubit>();
-        // Show bottom sheet only once when requestedTrip is non-null
-        if (state.requestedTrip != null && !cubit.hasShownBottomSheet) {
-          cubit.hasShownBottomSheet = true; // Mark as shown
+        if (state.requestedTrip != null) {
+          log("trip status 1 : ${state.requestedTrip!.status}");
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            log("trip status: ${state.requestedTrip!.status}");
-            if(state.requestedTrip!.status == TripState.pending.name){
+            log("trip status 2: ${state.requestedTrip!.status}");
+            if(state.requestedTrip!.status == TripState.pending.name && !cubit.hasPendingShownBottomSheet){
+              cubit.hasPendingShownBottomSheet = true;
               _showDriversOffersBottomSheet();
             }
-            if(state.requestedTrip!.status == TripState.accepted.name){
+            if(state.requestedTrip!.status == TripState.accepted.name && !cubit.hasAcceptedShownBottomSheet){
+              cubit.hasAcceptedShownBottomSheet = true;
               _showAcceptedTripBottomSheet();
             }
           });
         }
+      },
+      builder: (context,state) {
         return Scaffold(
           resizeToAvoidBottomInset: false,
-          body: cubit.loadingHomeData==true?const Center(child: CircularProgressIndicator()):Form(
+          body: context.read<RideCubit>().loadingHomeData == true ? const Center(child: CircularProgressIndicator()) : Form(
             key: _formKey,
             child: SafeArea(
               child: SharedScaffold(
@@ -298,8 +304,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                   body: Stack(
                     children: [
                       _buildTopImage(),
-                      state.requestedTrip == null ? _buildBottomSheet() : state.requestedTrip!.status == TripState.completed ? _buildBottomSheet() : const SizedBox.shrink(),
-                      state.requestedTrip == null ? _carTruckBtn() : state.requestedTrip!.status == TripState.completed ? _carTruckBtn() : const SizedBox.shrink(),
+                      state.requestedTrip == null ? _buildBottomSheet() : state.requestedTrip!.status == TripState.completed.name || state.requestedTrip!.status == TripState.canceled.name ? _buildBottomSheet() : const SizedBox.shrink(),
+                      state.requestedTrip == null ? _carTruckBtn() : state.requestedTrip!.status == TripState.completed.name || state.requestedTrip!.status == TripState.canceled.name ? _carTruckBtn() : const SizedBox.shrink(),
                     ],
                   ),
                 ),

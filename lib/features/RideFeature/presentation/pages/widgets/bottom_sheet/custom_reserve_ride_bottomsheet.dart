@@ -158,6 +158,7 @@ class _CustomReserveRideBottomSheetState extends State<CustomReserveRideBottomSh
                                               wayPointTwo: state.wayPointTwo != null ? [state.wayPointTwo?.lat ?? 0, state.wayPointTwo?.lng ?? 0] : null,
                                               calculateB: 0,
                                               isPremium: widget.isPremium,
+                                              polyline: widget.rideCubit.state.rideExpectedPrice?.polyline ?? [],
                                             );
 
                                           }
@@ -182,6 +183,7 @@ class _CustomReserveRideBottomSheetState extends State<CustomReserveRideBottomSh
                                             wayPointTwo: state.wayPointTwo != null ? [state.wayPointTwo?.lat ?? 0, state.wayPointTwo?.lng ?? 0] : null,
                                             calculateB: 0,
                                             isPremium: widget.isPremium,
+                                            polyline: widget.rideCubit.state.rideExpectedPrice?.polyline ?? [],
                                           );
                                         }
                                       },

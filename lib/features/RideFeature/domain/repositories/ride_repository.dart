@@ -38,6 +38,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/recording_tri
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/rider_in_start_location_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/start_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_driver_location_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_trip_auto_accept_by_client_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_trip_price_from_client_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_color_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_car_years_and_types_usecase.dart';
@@ -85,6 +86,7 @@ abstract class RideRepository {
   Future<Either<Failure, bool>> cancelTripByClient(CancelTripByClientUseCaseParams params);
   Future<Either<Failure, bool>> cancelPendingTripByClient(CancelPendingTripByClientUseCaseParams params);
   Future<Either<Failure, bool>> recordingTrip(RecordingTripUseCaseParams params);
+  Future<Either<Failure, bool>> updateTripAutoAcceptByClient(UpdateTripAutoAcceptByClientUseCaseParams params);
   Future<Either<Failure, bool>> makeRequestTrip();
   Future<Either<Failure, bool>> updateTripPriceFromClient(UpdateTripPriceFromClientUseCaseParams params);
   Future<Either<Failure, ActivityTripEntity>> getAllActivityTrips(GetAllActivityTripsUseCaseParams params);
