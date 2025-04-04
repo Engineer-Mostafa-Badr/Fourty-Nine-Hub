@@ -16,6 +16,7 @@ class RequestTripUseCaseParams {
   final bool nonSmoker;
   final bool autoAccept;
   final bool isPremium;
+  final List<List<double>> polyline;
 
   RequestTripUseCaseParams({
     required this.subcategoryId,
@@ -35,6 +36,7 @@ class RequestTripUseCaseParams {
     required this.nonSmoker,
     required this.autoAccept,
     required this.isPremium,
+    required this.polyline,
   });
 
   //toJson
@@ -55,6 +57,7 @@ class RequestTripUseCaseParams {
     "nonSmoker" : nonSmoker,
     "autoAccept" : autoAccept,
     "isPremium" : isPremium,
+    "polyline" : polyline,
   };
 
 }
