@@ -71,33 +71,33 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
     }
   }
 
-  // bool _isFilterApplied = false;
+  bool _isFilterApplied = false;
 
-  // Future<void> _applyFilter(
-  //     BuildContext context, SubcategoriesCubit controller) async {
-  //   if (_isFilterApplied) return; // Prevent duplicate execution
-  //   _isFilterApplied = true;
-  //
-  //   dynamic data = await context.push(
-  //     Routes.GOVERNORATEFILTERADS,
-  //     extra: CategorizationEntity(
-  //       mainCategory: controller.state.mainCategory!,
-  //       subCategory: controller.state.subCategories![controller
-  //               .state.subCategories!
-  //               .indexWhere((element) => element.isSelected == true) ??
-  //           0],
-  //     ),
-  //   );
-  //
-  //   if (data != null) {
-  //     controller.state.city = data.cityId;
-  //     controller.state.governorate = data.governorateId;
-  //     controller.changeFilterModel(data);
-  //     await controller.loadFilterData(model: data, filter: 'user');
-  //   }
-  //
-  //   _isFilterApplied = false; // Reset the flag
-  // }
+  Future<void> _applyFilter(
+      BuildContext context, SubcategoriesCubit controller) async {
+    if (_isFilterApplied) return; // Prevent duplicate execution
+    _isFilterApplied = true;
+
+    dynamic data = await context.push(
+      Routes.GOVERNORATEFILTERADS,
+      extra: CategorizationEntity(
+        mainCategory: controller.state.mainCategory!,
+        subCategory: controller.state.subCategories![controller
+                .state.subCategories!
+                .indexWhere((element) => element.isSelected == true) ??
+            0],
+      ),
+    );
+
+    if (data != null) {
+      controller.state.city = data.cityId;
+      controller.state.governorate = data.governorateId;
+      controller.changeFilterModel(data);
+      await controller.loadFilterData(model: data, filter: 'user');
+    }
+
+    _isFilterApplied = false; // Reset the flag
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -490,7 +490,6 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
             // label: context.isArabic
             //     ? widget.mainCategory.name
             //     : widget.mainCategory.nameEn,
-            centerTitle: false,
           ),
           floatingActionButton: CustomFloatingButtonAds(
             title:

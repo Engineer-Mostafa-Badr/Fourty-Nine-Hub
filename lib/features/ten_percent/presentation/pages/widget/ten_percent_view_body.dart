@@ -23,7 +23,6 @@ class TenPercentViewBody extends StatelessWidget {
     return BlocBuilder<TenPercentCubit, TenPercentState>(
         builder: (context, state) {
       var cubit = context.read<TenPercentCubit>();
-
       return Form(
         key: cubit.formKey,
         child: Padding(
