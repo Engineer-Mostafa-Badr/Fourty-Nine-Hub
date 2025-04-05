@@ -5,7 +5,6 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 
 import '../../../../res/style/app_colors.dart';
-import '../screen/running_and_past_trips_screen.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 import 'available_ride_mode_widget.dart';
@@ -311,7 +310,6 @@ class _MyRunningTabWidgetState extends State<MyRunningTabWidget> {
               style: TextStyle(
                 fontSize: 30.sp,
                 fontWeight: FontWeight.w900,
-                color: AppColors.PRIMARY_COLOR,
               ),
             ),
           ),

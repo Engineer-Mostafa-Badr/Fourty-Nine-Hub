@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:go_router/go_router.dart';
 import 'dart:async';
 import '../../../../../res/assets/assets.dart';
+import '../../../../../routes/routes.dart';
 import 'header_text_widget.dart';
 import '../../../captainshare/widget/tab_bar_content_widget.dart';
 import 'taps/tab_bar_row_widget.dart';
@@ -34,15 +36,12 @@ class _CaptainShareBodyState extends State<CaptainShareBody>
       duration: const Duration(milliseconds: 700),
     );
 
-    _scaleAnimation = Tween<double>(
-            begin: 0.6, end: 1.2) // تكبير أكبر من البقية
-        .animate(
-            CurvedAnimation(parent: _controller, curve: Curves.easeOutBack));
+    _scaleAnimation = Tween<double>(begin: 0.6, end: 1.2).animate(
+        CurvedAnimation(parent: _controller, curve: Curves.easeOutBack));
 
-    _positionAnimation = Tween<double>(begin: 200, end: 0) // يبدأ من تحت الشاشة
+    _positionAnimation = Tween<double>(begin: 200, end: 0)
         .animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
 
-    // تأخير بسيط ثم تشغيل الأنيميشن
     Future.delayed(const Duration(milliseconds: 250), () {
       _controller.forward();
     });
@@ -88,7 +87,9 @@ class _CaptainShareBodyState extends State<CaptainShareBody>
             TripOptionWidget(
               imagePath: Assets.locationTripIcon,
               title: context.isArabic ? "جاي معاك" : "Trip Join",
-              onTap: () {},
+              onTap: () {
+                context.push(Routes.AVAILABLE_TRIPS);
+              },
               icon: Assets.car,
             ),
             TripOptionWidget(

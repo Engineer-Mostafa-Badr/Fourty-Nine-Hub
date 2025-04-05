@@ -5,21 +5,21 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../routes/routes.dart';
 import '../../../captainshare/screen/captain_share_info_screen.dart';
-import 'pick_me_info_screen.dart';
 
 class TripJoinInfoScreen extends StatelessWidget {
   const TripJoinInfoScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
       floatingActionButton: GestureDetector(
         onTap: () {
-          context.push(Routes.pickMeInfoScreen);
+          context.push(Routes.AVAILABLE_TRIPS);
         },
         child: Container(
           width: 300.w,
@@ -73,25 +73,38 @@ class TripJoinInfoInfoBody extends StatelessWidget {
         SizedBox(height: 20.h),
         SvgPicture.asset(Assets.tripInfoIcon),
         SizedBox(height: 30.h),
-        RowTextWidget(
-          text: context.isArabic ? "أنت مالك السيارة." : 'You are a car Owner.',
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 70),
+          child: RowTextWidget(
+            text:
+                context.isArabic ? "أنت مالك السيارة." : 'You are a car Owner.',
+          ),
         ),
         SizedBox(height: 15.h),
-        RowTextWidget(
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 70),
+          child: RowTextWidget(
+              text: context.isArabic
+                  ? "قم بالإعلان عن رحلتك المتكررة يوميًا."
+                  : 'Advertise your daily repeat trip.'),
+        ),
+        SizedBox(height: 15.h),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 70),
+          child: RowTextWidget(
             text: context.isArabic
-                ? "قم بالإعلان عن رحلتك المتكررة يوميًا."
-                : 'Advertise your daily repeat trip.'),
-        SizedBox(height: 15.h),
-        RowTextWidget(
-          text: context.isArabic
-              ? "انتظر حتى يتواصل معك المستخدمون."
-              : 'Wait for users to contact you.',
+                ? "انتظر حتى يتواصل معك المستخدمون."
+                : 'Wait for users to contact you.',
+          ),
         ),
         SizedBox(height: 15.h),
-        RowTextWidget(
-          text: context.isArabic
-              ? "شارك رحلتك واكسب المال."
-              : 'Share your trip & gain money.',
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 70),
+          child: RowTextWidget(
+            text: context.isArabic
+                ? "شارك رحلتك واكسب المال."
+                : 'Share your trip & gain money.',
+          ),
         ),
       ],
     );

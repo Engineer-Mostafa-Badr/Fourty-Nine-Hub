@@ -7,8 +7,9 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 
 import '../../../../res/style/app_colors.dart';
+import '../../captainshare/widget/one_way_widget.dart';
 
-class AvailableRideModeWidget extends StatelessWidget {
+class AvailableRideModeWidget extends StatefulWidget {
   final String? statusDriver;
   final bool? cancelButton;
   final String? requestType;
@@ -22,16 +23,28 @@ class AvailableRideModeWidget extends StatelessWidget {
   });
 
   @override
+  State<AvailableRideModeWidget> createState() =>
+      _AvailableRideModeWidgetState();
+}
+
+class _AvailableRideModeWidgetState extends State<AvailableRideModeWidget> {
+  bool _showContainer = false; // متغير للتحكم في ظهور الـ Container
+
+  @override
   Widget build(BuildContext context) {
     return Stack(
+      clipBehavior: Clip.none,
       children: [
         GestureDetector(
-          onTap: onTap,
+          onTap: widget.onTap,
           child: Container(
             margin: const EdgeInsets.symmetric(horizontal: 7, vertical: 8),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(),
+              border: Border.all(
+                color:
+                    context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+              ),
             ),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
@@ -142,7 +155,7 @@ class AvailableRideModeWidget extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.only(top: 10),
                             child: Text(
-                              statusDriver ?? "",
+                              widget.statusDriver ?? "",
                               style: TextStyle(
                                 fontSize: 20.sp,
                                 fontWeight: FontWeight.bold,
@@ -237,7 +250,7 @@ class AvailableRideModeWidget extends StatelessWidget {
                       TextButton(
                         onPressed: () {},
                         child: Text(
-                          requestType ?? "",
+                          widget.requestType ?? "",
                           style: TextStyle(
                             fontSize: 24.sp,
                             color: context.isDarkMode
@@ -248,7 +261,7 @@ class AvailableRideModeWidget extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 5),
-                      cancelButton == true
+                      widget.cancelButton == true
                           ? ElevatedButton(
                               style: ButtonStyle(
                                 backgroundColor: WidgetStateProperty.all(
@@ -274,12 +287,28 @@ class AvailableRideModeWidget extends StatelessWidget {
         ),
         Positioned(
           bottom: 9,
-          left: 160,
-          child: SvgPicture.asset(
-            Assets.frameIcon,
-            width: 50,
+          left: 170,
+          child: GestureDetector(
+            onTap: () {
+              setState(() {
+                _showContainer = !_showContainer; // تغيير حالة الـ Container
+              });
+            },
+            child: SvgPicture.asset(
+              Assets.frameIcon,
+              width: 50,
+            ),
           ),
         ),
+        // الـ Container اللي هيظهر أو يختفي حسب الضغط
+        if (_showContainer)
+          const Positioned(
+            top: 0,
+            bottom: 75, // تحديد المكان اللي هيظهر فيه الـ Container
+            left: 0,
+            right: 0,
+            child: AddressWidget(),
+          ),
       ],
     );
   }

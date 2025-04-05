@@ -46,23 +46,23 @@ class NewRideModeBody extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              IconButton(
-                onPressed: () {
-                  context.pop();
-                },
-                icon: const Icon(Icons.arrow_back),
-              ),
-              Text(
-                context.isArabic ? 'وضع الركوب' : 'Ride Mode',
-                style: TextStyle(
-                  fontSize: 35.sp,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
+          // Row(
+          //   children: [
+          //     IconButton(
+          //       onPressed: () {
+          //         context.pop();
+          //       },
+          //       icon: const Icon(Icons.arrow_back),
+          //     ),
+          //     Text(
+          //       context.isArabic ? 'وضع الركوب' : 'Ride Mode',
+          //       style: TextStyle(
+          //         fontSize: 35.sp,
+          //         fontWeight: FontWeight.bold,
+          //       ),
+          //     ),
+          //   ],
+          // ),
           RideModeButton(
             onTap: () {
               context.push(Routes.runningAndPastTripsScreen);
@@ -84,7 +84,9 @@ class NewRideModeBody extends StatelessWidget {
                 icon: Assets.car,
                 imagePath: Assets.locationTripIcon,
                 title: context.isArabic ? "جاي معاك" : "Trip Join",
-                onTap: () {},
+                onTap: () {
+                  context.push(Routes.AVAILABLE_TRIPS);
+                },
               ),
               TripOptionWidget(
                 icon: Assets.pickMeIcon,

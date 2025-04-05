@@ -38,21 +38,22 @@ class _WelcomeTextWidgetState extends State<WelcomeTextWidget> {
             ),
           ),
           Positioned(
-            top: 220,
+            top: 180,
             left: position.dx + size.width / 2 - 125,
             right: 50,
             child: Material(
-              color: Colors.transparent,
               child: Container(
-                width: 350,
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
+                  color: context.isDarkMode
+                      ? Colors.transparent
+                      : Color(0xffFFFFFF),
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 6,
-                    ),
+                        //  color: Colors.black.withOpacity(0.2),
+                        //   blurRadius: 6,
+                        ),
                   ],
                 ),
                 child: Text(
