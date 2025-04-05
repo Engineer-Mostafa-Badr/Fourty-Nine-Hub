@@ -6,12 +6,12 @@ import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 
 class GetLoadingInfoUseCase
-    extends UseCase<LoadingInfoEntity, NoParams> {
+    extends UseCase<LoadingInfoEntity, bool> {
   final RideRepository _repo;
   GetLoadingInfoUseCase(this._repo);
 
   @override
-  Future<Either<Failure, LoadingInfoEntity>> call(NoParams params) {
-    return _repo.getLoadingInfo();
+  Future<Either<Failure, LoadingInfoEntity>> call(bool params) {
+    return _repo.getLoadingInfo(params);
   }
 }

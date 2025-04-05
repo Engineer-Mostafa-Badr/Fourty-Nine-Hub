@@ -27,7 +27,6 @@ class RideStatusScreen extends StatelessWidget {
     const rideStatus = 'You\'ll be Arriving in 15:40';
 
     return Scaffold(
-      // خريطة في الخلفية مثلاً
       body: SafeArea(
         child: SharedScaffold(
           mainCategoryId: 2,

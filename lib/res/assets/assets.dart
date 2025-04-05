@@ -377,6 +377,9 @@ abstract class Assets {
   static String tripJoinEathIcon = 'assets/icons/earth_icon.png';
 
 
+
+  static const String arrowDown = 'assets/icons/arrow-up.svg';
+
   // new trip join icon
   static String menuIcon = 'assets/icons/menuIcon.svg';
   static String locationTripIcon = 'assets/icons/locationTripIcon.svg';
