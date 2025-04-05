@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -160,7 +161,7 @@ class GetAllTalents extends StatelessWidget {
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              "${talent.totalViews.toShortScale} views • ${timeago.format(createdAt)}",
+                              "${talent.totalViews.toShortScale} ${LocaleKeys.views.localize} • ${timeago.format(createdAt, locale: context.locale.languageCode)}",
                               style: TextStyle(
                                 fontSize: 26.sp,
                                 color: Colors.grey,
@@ -208,7 +209,7 @@ class GetAllTalents extends StatelessWidget {
                           backgroundColor: Colors.red,
                         ),
                         child: Text(
-                          "Delete",
+                          LocaleKeys.delete_talent.localize,
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 36.sp,

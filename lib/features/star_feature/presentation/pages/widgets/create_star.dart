@@ -22,6 +22,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:video_player/video_player.dart';
 
 import '../add_talent_widget.dart';
+import '../all_winner_view.dart';
 
 class CreateStar extends StatefulWidget {
   const CreateStar({super.key});
@@ -78,12 +79,24 @@ class _CreateStarState extends State<CreateStar> {
               },
               child: Row(
                 children: [
-                  Text(
-                    LocaleKeys.winners.localize,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 32.sp,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => BlocProvider(
+                            create: (context) => serviceLocator<StarCubit>(),
+                            child: const AllWinnerView(),
+                          ),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      LocaleKeys.winners.localize,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 32.sp,
+                      ),
                     ),
                   ),
                   const SizedBox(width: 4),
@@ -146,7 +159,6 @@ class _CreateStarState extends State<CreateStar> {
       ),
     );
   }
-
 
   Widget buildTextField({
     required String label,
@@ -470,5 +482,4 @@ class _CreateStarState extends State<CreateStar> {
   //     ),
   //   );
   // }
-
 }

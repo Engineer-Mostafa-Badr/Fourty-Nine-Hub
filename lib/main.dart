@@ -49,6 +49,7 @@ import 'features/settings/presentation/cubit/floating_navigator_cubit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'firebase_options.dart';
 import 'routes/pages.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -57,6 +58,8 @@ bool isActivate = false;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await CacheManager.init();
+  timeago.setLocaleMessages('en', timeago.EnMessages());
+  timeago.setLocaleMessages('ar', timeago.ArMessages());
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -78,7 +81,6 @@ void main() async {
   //   print('New location (moved at least 300m): ${position.latitude}, ${position.longitude}');
   //   // Do something with the new location
   // });
-
 
   await CacheServiceImpl.init();
   await DI.execute();
@@ -130,7 +132,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
-
   @override
   void initState() {
     super.initState();
@@ -261,7 +262,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             ..getFloatingNavigatorStatus()
             ..getEnableFloatingNavigatorStatus(),
         ),
-        
+
         BlocProvider(
           create: (context) => ChoiceRulerCubit()
             ..getChoiceRulerStatus()

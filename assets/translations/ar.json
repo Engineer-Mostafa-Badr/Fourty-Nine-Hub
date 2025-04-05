@@ -1399,6 +1399,10 @@
   "anonymousMessage": "رسائل مجهولة المصدر",
   "showPosts": "إظهار المشاركات",
   "showStories": "عرض القصص",
+  "delete_talent": "حذف",
+  "views": "مشاهدات",
+  "talent_upload_image": "تحميل صورة",
+  "talent_upload_video": "تحميل فيديو",
   "showReels": "عرض البكرات",
   "writeComments": "اكتب تعليقات",
   "getMoney": "المال المتحصل عليه",
@@ -1469,7 +1473,9 @@
   "noOfRequests": "عدد الطلبات",
   "modify": "تعديل",
   "restaurantPhoto": "صورة المطعم",
-  "areYouSureUpdate": "Are you sure you want to update"
-
-
+  "areYouSureUpdate": "Are you sure you want to update",
+  "myTalent": "موهبتي",
+  "addTalent": "إضافة موهبة",
+  "winner_rating":"التقييم",
+  "EGP":"ج.م"
 }
