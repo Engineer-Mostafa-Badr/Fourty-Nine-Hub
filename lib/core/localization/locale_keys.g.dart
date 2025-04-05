@@ -1383,6 +1383,10 @@ abstract class  LocaleKeys {
   static const anonymousMessage = 'anonymousMessage';
   static const showPosts = 'showPosts';
   static const showStories = 'showStories';
+  static const delete_talent = 'delete_talent';
+  static const views = 'views';
+  static const talent_upload_image = 'talent_upload_image';
+  static const talent_upload_video = 'talent_upload_video';
   static const showReels = 'showReels';
   static const writeComments = 'writeComments';
   static const getMoney = 'getMoney';
@@ -1468,5 +1472,9 @@ abstract class  LocaleKeys {
   static const exploreTripsThatAreActiveAtTheMoment = 'exploreTripsThatAreActiveAtTheMoment';
   static const youWillFindFewerDriversIfYouSelectThisOption = 'youWillFindFewerDriversIfYouSelectThisOption';
   static const initiateRouteWaitFor1HourToGiveUserTimeToBookASeatInTheSameCarWithTheSameCaptain = 'initiateRouteWaitFor1HourToGiveUserTimeToBookASeatInTheSameCarWithTheSameCaptain';
+  static const myTalent = 'myTalent';
+  static const addTalent = 'addTalent';
+  static const winner_rating = 'winner_rating';
+  static const EGP = 'EGP';
 
 }
