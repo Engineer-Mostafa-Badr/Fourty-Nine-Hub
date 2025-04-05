@@ -19,6 +19,7 @@ import 'package:go_router/go_router.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 import '../../../core/error/failure.dart';
 import '../helper/file_picker_helper.dart';
@@ -29,12 +30,15 @@ class UploadFile {
       required String subCategoryId,
       bool? hasLoading,
       required BuildContext context,
-      required Function(UploadFileEntity) onUploaded}) async {
-    final file = await FilePickerHelper()
+      required Function(UploadFileEntity) onUploaded,
+      bool useWeChatPicker =false}) async {
+      if(!useWeChatPicker) {
+        final file = await FilePickerHelper()
         .pickImage(isGallery: isGallery)
         .then((file) async {
       if (file != null) {
         // Crop the image
+        
         final CroppedFile? croppedFile = await ImageCropper().cropImage(
           sourcePath: file.path,
           uiSettings: [
@@ -119,6 +123,114 @@ class UploadFile {
         });
       }
     });
+      }
+      else{
+         try {
+        // 1) فتح شاشة الاختيار (يمكنك تخصيص الإعدادات كما شئت)
+        final pickedAssets = await AssetPicker.pickAssets(
+          context,
+          pickerConfig: const AssetPickerConfig(
+            maxAssets: 1, // اختر صورة واحدة في كل مرة
+            requestType: RequestType.image,
+          ),
+        );
+
+        // إذا ألغى المستخدم العملية
+        if (pickedAssets == null || pickedAssets.isEmpty) return null;
+
+        final asset = pickedAssets.first;
+        final File? rawFile = await asset.file; // يمكنك الحصول على الـFile عبر PhotoManager
+        if (rawFile == null) return null;
+
+        // قص الصورة
+        final CroppedFile? croppedFile = await ImageCropper().cropImage(
+          sourcePath: rawFile.path,
+          uiSettings: [
+            AndroidUiSettings(
+              toolbarTitle: LocaleKeys.cropImage.localize,
+              toolbarColor: AppColors.SECONDARY_COLOR,
+              toolbarWidgetColor: Colors.white,
+              initAspectRatio: CropAspectRatioPreset.original,
+              lockAspectRatio: false,
+            ),
+            IOSUiSettings(
+              title: 'Crop Image',
+            ),
+          ],
+        );
+
+        // إذا ألغى القص
+        if (croppedFile == null) return null;
+
+        // تغليفها في XFile كي يستمر المنطق موحّد
+        XFile finalFile = XFile(croppedFile.path);
+
+        // ضغط الصورة
+        final tempDir = await getTemporaryDirectory();
+        final uniqueFileName =
+            'compressed_${DateTime.now().millisecondsSinceEpoch}_${finalFile.name}';
+        final targetPath = '${tempDir.path}/$uniqueFileName';
+
+        var result = await FlutterImageCompress.compressAndGetFile(
+          finalFile.path,
+          targetPath,
+          quality: 50,
+          rotate: 360,
+        );
+        if (result == null) {
+          // لو حدثت مشكلة بالضغط
+          return null;
+        }
+
+        // حساب الحجم
+        final bytes = await result.readAsBytes();
+        final size = bytes.length;
+
+        // يظهر لودينغ إن أردت
+        if (hasLoading != false) {
+          showLoadingDialog(context);
+        }
+
+        // 2) استدعاء السيرفر لجلب signedUrl
+        final signedURLResponse = await serviceLocator<ApiConsumer>()
+            .post(EndPoints.mediaUrl, data: {
+          "type": "image/${finalFile.mimeType ?? 'png'}",
+          "size": size,
+          "subcategoryId": subCategoryId,
+        });
+
+        // 3) رفع الصورة على الـ signedUrl
+        signedURLResponse.fold((failure) {
+          print(failure.toString());
+        }, (data) async {
+          final signedUrl = data['data']['signedUrl'];
+          final mediaId = data['data']['mediaId'];
+
+          // ارفع البيانات الثنائية
+          await sendBinaryFileData(file: result, signedUrl: signedUrl).then((_) async {
+            // 4) تأكيد الرفع
+            final confirmUploadResponse = await serviceLocator<ApiConsumer>()
+                .put(EndPoints.confirmUpload(mediaId));
+
+            confirmUploadResponse.fold((l) {
+              return Left(l);
+            }, (data) {
+              // نعيد الـmediaId والملف في الكول باك
+              onUploaded(UploadFileEntity(mediaId: mediaId, file: finalFile));
+              return const Right(true);
+            });
+          });
+        });
+
+        // أغلق الـLoading
+        if (hasLoading != false) {
+          context.pop();
+        }
+      } catch (e) {
+        print('Error using wechat_assets_picker: $e');
+        return null;
+      }
+      }
     return null;
   }
 

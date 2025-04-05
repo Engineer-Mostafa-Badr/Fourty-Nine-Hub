@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,6 +38,9 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
   final GetCitiesUseCase _getCitiesUseCase;
   final CreateRestaurantUseCase _createREstaurant;
   final ApiConsumer apiConsumer;
+  XFile? licenseFirstPage;
+  XFile? licenseSecondPage;
+  XFile? licenseThirdPage;
 
   CreateRestaurantCubit(
       this._shareCubit,
@@ -65,6 +70,7 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
         (createRestaurantParams.restaurantMedia?.isNotEmpty ?? false) &&
         (createRestaurantParams.mneu?.isNotEmpty ?? false)) {
       saveTextEditingController();
+      log("create data:${createRestaurantParams.toMap()}");
       emit(CreateResturantLoading(LocaleKeys.creatingRestaurant.tr()));
       final response = await _createREstaurant.call(createRestaurantParams);
       emit(CreateRestaurantCloseLoading());
@@ -76,15 +82,14 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
           AppPages.router.routerDelegate.navigatorKey.currentContext!
               .pushNamed(Routes.LOGIN);
         }
-        print("Error");
-
         res = 'fail';
       }, (data) {
-        print("Success");
+    
         res = 'success';
         emit(CreateRestaurantSuccess(LocaleKeys
             .youHaveSubmittedYourRegistrationSuccessfullyWaitingForAdministrationApproval
             .tr()));
+    
         Navigator.pop(context);
 
         AppPages.router.routerDelegate.navigatorKey.currentContext!
@@ -92,9 +97,11 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
             .loadData();
 
         AppPages.router.routerDelegate.pop();
+
         return res;
       });
     } else {
+      log("create data:${createRestaurantParams.toMap()}");
       res = 'fail';
       ScaffoldMessenger.of(
               AppPages.router.routerDelegate.navigatorKey.currentContext!)
@@ -107,47 +114,7 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
     return res;
   }
 
-  updateRestaurant1(BuildContext context, [String? phoneNumber]) async {
-    CreateRestaurantParams params = createRestaurantParams;
-
-    Map<String, dynamic> data = {
-      if (phoneNumber != null) "phone": phoneNumber, // Only update if provided
-      if (params.name != null) "name": params.name,
-      if (params.subcategoryId != null) "subcategoryId": params.subcategoryId,
-      if (params.restaurantMedia != null) "restaurantMedia": params.restaurantMedia,
-      if (params.government != null) "government": params.government,
-      if (params.city != null) "city": params.city,
-    };
-
-    if (data.isEmpty) {
-      _validationUpdateState();
-      return;
-    }
-
-    final result = await _updateRestaurantUseCase(
-      UpdateRestaurantParams(
-        city: params.city,
-        government: params.government,
-        subcategoryId: params.subcategoryId,
-        name: params.name,
-        number: phoneNumber ?? params.number, // Use new phone number if provided
-        restaurantMedia: params.restaurantMedia,
-      ),
-    );
-
-    return result.fold(
-          (failure) {
-        showErrorMessage(context, getFailureMessage(failure, context));
-      },
-          (success) {
-            loadData();
-            emit(CreateRestaurantFinish());
-        Navigator.pop(context); // Close the dialog on success
-      },
-    );
-  }
-
-  updateRestaurant12(context) async {
+  updateRestaurant1(context) async {
     CreateRestaurantParams params = createRestaurantParams;
 
     // List<Map<String, dynamic>> mneu = [];
@@ -192,6 +159,7 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
         restaurantMedia: params.restaurantMedia,
       ),
     );
+
     return result.fold(
       (Failure failure) {
         showErrorMessage(context, getFailureMessage(failure, context));
@@ -380,18 +348,21 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
 
   // ================================= upload images =================================
   Future<void> _uploadImage(
-      {required dynamic Function(UploadFileEntity) onUploaded,required BuildContext context,
+      {required dynamic Function(UploadFileEntity) onUploaded,
+      required BuildContext context,
       subcategoryId}) async {
     if (createRestaurantParams.subcategoryId != null ||
         createRestaurantParams.subcategoryId != "" ||
         subcategoryId != null) {
       emit(CreateResturantLoading(LocaleKeys.uploadingImage.tr()));
       await UploadFile().uploadImage(
+        useWeChatPicker: true,
         subCategoryId:
             createRestaurantParams.subcategoryId ?? subcategoryId ?? '',
         onUploaded: (value) {
           onUploaded(value);
-        }, context: context,
+        },
+        context: context,
       );
       emit(CreateRestaurantCloseLoading());
     } else {
@@ -403,44 +374,73 @@ class CreateRestaurantCubit extends Cubit<CreateRestaurantState> {
   List<String> restaurantImagesIds = [];
   List<String> licensRestaurantImagesIds = [];
 
-  Future<void> uploadProfileImage({subcategoryId,required BuildContext context}) async {
+  Future<void> uploadProfileImage({
+    subcategoryId,
+    required BuildContext context,
+    int? index,
+  }) async {
+    print(
+        "========================================   IN UPLOAD Profile ========================================");
     await _uploadImage(
         subcategoryId: subcategoryId,
         context: context,
         onUploaded: (media) {
-          restaurantImages.add(media.file);
-          restaurantImagesIds.add(media.mediaId);
+          print(
+              "========================================${media.mediaId}========================================");
+          if (index != null) {
+            if (index >= 0 && index < restaurantImages.length) {
+              restaurantImages[index] = media.file;
+              restaurantImagesIds[index] = media.mediaId;
+              log("after :${restaurantImagesIds[index]}");
+            }
+          } else {
+            restaurantImages.add(media.file);
+            restaurantImagesIds.add(media.mediaId);
+          }
+
           createRestaurantParams.restaurantMedia = restaurantImagesIds;
 
           emit(CreateRestaurantUploadProfileImage(restaurantImages));
         });
   }
 
-  Future<void> uploadLicenseFirstPageImage({required BuildContext context}) async {
-    await _uploadImage(onUploaded: (media) {
-      licensRestaurantImagesIds.add(media.mediaId);
-      createRestaurantParams.licenseMedia = licensRestaurantImagesIds;
-
-      emit(CreateRestaurantUploadLicenseFirstPageImage(media.file));
-    }, context: context);
+  Future<void> uploadLicenseFirstPageImage(
+      {required BuildContext context}) async {
+    await _uploadImage(
+      context: context,
+      onUploaded: (media) {
+        licenseFirstPage = media.file;
+        licensRestaurantImagesIds.add(media.mediaId);
+        createRestaurantParams.licenseMedia = licensRestaurantImagesIds;
+        emit(CreateRestaurantRefreshUI());
+      },
+    );
   }
 
-  Future<void> uploadLicenseSecondPageImage({required BuildContext context}) async {
-    await _uploadImage(onUploaded: (media) {
-      licensRestaurantImagesIds.add(media.mediaId);
-      createRestaurantParams.licenseMedia = licensRestaurantImagesIds;
-
-      emit(CreateRestaurantUploadLicenseSecondPageImage(media.file));
-    }, context: context);
+  Future<void> uploadLicenseSecondPageImage(
+      {required BuildContext context}) async {
+    await _uploadImage(
+      context: context,
+      onUploaded: (media) {
+        licenseSecondPage = media.file;
+        licensRestaurantImagesIds.add(media.mediaId);
+        createRestaurantParams.licenseMedia = licensRestaurantImagesIds;
+        emit(CreateRestaurantRefreshUI());
+      },
+    );
   }
 
-  Future<void> uploadLicenseThiredPageImage({required BuildContext context}) async {
-    await _uploadImage(onUploaded: (media) {
-      licensRestaurantImagesIds.add(media.mediaId);
-      createRestaurantParams.licenseMedia = licensRestaurantImagesIds;
-
-      emit(CreateRestaurantUploadLicenseThiredPageImage(media.file));
-    }, context: context);
+  Future<void> uploadLicenseThiredPageImage(
+      {required BuildContext context}) async {
+    await _uploadImage(
+      context: context,
+      onUploaded: (media) {
+        licenseThirdPage = media.file;
+        licensRestaurantImagesIds.add(media.mediaId);
+        createRestaurantParams.licenseMedia = licensRestaurantImagesIds;
+        emit(CreateRestaurantRefreshUI());
+      },
+    );
   }
 
   final name = TextEditingController();

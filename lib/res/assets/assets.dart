@@ -28,6 +28,7 @@ abstract class Assets {
   static String continueEditing = 'assets/icons/continieEditing.svg';
   static String discardPost = 'assets/icons/discardPost.svg';
   static String likeIcon = 'assets/icons/like_icon.svg';
+  static String cameraSvg = "assets/icons/Icon (2).svg";
   static String commentIcon = 'assets/icons/comment_icon.svg';
   static String sendIcon = 'assets/icons/send_icon.svg';
   static String shareIcon = 'assets/icons/share_icon.svg';
@@ -66,7 +67,8 @@ abstract class Assets {
   static String homeIcon = 'assets/icons/home_icon.svg';
   static String createIcon = 'assets/icons/create_icon.svg';
   static String profile2Icon = 'assets/icons/profile_icon.svg';
-  static String verifiedAccountMarkIcon = 'assets/icons/verified_account_mark_icon.svg';
+  static String verifiedAccountMarkIcon =
+      'assets/icons/verified_account_mark_icon.svg';
   static String musicNoteIcon = 'assets/icons/music_note.svg';
 
   // lottie
@@ -353,7 +355,6 @@ abstract class Assets {
   static String reportRed = 'assets/icons/report_red.svg';
   static String arrowUp = 'assets/icons/arrow_up.svg';
 
-
   static String onBoarding1 = 'assets/onBoarding/onBoarding1.svg';
   static String onBoarding2 = 'assets/onBoarding/onBoarding2.svg';
   static String onBoarding3 = 'assets/onBoarding/onBoarding3.svg';
@@ -367,6 +368,20 @@ abstract class Assets {
   static String onBoarding11 = 'assets/onBoarding/onBoarding11.svg';
   static String onBoarding12 = 'assets/onBoarding/onBoarding12.svg';
 
+  static String tripJoinCaptainShare =
+      'assets/images/trip_join/captain_share.png';
+  static String tripJoinIconSelected = 'assets/images/trip_join/trip_join.png';
+  static String tripJoinPickMe = 'assets/images/trip_join/pick_me.png';
+  static String maleUser = 'assets/images/trip_join/male_user.png';
+  static String femaleUser = 'assets/images/trip_join/female_user.png';
+  static String tripJoinCarIcon = 'assets/icons/trip_join_car_icon.png';
+  static String tripJoinBabySeatIcon = 'assets/icons/baby_car_seat.png';
+  static String tripJoinEathIcon = 'assets/icons/earth_icon.png';
+
+
+
+  static const String arrowDown = 'assets/icons/arrow-up.svg';
+
   // new trip join icon
   static String menuIcon = 'assets/icons/menuIcon.svg';
   static String locationTripIcon = 'assets/icons/locationTripIcon.svg';
@@ -379,7 +394,9 @@ abstract class Assets {
   static String freeIcon = 'assets/icons/freeIcon.svg';
   static String circleBlue = 'assets/icons/circleBlue.svg';
   static String circleGreen = 'assets/icons/circleGreen.svg';
+  static String circleBlack = 'assets/icons/circleBlack.svg';
   static String frameIcon = 'assets/icons/frameIcon.svg';
+  static String redFrame = 'assets/icons/redFrame.svg';
   static String bookedWoman = 'assets/icons/bookedWoman.svg';
   static String bookedMan = 'assets/icons/bookedMan.svg';
   static String car = 'assets/icons/car.png';

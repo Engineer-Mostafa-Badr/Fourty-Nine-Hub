@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/controllers/ride_register/ride_register_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/picture_optional_model/drag_analytics.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/picture_optional_model/drag_analytics.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/picture_optional_model/technical_examination.dart';
@@ -37,9 +38,9 @@ class TechnicalExaminationScreen extends StatelessWidget {
         children: [
           Expanded(
             child: SingleChildScrollView(
-              child: BlocBuilder<RideCubit, RideState>(
+              child: BlocBuilder<RideRegisterCubit, RideRegisterState>(
                 builder: (context,state) {
-                  var cubit = context.read<RideCubit>();
+                  var cubit = context.read<RideRegisterCubit>();
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 32,left: 16,right: 16,),
                     child: Form(
@@ -148,10 +149,10 @@ class TechnicalExaminationScreen extends StatelessWidget {
                 InkWell(
                   onTap: () {
                     print("object");
-                    if(context.read<RideCubit>().state.personalTechnicalExaminationPicture==null){
+                    if(context.read<RideRegisterCubit>().state.personalTechnicalExaminationPicture==null){
                       showErrorMessage(context, "Please select technical examination");
                     }else{
-                      context.read<RideCubit>().onSubmitUploadingTechnicalExamination(context);
+                      context.read<RideRegisterCubit>().onSubmitUploadingTechnicalExamination(context);
                     }
                   },
                   child: Container(

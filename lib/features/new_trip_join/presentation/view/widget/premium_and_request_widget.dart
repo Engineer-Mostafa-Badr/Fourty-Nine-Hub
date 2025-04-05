@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
 import '../../../../../res/style/app_colors.dart';
 
@@ -23,9 +25,10 @@ class PremiumAndRequestWidget extends StatelessWidget {
                 ),
               ),
               onPressed: () {},
-              child: const Text(
-                "Premium Request",
+              child: Text(
+                LocaleKeys.premiumRequest.localize,
                 style: TextStyle(
+                  fontSize: 25.sp,
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
@@ -42,9 +45,10 @@ class PremiumAndRequestWidget extends StatelessWidget {
                 ),
               ),
               onPressed: () {},
-              child: const Text(
-                "Request",
+              child: Text(
+                LocaleKeys.request.localize,
                 style: TextStyle(
+                  fontSize: 25.sp,
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),

@@ -40,13 +40,11 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:geolocator/geolocator.dart';
 import 'core/service/cache_service.dart';
 import 'core/themes/light_theme.dart';
-import 'features/RideFeature/presentation/controllers/dashboards_cubit/dashboards_cubit.dart';
 import 'features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'features/notifications/presentation/cubits/get_user_trips_notifications/get_user_trips_notifications_cubit.dart';
 import 'features/settings/presentation/cubit/choice_ruler_cubit.dart';
 import 'features/settings/presentation/cubit/floating_navigator_cubit.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'firebase_options.dart';
 import 'routes/pages.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -60,6 +58,7 @@ void main() async {
   await CacheManager.init();
   timeago.setLocaleMessages('en', timeago.EnMessages());
   timeago.setLocaleMessages('ar', timeago.ArMessages());
+//  await  initPickMeFeature();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -70,7 +69,7 @@ void main() async {
   // // Listen for new locations (only when moved at least 300m)
   // locationService.locationUpdates.listen((position) {
   //   Fluttertoast.showToast(
-  //       msg: "New location (moved at least 300m): ${position.latitude}, ${position.longitude}",
+  //       msg: "New location (moved at least 1m): ${position.latitude}, ${position.longitude}",
   //       toastLength: Toast.LENGTH_SHORT,
   //       gravity: ToastGravity.BOTTOM,
   //       timeInSecForIosWeb: 1,
@@ -78,8 +77,8 @@ void main() async {
   //       textColor: Colors.white,
   //       fontSize: 16.0
   //   );
-  //   print('New location (moved at least 300m): ${position.latitude}, ${position.longitude}');
-  //   // Do something with the new location
+  //   print('New location (moved at least 1m): ${position.latitude}, ${position.longitude}');
+    // Do something with the new location
   // });
 
   await CacheServiceImpl.init();
@@ -204,9 +203,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           create: (BuildContext context) =>
               serviceLocator<MainCategoriesCubit>()..loadData(),
         ),
-        BlocProvider(
-          create: (BuildContext context) => serviceLocator<RideCubit>(),
-        ),
+        // BlocProvider(
+        //   create: (BuildContext context) => serviceLocator<RideCubit>(),
+        // ),
         BlocProvider(
           create: (context) => ThemeCubit(),
         ),
