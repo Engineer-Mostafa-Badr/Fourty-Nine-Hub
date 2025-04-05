@@ -3,6 +3,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/completed_tri
 import 'package:fourtyninehub/features/RideFeature/domain/entities/cost_per_km_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/expected_price_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/get_location_from_address_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_offer_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_request_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/loading_info_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/running_trips_entity.dart';
@@ -62,12 +63,15 @@ class RideState {
   final RideExpectedPriceEntity? rideExpectedPrice;
   RideRequestTripEntity? requestedTrip;
   final List<CompletedTripsEntity>? completedTrips;
+  List<RideOfferEntity> rideOffers;
   final List<RunningTripsEntity>? runningTrips;
   final ActivityTripEntity ? activityTrips;
   final List<SubCategoryEntityUpdated>? rideSubCategories;
   final List<SubCategoryEntityUpdated>? shippingSubCategories;
   final List<GovernorateEntity>? govs;
   final List<RideColorEntity>? colors;
+  final RideColorEntity? color;
+  final GovernorateEntity? city;
   final List<String>? brands;
   final List<String>? models;
   final String? selectedModel;
@@ -133,6 +137,8 @@ class RideState {
     this.registerType='socket',
     this.driverInfo,
     this.colors,
+    this.color,
+    this.city,
     this.isSmoking=false,
     this.hasAirCondition=false,
     this.selectedModel,
@@ -152,6 +158,7 @@ class RideState {
     this.isUploadCriminalRecord,
     this.isUploadTechnicalExamination,
     this.isShipping,
+    required this.rideOffers,
   });
 
   RideState copyWith({
@@ -181,8 +188,10 @@ class RideState {
     List<String>? models,
     CostPerKmEntity? costPerKm,
     List<RideColorEntity>? colors,
+    RideColorEntity? color,
     RideCategoryEntityUpdated? shippingCategory,
     List<GovernorateEntity>? governorates,
+    GovernorateEntity? city,
     GetLocationFromAddressEntity? currentLocation,
     GetLocationFromAddressEntity? toLocation,
     GetLocationFromAddressEntity? wayPointOne,
@@ -211,12 +220,15 @@ class RideState {
     bool? isUploadDrugAnalysis,
     bool? isUploadCriminalRecord,
     bool? isUploadTechnicalExamination,
+    List<RideOfferEntity>? rideOffers,
   }) {
     return RideState(
       status: status ?? this.status,
       failure: failure ?? this.failure,
       registerType: registerType ?? this.registerType,
       personalPicture: personalPicture ?? this.personalPicture,
+      color: color ?? this.color,
+      city: city ?? this.city,
       driverLicensePicture: driverLicensePicture ?? this.driverLicensePicture,
       backOfDriverLicensePicture: backOfDriverLicensePicture ?? this.backOfDriverLicensePicture,
       selfieDriverLicensePicture: selfieDriverLicensePicture ?? this.selfieDriverLicensePicture,
@@ -269,6 +281,7 @@ class RideState {
       isShipping: isShipping ?? this.isShipping,
       loaderInfo: loaderInfo ?? this.loaderInfo,
       savedRideSubCategories: savedRideSubCategories ?? this.savedRideSubCategories,
+      rideOffers: rideOffers ?? this.rideOffers,
     );
   }
 }

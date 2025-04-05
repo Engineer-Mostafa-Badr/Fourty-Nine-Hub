@@ -18,19 +18,18 @@ class JsonParser implements ApiConsumer {
   Future<Either<Failure, Map<String, dynamic>>> delete(String url,
       {Map<String, dynamic>? data,
       Map<String, dynamic>? queryParameters,
-      Map<String, dynamic>? headers}) {
+      Map<String, dynamic>? headers,
+        bool refresh = false,}) {
     // TODO: implement delete
     throw UnimplementedError();
   }
 
   @override
-  Future<Either<Failure, Map<String, dynamic>>> get(
-    String url, {
-    Map<String, dynamic>? queryParameters,
-    Map<String, dynamic>? data,
-    Map<String, dynamic>? headers,
-    bool refresh = false,
-  }) async {
+  Future<Either<Failure, Map<String, dynamic>>> get(String url,
+      {Map<String, dynamic>? queryParameters,
+      Map<String, dynamic>? data,
+      Map<String, dynamic>? headers,
+        bool refresh = false,}) async {
     try {
       final response = jsonDecode(await rootBundle.loadString(url));
 
@@ -49,7 +48,8 @@ class JsonParser implements ApiConsumer {
       {Map<String, dynamic>? data,
       FormData? formData,
       Map<String, dynamic>? headers,
-      Map<String, dynamic>? queryParameters}) {
+      Map<String, dynamic>? queryParameters,
+        bool refresh = false,}) {
     // TODO: implement post
     throw UnimplementedError();
   }
@@ -60,6 +60,7 @@ class JsonParser implements ApiConsumer {
     Map<String, dynamic>? data,
     Map<String, dynamic>? queryParameters,
     Map<String, dynamic>? headers,
+        bool refresh = false,
   }) {
     // TODO: implement put
     throw UnimplementedError();
@@ -70,6 +71,7 @@ class JsonParser implements ApiConsumer {
       if (e.response?.statusCode == 413) {
         return const ServerFailure(
           message: 'File size is too large',
+          name: 'Unknown Error',
         );
       } else if (e.response?.statusCode == 401) {
         return const UnauthorizedFailure('');
@@ -77,6 +79,7 @@ class JsonParser implements ApiConsumer {
           e.response?.data['message'] is String) {
         return ServerFailure(
           message: e.response?.data['message'] as String,
+          name: e.response?.data['name'] as String? ?? 'Unknown Error',
         );
       } else if (e.response?.data is Map && e.response?.data['error'] is Map) {
         final error = e.response?.data['error'] as Map;
@@ -91,11 +94,13 @@ class JsonParser implements ApiConsumer {
         return ServerFailure(
           message: error['message'] as String,
           errors: errors,
+          name: error['name'] as String? ?? 'Unknown Error',
         );
       } else if (e.response?.data is Map &&
           e.response?.data['data'] is String) {
         return ServerFailure(
           message: e.response?.data['data'] as String,
+          name: e.response?.data['name'] as String? ?? 'Unknown Error',
         );
       }
     }
@@ -106,7 +111,8 @@ class JsonParser implements ApiConsumer {
   Future<Either<Failure, Map<String, dynamic>>> patch(String url,
       {Map<String, dynamic>? data,
       Map<String, dynamic>? queryParameters,
-      Map<String, dynamic>? headers}) {
+      Map<String, dynamic>? headers,
+        bool refresh = false,}) {
     // TODO: implement patch
     throw UnimplementedError();
   }

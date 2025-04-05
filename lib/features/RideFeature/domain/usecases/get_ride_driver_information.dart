@@ -6,12 +6,12 @@ import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
 
 class GetRideDriverInfoUseCase
-    extends UseCase<DriverInfoEntity, NoParams> {
+    extends UseCase<DriverInfoEntity, bool> {
   final RideRepository _repo;
   GetRideDriverInfoUseCase(this._repo);
 
   @override
-  Future<Either<Failure, DriverInfoEntity>> call(NoParams params) {
-    return _repo.getRideDriverInfo();
+  Future<Either<Failure, DriverInfoEntity>> call(bool params) {
+    return _repo.getRideDriverInfo(params);
   }
 }

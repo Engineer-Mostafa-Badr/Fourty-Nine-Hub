@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/controllers/ride_register/ride_register_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/picture_optional_model/drag_analytics.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/picture_optional_model/drag_analytics.dart';
 import 'package:go_router/go_router.dart';
@@ -40,9 +41,9 @@ class DragAnalyticsScreen extends StatelessWidget {
         children: [
           Expanded(
             child: SingleChildScrollView(
-              child: BlocBuilder<RideCubit, RideState>(
+              child: BlocBuilder<RideRegisterCubit, RideRegisterState>(
                 builder: (context,state) {
-                  var cubit = context.read<RideCubit>();
+                  var cubit = context.read<RideRegisterCubit>();
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 32,left: 16,right: 16,),
                     child: Form(
@@ -150,10 +151,10 @@ class DragAnalyticsScreen extends StatelessWidget {
                 const Sizer(),
                 InkWell(
                   onTap: () {
-                    if(context.read<RideCubit>().state.personalDrugAnalysisPicture==null){
+                    if(context.read<RideRegisterCubit>().state.personalDrugAnalysisPicture==null){
                       showErrorMessage(context, "Please select drag analysis");
                     }else{
-                      context.read<RideCubit>().onSubmitUploadingDrugAnalysis(context);
+                      context.read<RideRegisterCubit>().onSubmitUploadingDrugAnalysis(context);
                     }                  },
                   child: Container(
                     height: 44,

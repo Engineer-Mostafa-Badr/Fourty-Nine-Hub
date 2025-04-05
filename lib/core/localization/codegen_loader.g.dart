@@ -2892,6 +2892,7 @@ static const Map<String,dynamic> _en = {
   "subscribePackage": "Subscribe Package",
   "busMode": "Bus Mode",
   "trukMode": "Truck Mode",
+  "rideMode": "Ride Mode",
   "busDetails": "Bus Details",
   "trukDetails": "Truck Details",
   "busWithYou": "Bus ride with You",
