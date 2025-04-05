@@ -16,16 +16,19 @@ import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../../../routes/routes.dart';
 
 class TripJoinView extends StatefulWidget {
   const TripJoinView({super.key});
-
 
   @override
   State<TripJoinView> createState() => _TripJoinViewState();
 }
 
-class _TripJoinViewState extends State<TripJoinView>with TickerProviderStateMixin {
+class _TripJoinViewState extends State<TripJoinView>
+    with TickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String _displayedCategory = LocaleKeys.availableTrips;
 
@@ -46,9 +49,9 @@ class _TripJoinViewState extends State<TripJoinView>with TickerProviderStateMixi
     );
 
     _scaleAnimation = Tween<double>(
-        begin: 0.6, end: 1.2) // تكبير أكبر من البقية
+            begin: 0.6, end: 1.2) // تكبير أكبر من البقية
         .animate(
-        CurvedAnimation(parent: _controller, curve: Curves.easeOutBack));
+            CurvedAnimation(parent: _controller, curve: Curves.easeOutBack));
 
     _positionAnimation = Tween<double>(begin: 200, end: 0) // يبدأ من تحت الشاشة
         .animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
@@ -68,170 +71,192 @@ class _TripJoinViewState extends State<TripJoinView>with TickerProviderStateMixi
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: CustomScaffold(
-            appBar: HomeAppbar(
-              showChat: true,
-              isWithBackArrow: false,
-              language: true,
-              leading: IconButton(
-                icon: const Icon(Icons.menu), // The menu icon
-                onPressed: () {
-                  HandleCashback.setCount('drawerCount', context);
-                  _scaffoldKey.currentState?.openDrawer(); // Open the drawer
-                },
+      child: CustomScaffold(
+        appBar: HomeAppbar(
+          showChat: true,
+          isWithBackArrow: false,
+          language: true,
+          leading: IconButton(
+            icon: const Icon(Icons.menu), // The menu icon
+            onPressed: () {
+              HandleCashback.setCount('drawerCount', context);
+              _scaffoldKey.currentState?.openDrawer(); // Open the drawer
+            },
+          ),
+        ),
+        body: Stack(
+          children: [
+            SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 32.h),
+                child: Stack(
+                  children: [
+                    Column(children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          IconButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              icon: const Icon(
+                                Icons.arrow_back,
+                                color: AppColors.PRIMARY_COLOR,
+                              )),
+                        ],
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 15.h,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TripOptionWidget(
+                              imagePath: Assets.locationTripIcon,
+                              title: 'Captain\nShare',
+                              onTap: () {
+                                context.push(Routes.captainShareScreen);
+                              },
+                            ),
+                            AnimatedBuilder(
+                              animation: _controller,
+                              builder: (context, child) {
+                                return Transform.translate(
+                                  offset: Offset(0, _positionAnimation.value),
+                                  child: Transform.scale(
+                                    scale: _scaleAnimation.value,
+                                    child: child,
+                                  ),
+                                );
+                              },
+                              child: TripOptionWidget(
+                                borderColor: Colors.red,
+                                containerColor: Colors.white,
+                                iconColor: const Color(0xffF33D49),
+                                textColor: const Color(0xffF33D49),
+                                imagePath: Assets.locationTripIcon,
+                                title: 'Trip Join',
+                                onTap: () {},
+                                icon: Assets.car,
+                              ),
+                            ),
+                            TripOptionWidget(
+                              imagePath: Assets.locationTripIcon,
+                              title: 'Pick me',
+                              onTap: () {},
+                              icon: Assets.pickMeImage,
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Sizer(),
+                      _buildStatusCategories(),
+                      Sizer(
+                        height: 10.h,
+                      ),
+                      ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: 2,
+                          itemBuilder: (BuildContext context, int index) {
+                            switch (_displayedCategory) {
+                              case LocaleKeys.availableTrips:
+                                return TripJoinCard(
+                                  title: context.isArabic
+                                      ? 'كيا، سيراتو'
+                                      : 'Kia, Cerato',
+                                  buttonTitle: LocaleKeys.request.localize,
+                                  isMale: true,
+                                  time: context.isArabic
+                                      ? '8:00 مساء'
+                                      : '8:00 Pm',
+                                  seats: 2,
+                                  status: context.isArabic ? 'مكرر' : 'Repeat',
+                                  isRequestButton: true,
+                                  isContactInfo: true,
+                                  iconCar: true,
+                                  onTab: () => JoinTripBottomSheet(context,
+                                      topButtonColor: AppColors.SECONDARY_COLOR,
+                                      topButtonTitle:
+                                          LocaleKeys.premium_request.localize,
+                                      bottomButtonColor:
+                                          AppColors.PRIMARY_COLOR,
+                                      bottomButtonTitle:
+                                          LocaleKeys.request.localize),
+                                );
+                                break;
+
+                              case LocaleKeys.rideRequest:
+                                return TripJoinCard(
+                                  title: context.isArabic ? 'محمد' : 'Mohamed',
+                                  isMale: true,
+                                  buttonTitle: LocaleKeys.request.localize,
+                                  time: context.isArabic
+                                      ? '8:00 مساء'
+                                      : '8:00 Pm',
+                                  seats: 2,
+                                  status:
+                                      context.isArabic ? 'انتهت' : 'Expired',
+                                  isRequestButton: false,
+                                  isContactInfo: true,
+                                  iconCar: false,
+                                  onTab: () {},
+                                );
+                                break;
+                              case LocaleKeys.myAds:
+                                return TripJoinCard(
+                                  title: context.isArabic
+                                      ? 'كيا، سيراتو'
+                                      : 'Kia, Cerato',
+                                  isMale: true,
+                                  buttonTitle: LocaleKeys.deleteAd.localize,
+                                  time: context.isArabic
+                                      ? '8:00 مساء'
+                                      : '8:00 Pm',
+                                  seats: 2,
+                                  status: context.isArabic
+                                      ? 'مرة واحدة'
+                                      : 'One Time',
+                                  isRequestButton: true,
+                                  isContactInfo: false,
+                                  iconCar: true,
+                                  onTab: () => showDialogTripJoin(
+                                      context,
+                                      DialogContent(
+                                        subTitle:
+                                            LocaleKeys.areDeleteThisAd.localize,
+                                        leftButtonTitle:
+                                            LocaleKeys.deleteAd.localize,
+                                        rightButtonTitle:
+                                            LocaleKeys.close.localize,
+                                      )),
+                                );
+                                break;
+                            }
+                          }),
+                    ]),
+                  ],
+                ),
               ),
             ),
-            body: Stack(
-              children: [
-                SingleChildScrollView(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric( horizontal: 32.h),
-                    child: Stack(
-                      children: [
-                        Column(children: [
-                         Row(
-                           mainAxisAlignment: MainAxisAlignment.start,
-                           children: [
-                           IconButton(
-                               onPressed: () => Navigator.of(context).pop(),
-                               icon:const Icon(Icons.arrow_back,color: AppColors.PRIMARY_COLOR,)),
-                         ],),
-                          Padding(
-                            padding:
-                                EdgeInsets.symmetric(vertical: 15.h,
-                                ),
-                            child:Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [TripOptionWidget(
-                                imagePath: Assets.locationTripIcon,
-                                title: 'Captain\nShare',
-                                onTap: () {},
-                              ),
-                                AnimatedBuilder(
-                                  animation: _controller,
-                                  builder: (context, child) {
-                                    return Transform.translate(
-                                      offset: Offset(0, _positionAnimation.value),
-                                      child: Transform.scale(
-                                        scale: _scaleAnimation.value,
-                                        child: child,
-                                      ),
-                                    );
-                                  },
-                                  child: TripOptionWidget(
-                                    borderColor: Colors.red,
-                                    containerColor: Colors.white,
-                                    iconColor: const Color(0xffF33D49),
-                                    textColor: const Color(0xffF33D49),
-                                    imagePath: Assets.locationTripIcon,
-                                    title: 'Trip Join',
-                                    onTap: () {},
-                                    icon: Assets.car,
-                                  ),
-                                ),
-                                TripOptionWidget(
-                                  imagePath: Assets.locationTripIcon,
-                                  title: 'Pick me',
-                                  onTap: () {},
-                                  icon: Assets.pickMeImage,
-                                ),
-                              ],
-                            ),
-                          ),
-                          const Sizer(),
-                          _buildStatusCategories(),
-                          Sizer(
-                            height: 10.h,
-                          ),
-                          ListView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount: 2,
-                              itemBuilder: (BuildContext context, int index) {
-                                switch (_displayedCategory) {
-                                  case LocaleKeys.availableTrips:
-                                    return TripJoinCard(
-                                      title: context.isArabic
-                                          ? 'كيا، سيراتو'
-                                          : 'Kia, Cerato',
-                                      buttonTitle: LocaleKeys.request.localize,
-                                      isMale: true,
-                                      time: context.isArabic ? '8:00 مساء' : '8:00 Pm',
-                                      seats: 2,
-                                      status: context.isArabic ? 'مكرر' : 'Repeat',
-                                      isRequestButton: true,
-                                      isContactInfo: true,
-                                      iconCar: true,
-                                      onTab: ()=>JoinTripBottomSheet(context,
-                                topButtonColor: AppColors.SECONDARY_COLOR,
-                                topButtonTitle: LocaleKeys.premium_request.localize,
-                                bottomButtonColor: AppColors.PRIMARY_COLOR,
-                                bottomButtonTitle: LocaleKeys.request.localize),
-                                    );
-                                    break;
-
-                                  case LocaleKeys.rideRequest:
-                                    return TripJoinCard(
-                                      title: context.isArabic ? 'محمد' : 'Mohamed',
-                                      isMale: true,
-                                      buttonTitle: LocaleKeys.request.localize,
-                                      time: context.isArabic ? '8:00 مساء' : '8:00 Pm',
-                                      seats: 2,
-                                      status: context.isArabic ? 'انتهت' : 'Expired',
-                                      isRequestButton: false,
-                                      isContactInfo: true,
-                                      iconCar: false,
-                                      onTab: (){},
-                                    );
-                                    break;
-                                  case LocaleKeys.myAds:
-                                    return TripJoinCard(
-                                      title: context.isArabic
-                                          ? 'كيا، سيراتو'
-                                          : 'Kia, Cerato',
-                                      isMale: true,
-                                      buttonTitle: LocaleKeys.deleteAd.localize,
-                                      time: context.isArabic ? '8:00 مساء' : '8:00 Pm',
-                                      seats: 2,
-                                      status:
-                                          context.isArabic ? 'مرة واحدة' : 'One Time',
-                                      isRequestButton: true,
-                                      isContactInfo: false,
-                                      iconCar: true,
-                                      onTab: () => showDialogTripJoin(
-                                          context,
-                                          DialogContent(
-                                            subTitle: LocaleKeys.areDeleteThisAd.localize,
-                                            leftButtonTitle: LocaleKeys.deleteAd.localize,
-                                            rightButtonTitle: LocaleKeys.close.localize,
-                                          )),
-                                    );
-                                    break;
-                                }
-                              }),
-                            ]),
-
-                      ],
-                    ),
-                  ),
-                ),
-                const TripJoinFloatingActionButton(),
-              ],
-            )));
+            const TripJoinFloatingActionButton(),
+          ],
+        ),
+      ),
+    );
   }
+
   _buildStatusCategories() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children:
-      [
+      children: [
         Expanded(
           child: _buildCategory(
-              title: LocaleKeys.availableTrips,
-              index: 0,
-              // selected: _displayedCategory == LocaleKeys.availableTrips
-              //     ? true
-              //     : false
+            title: LocaleKeys.availableTrips,
+            index: 0,
+            // selected: _displayedCategory == LocaleKeys.availableTrips
+            //     ? true
+            //     : false
           ),
         ),
         const Sizer(
@@ -239,11 +264,11 @@ class _TripJoinViewState extends State<TripJoinView>with TickerProviderStateMixi
         ),
         Expanded(
           child: _buildCategory(
-              title: LocaleKeys.rideRequest,
-              index: 1,
-              // selected: _displayedCategory == LocaleKeys.rideRequest
-              //     ? true
-              //     : false
+            title: LocaleKeys.rideRequest,
+            index: 1,
+            // selected: _displayedCategory == LocaleKeys.rideRequest
+            //     ? true
+            //     : false
           ),
         ),
         const Sizer(
@@ -251,28 +276,32 @@ class _TripJoinViewState extends State<TripJoinView>with TickerProviderStateMixi
         ),
         Expanded(
           child: _buildCategory(
-              title: LocaleKeys.myAds,
-              index: 2,
-              // selected:
-              //     _displayedCategory == LocaleKeys.myAds ? true : false
+            title: LocaleKeys.myAds,
+            index: 2,
+            // selected:
+            //     _displayedCategory == LocaleKeys.myAds ? true : false
           ),
         ),
       ],
     );
   }
 
-  _buildCategory({required String title, required int index,}) {
-    bool selected=tabController.index == index;
+  _buildCategory({
+    required String title,
+    required int index,
+  }) {
+    bool selected = tabController.index == index;
     return GestureDetector(
-      onTap:(){
+      onTap: () {
         tabController.animateTo(index);
         setState(() {
-      _displayedCategory = title;
-      }); } ,
+          _displayedCategory = title;
+        });
+      },
       child: Stack(
         children: [
           Container(
-            margin: EdgeInsets.only(top:10.h),
+            margin: EdgeInsets.only(top: 10.h),
             width: double.maxFinite,
             padding: EdgeInsets.symmetric(
               vertical: 12.h,
@@ -295,7 +324,7 @@ class _TripJoinViewState extends State<TripJoinView>with TickerProviderStateMixi
             ),
           ),
           Visibility(
-            visible: title==LocaleKeys.rideRequest,
+            visible: title == LocaleKeys.rideRequest,
             child: Positioned(
               top: -3.h,
               right: 4.h,

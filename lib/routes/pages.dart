@@ -3291,6 +3291,9 @@ class AppPages {
                           getLatLongFromAddressRemoteDataSource:
                               serviceLocator()),
                     ),
+                    BlocProvider(
+                      create: (context) => serviceLocator<RideCubit>(),
+                    ),
                   ], child: const NewRouteScreen());
                 },
               ),

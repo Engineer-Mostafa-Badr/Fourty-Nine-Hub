@@ -366,7 +366,9 @@ class _FourtyNineViewState extends State<FourtyNineView>
             () => HandleCashback.setCount('threeDotsCount', context),
           ),
         ),
-        const Sizer(width: 32,),
+        const Sizer(
+          width: 32,
+        ),
         CustomHeartButton(),
         // CircularMenu(
         //     radius: 70,
@@ -429,7 +431,9 @@ class _FourtyNineViewState extends State<FourtyNineView>
         //         color: Colors.green,
         //       ),
         //     ]),
-        const Sizer(width: 32,),
+        const Sizer(
+          width: 32,
+        ),
         Expanded(
           child: _buildItemTabBar(
               const Icon(
@@ -475,7 +479,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
       title: context.isArabic ? 'جاي معاك' : 'Trip Join',
       // image: '',
 
-      route: Routes.AVAILABLE_TRIPS,
+      route: Routes.newRideModeScreen,
       onTab: () {
         AdInterstitialTop.loadIntersitialAd();
         AdInterstitialTop.showInterstitialAd();

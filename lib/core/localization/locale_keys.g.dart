@@ -1465,5 +1465,8 @@ abstract class  LocaleKeys {
   static const modify = 'modify';
   static const restaurantPhoto = 'restaurantPhoto';
   static const areYouSureUpdate = 'areYouSureUpdate';
+  static const exploreTripsThatAreActiveAtTheMoment = 'exploreTripsThatAreActiveAtTheMoment';
+  static const youWillFindFewerDriversIfYouSelectThisOption = 'youWillFindFewerDriversIfYouSelectThisOption';
+  static const initiateRouteWaitFor1HourToGiveUserTimeToBookASeatInTheSameCarWithTheSameCaptain = 'initiateRouteWaitFor1HourToGiveUserTimeToBookASeatInTheSameCarWithTheSameCaptain';
 
 }

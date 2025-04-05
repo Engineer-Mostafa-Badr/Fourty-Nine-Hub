@@ -168,7 +168,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 //     onTap: () =>
                                 //         context.push(Routes.FAVOURITE)),
 
-
                                 // drawerListTile(
                                 //     image: Assets.history,
                                 //     label: LocaleKeys.requestHistory.localize,
@@ -349,20 +348,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   onTap: () {
                                     context.pop();
                                     context.push(Routes.CHAT);
-                                  },
-                                ),
-                                drawerRollWidget(
-                                  label: "trip join ",
-                                  image: Assets.loading,
-                                  onTap: () {
-                                    context.push(Routes.newTripJoinScreen);
-                                  },
-                                ),
-                                drawerRollWidget(
-                                  label: "Ride Mode",
-                                  image: Assets.loading,
-                                  onTap: () {
-                                    context.push(Routes.newRideModeScreen);
                                   },
                                 ),
                               ],

@@ -40,13 +40,11 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:geolocator/geolocator.dart';
 import 'core/service/cache_service.dart';
 import 'core/themes/light_theme.dart';
-import 'features/RideFeature/presentation/controllers/dashboards_cubit/dashboards_cubit.dart';
 import 'features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'features/notifications/presentation/cubits/get_user_trips_notifications/get_user_trips_notifications_cubit.dart';
 import 'features/settings/presentation/cubit/choice_ruler_cubit.dart';
 import 'features/settings/presentation/cubit/floating_navigator_cubit.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'firebase_options.dart';
 import 'routes/pages.dart';
 
@@ -79,7 +77,6 @@ void main() async {
   //   print('New location (moved at least 1m): ${position.latitude}, ${position.longitude}');
     // Do something with the new location
   // });
-
 
   await CacheServiceImpl.init();
   await DI.execute();
@@ -132,7 +129,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
-
   @override
   void initState() {
     super.initState();
