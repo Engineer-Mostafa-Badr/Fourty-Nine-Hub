@@ -2626,6 +2626,9 @@ class AppPages {
                               serviceLocator()),
                     ),
                     BlocProvider(create: (_) => TripJoinViewCubit()),
+                    BlocProvider(
+                      create: (context) => serviceLocator<RideCubit>(),
+                    ),
                   ],
                   child: TripJoinCreateAdView(),
                   //const TripJoinView(),
