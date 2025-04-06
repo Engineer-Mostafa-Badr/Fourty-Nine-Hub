@@ -204,10 +204,11 @@ abstract class Assets {
   static String metaVerified = 'assets/images/meta-verified.jpeg';
   static String driversLicense = 'assets/images/Drivers-license.jpg';
   static String healthBanner = 'assets/images/health_banner.png';
-  static String emergency = 'assets/images/emergency.png';
-  static String doctorHomeVisit = 'assets/images/doctor_home_visit.png';
-  static String doctorCall = 'assets/images/doctor_call.png';
-  static String doctorClinicVisit = 'assets/images/doctor_clinic.png';
+  static String healthBanner1 = 'assets/images/health_banner1.jpeg';
+  static String emergency = 'assets/images/health_emergency.png';
+  static String doctorHomeVisit = 'assets/images/health_home_visit.png';
+  static String doctorCall = 'assets/images/health_call.png';
+  static String doctorClinicVisit = 'assets/images/health_clinic_visit.png';
   static String profileIcon = 'assets/images/profile_icon.png';
   static String chatRoomBackground = 'assets/images/background.png';
   static String maleImagePlaceholder = 'assets/images/male_image.png';
