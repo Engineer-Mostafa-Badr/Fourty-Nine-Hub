@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart' as EasyLocale;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -52,7 +51,7 @@ class _DoctorListCardState extends State<DoctorListCard> {
                 radius: 20,
                 children: [
                   const Sizer(),
-                  TripCardInfoWidget(
+                  _tripCardInfoWidget(
                     title: widget.title,
                     icon: widget.isSubscribed
                         ? 'assets/images/doctor_profile.jpeg'
@@ -124,7 +123,7 @@ class _DoctorListCardState extends State<DoctorListCard> {
     );
   }
 
-  TripCardInfoWidget({
+  _tripCardInfoWidget({
     required String title,
     required String icon,
   }) {

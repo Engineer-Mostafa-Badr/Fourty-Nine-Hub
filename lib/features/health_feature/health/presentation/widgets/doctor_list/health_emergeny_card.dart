@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart' as EasyLocale;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -13,9 +12,9 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
-class healthEmergencyCard extends StatefulWidget {
+class HealthEmergencyCard extends StatefulWidget {
   // ignore: prefer_const_constructors_in_immutables
-  const healthEmergencyCard({
+  const HealthEmergencyCard({
     super.key,
     required this.title,
     required this.isSubscribed,
@@ -30,10 +29,10 @@ class healthEmergencyCard extends StatefulWidget {
   final void Function() onTab;
 
   @override
-  State<healthEmergencyCard> createState() => _healthEmergencyCardState();
+  State<HealthEmergencyCard> createState() => _HealthEmergencyCardState();
 }
 
-class _healthEmergencyCardState extends State<healthEmergencyCard> {
+class _HealthEmergencyCardState extends State<HealthEmergencyCard> {
   @override
   Widget build(BuildContext context) {
     return Padding(

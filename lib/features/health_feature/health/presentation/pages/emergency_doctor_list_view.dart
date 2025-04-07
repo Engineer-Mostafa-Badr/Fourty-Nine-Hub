@@ -7,7 +7,6 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/doctor_list/health_emergeny_card.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/page_name_row.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class EmergencyDoctorListView extends StatefulWidget {
@@ -48,7 +47,7 @@ class _EmergencyDoctorListViewState extends State<EmergencyDoctorListView> {
                 Expanded(
                   child: ListView(
                     children: [
-                      healthEmergencyCard(
+                      HealthEmergencyCard(
                         onTab: () {},
                         buttonTitle: LocaleKeys.book.localize,
                         isSubscribed: false,
@@ -56,7 +55,7 @@ class _EmergencyDoctorListViewState extends State<EmergencyDoctorListView> {
                         status: LocaleKeys.premium.localize,
                       ),
                       // Sizer(),
-                      healthEmergencyCard(
+                      HealthEmergencyCard(
                         onTab: () {},
                         buttonTitle: LocaleKeys.book.localize,
                         isSubscribed: false,
