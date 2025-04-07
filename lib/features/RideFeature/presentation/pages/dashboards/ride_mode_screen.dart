@@ -76,7 +76,20 @@ class _RideModeScreenState extends State<RideModeScreen> {
           body: NestedAppbar(
             scrollController: _scrollController,
             appBars: const [],
-            body: BlocBuilder<DashboardsCubit, DashboardsState>(
+            body: BlocConsumer<DashboardsCubit, DashboardsState>(
+              listener: (context, state) {
+                // if (state.isErrorOffers) {
+                //   String errorName = getFailureName(state.failure!, context);
+                //   errorName == 'DebtError'
+                //       ? showDebtDialog(
+                //           context, state.availableTrips![0].subCategory!.id)
+                //       : errorName == 'SubscribeError'
+                //           ? showSubscribeDialog(
+                //               context, state.availableTrips![0].subCategory!.id)
+                //           : showErrorMessage(context,
+                //               getFailureMessage(state.failure!, context));
+                // }
+              },
               builder: (context, state) {
                 var cubit = context.read<DashboardsCubit>();
                 return DefaultTabController(
@@ -116,8 +129,6 @@ class _RideModeScreenState extends State<RideModeScreen> {
                             if (widget.params.isSocket != true)
                               _buildTabItem(1, LocaleKeys.runningTrips.tr()),
                             _buildTabItem(2, LocaleKeys.pastTrips.tr()),
-                            // if (widget.params.isSocket != false)
-                            // _buildTabItem(4, LocaleKeys.loadingRequest.tr()),
                             _buildFilterIcon(),
                           ],
                         ),
@@ -164,17 +175,10 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                                       child: CircularProgressIndicator())
                                                   : ListView.separated(
                                                       controller: _availableTripsScrollController,
-                                                      itemBuilder: (context, index) => TrukBusWidget(
+                                                      itemBuilder: (context, index) => TrukBusWidget(contextScreen: context,
                                                             tripEntity: state
                                                                     .availableTrips![
                                                                 index],
-                                                            isWithAnotherPrice:
-                                                                true,
-                                                            // !state
-                                                            //     .availableTrips![
-                                                            //         index]
-                                                            //     .tripDetails!
-                                                            //     .autoAccept,
                                                             modeType: 'bus',
                                                           ),
                                                       // : const TrukBusWidget(),
@@ -225,23 +229,6 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                         ? 'ride'
                                         : 'truk',
                                     settings: state.settings))
-                      // Ride or Loading Trips
-                      // else if (_selectedIndex == 4)
-                      //   Expanded(
-                      //     child: Padding(
-                      //       padding:
-                      //           const EdgeInsets.symmetric(horizontal: 16.0),
-                      //       child: ListView.separated(
-                      //           itemBuilder: (context, index) =>
-                      //               const TrukBusWidget(
-                      //                   modeType: 'bus',
-                      //                   isWithAnotherPrice: true),
-                      //           itemCount: 2,
-                      //           separatorBuilder:
-                      //               (BuildContext context, int index) =>
-                      //                   const SizedBox(height: 15)),
-                      //     ),
-                      //   )
                     ],
                   ),
                 );

@@ -13,9 +13,9 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_info_e
 import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_picture_optional_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_color_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/sub_category_entity.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 
 import '../../../../../core/error/failure.dart';
+import '../../../domain/entities/dashboards/trip_entity.dart';
 import '../../../domain/entities/ride_category_entity.dart';
 
 enum RideStates {
@@ -96,6 +96,7 @@ class RideState {
   final bool? isUploadTechnicalExamination;
   final bool? isShipping;
   final CostPerKmEntity? costPerKm;
+  final List<TripEntity>? offers;
 
   RideState({
     this.status = RideStates.initState,
@@ -156,6 +157,7 @@ class RideState {
     this.isUploadCriminalRecord,
     this.isUploadTechnicalExamination,
     this.isShipping,
+    this.offers,
   });
 
   RideState copyWith({
@@ -217,6 +219,7 @@ class RideState {
     bool? isUploadDrugAnalysis,
     bool? isUploadCriminalRecord,
     bool? isUploadTechnicalExamination,
+    List<TripEntity>? offers,
   }) {
     return RideState(
       status: status ?? this.status,
@@ -277,6 +280,7 @@ class RideState {
       isShipping: isShipping ?? this.isShipping,
       loaderInfo: loaderInfo ?? this.loaderInfo,
       savedRideSubCategories: savedRideSubCategories ?? this.savedRideSubCategories,
+      offers: offers ?? this.offers,
     );
   }
 }

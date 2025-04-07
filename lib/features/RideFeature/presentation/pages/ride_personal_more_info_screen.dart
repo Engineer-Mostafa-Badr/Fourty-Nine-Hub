@@ -8,12 +8,11 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/cu
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/image_text_row.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/pickup_text_form_field.dart';
 
-import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 
 class RidePersonalMoreInfoScreen extends StatefulWidget {
-  RidePersonalMoreInfoScreen({super.key});
+  const RidePersonalMoreInfoScreen({super.key});
 
   @override
   State<RidePersonalMoreInfoScreen> createState() =>
@@ -30,156 +29,176 @@ class _RidePersonalMoreInfoScreenState
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            spacing: 8,
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * 0.9,
+      child: ListView(
+        // spacing: 8,
+        children: [
+          PickUpLocationCard(
+            title: LocaleKeys.pickupLocation.localize,
+            firstColor: AppColors.c19D176,
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          PickUpLocationCard(
+            title: LocaleKeys.destination.localize,
+            firstColor: AppColors.c3897F0,
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(
-                height: 120,
-              ),
-              PickUpLocationCard(
-                title: LocaleKeys.pickupLocation.localize,
-                firstColor: AppColors.c19D176,
-              ),
-              PickUpLocationCard(
-                title: LocaleKeys.destination.localize,
-                firstColor: AppColors.c3897F0,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () async {
-                        final TimeOfDay? selectedTime = await showTimePicker(
-                          context: context,
-                          initialTime: TimeOfDay.now(),
-                        );
-
-                        if (selectedTime != null) {
-                          setState(() {
-                            _selectedTime = selectedTime.format(context);
-                          });
-                        }
-                      },
-                      child: PickUpContainer(
-                        fontWeight: FontWeight.w500,
-                        title: _selectedTime,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 7,
-                  ),
-                  Expanded(
-                    child: CustomDatePickerButton(
-                      selectedDate: _selectedDate,
-                      onDateSelected: (newDate) {
-                        setState(() {
-                          _selectedDate = newDate;
-                        });
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              PickUpTextFormField(
-                hintText: LocaleKeys.cargoDescription.localize,
-                maxLines: 4,
-              ),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _isExpanded =
-                        !_isExpanded;
-                  });
-                },
-                child: PickUpContainer(
-                  title: _numberOfPassengers == 0
-                      ? LocaleKeys.numberOfPassenger.localize
-                      : '$_numberOfPassengers',
-                ),
-              ),
-              if (_isExpanded)
-                Column(
-                  children: List.generate(10, (index) {
-                    return GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _numberOfPassengers =
-                              index + 1; 
-                          _isExpanded =
-                              false; 
-                        });
-                      },
-                      child: Container(
-                        alignment: Alignment.centerLeft,
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        height: 48,
-                        decoration: const BoxDecoration(
-                          color: Color(0xFFF5F5F5),
-                        ),
-                        child: Text(
-                          '${index + 1}',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () async {
+                    final TimeOfDay? selectedTime = await showTimePicker(
+                      context: context,
+                      initialTime: TimeOfDay.now(),
                     );
-                  }),
+
+                    if (selectedTime != null) {
+                      setState(() {
+                        _selectedTime = selectedTime.format(context);
+                      });
+                    }
+                  },
+                  child: PickUpContainer(
+                    fontWeight: FontWeight.w500,
+                    title: _selectedTime,
+                  ),
                 ),
-              PickUpTextFormField(
-                hintText: LocaleKeys.phone.localize,
               ),
-              GestureDetector(
-                onTap: () => _showOfferFareBottomSheet(context),
-                child: PickUpContainer(
-                  title: LocaleKeys.offerPrice.localize,
+              const SizedBox(
+                width: 7,
+              ),
+              Expanded(
+                child: CustomDatePickerButton(
+                  selectedDate: _selectedDate,
+                  onDateSelected: (newDate) {
+                    setState(() {
+                      _selectedDate = newDate;
+                    });
+                  },
                 ),
-              ),
-              ImageTextRow(
-                  imagePath: Assets.logo,
-                  text: LocaleKeys.appNotDeduct.localize),
-              ImageTextRow(
-                  imagePath: Assets.logo,
-                  text: LocaleKeys.premiumPackageCashBack.localize),
-              ImageTextRow(
-                  imagePath: Assets.logo,
-                  text: LocaleKeys.freeCancellation.localize),
-              const SizedBox(height: 15,),
-              Row(
-                children: [
-                  Expanded(child: AppButton(
-                    radius: 15,
-                    height: 44,
-                      backColor: AppColors.PRIMARY_COLOR_DARK,
-                      style: const TextStyle(
-                        color: AppColors.whiteColor,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500
-                      ),
-                      label:LocaleKeys.premium_request.localize, onPressed: (){})),
-                  const SizedBox(width: 4,),
-                  Expanded(child: AppButton(
-                    radius: 15,
-                    height: 44,
-                      backColor: AppColors.PRIMARY_COLOR,
-                      style: const TextStyle(
-                        color: AppColors.whiteColor,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500
-                      ),
-                      label: LocaleKeys.request.localize, onPressed: (){})),
-                ],
               ),
             ],
           ),
-        ),
+          const SizedBox(
+            height: 8,
+          ),
+          PickUpTextFormField(
+            hintText: LocaleKeys.cargoDescription.localize,
+            maxLines: 4,
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                _isExpanded =
+                !_isExpanded;
+              });
+            },
+            child: PickUpContainer(
+              title: _numberOfPassengers == 0
+                  ? LocaleKeys.numberOfPassenger.localize
+                  : '$_numberOfPassengers',
+            ),
+          ),
+          if (_isExpanded)
+            Column(
+              children: List.generate(10, (index) {
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _numberOfPassengers =
+                          index + 1;
+                      _isExpanded =
+                      false;
+                    });
+                  },
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    height: 48,
+                    decoration: const BoxDecoration(
+                      color: Color(0xFFF5F5F5),
+                    ),
+                    child: Text(
+                      '${index + 1}',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                );
+              }),
+            ),
+          const SizedBox(
+            height: 8,
+          ),
+          PickUpTextFormField(
+            hintText: LocaleKeys.phone.localize,
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          GestureDetector(
+            onTap: () => _showOfferFareBottomSheet(context),
+            child: PickUpContainer(
+              title: LocaleKeys.offerPrice.localize,
+            ),
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          ImageTextRow(
+              imagePath: Assets.logo,
+              text: LocaleKeys.appNotDeduct.localize),
+          const SizedBox(
+            height: 8,
+          ),
+          ImageTextRow(
+              imagePath: Assets.logo,
+              text: LocaleKeys.premiumPackageCashBack.localize),
+          const SizedBox(
+            height: 8,
+          ),
+          ImageTextRow(
+              imagePath: Assets.logo,
+              text: LocaleKeys.freeCancellation.localize),
+          const SizedBox(height: 15,),
+          Row(
+            children: [
+              Expanded(child: AppButton(
+                  radius: 15,
+                  height: 44,
+                  backColor: AppColors.PRIMARY_COLOR_DARK,
+                  style: const TextStyle(
+                      color: AppColors.whiteColor,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500
+                  ),
+                  label:LocaleKeys.premium_request.localize, onPressed: (){})),
+              const SizedBox(width: 4,),
+              Expanded(child: AppButton(
+                  radius: 15,
+                  height: 44,
+                  backColor: AppColors.PRIMARY_COLOR,
+                  style: const TextStyle(
+                      color: AppColors.whiteColor,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500
+                  ),
+                  label: LocaleKeys.request.localize, onPressed: (){})),
+            ],
+          ),
+        ],
       ),
     );
   }

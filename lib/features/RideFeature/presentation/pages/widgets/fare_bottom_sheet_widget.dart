@@ -132,6 +132,8 @@ class FareBottomSheetWidget2 extends StatelessWidget {
     required this.selectedCategoryPrice,
     // required this.dashboardsCubit,
     required this.id,
+    required this.contextScreen,
+    required this.subCategoryId,
   }) : _controller = TextEditingController(
           text:
               selectedCategoryPrice > 0 ? selectedCategoryPrice.toString() : '',
@@ -139,6 +141,8 @@ class FareBottomSheetWidget2 extends StatelessWidget {
 
   final double selectedCategoryPrice;
   final String id;
+  final String subCategoryId;
+  final BuildContext contextScreen;
   // final DashboardsCubit dashboardsCubit;
   final TextEditingController _controller;
   final _formKey = GlobalKey<FormState>();
@@ -201,33 +205,21 @@ class FareBottomSheetWidget2 extends StatelessWidget {
                 },
               ),
               const SizedBox(height: 20),
-              state.isLoadingCreateOffer
-                  ? const Center(child: CircularProgressIndicator.adaptive())
-                  : AppButton(
-                      iconWidget: state.isLoadingCreateOffer
-                          ? const CircularProgressIndicator.adaptive()
-                          : null,
+              AppButton(
+                      // iconWidget: state.isLoadingCreateOffer
+                      //     ? const CircularProgressIndicator.adaptive()
+                      //     : null,
                       width: double.infinity,
                       label: LocaleKeys.done.tr(),
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
+                           Navigator.pop(context);
                           BlocProvider.of<DashboardsCubit>(context)
                               .createNewOfferNonSocket(
-                                  context,
+                                  contextScreen,
                                   CreateNewOfferDashboardUsecaseParam(
                                       priceOffer: double.parse(_controller.text).toInt(),
-                                      
-                                      tripId: id))
-                              .then((value) {
-                                // if (state.isSuccessOffer) {
-                                   Navigator.pop(context);
-                                // }
-                                //  else {
-                                //   context.showToast(
-                                //       message: LocaleKeys.offerNotCreated.tr());
-                                // }
-                           
-                          });
+                                      tripId: id),subCategoryId);
                         }
                       },
                       backColor: AppColors.PRIMARY_COLOR,

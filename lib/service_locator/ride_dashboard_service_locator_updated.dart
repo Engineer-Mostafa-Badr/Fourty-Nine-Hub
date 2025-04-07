@@ -39,7 +39,7 @@ class RideDashboardServiceLocatorUpdated {
 
     // ---------------------------------- cubits ----------------------------------
 
-    serviceLocator.registerFactory<DashboardsCubit>(() => DashboardsCubit(
+    serviceLocator.registerLazySingleton<DashboardsCubit>(() => DashboardsCubit(
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

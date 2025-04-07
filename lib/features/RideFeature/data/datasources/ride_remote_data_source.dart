@@ -74,7 +74,9 @@ import '../../../../core/error/failure.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_available_ride_trips_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/available_ride_trip_model.dart';
 
+import '../../domain/entities/get_offers_entity.dart';
 import '../../domain/usecases/make_non_tracking_request_trip_usecase.dart';
+import '../models/dashboards/get_offers_response_model.dart';
 
 abstract class RideRemoteDataSource {
   ////////////////////Nasr////////////////////
@@ -166,6 +168,7 @@ abstract class RideRemoteDataSource {
       AvailableRideTripsUseCaseParams params);
   Future<Either<Failure, bool>> makeNonTrackingRequestTrip(
       MakeNonTrackingRequestTripUsecaseParam params);
+  Future<Either<Failure, GetOffersResponseEntity>> getClientOffers();
 }
 
 class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
@@ -905,6 +908,23 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
         return Right(data['status']);
       });
     } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, GetOffersResponseEntity>>
+      getClientOffers() async {
+    try {
+      final response = await _apiConsumer.get(EndPoints.getClientOffers);
+
+     return response.fold((failure) => Left(failure), (data) {
+        GetOffersResponseModel getOffersResponse =
+            GetOffersResponseModel.fromJson(data);
+        return Right(getOffersResponse);
+      });
+    } catch (e) {
+      print("e.toString ${e.toString()}");
       return Left(ServerFailure(message: e.toString()));
     }
   }

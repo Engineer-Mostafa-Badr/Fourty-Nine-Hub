@@ -20,9 +20,9 @@ class SettingsDashboardModel extends SettingsDashboardEntity {
 
   factory SettingsDashboardModel.fromJson(Map<String, dynamic> json) {
     return SettingsDashboardModel(
-       isReady: json['isReady'],
-      categoryIds: List<SubCategoryModel>.from(
-          (json['categoryIds'] as List).map((x) => SubCategoryModel.fromJson(x))),
+      isReady: json['isReady'],
+      categoryIds: List<SubCategoryModel>.from((json['categoryIds'] as List)
+          .map((x) => SubCategoryModel.fromJson(x))),
       subscriptionType: json['subscriptionType'],
       pricingPerKm: json['pricingPerKm'].toDouble(),
       city: json['city'],
@@ -37,11 +37,12 @@ class SettingsDashboardModel extends SettingsDashboardEntity {
 }
 
 class RatingSettingsModel extends RatingSettingsEntity {
-  RatingSettingsModel({required super.averageRating, required super.totalRatings});
+  RatingSettingsModel(
+      {required super.averageRating, required super.totalRatings});
 
   factory RatingSettingsModel.fromJson(Map<String, dynamic> json) {
     return RatingSettingsModel(
-      averageRating: json['averageRating'].toDouble(),
+      averageRating: json['averageRating'] ?? 0.0,
       totalRatings: json['totalRatings'],
     );
   }

@@ -14,7 +14,6 @@ import 'package:go_router/go_router.dart';
 import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/styles.dart';
-import '../../../../domain/entities/dashboards/trip_entity.dart';
 import '../../widgets/dialog_widget/show_custom_dialog_trip.dart';
 import 'edit_price_widget.dart';
 
