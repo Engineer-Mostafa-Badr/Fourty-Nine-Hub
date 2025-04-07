@@ -1510,7 +1510,12 @@ class CodegenLoader extends AssetLoader{
   "newPost": "منشور جديد",
   "addExplanatoryNote": "اضافة شرح توضيحي",
   "searchForAUser": "البحث عن مستخدم",
-  "taggedPeople": "الأشخاص المُشار إليهم"
+  "taggedPeople": "الأشخاص المُشار إليهم",
+  "status": "الحالات",
+  "otpCode": "الكود",
+  "weHaveSentACodeTo": "لقد ارسلنا لك كود الي ",
+  "oTPVerifyFor": "تاكيد الكود عن طريق ",
+  "resendOtpSuccess": "تم ارسال الكود بنجاح"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -2791,7 +2796,7 @@ static const Map<String,dynamic> _en = {
   "serviceNoifications": "Service Noifications",
   "socialNotifications": "Social Notifications",
   "fourtyNineNotifications": "49 Notifications",
-  "deActivateCustomPage": "deactivate custom page",
+  "deActivateCustomPage": "Deactivate Custom Page",
   "areYouSureToDeActivate": "Are you sure you want to deactivate custom page?",
   "youCanDeActivatePage": "You can deactivate the custom page and return to the main page from here",
   "chooseCategoryView": "Choose the main category view method for services",
@@ -3008,6 +3013,11 @@ static const Map<String,dynamic> _en = {
   "browseRecentlyCompletedTrips": "Browse recently completed trips.",
   "oneWayOneCaptain": "One Way - One Captain!",
   "goToFirstClient": "Go to first client",
+  "statusResponse": "Status Response",
+  "otpCode": "OTP Code",
+  "weHaveSentACodeTo": "We\\'ve sent a code to ",
+  "oTPVerifyFor": "OTP Verify for ",
+  "resendOtpSuccess": "resend otp success",
   "youWillFindFewerDriversIfYouSelectThisOption": "You will find fewer drivers if you select this option!",
   "initiateRouteWaitFor1HourToGiveUserTimeToBookASeatInTheSameCarWithTheSameCaptain": "Initiate route & wait for 1 hour to give user time to book a seat in the same car with the same captain.",
   "addTalent": "Add Talent",
