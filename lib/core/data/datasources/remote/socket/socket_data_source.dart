@@ -62,6 +62,10 @@ abstract class SocketIOListeners {
   static const String pinMessage = 'pinMessage';
   static const String unPinMessage = 'unPinMessage';
   static const String sendPoint = 'Stream:SendPoint';
+  static const String rideSendOffer = 'RIDE:UPDATED_OFFER';
+  static const String updateTripAutoAccept = 'RIDE:UPDATED_TRIP_AUTO_ACCEPT';
+  static const String updateTripPrice = 'RIDE:UPDATED_TRIP_PRICE';
+  static const String acceptDriverOffer = 'RIDE:ACCEPTED_OFFER_FROM_CLIENT';
 }
 
 abstract class SocketIOEvents {
@@ -78,6 +82,7 @@ abstract class SocketIOEvents {
   static const String connectMe = 'connectMe';
   static const String disconnectMe = 'disconnectMe';
   static const String sendPoint = 'Stream:SendPoint';
+  static const String updateDriverLocation = 'ride:UPDATE_DRIVER_LOCATION';
 }
 
 //

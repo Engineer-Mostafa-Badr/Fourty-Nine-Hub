@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/controllers/ride_register/ride_register_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/picture_optional_model/drag_analytics.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/picture_optional_model/drag_analytics.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/picture_optional_model/technical_examination.dart';
@@ -40,115 +41,95 @@ class TechnicalExaminationScreen extends StatelessWidget {
         children: [
           Expanded(
             child: SingleChildScrollView(
-              child:
-                  BlocBuilder<RideCubit, RideState>(builder: (context, state) {
-                var cubit = context.read<RideCubit>();
-                return Padding(
-                  padding: const EdgeInsets.only(
-                    bottom: 32,
-                    left: 16,
-                    right: 16,
-                  ),
-                  child: Form(
-                    key: cubit.terminalExaminationFormKey,
-                    child: Column(
-                      spacing: 4,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // closeWidget(context),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Label(
-                              text: LocaleKeys.technicalExamination.localize,
-                              style: Styles.headerText(
-                                fontWeight: FontWeight.w500,
+              child: BlocBuilder<RideRegisterCubit, RideRegisterState>(
+                builder: (context,state) {
+                  var cubit = context.read<RideRegisterCubit>();
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 32,left: 16,right: 16,),
+                    child: Form(
+                      key: cubit.terminalExaminationFormKey,
+                      child: Column(
+                        spacing: 4,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // closeWidget(context),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Label(
+                                text: LocaleKeys.technicalExamination.localize,
+                                style: Styles.headerText(
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
-                            ),
-                            IconButton(
-                              onPressed: () => context.pop(),
-                              icon: const Icon(
-                                Icons.close,
-                                color: AppColors.GREY_DARK_COLOR,
-                              ),
-                            )
-                          ],
-                        ),
-                        const Sizer(),
+                              IconButton(
+                                onPressed: () => context.pop(),
+                                icon: const Icon(
+                                  Icons.close,
+                                  color: AppColors.GREY_DARK_COLOR,
+                                ),
+                              )
+                            ],
+                          ),
+                          const Sizer(),
 
-                        // Wrap(
-                        //   direction: Axis.horizontal,
-                        //   children: [
-                        //     UploadFileWidget(
-                        //       title: uploadFilesTitles[0],
-                        //       onTap: (){
-                        //           cubit.onUploadDriverLicensePicture(context);
-                        //
-                        //       },
-                        //       imageUrl: state.driverLicensePicture,
-                        //     ),
-                        //     UploadFileWidget(
-                        //       title: uploadFilesTitles[1],
-                        //       onTap: (){
-                        //           cubit.onUploadBackOfDriverLicensePicture(context);
-                        //       },
-                        //       imageUrl: state.backOfDriverLicensePicture,
-                        //     ),
-                        //     UploadFileWidget(
-                        //       title: uploadFilesTitles[2],
-                        //       onTap: (){
-                        //           cubit.onUploadSelfieDriverLicensePicture(context);
-                        //       },
-                        //       imageUrl: state.selfieDriverLicensePicture,
-                        //     )
-                        //   ],
-                        // ),
+                          // Wrap(
+                          //   direction: Axis.horizontal,
+                          //   children: [
+                          //     UploadFileWidget(
+                          //       title: uploadFilesTitles[0],
+                          //       onTap: (){
+                          //           cubit.onUploadDriverLicensePicture(context);
+                          //
+                          //       },
+                          //       imageUrl: state.driverLicensePicture,
+                          //     ),
+                          //     UploadFileWidget(
+                          //       title: uploadFilesTitles[1],
+                          //       onTap: (){
+                          //           cubit.onUploadBackOfDriverLicensePicture(context);
+                          //       },
+                          //       imageUrl: state.backOfDriverLicensePicture,
+                          //     ),
+                          //     UploadFileWidget(
+                          //       title: uploadFilesTitles[2],
+                          //       onTap: (){
+                          //           cubit.onUploadSelfieDriverLicensePicture(context);
+                          //       },
+                          //       imageUrl: state.selfieDriverLicensePicture,
+                          //     )
+                          //   ],
+                          // ),
 
-                        UploadFileWidget(
-                          title: LocaleKeys.technicalExamination.localize,
-                          onTap: () {
-                            cubit.onUploadPersonalTechnicalExaminationPicture(
-                                context);
-                          },
-                          imageUrl: state.personalTechnicalExaminationPicture,
-                        ),
-                        // const Sizer(),
-                        // DefaultTextFormField(
-                        //   currentController: cubit.rideDriverLicenseNumController,
-                        //   fillColor: AppColors.GREYBG,
-                        //   borderColor: Colors.transparent,
-                        //   hint: LocaleKeys.licenseNumber.localize,
-                        // ),
-                        const Sizer(),
-                        DatePickerTextField(
-                          color: AppColors.GREYBG,
-                          initialDate: DateTime.now(),
-                          minDate: DateTime(1900),
-                          maxDate: DateTime(2090),
-                          onDateSelected: (date) {
-                            cubit.rideTechnicalExaminationExpireDateController
-                                    .text =
-                                DateFormat('yyyy-MM-dd')
-                                    .format(date ?? DateTime.now());
-                          },
-                          controller: cubit
-                              .rideTechnicalExaminationExpireDateController,
-                          hintText: LocaleKeys.expireDate.localize,
-                        ),
-                      ],
+                          UploadFileWidget(
+                            title: LocaleKeys.technicalExamination.localize,
+                            onTap: (){
+                              cubit.onUploadPersonalTechnicalExaminationPicture(context);
+
+                            },
+                            imageUrl:state.personalTechnicalExaminationPicture,
+                          ),
+                          // const Sizer(),
+                          // DefaultTextFormField(
+                          //   currentController: cubit.rideDriverLicenseNumController,
+                          //   fillColor: AppColors.GREYBG,
+                          //   borderColor: Colors.transparent,
+                          //   hint: LocaleKeys.licenseNumber.localize,
+                          // ),
+                          const Sizer(),
+                          DatePickerTextField(color:AppColors.GREYBG,initialDate: DateTime.now(), minDate: DateTime(1900), maxDate: DateTime(2090),onDateSelected: (date){
+                            cubit.rideTechnicalExaminationExpireDateController.text = DateFormat('yyyy-MM-dd').format(date??DateTime.now());
+                          }, controller:cubit.rideTechnicalExaminationExpireDateController,hintText: LocaleKeys.expireDate.localize,),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              }),
+                  );
+                }
+              ),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(
-              bottom: 32,
-              top: 8.0,
-              right: 12,
-              left: 12,
-            ),
+            padding: const EdgeInsets.only(bottom: 32,top: 8.0,right: 12,left: 12,),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -171,17 +152,10 @@ class TechnicalExaminationScreen extends StatelessWidget {
                 InkWell(
                   onTap: () {
                     print("object");
-                    if (context
-                            .read<RideCubit>()
-                            .state
-                            .personalTechnicalExaminationPicture ==
-                        null) {
-                      showErrorMessage(
-                          context, "Please select technical examination");
-                    } else {
-                      context
-                          .read<RideCubit>()
-                          .onSubmitUploadingTechnicalExamination(context);
+                    if(context.read<RideRegisterCubit>().state.personalTechnicalExaminationPicture==null){
+                      showErrorMessage(context, "Please select technical examination");
+                    }else{
+                      context.read<RideRegisterCubit>().onSubmitUploadingTechnicalExamination(context);
                     }
                   },
                   child: Container(
@@ -212,6 +186,7 @@ class TechnicalExaminationScreen extends StatelessWidget {
               ],
             ),
           ),
+
         ],
       ),
     );

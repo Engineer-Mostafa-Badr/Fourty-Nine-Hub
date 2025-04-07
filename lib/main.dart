@@ -14,7 +14,6 @@ import 'package:fourtyninehub/common/theme/cubit/states.dart';
 import 'package:fourtyninehub/core/localization/localization_service.dart';
 import 'package:fourtyninehub/core/themes/dark_theme.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/call/presentation/controller/call_controller/call_cubit.dart';
 import 'package:fourtyninehub/features/call/presentation/controller/send_call_controller.dart/send_call_cubit.dart';
 import 'package:fourtyninehub/features/call/presentation/pages/whatsapp_screen.dart';
@@ -49,6 +48,7 @@ import 'features/settings/presentation/cubit/choice_ruler_cubit.dart';
 import 'features/settings/presentation/cubit/floating_navigator_cubit.dart';
 import 'firebase_options.dart';
 import 'routes/pages.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -57,6 +57,9 @@ bool isActivate = false;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await CacheManager.init();
+  timeago.setLocaleMessages('en', timeago.EnMessages());
+  timeago.setLocaleMessages('ar', timeago.ArMessages());
+//  await  initPickMeFeature();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -67,7 +70,7 @@ void main() async {
   // // Listen for new locations (only when moved at least 300m)
   // locationService.locationUpdates.listen((position) {
   //   Fluttertoast.showToast(
-  //       msg: "New location (moved at least 300m): ${position.latitude}, ${position.longitude}",
+  //       msg: "New location (moved at least 1m): ${position.latitude}, ${position.longitude}",
   //       toastLength: Toast.LENGTH_SHORT,
   //       gravity: ToastGravity.BOTTOM,
   //       timeInSecForIosWeb: 1,
@@ -75,8 +78,8 @@ void main() async {
   //       textColor: Colors.white,
   //       fontSize: 16.0
   //   );
-  //   print('New location (moved at least 300m): ${position.latitude}, ${position.longitude}');
-  //   // Do something with the new location
+  //   print('New location (moved at least 1m): ${position.latitude}, ${position.longitude}');
+    // Do something with the new location
   // });
 
   await CacheServiceImpl.init();
@@ -205,9 +208,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           create: (BuildContext context) =>
               serviceLocator<MainCategoriesCubit>()..loadData(),
         ),
-        BlocProvider(
-          create: (BuildContext context) => serviceLocator<RideCubit>(),
-        ),
+        // BlocProvider(
+        //   create: (BuildContext context) => serviceLocator<RideCubit>(),
+        // ),
         BlocProvider(
           create: (context) => ThemeCubit(),
         ),

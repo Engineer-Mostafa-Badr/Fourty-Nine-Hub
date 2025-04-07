@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../routes/routes.dart';
@@ -13,34 +14,26 @@ class NewTripJoinBody extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          IconButton(
-            onPressed: () {
-              context.pop();
-            },
-            icon: const Icon(
-              Icons.arrow_back,
-            ),
-          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TripOptionWidget(
                 imagePath: Assets.locationTripIcon,
-                title: 'Captain\nShare',
+                title: context.isArabic ? 'مشاركة كابتن' : 'Captain\nShare',
                 onTap: () {
                   context.push(Routes.captainShareScreen);
                 },
               ),
               TripOptionWidget(
                 imagePath: Assets.locationTripIcon,
-                title: 'Trip Join',
+                title: context.isArabic ? "جاي معاك" : "Trip Join",
                 icon: Assets.car,
                 onTap: () {},
               ),
               TripOptionWidget(
                 imagePath: Assets.locationTripIcon,
-                title: 'Pick me',
+                title: context.isArabic ? "وصلني معاك" : "Pick me",
                 onTap: () {},
                 icon: Assets.pickMeImage,
               ),

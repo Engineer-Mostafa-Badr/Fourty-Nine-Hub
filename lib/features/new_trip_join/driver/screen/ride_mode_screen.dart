@@ -4,8 +4,6 @@ import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../../../core/utils/handle_cashback.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../routes/routes.dart';
 import '../../presentation/view/widget/trip_option_widget.dart';
@@ -18,26 +16,23 @@ class NewRideModeScreen extends StatefulWidget {
 }
 
 class _NewRideModeScreenState extends State<NewRideModeScreen> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      key: _scaffoldKey,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(30),
-        child: HomeAppbar(
-          isWithBackArrow: false,
-          language: true,
-          leading: IconButton(
-            icon: const Icon(Icons.menu), // The menu icon
-            onPressed: () {
-              HandleCashback.setCount('drawerCount', context);
-              _scaffoldKey.currentState?.openDrawer(); // Open the drawer
-            },
+    child:HomeAppbar(
+        isWithBackArrow: false,
+        language: true,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.arrow_back,
           ),
         ),
-      ),
+      ),),
       body: const NewRideModeBody(),
     );
   }
@@ -53,26 +48,23 @@ class NewRideModeBody extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              IconButton(
-                onPressed: () {
-                  context.pop();
-                },
-                icon: const Icon(
-                  Icons.arrow_back,
-                ),
-              ),
-              Text(
-                'Ride Mode',
-                style: TextStyle(
-                  fontSize: 35.sp,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-            ],
-          ),
+          // Row(
+          //   children: [
+          //     IconButton(
+          //       onPressed: () {
+          //         context.pop();
+          //       },
+          //       icon: const Icon(Icons.arrow_back),
+          //     ),
+          //     Text(
+          //       context.isArabic ? 'وضع الركوب' : 'Ride Mode',
+          //       style: TextStyle(
+          //         fontSize: 35.sp,
+          //         fontWeight: FontWeight.bold,
+          //       ),
+          //     ),
+          //   ],
+          // ),
           RideModeButton(
             onTap: () {
               context.push(Routes.runningAndPastTripsScreen);
@@ -94,7 +86,9 @@ class NewRideModeBody extends StatelessWidget {
                 icon: Assets.car,
                 imagePath: Assets.locationTripIcon,
                 title: context.isArabic ? "جاي معاك" : "Trip Join",
-                onTap: () {},
+                onTap: () {
+                  context.push(Routes.AVAILABLE_TRIPS);
+                },
               ),
               TripOptionWidget(
                 icon: Assets.pickMeIcon,

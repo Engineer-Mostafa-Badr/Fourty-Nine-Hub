@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
@@ -9,8 +10,6 @@ import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../routes/routes.dart';
-import '../../../trip_join/add_new_trip_join/presentation/views/widgets/button.dart';
-import '../../presentation/view/screen/pick_me_info_screen.dart';
 
 class CaptainShareInfoScreen extends StatefulWidget {
   const CaptainShareInfoScreen({super.key});
@@ -38,7 +37,7 @@ class _CaptainShareInfoScreenState extends State<CaptainShareInfoScreen> {
           ),
           child: Center(
             child: Text(
-              "Join Now!",
+              context.isArabic ? "انضم الآن !" : "Join Now!",
               style: TextStyle(
                 fontSize: 32.sp,
                 color: Colors.white,
@@ -79,29 +78,84 @@ class CaptainShareInfoBody extends StatelessWidget {
         children: [
           SizedBox(height: 40.h),
           Text(
-            'Captain Share !',
+            context.isArabic ? 'مشاركة كابتن !' : 'Captain Share !',
             style: TextStyle(
               fontSize: 60.sp,
               fontWeight: FontWeight.bold,
-              color: AppColors.PRIMARY_COLOR,
+              color: context.isDarkMode
+                  ? AppColors.whiteColor
+                  : AppColors.PRIMARY_COLOR,
             ),
           ),
           const SizedBox(height: 20),
           SvgPicture.asset(Assets.captainInfoIcon),
           const SizedBox(height: 40),
-          const RowTextWidget(
-            text: 'Save money & Book 1 seat.',
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 70),
+            child: RowTextWidget(
+              text: context.isArabic
+                  ? "وفر المال واحجز مقعدًا واحدًا."
+                  : 'Save money & Book 1 seat.',
+            ),
           ),
           SizedBox(height: 15.h),
-          const RowTextWidget(
-            text: 'Heading final destination.',
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 70),
+            child: RowTextWidget(
+              text: context.isArabic
+                  ? "متجه إلى الوجهة النهائية."
+                  : 'Heading final destination.',
+            ),
           ),
           SizedBox(height: 15.h),
-          const RowTextWidget(
-            text: 'Wait for others to share route seats with ',
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 70),
+            child: RowTextWidget(
+              text: context.isArabic
+                  ? "انتظر حتى يشارك الآخرون مقاعد الطريق مع قائدك"
+                  : "Wait for others to share route  seats with your captain",
+            ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class RowTextWidget extends StatelessWidget {
+  final String text;
+  final double fontSize;
+
+  const RowTextWidget({
+    super.key,
+    required this.text,
+    this.fontSize = 30,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(top: fontSize * 0.19),
+          child: Icon(
+            Icons.circle,
+            size: fontSize * 0.4,
+          ),
+        ),
+        const SizedBox(width: 6),
+        Expanded(
+          child: Text(
+            text,
+            style: TextStyle(
+              fontSize: fontSize.sp,
+              fontWeight: FontWeight.w700,
+            ),
+            softWrap: true,
+          ),
+        ),
+      ],
     );
   }
 }

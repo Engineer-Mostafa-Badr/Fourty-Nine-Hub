@@ -41,16 +41,12 @@ class TruckVehicleInformationScreen extends StatelessWidget {
           Expanded(
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.only(
-                  bottom: 32,
-                  left: 16,
-                  right: 16,
-                ),
+                padding: const EdgeInsets.only(bottom: 32,left: 16,right: 16,),
                 child: Column(
                   spacing: 4,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    closeWidget(context: context, onAcceptSaveData: () {}),
+                    closeWidget(context:context,onAcceptSaveData: (){}, closeRemoveData: (){}),
                     Label(
                       text: LocaleKeys.vehicleInformation.localize,
                       style: Styles.headerText(
@@ -59,7 +55,7 @@ class TruckVehicleInformationScreen extends StatelessWidget {
                     ),
                     const Sizer(),
                     SizedBox(
-                      height: MediaQuery.sizeOf(context).width * .35,
+                      height: MediaQuery.sizeOf(context).width*.35,
                       child: GridView.count(
                         physics: const NeverScrollableScrollPhysics(),
                         padding: EdgeInsets.zero,

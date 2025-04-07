@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/controllers/ride_register/ride_register_cubit.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/picture_optional_model/drag_analytics.dart';
 import 'package:fourtyninehub/features/ride/RideRequest/data/models/picture_optional_model/drag_analytics.dart';
 import 'package:go_router/go_router.dart';
@@ -43,113 +44,95 @@ class DragAnalyticsScreen extends StatelessWidget {
         children: [
           Expanded(
             child: SingleChildScrollView(
-              child:
-                  BlocBuilder<RideCubit, RideState>(builder: (context, state) {
-                var cubit = context.read<RideCubit>();
-                return Padding(
-                  padding: const EdgeInsets.only(
-                    bottom: 32,
-                    left: 16,
-                    right: 16,
-                  ),
-                  child: Form(
-                    key: cubit.drugAnalysisFormKey,
-                    child: Column(
-                      spacing: 4,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // closeWidget(context),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Label(
-                              text: LocaleKeys.dragAnalysis.localize,
-                              style: Styles.headerText(
-                                fontWeight: FontWeight.w500,
+              child: BlocBuilder<RideRegisterCubit, RideRegisterState>(
+                builder: (context,state) {
+                  var cubit = context.read<RideRegisterCubit>();
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 32,left: 16,right: 16,),
+                    child: Form(
+                      key: cubit.drugAnalysisFormKey,
+                      child: Column(
+                        spacing: 4,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // closeWidget(context),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Label(
+                                text: LocaleKeys.dragAnalysis.localize,
+                                style: Styles.headerText(
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
-                            ),
-                            IconButton(
-                              onPressed: () => context.pop(),
-                              icon: const Icon(
-                                Icons.close,
-                                color: AppColors.GREY_DARK_COLOR,
-                              ),
-                            )
-                          ],
-                        ),
-                        const Sizer(),
+                              IconButton(
+                                onPressed: () => context.pop(),
+                                icon: const Icon(
+                                  Icons.close,
+                                  color: AppColors.GREY_DARK_COLOR,
+                                ),
+                              )
+                            ],
+                          ),
+                          const Sizer(),
 
-                        // Wrap(
-                        //   direction: Axis.horizontal,
-                        //   children: [
-                        //     UploadFileWidget(
-                        //       title: uploadFilesTitles[0],
-                        //       onTap: (){
-                        //           cubit.onUploadDriverLicensePicture(context);
-                        //
-                        //       },
-                        //       imageUrl: state.driverLicensePicture,
-                        //     ),
-                        //     UploadFileWidget(
-                        //       title: uploadFilesTitles[1],
-                        //       onTap: (){
-                        //           cubit.onUploadBackOfDriverLicensePicture(context);
-                        //       },
-                        //       imageUrl: state.backOfDriverLicensePicture,
-                        //     ),
-                        //     UploadFileWidget(
-                        //       title: uploadFilesTitles[2],
-                        //       onTap: (){
-                        //           cubit.onUploadSelfieDriverLicensePicture(context);
-                        //       },
-                        //       imageUrl: state.selfieDriverLicensePicture,
-                        //     )
-                        //   ],
-                        // ),
+                          // Wrap(
+                          //   direction: Axis.horizontal,
+                          //   children: [
+                          //     UploadFileWidget(
+                          //       title: uploadFilesTitles[0],
+                          //       onTap: (){
+                          //           cubit.onUploadDriverLicensePicture(context);
+                          //
+                          //       },
+                          //       imageUrl: state.driverLicensePicture,
+                          //     ),
+                          //     UploadFileWidget(
+                          //       title: uploadFilesTitles[1],
+                          //       onTap: (){
+                          //           cubit.onUploadBackOfDriverLicensePicture(context);
+                          //       },
+                          //       imageUrl: state.backOfDriverLicensePicture,
+                          //     ),
+                          //     UploadFileWidget(
+                          //       title: uploadFilesTitles[2],
+                          //       onTap: (){
+                          //           cubit.onUploadSelfieDriverLicensePicture(context);
+                          //       },
+                          //       imageUrl: state.selfieDriverLicensePicture,
+                          //     )
+                          //   ],
+                          // ),
 
-                        UploadFileWidget(
-                          title: LocaleKeys.dragAnalysis.localize,
-                          onTap: () {
-                            cubit.onUploadPersonalDrugAnalysisPicture(context);
-                          },
-                          imageUrl: state.personalDrugAnalysisPicture,
-                        ),
-                        // const Sizer(),
-                        // DefaultTextFormField(
-                        //   currentController: cubit.rideDriverLicenseNumController,
-                        //   fillColor: AppColors.GREYBG,
-                        //   borderColor: Colors.transparent,
-                        //   hint: LocaleKeys.licenseNumber.localize,
-                        // ),
-                        const Sizer(),
-                        DatePickerTextField(
-                          color: AppColors.GREYBG,
-                          initialDate: DateTime.now(),
-                          minDate: DateTime(1900),
-                          maxDate: DateTime(2090),
-                          onDateSelected: (date) {
-                            cubit.rideDragAnalysisExpireDateController.text =
-                                DateFormat('yyyy-MM-dd')
-                                    .format(date ?? DateTime.now());
-                          },
-                          controller:
-                              cubit.rideDragAnalysisExpireDateController,
-                          hintText: LocaleKeys.expireDate.localize,
-                        ),
-                      ],
+                          UploadFileWidget(
+                            title: LocaleKeys.dragAnalysis.localize,
+                            onTap: (){
+                              cubit.onUploadPersonalDrugAnalysisPicture(context);
+
+                            },
+                            imageUrl:state.personalDrugAnalysisPicture,
+                          ),
+                          // const Sizer(),
+                          // DefaultTextFormField(
+                          //   currentController: cubit.rideDriverLicenseNumController,
+                          //   fillColor: AppColors.GREYBG,
+                          //   borderColor: Colors.transparent,
+                          //   hint: LocaleKeys.licenseNumber.localize,
+                          // ),
+                          const Sizer(),
+                          DatePickerTextField(color:AppColors.GREYBG,initialDate: DateTime.now(), minDate: DateTime(1900), maxDate: DateTime(2090),onDateSelected: (date){
+                            cubit.rideDragAnalysisExpireDateController.text = DateFormat('yyyy-MM-dd').format(date??DateTime.now());
+                          }, controller:cubit.rideDragAnalysisExpireDateController,hintText: LocaleKeys.expireDate.localize,),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              }),
+                  );
+                }
+              ),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(
-              bottom: 32,
-              top: 8.0,
-              right: 12,
-              left: 12,
-            ),
+            padding: const EdgeInsets.only(bottom: 32,top: 8.0,right: 12,left: 12,),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -171,18 +154,11 @@ class DragAnalyticsScreen extends StatelessWidget {
                 const Sizer(),
                 InkWell(
                   onTap: () {
-                    if (context
-                            .read<RideCubit>()
-                            .state
-                            .personalDrugAnalysisPicture ==
-                        null) {
+                    if(context.read<RideRegisterCubit>().state.personalDrugAnalysisPicture==null){
                       showErrorMessage(context, "Please select drag analysis");
-                    } else {
-                      context
-                          .read<RideCubit>()
-                          .onSubmitUploadingDrugAnalysis(context);
-                    }
-                  },
+                    }else{
+                      context.read<RideRegisterCubit>().onSubmitUploadingDrugAnalysis(context);
+                    }                  },
                   child: Container(
                     height: 44,
                     padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -211,6 +187,7 @@ class DragAnalyticsScreen extends StatelessWidget {
               ],
             ),
           ),
+
         ],
       ),
     );

@@ -3,7 +3,7 @@ import 'dart:async';
 
 class LocationService {
   // Distance threshold in meters
-  final double distanceThreshold = 300;
+  final double distanceThreshold = 0.2;
   Position? lastPosition;
   Timer? _timer;
 
@@ -17,7 +17,7 @@ class LocationService {
     stopLocationTracking();
 
     // Create a new timer that fires every 10 seconds
-    _timer = Timer.periodic(Duration(seconds: 10), (_) {
+    _timer = Timer.periodic(const Duration(seconds: 10), (_) {
       _checkAndUpdateLocation();
     });
 

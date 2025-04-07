@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:go_router/go_router.dart';
 import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
-import '../../../../core/utils/handle_cashback.dart';
 import '../../../../res/assets/assets.dart';
 import '../widget/my_running_tab_widget.dart';
 import '../widget/past_trips_widget.dart';
@@ -31,23 +29,29 @@ class _RunningAndPastTripsScreenState extends State<RunningAndPastTripsScreen>
     });
   }
 
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
   Widget build(BuildContext context) {
     return CustomScaffold(
       key: _scaffoldKey,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(30),
-        child: HomeAppbar(
-          isWithBackArrow: false,
-          language: true,
-          leading: IconButton(
-            icon: const Icon(Icons.menu), // The menu icon
-            onPressed: () {
-              HandleCashback.setCount('drawerCount', context);
-              _scaffoldKey.currentState?.openDrawer(); // Open the drawer
-            },
+    child: HomeAppbar(
+        isWithBackArrow: false,
+        language: true,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.arrow_back,
           ),
         ),
-      ),
+      ),),
       body: RunningAndPastTripsBody(
         tabController: _tabController,
       ),
@@ -69,14 +73,6 @@ class RunningAndPastTripsBody extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 15),
-        IconButton(
-          onPressed: () {
-            context.pop();
-          },
-          icon: const Icon(
-            Icons.arrow_back,
-          ),
-        ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: TabBarRowRideModeWidget(
@@ -133,7 +129,7 @@ class ItemTabRideModeWidget extends StatelessWidget {
                   color: isSelected ? Colors.black : Colors.grey),
             ),
           ),
-          Positioned(top: -8, right: -8, child: SvgPicture.asset(icon)),
+          Positioned(top: -14, right: -6, child: SvgPicture.asset(icon)),
         ],
       ),
     );
@@ -152,7 +148,7 @@ class TabBarRowRideModeWidget extends StatelessWidget {
       children: [
         Expanded(
           child: ItemTabRideModeWidget(
-            text: "My Running",
+            text: context.isArabic ? "رحلاتي الحاليه" : "My Running",
             icon: Assets.ideaIcon,
             index: 0,
             tabController: tabController,
@@ -176,7 +172,6 @@ class TabBarContentRideModeWidget extends StatefulWidget {
   final TabController tabController;
 
   const TabBarContentRideModeWidget({super.key, required this.tabController});
-
   @override
   _TabBarContentRideModeWidgetState createState() =>
       _TabBarContentRideModeWidgetState();
@@ -234,7 +229,9 @@ class _TabBarContentRideModeWidgetState
                 clientNumberAr: "الذهاب للعميل الأول",
                 content: tabContents[0],
               ),
-              PastTripsWidget(content: tabContents[1]),
+              PastTripsWidget(
+                content: tabContents[1],
+              ),
             ],
           ),
         ),

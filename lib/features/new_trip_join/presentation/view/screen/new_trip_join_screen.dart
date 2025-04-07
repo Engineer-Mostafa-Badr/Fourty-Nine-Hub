@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
-import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/features/new_trip_join/presentation/view/widget/new_trip_join_body.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
@@ -13,25 +12,23 @@ class NewTripJoinScreen extends StatefulWidget {
 }
 
 class _NewTripJoinScreenState extends State<NewTripJoinScreen> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(30),
-        child: HomeAppbar(
-          isWithBackArrow: false,
-          language: true,
-          leading: IconButton(
-            icon: const Icon(Icons.menu), // The menu icon
-            onPressed: () {
-              HandleCashback.setCount('drawerCount', context);
-              _scaffoldKey.currentState?.openDrawer(); // Open the drawer
-            },
+    child: HomeAppbar(
+        isWithBackArrow: false,
+        language: true,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.arrow_back,
           ),
         ),
-      ),
+      ),),
       body: NewTripJoinBody(),
     );
   }

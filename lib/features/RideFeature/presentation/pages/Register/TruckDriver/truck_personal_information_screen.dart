@@ -33,21 +33,17 @@ class TruckPersonalInformationScreen extends StatelessWidget {
           Expanded(
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.only(
-                  bottom: 32,
-                  left: 16,
-                  right: 16,
-                ),
+                padding: const EdgeInsets.only(bottom: 32,left: 16,right: 16,),
                 child: Column(
                   spacing: 4,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    closeWidget(context: context, onAcceptSaveData: () {}),
+                    closeWidget(context:context,onAcceptSaveData: (){}, closeRemoveData: (){}),
                     Label(
                       text: LocaleKeys.personalInformation.localize,
                       style: Styles.headerText(
-                        fontWeight: FontWeight.w500,
-                      ),
+                          fontWeight: FontWeight.w500,
+                          ),
                     ),
                     const Sizer(),
                     DefaultTextFormField(

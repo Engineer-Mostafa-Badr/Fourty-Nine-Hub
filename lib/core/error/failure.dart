@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -7,11 +10,13 @@ abstract class Failure {
 
 class ServerFailure extends Failure {
   final String message;
+  final String? name;
   final int? statusCode;
   final List<String>? errors;
 
   const ServerFailure({
     required this.message,
+    this.name,
     this.errors,
     this.statusCode,
   });
@@ -58,6 +63,34 @@ String getFailureMessage(Failure failure, BuildContext context) {
       return '$message\n${failure.errors!.join('\n')}';
     }
     return failure.message;
+  } else if (failure is InvalidOtpFailure) {
+    return failure.message;
+  } else if (failure is UnauthorizedFailure) {
+    return failure.message;
+  } else if (failure is SocialLoginFailure) {
+    if (failure.exception is FirebaseException &&
+        (failure.exception as FirebaseException).message != null) {
+      return (failure.exception as FirebaseException).message!;
+    }
+    return failure.exception.toString();
+  } else if (failure is CacheFailure) {
+    return 'Cache Failure';
+  } else if (failure is ValidationFailure) {
+    return failure.message;
+  } else if (failure is UnknownFailure) {
+    return failure.error;
+  } else {
+    return 'Unknown Failure';
+  }
+}
+
+String getFailureName(Failure failure, BuildContext context) {
+  if (failure is ServerFailure) {
+    final message = failure.name;
+    if (failure.errors != null && failure.errors!.isNotEmpty) {
+      return '$message\n${failure.errors!.join('\n')}';
+    }
+    return failure.name??'Unknown Error';
   } else if (failure is InvalidOtpFailure) {
     return failure.message;
   } else if (failure is UnauthorizedFailure) {

@@ -1,0 +1,35 @@
+import 'package:flutter/material.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
+
+class FollowButtonInstagram extends StatelessWidget {
+  const FollowButtonInstagram({
+    super.key,
+    required this.isReel,
+    required this.onPressed,
+  });
+
+  final bool isReel;
+  final void Function() onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return AppButton(
+      label: LocaleKeys.follow.localize,
+      style: Styles.mediumText(
+        fontSize: 26,
+        fontWeight: FontWeight.bold,
+        height: 1.25,
+        color: isReel ? Colors.white : Colors.black,
+      ),
+      width: 84,
+      height: 29,
+      backColor: Colors.transparent,
+      radius: 4,
+      border: Border.all(color: isReel ? Colors.white : Colors.black),
+      onPressed: onPressed,
+    );
+  }
+}

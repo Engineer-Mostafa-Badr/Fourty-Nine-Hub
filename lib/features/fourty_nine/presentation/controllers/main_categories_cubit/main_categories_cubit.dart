@@ -1,11 +1,21 @@
+import 'dart:developer';
+
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/core/utils/location_tracker.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/setting_subcategory_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/settings_dashboard_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/sub_category_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_settings_dashboard_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_socket_location_usecase.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/currency_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
@@ -43,17 +53,21 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
   final GetWalletHomeUseCase _getWalletHomeUseCase;
   final GetCurrencyUseCase _currencyUseCase;
   final GetMainCategoryDetailsUseCase _getMainCategoryDetailsUseCase;
+  final UpdateSocketLocationUseCase updateSocketLocationUseCase;
+  final GetSettingsDashboardUsecase getSettingsDashboardUsecase;
 
   MainCategoriesCubit(
     this._getMainCategoriesUseCase,
     this._toggleFavoriteCategoryUseCase,
     this._getWalletHomeUseCase,
     this._currencyUseCase,
+    this.updateSocketLocationUseCase,
     this._anyCashBackUseCase,
     this._categoriesCustomPageUseCase,
     this._getQuestionUseCase,
     this._answerQuestionUseCase,
     this._getMainCategoryDetailsUseCase,
+    this.getSettingsDashboardUsecase,
   ) : super(MainCategoriesState());
 
   Future<void> loadDataCategory() async {
@@ -81,6 +95,7 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     await UserCubit.to.getUser();
     getWallet();
     getCurrency();
+    getSettings();
     if (_fourtyNineSharedData.mainCategories.isEmpty) {
       final user = UserCubit.to.state.data?.id;
       print('userId1$user');
@@ -262,6 +277,74 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
       emit(state.copyWith(
         currency: data,
       ));
+    });
+  }
+
+  Future<void> getSettings() async {
+    log("getSettingsgetSettings");
+
+
+    final Either<Failure, SettingsDashboardEntityResponse> result =
+    await getSettingsDashboardUsecase(const NoParams());
+    result.fold(
+          (failure) {
+            log("getSettingsError${getFailureMessage(failure, AppPages.router.configuration.navigatorKey.currentContext!)}");
+
+        emit(state.copyWith(status: StateStatus.error, failure: failure));
+      },
+          (settings) {
+        log("Suzccess");
+
+        bool isReady = isServiceAvailable(settings);
+        log("SuccessIsReady : $isReady");
+        if(isReady){
+          updateDriverLocation();
+        }
+        emit(state.copyWith(
+            status: StateStatus.success,));
+      },
+    );
+  }
+
+  bool isServiceAvailable(SettingsDashboardEntityResponse data) {
+    // Check if isReady is true
+    if (data.data.isReady == true) {
+      // Check if any category is active
+      List<SubCategoryEntity> categories = data.data.categoryIds;
+      return categories.any((category) => category.isActive == true);
+    }
+    return false;
+  }
+
+  Future<void> emitDriverLocation({required double lat,required double long}) async {
+    final result = await updateSocketLocationUseCase(
+        UpdateSocketLocationParams(latitude: lat, longitude: long)
+    );
+    result.fold(
+            (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+            (r) async {
+          if(r==true)log("Location Updated Successfully");
+        });
+  }
+
+  updateDriverLocation(){
+    final locationService = LocationService();
+
+    locationService.startLocationTracking();
+
+    // Listen for new locations (only when moved at least 1m)
+    locationService.locationUpdates.listen((position) {
+      emitDriverLocation(lat: position.latitude, long: position.longitude);
+      Fluttertoast.showToast(
+          msg: "New location (moved at least 1m): ${position.latitude}, ${position.longitude}",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.green,
+          textColor: Colors.white,
+          fontSize: 16.0
+      );
+      print('New location (moved at least 1m): ${position.latitude}, ${position.longitude}');
     });
   }
 }

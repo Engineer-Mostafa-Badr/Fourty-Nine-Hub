@@ -6,6 +6,7 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 class SharedWebSocket {
   static IO.Socket? socket;
   static const String _url = 'https://49dev.com';
+  // static const String _url = 'https://a030-2a09-bac1-2200-8-00-3b6-3b.ngrok-free.app';
 
   static bool _isConnecting = false;
 

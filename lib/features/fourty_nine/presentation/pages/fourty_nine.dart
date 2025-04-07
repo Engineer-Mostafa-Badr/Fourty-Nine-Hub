@@ -507,7 +507,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
       title: context.isArabic ? 'جاي معاك' : 'Trip Join',
       // image: '',
 
-      route: Routes.AVAILABLE_TRIPS,
+      route: Routes.newRideModeScreen,
       onTab: () {
         AdInterstitialTop.loadIntersitialAd();
         AdInterstitialTop.showInterstitialAd();

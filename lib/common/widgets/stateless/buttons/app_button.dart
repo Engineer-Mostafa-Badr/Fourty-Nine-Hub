@@ -17,24 +17,27 @@ class AppButton extends StatelessWidget {
   final Widget? iconWidget;
   final Color? color;
   final MainAxisAlignment? mainAxisAlignment;
-  const AppButton(
-      {super.key,
-      required this.label,
-      required this.onPressed,
-      this.backColor,
-      this.height,
-      this.radius,
-      this.margin,
-      this.mainAxisAlignment,
-      this.widget,
-      this.padding,
-      this.iconSize,
-      this.textColor,
-      this.style,
-      this.icon,
-        this.iconWidget,
-      this.color,
-      this.width});
+  final BoxBorder? border;
+  const AppButton({
+    super.key,
+    required this.label,
+    required this.onPressed,
+    this.backColor,
+    this.height,
+    this.radius,
+    this.margin,
+    this.mainAxisAlignment,
+    this.widget,
+    this.padding,
+    this.iconSize,
+    this.textColor,
+    this.style,
+    this.icon,
+    this.iconWidget,
+    this.color,
+    this.width,
+    this.border,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +51,7 @@ class AppButton extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(radius ?? 15),
           color: backColor ?? AppColors.SECONDARY_COLOR,
+          border: border,
         ),
         child: widget ??
             Center(
@@ -61,7 +65,7 @@ class AppButton extends StatelessWidget {
                       size: (iconSize ?? 30).sp,
                       color: textColor ?? Colors.white,
                     ),
-                  if(iconWidget != null) iconWidget!,
+                  if (iconWidget != null) iconWidget!,
                   if (icon != null || iconWidget != null)
                     Sizer(
                       width: 10.w,
@@ -69,7 +73,10 @@ class AppButton extends StatelessWidget {
                   SizedBox(
                     child: Label(
                       text: label,
-                      style: style ?? Styles.mediumText(color: color?? Colors.white,),
+                      style: style ??
+                          Styles.mediumText(
+                            color: color ?? Colors.white,
+                          ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),

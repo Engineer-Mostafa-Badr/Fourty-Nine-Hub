@@ -40,16 +40,12 @@ class TruckMoreInfoScreen extends StatelessWidget {
           Expanded(
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.only(
-                  bottom: 32,
-                  left: 16,
-                  right: 16,
-                ),
+                padding: const EdgeInsets.only(bottom: 32,left: 16,right: 16,),
                 child: Column(
                   spacing: 4,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    closeWidget(context: context, onAcceptSaveData: () {}),
+                    closeWidget(context:context,onAcceptSaveData: (){}, closeRemoveData: (){}),
                     Label(
                       text: LocaleKeys.moreInfo.localize,
                       style: Styles.headerText(
@@ -61,8 +57,7 @@ class TruckMoreInfoScreen extends StatelessWidget {
                       title: Label(text: LocaleKeys.favoriteCity.localize),
                       onChange: (Widget selectedItem) {
                         // print("Selected Item: ${(selectedItem as Label).text}");
-                      },
-                      length: favoriteCity.length,
+                      }, length: favoriteCity.length,
                       children: List.generate(favoriteCity.length,
                           (index) => Label(text: favoriteCity[index])),
                     ),

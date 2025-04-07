@@ -1,18 +1,30 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/features/social_media/instagram/data/repositories/instagram_repository.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_posts_use_case.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/Post/post_instagram_state.dart';
 
 class GetPostsInstagramCubit extends Cubit<PostInstagramState> {
-  final InstagramRepository repository;
-  GetPostsInstagramCubit({required this.repository})
+  final GetPostsUseCase getPostsUseCase;
+  GetPostsInstagramCubit({required this.getPostsUseCase})
       : super(InitialPostInstagramState());
 
   getPosts() async {
     emit(LoadingPostInstagramState());
-    var response = await repository.getPosts(page: 1, limit: 100);
+    var response = await getPostsUseCase.call(PaginationParams(
+      page: 1,
+      limit: 10,
+    ));
     response.fold(
-      (l) {},
-      (r) {},
+      (l) {
+        emit(FailurePostInstagramState(
+          failure: l,
+        ));
+      },
+      (r) {
+        emit(SuccessCreatePostInstagramState(
+            // posts: r,
+            ));
+      },
     );
   }
 }

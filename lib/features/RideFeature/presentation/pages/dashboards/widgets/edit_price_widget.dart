@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../../../res/assets/assets.dart';
@@ -11,9 +12,10 @@ import '../../../../domain/entities/dashboards/trip_entity.dart';
 import '../../widgets/font_manager.dart';
 
 class EditPriceWidget extends StatefulWidget {
-  final TripEntity? tripEntity;
-  const EditPriceWidget({super.key, this.tripEntity});
-
+  final AvailableRideTripEntity? tripEntity;
+  const EditPriceWidget({super.key, this.tripEntity, required this.price, required this.onSendOffer});
+  final num price;
+  final Function(num offer) onSendOffer;
   @override
   State<EditPriceWidget> createState() => _EditPriceWidgetState();
 }
@@ -23,7 +25,9 @@ class _EditPriceWidgetState extends State<EditPriceWidget> {
   @override
   void initState() {
     super.initState();
-    price = widget.tripEntity?.tripDetails?.price.toInt() ?? 0;
+    setState(() {
+      price = (widget.tripEntity?.price??0).toInt();
+    });
   }
 
   @override
@@ -126,16 +130,18 @@ class _EditPriceWidgetState extends State<EditPriceWidget> {
             ],
           ),
           const SizedBox(height: 8),
-          _locationRow(widget.tripEntity?.tripDetails?.startLocation.title ?? "Tariaq Bedon Esm",
+          _locationRow(widget.tripEntity?.fromAddress ?? "Tariaq Bedon Esm",
               Colors.blue, true),
           const SizedBox(height: 15),
-          _locationRow(widget.tripEntity?.tripDetails?.targetLocation.title ?? "Open Air Mall - Madinaty",
+          _locationRow(widget.tripEntity?.toAddress ?? "Open Air Mall - Madinaty",
               Colors.green, false),
           const SizedBox(height: 25),
           AppButton(
             backColor: AppColors.PRIMARY_COLOR,
             label: LocaleKeys.sendOffer.localize,
-            onPressed: () {},
+            onPressed: () {
+              widget.onSendOffer(price);
+            },
           )
         ],
       ),
