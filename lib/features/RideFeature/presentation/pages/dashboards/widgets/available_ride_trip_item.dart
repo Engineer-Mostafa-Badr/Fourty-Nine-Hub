@@ -118,7 +118,7 @@ class AvailableRideTripItem extends StatelessWidget {
                             height: 30,
                             radius: 15,
                             label: LocaleKeys.Accept.tr(),
-                            onPressed: () =>cubit.createOffer(tripId: tripEntity.id,price: tripEntity.price, context: context, subCategoryId: tripEntity.subcategoryId),
+                            onPressed: () =>cubit.createOffer(tripId: tripEntity.id,price: tripEntity.price??0, context: context, subCategoryId: tripEntity.subcategoryId),
                             backColor: AppColors.PRIMARY_COLOR,
                           ),
                         ),
@@ -127,14 +127,14 @@ class AvailableRideTripItem extends StatelessWidget {
                           child: AppButton(
                             radius: 15,
                             height: 30,
-                            label: !tripEntity.isAutoAccept
+                            label: tripEntity.isAutoAccept==true
                                 ? LocaleKeys.acceptAnothePrice.tr()
                                 : LocaleKeys.refuse.tr(),
                             style: Styles.mediumText(
                                 color: Colors.white,
-                                fontSize: !tripEntity.isAutoAccept ? 23 : 28),
+                                fontSize: tripEntity.isAutoAccept==true ? 23 : 28),
                             onPressed: () {
-                              if (!tripEntity.isAutoAccept) {
+                              if (tripEntity.isAutoAccept==true) {
                                 showModalBottomSheet(
                                   backgroundColor: AppColors.whiteColor,
                                   context: context,
@@ -143,7 +143,7 @@ class AvailableRideTripItem extends StatelessWidget {
                                           top: Radius.circular(15))),
                                   isScrollControlled: true,
                                   builder: (BuildContext context) =>
-                                      EditPriceWidget(price: tripEntity.price,tripEntity: tripEntity, onSendOffer: (num offer) {
+                                      EditPriceWidget(price: tripEntity.price??0,tripEntity: tripEntity, onSendOffer: (num offer) {
                                         context.pop();
                                         cubit.createOffer(tripId: tripEntity.id, price: offer, context: context, subCategoryId: tripEntity.subcategoryId);
                                       },),
