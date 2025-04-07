@@ -105,35 +105,35 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                             ],
                           ),
                         ),
-                        context.read<UserCubit>().isLoggedIn
-                            ? widget.removeFavorite
-                                ? Container()
-                                : PositionedDirectional(
-                                    top: 10.h,
-                                    end: 10.w,
-                                    child: IconAppButton(
-                                      icon: widget.category.isFavorite == false
-                                          ? Icons.favorite_outline
-                                          : Icons.favorite,
-                                      onPressed: () async {
-                                        final result =
-                                            await widget.onFavorite();
-                                        print("resutlt=$result");
-                                        if (result == true) {
-                                          print(result);
-                                          setState(() {
-                                            widget.category.isFavorite =
-                                                !widget.category.isFavorite!;
-                                            print(widget.category.isFavorite);
-                                            widget.isFavorite = result;
-                                            print("===================$result");
-                                          });
-                                        }
-                                      },
-                                      color: AppColors.SECONDARY_COLOR,
-                                    ),
-                                  )
-                            : const SizedBox.shrink(),
+                        // context.read<UserCubit>().isLoggedIn
+                        //     ? widget.removeFavorite
+                        //         ? Container()
+                        //         : PositionedDirectional(
+                        //             top: 10.h,
+                        //             end: 10.w,
+                        //             child: IconAppButton(
+                        //               icon: widget.category.isFavorite == false
+                        //                   ? Icons.favorite_outline
+                        //                   : Icons.favorite,
+                        //               onPressed: () async {
+                        //                 final result =
+                        //                     await widget.onFavorite();
+                        //                 print("resutlt=$result");
+                        //                 if (result == true) {
+                        //                   print(result);
+                        //                   setState(() {
+                        //                     widget.category.isFavorite =
+                        //                         !widget.category.isFavorite!;
+                        //                     print(widget.category.isFavorite);
+                        //                     widget.isFavorite = result;
+                        //                     print("===================$result");
+                        //                   });
+                        //                 }
+                        //               },
+                        //               color: AppColors.SECONDARY_COLOR,
+                        //             ),
+                        //           )
+                        //     : const SizedBox.shrink(),
                       ],
                     ),
                   ),
@@ -184,33 +184,33 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                           fontWeight: FontWeight.bold,
                           fontSize: widget.fontSize ?? 45.sp),
                     ),
-                    PositionedDirectional(
-                      start: 0,
-                      child: Column(
-                        children: [
-                          context.read<UserCubit>().isLoggedIn
-                              ? InkWell(
-                                  onTap: () async {
-                                    final result = await widget.onFavorite();
-                                    if (result != null &&
-                                        result != widget.isFavorite) {
-                                      setState(() {
-                                        widget.isFavorite = result;
-                                        print("===================$result");
-                                      });
-                                    }
-                                  },
-                                  child: Icon(
-                                    widget.isFavorite == true
-                                        ? Icons.favorite
-                                        : Icons.favorite_border,
-                                    color: AppColors.SECONDARY_COLOR,
-                                  ),
-                                )
-                              : const SizedBox.shrink(),
-                        ],
-                      ),
-                    ),
+                    // PositionedDirectional(
+                    //   start: 0,
+                    //   child: Column(
+                    //     children: [
+                    //       context.read<UserCubit>().isLoggedIn
+                    //           ? InkWell(
+                    //               onTap: () async {
+                    //                 final result = await widget.onFavorite();
+                    //                 if (result != null &&
+                    //                     result != widget.isFavorite) {
+                    //                   setState(() {
+                    //                     widget.isFavorite = result;
+                    //                     print("===================$result");
+                    //                   });
+                    //                 }
+                    //               },
+                    //               child: Icon(
+                    //                 widget.isFavorite == true
+                    //                     ? Icons.favorite
+                    //                     : Icons.favorite_border,
+                    //                 color: AppColors.SECONDARY_COLOR,
+                    //               ),
+                    //             )
+                    //           : const SizedBox.shrink(),
+                    //     ],
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
@@ -250,37 +250,37 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                       color: Colors.white,
                     ),
                   ),
-                  PositionedDirectional(
-                    start: 0,
-                    child: Column(
-                      children: [
-                        context.read<UserCubit>().isLoggedIn
-                            ? InkWell(
-                                onTap: () async => await widget.onFavorite(),
-                                child: Icon(
-                                  widget.category.isFavorite == true
-                                      ? Icons.favorite
-                                      : Icons.favorite,
-                                  color: widget.category.isFavorite == true
-                                      ? AppColors.SECONDARY_COLOR
-                                      : AppColors.LIGHT_GRAY_COLOR2,
-                                ),
-                              )
-                            : const SizedBox.shrink(),
-                      ],
-                    ),
-                  ),
-                  PositionedDirectional(
-                    start: 20,
-                    child: InkWell(
-                      onTap: () async => await widget.onFavorite(),
-                      child: Icon(
-                        size: 64.h,
-                        Icons.favorite,
-                        color: AppColors.SECONDARY_COLOR,
-                      ),
-                    ),
-                  )
+                  // PositionedDirectional(
+                  //   start: 0,
+                  //   child: Column(
+                  //     children: [
+                  //       context.read<UserCubit>().isLoggedIn
+                  //           ? InkWell(
+                  //               onTap: () async => await widget.onFavorite(),
+                  //               child: Icon(
+                  //                 widget.category.isFavorite == true
+                  //                     ? Icons.favorite
+                  //                     : Icons.favorite,
+                  //                 color: widget.category.isFavorite == true
+                  //                     ? AppColors.SECONDARY_COLOR
+                  //                     : AppColors.LIGHT_GRAY_COLOR2,
+                  //               ),
+                  //             )
+                  //           : const SizedBox.shrink(),
+                  //     ],
+                  //   ),
+                  // ),
+                  // PositionedDirectional(
+                  //   start: 20,
+                  //   child: InkWell(
+                  //     onTap: () async => await widget.onFavorite(),
+                  //     child: Icon(
+                  //       size: 64.h,
+                  //       Icons.favorite,
+                  //       color: AppColors.SECONDARY_COLOR,
+                  //     ),
+                  //   ),
+                  // )
                 ],
               ),
             ),
@@ -313,24 +313,24 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                         fontWeight: FontWeight.bold,
                         fontSize: 45.sp),
                   ),
-                  PositionedDirectional(
-                    start: 0,
-                    // top: 0,
-                    child: Column(
-                      children: [
-                        context.read<UserCubit>().isLoggedIn
-                            ?
-                        InkWell(
-                                onTap: () async => await widget.onFavorite(),
-                                child: const Icon(
-                                  Icons.favorite,
-                                  color: AppColors.SECONDARY_COLOR,
-                                ),
-                              )
-                            : const SizedBox.shrink(),
-                      ],
-                    ),
-                  ),
+                  // PositionedDirectional(
+                  //   start: 0,
+                  //   // top: 0,
+                  //   child: Column(
+                  //     children: [
+                  //       context.read<UserCubit>().isLoggedIn
+                  //           ?
+                  //       InkWell(
+                  //               onTap: () async => await widget.onFavorite(),
+                  //               child: const Icon(
+                  //                 Icons.favorite,
+                  //                 color: AppColors.SECONDARY_COLOR,
+                  //               ),
+                  //             )
+                  //           : const SizedBox.shrink(),
+                  //     ],
+                  //   ),
+                  // ),
                 ],
               ),
             ),
