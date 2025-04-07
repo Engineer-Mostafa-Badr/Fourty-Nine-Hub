@@ -45,80 +45,78 @@ class _TripJoinCardState extends State<TripJoinCard> {
   @override
   Widget build(BuildContext context) {
 
-    return Expanded(
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 10.h,),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Stack(
-              children: [
-                CustomCard(
-                  radius: 20,
-                  children: [
-                    const Sizer(),
-                    TripCardInfoWidget(
-                      title: widget.title,
-                      icon:widget.iconCar?Assets.tripJoinCarIcon: widget.isMale ? Assets.maleUser : Assets.femaleUser,
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 10.h,),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Stack(
+            children: [
+              CustomCard(
+                radius: 20,
+                children: [
+                  const Sizer(),
+                  TripCardInfoWidget(
+                    title: widget.title,
+                    icon:widget.iconCar?Assets.tripJoinCarIcon: widget.isMale ? Assets.maleUser : Assets.femaleUser,
+                  ),
+                  const Sizer(
+                    height: 30,
+                  ),
+                  _locationWidget(
+                      title: context.isArabic ? 'الجيزة، مصر' : 'Giza, Egypt',
+                      iconColor: AppColors.LIGHT_BLUE),
+                  const Sizer(),
+                  _locationWidget(
+                      title: context.isArabic ? 'الجيزة، مصر' : 'Giza, Egypt',
+                      iconColor: AppColors.CHECK_MARK_COLOR),
+                  const Sizer(),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 32.0.h,
                     ),
-                    const Sizer(
-                      height: 30,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          widget.time,
+                          style: Styles.headerText(
+                              fontSize: 32, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          widget.seats == 1
+                              ? '${widget.seats} ${LocaleKeys.seat.localize}'
+                              : '${widget.seats} ${LocaleKeys.seat.localize}',
+                          style: Styles.headerText(
+                              fontSize: 32, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          widget.status,
+                          style: Styles.headerText(
+                              fontSize: 32, fontWeight: FontWeight.bold),
+                        ),
+                      ],
                     ),
-                    _locationWidget(
-                        title: context.isArabic ? 'الجيزة، مصر' : 'Giza, Egypt',
-                        iconColor: AppColors.LIGHT_BLUE),
-                    const Sizer(),
-                    _locationWidget(
-                        title: context.isArabic ? 'الجيزة، مصر' : 'Giza, Egypt',
-                        iconColor: AppColors.CHECK_MARK_COLOR),
-                    const Sizer(),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 32.0.h,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            widget.time,
-                            style: Styles.headerText(
-                                fontSize: 32, fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            widget.seats == 1
-                                ? '${widget.seats} ${LocaleKeys.seat.localize}'
-                                : '${widget.seats} ${LocaleKeys.seat.localize}',
-                            style: Styles.headerText(
-                                fontSize: 32, fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            widget.status,
-                            style: Styles.headerText(
-                                fontSize: 32, fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
+                  ),
+                  const Divider(),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 32.0.h,
                     ),
-                    const Divider(),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 16.0.h,
-                      ),
-                      child: TripJoinButtonsSection(
-                        isContactInfo: widget.isContactInfo,
-                        isRequestButton:widget.isRequestButton,
-                        buttonTitle: widget.buttonTitle,
-                        onTap:widget.onTab,
-                      ),
+                    child: TripJoinButtonsSection(
+                      isContactInfo: widget.isContactInfo,
+                      isRequestButton:widget.isRequestButton,
+                      buttonTitle: widget.buttonTitle,
+                      onTap:widget.onTab,
                     ),
-                    const Sizer(),
-                  ],
-                ),
-              ],
-            ),
-            TripCardSubscribeText(),
-          ],
-        ),
+                  ),
+                  const Sizer(),
+                ],
+              ),
+            ],
+          ),
+          TripCardSubscribeText(),
+        ],
       ),
     );
   }

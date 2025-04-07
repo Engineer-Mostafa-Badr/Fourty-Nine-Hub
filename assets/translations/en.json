@@ -563,6 +563,10 @@
   "subscribeToContactTheClient": "Subscribe to contact the client",
   "goToRequestHistory": "Go to Request History",
   "orContinueWith": "Or Continue with",
+  "delete_talent": "Delete",
+  "views": "Views",
+  "talent_upload_image": "Upload Image",
+  "talent_upload_video": "Upload Video",
   "error_dialog": {
     "audio_playback_fail": "Failed to load audio",
     "title": "Error",
@@ -1465,7 +1469,7 @@
   "noLinkAvailable": "No link available",
   "noNumberAvailable": "No number available",
   "qrCode": "QR Code",
-  "youMustUploadTheImage":"You must upload the image",
+  "youMustUploadTheImage": "You must upload the image",
   "selectAPaymentMethods": "Select a payment method",
   "selectTheAmount": "Select the amount",
   "enterWithdrawalAmount": "Enter withdrawal amount",
@@ -1489,5 +1493,12 @@
   "joinAvailableTripsNearYouNow": " Join available trips near you now. ",
   "browseRecentlyCompletedTrips": "Browse recently completed trips.",
   "oneWayOneCaptain": "One Way - One Captain!",
-  "goToFirstClient": "Go to first client"
+  "goToFirstClient": "Go to first client",
+  "youWillFindFewerDriversIfYouSelectThisOption": "You will find fewer drivers if you select this option!",
+  "initiateRouteWaitFor1HourToGiveUserTimeToBookASeatInTheSameCarWithTheSameCaptain": "Initiate route & wait for 1 hour to give user time to book a seat in the same car with the same captain.",
+  "addTalent": "Add Talent",
+  "myTalent": "My Talent",
+  "winner_rating":"Rating",
+  "EGP":"EGP"
+
 }

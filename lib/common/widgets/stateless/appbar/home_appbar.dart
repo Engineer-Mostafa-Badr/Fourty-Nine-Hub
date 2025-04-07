@@ -66,18 +66,19 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
       // toolbarHeight: 60,
       // toolbarHeight: toolbarHeight,
       bottom: bottom,
-      leading: IconButton(
-        icon: Image.asset(
-          Assets.menu,
-          width: 28,
-          height: 28,
-        ),
-        onPressed: () {
-          HandleCashback.setCount('drawerCount', context);
-          // Scaffold.currentState?.openDrawer(); // Open the drawer
-          Scaffold.of(context).openDrawer();
-        },
-      ),
+      leading: leading ??
+          IconButton(
+            icon: Image.asset(
+              Assets.menu,
+              width: 28,
+              height: 28,
+            ),
+            onPressed: () {
+              HandleCashback.setCount('drawerCount', context);
+              // Scaffold.currentState?.openDrawer(); // Open the drawer
+              Scaffold.of(context).openDrawer();
+            },
+          ),
       title: Row(
         children: [
           if (isShowLogo)

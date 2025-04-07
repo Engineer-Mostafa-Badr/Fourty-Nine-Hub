@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 
 
 class PremiumAndRequestWidget extends StatelessWidget {
@@ -15,17 +19,17 @@ class PremiumAndRequestWidget extends StatelessWidget {
         Expanded(
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.SECONDARY_COLOR_DARK,
+              backgroundColor: AppColors.SECONDARY_COLOR,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
               ),
             ),
             onPressed: () {},
-            child: const Text(
-              "Premium Request",
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
+            child: Center(
+              child: Text(
+                context.isArabic?'نشر مميز':'Premium Publish',
+                style:Styles.headerText(color: Colors.white,
+                  fontWeight: FontWeight.bold, fontSize: 30)
               ),
             ),
           ),
@@ -40,11 +44,11 @@ class PremiumAndRequestWidget extends StatelessWidget {
               ),
             ),
             onPressed: () {},
-            child: const Text(
-              "Request",
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
+            child: Center(
+              child: Text(
+                LocaleKeys.publish.localize,
+                style: Styles.headerText(color: Colors.white,
+                  fontWeight: FontWeight.bold,fontSize: 30),
               ),
             ),
           ),

@@ -45,6 +45,7 @@ import 'features/settings/presentation/cubit/choice_ruler_cubit.dart';
 import 'features/settings/presentation/cubit/floating_navigator_cubit.dart';
 import 'firebase_options.dart';
 import 'routes/pages.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -53,6 +54,8 @@ bool isActivate = false;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await CacheManager.init();
+  timeago.setLocaleMessages('en', timeago.EnMessages());
+  timeago.setLocaleMessages('ar', timeago.ArMessages());
 //  await  initPickMeFeature();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -76,7 +79,6 @@ void main() async {
     // Do something with the new location
   // });
 
-
   await CacheServiceImpl.init();
   await DI.execute();
   serviceLocator<FcmNotificationHelper>().setup();
@@ -85,7 +87,6 @@ void main() async {
     (value) {
       if (value == LocationPermission.denied) {
         Geolocator.requestPermission();
-
       }
     },
   );
@@ -128,7 +129,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
-
   @override
   void initState() {
     super.initState();

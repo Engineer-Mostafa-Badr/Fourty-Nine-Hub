@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -629,7 +630,10 @@ class _BeStarViewState extends State<BeStarView> {
               );
             },
             child: Container(
-              margin: const EdgeInsets.only(right: 35),
+              margin: EdgeInsets.only(
+                right: context.locale.languageCode == 'ar' ? 0 : 40,
+                left: context.locale.languageCode == 'ar' ? 40 : 0,
+              ),
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
               decoration: BoxDecoration(
                 color: const Color(0xff0B1035),
@@ -638,7 +642,7 @@ class _BeStarViewState extends State<BeStarView> {
               child: Align(
                 alignment: Alignment.center,
                 child: Text(
-                  "My Talent",
+                  LocaleKeys.myTalent.localize,
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -683,7 +687,6 @@ class _BeStarViewState extends State<BeStarView> {
           ),
         ),
       ],
-   
     );
   }
 }

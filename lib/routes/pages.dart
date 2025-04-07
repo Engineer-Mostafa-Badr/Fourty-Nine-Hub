@@ -2626,6 +2626,9 @@ class AppPages {
                               serviceLocator()),
                     ),
                     BlocProvider(create: (_) => TripJoinViewCubit()),
+                    BlocProvider(
+                      create: (context) => serviceLocator<RideCubit>(),
+                    ),
                   ],
                   child: TripJoinCreateAdView(),
                   //const TripJoinView(),
@@ -3287,6 +3290,9 @@ class AppPages {
                       create: (context) => DestGetLatAndLongCubit(
                           getLatLongFromAddressRemoteDataSource:
                               serviceLocator()),
+                    ),
+                    BlocProvider(
+                      create: (context) => serviceLocator<RideCubit>(),
                     ),
                   ], child: const NewRouteScreen());
                 },

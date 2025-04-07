@@ -40,11 +40,10 @@ class _TripJoinBottomSectionState extends State<TripJoinBottomSection> {
               children: [
                 CustomRow(
                   children: [
-                    Icon(Icons.directions_car, size: 30,),
+                    Center(child: const Icon(Icons.directions_car, size: 30,)),
                     Text('0.0 ${LocaleKeys.KM.localize}',
                         style: Styles.headerText()),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    Center(
                       child: Text(
                           '${20} ',
                           style: Styles.headerText(
@@ -63,21 +62,24 @@ class _TripJoinBottomSectionState extends State<TripJoinBottomSection> {
                 Sizer(),
                 CustomRow(
                   children: [
-                    IconButton(
-                      visualDensity:const  VisualDensity(
-                          horizontal: -4, vertical: -4),
-                      onPressed: () async {
-                        time = await showTimePicker(
-                          context: context,
-                          initialTime: const TimeOfDay(hour: 0, minute: 0),
-                        );
-                        setState(() {});
-                      },
-                      icon: Icon(Icons.access_time, size: 30,),
+                    Center(
+                      child:
+                      IconButton(
+                        visualDensity:const  VisualDensity(
+                            horizontal: -4, vertical: -4),
+                        onPressed: () async {
+                          time = await showTimePicker(
+                            context: context,
+                            initialTime: const TimeOfDay(hour: 0, minute: 0),
+                          );
+                          setState(() {});
+                        },
+                        icon: const Icon(Icons.access_time, size: 30,),
+                      ),
                     ),
                     Text(_getTime(), style: Styles.headerText()),
                     Checkbox(
-                      visualDensity: VisualDensity(
+                      visualDensity:const VisualDensity(
                           horizontal: -4, vertical: -4),
                       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       value: isChecked,
@@ -92,20 +94,35 @@ class _TripJoinBottomSectionState extends State<TripJoinBottomSection> {
                         LocaleKeys.repeat.localize, style: Styles.headerText()),
                   ],
                 ),
-                Sizer(),
+                const Sizer(),
                 CustomRow(
                   children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 45.0.h),
-                      child: GestureDetector(
-                          onTapDown: (detail) =>
-                        _showDropdownMenu(context: context,
-                            items: [1, 2, 3, 4, 5, 6],
-                            selectedItem: seatNum,
-                            position: detail.globalPosition)
-                      , child:Text('$seatNum',
-                          style: Styles.headerText(decoration: TextDecoration.underline,color: Colors.black, fontWeight: FontWeight.bold)),
-                      ),
+                    DropdownButton(
+                      dropdownColor:const Color.fromRGBO(225, 225, 225, 1),
+                      borderRadius: BorderRadius.circular(15),
+                      menuWidth: 100.w,
+                      enableFeedback: false,
+                      padding: EdgeInsets.symmetric(horizontal: 10.w),
+                      alignment: Alignment.center,
+                      underline:const SizedBox.shrink(),
+                      items: [1, 2, 3, 4, 5, 6]
+                          .map((e) => DropdownMenuItem(
+                          alignment: AlignmentDirectional.center,
+                          value: e,
+                          child: Text(
+                            e.toString(),
+                            style:const TextStyle(
+                              color: Colors.black,
+                            ),
+                          )))
+                          .toList(),
+                      onChanged: (int? value) {
+                        selectedSeatNum
+                        = value ?? 1;
+                        setState(() {});
+                      },
+                      icon:const Icon(Icons.keyboard_arrow_down, size: 30,),
+                      isDense: true,
                     ),
 
                     Text(LocaleKeys.seat.localize,

@@ -1407,6 +1407,10 @@ class CodegenLoader extends AssetLoader{
   "anonymousMessage": "رسائل مجهولة المصدر",
   "showPosts": "إظهار المشاركات",
   "showStories": "عرض القصص",
+  "delete_talent": "حذف",
+  "views": "مشاهدات",
+  "talent_upload_image": "تحميل صورة",
+  "talent_upload_video": "تحميل فيديو",
   "showReels": "عرض البكرات",
   "writeComments": "اكتب تعليقات",
   "getMoney": "المال المتحصل عليه",
@@ -1488,7 +1492,14 @@ class CodegenLoader extends AssetLoader{
   "noOfRequests": "عدد الطلبات",
   "modify": "تعديل",
   "restaurantPhoto": "صورة المطعم",
-  "areYouSureUpdate": "Are you sure you want to update"
+  "areYouSureUpdate": "Are you sure you want to update",
+  "exploreTripsThatAreActiveAtTheMoment": "استكشف الرحلات النشطة في الوقت الحالي",
+  "youWillFindFewerDriversIfYouSelectThisOption": "ستجد عددًا أقل من السائقين إذا قمت بتحديد هذا الخيار",
+  "initiateRouteWaitFor1HourToGiveUserTimeToBookASeatInTheSameCarWithTheSameCaptain": "ابدأ المسار وانتظر لمدة ساعة لإعطاء المستخدم الوقت لحجز مقعد في نفس السيارة مع نفس القبطان.",
+  "myTalent": "موهبتي",
+  "addTalent": "إضافة موهبة",
+  "winner_rating": "التقييم",
+  "EGP": "ج.م"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -2055,6 +2066,10 @@ static const Map<String,dynamic> _en = {
   "subscribeToContactTheClient": "Subscribe to contact the client",
   "goToRequestHistory": "Go to Request History",
   "orContinueWith": "Or Continue with",
+  "delete_talent": "Delete",
+  "views": "Views",
+  "talent_upload_image": "Upload Image",
+  "talent_upload_video": "Upload Video",
   "error_dialog": {
     "audio_playback_fail": "Failed to load audio",
     "title": "Error",
@@ -2981,7 +2996,13 @@ static const Map<String,dynamic> _en = {
   "joinAvailableTripsNearYouNow": " Join available trips near you now. ",
   "browseRecentlyCompletedTrips": "Browse recently completed trips.",
   "oneWayOneCaptain": "One Way - One Captain!",
-  "goToFirstClient": "Go to first client"
+  "goToFirstClient": "Go to first client",
+  "youWillFindFewerDriversIfYouSelectThisOption": "You will find fewer drivers if you select this option!",
+  "initiateRouteWaitFor1HourToGiveUserTimeToBookASeatInTheSameCarWithTheSameCaptain": "Initiate route & wait for 1 hour to give user time to book a seat in the same car with the same captain.",
+  "addTalent": "Add Talent",
+  "myTalent": "My Talent",
+  "winner_rating": "Rating",
+  "EGP": "EGP"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }
