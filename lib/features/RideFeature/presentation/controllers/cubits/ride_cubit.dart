@@ -94,6 +94,19 @@ class RideCubit extends Cubit<RideState> {
   bool hasPendingShownBottomSheet = false;
   bool hasAcceptedShownBottomSheet = false;
 
+
+  bool selectedCategoryIsSocket = true;
+
+  Map<String, String> socketCategories = {
+    'captain': '62c8ba9f8e28a58a3edf57eb',
+    'lady': '62ea012a69ea29c91dfc3917',
+    'intercity': '62c8baa08e28a58a3edf57ed',
+    'premium': '62c8baa38e28a58a3edf57f3',
+    'taxi': '62c8ba9e8e28a58a3edf57e9',
+    'suv': '62c8baa28e28a58a3edf57f1',
+    'scooter': '6698736fdaa111da2d775627',
+  };
+
   final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
 
   final GetRideCategoriesUseCase getRideCategories;
@@ -183,6 +196,16 @@ class RideCubit extends Cubit<RideState> {
       fetchRideGovernorates(),
     ]);
     loadingHomeData = false;
+    emit(state.copyWith(status: RideStates.success));
+  }
+
+  void checkSelectedCategoryIsSocket(String selectedCategory) {
+    if (socketCategories.containsValue(selectedCategory)) {
+      selectedCategoryIsSocket = true;
+    }else{
+      selectedCategoryIsSocket = false;
+    }
+    log(selectedCategoryIsSocket.toString());
     emit(state.copyWith(status: RideStates.success));
   }
 
