@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -12,22 +11,22 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/features/star_feature/domain/entity/star_winner_entity.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_cubit.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_state.dart';
-import 'package:fourtyninehub/features/star_feature/presentation/pages/widgets/winners_grid_view.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
-import '../../../../../core/loading/custom_loading.dart';
-import '../../../../../core/widget/custom_scaffold.dart';
+import '../../../../core/loading/custom_loading.dart';
+import '../../../../res/assets/assets.dart';
+import 'widgets/all_winner_grid_view.dart';
+// import '../../../../../core/widget/custom_scaffold.dart';
 
-class StarWinnerView extends StatefulWidget {
-  const StarWinnerView({super.key});
+class AllWinnerView extends StatefulWidget {
+  const AllWinnerView({super.key});
 
   @override
-  State<StarWinnerView> createState() => _StarWinnerViewState();
+  State<AllWinnerView> createState() => _AllWinnerViewState();
 }
 
-class _StarWinnerViewState extends State<StarWinnerView> {
+class _AllWinnerViewState extends State<AllWinnerView> {
   late ScrollController _scrollController;
   late StarCubit _cubit;
   @override
@@ -54,50 +53,47 @@ class _StarWinnerViewState extends State<StarWinnerView> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
+    return Scaffold(
       appBar: BackAppBar(
         label: LocaleKeys.winners.localize,
         actions: [
-          SvgPicture.asset(Assets.cupIcon),
+          Padding(
+            padding: const EdgeInsets.only(right: 12.0),
+            child: Image.asset(
+              Assets.winners,
+              height: 50.h,
+            ),
+          ),
         ],
       ),
       body: BlocBuilder<StarCubit, StarState>(
-        builder: (context, state) {
+        builder: (BuildContext context, state) {
           if (state.status == StarStates.loading) {
             return const CustomLoading();
           }
-          return WinnersGridView(
-            winners: state.winner!
-                .map(
-                  (w) => WinnersGridViewModel(
-                    image: w.user.image,
-                    name: '${w.user.firstName} ${w.user.lastName}',
-                    date: w.createdAt!,
-                    price: w.numberOfWins.toString(),
-                  ),
-                )
-                .toList(),
-            paginationOnpressed: () {
-              context.read<StarCubit>().fetchWinnerStar();
-            },
-          );
+
           return Padding(
-            padding: EdgeInsets.all(12.w),
-            child: ListView.separated(
-              controller: _scrollController,
-              physics: const AlwaysScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                if (index == _cubit.winner.length) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                return buildItem(context, state.winner![index]);
-              },
-              separatorBuilder: (context, index) => SizedBox(
-                height: 40.h,
-                // color: AppColors.GREY_NORMAL_COLOR,
-              ),
-              itemCount: state.winner?.length ?? 0,
+            padding: EdgeInsets.all(6.w),
+            child: AllWinnerGridView(
+              winner: state.winner,
+              starCubit: _cubit,
             ),
+
+            //  ListView.separated(
+            //   controller: _scrollController,
+            //   physics: const AlwaysScrollableScrollPhysics(),
+            //   itemBuilder: (context, index) {
+            //     if (index == _cubit.winner.length) {
+            //       return const Center(child: CircularProgressIndicator());
+            //     }
+            //     return buildItem(context, state.winner![index]);
+            //   },
+            //   separatorBuilder: (context, index) => SizedBox(
+            //     height: 40.h,
+            //     // color: AppColors.GREY_NORMAL_COLOR,
+            //   ),
+            //   itemCount: state.winner?.length ?? 0,
+            // ),
           );
         },
       ),

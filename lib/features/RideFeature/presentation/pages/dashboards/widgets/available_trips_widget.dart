@@ -5,6 +5,8 @@ import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
@@ -15,7 +17,7 @@ import 'edit_price_widget.dart';
 
 class AvailableTripsWidget extends StatelessWidget {
   final bool isWithAnotherPrice;
-  final TripEntity tripEntity;
+  final AvailableRideTripEntity tripEntity;
   const AvailableTripsWidget(
       {super.key, this.isWithAnotherPrice = false, required this.tripEntity});
 
@@ -45,13 +47,13 @@ class AvailableTripsWidget extends StatelessWidget {
                   ),
                 ),
                 Label(
-                  text: tripEntity.clientDetails!.firstName, //'Ahmed',
+                  text: tripEntity.clientName, //'Ahmed',
                   style: Styles.mediumText(),
                 ),
                 const SizedBox(height: 4),
                 Label(
                   text:
-                      '${(tripEntity.tripDetails!.duration / 120).toStringAsFixed(0)} Hour',
+                      '${(tripEntity.duration / 120).toStringAsFixed(0)} Hour',
                   style: const TextStyle(fontWeight: FontWeight.w300),
                 ),
               ],
@@ -71,7 +73,7 @@ class AvailableTripsWidget extends StatelessWidget {
                   Expanded(
                     flex: 9,
                     child: Label(
-                      text: tripEntity.tripDetails!.startLocation.title, //'Tariaq Bedon Esm',
+                      text: tripEntity.fromAddress, //'Tariaq Bedon Esm',
                       style: Styles.headerText(),
                     ),
                   )
@@ -84,14 +86,14 @@ class AvailableTripsWidget extends StatelessWidget {
                       flex: 9,
                       child: Label(
                           text:
-                              tripEntity.tripDetails!.targetLocation.title,//'Open Air Mall - Madinaty',
+                              tripEntity.toAddress,//'Open Air Mall - Madinaty',
                           style:
                               Styles.mediumText(fontWeight: FontWeight.w300)))
                 ]),
                 const SizedBox(height: 5),
                 RichText(
                   text: TextSpan(
-                    text: '${tripEntity.tripDetails!.price} ',
+                    text: '${tripEntity.price} ',
                     style: const TextStyle(color: AppColors.black),
                     children: <TextSpan>[
                       TextSpan(
@@ -101,7 +103,7 @@ class AvailableTripsWidget extends StatelessWidget {
                               color: AppColors.SECONDARY_COLOR_DARK2)),
                       TextSpan(
                           text:
-                              ' - ${tripEntity.tripDetails!.distance / 1000} ${LocaleKeys.KM.tr()}'),
+                              ' - ${tripEntity.distance / 1000} ${LocaleKeys.KM.tr()}'),
                     ],
                   ),
                 ),
@@ -122,14 +124,14 @@ class AvailableTripsWidget extends StatelessWidget {
                       child: AppButton(
                         radius: 15,
                         height: 30,
-                        label: !tripEntity.tripDetails!.autoAccept
+                        label: tripEntity.isAutoAccept==false
                             ? LocaleKeys.acceptAnothePrice.tr()
                             : LocaleKeys.refuse.tr(),
                         style: Styles.mediumText(
                             color: Colors.white,
-                            fontSize: !tripEntity.tripDetails!.autoAccept ? 23 : 28),
+                            fontSize: tripEntity.isAutoAccept==false ? 23 : 28),
                         onPressed: () {
-                          if (!tripEntity.tripDetails!.autoAccept) {
+                          if (tripEntity.isAutoAccept==false) {
                             showModalBottomSheet(
                               backgroundColor: AppColors.whiteColor,
                               context: context,
@@ -138,7 +140,11 @@ class AvailableTripsWidget extends StatelessWidget {
                                       top: Radius.circular(15))),
                               isScrollControlled: true,
                               builder: (BuildContext context) =>
-                                  EditPriceWidget(tripEntity: tripEntity),
+                                  EditPriceWidget(tripEntity: tripEntity, price: tripEntity.price??0, onSendOffer: (num offer) {
+                                    context.pop();
+                                    // cubit.createOffer(tripId: tripEntity.id, price: offer);
+
+                                  },),
                             );
                           } else {
                             showCustomDialogTrip(

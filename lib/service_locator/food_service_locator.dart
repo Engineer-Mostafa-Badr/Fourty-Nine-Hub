@@ -33,6 +33,7 @@ import 'package:get_it/get_it.dart';
 
 import '../features/food_feature/cusine_restaurants/presentation/cubit/cusine_restaurants_cubit.dart';
 import '../features/food_feature/restaurant_dashboard/domain/repositories/restaurant_dashboard_repo.dart';
+import '../features/food_feature/restaurant_dashboard/domain/usecases/complete_order_restaurant_usecase.dart';
 import '../features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_dashboard_cubit.dart';
 import '../features/food_feature/restaurant_details/data/datasources/restaurant_details_remote_data_source.dart';
 import '../features/food_feature/restaurant_details/data/repositories/restaurant_details_repo_impl.dart';
@@ -159,6 +160,7 @@ class FoodServiceLocator {
               serviceLocator(),
               serviceLocator(),
               serviceLocator(),
+              serviceLocator()
             ));
     serviceLocator
         .registerFactory<CusineRestaurantsCubit>(() => CusineRestaurantsCubit(
@@ -177,9 +179,23 @@ class FoodServiceLocator {
             serviceLocator(),
             serviceLocator(),
             serviceLocator(),
-            serviceLocator()));
+            serviceLocator(),
+            serviceLocator(),
+            serviceLocator(),
+            serviceLocator(),
+            serviceLocator(),
+            serviceLocator(),
+            serviceLocator(),
+
+        ));
+
+
+
+
     serviceLocator.registerLazySingleton<GetRestaurantDetailsUseCase>(
         () => GetRestaurantDetailsUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<CompleteOrderUseCase>(
+        () => CompleteOrderUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetRestaurantInfoUseCase>(
         () => GetRestaurantInfoUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetRestaurantOrdersUseCase>(

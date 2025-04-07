@@ -1,35 +1,24 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_offer_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/app_colors.dart';
 import 'font_manager.dart';
 
 class TopCardRequest extends StatelessWidget {
-  final String driverName;
-  final String driverImage;
-  final double driverRating;
-  final int ratingCount;
-  final int totalTrips;
-  final String carModel;
-  final String timeDistance;
-  final int price;
+  final RideOfferEntity rideOffer;
   final VoidCallback onAccept;
-  final VoidCallback onRefuse;
+  final RideCubit rideCubit;
 
   const TopCardRequest({
     super.key,
-    required this.driverName,
-    required this.driverImage,
-    required this.driverRating,
-    required this.ratingCount,
-    required this.totalTrips,
-    required this.carModel,
-    required this.timeDistance,
-    required this.price,
+    required this.rideOffer,
     required this.onAccept,
-    required this.onRefuse,
+    required this.rideCubit,
   });
 
   @override
@@ -43,7 +32,7 @@ class TopCardRequest extends StatelessWidget {
         ? AppColors.BG_GRAY_COLOR.withOpacity(.6)
         : const Color(0xffF5F5F5);
 
-    return Padding(
+    return rideOffer.isExpired? const SizedBox.shrink() : Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Card(
         elevation: 5,
@@ -62,8 +51,11 @@ class TopCardRequest extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 20,
-                    backgroundImage: NetworkImage(driverImage),
+                    backgroundImage: rideOffer.driverImage != null && rideOffer.driverImage!.isNotEmpty
+                        ? NetworkImage(rideOffer.driverImage!) as ImageProvider<Object>
+                        : AssetImage(Assets.maleImagePlaceholder) as ImageProvider<Object>,
                   ),
+
                   const SizedBox(width: 8),
                   Expanded(
                     child: Column(
@@ -72,7 +64,7 @@ class TopCardRequest extends StatelessWidget {
                         Row(
                           children: [
                             Text(
-                              driverName,
+                              rideOffer.driverName?? "",
                               style: TextStyle(
                                 fontSize: FontSize.s14,
                                 fontWeight: FontWeight.bold,
@@ -82,8 +74,8 @@ class TopCardRequest extends StatelessWidget {
                             const SizedBox(width: 4),
                             Icon(Icons.star, color: Colors.amber.shade700, size: 16),
                             const SizedBox(width: 2),
-                            Text(
-                              "$driverRating ($ratingCount)",
+                            (rideOffer.rating == null || rideOffer.ratingCount == null)? const SizedBox.shrink() : Text(
+                              "${rideOffer.rating} (${rideOffer.ratingCount})",
                               style: TextStyle(
                                 fontSize: FontSize.s14,
                                 color: textColor,
@@ -91,8 +83,8 @@ class TopCardRequest extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(width: 4),
-                            Text(
-                              "($totalTrips)",
+                            (rideOffer.tripsCount == null || rideOffer.tripsCount == 0) ? const SizedBox.shrink() : Text(
+                              "(${rideOffer.tripsCount})",
                               style: TextStyle(
                                 fontSize: FontSize.s12,
                                 color: subTextColor,
@@ -102,7 +94,7 @@ class TopCardRequest extends StatelessWidget {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          carModel,
+                          rideOffer.carModel ?? "",
                           style: TextStyle(
                             fontSize: FontSize.s12,
                             color: textColor,
@@ -116,7 +108,7 @@ class TopCardRequest extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        timeDistance,
+                        "${formatDuration(rideOffer.duration ?? 0)}, ${formatDistance(rideOffer.distance ?? 0)}",
                         style: TextStyle(
                           fontSize: FontSize.s12,
                           color: subTextColor,
@@ -124,7 +116,7 @@ class TopCardRequest extends StatelessWidget {
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        "$price ${context.isArabic ? "ج.م" : "EGP"}",
+                        "${rideOffer.price} ${context.isArabic ? "ج.م" : "EGP"}",
                         style: TextStyle(
                           fontSize: FontSize.s18,
                           fontWeight: FontWeight.bold,
@@ -143,9 +135,11 @@ class TopCardRequest extends StatelessWidget {
                     child: TweenAnimationBuilder<double>(
                       duration: const Duration(seconds: 10),
                       tween: Tween(begin: 0.0, end: 1.0),
+                      onEnd: (){
+                        rideCubit.removeRideOfferFromRideOffers(rideOffer);
+                      },
                       builder: (context, value, child) {
                         return Stack(
-
                           children: [
                             Container(
                               height: 38,
@@ -191,7 +185,9 @@ class TopCardRequest extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: MaterialButton(
-                        onPressed: onRefuse,
+                        onPressed: (){
+                          rideCubit.removeRideOfferFromRideOffers(rideOffer);
+                        },
                         child: Text(
                           LocaleKeys.refuse.tr(),
                           style: TextStyle(color: textColor, fontSize: 18),
@@ -206,5 +202,14 @@ class TopCardRequest extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  static String formatDistance(double distance) {
+    return "${(distance / 1000).toStringAsFixed(1)} KM";
+  }
+
+  static String formatDuration(double duration) {
+    int minutes = (duration / 60).ceil();
+    return "$minutes min";
   }
 }

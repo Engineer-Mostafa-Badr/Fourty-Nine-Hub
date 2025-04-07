@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -196,8 +195,7 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                                             0]));
                                 if (data != null) {
                                   print("data.cityId${data.cityId}");
-                                  print(
-                                      "data.governorateId${data.governorateId}");
+                                  print("data.governorateId${data.governorateId}");
                                   print("objectsdaa");
                                   controller.state.city = data.cityId;
                                   controller.state.governorate =
@@ -397,7 +395,7 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                                                               Expanded(
                                                                 flex: 3,
                                                                 child:
-                                                                    PremiumRequestButton(
+                                                                PremiumRequestButton(
                                                                   adId: controller
                                                                       .marriageAds[
                                                                           index]

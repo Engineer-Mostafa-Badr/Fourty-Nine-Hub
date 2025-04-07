@@ -29,7 +29,6 @@ import '../../../../../common/widgets/dynamic/drawer.dart';
 import '../../../../../common/widgets/dynamic/floating_button.dart';
 import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../../common/widgets/stateless/appbar/nested_appbar.dart';
-import '../../../../../core/widget/custom_scaffold.dart';
 import '../widgets/posts/create_post_banner.dart';
 
 class SocialParams {
@@ -37,7 +36,11 @@ class SocialParams {
   final bool? hideAppBar;
   final int? index;
 
-  SocialParams({required this.userId, this.hideAppBar = false, this.index = 0});
+  SocialParams({
+    required this.userId,
+    this.hideAppBar = false,
+    this.index = 0,
+  });
 }
 
 class SocialHomeView extends StatefulWidget {
@@ -88,8 +91,10 @@ class _SocialHomeViewState extends State<SocialHomeView>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return CustomScaffold(
-      appBar: const HomeAppbar(isWithBackArrow: true),
+    return Scaffold(
+      appBar: widget.params?.hideAppBar == false
+          ? const HomeAppbar(isWithBackArrow: true)
+          : null,
       body: Column(
         children: [
           isShowExplain
@@ -133,11 +138,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
                       ? null
                       : TabBar(
                           padding: EdgeInsets.zero,
-                          labelStyle: Styles.headerText(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w700,
-                            height: 1.83,
-                          ),
+                          labelStyle: const TextStyle(fontSize: 17),
                           unselectedLabelColor: Colors.grey,
                           dividerColor: Colors.transparent,
                           indicatorColor: context.isDarkMode
@@ -152,19 +153,10 @@ class _SocialHomeViewState extends State<SocialHomeView>
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Container(
-                                      width: 35.83,
-                                      height: 35.83,
-                                      padding: const EdgeInsets.all(8.0),
-                                      decoration: const ShapeDecoration(
-                                        color: Color(0xFF0B1035),
-                                        shape: OvalBorder(),
-                                      ),
-                                      child: SvgPicture.asset(
-                                        Assets.facebookIcon,
-                                        // height: 35,
-                                        // width: 35,
-                                      ),
+                                    child: SvgPicture.asset(
+                                      Assets.facebookAppBarIcon,
+                                      height: 35,
+                                      width: 35,
                                     ),
                                   ),
                                   Positioned(
@@ -187,26 +179,16 @@ class _SocialHomeViewState extends State<SocialHomeView>
                               ),
                               height: 78,
                               text: LocaleKeys.Face.localize,
-                              iconMargin: EdgeInsets.zero,
                             ),
                             Tab(
                               icon: Stack(
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Container(
-                                      width: 35.83,
-                                      height: 35.83,
-                                      padding: const EdgeInsets.all(8.0),
-                                      decoration: const ShapeDecoration(
-                                        color: Color(0xFF0B1035),
-                                        shape: OvalBorder(),
-                                      ),
-                                      child: SvgPicture.asset(
-                                        Assets.instagramIcon,
-                                        // height: 35,
-                                        // width: 35,
-                                      ),
+                                    child: SvgPicture.asset(
+                                      Assets.instagramAppBarIcon,
+                                      height: 35,
+                                      width: 35,
                                     ),
                                   ),
                                   Positioned(
@@ -229,26 +211,16 @@ class _SocialHomeViewState extends State<SocialHomeView>
                               ),
                               height: 78,
                               text: LocaleKeys.Insta.localize,
-                              iconMargin: EdgeInsets.zero,
                             ),
                             Tab(
                               icon: Stack(
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Container(
-                                      width: 35.83,
-                                      height: 35.83,
-                                      padding: const EdgeInsets.all(8.0),
-                                      decoration: const ShapeDecoration(
-                                        color: Color(0xFF0B1035),
-                                        shape: OvalBorder(),
-                                      ),
-                                      child: SvgPicture.asset(
-                                        Assets.twitterIcon,
-                                        // height: 35,
-                                        // width: 35,
-                                      ),
+                                    child: SvgPicture.asset(
+                                      Assets.twitterAppBarIcon,
+                                      height: 35,
+                                      width: 35,
                                     ),
                                   ),
                                   Positioned(
@@ -271,7 +243,6 @@ class _SocialHomeViewState extends State<SocialHomeView>
                               ),
                               height: 78,
                               text: LocaleKeys.tweet.localize,
-                              iconMargin: EdgeInsets.zero,
                             ),
                           ],
                         ),

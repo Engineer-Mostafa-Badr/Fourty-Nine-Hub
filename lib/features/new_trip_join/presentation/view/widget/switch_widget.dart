@@ -1,0 +1,55 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../../../../core/utils/hex_color_helper.dart';
+import '../../../../../res/style/app_colors.dart';
+
+class SwitchWidget extends StatelessWidget {
+  const SwitchWidget({
+    super.key,
+    required this.title,
+    required this.value,
+    required this.onChanged,
+    this.activeColor,
+    this.inactiveThumbColor,
+    this.trackColor,
+    this.trackOutlineColor,
+  });
+
+  final String title;
+  final bool value;
+  final Function(bool p1) onChanged;
+  final Color? activeColor;
+  final Color? inactiveThumbColor;
+  final WidgetStateProperty<Color?>? trackColor;
+  final WidgetStateProperty<Color?>? trackOutlineColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 5.h),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Switch(
+            value: value,
+            onChanged: onChanged,
+            thumbColor: const WidgetStatePropertyAll(AppColors.PRIMARY_COLOR),
+            trackOutlineColor: value
+                ? const WidgetStatePropertyAll(Colors.transparent)
+                : const WidgetStatePropertyAll(AppColors.PRIMARY_COLOR),
+            inactiveTrackColor: Theme.of(context).scaffoldBackgroundColor,
+            activeTrackColor: HexColor('4CDA64'),
+          )
+        ],
+      ),
+    );
+  }
+}

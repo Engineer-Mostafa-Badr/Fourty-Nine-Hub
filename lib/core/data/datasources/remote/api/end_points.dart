@@ -44,6 +44,8 @@ import '../../../../../features/account_taps/my_adds/domain/usecases/update_my_a
 import '../../../../../features/account_taps/wallet/domain/usecases/get_winners_cashback_use_case.dart';
 import '../../../../../features/ads_feature/create_company_ad/data/models/fetch_post_company_advertise_params.dart';
 import '../../../../../features/azkaar/domain/use_case/search_azkar_usecase.dart';
+import '../../../../../features/food_feature/restaurant_dashboard/domain/usecases/get_restaurant_orders_usecase.dart';
+import '../../../../../features/subcategories/domain/usecases/get_custom_page_sub_categories_use_case.dart';
 
 class EndPoints {
   //logout
@@ -174,17 +176,19 @@ class EndPoints {
   static const subTab = '/navigators/subTap';
   static const navigateBar = '/navigators/navigatorsBar';
   static const customPageCat = '/navigators/navigateCategories';
+  static const updateCustomPageCat = '/navigators/customPage-subcategories';
   static const activate = '/navigators/customPage';
+  static customPageSubCat(String mainCategoryId) => '/navigators/subcategories/$mainCategoryId';
 
   // Star
-  static String allStar(StarPaginationParams params) =>
-      '/talent/?page=${params.page}&limit=${params.limit}';
+  static String   allStar(StarPaginationParams params) =>
+      '/talent/?page=${params.page}&limit=${params.limit}&subCategory=${Constants.tubeSubCategory}';
   static String winnerStar(StarPaginationParams params) =>
-      '/talent/all-winner?page=${params.page}&limit=${params.limit}';
-  static const myStar = '/talent/my-talent';
-  static const uploadStar = '/talent/upload';
-  static const bannerTalent = '/talent/banner';
-  static String deleteMyStar({required String id}) => '/talent/$id';
+      '/talent/all-winner?page=${params.page}&limit=${params.limit}&subCategory=${Constants.tubeSubCategory}';
+  static String myStar = '/talent/my-talent?subCategory=${Constants.tubeSubCategory}';
+  static String uploadStar = '/talent/upload?subCategory=${Constants.tubeSubCategory}';
+  static String bannerTalent = '/talent/banner?subCategory=${Constants.tubeSubCategory}';
+  static String deleteMyStar({required String id}) => '/talent/$id?subCategory=${Constants.tubeSubCategory}';
 
   //My Ads
   static const myAdsAuction = '/ads/allMyAds/auction';
@@ -445,8 +449,8 @@ class EndPoints {
   static const getAllTripBySubCategory =
       '$developmentBaseUrl/loading/trip/driver/subcategory';
   static const carPlate = '/loading/driver/info/car-plate';
-  static getRestaurantOrders(PaginationParams params) =>
-      '/food/get-restaurant-orders?page=${params.page}&limit=${params.limit}';
+  static getRestaurantOrders(PaginationOrderFoodParams params) =>
+      '/food/get-restaurant-orders?page=${params.page}&limit=${params.limit}&completed=${params.isCompleted}';
   static const makeRatingDriver = '/loading/rating-driver/makeRating';
   static const getDriverData = '$developmentBaseUrl/loading/driver/info';
   static const updateDriver = '$developmentBaseUrl/loading/driver';
@@ -462,6 +466,7 @@ class EndPoints {
   static const getRestaurantStatistics = '/restaurants/statistics';
   static deleteRestaurant(String id) => '/restaurants/delete-restaurant/$id';
   static const updateRestaurant = '/restaurants/update-restaurant-info';
+  static const completeOrder = '/food/set-order-is-completed/';
   static const favoriteCategory = '$developmentBaseUrl/favorite-category';
   static const reasons = '$developmentBaseUrl/cancellation/reasons';
   static const sendOfferPremium =
@@ -541,6 +546,9 @@ class EndPoints {
 
   static String mainSubCategories({required GetSubCategoriesParams params}) {
     return '/categories/subcategories/${params.mainCategoryId}?userId=${params.userId}';
+  }
+  static String customPageSubCategories({required GetCustomPageSubCategoriesParams params}) {
+    return '/navigators/navigateCategories-enable/${params.mainCategoryId??'62c8b5779332225799fe3304'}';
   }
 
   static const riderInfoRegister = '/ride/riders/register';
@@ -1181,12 +1189,9 @@ class EndPoints {
   }
 
   // gecoding google api url
-  static String geocodingUrl =
-      'https://maps.googleapis.com/maps/api/geocode/json';
-
+  static String geocodingUrl ='https://maps.googleapis.com/maps/api/geocode/json';
   // trip join
-  static String tripJoinExpectedPrice =
-      "/ride/come-with-you/trip/expectedPrice";
+  static String tripJoinExpectedPrice ="/ride/come-with-you/trip/expectedPrice";
   static String getCarBrand = "/ride/riders/brands";
   static String getCarModelByBrand = "/ride/riders/models";
   static String getCarYearType = "/ride/riders/car-years-and-types";
@@ -1259,15 +1264,20 @@ class EndPoints {
   static String getExpectedPrice(String id) {
     return '/ride/trips/expected/price/$id';
   }
-
-  static String getAvailableTrips(String subCategoryId) {
-    return '/ride/driver/trips/available/not-tracking?limit=10&page=1';
+  static String getAvailableTrips(AvailableRideTripsUseCaseParams params) {
+    return '/ride/driver/trips/available/not-tracking?limit=${params.limit}&page=${params.page}';
   }
 
   static String getPastTrips(int page, String type) {
     return '/ride/driver/trips/past?tripType=$type&limit=20&page=$page';
   }
-
+  static String createNewOffer(String id) {
+    return '/ride/offers/new/offer/$id';
+  }
+  static String updateDriverRating(String id) {
+    return '/ride/trip/rating/$id/client';
+  }
+  static String createDriverRating = '/ride/trip/rating/driver';
   static String getSettingsDashboard = '/ride/driver/info/settings';
   static String deleteRideRegistration = '/ride/riders';
   static String getRideBrands = '/ride/riders/brands';
@@ -1352,5 +1362,13 @@ class EndPoints {
 
   static String getAvailableRideTrips(AvailableRideTripsUseCaseParams params) {
     return '/ride/driver/trips/available/tracking?page=${params.page}&limit=${params.limit}';
+  }
+
+  static String acceptOfferByClient(String offerId) {
+    return 'https://7a06-2a09-bac5-30c4-254b-00-3b7-47.ngrok-free.app/api/v1/ride/offers/accept/offer/$offerId';
+  }
+
+  static String updateTripAutoAcceptByClient() {
+    return '/ride/client/trips/auto-accept';
   }
 }

@@ -11,25 +11,27 @@ import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/get_main_cat
 import 'package:fourtyninehub/features/fourty_nine/domain/use_cases/toggle_sub_category_to_favorites_usecase.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-import '../../domain/usecases/get_sub_categories_use_case.dart';
 import '../../domain/entities/sub_category_entity.dart';
+import '../../domain/usecases/get_custom_page_sub_categories_use_case.dart';
+import '../../domain/usecases/get_sub_categories_use_case.dart';
 
 part 'subcategories_state.dart';
 
 class SubcategoriesCubit extends Cubit<SubcategoriesState> {
   final GetSubCategoriesUseCase _getSubcategoriesUsecase;
+  final GetCustomPageSubCategoriesUseCase _getCustomPageSubCategoriesUseCase;
   final ToggleSubCategoryToFavoritesUseCase
-      _toggleSubCategoryToFavoritesUseCase;
+  _toggleSubCategoryToFavoritesUseCase;
   final GetAdsUseCase _getAdsUseCase;
   final GetMainCategoryDetailsUseCase _getMainCategoryDetailsUseCase;
   final FilterAdUseCase _filterAdUseCase;
-  SubcategoriesCubit(
-      this._getSubcategoriesUsecase,
+
+  SubcategoriesCubit(this._getSubcategoriesUsecase,
       this._toggleSubCategoryToFavoritesUseCase,
       this._getMainCategoryDetailsUseCase,
       this._getAdsUseCase,
-      this._filterAdUseCase)
-      : super(SubcategoriesState());
+      this._filterAdUseCase,
+      this._getCustomPageSubCategoriesUseCase,) : super(SubcategoriesState());
 
   String _mainCategoryId = '';
 
@@ -58,6 +60,7 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
 
   init({required String mainCategoryId}) {
     _mainCategoryId = mainCategoryId;
+
   }
 
   changeSubCatIndex(int index) async {
@@ -80,6 +83,7 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
   }
 
   MainCategoryEntity? mainCategory;
+
   Future<void> getMainCategoryDetails() async {
     // if (user != null) {
     final response =
@@ -123,6 +127,28 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
             failure: failure, status: SubcategoriesStates.error)), (r) {
       data = r;
       emit(state.copyWith(subCategories: r));
+    });
+
+    return data;
+  }
+
+  Future<List<SubCategoryEntity>> getCustomPageSubcategories() async {
+    List<SubCategoryEntity> data = [];
+    emit(state.copyWith(status: SubcategoriesStates.loading));
+    final user = UserCubit.to.state.data?.id;
+    print('useeeerId===>$user in getCustomPageSubcategories $_mainCategoryId');
+    final response = await _getCustomPageSubCategoriesUseCase(
+      GetCustomPageSubCategoriesParams(
+        mainCategoryId: _mainCategoryId,
+      ),
+    );
+    response.fold(
+            (failure) =>
+            emit(state.copyWith(
+                failure: failure, status: SubcategoriesStates.error)), (r) {
+      data = r;
+      print("customPageSubCategories data ${r}");
+      emit(state.copyWith(customPageSubCategories: r));
     });
 
     return data;
@@ -182,8 +208,9 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
     final response = await _toggleSubCategoryToFavoritesUseCase(subcategoryId);
     bool result = false;
     response.fold(
-        (failure) => emit(state.copyWith(
-            failure: failure, status: SubcategoriesStates.error)), (data) {
+            (failure) =>
+            emit(state.copyWith(
+                failure: failure, status: SubcategoriesStates.error)), (data) {
       result = data;
       emit(state.copyWith(status: SubcategoriesStates.initState));
     });

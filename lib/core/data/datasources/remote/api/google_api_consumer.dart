@@ -17,7 +17,8 @@ class GoogleApiConsumer extends ApiConsumer {
   Future<Either<Failure, Map<String, dynamic>>> get(String url,
       {Map<String, dynamic>? queryParameters,
       Map<String, dynamic>? data,
-      Map<String, dynamic>? headers}) async {
+      Map<String, dynamic>? headers,
+        bool refresh = false,}) async {
     try {
       // dio.options.baseUrl ;
       final result = await dio.get(url,
@@ -42,10 +43,14 @@ class GoogleApiConsumer extends ApiConsumer {
       } else if (e.response?.statusCode == 400) {
         if (e.response?.data is Map &&
             e.response?.data['error_message'] is String) {
-          return ServerFailure(message: e.response?.data['error_message']);
+          return ServerFailure(message: e.response?.data['error_message'],
+            name: e.response?.data['name'] as String? ?? 'Unknown Error',
+          );
         } else {
           return const ServerFailure(
-              message: "Unkown Error, Please Try Again Later");
+              message: "Unkown Error, Please Try Again Later",
+            name:  'Unknown Error',
+          );
         }
       }
     }
@@ -61,7 +66,8 @@ class GoogleApiConsumer extends ApiConsumer {
   Future<Either<Failure, Map<String, dynamic>>> delete(String url,
       {Map<String, dynamic>? data,
       Map<String, dynamic>? queryParameters,
-      Map<String, dynamic>? headers}) {
+      Map<String, dynamic>? headers,
+        bool refresh = false,}) {
     // TODO: implement delete
     throw UnimplementedError();
   }
@@ -75,7 +81,8 @@ class GoogleApiConsumer extends ApiConsumer {
       {Map<String, dynamic>? data,
       FormData? formData,
       Map<String, dynamic>? queryParameters,
-      Map<String, dynamic>? headers}) {
+      Map<String, dynamic>? headers,
+        bool refresh = false,}) {
     // TODO: implement post
     throw UnimplementedError();
   }
@@ -84,7 +91,8 @@ class GoogleApiConsumer extends ApiConsumer {
   Future<Either<Failure, Map<String, dynamic>>> put(String url,
       {Map<String, dynamic>? data,
       Map<String, dynamic>? queryParameters,
-      Map<String, dynamic>? headers}) {
+      Map<String, dynamic>? headers,
+        bool refresh = false,}) {
     // TODO: implement put
     throw UnimplementedError();
   }
@@ -93,7 +101,8 @@ class GoogleApiConsumer extends ApiConsumer {
   Future<Either<Failure, Map<String, dynamic>>> patch(String url,
       {Map<String, dynamic>? data,
       Map<String, dynamic>? queryParameters,
-      Map<String, dynamic>? headers}) {
+      Map<String, dynamic>? headers,
+        bool refresh = false,}) {
     // TODO: implement patch
     throw UnimplementedError();
   }

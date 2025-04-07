@@ -1,10 +1,12 @@
 // driver_status_model.dart
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/settings_dashboard_entity.dart';
 
+import 'sub_category_model.dart';
+
 class SettingsDashboardModel extends SettingsDashboardEntity {
   SettingsDashboardModel({
     required super.isReady,
-    required super.categoryIds,
+    required List<SubCategoryModel> super.categoryIds,
     required super.subscriptionType,
     required super.pricingPerKm,
     required super.city,
@@ -18,13 +20,14 @@ class SettingsDashboardModel extends SettingsDashboardEntity {
 
   factory SettingsDashboardModel.fromJson(Map<String, dynamic> json) {
     return SettingsDashboardModel(
-      isReady: json['isReady'],
-      categoryIds: List<String>.from(json['categoryIds']),
+       isReady: json['isReady'],
+      categoryIds: List<SubCategoryModel>.from(
+          (json['categoryIds'] as List).map((x) => SubCategoryModel.fromJson(x))),
       subscriptionType: json['subscriptionType'],
-      pricingPerKm: json['pricingPerKm'].toDouble(),
+      pricingPerKm: json['pricingPerKm']!=null?json['pricingPerKm'].toDouble():0.0,
       city: json['city'],
       rating: RatingSettingsModel.fromJson(json['rating']),
-      profit: json['profit'].toDouble(),
+      profit: json['profit']!=null?json['profit'].toDouble():0.0,
       countTrips: json['countTrips'],
       isActive: json['isActive'],
       isApproved: json['isApproved'],
@@ -33,25 +36,23 @@ class SettingsDashboardModel extends SettingsDashboardEntity {
   }
 }
 
-// rating_model.dart
 class RatingSettingsModel extends RatingSettingsEntity {
   RatingSettingsModel({required super.averageRating, required super.totalRatings});
 
   factory RatingSettingsModel.fromJson(Map<String, dynamic> json) {
     return RatingSettingsModel(
-      averageRating: json['averageRating'].toDouble(),
+      averageRating: json['averageRating']!=null?json['averageRating'].toDouble():0.0,
       totalRatings: json['totalRatings'],
     );
   }
 }
 
-// driver_status_response_model.dart
-class DriverStatusResponseModel extends SettingsDashboardEntityResponse {
-  DriverStatusResponseModel(
+class SettingsDashboardResponseModel extends SettingsDashboardEntityResponse {
+  SettingsDashboardResponseModel(
       {required super.status, required SettingsDashboardModel super.data});
 
-  factory DriverStatusResponseModel.fromJson(Map<String, dynamic> json) {
-    return DriverStatusResponseModel(
+  factory SettingsDashboardResponseModel.fromJson(Map<String, dynamic> json) {
+    return SettingsDashboardResponseModel(
       status: json['status'],
       data: SettingsDashboardModel.fromJson(json['data']),
     );

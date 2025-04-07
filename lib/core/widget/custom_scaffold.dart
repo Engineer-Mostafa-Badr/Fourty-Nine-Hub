@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:floating_draggable_widget/floating_draggable_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,6 +31,7 @@ class CustomScaffold extends StatefulWidget {
     this.extendBodyBehindAppBar = false,
     this.enableCustomAppBar = false,
     this.bottomSheet,
+    this.showNavBAr = true,
     this.resizeToAvoidBottomInset,
   });
 
@@ -41,6 +44,7 @@ class CustomScaffold extends StatefulWidget {
   final PreferredSizeWidget? appBar;
   final bool extendBody;
   final bool extendBodyBehindAppBar;
+  final bool showNavBAr;
   final bool? resizeToAvoidBottomInset;
   final Widget? bottomSheet;
   final bool enableCustomAppBar;
@@ -58,9 +62,11 @@ class _CustomScaffoldState extends State<CustomScaffold>
     return BlocBuilder<FloatingNavigatorCubit, FloatingNavigatorState>(
       builder: (context, state) {
         var floatingNavigatorCubit = FloatingNavigatorCubit.get(context);
-        if (floatingNavigatorCubit.floatingNavigatorEnable) {
+        if (floatingNavigatorCubit.floatingNavigatorEnable &&
+            widget.showNavBAr) {
           return FloatingDraggableWidget(
             mainScreenWidget: MainScaffold(
+              showNavBAr: widget.showNavBAr,
               backgroundColor: widget.backgroundColor,
               floatingActionButtonLocation: widget.floatingActionButtonLocation,
               floatingActionButton: widget.floatingActionButton,
@@ -110,6 +116,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
           );
         } else {
           return MainScaffold(
+            showNavBAr: widget.showNavBAr,
             backgroundColor: widget.backgroundColor,
             floatingActionButtonLocation: widget.floatingActionButtonLocation,
             floatingActionButton: widget.floatingActionButton,
@@ -197,6 +204,11 @@ class _CustomScaffoldState extends State<CustomScaffold>
                             drawerRollWidget(
                               label: LocaleKeys.ride.localize,
                               image: Assets.rideIcon,
+                              // onTap: () => showTimePicker(
+                              //   context: context,
+                              //   initialTime:
+                              //       const TimeOfDay(hour: 0, minute: 0),
+                              // ),
                               onTap: () => context.push(Routes.onBoardingScreen),
                               // onTap: () => context.push(Routes.RIDE),
                             ),
@@ -318,6 +330,7 @@ class MainScaffold extends StatelessWidget {
     this.drawer,
     this.bottomNavigationBar,
     this.appBar,
+    this.showNavBAr = true,
     this.extendBody = false,
     this.extendBodyBehindAppBar = false,
     this.enableCustomAppBar = false,
@@ -335,6 +348,7 @@ class MainScaffold extends StatelessWidget {
   final PreferredSizeWidget? appBar;
   final bool extendBody;
   final bool extendBodyBehindAppBar;
+  final bool showNavBAr;
   final bool? resizeToAvoidBottomInset;
   final Widget? bottomSheet;
   final bool enableCustomAppBar;
@@ -342,6 +356,7 @@ class MainScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log("showNavBAr $showNavBAr");
     return BlocBuilder<FloatingNavigatorCubit, FloatingNavigatorState>(
       builder: (context, state) {
         var floatingNavigatorCubit = FloatingNavigatorCubit.get(context);
@@ -358,7 +373,8 @@ class MainScaffold extends StatelessWidget {
                   choiceRulerCubit.changeChoiceRulerStatus(forceValue: !value);
 
                   // choiceRulerCubit.changeChoiceRulerStatus();
-                  print('choiceRulerCubit.state ${choiceRulerCubit.state} value $value');
+                  print(
+                      'choiceRulerCubit.state ${choiceRulerCubit.state} value $value');
                   print('onDrawerChanged open $value');
                 },
                 bottomNavigationBar: bottomNavigationBar,
@@ -377,9 +393,7 @@ class MainScaffold extends StatelessWidget {
                       alignment: Alignment.centerLeft,
                       children: [
                         body,
-                        if (choiceRulerCubit.choiceRulerStatus ||
-                            floatingNavigatorCubit.floatingNavigatorStatus)
-                          rulerWidget,
+                           if ((choiceRulerCubit.choiceRulerStatus||floatingNavigatorCubit.floatingNavigatorStatus)&&showNavBAr) rulerWidget,
                       ],
                     ),
                   ),
@@ -398,15 +412,17 @@ class MainScaffold extends StatelessWidget {
                 drawer: drawer,
                 onDrawerChanged: (value) {
                   choiceRulerCubit.changeChoiceRulerStatus(forceValue: !value);
-                  print('choiceRulerCubit.state ${choiceRulerCubit.state} value $value');
-                  print('onDrawerChanged open $value');                },
+                  print(
+                      'choiceRulerCubit.state ${choiceRulerCubit.state} value $value');
+                  print('onDrawerChanged open $value');
+                },
                 bottomNavigationBar: bottomNavigationBar,
                 body: Stack(
                   alignment: Alignment.centerLeft,
                   children: [
                     body,
-                    if (choiceRulerCubit.choiceRulerStatus ||
-                        floatingNavigatorCubit.floatingNavigatorStatus)
+                    if ((choiceRulerCubit.choiceRulerStatus ||
+                        floatingNavigatorCubit.floatingNavigatorStatus)&& showNavBAr)
                       rulerWidget,
                   ],
                 ),

@@ -12,6 +12,7 @@ class SubcategoriesState {
   final List<AdModel>? adsRequestsLog;
 
   final List<SubCategoryEntity>? subCategories;
+  final List<SubCategoryEntity>? customPageSubCategories;
   final List<SubCategoryEntity>? marriageSubCategories;
   final MainCategoryEntity? mainCategory;
   SubcategoriesState(
@@ -20,6 +21,7 @@ class SubcategoriesState {
       this.ads,
       this.city = '',
       this.governorate = '',
+        this.customPageSubCategories,
       this.filterModel,
       this.myAds,
       this.adsRequestsLog,
@@ -37,6 +39,7 @@ class SubcategoriesState {
     String? governorate,
     FilterModel? filterModel,
     List<SubCategoryEntity>? subCategories,
+    List<SubCategoryEntity>? customPageSubCategories,
     List<SubCategoryEntity>? marriageSubCategories,
     List<AdModel>? ads,
     List<AdModel>? myAds,
@@ -47,6 +50,7 @@ class SubcategoriesState {
       status: status ?? this.status,
       ads: ads ?? this.ads,
       subCategories: subCategories ?? this.subCategories,
+      customPageSubCategories: customPageSubCategories ?? this.customPageSubCategories,
       subCatIndex: subCatIndex ?? this.subCatIndex,
       mainCategory: mainCategory ?? this.mainCategory,
       marriageSubCategories:

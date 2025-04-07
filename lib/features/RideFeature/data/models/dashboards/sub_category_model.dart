@@ -6,14 +6,17 @@ class SubCategoryModel extends SubCategoryEntity {
     required super.nameAr,
     required super.nameEn,
     required super.pictureUrl,
+    required super.isActive,
   });
 
   factory SubCategoryModel.fromJson(Map<String, dynamic> json) {
     return SubCategoryModel(
-      id: json['id'],
+      id: json['isActive'] == null ? json['id'] : json['subcategoryId'],
       nameAr: json['nameAr'],
       nameEn: json['nameEn'],
-      pictureUrl: json['pictureUrl'],
+      pictureUrl:
+          json['isActive'] == null ? json['pictureUrl'] : json['pictureKey'],
+      isActive: json['isActive']??false,
     );
   }
 }

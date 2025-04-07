@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 import '../../../../../res/style/app_colors.dart';
 
 class CountryDropdown extends StatefulWidget {
@@ -62,13 +63,13 @@ class _CountryDropdownState extends State<CountryDropdown> {
               outlineBorder: const BorderSide(color: AppColors.GREYFIELD),
               filled: true,
               constraints: const BoxConstraints(maxHeight: 45, minHeight: 45),
-              hintStyle: const TextStyle(fontSize: 12),
+              hintStyle: Styles.mediumText(),
               labelStyle: const TextStyle(fontSize: 12),
               fillColor: AppColors.GREYFIELD,
               contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
             ),
             menuHeight: 200,
-            trailingIcon: const Icon(Icons.arrow_drop_down),
+            trailingIcon: const Icon(Icons.keyboard_arrow_down),
           );
         }
     );

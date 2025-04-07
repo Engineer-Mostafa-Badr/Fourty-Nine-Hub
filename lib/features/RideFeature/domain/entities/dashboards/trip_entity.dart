@@ -12,8 +12,9 @@ class TripEntity extends Equatable {
   final TripDetailsEntity? tripDetails;
   final StateEntity? state;
   final TripRatingEntity? rating;
+  String? modeType;
 
-  const TripEntity( {
+   TripEntity({this.modeType='',  
     required this.clientDetails,
     required this.driverDetails,
     required this.subCategory,
