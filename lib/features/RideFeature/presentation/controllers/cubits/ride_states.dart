@@ -68,6 +68,8 @@ class RideState {
   final List<SubCategoryEntityUpdated>? shippingSubCategories;
   final List<GovernorateEntity>? govs;
   final List<RideColorEntity>? colors;
+  final RideColorEntity? color;
+  final GovernorateEntity? city;
   final List<String>? brands;
   final List<String>? models;
   final String? selectedModel;
@@ -133,6 +135,8 @@ class RideState {
     this.registerType='socket',
     this.driverInfo,
     this.colors,
+    this.color,
+    this.city,
     this.isSmoking=false,
     this.hasAirCondition=false,
     this.selectedModel,
@@ -181,8 +185,10 @@ class RideState {
     List<String>? models,
     CostPerKmEntity? costPerKm,
     List<RideColorEntity>? colors,
+    RideColorEntity? color,
     RideCategoryEntityUpdated? shippingCategory,
     List<GovernorateEntity>? governorates,
+    GovernorateEntity? city,
     GetLocationFromAddressEntity? currentLocation,
     GetLocationFromAddressEntity? toLocation,
     GetLocationFromAddressEntity? wayPointOne,
@@ -217,6 +223,8 @@ class RideState {
       failure: failure ?? this.failure,
       registerType: registerType ?? this.registerType,
       personalPicture: personalPicture ?? this.personalPicture,
+      color: color ?? this.color,
+      city: city ?? this.city,
       driverLicensePicture: driverLicensePicture ?? this.driverLicensePicture,
       backOfDriverLicensePicture: backOfDriverLicensePicture ?? this.backOfDriverLicensePicture,
       selfieDriverLicensePicture: selfieDriverLicensePicture ?? this.selfieDriverLicensePicture,

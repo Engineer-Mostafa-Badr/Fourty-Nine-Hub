@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_details/presentation/cubit/restaurant_details_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
+import '../../../../../res/style/styles.dart';
 import '../../../restaurants_list/domain/entities/restaurant_mneu.dart';
 
 class ItemCard extends StatefulWidget {
@@ -76,113 +78,119 @@ class _ItemCardState extends State<ItemCard> {
     context.read<RestaurantDetailsCubit>();
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Card(
-        color: cardDarkColor(context),
-        child: Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: Row(
-            children: [
-              // Image
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12.0),
-                child: SquareImage(
-                  url: widget.meal.picture ?? "",
-                  width: 80.0,
-                  height: 80.0,
-                ),
-              ),
-              const SizedBox(width: 12.0),
-              // Item Details
-              Expanded(
-                child: Column(
+      padding: const EdgeInsets.all(8.0),
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                  color: cardDarkColor(context, isRestruantItem: true),
+                  borderRadius: BorderRadius.circular(12)),
+              child: Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      widget.meal.foodName ?? 'Unknown',
-                      style: const TextStyle(
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.w600,
+                    190.horizontalSpace,
+                    // Item Details
+                    Expanded(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.meal.foodName ?? 'Unknown',
+                            style: Styles.headerText(
+                                fontSize: 32, color: AppColors.LIGHT_COLOR),
+                          ),
+                          16.verticalSpace,
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                ((widget.meal.price ?? 0.0)).toStringAsFixed(2),
+                                style: Styles.headerText(
+                                    fontSize: 32, color: AppColors.LIGHT_COLOR),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 8.0),
-                    Row(
+
+                    // Item Price
+                    Column(
                       children: [
-                        Expanded(
+                        10.verticalSpace,
+                        Container(
+                          padding: EdgeInsets.all(10.w),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(color: AppColors.LIGHT_COLOR)),
                           child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              // Decrease Quantity Button
-                              Container(
-                                padding: const EdgeInsets.all(4.0),
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(color: Colors.grey),
-                                ),
-                                child: InkWell(
-                                  onTap: (widget.fromUpdate ?? false)
-                                      ? null
-                                      : _decreaseQuantity,
-                                  child: const Icon(
-                                    Icons.remove,
-                                    size: 16.0,
-                                  ),
+                              InkWell(
+                                onTap: (widget.fromUpdate ?? false)
+                                    ? null
+                                    : _decreaseQuantity,
+                                child: Icon(
+                                  Icons.remove,
+                                  size: 50.sp,
+                                  color: AppColors.LIGHT_COLOR,
                                 ),
                               ),
-                              const SizedBox(width: 12.0),
+                              24.horizontalSpace,
                               // Quantity Text
                               Text(
                                 '$qty',
-                                style: const TextStyle(
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                                style: Styles.mediumText(
+                                    fontSize: 32, color: AppColors.LIGHT_COLOR),
                               ),
-                              const SizedBox(width: 12.0),
+                              24.horizontalSpace,
                               // Increase Quantity Button
-                              Container(
-                                padding: const EdgeInsets.all(4.0),
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(color: Colors.grey),
-                                ),
-                                child: InkWell(
-                                  onTap: (widget.fromUpdate ?? false)
-                                      ? null
-                                      : _increaseQuantity,
-                                  child: const Icon(
-                                    Icons.add,
-                                    size: 16.0,
-                                  ),
+                              InkWell(
+                                onTap: (widget.fromUpdate ?? false)
+                                    ? null
+                                    : _increaseQuantity,
+                                child: Icon(
+                                  Icons.add,
+                                  size: 50.sp,
+                                  color: AppColors.LIGHT_COLOR,
                                 ),
                               ),
                             ],
                           ),
                         ),
+                        SizedBox(height: qty > 0 ? 16.h : 0),
+                        if (qty > 0)
+                          BadgedLabel(
+                            label: 'Add to cart',
+                            onTap: _addToCart,
+                            color: AppColors.SECONDARY_COLOR_DARK,
+                            borderColor: AppColors.LIGHT_COLOR,
+                          ),
                       ],
                     ),
                   ],
                 ),
               ),
-              // Item Price
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    ((widget.meal.price ?? 0.0)).toStringAsFixed(2),
-                    style: const TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.SECONDARY_COLOR,
-                    ),
-                  ),
-                  SizedBox(height: qty > 0 ? 8.0 : 40),
-                  if (qty > 0)
-                    BadgedLabel(label: 'Add to cart', onTap: _addToCart),
-                ],
-              ),
-            ],
+            ),
           ),
-        ),
+          Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12.0),
+              child: SquareImage(
+                url: widget.meal.picture ?? "",
+                width: 80.0,
+                height: 160.h,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

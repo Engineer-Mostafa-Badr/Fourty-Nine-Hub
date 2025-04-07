@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/core/data/datasources/remote/socket/socket_data_source.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/activity_trip_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/car_years_and_types_model.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/check_driver_type_model.dart';
@@ -54,14 +55,18 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_histo
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_running_trips_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_car_years_and_types_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_location_from_address_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_categories_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/partial_payment_in_trip.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/recording_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/rider_in_start_location_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/start_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_driver_location_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_socket_location_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_trip_price_from_client_use_case.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/data/models/governrate_model.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
+import 'package:fourtyninehub/shared_web_socket.dart';
+import 'package:icons_launcher/utils/cli_logger.dart';
 
 import '../../../../core/data/datasources/remote/api/api_consumer.dart';
 import '../../../../core/data/datasources/remote/api/end_points.dart';
@@ -74,10 +79,11 @@ import '../../domain/usecases/make_non_tracking_request_trip_usecase.dart';
 abstract class RideRemoteDataSource {
   ////////////////////Nasr////////////////////
   Future<Either<Failure, RideCategoryEntityUpdated>> getRideCategories(
-      String userId);
-
+      GetRideCategoriesParams params);
+  Future<Either<Failure, bool>> listenToUpdateLocation(
+      UpdateSocketLocationParams params);
   Future<Either<Failure, RideCategoryEntityUpdated>> getShippingCategories(
-      String userId);
+      GetRideCategoriesParams params);
   Future<Either<Failure, CheckDriverTypeEntity>> checkDriverType();
   Future<Either<Failure, bool>> registerRideNotSpecial(
       RegisterRideNotSpecialEntity params);
@@ -99,7 +105,7 @@ abstract class RideRemoteDataSource {
       GetCarYearsAndTypesParams params);
   Future<Either<Failure, List<RideColorEntity>>> getRideCarColors();
   Future<Either<Failure, List<GovernorateEntity>>> getGovernorates();
-  Future<Either<Failure, DriverInfoEntity>> getRideDriverInfo();
+  Future<Either<Failure, DriverInfoEntity>> getRideDriverInfo(bool refresh);
   Future<Either<Failure, DriverPictureOptionalEntity>>
       getDriverPictureOptional();
 
@@ -154,7 +160,7 @@ abstract class RideRemoteDataSource {
           GetAllHistoryTripsForRiderUseCaseParams params);
   Future<Either<Failure, CostPerKmEntity>> getCostPerKm();
   Future<Either<Failure, bool>> loadingRegister(LoadingRegisterEntity params);
-  Future<Either<Failure, LoadingInfoEntity>> getLoadingInfo();
+  Future<Either<Failure, LoadingInfoEntity>> getLoadingInfo(bool refresh);
   Future<Either<Failure, bool>> makeRequestTrip();
   Future<Either<Failure, List<AvailableRideTripEntity>>> getAvailableRideTrips(
       AvailableRideTripsUseCaseParams params);
@@ -170,11 +176,11 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
   ////////////////////Nasr////////////////////
   @override
   Future<Either<Failure, RideCategoryEntityUpdated>> getRideCategories(
-      String userId) async {
+      GetRideCategoriesParams params) async {
     try {
       final response = await _apiConsumer.get(
-        EndPoints.getRideCategories(userId),
-      );
+          EndPoints.getRideCategories(params.userId),
+          refresh: params.refresh);
 
       return response.fold((failure) => Left(failure), (data) {
         RideCategoryModelUpdated rideCategoryModel =
@@ -188,11 +194,11 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
 
   @override
   Future<Either<Failure, RideCategoryEntityUpdated>> getShippingCategories(
-      String userId) async {
+      GetRideCategoriesParams params) async {
     try {
       final response = await _apiConsumer.get(
-        EndPoints.getShippingCategories(userId),
-      );
+          EndPoints.getShippingCategories(params.userId),
+          refresh: params.refresh);
 
       return response.fold((failure) => Left(failure), (data) {
         RideCategoryModelUpdated rideCategoryModel =
@@ -466,11 +472,11 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, DriverInfoEntity>> getRideDriverInfo() async {
+  Future<Either<Failure, DriverInfoEntity>> getRideDriverInfo(
+      bool refresh) async {
     try {
-      final response = await _apiConsumer.get(
-        EndPoints.getRideDriverInfo,
-      );
+      final response =
+          await _apiConsumer.get(EndPoints.getRideDriverInfo, refresh: refresh);
 
       return response.fold((failure) => Left(failure), (data) {
         return Right(DriverInfoModel.fromJson(data['data']));
@@ -820,11 +826,11 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, LoadingInfoEntity>> getLoadingInfo() async {
+  Future<Either<Failure, LoadingInfoEntity>> getLoadingInfo(
+      bool refresh) async {
     try {
-      final response = await _apiConsumer.get(
-        EndPoints.getLoadingInfo,
-      );
+      final response =
+          await _apiConsumer.get(EndPoints.getLoadingInfo, refresh: refresh);
 
       return response.fold((failure) => Left(failure), (data) {
         return Right(LoadingInfoModel.fromJson(data['data']));
@@ -865,6 +871,24 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
     } catch (e) {
       print("e.toString ${e.toString()}");
       return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> listenToUpdateLocation(
+      UpdateSocketLocationParams params) async {
+    try {
+      CliLogger.info('Listen To Update Location');
+      SharedWebSocket.socket!.emit(SocketIOEvents.updateDriverLocation, {
+        "location": {"longitude": params.longitude, "latitude": params.latitude}
+      });
+      CliLogger.info(
+          "SocketIOEvents.updateDriverLocation${SocketIOEvents.updateDriverLocation}");
+
+      return const Right(true);
+    } catch (e) {
+      CliLogger.error('can\'t Update Location error $e');
+      return const Left(ServerFailure(message: "can't Update Location "));
     }
   }
 

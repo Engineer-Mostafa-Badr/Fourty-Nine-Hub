@@ -8,16 +8,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/localization/locales.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../domain/entity/custom_page_categories_entity.dart';
-
 
 class CustomPageCategoryCard extends StatefulWidget {
   final CustomPageCategoriesEntity category;
@@ -29,7 +26,7 @@ class CustomPageCategoryCard extends StatefulWidget {
   final bool removeFavorite;
   final bool? fromHome;
 
-   CustomPageCategoryCard({
+  CustomPageCategoryCard({
     super.key,
     this.canRegister = false,
     this.fromHome = true,
@@ -58,132 +55,195 @@ class _MainCategoryBannerState extends State<CustomPageCategoryCard> {
   Widget build(BuildContext context) {
     return widget.fromHome == true
         ? Container(
-      decoration: BoxDecoration(
-        // border: Border.all(color: Colors.grey),
-        borderRadius: BorderRadius.circular(30.r),
-      ),
-      clipBehavior: Clip.antiAliasWithSaveLayer,
-      child: CachedNetworkImage(
-        width: double.infinity,
-        imageUrl: widget.category.banner,
-        height: MediaQuery
-            .sizeOf(context)
-            .height * 0.13.h,
-        imageBuilder: (context, i) =>
-            Column(
-              children: [
-                Expanded(
-                  child: Stack(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                            vertical: 10.h, horizontal: 15.w),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30.r),
-                          color: widget.category.banner.isNotEmpty
-                              ? Colors.transparent
-                              : AppColors.PRIMARY_COLOR,
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: CachedNetworkImageProvider(
-                              widget.category.banner,
+            decoration: BoxDecoration(
+              // border: Border.all(color: Colors.grey),
+              borderRadius: BorderRadius.circular(30.r),
+            ),
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            child: CachedNetworkImage(
+              width: double.infinity,
+              imageUrl: widget.category.banner,
+              height: MediaQuery.sizeOf(context).height * 0.13.h,
+              imageBuilder: (context, i) => Column(
+                children: [
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                              vertical: 10.h, horizontal: 15.w),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30.r),
+                            color: widget.category.banner.isNotEmpty
+                                ? Colors.transparent
+                                : AppColors.PRIMARY_COLOR,
+                            image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: CachedNetworkImageProvider(
+                                widget.category.banner,
+                              ),
+                              // colorFilter: ColorFilter.mode(
+                              //   Colors.black.withOpacity(0.3),
+                              //   BlendMode.darken,
+                              // ),
                             ),
-                            // colorFilter: ColorFilter.mode(
-                            //   Colors.black.withOpacity(0.3),
-                            //   BlendMode.darken,
-                            // ),
                           ),
                         ),
-                      ),
-                      Positioned(
-                        right: 0,
-                        left: 0,
-                        top: 0,
-                        bottom: 0,
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            PositionedDirectional(
-                                end: 0, child: _buildRegisterButton()),
-                          ],
+                        Positioned(
+                          right: 0,
+                          left: 0,
+                          top: 0,
+                          bottom: 0,
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              PositionedDirectional(
+                                  end: 0, child: _buildRegisterButton()),
+                            ],
+                          ),
                         ),
-                      ),
-                      context
-                          .read<UserCubit>()
-                          .isLoggedIn
-                          ? widget.removeFavorite
-                          ? Container()
-                          : PositionedDirectional(
-                        top: 10.h,
-                        end: 10.w,
-                        child: IconAppButton(
-                          icon: widget.category.enabled == false
-                              ? Icons.favorite_outline
-                              : Icons.favorite,
-                          onPressed: () async {
-                            final result =
-                            await widget.onFavorite();
-                            print("resutlt=$result");
-                            if (result == true) {
-                              print(result);
-                              setState(() {
-                                widget.category.selected =
-                                !widget.category.enabled;
-                                print(widget.category.enabled);
-                                widget.isSelected = result;
-                                print("===================$result");
-                              });
-                            }
-                          },
-                          color: AppColors.SECONDARY_COLOR,
-                        ),)
-                          : const SizedBox.shrink(),
-                    ],
+                        widget.removeFavorite
+                            ? Container()
+                            : PositionedDirectional(
+                                top: 10.h,
+                                end: 10.w,
+                                child: IconAppButton(
+                                  icon: widget.category.selected == false
+                                      ? Icons.favorite_outline
+                                      : Icons.favorite,
+                                  onPressed: () async {
+                                    final result = await widget.onFavorite();
+                                    print("resutlt=$result");
+                                    print(result);
+                                    setState(() {
+                                      widget.category.selected =
+                                          !widget.category.selected;
+                                      print(widget.category.selected);
+                                      widget.isSelected = result;
+                                      print("===================$result");
+                                    });
+                                  },
+                                  color: AppColors.SECONDARY_COLOR,
+                                ),
+                              ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Label(
+                      overflow: TextOverflow.ellipsis,
+                      text: context.isArabic
+                          ? widget.category.nameAr
+                          : widget.category.nameEn,
+                      style: TextStyle(
+                          color: context.isDarkMode
+                              ? Colors.white
+                              : AppColors.PRIMARY_COLOR,
+                          fontWeight: FontWeight.bold,
+                          fontSize: widget.fontSize ?? 30.sp),
+                    ),
+                  ),
+                ],
+              ),
+              placeholder: (context, u) => Shimmer.fromColors(
+                baseColor: Colors.grey[100]!,
+                highlightColor: Colors.white24,
+                child: Container(
+                  height: MediaQuery.sizeOf(context).height * 0.08,
+                  decoration: BoxDecoration(
+                    color: AppColors.AUTH_CONTAINER_COLOR,
+                    borderRadius: BorderRadius.circular(5),
+                    border: Border.all(color: Colors.grey),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Label(
-                    overflow: TextOverflow.ellipsis,
-                    text: context.isArabic
-                        ? widget.category.nameAr
-                        : widget.category.nameEn,
-                    style: TextStyle(
-                        color: context.isDarkMode ? Colors.white : AppColors
-                            .PRIMARY_COLOR,
-                        fontWeight: FontWeight.bold,
-                        fontSize: widget.fontSize ?? 30.sp),
-                  ),
-                ),
-              ],
-            ),
-        placeholder: (context, u) =>
-            Shimmer.fromColors(
-              baseColor: Colors.grey[100]!,
-              highlightColor: Colors.white24,
-              child: Container(
-                height: MediaQuery
-                    .sizeOf(context)
-                    .height * 0.08,
+              ),
+              errorWidget: (context, url, error) => Container(
+                padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5.w),
                 decoration: BoxDecoration(
-                  color: AppColors.AUTH_CONTAINER_COLOR,
                   borderRadius: BorderRadius.circular(5),
-                  border: Border.all(color: Colors.grey),
+                  color: AppColors.PRIMARY_COLOR,
+                ),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    PositionedDirectional(
+                        end: 0, child: _buildRegisterButton()),
+                    Label(
+                      text: context.isArabic
+                          ? widget.category.nameAr
+                          : widget.category.nameEn,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: widget.fontSize ?? 45.sp),
+                    ),
+                    PositionedDirectional(
+                      start: 0,
+                      child: Column(
+                        children: [
+                          InkWell(
+                            onTap: () async {
+                              final result = await widget.onFavorite();
+                              if (result != null &&
+                                  result != widget.isSelected) {
+                                setState(() {
+                                  widget.isSelected = result;
+                                  print("===================$result");
+                                });
+                              }
+                            },
+                            child: Icon(
+                              widget.category.selected == true
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                              color: AppColors.SECONDARY_COLOR,
+                            ),
+                          ),
+                          // Sizer(
+                          //   height: 15.h,
+                          // ),
+                          // Label(
+                          //   text: '${widget.category.total.toShortScale} ${Labels.ads}',
+                          //   style: Styles.mediumText(
+                          //     fontWeight: FontWeight.bold,
+                          //     color: Colors.white,
+                          //   ),
+                          // )
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-        errorWidget: (context, url, error) =>
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5.w),
+          )
+        : CachedNetworkImage(
+            imageUrl: widget.category.banner,
+            width: MediaQuery.sizeOf(context).width,
+            height: MediaQuery.sizeOf(context).height * 0.09,
+            imageBuilder: (context, i) => Container(
+              padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 10.w),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                color: AppColors.PRIMARY_COLOR,
+                borderRadius: BorderRadius.circular(10.r),
+                color: widget.category.banner.isNotEmpty
+                    ? Colors.transparent
+                    : AppColors.PRIMARY_COLOR,
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: CachedNetworkImageProvider(
+                    widget.category.banner,
+                  ),
+                  colorFilter: ColorFilter.mode(
+                    Colors.black.withOpacity(0.3),
+                    BlendMode.darken,
+                  ),
+                ),
               ),
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  PositionedDirectional(
-                      end: 0, child: _buildRegisterButton()),
+                  PositionedDirectional(end: 0, child: _buildRegisterButton()),
                   Label(
                     text: context.isArabic
                         ? widget.category.nameAr
@@ -191,39 +251,31 @@ class _MainCategoryBannerState extends State<CustomPageCategoryCard> {
                     style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
-                        fontSize: widget.fontSize ?? 45.sp),
+                        fontSize: 40.sp),
                   ),
                   PositionedDirectional(
                     start: 0,
                     child: Column(
                       children: [
-                        context
-                            .read<UserCubit>()
-                            .isLoggedIn
+                        context.read<UserCubit>().isLoggedIn
                             ? InkWell(
-                          onTap: () async {
-                            final result = await widget.onFavorite();
-                            if (result != null &&
-                                result != widget.isSelected) {
-                              setState(() {
-                                widget.isSelected = result;
-                                print("===================$result");
-                              });
-                            }
-                          },
-                          child: Icon(
-                            widget.isSelected == true
-                                ? Icons.favorite
-                                : Icons.favorite_border,
-                            color: AppColors.SECONDARY_COLOR,
-                          ),
-                        )
+                                onTap: () async => await widget.onFavorite(),
+                                child: Icon(
+                                  widget.category.selected == true
+                                      ? Icons.favorite
+                                      : Icons.favorite,
+                                  color: widget.category.selected == true
+                                      ? AppColors.SECONDARY_COLOR
+                                      : AppColors.LIGHT_GRAY_COLOR2,
+                                ),
+                              )
                             : const SizedBox.shrink(),
                         // Sizer(
                         //   height: 15.h,
                         // ),
                         // Label(
-                        //   text: '${widget.category.total.toShortScale} ${Labels.ads}',
+                        //   text:
+                        //       '${widget.category.numberOfAds.toShortScale} ${LocaleKeys.ad.localize}',
                         //   style: Styles.mediumText(
                         //     fontWeight: FontWeight.bold,
                         //     color: Colors.white,
@@ -235,142 +287,58 @@ class _MainCategoryBannerState extends State<CustomPageCategoryCard> {
                 ],
               ),
             ),
-      ),
-    )
-        : CachedNetworkImage(
-      imageUrl: widget.category.banner,
-      width: MediaQuery
-          .sizeOf(context)
-          .width,
-      height: MediaQuery
-          .sizeOf(context)
-          .height * 0.09,
-      imageBuilder: (context, i) =>
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 10.w),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.r),
-              color: widget.category.banner.isNotEmpty
-                  ? Colors.transparent
-                  : AppColors.PRIMARY_COLOR,
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                image: CachedNetworkImageProvider(
-                  widget.category.banner,
-                ),
-                colorFilter: ColorFilter.mode(
-                  Colors.black.withOpacity(0.3),
-                  BlendMode.darken,
+            placeholder: (context, u) => Shimmer.fromColors(
+              baseColor: Colors.grey[100]!,
+              highlightColor: Colors.white24,
+              child: Container(
+                height: MediaQuery.sizeOf(context).height * 0.08,
+                decoration: BoxDecoration(
+                  color: AppColors.AUTH_CONTAINER_COLOR,
+                  borderRadius: BorderRadius.circular(5),
+                  border: Border.all(color: Colors.grey),
                 ),
               ),
             ),
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                PositionedDirectional(end: 0, child: _buildRegisterButton()),
-                Label(
-                  text: context.isArabic
-                      ? widget.category.nameAr
-                      : widget.category.nameEn,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 40.sp),
-                ),
-                PositionedDirectional(
-                  start: 0,
-                  child: Column(
-                    children: [
-                      context
-                          .read<UserCubit>()
-                          .isLoggedIn
-                          ? InkWell(
-                        onTap: () async => await widget.onFavorite(),
-                        child: Icon(
-                          widget.category.enabled == true
-                              ? Icons.favorite
-                              : Icons.favorite,
-                          color: widget.category.enabled == true
-                              ? AppColors.SECONDARY_COLOR
-                              : AppColors.LIGHT_GRAY_COLOR2,
-                        ),
-                      )
-                          : const SizedBox.shrink(),
-                      // Sizer(
-                      //   height: 15.h,
-                      // ),
-                      // Label(
-                      //   text:
-                      //       '${widget.category.numberOfAds.toShortScale} ${LocaleKeys.ad.localize}',
-                      //   style: Styles.mediumText(
-                      //     fontWeight: FontWeight.bold,
-                      //     color: Colors.white,
-                      //   ),
-                      // )
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-      placeholder: (context, u) =>
-          Shimmer.fromColors(
-            baseColor: Colors.grey[100]!,
-            highlightColor: Colors.white24,
-            child: Container(
-              height: MediaQuery
-                  .sizeOf(context)
-                  .height * 0.08,
+            errorWidget: (context, url, error) => Container(
+              padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5),
               decoration: BoxDecoration(
-                color: AppColors.AUTH_CONTAINER_COLOR,
                 borderRadius: BorderRadius.circular(5),
-                border: Border.all(color: Colors.grey),
+                color: AppColors.PRIMARY_COLOR,
+              ),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  PositionedDirectional(end: 0, child: _buildRegisterButton()),
+                  Label(
+                    text: context.isArabic
+                        ? widget.category.nameAr
+                        : widget.category.nameEn,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 45.sp),
+                  ),
+                  PositionedDirectional(
+                    start: 0,
+                    // top: 0,
+                    child: Column(
+                      children: [
+                        context.read<UserCubit>().isLoggedIn
+                            ? InkWell(
+                                onTap: () async => await widget.onFavorite(),
+                                child: const Icon(
+                                  Icons.favorite,
+                                  color: AppColors.SECONDARY_COLOR,
+                                ),
+                              )
+                            : const SizedBox.shrink(),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
-          ),
-      errorWidget: (context, url, error) =>
-          Container(
-            padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 5),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: AppColors.PRIMARY_COLOR,
-            ),
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                PositionedDirectional(end: 0, child: _buildRegisterButton()),
-                Label(
-                  text: context.isArabic
-                      ? widget.category.nameAr
-                      : widget.category.nameEn,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 45.sp),
-                ),
-                PositionedDirectional(
-                  start: 0,
-                  // top: 0,
-                  child: Column(
-                    children: [
-                      context
-                          .read<UserCubit>()
-                          .isLoggedIn
-                          ? InkWell(
-                        onTap: () async => await widget.onFavorite(),
-                        child: const Icon(
-                          Icons.favorite,
-                          color: AppColors.SECONDARY_COLOR,
-                        ),
-                      )
-                          : const SizedBox.shrink(),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-    );
+          );
   }
 
   Widget _buildRegisterButton() {

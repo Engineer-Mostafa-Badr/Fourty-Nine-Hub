@@ -29,6 +29,7 @@ class _LogoutWidgetState extends State<LogoutWidget> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool("ISLOGIN", false);
     context.pop();
+    context.pop();
     context.go(Routes.HOME);
   }
 

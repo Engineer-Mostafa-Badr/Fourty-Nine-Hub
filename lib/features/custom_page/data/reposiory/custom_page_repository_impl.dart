@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/custom_page/data/data_source/custom_page_remote_data_source.dart';
 import 'package:fourtyninehub/features/custom_page/domain/entity/activate_entity.dart';
+import 'package:fourtyninehub/features/custom_page/domain/entity/custom_page_sub_categories_entity.dart';
 import 'package:fourtyninehub/features/custom_page/domain/entity/navigate_bar_entity.dart';
 import 'package:fourtyninehub/features/custom_page/domain/entity/social_page_entity.dart';
 import 'package:fourtyninehub/features/custom_page/domain/entity/sub_tab_entity.dart';
@@ -12,6 +13,7 @@ import 'package:fourtyninehub/features/custom_page/domain/use_case/update_sub_ta
 
 import '../../domain/entity/custom_page_categories_entity.dart';
 import '../../domain/reposiory/custom_page_repository.dart';
+import '../model/update_custom_page_categorise_model.dart';
 
 class CustomPageRepositoryImpl extends CustomPageRepository {
   final CustomPageRemoteDataSource _customPageRemoteDataSource;
@@ -48,12 +50,12 @@ class CustomPageRepositoryImpl extends CustomPageRepository {
   }
 
   @override
-  Future<Either<Failure, List<CustomPageCategoriesEntity>>> fetchFavouriteCat() {
-    return _customPageRemoteDataSource.fetchFavouriteCat();
+  Future<Either<Failure, List<CustomPageCategoriesEntity>>> fetchFavouriteCat(bool refresh) {
+    return _customPageRemoteDataSource.fetchFavouriteCat(refresh);
   }
 
   @override
-  Future<Either<Failure, bool>> updateFavouriteCat(FavouriteCatParams params) {
+  Future<Either<Failure, bool>> updateFavouriteCat(List<UpdateCustomPageCategoriesModel> params) {
     return _customPageRemoteDataSource.updateFavouriteCat(params);
   }
 
@@ -65,5 +67,10 @@ class CustomPageRepositoryImpl extends CustomPageRepository {
   @override
   Future<Either<Failure, bool>> updateActivate({required bool customPage}) {
     return _customPageRemoteDataSource.updateActivate(customPage: customPage);
+  }
+
+  @override
+  Future<Either<Failure, List<CustomPageSubCategoriesEntity>>> fetchFavouriteSubCat(String mainCategoryId) {
+    return _customPageRemoteDataSource.fetchFavouriteSubCat(mainCategoryId);
   }
 }

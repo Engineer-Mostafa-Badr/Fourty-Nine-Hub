@@ -168,6 +168,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 //     onTap: () =>
                                 //         context.push(Routes.FAVOURITE)),
 
+
                                 // drawerListTile(
                                 //     image: Assets.history,
                                 //     label: LocaleKeys.requestHistory.localize,
@@ -341,6 +342,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     context.push(Routes.SNAP);
                                   },
                                 ),
+
                                 drawerRollWidget(
                                   label: LocaleKeys.chat.localize,
                                   image: Assets.whatsApp,
@@ -977,13 +979,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         ),
                         Expanded(
                           child: Label(
-                            text: ' ${user?.wallet ?? 0}',
+                            text: '${user?.wallet ?? 0}',
                             style: Styles.mediumText(
-                              decoration: TextDecoration.underline,
-                              color: context.isDarkMode
-                                  ? Colors.white
-                                  : Colors.black,
-                            ),
+                                decoration: TextDecoration.underline),
                           ),
                         )
                       ],

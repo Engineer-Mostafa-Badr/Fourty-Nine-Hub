@@ -78,6 +78,7 @@ abstract class SocketIOEvents {
   static const String connectMe = 'connectMe';
   static const String disconnectMe = 'disconnectMe';
   static const String sendPoint = 'Stream:SendPoint';
+  static const String updateDriverLocation = 'ride:UPDATE_DRIVER_LOCATION';
 }
 
 //

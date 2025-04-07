@@ -3,6 +3,8 @@ import 'package:fourtyninehub/common/widgets/stateless/dynamic/CarouselSlider.da
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_media_model.dart';
 
+import '../../../../../res/style/app_colors.dart';
+
 class ImagesProfileForRestaurant extends StatefulWidget {
   const ImagesProfileForRestaurant({
     super.key,
@@ -55,8 +57,10 @@ class _ImagesProfileForRestaurantState
               widget.restaurantMedia?.length ?? 0,
               (index) => Icon(
                 Icons.circle,
-                color: index == currentIndex ? Colors.black87 : Colors.black26,
-                size: 15,
+                color: index == currentIndex
+                    ? AppColors.BG_GRAY_COLOR
+                    : AppColors.LIGHT_GRAY_COLOR2,
+                size: index == currentIndex ? 19 : 14,
               ),
             ),
           ),

@@ -11,13 +11,15 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/controllers/ride_register/ride_register_cubit.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import '../widgets/register_floating_action_button.dart';
 
 class WelcomeRideRegister extends StatefulWidget {
-  const WelcomeRideRegister({super.key});
-
+  const WelcomeRideRegister({super.key, required this.isShipping});
+  final bool isShipping;
   @override
   State<WelcomeRideRegister> createState() => _WelcomeRideRegisterState();
 }
@@ -26,7 +28,13 @@ class _WelcomeRideRegisterState extends State<WelcomeRideRegister> {
 
   @override
   void initState() {
-    context.read<RideCubit>().loadRegisterData(context);
+    if(widget.isShipping) {
+      context.read<RideRegisterCubit>().fetchShippingCategories(UserCubit.to.state.data?.id ?? "",false);
+      context.read<RideRegisterCubit>().fetchShippingCategories(UserCubit.to.state.data?.id ?? "",true);
+    }else{
+      context.read<RideRegisterCubit>().fetchRideCategories(UserCubit.to.state.data?.id ?? "",false);
+      context.read<RideRegisterCubit>().fetchRideCategories(UserCubit.to.state.data?.id ?? "",true);
+    }
     super.initState();
   }
 
@@ -35,17 +43,17 @@ class _WelcomeRideRegisterState extends State<WelcomeRideRegister> {
 
     return CustomScaffold(
       appBar: const HomeAppbar(),
-      body: BlocBuilder<RideCubit, RideState>(
+      body: BlocBuilder<RideRegisterCubit, RideRegisterState>(
         builder: (context,state) {
-          var cubit = context.read<RideCubit>();
+          var cubit = context.read<RideRegisterCubit>();
           return Column(
             children: [
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 32,left: 16,right: 16,),
-                  child: BlocBuilder<RideCubit, RideState>(
+                  child: BlocBuilder<RideRegisterCubit, RideRegisterState>(
                     builder: (context,state) {
-                      var cubit = context.read<RideCubit>();
+                      var cubit = context.read<RideRegisterCubit>();
                       if(state.isLoading){
                         return const Center(child: CircularProgressIndicator(),);
                       }
@@ -67,13 +75,13 @@ class _WelcomeRideRegisterState extends State<WelcomeRideRegister> {
                               mainAxisSpacing: 16,
                               crossAxisSpacing: 16,
                               children: List.generate(
-                                state.isShipping==true?state.shippingSubCategories?.where((e)=>e.isEnabled==true).toList().length??0:state.rideSubCategories?.where((e)=>e.isEnabled==true).toList().length??0,
+                                widget.isShipping==true?state.shippingSubCategories?.where((e)=>e.isEnabled==true).toList().length??0:state.rideSubCategories?.where((e)=>e.isEnabled==true).toList().length??0,
                                 (index) {
-                                  var list = state.isShipping==true?state.shippingSubCategories?.where((e)=>e.isEnabled==true).toList():state.rideSubCategories?.where((e)=>e.isEnabled==true).toList();
+                                  var list = widget.isShipping==true?state.shippingSubCategories?.where((e)=>e.isEnabled==true).toList():state.rideSubCategories?.where((e)=>e.isEnabled==true).toList();
                                   var subCategory = list?[index];
                                   return  InkWell(
                                     onTap: () {
-                                      if(state.isShipping==true){
+                                      if(widget.isShipping==true){
                                         cubit.onSelectShippingSubCategory(subCategory?.subCategoryId??'',context);
                                       }else{
                                         cubit.onSelectSubCategory(subCategory?.subCategoryId??'',context);
@@ -116,7 +124,7 @@ class _WelcomeRideRegisterState extends State<WelcomeRideRegister> {
               ),
               RegisterNextRow(
                 onTap: () {
-                  if(state.isShipping==true){
+                  if(widget.isShipping==true){
                     if(state.shippingSubCategories?.where((e)=>e.isSelected==true).toList().isEmpty??false){
                       showErrorMessage(context, context.isArabic?'يجب اختيار صنف واحد على الاقل':'Please select at least one category');
                       return;

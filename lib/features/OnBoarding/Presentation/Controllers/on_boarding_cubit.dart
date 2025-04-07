@@ -50,19 +50,23 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
     'انطلق بالبث المباشر! شارك لحظاتك مع العالم في بث مباشر بلا حدود.',
   ];
 
-  Future<void> getOnboardingData() async {
-    // CacheManager.getShowOnboarding();
-    emit(
-      state.copyWith(
-        currentIndex: 0,
-        image: images[0],
-        titleAr: titlesAr[0],
-        titleEn: titlesEn[0],
-      ),
-    );
-  }
+  // Future<void> getOnboardingData() async {
+  //   // CacheManager.getShowOnboarding();
+  //   emit(
+  //     state.copyWith(
+  //       currentIndex: 0,
+  //       image: images[0],
+  //       titleAr: titlesAr[0],
+  //       titleEn: titlesEn[0],
+  //     ),
+  //   );
+  // }
 
   Future<void> changeOnboardingData(int currentIndex) async {
+    print('isClosed: $isClosed before emit');
+    if (isClosed) return; // Prevent emitting after closing
+    // emit(state),
+    print('currentIndex: $currentIndex after emit');
     emit(
       state.copyWith(
         currentIndex: currentIndex,
@@ -71,5 +75,7 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
         titleEn: titlesEn[currentIndex],
       ),
     );
+    print('currentIndex: $currentIndex before emit');
+
   }
 }

@@ -2242,6 +2242,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.6.4"
+  photo_manager_image_provider:
+    dependency: transitive
+    description:
+      name: photo_manager_image_provider
+      sha256: b6015b67b32f345f57cf32c126f871bced2501236c405aafaefa885f7c821e4f
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.0"
   photo_view:
     dependency: "direct main"
     description:
@@ -2839,6 +2847,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.0"
+  tf_dio_cache:
+    dependency: "direct main"
+    description:
+      name: tf_dio_cache
+      sha256: "6e4a7b0edea91f1b1bae95cd9ffbddce5211417aa3acfcc4210afef1e7b144a0"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
+  timeago:
+    dependency: "direct main"
+    description:
+      name: timeago
+      sha256: "054cedf68706bb142839ba0ae6b135f6b68039f0b8301cbe8784ae653d5ff8de"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.7.0"
   timezone:
     dependency: transitive
     description:
@@ -3027,10 +3051,10 @@ packages:
     dependency: "direct main"
     description:
       name: video_player
-      sha256: "4a8c3492d734f7c39c2588a3206707a05ee80cef52e8c7f3b2078d430c84bc17"
+      sha256: "7d78f0cfaddc8c19d4cb2d3bebe1bfef11f2103b0a03e5398b303a1bf65eeb14"
       url: "https://pub.dev"
     source: hosted
-    version: "2.9.2"
+    version: "2.9.5"
   video_player_android:
     dependency: transitive
     description:
@@ -3167,6 +3191,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.18.0"
+  wechat_assets_picker:
+    dependency: "direct main"
+    description:
+      name: wechat_assets_picker
+      sha256: "65104fff598394fcf1c9a75a8a65a7aa9687485534b44d6e85275774d015df45"
+      url: "https://pub.dev"
+    source: hosted
+    version: "9.5.0"
+  wechat_picker_library:
+    dependency: transitive
+    description:
+      name: wechat_picker_library
+      sha256: a42e09cb85b15fc9410f6a69671371cc60aa99c4a1f7967f6593a7f665f6f47a
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.5"
   widget_and_text_animator:
     dependency: "direct main"
     description:

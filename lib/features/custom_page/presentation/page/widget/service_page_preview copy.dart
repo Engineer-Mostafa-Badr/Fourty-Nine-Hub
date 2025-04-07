@@ -4,7 +4,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/ads/app_open_model.dart';
 import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/drawer.dart';
@@ -38,7 +37,6 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
-import 'package:restart_app/restart_app.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ServicePagePreview extends StatefulWidget {
@@ -136,12 +134,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
           MainCategoriesCubit controller, MainCategoriesState state) =>
       [
         MainCategoriesListView(controller: controller, state: state),
-        BlocProvider(
-          create: (context) => serviceLocator<MainCategoriesTapsCubit>(),
-          child: Builder(builder: (context) {
-            return MainCategoriesGrideViewSection();
-          }),
-        ),
+        MainCategoriesGrideViewSection(controller: controller, state: state),
         BlocProvider(
           create: (context) => serviceLocator<MainCategoriesTapsCubit>(),
           child: Builder(builder: (context) {
@@ -157,6 +150,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
       ];
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     print("objectUser${UserCubit.to.state.data?.id}");
@@ -198,22 +192,25 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
             const SliverToBoxAdapter(child: Sizer()),
             SliverToBoxAdapter(
               child: ScrollableTextWithAnimation(
-                textDirection: context.isArabic
-                    ? TextDirection.rtl
-                    : TextDirection.ltr,
+                textDirection:
+                    context.isArabic ? TextDirection.rtl : TextDirection.ltr,
               ),
             ),
             const SliverToBoxAdapter(child: Sizer()),
-            SliverToBoxAdapter(child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Row(children: [
-                Expanded(child: _buildStarWidget()),
-                const Sizer(width: 32,),
-                Expanded(
-                  child: _pickMeAndComeWithUWidget(),
-                ),
-              ]),
-            ),),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Row(children: [
+                  Expanded(child: _buildStarWidget()),
+                  const Sizer(
+                    width: 32,
+                  ),
+                  Expanded(
+                    child: _pickMeAndComeWithUWidget(),
+                  ),
+                ]),
+              ),
+            ),
             const SliverToBoxAdapter(child: Sizer()),
             SliverToBoxAdapter(
               child: CustomAnimatedText(
@@ -251,7 +248,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
                               CacheManager.selectedCategoryView)!],
                     );
                   } else {
-                    return SliverToBoxAdapter(child: const SizedBox.shrink());
+                    return const SliverToBoxAdapter(child: SizedBox.shrink());
                   }
                 },
               ),
@@ -262,48 +259,48 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
     );
   }
 
-  Widget _buildMainCategoriesViews() {
-    return Container(
-      decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          borderRadius: BorderRadius.circular(20.r),
-          boxShadow: const [
-            BoxShadow(
-              color: AppColors.GRAY_LIGHT_COLOR3,
-              blurRadius: 5,
-              spreadRadius: 5,
-            )
-          ]),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20.r),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            _buildItemTabBar(
-              SvgPicture.asset(
-                Assets.threeDots,
-                height: 34.h,
-                width: 34.h,
-              ),
-              Routes.MAINCATEGORIESTREE,
-              () => HandleCashback.setCount('threeDotsCount', context),
-            ),
-            _buildItemTabBar(
-                SvgPicture.asset(
-                  Assets.mobile,
-                  height: 34.h,
-                  width: 34.h,
-                ),
-                Routes.MAINCATEGORIESCARDS, () {
-              AdInterstitialTop.loadIntersitialAd();
-              AdInterstitialTop.showInterstitialAd();
-              HandleCashback.setCount('mainCategoriesSliderCount', context);
-            }),
-          ],
-        ),
-      ),
-    );
-  }
+  // Widget _buildMainCategoriesViews() {
+  //   return Container(
+  //     decoration: BoxDecoration(
+  //         color: Theme.of(context).scaffoldBackgroundColor,
+  //         borderRadius: BorderRadius.circular(20.r),
+  //         boxShadow: const [
+  //           BoxShadow(
+  //             color: AppColors.GRAY_LIGHT_COLOR3,
+  //             blurRadius: 5,
+  //             spreadRadius: 5,
+  //           )
+  //         ]),
+  //     child: ClipRRect(
+  //       borderRadius: BorderRadius.circular(20.r),
+  //       child: Row(
+  //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //         children: [
+  //           _buildItemTabBar(
+  //             SvgPicture.asset(
+  //               Assets.threeDots,
+  //               height: 34.h,
+  //               width: 34.h,
+  //             ),
+  //             Routes.MAINCATEGORIESTREE,
+  //             () => HandleCashback.setCount('threeDotsCount', context),
+  //           ),
+  //           _buildItemTabBar(
+  //               SvgPicture.asset(
+  //                 Assets.mobile,
+  //                 height: 34.h,
+  //                 width: 34.h,
+  //               ),
+  //               Routes.MAINCATEGORIESCARDS, () {
+  //             AdInterstitialTop.loadIntersitialAd();
+  //             AdInterstitialTop.showInterstitialAd();
+  //             HandleCashback.setCount('mainCategoriesSliderCount', context);
+  //           }),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget _buildItemTabBar(
     Widget icon,
@@ -322,7 +319,6 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
       ),
     );
   }
-
 
   // BlocBuilder<ThumbnailsCubit, BasicState<List<RideThumbnailEntity>>>
   _pickMeAndComeWithUWidget() {
@@ -385,7 +381,6 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
     );
   }
 
-
   Widget itemAuctionAndInstallmentWidget(
       String label, Function function, IconData icon) {
     return Expanded(
@@ -439,22 +434,18 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
     );
   }
 
-  Widget _buildRideSubCategoryItem({
-    required String title,
-    String? route,
-    required Function() onTab}) {
+  Widget _buildRideSubCategoryItem(
+      {required String title, String? route, required Function() onTab}) {
     return InkWell(
       // onTap: () => context.push(Routes.ADS, extra: service.value()),
       onTap: () {
         onTab();
         route != null ? context.push(route) : null;
       },
-      child:  Container(
+      child: Container(
         height: kToolbarHeight * 2.h,
         decoration: BoxDecoration(
-          color: Theme
-              .of(context)
-              .scaffoldBackgroundColor,
+          color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(40.r),
           boxShadow: [
             BoxShadow(
@@ -471,8 +462,14 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Image.asset(Assets.joinTrip,fit: BoxFit.fill,width: double.infinity,),
-            Container(color: Colors.black38,),
+            Image.asset(
+              Assets.joinTrip,
+              fit: BoxFit.fill,
+              width: double.infinity,
+            ),
+            Container(
+              color: Colors.black38,
+            ),
             Label(
               text: title,
               style: Styles.mediumText(
@@ -597,7 +594,7 @@ class CustomDeActivateDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  AlertDialog(
+    return AlertDialog(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
       title: Text(
@@ -637,9 +634,11 @@ class CustomAnimatedText extends StatelessWidget {
     this.onTap,
     this.textDirection,
   });
+
   final String text;
   final void Function()? onTap;
   final TextDirection? textDirection;
+
   @override
   Widget build(BuildContext context) {
     return ClickableWidget(
@@ -725,6 +724,7 @@ class MainCategoriesListView extends StatelessWidget {
     required this.controller,
     required this.state,
   });
+
   final MainCategoriesState state;
   final MainCategoriesCubit controller;
 
@@ -740,11 +740,16 @@ class MainCategoriesListView extends StatelessWidget {
             AdInterstitialTop.loadIntersitialAd();
             AdInterstitialTop.showInterstitialAd();
             HandleCashback.setCount('mainCategoriesCount', context);
-            if(state.customPage![index].id=='62c8b5b09332225799fe335e'){
+            print('state.customPage![index].id ${state.customPage![index].id}');
+            print('state.customPage![index] ${state.customPage![index]}');
+            if (state.customPage![index].id == '62c8b5b09332225799fe335e') {
               context.push(Routes.MARRIAGESUBCATEGORIES,
                   extra: state.customPage![index]);
-            }else{
-              context.push(Routes.SUBCATEGORIES, extra: state.customPage![index]);
+            } else {
+              context.push(
+                Routes.CustomPageSubCategoriesView,
+                extra: state.customPage![index],
+              );
             }
           },
           child: MainCategoryBanner(

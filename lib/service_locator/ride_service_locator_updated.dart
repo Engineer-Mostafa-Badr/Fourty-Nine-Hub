@@ -23,7 +23,9 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/register_ride
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/register_ride_special_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/request_trip_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/retrieve_client_latest_trip_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_socket_location_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/controllers/ride_register/ride_register_cubit.dart';
 import 'package:get_it/get_it.dart';
 
 import '../features/RideFeature/data/datasources/ride_local_data_source.dart';
@@ -102,6 +104,8 @@ class RideServiceLocatorUpdated {
         RecordingTripUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<MakeNonTrackingRequestTripUsecase>(() =>
         MakeNonTrackingRequestTripUsecase(serviceLocator()));
+    serviceLocator.registerLazySingleton<UpdateSocketLocationUseCase>(() =>
+        UpdateSocketLocationUseCase(serviceLocator()));
 
     // ---------------------------------- cubits ----------------------------------
 
@@ -118,6 +122,22 @@ class RideServiceLocatorUpdated {
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+        ));
+    serviceLocator.registerFactory<RideRegisterCubit>(() => RideRegisterCubit(
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

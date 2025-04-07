@@ -27,7 +27,10 @@ class CreateRiderOfferParams {
     required this.lng,
   });
   Map<String, dynamic> toJson() => {
-        "priceOffer": price,
-        "location": [lat, lng]
-      };
+    "priceOffer": price,
+    "location": {
+      "latitude": lat,
+      "longitude": lng
+    }
+  };
 }

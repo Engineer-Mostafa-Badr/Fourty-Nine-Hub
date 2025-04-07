@@ -34,4 +34,19 @@ class RegisterRideNotSpecialEntity {
       "driverLicenseNumber": driverLicenseNumber
     };
   }
+
+  //fromJson
+  factory RegisterRideNotSpecialEntity.fromJson(Map<String, dynamic> json) {
+    return RegisterRideNotSpecialEntity(
+      driverFirstName: json['driverFirstName'],
+      driverLastName: json['driverLastName'],
+      carModel: json['carModel'],
+      subcategoryId: json['subcategoryId'],
+      phone: json['phone'],
+      plateInfo: json['plateInfo'],
+      idNumber: json['idNumber'],
+      birthday: json['birthday'],
+      driverLicenseNumber: json['driverLicenseNumber'],
+    );
+  }
 }

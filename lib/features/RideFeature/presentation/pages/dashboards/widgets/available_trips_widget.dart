@@ -13,6 +13,7 @@
 // import '../../widgets/dialog_widget/show_custom_dialog_trip.dart';
 // import 'edit_price_widget.dart';
 
+
 // class AvailableTripsWidget extends StatelessWidget {
 //   final bool isWithAnotherPrice;
 //   final TripEntity tripEntity;
@@ -24,7 +25,6 @@
 //     return Container(
 //       width: context.screenWidth,
 //       padding: const EdgeInsets.symmetric(vertical: 8.0),
-//       child: Row(
 //         crossAxisAlignment: CrossAxisAlignment.center,
 //         children: [
 //           Expanded(

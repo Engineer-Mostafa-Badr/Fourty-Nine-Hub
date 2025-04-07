@@ -75,7 +75,7 @@ class _SocialPageState extends State<SocialPage> {
                           leading: Radio<int>(
                             value: index,
                             groupValue: _selectedItem,
-                            activeColor: Theme.of(context).primaryColor,
+                            // activeColor: Theme.of(context).primaryColor,
                             onChanged: (int? value) {
                               setState(() {
                                 _selectedItem = value;
@@ -135,27 +135,27 @@ class _SocialPageState extends State<SocialPage> {
 
               print('Selected Item: ${_items[_selectedItem!]}');
             },text: LocaleKeys.next.localize,);
-            return CustomElevatedButton(
-              child: Text(
-                LocaleKeys.next.localize,
-                style: const TextStyle(color: AppColors.whiteColor),
-              ),
-              onPressed: () {
-                bool face = _selectedItem == 0;
-                bool insta = _selectedItem == 1;
-                bool tweet = _selectedItem == 2;
-
-                context.read<CustomPageCubit>().updateSocialPage(
-                      SocialPageParams(
-                        face: face,
-                        insta: insta,
-                        tweet: tweet,
-                      ),
-                    );
-
-                print('Selected Item: ${_items[_selectedItem!]}');
-              },
-            );
+            // return CustomElevatedButton(
+            //   child: Text(
+            //     LocaleKeys.next.localize,
+            //     style: const TextStyle(color: AppColors.whiteColor),
+            //   ),
+            //   onPressed: () {
+            //     bool face = _selectedItem == 0;
+            //     bool insta = _selectedItem == 1;
+            //     bool tweet = _selectedItem == 2;
+            //
+            //     context.read<CustomPageCubit>().updateSocialPage(
+            //           SocialPageParams(
+            //             face: face,
+            //             insta: insta,
+            //             tweet: tweet,
+            //           ),
+            //         );
+            //
+            //     print('Selected Item: ${_items[_selectedItem!]}');
+            //   },
+            // );
           },
         ),
       ),
