@@ -13,6 +13,7 @@ import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -148,9 +149,11 @@ class _LoginViewState extends State<LoginView> {
                                   color: AppColors.SECONDARY_COLOR,
                                 ),
                               ),
-                              Sizer(),
+                              const Sizer(),
                               Text(
-                                LocaleKeys.giftApp.localize,
+                                context.isArabic
+                                    ? state.giftMessageEntity.ar
+                                    : state.giftMessageEntity.en,
                                 textAlign: TextAlign.center,
                                 style: Styles.mediumText(),
                               ),
@@ -259,7 +262,10 @@ class _LoginViewState extends State<LoginView> {
         },
         child: Scaffold(
           resizeToAvoidBottomInset: true,
-          appBar: const BackAppBar(),
+          appBar: const PreferredSize(
+            preferredSize: Size.fromHeight(30),
+            child: BackAppBar(),
+          ),
           body: SingleChildScrollView(
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             controller: scrollController,

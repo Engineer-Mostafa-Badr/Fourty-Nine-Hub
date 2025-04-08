@@ -17,15 +17,18 @@ class TenPercentView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: BackAppBar(
-        label: LocaleKeys.billCashback.localize,
-        actions: [
-          CustomWinnerAppbar(
-            onPressed: () {
-              context.push(Routes.WINNERSGift);
-            },
-          ),
-        ],
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          label: LocaleKeys.billCashback.localize,
+          actions: [
+            CustomWinnerAppbar(
+              onPressed: () {
+                context.push(Routes.WINNERSGift);
+              },
+            ),
+          ],
+        ),
       ),
       body: const TenPercentViewBody(),
     );

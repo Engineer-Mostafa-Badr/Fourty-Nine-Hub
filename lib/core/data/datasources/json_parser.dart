@@ -15,10 +15,13 @@ class JsonParser implements ApiConsumer {
   }
 
   @override
-  Future<Either<Failure, Map<String, dynamic>>> delete(String url,
-      {Map<String, dynamic>? data,
-      Map<String, dynamic>? queryParameters,
-      Map<String, dynamic>? headers}) {
+  Future<Either<Failure, Map<String, dynamic>>> delete(
+    String url, {
+    Map<String, dynamic>? data,
+    Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? headers,
+    bool refresh = false,
+  }) {
     // TODO: implement delete
     throw UnimplementedError();
   }
@@ -45,11 +48,14 @@ class JsonParser implements ApiConsumer {
   bool get isTokenAttached => throw UnimplementedError();
 
   @override
-  Future<Either<Failure, Map<String, dynamic>>> post(String url,
-      {Map<String, dynamic>? data,
-      FormData? formData,
-      Map<String, dynamic>? headers,
-      Map<String, dynamic>? queryParameters}) {
+  Future<Either<Failure, Map<String, dynamic>>> post(
+    String url, {
+    Map<String, dynamic>? data,
+    FormData? formData,
+    Map<String, dynamic>? headers,
+    Map<String, dynamic>? queryParameters,
+    bool refresh = false,
+  }) {
     // TODO: implement post
     throw UnimplementedError();
   }
@@ -60,6 +66,7 @@ class JsonParser implements ApiConsumer {
     Map<String, dynamic>? data,
     Map<String, dynamic>? queryParameters,
     Map<String, dynamic>? headers,
+    bool refresh = false,
   }) {
     // TODO: implement put
     throw UnimplementedError();
@@ -103,10 +110,13 @@ class JsonParser implements ApiConsumer {
   }
 
   @override
-  Future<Either<Failure, Map<String, dynamic>>> patch(String url,
-      {Map<String, dynamic>? data,
-      Map<String, dynamic>? queryParameters,
-      Map<String, dynamic>? headers}) {
+  Future<Either<Failure, Map<String, dynamic>>> patch(
+    String url, {
+    Map<String, dynamic>? data,
+    Map<String, dynamic>? queryParameters,
+    Map<String, dynamic>? headers,
+    bool refresh = false,
+  }) {
     // TODO: implement patch
     throw UnimplementedError();
   }

@@ -29,16 +29,19 @@ class _NewRouteScreenState extends State<NewRouteScreen> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: HomeAppbar(
-        key: _scaffoldKey,
-        isWithBackArrow: false,
-        language: true,
-        leading: IconButton(
-          icon: const Icon(Icons.menu), // The menu icon
-          onPressed: () {
-            HandleCashback.setCount('drawerCount', context);
-            _scaffoldKey.currentState?.openDrawer(); // Open the drawer
-          },
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: HomeAppbar(
+          key: _scaffoldKey,
+          isWithBackArrow: false,
+          language: true,
+          leading: IconButton(
+            icon: const Icon(Icons.menu), // The menu icon
+            onPressed: () {
+              HandleCashback.setCount('drawerCount', context);
+              _scaffoldKey.currentState?.openDrawer(); // Open the drawer
+            },
+          ),
         ),
       ),
       body: const NewRouteBody(),

@@ -54,9 +54,12 @@ class _AzkarViewState extends State<AzkarView> {
   Widget build(BuildContext context) {
     return CustomScaffold(
       enableCustomAppBar: true,
-      appBar: BackAppBar(
-        label: LocaleKeys.azkar.localize,
-        enableCustomAppBar: true,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          label: LocaleKeys.azkar.localize,
+          enableCustomAppBar: true,
+        ),
       ),
       body: BlocBuilder<AzkarCubit, AzkarState>(
         builder: (BuildContext context, state) {

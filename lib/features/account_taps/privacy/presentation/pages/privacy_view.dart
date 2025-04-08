@@ -33,9 +33,12 @@ class PrivacyView extends StatelessWidget {
     return CustomScaffold(
       // backgroundColor: Theme.of(context).primaryColor,
       enableCustomAppBar: true,
-      appBar: BackAppBar(
-        label: LocaleKeys.privacy.localize,
-        enableCustomAppBar: true,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          label: LocaleKeys.privacy.localize,
+          enableCustomAppBar: true,
+        ),
       ),
       body: context.read<UserCubit>().isLoggedIn
           ? BlocProvider<PrivacyCubit>(

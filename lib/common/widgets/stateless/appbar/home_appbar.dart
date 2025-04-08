@@ -64,13 +64,13 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
 
     return AppBar(
       bottom: bottom,
-      leading: IconButton(
-        icon: Image.asset(
+      leading: InkWell(
+        child: Image.asset(
           Assets.menu,
-          width: 28,
-          height: 28,
+          width: 25,
+          height: 25,
         ),
-        onPressed: () {
+        onTap: () {
           HandleCashback.setCount('drawerCount', context);
           // Scaffold.currentState?.openDrawer(); // Open the drawer
           Scaffold.of(context).openDrawer();
@@ -151,17 +151,17 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
             width: 20.w,
           ),
           const Spacer(),
-          InkWell(
-            borderRadius: BorderRadius.circular(40.r),
-            onTap: () {
-              context.push(Routes.SEARCH);
-            },
-            child: const Icon(
-              Icons.search,
-              size: 25,
-              color: AppColors.QUANTITY_COLOR,
-            ),
-          ),
+          // InkWell(
+          //   borderRadius: BorderRadius.circular(40.r),
+          //   onTap: () {
+          //     context.push(Routes.SEARCH);
+          //   },
+          //   child: const Icon(
+          //     Icons.search,
+          //     size: 25,
+          //     color: AppColors.QUANTITY_COLOR,
+          //   ),
+          // ),
           const Sizer(),
           const Sizer(),
           if (showLanguage)

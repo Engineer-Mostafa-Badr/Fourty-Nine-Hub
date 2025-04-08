@@ -18,15 +18,18 @@ class _NewTripJoinScreenState extends State<NewTripJoinScreen> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: HomeAppbar(
-        isWithBackArrow: false,
-        language: true,
-        leading: IconButton(
-          icon: const Icon(Icons.menu), // The menu icon
-          onPressed: () {
-            HandleCashback.setCount('drawerCount', context);
-            _scaffoldKey.currentState?.openDrawer(); // Open the drawer
-          },
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: HomeAppbar(
+          isWithBackArrow: false,
+          language: true,
+          leading: IconButton(
+            icon: const Icon(Icons.menu), // The menu icon
+            onPressed: () {
+              HandleCashback.setCount('drawerCount', context);
+              _scaffoldKey.currentState?.openDrawer(); // Open the drawer
+            },
+          ),
         ),
       ),
       body: NewTripJoinBody(),

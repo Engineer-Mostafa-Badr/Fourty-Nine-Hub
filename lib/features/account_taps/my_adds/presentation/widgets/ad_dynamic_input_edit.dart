@@ -163,8 +163,11 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputEdit> {
     required List<SelectionEntity> values,
   }) {
     return CustomScaffold(
-      appBar: BackAppBar(
-        label: LocaleKeys.select.localize,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          label: LocaleKeys.select.localize,
+        ),
       ),
       body: ListView.builder(
         itemCount: values.length,

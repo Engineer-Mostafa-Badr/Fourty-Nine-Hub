@@ -26,6 +26,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../domain/entities/forget_password_questions_entity.dart';
 import '../../domain/entities/register_by_phone_entity.dart';
+import '../../domain/entities/verify_otp_entity.dart';
 import '../../domain/use_cases/change_password_use_case.dart';
 import '../models/forget_password_questions_model.dart';
 
@@ -72,7 +73,7 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<Either<Failure, UserTokensEntity>> verifyOTP(
+  Future<Either<Failure, VerifyOtpEntity>> verifyOTP(
     VerifyOTPParams verifyOTPParams,
   ) {
     return _remoteDataSource.verifyOTP(verifyOTPParams);
@@ -252,7 +253,7 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<Either<Failure, UserTokensEntity>> verifyPhoneOTP(VerifyPhoneOTPParams params) {
+  Future<Either<Failure, VerifyOtpEntity>> verifyPhoneOTP(VerifyPhoneOTPParams params) {
     return _remoteDataSource.verifyPhoneOTP(params);
   }
 }

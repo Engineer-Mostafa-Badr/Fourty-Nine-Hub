@@ -50,8 +50,11 @@ class EditDoctorProfileView extends StatelessWidget {
         }
       },
       builder: (context, state) => CustomScaffold(
-        appBar: BackAppBar(
-          label: LocaleKeys.editProfile.localize,
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(30),
+          child: BackAppBar(
+            label: LocaleKeys.editProfile.localize,
+          ),
         ),
         body: state.status == EditDoctorProfileStateStatus.initial
             ? const Center(child: CircularProgressIndicator())

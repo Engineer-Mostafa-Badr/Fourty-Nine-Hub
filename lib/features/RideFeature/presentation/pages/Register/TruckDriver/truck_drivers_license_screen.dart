@@ -29,7 +29,10 @@ class TruckDriversLicenseScreen extends StatelessWidget {
     TextEditingController licenseNumberController = TextEditingController();
     TextEditingController expirationDateController = TextEditingController();
     return CustomScaffold(
-      appBar: const HomeAppbar(),
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(30),
+        child: HomeAppbar(),
+      ),
       body: Column(
         children: [
           Expanded(
@@ -44,7 +47,7 @@ class TruckDriversLicenseScreen extends StatelessWidget {
                   spacing: 4,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    closeWidget(context:context,onAcceptSaveData: (){}),
+                    closeWidget(context: context, onAcceptSaveData: () {}),
                     Label(
                       text: LocaleKeys.driversLicense.localize,
                       style: Styles.headerText(

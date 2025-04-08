@@ -59,10 +59,13 @@ class _FavouriteScreensViewState extends State<FavouriteScreensView> {
         child: DefaultTabController(
           length: 2,
           child: CustomScaffold(
-              appBar: const HomeAppbar(
-                color: Colors.red,
-                inNotifications: true,
-                isWithBackArrow: true,
+              appBar: const PreferredSize(
+                preferredSize: Size.fromHeight(30),
+                child: HomeAppbar(
+                  color: Colors.red,
+                  inNotifications: true,
+                  isWithBackArrow: true,
+                ),
               ),
               body: Padding(
                 padding: const EdgeInsets.all(8.0),

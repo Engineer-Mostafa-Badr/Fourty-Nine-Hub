@@ -25,8 +25,11 @@ class CustomButtonCount extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: BackAppBar(
-        label: LocaleKeys.requestTripJoin.localize,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          label: LocaleKeys.requestTripJoin.localize,
+        ),
       ),
       body: BlocProvider<MyAddsCubit>(
         create: (BuildContext context) => serviceLocator()

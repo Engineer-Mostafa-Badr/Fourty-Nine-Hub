@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
-import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -13,8 +10,8 @@ import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/selection_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
-import 'package:fourtyninehub/features/ads_feature/filter_ads/presentation/pages/widgets/filter_ad_dynamic_inputs.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/presentation/pages/widgets/custom_header_form.dart';
+import 'package:fourtyninehub/features/ads_feature/filter_ads/presentation/pages/widgets/filter_ad_dynamic_inputs.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
@@ -22,6 +19,7 @@ import '../../../../../core/widget/custom_scaffold.dart';
 
 class FilterAdsView extends StatefulWidget {
   final CategorizationEntity categorization;
+
   const FilterAdsView({super.key, required this.categorization});
 
   @override
@@ -55,7 +53,10 @@ class _FilterAdsViewState extends State<FilterAdsView> {
     }, builder: (context, state) {
       final controller = context.read<CreateAdCubit>();
       return CustomScaffold(
-        appBar: BackAppBar(label: LocaleKeys.filter.localize),
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(30),
+          child: BackAppBar(label: LocaleKeys.filter.localize),
+        ),
         body: Form(
           key: controller.formState,
           child: BlocBuilder<CreateAdCubit, CreateAdState>(
@@ -66,7 +67,11 @@ class _FilterAdsViewState extends State<FilterAdsView> {
               );
             }
             return Padding(
-              padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0,),
+              padding: const EdgeInsets.only(
+                left: 16.0,
+                right: 16.0,
+                bottom: 16.0,
+              ),
               child: SingleChildScrollView(
                 child: Column(
                   // shrinkWrap: true,
@@ -113,7 +118,8 @@ class _FilterAdsViewState extends State<FilterAdsView> {
                     ClickableWidget(
                         onTap: () {
                           controller.filterAds(
-                              categorize: widget.categorization, context: context);
+                              categorize: widget.categorization,
+                              context: context);
                         },
                         child: Container(
                           alignment: Alignment.center,
@@ -123,7 +129,7 @@ class _FilterAdsViewState extends State<FilterAdsView> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15),
                             ),
-                            shadows:const [
+                            shadows: const [
                               BoxShadow(
                                 color: Color(0x3F000000),
                                 blurRadius: 4,

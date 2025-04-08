@@ -38,12 +38,15 @@ class TripJoinInfoScreen extends StatelessWidget {
           ),
         ),
       ),
-      appBar: HomeAppbar(
-        isWithBackArrow: false,
-        language: true,
-        leading: IconButton(
-          icon: const Icon(Icons.menu),
-          onPressed: () {},
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: HomeAppbar(
+          isWithBackArrow: false,
+          language: true,
+          leading: IconButton(
+            icon: const Icon(Icons.menu),
+            onPressed: () {},
+          ),
         ),
       ),
       body: const TripJoinInfoInfoBody(),

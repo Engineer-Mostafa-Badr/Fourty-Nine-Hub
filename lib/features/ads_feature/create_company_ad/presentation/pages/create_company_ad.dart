@@ -49,24 +49,27 @@ class _CreateCompanyAdViewState extends State<CreateCompanyAdView> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: BackAppBar(
-        centerTitle: false,
-        label: LocaleKeys.companyAdvertise.localize,
-        actions: [
-          context.read<UserCubit>().isLoggedIn
-              ? IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ShowPostCompanyAdvertise(),
-                      ),
-                    );
-                  },
-                  icon: Image.asset(Assets.clock,width: 40.w,),
-                )
-              : const SizedBox.shrink(),
-        ],
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          centerTitle: false,
+          label: LocaleKeys.companyAdvertise.localize,
+          actions: [
+            context.read<UserCubit>().isLoggedIn
+                ? IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ShowPostCompanyAdvertise(),
+                        ),
+                      );
+                    },
+                    icon: Image.asset(Assets.clock,width: 40.w,),
+                  )
+                : const SizedBox.shrink(),
+          ],
+        ),
       ),
       body: context.read<UserCubit>().isLoggedIn
           ? BlocConsumer<CreateCompanyAdCubit, CreateCompanyAdState>(

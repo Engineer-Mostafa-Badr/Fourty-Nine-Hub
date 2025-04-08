@@ -19,6 +19,7 @@ class ServerFailure extends Failure {
 
 class UnauthorizedFailure extends Failure {
   final String message;
+
   const UnauthorizedFailure(this.message);
 }
 
@@ -28,6 +29,7 @@ class CacheFailure extends Failure {
 
 class UnknownFailure extends Failure {
   final String error;
+
   UnknownFailure(this.error);
 }
 
@@ -46,9 +48,7 @@ class ValidationFailure extends Failure {
 class SocialLoginFailure extends Failure {
   final dynamic exception;
 
-  const SocialLoginFailure(
-    this.exception,
-  );
+  const SocialLoginFailure(this.exception,);
 }
 
 String getFailureMessage(Failure failure, BuildContext context) {
@@ -83,8 +83,8 @@ int getStatusCode(Failure failure, BuildContext context) {
   if (failure is ServerFailure) {
     final message = failure.statusCode;
 
-    return message??0;
-  }  else {
+    return message ?? 0;
+  } else {
     return 200;
   }
 }

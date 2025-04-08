@@ -65,8 +65,11 @@ class _CreateStarState extends State<CreateStar> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: BackAppBar(
-        label: LocaleKeys.addStar.localize,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          label: LocaleKeys.addStar.localize,
+        ),
       ),
       body: BlocProvider(
         create: (BuildContext context) => serviceLocator<CreatePostCubit>(),

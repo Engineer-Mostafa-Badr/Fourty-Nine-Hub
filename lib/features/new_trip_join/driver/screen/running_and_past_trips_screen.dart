@@ -34,15 +34,18 @@ class _RunningAndPastTripsScreenState extends State<RunningAndPastTripsScreen>
   Widget build(BuildContext context) {
     return CustomScaffold(
       key: _scaffoldKey,
-      appBar: HomeAppbar(
-        isWithBackArrow: false,
-        language: true,
-        leading: IconButton(
-          icon: const Icon(Icons.menu), // The menu icon
-          onPressed: () {
-            HandleCashback.setCount('drawerCount', context);
-            _scaffoldKey.currentState?.openDrawer(); // Open the drawer
-          },
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: HomeAppbar(
+          isWithBackArrow: false,
+          language: true,
+          leading: IconButton(
+            icon: const Icon(Icons.menu), // The menu icon
+            onPressed: () {
+              HandleCashback.setCount('drawerCount', context);
+              _scaffoldKey.currentState?.openDrawer(); // Open the drawer
+            },
+          ),
         ),
       ),
       body: RunningAndPastTripsBody(
@@ -113,7 +116,7 @@ class ItemTabRideModeWidget extends StatelessWidget {
           Container(
             height: 50,
             decoration: BoxDecoration(
-              color: isSelected ? Color(0xffF88B92) : Colors.white,
+              color: isSelected ? const Color(0xffF88B92) : Colors.white,
               borderRadius: BorderRadius.circular(10),
               boxShadow: const [
                 BoxShadow(

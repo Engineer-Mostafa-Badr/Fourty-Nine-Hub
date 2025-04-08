@@ -29,8 +29,11 @@ class SharedScaffold extends StatelessWidget {
       backgroundColor: backgroundColor,
       drawer: const DrawerWidget(),
       body: body,
-      appBar: HomeAppbar(
-        isWithBackArrow: isWithBackArrow,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: HomeAppbar(
+          isWithBackArrow: isWithBackArrow,
+        ),
       ),
       floatingActionButton: floatingActionButton,
     );

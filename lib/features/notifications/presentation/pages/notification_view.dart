@@ -21,7 +21,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../res/style/styles.dart';
-import '../widgets/request_log_builder.dart';
+import '../widgets/response_status_builder.dart';
 import '../widgets/status_icon_builder.dart';
 
 class NotificationView extends StatefulWidget {
@@ -101,10 +101,13 @@ class _NotificationViewState extends State<NotificationView> {
         child: DefaultTabController(
           length: 4,
           child: CustomScaffold(
-              appBar: const HomeAppbar(
-                color: Colors.red,
-                inNotifications: true,
-                isWithBackArrow: true,
+              appBar: const PreferredSize(
+                preferredSize: Size.fromHeight(30),
+                child: HomeAppbar(
+                  color: Colors.red,
+                  inNotifications: true,
+                  isWithBackArrow: true,
+                ),
               ),
               body: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -149,7 +152,7 @@ class _NotificationViewState extends State<NotificationView> {
                           GestureDetector(
                             onHorizontalDragStart: (_) {},
                             onHorizontalDragEnd: (_) {},
-                            child: const StatusRequestLogBuilder(),
+                            child: const ResponseStatusBuilder(),
                           ),
                         ],
                       ),

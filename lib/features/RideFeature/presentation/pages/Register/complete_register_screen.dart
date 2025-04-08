@@ -4,8 +4,8 @@ import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -18,7 +18,10 @@ class CompleteRegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: const HomeAppbar(),
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(30),
+        child: HomeAppbar(),
+      ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -39,8 +42,9 @@ class CompleteRegisterScreen extends StatelessWidget {
               ),
               const Sizer(),
               Label(
-                text:
-                    LocaleKeys.pleaseNoteThatRequestProcessingTakesPlaceDuringBusinessHours.localize,
+                text: LocaleKeys
+                    .pleaseNoteThatRequestProcessingTakesPlaceDuringBusinessHours
+                    .localize,
                 maxLines: 2,
                 textAlign: TextAlign.center,
                 style: Styles.mediumText(

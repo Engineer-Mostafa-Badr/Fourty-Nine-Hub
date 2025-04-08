@@ -18,8 +18,11 @@ class Biddings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: const BackAppBar(
-        label: Labels.biddings,
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(30),
+        child: BackAppBar(
+          label: Labels.biddings,
+        ),
       ),
       body: ListView.builder(
           itemCount: biddingsList.length,

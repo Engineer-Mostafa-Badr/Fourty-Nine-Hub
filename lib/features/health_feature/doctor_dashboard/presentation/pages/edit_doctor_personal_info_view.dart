@@ -37,8 +37,11 @@ class _EditDoctorPersonalInfoViewState
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: BackAppBar(
-        label: LocaleKeys.edit.localize,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          label: LocaleKeys.edit.localize,
+        ),
       ),
       body:
           BlocBuilder<EditDoctorPersonalInfoCubit, EditDoctorPersonalInfoState>(

@@ -14,7 +14,6 @@ import 'package:go_router/go_router.dart';
 import '../widgets/close_widget.dart';
 import '../widgets/register_floating_action_button.dart';
 
-
 class TruckPersonalInformationScreen extends StatelessWidget {
   const TruckPersonalInformationScreen({super.key});
 
@@ -25,23 +24,30 @@ class TruckPersonalInformationScreen extends StatelessWidget {
     TextEditingController dateOfBirthDayController = TextEditingController();
     TextEditingController phoneNumberController = TextEditingController();
     return CustomScaffold(
-      appBar: const HomeAppbar(),
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(30),
+        child: HomeAppbar(),
+      ),
       body: Column(
         children: [
           Expanded(
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.only(bottom: 32,left: 16,right: 16,),
+                padding: const EdgeInsets.only(
+                  bottom: 32,
+                  left: 16,
+                  right: 16,
+                ),
                 child: Column(
                   spacing: 4,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    closeWidget(context:context,onAcceptSaveData: (){}),
+                    closeWidget(context: context, onAcceptSaveData: () {}),
                     Label(
                       text: LocaleKeys.personalInformation.localize,
                       style: Styles.headerText(
-                          fontWeight: FontWeight.w500,
-                          ),
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                     const Sizer(),
                     DefaultTextFormField(

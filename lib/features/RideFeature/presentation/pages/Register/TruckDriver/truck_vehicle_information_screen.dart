@@ -32,18 +32,25 @@ class TruckVehicleInformationScreen extends StatelessWidget {
     TextEditingController licensePlateNumberController =
         TextEditingController();
     return CustomScaffold(
-      appBar: const HomeAppbar(),
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(30),
+        child: HomeAppbar(),
+      ),
       body: Column(
         children: [
           Expanded(
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.only(bottom: 32,left: 16,right: 16,),
+                padding: const EdgeInsets.only(
+                  bottom: 32,
+                  left: 16,
+                  right: 16,
+                ),
                 child: Column(
                   spacing: 4,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    closeWidget(context:context,onAcceptSaveData: (){}),
+                    closeWidget(context: context, onAcceptSaveData: () {}),
                     Label(
                       text: LocaleKeys.vehicleInformation.localize,
                       style: Styles.headerText(
@@ -52,7 +59,7 @@ class TruckVehicleInformationScreen extends StatelessWidget {
                     ),
                     const Sizer(),
                     SizedBox(
-                      height: MediaQuery.sizeOf(context).width*.35,
+                      height: MediaQuery.sizeOf(context).width * .35,
                       child: GridView.count(
                         physics: const NeverScrollableScrollPhysics(),
                         padding: EdgeInsets.zero,

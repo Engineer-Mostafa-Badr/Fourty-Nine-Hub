@@ -16,9 +16,12 @@ class Winners extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: BackAppBar(
-        centerTitle: false,
-        label: LocaleKeys.winners.localize,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          centerTitle: false,
+          label: LocaleKeys.winners.localize,
+        ),
       ),
       body: BlocProvider<CompetitionCubit>(
         create: (context) => serviceLocator()..fetchWinnerCompetition(),

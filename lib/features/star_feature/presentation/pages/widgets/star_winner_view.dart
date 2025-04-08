@@ -55,11 +55,14 @@ class _StarWinnerViewState extends State<StarWinnerView> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: BackAppBar(
-        label: LocaleKeys.winners.localize,
-        actions: [
-          SvgPicture.asset(Assets.cupIcon),
-        ],
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          label: LocaleKeys.winners.localize,
+          actions: [
+            SvgPicture.asset(Assets.cupIcon),
+          ],
+        ),
       ),
       body: BlocBuilder<StarCubit, StarState>(
         builder: (context, state) {

@@ -92,22 +92,25 @@ class _BeStarViewState extends State<BeStarView> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: BackAppBar(
-        label: LocaleKeys.beAStar.localize,
-        actions: [
-          if (context.read<UserCubit>().isLoggedIn)
-            TextButton(
-              onPressed: () {
-                context.push(Routes.BE_STAR_DETAILS);
-                //   Navigator.push(context, MaterialPageRoute(builder: (context)=>const StarWinnerView()));
-              },
-              child: Text(
-                '${LocaleKeys.winners.localize} 🏆',
-                style: Styles.mediumText(
-                    color: AppColors.SECONDARY_COLOR, fontSize: 60.sp),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          label: LocaleKeys.beAStar.localize,
+          actions: [
+            if (context.read<UserCubit>().isLoggedIn)
+              TextButton(
+                onPressed: () {
+                  context.push(Routes.BE_STAR_DETAILS);
+                  //   Navigator.push(context, MaterialPageRoute(builder: (context)=>const StarWinnerView()));
+                },
+                child: Text(
+                  '${LocaleKeys.winners.localize} 🏆',
+                  style: Styles.mediumText(
+                      color: AppColors.SECONDARY_COLOR, fontSize: 60.sp),
+                ),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
       floatingActionButton: context.read<UserCubit>().isLoggedIn
           ? const FloatingActionButtonStar()

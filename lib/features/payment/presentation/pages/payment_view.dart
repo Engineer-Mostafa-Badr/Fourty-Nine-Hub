@@ -56,8 +56,11 @@ class _PaymentViewState extends State<PaymentView> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: BackAppBar(
-        label: LocaleKeys.paymentOptions.localize,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          label: LocaleKeys.paymentOptions.localize,
+        ),
       ),
       body: BlocBuilder<PaymentCubit, PaymentState>(
         builder: (context, state) {

@@ -43,8 +43,11 @@ class _HistoryRequestsViewState extends State<HistoryRequestsView> {
         length: 6,
         initialIndex: 0,
         child: CustomScaffold(
-          appBar: BackAppBar(
-            label: LocaleKeys.requestLog.localize,
+          appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(30),
+            child: BackAppBar(
+              label: LocaleKeys.requestLog.localize,
+            ),
           ),
           body: Padding(
             padding: const EdgeInsets.all(8.0),

@@ -99,7 +99,9 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                               ),
                               Sizer(),
                               Text(
-                                LocaleKeys.giftApp.localize,
+                                  context.isArabic
+                                      ? state.giftMessageEntity.ar
+                                      : state.giftMessageEntity.en,
                                 textAlign: TextAlign.center,
                                 style: Styles.mediumText(),
                               ),
@@ -147,9 +149,12 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
       },
       child: CustomScaffold(
         enableCustomAppBar: true,
-        appBar: const BackAppBar(
-          label: 'OTP Verify For Email',
-          enableCustomAppBar: true,
+        appBar: const PreferredSize(
+          preferredSize: Size.fromHeight(30),
+          child: BackAppBar(
+            label: 'OTP Verify For Email',
+            enableCustomAppBar: true,
+          ),
         ),
         bottomSheet: SizedBox(
           child: DefaultButton(

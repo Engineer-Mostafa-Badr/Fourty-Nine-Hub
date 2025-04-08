@@ -44,7 +44,7 @@ import 'core/themes/light_theme.dart';
 import 'features/OnBoarding/Presentation/Controllers/on_boarding_cubit.dart';
 import 'features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'features/notifications/presentation/cubits/get_user_trips_notifications/get_user_trips_notifications_cubit.dart';
+import 'features/notifications/presentation/cubits/get_status_all_services_notifications/get_status_all_services_notifications_cubit.dart';
 import 'features/settings/presentation/cubit/choice_ruler_cubit.dart';
 import 'features/settings/presentation/cubit/floating_navigator_cubit.dart';
 import 'firebase_options.dart';
@@ -232,10 +232,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             context: context,
           ),
         ),
-        BlocProvider<GetUserTripsNotificationsCubit>(
-          create: (context) => GetUserTripsNotificationsCubit(
-            getAllUserTripsUseCase: serviceLocator(),
-          )..getUserTripsNotifications(),
+        BlocProvider<GetStatusAllServicesNotificationsCubit>(
+          create: (context) => GetStatusAllServicesNotificationsCubit(
+            serviceLocator(),
+          ),
         ),
         BlocProvider<GetSocialNotificationsCubit>(
           create: (context) => GetSocialNotificationsCubit(

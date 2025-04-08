@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_countdown_timer/countdown_timer_controller.dart';
 
 import '../../../../../core/error/failure.dart';
+import '../../../domain/entities/gift_message_entity.dart';
 import '../../../domain/entities/user_tokens_entity.dart';
 import '../../../domain/use_cases/attach_token_use_case.dart';
 import '../../../domain/use_cases/resend_otp_use_case.dart';
@@ -51,10 +52,10 @@ class VerifyOtpCubit extends Cubit<VerifyOtpState> {
     emit(
       result.fold(
         (failure) => VerifyOtpError(failure),
-        (userToken) {
-          _attachToken(userToken);
-          _saveTokens(userToken);
-          return VerifyOtpSuccess(userTokensEntity: userToken);
+        (data) {
+          _attachToken(data.userTokensEntity);
+          _saveTokens(data.userTokensEntity);
+          return VerifyOtpSuccess(userTokensEntity: data.userTokensEntity,giftMessageEntity: data.giftMessageEntity);
         },
       ),
     );
@@ -72,10 +73,10 @@ class VerifyOtpCubit extends Cubit<VerifyOtpState> {
     emit(
       result.fold(
         (failure) => VerifyOtpError(failure),
-        (userToken) {
-          _attachToken(userToken);
-          _saveTokens(userToken);
-          return VerifyOtpSuccess(userTokensEntity: userToken);
+        (data) {
+          _attachToken(data.userTokensEntity);
+          _saveTokens(data.userTokensEntity);
+          return VerifyOtpSuccess(userTokensEntity: data.userTokensEntity, giftMessageEntity: data.giftMessageEntity);
         },
       ),
     );

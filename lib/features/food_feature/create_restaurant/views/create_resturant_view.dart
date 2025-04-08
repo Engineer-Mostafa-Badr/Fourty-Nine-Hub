@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
@@ -15,13 +16,11 @@ import 'package:fourtyninehub/features/food_feature/create_restaurant/views/widg
 import 'package:fourtyninehub/features/food_feature/create_restaurant/views/widgets/mneu/show_menu.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/views/widgets/name/name_filed.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/views/widgets/photo/license_photo_picker.dart';
-import 'package:fourtyninehub/features/food_feature/create_restaurant/views/widgets/photo/restaurant_photo_picker.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/views/widgets/subcategory.dart';
 import 'package:fourtyninehub/features/food_feature/create_restaurant/views/widgets/submit_button.dart';
 import 'package:fourtyninehub/features/food_feature/edit_food/presentation/pages/edit_food_view.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
@@ -73,7 +72,10 @@ class _CreateRestaurantFormState extends State<CreateRestaurantForm> {
         }
       },
       child: CustomScaffold(
-          appBar: const HomeAppbar(),
+          appBar: const PreferredSize(
+            preferredSize: Size.fromHeight(30),
+            child: HomeAppbar(),
+          ),
           body: BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
               builder: (context, state) {
             if (state is CreateRestaurantLoading) {
@@ -140,7 +142,8 @@ class _CreateRestaurantFormState extends State<CreateRestaurantForm> {
                     Sizer(height: 20.h),
                     const CreateRestaurantNameField(),
                     Sizer(height: 20.h),
-                     CreateRestaurantNumberField(restaurantNumber: widget.restaurantId! ),
+                    CreateRestaurantNumberField(
+                        restaurantNumber: widget.restaurantId!),
                     Sizer(height: 20.h),
                     // CreateRestaurantProfilePhotoPicker(
                     //   subcategoryId: widget.subcategoryId,

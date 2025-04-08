@@ -28,12 +28,16 @@ class CriminalRecordScreen extends StatelessWidget {
       LocaleKeys.aSelfieWithTheLicense.localize,
     ];
     return CustomScaffold(
-      appBar: const HomeAppbar(),
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(30),
+        child: HomeAppbar(),
+      ),
       body: Column(
         children: [
           Expanded(
             child: SingleChildScrollView(
-              child: BlocBuilder<RideCubit, RideState>(builder: (context, state) {
+              child:
+                  BlocBuilder<RideCubit, RideState>(builder: (context, state) {
                 var cubit = context.read<RideCubit>();
                 return Padding(
                   padding: const EdgeInsets.only(
@@ -99,7 +103,8 @@ class CriminalRecordScreen extends StatelessWidget {
                         UploadFileWidget(
                           title: LocaleKeys.criminalRecord.localize,
                           onTap: () {
-                            cubit.onUploadPersonalCriminalRecordPicture(context);
+                            cubit
+                                .onUploadPersonalCriminalRecordPicture(context);
                           },
                           imageUrl: state.personalCriminalRecordPicture,
                         ),
@@ -111,9 +116,20 @@ class CriminalRecordScreen extends StatelessWidget {
                         //   hint: LocaleKeys.licenseNumber.localize,
                         // ),
                         const Sizer(),
-                        DatePickerTextField(color:AppColors.GREYBG,initialDate: DateTime.now(), minDate: DateTime(1900), maxDate: DateTime(2090),onDateSelected: (date){
-                          cubit.rideCriminalRecordExpireDateController.text = DateFormat('yyyy-MM-dd').format(date??DateTime.now());
-                        }, controller:cubit.rideCriminalRecordExpireDateController,hintText: LocaleKeys.expireDate.localize,),
+                        DatePickerTextField(
+                          color: AppColors.GREYBG,
+                          initialDate: DateTime.now(),
+                          minDate: DateTime(1900),
+                          maxDate: DateTime(2090),
+                          onDateSelected: (date) {
+                            cubit.rideCriminalRecordExpireDateController.text =
+                                DateFormat('yyyy-MM-dd')
+                                    .format(date ?? DateTime.now());
+                          },
+                          controller:
+                              cubit.rideCriminalRecordExpireDateController,
+                          hintText: LocaleKeys.expireDate.localize,
+                        ),
                       ],
                     ),
                   ),
@@ -149,10 +165,17 @@ class CriminalRecordScreen extends StatelessWidget {
                 const Sizer(),
                 InkWell(
                   onTap: () {
-                    if (context.read<RideCubit>().state.personalCriminalRecordPicture == null) {
-                      showErrorMessage(context, "Please select criminal record");
+                    if (context
+                            .read<RideCubit>()
+                            .state
+                            .personalCriminalRecordPicture ==
+                        null) {
+                      showErrorMessage(
+                          context, "Please select criminal record");
                     } else {
-                      context.read<RideCubit>().onSubmitUploadingCriminalRecord(context);
+                      context
+                          .read<RideCubit>()
+                          .onSubmitUploadingCriminalRecord(context);
                     }
                   },
                   child: Container(

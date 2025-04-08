@@ -40,8 +40,11 @@ class _DoctorTodayAppointmentsViewState
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: const BackAppBar(
-        label: Labels.todayAppointments,
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(30),
+        child: BackAppBar(
+          label: Labels.todayAppointments,
+        ),
       ),
       body: BlocBuilder<DoctorTodayAppointmentsCubit,
           DoctorTodayAppointmentsState>(

@@ -53,8 +53,12 @@ class _GovernorateFilterAdsViewState extends State<GovernorateFilterAdsView> {
     }, builder: (context, state) {
       final controller = context.read<CreateAdCubit>();
       return CustomScaffold(
-        appBar: BackAppBar(
-            label: "${LocaleKeys.filter.localize} ${LocaleKeys.city.localize}"),
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(30),
+          child: BackAppBar(
+              label:
+                  "${LocaleKeys.filter.localize} ${LocaleKeys.city.localize}"),
+        ),
         body: SingleChildScrollView(
           padding: EdgeInsets.all(10.w),
           child: Column(
@@ -152,7 +156,6 @@ class _GovernorateFilterAdsViewState extends State<GovernorateFilterAdsView> {
                                       color: Colors.grey, // Border color
                                     ),
                                   ),
-
                                 ),
                                 hint: Text(LocaleKeys.selectCity.tr()),
                                 value: null,

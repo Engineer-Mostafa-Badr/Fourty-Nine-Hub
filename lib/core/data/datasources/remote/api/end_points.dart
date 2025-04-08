@@ -244,6 +244,7 @@ class EndPoints {
   static const createNewForgetPasswordByQuestions = '/auth/reset-password-questions';
   static const changePassword = '/auth/change-password';
   static const notifications = '/notifications';
+  static const statusAllServices = '/users/status/status-all-services';
   static const unreadNotificationsCount = '/notifications/unread/count';
   static const privacy = '/privacy/personal';
   static const privacyConnection = '/privacy/connections';

@@ -16,14 +16,17 @@ class WinnersCashbackView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: BackAppBar(
-        label: LocaleKeys.winners.localize,
-        actions: [
-          Padding(
-            padding: const EdgeInsetsDirectional.only(end: 16),
-            child: Image.asset(Assets.cupImage),
-          ),
-        ],
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          label: LocaleKeys.winners.localize,
+          actions: [
+            Padding(
+              padding: const EdgeInsetsDirectional.only(end: 16),
+              child: Image.asset(Assets.cupImage),
+            ),
+          ],
+        ),
       ),
       body: BlocProvider(
         create: (context) => serviceLocator<WinnersCashbackCubit>()..getWinners(context),

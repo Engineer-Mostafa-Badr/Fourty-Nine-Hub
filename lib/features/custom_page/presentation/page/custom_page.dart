@@ -13,7 +13,6 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
-import 'package:restart_app/restart_app.dart';
 
 import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../core/widget/custom_switch_button.dart';
@@ -32,15 +31,11 @@ class _CustomPageState extends State<CustomPage> {
   Widget build(BuildContext context) {
     return CustomScaffold(
       key: _scaffoldKey,
-      appBar: BackAppBar(
-        label: LocaleKeys.customPage.localize,
-        // leading: IconButton(
-        //   icon: const Icon(Icons.menu),
-        //   onPressed: () {
-        //     HandleCashback.setCount('drawerCount',context);
-        //     _scaffoldKey.currentState?.openDrawer();
-        //   },
-        // ),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          label: LocaleKeys.customPage.localize,
+        ),
       ),
       //  drawer: const DrawerWidget(),
       body: BlocProvider<CustomPageCubit>(
@@ -132,7 +127,6 @@ class ActivatePageBlocConsumer extends StatelessWidget {
                   controller.updateActivate(v);
                   // Restart.restartApp();
                   Phoenix.rebirth(context);
-
                 },
               ),
             ],

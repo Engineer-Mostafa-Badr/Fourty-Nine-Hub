@@ -24,8 +24,11 @@ class CreateAuctionView extends StatelessWidget {
     return BlocConsumer<CreateAuctionCubit, BasicState<bool>>(
         builder: (context, state) {
       return CustomScaffold(
-        appBar: const BackAppBar(
-          label: 'Create Auction',
+        appBar: const PreferredSize(
+          preferredSize: Size.fromHeight(30),
+          child: BackAppBar(
+            label: 'Create Auction',
+          ),
         ),
         bottomNavigationBar: AppButton(
             label: 'Save Auction',

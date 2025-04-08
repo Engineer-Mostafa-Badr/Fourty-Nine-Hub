@@ -57,7 +57,7 @@ class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
                   color: enableCustomAppBar ? Colors.white : textColor))
           : null,
       actions: actions,
-      bottom: PreferredSize(
+      bottom: subTitle?.isEmpty ?? true ? null : PreferredSize(
         preferredSize: const Size.fromHeight(16.0), // here the desired height
         child: Row(
           children: [
@@ -73,5 +73,5 @@ class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(30);
 }

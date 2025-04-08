@@ -40,12 +40,15 @@ class _NavigatorSubCategoriesViewState
         print('state.favourite ${state.favourite}');
         return CustomScaffold(
           backgroundColor: Theme.of(context).primaryColor,
-          appBar: BackAppBar(
-            label: context.isArabic
-                ? widget.mainCategory.nameAr
-                : widget.mainCategory.nameEn,
-            textColor: Colors.white,
-            iconColor: Colors.white,
+          appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(30),
+            child: BackAppBar(
+              label: context.isArabic
+                  ? widget.mainCategory.nameAr
+                  : widget.mainCategory.nameEn,
+              textColor: Colors.white,
+              iconColor: Colors.white,
+            ),
           ),
           body: Padding(
             padding: const EdgeInsets.only(top: 8.0),

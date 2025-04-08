@@ -50,8 +50,11 @@ class _EmergencyRequestsViewState extends State<EmergencyRequestsView> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: BackAppBar(
-        label: LocaleKeys.emergencyRequests.localize,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          label: LocaleKeys.emergencyRequests.localize,
+        ),
       ),
       body: BlocBuilder<EmergencyRequestsCubit, EmergencyRequestsState>(
           builder: (context, state) {

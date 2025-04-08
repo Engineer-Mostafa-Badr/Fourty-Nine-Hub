@@ -17,6 +17,7 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entiti
 
 import '../entities/forget_password_questions_entity.dart';
 import '../entities/register_by_phone_entity.dart';
+import '../entities/verify_otp_entity.dart';
 import '../use_cases/change_password_use_case.dart';
 import '../use_cases/register_use_case.dart';
 import '../use_cases/send_forget_password_otp_use_case.dart';
@@ -39,7 +40,7 @@ abstract class AuthRepository {
 
   Future<Either<Failure, void>> register(RegisterParams registerParams);
 
-  Future<Either<Failure, UserTokensEntity>> verifyOTP(
+  Future<Either<Failure, VerifyOtpEntity>> verifyOTP(
       VerifyOTPParams verifyOTPParams);
 
   Future<Either<Failure, String>> verifyQuestions(VerifyQuestionsParams params);
@@ -93,5 +94,5 @@ abstract class AuthRepository {
   Future<Either<Failure, RegisterByPhoneEntity>> registerByPhone(RegisterByPhoneParams params);
 
 
-  Future<Either<Failure, UserTokensEntity>> verifyPhoneOTP(VerifyPhoneOTPParams params);
+  Future<Either<Failure, VerifyOtpEntity>> verifyPhoneOTP(VerifyPhoneOTPParams params);
 }

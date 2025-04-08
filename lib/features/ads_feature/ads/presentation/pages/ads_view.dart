@@ -92,7 +92,10 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
     }
     print(_tabController.index);
     return CustomScaffold(
-      appBar: const HomeAppbar(),
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(30),
+        child: HomeAppbar(),
+      ),
       body: BlocConsumer<AdvertisementCubit, AdsState>(
           listener: (context, state) {
         if (state.status == AdsStates.loading) {
@@ -236,7 +239,7 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
             context.push(Routes.LOGIN);
           }
         },
-        icon:  Icons.add,
+        icon: Icons.add,
         text: LocaleKeys.addAde.localize,
       ),
     );

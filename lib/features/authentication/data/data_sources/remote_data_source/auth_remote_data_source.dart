@@ -29,10 +29,12 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../../../core/utils/shared_pref.dart';
 import '../../../domain/entities/register_by_phone_entity.dart';
+import '../../../domain/entities/verify_otp_entity.dart';
 import '../../../domain/use_cases/change_password_use_case.dart';
 import '../../../domain/use_cases/verify_questions_use_case.dart';
 import '../../models/forget_password_questions_model.dart';
 import '../../models/register_by_phone_model.dart';
+import '../../models/verify_otp_model.dart';
 
 abstract class AuthRemoteDataSource {
   const AuthRemoteDataSource();
@@ -55,7 +57,7 @@ abstract class AuthRemoteDataSource {
 
   Future<Either<Failure, void>> register(RegisterParams registerParams);
 
-  Future<Either<Failure, UserTokensModel>> verifyOTP(
+  Future<Either<Failure, VerifyOtpModel>> verifyOTP(
     VerifyOTPParams verifyOTPParams,
   );
 
@@ -110,7 +112,7 @@ abstract class AuthRemoteDataSource {
   Future<Either<Failure, RegisterByPhoneEntity>> registerByPhone(
       RegisterByPhoneParams params);
 
-  Future<Either<Failure, UserTokensEntity>> verifyPhoneOTP(
+  Future<Either<Failure, VerifyOtpEntity>> verifyPhoneOTP(
       VerifyPhoneOTPParams params);
 }
 
@@ -159,7 +161,7 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, UserTokensModel>> verifyOTP(
+  Future<Either<Failure, VerifyOtpModel>> verifyOTP(
     VerifyOTPParams verifyOTPParams,
   ) async {
     final result = await _apiConsumer.post(
@@ -169,7 +171,7 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
     return result.fold(
       (failure) => Left(failure),
       (response) {
-        return Right(UserTokensModel.fromJson(
+        return Right(VerifyOtpModel.fromJson(
           response['data'],
         ));
       },
@@ -541,7 +543,7 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, UserTokensEntity>> verifyPhoneOTP(
+  Future<Either<Failure, VerifyOtpEntity>> verifyPhoneOTP(
       VerifyPhoneOTPParams params) async {
     final result = await _apiConsumer.post(
       EndPoints.VerifyPhoneOTP,
@@ -550,7 +552,7 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
     return result.fold(
       (failure) => Left(failure),
       (response) {
-        return Right(UserTokensModel.fromJson(
+        return Right(VerifyOtpModel.fromJson(
           response['data'],
         ));
       },

@@ -13,9 +13,10 @@ final class OTPPhoneSent extends RegisterState {}
 final class RegisterByPhone extends RegisterState {
   final UserTokensEntity userTokensEntity;
   final bool isPhoneVerified;
+  final GiftMessageEntity giftMessageEntity;
 
   RegisterByPhone(
-      {required this.userTokensEntity, required this.isPhoneVerified,});
+      {required this.userTokensEntity, required this.isPhoneVerified,required this.giftMessageEntity,});
 }
 
 final class RegisterError extends RegisterState {

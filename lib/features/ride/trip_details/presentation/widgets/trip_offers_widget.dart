@@ -18,14 +18,18 @@ import '../../../../../res/style/styles.dart';
 
 class TripOffersWidget extends StatelessWidget {
   final TripEntity trip;
+
   const TripOffersWidget({super.key, required this.trip});
 
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     return CustomScaffold(
-      appBar: const BackAppBar(
-        label: 'Trip Details',
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(30),
+        child: BackAppBar(
+          label: 'Trip Details',
+        ),
       ),
       bottomSheet: Container(
         width: double.infinity,

@@ -18,7 +18,10 @@ class MoreInfoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: const HomeAppbar(),
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(30),
+        child: HomeAppbar(),
+      ),
       body: Column(
         children: [
           Expanded(
@@ -29,21 +32,23 @@ class MoreInfoScreen extends StatelessWidget {
                   left: 16,
                   right: 16,
                 ),
-                child:
-                    BlocBuilder<RideCubit, RideState>(builder: (context, state) {
+                child: BlocBuilder<RideCubit, RideState>(
+                    builder: (context, state) {
                   var cubit = context.read<RideCubit>();
                   return Column(
                     spacing: 4,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      closeWidget(context:context,onAcceptSaveData:()=>cubit.onSaveRegisterData(context)),
+                      closeWidget(
+                          context: context,
+                          onAcceptSaveData: () =>
+                              cubit.onSaveRegisterData(context)),
                       Label(
                         text: LocaleKeys.moreInfo.localize,
                         style: Styles.headerText(
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-
                     ],
                   );
                 }),

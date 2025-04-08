@@ -104,14 +104,15 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
     return BlocBuilder<SubcategoriesCubit, SubcategoriesState>(
         builder: (context, state) {
       var controller = context.read<SubcategoriesCubit>();
-      if (state.isLoading) {
+      if (!state.isAdsSuccess) {
         return Container(
           color: Theme.of(context).scaffoldBackgroundColor,
           width: double.infinity,
           height: double.infinity,
           child: const CustomLoading(),
         );
-      } else if (widget.inGridView) {
+      }
+      if (widget.inGridView) {
         return Scaffold(
           floatingActionButton: CustomFloatingActionButton(
             onPressed: () {
@@ -160,18 +161,13 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                                                   element.isSelected == true) ??
                                           0],
                                     ));
-                                // if (data != null) {
-                                //   print("objectsdaa");
-                                //   // Future.delayed(const Duration(seconds: 1), () =>
-                                //   //     controller.changeState(data, data != null));
-                                //   // context.read<AdvertisementCubit>().loadFilterData(
-                                //   //     model: data,
-                                //   //     filter: userType);
-                                //   controller.changeFilterModel(data);
-                                //
-                                //   controller.loadFilterData(
-                                //       model: data, filter: 'user');
-                                // }
+                                print("data::: $data");
+                                if (data != null) {
+                                  print("objectsdaa");
+                                  controller.changeFilterModel(data);
+                                  controller.loadFilterData(
+                                      model: data, filter: 'user');
+                                }
                               }),
                         ),
                         const Sizer(
@@ -206,9 +202,9 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                                   controller.state.governorate =
                                       data.governorateId;
                                   controller.changeFilterModel(data);
-                                  FilterModel model = FilterModel(
-                                      cityId: "state.city",
-                                      governorateId: "state.governorate");
+                                  // FilterModel model = FilterModel(
+                                  //     cityId: "state.city",
+                                  //     governorateId: "state.governorate");
                                   // Future.delayed(const Duration(seconds: 1), () =>
                                   //     controller.changeState(data, data != null));
                                   // context.read<AdvertisementCubit>().loadFilterData(
@@ -483,13 +479,16 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
         );
       } else {
         return CustomScaffold(
-          appBar: BackAppBar(
-            label: context.isArabic
-                ? state.mainCategory!.name
-                : state.mainCategory!.nameEn,
-            // label: context.isArabic
-            //     ? widget.mainCategory.name
-            //     : widget.mainCategory.nameEn,
+          appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(30),
+            child: BackAppBar(
+              label: context.isArabic
+                  ? state.mainCategory!.name
+                  : state.mainCategory!.nameEn,
+              // label: context.isArabic
+              //     ? widget.mainCategory.name
+              //     : widget.mainCategory.nameEn,
+            ),
           ),
           floatingActionButton: CustomFloatingButtonAds(
             title:

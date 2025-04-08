@@ -85,9 +85,12 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
     final controller = context.read<MainCategoriesTapsCubit>();
     return CustomScaffold(
       appBar: widget.isAppBarShow
-          ? BackAppBar(
-              label: labelName,
-              enableCustomAppBar: true,
+          ? PreferredSize(
+              preferredSize: const Size.fromHeight(30),
+              child: BackAppBar(
+                label: labelName,
+                enableCustomAppBar: true,
+              ),
             )
           : null,
       enableCustomAppBar: true,
@@ -289,8 +292,7 @@ class _MainCategoriesGrideViewSectionState
                             'mainCategory.id ${widget.state.customPage![index].id} in gredview test');
                         AdInterstitialTop.loadIntersitialAd();
                         AdInterstitialTop.showInterstitialAd();
-                        HandleCashback.setCount(
-                            'mainCategoriesCount', context);
+                        HandleCashback.setCount('mainCategoriesCount', context);
                         if (widget.state.customPage![index].id ==
                             '62c8b5b09332225799fe335e') {
                           context.push(Routes.MARRIAGESUBCATEGORIES,
@@ -299,7 +301,8 @@ class _MainCategoriesGrideViewSectionState
                           print(
                               'mainCategory.id ${widget.state.customPage![index].id} in gredview');
                           context.push(Routes.CustomPageSubCategoriesView,
-                              extra: widget.state.customPage?[index]??'62c8b5779332225799fe3304');
+                              extra: widget.state.customPage?[index] ??
+                                  '62c8b5779332225799fe3304');
                         }
                       },
                       child: MainCategoryBanner(
@@ -307,7 +310,7 @@ class _MainCategoriesGrideViewSectionState
                         onFavorite: () async {
                           var result = await widget.controller
                               .toggleFavoriteMedicalService(
-                              widget.state.customPage![index].id);
+                                  widget.state.customPage![index].id);
                           print("result$result");
                           return result;
                         },

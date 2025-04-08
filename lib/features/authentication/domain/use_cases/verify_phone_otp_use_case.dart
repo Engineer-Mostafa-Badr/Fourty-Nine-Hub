@@ -4,14 +4,14 @@ import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
 import 'package:fourtyninehub/features/authentication/domain/repositories/auth_repository.dart';
-
-class VerifyPhoneOtpUseCase extends UseCase<UserTokensEntity, VerifyPhoneOTPParams> {
+import '../entities/verify_otp_entity.dart';
+class VerifyPhoneOtpUseCase extends UseCase<VerifyOtpEntity, VerifyPhoneOTPParams> {
   final AuthRepository _repository;
 
   VerifyPhoneOtpUseCase(this._repository);
 
   @override
-  Future<Either<Failure, UserTokensEntity>> call(VerifyPhoneOTPParams params) {
+  Future<Either<Failure, VerifyOtpEntity>> call(VerifyPhoneOTPParams params) {
     return _repository.verifyPhoneOTP(params);
   }
 }
