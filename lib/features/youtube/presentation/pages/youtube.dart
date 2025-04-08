@@ -47,7 +47,10 @@ class _YouTubeViewState extends State<YouTubeView> {
   Widget build(BuildContext context) {
     return CustomScaffold(
       backgroundColor: AppColors.GRAY_LIGHT_COLOR3,
-      appBar: const HomeAppbar(),
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(30),
+        child: HomeAppbar(),
+      ),
       drawer: const DrawerWidget(),
       bottomNavigationBar: BottomNavigator(
         scrollController: scrollController,

@@ -18,7 +18,12 @@ class ShippingDetailsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: BackAppBar(label: LocaleKeys.shippingDetails.tr()),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          label: LocaleKeys.shippingDetails.tr(),
+        ),
+      ),
       body: ListView(
         children: [
           _buildPickUpFromWidget(context: context),

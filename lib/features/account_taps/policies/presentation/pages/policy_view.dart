@@ -59,8 +59,11 @@ class _PolicyViewState extends State<PolicyView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: BackAppBar(
-        label: widget.fromTerms==true?LocaleKeys.conditions.localize:LocaleKeys.policies.localize,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          label: widget.fromTerms==true?LocaleKeys.conditions.localize:LocaleKeys.policies.localize,
+        ),
       ),
       body: Center(
         child: _isLoading

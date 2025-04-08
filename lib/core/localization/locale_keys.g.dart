@@ -1487,5 +1487,10 @@ abstract class  LocaleKeys {
   static const addExplanatoryNote = 'addExplanatoryNote';
   static const searchForAUser = 'searchForAUser';
   static const taggedPeople = 'taggedPeople';
+  static const status = 'status';
+  static const otpCode = 'otpCode';
+  static const weHaveSentACodeTo = 'weHaveSentACodeTo';
+  static const oTPVerifyFor = 'oTPVerifyFor';
+  static const resendOtpSuccess = 'resendOtpSuccess';
 
 }

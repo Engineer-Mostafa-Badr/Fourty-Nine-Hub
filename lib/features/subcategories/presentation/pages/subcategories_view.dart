@@ -197,10 +197,13 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
   Widget build(BuildContext context) {
     return CustomScaffold(
       backgroundColor: Theme.of(context).primaryColor,
-      appBar: BackAppBar(
-        label: widget.mainCategory.name,
-        textColor: Colors.white,
-        iconColor: Colors.white,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          label: widget.mainCategory.name,
+          textColor: Colors.white,
+          iconColor: Colors.white,
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 8.0),

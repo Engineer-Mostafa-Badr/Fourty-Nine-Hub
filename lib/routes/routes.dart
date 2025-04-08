@@ -262,6 +262,7 @@ abstract class Routes {
   static const CHANGEPASSWORD = '/ChangePassword';
   static const CHANGEPASSWORDSECOND = '/ChangePasswordSecond';
   static const VERIFICATION = '/Verification';
+  static const registerVerifyPhoneOTP = '/RegisterVerifyPhoneOTP';
 
   // Cashback
   static const CASHBACK = '/Cashback';
@@ -516,6 +517,7 @@ abstract class Paths {
   static const ratingDriverScreen = 'RatingDriverScreen';
   static const completeRideScreen = 'CompleteRideScreen';
   static const newRideModeScreen = 'NewRideModeScreen';
+  static const registerVerifyPhoneOTP = 'RegisterVerifyPhoneOTP';
 
   // Change Password
   static const CHANGEPASSWORD = 'ChangePassword';

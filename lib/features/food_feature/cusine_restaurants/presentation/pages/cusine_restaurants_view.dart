@@ -16,8 +16,11 @@ class CusineRestaurantsView extends StatelessWidget {
         listener: (context, state) {},
         builder: (context, state) {
           return CustomScaffold(
-            appBar: const BackAppBar(
-              label: 'Cusine Restaurants',
+            appBar: const PreferredSize(
+              preferredSize: Size.fromHeight(30),
+              child: BackAppBar(
+                label: 'Cusine Restaurants',
+              ),
             ),
             body: Padding(
               padding: const EdgeInsets.all(8.0),

@@ -88,9 +88,12 @@ class _CreatePostViewState extends State<CreatePostCompany> {
               },
               builder: (BuildContext context, Object? state) {
                 return CustomScaffold(
-                  appBar: BackAppBar(
-                    centerTitle: false,
-                    label: widget.title,
+                  appBar: PreferredSize(
+                    preferredSize: const Size.fromHeight(30),
+                    child: BackAppBar(
+                      centerTitle: false,
+                      label: widget.title,
+                    ),
                   ),
                   body: Form(
                     key: formKey,

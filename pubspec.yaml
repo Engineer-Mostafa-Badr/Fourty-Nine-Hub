@@ -104,7 +104,7 @@ dependencies:
   path: 1.9.0
   path_drawing: null
   path_provider: ^2.0.11
-  permission_handler: ^11.3.1
+#  permission_handler: ^11.3.1
   photo_manager: ^3.6.3
   photo_view: null
   pin_code_fields: ^8.0.1

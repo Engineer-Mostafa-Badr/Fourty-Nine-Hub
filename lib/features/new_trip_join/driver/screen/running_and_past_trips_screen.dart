@@ -38,7 +38,9 @@ class _RunningAndPastTripsScreenState extends State<RunningAndPastTripsScreen>
   Widget build(BuildContext context) {
     return CustomScaffold(
       key: _scaffoldKey,
-      appBar: HomeAppbar(
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+    child: HomeAppbar(
         isWithBackArrow: false,
         language: true,
         leading: IconButton(
@@ -49,7 +51,7 @@ class _RunningAndPastTripsScreenState extends State<RunningAndPastTripsScreen>
             Icons.arrow_back,
           ),
         ),
-      ),
+      ),),
       body: RunningAndPastTripsBody(
         tabController: _tabController,
       ),

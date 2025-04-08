@@ -49,8 +49,11 @@ class UserProfilePageState extends State<UserProfilePage> {
 
   CustomScaffold _buildLoadingScaffold() {
     return CustomScaffold(
-      appBar: BackAppBar(
-        label: LocaleKeys.profile.localize,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          label: LocaleKeys.profile.localize,
+        ),
       ),
       body: const Center(child: CupertinoActivityIndicator()),
     );
@@ -60,8 +63,11 @@ class UserProfilePageState extends State<UserProfilePage> {
     final userCubit = context.read<UserCubit>();
     return CustomScaffold(
       floatingActionButton: _buildFloatingActionButton(context),
-      appBar: BackAppBar(
-        label: LocaleKeys.profile.localize,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          label: LocaleKeys.profile.localize,
+        ),
       ),
       extendBodyBehindAppBar: true,
       body: SafeArea(

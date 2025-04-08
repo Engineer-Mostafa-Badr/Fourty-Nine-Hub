@@ -11,12 +11,18 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/D
 import 'package:go_router/go_router.dart';
 
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateful/picker/date_picker_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:go_router/go_router.dart';
+
 import '../widgets/upload_file_widget.dart';
 
 class DriversLicenseScreen extends StatelessWidget {
@@ -35,7 +41,10 @@ class DriversLicenseScreen extends StatelessWidget {
       LocaleKeys.aSelfieWithTheLicense.localize,
     ];
     return CustomScaffold(
-      appBar: const HomeAppbar(),
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(30),
+        child: HomeAppbar(),
+      ),
       body: BlocBuilder<RideRegisterCubit, RideRegisterState>(
         builder: (context,state) {
           return Column(

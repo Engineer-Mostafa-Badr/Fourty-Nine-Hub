@@ -39,15 +39,18 @@ class DoctorDashboardView extends StatelessWidget {
         // }
       },
       builder: (context, state) => CustomScaffold(
-        appBar: BackAppBar(
-          label: LocaleKeys.doctorDashboard.localize,
-          actions: [
-            DoctorDashboardPopupMenuButton(
-              earnedMoney:
-                  context.read<DoctorDashboardCubit>().totalEarnedMoney,
-              subCategoryId: state.info?.subCategoryId ?? '',
-            ),
-          ],
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(30),
+          child: BackAppBar(
+            label: LocaleKeys.doctorDashboard.localize,
+            actions: [
+              DoctorDashboardPopupMenuButton(
+                earnedMoney:
+                    context.read<DoctorDashboardCubit>().totalEarnedMoney,
+                subCategoryId: state.info?.subCategoryId ?? '',
+              ),
+            ],
+          ),
         ),
         body: state.status == DoctorDashboardStateStatus.startLoading
             ? const Center(child: CircularProgressIndicator())

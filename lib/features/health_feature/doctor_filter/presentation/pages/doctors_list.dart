@@ -64,8 +64,11 @@ class _DoctorsListViewState extends State<DoctorsListView> {
     return BlocListener<DoctorsListCubit, DoctorsListState>(
       listener: (context, state) {},
       child: CustomScaffold(
-        appBar: BackAppBar(
-          label: LocaleKeys.doctorList.localize,
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(30),
+          child: BackAppBar(
+            label: LocaleKeys.doctorList.localize,
+          ),
         ),
         body: BlocBuilder<DoctorsListCubit, DoctorsListState>(
             builder: (context, state) {

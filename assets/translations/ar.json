@@ -1494,5 +1494,11 @@
   "newPost": "منشور جديد",
   "addExplanatoryNote": "اضافة شرح توضيحي",
   "searchForAUser": "البحث عن مستخدم",
-  "taggedPeople": "الأشخاص المُشار إليهم"
+  "taggedPeople": "الأشخاص المُشار إليهم",
+  "areYouSureUpdate": "Are you sure you want to update",
+  "status": "الحالات",
+  "otpCode": "الكود",
+  "weHaveSentACodeTo": "لقد ارسلنا لك كود الي ",
+  "oTPVerifyFor": "تاكيد الكود عن طريق ",
+  "resendOtpSuccess": "تم ارسال الكود بنجاح"
 }

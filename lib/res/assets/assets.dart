@@ -140,6 +140,7 @@ abstract class Assets {
   static String clock = 'assets/icons/clock.png';
   static String single = 'assets/icons/single.png';
   static String married = 'assets/icons/married.png';
+  static String marriedSvg = 'assets/icons/married.svg';
   static String divorced = 'assets/icons/divorce.png';
   static String widowed = 'assets/icons/widowed.png';
   static String uploadImageCamera = 'assets/icons/uploadImage.png';
@@ -152,6 +153,7 @@ abstract class Assets {
   static String openBook = 'assets/images/openBook.png';
   static String social = 'assets/images/social.svg';
   static String hand = 'assets/images/hand.png';
+  static String status = 'assets/images/status.png';
   static String findLogo = 'assets/icons/findLogo.png';
   static String cameraLogo = 'assets/icons/cameraLogo.png';
   static String giftBoxIcon = 'assets/icons/gift-box.png';

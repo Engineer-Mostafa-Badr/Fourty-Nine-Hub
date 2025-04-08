@@ -49,8 +49,11 @@ class _TransferMoneyViewState extends State<TransferMoneyView> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: BackAppBar(
-        label: LocaleKeys.transferMoney.localize,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          label: LocaleKeys.transferMoney.localize,
+        ),
       ),
       body: BlocProvider<TransferMoneyCubit>(
         create: (BuildContext context) => serviceLocator()..loadData(),

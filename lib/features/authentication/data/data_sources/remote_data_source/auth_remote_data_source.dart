@@ -8,7 +8,10 @@ import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/authentication/data/models/user_tokens_model.dart';
+import 'package:fourtyninehub/features/authentication/domain/entities/user_tokens_entity.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/create_anonymous_chat_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/create_new_forget_password_use_case.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/create_normal_chat_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/get_profile_views_usecase.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/google_sign_in_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/login_use_case.dart';
@@ -19,16 +22,19 @@ import 'package:fourtyninehub/features/authentication/domain/use_cases/send_forg
 import 'package:fourtyninehub/features/authentication/domain/use_cases/update_profile_view_usecase.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/verify_forget_password_otp_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/verify_otp_use_case.dart';
-import 'package:fourtyninehub/features/authentication/domain/use_cases/create_anonymous_chat_use_case.dart';
-import 'package:fourtyninehub/features/authentication/domain/use_cases/create_normal_chat_use_case.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/verify_phone_otp_use_case.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/data/models/chat_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../../../core/utils/shared_pref.dart';
+import '../../../domain/entities/register_by_phone_entity.dart';
+import '../../../domain/entities/verify_otp_entity.dart';
 import '../../../domain/use_cases/change_password_use_case.dart';
 import '../../../domain/use_cases/verify_questions_use_case.dart';
 import '../../models/forget_password_questions_model.dart';
+import '../../models/register_by_phone_model.dart';
+import '../../models/verify_otp_model.dart';
 
 abstract class AuthRemoteDataSource {
   const AuthRemoteDataSource();
@@ -51,7 +57,7 @@ abstract class AuthRemoteDataSource {
 
   Future<Either<Failure, void>> register(RegisterParams registerParams);
 
-  Future<Either<Failure, UserTokensModel>> verifyOTP(
+  Future<Either<Failure, VerifyOtpModel>> verifyOTP(
     VerifyOTPParams verifyOTPParams,
   );
 
@@ -103,7 +109,11 @@ abstract class AuthRemoteDataSource {
   Future<Either<Failure, List<GetProfileViewsEntity>>> getProfileViewsByUserId(
       GetProfileViewsParams params);
 
-  Future<Either<Failure, void>> registerByPhone(RegisterByPhoneParams params);
+  Future<Either<Failure, RegisterByPhoneEntity>> registerByPhone(
+      RegisterByPhoneParams params);
+
+  Future<Either<Failure, VerifyOtpEntity>> verifyPhoneOTP(
+      VerifyPhoneOTPParams params);
 }
 
 class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
@@ -151,7 +161,7 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, UserTokensModel>> verifyOTP(
+  Future<Either<Failure, VerifyOtpModel>> verifyOTP(
     VerifyOTPParams verifyOTPParams,
   ) async {
     final result = await _apiConsumer.post(
@@ -161,7 +171,7 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
     return result.fold(
       (failure) => Left(failure),
       (response) {
-        return Right(UserTokensModel.fromJson(
+        return Right(VerifyOtpModel.fromJson(
           response['data'],
         ));
       },
@@ -520,14 +530,32 @@ class AuthRemoteDataSourceImpl extends AuthRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, void>> registerByPhone(RegisterByPhoneParams params) async {
+  Future<Either<Failure, RegisterByPhoneModel>> registerByPhone(
+      RegisterByPhoneParams params) async {
     final result = await _apiConsumer.post(
       EndPoints.registerByPhone,
       data: await params.toJson(),
     );
     return result.fold(
-          (failure) => Left(failure),
-          (response) => const Right(null),
+      (failure) => Left(failure),
+      (response) => Right(RegisterByPhoneModel.fromJson(response['data'])),
+    );
+  }
+
+  @override
+  Future<Either<Failure, VerifyOtpEntity>> verifyPhoneOTP(
+      VerifyPhoneOTPParams params) async {
+    final result = await _apiConsumer.post(
+      EndPoints.VerifyPhoneOTP,
+      data: params.toJson(),
+    );
+    return result.fold(
+      (failure) => Left(failure),
+      (response) {
+        return Right(VerifyOtpModel.fromJson(
+          response['data'],
+        ));
+      },
     );
   }
 }

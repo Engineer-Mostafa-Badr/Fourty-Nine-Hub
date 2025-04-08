@@ -44,6 +44,11 @@ class CreateAdRemoteDatasourceImpl implements CreateAdRemoteDatasource {
       {required FilterModel ad}) async {
     final response =
         await _apiConsumer.post(EndPoints.filterAd(ad), data: ad.toJson());
+    // await _apiConsumer.post(EndPoints.filterAd(ad), data:{
+    //   "filterCriteria":{
+    //     "678c8abd8bca9086d27b0b5f":{"type":"string", "value": "High School"}
+    //   }
+    // });
     return response.fold(
         (failure) => Left(failure),
         (response) => Right((response['data']['allAds']['ads'] as List)

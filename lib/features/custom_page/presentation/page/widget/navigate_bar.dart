@@ -36,7 +36,7 @@ class _NavigateBarState extends State<NavigateBar> {
     Assets.find,
     Assets.reel,
     Assets.spotlight,
-    Assets.meet,
+    Assets.married,
     Assets.liveIcon,
     Assets.snap,
   ];
@@ -50,7 +50,7 @@ class _NavigateBarState extends State<NavigateBar> {
       "Find": preferences.find.enabled,
       "Reel": preferences.reel.enabled,
       "Spotlight": preferences.spotlight.enabled,
-      "Meet": preferences.meet.enabled,
+      "Marriage": preferences.marriage.enabled,
       "Live": preferences.live.enabled,
       "Snap": preferences.snap.enabled,
     };
@@ -66,7 +66,7 @@ class _NavigateBarState extends State<NavigateBar> {
       isArabic ? preferences.find.nameAr : preferences.find.nameEn,
       isArabic ? preferences.reel.nameAr : preferences.reel.nameEn,
       isArabic ? preferences.spotlight.nameAr : preferences.spotlight.nameEn,
-      isArabic ? preferences.meet.nameAr : preferences.meet.nameEn,
+      isArabic ? preferences.marriage.nameAr : preferences.marriage.nameEn,
       isArabic ? preferences.live.nameAr : preferences.live.nameEn,
       isArabic ? preferences.snap.nameAr : preferences.snap.nameEn,
     ];
@@ -206,7 +206,7 @@ class _NavigateBarState extends State<NavigateBar> {
                         find: _selectedItems["Find"] ?? false,
                         reel: _selectedItems["Reel"] ?? false,
                         spotlight: _selectedItems["Spotlight"] ?? false,
-                        meet: _selectedItems["Meet"] ?? false,
+                        marriage: _selectedItems["Marriage"] ?? false,
                         live: _selectedItems["Live"] ?? false,
                         snap: _selectedItems["Snap"] ?? false,
                       ));
@@ -242,7 +242,7 @@ class _NavigateBarState extends State<NavigateBar> {
                               find: _selectedItems["Find"] ?? false,
                               reel: _selectedItems["Reel"] ?? false,
                               spotlight: _selectedItems["Spotlight"] ?? false,
-                              meet: _selectedItems["Meet"] ?? false,
+                          marriage: _selectedItems["Marriage"] ?? false,
                               live: _selectedItems["Live"] ?? false,
                               snap: _selectedItems["Snap"] ?? false,
                             ));

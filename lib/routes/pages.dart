@@ -355,6 +355,7 @@ import '../features/authentication/presentation/pages/forgot_password/enter_emai
 import '../features/authentication/presentation/pages/forgot_password/forget_password_otp_verification_view.dart';
 import '../features/authentication/presentation/pages/login_view.dart';
 import '../features/authentication/presentation/pages/register/register_verify_otp.dart';
+import '../features/authentication/presentation/pages/register/register_verify_phone_otp.dart';
 import '../features/azkaar/presentation/pages/azkar_view.dart';
 import '../features/competition/presentation/pages/competition_view.dart';
 import '../features/competition/presentation/pages/winners.dart';
@@ -508,11 +509,7 @@ class AppPages {
               GoRoute(
                 path: Routes.onBoardingScreen,
                 name: Routes.onBoardingScreen,
-                builder: (context, state) => BlocProvider(
-                  create: (context) => serviceLocator<OnBoardingCubit>()
-                    ..changeOnboardingData(0),
-                  child: const OnBoardingScreen(),
-                ),
+                builder: (context, state) => const OnBoardingScreen(),
               ),
               GoRoute(
                 path: Paths.RestaurantDashboard,
@@ -772,93 +769,21 @@ class AppPages {
                     mainCategory: state.extra as MainCategoryEntity,
                   ),
                 ),
-                // routes: [
-                //   GoRoute(
-                //       path: Paths.ADS,
-                //       name: Routes.ADS,
-                //       builder: (context, state) => BlocProvider(
-                //             create: (_) =>
-                //                 serviceLocator<AdvertisementCubit>(),
-                //             child: AdsView(
-                //               params: state.extra as AdsViewParams,
-                //             ),
-                //           ),
-                //       routes: [
-                //         GoRoute(
-                //             path: Paths.ADdetails,
-                //             name: Routes.ADdetails,
-                //             routes: [
-                //               GoRoute(
-                //                   path: Paths.ADRequests,
-                //                   name: Routes.ADRequests,
-                //                   builder: (context, state) =>
-                //                       BlocProvider<AdRequestsCubit>(
-                //                         create: (_) => serviceLocator(),
-                //                         child: AdRequestsView(
-                //                             payload: state.extra),
-                //                       ))
-                //             ],
-                //             builder: (context, state) =>
-                //                 BlocProvider<AdDetailsCubit>(
-                //                   create: (_) => serviceLocator(),
-                //                   child: AdDetailsView(payload: state.extra),
-                //                 )),
-                //         GoRoute(
-                //           path: Paths.CREATEAD,
-                //           name: Routes.CREATEAD,
-                //           builder: (context, state) => BlocProvider.value(
-                //               value: serviceLocator<CreateAdCubit>(),
-                //               child: CreateAdView(
-                //                 categorization:
-                //                     state.extra as CategorizationEntity,
-                //               )),
-                //         ),
-                //         GoRoute(
-                //           path: Paths.FILTERADS,
-                //           name: Routes.FILTERADS,
-                //           builder: (context, state) => BlocProvider.value(
-                //               value: serviceLocator<CreateAdCubit>(),
-                //               child: FilterAdsView(
-                //                 categorization:
-                //                     state.extra as CategorizationEntity,
-                //               )),
-                //         ),
-                //         GoRoute(
-                //           path: Paths.GOVERNORATEFILTERADS,
-                //           name: Routes.GOVERNORATEFILTERADS,
-                //           builder: (context, state) => BlocProvider.value(
-                //               value: serviceLocator<CreateAdCubit>(),
-                //               child: GovernorateFilterAdsView(
-                //                 categorization:
-                //                     state.extra as CategorizationEntity,
-                //               )),
-                //         ),
-                //         // CreateCompanyAdView
-                //         GoRoute(
-                //           path: Paths.CREATECOMPANYAD,
-                //           name: Routes.CREATECOMPANYAD,
-                //           builder: (context, state) =>
-                //               BlocProvider<CreateCompanyAdCubit>(
-                //                   create: (_) => serviceLocator()..loadData(),
-                //                   child: const CreateCompanyAdView()),
-                //         ),
-                //       ]),
-                // ],
               ),
-              GoRoute(
-                path: Paths.NavigatorSubCategoriesView,
-                name: Routes.NavigatorSubCategoriesView,
-                builder: (context, state) => NavigatorSubCategoriesView(
-                  mainCategory: state.extra as CustomPageCategoriesEntity,
-                ),
-              ),
+              // GoRoute(
+              //   path: Paths.NavigatorSubCategoriesView,
+              //   name: Routes.NavigatorSubCategoriesView,
+              //   builder: (context, state) => NavigatorSubCategoriesView(
+              //     mainCategory: state.extra as CustomPageCategoriesEntity,
+              //   ),
+              // ),
               GoRoute(
                 path: Paths.MARRIAGESUBCATEGORIES,
                 name: Routes.MARRIAGESUBCATEGORIES,
                 builder: (context, state) => BlocProvider(
                   create: (context) => serviceLocator<SubcategoriesCubit>(),
                   child: MarriageSubCategoriesView(
-                    mainCategory: state.extra as MainCategoryEntity,
+                    // mainCategory: state.extra as MainCategoryEntity,
                   ),
                 ),
               ),
@@ -955,6 +880,16 @@ class AppPages {
                       create: (context) => serviceLocator(),
                       child: RegisterVerifyOTP(
                         email: state.extra as String,
+                      ),
+                    ),
+                  ),
+                  GoRoute(
+                    name: Routes.registerVerifyPhoneOTP,
+                    path: Paths.registerVerifyPhoneOTP,
+                    builder: (context, state) => BlocProvider<VerifyOtpCubit>(
+                      create: (context) => serviceLocator(),
+                      child: RegisterVerifyPhoneOTP(
+                        phoneNumber: state.extra as String,
                       ),
                     ),
                   ),

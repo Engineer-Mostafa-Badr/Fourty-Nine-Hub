@@ -88,8 +88,11 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: BackAppBar(
-        label: LocaleKeys.posts.localize,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          label: LocaleKeys.posts.localize,
+        ),
       ),
       body: BlocProvider<InstagramCubit>(
         create: (BuildContext context) => serviceLocator()..loadData(),

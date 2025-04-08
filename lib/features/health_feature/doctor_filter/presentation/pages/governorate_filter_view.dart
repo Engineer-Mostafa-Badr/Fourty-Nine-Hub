@@ -19,8 +19,11 @@ class DoctorGovernorateFilterView extends StatelessWidget {
     final doctorGovernorateFilter =
         context.read<DoctorGovernorateFilterCubit>();
     return CustomScaffold(
-      appBar: BackAppBar(
-        label: LocaleKeys.governorate.localize,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          label: LocaleKeys.governorate.localize,
+        ),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(
