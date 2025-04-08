@@ -11,8 +11,12 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_auto_accept_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_available_ride_trips_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_available_trips_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_accept_offer_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_change_trip_price_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_update_trip_auto_accept_case.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/dialog_widget/show_custom_dialog_trip.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
 import 'package:fourtyninehub/features/ride/driver_dashboard/domain/usecases/create_rider_offer_usecase.dart';
@@ -21,6 +25,7 @@ import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:icons_launcher/utils/cli_logger.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../../../domain/entities/dashboards/settings_dashboard_entity.dart';
@@ -45,6 +50,9 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   final CreateDriverRatingUsecase createDriverRatingUsecase;
   final UpdateDriverRatingUsecase updateDriverRatingUsecase;
   final CreateRiderOfferUseCase createRiderOfferUseCase;
+  final ListenToUpdateTripAutoAcceptUseCase listenToUpdateTripAutoAcceptUseCase;
+  final ListenToUpdateTripPriceUseCase listenToUpdateTripPriceUseCase;
+  final ListenToAcceptOfferUseCase listenToAcceptOfferUseCase;
   DashboardsCubit(
     this.getAvailableTripsUsecase,
     this.getPastTripsUsecase,
@@ -55,8 +63,43 @@ class DashboardsCubit extends Cubit<DashboardsState> {
     this.createDriverRatingUsecase,
     this.updateDriverRatingUsecase,
     this.createRiderOfferUseCase,
+      this.listenToUpdateTripAutoAcceptUseCase,
+      this.listenToUpdateTripPriceUseCase,
+      this.listenToAcceptOfferUseCase,
   ) : super(const DashboardsState());
   List<TripEntity> availableTripsNonSocket = [];
+
+  void listenToUpdateTripAutoAccept() {
+    CliLogger.info('Listen To Update Trip Auto Accept');
+    listenToUpdateTripAutoAcceptUseCase((trip) {
+      List<AvailableRideTripEntity> list = state.availableRideTrips ?? [];
+      list.firstWhere((e)=>e.id==trip.id).isAutoAccept = trip.isAutoAccept;
+      log(trip.toString());
+      emit(state.copyWith(availableRideTrips: list));
+
+    });
+  }
+
+  void listenToUpdateTripPrice() {
+    CliLogger.info('Listen To Update Trip Auto Accept');
+    listenToUpdateTripPriceUseCase((trip) {
+      List<AvailableRideTripEntity> list = state.availableRideTrips ?? [];
+      list.firstWhere((e)=>e.id==trip.tripId).price = trip.price;
+      log(trip.toString());
+      emit(state.copyWith(availableRideTrips: list));
+
+    });
+  }
+  void listenToAcceptOffer() {
+    CliLogger.info('Listen To Update Trip Auto Accept');
+    listenToAcceptOfferUseCase((trip) {
+      // List<AvailableRideTripEntity> list = state.availableRideTrips ?? [];
+      // list.firstWhere((e)=>e.id==trip.id).isAutoAccept = trip.isAutoAccept;
+      // log(trip.toString());
+      // emit(state.copyWith(availableRideTrips: list));
+
+    });
+  }
   Future<void> getAvailableTrips(BuildContext context) async {
     // if (isClosed) {
     //   return;

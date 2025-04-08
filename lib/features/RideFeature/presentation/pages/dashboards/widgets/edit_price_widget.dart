@@ -26,7 +26,7 @@ class _EditPriceWidgetState extends State<EditPriceWidget> {
   void initState() {
     super.initState();
     setState(() {
-      price = widget.tripEntity?.price.toInt() ?? 0;
+      price = (widget.tripEntity?.price??0).toInt();
     });
   }
 

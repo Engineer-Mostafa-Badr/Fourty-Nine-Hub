@@ -281,16 +281,15 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
   }
 
   Future<void> getSettings() async {
-    if (isClosed) {
-      return;
-    }
+    log("getSettingsgetSettings");
+
 
     final Either<Failure, SettingsDashboardEntityResponse> result =
     await getSettingsDashboardUsecase(const NoParams());
-
-    if (isClosed) return;
     result.fold(
           (failure) {
+            log("getSettingsError${getFailureMessage(failure, AppPages.router.configuration.navigatorKey.currentContext!)}");
+
         emit(state.copyWith(status: StateStatus.error, failure: failure));
       },
           (settings) {
