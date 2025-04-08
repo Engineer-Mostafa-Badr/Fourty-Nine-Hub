@@ -8,6 +8,8 @@ import 'package:fourtyninehub/features/social_media/instagram/presentation/widge
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/sub_title_header_post.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 
 class InstagramUserInfoWithMentionPostWidget extends StatelessWidget {
   const InstagramUserInfoWithMentionPostWidget({
@@ -19,6 +21,7 @@ class InstagramUserInfoWithMentionPostWidget extends StatelessWidget {
     required this.userName,
     this.country,
     this.songName,
+    required this.userId,
   });
   final List<UserTagEntity> userTags;
   final bool isReel;
@@ -27,6 +30,7 @@ class InstagramUserInfoWithMentionPostWidget extends StatelessWidget {
   final String userName;
   final String? country;
   final String? songName;
+  final String userId;
 
   @override
   Widget build(BuildContext context) {
@@ -36,15 +40,19 @@ class InstagramUserInfoWithMentionPostWidget extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () {
-              showModalBottomSheet(
-                context: context,
-                backgroundColor: Colors.white,
-                builder: (context) {
-                  return InstagramUsersMentionBottomSheetWidget(
-                    userTags: userTags,
-                  );
-                },
+              context.go(
+                Routes.INSTAGRAMPROFILE,
+                extra: userId,
               );
+              // showModalBottomSheet(
+              //   context: context,
+              //   backgroundColor: Colors.white,
+              //   builder: (context) {
+              //     return InstagramUsersMentionBottomSheetWidget(
+              //       userTags: userTags,
+              //     );
+              //   },
+              // );
             },
             child: Stack(
               clipBehavior: Clip.none,

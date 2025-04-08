@@ -17,6 +17,7 @@ class HeaderPostInstagram extends StatelessWidget {
     this.country,
     this.songName,
     required this.isReel,
+    required this.userId,
   });
 
   final List<UserTagEntity> userTags;
@@ -25,6 +26,7 @@ class HeaderPostInstagram extends StatelessWidget {
   final String? country;
   final String? songName;
   final bool isReel;
+  final String userId;
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +41,7 @@ class HeaderPostInstagram extends StatelessWidget {
             imageUrl: imageUrl,
             userName: userName,
             userTags: userTags,
+            userId: userId,
           ),
           const Spacer(),
           FollowButtonInstagram(

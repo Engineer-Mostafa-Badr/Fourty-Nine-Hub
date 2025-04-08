@@ -210,6 +210,7 @@ class _AutoplayVideoWidgetState extends State<AutoplayVideoWidget> {
                   userTags: widget.instagramPostEntity?.userTags ?? [],
                   isReel: widget.isReel,
                   country: widget.instagramPostEntity?.locationName ?? '****',
+                  userId: widget.instagramPostEntity!.userId,
                   // songName: songName,
                   // numberUserNamesMenchan: numberUserNamesMenchan,
                   // userNameMenchan: userNameMenchan,

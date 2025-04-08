@@ -27,6 +27,7 @@ class PostInstagramWidget extends StatelessWidget {
                     instagramPostEntity.medias.first)) ==
                 MediaType.video,
             country: instagramPostEntity.locationName,
+            userId: instagramPostEntity.userId,
             // songName: songName,
             // numberUserNamesMenchan: numberUserNamesMenchan,
             // userNameMenchan: userNameMenchan,

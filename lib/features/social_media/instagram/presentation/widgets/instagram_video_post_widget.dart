@@ -29,12 +29,13 @@ class InstagramVideoPostWidget extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    const InstagramUserInfoWithMentionPostWidget(
+                    InstagramUserInfoWithMentionPostWidget(
                       imageUrl: testImage,
                       userName: 'joshua_l',
                       userTags: [],
                       isReel: true,
                       thereMusic: true,
+                      userId: instagramPostEntity.userId,
                     ),
                     const Spacer(),
                     GestureDetector(

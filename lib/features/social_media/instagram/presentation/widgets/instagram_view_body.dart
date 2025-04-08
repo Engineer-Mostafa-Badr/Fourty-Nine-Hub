@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/posts_instagram_cubit/posts_instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/profile_instagram_cubit/profile_instagram_cubit.dart';
@@ -16,7 +17,9 @@ import 'package:fourtyninehub/features/social_media/instagram/presentation/widge
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -246,16 +249,20 @@ class _InstagramViewBodyState extends State<InstagramViewBody> {
                       }
                       // يقوم بتحويلك لصفحة الملف الشخصي
                       if (index == 2) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => BlocProvider(
-                              create: (context) =>
-                                  serviceLocator<ProfileInstagramCubit>(),
-                              child: const ProfileInstagramView(),
-                            ),
-                          ),
+                        context.go(
+                          Routes.INSTAGRAMPROFILE,
+                          extra: UserCubit.to.state.data?.id,
                         );
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) => BlocProvider(
+                        //       create: (context) =>
+                        //           serviceLocator<ProfileInstagramCubit>(),
+                        //       child: const ProfileInstagramView(),
+                        //     ),
+                        //   ),
+                        // );
                       }
                       // setState(() {});
                       log(selectedIndex.toString());

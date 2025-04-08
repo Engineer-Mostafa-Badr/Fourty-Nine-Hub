@@ -5,7 +5,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/instagram_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/header_post_instagram.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_post_review_widget.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instgram_images_post_widget.dart';
+import 'package:fourtyninehub/helpers/media_helper.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
@@ -13,34 +13,37 @@ class PostAdInstagram extends StatelessWidget {
   const PostAdInstagram({
     super.key,
     required this.instagramPostEntity,
-    required this.userImageUrl,
-    required this.userName,
-    required this.images,
-    required this.isReal,
-    this.country,
-    this.songName,
+    // required this.userImageUrl,
+    // required this.userName,
+    // required this.images,
+    // required this.isReal,
+    // this.country,
+    // this.songName,
   });
 
   final InstagramPostEntity instagramPostEntity;
 
-  final String userImageUrl;
-  final String userName;
-  final List<String> images;
-  final bool isReal;
-  final String? country;
-  final String? songName;
+  // final String userImageUrl;
+  // final String userName;
+  // final List<String> images;
+  // final bool isReal;
+  // final String? country;
+  // final String? songName;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         HeaderPostInstagram(
-          imageUrl: userImageUrl,
-          userTags: [],
-          userName: userName,
-          isReel: isReal,
-          country: country,
-          songName: songName,
+          imageUrl: instagramPostEntity.profilePictureUrl!,
+          userTags: instagramPostEntity.userTags,
+          userName: instagramPostEntity.username,
+          isReel: MediaHelper.getMediaTypeFromExtension(
+                  instagramPostEntity.medias.first) ==
+              MediaType.video,
+          country: instagramPostEntity.locationName,
+          // songName: instagramPostEntity,
+          userId: instagramPostEntity.userId,
         ),
         // Container(
         //   child: Row(
