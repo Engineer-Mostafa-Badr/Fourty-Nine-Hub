@@ -1,0 +1,79 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/create_post_instagram_cubit/create_post_instagram_cubit.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
+
+class FloatingActionButtonCreatePostInstagram extends StatelessWidget {
+  const FloatingActionButtonCreatePostInstagram({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        padding: const EdgeInsetsDirectional.only(
+          top: 15,
+          bottom: 15,
+          start: 18,
+          // end: 15,
+        ),
+        decoration: ShapeDecoration(
+          color: AppColors.c0B1035,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(200),
+          ),
+        ),
+        child: Row(
+          children: [
+            SizedBox(
+              height: 16,
+              width: 18,
+              child: SvgPicture.asset(
+                Assets.imageWhiteIcon,
+              ),
+            ),
+            const SizedBox(
+              width: 17,
+            ),
+            ...List.generate(
+              context.read<CreatePostInstagramCubit>().postTypes.length,
+              (index) {
+                return Padding(
+                  padding: const EdgeInsetsDirectional.only(end: 16),
+                  child: InkWell(
+                    onTap: () {
+                      context
+                          .read<CreatePostInstagramCubit>()
+                          .changePostType(index);
+                    },
+                    child: BlocBuilder<CreatePostInstagramCubit,
+                        CreatePostInstagramState>(
+                      buildWhen: (previous, current) =>
+                          previous.postTypeSelectedIndex !=
+                          current.postTypeSelectedIndex,
+                      builder: (context, state) {
+                        return Label(
+                          text: context
+                              .read<CreatePostInstagramCubit>()
+                              .postTypes[index],
+                          style: Styles.mediumText(
+                            color: Colors.white,
+                            fontWeight: state.postTypeSelectedIndex == index
+                                ? FontWeight.w600
+                                : FontWeight.w400,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                );
+              },
+            ),
+          ],
+        ));
+  }
+}

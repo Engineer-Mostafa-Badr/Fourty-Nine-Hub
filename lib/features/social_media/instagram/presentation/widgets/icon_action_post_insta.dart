@@ -20,7 +20,6 @@ class IconsActionPostInsta extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 14),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           IconAndValueWidget(
             icon: const Icon(
@@ -28,6 +27,7 @@ class IconsActionPostInsta extends StatelessWidget {
               color: Color(0xffFE0135),
             ),
             value: FormatNumbers().formatNumber(likes),
+            onPressed: () {},
           ),
           const SizedBox(
             width: 9,
@@ -38,6 +38,26 @@ class IconsActionPostInsta extends StatelessWidget {
               width: 30,
             ),
             value: FormatNumbers().formatNumber(comments),
+            onPressed: () {
+              showBottomSheet(
+                context: context,
+                builder: (context) {
+                  return Padding(
+                    padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom,
+                    ),
+                    child: DraggableScrollableSheet(
+                      maxChildSize: 1,
+                      initialChildSize: 1,
+                      minChildSize: 0.3,
+                      builder: (context, scrollController) {
+                        return Container();
+                      },
+                    ),
+                  );
+                },
+              );
+            },
           ),
           // Image.asset(
           //   Assets.instagramCommentIcon,
@@ -59,6 +79,7 @@ class IconsActionPostInsta extends StatelessWidget {
               width: 30,
             ),
             value: FormatNumbers().formatNumber(shares),
+            onPressed: () {},
           ),
           // Image.asset(
           //   Assets.instagramSharePostIcon,

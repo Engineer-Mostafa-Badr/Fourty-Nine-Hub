@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/src/widgets/basic.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/ride_register/ride_register_cubit.dart';
@@ -228,7 +230,11 @@ import 'package:fourtyninehub/features/social_media/edit_profile/presentation/pa
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/Post/create_post_instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/Post/get_posts_instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/profile_instagram_cubit/profile_instagram_cubit.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/add_story_view.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/create_post_second_page_instagram_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/instgram_view.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/profile_instagram_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_all_discover_people.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_home_screen.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_view.dart';
@@ -1252,20 +1258,40 @@ class AppPages {
                   ]),
 
               GoRoute(
+                path: Paths.ADDSTORYINSTAGRAM,
+                name: Routes.ADDSTORYINSTAGRAM,
+                builder: (context, state) => const AddStoryView(),
+              ),
+
+              GoRoute(
                 path: Paths.INSTAGRAM,
                 name: Routes.INSTAGRAM,
                 routes: [
+                  // GoRoute(
+                  //   path: Paths.INSTAGRAMPROFILE,
+                  //   name: Routes.INSTAGRAMPROFILE,
+                  //   routes: const [],
+                  //   builder: (context, state) {
+                  //     final id = state.extra as String?;
+
+                  //     return BlocProvider<SocialPostsCubit>(
+                  //       create: (_) =>
+                  //           serviceLocator()..getUserProfile(id: id ?? ''),
+                  //       child: InstagramProfile(userId: id ?? ''),
+                  //     );
+                  //   },
+                  // ),
                   GoRoute(
                     path: Paths.INSTAGRAMPROFILE,
                     name: Routes.INSTAGRAMPROFILE,
                     routes: const [],
                     builder: (context, state) {
-                      final id = state.extra as String?;
+                      final String? id = state.extra as String?;
 
-                      return BlocProvider<SocialPostsCubit>(
-                        create: (_) =>
-                            serviceLocator()..getUserProfile(id: id ?? ''),
-                        child: InstagramProfile(userId: id ?? ''),
+                      return BlocProvider<ProfileInstagramCubit>(
+                        create: (_) => serviceLocator<ProfileInstagramCubit>()
+                          ..getUserProfile(id: id ?? ''),
+                        child: const ProfileInstagramView(),
                       );
                     },
                   ),
@@ -1293,13 +1319,21 @@ class AppPages {
                           repository: serviceLocator()),
                     ),
                     BlocProvider(
-                      create: (context) =>
-                          GetPostsInstagramCubit(repository: serviceLocator()),
+                      create: (context) => GetPostsInstagramCubit(
+                          getPostsUseCase: serviceLocator()),
                     ),
                   ],
                   child: const InstagramView(),
                 ),
               ),
+              GoRoute(
+                path: Paths.CREATEPOSTSECONDPAGEINSTAGRAM,
+                name: Routes.CREATEPOSTSECONDPAGEINSTAGRAM,
+                builder: (context, state) => CreatePostSecondPageInstagramView(
+                  selectedImages: state.extra as List<Future<File?>>,
+                ),
+              ),
+
               //social home
               GoRoute(
                 path: Paths.POSTDETAILS,

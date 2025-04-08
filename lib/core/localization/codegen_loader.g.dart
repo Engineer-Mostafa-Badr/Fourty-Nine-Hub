@@ -1499,7 +1499,18 @@ class CodegenLoader extends AssetLoader{
   "myTalent": "موهبتي",
   "addTalent": "إضافة موهبة",
   "winner_rating": "التقييم",
-  "EGP": "ج.م"
+  "EGP": "ج.م",
+  "suggestReels": "اقتراح ريلز",
+  "watchAll": "مشاهدة الكل",
+  "myStory": "قصتي",
+  "recents": "الاحدث",
+  "selectMultiple": "تحديد متعدد",
+  "youMustSelectAtLeastOneImage": "يجب عليك اختيار صورة واحدة على الأقل",
+  "youMustSelectAtLeastOneVideo": "يجب عليك اختيار فيديو واحد على الأقل",
+  "newPost": "منشور جديد",
+  "addExplanatoryNote": "اضافة شرح توضيحي",
+  "searchForAUser": "البحث عن مستخدم",
+  "taggedPeople": "الأشخاص المُشار إليهم"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -3002,7 +3013,18 @@ static const Map<String,dynamic> _en = {
   "addTalent": "Add Talent",
   "myTalent": "My Talent",
   "winner_rating": "Rating",
-  "EGP": "EGP"
+  "EGP": "EGP",
+  "suggestReels": "Suggest reels",
+  "watchAll": "watch all",
+  "myStory": "My story",
+  "recents": "Recents",
+  "selectMultiple": "SELECT MULTIPLE",
+  "youMustSelectAtLeastOneImage": "You must select at least one image",
+  "youMustSelectAtLeastOneVideo": "You must select at least one video",
+  "newPost": "New Post",
+  "addExplanatoryNote": "Add an explanatory note",
+  "searchForAUser": "Search for a user",
+  "taggedPeople": "Tagged People"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

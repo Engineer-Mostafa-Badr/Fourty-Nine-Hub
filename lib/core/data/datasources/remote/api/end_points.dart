@@ -240,7 +240,8 @@ class EndPoints {
   static const sendForgetPasswordOTP = '/auth/forget-password';
   static const verifyForgetPasswordOTP = '/auth/verify/otp';
   static const createNewForgetPassword = '/auth/reset-password';
-  static const createNewForgetPasswordByQuestions = '/auth/reset-password-questions';
+  static const createNewForgetPasswordByQuestions =
+      '/auth/reset-password-questions';
   static const changePassword = '/auth/change-password';
   static const notifications = '/notifications';
   static const unreadNotificationsCount = '/notifications/unread/count';
@@ -253,7 +254,6 @@ class EndPoints {
   static const onlyWithPrivacy = '/privacy/exclusion/only-with';
   static const exceptFromPrivacy = '/privacy/exclusion/except-from';
   static const exclusionPrivacy = '/privacy/exclusion?feature=';
-
 
   static const searchUserPrivacy = '/search/users/';
   static const deleteAccount = '/users/settings/delete-account';
@@ -287,7 +287,8 @@ class EndPoints {
   // ride
   static String bannerDataRider = "$developmentBaseUrl/ride/get-thumbnail-ride";
   static String getDriverRide = "$developmentBaseUrl/ride/riders/Info";
-  static String specialRegister = "$developmentBaseUrl/ride/drivers/registration/special";
+  static String specialRegister =
+      "$developmentBaseUrl/ride/drivers/registration/special";
   static String loadingRegister = "$developmentBaseUrl/loading/driver/register";
   static String riderRegister = "$developmentBaseUrl/ride/riders/register";
   static String expectedPrice = "$developmentBaseUrl/ride/trips/expected/price";
@@ -671,7 +672,7 @@ class EndPoints {
   }
 
   static String getReels(TwitterFeedParams params) {
-    return '/reels-explore?limit=${params.limit}&page=${params.page}&subCategory=${Constants.reelsSubCategory}';
+    return '/reels-explore/discover?page=${params.page}&limit=${params.limit}';
   }
 
   static String getUserReels(UserReelsParams params) {
@@ -689,6 +690,12 @@ class EndPoints {
   static String following(TwitterFeedParams params) {
     return '/follow/allFollowing?search=${params.search}&limit=${params.limit}&page=${params.page}&otherId=${params.otherId}';
   }
+
+  static String getPostsInstagram(PaginationParams params) {
+    return '/inst/posts?page=${params.page}&limit=${params.limit}';
+  }
+
+  static String getUserTag = '/inst/tags';
 
   static String createReel(CreateReelParams params) {
     return '/reels/views/${params.reelId}';
@@ -1248,9 +1255,11 @@ class EndPoints {
   static String getDriversInSubcategory(String subCategoryId) {
     return '/ride/riders/drivers/$subCategoryId';
   }
+
   static String requestTrip(String subcategoryId) {
     return '/ride/trips/newTrip/$subcategoryId';
   }
+
   static String retrieveClientLatestTrip = '/ride/client/trips/latest';
   static String getExpectedPrice(String id) {
     return '/ride/trips/expected/price/$id';
@@ -1258,7 +1267,8 @@ class EndPoints {
   static String getAvailableTrips(AvailableRideTripsUseCaseParams params) {
     return '/ride/driver/trips/available/not-tracking?limit=${params.limit}&page=${params.page}';
   }
-  static String getPastTrips(int page,String type) {
+
+  static String getPastTrips(int page, String type) {
     return '/ride/driver/trips/past?tripType=$type&limit=20&page=$page';
   }
   static String createNewOffer(String id) {
@@ -1278,7 +1288,8 @@ class EndPoints {
   static String getRideDriverInfo = '/ride/driver/info';
   static String getRideDriverPictureOptional = '/ride/info/picture-optional';
   static String getCostPerKm = '/ride/driver/info/fair-cost';
-  static String getLoadingInfo = '/loading/driver/info?subCategory=62c8baad8e28a58a3edf5805';
+  static String getLoadingInfo =
+      '/loading/driver/info?subCategory=62c8baad8e28a58a3edf5805';
   static String makeTripRequest = '/ride/trips/request';
 
   static String updateDriverLocation() {
@@ -1337,11 +1348,11 @@ class EndPoints {
     return '/ride/trips/cancel-by-client/$tripId';
   }
 
-  static String cancelPendingTripByClient(String tripId){
+  static String cancelPendingTripByClient(String tripId) {
     return '/ride/client/trips/pending/cancel/$tripId';
   }
 
-  static String recordingTrip(String tripId){
+  static String recordingTrip(String tripId) {
     return '/ride/trips/record-voice/$tripId';
   }
 
