@@ -88,13 +88,13 @@ class BaseApiConsumer extends ApiConsumer {
       log(token.accessToken.toString(), name: "Token");
       _dio.options.headers['Authorization'] = 'Bearer ${token.accessToken}';
       _dio.options.headers['x-api-key'] =
-          '25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91';
+          '2fef55aee2e4efa73d64120ecad8092262fd4f1b912ca1d5460d70a47eaf4684';
       // _dio.options.headers['Authorization'] = 'Bearer ${await CacheManager.getAccessToken()}';
       // _dio.options.headers['Authorization'] = 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzb2NrZXRJZCI6ImEzMWEyNzkzLWFiYTEtNDliOC1iZTgzLTlkYzM2NWZhOTk1OCIsImlhdCI6MTczMjA1MTYzMywiZXhwIjo1NTczMjA1MTYzMywic3ViIjoiNjZkODZhODJlOWNkMzk5NzAwMmY2MzM2In0.Mcl_dnYecdxc2htakepeWmZUYMDjfdjYkvgwWb4p9ok';
     }
   }
 
-  //addAll({"x-api-key":"25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91"})
+  //addAll({"x-api-key":"2fef55aee2e4efa73d64120ecad8092262fd4f1b912ca1d5460d70a47eaf4684"})
   @override
   Future<Either<Failure, Map<String, dynamic>>> patch(String url,
       {Map<String, dynamic>? data,
@@ -110,7 +110,7 @@ class BaseApiConsumer extends ApiConsumer {
         options: Options(headers: {
           ...?headers,
           "x-api-key":
-              "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91",
+              "2fef55aee2e4efa73d64120ecad8092262fd4f1b912ca1d5460d70a47eaf4684",
           // Your custom header
         }),
       );
@@ -133,7 +133,7 @@ class BaseApiConsumer extends ApiConsumer {
             headers: {
               ...?headers,
               "x-api-key":
-                  "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91",
+                  "2fef55aee2e4efa73d64120ecad8092262fd4f1b912ca1d5460d70a47eaf4684",
               // Your custom header
             },
           ),
@@ -158,7 +158,7 @@ class BaseApiConsumer extends ApiConsumer {
         options: Options(headers: {
           ...?headers,
           "x-api-key":
-              "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91",
+              "2fef55aee2e4efa73d64120ecad8092262fd4f1b912ca1d5460d70a47eaf4684",
           // Your custom header
         }),
         queryParameters: queryParameters,
@@ -206,7 +206,7 @@ class BaseApiConsumer extends ApiConsumer {
             options: Options(headers: {
               ...?headers,
               "x-api-key":
-              "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91",
+              "2fef55aee2e4efa73d64120ecad8092262fd4f1b912ca1d5460d70a47eaf4684",
             }),
           ),
           );
@@ -254,7 +254,7 @@ class BaseApiConsumer extends ApiConsumer {
           options: Options(headers: {
             ...?headers,
             "x-api-key":
-            "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91",
+            "2fef55aee2e4efa73d64120ecad8092262fd4f1b912ca1d5460d70a47eaf4684",
           }),
         ),
       );
@@ -304,7 +304,7 @@ class BaseApiConsumer extends ApiConsumer {
             options: Options(headers: {
               ...?headers,
               "x-api-key":
-              "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91",
+              "2fef55aee2e4efa73d64120ecad8092262fd4f1b912ca1d5460d70a47eaf4684",
             }),
           )
           // options: Options(headers: {

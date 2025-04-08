@@ -1354,7 +1354,7 @@ class EndPoints {
   }
 
   static String acceptOfferByClient(String offerId) {
-    return 'https://7a06-2a09-bac5-30c4-254b-00-3b7-47.ngrok-free.app/api/v1/ride/offers/accept/offer/$offerId';
+    return '/ride/offers/accept/offer/$offerId';
   }
 
   static String updateTripAutoAcceptByClient() {
