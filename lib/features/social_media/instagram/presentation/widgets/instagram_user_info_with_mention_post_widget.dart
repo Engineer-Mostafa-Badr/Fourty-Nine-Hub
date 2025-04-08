@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/entities/instagram_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_users_mention_bottom_sheet_widget.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/name_and_verified_mark.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/sub_title_header_post.dart';
@@ -10,31 +12,25 @@ import 'package:fourtyninehub/res/style/styles.dart';
 class InstagramUserInfoWithMentionPostWidget extends StatelessWidget {
   const InstagramUserInfoWithMentionPostWidget({
     super.key,
-    required this.isMenchan,
+    required this.userTags,
     this.isReel = false,
     this.thereMusic = false,
     required this.imageUrl,
     required this.userName,
     this.country,
     this.songName,
-    this.userNameMenchan,
-    this.numberUserNamesMenchan,
-    this.userImageMenchan,
   });
-  final bool isMenchan;
+  final List<UserTagEntity> userTags;
   final bool isReel;
   final bool thereMusic;
   final String imageUrl;
   final String userName;
   final String? country;
   final String? songName;
-  final String? userNameMenchan;
-  final int? numberUserNamesMenchan;
-  final String? userImageMenchan;
 
   @override
   Widget build(BuildContext context) {
-    if (isMenchan) {
+    if (userTags.isNotEmpty) {
       return Row(
         // crossAxisAlignment: Cros,
         children: [
@@ -44,7 +40,9 @@ class InstagramUserInfoWithMentionPostWidget extends StatelessWidget {
                 context: context,
                 backgroundColor: Colors.white,
                 builder: (context) {
-                  return const InstagramUsersMentionBottomSheetWidget();
+                  return InstagramUsersMentionBottomSheetWidget(
+                    userTags: userTags,
+                  );
                 },
               );
             },
@@ -52,12 +50,13 @@ class InstagramUserInfoWithMentionPostWidget extends StatelessWidget {
               clipBehavior: Clip.none,
               children: [
                 PositionedDirectional(
-                  bottom: 7,
+                  // bottom: 7,
+                  bottom: 5,
                   end: 7,
                   child: ImageFromInternet(
                     width: 25,
                     height: 25,
-                    image: userImageMenchan!,
+                    image: userTags.first.profilePictureUrl,
                     isCircle: true,
                     fit: BoxFit.cover,
                     // decoration: const BoxDecoration(
@@ -85,45 +84,100 @@ class InstagramUserInfoWithMentionPostWidget extends StatelessWidget {
           const SizedBox(
             width: 11,
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text.rich(
-                TextSpan(
-                  children: [
-                    TextSpan(
-                      text: userNameMenchan,
-                      style: Styles.headerText(
-                        fontSize: 32,
-                        height: 1.25,
+          InkWell(
+            onTap: () {
+              showModalBottomSheet(
+                context: context,
+                backgroundColor: Colors.white,
+                builder: (context) {
+                  return InstagramUsersMentionBottomSheetWidget(
+                    userTags: userTags,
+                  );
+                },
+              );
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Text.rich(
+                //   maxLines: 1,
+                //   overflow: TextOverflow.ellipsis,
+                //   TextSpan(
+                //     children: [
+                //       TextSpan(
+                //         text: userTags.first.username,
+                //         style: Styles.headerText(
+                //           fontSize: 32,
+                //           height: 1.25,
+                //           color: isReel ? Colors.white : Colors.black,
+                //         ),
+                //       ),
+                //       TextSpan(
+                //         text: " ${LocaleKeys.and.localize} ",
+                //         style: Styles.headerText(
+                //           fontSize: 32,
+                //           height: 1.25,
+                //           fontWeight: FontWeight.w400,
+                //           color: isReel ? Colors.white : Colors.black,
+                //         ),
+                //       ),
+                //       TextSpan(
+                //         text:
+                //             "${userTags.length - 1} ${LocaleKeys.others.localize}",
+                //         style: Styles.headerText(
+                //           fontSize: 32,
+                //           height: 1.25,
+                //           color: isReel ? Colors.white : Colors.black,
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.45,
+                  child: Row(
+                    children: [
+                      Label(
+                        text: userTags.first.username,
+                        style: Styles.headerText(
+                          fontSize: 32,
+                          height: 1.25,
+                          color: isReel ? Colors.white : Colors.black,
+                        ),
                       ),
-                    ),
-                    TextSpan(
-                      text: " ${LocaleKeys.and.localize} ",
-                      style: Styles.headerText(
-                        fontSize: 32,
-                        height: 1.25,
-                        fontWeight: FontWeight.w400,
+                      Label(
+                        text: " ${LocaleKeys.and.localize} ",
+                        style: Styles.headerText(
+                          fontSize: 32,
+                          height: 1.25,
+                          fontWeight: FontWeight.w400,
+                          color: isReel ? Colors.white : Colors.black,
+                        ),
                       ),
-                    ),
-                    TextSpan(
-                      text:
-                          "$numberUserNamesMenchan ${LocaleKeys.others.localize}",
-                      style: Styles.headerText(
-                        fontSize: 32,
-                        height: 1.25,
+                      Flexible(
+                        child: Label(
+                          text:
+                              "${userTags.length - 1} ${LocaleKeys.others.localize}",
+                          style: Styles.headerText(
+                            fontSize: 32,
+                            height: 1.25,
+                            color: isReel ? Colors.white : Colors.black,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              SubTitleHeaderPost(
-                country: country ?? '',
-                isReel: isReel,
-                songName: songName,
-              ),
-            ],
+                SubTitleHeaderPost(
+                  country: country ?? '',
+                  isReel: isReel,
+                  songName: songName,
+                ),
+              ],
+            ),
           ),
         ],
       );

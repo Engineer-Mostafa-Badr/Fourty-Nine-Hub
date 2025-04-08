@@ -1,8 +1,14 @@
 import 'package:dartz/dartz.dart';
+import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/features/social_media/instagram/data/models/followers_model.dart';
 import 'package:fourtyninehub/features/social_media/instagram/data/models/following_model.dart';
+import 'package:fourtyninehub/features/social_media/instagram/data/models/instagram_post_data_model.dart';
+import 'package:fourtyninehub/features/social_media/instagram/data/models/reel_instagram_data_model.dart';
+import 'package:fourtyninehub/features/social_media/instagram/data/models/user_tag_model.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/followers_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/following_entity.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/entities/reel_instagram_data_entity.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/entities/user_tag_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_user_media_usecase.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
@@ -19,7 +25,7 @@ abstract class InstagramRemoteDataSource {
       {required InstagramUserMediaParams params});
   Future<Either<Failure, List<PostEntity>>> getGlobalFeed(
       {required TwitterFeedParams params});
-  Future<Either<Failure, List<PostEntity>>> getReels(
+  Future<Either<Failure, ReelInstagramDataEntity>> getReels(
       {required TwitterFeedParams params});
   Future<Either<Failure, List<PostEntity>>> getUserReels(
       {required UserReelsParams params});
@@ -31,6 +37,9 @@ abstract class InstagramRemoteDataSource {
 
   Future<Either<Failure, List<FollowingEntity>>> getAllFollowing(
       TwitterFeedParams params);
+  Future<Either<Failure, InstagramPostDataModel>> getPosts(
+      PaginationParams params);
+  Future<Either<Failure, List<UserTagEntity>>> getUserTag(String username);
 }
 
 class InstagramRemoteDataSourceImpl implements InstagramRemoteDataSource {
@@ -84,17 +93,15 @@ class InstagramRemoteDataSourceImpl implements InstagramRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, List<PostEntity>>> getReels(
+  Future<Either<Failure, ReelInstagramDataEntity>> getReels(
       {required TwitterFeedParams params}) async {
     final response = await _apiConsumer.get(EndPoints.getReels(params));
 
     return response.fold((l) {
       return Left(l);
     }, (data) {
-      final list = (data['data']['reels'] as List)
-          .map((e) => PostModel.fromJson(e))
-          .toList();
-      return Right(list);
+      final responseData = ReelInstagramDataModel.fromJson(data['data']);
+      return Right(responseData);
     });
   }
 
@@ -153,6 +160,40 @@ class InstagramRemoteDataSourceImpl implements InstagramRemoteDataSource {
     }, (data) {
       final list = (data['data'] as List)
           .map((e) => FollowingModel.fromJson(e))
+          .toList();
+      return Right(list);
+    });
+  }
+
+  @override
+  Future<Either<Failure, InstagramPostDataModel>> getPosts(
+      PaginationParams params) async {
+    final response =
+        await _apiConsumer.get(EndPoints.getPostsInstagram(params));
+
+    return response.fold((l) {
+      return Left(l);
+    }, (response) {
+      // final dataPosts = InstagramPostDataModel.fromJson(data);
+      return Right(InstagramPostDataModel.fromJson(response['data']));
+    });
+  }
+
+  @override
+  Future<Either<Failure, List<UserTagEntity>>> getUserTag(
+      String username) async {
+    final response = await _apiConsumer.get(
+      EndPoints.getUserTag,
+      data: {
+        "username": username,
+      },
+    );
+
+    return response.fold((l) {
+      return Left(l);
+    }, (data) {
+      final list = (data['data']['tags'] as List)
+          .map((e) => UserTagModel.fromJson(e))
           .toList();
       return Right(list);
     });

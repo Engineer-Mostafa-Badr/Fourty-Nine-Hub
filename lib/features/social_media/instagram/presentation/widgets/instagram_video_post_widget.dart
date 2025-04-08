@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/entities/instagram_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_post_buttom_sheet_without_mention_widget.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_post_review_widget.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/post_image_instagram.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/post_instagram_widget.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_user_info_with_mention_post_widget.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_users_mention_bottom_sheet_widget.dart';
 
 class InstagramVideoPostWidget extends StatelessWidget {
-  const InstagramVideoPostWidget({super.key});
+  const InstagramVideoPostWidget(
+      {super.key, required this.instagramPostEntity});
+  final InstagramPostEntity instagramPostEntity;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +32,7 @@ class InstagramVideoPostWidget extends StatelessWidget {
                     const InstagramUserInfoWithMentionPostWidget(
                       imageUrl: testImage,
                       userName: 'joshua_l',
-                      isMenchan: false,
+                      userTags: [],
                       isReel: true,
                       thereMusic: true,
                     ),
@@ -63,7 +66,9 @@ class InstagramVideoPostWidget extends StatelessWidget {
                           context: context,
                           backgroundColor: Colors.white,
                           builder: (context) {
-                            return const InstagramUsersMentionBottomSheetWidget();
+                            return InstagramUsersMentionBottomSheetWidget(
+                              userTags: instagramPostEntity.userTags,
+                            );
                           },
                         );
                       },
@@ -106,8 +111,12 @@ class InstagramVideoPostWidget extends StatelessWidget {
           ),
           Container(
             padding: const EdgeInsets.all(10),
-            child: const Column(
-              children: [InstagramPostReviewWidget()],
+            child: Column(
+              children: [
+                InstagramPostReviewWidget(
+                  instagramPostEntity: instagramPostEntity,
+                )
+              ],
             ),
           )
         ],

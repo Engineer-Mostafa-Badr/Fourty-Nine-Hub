@@ -12,44 +12,52 @@ extension CreatePostInstagramStateX on CreatePostInstagramStates {
 class CreatePostInstagramState {
   final CreatePostInstagramStates status;
   final List<AssetEntity> images;
-  final Future<File?>? selectedImage;
+  final List<Future<File?>> selectedImages;
   final bool isPermissionGranted;
   final int postTypeSelectedIndex;
   final bool multiSelect;
   final List<AssetEntity> selectedMeda;
   final String? errMessage;
+  final int currentPage;
+  final bool hasMoreImages;
 
   const CreatePostInstagramState({
     this.status = CreatePostInstagramStates.loading,
     this.images = const [],
-    this.selectedImage,
+    this.selectedImages = const [],
     this.isPermissionGranted = false,
     this.postTypeSelectedIndex = 0,
     this.multiSelect = false,
     this.selectedMeda = const [],
     this.errMessage,
+    this.currentPage = 0,
+    this.hasMoreImages = true,
   });
 
   CreatePostInstagramState copyWith({
     CreatePostInstagramStates? status,
     List<AssetEntity>? images,
-    Future<File?>? selectedImage,
+    List<Future<File?>>? selectedImages,
     bool? isPermissionGranted,
     int? postTypeSelectedIndex,
     bool? multiSelect,
     List<AssetEntity>? selectedMeda,
     String? errMessage,
+    int? currentPage,
+    bool? hasMoreImages,
   }) {
     return CreatePostInstagramState(
       status: status ?? this.status,
       images: images ?? this.images,
-      selectedImage: selectedImage ?? this.selectedImage,
+      selectedImages: selectedImages ?? this.selectedImages,
       isPermissionGranted: isPermissionGranted ?? this.isPermissionGranted,
       postTypeSelectedIndex:
           postTypeSelectedIndex ?? this.postTypeSelectedIndex,
       multiSelect: multiSelect ?? this.multiSelect,
       selectedMeda: selectedMeda ?? this.selectedMeda,
       errMessage: errMessage ?? this.errMessage,
+      currentPage: currentPage ?? this.currentPage,
+      hasMoreImages: hasMoreImages ?? this.hasMoreImages,
     );
   }
 }

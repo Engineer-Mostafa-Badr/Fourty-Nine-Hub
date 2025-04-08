@@ -1479,5 +1479,11 @@
   "watchAll": "watch all",
   "myStory": "My story",
   "recents": "Recents",
-  "selectMultiple": "SELECT MULTIPLE"
+  "selectMultiple": "SELECT MULTIPLE",
+  "youMustSelectAtLeastOneImage": "You must select at least one image",
+  "youMustSelectAtLeastOneVideo": "You must select at least one video",
+  "newPost": "New Post",
+  "addExplanatoryNote": "Add an explanatory note",
+  "searchForAUser": "Search for a user",
+  "taggedPeople": "Tagged People"
 }

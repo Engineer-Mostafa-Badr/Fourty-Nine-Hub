@@ -1455,5 +1455,11 @@ abstract class  LocaleKeys {
   static const myStory = 'myStory';
   static const recents = 'recents';
   static const selectMultiple = 'selectMultiple';
+  static const youMustSelectAtLeastOneImage = 'youMustSelectAtLeastOneImage';
+  static const youMustSelectAtLeastOneVideo = 'youMustSelectAtLeastOneVideo';
+  static const newPost = 'newPost';
+  static const addExplanatoryNote = 'addExplanatoryNote';
+  static const searchForAUser = 'searchForAUser';
+  static const taggedPeople = 'taggedPeople';
 
 }

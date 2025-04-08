@@ -50,8 +50,9 @@ class LikedByWidget extends StatelessWidget {
                 ),
               ),
               TextSpan(
-                text:
-                " ${LocaleKeys.and.localize} ${FormatNumbers().formatNumberByComma(context, others.toString())} ${LocaleKeys.others.localize}",
+                text: others == 0
+                    ? ''
+                    : " ${LocaleKeys.and.localize} ${FormatNumbers().formatNumberByComma(context, others.toString())} ${LocaleKeys.others.localize}",
                 style: Styles.mediumText(
                   height: 1.29,
                 ),

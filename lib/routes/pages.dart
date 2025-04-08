@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/src/widgets/basic.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/creminal_record_screen.dart';
@@ -221,6 +223,7 @@ import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/Post/get_posts_instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/add_story_view.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/create_post_second_page_instagram_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/instgram_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_all_discover_people.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_home_screen.dart';
@@ -1164,13 +1167,21 @@ class AppPages {
                           repository: serviceLocator()),
                     ),
                     BlocProvider(
-                      create: (context) =>
-                          GetPostsInstagramCubit(repository: serviceLocator()),
+                      create: (context) => GetPostsInstagramCubit(
+                          getPostsUseCase: serviceLocator()),
                     ),
                   ],
                   child: const InstagramView(),
                 ),
               ),
+              GoRoute(
+                path: Paths.CREATEPOSTSECONDPAGEINSTAGRAM,
+                name: Routes.CREATEPOSTSECONDPAGEINSTAGRAM,
+                builder: (context, state) => CreatePostSecondPageInstagramView(
+                  selectedImages: state.extra as List<Future<File?>>,
+                ),
+              ),
+
               //social home
               GoRoute(
                 path: Paths.POSTDETAILS,

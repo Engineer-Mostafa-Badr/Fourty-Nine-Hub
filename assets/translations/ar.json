@@ -1462,5 +1462,11 @@
   "watchAll": "مشاهدة الكل",
   "myStory": "قصتي",
   "recents": "الاحدث",
-  "selectMultiple": "تحديد متعدد"
+  "selectMultiple": "تحديد متعدد",
+  "youMustSelectAtLeastOneImage": "يجب عليك اختيار صورة واحدة على الأقل",
+  "youMustSelectAtLeastOneVideo": "يجب عليك اختيار فيديو واحد على الأقل",
+  "newPost": "منشور جديد",
+  "addExplanatoryNote": "اضافة شرح توضيحي",
+  "searchForAUser": "البحث عن مستخدم",
+  "taggedPeople": "الأشخاص المُشار إليهم"
 }

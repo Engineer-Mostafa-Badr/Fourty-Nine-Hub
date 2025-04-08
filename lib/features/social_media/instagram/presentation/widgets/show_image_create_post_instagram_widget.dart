@@ -18,21 +18,26 @@ class ShowImageCreatePostInstagramWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<CreatePostInstagramCubit, CreatePostInstagramState>(
       buildWhen: (previous, current) =>
-          previous.selectedImage != current.selectedImage,
+          previous.selectedImages != current.selectedImages,
       builder: (context, state) {
         return AnimatedContainer(
           duration: const Duration(milliseconds: 500),
           width: double.infinity,
-          height:
-              context.read<CreatePostInstagramCubit>().state.selectedImage ==
-                      null
-                  ? 0
-                  : MediaQuery.of(context).size.height * 0.35,
-          child: context.read<CreatePostInstagramCubit>().state.selectedImage ==
-                  null
+          height: context
+                  .read<CreatePostInstagramCubit>()
+                  .state
+                  .selectedImages
+                  .isEmpty
+              ? 0
+              : MediaQuery.of(context).size.height * 0.35,
+          child: context
+                  .read<CreatePostInstagramCubit>()
+                  .state
+                  .selectedImages
+                  .isEmpty
               ? const SizedBox()
               : FutureBuilder<File?>(
-                  future: state.selectedImage,
+                  future: state.selectedImages.last,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       return Stack(

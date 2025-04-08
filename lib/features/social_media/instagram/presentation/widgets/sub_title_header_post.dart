@@ -57,7 +57,11 @@ class _SubTitleHeaderPostState extends State<SubTitleHeaderPost> {
               Assets.musicNoteIcon,
               height: 14,
               width: 14,
-              color: Colors.white,
+              // color: Colors.white,
+              colorFilter: ColorFilter.mode(
+                widget.isReel ? Colors.white : Colors.black,
+                BlendMode.srcIn,
+              ),
             ),
             const SizedBox(width: 2),
             Label(

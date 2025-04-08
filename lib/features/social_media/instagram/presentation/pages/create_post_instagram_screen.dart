@@ -1,22 +1,14 @@
-import 'dart:io';
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/error/custom_error.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/create_post_instagram_cubit/create_post_instagram_cubit.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/app_bar_create_post_instagram.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/floating_action_button_create_post_instagram.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/post_body_create_post_instagram.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:go_router/go_router.dart';
-import 'package:photo_manager/photo_manager.dart';
 
 class CreatePostInstagramScreen extends StatelessWidget {
   const CreatePostInstagramScreen({super.key});
@@ -107,29 +99,37 @@ class CreatePostInstagramScreen extends StatelessWidget {
               builder: (context, state) {
                 return Column(
                   children: [
-                    Row(
-                      children: [
-                        IconButton(
-                          icon: const Icon(
-                            Icons.close,
-                            color: Colors.black,
-                          ),
-                          onPressed: () {
-                            context.pop();
-                          },
-                        ),
-                        const SizedBox(
-                          width: 12,
-                        ),
-                        Label(
-                          text: context
+                    AppBarCreatePostInstagram(
+                      postType: context
+                          .read<CreatePostInstagramCubit>()
+                          .postTypes[state.postTypeSelectedIndex],
+                      onPressed: () {
+                        if (state.postTypeSelectedIndex == 0) {
+                          bool isEmpty = context
                               .read<CreatePostInstagramCubit>()
-                              .postTypes[state.postTypeSelectedIndex],
-                          style: Styles.headerText(
-                            fontSize: 40,
-                          ),
-                        ),
-                      ],
+                              .state
+                              .selectedImages
+                              .isEmpty;
+                          bool isEmpty2 = state.selectedImages.isEmpty;
+                          if (isEmpty) {
+                            showErrorMessage(
+                              context,
+                              LocaleKeys.youMustSelectAtLeastOneImage.localize,
+                            );
+                          } else {
+                            context
+                                .read<CreatePostInstagramCubit>()
+                                .nextPage(context);
+                          }
+                        } else if (state.postTypeSelectedIndex == 2) {
+                          if (true) {
+                            showErrorMessage(
+                              context,
+                              LocaleKeys.youMustSelectAtLeastOneVideo.localize,
+                            );
+                          } else {}
+                        }
+                      },
                     ),
                     if (state.postTypeSelectedIndex == 0)
                       const Expanded(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/post_image_instagram.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/post_instagram_widget.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/value_and_title_header_profile_instagram.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -61,7 +61,7 @@ class HeaderProfileInstagram extends StatelessWidget {
             value: '12',
             title: 'Friend',
           ),
-           const Spacer(),
+          const Spacer(),
           const ValueAndTitleHeaderProfileInstagram(
             value: '23',
             title: 'Follower',

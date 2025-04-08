@@ -4,7 +4,7 @@ import 'package:fourtyninehub/features/social_media/instagram/presentation/widge
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/buttons_profile_instagram_section.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/discover_people_profile_instagram_list_view_item.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/header_profile_instagram.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/post_image_instagram.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/post_instagram_widget.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/subtitle_and_name_under_header_instagram.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/top_navigation_bar_profile_instagram.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';

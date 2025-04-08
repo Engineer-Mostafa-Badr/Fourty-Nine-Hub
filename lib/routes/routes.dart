@@ -252,6 +252,8 @@ abstract class Routes {
 
   // Cashback
   static const CASHBACK = '/Cashback';
+  // Instagram
+  static const CREATEPOSTSECONDPAGEINSTAGRAM = '/CreatePostSecondPageInstagram';
 }
 
 abstract class Paths {
@@ -493,4 +495,7 @@ abstract class Paths {
 
   // Cashback
   static const CASHBACK = 'CashBack';
+
+  // Instagram
+  static const CREATEPOSTSECONDPAGEINSTAGRAM = 'CreatePostSecondPageInstagram';
 }
