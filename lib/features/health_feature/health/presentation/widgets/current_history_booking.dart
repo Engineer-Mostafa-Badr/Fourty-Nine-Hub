@@ -5,12 +5,14 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class CurrentHistoryBooking extends StatelessWidget {
-  const CurrentHistoryBooking({super.key, required this.title});
+  const CurrentHistoryBooking({super.key, required this.title, required this.isSelected, required this.onTap});
   final String title;
+  final bool isSelected;
+  final void Function() onTap ;
   @override
   Widget build(BuildContext context, ) {
     return GestureDetector(
-      onTap:(){ } ,
+      onTap:onTap ,
       child: Container(
         margin: EdgeInsets.only(top:10.h),
         width: double.maxFinite,
@@ -19,19 +21,20 @@ class CurrentHistoryBooking extends StatelessWidget {
         ),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(40.h),
-            color: AppColors.GREYBG,
+            color: isSelected?AppColors.PRIMARY_COLOR:AppColors.GREYBG,
             border: Border.all(
-                color:AppColors.PRIMARY_COLOR,
+                color:isSelected?AppColors.SECONDARY_COLOR:AppColors.PRIMARY_COLOR,
                 width: 2)),
         child: Center(
           child: Text(
             title.localize,
             style: Styles.headerText(
                 fontSize: 24,
-                color:AppColors.black),
+                color:isSelected?AppColors.whiteColor:AppColors.black),
           ),
         ),
       ),
     );
   }
+
 }

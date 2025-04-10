@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class WelcomeTextWidget extends StatefulWidget {
-  const WelcomeTextWidget({super.key});
-
+  const WelcomeTextWidget({super.key, required this.title, required this.infoMessage});
+  final String title;
+  final String infoMessage;
   @override
   _WelcomeTextWidgetState createState() => _WelcomeTextWidgetState();
 }
@@ -55,10 +54,10 @@ class _WelcomeTextWidgetState extends State<WelcomeTextWidget> {
                     ),
                   ],
                 ),
-                child:const  Text(
-                  "Create Ad for a trip with your car, wait users to contact you. Share trip & gain money!",
+                child:  Text(
+                  widget.infoMessage ,
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
@@ -76,10 +75,11 @@ class _WelcomeTextWidgetState extends State<WelcomeTextWidget> {
 
   @override
   Widget build(BuildContext context) {
+
     return Row(
       children: [
         Text(
-          LocaleKeys.welcomeToTripjoin.localize,
+          widget.title,
           style:const TextStyle(
             fontSize: 17,
             fontWeight: FontWeight.w700,

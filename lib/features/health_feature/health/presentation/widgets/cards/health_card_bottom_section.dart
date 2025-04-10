@@ -9,10 +9,10 @@ class HealthCardButtonsSection extends StatelessWidget {
   const HealthCardButtonsSection({
     super.key,
     this.buttonTitle,
-    required this.isSubscribed, required this.onTap,
+    required this.isSubscribed, required this.onTap, required this.isButton,
   });
-
   final bool isSubscribed;
+  final bool isButton;
   final String? buttonTitle;
 
   final void Function() onTap;
@@ -21,7 +21,8 @@ class HealthCardButtonsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(
+        if(isButton)
+          Expanded(
           child: Padding(
             padding: EdgeInsets.only(top:8.h,bottom: 8.h),
             child: TripJoinCardButton(
@@ -34,7 +35,8 @@ class HealthCardButtonsSection extends StatelessWidget {
             ),
           ),
         ),
-        const Sizer(
+        if(isButton)
+          const Sizer(
           width: 60,
         ),
         const Expanded(

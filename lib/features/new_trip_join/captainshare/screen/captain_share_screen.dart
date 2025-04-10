@@ -29,22 +29,24 @@ class _CaptainShareScreenState extends State<CaptainShareScreen>
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
-      //     key: _scaffoldKey,
-      floatingActionButton: const RouteButtonWidget(),
-      appBar: HomeAppbar(
-        isMenu: false,
-        language: true,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(
-            Icons.arrow_back,
+    return SafeArea(
+      child: CustomScaffold(
+        //     key: _scaffoldKey,
+        floatingActionButton: const RouteButtonWidget(),
+        appBar: HomeAppbar(
+          isMenu: false,
+          language: true,
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(
+              Icons.arrow_back,
+            ),
           ),
         ),
+        body: CaptainShareBody(tabController: _tabController),
       ),
-      body: CaptainShareBody(tabController: _tabController),
     );
   }
 }

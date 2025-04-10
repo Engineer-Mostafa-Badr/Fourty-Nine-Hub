@@ -6,20 +6,21 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/doctor_list/health_card_bottom_section.dart';
-import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/health_custom_card.dart';
+import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/cards/health_card_bottom_section.dart';
+import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/cards/health_custom_card.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
-class HealthEmergencyCard extends StatefulWidget {
+class DoctorListCard extends StatefulWidget {
   // ignore: prefer_const_constructors_in_immutables
-  const HealthEmergencyCard({
+  const DoctorListCard({
     super.key,
     required this.title,
     required this.isSubscribed,
     required this.buttonTitle,
-    required this.onTab, required this.status,
+    required this.onTab,
+    required this.status,
   });
 
   final String title;
@@ -29,10 +30,10 @@ class HealthEmergencyCard extends StatefulWidget {
   final void Function() onTab;
 
   @override
-  State<HealthEmergencyCard> createState() => _HealthEmergencyCardState();
+  State<DoctorListCard> createState() => _DoctorListCardState();
 }
 
-class _HealthEmergencyCardState extends State<HealthEmergencyCard> {
+class _DoctorListCardState extends State<DoctorListCard> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -47,17 +48,23 @@ class _HealthEmergencyCardState extends State<HealthEmergencyCard> {
               HealthCustomCard(
                 margin: EdgeInsets.only(top: 56.h),
                 padding: EdgeInsets.symmetric(horizontal: 32.h),
-                radius: 20,
+                radiusGeometry:BorderRadius.only(
+                  topLeft: Radius.circular(20.h),
+                  bottomLeft: Radius.circular(20.h),
+                  bottomRight: Radius.circular(20.h),
+                ),
                 children: [
                   const Sizer(),
-                  TripCardInfoWidget(
+                  _tripCardInfoWidget(
                     title: widget.title,
-                    icon:widget.isSubscribed? 'assets/images/doctor_profile.jpeg':Assets.maleUser ,
+                    icon: widget.isSubscribed
+                        ? 'assets/images/doctor_profile.jpeg'
+                        : Assets.maleUser,
                   ),
                   const Sizer(),
                   Row(
                     children: [
-                      Icon(
+                       Icon(
                         Icons.location_on_sharp,
                         color: AppColors.PRIMARY_COLOR,size: 48.h,
                       ),
@@ -69,7 +76,42 @@ class _HealthEmergencyCardState extends State<HealthEmergencyCard> {
                     ],
                   ),
                   const Sizer(),
-                  HealthCardButtonsSection(
+                  Row(
+                    children: [
+                      SvgPicture.asset(
+
+                        Assets.cash,
+                        fit: BoxFit.cover,height: 48.h,width: 48.h,
+                      ),
+                      const Sizer(),
+                      Expanded(
+                        child: Label(
+                          text: context.isArabic ? 'خدمة' : 'Fees',
+                          style: Styles.mediumText(fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                      Label(
+                        text: '100 ${LocaleKeys.egp.localize}',
+                        style: Styles.mediumText(fontWeight: FontWeight.w500),
+                      )
+                    ],
+                  ),
+                  const Sizer(),
+                  Row(
+                    children: [
+                       Icon(
+                        Icons.watch_later_outlined,
+                        color: AppColors.black,size: 48.h
+                      ),
+                      const Sizer(),
+                      Label(
+                        text: '${context.isArabic?'وقت الانتظار':'Waiting time'}: 10 ${context.isArabic?'دقيقة':'min'}',
+                        style: Styles.mediumText(fontWeight: FontWeight.w500),
+                      )
+                    ],
+                  ),
+                  const Sizer(),
+                  HealthCardButtonsSection(isButton: true,
                     isSubscribed: widget.isSubscribed,
                     buttonTitle: widget.buttonTitle,
                     onTap: widget.onTab,
@@ -85,7 +127,7 @@ class _HealthEmergencyCardState extends State<HealthEmergencyCard> {
     );
   }
 
-  TripCardInfoWidget({
+  _tripCardInfoWidget({
     required String title,
     required String icon,
   }) {
@@ -139,25 +181,24 @@ class _HealthEmergencyCardState extends State<HealthEmergencyCard> {
             ),
             if (widget.isSubscribed)
               Label(
-              text: 'Ear/Nose',
-              style: Styles.mediumText(),
-            )
+                text: 'Ear/Nose',
+                style: Styles.mediumText(),
+              )
           ],
         )
       ],
     );
   }
-  _statusStack(){
+
+  _statusStack() {
     return Positioned(
       right: 0,
       top: 0,
       child: Container(
-        padding:
-        const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(15),
-              topRight: Radius.circular(15)),
+              topLeft: Radius.circular(15), topRight: Radius.circular(15)),
           color: Colors.white,
           border: Border.all(
             color: context.isDarkMode
@@ -166,7 +207,9 @@ class _HealthEmergencyCardState extends State<HealthEmergencyCard> {
           ),
         ),
         child: Text(
-          widget.isSubscribed?widget.status:LocaleKeys.notSubscribed.localize,
+          widget.isSubscribed
+              ? widget.status
+              : LocaleKeys.notSubscribed.localize,
           style: Styles.headerText(color: AppColors.SECONDARY_COLOR),
         ),
       ),

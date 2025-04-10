@@ -7,13 +7,13 @@ class HealthCustomCard extends StatelessWidget {
   const HealthCustomCard({
     super.key,
     required this.children,
-    this.title = '', this.radius=10,  this.padding, this.margin,
+    this.title = '',  this.padding, this.margin, this.radiusGeometry,
   });
   final List<Widget> children;
   final String title;
-  final double radius;
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry? margin;
+  final BorderRadiusGeometry? radiusGeometry;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -26,11 +26,7 @@ class HealthCustomCard extends StatelessWidget {
               ? AppColors.PRIMARY_COLOR_DARK
               : AppColors.PRIMARY_COLOR_LIGHT,
         ),
-        borderRadius: BorderRadius.only(
-            topLeft:Radius.circular(radius),
-            bottomLeft:Radius.circular(radius),
-            bottomRight:Radius.circular(radius),
-        ),
+        borderRadius: radiusGeometry,
         color: Theme.of(context).scaffoldBackgroundColor,
         boxShadow: [
           BoxShadow(

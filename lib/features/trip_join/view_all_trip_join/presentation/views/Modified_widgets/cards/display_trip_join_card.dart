@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart' as EasyLocale;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -24,12 +25,13 @@ class TripJoinCard extends StatefulWidget {
     required this.title,
     required this.isMale,
     required this.isContactInfo,
-    required this.isRequestButton, required this.iconCar, required this.buttonTitle, required this.onTab,
+    required this.isRequestButton, required this.iconCar, required this.buttonTitle, required this.onTab, required this.subscribtionPlan,
   });
 
   final String time;
   final int seats;
   final String status;
+  final String subscribtionPlan;
   final String title;
   final String buttonTitle;
   final bool isMale;
@@ -55,6 +57,31 @@ class _TripJoinCardState extends State<TripJoinCard> {
               CustomCard(
                 radius: 20,
                 children: [
+                  const Sizer(height: 8,),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 32.0.h),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.remove_red_eye_sharp,
+                                color: AppColors.DARK_GRAY_COLOR,
+                              ),
+                              const Sizer(),
+                              Label(text: '437k ${LocaleKeys.views}',style: Styles.mediumText(fontSize: 24,color: AppColors.DARK_GRAY_COLOR),)
+                            ],
+                          ),
+                        ),
+                        Text(
+                         widget.subscribtionPlan,
+                          style: Styles.headerText(color: AppColors.SECONDARY_COLOR,fontSize: 32),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Divider(),
                   const Sizer(),
                   TripCardInfoWidget(
                     title: widget.title,

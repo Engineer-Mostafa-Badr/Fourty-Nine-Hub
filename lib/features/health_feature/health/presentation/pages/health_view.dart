@@ -3,10 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/banner.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/booking/bookgins.dart';
+import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/cards/booking_history_card.dart';
+import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/cards/current_booking_card.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/current_history_booking.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/doctor_mode_banner.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/medical_services/medical_services.dart';
@@ -16,13 +17,18 @@ import 'package:fourtyninehub/features/health_feature/health/presentation/widget
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
-import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
-class HealthView extends StatelessWidget {
-  const HealthView({super.key});
+class HealthView extends StatefulWidget {
+  HealthView({super.key});
+
+  @override
+  State<HealthView> createState() => _HealthViewState();
+}
+
+class _HealthViewState extends State<HealthView> {
+  int history = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -32,18 +38,20 @@ class HealthView extends StatelessWidget {
         body: BlocBuilder<HealthCubit, HealthState>(
           builder: (context, state) {
             // var controller = context.read<HealthCubit>();
-            return state.isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : ListView(
+            // if (state.isLoading) {
+            //   return const Center(child: CircularProgressIndicator());
+            // } else {
+              return ListView(
                     padding: EdgeInsets.all(16.0.w),
                     children: [
                       const HealthBanner(),
                       if (state.isDoctor == false) const RegistrationBanner(),
                       const Sizer(),
-                      DoctorModeBanner(
-                          isWaitingApproval: isWaitingApproval,
-                        ),
-                      if (isWaitingApproval) WaitingAprovalText(),
+                      RegistrationBanner(),
+                      // DoctorModeBanner(
+                      //   isWaitingApproval: isWaitingApproval,
+                      // ),
+                      // if (isWaitingApproval) WaitingAprovalText(),
                       const Sizer(),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -53,6 +61,12 @@ class HealthView extends StatelessWidget {
                             title: context.isArabic
                                 ? 'الحجوزات الحالية'
                                 : 'Current Booking',
+                            isSelected: history == 1 ? true : false,
+                            onTap: () {
+                              setState(() {
+                                history = 1;
+                              });
+                            },
                           )),
                           const Sizer(),
                           Expanded(
@@ -60,22 +74,49 @@ class HealthView extends StatelessWidget {
                             title: context.isArabic
                                 ? 'تاريخ الحجوزات'
                                 : 'Booking History',
+                            isSelected: history == 2 ? true : false,
+                            onTap: () {
+                              setState(() {
+                                history = 2;
+                              });
+                            },
                           )),
                         ],
                       ),
                       const Sizer(
                         height: 20,
                       ),
-                      const HealthBookingTypesWidgt(),
-                      const Sizer(),
-                      const HealthSubCategories(),
-                      const Sizer(),
-                      const HealthMedicalServices(),
-                      const Sizer(),
-                      const HealthBookings(),
-                      const Sizer(),
+                      if(history==0)
+                        const Column(
+                          children: [
+                            HealthBookingTypesWidgt(),
+                            Sizer(),
+                            HealthSubCategories(),
+                            Sizer(),
+                            HealthMedicalServices(),
+                            Sizer(),
+                            HealthBookings(),
+                            Sizer(),
+                          ],
+                        ),
+                      if(history==1)
+                        const Column(
+                          children: [
+                            CurrentBookingCard(title: 'Ibrahim',isSubscribed: false,),
+                            CurrentBookingCard(title: 'Ibrahim',isSubscribed: false,),
+                          ],
+                        ),
+                      if(history==2)
+                        const Column(
+                          children: [
+                            BookingHistoryCard(title: 'Dr.Ahmed Ibrahim',isSubscribed: true,),
+                            BookingHistoryCard(title: 'Dr.Ahmed Ibrahim',isSubscribed: true,),
+                          ],
+                        ),
+
                     ],
                   );
+            //}
           },
         ));
   }

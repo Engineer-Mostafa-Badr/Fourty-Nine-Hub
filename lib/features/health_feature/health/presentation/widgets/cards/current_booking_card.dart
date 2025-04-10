@@ -6,34 +6,28 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/doctor_list/health_card_bottom_section.dart';
-import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/health_custom_card.dart';
+import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/cards/health_card_bottom_section.dart';
+import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/cards/health_custom_card.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
-class DoctorListCard extends StatefulWidget {
+class CurrentBookingCard extends StatefulWidget {
   // ignore: prefer_const_constructors_in_immutables
-  const DoctorListCard({
+  const CurrentBookingCard({
     super.key,
     required this.title,
     required this.isSubscribed,
-    required this.buttonTitle,
-    required this.onTab,
-    required this.status,
   });
 
   final String title;
-  final String buttonTitle;
-  final String status;
   final bool isSubscribed;
-  final void Function() onTab;
 
   @override
-  State<DoctorListCard> createState() => _DoctorListCardState();
+  State<CurrentBookingCard> createState() => _CurrentBookingCardState();
 }
 
-class _DoctorListCardState extends State<DoctorListCard> {
+class _CurrentBookingCardState extends State<CurrentBookingCard> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -46,9 +40,8 @@ class _DoctorListCardState extends State<DoctorListCard> {
           Stack(
             children: [
               HealthCustomCard(
-                margin: EdgeInsets.only(top: 56.h),
-                padding: EdgeInsets.symmetric(horizontal: 32.h),
-                radius: 20,
+                padding: EdgeInsets.symmetric(horizontal: 16.h),
+                radiusGeometry: BorderRadius.circular(20.h),
                 children: [
                   const Sizer(),
                   _tripCardInfoWidget(
@@ -60,7 +53,7 @@ class _DoctorListCardState extends State<DoctorListCard> {
                   const Sizer(),
                   Row(
                     children: [
-                       Icon(
+                      Icon(
                         Icons.location_on_sharp,
                         color: AppColors.PRIMARY_COLOR,size: 48.h,
                       ),
@@ -95,9 +88,9 @@ class _DoctorListCardState extends State<DoctorListCard> {
                   const Sizer(),
                   Row(
                     children: [
-                       Icon(
-                        Icons.watch_later_outlined,
-                        color: AppColors.black,size: 48.h
+                      Icon(
+                          Icons.watch_later_outlined,
+                          color: AppColors.black,size: 48.h
                       ),
                       const Sizer(),
                       Label(
@@ -108,14 +101,14 @@ class _DoctorListCardState extends State<DoctorListCard> {
                   ),
                   const Sizer(),
                   HealthCardButtonsSection(
+                    isButton: false,
                     isSubscribed: widget.isSubscribed,
-                    buttonTitle: widget.buttonTitle,
-                    onTap: widget.onTab,
+                    buttonTitle: '',
+                    onTap: (){},
                   ),
                   const Sizer(),
                 ],
               ),
-              _statusStack(),
             ],
           ),
         ],
@@ -167,17 +160,32 @@ class _DoctorListCardState extends State<DoctorListCard> {
           ],
         ),
         const Sizer(),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Label(
+                text: title,
+                style:
+                Styles.headerText(fontWeight: FontWeight.w600, fontSize: 32),
+              ),
+              if (widget.isSubscribed)
+                Label(
+                  text: 'Ear/Nose',
+                  style: Styles.mediumText(),
+                )
+            ],
+          ),
+        ),
         Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Label(
-              text: title,
+              text: '20/01/2025',
               style:
-                  Styles.headerText(fontWeight: FontWeight.w600, fontSize: 32),
+              Styles.mediumText(),
             ),
-            if (widget.isSubscribed)
               Label(
-                text: 'Ear/Nose',
+                text: '07:00 PM',
                 style: Styles.mediumText(),
               )
           ],
@@ -186,29 +194,4 @@ class _DoctorListCardState extends State<DoctorListCard> {
     );
   }
 
-  _statusStack() {
-    return Positioned(
-      right: 0,
-      top: 0,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-        decoration: BoxDecoration(
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(15), topRight: Radius.circular(15)),
-          color: Colors.white,
-          border: Border.all(
-            color: context.isDarkMode
-                ? AppColors.PRIMARY_COLOR_DARK
-                : AppColors.PRIMARY_COLOR_LIGHT,
-          ),
-        ),
-        child: Text(
-          widget.isSubscribed
-              ? widget.status
-              : LocaleKeys.notSubscribed.localize,
-          style: Styles.headerText(color: AppColors.SECONDARY_COLOR),
-        ),
-      ),
-    );
-  }
 }
