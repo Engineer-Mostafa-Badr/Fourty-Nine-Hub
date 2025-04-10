@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/accept_offer_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/trips_response_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_auto_accept_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_price_entity.dart';
@@ -69,6 +70,11 @@ class TripRepositoryImpl implements TripRepository {
   @override
   void listenToUpdateTripPrice(Function(UpdateTripPriceEntity trip) params) {
     remoteDataSource.listenToUpdateTripPrice(params);
+  }
+
+  @override
+  void listenToNewTrip(Function(TripEntity trip) params) {
+    remoteDataSource.listenToNewTrip(params);
   }
 
 }

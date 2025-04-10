@@ -16,6 +16,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/ge
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_available_trips_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_accept_offer_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_change_trip_price_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_new_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_update_trip_auto_accept_case.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/dialog_widget/show_custom_dialog_trip.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
@@ -53,6 +54,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   final ListenToUpdateTripAutoAcceptUseCase listenToUpdateTripAutoAcceptUseCase;
   final ListenToUpdateTripPriceUseCase listenToUpdateTripPriceUseCase;
   final ListenToAcceptOfferUseCase listenToAcceptOfferUseCase;
+  final ListenToNewTripUseCase listenToNewTripUseCase;
   DashboardsCubit(
     this.getAvailableTripsUsecase,
     this.getPastTripsUsecase,
@@ -66,8 +68,16 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       this.listenToUpdateTripAutoAcceptUseCase,
       this.listenToUpdateTripPriceUseCase,
       this.listenToAcceptOfferUseCase,
+      this.listenToNewTripUseCase,
   ) : super(const DashboardsState());
   List<TripEntity> availableTripsNonSocket = [];
+
+  void listenToNewTrip() {
+    CliLogger.info('Listen To New Trip');
+    listenToNewTripUseCase((trip) {
+
+    });
+  }
 
   void listenToUpdateTripAutoAccept() {
     CliLogger.info('Listen To Update Trip Auto Accept');
@@ -81,13 +91,15 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   }
 
   void listenToUpdateTripPrice() {
-    CliLogger.info('Listen To Update Trip Auto Accept');
+    CliLogger.info('Listen To Update Trip Price');
     listenToUpdateTripPriceUseCase((trip) {
+      CliLogger.info('Listen To Update TripPrice ${trip.price}');
+      CliLogger.info('Listen To Update TripId ${trip.tripId}');
+
       List<AvailableRideTripEntity> list = state.availableRideTrips ?? [];
       list.firstWhere((e)=>e.id==trip.tripId).price = trip.price;
       log(trip.toString());
       emit(state.copyWith(availableRideTrips: list));
-
     });
   }
   void listenToAcceptOffer() {

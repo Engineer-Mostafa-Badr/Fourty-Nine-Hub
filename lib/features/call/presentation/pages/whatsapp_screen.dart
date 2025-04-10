@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:flutter/services.dart';
+import 'dart:io';
 
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:flutter/material.dart';
@@ -7,9 +9,14 @@ import 'package:fourtyninehub/features/authentication/data/models/user_model.dar
 import 'package:fourtyninehub/features/call/domain/entities/call_data.dart';
 import 'package:fourtyninehub/features/call/presentation/controller/call_controller/call_cubit.dart';
 import 'package:fourtyninehub/features/call/presentation/controller/call_controller/call_state.dart';
+import 'package:fourtyninehub/features/call/presentation/controller/send_call_controller.dart/send_call_cubit.dart';
+import 'package:fourtyninehub/features/call/presentation/controller/send_call_controller.dart/send_call_states.dart';
+import 'package:fourtyninehub/features/call/presentation/pages/zego_call_page.dart';
 import 'package:fourtyninehub/features/call/widgets/build_app_bar.dart';
 import 'package:fourtyninehub/features/call/widgets/build_bottom_btns.dart';
+import 'package:fourtyninehub/features/call/widgets/screen_lock_manager.dart';
 import 'package:fourtyninehub/features/call/widgets/ui_fake_call.dart';
+import 'package:zego_express_engine/zego_express_engine.dart';
 
 class WhatsAppCallScreen extends StatefulWidget {
   const WhatsAppCallScreen({
@@ -22,46 +29,160 @@ class WhatsAppCallScreen extends StatefulWidget {
 
 class _WhatsAppCallScreenState extends State<WhatsAppCallScreen>
     with WidgetsBindingObserver {
+  static const platform =
+      MethodChannel('com.fourtyninehub.app/background_service');
+  bool isKeepScreenOn = true;
+  late final CallCubit _callCubit;
+  bool _isDisposed = false;
+
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
-    context.read<CallCubit>().checkIfThereIsCall();
+    _callCubit = context.read<CallCubit>();
+    _callCubit.checkIfThereIsCall();
+
     super.initState();
+    _enableKeepScreenOn();
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
+    if (state == AppLifecycleState.paused) {
+      // App is in background or screen is locked
+      _handleAppInBackground();
+    } else if (state == AppLifecycleState.resumed) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _handleResumed();
       });
+      if (isKeepScreenOn) {
+        _enableKeepScreenOn();
+      }
     }
     super.didChangeAppLifecycleState(state);
   }
 
+  void _handleAppInBackground() {
+    // Safety check
+    if (!mounted) return;
+
+    final callState = context.read<CallCubit>().state;
+    if (callState is HasCall) {
+      if (callState.isZegoCloud) {
+        ZegoExpressEngine.setEngineConfig(ZegoEngineConfig(
+          advancedConfig: {
+            "audio.capture.force_using_media_recorder": "true",
+            "audio.captureAndRender.androidLowLatencyEnabled": "true",
+            "background.mode.enabled": "true",
+            "audio.process.continue.in.background": "true",
+            "audio.audioRecord.bluetooth_disable_aec": "true",
+            "audio.audioRecord.disable_aes": "true",
+            "audio.audioRecord.keep.audiosession.active": "true",
+            "audio.capture.prevent.system.suspend": "true",
+            "audio.capture.continuous.background.mode": "true",
+            "audio.audioRecord.low.latency": "true",
+            "audio.voice.communication.mode": "true",
+            "android.audio.session.alwaysOn": "true",
+            "audio.record.keep.awake": "true",
+            "audio.capture.nodata.protection": "false",
+            "android.audio.focus.permanent": "true",
+          },
+        ));
+        if (Platform.isAndroid) {
+          _safelyCallPlatformMethod('releaseWakeLock');
+        }
+        ZegoExpressEngine.instance.enableAudioCaptureDevice(true);
+      } else if (callState.engine != null) {
+        callState.engine!.enableAudio();
+      }
+    }
+  }
+
+  // Safely call platform methods with proper error handling
+  Future<void> _safelyCallPlatformMethod(String method,
+      [dynamic arguments]) async {
+    if (Platform.isAndroid) {
+      try {
+        await platform.invokeMethod(method, arguments);
+      } catch (e) {
+        // Check if this is a MissingPluginException
+        if (e.toString().contains('MissingPluginException')) {
+          print(
+              'Method $method not implemented in native platform. This is expected in some environments.');
+        } else {
+          print('Error calling platform method $method: $e');
+        }
+      }
+    }
+  }
+
   void _handleResumed() async {
-    await Future.delayed(const Duration(seconds: 1));
-    if (mounted) context.read<CallCubit>().checkIfThereIsCall();
+    // await Future.delayed(const Duration(seconds: 1));
+    // if (mounted) context.read<CallCubit>().checkIfThereIsCall();
+  }
+
+  // Enable wakelock to keep screen on
+  Future<void> _enableKeepScreenOn() async {
+    await ScreenWakeLockManager.keepScreenOn();
+    setState(() {
+      isKeepScreenOn = true;
+    });
+  }
+
+  // Disable wakelock to allow screen to turn off
+  Future<void> _disableKeepScreenOn() async {
+    await ScreenWakeLockManager.allowScreenOff();
+    setState(() {
+      isKeepScreenOn = false;
+    });
   }
 
   @override
   void dispose() {
+    _isDisposed = true; // Mark as disposed
     WidgetsBinding.instance.removeObserver(this);
+    _disableKeepScreenOn();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    print("WhatsAppCallScreen call state ${context.watch<CallCubit>().state}");
-    return BlocBuilder<CallCubit, CallState>(
-      builder: (context, state) {
-        if (state is HasCall) {
-          return Positioned.fill(
-              child: VoiceCallingScreen(callData: state.callData));
-        }
-
-        return const SizedBox();
+    return PopScope(
+      canPop: true,
+      onPopInvoked: (val) {
+        // When user tries to go back, minimize the call instead
       },
+      child:
+          BlocBuilder<SendCallCubit, SendCallState>(builder: (context, state) {
+        if (state is CallMinimized) {
+          return const SizedBox();
+        }
+        return BlocBuilder<CallCubit, CallState>(
+          builder: (context, state) {
+            if (state is HasCall) {
+              print("Building call UI for state: $state");
+              if (state.isZegoCloud) {
+                return Positioned.fill(
+                  child: ZegoCallPage(
+                    callData: state.callData,
+                  ),
+                );
+              } else {
+                return Positioned.fill(
+                    child: VoiceCallingScreen(callData: state.callData));
+              }
+            } else {
+              print("No active call, returning to previous screen");
+              // If there's no active call, pop back to previous screen
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (!_isDisposed && Navigator.canPop(context)) {
+                  Navigator.of(context).pop();
+                }
+              });
+              return const SizedBox();
+            }
+          },
+        );
+      }),
     );
   }
 }
@@ -85,85 +206,93 @@ class _VoiceCallingScreenState extends State<VoiceCallingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF121212),
-      extendBody: true,
-      body: BlocBuilder<CallCubit, CallState>(
-        builder: (context, state) {
-          if (state is HasCall) {
-            print("VoiceCallingScreen call state1 $state");
-            if (state.callData.isRealCall == true.toString()) {
-              print("VoiceCallingScreen call state2 $state");
-              if (state.engine != null) {
-                // Setup event handler for remote user
-                state.engine!.registerEventHandler(
-                  RtcEngineEventHandler(
-                    onJoinChannelSuccess: (connection, elapsed) {
-                      print(
-                          "Local user joined channel: ${connection.channelId}");
-                    },
-                    onUserJoined: (connection, remoteUid, elapsed) {
-                      print("Remote user joined: $remoteUid");
-                      setState(() {
-                        _remoteUid = remoteUid;
-                      });
-                    },
-                    onUserOffline: (connection, remoteUid, reason) {
-                      print("Remote user left: $remoteUid");
-                      setState(() {
-                        _remoteUid = null;
-                        _isRemoteVideoEnabled = false;
-                      });
-                    },
-                    onRemoteVideoStateChanged:
-                        (connection, remoteUid, state, reason, elapsed) {
-                      print(
-                          "Remote video state changed: uid=$remoteUid, state=$state, reason=$reason");
-                      setState(() {
-                        _remoteUid = remoteUid;
-                        _isRemoteVideoEnabled = state ==
-                                RemoteVideoState.remoteVideoStateStarting ||
-                            state == RemoteVideoState.remoteVideoStateDecoding;
-                        print(
-                            '_isRemoteVideoEnabled $_isRemoteVideoEnabled and remoteUid $_remoteUid');
-                      });
-                    },
-                  ),
-                );
-              }
-
-              return Stack(
-                children: [
-                  // Video Layer or Background
-                  state.isVideoEnabled
-                      ? _buildAgoraVideoLayer(state)
-                      : Image.asset(
-                          'assets/images/whatsapp_bacground.png',
-                          fit: BoxFit.cover,
-                          height: double.infinity,
-                          width: double.infinity,
-                        ),
-
-                  // UI Layer with controls and info
-                  _buildUILayer(state),
-                ],
-              );
-            } else {
-             
-              print("VoiceCallingScreen call state3 $state");
-              return UIFakeCall(
-                receiver: UserModel(
-                  id: widget.callData.receiverId,
-                  firstName: widget.callData.receiverName,
-                  lastName: '',
-                  profilePicture: widget.callData.receiverImage,
-                ),
-              );
+        backgroundColor: const Color(0xFF121212),
+        extendBody: true,
+        body: BlocBuilder<SendCallCubit, SendCallState>(
+          builder: (context, state) {
+            if (state is CallMinimized) {
+              return const SizedBox();
             }
-          }
-          return const SizedBox();
-        },
-      ),
-    );
+            return BlocBuilder<CallCubit, CallState>(
+              builder: (context, state) {
+                if (state is HasCall) {
+                  print("VoiceCallingScreen call state1 $state");
+                  if (state.callData.isRealCall == true.toString()) {
+                    print("VoiceCallingScreen call state2 $state");
+                    if (state.engine != null) {
+                      // Setup event handler for remote user
+                      state.engine!.registerEventHandler(
+                        RtcEngineEventHandler(
+                          onJoinChannelSuccess: (connection, elapsed) {
+                            print(
+                                "Local user joined channel: ${connection.channelId}");
+                          },
+                          onUserJoined: (connection, remoteUid, elapsed) {
+                            print("Remote user joined: $remoteUid");
+                            setState(() {
+                              _remoteUid = remoteUid;
+                            });
+                          },
+                          onUserOffline: (connection, remoteUid, reason) {
+                            print("Remote user left: $remoteUid");
+                            setState(() {
+                              _remoteUid = null;
+                              _isRemoteVideoEnabled = false;
+                            });
+                          },
+                          onRemoteVideoStateChanged:
+                              (connection, remoteUid, state, reason, elapsed) {
+                            print(
+                                "Remote video state changed: uid=$remoteUid, state=$state, reason=$reason");
+                            setState(() {
+                              _remoteUid = remoteUid;
+                              _isRemoteVideoEnabled = state ==
+                                      RemoteVideoState
+                                          .remoteVideoStateStarting ||
+                                  state ==
+                                      RemoteVideoState.remoteVideoStateDecoding;
+                              print(
+                                  '_isRemoteVideoEnabled $_isRemoteVideoEnabled and remoteUid $_remoteUid');
+                            });
+                          },
+                        ),
+                      );
+                    }
+
+                    return Stack(
+                      children: [
+                        // Video Layer or Background
+                        state.isVideoEnabled
+                            ? _buildAgoraVideoLayer(state)
+                            : Image.asset(
+                                'assets/images/whatsapp_bacground.png',
+                                fit: BoxFit.cover,
+                                height: double.infinity,
+                                width: double.infinity,
+                              ),
+
+                        // UI Layer with controls and info
+                        _buildUILayer(state),
+                      ],
+                    );
+                  } else {
+                    print("VoiceCallingScreen call state3 $state");
+                    return UIFakeCall(
+                      receiver: UserModel(
+                        id: widget.callData.receiverId,
+                        firstName: widget.callData.receiverName,
+                        lastName: '',
+                        profilePicture: widget.callData.receiverImage,
+                      ),
+                      onMorePressed: () {},
+                    );
+                  }
+                }
+                return const SizedBox();
+              },
+            );
+          }, // BlocBuilder<CallCubit, CallState>(builder: (context, state) {
+        ));
   }
 
   Widget _buildAgoraVideoLayer(HasCall state) {
@@ -240,16 +369,27 @@ class _VoiceCallingScreenState extends State<VoiceCallingScreen> {
 
         // Profile Picture (only show when video is off)
         if (!state.isVideoEnabled && !_isRemoteVideoEnabled)
-          CircleAvatar(
-            radius: 100,
-            backgroundImage: NetworkImage(
-              state.callData.receiverImage ??
-                  'https://cdn-icons-png.flaticon.com/512/149/149071.png',
+          Container(
+            width: 220,
+            height: 220,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: NetworkImage(state.callData.receiverImage ??
+                    'https://cdn-icons-png.flaticon.com/512/149/149071.png'),
+              ),
             ),
           ),
 
         // Bottom Buttons
-        BuildBottomBtns(state: state),
+        BuildBottomBtns(
+          currentContext: context,
+            state: state,
+            callData: widget.callData,
+            onMorePressed: () {
+              // Handle more options
+            }),
       ],
     );
   }
