@@ -276,6 +276,7 @@ import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/pres
 import 'package:fourtyninehub/features/trip_join/trip_join_requests_history/presentation/pages/tripjoin_request_history_view.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_pick_me/domain/usecases/view_all_pick_me_usecase.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_pick_me/presentation/cubits/view_all_pick_me/view_all_pick_me_cubit.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_pick_me/presentation/views/all_pickme_view.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/request_trip_join_usecase.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/view_all_trip_join_usecase.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/cubits/request_trip_join_cubit/request_trip_join_cubit.dart';
@@ -2752,10 +2753,58 @@ class AppPages {
                       create: (context) => serviceLocator<AdvertisementCubit>(),
                     ),
                   ],
-                  child: TripJoinView()
-                  //const AvailableTripsView(),
+                  child: const TripJoinView(),
+                ),
+              ),GoRoute(
+                path: Paths.All_PickMe_View,
+                name: Routes.All_PickMe_View,
+                builder: (context, state) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider(
+                      create: (_) => ViewAllTripJoinCubit(
+                        viewAllTripJoinUseCase:
+                            serviceLocator<ViewAllTripJoinUseCase>(),
+                      ),
+                    ),
+                    BlocProvider(
+                      create: (_) => RequestTripJoinCubit(
+                        requestTripJoinUseCase:
+                            serviceLocator<RequstTripJoinUseCase>(),
+                      ),
+                    ),
+                    BlocProvider(
+                      create: (_) => ViewAllPickMeCubit(
+                        viewAllPickMeUseCase:
+                            serviceLocator<ViewAllPickMeUseCase>(),
+                      ),
+                    ),
+                    BlocProvider<GetCurrencyCubit>(
+                      create: (context) => GetCurrencyCubit(
+                        serviceLocator(),
+                      ),
+                    ),
+                    // car pool
+                    BlocProvider<GetAllTripsCubit>(
+                      create: (context) =>
+                          GetAllTripsCubit(apiConsumer: serviceLocator()),
+                    ),
+                    BlocProvider<GetCurrencyCubit>(
+                      create: (context) => GetCurrencyCubit(
+                        serviceLocator(),
+                      ),
+                    ),
+                    BlocProvider<JoinTripCarPoolCubit>(
+                      create: (context) => JoinTripCarPoolCubit(
+                          joinTripCarpoolUsecase: serviceLocator()),
+                    ),
+                    BlocProvider<AdvertisementCubit>(
+                      create: (context) => serviceLocator<AdvertisementCubit>(),
+                    ),
+                  ],
+                  child: const AllPickMeView(),
                 ),
               ),
+
               GoRoute(
                 path: Paths.TRIP_JOIN_REQUEST_NOTIFICATIONS,
                 name: Routes.TRIP_JOIN_REQUEST_NOTIFICATIONS,
