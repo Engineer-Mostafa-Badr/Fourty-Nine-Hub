@@ -1470,5 +1470,6 @@ abstract class  LocaleKeys {
   static const yourRate = 'yourRate';
   static const bad = 'bad';
   static const rateTheRestaurant = 'rateTheRestaurant';
+  static const restaurantRateYou = 'restaurantRateYou';
 
 }

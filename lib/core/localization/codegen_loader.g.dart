@@ -1493,7 +1493,8 @@ class CodegenLoader extends AssetLoader{
   "views": "المشاهدات",
   "yourRate": "التقييم الخاص بك",
   "bad": "سيء",
-  "rateTheRestaurant": "قيم المطعم"
+  "rateTheRestaurant": "قيم المطعم",
+  "restaurantRateYou": "تقييم المطعم لك"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -2990,7 +2991,8 @@ static const Map<String,dynamic> _en = {
   "views": "Views",
   "yourRate": "Your rate",
   "bad": "Bad",
-  "rateTheRestaurant": "Rate The Restaurant"
+  "rateTheRestaurant": "Rate The Restaurant",
+  "restaurantRateYou": "Restaurant rate you"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

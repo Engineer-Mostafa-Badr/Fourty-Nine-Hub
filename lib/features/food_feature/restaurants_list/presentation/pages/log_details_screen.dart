@@ -168,6 +168,42 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
                         ),
                       ],
                     ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Label(
+                    text: LocaleKeys.restaurantRateYou.localize,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16,
+                        color: AppColors.black),
+                  ),
+                  Row(
+                    children: [
+                      const Label(
+                        text: "Good",
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w600),
+                      ),
+                      RatingBar(
+                        initialRating: _currentLogsEntity.restaurantRateUser?.toDouble() ?? 0,
+                        // initialRating:
+                        //     widget.logsEntity.userRateRestaurant?.toDouble() ?? 0,
+                        ignoreGestures: true,
+                        itemPadding:
+                        const EdgeInsets.symmetric(horizontal: 3),
+                        ratingWidget: RatingWidget(
+                          full: SvgPicture.asset(Assets.star1),
+                          half: SvgPicture.asset(Assets.star1),
+                          empty: SvgPicture.asset(Assets.starEmpty),
+                        ),
+                        itemSize: 13,
+                        onRatingUpdate: (double value) {},
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ],
           ),
         ),
@@ -465,6 +501,12 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
             style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
           ),
           const SizedBox(height: 8),
+          Label(
+            text:getRatingText(),
+            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 30),
+          ),
+
+          const SizedBox(height: 8),
           // Rating Bar
           RatingBar(
             initialRating: _rating,
@@ -484,16 +526,6 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
                 _rating = rating;
               });
             },
-          ),
-          const SizedBox(height: 16),
-          // Displaying the rating text based on the selected rating
-          Text(
-            getRatingText(),
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: Colors.black,
-            ),
           ),
           const SizedBox(height: 24),
           AppButton(
