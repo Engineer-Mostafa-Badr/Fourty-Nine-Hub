@@ -1520,7 +1520,10 @@ class CodegenLoader extends AssetLoader{
   "yourRate": "التقييم الخاص بك",
   "bad": "سيء",
   "rateTheRestaurant": "قيم المطعم",
-  "restaurantRateYou": "تقييم المطعم لك"
+  "restaurantRateYou": "تقييم المطعم لك",
+  "addACommentsFor": "أضف تعليقًا لـ",
+  "commentAdded": "تم إضافة التعليق",
+  "areYouSureYouWantToDeleteThisComment": "هل أنت متأكد أنك تريد حذف هذا التعليق؟"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -3045,7 +3048,10 @@ static const Map<String,dynamic> _en = {
   "yourRate": "Your rate",
   "bad": "Bad",
   "rateTheRestaurant": "Rate The Restaurant",
-  "restaurantRateYou": "Restaurant rate you"
+  "restaurantRateYou": "Restaurant rate you",
+  "addACommentsFor": "Add a comments for",
+  "commentAdded": "Comment added",
+  "areYouSureYouWantToDeleteThisComment": "Are you sure you want to delete this comment?"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }
