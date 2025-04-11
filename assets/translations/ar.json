@@ -1472,7 +1472,12 @@
   "noOfRequests": "عدد الطلبات",
   "modify": "تعديل",
   "restaurantPhoto": "صورة المطعم",
-  "areYouSureUpdate": "Are you sure you want to update"
+  "areYouSureUpdate": "Are you sure you want to update",
+  "restaurantMode": "وضع المطعم",
+  "views": "المشاهدات",
+  "yourRate": "التقييم الخاص بك",
+  "bad": "سيء",
+  "rateTheRestaurant": "قيم المطعم"
 
 
 }

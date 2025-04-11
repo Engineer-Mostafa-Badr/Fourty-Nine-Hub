@@ -51,7 +51,7 @@ class UserTripOptions extends StatelessWidget {
             children: [
               Expanded(
                 child: PublishButtonV3UserTrip(
-                  text: LocaleKeys.publish_perimum.localize,
+                  text: "LocaleKeys.publish_perimum.localize",
                   formKey: formKey,
                   color: AppColors.colorRed,
                 ),

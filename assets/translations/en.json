@@ -1488,5 +1488,10 @@
   "joinAvailableTripsNearYouNow": " Join available trips near you now. ",
   "browseRecentlyCompletedTrips": "Browse recently completed trips.",
   "oneWayOneCaptain": "One Way - One Captain!",
-  "goToFirstClient": "Go to first client"
+  "goToFirstClient": "Go to first client",
+  "restaurantMode": "Restaurant Mode",
+  "views": "Views",
+  "yourRate": "Your rate",
+  "bad": "Bad",
+  "rateTheRestaurant": "Rate The Restaurant"
 }

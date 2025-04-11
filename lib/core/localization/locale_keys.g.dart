@@ -540,16 +540,13 @@ abstract class  LocaleKeys {
   static const KM = 'KM';
   static const repeat = 'repeat';
   static const totalPrice = 'totalPrice';
- 
   static const brand = 'brand';
+  static const publish_permiun = 'publish_permiun';
+  static const welcome_pick_me = 'welcome_pick_me';
+  static const tool_help_question = 'tool_help_question';
   static const model = 'model';
   static const publish = 'publish';
-  static const welcome_pick_me =   'welcome_pick_me';
-  static const publish_perimum ='publish_permiun'; 
   static const youCantLeaveFieldEmpty = 'youCantLeaveFieldEmpty';
-  static const toolHelp =  'tool_help_question';
-
-  
   static const addressMustBeAtLeast10Chars = 'addressMustBeAtLeast10Chars';
   static const searchFind = 'searchFind';
   static const markAllNotificationAsSeen = 'markAllNotificationAsSeen';
@@ -1468,5 +1465,10 @@ abstract class  LocaleKeys {
   static const modify = 'modify';
   static const restaurantPhoto = 'restaurantPhoto';
   static const areYouSureUpdate = 'areYouSureUpdate';
+  static const restaurantMode = 'restaurantMode';
+  static const views = 'views';
+  static const yourRate = 'yourRate';
+  static const bad = 'bad';
+  static const rateTheRestaurant = 'rateTheRestaurant';
 
 }

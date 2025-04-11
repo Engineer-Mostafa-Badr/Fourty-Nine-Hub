@@ -46,7 +46,7 @@ class _MealCategoryCardState extends State<MealCategoryCard> {
                   decoration: BoxDecoration(
                     color:widget.subCategory?.isSelected == true
                         ? AppColors.SECONDARY_COLOR:
-                    Colors.grey,
+                    AppColors.cD9D9D9,
                     borderRadius: BorderRadius.circular(15),
                     border: Border.all(width: 0.5, color: AppColors.black),
                   ),

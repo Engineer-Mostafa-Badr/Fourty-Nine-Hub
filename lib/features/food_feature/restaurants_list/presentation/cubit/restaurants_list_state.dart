@@ -38,17 +38,22 @@ class RestaurantsListState {
   final bool? isLoadingMore;
   final bool? isLoadingRestaurantsMore;
   final bool? isLoadingExpiredOrdersMore;
+  final bool? isLoadingUserOrdersMore;
   final int? numOfRestaurants;
   final String? selectedSubCategoryId;
   final FoodCategoryEntity? selectedCategory;
   final MainCategoryEntity? mainCategory;
   final IsRestaurantModel? isResturant;
+  final List<UserOrderEntity>? userOrderEntity;
   final List<Restaurant2Model>?
       allRestaurant; // Using Restaurant2Model for consistency
   final List<RestaurantEntity>? trendingRestaurants;
   final List<Restaurant2Model>? subCategories;
   final List<FoodCategoryEntity>? mealCategories;
   final List<SubCategoryEntity>? categories;
+  final List<LogsRequestLogsEntity>? logsEntity;
+  final bool? isLoadingMoreLogs;
+  final RateResponseEntity? rateResponseEntity;
 
   const RestaurantsListState({
     this.expiredRequestsResponse,
@@ -61,6 +66,8 @@ class RestaurantsListState {
     this.allRestaurant,
     this.isLoadingMore = false,
     this.isLoadingExpiredOrdersMore = false,
+    this.isLoadingUserOrdersMore = false,
+    this.isLoadingMoreLogs = false,
     this.selectedCategory,
     this.selectedSubCategoryId = '',
     this.isLoadingRestaurantsMore,
@@ -69,6 +76,9 @@ class RestaurantsListState {
     this.banner,
     this.trendingRestaurants,
     this.categories,
+    this.userOrderEntity,
+    this.logsEntity,
+    this.rateResponseEntity,
   });
 
   RestaurantsListState copyWith({
@@ -77,6 +87,8 @@ class RestaurantsListState {
     Failure? failure,
     bool? isLoadingMore,
     bool? isLoadingExpiredOrdersMore,
+    bool? isLoadingMoreLogs,
+    bool? isLoadingUserOrdersMore,
     bool? isLoadingRestaurantsMore,
     List<RestaurantEntity>? nearByRestaurants,
     List<Restaurant2Model>? subCategories,
@@ -91,6 +103,9 @@ class RestaurantsListState {
     List<RestaurantEntity>? trendingRestaurants,
     List<SubCategoryEntity>? categories,
     List<FoodCategoryEntity>? mealCategories,
+    List<UserOrderEntity>? userOrderEntity,
+    List<LogsRequestLogsEntity>? logsEntity,
+    RateResponseEntity? rateResponseEntity,
   }) {
     return RestaurantsListState(
       status: status ?? this.status,
@@ -101,6 +116,8 @@ class RestaurantsListState {
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
       isLoadingExpiredOrdersMore:
           isLoadingExpiredOrdersMore ?? this.isLoadingExpiredOrdersMore,
+      isLoadingUserOrdersMore:
+      isLoadingUserOrdersMore ?? this.isLoadingUserOrdersMore,
       isLoadingRestaurantsMore:
           isLoadingRestaurantsMore ?? this.isLoadingRestaurantsMore,
       allRestaurant: allRestaurant ?? this.allRestaurant,
@@ -115,6 +132,10 @@ class RestaurantsListState {
       selectedSubCategoryId:
           selectedSubCategoryId ?? this.selectedSubCategoryId,
       selectedCategory: selectedCategory ?? this.selectedCategory,
+      userOrderEntity: userOrderEntity ?? this.userOrderEntity,
+      logsEntity: logsEntity ?? this.logsEntity,
+      isLoadingMoreLogs: isLoadingMoreLogs ?? this.isLoadingMoreLogs,
+      rateResponseEntity: rateResponseEntity ?? this.rateResponseEntity,
     );
   }
 }

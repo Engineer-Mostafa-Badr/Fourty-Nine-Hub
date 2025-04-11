@@ -70,6 +70,7 @@ class EndPoints {
   static const checkAnswersQuestions = '/auth/check-answers-questions';
   static const refreshToken = '/auth/refresh/token';
   static const agoraGenerateToken = '/stream-services/agora/channel';
+  static const addRateRestaurant = '/restaurant/rating-restaurant/';
   static const whatsAppAgoraToken =
       '/stream-services/agora/channel/single-token';
   static String friendsList(TwitterFeedParams params) =>
@@ -253,6 +254,7 @@ class EndPoints {
   static const onlyWithPrivacy = '/privacy/exclusion/only-with';
   static const exceptFromPrivacy = '/privacy/exclusion/except-from';
   static const exclusionPrivacy = '/privacy/exclusion?feature=';
+  static const userOrder = '/food/get-user-orders';
 
 
   static const searchUserPrivacy = '/search/users/';
@@ -883,6 +885,8 @@ class EndPoints {
       '/food/favorite-restaurant/$id';
   static String foodExpiredOrders(PaginationParams params) =>
       '/food/expired-orders?page=${params.page}&limit=${params.limit}';
+  static String foodReqLogs(PaginationParams params) =>
+      '/food/request-logs?page=${params.page}&limit=${params.limit}';
   static String isResturant = '/restaurants/check-user-have-restaurant';
   static String createRestaurant = '/restaurants/create-restaurant';
   static String changeConnectivity = '/restaurants/modify-active';

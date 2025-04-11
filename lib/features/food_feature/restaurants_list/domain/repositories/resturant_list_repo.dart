@@ -10,6 +10,11 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 
 import '../../../../../core/error/failure.dart';
 import '../../data/models/restaurant_model.dart';
+import '../entities/logs_entity.dart';
+import '../entities/rate_response_entity.dart';
+import '../entities/user_order_entity.dart';
+import '../usecases/add_rate_restaurant_use_case.dart';
+import '../usecases/get_user_order_use_case.dart';
 
 abstract class RestaurantListRepo {
   Future<Either<Failure, List<RestaurantModel>>> getNearByReasturants({
@@ -26,6 +31,10 @@ abstract class RestaurantListRepo {
       {required String params});
   Future<Either<Failure, ExpiredRequestsResponse>> getExpiredOrders(
       PaginationParams params);
+
+  Future<Either<Failure, List<LogsRequestLogsEntity>>> getReqLogs(
+      PaginationParams params);
+
   Future<Either<Failure, List<RestaurantModel>>> getTrendingRestaurants({
     required double lat,
     required double lng,
@@ -41,4 +50,8 @@ abstract class RestaurantListRepo {
       required String government,
       PostCommentsParams? params});
   Future<Either<Failure, bool>> createRestaurant(CreateRestaurantParams params);
+
+  Future<Either<Failure, List<UserOrderEntity>>> getUserOrder({required GetUserOrderParams params});
+
+  Future<Either<Failure, RateResponseEntity>> addRateRestaurant({required AddRateRestaurantParams params});
 }
