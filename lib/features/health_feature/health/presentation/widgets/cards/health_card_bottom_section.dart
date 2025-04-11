@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/cards/trip_contacts_buttons.dart';
+import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/cards/health_contacts_button.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_card_button.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
@@ -40,7 +40,7 @@ class HealthCardButtonsSection extends StatelessWidget {
           width: 60,
         ),
         const Expanded(
-          child:  ContactsTripButtons(
+          child:  HealthContactsButtons(
             // otherUserId: widget.tripJoinCardEntity.userId!,
             // subcategoryId: widget.tripJoinCardEntity.categoryId!,
             // phone: widget.tripJoinCardEntity.phone!,
