@@ -21,7 +21,7 @@ class UserStarModel extends UserStarEntity {
           ? json['userId']['lastName']
           : json['lastName'] ?? '',
       email: json['userId'] != null
-          ? json['userId']['email']
+          ? json['userId']['email']??''
           : json['email'] ?? '',
       image: json['userId'] != null
           ? json['userId']['USER_PROFILE']['profilePictureKey']['mediaKey']

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
@@ -17,7 +18,8 @@ import '../../../../../core/widget/custom_scaffold.dart';
 import '../cubit/restaurants_list_cubit.dart';
 
 class RestaurantExpiredRequestsScreen extends StatefulWidget {
-  const RestaurantExpiredRequestsScreen({super.key});
+  const  RestaurantExpiredRequestsScreen({super.key, this.onClose});
+  final VoidCallback? onClose; // Callback to hide search UI
 
   @override
   State<RestaurantExpiredRequestsScreen> createState() =>
@@ -49,52 +51,91 @@ class _RestaurantExpiredRequestsScreenState
     super.dispose();
   }
 
-  @override
+//   @override
+//   Widget build(BuildContext context) {
+//     return CustomScaffold(
+//       backgroundColor: scaffoldDarkColor(context),
+//       appBar: BackAppBar(
+//         label: LocaleKeys.expiredRequests.tr(),
+//       ),
+//       body: BlocBuilder<RestaurantsCubit, RestaurantsListState>(
+//           builder: (context, state) {
+//         final controller = context.read<RestaurantsCubit>();
+//
+//         if (!state.isLoading) {
+//           return Column(
+//             children: [
+//               Expanded(
+//                 child: ListView.separated(
+//                   controller: _scrollController,
+//                   itemCount: controller.expiredOrders.length,
+//                   itemBuilder: (context, index) {
+//                     final request = controller.expiredOrders[index];
+//                     return Padding(
+//                       padding: const EdgeInsets.all(4.0),
+//                       child: TripRequestCard(orderData: request),
+//                     );
+//                   },
+//                   separatorBuilder: (BuildContext context, int index) {
+//                     return const Sizer();
+//                   },
+//                 ),
+//               ),
+//               if (controller.isLoadingExpiredOrdersMore)
+//                 const Center(
+//                   child: CircularProgressIndicator(),
+//                 )
+//             ],
+//           );
+//         } else {
+//           return const Center(
+//             child: CircularProgressIndicator(),
+//           );
+//         }
+//       }),
+//     );
+//   }
+// }
+@override
   Widget build(BuildContext context) {
-    return CustomScaffold(
-      backgroundColor: scaffoldDarkColor(context),
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(30),
-        child: BackAppBar(
-          label: LocaleKeys.expiredRequests.tr(),
-        ),
-      ),
-      body: BlocBuilder<RestaurantsCubit, RestaurantsListState>(
-          builder: (context, state) {
-        final controller = context.read<RestaurantsCubit>();
+    return BlocBuilder<RestaurantsCubit, RestaurantsListState>(
+        builder: (context, state) {
+          final controller = context.read<RestaurantsCubit>();
 
-        if (!state.isLoading) {
-          return Column(
-            children: [
-              Expanded(
-                child: ListView.separated(
-                  controller: _scrollController,
-                  itemCount: controller.expiredOrders.length,
-                  itemBuilder: (context, index) {
-                    final request = controller.expiredOrders[index];
-                    return Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: TripRequestCard(orderData: request),
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return const Sizer();
-                  },
-                ),
+          if (!state.isLoading) {
+            return SizedBox(
+              height:MediaQuery.sizeOf(context).height * .8,
+              child: Column(
+                children: [
+                  Expanded(
+                    child: ListView.separated(
+                      controller: _scrollController,
+                      itemCount: controller.expiredOrders.length,
+                      itemBuilder: (context, index) {
+                        final request = controller.expiredOrders[index];
+                        return Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: TripRequestCard(orderData: request),
+                        );
+                      },
+                      separatorBuilder: (BuildContext context, int index) {
+                        return const Sizer();
+                      },
+                    ),
+                  ),
+                  if (controller.isLoadingExpiredOrdersMore)
+                    const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                ],
               ),
-              if (controller.isLoadingExpiredOrdersMore)
-                const Center(
-                  child: CircularProgressIndicator(),
-                )
-            ],
-          );
-        } else {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-      }),
-    );
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        });
   }
 }
 
@@ -109,9 +150,15 @@ class TripRequestCard extends StatelessWidget {
             orderData.user!.id!.isNotEmpty ||
             orderData.restaurant != null ||
             orderData.restaurant!.id!.isNotEmpty
-        ? Card(
-            elevation: context.isDarkMode ? 0 : 2,
-            color: cardDarkColor(context),
+        ? Container(
+            // elevation: context.isDarkMode ? 0 : 2,
+           decoration: BoxDecoration(
+             // color: cardDarkColor(context),
+             border: Border.all(
+               color: AppColors.black,
+             ),
+             borderRadius: BorderRadius.circular(15)
+           ),
             child: Padding(
               padding: const EdgeInsets.all(12.0),
               child: Column(
@@ -128,21 +175,48 @@ class TripRequestCard extends StatelessWidget {
   Widget _buildHeader(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        CircleAvatar(
-          radius: 65.w,
-          backgroundColor: Colors.grey[600],
-          backgroundImage: AssetImage(_getGenderImage(orderData.user)),
+        Stack(
+          alignment: Alignment.topRight,
+          children: [
+            CircleAvatar(
+              radius: 65.w,
+              backgroundColor: Colors.grey[600],
+              backgroundImage: AssetImage(_getGenderImage(orderData.user)),
+            ),
+            Container(
+              width: 32,
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: AppColors.cF5F5F5,
+                borderRadius: BorderRadius.circular(10),
+                // shape: BoxShape.circle,
+              ),
+              child: const Row(
+                children: [
+                  Icon(Icons.star,size: 6.6,color: AppColors.ACCENT_COLOR,),
+                  Text(
+                    '4.5',
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
         SizedBox(width: 16.h),
         Expanded(
           flex: 1,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            // mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _buildUserName(),
-              const SizedBox(height: 50),
             ],
           ),
         ),
@@ -156,12 +230,12 @@ class TripRequestCard extends StatelessWidget {
   }
 
   Widget _buildUserName() {
-    return Text(
-      capitalizeAndSplit2Only(
+    return Label(
+     text:  capitalizeAndSplit2Only(
           orderData.user?.firstName ?? LocaleKeys.noName.tr()),
       style: const TextStyle(
         fontSize: 16,
-        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.w600,
       ),
     );
   }
@@ -175,14 +249,21 @@ class TripRequestCard extends StatelessWidget {
                 LocaleKeys.unknownRestaurant.tr()),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: Styles.headerText()),
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+          ),),
         if (orderData.restaurant?.subcategory != null)
           Text(
               context.isArabic
                   ? orderData.restaurant!.subcategory!.nameAr.toString()
                   : capitalizeAndSplit2Only(
                       orderData.restaurant!.subcategory!.nameEn ?? ''),
-              style: Styles.headerText()),
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
         _buildFoodDetails(),
         _buildTotalAndCurrency(),
       ],
@@ -205,7 +286,10 @@ class TripRequestCard extends StatelessWidget {
       foodList.length > 1 ? "${foodList[0]}, ${foodList[1]}" : foodList[0],
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
-      style: Styles.headerText(),
+      style: const TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w700,
+      ),
     );
   }
 
@@ -214,17 +298,25 @@ class TripRequestCard extends StatelessWidget {
       children: [
         Text(
           "${LocaleKeys.total.tr()}: ",
-          style: Styles.headerText(),
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+          ),
         ),
         const Spacer(),
         Text(
           orderData.total?.toString() ?? '0',
-          style: Styles.headerText(),
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+          ),
         ),
         Text(
           " ${orderData.currency ?? ''}",
-          style: Styles.mediumText(
-              color: AppColors.SECONDARY_COLOR, fontWeight: FontWeight.bold),
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+          ),
         ),
       ],
     );
@@ -232,13 +324,15 @@ class TripRequestCard extends StatelessWidget {
 
   Widget _buildFooter(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           orderData.createdAt != null
               ? DateFormat('MMM d, yyyy h:mm a').format(orderData.createdAt!)
               : LocaleKeys.noDate.tr(),
-          style: Styles.mediumText(
-            fontWeight: FontWeight.normal,
+          style: const TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
           ),
         ),
         const Spacer(),
@@ -247,9 +341,10 @@ class TripRequestCard extends StatelessWidget {
           child: Text(
             orderData.subscriptionType?.toString() ??
                 LocaleKeys.noSubscription.tr(),
-            style: Styles.headerText(
+            style: const TextStyle(
+              fontSize: 12,
               color: AppColors.SECONDARY_COLOR_DARK,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ),
@@ -258,7 +353,7 @@ class TripRequestCard extends StatelessWidget {
   }
 
   String _getGenderImage(User? user) {
-    if (user == null) return Assets.maleImagePlaceholder; // Default image
+    if (user == null) return Assets.maleImagePlaceholder;
     return user.gender == 'male'
         ? Assets.maleImagePlaceholder
         : Assets.femaleImagePlacehlder;

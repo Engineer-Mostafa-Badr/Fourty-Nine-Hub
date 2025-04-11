@@ -5,7 +5,7 @@ class CommentInstagramEntity {
   final String createdAt;
   final String userId;
   final String username;
-  final List<RepliesEntity> replies;
+  final List<CommentInstagramEntity> replies;
   final int repliesCount;
 
   CommentInstagramEntity({
@@ -19,5 +19,3 @@ class CommentInstagramEntity {
     required this.repliesCount,
   });
 }
-
-class RepliesEntity {}

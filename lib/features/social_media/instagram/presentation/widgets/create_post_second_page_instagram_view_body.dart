@@ -16,10 +16,10 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 class CreatePostSecondPageInstagramViewBody extends StatelessWidget {
   const CreatePostSecondPageInstagramViewBody({
     super.key,
-    required this.selectedImages,
+    // required this.selectedImages,
   });
 
-  final List<Future<File?>> selectedImages;
+  // final List<Future<File?>> selectedImages;
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +32,8 @@ class CreatePostSecondPageInstagramViewBody extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: ShowImagesCreatePostSecond(
-                  selectedImages: selectedImages,
-                ),
+                    // selectedImages: selectedImages,
+                    ),
               ),
               const SizedBox(height: 20),
               const Padding(

@@ -14,8 +14,16 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usec
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 
 import '../../../../../res/assets/jsons.dart';
+import '../../domain/entities/logs_entity.dart';
+import '../../domain/entities/rate_response_entity.dart';
+import '../../domain/entities/user_order_entity.dart';
+import '../../domain/usecases/add_rate_restaurant_use_case.dart';
+import '../../domain/usecases/get_user_order_use_case.dart';
 import '../models/food_category_model.dart';
+import '../models/logs_model.dart';
+import '../models/rate_response_model.dart';
 import '../models/restaurant_model.dart';
+import '../models/user_order_model.dart';
 
 abstract class RestaurantsRemoteDataSource {
   Future<Either<Failure, bool>> createRestaurant(CreateRestaurantParams params);
@@ -47,6 +55,14 @@ abstract class RestaurantsRemoteDataSource {
   Future<Either<Failure, List<Restaurant2Model>>> getSubCategoryRestaurants(
       {required GetSubCategoryRestaurants params});
   Future<Either<Failure, IsRestaurantModel>> isRestaurant();
+
+  Future<Either<Failure, List<UserOrderEntity>>> getUserOrder({required GetUserOrderParams params});
+
+  Future<Either<Failure, List<LogsRequestLogsEntity>>> getReqLogs(
+      PaginationParams params);
+
+  Future<Either<Failure, RateResponseEntity>> addRateRestaurant({required AddRateRestaurantParams params});
+
 }
 
 class RestaurantsRemoteDataSourceImpl implements RestaurantsRemoteDataSource {
@@ -232,5 +248,53 @@ class RestaurantsRemoteDataSourceImpl implements RestaurantsRemoteDataSource {
         await _apiConsumer.post(EndPoints.toggleRestaurantFavourite(params));
     return response.fold(
         (failure) => Left(failure), (data) => Right(data['status']));
+  }
+
+  @override
+  Future<Either<Failure, List<UserOrderEntity>>> getUserOrder({required GetUserOrderParams params}) async{
+    final String url =
+        "${EndPoints.userOrder}?page=${params.page}&limit=${params.limit}}";
+
+    final response = await _apiConsumer.get(url);
+
+    return response.fold(
+          (failure) => Left(failure),
+          (data) {
+        final balanceData = (data['data'] as List)
+            .map((e) => UserOrderModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+        return Right(balanceData);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<LogsRequestLogsEntity>>> getReqLogs(PaginationParams params) async{
+    final response =
+    await _apiConsumer.get(EndPoints.foodReqLogs(params));
+    return response.fold(
+          (failure) => Left(failure),
+          (data) {
+        final balanceData = (data['data'] as List)
+            .map((e) => LogsRequestLogsModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+        return Right(balanceData);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, RateResponseEntity>> addRateRestaurant({required AddRateRestaurantParams params}) async{
+    final url = "${EndPoints.addRateRestaurant}${params.restaurantId}";
+
+    final response = await _apiConsumer.post(url,data: params.toJson());
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final blockHealthModel = RateResponseModel.fromJson(data);
+        return Right(blockHealthModel);
+      },
+    );
   }
 }

@@ -1495,10 +1495,18 @@
   "addExplanatoryNote": "اضافة شرح توضيحي",
   "searchForAUser": "البحث عن مستخدم",
   "taggedPeople": "الأشخاص المُشار إليهم",
-  "areYouSureUpdate": "Are you sure you want to update",
   "status": "الحالات",
   "otpCode": "الكود",
   "weHaveSentACodeTo": "لقد ارسلنا لك كود الي ",
   "oTPVerifyFor": "تاكيد الكود عن طريق ",
-  "resendOtpSuccess": "تم ارسال الكود بنجاح"
+  "resendOtpSuccess": "تم ارسال الكود بنجاح",
+  "restaurantMode": "وضع المطعم",
+  "yourRate": "التقييم الخاص بك",
+  "bad": "سيء",
+  "rateTheRestaurant": "قيم المطعم",
+  "restaurantRateYou": "تقييم المطعم لك",
+  "addACommentsFor": "أضف تعليقًا لـ",
+  "commentAdded": "تم إضافة التعليق",
+  "areYouSureYouWantToDeleteThisComment": "هل أنت متأكد أنك تريد حذف هذا التعليق؟",
+  "responseStatus": "حالة الرد"
 }

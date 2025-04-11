@@ -38,6 +38,7 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/secrets/controller/secrets_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 import 'core/service/cache_service.dart';
 import 'core/themes/light_theme.dart';
@@ -49,11 +50,11 @@ import 'features/settings/presentation/cubit/choice_ruler_cubit.dart';
 import 'features/settings/presentation/cubit/floating_navigator_cubit.dart';
 import 'firebase_options.dart';
 import 'routes/pages.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 bool isActivate = false;
+bool isShowOnboarding = false;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -96,8 +97,9 @@ void main() async {
   );
   // ZegoGiftManager().cache.cache(giftItemList);
   isActivate = await CacheManager.getActivation() ?? false;
+  isShowOnboarding = await CacheManager.getShowOnboarding() ?? false;
   await CacheManager.getFloatingNavigator();
-  //Admob.initialize();l
+  //Admob.initialize();
 
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -108,8 +110,12 @@ void main() async {
   await customPageCubit.fetchActivate();
 
   // final isActivated =  false;
-
-  final initialRoute = isActivate ? Routes.PAGEPREVIEW : Routes.HOME;
+  // Routes.onBoardingScreen
+  final initialRoute = !isShowOnboarding
+      ? Routes.onBoardingScreen
+      : isActivate
+          ? Routes.PAGEPREVIEW
+          : Routes.HOME;
 
   AppPages.initializeRouter(initialRoute);
   runApp(

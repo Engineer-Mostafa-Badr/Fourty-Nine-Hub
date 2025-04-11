@@ -11,6 +11,7 @@ Restaurant2Model _$Restaurant2ModelFromJson(Map<String, dynamic> json) =>
       id: json['_id'] as String?,
       name: json['name'] as String?,
       number: json['phone'] as String?,
+          rateName: json['rateName'] as String?,
       subscriptionType: json['subscriptionType'] as String?,
       city: json['city'] == null
           ? null
@@ -32,13 +33,14 @@ Restaurant2Model _$Restaurant2ModelFromJson(Map<String, dynamic> json) =>
           ?.map((e) => RestaurantMneuModel.fromJson(e as Map<String, dynamic>))
           .toList(),
       numberOfReviews: (json['numberOfReviews'] as num?)?.toInt(),
+          totalViews: (json['totalViews'] as num?)?.toInt(),
       restaurantMedia: (json['restaurantMedia'] as List<dynamic>?)
           ?.map((e) => RestaurantMediaModel.fromJson(e as Map<String, dynamic>))
           .toList(),
       totalRating: (json['totalRating'] as num?)?.toDouble(),
       description: json['description'] as String?,
-      isFavorite: json['isFavorite'] as bool?,
-      enableOrDisableChat: json['enableOrDisableChat'].toString(),
+      isFavorite: json['isFavorite'] as bool? ?? false,
+      enableOrDisableChat: json['enableOrDisableChat'] as String?,
     );
 
 Map<String, dynamic> _$Restaurant2ModelToJson(Restaurant2Model instance) =>

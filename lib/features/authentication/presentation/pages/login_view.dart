@@ -617,7 +617,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   // fillColor: const Color(0xFFEEEEEE),
                   borderColor: Colors.black,
                   currentController: registerCubit.lastNameController,
-                  style: const TextStyle(color: AppColors.QUANTITY_COLOR),
+                  // style: const TextStyle(color: AppColors.QUANTITY_COLOR),
                   // label: 'E-mail or phone number',
                   hint: LocaleKeys.lastName.localize,
                   prefixIcon: Icon(
@@ -647,6 +647,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     color: AppColors.GREY_DARK_COLOR,
                     size: 40.w,
                   ),
+                  keyboardType: TextInputType.emailAddress,
                 ),
                 Sizer(
                   height: 30.h,

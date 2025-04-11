@@ -52,64 +52,64 @@ class GetStatusAllServicesNotificationsCubit
           
         },
         {
-          'nameEn': 'Ads Registration',
+          'nameEn': 'Ads',
           'nameAr': 'تسجيل الإعلانات',
           'valueEn': r.adsRegistration,
           'valueAr': _changeStatusLang(r.adsRegistration),
           
         },
         {
-          'nameEn': 'Company Ads Registration',
-          'nameAr': 'تسجيل إعلانات الشركة',
+          'nameEn': 'Company Ads',
+          'nameAr': 'إعلانات الشركة',
           'valueEn': r.companyAdsRegistration,
           'valueAr': _changeStatusLang(r.companyAdsRegistration),
           
         },
         {
-          'nameEn': 'Talent Registration',
-          'nameAr': 'تسجيل المواهب',
+          'nameEn': 'Talent',
+          'nameAr': 'المواهب',
           'valueEn': r.talentRegistration,
           'valueAr': _changeStatusLang(r.talentRegistration),
           
         },
         {
-          'nameEn': 'Yellow Card Status',
-          'nameAr': 'حالة البطاقة الصفراء',
+          'nameEn': 'Yellow Card',
+          'nameAr': 'البطاقة الصفراء',
           'valueEn': r.yellowCardStatus,
           'valueAr': _changeStatusLang(r.yellowCardStatus),
           
         },
         {
-          'nameEn': 'Bills Status',
-          'nameAr': 'حالة الفواتير',
+          'nameEn': 'Bills',
+          'nameAr': 'الفواتير',
           'valueEn': r.billsStatus,
           'valueAr': _changeStatusLang(r.billsStatus),
           
         },
         {
-          'nameEn': 'Help Status',
-          'nameAr': 'حالة المساعدة',
+          'nameEn': 'Help',
+          'nameAr': 'المساعدة',
           'valueEn': r.helpStatus,
           'valueAr': _changeStatusLang(r.helpStatus),
           
         },
         {
-          'nameEn': 'Cashback Withdraw Status',
-          'nameAr': 'حالة سحب النقود المستردة',
+          'nameEn': 'Cashback Withdraw',
+          'nameAr': 'سحب النقود المستردة',
           'valueEn': r.cashbackWithdrawStatus,
           'valueAr': _changeStatusLang(r.cashbackWithdrawStatus),
           
         },
         {
-          'nameEn': 'Wallet Withdraw Status',
-          'nameAr': 'حالة سحب المحفظة',
+          'nameEn': 'Wallet Withdraw',
+          'nameAr': 'سحب المحفظة',
           'valueEn': r.walletWithdrawStatus,
           'valueAr': _changeStatusLang(r.walletWithdrawStatus),
           
         },
         {
-          'nameEn': 'Report Status',
-          'nameAr': 'حالة التقرير',
+          'nameEn': 'Report',
+          'nameAr': 'التقرير',
           'valueEn': r.reportStatus,
           'valueAr': _changeStatusLang(r.reportStatus),
         },

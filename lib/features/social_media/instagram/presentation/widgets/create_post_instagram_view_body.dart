@@ -9,9 +9,11 @@ import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/app_bar_create_post_instagram.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/floating_action_button_create_post_instagram.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/post_body_create_post_instagram.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 
-class CreatePostInstagramScreen extends StatelessWidget {
-  const CreatePostInstagramScreen({super.key});
+class CreatePostInstagramViewBody extends StatelessWidget {
+  const CreatePostInstagramViewBody({super.key});
 
   // @override
   // void initState() {
@@ -74,7 +76,6 @@ class CreatePostInstagramScreen extends StatelessWidget {
     // if (isLoading) {
     //   return const Center(child: CircularProgressIndicator());
     // }
-
     // if (images.isEmpty) {
     //   return const Center(child: Text('No images found!'));
     // }
@@ -110,16 +111,19 @@ class CreatePostInstagramScreen extends StatelessWidget {
                               .state
                               .selectedImages
                               .isEmpty;
-                          bool isEmpty2 = state.selectedImages.isEmpty;
                           if (isEmpty) {
                             showErrorMessage(
                               context,
                               LocaleKeys.youMustSelectAtLeastOneImage.localize,
                             );
                           } else {
-                            context
-                                .read<CreatePostInstagramCubit>()
-                                .nextPage(context);
+                            context.pushNamed(
+                              Routes.CREATEPOSTSECONDPAGEINSTAGRAM,
+                              // extra: state.selectedImages,
+                            );
+                            // context
+                            //     .read<CreatePostInstagramCubit>()
+                            //     .nextPage(context);
                           }
                         } else if (state.postTypeSelectedIndex == 2) {
                           if (true) {
@@ -127,7 +131,7 @@ class CreatePostInstagramScreen extends StatelessWidget {
                               context,
                               LocaleKeys.youMustSelectAtLeastOneVideo.localize,
                             );
-                          } else {}
+                          }
                         }
                       },
                     ),

@@ -232,6 +232,8 @@ import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/profile_instagram_cubit/profile_instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/add_story_view.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/comment_instagram_view.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/create_post_instagram_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/create_post_second_page_instagram_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/instgram_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/profile_instagram_view.dart';
@@ -603,7 +605,9 @@ class AppPages {
                 path: Paths.MAINCATEGORIESCARDS,
                 name: Routes.MAINCATEGORIESCARDS,
                 builder: (context, state) =>
-                    const MainCategoriesFlipCardsView(),
+                    MainCategoriesFlipCardsView(
+                      data: state.extra as List<MainCategoryEntity>,
+                    ),
               ),
               GoRoute(
                 path: Paths.CONTACTS_VIEW,
@@ -1203,24 +1207,9 @@ class AppPages {
                 path: Paths.INSTAGRAM,
                 name: Routes.INSTAGRAM,
                 routes: [
-                  // GoRoute(
-                  //   path: Paths.INSTAGRAMPROFILE,
-                  //   name: Routes.INSTAGRAMPROFILE,
-                  //   routes: const [],
-                  //   builder: (context, state) {
-                  //     final id = state.extra as String?;
-
-                  //     return BlocProvider<SocialPostsCubit>(
-                  //       create: (_) =>
-                  //           serviceLocator()..getUserProfile(id: id ?? ''),
-                  //       child: InstagramProfile(userId: id ?? ''),
-                  //     );
-                  //   },
-                  // ),
                   GoRoute(
                     path: Paths.INSTAGRAMPROFILE,
                     name: Routes.INSTAGRAMPROFILE,
-                    routes: const [],
                     builder: (context, state) {
                       final String? id = state.extra as String?;
 
@@ -1232,12 +1221,35 @@ class AppPages {
                     },
                   ),
                   GoRoute(
+                    path: Paths.CREATEPOSTINSTAGRAM,
+                    name: Routes.CREATEPOSTINSTAGRAM,
+                    routes: [
+                      GoRoute(
+                        path: Paths.CREATEPOSTSECONDPAGEINSTAGRAM,
+                        name: Routes.CREATEPOSTSECONDPAGEINSTAGRAM,
+                        builder: (context, state) =>
+                            CreatePostSecondPageInstagramView(
+                                // selectedImages: state.extra as List<Future<File?>>,
+                                ),
+                      ),
+                    ],
+                    builder: (context, state) =>
+                        const CreatePostInstagramView(),
+                  ),
+                  GoRoute(
                     path: Paths.InstagramSuggestPeople,
                     name: Routes.InstagramSuggestPeople,
                     routes: const [],
                     builder: (context, state) => BlocProvider<InstagramCubit>(
                       create: (_) => serviceLocator(),
                       child: const InstagramAllDiscoverPeople(),
+                    ),
+                  ),
+                  GoRoute(
+                    path: Paths.INSTAGRAMCOMMENT,
+                    name: Routes.INSTAGRAMCOMMENT,
+                    builder: (context, state) => CommentInstagramView(
+                      postId: state.extra as String,
                     ),
                   ),
                 ],
@@ -1260,13 +1272,6 @@ class AppPages {
                     ),
                   ],
                   child: const InstagramView(),
-                ),
-              ),
-              GoRoute(
-                path: Paths.CREATEPOSTSECONDPAGEINSTAGRAM,
-                name: Routes.CREATEPOSTSECONDPAGEINSTAGRAM,
-                builder: (context, state) => CreatePostSecondPageInstagramView(
-                  selectedImages: state.extra as List<Future<File?>>,
                 ),
               ),
 
@@ -2895,11 +2900,16 @@ class AppPages {
                 path: Paths.welcomeRideRegister,
                 name: Routes.welcomeRideRegister,
                 builder: (context, state) {
-                  return MultiBlocProvider(providers: [
-                    BlocProvider(
-                      create: (context) => serviceLocator<RideRegisterCubit>(),
-                    ),
-                  ], child: WelcomeRideRegister(isShipping: state.extra as bool,));
+                  return MultiBlocProvider(
+                      providers: [
+                        BlocProvider(
+                          create: (context) =>
+                              serviceLocator<RideRegisterCubit>(),
+                        ),
+                      ],
+                      child: WelcomeRideRegister(
+                        isShipping: state.extra as bool,
+                      ));
                 },
               ),
               GoRoute(
@@ -2920,20 +2930,26 @@ class AppPages {
                 builder: (context, state) {
                   return BlocProvider(
                       create: (context) => serviceLocator<RideRegisterCubit>(),
-                      child: PersonalInformationScreen(params: state.extra as RideFeatureRegisterParams,));
+                      child: PersonalInformationScreen(
+                        params: state.extra as RideFeatureRegisterParams,
+                      ));
                 },
               ),
               GoRoute(
                 path: Paths.driversLicenseScreen,
                 name: Routes.driversLicenseScreen,
                 builder: (context, state) {
-                  return MultiBlocProvider(providers: [
-                    BlocProvider<DestGetLatAndLongCubit>(
-                      create: (context) => DestGetLatAndLongCubit(
-                          getLatLongFromAddressRemoteDataSource:
-                              serviceLocator()),
-                    ),
-                  ], child: DriversLicenseScreen(params: state.extra as UploadRiderImagesParams,));
+                  return MultiBlocProvider(
+                      providers: [
+                        BlocProvider<DestGetLatAndLongCubit>(
+                          create: (context) => DestGetLatAndLongCubit(
+                              getLatLongFromAddressRemoteDataSource:
+                                  serviceLocator()),
+                        ),
+                      ],
+                      child: DriversLicenseScreen(
+                        params: state.extra as UploadRiderImagesParams,
+                      ));
                 },
               ),
               GoRoute(
@@ -2961,26 +2977,32 @@ class AppPages {
                 path: Paths.personalDocumentsScreen,
                 name: Routes.personalDocumentsScreen,
                 builder: (context, state) {
-                  return MultiBlocProvider(providers: [
-                    BlocProvider<DestGetLatAndLongCubit>(
-                      create: (context) => DestGetLatAndLongCubit(
-                          getLatLongFromAddressRemoteDataSource:
-                              serviceLocator()),
-                    ),
-                  ], child: PersonalDocumentsScreen(params: state.extra as UploadRiderImagesParams));
+                  return MultiBlocProvider(
+                      providers: [
+                        BlocProvider<DestGetLatAndLongCubit>(
+                          create: (context) => DestGetLatAndLongCubit(
+                              getLatLongFromAddressRemoteDataSource:
+                                  serviceLocator()),
+                        ),
+                      ],
+                      child: PersonalDocumentsScreen(
+                          params: state.extra as UploadRiderImagesParams));
                 },
               ),
               GoRoute(
                 path: Paths.vehicleInformationScreen,
                 name: Routes.vehicleInformationScreen,
                 builder: (context, state) {
-                  return MultiBlocProvider(providers: [
-                    BlocProvider<DestGetLatAndLongCubit>(
-                      create: (context) => DestGetLatAndLongCubit(
-                          getLatLongFromAddressRemoteDataSource:
-                              serviceLocator()),
-                    ),
-                  ], child: VehicleInformationScreen(params: state.extra as UploadRiderImagesParams));
+                  return MultiBlocProvider(
+                      providers: [
+                        BlocProvider<DestGetLatAndLongCubit>(
+                          create: (context) => DestGetLatAndLongCubit(
+                              getLatLongFromAddressRemoteDataSource:
+                                  serviceLocator()),
+                        ),
+                      ],
+                      child: VehicleInformationScreen(
+                          params: state.extra as UploadRiderImagesParams));
                 },
               ),
               GoRoute(
@@ -3079,13 +3101,17 @@ class AppPages {
                 path: Paths.completeRegisterScreen,
                 name: Routes.completeRegisterScreen,
                 builder: (context, state) {
-                  return MultiBlocProvider(providers: [
-                    BlocProvider<DestGetLatAndLongCubit>(
-                      create: (context) => DestGetLatAndLongCubit(
-                          getLatLongFromAddressRemoteDataSource:
-                              serviceLocator()),
-                    ),
-                  ], child: CompleteRegisterScreen(params: state.extra as UploadRiderImagesParams,));
+                  return MultiBlocProvider(
+                      providers: [
+                        BlocProvider<DestGetLatAndLongCubit>(
+                          create: (context) => DestGetLatAndLongCubit(
+                              getLatLongFromAddressRemoteDataSource:
+                                  serviceLocator()),
+                        ),
+                      ],
+                      child: CompleteRegisterScreen(
+                        params: state.extra as UploadRiderImagesParams,
+                      ));
                 },
               ),
               GoRoute(
@@ -3274,53 +3300,57 @@ class AppPages {
               //       ], child: const NewTripJoinScreen());
               //     },),
               GoRoute(
-                  path: Paths.captainShareScreen,
-                  name: Routes.captainShareScreen,
-                  builder: (context, state) {
-                    return MultiBlocProvider(providers: [
-                      BlocProvider<DestGetLatAndLongCubit>(
-                        create: (context) => DestGetLatAndLongCubit(
-                            getLatLongFromAddressRemoteDataSource:
-                            serviceLocator()),
-                      ),
-                    ], child: const CaptainShareScreen());
-                  },),
+                path: Paths.captainShareScreen,
+                name: Routes.captainShareScreen,
+                builder: (context, state) {
+                  return MultiBlocProvider(providers: [
+                    BlocProvider<DestGetLatAndLongCubit>(
+                      create: (context) => DestGetLatAndLongCubit(
+                          getLatLongFromAddressRemoteDataSource:
+                              serviceLocator()),
+                    ),
+                  ], child: const CaptainShareScreen());
+                },
+              ),
               GoRoute(
-                  path: Paths.captainShareInfoScreen,
-                  name: Routes.captainShareInfoScreen,
-                  builder: (context, state) {
-                    return MultiBlocProvider(providers: [
-                      BlocProvider<DestGetLatAndLongCubit>(
-                        create: (context) => DestGetLatAndLongCubit(
-                            getLatLongFromAddressRemoteDataSource:
-                            serviceLocator()),
-                      ),
-                    ], child: const CaptainShareInfoScreen());
-                  },),
+                path: Paths.captainShareInfoScreen,
+                name: Routes.captainShareInfoScreen,
+                builder: (context, state) {
+                  return MultiBlocProvider(providers: [
+                    BlocProvider<DestGetLatAndLongCubit>(
+                      create: (context) => DestGetLatAndLongCubit(
+                          getLatLongFromAddressRemoteDataSource:
+                              serviceLocator()),
+                    ),
+                  ], child: const CaptainShareInfoScreen());
+                },
+              ),
               GoRoute(
-                  path: Paths.tripJoinInfoScreen,
-                  name: Routes.tripJoinInfoScreen,
-                  builder: (context, state) {
-                    return MultiBlocProvider(providers: [
-                      BlocProvider<DestGetLatAndLongCubit>(
-                        create: (context) => DestGetLatAndLongCubit(
-                            getLatLongFromAddressRemoteDataSource:
-                            serviceLocator()),
-                      ),
-                    ], child: const TripJoinInfoScreen());
-                  },),
+                path: Paths.tripJoinInfoScreen,
+                name: Routes.tripJoinInfoScreen,
+                builder: (context, state) {
+                  return MultiBlocProvider(providers: [
+                    BlocProvider<DestGetLatAndLongCubit>(
+                      create: (context) => DestGetLatAndLongCubit(
+                          getLatLongFromAddressRemoteDataSource:
+                              serviceLocator()),
+                    ),
+                  ], child: const TripJoinInfoScreen());
+                },
+              ),
               GoRoute(
-                  path: Paths.pickMeInfoScreen,
-                  name: Routes.pickMeInfoScreen,
-                  builder: (context, state) {
-                    return MultiBlocProvider(providers: [
-                      BlocProvider<DestGetLatAndLongCubit>(
-                        create: (context) => DestGetLatAndLongCubit(
-                            getLatLongFromAddressRemoteDataSource:
-                            serviceLocator()),
-                      ),
-                    ], child: const PickMeInfoScreen());
-                  },),
+                path: Paths.pickMeInfoScreen,
+                name: Routes.pickMeInfoScreen,
+                builder: (context, state) {
+                  return MultiBlocProvider(providers: [
+                    BlocProvider<DestGetLatAndLongCubit>(
+                      create: (context) => DestGetLatAndLongCubit(
+                          getLatLongFromAddressRemoteDataSource:
+                              serviceLocator()),
+                    ),
+                  ], child: const PickMeInfoScreen());
+                },
+              ),
               GoRoute(
                 path: Paths.newRouteScreen,
                 name: Routes.newRouteScreen,

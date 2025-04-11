@@ -1500,7 +1500,6 @@
   "weHaveSentACodeTo": "We\\'ve sent a code to ",
   "oTPVerifyFor": "OTP Verify for ",
   "resendOtpSuccess": "resend otp success",
-  "goToFirstClient": "Go to first client",
   "youWillFindFewerDriversIfYouSelectThisOption": "You will find fewer drivers if you select this option!",
   "initiateRouteWaitFor1HourToGiveUserTimeToBookASeatInTheSameCarWithTheSameCaptain": "Initiate route & wait for 1 hour to give user time to book a seat in the same car with the same captain.",
   "addTalent": "Add Talent",
@@ -1517,5 +1516,14 @@
   "newPost": "New Post",
   "addExplanatoryNote": "Add an explanatory note",
   "searchForAUser": "Search for a user",
-  "taggedPeople": "Tagged People"
+  "taggedPeople": "Tagged People",
+  "restaurantMode": "Restaurant Mode",
+  "yourRate": "Your rate",
+  "bad": "Bad",
+  "rateTheRestaurant": "Rate The Restaurant",
+  "restaurantRateYou": "Restaurant rate you",
+  "addACommentsFor": "Add a comments for",
+  "commentAdded": "Comment added",
+  "areYouSureYouWantToDeleteThisComment": "Are you sure you want to delete this comment?",
+  "responseStatus": "Response Status"
 }

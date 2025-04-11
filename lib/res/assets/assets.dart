@@ -79,6 +79,10 @@ abstract class Assets {
   static String profile2BlackIcon = 'assets/icons/profile_2_black_icon.svg';
   static String profile2GreyIcon = 'assets/icons/profile_2_grey_icon.svg';
 
+  // Commets
+  static String commentIconsIcon = 'assets/icons/comment_icons_icon.svg';
+  static String commentIconsPng = 'assets/icons/comment_icons_icon.png';
+
   // lottie
   static String loveReaction = 'assets/lottie/love_reaction.json';
   static String likeReaction = 'assets/lottie/like_reaction.json';
@@ -233,6 +237,7 @@ abstract class Assets {
   static String carImage = "assets/images/car_image.jpg";
   static String personalImage = "assets/images/personal_image.png";
   static String checkSuccessImage = 'assets/images/check_success_image.png';
+  static String checkCircle = 'assets/icons/check-circle.png';
   static String walletImage = 'assets/images/wallet_image.svg';
 
 // .png
@@ -390,8 +395,6 @@ abstract class Assets {
   static String tripJoinCarIcon = 'assets/icons/trip_join_car_icon.png';
   static String tripJoinBabySeatIcon = 'assets/icons/baby_car_seat.png';
   static String tripJoinEathIcon = 'assets/icons/earth_icon.png';
-
-
 
   static const String arrowDown = 'assets/icons/arrow-up.svg';
 

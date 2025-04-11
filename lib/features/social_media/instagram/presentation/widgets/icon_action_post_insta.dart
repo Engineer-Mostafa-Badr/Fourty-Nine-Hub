@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/core/utils/format_numbers.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/comment_instagram_cubit/comments_instagram_cubit.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/comment_instagram_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/icon_and_value_widget.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:go_router/go_router.dart';
 
 class IconsActionPostInsta extends StatelessWidget {
   const IconsActionPostInsta({
@@ -9,11 +17,13 @@ class IconsActionPostInsta extends StatelessWidget {
     required this.likes,
     required this.comments,
     required this.shares,
+    required this.postId,
   });
 
   final num likes;
   final num comments;
   final num shares;
+  final String postId;
 
   @override
   Widget build(BuildContext context) {
@@ -39,24 +49,41 @@ class IconsActionPostInsta extends StatelessWidget {
             ),
             value: FormatNumbers().formatNumber(comments),
             onPressed: () {
-              showBottomSheet(
+              // context.pushNamed(
+              //   Routes.INSTAGRAMCOMMENT,
+              //   extra: postId,
+              // );
+              bottomSheet(
                 context: context,
-                builder: (context) {
-                  return Padding(
-                    padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom,
-                    ),
-                    child: DraggableScrollableSheet(
-                      maxChildSize: 1,
-                      initialChildSize: 1,
-                      minChildSize: 0.3,
-                      builder: (context, scrollController) {
-                        return Container();
-                      },
-                    ),
-                  );
-                },
+                isScrollControlled: true,
+                padding: 0,
+                widget: BlocProvider(
+                  create: (context) => serviceLocator<CommentsInstagramCubit>()
+                    ..getComments(postId),
+                  child: CommentInstagramView(
+                    postId: postId,
+                  ),
+                ),
               );
+              // showBottomSheet(
+              //   backgroundColor: Colors.transparent,
+              //   context: context,
+              //   builder: (context) {
+              //     return Padding(
+              //       padding: EdgeInsets.only(
+              //         bottom: MediaQuery.of(context).viewInsets.bottom,
+              //       ),
+              //       child: DraggableScrollableSheet(
+              //         maxChildSize: 0.5,
+              //         initialChildSize: 0.5,
+              //         minChildSize: 0.2,
+              //         builder: (context, scrollController) {
+              //           return const CommentInstagramView();
+              //         },
+              //       ),
+              //     );
+              //   },
+              // );
             },
           ),
           // Image.asset(

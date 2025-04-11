@@ -23,6 +23,7 @@ class InstagramPostReviewWidget extends StatelessWidget {
           likes: instagramPostEntity.likesCounter,
           comments: instagramPostEntity.commentsCounter,
           shares: 2021,
+          postId: instagramPostEntity.id,
         ),
         const SizedBox(
           height: 10,

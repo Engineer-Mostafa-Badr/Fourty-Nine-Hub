@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:auto_scroll_text/auto_scroll_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -14,6 +16,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/widgets/animated_text.dart';
 import 'package:fourtyninehub/features/notifications/presentation/cubits/firebase_notfications_cubit/firebase_notfications_cubit.dart';
@@ -64,7 +67,6 @@ class _FourtyNineViewState extends State<FourtyNineView>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    // TODO: implement didChangeAppLifecycleState
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.paused) {
       print("xd==========================");
@@ -266,7 +268,12 @@ class _FourtyNineViewState extends State<FourtyNineView>
               // _buildBookingWidget(),
               const Sizer(),
               //cats layout
-              _buildMainCategoriesViews(),
+              BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
+                builder: (context, state) {
+                  var data = state.data;
+                  return _buildMainCategoriesViews(data);
+                },
+              ),
               const Sizer(),
               //main cats
               BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
@@ -278,10 +285,10 @@ class _FourtyNineViewState extends State<FourtyNineView>
                       highlightColor: Colors.white24,
                       child: GridView.builder(
                         gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisSpacing: 10,
-                            crossAxisCount: 2,
-                            childAspectRatio: 2 / 3),
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisSpacing: 10,
+                                crossAxisCount: 2,
+                                childAspectRatio: 2 / 3),
                         itemCount: 6,
                         physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
@@ -289,13 +296,11 @@ class _FourtyNineViewState extends State<FourtyNineView>
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 10),
                             child: Container(
-                              height: MediaQuery.of(context).size.height *
-                                  .15.h,
+                              height:
+                                  MediaQuery.of(context).size.height * .15.h,
                               width: double.infinity,
-                              margin:
-                              EdgeInsets.symmetric(horizontal: 10.w),
-                              padding:
-                              EdgeInsets.symmetric(horizontal: 10.w),
+                              margin: EdgeInsets.symmetric(horizontal: 10.w),
+                              padding: EdgeInsets.symmetric(horizontal: 10.w),
                               decoration: BoxDecoration(
                                 color: AppColors.AUTH_CONTAINER_COLOR,
                                 borderRadius: BorderRadius.circular(20.r),
@@ -306,7 +311,6 @@ class _FourtyNineViewState extends State<FourtyNineView>
                         },
                       ),
                     );
-
                   }
                   if (state.data != null) {
                     return GridView.builder(
@@ -362,9 +366,10 @@ class _FourtyNineViewState extends State<FourtyNineView>
     );
   }
 
-  Widget _buildMainCategoriesViews() {
+  Widget _buildMainCategoriesViews(List<MainCategoryEntity>? extra) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      spacing: 16,
       children: [
         Expanded(
           child: _buildItemTabBar(
@@ -377,15 +382,16 @@ class _FourtyNineViewState extends State<FourtyNineView>
             () => HandleCashback.setCount('threeDotsCount', context),
           ),
         ),
-        const Sizer(
-          width: 32,
-        ),
         GestureDetector(
           onTap: () {
-            Navigator.push(
+            if(context.read<UserCubit>().isLoggedIn){
+
+            }else {
+              Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => const FavouriteScreensView()));
+            }
           },
           child: Container(
             height: 40,
@@ -397,97 +403,33 @@ class _FourtyNineViewState extends State<FourtyNineView>
             child: const Icon(Icons.favorite, color: Colors.red),
           ),
         ),
-        // CustomHeartButton(),
-        // CircularMenu(
-        //     radius: 70,
-        //     backgroundWidget: Container(
-        //       decoration: const BoxDecoration(
-        //         color: AppColors.BG_GRAY_COLOR,
-        //         shape: BoxShape.circle,
-        //       ),
-        //       width: 40,
-        //       height: 40,
-        //       child: const Icon(
-        //         Icons.favorite_rounded,
-        //         color: AppColors.SECONDARY_COLOR,
-        //       ),
-        //     ),
-        //     toggleButtonColor: Colors.transparent,
-        //     alignment: Alignment.center,
-        //     items: [
-        //       CircularMenuItem(
-        //         onTap: () {
-        //           print('tapped');
-        //         },
-        //         icon: Icons.search,
-        //         iconSize: 50,
-        //         color: Colors.blue,
-        //       ),
-        //       CircularMenuItem(
-        //         onTap: () {
-        //           print('tapped');
-        //         },
-        //         icon: Icons.home,
-        //         color: Colors.grey,
-        //       ),
-        //       CircularMenuItem(
-        //         onTap: () {
-        //           print('tapped');
-        //         },
-        //         icon: Icons.settings,
-        //         color: Colors.green,
-        //       ),
-        //       CircularMenuItem(
-        //         onTap: () {
-        //           print('tapped');
-        //         },
-        //         icon: Icons.search,
-        //         color: Colors.blue,
-        //       ),
-        //       CircularMenuItem(
-        //         onTap: () {
-        //           print('tapped');
-        //         },
-        //         icon: Icons.home,
-        //         color: Colors.grey,
-        //       ),
-        //       CircularMenuItem(
-        //         onTap: () {
-        //           print('tapped');
-        //         },
-        //         icon: Icons.settings,
-        //         color: Colors.green,
-        //       ),
-        //     ]),
-        const Sizer(
-          width: 32,
-        ),
         Expanded(
           child: _buildItemTabBar(
-              const Icon(
-                Icons.view_carousel,
-                color: AppColors.PRIMARY_COLOR,
-                size: 30,
-              ),
-              Routes.MAINCATEGORIESCARDS, () {
-            AdInterstitialTop.loadIntersitialAd();
-            AdInterstitialTop.showInterstitialAd();
-            HandleCashback.setCount('mainCategoriesSliderCount', context);
-          }),
+            const Icon(
+              Icons.view_carousel,
+              color: AppColors.PRIMARY_COLOR,
+              size: 30,
+            ),
+            Routes.MAINCATEGORIESCARDS,
+            () {
+              log('extra is $extra');
+              AdInterstitialTop.loadIntersitialAd();
+              AdInterstitialTop.showInterstitialAd();
+              HandleCashback.setCount('mainCategoriesSliderCount', context);
+            },
+            extra: extra,
+          ),
         ),
       ],
     );
   }
 
-  Widget _buildItemTabBar(
-    Widget icon,
-    String routeName,
-    Function() onTab,
-  ) {
+  Widget _buildItemTabBar(Widget icon, String routeName, Function() onTab,
+      {List<MainCategoryEntity>? extra}) {
     return InkWell(
       onTap: () {
         onTab();
-        context.push(routeName);
+        context.push(routeName, extra: extra);
       },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -564,47 +506,49 @@ class _FourtyNineViewState extends State<FourtyNineView>
         ),
       ),
     );
-    return SizedBox(
-      height: kToolbarHeight * 2.h,
-      width: double.infinity,
-      child: GestureDetector(
-        onTap: () {
-          AdInterstitialTop.loadIntersitialAd();
-          AdInterstitialTop.showInterstitialAd();
-          HandleCashback.setCount('beAStarCount', context);
-          context.push(Routes.BE_STAR);
-        },
-        child: Container(
-          height: kToolbarHeight * 2.h,
-          decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            borderRadius: BorderRadius.circular(40.r),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
-                spreadRadius: 5,
-                blurRadius: 5,
-                offset: const Offset(1, 1),
-              )
-            ],
-            image: DecorationImage(
-                image: AssetImage(Assets.tube1), fit: BoxFit.fill),
-          ),
-          child: Center(
-            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Label(
-                text: LocaleKeys.tube.localize,
-                style: Styles.mediumText(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 45,
-                ),
-              )
-            ]),
-          ),
-        ),
-      ),
-    );
+    // return SizedBox(
+    //   height: kToolbarHeight * 2.h,
+    //   width: double.infinity,
+    //   child: GestureDetector(
+    //     onTap: () {
+    //       AdInterstitialTop.loadIntersitialAd();
+    //       AdInterstitialTop.showInterstitialAd();
+    //       HandleCashback.setCount('beAStarCount', context);
+    //       context.push(Routes.BE_STAR);
+    //     },
+    //     child: Container(
+    //       height: kToolbarHeight * 2.h,
+    //       decoration: BoxDecoration(
+    //         color: Theme
+    //             .of(context)
+    //             .scaffoldBackgroundColor,
+    //         borderRadius: BorderRadius.circular(40.r),
+    //         boxShadow: [
+    //           BoxShadow(
+    //             color: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
+    //             spreadRadius: 5,
+    //             blurRadius: 5,
+    //             offset: const Offset(1, 1),
+    //           )
+    //         ],
+    //         image: DecorationImage(
+    //             image: AssetImage(Assets.tube1), fit: BoxFit.fill),
+    //       ),
+    //       child: Center(
+    //         child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+    //           Label(
+    //             text: LocaleKeys.tube.localize,
+    //             style: Styles.mediumText(
+    //               color: Colors.white,
+    //               fontWeight: FontWeight.bold,
+    //               fontSize: 45,
+    //             ),
+    //           )
+    //         ]),
+    //       ),
+    //     ),
+    //   ),
+    // );
   }
 
   Widget _buildRideSubCategoryItem(

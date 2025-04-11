@@ -1,3 +1,5 @@
+import 'package:fourtyninehub/features/social_media/instagram/data/models/comment_instagram_model.dart';
+
 class InstagramPostEntity {
   final String id;
   final String content;
@@ -9,7 +11,7 @@ class InstagramPostEntity {
   final String? profilePictureUrl;
   final bool verifiedBadge;
   final List<String> medias;
-  final List<CommentsEntity> comments;
+  final List<CommentInstagramModel> comments;
   final List<UserTagEntity> userTags;
   final List<String> hashtags;
   final int favoritesCounter;
@@ -56,10 +58,10 @@ class UserTagEntity {
   });
 }
 
-class CommentsEntity {
-  final String id;
+// class CommentsEntity {
+//   final String id;
 
-  CommentsEntity({
-    required this.id,
-  });
-}
+//   CommentsEntity({
+//     required this.id,
+//   });
+// }

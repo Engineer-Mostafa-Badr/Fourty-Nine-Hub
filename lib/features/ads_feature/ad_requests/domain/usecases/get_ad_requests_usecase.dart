@@ -32,5 +32,5 @@ class GetAdRequestsParams {
   });
 
   Map<String, dynamic> toJson() =>
-      {"username": username, "page": page, "limit": limit};
+      {"page": page, "limit": limit};
 }
