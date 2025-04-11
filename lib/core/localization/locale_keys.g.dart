@@ -409,6 +409,7 @@ abstract class  LocaleKeys {
   static const messageSentSuccessfully = 'messageSentSuccessfully';
   static const days = 'days';
   static const comments = 'comments';
+  static const commentsRates = 'commentsRates';
   static const comment = 'comment';
   static const like = 'like';
   static const sad = 'sad';
