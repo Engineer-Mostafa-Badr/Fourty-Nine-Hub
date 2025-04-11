@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/features/new_trip_join/presentation/view/widget/trip_option_widget.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/cards/available_trips_card.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/cards/display_trip_join_card.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_bottom_sheet/show_bottom_sheet.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_bottom_sheet/submit_bottom_sheet.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_dialog/dialog_content.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_dialog/show_dialog_trip_join.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_floating_action_button.dart';
@@ -71,19 +74,7 @@ class _TripJoinViewState extends State<TripJoinView>
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: CustomScaffold(
-        appBar: HomeAppbar(
-          showChat: true,
-          isWithBackArrow: false,
-          language: true,
-          leading: IconButton(
-            icon: const Icon(Icons.menu), // The menu icon
-            onPressed: () {
-              HandleCashback.setCount('drawerCount', context);
-              _scaffoldKey.currentState?.openDrawer(); // Open the drawer
-            },
-          ),
-        ),
+      child: SharedScaffold(
         body: Stack(
           children: [
             SingleChildScrollView(
@@ -143,7 +134,7 @@ class _TripJoinViewState extends State<TripJoinView>
                             TripOptionWidget(
                               imagePath: Assets.locationTripIcon,
                               title: 'Pick me',
-                              onTap: () {},
+                              onTap: () {context.push(Routes.All_PickMe_View);},
                               icon: Assets.pickMeImage,
                             ),
                           ],
@@ -161,7 +152,8 @@ class _TripJoinViewState extends State<TripJoinView>
                           itemBuilder: (BuildContext context, int index) {
                             switch (_displayedCategory) {
                               case LocaleKeys.availableTrips:
-                                return TripJoinCard(
+                                return AvailableTripsCard(
+                                  subscribtionPlan: LocaleKeys.premium.localize,
                                   title: context.isArabic
                                       ? 'كيا، سيراتو'
                                       : 'Kia, Cerato',
@@ -182,12 +174,14 @@ class _TripJoinViewState extends State<TripJoinView>
                                       bottomButtonColor:
                                           AppColors.PRIMARY_COLOR,
                                       bottomButtonTitle:
-                                          LocaleKeys.request.localize),
+                                          LocaleKeys.request.localize,
+                                  onTap: ()=>SubmitBottomSheet(context, buttonColor:AppColors.PRIMARY_COLOR,buttonTitle: LocaleKeys.submit.localize ,)),
                                 );
                                 break;
 
                               case LocaleKeys.rideRequest:
                                 return TripJoinCard(
+                                  subscribtionPlan: LocaleKeys.premium.localize,
                                   title: context.isArabic ? 'محمد' : 'Mohamed',
                                   isMale: true,
                                   buttonTitle: LocaleKeys.request.localize,
@@ -205,6 +199,7 @@ class _TripJoinViewState extends State<TripJoinView>
                                 break;
                               case LocaleKeys.myAds:
                                 return TripJoinCard(
+                                  subscribtionPlan: LocaleKeys.premium.localize,
                                   title: context.isArabic
                                       ? 'كيا، سيراتو'
                                       : 'Kia, Cerato',
@@ -239,9 +234,37 @@ class _TripJoinViewState extends State<TripJoinView>
                 ),
               ),
             ),
-            const TripJoinFloatingActionButton(),
+            Positioned.directional(
+              bottom: 40.h,
+              start: 10,
+              textDirection: context.isArabic ? TextDirection.rtl : TextDirection.ltr,
+              child: GestureDetector(
+                onTap: () {
+                  context.push(Routes.pickMeInfoScreen);
+                },
+                child: Container(
+                  height: 48.h,
+                  width: 48.h,
+                  decoration: BoxDecoration(
+                      color: const Color(0xff0B1035),
+                      borderRadius:BorderRadius.circular(10)
+                  ),
+                  child: const Icon(
+                    size: 19,
+                    Icons.question_mark,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+            TripJoinFloatingActionButton(title: context.isArabic
+                ? "أعلن عن سيارتك"
+                : "Advertise your car",
+            onTap:  () {
+              context.push(Routes.TRIP_JOIN);
+            },),
           ],
-        ),
+        ), mainCategoryId: 1,isWithBackArrow: false,
       ),
     );
   }

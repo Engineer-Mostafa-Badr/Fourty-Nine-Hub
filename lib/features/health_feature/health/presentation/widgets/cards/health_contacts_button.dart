@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/functions/global/button_availability.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -13,23 +14,25 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entiti
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/pages/chats_view.dart';
 import 'package:fourtyninehub/features/social_media/twitter/presentation/widgets/report_view.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_bottom_sheet/show_bottom_sheet.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_dialog/dialog_content.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_dialog/show_dialog_trip_join.dart';
 import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
-class ContactsTripButtons extends StatefulWidget {
-  const ContactsTripButtons(
+class HealthContactsButtons extends StatefulWidget {
+  const HealthContactsButtons(
       {super.key,
-      required this.otherUserId,
-      required this.subcategoryId,
-      required this.phone,
-      this.senderName,
-      this.senderImage,
-      required this.id,
-      this.hasReport = false,
-      this.clientId});
+        required this.otherUserId,
+        required this.subcategoryId,
+        required this.phone,
+        this.senderName,
+        this.senderImage,
+        required this.id,
+        this.hasReport = false,
+        this.clientId});
 
   final String otherUserId;
   final String? clientId;
@@ -41,10 +44,10 @@ class ContactsTripButtons extends StatefulWidget {
   final bool? hasReport;
 
   @override
-  State<ContactsTripButtons> createState() => _ContactsTripButtonsState();
+  State<HealthContactsButtons> createState() => _HealthContactsButtonsState();
 }
 
-class _ContactsTripButtonsState extends State<ContactsTripButtons> {
+class _HealthContactsButtonsState extends State<HealthContactsButtons> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -61,7 +64,7 @@ class _ContactsTripButtonsState extends State<ContactsTripButtons> {
                 visualDensity:const  VisualDensity(
                     horizontal: -4, vertical: -4),
                 color: (snap.data == true &&
-                        context.read<UserCubit>().isLoggedIn)
+                    context.read<UserCubit>().isLoggedIn)
                     ? AppColors.PRIMARY_COLOR
                     : AppColors.DARK_GRAY_COLOR,
                 icon: SvgPicture.asset(
@@ -74,7 +77,13 @@ class _ContactsTripButtonsState extends State<ContactsTripButtons> {
                     topButtonColor: AppColors.PRIMARY_COLOR,
                     topButtonTitle:LocaleKeys.freeCall.localize ,
                     bottomButtonColor: AppColors.BG_GRAY_COLOR,
-                    bottomButtonTitle: LocaleKeys.regularCall.localize,onTap:()=> Navigator.of(context).pop()),
+                    bottomButtonTitle: LocaleKeys.regularCall.localize,onTap:() => showDialogTripJoin(
+                      context,
+                      DialogContent(
+                        subTitle: context.isArabic?'برجاء الاشتراك حتي تستطيع التواصل مع الطبيب':'Please Subscribe to contact Doctor',
+                        leftButtonTitle: LocaleKeys.close.localize,
+                        rightButtonTitle: LocaleKeys.subscribe.localize,
+                      )),),
                 // !context.read<UserCubit>().isLoggedIn
                 //     ? () => context.push(Routes.LOGIN)
                 //     :
@@ -224,7 +233,7 @@ class _ContactsTripButtonsState extends State<ContactsTripButtons> {
                 visualDensity:const  VisualDensity(
                     horizontal: -4, vertical: -4),
                 color: (snap.data == true &&
-                        context.read<UserCubit>().isLoggedIn)
+                    context.read<UserCubit>().isLoggedIn)
                     ? AppColors.PRIMARY_COLOR
                     : AppColors.DARK_GRAY_COLOR,
                 icon: SvgPicture.asset(
@@ -233,27 +242,27 @@ class _ContactsTripButtonsState extends State<ContactsTripButtons> {
                 onPressed: !context.read<UserCubit>().isLoggedIn
                     ? () => context.push(Routes.LOGIN)
                     : snap.data == true
-                        ? () async {
-                            ChatEntity? chat = await context
-                                .read<UserCubit>()
-                                .createNormalChat(
-                                  otherId: widget.otherUserId,
-                                  categoryId: widget.subcategoryId,
-                                );
-                            context.push(
-                              Routes.CHAT,
-                              extra: ChatsViewParams(
-                                isFromStartChat: true,
-                                initialTabIndex: 1,
-                                selectedChat: chat,
-                              ),
-                            );
-                          }
-                        : () {
-                            SubscriptionMethod().subscribe(
-                                subscribeId: widget.subcategoryId,
-                                title: LocaleKeys.ads.localize);
-                          },
+                    ? () async {
+                  ChatEntity? chat = await context
+                      .read<UserCubit>()
+                      .createNormalChat(
+                    otherId: widget.otherUserId,
+                    categoryId: widget.subcategoryId,
+                  );
+                  context.push(
+                    Routes.CHAT,
+                    extra: ChatsViewParams(
+                      isFromStartChat: true,
+                      initialTabIndex: 1,
+                      selectedChat: chat,
+                    ),
+                  );
+                }
+                    : () {
+                  SubscriptionMethod().subscribe(
+                      subscribeId: widget.subcategoryId,
+                      title: LocaleKeys.ads.localize);
+                },
               ),
               IconButton(
                 visualDensity:const  VisualDensity(
@@ -264,13 +273,13 @@ class _ContactsTripButtonsState extends State<ContactsTripButtons> {
                 onPressed: !context.read<UserCubit>().isLoggedIn
                     ? () => context.push(Routes.LOGIN)
                     : () {
-                        bottomSheet(
-                            context: context,
-                            widget: ReportView(
-                              id: widget.id,
-                              categoryId: widget.subcategoryId,
-                            ));
-                      },
+                  bottomSheet(
+                      context: context,
+                      widget: ReportView(
+                        id: widget.id,
+                        categoryId: widget.subcategoryId,
+                      ));
+                },
               ),
             ],
           );

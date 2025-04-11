@@ -15,9 +15,9 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
-class TripJoinCard extends StatefulWidget {
+class AvailableTripsCard extends StatefulWidget {
   // ignore: prefer_const_constructors_in_immutables
-  const TripJoinCard({
+  const AvailableTripsCard({
     super.key,
     required this.time,
     required this.seats,
@@ -40,10 +40,10 @@ class TripJoinCard extends StatefulWidget {
   final bool iconCar;
   final void Function() onTab;
   @override
-  State<TripJoinCard> createState() => _TripJoinCardState();
+  State<AvailableTripsCard> createState() => _AvailableTripsCardState();
 }
 
-class _TripJoinCardState extends State<TripJoinCard> {
+class _AvailableTripsCardState extends State<AvailableTripsCard> {
   @override
   Widget build(BuildContext context) {
 
@@ -57,6 +57,31 @@ class _TripJoinCardState extends State<TripJoinCard> {
               CustomCard(
                 radius: 20,
                 children: [
+                  const Sizer(height: 8,),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 32.0.h),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.remove_red_eye_sharp,
+                                color: AppColors.DARK_GRAY_COLOR,
+                              ),
+                              const Sizer(),
+                              Label(text: '437k ${LocaleKeys.views}',style: Styles.mediumText(fontSize: 24,color: AppColors.DARK_GRAY_COLOR),)
+                            ],
+                          ),
+                        ),
+                        Text(
+                          widget.subscribtionPlan,
+                          style: Styles.headerText(color: AppColors.SECONDARY_COLOR,fontSize: 32),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Divider(),
                   const Sizer(),
                   TripCardInfoWidget(
                     title: widget.title,
@@ -170,18 +195,18 @@ class _TripJoinCardState extends State<TripJoinCard> {
           Expanded(child: Container()),
           RichText(
               text: TextSpan(children: [
-            TextSpan(
-                text: '${20} ',
-                style: Styles.headerText(
-                    color: Colors.black, fontWeight: FontWeight.bold)),
-            TextSpan(
-              text: context.isArabic ? 'جنيه' : 'EGP',
-              style: Styles.mediumText(
-                  fontSize: context.locale.languageCode == "ar" ? 35 : 28,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.SECONDARY_COLOR),
-            )
-          ]))
+                TextSpan(
+                    text: '${20} ',
+                    style: Styles.headerText(
+                        color: Colors.black, fontWeight: FontWeight.bold)),
+                TextSpan(
+                  text: context.isArabic ? 'جنيه' : 'EGP',
+                  style: Styles.mediumText(
+                      fontSize: context.locale.languageCode == "ar" ? 35 : 28,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.SECONDARY_COLOR),
+                )
+              ]))
         ],
       ),
     );

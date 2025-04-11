@@ -20,9 +20,10 @@ class AllPickMeFloatingActionButton extends StatelessWidget {
         height: 56, // ارتفاع الزر الجديد
         child: RawMaterialButton(
           onPressed: () {
-            context.read<UserCubit>().isLoggedIn
-                ? context.push(Routes.AddNewPickMe)
-                : context.push(Routes.LOGIN);
+            // context.read<UserCubit>().isLoggedIn
+              //  ?
+            context.push(Routes.AddNewPickMe);
+             //   : context.push(Routes.LOGIN);
           },
           fillColor: AppColors.PRIMARY_COLOR,
           shape: RoundedRectangleBorder(

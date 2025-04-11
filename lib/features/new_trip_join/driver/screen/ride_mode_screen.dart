@@ -94,7 +94,7 @@ class NewRideModeBody extends StatelessWidget {
                 icon: Assets.pickMeIcon,
                 imagePath: Assets.locationTripIcon,
                 title: context.isArabic ? "وصلني معاك" : "Pick me",
-                onTap: () {},
+                onTap: () {context.push(Routes.All_PickMe_View);},
               ),
             ],
           ),

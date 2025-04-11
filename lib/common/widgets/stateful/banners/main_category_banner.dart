@@ -7,10 +7,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/localization/locales.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:shimmer/shimmer.dart';
@@ -110,35 +112,35 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                             ],
                           ),
                         ),
-                        context.read<UserCubit>().isLoggedIn
-                            ? widget.removeFavorite
-                                ? Container()
-                                : PositionedDirectional(
-                                    top: 10.h,
-                                    end: 10.w,
-                                    child: IconAppButton(
-                                      icon: widget.category.isFavorite == false
-                                          ? Icons.favorite_outline
-                                          : Icons.favorite,
-                                      onPressed: () async {
-                                        final result =
-                                            await widget.onFavorite();
-                                        print("resutlt=$result");
-                                        if (result == true) {
-                                          print(result);
-                                          setState(() {
-                                            widget.category.isFavorite =
-                                                !widget.category.isFavorite!;
-                                            print(widget.category.isFavorite);
-                                            widget.isFavorite = result;
-                                            print("===================$result");
-                                          });
-                                        }
-                                      },
-                                      color: AppColors.SECONDARY_COLOR,
-                                    ),
-                                  )
-                            : const SizedBox.shrink(),
+                        // context.read<UserCubit>().isLoggedIn
+                        //     ? widget.removeFavorite
+                        //         ? Container()
+                        //         : PositionedDirectional(
+                        //             top: 10.h,
+                        //             end: 10.w,
+                        //             child: IconAppButton(
+                        //               icon: widget.category.isFavorite == false
+                        //                   ? Icons.favorite_outline
+                        //                   : Icons.favorite,
+                        //               onPressed: () async {
+                        //                 final result =
+                        //                     await widget.onFavorite();
+                        //                 print("resutlt=$result");
+                        //                 if (result == true) {
+                        //                   print(result);
+                        //                   setState(() {
+                        //                     widget.category.isFavorite =
+                        //                         !widget.category.isFavorite!;
+                        //                     print(widget.category.isFavorite);
+                        //                     widget.isFavorite = result;
+                        //                     print("===================$result");
+                        //                   });
+                        //                 }
+                        //               },
+                        //               color: AppColors.SECONDARY_COLOR,
+                        //             ),
+                        //           )
+                        //     : const SizedBox.shrink(),
                       ],
                     ),
                   ),
@@ -189,43 +191,33 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                           fontWeight: FontWeight.bold,
                           fontSize: widget.fontSize ?? 45.sp),
                     ),
-                    PositionedDirectional(
-                      start: 0,
-                      child: Column(
-                        children: [
-                          context.read<UserCubit>().isLoggedIn
-                              ? InkWell(
-                                  onTap: () async {
-                                    final result = await widget.onFavorite();
-                                    if (result != null &&
-                                        result != widget.isFavorite) {
-                                      setState(() {
-                                        widget.isFavorite = result;
-                                        print("===================$result");
-                                      });
-                                    }
-                                  },
-                                  child: Icon(
-                                    widget.isFavorite == true
-                                        ? Icons.favorite
-                                        : Icons.favorite_border,
-                                    color: AppColors.SECONDARY_COLOR,
-                                  ),
-                                )
-                              : const SizedBox.shrink(),
-                          // Sizer(
-                          //   height: 15.h,
-                          // ),
-                          // Label(
-                          //   text: '${widget.category.total.toShortScale} ${Labels.ads}',
-                          //   style: Styles.mediumText(
-                          //     fontWeight: FontWeight.bold,
-                          //     color: Colors.white,
-                          //   ),
-                          // )
-                        ],
-                      ),
-                    ),
+                    // PositionedDirectional(
+                    //   start: 0,
+                    //   child: Column(
+                    //     children: [
+                    //       context.read<UserCubit>().isLoggedIn
+                    //           ? InkWell(
+                    //               onTap: () async {
+                    //                 final result = await widget.onFavorite();
+                    //                 if (result != null &&
+                    //                     result != widget.isFavorite) {
+                    //                   setState(() {
+                    //                     widget.isFavorite = result;
+                    //                     print("===================$result");
+                    //                   });
+                    //                 }
+                    //               },
+                    //               child: Icon(
+                    //                 widget.isFavorite == true
+                    //                     ? Icons.favorite
+                    //                     : Icons.favorite_border,
+                    //                 color: AppColors.SECONDARY_COLOR,
+                    //               ),
+                    //             )
+                    //           : const SizedBox.shrink(),
+                    //     ],
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
@@ -244,9 +236,10 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                     : AppColors.PRIMARY_COLOR,
                 image: DecorationImage(
                   fit: BoxFit.cover,
-                  image: CachedNetworkImageProvider(
-                    widget.category.banner,
-                  ),
+                  image:AssetImage(Assets.healthBanner1),
+                  // CachedNetworkImageProvider(
+                  //   widget.category.banner,
+                  // ),
                   colorFilter: ColorFilter.mode(
                     Colors.black.withOpacity(0.3),
                     BlendMode.darken,
@@ -264,37 +257,37 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                       color: Colors.white,
                     ),
                   ),
-                  PositionedDirectional(
-                    start: 0,
-                    child: Column(
-                      children: [
-                        context.read<UserCubit>().isLoggedIn
-                            ? InkWell(
-                                onTap: () async => await widget.onFavorite(),
-                                child: Icon(
-                                  widget.category.isFavorite == true
-                                      ? Icons.favorite
-                                      : Icons.favorite,
-                                  color: widget.category.isFavorite == true
-                                      ? AppColors.SECONDARY_COLOR
-                                      : AppColors.LIGHT_GRAY_COLOR2,
-                                ),
-                              )
-                            : const SizedBox.shrink(),
-                        // Sizer(
-                        //   height: 15.h,
-                        // ),
-                        // Label(
-                        //   text:
-                        //       '${widget.category.numberOfAds.toShortScale} ${LocaleKeys.ad.localize}',
-                        //   style: Styles.mediumText(
-                        //     fontWeight: FontWeight.bold,
-                        //     color: Colors.white,
-                        //   ),
-                        // )
-                      ],
-                    ),
-                  ),
+                  // PositionedDirectional(
+                  //   start: 0,
+                  //   child: Column(
+                  //     children: [
+                  //       context.read<UserCubit>().isLoggedIn
+                  //           ? InkWell(
+                  //               onTap: () async => await widget.onFavorite(),
+                  //               child: Icon(
+                  //                 widget.category.isFavorite == true
+                  //                     ? Icons.favorite
+                  //                     : Icons.favorite,
+                  //                 color: widget.category.isFavorite == true
+                  //                     ? AppColors.SECONDARY_COLOR
+                  //                     : AppColors.LIGHT_GRAY_COLOR2,
+                  //               ),
+                  //             )
+                  //           : const SizedBox.shrink(),
+                  //     ],
+                  //   ),
+                  // ),
+                  // PositionedDirectional(
+                  //   start: 20,
+                  //   child: InkWell(
+                  //     onTap: () async => await widget.onFavorite(),
+                  //     child: Icon(
+                  //       size: 64.h,
+                  //       Icons.favorite,
+                  //       color: AppColors.SECONDARY_COLOR,
+                  //     ),
+                  //   ),
+                  // )
                 ],
               ),
             ),
@@ -327,23 +320,24 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                         fontWeight: FontWeight.bold,
                         fontSize: 45.sp),
                   ),
-                  PositionedDirectional(
-                    start: 0,
-                    // top: 0,
-                    child: Column(
-                      children: [
-                        context.read<UserCubit>().isLoggedIn
-                            ? InkWell(
-                                onTap: () async => await widget.onFavorite(),
-                                child: const Icon(
-                                  Icons.favorite,
-                                  color: AppColors.SECONDARY_COLOR,
-                                ),
-                              )
-                            : const SizedBox.shrink(),
-                      ],
-                    ),
-                  ),
+                  // PositionedDirectional(
+                  //   start: 0,
+                  //   // top: 0,
+                  //   child: Column(
+                  //     children: [
+                  //       context.read<UserCubit>().isLoggedIn
+                  //           ?
+                  //       InkWell(
+                  //               onTap: () async => await widget.onFavorite(),
+                  //               child: const Icon(
+                  //                 Icons.favorite,
+                  //                 color: AppColors.SECONDARY_COLOR,
+                  //               ),
+                  //             )
+                  //           : const SizedBox.shrink(),
+                  //     ],
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -352,26 +346,31 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
 
   Widget _buildRegisterButton() {
     if (widget.canRegister) {
-      return TextButton(
-        onPressed: () {
-          log('88888888888888888888888888');
-          widget.onRegister?.call();
-        },
-        style: TextButton.styleFrom(
-          backgroundColor: Colors.red,
-          foregroundColor: Colors.white,
-          padding: const EdgeInsets.all(0),
-          minimumSize: const Size(70, 30),
-          maximumSize: const Size(70, 30),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
+      return GestureDetector(
+        onTap: () {
+            log('88888888888888888888888888');
+            widget.onRegister?.call();
+          },
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: AppColors.c0B1035,
+            gradient: const LinearGradient(
+              colors: [AppColors.SECONDARY_COLOR_DARK2,AppColors.c90242B],
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+            ),
+          ),
+          child: Center(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 12.0.h,horizontal: 32.h),
+              child: Text(
+                LocaleKeys.register.localize,
+                style: Styles.mediumText(color: Colors.white,fontWeight: FontWeight.bold),
+              ),
+            ),
           ),
         ),
-        child: Text(LocaleKeys.register.tr(),
-            style: Styles.mediumText(
-                fontSize: 30,
-                color: Colors.white,
-                fontWeight: FontWeight.bold)),
       );
     } else {
       return const SizedBox.shrink();
