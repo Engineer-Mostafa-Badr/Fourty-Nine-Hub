@@ -26,8 +26,11 @@ class ShareTheApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-        appBar: BackAppBar(
-          label: LocaleKeys.shareApp.localize,
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(30),
+          child: BackAppBar(
+            label: LocaleKeys.shareApp.localize,
+          ),
         ),
         body: BlocProvider<ShareAppCubit>(
           create: (BuildContext context) => serviceLocator()..shareApp(),

@@ -48,8 +48,11 @@ class _ViewFollowersAndFollowingState extends State<ViewFollowersAndFollowing>
     return DefaultTabController(
       length: 2,
       child: CustomScaffold(
-        appBar: BackAppBar(
-            label: widget.email == 'Hidden' ? '' : widget.email.split('@')[0]),
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(30),
+          child: BackAppBar(
+              label: widget.email == 'Hidden' ? '' : widget.email.split('@')[0]),
+        ),
         body: BlocProvider<FollowCubit>(
           create: (BuildContext context) => serviceLocator(),
           child: BlocConsumer<FollowCubit, FollowState>(

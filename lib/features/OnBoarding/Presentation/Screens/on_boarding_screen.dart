@@ -13,6 +13,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
+import '../../../../service_locator/service_locator.dart';
 import '../Controllers/on_boarding_cubit.dart';
 
 class OnBoardingScreen extends StatefulWidget {
@@ -24,14 +25,14 @@ class OnBoardingScreen extends StatefulWidget {
 
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
   PageController controller = PageController();
-
-  // late OnBoardingCubit onBoardingCubit;
-
   @override
-  initState() {
-    controller = PageController(initialPage: 0);
-    print('isClosed: ${context.read<OnBoardingCubit>().isClosed} initState');
+  void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final cubit = context.read<OnBoardingCubit>();
+      debugPrint('isClosed: ${cubit.isClosed} initState');
+      cubit.changeOnboardingData(0);
+    });
   }
 
   @override
@@ -40,7 +41,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: BlocBuilder<OnBoardingCubit, OnBoardingState>(
         builder: (context, state) {
-          var cubit = context.read<OnBoardingCubit>();
+          final cubit = context.read<OnBoardingCubit>();
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
@@ -87,15 +88,20 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                             width: double.infinity,
                             height: 300,
                             child: SvgPicture.asset(
-                              cubit.images[controller.page!.toInt()],
+                              state.image.isNotEmpty
+                                  ? state.image
+                                  : 'assets/default_image.svg',
+
+                              // state.image,
+                              // cubit.images[state.currentIndex],
                               width: double.infinity,
                             ),
                           ),
                           const SizedBox(height: 32),
                           Text(
-                            context.isArabic
-                                ? cubit.titlesAr[controller.page!.toInt()]
-                                : cubit.titlesEn[controller.page!.toInt()],
+                            context.isArabic ? state.titleAr : state.titleEn,
+                            // ? cubit.titlesAr[state.currentIndex]
+                            // : cubit.titlesEn[state.currentIndex],
                             style: Styles.headerText(
                                 color: context.isDarkMode
                                     ? AppColors.AUTH_CONTAINER_COLOR
@@ -104,8 +110,14 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                         ],
                       ),
                       onPageChanged: (index) {
+                        if (!context.read<OnBoardingCubit>().isClosed) {
+                          context
+                              .read<OnBoardingCubit>()
+                              .changeOnboardingData(controller.page!.toInt());
+                        }
                         debugPrint('index $index');
-                        debugPrint('state.currentIndex ${state.currentIndex}');
+                        debugPrint(
+                            'state.currentIndex ${state.currentIndex}');
                         if (index < cubit.images.length) {
                           debugPrint(
                               'index <= ${cubit.images.length - 1} $index');
@@ -134,7 +146,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                         child: Container(
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            gradient: itemIndex == controller.page!.toInt()
+                            gradient: itemIndex == state.currentIndex
                                 ? const LinearGradient(
                                     colors: [
                                       Color(0xFF0B1035),
@@ -143,7 +155,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                                     begin: Alignment.topCenter,
                                   )
                                 : null,
-                            color: itemIndex == controller.page!.toInt()
+                            color: itemIndex == state.currentIndex
                                 ? null
                                 : AppColors.GREYBG,
                           ),
@@ -162,7 +174,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   child: AppButton(
                     backColor: AppColors.PRIMARY_COLOR,
                     onPressed: () {
-                      int index = controller.page!.toInt();
+                      int index = state.currentIndex;
                       debugPrint(index.toString());
                       debugPrint(controller.page.toString());
                       if (index < cubit.images.length - 1) {
@@ -176,7 +188,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                         // CacheHelper.put(key: 'showOnboarding', value: true);
                       }
                     },
-                    label: (controller.page!.toInt() < cubit.images.length - 1)
+                    label: (state.currentIndex < cubit.images.length - 1)
                         ? LocaleKeys.next.localize
                         : LocaleKeys.start.localize,
                     style: Styles.headerText(

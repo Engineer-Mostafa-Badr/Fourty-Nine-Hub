@@ -15,23 +15,26 @@ class SpecialAdsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: BackAppBar(
-        centerTitle: false,
-        label: LocaleKeys.competition.localize,
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const Winners()),
-              );
-            },
-            child: Text(
-              '${LocaleKeys.winners.localize} 🏆',
-              style: Styles.mediumText(color: AppColors.SECONDARY_COLOR),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          centerTitle: false,
+          label: LocaleKeys.competition.localize,
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Winners()),
+                );
+              },
+              child: Text(
+                '${LocaleKeys.winners.localize} 🏆',
+                style: Styles.mediumText(color: AppColors.SECONDARY_COLOR),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       body: const SpecialAdsBody(),
     );

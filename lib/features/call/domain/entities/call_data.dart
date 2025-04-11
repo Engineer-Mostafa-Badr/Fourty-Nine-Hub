@@ -15,12 +15,14 @@ class CallData extends Equatable {
   final String zegoAppId;
   final String zegoAppSign;
   final String agoraAppId;
+  final String zegoRoomId;
   final String uid;
   final String fcmToken;
   final String callType;
   final String channelId;
   final String permission;
   final String expiresAt;
+  
 
   const CallData({
     required this.isCaller,
@@ -35,6 +37,7 @@ class CallData extends Equatable {
     required this.serviceType,
     required this.zegoAppId,
     required this.zegoAppSign,
+    required this.zegoRoomId,
     required this.agoraAppId,
     required this.uid,
     required this.fcmToken,
@@ -56,6 +59,7 @@ class CallData extends Equatable {
       serviceType: map['service_type'] ?? '',
       zegoAppId: map['zego_app_id'].toString(),
       zegoAppSign: map['zego_app_sign'] ?? '',
+      zegoRoomId: map['zego_room_id'] ?? '',
       agoraAppId: map['agora_app_id'] ?? '',
       uid: map['uid'] ?? '',
       fcmToken: map['fcm_token'] ?? '',
@@ -92,6 +96,7 @@ class CallData extends Equatable {
       'service_type': serviceType.toString(),
       'zego_app_id': zegoAppId.toString(),
       'zego_app_sign': zegoAppSign.toString(),
+      'zego_room_id': zegoRoomId.toString(),
       'agora_app_id': agoraAppId.toString(),
       // 'uid': uid,
       'fcm_token': fcmToken ?? this.fcmToken.toString(),

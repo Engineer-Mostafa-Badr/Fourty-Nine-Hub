@@ -1,23 +1,23 @@
-import 'package:device_preview/device_preview.dart';
 import 'dart:developer';
+
+import 'package:device_preview/device_preview.dart';
 import 'package:easy_localization/easy_localization.dart' as easy_localization;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_callkit_incoming_yoer/flutter_callkit_incoming.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/theme/cubit/cubit.dart';
 import 'package:fourtyninehub/common/theme/cubit/states.dart';
 import 'package:fourtyninehub/core/localization/localization_service.dart';
 import 'package:fourtyninehub/core/themes/dark_theme.dart';
-import 'package:fourtyninehub/core/utils/location_tracker.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/call/presentation/controller/call_controller/call_cubit.dart';
 import 'package:fourtyninehub/features/call/presentation/controller/send_call_controller.dart/send_call_cubit.dart';
 import 'package:fourtyninehub/features/call/presentation/pages/whatsapp_screen.dart';
+import 'package:fourtyninehub/features/call/widgets/minimized_call_overlay.dart';
 import 'package:fourtyninehub/features/carpool/join_trip/presentation/cubits/cubit/join_trip_car_pool_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_states.dart';
@@ -38,17 +38,18 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/secrets/controller/secrets_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:geolocator/geolocator.dart';
+
 import 'core/service/cache_service.dart';
 import 'core/themes/light_theme.dart';
-import 'features/RideFeature/presentation/controllers/dashboards_cubit/dashboards_cubit.dart';
+import 'features/OnBoarding/Presentation/Controllers/on_boarding_cubit.dart';
 import 'features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'features/notifications/presentation/cubits/get_user_trips_notifications/get_user_trips_notifications_cubit.dart';
+import 'features/notifications/presentation/cubits/get_status_all_services_notifications/get_status_all_services_notifications_cubit.dart';
 import 'features/settings/presentation/cubit/choice_ruler_cubit.dart';
 import 'features/settings/presentation/cubit/floating_navigator_cubit.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'firebase_options.dart';
 import 'routes/pages.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -57,6 +58,8 @@ bool isActivate = false;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await CacheManager.init();
+  timeago.setLocaleMessages('en', timeago.EnMessages());
+  timeago.setLocaleMessages('ar', timeago.ArMessages());
 //  await  initPickMeFeature();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -68,7 +71,7 @@ void main() async {
   // // Listen for new locations (only when moved at least 300m)
   // locationService.locationUpdates.listen((position) {
   //   Fluttertoast.showToast(
-  //       msg: "New location (moved at least 300m): ${position.latitude}, ${position.longitude}",
+  //       msg: "New location (moved at least 1m): ${position.latitude}, ${position.longitude}",
   //       toastLength: Toast.LENGTH_SHORT,
   //       gravity: ToastGravity.BOTTOM,
   //       timeInSecForIosWeb: 1,
@@ -76,20 +79,18 @@ void main() async {
   //       textColor: Colors.white,
   //       fontSize: 16.0
   //   );
-  //   print('New location (moved at least 300m): ${position.latitude}, ${position.longitude}');
-  //   // Do something with the new location
+  //   print('New location (moved at least 1m): ${position.latitude}, ${position.longitude}');
+  // Do something with the new location
   // });
-
 
   await CacheServiceImpl.init();
   await DI.execute();
   serviceLocator<FcmNotificationHelper>().setup();
   serviceLocator<FcmNotificationHelper>().getFcmToken();
   await Geolocator.checkPermission().then(
-    (value) {
+        (value) {
       if (value == LocationPermission.denied) {
         Geolocator.requestPermission();
-
       }
     },
   );
@@ -132,7 +133,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
-
   @override
   void initState() {
     super.initState();
@@ -154,7 +154,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   Future<void> getDevicePushTokenVoIP() async {
     var devicePushTokenVoIP =
-        await FlutterCallkitIncoming.getDevicePushTokenVoIP();
+    await FlutterCallkitIncoming.getDevicePushTokenVoIP();
     print(devicePushTokenVoIP);
   }
 
@@ -189,6 +189,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           create: (context) => serviceLocator<SecretsCubit>()..getAllSecrets(),
         ),
         BlocProvider(
+          create: (context) =>
+          serviceLocator<OnBoardingCubit>()..changeOnboardingData(0),
+        ),
+        BlocProvider(
           create: (BuildContext context) => serviceLocator<WalletCubit>(),
         ),
         //to initialize preloading
@@ -200,14 +204,14 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ),
         BlocProvider(
             create: (context) =>
-                serviceLocator<PreloadBloc>()..getVideosFromApi()),
+            serviceLocator<PreloadBloc>()..getVideosFromApi()),
         BlocProvider(
           create: (BuildContext context) =>
-              serviceLocator<MainCategoriesCubit>()..loadData(),
+          serviceLocator<MainCategoriesCubit>()..loadData(),
         ),
-        BlocProvider(
-          create: (BuildContext context) => serviceLocator<RideCubit>(),
-        ),
+        // BlocProvider(
+        //   create: (BuildContext context) => serviceLocator<RideCubit>(),
+        // ),
         BlocProvider(
           create: (context) => ThemeCubit(),
         ),
@@ -232,10 +236,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             context: context,
           ),
         ),
-        BlocProvider<GetUserTripsNotificationsCubit>(
-          create: (context) => GetUserTripsNotificationsCubit(
-            getAllUserTripsUseCase: serviceLocator(),
-          )..getUserTripsNotifications(),
+        BlocProvider<GetStatusAllServicesNotificationsCubit>(
+          create: (context) => GetStatusAllServicesNotificationsCubit(
+            serviceLocator(),
+          ),
         ),
         BlocProvider<GetSocialNotificationsCubit>(
           create: (context) => GetSocialNotificationsCubit(
@@ -254,9 +258,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ),
         BlocProvider<NotificationSocketIoCubit>(
             create: (context) => NotificationSocketIoCubit(
-                  context: context,
-                  notificationListenerUseCase: serviceLocator(),
-                )),
+              context: context,
+              notificationListenerUseCase: serviceLocator(),
+            )),
         BlocProvider(create: (context) => serviceLocator<ShippingCubit>()),
         BlocProvider(
           create: (context) => FloatingNavigatorCubit()
@@ -294,11 +298,16 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                               routerConfig: AppPages.router,
                               builder: (BuildContext context, Widget? child) {
                                 final mediaQuery = MediaQuery.of(context);
-                                return MediaQuery(
+                                return  MediaQuery(
                                   data: mediaQuery.copyWith(
                                     textScaler: TextScaler.noScaling,
                                   ),
-                                  child: child ?? const SizedBox.shrink(),
+                                  child: Stack(
+                                    children: [child !,
+                                      const WhatsAppCallScreen(),
+                                    ],
+                                  ),
+
                                 );
                               },
                               themeMode: (snapshot.data ?? false)
@@ -309,11 +318,11 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                               title: '49',
                               debugShowCheckedModeBanner: false,
                               localizationsDelegates:
-                                  context.localizationDelegates,
+                              context.localizationDelegates,
                               supportedLocales: context.supportedLocales,
                               locale: context.locale,
                             ),
-                            const WhatsAppCallScreen(),
+                            const MinimizedCallOverlay(),
                           ],
                         ),
                       );

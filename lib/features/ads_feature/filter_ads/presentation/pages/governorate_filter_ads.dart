@@ -20,6 +20,7 @@ import '../../../../../core/widget/custom_scaffold.dart';
 
 class GovernorateFilterAdsView extends StatefulWidget {
   final CategorizationEntity categorization;
+
   const GovernorateFilterAdsView({super.key, required this.categorization});
 
   @override
@@ -30,9 +31,9 @@ class GovernorateFilterAdsView extends StatefulWidget {
 class _GovernorateFilterAdsViewState extends State<GovernorateFilterAdsView> {
   @override
   void initState() {
-    context
-        .read<CreateAdCubit>()
-        .loadData(subCategoryId: widget.categorization.mainCategory.id, fromMarriage: false);
+    context.read<CreateAdCubit>().loadData(
+        subCategoryId: widget.categorization.mainCategory.id,
+        fromMarriage: false);
     super.initState();
   }
 
@@ -52,8 +53,12 @@ class _GovernorateFilterAdsViewState extends State<GovernorateFilterAdsView> {
     }, builder: (context, state) {
       final controller = context.read<CreateAdCubit>();
       return CustomScaffold(
-        appBar: BackAppBar(
-            label: "${LocaleKeys.filter.localize} ${LocaleKeys.city.localize}"),
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(30),
+          child: BackAppBar(
+              label:
+                  "${LocaleKeys.filter.localize} ${LocaleKeys.city.localize}"),
+        ),
         body: SingleChildScrollView(
           padding: EdgeInsets.all(10.w),
           child: Column(
@@ -67,10 +72,27 @@ class _GovernorateFilterAdsViewState extends State<GovernorateFilterAdsView> {
                     contentPadding: const EdgeInsets.symmetric(
                         vertical: 10, horizontal: 12),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(20),
                       borderSide: const BorderSide(
                         color: Colors.grey, // Border color
-                        width: 1.0, // Border width
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: const BorderSide(
+                        color: Colors.grey, // Border color
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: const BorderSide(
+                        color: Colors.grey, // Border color
+                      ),
+                    ),
+                    disabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: const BorderSide(
+                        color: Colors.grey, // Border color
                       ),
                     ),
                   ),
@@ -111,10 +133,27 @@ class _GovernorateFilterAdsViewState extends State<GovernorateFilterAdsView> {
                                   contentPadding: const EdgeInsets.symmetric(
                                       vertical: 10, horizontal: 12),
                                   border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
+                                    borderRadius: BorderRadius.circular(20),
                                     borderSide: const BorderSide(
                                       color: Colors.grey, // Border color
-                                      width: 1.0, // Border width
+                                    ),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                    borderSide: const BorderSide(
+                                      color: Colors.grey, // Border color
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                    borderSide: const BorderSide(
+                                      color: Colors.grey, // Border color
+                                    ),
+                                  ),
+                                  disabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                    borderSide: const BorderSide(
+                                      color: Colors.grey, // Border color
                                     ),
                                   ),
                                 ),

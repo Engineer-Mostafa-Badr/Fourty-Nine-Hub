@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class AlertTextWidget extends StatelessWidget {
   final String text;
@@ -9,28 +8,32 @@ class AlertTextWidget extends StatelessWidget {
   const AlertTextWidget({
     super.key,
     required this.text,
-    this.fontSize = 32,
+    this.fontSize = 26,
   });
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(
-          Icons.circle,
-          color: Colors.black,
-          size: fontSize * 0.3, // حجم الأيقونة مناسب للنص
+        Padding(
+          padding: EdgeInsets.only(top: fontSize * 0.15),
+          child: Icon(
+            Icons.circle,
+            color: Colors.black,
+            size: fontSize * 0.4,
+          ),
         ),
-        const SizedBox(width: 10),
+        const SizedBox(width: 6),
         Expanded(
           child: Text(
             text,
             style: TextStyle(
-              color: AppColors.black,
               fontSize: fontSize.sp,
-              fontWeight: FontWeight.w900,
+              fontWeight: FontWeight.w700,
+              color: Colors.black,
             ),
+            softWrap: true,
           ),
         ),
       ],

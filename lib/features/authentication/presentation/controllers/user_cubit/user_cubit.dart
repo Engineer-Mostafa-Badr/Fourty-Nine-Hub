@@ -3,12 +3,15 @@ import 'dart:developer';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:fourtyninehub/core/abstract/use_case.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/service/cache_service.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
+import 'package:fourtyninehub/core/utils/location_tracker.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_socket_location_usecase.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/attach_token_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/create_anonymous_chat_use_case.dart';
@@ -54,6 +57,7 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
   int unreadedChatsCounter = 0;
   List<GetProfileViewsEntity> profileViews = [];
   List<GetProfileViewsEntity> profileViewsByUserId = [];
+  // final UpdateSocketLocationUseCase updateSocketLocationUseCase;
 
   // final UserRepository repository;
   bool isTokenAttached = false;
@@ -72,6 +76,7 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
     this._updateProfileViewUseCase,
     this._getProfileViewsUseCase,
     this._getProfileViewsByUserIdUseCase,
+    // this.updateSocketLocationUseCase,
     // this._getUnreadedChatsCounterUsecase,
   ) : super(const BasicState());
 
@@ -340,4 +345,38 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
       emit(state.copyWith(status: StateStatus.success));
     });
   }
+
+
+  // Future<void> emitDriverLocation() async {
+  //   final result = await updateSocketLocationUseCase(
+  //       UpdateSocketLocationParams(latitude: 31.241106, longitude: 30.047558)
+  //   );
+  //   result.fold(
+  //           (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+  //           (r) async {
+  //         if(r==true)log("Location Updated Successfully");
+  //       });
+  // }
+
+  // updateDriverLocation(){
+  //   print("state.data?.email${state.data?.email}");
+  // final locationService = LocationService();
+  //
+  //   locationService.startLocationTracking();
+  //
+  //   // Listen for new locations (only when moved at least 300m)
+  //   locationService.locationUpdates.listen((position) {
+  //     // emitDriverLocation();
+  //     Fluttertoast.showToast(
+  //         msg: "New location (moved at least 1m): ${position.latitude}, ${position.longitude}",
+  //         toastLength: Toast.LENGTH_SHORT,
+  //         gravity: ToastGravity.BOTTOM,
+  //         timeInSecForIosWeb: 1,
+  //         backgroundColor: Colors.green,
+  //         textColor: Colors.white,
+  //         fontSize: 16.0
+  //     );
+  //     print('New location (moved at least 1m): ${position.latitude}, ${position.longitude}');
+  //   });
+  //   }
 }

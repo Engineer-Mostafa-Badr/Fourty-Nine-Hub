@@ -20,8 +20,11 @@ class DoctorSubcategoryFilterView extends StatelessWidget {
     final doctorSubcategoryFilter =
         context.read<DoctorSubcategoryFilterCubit>();
     return CustomScaffold(
-      appBar: BackAppBar(
-        label: LocaleKeys.speciality.localize,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          label: LocaleKeys.speciality.localize,
+        ),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(

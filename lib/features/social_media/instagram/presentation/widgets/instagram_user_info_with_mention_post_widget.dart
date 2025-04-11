@@ -1,88 +1,204 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/entities/instagram_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_users_mention_bottom_sheet_widget.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/name_and_verified_mark.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/sub_title_header_post.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 
 class InstagramUserInfoWithMentionPostWidget extends StatelessWidget {
-  const InstagramUserInfoWithMentionPostWidget(
-      {super.key, this.subTitle = "Tokyo, Japan", required this.isMenchan, this.isReel = false, this.thereMusic = false});
-  final String subTitle;
-  final bool isMenchan;
+  const InstagramUserInfoWithMentionPostWidget({
+    super.key,
+    required this.userTags,
+    this.isReel = false,
+    this.thereMusic = false,
+    required this.imageUrl,
+    required this.userName,
+    this.country,
+    this.songName,
+    required this.userId,
+  });
+  final List<UserTagEntity> userTags;
   final bool isReel;
   final bool thereMusic;
+  final String imageUrl;
+  final String userName;
+  final String? country;
+  final String? songName;
+  final String userId;
+
   @override
   Widget build(BuildContext context) {
-    if (isMenchan) {
+    if (userTags.isNotEmpty) {
       return Row(
+        // crossAxisAlignment: Cros,
         children: [
           GestureDetector(
             onTap: () {
-              showModalBottomSheet(
-                context: context,
-                backgroundColor: Colors.white,
-                builder: (context) {
-                  return const InstagramUsersMentionBottomSheetWidget();
-                },
+              context.go(
+                Routes.INSTAGRAMPROFILE,
+                extra: userId,
               );
+              // showModalBottomSheet(
+              //   context: context,
+              //   backgroundColor: Colors.white,
+              //   builder: (context) {
+              //     return InstagramUsersMentionBottomSheetWidget(
+              //       userTags: userTags,
+              //     );
+              //   },
+              // );
             },
             child: Stack(
               clipBehavior: Clip.none,
               children: [
-                Positioned(
-                  bottom: 7,
-                  right: 7,
-                  child: Container(
+                PositionedDirectional(
+                  // bottom: 7,
+                  bottom: 5,
+                  end: 7,
+                  child: ImageFromInternet(
                     width: 25,
                     height: 25,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.green,
-                    ),
+                    image: userTags.first.profilePictureUrl,
+                    isCircle: true,
+                    fit: BoxFit.cover,
+                    // decoration: const BoxDecoration(
+                    //   shape: BoxShape.circle,
+                    //   color: Colors.green,
+                    // ),
                   ),
                 ),
-                Container(
-                  width: 25,
-                  height: 25,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.blue,
+                PositionedDirectional(
+                  child: ImageFromInternet(
+                    width: 25,
+                    height: 25,
+                    image: imageUrl,
+                    isCircle: true,
+                    fit: BoxFit.cover,
+                    // decoration: const BoxDecoration(
+                    //   shape: BoxShape.circle,
+                    //   color: Colors.blue,
+                    // ),
                   ),
                 ),
               ],
             ),
           ),
-          const Sizer(
-            width: 30,
+          const SizedBox(
+            width: 11,
           ),
-          const Text.rich(TextSpan(children: [
-            TextSpan(
-                text: "janegoodallinst",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
-            TextSpan(
-                text: " and",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400)),
-            TextSpan(
-                text: " 2 others",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
-          ]))
+          InkWell(
+            onTap: () {
+              showModalBottomSheet(
+                context: context,
+                backgroundColor: Colors.white,
+                builder: (context) {
+                  return InstagramUsersMentionBottomSheetWidget(
+                    userTags: userTags,
+                  );
+                },
+              );
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Text.rich(
+                //   maxLines: 1,
+                //   overflow: TextOverflow.ellipsis,
+                //   TextSpan(
+                //     children: [
+                //       TextSpan(
+                //         text: userTags.first.username,
+                //         style: Styles.headerText(
+                //           fontSize: 32,
+                //           height: 1.25,
+                //           color: isReel ? Colors.white : Colors.black,
+                //         ),
+                //       ),
+                //       TextSpan(
+                //         text: " ${LocaleKeys.and.localize} ",
+                //         style: Styles.headerText(
+                //           fontSize: 32,
+                //           height: 1.25,
+                //           fontWeight: FontWeight.w400,
+                //           color: isReel ? Colors.white : Colors.black,
+                //         ),
+                //       ),
+                //       TextSpan(
+                //         text:
+                //             "${userTags.length - 1} ${LocaleKeys.others.localize}",
+                //         style: Styles.headerText(
+                //           fontSize: 32,
+                //           height: 1.25,
+                //           color: isReel ? Colors.white : Colors.black,
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.45,
+                  child: Row(
+                    children: [
+                      Label(
+                        text: userTags.first.username,
+                        style: Styles.headerText(
+                          fontSize: 32,
+                          height: 1.25,
+                          color: isReel ? Colors.white : Colors.black,
+                        ),
+                      ),
+                      Label(
+                        text: " ${LocaleKeys.and.localize} ",
+                        style: Styles.headerText(
+                          fontSize: 32,
+                          height: 1.25,
+                          fontWeight: FontWeight.w400,
+                          color: isReel ? Colors.white : Colors.black,
+                        ),
+                      ),
+                      Flexible(
+                        child: Label(
+                          text:
+                              "${userTags.length - 1} ${LocaleKeys.others.localize}",
+                          style: Styles.headerText(
+                            fontSize: 32,
+                            height: 1.25,
+                            color: isReel ? Colors.white : Colors.black,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SubTitleHeaderPost(
+                  country: country ?? '',
+                  isReel: isReel,
+                  songName: songName,
+                ),
+              ],
+            ),
+          ),
         ],
       );
     }
     return Row(
       children: [
-        const ImageFromInternet(
+        ImageFromInternet(
           height: 30,
           width: 30,
           isCircle: true,
-          image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQT08_1dF0iNLYfRnL2lbqnlXg5QKKofxDew&s',
+          image: imageUrl,
           fit: BoxFit.cover,
-    ),
+        ),
         // Container(
         //   width: 30,
         //   height: 30,
@@ -103,13 +219,12 @@ class InstagramUserInfoWithMentionPostWidget extends StatelessWidget {
             NameAndVerifiedMark(
               isReel: isReel,
               isVerified: true,
-              name: 'joshua_l',
+              name: userName,
             ),
             SubTitleHeaderPost(
-              city: 'Tokyo',
-              country: 'Japan',
+              country: country ?? '',
               isReel: isReel,
-              songName: 'Astronaut In The Ocean',
+              songName: songName,
             ),
           ],
         ),

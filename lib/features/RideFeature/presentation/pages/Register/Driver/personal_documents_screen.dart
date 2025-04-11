@@ -1,24 +1,26 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateful/picker/date_picker_field.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
-
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
+import 'package:fourtyninehub/common/widgets/stateful/picker/date_picker_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/controllers/ride_register/ride_register_cubit.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/upload_rider_images.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
+
 import '../widgets/upload_file_widget.dart';
 
 class PersonalDocumentsScreen extends StatelessWidget {
-  const PersonalDocumentsScreen({super.key});
+  const PersonalDocumentsScreen({super.key, required this.params});
+  final UploadRiderImagesParams params;
 
   @override
   Widget build(BuildContext context) {
@@ -26,11 +28,14 @@ class PersonalDocumentsScreen extends StatelessWidget {
       LocaleKeys.nationalIdCard.localize,
       LocaleKeys.backOfTheId.localize,
     ];
-    return BlocBuilder<RideCubit, RideState>(
+    return BlocBuilder<RideRegisterCubit, RideRegisterState>(
       builder: (context,state) {
-        var cubit = context.read<RideCubit>();
+        var cubit = context.read<RideRegisterCubit>();
         return CustomScaffold(
-          appBar: const HomeAppbar(),
+          appBar: const PreferredSize(
+            preferredSize: Size.fromHeight(30),
+            child: HomeAppbar(),
+          ),
 
           body: Column(
             children: [
@@ -158,7 +163,7 @@ class PersonalDocumentsScreen extends StatelessWidget {
                     InkWell(
                       onTap: () {
                         print("object");
-                        context.read<RideCubit>().onSubmitUploadingId(context);
+                        context.read<RideRegisterCubit>().onSubmitUploadingId(context,params);
                       },
                       child: Container(
                         height: 44,

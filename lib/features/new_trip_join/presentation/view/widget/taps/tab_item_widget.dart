@@ -41,12 +41,17 @@ class TabItemWidget extends StatelessWidget {
               text,
               textAlign: TextAlign.center,
               style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                  color: isSelected ? Colors.black : const Color(0xff727272)),
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                color: isSelected
+                    ? Colors.black
+                    : const Color(
+                        0xff727272,
+                      ),
+              ),
             ),
           ),
-          Positioned(top: -8, right: -8, child: SvgPicture.asset(icon)),
+          Positioned(top: -14, right: -6, child: SvgPicture.asset(icon)),
         ],
       ),
     );

@@ -170,8 +170,11 @@ class _FoodCartViewState extends State<FoodCartView> {
   }
 
   _buildAppBar() {
-    return BackAppBar(
-      label: LocaleKeys.your_cart.tr(),
+    return PreferredSize(
+      preferredSize: const Size.fromHeight(30),
+      child: BackAppBar(
+        label: LocaleKeys.your_cart.tr(),
+      ),
     );
   }
 

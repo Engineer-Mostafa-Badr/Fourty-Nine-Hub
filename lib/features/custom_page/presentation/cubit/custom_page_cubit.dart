@@ -149,10 +149,10 @@ class CustomPageCubit extends Cubit<CustomPageState> {
           List.from(state.updateData ?? []);
 
       for (var item in data) {
+        favourite.add(item.copyWith(selected: item.enabled));
         for (var sub in item.subCategories) {
           updateCategoryModel(subCategoryId: sub, categoryId: item.id);
         }
-        favourite.add(item.copyWith(selected: item.enabled));
       }
 
       print("🚀 Before emit: updatedCategories = ${state.updateData}");
@@ -224,13 +224,12 @@ class CustomPageCubit extends Cubit<CustomPageState> {
     });
   }
 
-
   void updateCategoryModel(
       {required String subCategoryId, required String categoryId}) {
     List<UpdateCustomPageCategoriesModel> categories =
-    List.from(state.updateData ?? []);
-    // List<CustomPageCategoriesEntity>? favourite =
-    //     List.from(state.favourite ?? []);
+        List.from(state.updateData ?? []);
+    List<CustomPageCategoriesEntity>? favourite =
+        List.from(state.favourite ?? []);
     // List<CustomPageSubCategoriesEntity>? favouriteSubCat =
     //     List.from(state.favouriteSubCat ?? []);
     bool isRemoved = false;
@@ -239,23 +238,23 @@ class CustomPageCubit extends Cubit<CustomPageState> {
       if (categories[i].subcategories.contains(subCategoryId)) {
         // ✅ Remove subCategoryId if it exists
         List<String> updatedSubcategories =
-        List.from(categories[i].subcategories)..remove(subCategoryId);
+            List.from(categories[i].subcategories)..remove(subCategoryId);
         // favouriteSubCat
         //     .firstWhere((element) => element.id == subCategoryId)
         //     .selected = false;
         if (updatedSubcategories.isEmpty) {
           // If no subcategories left, remove the entire category
           categories.removeAt(i);
-          // favourite.firstWhere((element) => element.id == categoryId).selected =
-          //     false;
+          favourite.firstWhere((element) => element.id == categoryId).selected =
+              false;
         } else {
           // Otherwise, update the category with the new list
           categories[i] = UpdateCustomPageCategoriesModel(
             mainCategoryId: categories[i].mainCategoryId,
             subcategories: updatedSubcategories,
           );
-          // favourite.firstWhere((element) => element.id == categoryId).selected =
-          //     true;
+          favourite.firstWhere((element) => element.id == categoryId).selected =
+              true;
           // favouriteSubCat
           //     .firstWhere((element) => element.id == subCategoryId)
           //     .selected = true;
@@ -283,6 +282,7 @@ class CustomPageCubit extends Cubit<CustomPageState> {
           // favouriteSubCat
           //     .firstWhere((element) => element.id == subCategoryId)
           //     .selected = true;
+
           mainCategoryExists = true;
           print(
               "✅ Added $subCategoryId to existing mainCategoryId: $categoryId");
@@ -296,8 +296,17 @@ class CustomPageCubit extends Cubit<CustomPageState> {
           mainCategoryId: categoryId,
           subcategories: [subCategoryId],
         ));
-        // favourite.firstWhere((element) => element.id == categoryId).selected =
-        //     true;
+        favourite.firstWhere((element) => element.id == categoryId, orElse: () {
+          return CustomPageCategoriesEntity(
+            id: categoryId,
+            nameEn: "",
+            nameAr: "",
+            enabled: false,
+            banner: "",
+            selected: false,
+            subCategories: [],
+          );
+        }).selected = true;
         print(
             "✅ Created new mainCategoryId: $categoryId and added $subCategoryId.");
       }
@@ -416,5 +425,4 @@ class CustomPageCubit extends Cubit<CustomPageState> {
     //   fetchActivate();
     // });
   }
-
 }

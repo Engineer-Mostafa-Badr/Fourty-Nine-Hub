@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/my_story_instagram_header_item.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/story_instagram_header_item.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 
 class StoresInstagramWidget extends StatelessWidget {
   const StoresInstagramWidget({super.key});
@@ -19,7 +21,14 @@ class StoresInstagramWidget extends StatelessWidget {
           itemBuilder: (context, index) {
             if (index == 0) {
               return InkWell(
-                onTap: () {},
+                onTap: () {
+                  // bottomSheet(
+                  //   context: context,
+                  //   isScrollControlled: true,
+                  //   widget: AddStoryView(),
+                  // );
+                  context.push(Routes.ADDSTORYINSTAGRAM);
+                },
                 child: Padding(
                   padding: const EdgeInsetsDirectional.only(
                     start: 10.0,
@@ -111,14 +120,14 @@ class StoryItemEntity {
       id: 4,
       userName: 'Mido',
       imageUrl:
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQT08_1dF0iNLYfRnL2lbqnlXg5QKKofxDew&s',
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQT08_1dF0iNLYfRnL2lbqnlXg5QKKofxDew&s',
       storyCount: 7,
     ),
     StoryItemEntity(
       id: 5,
       userName: 'Mohammed Ibrahim',
       imageUrl:
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQT08_1dF0iNLYfRnL2lbqnlXg5QKKofxDew&s',
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQT08_1dF0iNLYfRnL2lbqnlXg5QKKofxDew&s',
       storyCount: 14,
     ),
   ];

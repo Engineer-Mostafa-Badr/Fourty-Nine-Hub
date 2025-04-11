@@ -26,6 +26,20 @@ class RideRequestTripModel extends RideRequestTripEntity {
     required super.updatedAt,
     required super.expireAt,
     required super.rating,
+    required super.driverId,
+    required super.driverFirstName,
+    required super.driverIsArrivingIn,
+    required super.driverPhoneNumber,
+    required super.driverProfilePicture,
+    required super.driverRating,
+    required super.driverRatingCount,
+    required super.driverUserId,
+    required super.vehicleBrand,
+    required super.vehicleModel,
+    required super.vehicleColor,
+    required super.vehiclePicture,
+    required super.vehiclePlateNumber,
+    required super.polyline,
   });
 
   factory RideRequestTripModel.fromJson(Map<String, dynamic> json) {
@@ -61,6 +75,27 @@ class RideRequestTripModel extends RideRequestTripEntity {
       updatedAt: json['updatedAt'] != null ? DateTime.tryParse(json['updatedAt']) ?? DateTime.now() : DateTime.now(),
       expireAt: json['expireAt'] != null ? DateTime.tryParse(json['expireAt']) ?? DateTime.now() : DateTime.now(),
       rating: (json['rate'] as num?)?.toDouble() ?? 0.0, // Default rating to 0.0
+      driverId: json['driverDetails']?['driverId'] ?? '',
+      driverUserId: json['driverDetails']?['driverUserId'] ?? '',
+      driverFirstName: json['driverDetails']?['firstName'] ?? '',
+      driverIsArrivingIn: (json['driverIsArrivingIn'] as num?)?.toDouble() ?? 0,
+      driverPhoneNumber: json['driverDetails']?['phoneNumber'] ?? '',
+      driverProfilePicture: json['driverDetails']?['profilePictureUrl'],
+      driverRating: (json['driverDetails']?['rating']?['averageRating'] as num?)?.toDouble() ?? 0.0,
+      driverRatingCount: (json['driverDetails']?['rating']?['totalRatings'] as num?)?.toInt() ?? 0,
+      vehicleBrand: json['vehicleDetails']?['brand'] ?? '',
+      vehicleModel: json['vehicleModel']?['model'] ?? '',
+      vehicleColor: json['vehicleDetails']?['color'] ?? '',
+      vehiclePlateNumber: json['vehicleDetails']?['plateInfo'] ?? '',
+      vehiclePicture: json['vehicleDetails']?['carPictureUrl'],
+      polyline: json['polyline'] != null
+          ? (json['polyline'] as List)
+          .map((e) =>
+          (e as List)
+              .map((p) => (p as num).toDouble())
+              .toList())
+          .toList()
+          : [],
     );
   }
 }

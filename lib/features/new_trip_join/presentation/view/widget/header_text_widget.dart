@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
 class HeaderTextWidget extends StatelessWidget {
   const HeaderTextWidget({super.key});
@@ -7,7 +9,7 @@ class HeaderTextWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      "One Way - One Captain!",
+      LocaleKeys.oneWayOneCaptain.localize,
       style: TextStyle(
         color: const Color(0xffFF0808),
         fontWeight: FontWeight.bold,

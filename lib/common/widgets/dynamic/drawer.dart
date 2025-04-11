@@ -106,16 +106,16 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                         ),
                                       );
                                     }),
-                                // drawerListTile(
-                                //   image: Assets.microphone,
-                                //   label:
-                                //       LocaleKeys.advertiseYourCompany.localize,
-                                //   onTap: () {
-                                //     AdInterstitialTop.loadIntersitialAd();
-                                //     AdInterstitialTop.showInterstitialAd();
-                                //     return context.push(Routes.CREATECOMPANYAD);
-                                //   },
-                                // ),
+                                drawerListTile(
+                                  image: Assets.microphone,
+                                  label:
+                                      LocaleKeys.advertiseYourCompany.localize,
+                                  onTap: () {
+                                    AdInterstitialTop.loadIntersitialAd();
+                                    AdInterstitialTop.showInterstitialAd();
+                                    return context.push(Routes.CREATECOMPANYAD);
+                                  },
+                                ),
                                 drawerListTile(
                                     image: Assets.quran,
                                     label: LocaleKeys.quraan.localize,
@@ -167,7 +167,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 //     requireLogin: true,
                                 //     onTap: () =>
                                 //         context.push(Routes.FAVOURITE)),
-
 
                                 // drawerListTile(
                                 //     image: Assets.history,
@@ -275,7 +274,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   // onTap: () {},
                                   onTap: () {
                                     context.pop();
-                                    context.push(Routes.welcomeRideRegister);
+                                    context.push(Routes.createLoadingTripScreen);
                                   },
                                 ),
                                 drawerRollWidget(
@@ -349,20 +348,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   onTap: () {
                                     context.pop();
                                     context.push(Routes.CHAT);
-                                  },
-                                ),
-                                drawerRollWidget(
-                                  label: "trip join ",
-                                  image: Assets.loading,
-                                  onTap: () {
-                                    context.push(Routes.newTripJoinScreen);
-                                  },
-                                ),
-                                drawerRollWidget(
-                                  label: "Ride Mode",
-                                  image: Assets.loading,
-                                  onTap: () {
-                                    context.push(Routes.newRideModeScreen);
                                   },
                                 ),
                               ],

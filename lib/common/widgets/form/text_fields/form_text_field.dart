@@ -129,7 +129,7 @@ class FormTextField extends StatelessWidget {
             labelText: label,
             hintStyle: style ??
                 Styles.mediumText(
-                    fontSize: 14, color: AppColors.GREY_DARK_COLOR),
+                    fontSize: 25, color: AppColors.GREY_DARK_COLOR),
             // labelStyle: style ??
             //     TextStyle(fontSize: 30.sp, color: AppColors.QUANTITY_COLOR),
             prefixIcon: prefix,

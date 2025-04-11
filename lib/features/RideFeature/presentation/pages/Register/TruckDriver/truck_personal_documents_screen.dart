@@ -27,7 +27,10 @@ class TruckPersonalDocumentsScreen extends StatelessWidget {
     TextEditingController idNumberController = TextEditingController();
     TextEditingController expirationDateController = TextEditingController();
     return CustomScaffold(
-      appBar: const HomeAppbar(),
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(30),
+        child: HomeAppbar(),
+      ),
       body: Column(
         children: [
           Expanded(
@@ -38,7 +41,7 @@ class TruckPersonalDocumentsScreen extends StatelessWidget {
                   spacing: 4,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    closeWidget(context:context,onAcceptSaveData: (){}),
+                    closeWidget(context:context,onAcceptSaveData: (){}, closeRemoveData: (){}),
                     Label(
                       text: LocaleKeys.personalDocuments.localize,
                       style: Styles.headerText(

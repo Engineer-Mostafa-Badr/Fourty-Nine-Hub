@@ -22,9 +22,12 @@ class VerificationView extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomScaffold(
       enableCustomAppBar: true,
-      appBar: BackAppBar(
-        label: LocaleKeys.verification.localize,
-        enableCustomAppBar: true,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          label: LocaleKeys.verification.localize,
+          enableCustomAppBar: true,
+        ),
       ),
       body: VerificationViewBody(
         questions: questions,

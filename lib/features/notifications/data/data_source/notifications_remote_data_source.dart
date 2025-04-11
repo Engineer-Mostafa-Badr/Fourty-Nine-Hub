@@ -8,6 +8,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/notifications/data/models/notification_model/notification_model.dart';
 import 'package:fourtyninehub/features/notifications/data/models/unread_notifications_count_model.dart';
 import 'package:fourtyninehub/features/notifications/domain/entities/notification_entity.dart';
+import 'package:fourtyninehub/features/notifications/domain/entities/status_all_services_entity.dart';
 import 'package:fourtyninehub/features/notifications/domain/entities/unread_notifications_count_entity.dart';
 import 'package:fourtyninehub/features/notifications/helpers/firebase_notification_helper.dart';
 import 'package:fourtyninehub/features/notifications/helpers/web_socket_helper.dart';
@@ -15,6 +16,7 @@ import 'package:fourtyninehub/features/trip_join/helpers/print_helper.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 import '../../domain/entities/user_trip_entity.dart';
+import '../models/status_all_services_model.dart';
 import '../models/user_trips_model.dart';
 
 abstract class NotificationsRemoteDataSource {
@@ -42,6 +44,8 @@ abstract class NotificationsRemoteDataSource {
   Future<Either<Failure, bool>> deleteAllNotifications({required String type});
 
   Future<Either<Failure, List<UserTripEntity>>> getAllUserTrips();
+
+  Future<Either<Failure, StatusAllServicesEntity>> getStatusAllServices();
 }
 
 class NotificationsRemoteDataSourceImp
@@ -211,6 +215,21 @@ class NotificationsRemoteDataSourceImp
             pr(userTripsModel);
             return Right(userTripsModel);
           },
+    );
+  }
+
+  @override
+  Future<Either<Failure, StatusAllServicesEntity>> getStatusAllServices()async {
+    final response = await apiConsumer.get(
+      EndPoints.statusAllServices,
+    );
+
+    return response.fold(
+          (failure) => Left(pr(failure)),
+          (data) {
+        pr(data['data']);
+        return Right(StatusAllServicesModel.fromJson(data['data']));
+      },
     );
   }
 }

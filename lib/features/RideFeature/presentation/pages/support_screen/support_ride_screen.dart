@@ -23,7 +23,7 @@ class _SupportRideScreenState extends State<SupportRideScreen> {
       appBar: AppBar(
         title: Text(LocaleKeys.support.localize),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
+          icon: const Icon(Icons.arrow_back_ios),
           onPressed: () => Navigator.pop(context),
         ),
       ),
@@ -32,9 +32,9 @@ class _SupportRideScreenState extends State<SupportRideScreen> {
         child: Column(
           children: [
             CustomSupportTextField(hintText: LocaleKeys.writeYourProblem.localize, controller: problemController),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             CustomSupportTextField(hintText: LocaleKeys.writeYourPhoneNumber.localize, controller: phoneController),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             SizedBox(
               width: double.infinity,
               height: 50,
@@ -53,25 +53,25 @@ class _SupportRideScreenState extends State<SupportRideScreen> {
                 ),
                 child: Text(
                   is_sent_request?LocaleKeys.requestSent.localize: LocaleKeys.requestEmergencySupport.localize,
-                  style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                  style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
-            SizedBox(height: 6,),
+            const SizedBox(height: 6,),
             if(is_sent_request)
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(children: [
-                Text(LocaleKeys.waitingApproval.localize,  style: TextStyle(color: Colors.red, fontSize: 16, fontWeight: FontWeight.bold),),
+                Text(LocaleKeys.waitingApproval.localize,  style: const TextStyle(color: Colors.red, fontSize: 16, fontWeight: FontWeight.bold),),
               ],),
             ),
 
-            SizedBox(height: 30,),
+            const SizedBox(height: 30,),
             GestureDetector(
               onTap: (){
               context.push( Routes.supportClientDetailsScreen);
               },
-              child: Text("go to client screen",style: TextStyle(
+              child: const Text("go to client screen",style: TextStyle(
                 color: Colors.red,
               ),),
             )

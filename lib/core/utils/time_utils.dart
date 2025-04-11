@@ -74,12 +74,12 @@ class TimeUtils {
     // If less than 1 minute
     if (difference.inMinutes < 1) {
       int seconds = difference.inSeconds;
-      return '$seconds\nsecond';
+      return '$seconds Sec';
     }
     // If 1 minute or more
     else {
       int minutes = difference.inMinutes;
-      return '$minutes\nminute';
+      return '$minutes Min';
     }
   }
 }

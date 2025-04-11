@@ -21,7 +21,7 @@ class NavigateBarParams {
   final bool live;
   final bool loading;
   final bool meal;
-  final bool meet;
+  final bool marriage;
   final bool reel;
   final bool ride;
   final bool snap;
@@ -33,7 +33,7 @@ class NavigateBarParams {
     required this.live,
     required this.loading,
     required this.meal,
-    required this.meet,
+    required this.marriage,
     required this.reel,
     required this.ride,
     required this.snap,
@@ -47,7 +47,7 @@ class NavigateBarParams {
       live: json['Live']['enabled'] ?? false,
       loading: json['Loading']['enabled'] ?? false,
       meal: json['Meal']['enabled'] ?? false,
-      meet: json['Meet']['enabled'] ?? false,
+      marriage: json['Marriage']['enabled'] ?? false,
       reel: json['Reel']['enabled'] ?? false,
       ride: json['Ride']['enabled'] ?? false,
       snap: json['Snap']['enabled'] ?? false,
@@ -62,7 +62,7 @@ class NavigateBarParams {
       'Live': {'enabled': live},
       'Loading': {'enabled': loading},
       'Meal': {'enabled': meal},
-      'Meet': {'enabled': meet},
+      'Marriage': {'enabled': marriage},
       'Reel': {'enabled': reel},
       'Ride': {'enabled': ride},
       'Snap': {'enabled': snap},

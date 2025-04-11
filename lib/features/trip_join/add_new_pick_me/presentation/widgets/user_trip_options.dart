@@ -31,7 +31,7 @@ class UserTripOptions extends StatelessWidget {
           const Sizer(),
           Container(
             decoration: BoxDecoration(
-              color: Color.fromRGBO(245, 245, 245, 1),
+              color: const Color.fromRGBO(245, 245, 245, 1),
               borderRadius: BorderRadius.circular(15),
             ),
             child: Column(
@@ -51,7 +51,7 @@ class UserTripOptions extends StatelessWidget {
             children: [
               Expanded(
                 child: PublishButtonV3UserTrip(
-                  text: "LocaleKeys.publish_perimum.localize",
+                  text: LocaleKeys.publish_permiun.localize,
                   formKey: formKey,
                   color: AppColors.colorRed,
                 ),

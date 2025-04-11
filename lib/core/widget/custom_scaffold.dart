@@ -209,8 +209,8 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               //   initialTime:
                               //       const TimeOfDay(hour: 0, minute: 0),
                               // ),
-                              onTap: () => context.push(Routes.onBoardingScreen),
-                              // onTap: () => context.push(Routes.RIDE),
+                              // onTap: () => context.push(Routes.onBoardingScreen),
+                              onTap: () => context.push(Routes.RIDE),
                             ),
                             drawerRollWidget(
                               label: LocaleKeys.loading.localize,
@@ -274,7 +274,6 @@ class _CustomScaffoldState extends State<CustomScaffold>
                 color: Colors.transparent,
                 child: ClickableWidget(
                   onTap: () {
-                    // choiceRulerCubit.changeChoiceRulerStatus();
                     floatingNavigatorCubit.changeFloatingNavigator();
                   },
                   child: Container(
