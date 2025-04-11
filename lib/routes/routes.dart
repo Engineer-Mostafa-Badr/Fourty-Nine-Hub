@@ -49,6 +49,7 @@ abstract class Routes {
   static const FacebookSuggestPeople = '/Social/FacebookSuggestPeople';
   static const OTHERSACCOUNT = '/Social/OthersAccount';
   static const INSTAGRAMPROFILE = '/Instagram/InstagramProfile';
+  static const INSTAGRAMCOMMENT = '/Instagram/InstagramComment';
   static const InstagramSuggestPeople = '/Instagram/InstagramSuggestPeople';
   static const ADDSTORYINSTAGRAM = '/AddStoryInstagram';
   static const EDITPROFILE = '/Social/OthersAccount/EditProfile';
@@ -267,7 +268,6 @@ abstract class Routes {
   static const CASHBACK = '/Cashback';
   static const newRideModeScreen = '/NewRideModeScreen';
 
-
   // Instagram
   static const CREATEPOSTSECONDPAGEINSTAGRAM = '/CreatePostSecondPageInstagram';
 }
@@ -319,6 +319,7 @@ abstract class Paths {
   static const FacebookSuggestPeople = 'FacebookSuggestPeople';
   static const OTHERSACCOUNT = 'OthersAccount';
   static const INSTAGRAMPROFILE = 'InstagramProfile';
+  static const INSTAGRAMCOMMENT = '/Instagram/InstagramComment';
   static const InstagramSuggestPeople = 'InstagramSuggestPeople';
   static const ADDSTORYINSTAGRAM = 'AddStoryInstagram';
   static const MAZADAT = 'Mazadat';

@@ -1494,5 +1494,8 @@
   "newPost": "منشور جديد",
   "addExplanatoryNote": "اضافة شرح توضيحي",
   "searchForAUser": "البحث عن مستخدم",
-  "taggedPeople": "الأشخاص المُشار إليهم"
+  "taggedPeople": "الأشخاص المُشار إليهم",
+  "addACommentsFor": "أضف تعليقًا لـ",
+  "commentAdded": "تم إضافة التعليق",
+  "areYouSureYouWantToDeleteThisComment": "هل أنت متأكد أنك تريد حذف هذا التعليق؟"
 }

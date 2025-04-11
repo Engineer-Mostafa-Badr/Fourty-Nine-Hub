@@ -1510,5 +1510,8 @@
   "newPost": "New Post",
   "addExplanatoryNote": "Add an explanatory note",
   "searchForAUser": "Search for a user",
-  "taggedPeople": "Tagged People"
+  "taggedPeople": "Tagged People",
+  "addACommentsFor": "Add a comments for",
+  "commentAdded": "Comment added",
+  "areYouSureYouWantToDeleteThisComment": "Are you sure you want to delete this comment?"
 }

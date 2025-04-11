@@ -1487,5 +1487,8 @@ abstract class  LocaleKeys {
   static const addExplanatoryNote = 'addExplanatoryNote';
   static const searchForAUser = 'searchForAUser';
   static const taggedPeople = 'taggedPeople';
+  static const addACommentsFor = 'addACommentsFor';
+  static const commentAdded = 'commentAdded';
+  static const areYouSureYouWantToDeleteThisComment = 'areYouSureYouWantToDeleteThisComment';
 
 }

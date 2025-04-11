@@ -4,7 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/error/custom_error.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/custom_failure_widget.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/posts_instagram_cubit/posts_instagram_cubit.dart';
@@ -131,8 +135,19 @@ class _InstagramViewBodyState extends State<InstagramViewBody> {
   Widget build(BuildContext context) {
     return BlocBuilder<PostsInstagramCubit, PostsInstagramState>(
       builder: (context, state) {
-        if (state.status.isLoading) {
+        if (state.status.isLoading || state.status.isInitial) {
           return const CustomLoading();
+        }
+        if (state.status.isFailure) {
+          return CustomFailureWidget(
+            title: state.errMessage ?? LocaleKeys.somethingWentWrong.localize,
+            onPressed: () {
+              context.read<PostsInstagramCubit>().loadPosts(
+                    context,
+                    refresh: true,
+                  );
+            },
+          );
         }
 
         return CustomScrollView(
