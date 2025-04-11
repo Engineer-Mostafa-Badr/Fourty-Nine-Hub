@@ -102,6 +102,7 @@ abstract class Routes {
   static const EDITDOCTORPROFILE = '/Visita/EditDoctorProfile';
   static const VISITADOCTORDETAILS = '/Visita/DoctorDetails';
   static const VISITABOOKING = '/Visita/VisitaBooking';
+  static const SUCCESSFULLBOOKING = 'SucessfullBooking';
   static const DOCTORDASHBOARD = '/Visita/DoctorDashboard';
   static const EDITDOCTORPERSONALINFO = '/Visita/EditDoctorPersonalInfo';
   static const EDITDOCTORTIMETABLE = '/Visita/EditDoctorTimeTable';
@@ -356,6 +357,7 @@ abstract class Paths {
   static const VISITAEMERGENCY = 'VisitaEmergency';
   static const VISITADOCTORDETAILS = 'DoctorDetails';
   static const VISITABOOKING = 'VisitaBooking';
+  static const SUCCESSFULLBOOKING = 'SucessfullBooking';
   static const CREATEDOCTOR = 'CreateDoctor';
   static const EDITDOCTORPROFILE = 'EditDoctorProfile';
   static const FILTERDOCTORSUBCATEGORY = 'FilterDoctorSubcategory';

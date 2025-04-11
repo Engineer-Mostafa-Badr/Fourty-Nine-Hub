@@ -24,7 +24,7 @@ class DoctorDetailsReviewsWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            LocaleKeys.patientsReviews.localize,
+            LocaleKeys.comments.localize,
             style: Styles.headerText(),
           ),
           const Sizer(),
@@ -45,7 +45,7 @@ class DoctorDetailsReviewsWidget extends StatelessWidget {
                       itemCount:
                           cubit.rates.length > 2 ? 2 : cubit.rates.length,
                       separatorBuilder: (context, index) =>
-                          const DoctorDetailsDivider(),
+                          const Sizer(),
                       itemBuilder: (context, index) =>
                           UserDoctorRateCard(rate: cubit.rates[index]),
                     ),

@@ -411,6 +411,8 @@
   "messageSentSuccessfully": "تم إرسال الرسالة بنجاح",
   "days": "يوم",
   "comments": "تعليقات",
+  "commentsRates": "تعلقيات/تقيمات",
+
   "comment": "تعليق",
   "like": "أعجبني",
   "sad": "أحزنني",
@@ -1484,4 +1486,5 @@
   "addTalent": "إضافة موهبة",
   "winner_rating":"التقييم",
   "EGP":"ج.م"
+
 }

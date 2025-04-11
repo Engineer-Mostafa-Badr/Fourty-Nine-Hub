@@ -79,6 +79,7 @@ abstract class AppColors {
   static const GREY_DARK_COLOR = Color(0xFF707070);
   static const GREY_BORDER_COLOR = Color(0xFFDEDEDE);
   static const WHATS_APP_COLOR = Color(0xFF55CD6C);
+  static const RIGHT_SGIN = Color(0xFF7BBA69);
   static const Arrow_Icon_color = Color(0xff374957);
   static const AUTH_CONTAINER_COLOR = Colors.white;
   static const CHECK_MARK_COLOR = Color(0xFF55CD6C);
