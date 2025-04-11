@@ -1,4 +1,5 @@
 {
+
   "nnew": "New",
   "today": "Today",
   "tommorow": "Tomorrow",
@@ -413,6 +414,7 @@
   "noFriendsSuggested": "No Friends Suggested",
   "days": "d",
   "comments": "Comments",
+  "commentsRates": "comments/rates",
   "comment": "Comment",
   "like": "Like",
   "sad": "Sad",

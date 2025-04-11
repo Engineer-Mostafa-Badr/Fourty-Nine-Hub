@@ -10,12 +10,26 @@
 .history
 .svn/
 .swiftpm/
-migrate_working_dir/
-# *.g.dart
-pubspec.lock
-pubspec.yaml
+# Ignore APKs
+*.apk
 
-# IntelliJ related
+/build/
+/*/build/
+
+.gradle/
+/**/.gradle/
+
+local.properties
+
+.idea/
+*.iml
+
+captures/
+output.json
+
+migrate_working_dir/
+pubspec.lock
+
 *.iml
 *.ipr
 *.iws
