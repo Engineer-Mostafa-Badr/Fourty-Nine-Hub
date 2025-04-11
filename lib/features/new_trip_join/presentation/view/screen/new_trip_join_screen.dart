@@ -15,7 +15,9 @@ class _NewTripJoinScreenState extends State<NewTripJoinScreen> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: HomeAppbar(
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+    child: HomeAppbar(
         isWithBackArrow: false,
         language: true,
         leading: IconButton(
@@ -26,7 +28,7 @@ class _NewTripJoinScreenState extends State<NewTripJoinScreen> {
             Icons.arrow_back,
           ),
         ),
-      ),
+      ),),
       body: NewTripJoinBody(),
     );
   }

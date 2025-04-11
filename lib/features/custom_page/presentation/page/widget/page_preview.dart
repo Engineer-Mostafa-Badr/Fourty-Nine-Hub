@@ -61,49 +61,52 @@ class _PagePreviewState extends State<PagePreview>
         },
         child: CustomScaffold(
           key: _scaffoldKey,
-          appBar: HomeAppbar(
-            isWithBackArrow: false,
-            toolbarHeight: kTextTabBarHeight * 4.h,
-            language: true,
-            leading: IconButton(
-              icon: const Icon(Icons.menu), // The menu icon
-              onPressed: () {
-                HandleCashback.setCount('drawerCount', context);
-                _scaffoldKey.currentState?.openDrawer();
-              },
-            ),
-            bottom: TabBar(
-              dividerColor: Colors.transparent,
-              indicator: BoxDecoration(
-                color: Colors.red.withOpacity(0.1), // Light red background
-                borderRadius: BorderRadius.circular(8), // Rounded corners
+          appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(90),
+            child: HomeAppbar(
+              isWithBackArrow: false,
+              toolbarHeight: kTextTabBarHeight * 4.h,
+              language: true,
+              leading: IconButton(
+                icon: const Icon(Icons.menu), // The menu icon
+                onPressed: () {
+                  HandleCashback.setCount('drawerCount', context);
+                  _scaffoldKey.currentState?.openDrawer();
+                },
               ),
-              labelStyle: const TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.red,
-              ),
-              unselectedLabelStyle: const TextStyle(
-                fontWeight: FontWeight.bold,
-                color: AppColors.LIGHT_GRAY_COLOR2,
-              ),
-              tabs: [
-                Tab(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: Text(
-                      LocaleKeys.social.tr(),
+              bottom: TabBar(
+                dividerColor: Colors.transparent,
+                indicator: BoxDecoration(
+                  color: Colors.red.withValues(alpha: 0.1), // Light red background
+                  borderRadius: BorderRadius.circular(8), // Rounded corners
+                ),
+                labelStyle: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.red,
+                ),
+                unselectedLabelStyle: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.LIGHT_GRAY_COLOR2,
+                ),
+                tabs: [
+                  Tab(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Text(
+                        LocaleKeys.social.tr(),
+                      ),
                     ),
                   ),
-                ),
-                Tab(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: Text(
-                      LocaleKeys.service.tr(),
+                  Tab(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      child: Text(
+                        LocaleKeys.service.tr(),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           drawer: const DrawerWidget(),

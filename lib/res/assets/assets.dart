@@ -70,6 +70,18 @@ abstract class Assets {
   static String verifiedAccountMarkIcon =
       'assets/icons/verified_account_mark_icon.svg';
   static String musicNoteIcon = 'assets/icons/music_note.svg';
+  static String aMailIcon = 'assets/icons/a_mail_icon.svg';
+  static String facebook2Icon = 'assets/icons/facebook_2_icon.svg';
+  static String appsBlackIcon = 'assets/icons/apps_black_icon.svg';
+  static String appsGreyIcon = 'assets/icons/apps_grey_icon.svg';
+  static String videoGreyIcon = 'assets/icons/video_grey_icon.svg';
+  static String videoIcon = 'assets/icons/video_icon.svg';
+  static String profile2BlackIcon = 'assets/icons/profile_2_black_icon.svg';
+  static String profile2GreyIcon = 'assets/icons/profile_2_grey_icon.svg';
+
+  // Commets
+  static String commentIconsIcon = 'assets/icons/comment_icons_icon.svg';
+  static String commentIconsPng = 'assets/icons/comment_icons_icon.png';
 
   // lottie
   static String loveReaction = 'assets/lottie/love_reaction.json';
@@ -132,6 +144,7 @@ abstract class Assets {
   static String clock = 'assets/icons/clock.png';
   static String single = 'assets/icons/single.png';
   static String married = 'assets/icons/married.png';
+  static String marriedSvg = 'assets/icons/married.svg';
   static String divorced = 'assets/icons/divorce.png';
   static String widowed = 'assets/icons/widowed.png';
   static String uploadImageCamera = 'assets/icons/uploadImage.png';
@@ -144,6 +157,7 @@ abstract class Assets {
   static String openBook = 'assets/images/openBook.png';
   static String social = 'assets/images/social.svg';
   static String hand = 'assets/images/hand.png';
+  static String status = 'assets/images/status.png';
   static String findLogo = 'assets/icons/findLogo.png';
   static String cameraLogo = 'assets/icons/cameraLogo.png';
   static String giftBoxIcon = 'assets/icons/gift-box.png';
@@ -204,10 +218,11 @@ abstract class Assets {
   static String metaVerified = 'assets/images/meta-verified.jpeg';
   static String driversLicense = 'assets/images/Drivers-license.jpg';
   static String healthBanner = 'assets/images/health_banner.png';
-  static String emergency = 'assets/images/emergency.png';
-  static String doctorHomeVisit = 'assets/images/doctor_home_visit.png';
-  static String doctorCall = 'assets/images/doctor_call.png';
-  static String doctorClinicVisit = 'assets/images/doctor_clinic.png';
+  static String healthBanner1 = 'assets/images/health_banner1.jpeg';
+  static String emergency = 'assets/images/health_emergency.png';
+  static String doctorHomeVisit = 'assets/images/health_home_visit.png';
+  static String doctorCall = 'assets/images/health_call.png';
+  static String doctorClinicVisit = 'assets/images/health_clinic_visit.png';
   static String profileIcon = 'assets/images/profile_icon.png';
   static String chatRoomBackground = 'assets/images/background.png';
   static String maleImagePlaceholder = 'assets/images/male_image.png';
@@ -222,6 +237,7 @@ abstract class Assets {
   static String carImage = "assets/images/car_image.jpg";
   static String personalImage = "assets/images/personal_image.png";
   static String checkSuccessImage = 'assets/images/check_success_image.png';
+  static String checkCircle = 'assets/icons/check-circle.png';
   static String walletImage = 'assets/images/wallet_image.svg';
 
 // .png
@@ -297,6 +313,8 @@ abstract class Assets {
   static String star = 'assets/images/star.png';
   static String tripJoinImage = 'assets/images/tripJoinImage.jpg';
   static String azkarPrayer = 'assets/drawerIcons/azkar_prayer.png';
+  static String imageWhiteIcon = 'assets/icons/image_white_icon.svg';
+  static String expandIcon = 'assets/icons/expand_icon.svg';
 
   //! audio
   static String notificationAudioApp = 'audio/notification.mp3';
@@ -377,8 +395,6 @@ abstract class Assets {
   static String tripJoinCarIcon = 'assets/icons/trip_join_car_icon.png';
   static String tripJoinBabySeatIcon = 'assets/icons/baby_car_seat.png';
   static String tripJoinEathIcon = 'assets/icons/earth_icon.png';
-
-
 
   static const String arrowDown = 'assets/icons/arrow-up.svg';
 

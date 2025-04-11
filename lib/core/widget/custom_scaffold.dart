@@ -12,6 +12,7 @@ import '../../common/widgets/dynamic/drawer.dart';
 import '../../common/widgets/stateless/labels/label.dart';
 import '../../features/settings/presentation/cubit/choice_ruler_cubit.dart';
 import '../../features/settings/presentation/cubit/floating_navigator_cubit.dart';
+import '../../features/social_media/chat/chat_view/presentation/pages/chats_view.dart';
 import '../../res/assets/assets.dart';
 import '../../res/style/app_colors.dart';
 import '../../routes/routes.dart';
@@ -209,8 +210,8 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               //   initialTime:
                               //       const TimeOfDay(hour: 0, minute: 0),
                               // ),
-                              onTap: () => context.push(Routes.onBoardingScreen),
-                              // onTap: () => context.push(Routes.RIDE),
+                              // onTap: () => context.push(Routes.onBoardingScreen),
+                              onTap: () => context.push(Routes.RIDE),
                             ),
                             drawerRollWidget(
                               label: LocaleKeys.loading.localize,
@@ -263,7 +264,8 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               label: LocaleKeys.chat.localize,
                               image: Assets.whatsApp,
                               padding: const EdgeInsets.all(2),
-                              onTap: () => context.push(Routes.CHAT),
+                              onTap: () => context.push(Routes.CHAT,
+                                  extra: ChatsViewParams()),
                             ),
                           ],
                         ),
@@ -274,7 +276,6 @@ class _CustomScaffoldState extends State<CustomScaffold>
                 color: Colors.transparent,
                 child: ClickableWidget(
                   onTap: () {
-                    // choiceRulerCubit.changeChoiceRulerStatus();
                     floatingNavigatorCubit.changeFloatingNavigator();
                   },
                   child: Container(

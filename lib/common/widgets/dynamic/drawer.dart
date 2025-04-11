@@ -20,7 +20,6 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
-import 'package:restart_app/restart_app.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../core/utils/custom_show_dialog.dart';
@@ -32,6 +31,7 @@ import '../../../features/competition/presentation/cubit/competition_cubit/compe
 import '../../../features/competition/presentation/view/special_ads_view.dart';
 import '../../../features/custom_page/presentation/cubit/custom_page_cubit.dart';
 import '../../../features/settings/presentation/cubit/floating_navigator_cubit.dart';
+import '../../../features/social_media/chat/chat_view/presentation/pages/chats_view.dart';
 import '../../../features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../../../res/assets/assets.dart';
 import '../../../res/style/app_colors.dart';
@@ -98,6 +98,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     onTap: () {
                                       AdInterstitialTop.loadIntersitialAd();
                                       AdInterstitialTop.showInterstitialAd();
+                                      Navigator.pop(context);
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -106,16 +107,17 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                         ),
                                       );
                                     }),
-                                // drawerListTile(
-                                //   image: Assets.microphone,
-                                //   label:
-                                //       LocaleKeys.advertiseYourCompany.localize,
-                                //   onTap: () {
-                                //     AdInterstitialTop.loadIntersitialAd();
-                                //     AdInterstitialTop.showInterstitialAd();
-                                //     return context.push(Routes.CREATECOMPANYAD);
-                                //   },
-                                // ),
+                                drawerListTile(
+                                  image: Assets.microphone,
+                                  label:
+                                      LocaleKeys.advertiseYourCompany.localize,
+                                  onTap: () {
+                                    AdInterstitialTop.loadIntersitialAd();
+                                    AdInterstitialTop.showInterstitialAd();
+                                    Navigator.pop(context);
+                                    return context.push(Routes.CREATECOMPANYAD);
+                                  },
+                                ),
                                 drawerListTile(
                                     image: Assets.quran,
                                     label: LocaleKeys.quraan.localize,
@@ -135,58 +137,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
 
                                       return context.push(Routes.AZKAAR);
                                     }),
-                                // drawerListTile(
-                                //     image: Assets.favorite_main_category_icon,
-                                //     label:
-                                //         LocaleKeys.favouriteCategories.localize,
-                                //     requireLogin: true,
-                                //     onTap: () async {
-                                //       AdInterstitialTop.loadIntersitialAd();
-                                //       AdInterstitialTop.showInterstitialAd();
-                                //       await context
-                                //           .push(Routes.FAVOURITECATEGORIES);
-                                //       context
-                                //           .read<MainCategoriesCubit>()
-                                //           .loadDataCategory();
-                                //       // context.read<MainCategoriesCubit>().getMainCategoryCustomPage();
-                                //     }),
-
-                                // drawerListTile(
-                                //     // icon: Icons.favorite,
-                                //     image: Assets.favorite_sub_category_icon,
-                                //     label: LocaleKeys
-                                //         .favouriteSubCategories.localize,
-                                //     requireLogin: true,
-                                //     onTap: () => context
-                                //         .push(Routes.FAVOURITESUBCATEGORIES)),
-
-                                // drawerListTile(
-                                //     // icon: FontAwesomeIcons.adn,
-                                //     image: Assets.favorite_ad_icon,
-                                //     label: LocaleKeys.favouriteAds.localize,
-                                //     requireLogin: true,
-                                //     onTap: () =>
-                                //         context.push(Routes.FAVOURITE)),
-
-                                // drawerListTile(
-                                //     image: Assets.history,
-                                //     label: LocaleKeys.requestHistory.localize,
-                                //     requireLogin: true,
-                                //     onTap: () => context.push(Routes.REQUESTSHISTORY)),
-
-                                // drawerListTile(
-                                //   // icon: Icons.list,
-                                //     image: Assets.lists_icon,
-                                //     label: LocaleKeys.lists.localize,
-                                //     requireLogin: true,
-                                //     onTap: () => context.push(Routes.Lists)),
-                                // drawerListTile(
-                                //     // icon: Icons.ads_click,
-                                //     image: Assets.my_ads_icon,
-                                //     label: LocaleKeys.myAds.localize,
-                                //     requireLogin: true,
-                                //     onTap: () => context.push(Routes.MYADDS)),
-                                // // drawerListTile(icon: Icons.list, label: 'Requests', onTap: () {}),
                                 drawerListTile(
                                     // icon: Icons.settings,
                                     image: Assets.settings_icon,
@@ -195,7 +145,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                       context.pop();
                                       context.push(Routes.SETTINGS);
                                     }),
-
                                 drawerListTile(
                                     // icon: Icons.privacy_tip,
                                     image: Assets.privacy_icon,
@@ -207,7 +156,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                       context.pop();
                                       return context.push(Routes.PRIVACY);
                                     }),
-
                                 drawerListTile(
                                     image: Assets.policy,
                                     label: LocaleKeys.policies.localize,
@@ -234,7 +182,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                       context.pop();
                                       context.push(Routes.CONTACTUS);
                                     }),
-
                                 drawerListTile(
                                     // icon: Icons.logout,
                                     image: Assets.sign_out_icon,
@@ -274,7 +221,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   // onTap: () {},
                                   onTap: () {
                                     context.pop();
-                                    context.push(Routes.welcomeRideRegister);
+                                    context
+                                        .push(Routes.createLoadingTripScreen);
                                   },
                                 ),
                                 drawerRollWidget(
@@ -347,7 +295,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   image: Assets.whatsApp,
                                   onTap: () {
                                     context.pop();
-                                    context.push(Routes.CHAT);
+                                    context.push(Routes.CHAT,
+                                        extra: ChatsViewParams());
                                   },
                                 ),
                               ],
@@ -381,6 +330,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   width: 100.h,
                   height: 100.h,
                   isCircle: true,
+                  backColor: Colors.red.withValues(alpha: 0.1),
                   icon: Icons.person,
                   color: AppColors.PRIMARY_COLOR,
                   onPressed: () {
@@ -405,6 +355,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     height: 100.h,
                     isCircle: true,
                     icon: Icons.person_add,
+                    backColor: Colors.red.withValues(alpha: 0.1),
                     color: AppColors.PRIMARY_COLOR,
                     onPressed: () {
                       context.pop();
@@ -635,6 +586,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
         AdInterstitialTop.loadIntersitialAd();
         AdInterstitialTop.showInterstitialAd();
         if (context.read<UserCubit>().isLoggedIn) {
+          Navigator.pop(context);
           context.go(Routes.LUCKYWHEEL);
         } else {
           showDialog(
@@ -987,12 +939,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   Phoenix.rebirth(context);
                   // Restart.restartApp();
                 },
-                // activeColor: Colors.white,
-                // inactiveThumbColor: Colors.white,
-                // inactiveTrackColor: HexColor('d9d9d9'),
-                // activeTrackColor: Colors.black,
-                // // trackColor:  WidgetStatePropertyAll(HexColor('d9d9d9')),
-                // trackOutlineColor: WidgetStatePropertyAll(HexColor('ff3308')),
               ),
               SizedBox(
                 width: 4.w,
@@ -1010,6 +956,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   return CustomSwitchButton(
                     value: floatingNavigatorCubit.floatingNavigatorEnable,
                     onChanged: (value) async {
+                      Navigator.pop(context);
                       floatingNavigatorCubit.changeFloatingNavigatorEnable();
                     },
                   );

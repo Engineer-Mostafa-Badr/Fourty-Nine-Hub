@@ -22,70 +22,53 @@ class FavSubCategoryView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
-      backgroundColor: Theme.of(context).primaryColor,
-      appBar: BackAppBar(
-        label: LocaleKeys.favouriteSubCategories.localize,
-        textColor: Colors.white,
-        iconColor: Colors.white,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 8.0),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            borderRadius: BorderRadius.vertical(
-              top: Radius.circular(50.r),
-            ),
-          ),
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          child: BlocProvider<FavouriteSubCategoryCubit>(
-            create: (BuildContext context) => serviceLocator()..load(),
-            child: BlocBuilder<FavouriteSubCategoryCubit,
-                FavouriteSubCategoryState>(
-              builder: (context, state) {
-                final controller = context.read<FavouriteSubCategoryCubit>();
-                return state.status == StateStatus.loading
-                    ? const Center(
-                        // ignore: unnecessary_const
-                        child: const CircularProgressIndicator(),
+    return Scaffold(
+
+      body: BlocProvider<FavouriteSubCategoryCubit>(
+        create: (BuildContext context) => serviceLocator()..load(),
+        child: BlocBuilder<FavouriteSubCategoryCubit,
+            FavouriteSubCategoryState>(
+          builder: (context, state) {
+            final controller = context.read<FavouriteSubCategoryCubit>();
+            return state.status == StateStatus.loading
+                ? const Center(
+                    // ignore: unnecessary_const
+                    child: const CircularProgressIndicator(),
+                  )
+                : state.data != null && state.data!.isNotEmpty
+                    ? GridView.builder(
+                        itemCount: state.data?.length,
+                        padding: EdgeInsets.all(24.w),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: .65,
+                          mainAxisSpacing: 16,
+                          crossAxisSpacing: 16,
+                        ),
+                        itemBuilder: (context, index) =>
+                            FavouriteSubCategoryCard(
+                          item: state.data![index],
+                          onFav: () async {
+                            var result = await controller
+                                .toggleSubCategoryToFavorites(
+                                    state.data![index].id);
+                            if (result == true) {
+                              state.data!.removeWhere((element) =>
+                                  element.id == state.data![index].id);
+                            }
+                          },
+                          mainCategory: state.mainCategory![index],
+                        ),
                       )
-                    : state.data != null && state.data!.isNotEmpty
-                        ? GridView.builder(
-                            itemCount: state.data?.length,
-                            padding: EdgeInsets.all(24.w),
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              childAspectRatio: .65,
-                              mainAxisSpacing: 16,
-                              crossAxisSpacing: 16,
-                            ),
-                            itemBuilder: (context, index) =>
-                                FavouriteSubCategoryCard(
-                              item: state.data![index],
-                              onFav: () async {
-                                var result = await controller
-                                    .toggleSubCategoryToFavorites(
-                                        state.data![index].id);
-                                if (result == true) {
-                                  state.data!.removeWhere((element) =>
-                                      element.id == state.data![index].id);
-                                }
-                              },
-                              mainCategory: state.mainCategory![index],
-                            ),
-                          )
-                        : Center(
-                            child: Label(
-                                style: Styles.mediumText(fontSize: 60.sp),
-                                maxLines: 3,
-                                textAlign: TextAlign.center,
-                                text: LocaleKeys
-                                    .noFavouriteSubCategory.localize));
-              },
-            ),
-          ),
+                    : Center(
+                        child: Label(
+                            style: Styles.mediumText(fontSize: 60.sp),
+                            maxLines: 3,
+                            textAlign: TextAlign.center,
+                            text: LocaleKeys
+                                .noFavouriteSubCategory.localize));
+          },
         ),
       ),
     );

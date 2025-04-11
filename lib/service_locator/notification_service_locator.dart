@@ -14,7 +14,8 @@ import 'package:fourtyninehub/features/notifications/helpers/web_socket_helper.d
 import 'package:get_it/get_it.dart';
 
 import '../features/notifications/domain/usecases/get_all_user_trips_usecase.dart';
-import '../features/notifications/presentation/cubits/get_user_trips_notifications/get_user_trips_notifications_cubit.dart';
+import '../features/notifications/domain/usecases/get_status_all_services_usecase.dart';
+import '../features/notifications/presentation/cubits/get_status_all_services_notifications/get_status_all_services_notifications_cubit.dart';
 
 class NotificationsServiceLocator {
   static execute({required GetIt serviceLocator}) async {
@@ -68,13 +69,12 @@ class NotificationsServiceLocator {
     serviceLocator.registerLazySingleton<DeleteAllNotificationsUseCase>(
       () => DeleteAllNotificationsUseCase(notificationRepo: serviceLocator()),
     );
-    serviceLocator.registerLazySingleton<GetAllUserTripsUseCase>(
-      () => GetAllUserTripsUseCase(notificationRepo: serviceLocator()),
+    serviceLocator.registerLazySingleton<GetStatusAllServicesUseCase>(
+      () => GetStatusAllServicesUseCase(notificationRepo: serviceLocator()),
     );
-
-    serviceLocator.registerLazySingleton<GetUserTripsNotificationsCubit>(
-      () => GetUserTripsNotificationsCubit(
-          getAllUserTripsUseCase: serviceLocator()),
+    serviceLocator
+        .registerLazySingleton<GetStatusAllServicesNotificationsCubit>(
+      () => GetStatusAllServicesNotificationsCubit(serviceLocator()),
     );
   }
 }

@@ -45,8 +45,11 @@ class _VisitaBookingState extends State<VisitaBooking> {
     final controller = context.read<BookDoctorAppointmentCubit>();
 
     return CustomScaffold(
-        appBar: BackAppBar(
-          label: LocaleKeys.confirmBooking.localize,
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(30),
+          child: BackAppBar(
+            label: LocaleKeys.confirmBooking.localize,
+          ),
         ),
         body: BlocConsumer<BookDoctorAppointmentCubit,
             BookDoctorAppointmentState>(

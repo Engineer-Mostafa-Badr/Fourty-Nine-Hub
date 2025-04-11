@@ -36,7 +36,6 @@ class PersonalInformationScreen extends StatefulWidget {
 }
 
 class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
-
   @override
   void initState() {
     print("widget.params.subCategoriesId: ${widget.params.subCategoriesId}");
@@ -54,7 +53,10 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
       return PopScope(
         canPop: false,
         child: CustomScaffold(
-          appBar: const HomeAppbar(),
+          appBar: const PreferredSize(
+            preferredSize: Size.fromHeight(30),
+            child: HomeAppbar(),
+          ),
           body: cubit.loadingRegister==true?const Center(child: CircularProgressIndicator()):Form(
             key: context.read<RideRegisterCubit>().formKey,
             child: Column(

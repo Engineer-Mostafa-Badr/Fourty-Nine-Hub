@@ -63,22 +63,19 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
     }
 
     return AppBar(
-      // toolbarHeight: 60,
-      // toolbarHeight: toolbarHeight,
       bottom: bottom,
-      leading: leading ??
-          IconButton(
-            icon: Image.asset(
-              Assets.menu,
-              width: 28,
-              height: 28,
-            ),
-            onPressed: () {
-              HandleCashback.setCount('drawerCount', context);
-              // Scaffold.currentState?.openDrawer(); // Open the drawer
-              Scaffold.of(context).openDrawer();
-            },
-          ),
+      leading: InkWell(
+        child: Image.asset(
+          Assets.menu,
+          width: 25,
+          height: 25,
+        ),
+        onTap: () {
+          HandleCashback.setCount('drawerCount', context);
+          // Scaffold.currentState?.openDrawer(); // Open the drawer
+          Scaffold.of(context).openDrawer();
+        },
+      ),
       title: Row(
         children: [
           if (isShowLogo)
@@ -154,17 +151,17 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
             width: 20.w,
           ),
           const Spacer(),
-          InkWell(
-            borderRadius: BorderRadius.circular(40.r),
-            onTap: () {
-              context.push(Routes.SEARCH);
-            },
-            child: const Icon(
-              Icons.search,
-              size: 25,
-              color: AppColors.QUANTITY_COLOR,
-            ),
-          ),
+          // InkWell(
+          //   borderRadius: BorderRadius.circular(40.r),
+          //   onTap: () {
+          //     context.push(Routes.SEARCH);
+          //   },
+          //   child: const Icon(
+          //     Icons.search,
+          //     size: 25,
+          //     color: AppColors.QUANTITY_COLOR,
+          //   ),
+          // ),
           const Sizer(),
           const Sizer(),
           if (showLanguage)

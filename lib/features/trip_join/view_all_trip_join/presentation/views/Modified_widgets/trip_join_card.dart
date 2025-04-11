@@ -26,14 +26,14 @@ class CustomCard extends StatelessWidget {
         ),
         borderRadius: BorderRadius.circular(radius),
         color: Theme.of(context).scaffoldBackgroundColor,
-        boxShadow: [
-          BoxShadow(
-            color: context.isDarkMode
-                ? AppColors.PRIMARY_COLOR_DARK.withOpacity(0.5)
-                : AppColors.PRIMARY_COLOR_LIGHT.withOpacity(0.5),
-            offset: const Offset(1, 2),
-          ),
-        ],
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: context.isDarkMode
+        //         ? AppColors.PRIMARY_COLOR_DARK.withOpacity(0.5)
+        //         : AppColors.PRIMARY_COLOR_LIGHT.withOpacity(0.5),
+        //     offset: const Offset(1, 2),
+        //   ),
+        // ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

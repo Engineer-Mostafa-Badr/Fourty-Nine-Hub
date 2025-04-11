@@ -19,7 +19,9 @@ class _NewRideModeScreenState extends State<NewRideModeScreen> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: HomeAppbar(
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+    child:HomeAppbar(
         isWithBackArrow: false,
         language: true,
         leading: IconButton(
@@ -30,7 +32,7 @@ class _NewRideModeScreenState extends State<NewRideModeScreen> {
             Icons.arrow_back,
           ),
         ),
-      ),
+      ),),
       body: const NewRideModeBody(),
     );
   }
@@ -92,7 +94,7 @@ class NewRideModeBody extends StatelessWidget {
                 icon: Assets.pickMeIcon,
                 imagePath: Assets.locationTripIcon,
                 title: context.isArabic ? "وصلني معاك" : "Pick me",
-                onTap: () {},
+                onTap: () {context.push(Routes.All_PickMe_View);},
               ),
             ],
           ),

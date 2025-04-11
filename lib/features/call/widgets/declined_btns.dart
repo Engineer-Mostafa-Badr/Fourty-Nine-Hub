@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/call/widgets/call_control_button.dart';
 
@@ -13,8 +12,8 @@ class DeclinedBtns extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
         
-         _customBtn(context: context, icon: Icons.close, btnText: tr('cancel'), backgroundColor:Colors.white , iconColor: Color(0xFF1E282A)),
-          _customBtn(context: context, icon: Icons.message_outlined, btnText: tr('message'), backgroundColor:Color(0xFF1E282A) , iconColor: Colors.white),
+         _customBtn(context: context, icon: Icons.close, btnText: 'Cancel', backgroundColor:Colors.white , iconColor: Color(0xFF1E282A)),
+          _customBtn(context: context, icon: Icons.message_outlined, btnText: "Message", backgroundColor:Color(0xFF1E282A) , iconColor: Colors.white),
         ],
       ),
     );

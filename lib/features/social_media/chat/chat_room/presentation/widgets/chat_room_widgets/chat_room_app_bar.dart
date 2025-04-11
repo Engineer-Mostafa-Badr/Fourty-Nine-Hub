@@ -406,7 +406,6 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                               MaterialPageRoute(
                                   builder: (context) =>
                                       SendWhatsappCallScreen(
-                                        isRealCall: false,
                                         callType: CallType.video,
                                         receiver: UserModel(
                                             id: chat.userId,
@@ -456,15 +455,15 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                               MaterialPageRoute(
                                   builder: (context) =>
                                       SendWhatsappCallScreen(
-                                        isRealCall: false,
                                         callType: CallType.audio,
                                         receiver: UserModel(
                                             id: chat.userId,
                                             firstName: chat.name,
                                             lastName: '',
                                             firebaseToken:
-                                            "eVbbeN09TSa8oSMH4xEgki:APA91bEiZraT2zh96KMj-EUBaUQVuoFSk2WNCC3yU7CDOOXtspeHH5CtauPZatt7ghxS7Em-4pv7xbkM8rI7WcIPHWHQVtiScl2OLK04BTm4bGS6LxFJyo0"
-                                          // chat.fcmToken
+                                            'eVbbeN09TSa8oSMH4xEgki:APA91bEiZraT2zh96KMj-EUBaUQVuoFSk2WNCC3yU7CDOOXtspeHH5CtauPZatt7ghxS7Em-4pv7xbkM8rI7WcIPHWHQVtiScl2OLK04BTm4bGS6LxFJyo0'
+                                            // "eVbbeN09TSa8oSMH4xEgki:APA91bEiZraT2zh96KMj-EUBaUQVuoFSk2WNCC3yU7CDOOXtspeHH5CtauPZatt7ghxS7Em-4pv7xbkM8rI7WcIPHWHQVtiScl2OLK04BTm4bGS6LxFJyo0"
+                                          //chat.fcmToken
                                         ),
                                         sender: UserModel(
                                           id: userStateEntity

@@ -13,6 +13,7 @@ import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -92,10 +93,110 @@ class _LoginViewState extends State<LoginView> {
             Routes.VERIFYMAIL,
             extra: registerCubit.emailTextController.text,
           );
-        } else if (state is RegisterByPhone) {
+        } else if (state is OTPPhoneSent) {
+          showSuccessMessage(context, LocaleKeys.oTP.localize);
           context.go(
-            Routes.HOME,
+            Routes.registerVerifyPhoneOTP,
+            extra: registerCubit.emailTextController.text,
           );
+        } else if (state is RegisterByPhone) {
+          await CacheManager.saveAccessToken(
+              state.userTokensEntity.accessToken);
+          await CacheManager.saveRefreshToken(
+              state.userTokensEntity.refreshToken);
+          context
+              .read<NotificationSocketIoCubit>()
+              .notificationListener(languageCode: 'en');
+          context
+              .read<NotificationSocketIoCubit>()
+              .clearAllNotificationsAndRefeatchAfterLogin(languageCode: 'en');
+
+          serviceLocator<UserCubit>()
+            ..setLogin(true)
+            ..attachToken()
+            ..getUser().then((value) async {
+              if (!mounted) return;
+
+              String? accessToken = await CacheManager.getAccessToken();
+              String? refreshToken = await CacheManager.getRefreshToken();
+
+              print('Refresh Token: $refreshToken');
+              print('Access Token: $accessToken');
+              print(serviceLocator<UserCubit>().state.data.toString());
+
+              Navigator.pop(context);
+              context.push(Routes.HOME);
+
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (mounted) {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Dialog(
+                        backgroundColor:
+                            Theme.of(context).scaffoldBackgroundColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(24.0.r),
+                        ),
+                        child: Container(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              Text(
+                                LocaleKeys.congratulations.localize,
+                                style: Styles.headerText(
+                                  color: AppColors.SECONDARY_COLOR,
+                                ),
+                              ),
+                              const Sizer(),
+                              Text(
+                                context.isArabic
+                                    ? state.giftMessageEntity.ar
+                                    : state.giftMessageEntity.en,
+                                textAlign: TextAlign.center,
+                                style: Styles.mediumText(),
+                              ),
+                              SizedBox(height: 40.h),
+                              SizedBox(
+                                height: 40,
+                                width: double.infinity,
+                                child: Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8),
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                            AppColors.SECONDARY_COLOR,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(16.0.r),
+                                        ),
+                                      ),
+                                      child: Label(
+                                        text: LocaleKeys.close.localize,
+                                        style: Styles.mediumText(
+                                          color: Theme.of(context)
+                                              .scaffoldBackgroundColor,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                }
+              });
+            });
         } else if (state is RegisterSuccess) {
           await context.read<UserCubit>().setLogin(true);
           await context.read<UserCubit>().getUser();
@@ -161,7 +262,10 @@ class _LoginViewState extends State<LoginView> {
         },
         child: Scaffold(
           resizeToAvoidBottomInset: true,
-          appBar: const BackAppBar(),
+          appBar: const PreferredSize(
+            preferredSize: Size.fromHeight(30),
+            child: BackAppBar(),
+          ),
           body: SingleChildScrollView(
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             controller: scrollController,
@@ -366,8 +470,7 @@ class _LoginWidgetState extends State<LoginWidget> {
           children: [
             TextAppButton(
                 style: Styles.smallText(
-                  fontSize: 24,
-                 color: Theme.of(context).primaryColor),
+                    fontSize: 24, color: Theme.of(context).primaryColor),
                 label: LocaleKeys.forgetPassword.localize,
                 onPressed: () => context.push(Routes.FORGOTPASSWORD)),
           ],
@@ -514,7 +617,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   // fillColor: const Color(0xFFEEEEEE),
                   borderColor: Colors.black,
                   currentController: registerCubit.lastNameController,
-                  style: const TextStyle(color: AppColors.QUANTITY_COLOR),
+                  // style: const TextStyle(color: AppColors.QUANTITY_COLOR),
                   // label: 'E-mail or phone number',
                   hint: LocaleKeys.lastName.localize,
                   prefixIcon: Icon(
@@ -544,6 +647,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     color: AppColors.GREY_DARK_COLOR,
                     size: 40.w,
                   ),
+                  keyboardType: TextInputType.emailAddress,
                 ),
                 Sizer(
                   height: 30.h,

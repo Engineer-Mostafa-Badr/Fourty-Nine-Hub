@@ -55,7 +55,12 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar:HomeAppbar(),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          label: LocaleKeys.doctorDetails.localize,
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: BlocBuilder<DoctorDetailsCubit, DoctorDetailsState>(

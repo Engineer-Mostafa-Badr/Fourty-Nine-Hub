@@ -8,6 +8,7 @@ import '../../../../../core/error/failure.dart';
 class GetAdRequestsUseCase
     extends UseCase<List<AdRequestEntity>, GetAdRequestsParams> {
   final AdRequestsRepo _repo;
+
   GetAdRequestsUseCase(this._repo);
 
   @override
@@ -23,12 +24,13 @@ class GetAdRequestsParams {
   final int limit;
   final String username;
 
-  GetAdRequestsParams(
-      {required this.id,
-      required this.page,
-      required this.limit,
-      required this.username});
+  GetAdRequestsParams({
+    required this.id,
+    required this.page,
+    required this.limit,
+    required this.username,
+  });
 
   Map<String, dynamic> toJson() =>
-      {"username": username, "page": page, "limit": limit};
+      {"page": page, "limit": limit};
 }

@@ -81,166 +81,289 @@ class _BuildCartItemState extends State<BuildCartItem> {
         builder: (context, state) {
       return Column(
         children: [
-          Card(
-            color: cardDarkColor(context),
-            child: Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Row(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: widget.foodImageUrl.isNotEmpty
-                        ? Image.network(
-                            widget.foodImageUrl,
-                            width: 80,
-                            height: 80,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Container(
-                                width: 80,
-                                height: 80,
-                                color: Colors.grey[200],
-                                child: const Icon(
-                                  Icons.broken_image,
-                                  size: 40,
-                                  color: Colors.grey,
-                                ),
-                              );
-                            },
-                          )
-                        : Container(
-                            width: 80,
-                            height: 80,
-                            color: Colors.grey[200],
-                            child: const Icon(
-                              Icons.broken_image,
-                              size: 40,
-                              color: Colors.grey,
-                            ),
-                          ),
+          /*
+           Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: AppColors.cD9D9D9,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: widget.foodImageUrl.isNotEmpty
+                      ? Image.network(
+                    widget.foodImageUrl,
+                    width: 100,
+                    height: 70,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        width: 100,
+                        height: 70,
+                        color: Colors.grey[200],
+                        child: const Icon(Icons.broken_image, size: 40, color: Colors.grey),
+                      );
+                    },
+                  )
+                      : Container(
+                    width: 100,
+                    height: 70,
+                    color: Colors.grey[200],
+                    child: const Icon(Icons.broken_image, size: 40, color: Colors.grey),
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Row(
+                ),
+                const SizedBox(width: 12),
+
+                /// Only ONE Expanded here
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      /// Food name & price
+                      Text(
+                        widget.foodName,
+                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        widget.totalPrice.toStringAsFixed(2),
+                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      ),
+                      const SizedBox(height: 8),
+
+                      /// Quantity buttons
+                      Row(
+                        children: [
+                          _buildQuantityButton(
+                            icon: widget.quantity > 1 ? Icons.remove : Icons.delete,
+                            color: widget.quantity > 1 ? null : AppColors.SECONDARY_COLOR,
+                            onTap: () {
+                              setState(() {
+                                if ((localQuantity ?? 0) > 1) {
+                                  localQuantity = (localQuantity ?? 1) - 1;
+                                }
+                                if (widget.quantity == 1) {
+                                  widget.removeItem(
+                                    widget.cartItem.restaurant?.id ?? '',
+                                    widget.foodId,
+                                  );
+                                }
+                              });
+                            },
+                          ),
+                          const SizedBox(width: 12),
+                          Text('$localQuantity', style: Styles.headerText()),
+                          const SizedBox(width: 12),
+                          _buildQuantityButton(
+                            icon: Icons.add,
+                            onTap: () {
+                              setState(() {
+                                localQuantity = (localQuantity ?? 0) + 1;
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+
+                      /// Confirm/Cancel
+                      if (localQuantity != widget.quantity)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Row(
+                            children: [
+                              BadgedLabel(
+                                onTap: () {
+                                  setState(() {
+                                    _updateQuantity(
+                                      restaurantId: widget.cartItem.restaurant?.id ?? '',
+                                      mealId: widget.foodId,
+                                      qtyChange: 1,
+                                      currentQty: localQuantity ?? 0,
+                                    );
+                                  });
+                                },
+                                color: AppColors.SECONDARY_COLOR,
+                                label: LocaleKeys.confirm.localize,
+                              ),
+                              const SizedBox(width: 8),
+                              BadgedLabel(
+                                onTap: () {
+                                  setState(() {
+                                    localQuantity = widget.quantity;
+                                  });
+                                },
+                                label: LocaleKeys.cancel.localize,
+                              ),
+                            ],
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+           */
+          Container(
+            decoration: BoxDecoration(
+              color: AppColors.cD9D9D9,
+              borderRadius: BorderRadius.circular(20)
+            ),
+            // color: cardDarkColor(context),
+            child: Row(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: widget.foodImageUrl.isNotEmpty
+                      ? Image.network(
+                          widget.foodImageUrl,
+                          width: 100,
+                          height: 70,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Container(
+                              width: 80,
+                              height: 80,
+                              color: Colors.grey[200],
+                              child: const Icon(
+                                Icons.broken_image,
+                                size: 40,
+                                color: Colors.grey,
+                              ),
+                            );
+                          },
+                        )
+                      : Container(
+                          width: 80,
+                          height: 80,
+                          color: Colors.grey[200],
+                          child: const Icon(
+                            Icons.broken_image,
+                            size: 40,
+                            color: Colors.grey,
+                          ),
+                        ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(child:       Column(
+                  children: [
+                    Row(
                       children: [
-                        Expanded(
+                        Expanded( // <-- important
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      widget.foodName,
-                                      style: Styles.headerText(),
-                                    ),
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        widget.totalPrice.toStringAsFixed(2),
-                                        style: Styles.headerText(),
-                                      ),
-                                      Text(
-                                        ' ${widget.currency}',
-                                        style: Styles.mediumText(
-                                            color: AppColors.SECONDARY_COLOR,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                              Text(
+                                widget.foodName,
+                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
                               ),
+                              SizedBox(height: 4),
+                              Text(
+                                widget.totalPrice.toStringAsFixed(2),
+                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Spacer(),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
                               const SizedBox(height: 8),
                               Row(
                                 children: [
-                                  Expanded(
-                                    child: Row(
-                                      children: [
-                                        _buildQuantityButton(
-                                          icon: widget.quantity > 1
-                                              ? Icons.remove
-                                              : Icons.delete,
-                                          color: widget.quantity > 1
-                                              ? null
-                                              : AppColors.SECONDARY_COLOR,
-                                          onTap: () {
-                                            setState(() {
-                                              if ((localQuantity ?? 0) > 1) {
-                                                localQuantity =
-                                                    (localQuantity ?? 1) - 1;
-                                              }
-                                              if (widget.quantity == 1) {
-                                                widget.removeItem(
-                                                  widget.cartItem.restaurant
-                                                          ?.id ??
-                                                      '',
-                                                  widget.foodId,
-                                                );
-                                              }
-                                            });
-                                          },
-                                        ),
-                                        const SizedBox(width: 12),
-                                        Text(
-                                          '$localQuantity',
-                                          style: Styles.headerText(),
-                                        ),
-                                        const SizedBox(width: 12),
-                                        _buildQuantityButton(
-                                          icon: Icons.add,
-                                          onTap: () {
-                                            print("object");
-                                            setState(() {
-                                              localQuantity =
-                                                  (localQuantity ?? 0) + 1;
-                                            });
-                                          },
-                                        ),
-                                      ],
-                                    ),
+                                  _buildQuantityButton(
+                                    icon: widget.quantity > 1
+                                        ? Icons.remove
+                                        : Icons.delete,
+                                    color: widget.quantity > 1
+                                        ? null
+                                        : AppColors.SECONDARY_COLOR,
+                                    onTap: () {
+                                      setState(() {
+                                        if ((localQuantity ?? 0) > 1) {
+                                          localQuantity =
+                                              (localQuantity ?? 1) - 1;
+                                        }
+                                        if (widget.quantity == 1) {
+                                          widget.removeItem(
+                                            widget.cartItem.restaurant
+                                                ?.id ??
+                                                '',
+                                            widget.foodId,
+                                          );
+                                        }
+                                      });
+                                    },
                                   ),
-                                  if (localQuantity != widget.quantity)
-                                    Row(
-                                      children: [
-                                        BadgedLabel(
-                                            onTap: () {
-                                              setState(() {
-                                                _updateQuantity(
-                                                  restaurantId: widget.cartItem
-                                                          .restaurant?.id ??
-                                                      '',
-                                                  mealId: widget.foodId,
-                                                  qtyChange: 1,
-                                                  currentQty: localQuantity !=
-                                                          widget.quantity
-                                                      ? localQuantity ?? 0
-                                                      : widget.quantity,
-                                                );
-                                              });
-                                            },
-                                            color: AppColors.SECONDARY_COLOR,
-                                            label: LocaleKeys.confirm.localize),
-                                        const Sizer(),
-                                        BadgedLabel(
-                                            onTap: () {
-                                              setState(() {
-                                                localQuantity = widget.quantity;
-                                              });
-                                            },
-                                            label: LocaleKeys.cancel.localize),
-                                      ],
-                                    )
+                                  const SizedBox(width: 12),
+                                  Text(
+                                    '$localQuantity',
+                                    style: Styles.headerText(),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  _buildQuantityButton(
+                                    icon: Icons.add,
+                                    onTap: () {
+                                      print("object");
+                                      setState(() {
+                                        localQuantity =
+                                            (localQuantity ?? 0) + 1;
+                                      });
+                                    },
+                                  ),
                                 ],
                               ),
+
                             ],
                           ),
                         ),
                       ],
                     ),
-                  )
-                ],
-              ),
+                    if (localQuantity != widget.quantity)
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            BadgedLabel(
+                              onTap: () {
+                                setState(() {
+                                  _updateQuantity(
+                                    restaurantId: widget.cartItem.restaurant?.id ?? '',
+                                    mealId: widget.foodId,
+                                    qtyChange: 1,
+                                    currentQty: localQuantity ?? 0,
+                                  );
+                                });
+                              },
+                              color: AppColors.SECONDARY_COLOR,
+                              label: LocaleKeys.confirm.localize,
+                            ),
+                            const SizedBox(width: 8),
+                            BadgedLabel(
+                              onTap: () {
+                                setState(() {
+                                  localQuantity = widget.quantity;
+                                });
+                              },
+                              label: LocaleKeys.cancel.localize,
+                            ),
+                          ],
+                        ),
+                      ),
+                  ],
+                ),)
+              ],
             ),
           ),
           if (localQuantity != widget.quantity) ...[

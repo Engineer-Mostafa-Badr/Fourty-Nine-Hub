@@ -1,14 +1,18 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/entities/instagram_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/image_post_widget.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
 
 class InstgramImagesPostWidget extends StatefulWidget {
-  const InstgramImagesPostWidget({super.key, required this.images});
-  final List images;
+  const InstgramImagesPostWidget({
+    super.key,
+    // required this.images,
+    required this.instagramPostEntity,
+  });
+  // final List images;
+  final InstagramPostEntity instagramPostEntity;
 
   @override
   State<InstgramImagesPostWidget> createState() =>
@@ -19,18 +23,19 @@ class _InstgramImagesPostWidgetState extends State<InstgramImagesPostWidget> {
   int currentIndex = 0;
   @override
   Widget build(BuildContext context) {
-    if (widget.images.length == 1) {
-      log(widget.images.first);
+    if (widget.instagramPostEntity.medias.length == 1) {
+      log(widget.instagramPostEntity.medias.first);
       return ImagePostWidget(
-        imageUrl: widget.images.first,
+        // imageUrl: widget.images.first,
+        instagramPostEntity: widget.instagramPostEntity,
       );
-      return Container(
-        height: 400,
-        decoration: BoxDecoration(
-            color: Colors.green,
-            image: DecorationImage(
-                image: NetworkImage(widget.images.first), fit: BoxFit.cover)),
-      );
+      // return Container(
+      //   height: 400,
+      //   decoration: BoxDecoration(
+      //       color: Colors.green,
+      //       image: DecorationImage(
+      //           image: NetworkImage(widget.images.first), fit: BoxFit.cover)),
+      // );
     } else {
       return Column(
         children: [
@@ -42,10 +47,11 @@ class _InstgramImagesPostWidgetState extends State<InstgramImagesPostWidget> {
                   currentIndex = value;
                 });
               },
-              itemCount: widget.images.length,
+              itemCount: widget.instagramPostEntity.medias.length,
               itemBuilder: (context, index) {
                 return ImagePostWidget(
-                  imageUrl: widget.images[index],
+                  // imageUrl: widget.images[index],
+                  instagramPostEntity: widget.instagramPostEntity,
                 );
 
                 // return Container(
@@ -77,7 +83,7 @@ class _InstgramImagesPostWidgetState extends State<InstgramImagesPostWidget> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ...List.generate(
-                widget.images.length,
+                widget.instagramPostEntity.medias.length,
                 (index) {
                   return AnimatedContainer(
                     margin: const EdgeInsets.symmetric(horizontal: 2),

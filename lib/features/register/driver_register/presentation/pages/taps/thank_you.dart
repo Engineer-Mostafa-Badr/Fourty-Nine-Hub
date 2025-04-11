@@ -17,8 +17,11 @@ class ThankYou extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: BackAppBar(
-        label: label,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          label: label,
+        ),
       ),
       body: Center(
         child: Column(

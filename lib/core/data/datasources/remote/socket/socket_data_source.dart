@@ -63,6 +63,10 @@ abstract class SocketIOListeners {
   static const String unPinMessage = 'unPinMessage';
   static const String sendPoint = 'Stream:SendPoint';
   static const String rideSendOffer = 'RIDE:UPDATED_OFFER';
+  static const String updateTripAutoAccept = 'RIDE:UPDATED_TRIP_AUTO_ACCEPT';
+  static const String updateTripPrice = 'RIDE:UPDATED_TRIP_PRICE';
+  static const String acceptDriverOffer = 'RIDE:ACCEPTED_OFFER_FROM_CLIENT';
+  static const String getAllTrip = 'Ride:getAllTrip';
 }
 
 abstract class SocketIOEvents {

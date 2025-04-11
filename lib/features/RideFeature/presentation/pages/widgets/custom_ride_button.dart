@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/constants/registration_status.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 
 
 import '../../../../../res/style/app_colors.dart';
@@ -173,9 +174,9 @@ class CustomRideButton extends StatelessWidget {
           ),
           const Sizer(),
           Text(
-            status==RegistrationStatus.rejected.status?"rejected"
-                :status==RegistrationStatus.pending.status?"waiting for approval"
-                :status==RegistrationStatus.initial.status?"Pending":'',
+            status==RegistrationStatus.rejected.status?context.isArabic?"مرفوض":"Rejected"
+                :status==RegistrationStatus.pending.status?context.isArabic?'انتظار الموافقة':"Waiting approval"
+                :status==RegistrationStatus.initial.status?context.isArabic?'غير مكتمل':"Pending":'',
             style: const TextStyle(color: Colors.red),)
         ],
       ),

@@ -1476,5 +1476,30 @@ abstract class  LocaleKeys {
   static const addTalent = 'addTalent';
   static const winner_rating = 'winner_rating';
   static const EGP = 'EGP';
+  static const suggestReels = 'suggestReels';
+  static const watchAll = 'watchAll';
+  static const myStory = 'myStory';
+  static const recents = 'recents';
+  static const selectMultiple = 'selectMultiple';
+  static const youMustSelectAtLeastOneImage = 'youMustSelectAtLeastOneImage';
+  static const youMustSelectAtLeastOneVideo = 'youMustSelectAtLeastOneVideo';
+  static const newPost = 'newPost';
+  static const addExplanatoryNote = 'addExplanatoryNote';
+  static const searchForAUser = 'searchForAUser';
+  static const taggedPeople = 'taggedPeople';
+  static const status = 'status';
+  static const otpCode = 'otpCode';
+  static const weHaveSentACodeTo = 'weHaveSentACodeTo';
+  static const oTPVerifyFor = 'oTPVerifyFor';
+  static const resendOtpSuccess = 'resendOtpSuccess';
+  static const restaurantMode = 'restaurantMode';
+  static const yourRate = 'yourRate';
+  static const bad = 'bad';
+  static const rateTheRestaurant = 'rateTheRestaurant';
+  static const restaurantRateYou = 'restaurantRateYou';
+  static const addACommentsFor = 'addACommentsFor';
+  static const commentAdded = 'commentAdded';
+  static const areYouSureYouWantToDeleteThisComment = 'areYouSureYouWantToDeleteThisComment';
+  static const responseStatus = 'responseStatus';
 
 }

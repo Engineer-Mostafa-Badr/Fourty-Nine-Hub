@@ -64,7 +64,12 @@ class _MyAddsViewState extends State<MyAddsView>
     return DefaultTabController(
       length: 2,
       child: CustomScaffold(
-        appBar: BackAppBar(label: LocaleKeys.myAds.localize),
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(30),
+          child: BackAppBar(
+            label: LocaleKeys.myAds.localize,
+          ),
+        ),
         body: BlocConsumer<MyAddsCubit, MyAddsState>(
           listener: (context, state) {
             if (state.status == MyAddsStates.error && state.failure != null) {

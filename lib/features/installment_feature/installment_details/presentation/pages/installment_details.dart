@@ -27,6 +27,7 @@ import '../../../../../routes/routes.dart';
 
 class InstallmentsDetails extends StatefulWidget {
   final String installmentId;
+
   const InstallmentsDetails({super.key, required this.installmentId});
 
   @override
@@ -61,7 +62,10 @@ class _InstallmentsDetailsState extends State<InstallmentsDetails> {
       },
       builder: (context, state) {
         return CustomScaffold(
-          appBar: const BackAppBar(),
+          appBar: const PreferredSize(
+            preferredSize: Size.fromHeight(30),
+            child: BackAppBar(),
+          ),
           body: state.isLoading
               ? const Center(
                   child: CircularProgressIndicator.adaptive(),

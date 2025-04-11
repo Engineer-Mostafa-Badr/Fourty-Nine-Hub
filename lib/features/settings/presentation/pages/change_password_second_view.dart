@@ -12,9 +12,12 @@ class ChangePasswordSecondView extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomScaffold(
       enableCustomAppBar: true,
-      appBar: BackAppBar(
-        label: LocaleKeys.changePassword.localize,
-        enableCustomAppBar: true,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          label: LocaleKeys.changePassword.localize,
+          enableCustomAppBar: true,
+        ),
       ),
       body: const ChangePasswordSecondViewBody(),
     );

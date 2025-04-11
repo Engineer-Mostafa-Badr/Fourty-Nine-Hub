@@ -36,7 +36,7 @@ class _HealthSubCategoriesState extends State<HealthSubCategories> {
   Widget build(BuildContext context) {
     return BlocBuilder<HealthCubit, HealthState>(builder: (context, state) {
       return SizedBox(
-        height: 0.25.sh,
+        height: 0.26.sh,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -82,7 +82,7 @@ class _HealthSubCategoriesState extends State<HealthSubCategories> {
                                   Icon(
                                     Icons.arrow_forward_ios,
                                     color: AppColors.PRIMARY_COLOR_DARK,
-                                    size: 0.06.sw,
+                                    size: 30.h,
                                   ),
                                 ],
                               ),
@@ -95,8 +95,9 @@ class _HealthSubCategoriesState extends State<HealthSubCategories> {
                       controller: _scrollController,
                       separatorBuilder: (context, index) => const Sizer(),
                       scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) => HealthSubCategoryCard(
-                          subCategory: state.subCategories![index]),
+                      itemBuilder: (context, index) =>
+                            HealthSubCategoryCard(
+                            subCategory: state.subCategories![index]),
                       itemCount: state.subCategories?.length ?? 0,
                     )
                   : state.subCategories == null
