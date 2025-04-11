@@ -1,5 +1,5 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:fourtyninehub/features/authentication/data/models/user_model.dart';
 import 'package:fourtyninehub/features/call/widgets/declined_app_bar.dart';
 import 'package:fourtyninehub/features/call/widgets/declined_btns.dart';
@@ -68,11 +68,17 @@ class _DeclinedCallScreenState extends State<DeclinedCallScreen> {
                   children: [
                     DeclinedAppBar(receiverName: widget.receiver.firstName),
                     const SizedBox(height: 20),
-                    CircleAvatar(
-                      radius: 100,
-                      backgroundImage: NetworkImage(widget
-                              .receiver.profilePicture ??
-                          'https://cdn-icons-png.flaticon.com/512/149/149071.png'),
+                    Container(
+                      width: 220,
+                      height: 220,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: NetworkImage(widget.receiver.profilePicture ??
+                              'https://cdn-icons-png.flaticon.com/512/149/149071.png'),
+                        ),
+                      ),
                     ),
                   ],
                 ),
