@@ -24,7 +24,7 @@ class MarriageMyAds extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: ListView.builder(
         controller: _scrollController,
-        itemCount: controller.mrriageMyAds.length,
+        itemCount: state.myAds!.length,
         physics: const BouncingScrollPhysics(),
         itemBuilder: (context, index) => Padding(
           padding: const EdgeInsets.only(bottom: 8),
@@ -32,7 +32,7 @@ class MarriageMyAds extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               MarriageMyAdsListViewItem(
-                marriageAds: controller.mrriageMyAds[index],
+                marriageAds: state.myAds![index],
                 state: state,
               ),
               Padding(

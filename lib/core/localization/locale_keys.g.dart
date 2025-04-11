@@ -1500,5 +1500,6 @@ abstract class  LocaleKeys {
   static const addACommentsFor = 'addACommentsFor';
   static const commentAdded = 'commentAdded';
   static const areYouSureYouWantToDeleteThisComment = 'areYouSureYouWantToDeleteThisComment';
+  static const responseStatus = 'responseStatus';
 
 }

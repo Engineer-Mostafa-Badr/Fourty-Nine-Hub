@@ -20,6 +20,8 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../res/style/app_colors.dart';
+
 class MarriageAdsViewBody extends StatelessWidget {
   const MarriageAdsViewBody({
     super.key,
@@ -60,15 +62,51 @@ class MarriageAdsViewBody extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Row(
             children: [
+              const Icon(
+                Icons.search,
+                color: AppColors.PRIMARY_COLOR,
+              ),
+              const SizedBox(
+                width: 8,
+              ),
               Expanded(
                 child: CustomNotificationBadge(
-                  count: 22,
+                  count: 0,
+                  child: HeaderButtonWidget(
+                    title: LocaleKeys.favouriteAds.localize,
+                    isOpened:
+                        context.read<SubcategoriesCubit>().isFavouriteAdsOpen,
+                    onPressed: () {
+                      context
+                          .read<SubcategoriesCubit>()
+                          .getRequestsLog('62c8b5b09332225799fe335e');
+
+                      context
+                          .read<SubcategoriesCubit>()
+                          .toggleMyAds('isFavouriteAdsOpen');
+                    },
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              Expanded(
+                child: CustomNotificationBadge(
+                  count: 0,
                   child: HeaderButtonWidget(
                     title: LocaleKeys.requestLog.localize,
                     isOpened:
                         context.read<SubcategoriesCubit>().isRequestLogOpen,
                     onPressed: () {
-                      context.read<SubcategoriesCubit>().toggleRequestLog();
+                      context
+                          .read<SubcategoriesCubit>()
+                          .getRequestsLog('62c8b5b09332225799fe335e');
+                      context
+                          .read<SubcategoriesCubit>()
+                          .toggleMyAds('isRequestLogOpen');
+
+                      // context.read<SubcategoriesCubit>().toggleRequestLog();
                     },
                   ),
                 ),
@@ -82,7 +120,10 @@ class MarriageAdsViewBody extends StatelessWidget {
                   isOpened: context.read<SubcategoriesCubit>().isMyAdsOpen,
                   onPressed: () {
                     // TODO: EDIT THIS
-                    context.read<SubcategoriesCubit>().toggleMyAds();
+                    context.read<SubcategoriesCubit>().getMarriageMyAds();
+                    context
+                        .read<SubcategoriesCubit>()
+                        .toggleMyAds('isMyAdsOpen');
                     // context.push(Routes.MYADDS);
                   },
                 ),
@@ -162,10 +203,7 @@ class MarriageAdsViewBody extends StatelessWidget {
           height: 32,
           child: ListView.separated(
             itemCount: state.subCategories?.length ?? 0,
-            // controller: _scrollController,
             scrollDirection: Axis.horizontal,
-            // gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            //     crossAxisCount: 3, childAspectRatio: 1),
             itemBuilder: (context, index) {
               return Padding(
                 padding: EdgeInsetsDirectional.only(
@@ -227,6 +265,7 @@ class MarriageAdsViewBody extends StatelessWidget {
 
     // Requests Log
     if (context.read<SubcategoriesCubit>().isRequestLogOpen) {
+      print('state.adsRequestsLog ${state.adsRequestsLog?.length}');
       if (state.adsRequestsLog == null) {
         return SizedBox(
           child: Label(
@@ -239,7 +278,28 @@ class MarriageAdsViewBody extends StatelessWidget {
       if (state.adsRequestsLog!.isEmpty) {
         return CustomEmptyWidget(label: LocaleKeys.noRequests.localize);
       }
+      return MarriageRequest(
+        scrollController: _scrollController,
+        controller: controller,
+        state: state,
+      );
+    }
 
+    // Favourite Ads
+    if (context.read<SubcategoriesCubit>().isFavouriteAdsOpen) {
+      print('state.adsRequestsLog ${state.adsRequestsLog?.length}');
+      if (state.adsRequestsLog == null) {
+        return SizedBox(
+          child: Label(
+            text: 'My Ads is Null',
+            style: Styles.headerText(),
+          ),
+        );
+      }
+
+      if (state.adsRequestsLog!.isEmpty) {
+        return CustomEmptyWidget(label: LocaleKeys.noRequests.localize);
+      }
       return MarriageRequest(
         scrollController: _scrollController,
         controller: controller,
@@ -248,10 +308,10 @@ class MarriageAdsViewBody extends StatelessWidget {
     }
 
     // Ads
+    print('state.adds ${state.ads}');
     if (state.ads == null) {
       return const SizedBox();
     }
-
     if (state.ads!.isEmpty) {
       return CustomEmptyWidget(
         label: LocaleKeys.noAds.localize,

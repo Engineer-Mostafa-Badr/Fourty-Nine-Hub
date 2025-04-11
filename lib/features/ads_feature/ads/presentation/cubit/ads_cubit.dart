@@ -18,6 +18,7 @@ import '../../../../../core/error/failure.dart';
 import '../../../../requests_history/domain/entities/trip_entity.dart';
 import '../../data/models/Ad_model.dart';
 import '../../domain/usecases/get_ads_usecase.dart';
+import '../../domain/usecases/get_my_ad_by_id_usecase.dart';
 
 part 'ads_state.dart';
 
@@ -32,9 +33,9 @@ class AdvertisementCubit extends Cubit<AdsState> {
   final FilterAdUseCase _filterAdUseCase;
   final MakeAdRequestUsecase _makeAdRequestUsecase;
   final MakeAdPremiumRequestUsecase _makeAdPremiumRequestUsecase;
+  final GetMyAdByIdUseCase _getMyAdByIdUseCase;
 
-  AdvertisementCubit(
-      this._getAdsUseCase,
+  AdvertisementCubit(this._getAdsUseCase,
       this._getAllComeWithMeUseCase,
       this._getAllPickMeUseCase,
       this._requestComeWithMeUseCase,
@@ -43,7 +44,7 @@ class AdvertisementCubit extends Cubit<AdsState> {
       this._favouriteAdUseCase,
       this._filterAdUseCase,
       this._makeAdRequestUsecase,
-      this._makeAdPremiumRequestUsecase)
+      this._makeAdPremiumRequestUsecase, this._getMyAdByIdUseCase,)
       : super(AdsState());
 
   // void loadData({required String subCategoryId,required String filter}) async {
@@ -58,10 +59,9 @@ class AdvertisementCubit extends Cubit<AdsState> {
   //   }
   // }
 
-  void loadData(
-      {required String subCategoryId,
-      required String filter,
-      required bool fromTab}) async {
+  void loadData({required String subCategoryId,
+    required String filter,
+    required bool fromTab}) async {
     if (fromTab == true) {
       emit(state.copyWith(status: AdsStates.loading));
     }
@@ -73,10 +73,9 @@ class AdvertisementCubit extends Cubit<AdsState> {
     emit(state.copyWith(status: AdsStates.success));
   }
 
-  void loadMarriageData(
-      {required String subCategoryId,
-      required String filter,
-      required bool fromTab}) async {
+  void loadMarriageData({required String subCategoryId,
+    required String filter,
+    required bool fromTab}) async {
     if (fromTab == true) {
       emit(state.copyWith(status: AdsStates.loading));
     }
@@ -136,29 +135,29 @@ class AdvertisementCubit extends Cubit<AdsState> {
     response
         .fold((l) => emit(state.copyWith(failure: l, status: AdsStates.error)),
             (data) {
-      final isLastPage = data.length < 10;
-      if (page == 1) {
-        print("page == 1 $page");
-        adsPagingController.itemList = [];
-      }
-      if (isLastPage) {
-        print("isLastPage = $isLastPage");
-        adsPagingController.appendLastPage(data);
-      } else {
-        print("isNotLastPage = $isLastPage");
-        final nextPageKey = page + 1;
-        adsPagingController.appendPage(data, nextPageKey);
-      }
-      print(data.toString());
-    });
+          final isLastPage = data.length < 10;
+          if (page == 1) {
+            print("page == 1 $page");
+            adsPagingController.itemList = [];
+          }
+          if (isLastPage) {
+            print("isLastPage = $isLastPage");
+            adsPagingController.appendLastPage(data);
+          } else {
+            print("isNotLastPage = $isLastPage");
+            final nextPageKey = page + 1;
+            adsPagingController.appendPage(data, nextPageKey);
+          }
+          print(data.toString());
+        });
   }
 
   final PagingController<int, AdModel> adsPagingController =
-      PagingController(firstPageKey: 1);
-  getAds(
-      {required String subCategoryId,
-      required String filter,
-      required int page}) async {
+  PagingController(firstPageKey: 1);
+
+  getAds({required String subCategoryId,
+    required String filter,
+    required int page}) async {
     final userId = UserCubit.to.isLoggedIn ? UserCubit.to.state.data?.id : '';
 
     if (page == 1) {
@@ -173,22 +172,22 @@ class AdvertisementCubit extends Cubit<AdsState> {
     response
         .fold((l) => emit(state.copyWith(failure: l, status: AdsStates.error)),
             (data) async {
-      final isLastPage = data.length < 10;
-      if (page == 1) {
-        print("page == 1 $page");
-        adsPagingController.itemList = [];
-      }
-      if (isLastPage) {
-        print("isLastPage = $isLastPage");
-        print(data.length);
-        print(data.toString());
-        adsPagingController.appendLastPage(data);
-      } else {
-        print("isNotLastPage = $isLastPage");
-        final nextPageKey = page + 1;
-        adsPagingController.appendPage(data, nextPageKey);
-      }
-    });
+          final isLastPage = data.length < 10;
+          if (page == 1) {
+            print("page == 1 $page");
+            adsPagingController.itemList = [];
+          }
+          if (isLastPage) {
+            print("isLastPage = $isLastPage");
+            print(data.length);
+            print(data.toString());
+            adsPagingController.appendLastPage(data);
+          } else {
+            print("isNotLastPage = $isLastPage");
+            final nextPageKey = page + 1;
+            adsPagingController.appendPage(data, nextPageKey);
+          }
+        });
   }
 
   getMarriageAds({required String subCategoryId, required int page}) async {
@@ -202,30 +201,30 @@ class AdvertisementCubit extends Cubit<AdsState> {
     response
         .fold((l) => emit(state.copyWith(failure: l, status: AdsStates.error)),
             (data) async {
-      final isLastPage = data.length < 10;
-      if (page == 1) {
-        print("page == 1 $page");
-        adsPagingController.itemList = [];
-      }
-      if (isLastPage) {
-        print("isLastPage = $isLastPage");
-        print(data.length);
-        print(data.toString());
-        adsPagingController.appendLastPage(data);
-      } else {
-        print("isNotLastPage = $isLastPage");
-        final nextPageKey = page + 1;
-        adsPagingController.appendPage(data, nextPageKey);
-      }
-    });
+          final isLastPage = data.length < 10;
+          if (page == 1) {
+            print("page == 1 $page");
+            adsPagingController.itemList = [];
+          }
+          if (isLastPage) {
+            print("isLastPage = $isLastPage");
+            print(data.length);
+            print(data.toString());
+            adsPagingController.appendLastPage(data);
+          } else {
+            print("isNotLastPage = $isLastPage");
+            final nextPageKey = page + 1;
+            adsPagingController.appendPage(data, nextPageKey);
+          }
+        });
   }
 
   Future<void> getPickMeAds() async {
     final response = await _getAllPickMeUseCase(const NoParams());
     response.fold(
-        (failure) =>
+            (failure) =>
             emit(state.copyWith(failure: failure, status: AdsStates.error)),
-        (data) =>
+            (data) =>
             emit(state.copyWith(pickMeAds: data, status: AdsStates.initState)));
   }
 
@@ -233,12 +232,12 @@ class AdvertisementCubit extends Cubit<AdsState> {
     final response = await _favouriteAdUseCase(id);
     bool result = false;
     response.fold(
-        (failure) =>
+            (failure) =>
             emit(state.copyWith(failure: failure, status: AdsStates.error)),
-        (data) {
-      result = data;
-      emit(state.copyWith(status: AdsStates.success));
-    });
+            (data) {
+          result = data;
+          emit(state.copyWith(status: AdsStates.success));
+        });
     return result;
   }
 
@@ -246,38 +245,40 @@ class AdvertisementCubit extends Cubit<AdsState> {
     final response = await _removeFavouriteAdUseCase(id);
     bool result = false;
     response.fold(
-        (failure) =>
+            (failure) =>
             emit(state.copyWith(failure: failure, status: AdsStates.error)),
-        (data) {
-      result = data;
-      emit(state.copyWith(status: AdsStates.success));
-    });
+            (data) {
+          result = data;
+          emit(state.copyWith(status: AdsStates.success));
+        });
     return result;
   }
 
   Future<void> getComeWithMeAds() async {
     final response = await _getAllComeWithMeUseCase(const NoParams());
     response.fold(
-        (failure) =>
+            (failure) =>
             emit(state.copyWith(failure: failure, status: AdsStates.error)),
-        (data) => emit(
-            state.copyWith(comeWithMeAds: data, status: AdsStates.initState)));
+            (data) =>
+            emit(
+                state.copyWith(
+                    comeWithMeAds: data, status: AdsStates.initState)));
   }
 
   Future<void> requestPickMeAd({required RequestParams params}) async {
     final response = await _requestPickMeUseCase(params);
     response.fold(
-        (failure) =>
+            (failure) =>
             emit(state.copyWith(failure: failure, status: AdsStates.error)),
-        (data) => emit(state.copyWith(status: AdsStates.success)));
+            (data) => emit(state.copyWith(status: AdsStates.success)));
   }
 
   Future<void> requestComeWithMeAd({required RequestParams params}) async {
     final response = await _requestComeWithMeUseCase(params);
     response.fold(
-        (failure) =>
+            (failure) =>
             emit(state.copyWith(failure: failure, status: AdsStates.error)),
-        (data) => emit(state.copyWith(status: AdsStates.success)));
+            (data) => emit(state.copyWith(status: AdsStates.success)));
   }
 
   String? phone;
@@ -290,6 +291,7 @@ class AdvertisementCubit extends Cubit<AdsState> {
   }
 
   final formKey = GlobalKey<FormState>();
+
   void resetRequest() {
     emit(state.copyWith(makeRequest: false));
   }

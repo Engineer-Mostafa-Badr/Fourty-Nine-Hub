@@ -28,6 +28,8 @@ class SubcategoriesServiceLocator {
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
         ));
   }
 }

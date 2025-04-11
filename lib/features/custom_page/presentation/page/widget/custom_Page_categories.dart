@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -12,6 +13,7 @@ import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_pag
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/edit_page_cubit/edit_page_cubit.dart';
 
 import '../../../../../core/messages/messages.dart';
+import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
 import 'navigator_subcategories_view.dart';
@@ -132,15 +134,7 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
                   Expanded(
                     child: ListView.separated(
                         itemBuilder: (context, index) {
-                          return ListTile(
-                            leading: Checkbox(
-                              shape: const CircleBorder(),
-                              value: state.favourite![index].selected,
-                              checkColor:
-                                  Theme.of(context).scaffoldBackgroundColor,
-                              activeColor: Theme.of(context).primaryColor,
-                              onChanged: (bool? value) {},
-                            ),
+                          return GestureDetector(
                             onTap: () {
                               context
                                   .read<CustomPageCubit>()
@@ -159,115 +153,48 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
                                   ),
                                 ),
                               );
-                              // context.push(Routes.NavigatorSubCategoriesView,
-                              //     extra: state.favourite![index]);
                             },
-                            title: Text(
-                              context.isArabic
-                                  ? state.favourite![index].nameAr
-                                  : state.favourite![index].nameEn,
-                              style: Styles.mediumText(
-                                  fontSize: 65.sp,
-                                  fontWeight: FontWeight.w400,
-                                  color: Theme.of(context).primaryColor),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 16,
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: Theme.of(context)
+                                      .primaryColor
+                                      .withValues(alpha: .0),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Label(
+                                      text: context.isArabic
+                                          ? state.favourite![index].nameAr
+                                          : state.favourite![index].nameEn,
+                                      style: Styles.mediumText(
+                                          fontSize: 65.sp,
+                                          fontWeight: FontWeight.w400,
+                                          color:
+                                              Theme.of(context).primaryColor),
+                                    ),
+                                    const Spacer(),
+                                    if (state.favourite![index].selected)
+                                      Image.asset(
+                                        Assets.checkCircle,
+                                        width: 24,
+                                      ),
+                                  ],
+                                ),
+                              ),
                             ),
-                            selected: state.favourite![index].selected,
                           );
                         },
                         separatorBuilder: (context, index) => const Sizer(),
                         itemCount: state.favourite!.length),
                   ),
-                  // Expanded(
-                  //   child: GridView.builder(
-                  //     padding: const EdgeInsets.symmetric(horizontal: 16),
-                  //     gridDelegate:
-                  //         const SliverGridDelegateWithFixedCrossAxisCount(
-                  //       crossAxisCount: 2,
-                  //       childAspectRatio: .65,
-                  //       mainAxisSpacing: 16,
-                  //       crossAxisSpacing: 16,
-                  //     ),
-                  //     controller: controller,
-                  //     itemCount: state.favourite!.length,
-                  //     itemBuilder: (context, index) {
-                  //       var currentCategory = state.favourite![index];
-                  //       return Padding(
-                  //         padding: const EdgeInsets.only(bottom: 10),
-                  //         child: InkWell(
-                  //           onTap: () async {
-                  //             AdInterstitialTop.loadIntersitialAd();
-                  //             AdInterstitialTop.showInterstitialAd();
-                  //             HandleCashback.setCount(
-                  //                 'mainCategoriesCount', context);
-                  //             if (state.favourite![index].id ==
-                  //                 '62c8b5b09332225799fe335e') {
-                  //               context.push(Routes.MARRIAGESUBCATEGORIES,
-                  //                   extra: state.favourite![index]);
-                  //             } else {
-                  //               // context
-                  //               //     .read<CustomPageCubit>()
-                  //               //     .fetchFavouriteSubCat(
-                  //               //         state.favourite![index].id);
-                  //               // Navigator.push(
-                  //               //   context,
-                  //               //   MaterialPageRoute(
-                  //               //     builder: (context) =>
-                  //               //         NavigatorSubCategoriesView(
-                  //               //       mainCategory: state.favourite![index],
-                  //               //       customPageCubit:
-                  //               //           context.read<CustomPageCubit>(),
-                  //               //     ),
-                  //               //   ),
-                  //               // );
-                  //               context.push(Routes.NavigatorSubCategoriesView,
-                  //                   extra: state.favourite![index]);
-                  //             }
-                  //           },
-                  //           child: CustomPageCategoryCard(
-                  //             category: currentCategory,
-                  //             onFavorite: () async {
-                  //               print(state.favourite![index]);
-                  //               var result =
-                  //                   await !state.favourite![index].selected;
-                  //               return result;
-                  //               // var result = await controller
-                  //               //     .toggleFavoriteMedicalService(
-                  //               //     state.data![index].id);
-                  //               // print("result$result");
-                  //               // return result;
-                  //             },
-                  //           ),
-                  //         ),
-                  //       );
-                  //       // return ListTile(
-                  //       //   leading: Checkbox(
-                  //       //     shape: const CircleBorder(),
-                  //       //     value: state.favourite![index].enabled,
-                  //       //     checkColor:
-                  //       //         Theme.of(context).scaffoldBackgroundColor,
-                  //       //     activeColor: Theme.of(context).primaryColor,
-                  //       //     onChanged: (bool? value) {
-                  //       //       setState(() {
-                  //       //         // currentCategory.enabled = value ?? false;
-                  //       //         // _categoriesMap[_categoriesMap.keys
-                  //       //         //     .elementAt(index)] = value ?? false;
-                  //       //       });
-                  //       //     },
-                  //       //   ),
-                  //       //   title: Text(
-                  //       //     context.isArabic
-                  //       //         ? currentCategory.nameAr
-                  //       //         : currentCategory.nameEn,
-                  //       //     style: Styles.mediumText(
-                  //       //         fontSize: 65.sp,
-                  //       //         fontWeight: FontWeight.w400,
-                  //       //         color: Theme.of(context).primaryColor),
-                  //       //   ),
-                  //       //   selected: state.favourite![index].enabled,
-                  //       // );
-                  //     },
-                  //   ),
-                  // ),
                 ],
               );
             } else if (state.status == CustomPageStates.loading) {
