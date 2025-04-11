@@ -45,9 +45,9 @@ class _HealthViewState extends State<HealthView> {
                     padding: EdgeInsets.all(16.0.w),
                     children: [
                       const HealthBanner(),
-                      if (state.isDoctor == false) const RegistrationBanner(),
                       const Sizer(),
-                      RegistrationBanner(),
+                      if (state.isDoctor == false) const RegistrationBanner(),
+                      // RegistrationBanner(),
                       // DoctorModeBanner(
                       //   isWaitingApproval: isWaitingApproval,
                       // ),
