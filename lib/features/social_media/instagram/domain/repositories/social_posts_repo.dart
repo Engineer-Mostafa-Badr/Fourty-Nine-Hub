@@ -1,10 +1,13 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/features/social_media/instagram/data/models/instagram_post_data_model.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/entities/comment_instagram_data_entiry.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/followers_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/following_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/reel_instagram_data_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/user_tag_entity.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/add_comment_use_case.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/delete_comment_use_case.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_user_media_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_reels_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
@@ -36,4 +39,10 @@ abstract class InstagramRepo {
       PaginationParams params);
 
   Future<Either<Failure, List<UserTagEntity>>> getUserTag(String username);
+
+  Future<Either<Failure, CommentInstagramDataEntiry>> getComment(String postId);
+
+  Future<Either<Failure, bool>> addComment(AddCommentParams params);
+
+  Future<Either<Failure, bool>> deleteComment(DeleteCommentParams params);
 }

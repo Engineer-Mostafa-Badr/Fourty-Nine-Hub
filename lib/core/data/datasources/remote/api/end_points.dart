@@ -180,17 +180,22 @@ class EndPoints {
   static const customPageCat = '/navigators/navigateCategories';
   static const updateCustomPageCat = '/navigators/customPage-subcategories';
   static const activate = '/navigators/customPage';
-  static customPageSubCat(String mainCategoryId) => '/navigators/subcategories/$mainCategoryId';
+  static customPageSubCat(String mainCategoryId) =>
+      '/navigators/subcategories/$mainCategoryId';
 
   // Star
-  static String   allStar(StarPaginationParams params) =>
+  static String allStar(StarPaginationParams params) =>
       '/talent/?page=${params.page}&limit=${params.limit}&subCategory=${Constants.tubeSubCategory}';
   static String winnerStar(StarPaginationParams params) =>
       '/talent/all-winner?page=${params.page}&limit=${params.limit}&subCategory=${Constants.tubeSubCategory}';
-  static String myStar = '/talent/my-talent?subCategory=${Constants.tubeSubCategory}';
-  static String uploadStar = '/talent/upload?subCategory=${Constants.tubeSubCategory}';
-  static String bannerTalent = '/talent/banner?subCategory=${Constants.tubeSubCategory}';
-  static String deleteMyStar({required String id}) => '/talent/$id?subCategory=${Constants.tubeSubCategory}';
+  static String myStar =
+      '/talent/my-talent?subCategory=${Constants.tubeSubCategory}';
+  static String uploadStar =
+      '/talent/upload?subCategory=${Constants.tubeSubCategory}';
+  static String bannerTalent =
+      '/talent/banner?subCategory=${Constants.tubeSubCategory}';
+  static String deleteMyStar({required String id}) =>
+      '/talent/$id?subCategory=${Constants.tubeSubCategory}';
 
   //My Ads
   static const myAdsAuction = '/ads/allMyAds/auction';
@@ -551,8 +556,10 @@ class EndPoints {
   static String mainSubCategories({required GetSubCategoriesParams params}) {
     return '/categories/subcategories/${params.mainCategoryId}?userId=${params.userId}';
   }
-  static String customPageSubCategories({required GetCustomPageSubCategoriesParams params}) {
-    return '/navigators/navigateCategories-enable/${params.mainCategoryId??'62c8b5779332225799fe3304'}';
+
+  static String customPageSubCategories(
+      {required GetCustomPageSubCategoriesParams params}) {
+    return '/navigators/navigateCategories-enable/${params.mainCategoryId ?? '62c8b5779332225799fe3304'}';
   }
 
   static const riderInfoRegister = '/ride/riders/register';
@@ -765,6 +772,18 @@ class EndPoints {
 
   static String reactOnComment(String postId) {
     return '/facebook/comment/react/$postId?subCategory=${Constants.facebookSubCategory}';
+  }
+
+  static String getCommentInstagram(String postId) {
+    return '/inst/posts/$postId/comments?page=1&limit=10';
+  }
+
+  static String addCommentInstagram(String postId) {
+    return '/inst/posts/$postId/comments';
+  }
+
+  static String deleteCommentInstagram(String postId, String commentId) {
+    return '/inst/posts/$postId/comments/$commentId';
   }
 
   static String reactOnTwitterPost(String postId) {
@@ -1195,9 +1214,11 @@ class EndPoints {
   }
 
   // gecoding google api url
-  static String geocodingUrl ='https://maps.googleapis.com/maps/api/geocode/json';
+  static String geocodingUrl =
+      'https://maps.googleapis.com/maps/api/geocode/json';
   // trip join
-  static String tripJoinExpectedPrice ="/ride/come-with-you/trip/expectedPrice";
+  static String tripJoinExpectedPrice =
+      "/ride/come-with-you/trip/expectedPrice";
   static String getCarBrand = "/ride/riders/brands";
   static String getCarModelByBrand = "/ride/riders/models";
   static String getCarYearType = "/ride/riders/car-years-and-types";
@@ -1270,6 +1291,7 @@ class EndPoints {
   static String getExpectedPrice(String id) {
     return '/ride/trips/expected/price/$id';
   }
+
   static String getAvailableTrips(AvailableRideTripsUseCaseParams params) {
     return '/ride/driver/trips/available/not-tracking?limit=${params.limit}&page=${params.page}';
   }
@@ -1277,12 +1299,15 @@ class EndPoints {
   static String getPastTrips(int page, String type) {
     return '/ride/driver/trips/past?tripType=$type&limit=20&page=$page';
   }
+
   static String createNewOffer(String id) {
     return '/ride/offers/new/offer/$id';
   }
+
   static String updateDriverRating(String id) {
     return '/ride/trip/rating/$id/client';
   }
+
   static String createDriverRating = '/ride/trip/rating/driver';
   static String getSettingsDashboard = '/ride/driver/info/settings';
   static String deleteRideRegistration = '/ride/riders';

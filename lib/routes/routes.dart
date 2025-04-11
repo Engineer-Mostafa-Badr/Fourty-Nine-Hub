@@ -48,9 +48,6 @@ abstract class Routes {
   static const SOCIAL = '/Social';
   static const FacebookSuggestPeople = '/Social/FacebookSuggestPeople';
   static const OTHERSACCOUNT = '/Social/OthersAccount';
-  static const INSTAGRAMPROFILE = '/Instagram/InstagramProfile';
-  static const InstagramSuggestPeople = '/Instagram/InstagramSuggestPeople';
-  static const ADDSTORYINSTAGRAM = '/AddStoryInstagram';
   static const EDITPROFILE = '/Social/OthersAccount/EditProfile';
   static const REELS = '/Social/REELS';
   static const MUSICREELS = '/Social/REELS/MUSICREELS';
@@ -145,7 +142,6 @@ abstract class Routes {
   static const MAZADDETAILS = '/Mazadat/MazadDetails';
   static const CREATEAUCTION = '/Mazadat/CreateAuction';
 
-  static const INSTAGRAM = '/Instagram';
   static const ZOOM = '/Zoom';
   static const MEETINGROOM = '/Zoom/MeetingRoom';
   static const CALLSCREEN = '/Zoom/CallScreen';
@@ -268,9 +264,15 @@ abstract class Routes {
   static const CASHBACK = '/Cashback';
   static const newRideModeScreen = '/NewRideModeScreen';
 
-
   // Instagram
-  static const CREATEPOSTSECONDPAGEINSTAGRAM = '/CreatePostSecondPageInstagram';
+  static const INSTAGRAM = '/Instagram';
+  static const INSTAGRAMPROFILE = '/Instagram/InstagramProfile';
+  static const INSTAGRAMCOMMENT = '/Instagram/InstagramComment';
+  static const InstagramSuggestPeople = '/Instagram/InstagramSuggestPeople';
+  static const ADDSTORYINSTAGRAM = '/AddStoryInstagram';
+  static const CREATEPOSTINSTAGRAM = '/Instagram/CreatePostInstagram';
+  static const CREATEPOSTSECONDPAGEINSTAGRAM =
+      '/Instagram/CreatePostInstagram/CreatePostSecondPageInstagram';
 }
 
 abstract class Paths {
@@ -315,13 +317,9 @@ abstract class Paths {
   static const GIFT = 'Gift';
   static const WALLETHISTORY = 'WalletHistory';
   static const TRANSFERMONEY = 'TransferMoney';
-  static const INSTAGRAM = 'Instagram';
   static const SOCIAL = 'Social';
   static const FacebookSuggestPeople = 'FacebookSuggestPeople';
   static const OTHERSACCOUNT = 'OthersAccount';
-  static const INSTAGRAMPROFILE = 'InstagramProfile';
-  static const InstagramSuggestPeople = 'InstagramSuggestPeople';
-  static const ADDSTORYINSTAGRAM = 'AddStoryInstagram';
   static const MAZADAT = 'Mazadat';
   static const IMAGESPAGEVIEW = 'ImagesPageView';
   static const SHOWIMAGESVIEW = 'ShowImagesView';
@@ -528,5 +526,11 @@ abstract class Paths {
   static const CASHBACK = 'CashBack';
 
   // Instagram
+  static const INSTAGRAM = 'Instagram';
+  static const INSTAGRAMPROFILE = 'InstagramProfile';
+  static const INSTAGRAMCOMMENT = 'InstagramComment';
+  static const InstagramSuggestPeople = 'InstagramSuggestPeople';
+  static const ADDSTORYINSTAGRAM = 'AddStoryInstagram';
+  static const CREATEPOSTINSTAGRAM = 'CreatePostInstagram';
   static const CREATEPOSTSECONDPAGEINSTAGRAM = 'CreatePostSecondPageInstagram';
 }

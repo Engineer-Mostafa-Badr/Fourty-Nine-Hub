@@ -1504,7 +1504,9 @@
   "yourRate": "التقييم الخاص بك",
   "bad": "سيء",
   "rateTheRestaurant": "قيم المطعم",
-  "restaurantRateYou": "تقييم المطعم لك"
-
-
+  "restaurantRateYou": "تقييم المطعم لك",
+  "taggedPeople": "الأشخاص المُشار إليهم",
+  "addACommentsFor": "أضف تعليقًا لـ",
+  "commentAdded": "تم إضافة التعليق",
+  "areYouSureYouWantToDeleteThisComment": "هل أنت متأكد أنك تريد حذف هذا التعليق؟"
 }
