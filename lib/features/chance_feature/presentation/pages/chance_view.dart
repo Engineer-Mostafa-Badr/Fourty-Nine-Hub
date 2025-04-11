@@ -13,8 +13,11 @@ class ChanceView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: BackAppBar(
-        label: LocaleKeys.chance.localize,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          label: LocaleKeys.chance.localize,
+        ),
       ),
       floatingActionButton: const FloatingActionButtonWidget(),
       body: const ChanceViewBody(),

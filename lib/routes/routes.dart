@@ -50,6 +50,7 @@ abstract class Routes {
   static const OTHERSACCOUNT = '/Social/OthersAccount';
   static const INSTAGRAMPROFILE = '/Instagram/InstagramProfile';
   static const InstagramSuggestPeople = '/Instagram/InstagramSuggestPeople';
+  static const ADDSTORYINSTAGRAM = '/AddStoryInstagram';
   static const EDITPROFILE = '/Social/OthersAccount/EditProfile';
   static const REELS = '/Social/REELS';
   static const MUSICREELS = '/Social/REELS/MUSICREELS';
@@ -262,12 +263,15 @@ abstract class Routes {
   static const CHANGEPASSWORD = '/ChangePassword';
   static const CHANGEPASSWORDSECOND = '/ChangePasswordSecond';
   static const VERIFICATION = '/Verification';
+  static const registerVerifyPhoneOTP = '/RegisterVerifyPhoneOTP';
 
   // Cashback
   static const CASHBACK = '/Cashback';
   static const newRideModeScreen = '/NewRideModeScreen';
 
 
+  // Instagram
+  static const CREATEPOSTSECONDPAGEINSTAGRAM = '/CreatePostSecondPageInstagram';
 }
 
 abstract class Paths {
@@ -318,6 +322,7 @@ abstract class Paths {
   static const OTHERSACCOUNT = 'OthersAccount';
   static const INSTAGRAMPROFILE = 'InstagramProfile';
   static const InstagramSuggestPeople = 'InstagramSuggestPeople';
+  static const ADDSTORYINSTAGRAM = 'AddStoryInstagram';
   static const MAZADAT = 'Mazadat';
   static const IMAGESPAGEVIEW = 'ImagesPageView';
   static const SHOWIMAGESVIEW = 'ShowImagesView';
@@ -514,6 +519,7 @@ abstract class Paths {
   static const ratingDriverScreen = 'RatingDriverScreen';
   static const completeRideScreen = 'CompleteRideScreen';
   static const newRideModeScreen = 'NewRideModeScreen';
+  static const registerVerifyPhoneOTP = 'RegisterVerifyPhoneOTP';
 
   // Change Password
   static const CHANGEPASSWORD = 'ChangePassword';
@@ -523,4 +529,6 @@ abstract class Paths {
   // Cashback
   static const CASHBACK = 'CashBack';
 
+  // Instagram
+  static const CREATEPOSTSECONDPAGEINSTAGRAM = 'CreatePostSecondPageInstagram';
 }

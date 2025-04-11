@@ -8,6 +8,7 @@ import 'package:fourtyninehub/core/utils/custom_show_dialog.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/upload_rider_images.dart';
+import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -85,7 +86,10 @@ class CompleteRegisterScreen extends StatelessWidget {
         );
       },
       child: CustomScaffold(
-        appBar: const HomeAppbar(),
+        appBar: const PreferredSize(
+          preferredSize: Size.fromHeight(30),
+          child: HomeAppbar(),
+        ),
         body: Center(
           child: Padding(
             padding: const EdgeInsets.all(16.0),

@@ -63,8 +63,11 @@ class _NormalWalletViewState extends State<NormalWalletView> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: BackAppBar(
-        label: LocaleKeys.wallet.localize,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          label: LocaleKeys.wallet.localize,
+        ),
       ),
       bottomNavigationBar: Container(
         margin: const EdgeInsets.all(10),

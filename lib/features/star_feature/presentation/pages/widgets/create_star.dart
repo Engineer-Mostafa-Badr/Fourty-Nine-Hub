@@ -20,6 +20,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:video_player/video_player.dart';
+import '../../../../../core/widget/custom_scaffold.dart';
 
 import '../add_talent_widget.dart';
 import '../all_winner_view.dart';
@@ -60,54 +61,57 @@ class _CreateStarState extends State<CreateStar> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: BackAppBar(
-        label: LocaleKeys.addStar.localize,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: GestureDetector(
-              onTap: () {
-                // Navigator.of(context).push(
-                //   MaterialPageRoute(
-                //     builder: (context) => BlocProvider(
-                //       create: (context) => serviceLocator<StarCubit>(),
-                //       child: const AllWinnerView(),
-                //     ),
-                //   ),
-                // );
-              },
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => BlocProvider(
-                            create: (context) => serviceLocator<StarCubit>(),
-                            child: const AllWinnerView(),
+    return CustomScaffold(
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          label: LocaleKeys.addStar.localize,
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: GestureDetector(
+                onTap: () {
+                  // Navigator.of(context).push(
+                  //   MaterialPageRoute(
+                  //     builder: (context) => BlocProvider(
+                  //       create: (context) => serviceLocator<StarCubit>(),
+                  //       child: const AllWinnerView(),
+                  //     ),
+                  //   ),
+                  // );
+                },
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => BlocProvider(
+                              create: (context) => serviceLocator<StarCubit>(),
+                              child: const AllWinnerView(),
+                            ),
                           ),
+                        );
+                      },
+                      child: Text(
+                        LocaleKeys.winners.localize,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 32.sp,
                         ),
-                      );
-                    },
-                    child: Text(
-                      LocaleKeys.winners.localize,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 32.sp,
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 4),
-                  Image.asset(
-                    Assets.winners,
-                  ),
-                ],
+                    const SizedBox(width: 4),
+                    Image.asset(
+                      Assets.winners,
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       body: BlocProvider(
         create: (BuildContext context) => serviceLocator<CreatePostCubit>(),

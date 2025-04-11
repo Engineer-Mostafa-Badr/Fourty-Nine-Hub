@@ -13,11 +13,16 @@ import '../../../../../core/widget/custom_scaffold.dart';
 
 class DoctorStatisticsView extends StatelessWidget {
   const DoctorStatisticsView({super.key, required this.totalEarnedMoney});
+
   final List<EarnedMoneyEntity> totalEarnedMoney;
+
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: const BackAppBar(),
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(30),
+        child: BackAppBar(),
+      ),
       body: BlocBuilder<DoctorStatisticsCubit, DoctorStatisticsState>(
         builder: (context, state) {
           return totalEarnedMoney.isEmpty

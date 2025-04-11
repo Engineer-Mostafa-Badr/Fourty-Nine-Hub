@@ -48,14 +48,14 @@ class _RideModeScreenState extends State<RideModeScreen> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final dashboardCubit = context.read<DashboardsCubit>();
-      if (!dashboardCubit.isClosed) {
+      // if (!dashboardCubit.isClosed) {
         widget.params.isSocket == true
-            ? dashboardCubit.loadAvailableRideTrips(context)
+            ? [dashboardCubit.loadAvailableRideTrips(context),dashboardCubit.listenToUpdateTripAutoAccept(),dashboardCubit.listenToUpdateTripPrice(),dashboardCubit.listenToAcceptOffer(),dashboardCubit.listenToNewTrip()]
             : dashboardCubit.getAvailableTrips(context);
         dashboardCubit.getPastTrips(context,
             widget.params.isSocket == true ? "tracking" : 'non-tracking');
         dashboardCubit.getSettings(context);
-      }
+      // }
     });
   }
 
@@ -75,7 +75,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
       body: SafeArea(
         child: SharedScaffold(
           mainCategoryId: 2,
-          isWithBackArrow: false,
+          isWithBackArrow: true,
           body: NestedAppbar(
             scrollController: _scrollController,
             appBars: const [],
@@ -89,13 +89,13 @@ class _RideModeScreenState extends State<RideModeScreen> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: GestureDetector(
-                          onTap: () {
-                            context.pop();
-                          },
+                          // onTap: () {
+                          //   context.pop();
+                          // },
                           child: Row(
                             spacing: 8,
                             children: [
-                              const Icon(Icons.arrow_back),
+                              // const Icon(Icons.arrow_back),
                               Text(
                                   widget.params.isSocket == true
                                       ? LocaleKeys.rideMode.tr()

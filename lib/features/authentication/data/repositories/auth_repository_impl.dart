@@ -19,11 +19,14 @@ import 'package:fourtyninehub/features/authentication/domain/use_cases/verify_fo
 import 'package:fourtyninehub/features/authentication/domain/use_cases/verify_otp_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/create_anonymous_chat_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/create_normal_chat_use_case.dart';
+import 'package:fourtyninehub/features/authentication/domain/use_cases/verify_phone_otp_use_case.dart';
 import 'package:fourtyninehub/features/authentication/domain/use_cases/verify_questions_use_case.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/domain/entities/chat_entity.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../domain/entities/forget_password_questions_entity.dart';
+import '../../domain/entities/register_by_phone_entity.dart';
+import '../../domain/entities/verify_otp_entity.dart';
 import '../../domain/use_cases/change_password_use_case.dart';
 import '../models/forget_password_questions_model.dart';
 
@@ -70,7 +73,7 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<Either<Failure, UserTokensEntity>> verifyOTP(
+  Future<Either<Failure, VerifyOtpEntity>> verifyOTP(
     VerifyOTPParams verifyOTPParams,
   ) {
     return _remoteDataSource.verifyOTP(verifyOTPParams);
@@ -244,9 +247,14 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<Either<Failure, void>> registerByPhone(RegisterByPhoneParams params) {
+  Future<Either<Failure, RegisterByPhoneEntity>> registerByPhone(RegisterByPhoneParams params) {
     return _remoteDataSource.registerByPhone(params);
 
+  }
+
+  @override
+  Future<Either<Failure, VerifyOtpEntity>> verifyPhoneOTP(VerifyPhoneOTPParams params) {
+    return _remoteDataSource.verifyPhoneOTP(params);
   }
 }
 //enum: ['google', 'facebook', 'local', 'apple']

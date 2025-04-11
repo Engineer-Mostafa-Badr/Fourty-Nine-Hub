@@ -16,8 +16,11 @@ class MeetingParticipants extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: const BackAppBar(
-        label: 'Meeting Participants',
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(30),
+        child: BackAppBar(
+          label: 'Meeting Participants',
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),

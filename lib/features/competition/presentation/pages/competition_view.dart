@@ -23,8 +23,11 @@ class CompetitionView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: const BackAppBar(
-        label: Labels.appCompetitions,
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(30),
+        child: BackAppBar(
+          label: Labels.appCompetitions,
+        ),
       ),
       body: ListView(children: [
         // winnersBanner(context: context),

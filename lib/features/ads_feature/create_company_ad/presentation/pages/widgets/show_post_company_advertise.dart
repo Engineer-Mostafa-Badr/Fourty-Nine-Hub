@@ -32,18 +32,21 @@ class _ShowPostCompanyAdvertiseState extends State<ShowPostCompanyAdvertise> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: BackAppBar(
-        centerTitle: false,
-        label: LocaleKeys.myPosts.localize,
-        leading: IconButton(
-          onPressed: () {
-            context.pop();
-            context.pop();
-            context.push(Routes.CREATECOMPANYAD);
-          },
-          icon: const Icon(
-            Icons.arrow_back,
-            size: 20,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          centerTitle: false,
+          label: LocaleKeys.myPosts.localize,
+          leading: IconButton(
+            onPressed: () {
+              context.pop();
+              context.pop();
+              context.push(Routes.CREATECOMPANYAD);
+            },
+            icon: const Icon(
+              Icons.arrow_back,
+              size: 20,
+            ),
           ),
         ),
       ),

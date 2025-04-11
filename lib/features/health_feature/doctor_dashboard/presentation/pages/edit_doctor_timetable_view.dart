@@ -34,9 +34,12 @@ class _EditDoctorTimetableViewState extends State<EditDoctorTimetableView> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: BackAppBar(
-        label: LocaleKeys.timeTable.localize,
-        backColor: cardDarkColor(context),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          label: LocaleKeys.timeTable.localize,
+          backColor: cardDarkColor(context),
+        ),
       ),
       body: BlocBuilder<EditDoctorTimetableCubit, EditDoctorTimetableState>(
           builder: (context, state) => state.status ==

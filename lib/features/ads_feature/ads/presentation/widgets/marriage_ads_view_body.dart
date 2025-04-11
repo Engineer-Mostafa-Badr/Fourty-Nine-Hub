@@ -15,7 +15,6 @@ import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/marr
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/marriage_request.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/sub_category_list_view_item.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
-import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcategories_cubit.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -83,8 +82,8 @@ class MarriageAdsViewBody extends StatelessWidget {
                   isOpened: context.read<SubcategoriesCubit>().isMyAdsOpen,
                   onPressed: () {
                     // TODO: EDIT THIS
-                    // context.read<SubcategoriesCubit>().toggleMyAds();
-                    context.push(Routes.MYADDS);
+                    context.read<SubcategoriesCubit>().toggleMyAds();
+                    // context.push(Routes.MYADDS);
                   },
                 ),
               ),
@@ -102,7 +101,7 @@ class MarriageAdsViewBody extends StatelessWidget {
                 child: FilterButtonItem(
                   title: LocaleKeys.filter.localize,
                   onTap: () async {
-                    context.push(
+                    dynamic data = await context.push(
                       Routes.FILTERADS,
                       extra: CategorizationEntity(
                         mainCategory: state.mainCategory!,
@@ -113,18 +112,14 @@ class MarriageAdsViewBody extends StatelessWidget {
                             0],
                       ),
                     );
-                    // if (data != null) {
-                    //   print("objectsdaa");
-                    //   // Future.delayed(const Duration(seconds: 1), () =>
-                    //   //     controller.changeState(data, data != null));
-                    //   // context.read<AdvertisementCubit>().loadFilterData(
-                    //   //     model: data,
-                    //   //     filter: userType);
-                    //   controller.changeFilterModel(data);
-                    //
-                    //   controller.loadFilterData(
-                    //       model: data, filter: 'user');
-                    // }
+                    if (data != null) {
+                      print("objectsdaa");
+                      controller.changeFilterModel(data);
+                      controller.loadFilterData(
+                        model: data,
+                        filter: 'user',
+                      );
+                    }
                   },
                 ),
               ),
@@ -151,61 +146,12 @@ class MarriageAdsViewBody extends StatelessWidget {
                       controller.state.city = data.cityId;
                       controller.state.governorate = data.governorateId;
                       controller.changeFilterModel(data);
-                      FilterModel model = FilterModel(
-                          cityId: "state.city",
-                          governorateId: "state.governorate");
-                      // Future.delayed(const Duration(seconds: 1), () =>
-                      //     controller.changeState(data, data != null));
-                      // context.read<AdvertisementCubit>().loadFilterData(
-                      //     model: data,
-                      //     filter: userType);
                       await controller.loadFilterData(
                           model: data, filter: 'user');
                     }
                   },
                 ),
               ),
-              // Expanded(
-              //   child: BadgedLabel(
-              //       label: LocaleKeys.city.localize,
-              //       style: Styles.mediumText(
-              //         color: Colors.white,
-              //         fontSize: 32,
-              //       ),
-              //       icon: Icons.filter_alt_rounded,
-              //       padding:
-              //           EdgeInsets.symmetric(vertical: 15.h, horizontal: 5.w),
-              //       iconLeading: Icons.arrow_drop_down,
-              //       onTap: () async {
-              //         dynamic data = await context.push(
-              //             Routes.GOVERNORATEFILTERADS,
-              //             extra: CategorizationEntity(
-              //                 mainCategory: state.mainCategory!,
-              //                 fromMarriage: true,
-              //                 subCategory: state.subCategories![
-              //                     state.subCategories?.indexWhere((element) =>
-              //                             element.isSelected == true) ??
-              //                         0]));
-              //         if (data != null) {
-              //           print("data.cityId${data.cityId}");
-              //           print("data.governorateId${data.governorateId}");
-              //           print("objectsdaa");
-              //           controller.state.city = data.cityId;
-              //           controller.state.governorate = data.governorateId;
-              //           controller.changeFilterModel(data);
-              //           FilterModel model = FilterModel(
-              //               cityId: "state.city",
-              //               governorateId: "state.governorate");
-              //           // Future.delayed(const Duration(seconds: 1), () =>
-              //           //     controller.changeState(data, data != null));
-              //           // context.read<AdvertisementCubit>().loadFilterData(
-              //           //     model: data,
-              //           //     filter: userType);
-              //           await controller.loadFilterData(
-              //               model: data, filter: 'user');
-              //         }
-              //       }),
-              // ),
             ],
           ),
         ),
@@ -317,36 +263,5 @@ class MarriageAdsViewBody extends StatelessWidget {
       controller: controller,
       state: state,
     );
-    // return state.status == SubcategoriesStates.loadingAds
-    //     ? const CustomLoading()
-    //     : context.read<SubcategoriesCubit>().isMyAdsOpen
-    //         ? state.myAds == null
-    //             ? SizedBox(
-    //                 child: Label(
-    //                   text: 'My Ads is Null',
-    //                   style: Styles.headerText(),
-    //                 ),
-    //               )
-    //             : state.myAds!.isEmpty
-    //                 ? CustomEmptyWidget(label: LocaleKeys.noAds.localize)
-    //                 : MarriageMyAds(
-    //                     scrollController: _scrollController,
-    //                     controller: controller,
-    //                     state: state,
-    //                   )
-    //         : state.ads == null
-    //             ? const SizedBox()
-    //             : state.ads!.isEmpty
-    //                 ? CustomEmptyWidget(
-    //                     label: LocaleKeys.noAds.localize,
-    //                   )
-    //                 : Padding(
-    //                     padding: const EdgeInsets.symmetric(horizontal: 16),
-    //                     child: MarriageAdsListView(
-    //                       scrollController: _scrollController,
-    //                       controller: controller,
-    //                       state: state,
-    //                     ),
-    //                   );
   }
 }

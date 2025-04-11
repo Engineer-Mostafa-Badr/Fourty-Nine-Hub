@@ -18,7 +18,10 @@ class MoreInfoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: const HomeAppbar(),
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(30),
+        child: HomeAppbar(),
+      ),
       body: Column(
         children: [
           Expanded(
@@ -29,8 +32,8 @@ class MoreInfoScreen extends StatelessWidget {
                   left: 16,
                   right: 16,
                 ),
-                child:
-                    BlocBuilder<RideCubit, RideState>(builder: (context, state) {
+                child: BlocBuilder<RideCubit, RideState>(
+                    builder: (context, state) {
                   var cubit = context.read<RideCubit>();
                   return Column(
                     spacing: 4,
@@ -43,7 +46,6 @@ class MoreInfoScreen extends StatelessWidget {
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-
                     ],
                   );
                 }),

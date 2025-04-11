@@ -43,9 +43,12 @@ class CreateNewForgetPasswordView extends StatelessWidget {
         return CustomScaffold(
           resizeToAvoidBottomInset: false,
           enableCustomAppBar: true,
-          appBar: BackAppBar(
-            label: LocaleKeys.createNewPassword.localize,
-            enableCustomAppBar: true,
+          appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(30),
+            child: BackAppBar(
+              label: LocaleKeys.createNewPassword.localize,
+              enableCustomAppBar: true,
+            ),
           ),
           bottomSheet: SizedBox(
             height: 160.h,

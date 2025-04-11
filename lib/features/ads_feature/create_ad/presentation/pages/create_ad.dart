@@ -34,6 +34,7 @@ import '../widgets/ad_dynamic_inputs.dart';
 
 class CreateAdView extends StatefulWidget {
   final CategorizationEntity categorization;
+
   const CreateAdView({super.key, required this.categorization});
 
   @override
@@ -67,7 +68,12 @@ class _CreateAdViewState extends State<CreateAdView> {
     }, builder: (context, state) {
       final controller = context.read<CreateAdCubit>();
       return CustomScaffold(
-        appBar: BackAppBar(label: LocaleKeys.createAd.localize),
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(30),
+          child: BackAppBar(
+            label: LocaleKeys.createAd.localize,
+          ),
+        ),
         body: BlocBuilder<CreateAdCubit, CreateAdState>(
           // buildWhen: (previous, current) => previous.status == current.status,
           builder: (context, state) {

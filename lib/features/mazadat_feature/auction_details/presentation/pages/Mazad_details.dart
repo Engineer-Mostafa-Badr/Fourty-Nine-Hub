@@ -25,6 +25,7 @@ import '../widgets/PlaceBidding.dart';
 
 class MazadDetails extends StatefulWidget {
   final String id;
+
   const MazadDetails({super.key, required this.id});
 
   @override
@@ -57,7 +58,10 @@ class _MazadDetailsState extends State<MazadDetails> {
       builder: (context, state) {
         final controller = context.read<AuctionDetailsCubit>();
         return CustomScaffold(
-          appBar: const BackAppBar(),
+          appBar: const PreferredSize(
+            preferredSize: Size.fromHeight(30),
+            child: BackAppBar(),
+          ),
           bottomNavigationBar: ((state.auction?.isMine ?? false) &&
                   !(state.auction?.isFinished ?? false))
               ? AppButton(

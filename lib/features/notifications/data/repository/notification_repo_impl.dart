@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/notifications/data/data_source/notifications_remote_data_source.dart';
 import 'package:fourtyninehub/features/notifications/domain/entities/notification_entity.dart';
+import 'package:fourtyninehub/features/notifications/domain/entities/status_all_services_entity.dart';
 import 'package:fourtyninehub/features/notifications/domain/entities/unread_notifications_count_entity.dart';
 import 'package:fourtyninehub/features/notifications/domain/entities/user_trip_entity.dart';
 
@@ -67,6 +68,12 @@ class NotificationRepoImpl implements NotificationRepo {
   @override
   Future<Either<Failure, List<UserTripEntity>>> getAllUserTrips() {
     return notificationRemoteDataSource.getAllUserTrips();
+
+  }
+
+  @override
+  Future<Either<Failure, StatusAllServicesEntity>> getStatusAllServices() {
+    return notificationRemoteDataSource.getStatusAllServices();
 
   }
 }

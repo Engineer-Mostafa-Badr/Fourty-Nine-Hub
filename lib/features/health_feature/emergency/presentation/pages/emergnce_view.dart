@@ -43,8 +43,11 @@ class HealthEmergencyView extends StatelessWidget {
         }
       },
       child: CustomScaffold(
-        appBar: BackAppBar(
-          label: LocaleKeys.emergency.localize,
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(30),
+          child: BackAppBar(
+            label: LocaleKeys.emergency.localize,
+          ),
         ),
         body: Form(
           key: context.read<HealthEmergencyCubit>().formKey,
