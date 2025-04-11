@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/features/new_trip_join/presentation/view/widget/trip_option_widget.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/cards/available_trips_card.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/cards/display_trip_join_card.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_bottom_sheet/show_bottom_sheet.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_bottom_sheet/submit_bottom_sheet.dart';
@@ -72,19 +74,7 @@ class _TripJoinViewState extends State<TripJoinView>
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: CustomScaffold(
-        appBar: HomeAppbar(
-          showChat: true,
-          isWithBackArrow: false,
-          language: true,
-          leading: IconButton(
-            icon: const Icon(Icons.menu), // The menu icon
-            onPressed: () {
-              HandleCashback.setCount('drawerCount', context);
-              _scaffoldKey.currentState?.openDrawer(); // Open the drawer
-            },
-          ),
-        ),
+      child: SharedScaffold(
         body: Stack(
           children: [
             SingleChildScrollView(
@@ -162,7 +152,7 @@ class _TripJoinViewState extends State<TripJoinView>
                           itemBuilder: (BuildContext context, int index) {
                             switch (_displayedCategory) {
                               case LocaleKeys.availableTrips:
-                                return TripJoinCard(
+                                return AvailableTripsCard(
                                   subscribtionPlan: LocaleKeys.premium.localize,
                                   title: context.isArabic
                                       ? 'كيا، سيراتو'
@@ -274,7 +264,7 @@ class _TripJoinViewState extends State<TripJoinView>
               context.push(Routes.TRIP_JOIN);
             },),
           ],
-        ),
+        ), mainCategoryId: 1,isWithBackArrow: false,
       ),
     );
   }

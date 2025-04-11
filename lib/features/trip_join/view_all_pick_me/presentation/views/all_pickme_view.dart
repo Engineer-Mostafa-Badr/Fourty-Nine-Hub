@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -73,19 +74,8 @@ class _AllPickMeViewState extends State<AllPickMeView>
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: CustomScaffold(
-        appBar: HomeAppbar(
-          showChat: true,
-          isWithBackArrow: false,
-          language: true,
-          leading: IconButton(
-            icon: const Icon(Icons.menu), // The menu icon
-            onPressed: () {
-              HandleCashback.setCount('drawerCount', context);
-              _scaffoldKey.currentState?.openDrawer(); // Open the drawer
-            },
-          ),
-        ),
+      child: SharedScaffold(
+        mainCategoryId: 1,isWithBackArrow: false,
         body: Stack(
           children: [
             SingleChildScrollView(
