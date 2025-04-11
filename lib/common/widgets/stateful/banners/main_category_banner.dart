@@ -26,6 +26,7 @@ class MainCategoryBanner extends StatefulWidget {
   final double? fontSize;
   final bool removeFavorite;
   final bool? fromHome;
+  final bool? fromFavorite;
 
   MainCategoryBanner({
     super.key,
@@ -35,6 +36,7 @@ class MainCategoryBanner extends StatefulWidget {
     this.fontSize,
     required this.category,
     this.removeFavorite = false,
+    this.fromFavorite = false,
     required this.onFavorite,
     this.isFavorite,
   });
@@ -48,7 +50,12 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
 
   @override
   void initState() {
-    widget.isFavorite = widget.category.isFavorite ?? false;
+    if (widget.fromFavorite ?? false) {
+      widget.isFavorite = true;
+      widget.category.isFavorite = true;
+    } else {
+      widget.isFavorite = widget.category.isFavorite ?? false;
+    }
     super.initState();
   }
 
@@ -64,7 +71,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
             child: CachedNetworkImage(
               width: double.infinity,
               imageUrl: widget.category.banner,
-              height: MediaQuery.sizeOf(context).height * 0.13.h,
+              height: MediaQuery.sizeOf(context).height * 0.1,
               imageBuilder: (context, i) => Column(
                 children: [
                   Expanded(

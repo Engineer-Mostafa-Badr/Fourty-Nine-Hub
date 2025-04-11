@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_states.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
+import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../core/widget/custom_floating_action_button.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../res/style/styles.dart';
-import '../../../../../service_locator/service_locator.dart';
 import '../../../domain/entity/custom_page_categories_entity.dart';
 import '../../cubit/custom_page_cubit.dart';
 
@@ -37,7 +39,6 @@ class _NavigatorSubCategoriesViewState
     return BlocConsumer<CustomPageCubit, CustomPageState>(
       listener: (context, state) {},
       builder: (context, state) {
-        print('state.favourite ${state.favourite}');
         return CustomScaffold(
           backgroundColor: Theme.of(context).primaryColor,
           appBar: PreferredSize(
@@ -63,20 +64,8 @@ class _NavigatorSubCategoriesViewState
               child: BlocBuilder<CustomPageCubit, CustomPageState>(
                 builder: (context, state) {
                   if (state.status == CustomPageStates.loading) {
-                    return Center(
-                      child: Column(
-                        children: [
-                          CircularProgressIndicator(),
-                          Sizer(),
-                          Text(
-                            state.status.toString(),
-                            style: Styles.mediumText(
-                                fontSize: 65.sp,
-                                fontWeight: FontWeight.w400,
-                                color: Theme.of(context).primaryColor),
-                          )
-                        ],
-                      ),
+                    return const Center(
+                      child: CircularProgressIndicator(),
                     );
                   }
                   if (state.status == CustomPageStates.error) {
@@ -86,8 +75,7 @@ class _NavigatorSubCategoriesViewState
                   }
                   return ListView.separated(
                       itemBuilder: (context, index) {
-                        var currentSubCategory =
-                            state.favouriteSubCat![index];
+                        var currentSubCategory = state.favouriteSubCat![index];
                         return ListTile(
                           leading: Checkbox(
                             shape: const CircleBorder(),
@@ -126,35 +114,15 @@ class _NavigatorSubCategoriesViewState
                       },
                       separatorBuilder: (context, index) => const Sizer(),
                       itemCount: state.favouriteSubCat!.length);
-                  /*  return GridView.builder(
-                  padding: EdgeInsets.all(24.w),
-                  itemCount: state.favouriteSubCat!.length,
-                  gridDelegate:
-                      const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    childAspectRatio: .65,
-                    mainAxisSpacing: 16,
-                    crossAxisSpacing: 16,
-                  ),
-                  itemBuilder: (context, index) => NavigatorSubCategoryCard(
-                    mainCategory: mainCategory,
-                    item: state.favouriteSubCat![index],
-                    onFav: () async {
-                      print(state.favouriteSubCat![index]);
-                      var result =
-                          await !state.favouriteSubCat![index].selected;
-                      return result;
-                      // var result = state.favouriteSubCat![index].selected;
-                      // return result;
-                      // var result = await controller
-                      //     .toggleSubCategoryToFavorites(data[index].id);
-                      // return result;
-                    },
-                  ),
-                );*/
                 },
               ),
             ),
+          ),
+          floatingActionButton: CustomFloatingActionButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            text: LocaleKeys.save.localize,
           ),
         );
       },

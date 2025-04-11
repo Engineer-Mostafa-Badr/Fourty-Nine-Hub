@@ -77,7 +77,7 @@ class _PagePreviewState extends State<PagePreview>
               bottom: TabBar(
                 dividerColor: Colors.transparent,
                 indicator: BoxDecoration(
-                  color: Colors.red.withOpacity(0.1), // Light red background
+                  color: Colors.red.withValues(alpha: 0.1), // Light red background
                   borderRadius: BorderRadius.circular(8), // Rounded corners
                 ),
                 labelStyle: const TextStyle(

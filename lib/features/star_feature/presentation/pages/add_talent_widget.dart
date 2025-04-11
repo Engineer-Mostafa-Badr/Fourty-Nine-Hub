@@ -14,6 +14,7 @@ import 'package:video_player/video_player.dart';
 import '../../../../common/widgets/stateless/buttons/default_button.dart';
 import '../../../../core/messages/messages.dart';
 import '../../../../res/assets/assets.dart';
+import '../../../../res/style/styles.dart';
 
 class AddTalentWidget extends StatefulWidget {
   const AddTalentWidget({super.key});
@@ -284,16 +285,10 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
               ),
               child: Text(
                 LocaleKeys.publish.localize,
-                style: const TextStyle(color: Colors.white, fontSize: 20),
+                style: Styles.mediumText(color: Colors.white),
+                // const TextStyle(color: Colors.white, fontSize: 20),
               ),
             ),
-            // Submit button
-            // DefaultButton(
-            //   width: 200.w,
-            //   label: LocaleKeys.submit.localize,
-            //   backgroundColor: AppColors.colorRed,
-            //   onPressed: _handleSubmit,
-            // ),
           ],
         ),
       ),

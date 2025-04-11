@@ -243,8 +243,12 @@ import 'package:fourtyninehub/features/subcategories/presentation/widgets/subcat
 
 import '../../../../common/widgets/stateless/images/square_image.dart';
 import '../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../core/localization/locale_keys.g.dart';
+import '../../../../core/widget/custom_notification_badge.dart';
 import '../../../../core/widget/custom_scaffold.dart';
+import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
+import '../../../ads_feature/ads/presentation/widgets/header_button_widget.dart';
 import '../cubit/subcategories_cubit.dart';
 import '../widgets/floating_add_button.dart';
 
@@ -446,34 +450,130 @@ class _CustomPageSubCategoriesViewState
               builder: (context, state) {
             final controller = context.read<SubcategoriesCubit>();
 
-            return PaginationView<SubCategoryEntity>(
-              build: (ScrollController scrollController,
-                  List<SubCategoryEntity> data) {
-                print("data.length${data.length}");
-                return GridView.builder(
-                  padding: EdgeInsets.all(24.w),
-                  itemCount: data.length,
-                  controller: this.scrollController,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    childAspectRatio: .65,
-                    mainAxisSpacing: 16,
-                    crossAxisSpacing: 16,
+            return Column(
+              children: [
+                const SizedBox(
+                  height: 16,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.search,
+                        color: AppColors.PRIMARY_COLOR,
+                      ),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      Expanded(
+                        child: CustomNotificationBadge(
+                          count: 0,
+                          child: HeaderButtonWidget(
+                            title: LocaleKeys.favouriteAds.localize,
+                            isOpened: context
+                                .read<SubcategoriesCubit>()
+                                .isFavouriteAdsOpen,
+                            onPressed: () {
+                              context
+                                  .read<SubcategoriesCubit>()
+                                  .getRequestsLog(widget.mainCategory.id);
+
+                              context
+                                  .read<SubcategoriesCubit>()
+                                  .toggleMyAds('isFavouriteAdsOpen');
+                            },
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      Expanded(
+                        child: CustomNotificationBadge(
+                          count: 0,
+                          child: HeaderButtonWidget(
+                            title: LocaleKeys.requestLog.localize,
+                            isOpened: context
+                                .read<SubcategoriesCubit>()
+                                .isRequestLogOpen,
+                            onPressed: () {
+                              context
+                                  .read<SubcategoriesCubit>()
+                                  .getRequestsLog(widget.mainCategory.id);
+                              context
+                                  .read<SubcategoriesCubit>()
+                                  .toggleMyAds('isRequestLogOpen');
+
+                              // context.read<SubcategoriesCubit>().toggleRequestLog();
+                            },
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 8,
+                      ),
+                      Expanded(
+                        child: HeaderButtonWidget(
+                          title: LocaleKeys.myAds.localize,
+                          isOpened:
+                          context.read<SubcategoriesCubit>().isMyAdsOpen,
+                          onPressed: () {
+                            // TODO: EDIT THIS
+                            context.read<SubcategoriesCubit>().getMarriageMyAds();
+                            context
+                                .read<SubcategoriesCubit>()
+                                .toggleMyAds('isMyAdsOpen');
+                            // context.push(Routes.MYADDS);
+                          },
+                        ),
+                      ),
+                    ],
                   ),
-                  itemBuilder: (context, index) => SubCategoryCard(
-                    mainCategory: widget.mainCategory,
-                    item: data[index],
-                    onFav: () async {
-                      var result = await controller
-                          .toggleSubCategoryToFavorites(data[index].id);
-                      return result;
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                if (controller.isFavouriteAdsOpen)
+                  Container(),
+                if (controller.isRequestLogOpen)
+                  Container(),
+                if (controller.isMyAdsOpen) Container(),
+                if (!controller.isMyAdsOpen &&
+                    !controller.isFavouriteAdsOpen &&
+                    !controller.isRequestLogOpen)
+                Expanded(
+                  child: PaginationView<SubCategoryEntity>(
+                    build: (ScrollController scrollController,
+                        List<SubCategoryEntity> data) {
+                      print("data.length${data.length}");
+                      return GridView.builder(
+                        padding: EdgeInsets.all(24.w),
+                        itemCount: data.length,
+                        controller: this.scrollController,
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          childAspectRatio: .65,
+                          mainAxisSpacing: 16,
+                          crossAxisSpacing: 16,
+                        ),
+                        itemBuilder: (context, index) => SubCategoryCard(
+                          mainCategory: widget.mainCategory,
+                          item: data[index],
+                          onFav: () async {
+                            var result = await controller
+                                .toggleSubCategoryToFavorites(data[index].id);
+                            return result;
+                          },
+                        ),
+                      );
                     },
+                    fetchData: (PaginationParams paginationParams) => context
+                        .read<SubcategoriesCubit>()
+                        .getCustomPageSubcategories(),
                   ),
-                );
-              },
-              fetchData: (PaginationParams paginationParams) => context
-                  .read<SubcategoriesCubit>()
-                  .getCustomPageSubcategories(),
+                ),
+              ],
             );
           }),
         ),

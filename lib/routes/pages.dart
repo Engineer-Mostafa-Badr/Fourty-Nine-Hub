@@ -602,7 +602,9 @@ class AppPages {
                 path: Paths.MAINCATEGORIESCARDS,
                 name: Routes.MAINCATEGORIESCARDS,
                 builder: (context, state) =>
-                    const MainCategoriesFlipCardsView(),
+                    MainCategoriesFlipCardsView(
+                      data: state.extra as List<MainCategoryEntity>,
+                    ),
               ),
               GoRoute(
                 path: Paths.CONTACTS_VIEW,

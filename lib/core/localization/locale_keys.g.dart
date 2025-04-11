@@ -1492,5 +1492,6 @@ abstract class  LocaleKeys {
   static const weHaveSentACodeTo = 'weHaveSentACodeTo';
   static const oTPVerifyFor = 'oTPVerifyFor';
   static const resendOtpSuccess = 'resendOtpSuccess';
+  static const responseStatus = 'responseStatus';
 
 }
