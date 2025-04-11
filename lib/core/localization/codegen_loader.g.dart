@@ -1366,7 +1366,7 @@ class CodegenLoader extends AssetLoader{
   "iChangedMyMind": "لقد غيرت راي",
   "theClientDidNotShow": "العميل لما يظهر",
   "whyDoYouWantToCancel": "لماذا تريد الإلغاء",
-  "acceptAnothePrice": "قبول سعر آخر",
+  "acceptAnothePrice": "سعر آخر",
   "captainWithYou": "رحله كابتن معك",
   "youRateClient": "أنت تقيم العميل",
   "clientRateYou": "تقييم العميل لك",
@@ -1515,7 +1515,15 @@ class CodegenLoader extends AssetLoader{
   "otpCode": "الكود",
   "weHaveSentACodeTo": "لقد ارسلنا لك كود الي ",
   "oTPVerifyFor": "تاكيد الكود عن طريق ",
-  "resendOtpSuccess": "تم ارسال الكود بنجاح"
+  "resendOtpSuccess": "تم ارسال الكود بنجاح",
+  "restaurantMode": "وضع المطعم",
+  "yourRate": "التقييم الخاص بك",
+  "bad": "سيء",
+  "rateTheRestaurant": "قيم المطعم",
+  "restaurantRateYou": "تقييم المطعم لك",
+  "addACommentsFor": "أضف تعليقًا لـ",
+  "commentAdded": "تم إضافة التعليق",
+  "areYouSureYouWantToDeleteThisComment": "هل أنت متأكد أنك تريد حذف هذا التعليق؟"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -2893,7 +2901,7 @@ static const Map<String,dynamic> _en = {
   "iChangedMyMind": "I changed my mind",
   "theClientDidNotShow": "The client did not show up",
   "whyDoYouWantToCancel": "Why do you want to cancel?",
-  "acceptAnothePrice": "Accept another price",
+  "acceptAnothePrice": "Other Price",
   "captainWithYou": "Captain ride with You",
   "youRateClient": "You rate client",
   "clientRateYou": "Client rate you",
@@ -2921,6 +2929,7 @@ static const Map<String,dynamic> _en = {
   "busMode": "Bus Mode",
   "trukMode": "Truck Mode",
   "rideMode": "Ride Mode",
+  "pastTrips": "Past Trips",
   "busDetails": "Bus Details",
   "trukDetails": "Truck Details",
   "busWithYou": "Bus ride with You",
@@ -3034,7 +3043,15 @@ static const Map<String,dynamic> _en = {
   "newPost": "New Post",
   "addExplanatoryNote": "Add an explanatory note",
   "searchForAUser": "Search for a user",
-  "taggedPeople": "Tagged People"
+  "taggedPeople": "Tagged People",
+  "restaurantMode": "Restaurant Mode",
+  "yourRate": "Your rate",
+  "bad": "Bad",
+  "rateTheRestaurant": "Rate The Restaurant",
+  "restaurantRateYou": "Restaurant rate you",
+  "addACommentsFor": "Add a comments for",
+  "commentAdded": "Comment added",
+  "areYouSureYouWantToDeleteThisComment": "Are you sure you want to delete this comment?"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

@@ -154,6 +154,7 @@ class _FoodCartViewState extends State<FoodCartView> {
               child: CircularProgressIndicator(),
             );
           } else if (state.cart != null && state.cart!.allItems.isNotEmpty) {
+            // return Text("hi wwwwwwwwwwwwwwwwwwwwwwwwwwww");
             return _buildCartContent(state.cart!);
           } else {
             return Center(
@@ -206,9 +207,30 @@ class _FoodCartViewState extends State<FoodCartView> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 16),
-        Text(
-          restaurantName,
-          style: Styles.headerText(),
+        Row(
+          children: [
+            ClipOval(
+              child: Image.network(
+                cartItem.restaurant?.restaurantMedia.first.mediaKey ?? "",
+                width: 40,
+                height: 40,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    width: 40,
+                    height: 40,
+                    color: Colors.grey[300],
+                    child: const Icon(Icons.image_not_supported, size: 20, color: Colors.grey),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(width: 12),
+            Text(
+              restaurantName,
+              style: Styles.headerText(),
+            ),
+          ],
         ),
         ListView.builder(
           shrinkWrap: true,

@@ -17,6 +17,7 @@ import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/features/call/presentation/controller/call_controller/call_cubit.dart';
 import 'package:fourtyninehub/features/call/presentation/controller/send_call_controller.dart/send_call_cubit.dart';
 import 'package:fourtyninehub/features/call/presentation/pages/whatsapp_screen.dart';
+import 'package:fourtyninehub/features/call/widgets/minimized_call_overlay.dart';
 import 'package:fourtyninehub/features/carpool/join_trip/presentation/cubits/cubit/join_trip_car_pool_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_states.dart';
@@ -88,7 +89,7 @@ void main() async {
   serviceLocator<FcmNotificationHelper>().setup();
   serviceLocator<FcmNotificationHelper>().getFcmToken();
   await Geolocator.checkPermission().then(
-    (value) {
+        (value) {
       if (value == LocationPermission.denied) {
         Geolocator.requestPermission();
       }
@@ -159,7 +160,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   Future<void> getDevicePushTokenVoIP() async {
     var devicePushTokenVoIP =
-        await FlutterCallkitIncoming.getDevicePushTokenVoIP();
+    await FlutterCallkitIncoming.getDevicePushTokenVoIP();
     print(devicePushTokenVoIP);
   }
 
@@ -195,7 +196,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ),
         BlocProvider(
           create: (context) =>
-              serviceLocator<OnBoardingCubit>()..changeOnboardingData(0),
+          serviceLocator<OnBoardingCubit>()..changeOnboardingData(0),
         ),
         BlocProvider(
           create: (BuildContext context) => serviceLocator<WalletCubit>(),
@@ -209,10 +210,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ),
         BlocProvider(
             create: (context) =>
-                serviceLocator<PreloadBloc>()..getVideosFromApi()),
+            serviceLocator<PreloadBloc>()..getVideosFromApi()),
         BlocProvider(
           create: (BuildContext context) =>
-              serviceLocator<MainCategoriesCubit>()..loadData(),
+          serviceLocator<MainCategoriesCubit>()..loadData(),
         ),
         // BlocProvider(
         //   create: (BuildContext context) => serviceLocator<RideCubit>(),
@@ -263,9 +264,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ),
         BlocProvider<NotificationSocketIoCubit>(
             create: (context) => NotificationSocketIoCubit(
-                  context: context,
-                  notificationListenerUseCase: serviceLocator(),
-                )),
+              context: context,
+              notificationListenerUseCase: serviceLocator(),
+            )),
         BlocProvider(create: (context) => serviceLocator<ShippingCubit>()),
         BlocProvider(
           create: (context) => FloatingNavigatorCubit()
@@ -303,11 +304,16 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                               routerConfig: AppPages.router,
                               builder: (BuildContext context, Widget? child) {
                                 final mediaQuery = MediaQuery.of(context);
-                                return MediaQuery(
+                                return  MediaQuery(
                                   data: mediaQuery.copyWith(
                                     textScaler: TextScaler.noScaling,
                                   ),
-                                  child: child ?? const SizedBox.shrink(),
+                                  child: Stack(
+                                    children: [child !,
+                                      const WhatsAppCallScreen(),
+                                    ],
+                                  ),
+
                                 );
                               },
                               themeMode: (snapshot.data ?? false)
@@ -318,11 +324,11 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                               title: '49',
                               debugShowCheckedModeBanner: false,
                               localizationsDelegates:
-                                  context.localizationDelegates,
+                              context.localizationDelegates,
                               supportedLocales: context.supportedLocales,
                               locale: context.locale,
                             ),
-                            const WhatsAppCallScreen(),
+                            const MinimizedCallOverlay(),
                           ],
                         ),
                       );

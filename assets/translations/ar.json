@@ -1350,7 +1350,7 @@
   "iChangedMyMind": "لقد غيرت راي",
   "theClientDidNotShow": "العميل لما يظهر",
   "whyDoYouWantToCancel": "لماذا تريد الإلغاء",
-  "acceptAnothePrice": "قبول سعر آخر",
+  "acceptAnothePrice": "سعر آخر",
   "captainWithYou": "رحله كابتن معك",
   "youRateClient": "أنت تقيم العميل",
   "clientRateYou": "تقييم العميل لك",
@@ -1500,5 +1500,13 @@
   "weHaveSentACodeTo": "لقد ارسلنا لك كود الي ",
   "oTPVerifyFor": "تاكيد الكود عن طريق ",
   "resendOtpSuccess": "تم ارسال الكود بنجاح",
+  "restaurantMode": "وضع المطعم",
+  "yourRate": "التقييم الخاص بك",
+  "bad": "سيء",
+  "rateTheRestaurant": "قيم المطعم",
+  "restaurantRateYou": "تقييم المطعم لك",
+  "addACommentsFor": "أضف تعليقًا لـ",
+  "commentAdded": "تم إضافة التعليق",
+  "areYouSureYouWantToDeleteThisComment": "هل أنت متأكد أنك تريد حذف هذا التعليق؟",
   "responseStatus": "حالة الرد"
 }

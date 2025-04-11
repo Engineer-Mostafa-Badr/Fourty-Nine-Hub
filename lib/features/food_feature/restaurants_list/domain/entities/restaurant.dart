@@ -250,12 +250,20 @@ class Restaurant extends Equatable {
 
   @JsonKey(name: "isActive")
   final bool? isActive;
+  @JsonKey(name: "isPremium")
+  final bool? isPremium;
+
+  @JsonKey(name: "rateName")
+  final String? rateName;
 
   @JsonKey(name: "subscriptionType")
   final String? subscriptionType;
 
   @JsonKey(name: "totalRating")
   final double? totalRating;
+
+  @JsonKey(name: "totalViews")
+  final num? totalViews;
 
   @JsonKey(name: "numberOfReviews")
   final int? numberOfReviews;
@@ -291,6 +299,8 @@ class Restaurant extends Equatable {
     this.government,
     this.city,
     this.isActive,
+    this.isPremium,
+    this.rateName,
     this.subscriptionType,
     this.totalRating,
     this.numberOfReviews,
@@ -300,6 +310,7 @@ class Restaurant extends Equatable {
     this.isFavorite = false,
     this.enableOrDisableChat,
     this.description,
+    this.totalViews,
   });
 
   @override
@@ -314,6 +325,8 @@ class Restaurant extends Equatable {
         isActive,
         subscriptionType,
         totalRating,
+    isPremium,
+    rateName,
         numberOfReviews,
         menu,
         subcategoryId,
@@ -321,6 +334,7 @@ class Restaurant extends Equatable {
         isFavorite,
         enableOrDisableChat,
         description,
+    totalViews,
       ];
 }
 

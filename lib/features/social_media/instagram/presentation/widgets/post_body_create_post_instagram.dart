@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -7,20 +9,79 @@ import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/post_body_create_post_instagram_grid_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/show_image_create_post_instagram_widget.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:photo_manager/photo_manager.dart';
 
-class PostBodyCreatePostInstagram extends StatelessWidget {
+class PostBodyCreatePostInstagram extends StatefulWidget {
   const PostBodyCreatePostInstagram({
     super.key,
     // required this.selectedImage,
     // required this.images,
   });
 
+  @override
+  State<PostBodyCreatePostInstagram> createState() =>
+      _PostBodyCreatePostInstagramState();
+}
+
+class _PostBodyCreatePostInstagramState
+    extends State<PostBodyCreatePostInstagram> {
   // final Future<File?>? selectedImage;
-  // final List<AssetEntity> images;
-  // BoxFit? fit;
-  // bool multiSelect = false;
-  // List<AssetEntity> selectedMeda = [];
-  // Future<File?>? selectedImage;
+  final List<Widget> _mediaList = [];
+  final List<File> path = [];
+  File? _file;
+  int currentPage = 0;
+  int? lastPage;
+
+  _fetchNewMedia() async {
+    lastPage = currentPage;
+    final PermissionState ps = await PhotoManager.requestPermissionExtend();
+    if (ps.isAuth) {
+      List<AssetPathEntity> album = await PhotoManager.getAssetPathList(
+        onlyAll: true,
+      );
+      List<AssetEntity> media = await album[0].getAssetListPaged(
+        page: currentPage,
+        size: 60,
+      );
+      for (var asset in media) {
+        if (asset.type == AssetType.image) {
+          final file = await asset.file;
+          if (file != null) {
+            path.add(File(file.path));
+            _file = path[0];
+          }
+        }
+      }
+      List<Widget> temp = [];
+      for (var asset in media) {
+        temp.add(FutureBuilder(
+          future: asset.thumbnailDataWithSize(
+            const ThumbnailSize(200, 200),
+          ),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return Container(
+                child: Stack(
+                  children: [
+                    Positioned.fill(
+                      child: Image.memory(snapshot.data!, fit: BoxFit.cover),
+                    ),
+                  ],
+                ),
+              );
+            }
+            return Container();
+          },
+        ));
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchNewMedia();
+  }
 
   @override
   Widget build(BuildContext context) {

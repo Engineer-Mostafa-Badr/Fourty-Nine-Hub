@@ -1,12 +1,9 @@
 import 'dart:async';
-
-import 'package:audioplayers/audioplayers.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/services.dart';
 import 'package:fourtyninehub/core/enums/call_enums_manager.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/data/models/user_model.dart';
 import 'package:fourtyninehub/features/call/domain/entities/call_data.dart';
 import 'package:fourtyninehub/features/call/presentation/controller/call_controller/call_cubit.dart';
@@ -17,10 +14,8 @@ import 'package:fourtyninehub/features/call/presentation/pages/declined_call_scr
 import 'package:fourtyninehub/features/call/widgets/build_app_bar.dart';
 import 'package:fourtyninehub/features/call/widgets/build_bottom_btns.dart';
 import 'package:fourtyninehub/helpers/call_helpers/call_helper/call_with_notification_helper.dart';
-import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 
 class SendWhatsappCallScreen extends StatefulWidget {
@@ -29,12 +24,12 @@ class SendWhatsappCallScreen extends StatefulWidget {
     required this.receiver,
     required this.sender,
     required this.callType,
-    required this.isRealCall,
+    // required this.isRealCall,
   });
   final CallType callType;
   final UserModel receiver;
   final UserModel sender;
-  final bool isRealCall;
+  // final bool isRealCall;
 
   @override
   State<SendWhatsappCallScreen> createState() => _SendWhatsappCallScreenState();
@@ -48,10 +43,12 @@ class _SendWhatsappCallScreenState extends State<SendWhatsappCallScreen> {
   void initState() {
     serviceLocator<CallWithNotificationHelper>()
         .sendCallNotification(
-          isRealCall: widget.isRealCall.toString(),
+          isRealCall: "true",
+          //  widget.isRealCall.toString(),
           callType: widget.callType.name.toString(),
           agoraAppId: UIConst.agoraAppId,
-          serviceType: "agora",
+          serviceType: "zegocloud",
+          //  "agora",
           uid: widget.sender.id,
           zegoAppId: 0,
           zegoAppSign: '',
@@ -72,7 +69,8 @@ class _SendWhatsappCallScreenState extends State<SendWhatsappCallScreen> {
           (_) => timer = Timer(
             const Duration(seconds: UIConst.callRingingDuration),
             () {
-              if (widget.isRealCall) {
+              if ("true" == "true") {
+                //widget.isRealCall
                 context
                     .read<SendCallCubit>()
                     .setCallClosedState('no answer from receiver');
@@ -126,6 +124,7 @@ class _SendWhatsappCallScreenState extends State<SendWhatsappCallScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.PRIMARY_COLOR,
+      extendBody: true,
       body: BlocConsumer<SendCallCubit, SendCallState>(
         listener: (context, state) {
           print("SendCallCubit state $state");
@@ -161,7 +160,10 @@ class _SendWhatsappCallScreenState extends State<SendWhatsappCallScreen> {
                 ));
           }
 
-          if (state is FakeCallConnected) {}
+          if (state is FakeCallConnected) {
+            _stopCallingSound();
+            _audioPlayer.dispose();
+          }
         },
         builder: (context, state) {
           return Stack(children: [
@@ -179,42 +181,44 @@ class _SendWhatsappCallScreenState extends State<SendWhatsappCallScreen> {
                 ),
                 // Top section with contact details
 
-                CircleAvatar(
-                  radius: 100,
-                  backgroundImage: NetworkImage(widget
-                          .receiver.profilePicture ??
-                      'https://cdn-icons-png.flaticon.com/512/149/149071.png'),
-                ),
-
-                // add Please subscribe to join the call!
-                if (state is FakeCallConnected)
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Please subscribe to join the call!',
-                        style: Styles.mediumText(
-                          color: AppColors.SECONDARY_COLOR,
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 220,
+                      height: 220,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: NetworkImage(widget.receiver.profilePicture ??
+                              'https://cdn-icons-png.flaticon.com/512/149/149071.png'),
                         ),
                       ),
-                      const SizedBox(
-                        height: 15,
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    // add Please subscribe to join the call!
+                    if (state is FakeCallConnected)
+                      const Text(
+                        'Please subscribe to join the call!',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 18,
+                        ),
                       ),
-                      ElevatedAppButton(
-                        label: tr(LocaleKeys.subscribe),
-                        onPressed: () {
-                          SubscriptionMethod().subscribe(
-                              subscribeId: "668e7dc4e8cfec5bcc752afc",
-                              title: tr(LocaleKeys.ads));
-                        },
-                        backColor: const Color(0xFF11191C),
-                      ),
-                    ],
-                  ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                  ],
+                ),
 
                 // Bottom call control buttons
                 BuildBottomBtns(
+          currentContext: context,
                   callData: CallData(
                       isCaller: true,
                       isRealCall: false.toString(),
@@ -228,6 +232,7 @@ class _SendWhatsappCallScreenState extends State<SendWhatsappCallScreen> {
                       serviceType: "",
                       zegoAppId: "",
                       zegoAppSign: "",
+                      zegoRoomId: "",
                       agoraAppId: "",
                       uid: "",
                       fcmToken: widget.receiver.firebaseToken!
@@ -239,6 +244,9 @@ class _SendWhatsappCallScreenState extends State<SendWhatsappCallScreen> {
                       channelId: "",
                       permission: "",
                       expiresAt: ""),
+                  onMorePressed: () {
+                
+                  },
                 ),
               ],
             ),

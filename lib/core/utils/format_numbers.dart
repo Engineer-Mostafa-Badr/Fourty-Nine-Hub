@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class FormatNumbers {
   String formatNumber(num number, {int decimals = 1}) {
@@ -69,5 +70,17 @@ class FormatDate {
       return DateFormat('MMMM d', 'ar').format(date);
     }
     return DateFormat('MMMM d', 'en').format(date);
+  }
+
+  // Function to format the timestamp to relative time (e.g., "4d ago")
+  String getRelativeTime(BuildContext context, String createdDate) {
+    final now = DateTime.now();
+    final difference = now.difference(DateTime.parse(createdDate).toLocal());
+
+    if (context.isArabic) {
+      return timeago.format(now.subtract(difference), locale: 'ar_short');
+    } else {
+      return timeago.format(now.subtract(difference), locale: 'en_short');
+    }
   }
 }

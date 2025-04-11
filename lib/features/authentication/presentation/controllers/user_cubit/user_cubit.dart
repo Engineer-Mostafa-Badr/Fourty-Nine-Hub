@@ -358,25 +358,25 @@ class UserCubit extends Cubit<BasicState<UserEntity>> {
   //       });
   // }
 
-  updateDriverLocation(){
-    print("state.data?.email${state.data?.email}");
-  final locationService = LocationService();
-
-    locationService.startLocationTracking();
-
-    // Listen for new locations (only when moved at least 300m)
-    locationService.locationUpdates.listen((position) {
-      // emitDriverLocation();
-      Fluttertoast.showToast(
-          msg: "New location (moved at least 1m): ${position.latitude}, ${position.longitude}",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 16.0
-      );
-      print('New location (moved at least 1m): ${position.latitude}, ${position.longitude}');
-    });
-    }
+  // updateDriverLocation(){
+  //   print("state.data?.email${state.data?.email}");
+  // final locationService = LocationService();
+  //
+  //   locationService.startLocationTracking();
+  //
+  //   // Listen for new locations (only when moved at least 300m)
+  //   locationService.locationUpdates.listen((position) {
+  //     // emitDriverLocation();
+  //     Fluttertoast.showToast(
+  //         msg: "New location (moved at least 1m): ${position.latitude}, ${position.longitude}",
+  //         toastLength: Toast.LENGTH_SHORT,
+  //         gravity: ToastGravity.BOTTOM,
+  //         timeInSecForIosWeb: 1,
+  //         backgroundColor: Colors.green,
+  //         textColor: Colors.white,
+  //         fontSize: 16.0
+  //     );
+  //     print('New location (moved at least 1m): ${position.latitude}, ${position.longitude}');
+  //   });
+  //   }
 }

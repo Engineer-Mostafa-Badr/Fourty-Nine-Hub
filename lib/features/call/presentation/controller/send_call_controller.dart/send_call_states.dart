@@ -33,3 +33,9 @@ class CallConnected extends SendCallState {}
 class FakeCallConnected extends SendCallState {}
 
 class DeclinedCall extends SendCallState {}
+
+class CallMinimized extends SendCallState {
+  final bool isMinimized;
+  
+  CallMinimized({this.isMinimized = true});
+}
