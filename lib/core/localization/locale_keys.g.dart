@@ -1497,5 +1497,8 @@ abstract class  LocaleKeys {
   static const bad = 'bad';
   static const rateTheRestaurant = 'rateTheRestaurant';
   static const restaurantRateYou = 'restaurantRateYou';
+  static const addACommentsFor = 'addACommentsFor';
+  static const commentAdded = 'commentAdded';
+  static const areYouSureYouWantToDeleteThisComment = 'areYouSureYouWantToDeleteThisComment';
 
 }
