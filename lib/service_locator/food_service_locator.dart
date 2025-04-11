@@ -45,6 +45,9 @@ import '../features/food_feature/restaurant_details/presentation/cubit/restauran
 import '../features/food_feature/restaurants_list/data/datasources/restaurants_remote_data_source.dart';
 import '../features/food_feature/restaurants_list/data/repositories/restaurant_list_repo_impl.dart';
 import '../features/food_feature/restaurants_list/domain/repositories/resturant_list_repo.dart';
+import '../features/food_feature/restaurants_list/domain/usecases/add_rate_restaurant_use_case.dart';
+import '../features/food_feature/restaurants_list/domain/usecases/get_req_logs_use_case.dart';
+import '../features/food_feature/restaurants_list/domain/usecases/get_user_order_use_case.dart';
 import '../features/food_feature/restaurants_list/domain/usecases/getsubcategory_restaurants_usecase.dart';
 import '../features/food_feature/restaurants_list/domain/usecases/get_nearby_restaurants_usecase.dart';
 import '../features/food_feature/restaurants_list/domain/usecases/get_trending_restaurants_usecase.dart';
@@ -115,6 +118,18 @@ class FoodServiceLocator {
         () => ChangeQuantityUseCase(
               serviceLocator(),
             ));
+    serviceLocator.registerLazySingleton<GetUserOrderUseCase>(
+        () => GetUserOrderUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<GetReqLogsUseCase>(
+        () => GetReqLogsUseCase(
+              serviceLocator(),
+            ));
+    serviceLocator.registerLazySingleton<AddRateRestaurantUseCase>(
+        () => AddRateRestaurantUseCase(
+              serviceLocator(),
+            ));
 
     serviceLocator.registerLazySingleton<ToggleRestaurantFavouriteUseCase>(
         () => ToggleRestaurantFavouriteUseCase(
@@ -136,6 +151,9 @@ class FoodServiceLocator {
       ),
     );
     serviceLocator.registerFactory<RestaurantsCubit>(() => RestaurantsCubit(
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

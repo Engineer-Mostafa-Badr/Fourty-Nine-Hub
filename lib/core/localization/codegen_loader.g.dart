@@ -1515,7 +1515,12 @@ class CodegenLoader extends AssetLoader{
   "otpCode": "الكود",
   "weHaveSentACodeTo": "لقد ارسلنا لك كود الي ",
   "oTPVerifyFor": "تاكيد الكود عن طريق ",
-  "resendOtpSuccess": "تم ارسال الكود بنجاح"
+  "resendOtpSuccess": "تم ارسال الكود بنجاح",
+  "restaurantMode": "وضع المطعم",
+  "yourRate": "التقييم الخاص بك",
+  "bad": "سيء",
+  "rateTheRestaurant": "قيم المطعم",
+  "restaurantRateYou": "تقييم المطعم لك"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -3035,7 +3040,12 @@ static const Map<String,dynamic> _en = {
   "newPost": "New Post",
   "addExplanatoryNote": "Add an explanatory note",
   "searchForAUser": "Search for a user",
-  "taggedPeople": "Tagged People"
+  "taggedPeople": "Tagged People",
+  "restaurantMode": "Restaurant Mode",
+  "yourRate": "Your rate",
+  "bad": "Bad",
+  "rateTheRestaurant": "Rate The Restaurant",
+  "restaurantRateYou": "Restaurant rate you"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

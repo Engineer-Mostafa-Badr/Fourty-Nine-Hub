@@ -225,7 +225,7 @@ class _AvailableRequestFoodState extends State<AvailableRequestFood> {
                                     borderRadius: BorderRadius.vertical(
                                         top: Radius.circular(15)),
                                   ),
-                                  builder: (context) => CustomBottomSheet(),
+                                  builder: (context) => CustomBottomSheet(phone: data.phone ?? "",),
                                 );
                               },
                               child: SvgPicture.asset(
@@ -361,7 +361,7 @@ class _PastRequestFoodState extends State<PastRequestFood> {
                               // Prevent extra spacing
                               children: [
                                 // Image.network(
-                                //   data.orders[index].foodId.foodName, // Replace with actual image
+                                //   data.userId., // Replace with actual image
                                 //   width: 50,
                                 //   height: 50,
                                 //   fit: BoxFit.cover,
@@ -395,15 +395,16 @@ class _PastRequestFoodState extends State<PastRequestFood> {
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.end,
                                       children: [
-                                        if (data.orders != null &&
-                                            index < data.orders!.length &&
-                                            data.orders![index].foodId != null &&
-                                            data.orders![index].foodId!.foodName != null &&
-                                            data.orders![index].foodId!.foodName!.trim().isNotEmpty)
+                                        // if (data.orders != null &&
+                                        //     index < data.orders!.length &&
+                                        //     data.orders![index].foodId != null &&
+                                        //     data.orders![index].foodId!.foodName != null &&
+                                        //     data.orders![index].foodId!.foodName!.trim().isNotEmpty)
 
                                         // print("✅ Showing: ${data.orders![index].foodId!.foodName!}"), // Debugging line
+                                        if (data.orders != null && index < data.orders!.length && data.orders![index].foodId?.foodName != null)
                                           Label(
-                                            text: data.orders![index].foodId!.foodName!,
+                                            text: data.orders![index].foodId?.foodName ?? "",
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                             style: TextStyle(
@@ -412,6 +413,7 @@ class _PastRequestFoodState extends State<PastRequestFood> {
                                               color: context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.whiteColor,
                                             ),
                                           ),
+
 
                                         const SizedBox(height: 4.0),
                                         Label(
@@ -484,7 +486,7 @@ class _PastRequestFoodState extends State<PastRequestFood> {
                                     borderRadius: BorderRadius.vertical(
                                         top: Radius.circular(15)),
                                   ),
-                                  builder: (context) => CustomBottomSheet(),
+                                  builder: (context) => CustomBottomSheet(phone: data.phone ?? "",),
                                 );
                               },
                               child: SvgPicture.asset(

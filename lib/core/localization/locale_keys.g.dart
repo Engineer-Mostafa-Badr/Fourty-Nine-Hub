@@ -1492,5 +1492,10 @@ abstract class  LocaleKeys {
   static const weHaveSentACodeTo = 'weHaveSentACodeTo';
   static const oTPVerifyFor = 'oTPVerifyFor';
   static const resendOtpSuccess = 'resendOtpSuccess';
+  static const restaurantMode = 'restaurantMode';
+  static const yourRate = 'yourRate';
+  static const bad = 'bad';
+  static const rateTheRestaurant = 'rateTheRestaurant';
+  static const restaurantRateYou = 'restaurantRateYou';
 
 }

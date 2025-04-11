@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
@@ -23,6 +25,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../../../../res/assets/assets.dart';
 import '../../../../social_media/twitter/presentation/widgets/report_view.dart';
 import '../../../../subscripe/presentation/controllers/subscription_controller.dart';
 
@@ -31,6 +34,7 @@ class SubCategoriesRestaurantCard extends StatelessWidget {
   final bool isVertical;
   final String mealId;
   final Function(String id) favouriteRestaurant;
+
   const SubCategoriesRestaurantCard({
     super.key,
     this.isVertical = true,
@@ -58,6 +62,7 @@ class VerticalRestaurantCard extends StatelessWidget {
   final Restaurant? item;
   final String mealId;
   final Function(String id) favouriteRestaurant;
+
   const VerticalRestaurantCard(
       {super.key,
       this.item,
@@ -68,7 +73,7 @@ class VerticalRestaurantCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.92,
-      height: MediaQuery.of(context).size.width * 1.1,
+      height: MediaQuery.of(context).size.width *1,
       child: PropertyCard(
         item: item!,
         mealId: mealId,
@@ -140,6 +145,7 @@ class PropertyCard extends StatelessWidget {
   final String mealId;
   final bool myRestaurant;
   final Function(String id) favouriteRestaurant;
+
   const PropertyCard(
       {super.key,
       required this.item,
@@ -147,29 +153,79 @@ class PropertyCard extends StatelessWidget {
       required this.favouriteRestaurant,
       required this.myRestaurant});
 
+  String formatViews(int views) {
+    if (views >= 1000000) {
+      return "${(views / 1000000).toStringAsFixed(1)}M";
+    } else if (views >= 1000) {
+      return "${(views / 1000).toStringAsFixed(1)}K";
+    } else {
+      return views.toString();
+    }
+  }
   @override
   Widget build(BuildContext context) {
     final hasSubscription =
         item.subscriptionType?.split(' ').first.toLowerCase() != 'no';
     return LayoutBuilder(
       builder: (context, constraints) {
-        return Card(
-          margin: EdgeInsets.zero,
-          clipBehavior: Clip.hardEdge,
-          color: cardDarkColor(context),
-          elevation: myRestaurant ? 0 : 5,
+
+
+        return Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            border: Border.all(width: 1, color: AppColors.PRIMARY_COLOR),
+          ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              Padding(
+                padding:EdgeInsetsDirectional.symmetric(vertical: 8,horizontal: 12),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      spacing: 2,
+                      children: [
+                        SvgPicture.asset(Assets.viewCountIcon,color: Colors.grey,),
+                        Label(text: formatViews(item.totalViews!.toInt()),
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              color: AppColors.c6C6C6C
+                          ),
+                        ),
+                        Label(text: LocaleKeys.views.localize,
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          color: AppColors.c6C6C6C
+                        ),
+                        ),
+                      ],
+                    ),
+                    Label(
+                      text: item.subscriptionType ?? "N/A" ,
+                      textAlign: TextAlign.right,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               if (hasSubscription)
                 EliteBanner(subscriptionType: item.subscriptionType ?? ''),
               Flexible(
                 flex: 4,
                 child: Stack(
                   children: [
-                    ImagesProfileForRestaurant(
-                      autoPlay: true,
-                      restaurantMedia: item.restaurantMedia,
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(15),
+                      child: ImagesProfileForRestaurant(
+                        autoPlay: true,
+                        restaurantMedia: item.restaurantMedia,
+                      ),
                     ),
                     if (!myRestaurant && context.read<UserCubit>().isLoggedIn)
                       Positioned(
@@ -185,7 +241,7 @@ class PropertyCard extends StatelessWidget {
                 ),
               ),
               Flexible(
-                  flex: 3,
+                  flex: 2,
                   child:
                       DetailsSection(item: item, myRestaurant: myRestaurant)),
               if (!myRestaurant) const SizedBox(height: 4),
@@ -199,14 +255,6 @@ class PropertyCard extends StatelessWidget {
                     CallMessageReportButtons(item: item),
                   ],
                 ),
-              // if (!myRestaurant) const SizedBox(height: 4),
-              // if (!myRestaurant)
-              // if (!myRestaurant) const SizedBox(height: 2),
-              // CallMessageButtons(
-              //     otherUserId: item.userIdModel!.id??''!,
-              //     subcategoryId: item.subcategoryId!.id,
-              //     phone: item.number!,
-              //     id: item.id!),
             ],
           ),
         );
@@ -290,6 +338,7 @@ class FavoriteButton extends StatelessWidget {
   final Restaurant item;
   final String mealId;
   final Function(String id) favouriteRestaurant;
+
   const FavoriteButton(
       {super.key,
       required this.item,
@@ -333,95 +382,145 @@ class DetailsSection extends StatelessWidget {
       height: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        // mainAxisAlignment: MainAxisAlignment.spaceAround,
+        spacing: 8,
         children: [
-          Expanded(
-              child: Row(
-            children: [
-              Expanded(
-                  child: Text(item.name ?? '', style: Styles.headerText())),
-              if (myRestaurant)
-                ClickableWidget(
-                    onTap: () {
-                      context.push(Routes.RESTAURANTORDERS);
-                    },
-                    child: Text(LocaleKeys.showAllOrders.localize,
-                        style: Styles.mediumText(
-                            color: AppColors.SECONDARY_COLOR,
-                            decoration: TextDecoration.underline,
-                            decorationThickness: 2.w))),
-            ],
-          )),
-          Expanded(
-            child: Text(
-                "${context.isArabic ? item.subcategoryId?.nameAr : item.subcategoryId?.nameEn ?? ''}"
-                "${item.description != null ? "," : ""} ${item.description ?? ''}",
-                style: Styles.mediumText(
-                    fontWeight: FontWeight.w600, fontSize: 30)),
+          const SizedBox(
+            height: 8,
           ),
-          if (myRestaurant)
-            Expanded(
-              child: Row(
-                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                      '${context.isArabic ? item.government?.governorateNameAr ?? '' : item.government?.governorateNameEn ?? ''}, ${context.isArabic ? item.city?.cityNameAr : item.city?.cityNameEn ?? ''}',
-                      style: Styles.mediumText()),
-                  const Spacer(),
-                  const Icon(
-                    Icons.star_rounded,
-                    color: AppColors.ACCENT_COLOR,
-                  ),
-                  const Sizer(),
-                  Label(
-                    text: '${item.totalRating}',
-                    style: Styles.mediumText(fontWeight: FontWeight.w500),
-                  ),
-                  Label(
-                    text: '(${item.numberOfReviews}+)',
-                    style: Styles.mediumText(),
-                  ),
-                ],
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                item.name ?? '',
+                style:
+                    const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
               ),
+              const SizedBox(width: 5),
+              Expanded(
+                child: Text(
+                  "${context.isArabic ? item.subcategoryId?.nameAr : item.subcategoryId?.nameEn ?? ''}"
+                  "${item.description != null ? "," : ""} ${item.description ?? ''}",
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w600, fontSize: 12),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+          if (!myRestaurant)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Row(
+                  children: [
+                     Label(text: item.rateName ?? "N/A"),
+                    // const Icon(
+                    //   Icons.star_rounded,
+                    //   color: AppColors.ACCENT_COLOR,
+                    // ),
+                    // const Sizer(),
+                    RatingBar(
+                      initialRating: item.totalRating ?? 0,
+                      ignoreGestures: true,
+                      itemPadding: const EdgeInsets.symmetric(horizontal: 3),
+                      ratingWidget: RatingWidget(
+                        full: SvgPicture.asset(Assets.star1),
+                        half: SvgPicture.asset(Assets.star1),
+                        empty: SvgPicture.asset(Assets.starEmpty),
+                      ),
+                      itemSize: 13,
+                      onRatingUpdate: (double value) {},
+                    ),
+                    // Label(
+                    //   text: '${item.totalRating}',
+                    //   style: Styles.mediumText(fontWeight: FontWeight.w500),
+                    // ),
+                    // Label(
+                    //   text: '(${item.numberOfReviews}+)',
+                    //   style: Styles.mediumText(),
+                    // ),
+                  ],
+                ),
+              ],
+            ),
+          // Expanded(
+          //     child: Row(
+          //   children: [
+          //     Text(item.name ?? '', style: TextStyle(
+          //         fontWeight: FontWeight.w600, fontSize: 16)),
+          //     Text(
+          //         "${context.isArabic ? item.subcategoryId?.nameAr : item.subcategoryId?.nameEn ?? ''}"
+          //             "${item.description != null ? "," : ""} ${item.description ?? ''}",
+          //         style: TextStyle(
+          //             fontWeight: FontWeight.w600, fontSize: 12)),
+          //     if (myRestaurant)
+          //       ClickableWidget(
+          //           onTap: () {
+          //             context.push(Routes.RESTAURANTORDERS);
+          //           },
+          //           child: Text(LocaleKeys.showAllOrders.localize,
+          //               style: Styles.mediumText(
+          //                   color: AppColors.SECONDARY_COLOR,
+          //                   decoration: TextDecoration.underline,
+          //                   decorationThickness: 2.w))),
+          //
+          //   ],
+          // )
+          // ),
+          if (myRestaurant)
+            Row(
+              // mainAxisAlignment: MainAxisAlignment.end,
+              // crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                    textAlign: TextAlign.end,
+                    '${context.isArabic ? item.government?.governorateNameAr ?? '' : item.government?.governorateNameEn ?? ''}, ${context.isArabic ? item.city?.cityNameAr : item.city?.cityNameEn ?? ''}',
+                    style: Styles.mediumText()),
+                const Spacer(),
+                const Icon(
+                  Icons.star_rounded,
+                  color: AppColors.ACCENT_COLOR,
+                ),
+                const Sizer(),
+                Label(
+                  text: '${item.totalRating}',
+                  style: Styles.mediumText(fontWeight: FontWeight.w500),
+                ),
+                Label(
+                  text: '(${item.numberOfReviews}+)',
+                  style: Styles.mediumText(),
+                ),
+              ],
             )
           else
-            Expanded(
-              child: Text(
-                  '${context.isArabic ? item.government?.governorateNameAr ?? '' : item.government?.governorateNameEn ?? ''}, ${context.isArabic ? item.city?.cityNameAr : item.city?.cityNameEn ?? ''}',
-                  style: Styles.mediumText()),
-            ),
-          if (!myRestaurant)
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.star_rounded,
-                        color: AppColors.ACCENT_COLOR,
-                      ),
-                      const Sizer(),
-                      Label(
-                        text: '${item.totalRating}',
-                        style: Styles.mediumText(fontWeight: FontWeight.w500),
-                      ),
-                      Label(
-                        text: '(${item.numberOfReviews}+)',
-                        style: Styles.mediumText(),
-                      ),
-                    ],
-                  ),
-                  if (!myRestaurant)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                if (!myRestaurant)
+                  Text(
+                      (item.isActive ?? false)
+                          ? LocaleKeys.available.localize
+                          : LocaleKeys.notAvailable.localize,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 12,
+                          color: AppColors.SECONDARY_COLOR)),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    const Icon(Icons.location_on_rounded),
                     Text(
-                        (item.isActive ?? false)
-                            ? LocaleKeys.available.localize
-                            : LocaleKeys.notAvailable.localize,
-                        style: Styles.headerText(
-                            color: AppColors.SECONDARY_COLOR)),
-                ],
-              ),
+                        // textAlign: TextAlign.end,
+                        '${context.isArabic ? item.government?.governorateNameAr ?? '' : item.government?.governorateNameEn ?? ''}, ${context.isArabic ? item.city?.cityNameAr : item.city?.cityNameEn ?? ''}',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                        )),
+                  ],
+                ),
+              ],
             ),
         ],
       ),
@@ -458,7 +557,7 @@ class PremiumAndRequestButtons extends StatelessWidget {
           // const SizedBox(width: 4),
           _buildButton(
             label: LocaleKeys.request.localize,
-            color: AppColors.PRIMARY_COLOR,
+            color: AppColors.PRIMARY_COLOR_DARK,
             onPressed: () {
               context.push(Routes.RESTAURANTDETAILS, extra: item);
             },
@@ -496,11 +595,14 @@ class CallMessageReportButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     final isChatEnabled = item.enableOrDisableChat != 'disable';
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 0),
       child: Row(
         children: [
           IconButton(
-            icon: const Icon(Icons.call),
+            icon:  SvgPicture.asset(Assets.phoneIconRed,
+            width: 18,
+              height: 18,
+            ),
             color: isChatEnabled
                 ? AppColors.PRIMARY_COLOR
                 : AppColors.GREY_DARK_COLOR,
@@ -512,9 +614,9 @@ class CallMessageReportButtons extends StatelessWidget {
                         title: item.name ?? '');
                   },
           ),
-          const SizedBox(width: 4),
+          // const SizedBox(width: 4),
           IconButton(
-            icon: const Icon(Icons.message),
+            icon: SvgPicture.asset(Assets.mailIconRed),
             color: isChatEnabled
                 ? AppColors.PRIMARY_COLOR
                 : AppColors.GREY_DARK_COLOR,
@@ -530,7 +632,7 @@ class CallMessageReportButtons extends StatelessWidget {
                         title: item.name ?? '');
                   },
           ),
-          const SizedBox(width: 4),
+          // const SizedBox(width: 4),
           IconButton(
             icon: const Icon(Icons.report),
             color: AppColors.PRIMARY_COLOR_DARK,
