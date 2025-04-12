@@ -82,7 +82,7 @@ import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_taps_cubit/main_categories_taps_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/slider_cubit.dart/slider_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/booking/presentation/cubit/all_appointments_cubit/all_appointments_cubit.dart';
-import 'package:fourtyninehub/features/health_feature/booking/presentation/pages/all_appointments.dart';
+import 'package:fourtyninehub/features/health_feature/booking/presentation/pages/all_appointments_screen.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/pages/create_doctor_view.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/all_doctor_reservations/all_doctor_reservations_cubit.dart';
@@ -376,6 +376,8 @@ import '../features/fourty_nine/presentation/pages/fourty_nine.dart';
 import '../features/fourty_nine/presentation/pages/main_categories_cards_view.dart';
 import '../features/fourty_nine/presentation/pages/main_categories_taps_view.dart';
 import '../features/health_feature/booking/presentation/cubit/book_doctor_appointment_cubit.dart';
+import '../features/health_feature/booking/presentation/pages/booking_confirmation_screen.dart';
+import '../features/health_feature/booking/presentation/pages/successful_booking_screen.dart';
 import '../features/health_feature/booking/presentation/pages/visita_booking.dart';
 import '../features/health_feature/doctor_details/presentation/cubit/doctor_details_cubit.dart';
 import '../features/health_feature/doctor_details/presentation/pages/DoctorDetails.dart';
@@ -1676,10 +1678,28 @@ class AppPages {
                         builder: (context, state) =>
                             BlocProvider<BookDoctorAppointmentCubit>(
                                 create: (_) => serviceLocator(),
-                                child: VisitaBooking(
-                                  doctorDetailsCubit:
-                                      (state.extra) as DoctorDetailsCubit,
-                                ))),
+
+                              child: BookingConfirmationScreen(
+                                    doctorDetailsCubit:
+                                        (state.extra) as DoctorDetailsCubit,
+                                )
+
+                                // child: VisitaBooking(
+                                //   doctorDetailsCubit:
+                                //       (state.extra) as DoctorDetailsCubit,
+                                // )
+                                )),
+                    GoRoute(
+                        path: Paths.SUCCESSFULLBOOKING,
+                        name: Routes.SUCCESSFULLBOOKING,
+                        // BookDoctorAppointmentCubit
+                        builder: (context, state) =>
+                            BlocProvider<BookDoctorAppointmentCubit>(
+                                create: (_) => serviceLocator(),
+                                child: SuccessfulBookingScreen(
+
+                                )
+                                )),
                     GoRoute(
                         path: Paths.DOCTORDASHBOARD,
                         name: Routes.DOCTORDASHBOARD,

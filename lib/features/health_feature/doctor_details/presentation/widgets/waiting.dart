@@ -19,7 +19,6 @@ class DoctorDetailsWaitingTimeCard extends StatelessWidget {
               icon: Icons.access_time,
               label:
                   '${LocaleKeys.waitingTime.localize}: ${doctorDetailsCubit.state.doctor?.waitingTime??''} ${LocaleKeys.minuteLoc.localize}'),
-          const DoctorDetailsDivider(),
         ],
       );
     } else {
