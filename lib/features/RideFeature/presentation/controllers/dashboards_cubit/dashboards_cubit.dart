@@ -74,8 +74,12 @@ class DashboardsCubit extends Cubit<DashboardsState> {
 
   void listenToNewTrip() {
     CliLogger.info('Listen To New Trip');
+    // TripsResponseEntity
     listenToNewTripUseCase((trip) {
-
+      List<AvailableRideTripEntity> list = state.availableRideTrips ?? [];
+      list.insert(0, trip);
+      emit(state.copyWith(availableRideTrips: list));
+      log(trip.toString());
     });
   }
 

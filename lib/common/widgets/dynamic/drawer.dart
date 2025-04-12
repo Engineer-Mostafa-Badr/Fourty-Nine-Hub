@@ -213,7 +213,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     image: Assets.rideIcon,
                                     onTap: () {
                                       context.pop();
-                                      context.push(Routes.RIDE);
+                                      context.push(Routes.RIDE_HOME);
                                     }),
                                 drawerRollWidget(
                                   label: LocaleKeys.loading.localize,

@@ -73,7 +73,7 @@ class TripRepositoryImpl implements TripRepository {
   }
 
   @override
-  void listenToNewTrip(Function(TripEntity trip) params) {
+  void listenToNewTrip(Function(AvailableRideTripEntity trip) params) {
     remoteDataSource.listenToNewTrip(params);
   }
 

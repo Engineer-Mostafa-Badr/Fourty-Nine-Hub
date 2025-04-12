@@ -268,7 +268,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                     onTap: () {
                       AdInterstitialTop.loadIntersitialAd();
                       AdInterstitialTop.showInterstitialAd();
-                      context.push(Routes.RIDE);
+                      context.push(Routes.RIDE_HOME);
                     },
                     shadowColor: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
                     image: Assets.car2Image,
