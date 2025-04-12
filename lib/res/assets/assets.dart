@@ -294,7 +294,8 @@ abstract class Assets {
   static String moreIcon = 'assets/icons/more_icon.svg';
 
   // static String notification = 'assets/49-New-icons/Group 1.png';
-  static String notification = 'assets/49-New-icons/bell.png';
+  static String bell = 'assets/49-New-icons/bell.png';
+  static String notification = 'assets/49-New-icons/notification.png';
   static String menu = 'assets/49-New-icons/menu.png';
   static String theme = 'assets/49-New-icons/Group 4.png';
   static String person = 'assets/49-New-icons/Group 6.png';
@@ -428,4 +429,7 @@ abstract class Assets {
   static String car2Image = "assets/images/car.jpg";
   static String doctorImage = "assets/images/doctor.jpg";
   static String marriage = "assets/images/marriage.jpg";
+  static String ellipsis = "assets/icons/ellipsis.svg";
+  static String reelBar = "assets/icons/reelBar.svg";
+  static String grid = "assets/icons/grid.png";
 }

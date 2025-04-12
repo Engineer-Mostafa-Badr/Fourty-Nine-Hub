@@ -242,15 +242,25 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
                     : AppColors.PRIMARY_COLOR,
                 image: DecorationImage(
                   fit: BoxFit.cover,
-                  image:AssetImage(Assets.healthBanner1),
-                  // CachedNetworkImageProvider(
-                  //   widget.category.banner,
-                  // ),
-                  colorFilter: ColorFilter.mode(
-                    Colors.black.withOpacity(0.3),
-                    BlendMode.darken,
+                  image: CachedNetworkImageProvider(
+                    widget.category.banner,
                   ),
+                  // colorFilter: ColorFilter.mode(
+                  //   Colors.black.withOpacity(0.3),
+                  //   BlendMode.darken,
+                  // ),
                 ),
+                // image: DecorationImage(
+                //   fit: BoxFit.cover,
+                //   image:AssetImage(Assets.healthBanner1),
+                //   // CachedNetworkImageProvider(
+                //   //   widget.category.banner,
+                //   // ),
+                //   colorFilter: ColorFilter.mode(
+                //     Colors.black.withOpacity(0.3),
+                //     BlendMode.darken,
+                //   ),
+                // ),
               ),
               child: Stack(
                 alignment: Alignment.center,

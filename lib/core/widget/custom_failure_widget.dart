@@ -24,13 +24,13 @@ class CustomFailureWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const Spacer(),
-        Text(
-          title,
-          style: Styles.headerText(
-            fontSize: 38,
-          ),
-          textAlign: TextAlign.center,
-        ),
+        // Text(
+        //   title,
+        //   style: Styles.headerText(
+        //     fontSize: 38,
+        //   ),
+        //   textAlign: TextAlign.center,
+        // ),
         const Spacer(
           flex: 5,
         ),

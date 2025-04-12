@@ -12,9 +12,11 @@ class IconWithViewCount extends StatelessWidget {
     required this.unreadCount,
     this.spaceBetween = 5,
   });
+
   final Widget icon;
   final int unreadCount;
   final double spaceBetween;
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -49,8 +51,9 @@ class CustomNotificationWidget extends StatelessWidget {
     return Stack(
       clipBehavior: Clip.none,
       children: [
-        Tab(
-          icon: icon,
+        Container(
+          padding: const EdgeInsetsDirectional.only(top: 16,end: 8,start: 8,),
+          child: icon,
         ),
         Visibility(
           visible: unreadCount != 0,
