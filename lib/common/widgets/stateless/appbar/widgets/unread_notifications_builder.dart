@@ -35,7 +35,7 @@ class UnreadNotificationsBuilder extends StatelessWidget {
             //           : Colors.black.withOpacity(0.8),
             // ),
             icon: Image.asset(
-              Assets.notification,
+              Assets.bell,
               width: 28,
               height: 28,
               // fit: BoxFit.cover,

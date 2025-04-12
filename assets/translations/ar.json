@@ -1508,5 +1508,6 @@
   "addACommentsFor": "أضف تعليقًا لـ",
   "commentAdded": "تم إضافة التعليق",
   "areYouSureYouWantToDeleteThisComment": "هل أنت متأكد أنك تريد حذف هذا التعليق؟",
-  "responseStatus": "حالة الرد"
+  "responseStatus": "حالة الرد",
+  "socialExplain":"احصل على المال إذا قمت بالنشر والمشاهدة والإعجاب على أي واجهة تريدها!"
 }
