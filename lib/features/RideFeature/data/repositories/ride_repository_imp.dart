@@ -22,11 +22,13 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/register_ride
 import 'package:fourtyninehub/features/RideFeature/domain/entities/request_trip_params.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_category_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_color_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_offer_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_request_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/running_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/repositories/ride_repository.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_pending_trip_by_client_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_car_years_and_types_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_trip_auto_accept_by_client_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_categories_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_socket_location_usecase.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
@@ -313,5 +315,20 @@ class RideRepositoryImplementation extends RideRepository {
   @override
   Future<Either<Failure, GetOffersResponseEntity>> getClientOffers() async{
     return await rideRemoteDataSource.getClientOffers();
+  }
+
+  @override
+  void listenToRideOffers(Function(RideOfferEntity offer) params) {
+    rideRemoteDataSource.listenToRideOffers(params);
+  }
+
+  @override
+  Future<Either<Failure, RideRequestTripEntity>> acceptOfferByClient(String params) {
+    return rideRemoteDataSource.acceptOfferByClient(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateTripAutoAcceptByClient(UpdateTripAutoAcceptByClientUseCaseParams params) async{
+    return await rideRemoteDataSource.updateTripAutoAcceptByClient(params);
   }
 }

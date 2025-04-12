@@ -468,8 +468,8 @@ class AppPages {
                 name: Routes.RIDE_HOME,
                 builder: (context, state) => MultiBlocProvider(
                   providers: [
-                    BlocProvider(
-                      create: (context) => serviceLocator<RideCubit>(),
+                    BlocProvider.value(
+                      value: serviceLocator<RideCubit>(),
                     ),
                   ],
                   child: const RideHome(),

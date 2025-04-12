@@ -17,5 +17,5 @@ abstract class TripRepository {
    Future<Either<Failure, bool>> createNewOfferNonSocket(CreateNewOfferDashboardUsecaseParam params);
    Future<Either<Failure, bool>> createDriverRating(CreateUpdateDriverRatingUsecaseParam params);
    Future<Either<Failure, bool>> updateDriverRating(CreateUpdateDriverRatingUsecaseParam params);
-   
+
 }
