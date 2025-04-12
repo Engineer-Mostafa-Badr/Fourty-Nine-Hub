@@ -15,7 +15,9 @@ class SuccessfulBookingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: const HomeAppbar(),
+      appBar: const HomeAppbar(
+        isWithBackArrow: true,
+      ),
       body: BlocBuilder<BookDoctorAppointmentCubit, BookDoctorAppointmentState>(
         builder: (context, state) {
           return SingleChildScrollView(

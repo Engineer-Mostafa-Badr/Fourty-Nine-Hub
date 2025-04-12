@@ -54,7 +54,9 @@ class _BookingConfirmationScreenState extends State<BookingConfirmationScreen> {
     final bookingController = context.read<BookDoctorAppointmentCubit>();
 
     return CustomScaffold(
-      appBar: const HomeAppbar(),
+      appBar: const HomeAppbar(
+        isWithBackArrow: true,
+      ),
       body: BlocBuilder<BookDoctorAppointmentCubit, BookDoctorAppointmentState>(
         builder: (context, state) {
           return Form(

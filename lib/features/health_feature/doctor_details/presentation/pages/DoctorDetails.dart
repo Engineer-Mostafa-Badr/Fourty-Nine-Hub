@@ -57,8 +57,8 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView> {
     return CustomScaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(30),
-        child: BackAppBar(
-          label: LocaleKeys.doctorDetails.localize,
+        child:HomeAppbar(
+          isWithBackArrow: true,
         ),
       ),
       body: Padding(
