@@ -68,7 +68,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
       ),
       BottomItemModel(
         icon: FontAwesomeIcons.car,
-        label: 'ride',
+        label: 'dre',
         cacheKey: 'rideCount',
         index: 3,
         image: Assets.ride,

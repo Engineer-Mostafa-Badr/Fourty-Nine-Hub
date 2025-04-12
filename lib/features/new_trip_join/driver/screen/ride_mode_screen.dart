@@ -22,7 +22,7 @@ class _NewRideModeScreenState extends State<NewRideModeScreen> {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(30),
     child:HomeAppbar(
-        isWithBackArrow: false,
+        isWithBackArrow: true,
         language: true,
         leading: IconButton(
           onPressed: () {
