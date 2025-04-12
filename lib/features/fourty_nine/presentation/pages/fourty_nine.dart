@@ -27,6 +27,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../../common/widgets/dynamic/bottom_navigator.dart';
+import '../../../../common/widgets/dynamic/custom_bottom_navigator.dart';
 import '../../../../common/widgets/dynamic/drawer.dart';
 import '../../../../common/widgets/dynamic/floating_button.dart';
 import '../../../../common/widgets/dynamic/sizer.dart';
@@ -165,6 +166,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
             child: HomeAppbar(
               isWithBackArrow: false,
               language: true,
+              // isHaveLeading: true,
             ),
           ),
           bottomNavigationBar: BottomNavigator(
@@ -263,6 +265,8 @@ class _FourtyNineViewState extends State<FourtyNineView>
               // const Sizer(),
               const Sizer(),
               Row(children: [
+                const Sizer(width: 8),
+
                 Expanded(
                   child: _buildStarWidget(
                     onTap: () {
@@ -302,10 +306,14 @@ class _FourtyNineViewState extends State<FourtyNineView>
                     title: LocaleKeys.meal.localize,
                   ),
                 ),
+                const Sizer(width: 8),
+
               ]),
               const Sizer(),
               const Sizer(),
               Row(children: [
+                const Sizer(width: 8),
+
                   Expanded(child: _pickMeAndComeWithUWidget()),
                 const Sizer(width: 32),
                 Expanded(
@@ -334,7 +342,9 @@ class _FourtyNineViewState extends State<FourtyNineView>
                     title: LocaleKeys.marriage.localize,
                   ),
                 ),
-              ]),
+                const Sizer(width: 8),
+
+              ],),
               const Sizer(),
               // _buildTenPercentWidget(),
               // const Sizer(),

@@ -37,7 +37,12 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:restart_app/restart_app.dart';
 import 'package:shimmer/shimmer.dart';
+
+import '../../../../../common/widgets/dynamic/bottom_navigator.dart';
+import '../../../../../common/widgets/dynamic/floating_button.dart';
+import '../../../../../core/utils/custom_show_dialog.dart';
 
 class ServicePagePreview extends StatefulWidget {
   const ServicePagePreview({super.key});
@@ -150,6 +155,21 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
             );
           }),
         ),
+        BlocProvider(
+          create: (context) => serviceLocator<MainCategoriesTapsCubit>(),
+          child: Builder(builder: (context) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: SizedBox(
+                height: 350,
+                child: MainCategoriesFlipCardsView(
+                  isAppBarShow: false,
+                  data: context.read<MainCategoriesTapsCubit>().mainCategories,
+                ),
+              ),
+            );
+          }),
+        ),
       ];
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -173,13 +193,27 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
       },
       child: Scaffold(
         key: _scaffoldKey,
-        bottomNavigationBar: CustomPageBottonNavBar(
+        bottomNavigationBar: BottomNavigator(
           scrollController: scrollController,
-          currentIndex: 2,
           isScrollingDown: _isScrollingDown,
-          // mainCategory: 1,
-          // index: 2,
+          mainCategory: 1,
+          index: 2,
         ),
+        floatingActionButton: _isScrollingDown
+            ? null
+            : const FloatingButton(
+          changeView: 1,
+          icon: Icons.person,
+        ),
+        floatingActionButtonLocation:
+        FloatingActionButtonLocation.centerDocked,
+        // bottomNavigationBar: CustomPageBottonNavBar(
+        //   scrollController: scrollController,
+        //   currentIndex: 2,
+        //   isScrollingDown: _isScrollingDown,
+        //   // mainCategory: 1,
+        //   // index: 2,
+        // ),
         drawer: const DrawerWidget(),
         body: Stack(
           children: [
@@ -208,14 +242,91 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Row(children: [
-                      Expanded(child: _buildStarWidget()),
-                      const Sizer(
-                        width: 32,
-                      ),
+                      const Sizer(width: 8),
+
                       Expanded(
-                        child: _pickMeAndComeWithUWidget(),
+                        child: _buildStarWidget(
+                          onTap: () {
+                            AdInterstitialTop.loadIntersitialAd();
+                            AdInterstitialTop.showInterstitialAd();
+                            context.push(Routes.RIDE_HOME);
+                          },
+                          shadowColor: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
+                          image: Assets.car2Image,
+                          title: LocaleKeys.ride.localize,
+                        ),
                       ),
+                      const Sizer(width: 32),
+                      Expanded(
+                        child: _buildStarWidget(
+                          onTap: () {
+                            AdInterstitialTop.loadIntersitialAd();
+                            AdInterstitialTop.showInterstitialAd();
+                            context.push(Routes.VISITA);
+                          },
+                          shadowColor: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
+                          image: Assets.doctorImage,
+                          title: LocaleKeys.health.localize,
+                        ),
+                      ),
+                      const Sizer(width: 32),
+                      Expanded(
+                        child: _buildStarWidget(
+                          onTap: () {
+                            AdInterstitialTop.loadIntersitialAd();
+                            AdInterstitialTop.showInterstitialAd();
+                            HandleCashback.setCount('beAStarCount', context);
+                            context.push(Routes.FOOD);
+                          },
+                          shadowColor: Colors.deepOrange.withValues(alpha: .7),
+                          image: Assets.mealImage,
+                          title: LocaleKeys.meal.localize,
+                        ),
+                      ),
+                      const Sizer(width: 8),
+
                     ]),
+                  ),
+                ),
+                const SliverToBoxAdapter(child: Sizer()),
+                const SliverToBoxAdapter(child: Sizer()),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child:Row(children: [
+                      const Sizer(width: 8),
+
+                      Expanded(child: _pickMeAndComeWithUWidget()),
+                      const Sizer(width: 32),
+                      Expanded(
+                        child: _buildStarWidget(
+                          onTap: () {
+                            AdInterstitialTop.loadIntersitialAd();
+                            AdInterstitialTop.showInterstitialAd();
+                            HandleCashback.setCount('beAStarCount', context);
+                            context.push(Routes.BE_STAR);
+                          },
+                          shadowColor: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
+                          image: Assets.tube1,
+                          title: LocaleKeys.tube.localize,
+                        ),
+                      ),
+                      const Sizer(width: 32),
+                      Expanded(
+                        child: _buildStarWidget(
+                          onTap: () {
+                            AdInterstitialTop.loadIntersitialAd();
+                            AdInterstitialTop.showInterstitialAd();
+                            context.push(Routes.MARRIAGESUBCATEGORIES);
+                          },
+                          shadowColor: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
+                          image: Assets.marriage,
+                          title: LocaleKeys.marriage.localize,
+                        ),
+                      ),
+                      const Sizer(width: 8),
+
+                    ],),
                   ),
                 ),
                 const SliverToBoxAdapter(child: Sizer()),
@@ -352,48 +463,96 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
     );
   }
 
-  Widget _buildStarWidget() {
-    return SizedBox(
-      height: kToolbarHeight * 2.h,
-      width: double.infinity,
-      child: GestureDetector(
-        onTap: () {
-          AdInterstitialTop.loadIntersitialAd();
-          AdInterstitialTop.showInterstitialAd();
-          HandleCashback.setCount('beAStarCount', context);
-          context.push(Routes.BE_STAR);
-        },
-        child: Container(
-          height: kToolbarHeight * 2.h,
-          decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            borderRadius: BorderRadius.circular(40.r),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
-                spreadRadius: 5,
-                blurRadius: 5,
-                offset: const Offset(1, 1),
-              )
-            ],
-            image: DecorationImage(
-                image: AssetImage(Assets.tube1), fit: BoxFit.fill),
-          ),
-          child: Center(
-            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Label(
-                text: LocaleKeys.tube.localize,
-                style: Styles.mediumText(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 45,
-                ),
-              )
-            ]),
-          ),
+  Widget _buildStarWidget({
+    void Function()? onTap,
+    required Color shadowColor,
+    required String title,
+    required String image,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        // height: kToolbarHeight * 2.h,
+        height: 64,
+        decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          borderRadius: BorderRadius.circular(40.r),
+          boxShadow: [
+            BoxShadow(
+              color: shadowColor,
+              spreadRadius: 5,
+              blurRadius: 5,
+              offset: const Offset(1, 1),
+            )
+          ],
+        ),
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Image.asset(
+              image,
+              fit: BoxFit.fill,
+              width: double.infinity,
+            ),
+            Container(
+              color: Colors.black38,
+            ),
+            Label(
+              text: title,
+              style: Styles.mediumText(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 45,
+              ),
+            ),
+          ],
         ),
       ),
     );
+    // return SizedBox(
+    //   height: kToolbarHeight * 2.h,
+    //   width: double.infinity,
+    //   child: GestureDetector(
+    //     onTap: () {
+    //       AdInterstitialTop.loadIntersitialAd();
+    //       AdInterstitialTop.showInterstitialAd();
+    //       HandleCashback.setCount('beAStarCount', context);
+    //       context.push(Routes.BE_STAR);
+    //     },
+    //     child: Container(
+    //       height: kToolbarHeight * 2.h,
+    //       decoration: BoxDecoration(
+    //         color: Theme
+    //             .of(context)
+    //             .scaffoldBackgroundColor,
+    //         borderRadius: BorderRadius.circular(40.r),
+    //         boxShadow: [
+    //           BoxShadow(
+    //             color: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
+    //             spreadRadius: 5,
+    //             blurRadius: 5,
+    //             offset: const Offset(1, 1),
+    //           )
+    //         ],
+    //         image: DecorationImage(
+    //             image: AssetImage(Assets.tube1), fit: BoxFit.fill),
+    //       ),
+    //       child: Center(
+    //         child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+    //           Label(
+    //             text: LocaleKeys.tube.localize,
+    //             style: Styles.mediumText(
+    //               color: Colors.white,
+    //               fontWeight: FontWeight.bold,
+    //               fontSize: 45,
+    //             ),
+    //           )
+    //         ]),
+    //       ),
+    //     ),
+    //   ),
+    // );
   }
 
   Widget itemAuctionAndInstallmentWidget(
@@ -458,7 +617,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
         route != null ? context.push(route) : null;
       },
       child: Container(
-        height: kToolbarHeight * 2.h,
+        height: 64,
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(40.r),
@@ -640,9 +799,49 @@ class CustomDeActivateDialog extends StatelessWidget {
             Expanded(
               child: CustomElevatedButton(
                 onPressed: () async {
-                  await context.read<CustomPageCubit>().updateActivate(false);
-                  // Restart.restartApp();
-                  Phoenix.rebirth(context);
+                  // await context.read<CustomPageCubit>().updateActivate(false);
+                  // // Restart.restartApp();
+                  // Phoenix.rebirth(context);
+                  showAnimatedDialog(
+                    context,
+                    AlertDialog(
+                      content:Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Label(
+                              text: 'Restart to Apply',
+                              style: Styles.headerText(fontWeight: FontWeight.w400)),
+                          const Sizer(),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: AppButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  label: LocaleKeys.cancel.localize,
+                                ),
+                              ),
+                              const Sizer(width: 16,),
+                              Expanded(
+                                child: AppButton(
+                                  backColor: AppColors.PRIMARY_COLOR,
+                                  onPressed: () {
+                                    context
+                                        .read<CustomPageCubit>()
+                                        .updateActivate(true);
+                                    Restart.restartApp();
+                                  },
+                                  label: 'Restart',
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
                 },
                 child: Text(
                   LocaleKeys.yes.localize,

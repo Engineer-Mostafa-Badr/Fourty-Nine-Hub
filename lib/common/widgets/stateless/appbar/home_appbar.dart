@@ -32,6 +32,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
   final bool showLanguage;
   final Color color;
   final bool language;
+  final bool isHaveLeading;
   final double? toolbarHeight;
   final Widget? leading;
   final PreferredSizeWidget? bottom;
@@ -51,6 +52,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
     this.showLanguage = false,
     this.color = AppColors.PRIMARY_COLOR,
     this.language = false,
+    this.isHaveLeading = false,
   });
 
   @override
@@ -63,17 +65,20 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
 
     return AppBar(
       bottom: bottom,
-      // leading: InkWell(
-      //   child: Image.asset(
-      //     Assets.menu,
-      //     width: 25,
-      //     height: 25,
-      //   ),
-      //   onTap: () {
-      //     HandleCashback.setCount('drawerCount', context);
-      //     Scaffold.of(context).openDrawer();
-      //   },
-      // ),
+      leading:
+      isHaveLeading
+          ? InkWell(
+              child: Image.asset(
+                Assets.menu,
+                width: 25,
+                height: 25,
+              ),
+              onTap: () {
+                HandleCashback.setCount('drawerCount', context);
+                Scaffold.of(context).openDrawer();
+              },
+            ):
+           Container(),
       title: Row(
         children: [
           const SizedBox(
@@ -82,7 +87,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
           if (isShowLogo)
             InkWell(
               onTap: () {
-                if (!isCurrentRoute(context, Routes.HOME)){
+                if (!isCurrentRoute(context, Routes.HOME)) {
                   context.go(
                     Routes.HOME,
                   );
@@ -103,10 +108,10 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                       ),
                     ),
                   ),
-                  Label(text: 'HUB', style: Styles.headerText(
-                    color: AppColors.SECONDARY_COLOR,
-                    fontSize: 40
-                  )),
+                  Label(
+                      text: 'HUB',
+                      style: Styles.headerText(
+                          color: AppColors.SECONDARY_COLOR, fontSize: 40)),
                 ],
               ),
             ),
@@ -231,7 +236,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
           // const Sizer(),
         ],
       ),
-      leadingWidth: 90.w,
+      leadingWidth: isHaveLeading ? 90 : 0,
       elevation: 0,
       titleSpacing: 0,
 
