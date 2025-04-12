@@ -38,6 +38,7 @@ import '../features/RideFeature/data/repositories/shipping_repository_imp.dart';
 import '../features/RideFeature/domain/repositories/shipping_repository.dart';
 import '../features/RideFeature/domain/usecases/create_loading_trip_usecase.dart';
 import '../features/RideFeature/domain/usecases/get_ride_categories_usecase.dart';
+import '../features/ride/RideRequest/presentation/cubit/NoSocket/check_trip_end_cubit.dart';
 
 class RideServiceLocatorUpdated {
   static void execute({required GetIt serviceLocator}) {
@@ -146,6 +147,9 @@ class RideServiceLocatorUpdated {
           serviceLocator(),
           serviceLocator(),
         ));
+    // serviceLocator.registerLazySingleton<CheckTripEndCubit>(() => CheckTripEndCubit(
+    //       serviceLocator(),
+    //     ));
     serviceLocator.registerFactory<RideRegisterCubit>(() => RideRegisterCubit(
           serviceLocator(),
           serviceLocator(),

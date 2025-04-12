@@ -52,6 +52,10 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
 
   @override
   void initState() {
+    print('widget.category');
+    print(widget.category.image);
+    print(widget.category.banner);
+    print(widget.category.cover);
     if (widget.fromFavorite ?? false) {
       widget.isFavorite = true;
       widget.category.isFavorite = true;
@@ -72,6 +76,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
             clipBehavior: Clip.antiAliasWithSaveLayer,
             child: CachedNetworkImage(
               width: double.infinity,
+              // imageUrl: 'https://images.google.com/images/branding/googlelogo/2x/googlelogo_light_color_272x92dp.png',
               imageUrl: widget.category.banner,
               height: MediaQuery.sizeOf(context).height * 0.1,
               imageBuilder: (context, i) => Column(
@@ -224,6 +229,7 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
             ),
           )
         : CachedNetworkImage(
+            // imageUrl: 'https://images.google.com/images/branding/googlelogo/2x/googlelogo_light_color_272x92dp.png',
             imageUrl: widget.category.banner,
             width: double.infinity,
             height: 70,

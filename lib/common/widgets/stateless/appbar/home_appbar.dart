@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/appbar/widgets/unread_notifications_builder.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -64,24 +63,26 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
 
     return AppBar(
       bottom: bottom,
-      leading: InkWell(
-        child: Image.asset(
-          Assets.menu,
-          width: 25,
-          height: 25,
-        ),
-        onTap: () {
-          HandleCashback.setCount('drawerCount', context);
-          // Scaffold.currentState?.openDrawer(); // Open the drawer
-          Scaffold.of(context).openDrawer();
-        },
-      ),
+      // leading: InkWell(
+      //   child: Image.asset(
+      //     Assets.menu,
+      //     width: 25,
+      //     height: 25,
+      //   ),
+      //   onTap: () {
+      //     HandleCashback.setCount('drawerCount', context);
+      //     Scaffold.of(context).openDrawer();
+      //   },
+      // ),
       title: Row(
         children: [
+          const SizedBox(
+            width: 16,
+          ),
           if (isShowLogo)
             InkWell(
               onTap: () {
-                if (!isCurrentRoute(context, Routes.HOME)) {
+                if (!isCurrentRoute(context, Routes.HOME)){
                   context.go(
                     Routes.HOME,
                   );
@@ -89,16 +90,24 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                   print("object");
                 }
               },
-              child: SizedBox(
-                height: 50.h,
-                width: 50.h,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(5.r),
-                  child: Image(
-                    image: AssetImage(Assets.icon),
-                    fit: BoxFit.cover,
+              child: Row(
+                children: [
+                  SizedBox(
+                    height: 50.h,
+                    width: 50.h,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(5.r),
+                      child: Image(
+                        image: AssetImage(Assets.icon),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
-                ),
+                  Label(text: 'HUB', style: Styles.headerText(
+                    color: AppColors.SECONDARY_COLOR,
+                    fontSize: 40
+                  )),
+                ],
               ),
             ),
           // if (showLanguage)
@@ -123,6 +132,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                     child: Label(text: 'Register', style: Styles.mediumText())),
               ),
           //put lang
+          const Spacer(),
           Container(
               width: 80.w,
               padding: EdgeInsets.symmetric(horizontal: 5.w),
@@ -150,18 +160,17 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
           SizedBox(
             width: 20.w,
           ),
-          const Spacer(),
-          // InkWell(
-          //   borderRadius: BorderRadius.circular(40.r),
-          //   onTap: () {
-          //     context.push(Routes.SEARCH);
-          //   },
-          //   child: const Icon(
-          //     Icons.search,
-          //     size: 25,
-          //     color: AppColors.QUANTITY_COLOR,
-          //   ),
-          // ),
+          InkWell(
+            borderRadius: BorderRadius.circular(40.r),
+            onTap: () {
+              context.push(Routes.SEARCH);
+            },
+            child: const Icon(
+              Icons.search,
+              size: 25,
+              color: AppColors.QUANTITY_COLOR,
+            ),
+          ),
           const Sizer(),
           const Sizer(),
           if (showLanguage)
@@ -176,11 +185,9 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
           InkWell(
             onTap: () async {
               await context.read<UserCubit>().resetUnreadedChatsCounter();
-
               if (isCurrentRoute(context, Routes.CHAT) == true) {
                 return;
               }
-
               HandleCashback.setCount('chatCount', context);
               context.push(Routes.CHAT, extra: ChatsViewParams());
             },
@@ -201,27 +208,27 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
           const Sizer(),
-          const Sizer(),
+          // const Sizer(),
           // SizedBox(
           //   width: 15.w,
           // ),
-          InkWell(
-            onTap: () {
-              if (isCurrentRoute(context, Routes.NOTIFICATIONS) == true) {
-                return;
-              }
-              HandleCashback.setCount('notificationCount', context);
-              context.push(
-                context.read<UserCubit>().isLoggedIn
-                    ? Routes.NOTIFICATIONS
-                    : Routes.LOGIN,
-              );
-            },
-            child: UnreadNotificationsBuilder(
-              inNotifications: inNotifications,
-            ),
-          ),
-          const Sizer(),
+          // InkWell(
+          //   onTap: () {
+          //     if (isCurrentRoute(context, Routes.NOTIFICATIONS) == true) {
+          //       return;
+          //     }
+          //     HandleCashback.setCount('notificationCount', context);
+          //     context.push(
+          //       context.read<UserCubit>().isLoggedIn
+          //           ? Routes.NOTIFICATIONS
+          //           : Routes.LOGIN,
+          //     );
+          //   },
+          //   child: UnreadNotificationsBuilder(
+          //     inNotifications: inNotifications,
+          //   ),
+          // ),
+          // const Sizer(),
         ],
       ),
       leadingWidth: 90.w,
