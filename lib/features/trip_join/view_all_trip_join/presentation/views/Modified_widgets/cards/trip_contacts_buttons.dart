@@ -58,6 +58,8 @@ class _ContactsTripButtonsState extends State<ContactsTripButtons> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               IconButton(
+                visualDensity:const  VisualDensity(
+                    horizontal: -4, vertical: -4),
                 color: (snap.data == true &&
                         context.read<UserCubit>().isLoggedIn)
                     ? AppColors.PRIMARY_COLOR
@@ -72,7 +74,7 @@ class _ContactsTripButtonsState extends State<ContactsTripButtons> {
                     topButtonColor: AppColors.PRIMARY_COLOR,
                     topButtonTitle:LocaleKeys.freeCall.localize ,
                     bottomButtonColor: AppColors.BG_GRAY_COLOR,
-                    bottomButtonTitle: LocaleKeys.regularCall.localize),
+                    bottomButtonTitle: LocaleKeys.regularCall.localize,onTap:()=> Navigator.of(context).pop()),
                 // !context.read<UserCubit>().isLoggedIn
                 //     ? () => context.push(Routes.LOGIN)
                 //     :
@@ -219,6 +221,8 @@ class _ContactsTripButtonsState extends State<ContactsTripButtons> {
                 //           },
               ),
               IconButton(
+                visualDensity:const  VisualDensity(
+                    horizontal: -4, vertical: -4),
                 color: (snap.data == true &&
                         context.read<UserCubit>().isLoggedIn)
                     ? AppColors.PRIMARY_COLOR
@@ -252,6 +256,8 @@ class _ContactsTripButtonsState extends State<ContactsTripButtons> {
                           },
               ),
               IconButton(
+                visualDensity:const  VisualDensity(
+                    horizontal: -4, vertical: -4),
                 padding: EdgeInsets.zero,
                 color: AppColors.SECONDARY_COLOR,
                 icon: const Icon(Icons.report,),

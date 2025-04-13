@@ -12,7 +12,10 @@ class InstallmentOrdersList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: const HomeAppbar(),
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(30),
+        child: HomeAppbar(),
+      ),
       drawer: const DrawerWidget(),
       body: Padding(
         padding: const EdgeInsets.all(8.0),

@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:either_dart/either.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
-import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/features/call/data/models/agora_info_model.dart';
 import 'package:fourtyninehub/features/call/domain/usecases/get_agora_token_usecase.dart';
 import 'package:http/http.dart' as http;
@@ -17,12 +16,13 @@ class CallRemoteDatasourceImpl implements CallRemoteDatasource {
   Future<Either<Exception, AgoraInfoModel>> getAgoraToken(
       GetAgoraTokenParams params) async {
     try {
-      final token = await CacheManager.getAccessToken();
+      final token = "";
+      // await CacheManager.getAccessToken();
       Map<String, String> headers = {'Content-Type': 'application/json'};
       headers.addAll({'Authorization': 'Bearer $token'});
       http.Response response = await http.post(
         Uri.parse(
-            EndPoints.developmentBaseUrl + EndPoints.whatsAppAgoraToken),
+          EndPoints.productionBaseUrl+ EndPoints.whatsAppAgoraToken),
         headers: headers,
       );
 

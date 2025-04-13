@@ -71,7 +71,6 @@ class CustomPageState {
   final List<CustomPageCategoriesEntity>? favourite;
   final List<CustomPageSubCategoriesEntity>? favouriteSubCat;
   final List<UpdateCustomPageCategoriesModel>? updateData;
-  final List<String> updateSubCategoriesId; // ✅ No 'late', and made non-nullable
   final ActivateEntity? activate;
 
   CustomPageState({
@@ -85,7 +84,7 @@ class CustomPageState {
   this.activate,
   this.updateData = const [],
   List<String>? updateSubCategoriesId, // Accepts a nullable list
-  }) : updateSubCategoriesId = updateSubCategoriesId ?? [];
+  });
 
   CustomPageState copyWith({
     CustomPageStates? status,
@@ -96,7 +95,6 @@ class CustomPageState {
     List<CustomPageCategoriesEntity>? favourite,
     List<CustomPageSubCategoriesEntity>? favouriteSubCat,
     List<UpdateCustomPageCategoriesModel>? updateData,
-    List<String>? updateCategoriesId,
     ActivateEntity? activate,
   }) {
     return CustomPageState(
@@ -109,7 +107,6 @@ class CustomPageState {
       favouriteSubCat: favouriteSubCat ?? this.favouriteSubCat,
       activate: activate ?? this.activate,
       updateData: updateData ?? this.updateData,
-      updateSubCategoriesId: updateCategoriesId ?? updateSubCategoriesId, // ✅
     );
   }
 }

@@ -3,9 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/utils/custom_show_dialog.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_states.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
@@ -32,15 +34,11 @@ class _CustomPageState extends State<CustomPage> {
   Widget build(BuildContext context) {
     return CustomScaffold(
       key: _scaffoldKey,
-      appBar: BackAppBar(
-        label: LocaleKeys.customPage.localize,
-        // leading: IconButton(
-        //   icon: const Icon(Icons.menu),
-        //   onPressed: () {
-        //     HandleCashback.setCount('drawerCount',context);
-        //     _scaffoldKey.currentState?.openDrawer();
-        //   },
-        // ),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          label: LocaleKeys.customPage.localize,
+        ),
       ),
       //  drawer: const DrawerWidget(),
       body: BlocProvider<CustomPageCubit>(
@@ -129,9 +127,30 @@ class ActivatePageBlocConsumer extends StatelessWidget {
               CustomSwitchButton(
                 value: state.activate?.customPage ?? false,
                 onChanged: (v) {
-                  controller.updateActivate(v);
-                  // Restart.restartApp();
-                  Phoenix.rebirth(context);
+                  showAnimatedDialog(
+                    context,
+                    AlertDialog(
+                      title: Label(
+                          text: 'The App will Restart to Apply Changes',
+                          style: Styles.mediumText(
+                              fontSize: 65.sp, fontWeight: FontWeight.w400)),
+                      actions: [
+                        AppButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            label: LocaleKeys.cancel.localize,
+                        ),
+                        AppButton(
+                          onPressed: () {
+                            controller.updateActivate(v);
+                            Restart.restartApp();
+                          },
+                          label: 'Restart',
+                        ),
+                      ],
+                    ),
+                  );
 
                 },
               ),

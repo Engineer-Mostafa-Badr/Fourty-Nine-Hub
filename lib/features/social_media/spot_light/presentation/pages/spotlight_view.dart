@@ -85,34 +85,37 @@ class _SpotlightViewState extends State<SpotlightView> {
     final userId = userCubit.state.data?.id ?? '';
 
     return CustomScaffold(
-      appBar: BackAppBar(
-        label: LocaleKeys.spotlight_title.tr(),
-        actions: [
-          IconButton(
-            onPressed: () {
-              context.push(
-                Routes.OTHERSACCOUNT,
-                extra: userId,
-              );
-            },
-            icon: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4.0),
-              child: Icon(
-                Icons.person,
-                size: 50.sp,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          label: LocaleKeys.spotlight_title.tr(),
+          actions: [
+            IconButton(
+              onPressed: () {
+                context.push(
+                  Routes.OTHERSACCOUNT,
+                  extra: userId,
+                );
+              },
+              icon: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                child: Icon(
+                  Icons.person,
+                  size: 50.sp,
+                ),
               ),
             ),
-          ),
-          IconButton(
-              onPressed: () {
-                showDialog(
-                    context: context, builder: (_) => const SearchAppUsers());
-              },
-              icon: Icon(
-                Icons.search,
-                size: 50.sp,
-              )),
-        ],
+            IconButton(
+                onPressed: () {
+                  showDialog(
+                      context: context, builder: (_) => const SearchAppUsers());
+                },
+                icon: Icon(
+                  Icons.search,
+                  size: 50.sp,
+                )),
+          ],
+        ),
       ),
       body: isLoggedIn
           ? CustomScrollView(

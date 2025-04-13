@@ -1,6 +1,11 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/accept_offer_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/trips_response_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_auto_accept_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_price_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/create_driver_rating_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/create_new_offer_dashboard_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/update_settings_dashboard_usecase.dart';
@@ -54,6 +59,31 @@ class TripRepositoryImpl implements TripRepository {
   @override
   Future<Either<Failure, bool>> updateDriverRating(CreateUpdateDriverRatingUsecaseParam params) async{
    return await remoteDataSource.updateDriverRating(params);
+  }
+
+  @override
+  void listenToUpdateTripAutoAccept(Function(UpdateTripAutoAcceptEntity trip) params) {
+    remoteDataSource.listenToUpdateTripAutoAccept(params);
+  }
+
+  @override
+  void listenToAcceptOffer(Function(AcceptOfferEntity trip) params) {
+    remoteDataSource.listenToAcceptOffer(params);
+  }
+
+  @override
+  void listenToUpdateTripPrice(Function(UpdateTripPriceEntity trip) params) {
+    remoteDataSource.listenToUpdateTripPrice(params);
+  }
+
+  @override
+  void listenToNewTrip(Function(AvailableRideTripEntity trip) params) {
+    remoteDataSource.listenToNewTrip(params);
+  }
+
+  @override
+  void listenToRemoveTrip(Function(String tripId) params) {
+    remoteDataSource.listenToRemoveTrip(params);
   }
 
 }

@@ -46,9 +46,12 @@ class ForgetPasswordOtpVerificationView extends StatelessWidget {
       builder: (context, state) {
         return CustomScaffold(
           enableCustomAppBar: true,
-          appBar: const BackAppBar(
-            label: 'OTP Verify For Email',
-            enableCustomAppBar: true,
+          appBar: const PreferredSize(
+            preferredSize: Size.fromHeight(30),
+            child: BackAppBar(
+              label: 'OTP Verify For Email',
+              enableCustomAppBar: true,
+            ),
           ),
           bottomSheet: SizedBox(
             child: DefaultButton(

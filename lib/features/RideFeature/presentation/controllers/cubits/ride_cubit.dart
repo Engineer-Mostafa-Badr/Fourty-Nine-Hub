@@ -255,12 +255,41 @@ class RideCubit extends Cubit<RideState> {
 
   Future<Position> _determinePosition() async {
     LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.deniedForever) {
-        throw Exception("Location permissions are permanently denied.");
-      }
+    print(" permanently denied$permission");
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Position(
+        longitude: 31.235457277186548,
+        latitude: 30.047873322617807,
+        timestamp: DateTime.now(),
+        accuracy: 0.2,
+        altitude: 0.5,
+        altitudeAccuracy: 0.6,
+        heading: 0.2,
+        headingAccuracy: 0.1,
+        speed: 20,
+        speedAccuracy: 10,
+      );
     }
+    if (permission == LocationPermission.denied) {
+      print("objectLocation permissions are permanently denied");
+      // permission = await Geolocator.requestPermission();
+      // if (permission == LocationPermission.deniedForever||permission == LocationPermission.whileInUse) {
+        print("objectLocation permissions are permanently denied");
+        return Position(
+          longitude: 31.235457277186548,
+          latitude: 30.047873322617807,
+          timestamp: DateTime.now(),
+          accuracy: 0.2,
+          altitude: 0.5,
+          altitudeAccuracy: 0.6,
+          heading: 0.2,
+          headingAccuracy: 0.1,
+          speed: 20,
+          speedAccuracy: 10,
+        );
+      }
+    // }
     return await Geolocator.getCurrentPosition();
   }
 

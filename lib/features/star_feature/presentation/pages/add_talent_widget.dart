@@ -14,6 +14,7 @@ import 'package:video_player/video_player.dart';
 import '../../../../common/widgets/stateless/buttons/default_button.dart';
 import '../../../../core/messages/messages.dart';
 import '../../../../res/assets/assets.dart';
+import '../../../../res/style/styles.dart';
 
 class AddTalentWidget extends StatefulWidget {
   const AddTalentWidget({super.key});
@@ -186,10 +187,10 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
                   child: ElevatedButton.icon(
                     onPressed: () => _showMediaPicker(true),
                     icon: Image.asset(Assets.uploadIcon, color: Colors.white),
-                    label: const FittedBox(
+                    label: FittedBox(
                       child: Text(
-                        "Upload Image",
-                        style: TextStyle(color: Colors.white),
+                        LocaleKeys.talent_upload_image.localize,
+                        style: const TextStyle(color: Colors.white),
                       ),
                     ),
                     style: ElevatedButton.styleFrom(
@@ -205,10 +206,10 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
                   child: ElevatedButton.icon(
                     onPressed: () => _showMediaPicker(false),
                     icon: Image.asset(Assets.uploadIcon, color: Colors.white),
-                    label: const FittedBox(
+                    label: FittedBox(
                       child: Text(
-                        "Upload Video",
-                        style: TextStyle(color: Colors.white),
+                        LocaleKeys.talent_upload_video.localize,
+                        style: const TextStyle(color: Colors.white),
                       ),
                     ),
                     style: ElevatedButton.styleFrom(
@@ -273,13 +274,20 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
               ),
             ),
             const SizedBox(height: 24),
-
-            // Submit button
-            DefaultButton(
-              width: double.infinity,
-              label: LocaleKeys.submit.localize,
-              backgroundColor: AppColors.colorRed,
+            ElevatedButton(
               onPressed: _handleSubmit,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.colorRed,
+                minimumSize: const Size(double.infinity, 50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15),
+                ),
+              ),
+              child: Text(
+                LocaleKeys.publish.localize,
+                style: Styles.mediumText(color: Colors.white),
+                // const TextStyle(color: Colors.white, fontSize: 20),
+              ),
             ),
           ],
         ),

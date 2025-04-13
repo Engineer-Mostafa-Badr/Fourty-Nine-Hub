@@ -20,11 +20,15 @@ class CallControlButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+    final buttonSize = size ?? (screenSize.width * 0.13);
+    final buttonIconSize = iconSize ?? (buttonSize * 0.55);
+
     return GestureDetector(
       onTap: onPressed,
       child: Container(
-        width: size ?? 52,
-        height: size ?? 52,
+        width: buttonSize,
+        height: buttonSize,
         decoration: BoxDecoration(
           color: backgroundColor ?? Color(0xFF1E282A),
           shape: BoxShape.circle,
@@ -32,7 +36,7 @@ class CallControlButton extends StatelessWidget {
         child: Icon(
           icon,
           color: iconColor ?? Colors.white,
-          size: iconSize ?? 30,
+          size: buttonIconSize,
         ),
       ),
     );

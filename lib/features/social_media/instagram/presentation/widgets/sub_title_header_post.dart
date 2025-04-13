@@ -10,13 +10,11 @@ class SubTitleHeaderPost extends StatefulWidget {
   const SubTitleHeaderPost({
     super.key,
     this.country = '',
-    this.city = '',
     required this.isReel,
     this.songName,
   });
 
   final String country;
-  final String city;
   final bool isReel;
   final String? songName;
 
@@ -31,7 +29,7 @@ class _SubTitleHeaderPostState extends State<SubTitleHeaderPost> {
   @override
   void initState() {
     super.initState();
-    if ((widget.city.isNotEmpty || widget.country.isNotEmpty) && widget.songName != null) {
+    if (widget.country.isNotEmpty && widget.songName != null) {
       _timer = Timer.periodic(const Duration(seconds: 2), (timer) {
         if (mounted) {
           setState(() {
@@ -51,7 +49,7 @@ class _SubTitleHeaderPostState extends State<SubTitleHeaderPost> {
   @override
   Widget build(BuildContext context) {
     // إذا لم يكن هناك اسم مدينة ويوجد اسم أغنية
-    if (widget.city.isEmpty && widget.country.isEmpty && widget.songName != null) {
+    if (widget.country.isEmpty && widget.songName != null) {
       return FittedBox(
         child: Row(
           children: [
@@ -59,7 +57,11 @@ class _SubTitleHeaderPostState extends State<SubTitleHeaderPost> {
               Assets.musicNoteIcon,
               height: 14,
               width: 14,
-              color:  Colors.white ,
+              // color: Colors.white,
+              colorFilter: ColorFilter.mode(
+                widget.isReel ? Colors.white : Colors.black,
+                BlendMode.srcIn,
+              ),
             ),
             const SizedBox(width: 2),
             Label(
@@ -108,7 +110,7 @@ class _SubTitleHeaderPostState extends State<SubTitleHeaderPost> {
         mainAxisSize: MainAxisSize.min,
         children: [
           // التبديل بين اسم المدينة واسم الأغنية
-          if(!_showCity) ...[
+          if (!_showCity) ...[
             SvgPicture.asset(
               Assets.musicNoteIcon,
               height: 14,
@@ -120,8 +122,8 @@ class _SubTitleHeaderPostState extends State<SubTitleHeaderPost> {
           FittedBox(
             child: Label(
               text: _showCity
-                  ? '${widget.city}, ${widget.country}'
-                  : (widget.songName ?? '${widget.city}, ${widget.country}'),
+                  ? widget.country
+                  : (widget.songName ?? widget.country),
               style: Styles.mediumText(
                 fontSize: 24,
                 color: widget.isReel ? Colors.white : Colors.black,

@@ -7,6 +7,7 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/utils/time_utils.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/dashboards_cubit/dashboards_cubit.dart';
 import 'package:go_router/go_router.dart';
@@ -45,8 +46,8 @@ class AvailableRideTripItem extends StatelessWidget {
                         height: 50,
                         decoration: const BoxDecoration(shape: BoxShape.circle),
                         clipBehavior: Clip.antiAliasWithSaveLayer,
-                        child: tripEntity.clientImage.isNotEmpty ? Image.network(tripEntity.clientImage, fit: BoxFit.cover,) : Image.asset(
-                          Assets.personalImage,
+                        child: tripEntity.clientGender=='male' ? Image.asset(Assets.maleImagePlaceholder, fit: BoxFit.cover,) : Image.asset(
+                          Assets.femaleImagePlacehlder,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -93,47 +94,76 @@ class AvailableRideTripItem extends StatelessWidget {
                               style:
                                   Styles.mediumText(fontWeight: FontWeight.w300)))
                     ]),
-                   const SizedBox(height: 5), RichText(
-                      text: TextSpan(
-                        text: '${tripEntity.price} ',
-                        style: const TextStyle(color: AppColors.black),
-                        children: <TextSpan>[
-                          TextSpan(
-                              text: LocaleKeys.egp.tr(),
-                              style: const TextStyle(
-                                  fontSize: 14,
-                                  color: AppColors.SECONDARY_COLOR_DARK2)),
-                          TextSpan(
-                              text:
-                                  ' - ${(tripEntity.distance / 1000).toStringAsFixed(2)} ${LocaleKeys.KM.tr()}'),
-                        ],
+                   const SizedBox(height: 5),
+                    Align(
+                      alignment: AlignmentDirectional.centerEnd,
+                      child: RichText(
+                        text: TextSpan(
+                          style: const TextStyle(color: AppColors.black),
+                          children: <TextSpan>[
+                            TextSpan(
+                                text:
+                                '${(tripEntity.distance / 1000).toStringAsFixed(1)} ${LocaleKeys.KM.tr()}'),
+                          ],
+                        ),
                       ),
                     ),
                     state.isLoadingAcceptOffer?const Center(child: CircularProgressIndicator()):Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(
-                          child: AppButton(
-                            height: 30,
-                            radius: 15,
-                            label: LocaleKeys.Accept.tr(),
-                            onPressed: () =>cubit.createOffer(tripId: tripEntity.id,price: tripEntity.price, context: context, subCategoryId: tripEntity.subcategoryId),
-                            backColor: AppColors.PRIMARY_COLOR,
-                          ),
+                          child:ClickableWidget(
+                        onTap: () {
+                          if(tripEntity.isAutoAccept==false){
+                            cubit.createOffer(tripId: tripEntity.id,price: tripEntity.price??0, context: context, subCategoryId: tripEntity.subcategoryId);
+                          }
+                        },
+                child: Container(
+                  height: 30,
+                  margin: const EdgeInsets.all( 0),
+                  padding: const EdgeInsets.symmetric(horizontal:  0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular( 15),
+                    color: AppColors.PRIMARY_COLOR,
+                  ),
+                  alignment: Alignment.center,
+                  child: RichText(
+                    text: TextSpan(
+                      style: const TextStyle(color: AppColors.black),
+                      children: <TextSpan>[
+                        TextSpan(
+                            text:
+                            '${LocaleKeys.Accept.tr()} ${tripEntity.price}  ',
+                        style: Styles.mediumText(
+                          color: Colors.white,
+                        )
+                        ),
+                        TextSpan(
+                            text:
+                            LocaleKeys.egp.tr(),
+                          style: Styles.smallText(
+                            color: Colors.white,
+                          )
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                    )
                         ),
                         const Sizer(),
                         Expanded(
                           child: AppButton(
                             radius: 15,
                             height: 30,
-                            label: !tripEntity.isAutoAccept
+                            label: tripEntity.isAutoAccept==false
                                 ? LocaleKeys.acceptAnothePrice.tr()
                                 : LocaleKeys.refuse.tr(),
                             style: Styles.mediumText(
                                 color: Colors.white,
-                                fontSize: !tripEntity.isAutoAccept ? 23 : 28),
+                                fontSize: tripEntity.isAutoAccept==false ? 28 : 28),
                             onPressed: () {
-                              if (!tripEntity.isAutoAccept) {
+                              if (tripEntity.isAutoAccept==false) {
                                 showModalBottomSheet(
                                   backgroundColor: AppColors.whiteColor,
                                   context: context,
@@ -142,7 +172,7 @@ class AvailableRideTripItem extends StatelessWidget {
                                           top: Radius.circular(15))),
                                   isScrollControlled: true,
                                   builder: (BuildContext context) =>
-                                      EditPriceWidget(price: tripEntity.price,tripEntity: tripEntity, onSendOffer: (num offer) {
+                                      EditPriceWidget(price: tripEntity.price??0,tripEntity: tripEntity, onSendOffer: (num offer) {
                                         context.pop();
                                         cubit.createOffer(tripId: tripEntity.id, price: offer, context: context, subCategoryId: tripEntity.subcategoryId);
                                       },),

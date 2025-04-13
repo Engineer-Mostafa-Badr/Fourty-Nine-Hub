@@ -5,7 +5,6 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 
 import '../../../../res/style/app_colors.dart';
-import '../screen/running_and_past_trips_screen.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 import 'available_ride_mode_widget.dart';
@@ -47,7 +46,7 @@ class _MyRunningTabWidgetState extends State<MyRunningTabWidget> {
                 AvailableRideModeWidget(
                   requestType: context.isArabic ? 'عادي' : 'Regular',
                   cancelButton: false,
-                  statusDriver: "Running",
+                  statusDriver: context.isArabic ? "الحالية " : "Running",
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -66,9 +65,13 @@ class _MyRunningTabWidgetState extends State<MyRunningTabWidget> {
                             GestureDetector(
                               onTap: () => _showOtpBottomSheet(context),
                               child: Text(
-                                "Enter OTP Code",
+                                context.isArabic
+                                    ? "أدخل رمز OTP"
+                                    : "Enter OTP Code",
                                 style: TextStyle(
-                                  color: AppColors.black,
+                                  color: context.isDarkMode
+                                      ? Colors.white
+                                      : AppColors.black,
                                   fontSize: 25.sp,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -86,9 +89,13 @@ class _MyRunningTabWidgetState extends State<MyRunningTabWidget> {
                                 borderRadius: BorderRadius.circular(8),
                                 fieldHeight: 50,
                                 fieldWidth: 40,
-                                activeColor: AppColors.PRIMARY_COLOR,
+                                activeColor: context.isDarkMode
+                                    ? Colors.white
+                                    : AppColors.PRIMARY_COLOR,
                                 inactiveColor: Colors.grey,
-                                selectedColor: AppColors.PRIMARY_COLOR,
+                                selectedColor: context.isDarkMode
+                                    ? Colors.white
+                                    : AppColors.PRIMARY_COLOR,
                               ),
                               animationDuration:
                                   const Duration(milliseconds: 300),
@@ -119,21 +126,22 @@ class _MyRunningTabWidgetState extends State<MyRunningTabWidget> {
             children: [
               SvgPicture.asset(Assets.circleGreen),
               const SizedBox(width: 5),
-              const Text(
+              Text(
                 "Giza, Egypt",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 32.sp, fontWeight: FontWeight.bold),
               ),
             ],
           ),
         ),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 15),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
           child: Text(
-            "1st Client  3 mins",
+            context.isArabic ? "العميل الثاني 3 دقيقة" : "1st Client  3 mins",
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 14,
-              color: AppColors.PRIMARY_COLOR,
+              color:
+                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
             ),
           ),
         ),
@@ -191,15 +199,18 @@ class _MyRunningTabWidgetState extends State<MyRunningTabWidget> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
           ),
-          side: const BorderSide(color: Colors.black, width: 1.5),
+          side: BorderSide(
+            color: context.isDarkMode ? Colors.white : AppColors.black,
+            width: 1.5,
+          ),
           padding: const EdgeInsets.symmetric(vertical: 12),
         ),
         child: Text(
           context.isArabic ? "تقرير العميل" : "Report Client",
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.w900,
-            fontSize: 14,
-            color: Colors.black,
+            fontSize: 28.sp,
+            color: context.isDarkMode ? Colors.white : AppColors.black,
           ),
         ),
       ),
@@ -209,10 +220,13 @@ class _MyRunningTabWidgetState extends State<MyRunningTabWidget> {
   void _showOtpBottomSheet(BuildContext context) {
     final TextEditingController tempController = TextEditingController();
     final FocusNode otpFocusNode = FocusNode();
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     showModalBottomSheet(
+      backgroundColor: Colors.transparent,
       context: context,
       isScrollControlled: true,
+      elevation: 0,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -222,9 +236,25 @@ class _MyRunningTabWidgetState extends State<MyRunningTabWidget> {
             FocusScope.of(context).requestFocus(otpFocusNode);
           }
         });
+
         return StatefulBuilder(
           builder: (context, setModalState) {
-            return Padding(
+            return Container(
+              decoration: BoxDecoration(
+                color: isDarkMode ? Colors.grey[900] : Colors.white,
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(20)),
+                boxShadow: [
+                  BoxShadow(
+                    color: isDarkMode
+                        ? Colors.black.withOpacity(0.3)
+                        : Colors.grey.withOpacity(0.1),
+                    blurRadius: 5,
+                    spreadRadius: 1,
+                    offset: const Offset(0, -2), // جعل الظل للأعلى فقط
+                  ),
+                ],
+              ),
               padding: EdgeInsets.only(
                 left: 16,
                 right: 16,
@@ -247,12 +277,19 @@ class _MyRunningTabWidgetState extends State<MyRunningTabWidget> {
                       borderRadius: BorderRadius.circular(8),
                       fieldHeight: 50,
                       fieldWidth: 40,
-                      activeColor: AppColors.PRIMARY_COLOR,
+                      activeColor: context.isDarkMode
+                          ? Colors.white
+                          : AppColors.PRIMARY_COLOR,
                       inactiveColor: Colors.grey,
-                      selectedColor: AppColors.PRIMARY_COLOR,
+                      selectedColor: context.isDarkMode
+                          ? Colors.white
+                          : AppColors.PRIMARY_COLOR,
                     ),
+                    backgroundColor: Colors.transparent,
+                    enableActiveFill: false,
                     onChanged: (value) {},
                   ),
+                  const SizedBox(height: 20),
                   _buildDoneButton(context),
                 ],
               ),
@@ -269,11 +306,10 @@ class _MyRunningTabWidgetState extends State<MyRunningTabWidget> {
         Expanded(
           child: Center(
             child: Text(
-              "Enter OTP Code",
+              context.isArabic ? "أدخل رمز OTP" : "Enter OTP Code",
               style: TextStyle(
                 fontSize: 30.sp,
                 fontWeight: FontWeight.w900,
-                color: AppColors.PRIMARY_COLOR,
               ),
             ),
           ),

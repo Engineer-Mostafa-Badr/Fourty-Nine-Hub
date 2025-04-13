@@ -8,6 +8,7 @@ import 'package:fourtyninehub/features/authentication/domain/use_cases/register_
 
 import '../../../../../core/abstract/use_case.dart';
 import '../../../../../core/error/failure.dart';
+import '../../../domain/entities/gift_message_entity.dart';
 import '../../../domain/entities/user_tokens_entity.dart';
 import '../../../domain/use_cases/attach_token_use_case.dart';
 import '../../../domain/use_cases/get_welcome_gift_use_case.dart';
@@ -79,7 +80,22 @@ class RegisterCubit extends Cubit<RegisterState> {
       emit(
         result.fold(
           (failure) => RegisterError(failure),
-          (_) => RegisterByPhone(),
+          (data) {
+            print("data.isPhoneVerified ${data.isPhoneVerified}");
+            print("data.tokensEntity.accessToken ${data.tokensEntity.accessToken}");
+            if (data.isPhoneVerified) {
+              _attachToken(data.tokensEntity); // attach to dio
+              _saveTokens(data.tokensEntity);
+              return RegisterByPhone(
+                userTokensEntity: data.tokensEntity,
+                isPhoneVerified: data.isPhoneVerified,
+                giftMessageEntity: data.giftMessageEntity,
+              );
+            }
+            else{
+              return OTPPhoneSent();
+            }
+          },
         ),
       );
     } else if (_isEmail(emailTextController.text.trim())) {

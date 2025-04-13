@@ -280,16 +280,15 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
   }
 
   Future<void> getSettings() async {
-    if (isClosed) {
-      return;
-    }
+    log("getSettingsgetSettings");
+
 
     final Either<Failure, SettingsDashboardEntityResponse> result =
     await getSettingsDashboardUsecase(const NoParams());
-
-    if (isClosed) return;
     result.fold(
           (failure) {
+            log("getSettingsError${getFailureMessage(failure, AppPages.router.configuration.navigatorKey.currentContext!)}");
+
         emit(state.copyWith(status: StateStatus.error, failure: failure));
       },
           (settings) {
@@ -335,15 +334,15 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     // Listen for new locations (only when moved at least 1m)
     locationService.locationUpdates.listen((position) {
       emitDriverLocation(lat: position.latitude, long: position.longitude);
-      Fluttertoast.showToast(
-          msg: "New location (moved at least 1m): ${position.latitude}, ${position.longitude}",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 16.0
-      );
+      // Fluttertoast.showToast(
+      //     msg: "New location (moved at least 1m): ${position.latitude}, ${position.longitude}",
+      //     toastLength: Toast.LENGTH_SHORT,
+      //     gravity: ToastGravity.BOTTOM,
+      //     timeInSecForIosWeb: 1,
+      //     backgroundColor: Colors.green,
+      //     textColor: Colors.white,
+      //     fontSize: 16.0
+      // );
       print('New location (moved at least 1m): ${position.latitude}, ${position.longitude}');
     });
   }

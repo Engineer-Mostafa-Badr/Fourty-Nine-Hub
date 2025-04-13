@@ -8,6 +8,7 @@ import '../banners/back_appbar.dart';
 class WebViewScaffold extends StatefulWidget {
   final String url;
   final String label;
+
   const WebViewScaffold({super.key, required this.label, required this.url});
 
   @override
@@ -16,6 +17,7 @@ class WebViewScaffold extends StatefulWidget {
 
 class _WebViewWidgetState extends State<WebViewScaffold> {
   late WebViewController controller;
+
   @override
   void didChangeDependencies() {
     controller = WebViewController()
@@ -40,7 +42,10 @@ class _WebViewWidgetState extends State<WebViewScaffold> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-        appBar: BackAppBar(label: widget.label),
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(30),
+          child: BackAppBar(label: widget.label),
+        ),
         body: WebViewWidget(controller: controller));
   }
 }

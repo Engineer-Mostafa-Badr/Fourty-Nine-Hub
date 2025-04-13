@@ -32,9 +32,12 @@ class SettingsView extends StatelessWidget {
     final controller = context.read<UserCubit>();
     return CustomScaffold(
         enableCustomAppBar: true,
-        appBar: BackAppBar(
-          label: LocaleKeys.settings.localize,
-          enableCustomAppBar: true,
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(30),
+          child: BackAppBar(
+            label: LocaleKeys.settings.localize,
+            enableCustomAppBar: true,
+          ),
         ),
         body: BlocProvider<SettingCubit>(
           create: (BuildContext context) => serviceLocator(),

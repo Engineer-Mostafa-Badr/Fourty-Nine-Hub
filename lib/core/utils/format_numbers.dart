@@ -1,8 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
-class FormatNumbers{
+class FormatNumbers {
   String formatNumber(num number, {int decimals = 1}) {
     if (number >= 1000 && number < 1000000) {
       return '${(number / 1000).toStringAsFixed(decimals)}K';
@@ -37,7 +38,7 @@ class FormatNumbers{
   }
 }
 
-class FormatDate{
+class FormatDate {
   String formatDate(String dateString) {
     DateTime date = DateTime.parse(dateString).toLocal();
     DateTime now = DateTime.now();
@@ -46,15 +47,40 @@ class FormatDate{
     DateTime yesterday = today.subtract(Duration(days: 1));
     DateTime tomorrow = today.add(Duration(days: 1));
 
-    if (date.year == today.year && date.month == today.month && date.day == today.day) {
+    if (date.year == today.year &&
+        date.month == today.month &&
+        date.day == today.day) {
       return "Today";
-    } else if (date.year == yesterday.year && date.month == yesterday.month && date.day == yesterday.day) {
+    } else if (date.year == yesterday.year &&
+        date.month == yesterday.month &&
+        date.day == yesterday.day) {
       return "Yesterday";
-    } else if (date.year == tomorrow.year && date.month == tomorrow.month && date.day == tomorrow.day) {
+    } else if (date.year == tomorrow.year &&
+        date.month == tomorrow.month &&
+        date.day == tomorrow.day) {
       return "Tomorrow";
     } else {
       return DateFormat('dd/MM/yyyy').format(date);
     }
   }
 
+  String fromatDateLikeMonthDay(BuildContext context, String dateString) {
+    DateTime date = DateTime.parse(dateString).toLocal();
+    if (context.isArabic) {
+      return DateFormat('MMMM d', 'ar').format(date);
+    }
+    return DateFormat('MMMM d', 'en').format(date);
+  }
+
+  // Function to format the timestamp to relative time (e.g., "4d ago")
+  String getRelativeTime(BuildContext context, String createdDate) {
+    final now = DateTime.now();
+    final difference = now.difference(DateTime.parse(createdDate).toLocal());
+
+    if (context.isArabic) {
+      return timeago.format(now.subtract(difference), locale: 'ar_short');
+    } else {
+      return timeago.format(now.subtract(difference), locale: 'en_short');
+    }
+  }
 }

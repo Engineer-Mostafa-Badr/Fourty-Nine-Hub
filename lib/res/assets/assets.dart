@@ -28,7 +28,7 @@ abstract class Assets {
   static String continueEditing = 'assets/icons/continieEditing.svg';
   static String discardPost = 'assets/icons/discardPost.svg';
   static String likeIcon = 'assets/icons/like_icon.svg';
-  static String cameraSvg= "assets/icons/Icon (2).svg";
+  static String cameraSvg = "assets/icons/Icon (2).svg";
   static String commentIcon = 'assets/icons/comment_icon.svg';
   static String sendIcon = 'assets/icons/send_icon.svg';
   static String shareIcon = 'assets/icons/share_icon.svg';
@@ -67,8 +67,21 @@ abstract class Assets {
   static String homeIcon = 'assets/icons/home_icon.svg';
   static String createIcon = 'assets/icons/create_icon.svg';
   static String profile2Icon = 'assets/icons/profile_icon.svg';
-  static String verifiedAccountMarkIcon = 'assets/icons/verified_account_mark_icon.svg';
+  static String verifiedAccountMarkIcon =
+      'assets/icons/verified_account_mark_icon.svg';
   static String musicNoteIcon = 'assets/icons/music_note.svg';
+  static String aMailIcon = 'assets/icons/a_mail_icon.svg';
+  static String facebook2Icon = 'assets/icons/facebook_2_icon.svg';
+  static String appsBlackIcon = 'assets/icons/apps_black_icon.svg';
+  static String appsGreyIcon = 'assets/icons/apps_grey_icon.svg';
+  static String videoGreyIcon = 'assets/icons/video_grey_icon.svg';
+  static String videoIcon = 'assets/icons/video_icon.svg';
+  static String profile2BlackIcon = 'assets/icons/profile_2_black_icon.svg';
+  static String profile2GreyIcon = 'assets/icons/profile_2_grey_icon.svg';
+
+  // Commets
+  static String commentIconsIcon = 'assets/icons/comment_icons_icon.svg';
+  static String commentIconsPng = 'assets/icons/comment_icons_icon.png';
 
   // lottie
   static String loveReaction = 'assets/lottie/love_reaction.json';
@@ -131,6 +144,7 @@ abstract class Assets {
   static String clock = 'assets/icons/clock.png';
   static String single = 'assets/icons/single.png';
   static String married = 'assets/icons/married.png';
+  static String marriedSvg = 'assets/icons/married.svg';
   static String divorced = 'assets/icons/divorce.png';
   static String widowed = 'assets/icons/widowed.png';
   static String uploadImageCamera = 'assets/icons/uploadImage.png';
@@ -143,6 +157,7 @@ abstract class Assets {
   static String openBook = 'assets/images/openBook.png';
   static String social = 'assets/images/social.svg';
   static String hand = 'assets/images/hand.png';
+  static String status = 'assets/images/status.png';
   static String findLogo = 'assets/icons/findLogo.png';
   static String cameraLogo = 'assets/icons/cameraLogo.png';
   static String giftBoxIcon = 'assets/icons/gift-box.png';
@@ -177,8 +192,10 @@ abstract class Assets {
   static String threeDots = 'assets/images/three_dots.svg';
   static String mobile = 'assets/images/mobile_icon.svg';
   static String visa = 'assets/images/visa.png';
-  static String instagramCommentIcon = 'assets/icons/instagram_comment_icon.png';
-  static String instagramSharePostIcon = 'assets/icons/instagram_share_post_icon.png';
+  static String instagramCommentIcon =
+      'assets/icons/instagram_comment_icon.png';
+  static String instagramSharePostIcon =
+      'assets/icons/instagram_share_post_icon.png';
   static String instagramHideIcon = 'assets/icons/instagram_hide_icon.svg';
 
   // reactions
@@ -201,10 +218,11 @@ abstract class Assets {
   static String metaVerified = 'assets/images/meta-verified.jpeg';
   static String driversLicense = 'assets/images/Drivers-license.jpg';
   static String healthBanner = 'assets/images/health_banner.png';
-  static String emergency = 'assets/images/emergency.png';
-  static String doctorHomeVisit = 'assets/images/doctor_home_visit.png';
-  static String doctorCall = 'assets/images/doctor_call.png';
-  static String doctorClinicVisit = 'assets/images/doctor_clinic.png';
+  static String healthBanner1 = 'assets/images/health_banner1.jpeg';
+  static String emergency = 'assets/images/health_emergency.png';
+  static String doctorHomeVisit = 'assets/images/health_home_visit.png';
+  static String doctorCall = 'assets/images/health_call.png';
+  static String doctorClinicVisit = 'assets/images/health_clinic_visit.png';
   static String profileIcon = 'assets/images/profile_icon.png';
   static String chatRoomBackground = 'assets/images/background.png';
   static String maleImagePlaceholder = 'assets/images/male_image.png';
@@ -219,6 +237,7 @@ abstract class Assets {
   static String carImage = "assets/images/car_image.jpg";
   static String personalImage = "assets/images/personal_image.png";
   static String checkSuccessImage = 'assets/images/check_success_image.png';
+  static String checkCircle = 'assets/icons/check-circle.png';
   static String walletImage = 'assets/images/wallet_image.svg';
 
 // .png
@@ -275,7 +294,8 @@ abstract class Assets {
   static String moreIcon = 'assets/icons/more_icon.svg';
 
   // static String notification = 'assets/49-New-icons/Group 1.png';
-  static String notification = 'assets/49-New-icons/bell.png';
+  static String bell = 'assets/49-New-icons/bell.png';
+  static String notification = 'assets/49-New-icons/notification.png';
   static String menu = 'assets/49-New-icons/menu.png';
   static String theme = 'assets/49-New-icons/Group 4.png';
   static String person = 'assets/49-New-icons/Group 6.png';
@@ -293,7 +313,9 @@ abstract class Assets {
   static String cameraIcon = 'assets/icons/camera_icon.svg';
   static String star = 'assets/images/star.png';
   static String tripJoinImage = 'assets/images/tripJoinImage.jpg';
-  static  String azkarPrayer='assets/drawerIcons/azkar_prayer.png';
+  static String azkarPrayer = 'assets/drawerIcons/azkar_prayer.png';
+  static String imageWhiteIcon = 'assets/icons/image_white_icon.svg';
+  static String expandIcon = 'assets/icons/expand_icon.svg';
 
   //! audio
   static String notificationAudioApp = 'audio/notification.mp3';
@@ -352,7 +374,6 @@ abstract class Assets {
   static String reportRed = 'assets/icons/report_red.svg';
   static String arrowUp = 'assets/icons/arrow_up.svg';
 
-
   static String onBoarding1 = 'assets/onBoarding/onBoarding1.svg';
   static String onBoarding2 = 'assets/onBoarding/onBoarding2.svg';
   static String onBoarding3 = 'assets/onBoarding/onBoarding3.svg';
@@ -366,8 +387,8 @@ abstract class Assets {
   static String onBoarding11 = 'assets/onBoarding/onBoarding11.svg';
   static String onBoarding12 = 'assets/onBoarding/onBoarding12.svg';
 
-
-  static String tripJoinCaptainShare = 'assets/images/trip_join/captain_share.png';
+  static String tripJoinCaptainShare =
+      'assets/images/trip_join/captain_share.png';
   static String tripJoinIconSelected = 'assets/images/trip_join/trip_join.png';
   static String tripJoinPickMe = 'assets/images/trip_join/pick_me.png';
   static String maleUser = 'assets/images/trip_join/male_user.png';
@@ -375,8 +396,6 @@ abstract class Assets {
   static String tripJoinCarIcon = 'assets/icons/trip_join_car_icon.png';
   static String tripJoinBabySeatIcon = 'assets/icons/baby_car_seat.png';
   static String tripJoinEathIcon = 'assets/icons/earth_icon.png';
-
-
 
   static const String arrowDown = 'assets/icons/arrow-up.svg';
 
@@ -392,7 +411,9 @@ abstract class Assets {
   static String freeIcon = 'assets/icons/freeIcon.svg';
   static String circleBlue = 'assets/icons/circleBlue.svg';
   static String circleGreen = 'assets/icons/circleGreen.svg';
+  static String circleBlack = 'assets/icons/circleBlack.svg';
   static String frameIcon = 'assets/icons/frameIcon.svg';
+  static String redFrame = 'assets/icons/redFrame.svg';
   static String bookedWoman = 'assets/icons/bookedWoman.svg';
   static String bookedMan = 'assets/icons/bookedMan.svg';
   static String car = 'assets/icons/car.png';
@@ -404,4 +425,11 @@ abstract class Assets {
   static String crown = 'assets/49-New-icons/crown.png';
   static String starGold = 'assets/49-New-icons/star_gold.png';
   static String winners = "assets/49-New-icons/winners.png";
+  static String mealImage = "assets/images/mealImage.jpg";
+  static String car2Image = "assets/images/car.jpg";
+  static String doctorImage = "assets/images/doctor.jpg";
+  static String marriage = "assets/images/marriage.jpg";
+  static String ellipsis = "assets/icons/ellipsis.svg";
+  static String reelBar = "assets/icons/reelBar.svg";
+  static String grid = "assets/icons/grid.png";
 }

@@ -168,14 +168,20 @@ class WalletRemoteDataSourceImpl implements WalletRemoteDataSource {
       getGiftCompetitions() async {
     final response = await _apiConsumer.get(EndPoints.getGiftAndCompetitions);
 
-    return response.fold(
-      (failure) => Left(failure),
-      (response) {
-        // final list = (response['data'] as List)
-        //     .map((e) => GiftCompetitionModel.fromJson(e))
-        //     .toList();
-        return Right(GiftAndCompetitionModel.fromJson(response['data']));
-      },
-    );
+    try {
+      return response.fold(
+        (failure) => Left(failure),
+        (response) {
+          // final list = (response['data'] as List)
+          //     .map((e) => GiftCompetitionModel.fromJson(e))
+          //     .toList();
+          return Right(GiftAndCompetitionModel.fromJson(response['data']));
+        },
+      );
+    } catch (e) {
+      final error = (e is Map && e['error'] is Map) ? e['error'] as Map : null;
+      return Left(
+          UnknownFailure(error != null ? error.toString() : 'Unknown error'));
+    }
   }
 }

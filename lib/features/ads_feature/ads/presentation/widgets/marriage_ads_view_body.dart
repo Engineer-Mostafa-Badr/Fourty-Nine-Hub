@@ -15,11 +15,12 @@ import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/marr
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/marriage_request.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/sub_category_list_view_item.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
-import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcategories_cubit.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../../../../res/style/app_colors.dart';
 
 class MarriageAdsViewBody extends StatelessWidget {
   const MarriageAdsViewBody({
@@ -61,15 +62,51 @@ class MarriageAdsViewBody extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Row(
             children: [
+              const Icon(
+                Icons.search,
+                color: AppColors.PRIMARY_COLOR,
+              ),
+              const SizedBox(
+                width: 8,
+              ),
               Expanded(
                 child: CustomNotificationBadge(
-                  count: 22,
+                  count: 0,
+                  child: HeaderButtonWidget(
+                    title: LocaleKeys.favouriteAds.localize,
+                    isOpened:
+                        context.read<SubcategoriesCubit>().isFavouriteAdsOpen,
+                    onPressed: () {
+                      context
+                          .read<SubcategoriesCubit>()
+                          .getRequestsLog('62c8b5b09332225799fe335e');
+
+                      context
+                          .read<SubcategoriesCubit>()
+                          .toggleMyAds('isFavouriteAdsOpen');
+                    },
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              Expanded(
+                child: CustomNotificationBadge(
+                  count: 0,
                   child: HeaderButtonWidget(
                     title: LocaleKeys.requestLog.localize,
                     isOpened:
                         context.read<SubcategoriesCubit>().isRequestLogOpen,
                     onPressed: () {
-                      context.read<SubcategoriesCubit>().toggleRequestLog();
+                      context
+                          .read<SubcategoriesCubit>()
+                          .getRequestsLog('62c8b5b09332225799fe335e');
+                      context
+                          .read<SubcategoriesCubit>()
+                          .toggleMyAds('isRequestLogOpen');
+
+                      // context.read<SubcategoriesCubit>().toggleRequestLog();
                     },
                   ),
                 ),
@@ -83,8 +120,11 @@ class MarriageAdsViewBody extends StatelessWidget {
                   isOpened: context.read<SubcategoriesCubit>().isMyAdsOpen,
                   onPressed: () {
                     // TODO: EDIT THIS
-                    // context.read<SubcategoriesCubit>().toggleMyAds();
-                    context.push(Routes.MYADDS);
+                    context.read<SubcategoriesCubit>().getMarriageMyAds();
+                    context
+                        .read<SubcategoriesCubit>()
+                        .toggleMyAds('isMyAdsOpen');
+                    // context.push(Routes.MYADDS);
                   },
                 ),
               ),
@@ -102,7 +142,7 @@ class MarriageAdsViewBody extends StatelessWidget {
                 child: FilterButtonItem(
                   title: LocaleKeys.filter.localize,
                   onTap: () async {
-                    context.push(
+                    dynamic data = await context.push(
                       Routes.FILTERADS,
                       extra: CategorizationEntity(
                         mainCategory: state.mainCategory!,
@@ -113,18 +153,14 @@ class MarriageAdsViewBody extends StatelessWidget {
                             0],
                       ),
                     );
-                    // if (data != null) {
-                    //   print("objectsdaa");
-                    //   // Future.delayed(const Duration(seconds: 1), () =>
-                    //   //     controller.changeState(data, data != null));
-                    //   // context.read<AdvertisementCubit>().loadFilterData(
-                    //   //     model: data,
-                    //   //     filter: userType);
-                    //   controller.changeFilterModel(data);
-                    //
-                    //   controller.loadFilterData(
-                    //       model: data, filter: 'user');
-                    // }
+                    if (data != null) {
+                      print("objectsdaa");
+                      controller.changeFilterModel(data);
+                      controller.loadFilterData(
+                        model: data,
+                        filter: 'user',
+                      );
+                    }
                   },
                 ),
               ),
@@ -151,61 +187,12 @@ class MarriageAdsViewBody extends StatelessWidget {
                       controller.state.city = data.cityId;
                       controller.state.governorate = data.governorateId;
                       controller.changeFilterModel(data);
-                      FilterModel model = FilterModel(
-                          cityId: "state.city",
-                          governorateId: "state.governorate");
-                      // Future.delayed(const Duration(seconds: 1), () =>
-                      //     controller.changeState(data, data != null));
-                      // context.read<AdvertisementCubit>().loadFilterData(
-                      //     model: data,
-                      //     filter: userType);
                       await controller.loadFilterData(
                           model: data, filter: 'user');
                     }
                   },
                 ),
               ),
-              // Expanded(
-              //   child: BadgedLabel(
-              //       label: LocaleKeys.city.localize,
-              //       style: Styles.mediumText(
-              //         color: Colors.white,
-              //         fontSize: 32,
-              //       ),
-              //       icon: Icons.filter_alt_rounded,
-              //       padding:
-              //           EdgeInsets.symmetric(vertical: 15.h, horizontal: 5.w),
-              //       iconLeading: Icons.arrow_drop_down,
-              //       onTap: () async {
-              //         dynamic data = await context.push(
-              //             Routes.GOVERNORATEFILTERADS,
-              //             extra: CategorizationEntity(
-              //                 mainCategory: state.mainCategory!,
-              //                 fromMarriage: true,
-              //                 subCategory: state.subCategories![
-              //                     state.subCategories?.indexWhere((element) =>
-              //                             element.isSelected == true) ??
-              //                         0]));
-              //         if (data != null) {
-              //           print("data.cityId${data.cityId}");
-              //           print("data.governorateId${data.governorateId}");
-              //           print("objectsdaa");
-              //           controller.state.city = data.cityId;
-              //           controller.state.governorate = data.governorateId;
-              //           controller.changeFilterModel(data);
-              //           FilterModel model = FilterModel(
-              //               cityId: "state.city",
-              //               governorateId: "state.governorate");
-              //           // Future.delayed(const Duration(seconds: 1), () =>
-              //           //     controller.changeState(data, data != null));
-              //           // context.read<AdvertisementCubit>().loadFilterData(
-              //           //     model: data,
-              //           //     filter: userType);
-              //           await controller.loadFilterData(
-              //               model: data, filter: 'user');
-              //         }
-              //       }),
-              // ),
             ],
           ),
         ),
@@ -216,10 +203,7 @@ class MarriageAdsViewBody extends StatelessWidget {
           height: 32,
           child: ListView.separated(
             itemCount: state.subCategories?.length ?? 0,
-            // controller: _scrollController,
             scrollDirection: Axis.horizontal,
-            // gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            //     crossAxisCount: 3, childAspectRatio: 1),
             itemBuilder: (context, index) {
               return Padding(
                 padding: EdgeInsetsDirectional.only(
@@ -281,6 +265,7 @@ class MarriageAdsViewBody extends StatelessWidget {
 
     // Requests Log
     if (context.read<SubcategoriesCubit>().isRequestLogOpen) {
+      print('state.adsRequestsLog ${state.adsRequestsLog?.length}');
       if (state.adsRequestsLog == null) {
         return SizedBox(
           child: Label(
@@ -293,7 +278,28 @@ class MarriageAdsViewBody extends StatelessWidget {
       if (state.adsRequestsLog!.isEmpty) {
         return CustomEmptyWidget(label: LocaleKeys.noRequests.localize);
       }
+      return MarriageRequest(
+        scrollController: _scrollController,
+        controller: controller,
+        state: state,
+      );
+    }
 
+    // Favourite Ads
+    if (context.read<SubcategoriesCubit>().isFavouriteAdsOpen) {
+      print('state.adsRequestsLog ${state.adsRequestsLog?.length}');
+      if (state.adsRequestsLog == null) {
+        return SizedBox(
+          child: Label(
+            text: 'My Ads is Null',
+            style: Styles.headerText(),
+          ),
+        );
+      }
+
+      if (state.adsRequestsLog!.isEmpty) {
+        return CustomEmptyWidget(label: LocaleKeys.noRequests.localize);
+      }
       return MarriageRequest(
         scrollController: _scrollController,
         controller: controller,
@@ -302,10 +308,10 @@ class MarriageAdsViewBody extends StatelessWidget {
     }
 
     // Ads
+    print('state.adds ${state.ads}');
     if (state.ads == null) {
       return const SizedBox();
     }
-
     if (state.ads!.isEmpty) {
       return CustomEmptyWidget(
         label: LocaleKeys.noAds.localize,
@@ -317,36 +323,5 @@ class MarriageAdsViewBody extends StatelessWidget {
       controller: controller,
       state: state,
     );
-    // return state.status == SubcategoriesStates.loadingAds
-    //     ? const CustomLoading()
-    //     : context.read<SubcategoriesCubit>().isMyAdsOpen
-    //         ? state.myAds == null
-    //             ? SizedBox(
-    //                 child: Label(
-    //                   text: 'My Ads is Null',
-    //                   style: Styles.headerText(),
-    //                 ),
-    //               )
-    //             : state.myAds!.isEmpty
-    //                 ? CustomEmptyWidget(label: LocaleKeys.noAds.localize)
-    //                 : MarriageMyAds(
-    //                     scrollController: _scrollController,
-    //                     controller: controller,
-    //                     state: state,
-    //                   )
-    //         : state.ads == null
-    //             ? const SizedBox()
-    //             : state.ads!.isEmpty
-    //                 ? CustomEmptyWidget(
-    //                     label: LocaleKeys.noAds.localize,
-    //                   )
-    //                 : Padding(
-    //                     padding: const EdgeInsets.symmetric(horizontal: 16),
-    //                     child: MarriageAdsListView(
-    //                       scrollController: _scrollController,
-    //                       controller: controller,
-    //                       state: state,
-    //                     ),
-    //                   );
   }
 }

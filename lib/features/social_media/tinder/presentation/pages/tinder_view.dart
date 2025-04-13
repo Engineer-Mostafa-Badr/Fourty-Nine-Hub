@@ -84,49 +84,52 @@ class _TinderScreenState extends State<TinderScreen> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: BackAppBar(
-        label: LocaleKeys.tinder_find.tr(),
-        actions: [
-          // The text behind the icon
-          Text(
-            isMaleSelected!
-                ? context.isArabic
-                    ? "ذكر"
-                    : 'Male'
-                : context.isArabic
-                    ? "انثى"
-                    : 'Female',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: isMaleSelected!
-                  ? AppColors.PRIMARY_COLOR
-                  : AppColors.PRIMARY_COLOR_DARK, // Subtle background color
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          label: LocaleKeys.tinder_find.tr(),
+          actions: [
+            // The text behind the icon
+            Text(
+              isMaleSelected!
+                  ? context.isArabic
+                      ? "ذكر"
+                      : 'Male'
+                  : context.isArabic
+                      ? "انثى"
+                      : 'Female',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: isMaleSelected!
+                    ? AppColors.PRIMARY_COLOR
+                    : AppColors.PRIMARY_COLOR_DARK, // Subtle background color
+              ),
             ),
-          ),
-          IconButton(
-            onPressed: () {
-              setState(() {
-                isMaleSelected = !isMaleSelected!; // Toggle the state
-                final tinderCubit = context.read<TinderViewCubit>();
-                tinderCubit
-                  ..fetchUserData(gender: isMaleSelected! ? 'female' : 'male', isLoggedIn: context.isUserLoggedIn, userId: context.isUserLoggedIn ? context.read<UserCubit>().state.data!.id : "")
-                  // ..fetchSubCategoryData()
-                  ..fetchFavorites();
-              });
-            },
-            icon: Icon(
-              isMaleSelected! ? Icons.male : Icons.female,
-              size: 28,
-              color: isMaleSelected!
-                  ? AppColors.PRIMARY_COLOR
-                  : AppColors.PRIMARY_COLOR_DARK, // Optional styling
+            IconButton(
+              onPressed: () {
+                setState(() {
+                  isMaleSelected = !isMaleSelected!; // Toggle the state
+                  final tinderCubit = context.read<TinderViewCubit>();
+                  tinderCubit
+                    ..fetchUserData(gender: isMaleSelected! ? 'female' : 'male', isLoggedIn: context.isUserLoggedIn, userId: context.isUserLoggedIn ? context.read<UserCubit>().state.data!.id : "")
+                    // ..fetchSubCategoryData()
+                    ..fetchFavorites();
+                });
+              },
+              icon: Icon(
+                isMaleSelected! ? Icons.male : Icons.female,
+                size: 28,
+                color: isMaleSelected!
+                    ? AppColors.PRIMARY_COLOR
+                    : AppColors.PRIMARY_COLOR_DARK, // Optional styling
+              ),
+              tooltip: isMaleSelected!
+                  ? 'Male'
+                  : 'Female', // Tooltip for accessibility
             ),
-            tooltip: isMaleSelected!
-                ? 'Male'
-                : 'Female', // Tooltip for accessibility
-          ),
-        ],
+          ],
+        ),
       ),
       body: BlocBuilder<TinderViewCubit, TinderViewState>(
         builder: (context, state) {

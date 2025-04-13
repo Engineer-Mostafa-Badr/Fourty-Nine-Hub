@@ -11,6 +11,7 @@ class SharedCommonNavigator extends StatelessWidget {
   final Widget body;
   final bool showBottomNavigator;
   final bool showFloatingButton;
+
   const SharedCommonNavigator(
       {super.key,
       required this.mainCategory,
@@ -21,7 +22,10 @@ class SharedCommonNavigator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: const HomeAppbar(),
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(30),
+        child: HomeAppbar(),
+      ),
       drawer: const DrawerWidget(),
       bottomNavigationBar: showBottomNavigator
           ? BottomNavigator(

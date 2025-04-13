@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/repositories/ads_repo.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_ads_usecase.dart';
 import 'package:fourtyninehub/features/requests_history/domain/entities/trip_entity.dart';
@@ -47,5 +48,11 @@ class AdsRepoImpl implements AdsRepo {
   @override
   Future<Either<Failure, bool>> removeFavouriteAd({required String params}) {
     return _remoteDataSource.removeFavouriteAd(params: params);
+  }
+
+  @override
+  Future<Either<Failure, List<AdModel>>> getMyAdById(String params) {
+    return _remoteDataSource.getMyAdById(params);
+
   }
 }

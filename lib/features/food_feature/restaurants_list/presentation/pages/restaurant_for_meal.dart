@@ -31,8 +31,11 @@ class _RestaurantForSelectedMealState extends State<RestaurantForSelectedMeal> {
   Widget build(BuildContext context) {
     return CustomScaffold(
       backgroundColor: scaffoldDarkColor(context),
-      appBar: BackAppBar(
-        label: LocaleKeys.restaurantsForSelectedMeal.tr(),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          label: LocaleKeys.restaurantsForSelectedMeal.tr(),
+        ),
       ),
       body: SafeArea(
         child: BlocProvider.value(

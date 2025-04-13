@@ -17,19 +17,24 @@ class GiftView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: BackAppBar(
-        label: LocaleKeys.gift.localize,
-        actions: [
-          CustomWinnerAppbar(
-            onPressed: () {
-              context.push(Routes.WINNERSGift);
-            },
-          ),
-        ],
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          // backColor:Colors.red,
+          label: LocaleKeys.gift.localize,
+          actions: [
+            CustomWinnerAppbar(
+              onPressed: () {
+                context.push(Routes.WINNERSGift);
+              },
+            ),
+          ],
+        ),
       ),
       body: BlocProvider(
         create: (context) =>
-            serviceLocator<GiftTwoCubit>()..getAllData(context),
+        serviceLocator<GiftTwoCubit>()
+          ..getAllData(context),
         child: const GiftViewBody(),
       ),
     );

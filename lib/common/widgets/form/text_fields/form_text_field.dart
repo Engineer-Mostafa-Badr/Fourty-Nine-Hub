@@ -30,6 +30,7 @@ class FormTextField extends StatelessWidget {
   final TextStyle? style;
   final String? Function(String?)? validator;
   final Color? fillColor;
+  final Color? borderColor;
   final bool noBorder;
   final bool? readOnly;
   final TextStyle? hintStyle;
@@ -68,7 +69,7 @@ class FormTextField extends StatelessWidget {
       this.validator,
       this.required,
       this.controller,
-      this.textStyle});
+      this.textStyle, this.borderColor});
 
   bool validate = false;
 
@@ -129,7 +130,7 @@ class FormTextField extends StatelessWidget {
             labelText: label,
             hintStyle: style ??
                 Styles.mediumText(
-                    fontSize: 14, color: AppColors.GREY_DARK_COLOR),
+                    fontSize: 25, color: AppColors.GREY_DARK_COLOR),
             // labelStyle: style ??
             //     TextStyle(fontSize: 30.sp, color: AppColors.QUANTITY_COLOR),
             prefixIcon: prefix,
@@ -137,21 +138,21 @@ class FormTextField extends StatelessWidget {
             enabledBorder: noBorder
                 ? InputBorder.none
                 : OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: AppColors.GREYFIELD,
+                    borderSide: BorderSide(
+                      color:borderColor??AppColors.GREYFIELD,
                     ),
                     borderRadius: borderRadius ?? BorderRadius.circular(5),
                   ),
             focusedBorder: noBorder
                 ? InputBorder.none
                 : OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: AppColors.GREYFIELD,
+                    borderSide:  BorderSide(
+                      color:borderColor??AppColors.GREYFIELD,
                     ),
                     borderRadius: borderRadius ?? BorderRadius.circular(5),
                   ),
             errorBorder: OutlineInputBorder(
-              borderSide: const BorderSide(
+              borderSide:  BorderSide(
                 color: Colors.red,
               ),
               borderRadius: borderRadius ?? BorderRadius.circular(5),
