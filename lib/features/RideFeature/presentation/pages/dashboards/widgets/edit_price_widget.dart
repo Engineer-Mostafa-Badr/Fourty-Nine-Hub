@@ -8,7 +8,6 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/av
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../../../res/assets/assets.dart';
-import '../../../../domain/entities/dashboards/trip_entity.dart';
 import '../../widgets/font_manager.dart';
 
 class EditPriceWidget extends StatefulWidget {

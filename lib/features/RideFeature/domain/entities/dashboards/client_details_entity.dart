@@ -4,7 +4,7 @@ class ClientDetailsEntity {
   final String firstName;
   final String profilePictureUrl;
   final String gender;
-  final RatingEntity? rating;
+  final RatingEntityy? rating;
 
   ClientDetailsEntity({
     required this.firstName,

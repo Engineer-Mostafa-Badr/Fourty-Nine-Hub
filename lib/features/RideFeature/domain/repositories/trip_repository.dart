@@ -19,6 +19,7 @@ abstract class TripRepository {
    Future<Either<Failure, SettingsDashboardEntityResponse>> getSettings();
    Future<Either<Failure, bool>> updateSettings(UpdateSettingsDashboardUsecaseParam params);
    Future<Either<Failure, bool>> createNewOffer(CreateNewOfferDashboardUsecaseParam params);
+   Future<Either<Failure, bool>> createNewOfferNonSocket(CreateNewOfferDashboardUsecaseParam params);
    Future<Either<Failure, bool>> createDriverRating(CreateUpdateDriverRatingUsecaseParam params);
    Future<Either<Failure, bool>> updateDriverRating(CreateUpdateDriverRatingUsecaseParam params);
    void listenToUpdateTripAutoAccept(Function(UpdateTripAutoAcceptEntity trip) params);

@@ -15,3 +15,4 @@ class TripDataEntity {
 
   TripDataEntity({required this.trips, required this.pagination});
 }
+

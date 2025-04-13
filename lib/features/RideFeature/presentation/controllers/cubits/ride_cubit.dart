@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
@@ -70,7 +69,6 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:icons_launcher/utils/cli_logger.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../../../../../core/data/datasources/remote/socket/socket_data_source.dart';
@@ -79,6 +77,7 @@ import '../../../../../shared_web_socket.dart';
 import '../../../domain/entities/ride_category_entity.dart';
 import '../../../domain/usecases/get_ride_categories_usecase.dart';
 import 'package:record/record.dart';
+
 
 class RideCubit extends Cubit<RideState> {
   bool isComfort = false;
@@ -93,6 +92,33 @@ class RideCubit extends Cubit<RideState> {
 
   bool hasPendingShownBottomSheet = false;
   bool hasAcceptedShownBottomSheet = false;
+
+  bool selectedCategoryIsSocket = true;
+  String subCategoryId = '';
+
+  Map<String, String> socketCategories = {
+    'captain': '62c8ba9f8e28a58a3edf57eb',
+    'lady': '62ea012a69ea29c91dfc3917',
+    'intercity': '62c8baa08e28a58a3edf57ed',
+    'premium': '62c8baa38e28a58a3edf57f3',
+    'taxi': '62c8ba9e8e28a58a3edf57e9',
+    'suv': '62c8baa28e28a58a3edf57f1',
+    'scooter': '6698736fdaa111da2d775627',
+  };
+  Map<String, String> trukCategories = {
+    'Trucycle': '63044ea31df1280e87614fe4',
+    'Delivery ': '62c8bab78e28a58a3edf5819',
+    'Pickup': '62c8baad8e28a58a3edf5805',
+    'Jumbo': '62c8baae8e28a58a3edf5807',
+    'Tow': '62c8bab48e28a58a3edf5813',
+    'Money': '62c8bab68e28a58a3edf5817',
+    'Trailer': '62c8baaf8e28a58a3edf5809',
+    'Flatbed': '62c8bab28e28a58a3edf580f',
+    'Tank ': '62c8bab18e28a58a3edf580d',
+    'Tipper': '62c8bab08e28a58a3edf580b',
+    'Refriger': '62c8bab38e28a58a3edf5811',
+    'Transport': '62c8bab88e28a58a3edf581b',
+  };
 
   final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
 
@@ -154,10 +180,10 @@ class RideCubit extends Cubit<RideState> {
     this.listenToRideOffersUseCase,
     this.acceptOfferByClientUseCase,
     this.updateTripAutoAcceptByClientUseCase,
-      this.updateSocketLocationUseCase,
-  ) : super( RideState(
-    rideOffers: [],
-  )){
+    this.updateSocketLocationUseCase,
+  ) : super(RideState(
+          rideOffers: [],
+        )) {
     listenToRideOffers();
   }
 
@@ -168,21 +194,36 @@ class RideCubit extends Cubit<RideState> {
     await Future.wait([
       _fetchUserLocation(),
       _fetchUserLocation(),
-      fetchRideDriverInfo(context,false),
-      fetchRideDriverInfo(context,true),
+      fetchRideDriverInfo(context, false),
+      fetchRideDriverInfo(context, true),
       retrieveClientLatestTrip(),
-      fetchRideDriverInfo(context,false),
+      fetchRideDriverInfo(context, false),
       getCostPerKm(),
-      fetchLoaderInfo(context,false),
-      fetchLoaderInfo(context,true),
+      fetchLoaderInfo(context, false),
+      fetchLoaderInfo(context, true),
       fetchRideDriverPictureOptional(context),
-      fetchRideCategories(UserCubit.to.state.data?.id??'',false),
-      fetchRideCategories(UserCubit.to.state.data?.id??'',true),
-      fetchShippingCategories(UserCubit.to.state.data?.id??'',false),
-      fetchShippingCategories(UserCubit.to.state.data?.id??'',true),
+      fetchRideCategories(UserCubit.to.state.data?.id ?? '', false),
+      fetchRideCategories(UserCubit.to.state.data?.id ?? '', true),
+      fetchShippingCategories(UserCubit.to.state.data?.id ?? '', false),
+      fetchShippingCategories(UserCubit.to.state.data?.id ?? '', true),
       fetchRideGovernorates(),
     ]);
     loadingHomeData = false;
+    emit(state.copyWith(status: RideStates.success));
+  }
+
+  bool isTruk = false;
+  void checkSelectedCategoryIsSocket(String selectedCategory) {
+    if (socketCategories.containsValue(selectedCategory)) {
+      selectedCategoryIsSocket = true;
+    } else if (trukCategories.containsValue(selectedCategory)) {
+      selectedCategoryIsSocket = false;
+      isTruk = true;
+    } else {
+      isTruk = false;
+      selectedCategoryIsSocket = false;
+    }
+    log(selectedCategoryIsSocket.toString());
     emit(state.copyWith(status: RideStates.success));
   }
 
@@ -191,17 +232,22 @@ class RideCubit extends Cubit<RideState> {
 
     try {
       Position position = await _determinePosition();
-      List<Placemark> placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
+      List<Placemark> placemarks =
+          await placemarkFromCoordinates(position.latitude, position.longitude);
 
-      String address = placemarks.isNotEmpty ? "${placemarks.first.street}, ${placemarks.first.locality}, ${placemarks.first.country}" : "Unknown current Location";
+      String address = placemarks.isNotEmpty
+          ? "${placemarks.first.street}, ${placemarks.first.locality}, ${placemarks.first.country}"
+          : "Unknown current Location";
 
-      GetLocationFromAddressEntity currentLocation = GetLocationFromAddressEntity(
+      GetLocationFromAddressEntity currentLocation =
+          GetLocationFromAddressEntity(
         lat: position.latitude,
         lng: position.longitude,
         address: address,
       );
 
-      emit(state.copyWith(status: RideStates.success, currentLocation: currentLocation));
+      emit(state.copyWith(
+          status: RideStates.success, currentLocation: currentLocation));
     } catch (e) {
       log('_fetchUserLocation ${e.toString()}');
     }
@@ -258,28 +304,39 @@ class RideCubit extends Cubit<RideState> {
   TextEditingController rideSurNameController = TextEditingController();
   TextEditingController rideDateOfBirthController = TextEditingController();
   TextEditingController ridePhoneNumberController = TextEditingController();
-  TextEditingController rideDriverLicenseNumController = TextEditingController();
-  TextEditingController rideDriverExpireDateController = TextEditingController();
-  TextEditingController ridePersonalDocLicenseNumController = TextEditingController();
-  TextEditingController ridePersonalDocIdNumController = TextEditingController();
-  TextEditingController ridePersonalDocExpireDateController = TextEditingController();
-  TextEditingController rideVehicleLicenseNumController = TextEditingController();
-  TextEditingController rideVehicleExpireDateController = TextEditingController();
-  TextEditingController rideDragAnalysisExpireDateController = TextEditingController();
-  TextEditingController rideTechnicalExaminationExpireDateController = TextEditingController();
-  TextEditingController rideCriminalRecordExpireDateController = TextEditingController();
-  TextEditingController rideVehicleProductionYearController = TextEditingController();
-  TextEditingController rideVehiclePlateNumberController = TextEditingController();
+  TextEditingController rideDriverLicenseNumController =
+      TextEditingController();
+  TextEditingController rideDriverExpireDateController =
+      TextEditingController();
+  TextEditingController ridePersonalDocLicenseNumController =
+      TextEditingController();
+  TextEditingController ridePersonalDocIdNumController =
+      TextEditingController();
+  TextEditingController ridePersonalDocExpireDateController =
+      TextEditingController();
+  TextEditingController rideVehicleLicenseNumController =
+      TextEditingController();
+  TextEditingController rideVehicleExpireDateController =
+      TextEditingController();
+  TextEditingController rideDragAnalysisExpireDateController =
+      TextEditingController();
+  TextEditingController rideTechnicalExaminationExpireDateController =
+      TextEditingController();
+  TextEditingController rideCriminalRecordExpireDateController =
+      TextEditingController();
+  TextEditingController rideVehicleProductionYearController =
+      TextEditingController();
+  TextEditingController rideVehiclePlateNumberController =
+      TextEditingController();
   TextEditingController ridePricingPerKmController = TextEditingController();
   TextEditingController rideCarModelController = TextEditingController();
 
-  Future<void> fetchRideCategories(String userId,bool refresh) async {
+  Future<void> fetchRideCategories(String userId, bool refresh) async {
     emit(state.copyWith(status: RideStates.loading));
 
-    final Either<Failure, RideCategoryEntityUpdated> result = await getRideCategories(GetRideCategoriesParams(
-      userId: userId,
-      refresh: refresh
-    ));
+    final Either<Failure, RideCategoryEntityUpdated> result =
+        await getRideCategories(
+            GetRideCategoriesParams(userId: userId, refresh: refresh));
 
     result.fold(
       (failure) {
@@ -303,34 +360,43 @@ class RideCubit extends Cubit<RideState> {
         //       item.isEnabled = false;
         //     }
         //   }
-        emit(state.copyWith(status: RideStates.success, rideCategory: rideCategory, rideSubCategories: rideCategory.subCategories));
+        emit(state.copyWith(
+            status: RideStates.success,
+            rideCategory: rideCategory,
+            rideSubCategories: rideCategory.subCategories));
       },
     );
   }
 
-  Future<void> fetchShippingCategories(String userId,bool refresh) async {
+  Future<void> fetchShippingCategories(String userId, bool refresh) async {
     emit(state.copyWith(status: RideStates.loading));
 
-    final Either<Failure, RideCategoryEntityUpdated> result = await getShippingCategoriesUsecase(GetRideCategoriesParams(userId: userId, refresh: refresh));
+    final Either<Failure, RideCategoryEntityUpdated> result =
+        await getShippingCategoriesUsecase(
+            GetRideCategoriesParams(userId: userId, refresh: refresh));
 
     result.fold(
-          (failure) => emit(state.copyWith(status: RideStates.error, failure: failure)),
-          (rideCategory) async {
-            // LoadingRegisterEntity? loadingCachedData = await Storage().getLoaderEntity();
-            // List<SubCategoryEntityUpdated>? rideSubCategories = rideCategory.subCategories;
-            // for (var item in rideSubCategories) {
-            //   List<String> subcategoryIds = [];
-            //   subcategoryIds.add(loadingCachedData?.categoryId??'');
-            //   if (subcategoryIds.contains(item.subCategoryId)) {
-            //     item.isSelected = true;
-            //     item.isEnabled = true;
-            //   }else{
-            //     item.isSelected = false;
-            //     item.isEnabled = false;
-            //   }
-            // }
-            emit(state.copyWith(status: RideStates.success, shippingCategory: rideCategory, shippingSubCategories: rideCategory.subCategories));
-            },
+      (failure) =>
+          emit(state.copyWith(status: RideStates.error, failure: failure)),
+      (rideCategory) async {
+        // LoadingRegisterEntity? loadingCachedData = await Storage().getLoaderEntity();
+        // List<SubCategoryEntityUpdated>? rideSubCategories = rideCategory.subCategories;
+        // for (var item in rideSubCategories) {
+        //   List<String> subcategoryIds = [];
+        //   subcategoryIds.add(loadingCachedData?.categoryId??'');
+        //   if (subcategoryIds.contains(item.subCategoryId)) {
+        //     item.isSelected = true;
+        //     item.isEnabled = true;
+        //   }else{
+        //     item.isSelected = false;
+        //     item.isEnabled = false;
+        //   }
+        // }
+        emit(state.copyWith(
+            status: RideStates.success,
+            shippingCategory: rideCategory,
+            shippingSubCategories: rideCategory.subCategories));
+      },
     );
   }
 
@@ -338,7 +404,8 @@ class RideCubit extends Cubit<RideState> {
     // if (isClosed) return false;
     emit(state.copyWith(status: RideStates.loadingSubmit));
     bool isSuccess = true;
-    final Either<Failure, bool> result = await makeRequestTripUseCase(const NoParams());
+    final Either<Failure, bool> result =
+        await makeRequestTripUseCase(const NoParams());
 
     // if (isClosed) return false;
     result.fold(
@@ -346,7 +413,7 @@ class RideCubit extends Cubit<RideState> {
         emit(state.copyWith(status: RideStates.error, failure: failure));
       },
       (data) {
-         isSuccess = data;
+        isSuccess = data;
         emit(state.copyWith(status: RideStates.success));
       },
     );
@@ -354,25 +421,32 @@ class RideCubit extends Cubit<RideState> {
   }
 
   Future<void> getCostPerKm() async {
-    if (isClosed) return; // Prevents state emission if the cubit is already disposed.
+    if (isClosed) {
+      return; // Prevents state emission if the cubit is already disposed.
+    }
     emit(state.copyWith(status: RideStates.loading));
 
-    final Either<Failure, CostPerKmEntity> result = await getCostPerKmUseCase(const NoParams());
+    final Either<Failure, CostPerKmEntity> result =
+        await getCostPerKmUseCase(const NoParams());
 
     if (isClosed) return; // Double-check before emitting a state
     result.fold(
-      (failure) => emit(state.copyWith(status: RideStates.error, failure: failure)),
+      (failure) =>
+          emit(state.copyWith(status: RideStates.error, failure: failure)),
       (data) {
         emit(state.copyWith(status: RideStates.success, costPerKm: data));
       },
     );
   }
 
-  Future<void> fetchRideDriverInfo(BuildContext context,bool refresh) async {
-    if (isClosed) return; // Prevents state emission if the cubit is already disposed.
+  Future<void> fetchRideDriverInfo(BuildContext context, bool refresh) async {
+    if (isClosed) {
+      return; // Prevents state emission if the cubit is already disposed.
+    }
     emit(state.copyWith(status: RideStates.loading));
 
-    final Either<Failure, DriverInfoEntity> result = await getRideDriverInfoUseCase(refresh);
+    final Either<Failure, DriverInfoEntity> result =
+        await getRideDriverInfoUseCase(refresh);
 
     if (isClosed) return; // Double-check before emitting a state
     result.fold(
@@ -399,11 +473,14 @@ class RideCubit extends Cubit<RideState> {
     );
   }
 
-  Future<void> fetchLoaderInfo(BuildContext context,bool refresh) async {
-    if (isClosed) return; // Prevents state emission if the cubit is already disposed.
+  Future<void> fetchLoaderInfo(BuildContext context, bool refresh) async {
+    if (isClosed) {
+      return; // Prevents state emission if the cubit is already disposed.
+    }
     emit(state.copyWith(status: RideStates.loading));
 
-    final Either<Failure, LoadingInfoEntity> result = await getLoadingInfoUseCase(refresh);
+    final Either<Failure, LoadingInfoEntity> result =
+        await getLoadingInfoUseCase(refresh);
 
     if (isClosed) return; // Double-check before emitting a state
     result.fold(
@@ -411,29 +488,45 @@ class RideCubit extends Cubit<RideState> {
         emit(state.copyWith(status: RideStates.error, failure: failure));
       },
       (info) {
-        emit(state.copyWith(status: RideStates.success, loaderInfo: info, registerType: 'noSocket', isShipping: true));
+        emit(state.copyWith(
+            status: RideStates.success,
+            loaderInfo: info,
+            registerType: 'noSocket',
+            isShipping: true));
       },
     );
   }
 
-  fetchRideUploadedImagesData(BuildContext context, UploadRiderImagesParams? params) async {
-    if (params != null) emit(state.copyWith(isShipping: params.isShipping, registerType: params.isSocket == true ? 'socket' : 'noSocket'));
+  fetchRideUploadedImagesData(
+      BuildContext context, UploadRiderImagesParams? params) async {
+    if (params != null) {
+      emit(state.copyWith(
+          isShipping: params.isShipping,
+          registerType: params.isSocket == true ? 'socket' : 'noSocket'));
+    }
     emit(state.copyWith(status: RideStates.loading));
-    await Future.wait(
-        [fetchRideDriverPictureOptional(context),
-          if(state.isShipping == true || params?.isShipping == true)  fetchLoaderInfo(context,false),
-          if(state.isShipping == true || params?.isShipping == true)  fetchLoaderInfo(context,true),
-          if(state.isShipping == false || params?.isShipping == false) fetchRideDriverInfo(context,false),
-          if(state.isShipping == false || params?.isShipping == false) fetchRideDriverInfo(context,true)
-        ]);
+    await Future.wait([
+      fetchRideDriverPictureOptional(context),
+      if (state.isShipping == true || params?.isShipping == true)
+        fetchLoaderInfo(context, false),
+      if (state.isShipping == true || params?.isShipping == true)
+        fetchLoaderInfo(context, true),
+      if (state.isShipping == false || params?.isShipping == false)
+        fetchRideDriverInfo(context, false),
+      if (state.isShipping == false || params?.isShipping == false)
+        fetchRideDriverInfo(context, true)
+    ]);
     emit(state.copyWith(status: RideStates.success));
   }
 
   Future<void> fetchRideDriverPictureOptional(BuildContext context) async {
-    if (isClosed) return; // Prevents state emission if the cubit is already disposed.
+    if (isClosed) {
+      return; // Prevents state emission if the cubit is already disposed.
+    }
     emit(state.copyWith(status: RideStates.loading));
 
-    final Either<Failure, DriverPictureOptionalEntity> result = await getDriverPictureOptionalUseCase(const NoParams());
+    final Either<Failure, DriverPictureOptionalEntity> result =
+        await getDriverPictureOptionalUseCase(const NoParams());
 
     if (isClosed) return; // Double-check before emitting a state
     result.fold(
@@ -446,22 +539,26 @@ class RideCubit extends Cubit<RideState> {
     );
   }
 
-
-
   Future<void> fetchRideGovernorates() async {
     emit(state.copyWith(status: RideStates.loading));
 
-    final Either<Failure, List<GovernorateEntity>> result = await getRideGovernoratesUseCase(const NoParams());
+    final Either<Failure, List<GovernorateEntity>> result =
+        await getRideGovernoratesUseCase(const NoParams());
 
     result.fold(
-      (failure) => emit(state.copyWith(status: RideStates.error, failure: failure)),
+      (failure) =>
+          emit(state.copyWith(status: RideStates.error, failure: failure)),
       (governorates) async {
         RegisterRideSpecialEntity? data = await Storage().getDriverEntity();
         GovernorateEntity? selectedCity;
-        if(data?.city!=null&&(data?.city.isNotEmpty??false)){
-          selectedCity = governorates.firstWhereOrNull((element) => element.id == data?.city);
+        if (data?.city != null && (data?.city.isNotEmpty ?? false)) {
+          selectedCity = governorates
+              .firstWhereOrNull((element) => element.id == data?.city);
         }
-        emit(state.copyWith(status: RideStates.success, governorates: governorates,city: selectedCity));
+        emit(state.copyWith(
+            status: RideStates.success,
+            governorates: governorates,
+            city: selectedCity));
       },
     );
   }
@@ -485,32 +582,44 @@ class RideCubit extends Cubit<RideState> {
   Future<void> fetchRideExpectedPrice({required String id}) async {
     emit(state.copyWith(status: RideStates.loading));
 
-    final Either<Failure, RideExpectedPriceEntity> result = await getRideExpectedPriceUseCase(
+    final Either<Failure, RideExpectedPriceEntity> result =
+        await getRideExpectedPriceUseCase(
       RideExpectedPriceParams(
-        startLocation:[state.currentLocation!.lat!, state.currentLocation!.lng!],
-        targetLocation: [state.toLocation!.lat!, state.toLocation!.lng!],
-        // startLocation: [30.0445439,31.2326909],
-        // targetLocation: [30.1186853,31.3609478],
-        comfort: isComfort,
-        nonSmoking: isNonSmoker,
-        autoAccept: isAutoAccept,
-        wayPointOne: (state.wayPointOne != null) ? [state.wayPointOne!.lat!, state.wayPointOne!.lng!] : null,
-        wayPointTwo: (state.wayPointTwo != null) ? [state.wayPointTwo!.lat!, state.wayPointTwo!.lng!] : null,
-        id: id
-      ),
+          startLocation: [
+            state.currentLocation!.lat!,
+            state.currentLocation!.lng!
+          ],
+          targetLocation: [
+            state.toLocation!.lat!,
+            state.toLocation!.lng!
+          ],
+          // startLocation: [30.0445439,31.2326909],
+          // targetLocation: [30.1186853,31.3609478],
+          comfort: isComfort,
+          nonSmoking: isNonSmoker,
+          autoAccept: isAutoAccept,
+          wayPointOne: (state.wayPointOne != null)
+              ? [state.wayPointOne!.lat!, state.wayPointOne!.lng!]
+              : null,
+          wayPointTwo: (state.wayPointTwo != null)
+              ? [state.wayPointTwo!.lat!, state.wayPointTwo!.lng!]
+              : null,
+          id: id),
     );
 
     log(result.toString());
 
     result.fold(
-      (failure) => emit(state.copyWith(status: RideStates.error, failure: failure)),
-      (rideExpectedPrice) => emit(state.copyWith(status: RideStates.success, rideExpectedPrice: rideExpectedPrice)),
+      (failure) =>
+          emit(state.copyWith(status: RideStates.error, failure: failure)),
+      (rideExpectedPrice) => emit(state.copyWith(
+          status: RideStates.success, rideExpectedPrice: rideExpectedPrice)),
     );
   }
 
-  Future<bool> checkRealAmountIsEnough({required double price}) async{
-
-    final Either<Failure, bool> result = await checkRealAmountEnoughUseCase(price);
+  Future<bool> checkRealAmountIsEnough({required double price}) async {
+    final Either<Failure, bool> result =
+        await checkRealAmountEnoughUseCase(price);
 
     return result.fold(
       (failure) => false,
@@ -538,7 +647,8 @@ class RideCubit extends Cubit<RideState> {
     required bool isPremium,
     required List<List<double>> polyline,
   }) async {
-    final Either<Failure, RideRequestTripEntity> result = await requestTripUseCase(
+    final Either<Failure, RideRequestTripEntity> result =
+        await requestTripUseCase(
       RequestTripUseCaseParams(
         subcategoryId: subcategoryId,
         price: price,
@@ -562,76 +672,95 @@ class RideCubit extends Cubit<RideState> {
     );
 
     result.fold(
-          (failure) => emit(state.copyWith(status: RideStates.error, failure: failure)),
-          (rideRequestTrip){
-            log("tripId${rideRequestTrip.id}");
-            emit(state.copyWith(status: RideStates.success, requestedTrip: rideRequestTrip));
-          },
+      (failure) =>
+          emit(state.copyWith(status: RideStates.error, failure: failure)),
+      (rideRequestTrip) {
+        log("tripId${rideRequestTrip.id}");
+        emit(state.copyWith(
+            status: RideStates.success, requestedTrip: rideRequestTrip));
+      },
     );
   }
 
   Future<void> updateTripAutoAcceptStatus({required bool isAutoAccept}) async {
-
-    final Either<Failure, bool> result = await updateTripAutoAcceptByClientUseCase(
+    final Either<Failure, bool> result =
+        await updateTripAutoAcceptByClientUseCase(
       UpdateTripAutoAcceptByClientUseCaseParams(
         isAutoAccept: isAutoAccept,
       ),
     );
 
     result.fold(
-          (failure) => emit(state.copyWith(status: RideStates.error, failure: failure)),
-          (status){
-            state.requestedTrip!.autoAccept = isAutoAccept;
-            emit(state.copyWith(status: RideStates.success));
-          },
+      (failure) =>
+          emit(state.copyWith(status: RideStates.error, failure: failure)),
+      (status) {
+        state.requestedTrip!.autoAccept = isAutoAccept;
+        emit(state.copyWith(status: RideStates.success));
+      },
     );
   }
 
   Future<void> retrieveClientLatestTrip() async {
-
-    final Either<Failure, RideRequestTripEntity> result = await retrieveClientLatestTripUseCase(const NoParams());
+    final Either<Failure, RideRequestTripEntity> result =
+        await retrieveClientLatestTripUseCase(const NoParams());
 
     result.fold(
-          (failure) => emit(state.copyWith(status: RideStates.error, failure: failure)),
-          (rideRequestTrip){
-            state.requestedTrip = rideRequestTrip;
-            if(state.requestedTrip!.status != TripState.canceled.name && state.requestedTrip!.status != TripState.completed.name){
-              GetLocationFromAddressEntity currentLocation = GetLocationFromAddressEntity(
-                lat: state.requestedTrip!.startCoordinates![0],
-                lng: state.requestedTrip!.startCoordinates![1],
-                address: state.requestedTrip!.from!,
-              );
-              GetLocationFromAddressEntity toLocation = GetLocationFromAddressEntity(
-                lat: state.requestedTrip!.targetCoordinates![0],
-                lng: state.requestedTrip!.targetCoordinates![1],
-                address: state.requestedTrip!.to!,
-              );
-              emit(state.copyWith(status: RideStates.success, requestedTrip: rideRequestTrip, currentLocation: currentLocation, toLocation: toLocation));
-            }
-            emit(state.copyWith(status: RideStates.success, requestedTrip: rideRequestTrip));
-          },
+      (failure) =>
+          emit(state.copyWith(status: RideStates.error, failure: failure)),
+      (rideRequestTrip) {
+        state.requestedTrip = rideRequestTrip;
+        if (state.requestedTrip!.status != TripState.canceled.name &&
+            state.requestedTrip!.status != TripState.completed.name) {
+          GetLocationFromAddressEntity currentLocation =
+              GetLocationFromAddressEntity(
+            lat: state.requestedTrip!.startCoordinates![0],
+            lng: state.requestedTrip!.startCoordinates![1],
+            address: state.requestedTrip!.from!,
+          );
+          GetLocationFromAddressEntity toLocation =
+              GetLocationFromAddressEntity(
+            lat: state.requestedTrip!.targetCoordinates![0],
+            lng: state.requestedTrip!.targetCoordinates![1],
+            address: state.requestedTrip!.to!,
+          );
+          emit(state.copyWith(
+              status: RideStates.success,
+              requestedTrip: rideRequestTrip,
+              currentLocation: currentLocation,
+              toLocation: toLocation));
+        }
+        emit(state.copyWith(
+            status: RideStates.success, requestedTrip: rideRequestTrip));
+      },
     );
   }
 
   Future<void> acceptOfferByClient({required String offerId}) async {
-    final Either<Failure, RideRequestTripEntity> result = await acceptOfferByClientUseCase(offerId);
+    final Either<Failure, RideRequestTripEntity> result =
+        await acceptOfferByClientUseCase(offerId);
 
     result.fold(
-          (failure) => emit(state.copyWith(status: RideStates.error, failure: failure)),
-          (rideRequestTrip) {
-            state.requestedTrip = rideRequestTrip;
-            GetLocationFromAddressEntity currentLocation = GetLocationFromAddressEntity(
-              lat: state.requestedTrip!.startCoordinates![0],
-              lng: state.requestedTrip!.startCoordinates![1],
-              address: state.requestedTrip!.from!,
-            );
-            GetLocationFromAddressEntity toLocation = GetLocationFromAddressEntity(
-              lat: state.requestedTrip!.targetCoordinates![0],
-              lng: state.requestedTrip!.targetCoordinates![1],
-              address: state.requestedTrip!.to!,
-            );
-            emit(state.copyWith(status: RideStates.success, requestedTrip: rideRequestTrip, currentLocation: currentLocation, toLocation: toLocation));
-          },
+      (failure) =>
+          emit(state.copyWith(status: RideStates.error, failure: failure)),
+      (rideRequestTrip) {
+        state.requestedTrip = rideRequestTrip;
+        GetLocationFromAddressEntity currentLocation =
+            GetLocationFromAddressEntity(
+          lat: state.requestedTrip!.startCoordinates![0],
+          lng: state.requestedTrip!.startCoordinates![1],
+          address: state.requestedTrip!.from!,
+        );
+        GetLocationFromAddressEntity toLocation = GetLocationFromAddressEntity(
+          lat: state.requestedTrip!.targetCoordinates![0],
+          lng: state.requestedTrip!.targetCoordinates![1],
+          address: state.requestedTrip!.to!,
+        );
+        emit(state.copyWith(
+            status: RideStates.success,
+            requestedTrip: rideRequestTrip,
+            currentLocation: currentLocation,
+            toLocation: toLocation));
+      },
     );
   }
 
@@ -645,75 +774,97 @@ class RideCubit extends Cubit<RideState> {
     );
 
     result.fold(
-          (failure) => emit(state.copyWith(status: RideStates.error, failure: failure)),
-          (isCanceled){
-            if(isCanceled){
-              state.requestedTrip = null;
-            }
-            emit(state.copyWith(status: RideStates.success, requestedTrip: state.requestedTrip));
-          },
+      (failure) =>
+          emit(state.copyWith(status: RideStates.error, failure: failure)),
+      (isCanceled) {
+        if (isCanceled) {
+          state.requestedTrip = null;
+        }
+        emit(state.copyWith(
+            status: RideStates.success, requestedTrip: state.requestedTrip));
+      },
     );
   }
 
-  Future<void> fetchAllCompletedTrips({required int limit, required int page}) async {
+  Future<void> fetchAllCompletedTrips(
+      {required int limit, required int page}) async {
     //emit(state.copyWith(status: RideStates.loading));
 
-    final Either<Failure, List<CompletedTripsEntity>> result = await getAllCompletedTripsUseCase(GetAllCompletedTripsUseCaseParams(limit, page));
+    final Either<Failure, List<CompletedTripsEntity>> result =
+        await getAllCompletedTripsUseCase(
+            GetAllCompletedTripsUseCaseParams(limit, page));
 
     result.fold(
       (failure) {
         emit(state.copyWith(status: RideStates.error, failure: failure));
       },
       (completedTrips) {
-        final List<CompletedTripsEntity> updatedTrips = page == 1 ? completedTrips : [...?state.completedTrips, ...completedTrips];
+        final List<CompletedTripsEntity> updatedTrips = page == 1
+            ? completedTrips
+            : [...?state.completedTrips, ...completedTrips];
 
-        emit(state.copyWith(status: RideStates.success, completedTrips: updatedTrips));
+        emit(state.copyWith(
+            status: RideStates.success, completedTrips: updatedTrips));
       },
     );
   }
 
-  Future<void> fetchAllRunningTrips({required int limit, required int page}) async {
+  Future<void> fetchAllRunningTrips(
+      {required int limit, required int page}) async {
     emit(state.copyWith(status: RideStates.loading));
 
-    final Either<Failure, List<RunningTripsEntity>> result = await getAllRunningTripsUseCase(GetAllRunningTripsUseCaseParams(limit, page));
+    final Either<Failure, List<RunningTripsEntity>> result =
+        await getAllRunningTripsUseCase(
+            GetAllRunningTripsUseCaseParams(limit, page));
 
     result.fold(
       (failure) {
         emit(state.copyWith(status: RideStates.error, failure: failure));
       },
       (runningTrips) {
-        final List<RunningTripsEntity> updatedTrips = page == 1 ? runningTrips : [...?state.runningTrips, ...runningTrips];
+        final List<RunningTripsEntity> updatedTrips = page == 1
+            ? runningTrips
+            : [...?state.runningTrips, ...runningTrips];
 
-        emit(state.copyWith(status: RideStates.success, runningTrips: updatedTrips));
+        emit(state.copyWith(
+            status: RideStates.success, runningTrips: updatedTrips));
       },
     );
   }
 
-  Future<void> fetchAllActivityTrips({required int limit, required int page}) async {
+  Future<void> fetchAllActivityTrips(
+      {required int limit, required int page}) async {
     emit(state.copyWith(status: RideStates.loading));
 
-    final Either<Failure, ActivityTripEntity> result = await getAllActivityTripsUseCase(GetAllActivityTripsUseCaseParams(limit: limit, page: page));
+    final Either<Failure, ActivityTripEntity> result =
+        await getAllActivityTripsUseCase(
+            GetAllActivityTripsUseCaseParams(limit: limit, page: page));
     result.fold(
-      (failure) => emit(state.copyWith(status: RideStates.error, failure: failure)),
-      (activityTrips) => emit(state.copyWith(status: RideStates.success, activityTrips: activityTrips)),
+      (failure) =>
+          emit(state.copyWith(status: RideStates.error, failure: failure)),
+      (activityTrips) => emit(state.copyWith(
+          status: RideStates.success, activityTrips: activityTrips)),
     );
   }
 
-  void updateFromLocation({required double lat, required double lng, required String address}) {
+  void updateFromLocation(
+      {required double lat, required double lng, required String address}) {
     GetLocationFromAddressEntity currentLocation = GetLocationFromAddressEntity(
       lat: lat,
       lng: lng,
       address: address,
     );
 
-    emit(state.copyWith(status: RideStates.success, currentLocation: currentLocation));
+    emit(state.copyWith(
+        status: RideStates.success, currentLocation: currentLocation));
   }
 
   void emitRefreshState() {
     emit(state.copyWith(status: RideStates.success));
   }
 
-  void updateToLocation({required double lat, required double lng, required String address}) {
+  void updateToLocation(
+      {required double lat, required double lng, required String address}) {
     GetLocationFromAddressEntity toLocation = GetLocationFromAddressEntity(
       lat: lat,
       lng: lng,
@@ -723,8 +874,8 @@ class RideCubit extends Cubit<RideState> {
     emit(state.copyWith(status: RideStates.success, toLocation: toLocation));
   }
 
-  void updateWayPointOne({required double lat, required double lng, required String address}) {
-
+  void updateWayPointOne(
+      {required double lat, required double lng, required String address}) {
     GetLocationFromAddressEntity wayPointOne = GetLocationFromAddressEntity(
       lat: lat,
       lng: lng,
@@ -734,8 +885,8 @@ class RideCubit extends Cubit<RideState> {
     emit(state.copyWith(status: RideStates.success, wayPointOne: wayPointOne));
   }
 
-  void updateWayPointTwo({required double lat, required double lng, required String address}) {
-
+  void updateWayPointTwo(
+      {required double lat, required double lng, required String address}) {
     GetLocationFromAddressEntity wayPointTwo = GetLocationFromAddressEntity(
       lat: lat,
       lng: lng,
@@ -747,38 +898,52 @@ class RideCubit extends Cubit<RideState> {
 
   loadRegisterData(BuildContext context) async {
     emit(state.copyWith(status: RideStates.loading));
-    await Future.wait([fetchGovs(), fetchBrands(context), fetchColors(context)]);
+    await Future.wait(
+        [fetchGovs(), fetchBrands(context), fetchColors(context)]);
     emit(state.copyWith(status: RideStates.success));
   }
 
   Future<void> fetchGovs() async {
-    final Either<Failure, List<GovernorateEntity>> result = await getRideGovernoratesUseCase(const NoParams());
+    final Either<Failure, List<GovernorateEntity>> result =
+        await getRideGovernoratesUseCase(const NoParams());
 
     result.fold(
-      (failure) => emit(state.copyWith(status: RideStates.error, failure: failure)),
+      (failure) =>
+          emit(state.copyWith(status: RideStates.error, failure: failure)),
       (governorates) async {
-        RegisterRideSpecialEntity? cachedData = await Storage().getDriverEntity();
+        RegisterRideSpecialEntity? cachedData =
+            await Storage().getDriverEntity();
         String? cityId = cachedData?.city;
         GovernorateEntity? selectedCity;
         if (cityId != null && (cityId.isNotEmpty)) {
-          selectedCity=governorates.firstWhere((element) => element.id == cityId);
+          selectedCity =
+              governorates.firstWhere((element) => element.id == cityId);
           onSelectGov(cityId);
         }
-        emit(state.copyWith(status: RideStates.success, govs: governorates,city: selectedCity));
+        emit(state.copyWith(
+            status: RideStates.success,
+            govs: governorates,
+            city: selectedCity));
       },
     );
   }
 
   Future<void> fetchBrands(BuildContext context) async {
-    final Either<Failure, List<String>> result = await getRideBrandsUseCase(const NoParams());
+    final Either<Failure, List<String>> result =
+        await getRideBrandsUseCase(const NoParams());
 
     result.fold(
-      (failure) => emit(state.copyWith(status: RideStates.error, failure: failure)),
+      (failure) =>
+          emit(state.copyWith(status: RideStates.error, failure: failure)),
       (data) async {
-        RegisterRideSpecialEntity? cachedData = await Storage().getDriverEntity();
+        RegisterRideSpecialEntity? cachedData =
+            await Storage().getDriverEntity();
         String? brand = cachedData?.vehicleBrand;
-        if(brand!=null&&(brand.isNotEmpty))await onSelectBrand(brand, context);
-        emit(state.copyWith(status: RideStates.success, brands: data,selectedBrand: brand));
+        if (brand != null && (brand.isNotEmpty)) {
+          await onSelectBrand(brand, context);
+        }
+        emit(state.copyWith(
+            status: RideStates.success, brands: data, selectedBrand: brand));
       },
     );
   }
@@ -791,7 +956,10 @@ class RideCubit extends Cubit<RideState> {
   List<String> models = [];
   onSelectBrand(String brand, BuildContext context) async {
     if (brand == state.selectedBrand) return;
-    emit(state.copyWith(selectedBrand: brand, selectedModel: '', status: RideStates.loadingModels));
+    emit(state.copyWith(
+        selectedBrand: brand,
+        selectedModel: '',
+        status: RideStates.loadingModels));
     await fetchModels(brand, context);
     emit(state.copyWith(status: RideStates.success));
   }
@@ -809,14 +977,17 @@ class RideCubit extends Cubit<RideState> {
   }
 
   onSelectPlan(String plan) {
-    String selectedPlan = plan == 'Percentage' ? 'percentage' : 'subscribePackage';
-    emit(state.copyWith(selectedPlan: selectedPlan, status: RideStates.success));
+    String selectedPlan =
+        plan == 'Percentage' ? 'percentage' : 'subscribePackage';
+    emit(
+        state.copyWith(selectedPlan: selectedPlan, status: RideStates.success));
   }
 
   Future<void> fetchModels(String brandId, BuildContext context) async {
     models.clear();
     emit(state.copyWith(colors: [], status: RideStates.loadingModels));
-    final Either<Failure, List<String>> result = await getRideModelsUseCase(brandId);
+    final Either<Failure, List<String>> result =
+        await getRideModelsUseCase(brandId);
 
     result.fold(
       (failure) {
@@ -835,21 +1006,24 @@ class RideCubit extends Cubit<RideState> {
   }
 
   Future<void> fetchColors(BuildContext context) async {
-    final Either<Failure, List<RideColorEntity>> result = await getRideCarColorsUseCase(const NoParams());
+    final Either<Failure, List<RideColorEntity>> result =
+        await getRideCarColorsUseCase(const NoParams());
 
     result.fold(
       (failure) {
         emit(state.copyWith(status: RideStates.error, failure: failure));
       },
       (data) async {
-        RegisterRideSpecialEntity? cachedData = await Storage().getDriverEntity();
+        RegisterRideSpecialEntity? cachedData =
+            await Storage().getDriverEntity();
         String? color = cachedData?.vehicleColor;
         RideColorEntity? selectedColor;
         if (color != null && (color.isNotEmpty)) {
-          selectedColor=data.firstWhere((element) => element.id == color);
+          selectedColor = data.firstWhere((element) => element.id == color);
           onSelectColor(selectedColor);
         }
-        emit(state.copyWith(status: RideStates.success, colors: data,color: selectedColor));
+        emit(state.copyWith(
+            status: RideStates.success, colors: data, color: selectedColor));
       },
     );
   }
@@ -969,33 +1143,48 @@ class RideCubit extends Cubit<RideState> {
       scooter,
     };
 
-    if ((state.rideSubCategories ?? []).any((element) => categoriesToCheck.contains(element.subCategoryId) && element.isSelected == true)) {
+    if ((state.rideSubCategories ?? []).any((element) =>
+        categoriesToCheck.contains(element.subCategoryId) &&
+        element.isSelected == true)) {
       emit(state.copyWith(registerType: 'socket', isShipping: false));
-      context.push(Routes.personalInformationScreen,extra:RideFeatureRegisterParams(
-          isSocket:true,
-          isShipping:false,
-          subCategoriesId:(state.rideSubCategories ?? []).where((e) => e.isEnabled == true).toList().map((e) => e.subCategoryId).toList()
-      ));
+      context.push(Routes.personalInformationScreen,
+          extra: RideFeatureRegisterParams(
+              isSocket: true,
+              isShipping: false,
+              subCategoriesId: (state.rideSubCategories ?? [])
+                  .where((e) => e.isEnabled == true)
+                  .toList()
+                  .map((e) => e.subCategoryId)
+                  .toList()));
     } else {
       emit(state.copyWith(registerType: 'noSocket', isShipping: false));
-      context.push(Routes.personalInformationScreen,extra:RideFeatureRegisterParams(
-          isSocket:false,
-          isShipping:false,
-          subCategoriesId:(state.rideSubCategories ?? []).where((e) => e.isEnabled == true).toList().map((e) => e.subCategoryId).toList()
-      ));
+      context.push(Routes.personalInformationScreen,
+          extra: RideFeatureRegisterParams(
+              isSocket: false,
+              isShipping: false,
+              subCategoriesId: (state.rideSubCategories ?? [])
+                  .where((e) => e.isEnabled == true)
+                  .toList()
+                  .map((e) => e.subCategoryId)
+                  .toList()));
     }
   }
 
   onSubmitSelectShippingSubCategories(BuildContext context) async {
     emit(state.copyWith(registerType: 'noSocket', isShipping: true));
-    context.push(Routes.personalInformationScreen,extra:RideFeatureRegisterParams(
-        isSocket:false,
-        isShipping:true,
-        subCategoriesId: (state.shippingSubCategories ?? []).where((e) => e.isEnabled == true).toList().map((e) => e.subCategoryId).toList()
-    ));
+    context.push(Routes.personalInformationScreen,
+        extra: RideFeatureRegisterParams(
+            isSocket: false,
+            isShipping: true,
+            subCategoriesId: (state.shippingSubCategories ?? [])
+                .where((e) => e.isEnabled == true)
+                .toList()
+                .map((e) => e.subCategoryId)
+                .toList()));
   }
 
-  onNavigateToWelcomeScreen({required bool fromShipping, required BuildContext context}) {
+  onNavigateToWelcomeScreen(
+      {required bool fromShipping, required BuildContext context}) {
     if (fromShipping == true) {
       emit(state.copyWith(isShipping: true, status: RideStates.success));
       context.push(Routes.welcomeRideRegister, extra: fromShipping);
@@ -1008,7 +1197,8 @@ class RideCubit extends Cubit<RideState> {
   onSelectShippingSubCategory(String id, BuildContext context) {
     List<SubCategoryEntityUpdated> subCategories = [];
     subCategories.addAll(state.shippingSubCategories ?? []);
-    SubCategoryEntityUpdated selectedItem = subCategories.firstWhere((element) => element.subCategoryId == id);
+    SubCategoryEntityUpdated selectedItem =
+        subCategories.firstWhere((element) => element.subCategoryId == id);
     if (selectedItem.isSelected == true) {
       selectedItem.isSelected = false;
       subCategories.where((e) => e.isEnabled = true).toList();
@@ -1024,18 +1214,25 @@ class RideCubit extends Cubit<RideState> {
     bool isMale = UserCubit.to.state.data?.gender == 'male';
     List<SubCategoryEntityUpdated> subCategories = [];
     subCategories.addAll(state.rideSubCategories ?? []);
-    SubCategoryEntityUpdated selectedItem = subCategories.firstWhere((element) => element.subCategoryId == id);
-    SubCategoryEntityUpdated captainCategory = subCategories.firstWhere((element) => element.subCategoryId == captain);
-    SubCategoryEntityUpdated ladyCategory = subCategories.firstWhere((element) => element.subCategoryId == lady);
-    SubCategoryEntityUpdated premiumCategory = subCategories.firstWhere((element) => element.subCategoryId == premium);
-    SubCategoryEntityUpdated intercityCategory = subCategories.firstWhere((element) => element.subCategoryId == intercity);
+    SubCategoryEntityUpdated selectedItem =
+        subCategories.firstWhere((element) => element.subCategoryId == id);
+    SubCategoryEntityUpdated captainCategory =
+        subCategories.firstWhere((element) => element.subCategoryId == captain);
+    SubCategoryEntityUpdated ladyCategory =
+        subCategories.firstWhere((element) => element.subCategoryId == lady);
+    SubCategoryEntityUpdated premiumCategory =
+        subCategories.firstWhere((element) => element.subCategoryId == premium);
+    SubCategoryEntityUpdated intercityCategory = subCategories
+        .firstWhere((element) => element.subCategoryId == intercity);
     if (id == captain) {
       if (!isMale) {
-        showErrorMessage(context, "You are female, try register as a lady or change your gender from setting.");
+        showErrorMessage(context,
+            "You are female, try register as a lady or change your gender from setting.");
         return;
       }
       if (selectedItem.isSelected == true) {
-        if (premiumCategory.isSelected == true || intercityCategory.isSelected == true) {
+        if (premiumCategory.isSelected == true ||
+            intercityCategory.isSelected == true) {
           ladyCategory.isEnabled = true;
           captainCategory.isEnabled = true;
           captainCategory.isSelected = false;
@@ -1044,7 +1241,8 @@ class RideCubit extends Cubit<RideState> {
           subCategories.where((e) => e.isEnabled = true).toList();
         }
       } else {
-        if (premiumCategory.isSelected == true || intercityCategory.isSelected == true) {
+        if (premiumCategory.isSelected == true ||
+            intercityCategory.isSelected == true) {
           ladyCategory.isEnabled = false;
           ladyCategory.isSelected = false;
           captainCategory.isEnabled = true;
@@ -1060,11 +1258,13 @@ class RideCubit extends Cubit<RideState> {
       }
     } else if (id == lady) {
       if (isMale) {
-        showErrorMessage(context, "You are male, try register as a captain or change your gender from setting.");
+        showErrorMessage(context,
+            "You are male, try register as a captain or change your gender from setting.");
         return;
       }
       if (selectedItem.isSelected == true) {
-        if (premiumCategory.isSelected == true || intercityCategory.isSelected == true) {
+        if (premiumCategory.isSelected == true ||
+            intercityCategory.isSelected == true) {
           captainCategory.isEnabled = true;
           ladyCategory.isEnabled = true;
           ladyCategory.isSelected = false;
@@ -1073,7 +1273,8 @@ class RideCubit extends Cubit<RideState> {
           subCategories.where((e) => e.isEnabled = true).toList();
         }
       } else {
-        if (premiumCategory.isSelected == true || intercityCategory.isSelected == true) {
+        if (premiumCategory.isSelected == true ||
+            intercityCategory.isSelected == true) {
           captainCategory.isEnabled = false;
           captainCategory.isSelected = false;
           ladyCategory.isEnabled = true;
@@ -1089,14 +1290,18 @@ class RideCubit extends Cubit<RideState> {
       }
     } else if (id == premium) {
       if (selectedItem.isSelected == true) {
-        if (captainCategory.isSelected == true || ladyCategory.isSelected == true || intercityCategory.isSelected == true) {
+        if (captainCategory.isSelected == true ||
+            ladyCategory.isSelected == true ||
+            intercityCategory.isSelected == true) {
           premiumCategory.isSelected = false;
         } else {
           premiumCategory.isSelected = false;
           subCategories.where((e) => e.isEnabled = true).toList();
         }
       } else {
-        if (captainCategory.isSelected == true || ladyCategory.isSelected == true || intercityCategory.isSelected == true) {
+        if (captainCategory.isSelected == true ||
+            ladyCategory.isSelected == true ||
+            intercityCategory.isSelected == true) {
           premiumCategory.isSelected = true;
         } else {
           subCategories.where((e) => e.isEnabled = false).toList();
@@ -1109,14 +1314,18 @@ class RideCubit extends Cubit<RideState> {
       }
     } else if (id == intercity) {
       if (selectedItem.isSelected == true) {
-        if (captainCategory.isSelected == true || ladyCategory.isSelected == true || premiumCategory.isSelected == true) {
+        if (captainCategory.isSelected == true ||
+            ladyCategory.isSelected == true ||
+            premiumCategory.isSelected == true) {
           intercityCategory.isSelected = false;
         } else {
           intercityCategory.isSelected = false;
           subCategories.where((e) => e.isEnabled = true).toList();
         }
       } else {
-        if (captainCategory.isSelected == true || ladyCategory.isSelected == true || premiumCategory.isSelected == true) {
+        if (captainCategory.isSelected == true ||
+            ladyCategory.isSelected == true ||
+            premiumCategory.isSelected == true) {
           intercityCategory.isSelected = true;
         } else {
           subCategories.where((e) => e.isEnabled = false).toList();
@@ -1141,11 +1350,14 @@ class RideCubit extends Cubit<RideState> {
   }
 
   onChangeSmokingValue() {
-    emit(state.copyWith(isSmoking: !(state.isSmoking ?? false), status: RideStates.success));
+    emit(state.copyWith(
+        isSmoking: !(state.isSmoking ?? false), status: RideStates.success));
   }
 
   onChangeAirCondition() {
-    emit(state.copyWith(hasAirCondition: !(state.hasAirCondition ?? false), status: RideStates.success));
+    emit(state.copyWith(
+        hasAirCondition: !(state.hasAirCondition ?? false),
+        status: RideStates.success));
   }
 
   onSubmitUploadingId(BuildContext context) async {
@@ -1171,49 +1383,69 @@ class RideCubit extends Cubit<RideState> {
               onSuccessUploaded: (bool isSuccess) async {
                 if (isSuccess == true) {
                   loaderInfo?.isUploadDriverId = true;
-                  emit(state.copyWith(loaderInfo: loaderInfo, status: RideStates.success));
+                  emit(state.copyWith(
+                      loaderInfo: loaderInfo, status: RideStates.success));
                   if (state.loaderInfo?.isUploadDriverLicense == true &&
                       state.loaderInfo?.isUploadDriverId == true &&
                       state.loaderInfo?.isUploadCarLicense == true &&
                       state.loaderInfo?.isUploadCarImage == true) {
-                    await fetchLoaderInfo(context,false);
+                    await fetchLoaderInfo(context, false);
                   }
-                  showSuccessMessage(context, context.isArabic ? 'تم رفع الصور بنجاح' : "Successfully uploaded images");
+                  showSuccessMessage(
+                      context,
+                      context.isArabic
+                          ? 'تم رفع الصور بنجاح'
+                          : "Successfully uploaded images");
                   context.pop();
                   context.pop();
                 } else {
                   context.pop();
-                  showErrorMessage(context, context.isArabic ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.' : 'An error occurred while uploading images. Please try again.');
+                  showErrorMessage(
+                      context,
+                      context.isArabic
+                          ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.'
+                          : 'An error occurred while uploading images. Please try again.');
                 }
               })
-          : await RideMethodHelper()
-              .uploadDriverId(idImageInBehind: state.personalBackIdPicture!, idImageInFront: state.personalFrontIdPicture!, idExpiryDate: ridePersonalDocExpireDateController.text, onSuccessUploaded: (bool isSuccess) async{
-        if (isSuccess) {
-          driverInfo?.isUploadDriverId = true;
-          emit(state.copyWith(driverInfo: driverInfo, status: RideStates.success));
-          if (state.driverInfo?.isUploadDriverLicense == true &&
-              state.driverInfo?.isUploadDriverId == true &&
-              state.driverInfo?.isUploadCarLicense == true &&
-              state.driverInfo?.isUploadConfirmIdentifier == true &&
-              state.driverInfo?.isUploadDriverImage == true &&
-              state.driverInfo?.isUploadCarImage == true) {
-            await fetchRideDriverInfo(context,false);
-            showSuccessMessage(context,
-                context.isArabic ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.' : "Successfully uploaded images, please wait for the approval of all data.");
-          }
-          showSuccessMessage(
-              context,
-              context.isArabic
-                  ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.'
-                  : "Successfully uploaded images, please wait for the approval of all data.");
-          context.pop();
-          context.pop();
-          emit(state.copyWith(status: RideStates.success));
-        } else {
-          context.pop();
-          showErrorMessage(context, context.isArabic ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.' : 'An error occurred while uploading images. Please try again.');
-        }
-      });
+          : await RideMethodHelper().uploadDriverId(
+              idImageInBehind: state.personalBackIdPicture!,
+              idImageInFront: state.personalFrontIdPicture!,
+              idExpiryDate: ridePersonalDocExpireDateController.text,
+              onSuccessUploaded: (bool isSuccess) async {
+                if (isSuccess) {
+                  driverInfo?.isUploadDriverId = true;
+                  emit(state.copyWith(
+                      driverInfo: driverInfo, status: RideStates.success));
+                  if (state.driverInfo?.isUploadDriverLicense == true &&
+                      state.driverInfo?.isUploadDriverId == true &&
+                      state.driverInfo?.isUploadCarLicense == true &&
+                      state.driverInfo?.isUploadConfirmIdentifier == true &&
+                      state.driverInfo?.isUploadDriverImage == true &&
+                      state.driverInfo?.isUploadCarImage == true) {
+                    await fetchRideDriverInfo(context, false);
+                    showSuccessMessage(
+                        context,
+                        context.isArabic
+                            ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.'
+                            : "Successfully uploaded images, please wait for the approval of all data.");
+                  }
+                  showSuccessMessage(
+                      context,
+                      context.isArabic
+                          ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.'
+                          : "Successfully uploaded images, please wait for the approval of all data.");
+                  context.pop();
+                  context.pop();
+                  emit(state.copyWith(status: RideStates.success));
+                } else {
+                  context.pop();
+                  showErrorMessage(
+                      context,
+                      context.isArabic
+                          ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.'
+                          : 'An error occurred while uploading images. Please try again.');
+                }
+              });
       Future.delayed(const Duration(seconds: 3));
       driverInfo?.isUploadDriverId = true;
     }
@@ -1228,11 +1460,14 @@ class RideCubit extends Cubit<RideState> {
         return;
       }
       if (state.backOfDriverLicensePicture == null) {
-        showErrorMessage(context, "Please select back of driver license picture");
+        showErrorMessage(
+            context, "Please select back of driver license picture");
         return;
       }
-      if (state.selfieDriverLicensePicture == null && state.isShipping != true) {
-        showErrorMessage(context, "Please select selfie driver license picture");
+      if (state.selfieDriverLicensePicture == null &&
+          state.isShipping != true) {
+        showErrorMessage(
+            context, "Please select selfie driver license picture");
         return;
       }
       showLoadingDialog(context, canPop: false);
@@ -1241,78 +1476,108 @@ class RideCubit extends Cubit<RideState> {
               onSuccessUploaded: (isSuccess) async {
                 if (isSuccess == true) {
                   loaderInfo?.isUploadDriverLicense = true;
-                  emit(state.copyWith(loaderInfo: loaderInfo, status: RideStates.success));
+                  emit(state.copyWith(
+                      loaderInfo: loaderInfo, status: RideStates.success));
                   if (state.loaderInfo?.isUploadDriverLicense == true &&
                       state.loaderInfo?.isUploadDriverId == true &&
                       state.loaderInfo?.isUploadCarLicense == true &&
                       state.loaderInfo?.isUploadCarImage == true) {
-                    await fetchLoaderInfo(context,false);
+                    await fetchLoaderInfo(context, false);
                     showSuccessMessage(
                         context,
                         context.isArabic
                             ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.'
                             : "Successfully uploaded images, please wait for the approval of all data.");
                   }
-                  showSuccessMessage(context, context.isArabic ? 'تم رفع الصور بنجاح' : "Successfully uploaded images");
+                  showSuccessMessage(
+                      context,
+                      context.isArabic
+                          ? 'تم رفع الصور بنجاح'
+                          : "Successfully uploaded images");
                   context.pop();
                   context.pop();
                 } else {
                   context.pop();
-                  showErrorMessage(context, context.isArabic ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.' : 'An error occurred while uploading images. Please try again.');
+                  showErrorMessage(
+                      context,
+                      context.isArabic
+                          ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.'
+                          : 'An error occurred while uploading images. Please try again.');
                 }
               },
               drivingImageInFront: state.driverLicensePicture!,
               drivingImageBehind: state.backOfDriverLicensePicture!,
               drivingExpiryDate: rideDriverExpireDateController.text)
           : await RideMethodHelper().uploadDriverLicense(
-              drivingImageInFront: state.driverLicensePicture!, drivingImageBehind: state.backOfDriverLicensePicture!, drivingExpiryDate: rideDriverExpireDateController.text, onSuccessUploaded: (bool isSuccess) async{
-        if (isSuccess) {
-          driverInfo?.isUploadDriverLicense = true;
-          emit(state.copyWith(driverInfo: driverInfo, status: RideStates.success));
-          if (state.driverInfo?.isUploadDriverLicense == true &&
-              state.driverInfo?.isUploadDriverId == true &&
-              state.driverInfo?.isUploadCarLicense == true &&
-              state.driverInfo?.isUploadConfirmIdentifier == true &&
-              state.driverInfo?.isUploadDriverImage == true &&
-              state.driverInfo?.isUploadCarImage == true) {
-            await fetchRideDriverInfo(context,false);
-            showSuccessMessage(context,
-                context.isArabic ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.' : "Successfully uploaded images, please wait for the approval of all data.");
-          }
-          emit(state.copyWith(status: RideStates.success));
-        } else {
-          showErrorMessage(context, context.isArabic ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.' : 'An error occurred while uploading images. Please try again.');
-        }
-      });
+              drivingImageInFront: state.driverLicensePicture!,
+              drivingImageBehind: state.backOfDriverLicensePicture!,
+              drivingExpiryDate: rideDriverExpireDateController.text,
+              onSuccessUploaded: (bool isSuccess) async {
+                if (isSuccess) {
+                  driverInfo?.isUploadDriverLicense = true;
+                  emit(state.copyWith(
+                      driverInfo: driverInfo, status: RideStates.success));
+                  if (state.driverInfo?.isUploadDriverLicense == true &&
+                      state.driverInfo?.isUploadDriverId == true &&
+                      state.driverInfo?.isUploadCarLicense == true &&
+                      state.driverInfo?.isUploadConfirmIdentifier == true &&
+                      state.driverInfo?.isUploadDriverImage == true &&
+                      state.driverInfo?.isUploadCarImage == true) {
+                    await fetchRideDriverInfo(context, false);
+                    showSuccessMessage(
+                        context,
+                        context.isArabic
+                            ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.'
+                            : "Successfully uploaded images, please wait for the approval of all data.");
+                  }
+                  emit(state.copyWith(status: RideStates.success));
+                } else {
+                  showErrorMessage(
+                      context,
+                      context.isArabic
+                          ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.'
+                          : 'An error occurred while uploading images. Please try again.');
+                }
+              });
       emit(state.copyWith(status: RideStates.success));
       if (state.isShipping != true) {
-        await RideMethodHelper().confirmIdentity(verifyUserImage: state.selfieDriverLicensePicture!, onSuccessUploaded: (bool isSuccess) async{
-        if (isSuccess) {
-          driverInfo?.isUploadConfirmIdentifier = true;
-          emit(state.copyWith(driverInfo: driverInfo, status: RideStates.success));
-          if (state.driverInfo?.isUploadDriverLicense == true &&
-              state.driverInfo?.isUploadDriverId == true &&
-              state.driverInfo?.isUploadCarLicense == true &&
-              state.driverInfo?.isUploadConfirmIdentifier == true &&
-              state.driverInfo?.isUploadDriverImage == true &&
-              state.driverInfo?.isUploadCarImage == true) {
-            await fetchRideDriverInfo(context,false);
-            showSuccessMessage(context,
-                context.isArabic ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.' : "Successfully uploaded images, please wait for the approval of all data.");
-          }
-          showSuccessMessage(
-              context,
-              context.isArabic
-                  ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.'
-                  : "Successfully uploaded images, please wait for the approval of all data.");
-          context.pop();
-          context.pop();
-          emit(state.copyWith(status: RideStates.success));
-        } else {
-          context.pop();
-          showErrorMessage(context, context.isArabic ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.' : 'An error occurred while uploading images. Please try again.');
-        }
-      });
+        await RideMethodHelper().confirmIdentity(
+            verifyUserImage: state.selfieDriverLicensePicture!,
+            onSuccessUploaded: (bool isSuccess) async {
+              if (isSuccess) {
+                driverInfo?.isUploadConfirmIdentifier = true;
+                emit(state.copyWith(
+                    driverInfo: driverInfo, status: RideStates.success));
+                if (state.driverInfo?.isUploadDriverLicense == true &&
+                    state.driverInfo?.isUploadDriverId == true &&
+                    state.driverInfo?.isUploadCarLicense == true &&
+                    state.driverInfo?.isUploadConfirmIdentifier == true &&
+                    state.driverInfo?.isUploadDriverImage == true &&
+                    state.driverInfo?.isUploadCarImage == true) {
+                  await fetchRideDriverInfo(context, false);
+                  showSuccessMessage(
+                      context,
+                      context.isArabic
+                          ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.'
+                          : "Successfully uploaded images, please wait for the approval of all data.");
+                }
+                showSuccessMessage(
+                    context,
+                    context.isArabic
+                        ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.'
+                        : "Successfully uploaded images, please wait for the approval of all data.");
+                context.pop();
+                context.pop();
+                emit(state.copyWith(status: RideStates.success));
+              } else {
+                context.pop();
+                showErrorMessage(
+                    context,
+                    context.isArabic
+                        ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.'
+                        : 'An error occurred while uploading images. Please try again.');
+              }
+            });
       }
       emit(state.copyWith(status: RideStates.success));
     }
@@ -1332,88 +1597,130 @@ class RideCubit extends Cubit<RideState> {
             onSuccessUploaded: (bool isSuccess) async {
               if (isSuccess == true) {
                 loaderInfo?.isUploadCarLicense = true;
-                emit(state.copyWith(loaderInfo: loaderInfo, status: RideStates.success));
+                emit(state.copyWith(
+                    loaderInfo: loaderInfo, status: RideStates.success));
                 if (state.loaderInfo?.isUploadDriverLicense == true &&
                     state.loaderInfo?.isUploadDriverId == true &&
                     state.loaderInfo?.isUploadCarLicense == true &&
                     state.loaderInfo?.isUploadCarImage == true) {
-                  await fetchLoaderInfo(context,false);
-                  showSuccessMessage(context,
-                      context.isArabic ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.' : "Successfully uploaded images, please wait for the approval of all data.");
+                  await fetchLoaderInfo(context, false);
+                  showSuccessMessage(
+                      context,
+                      context.isArabic
+                          ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.'
+                          : "Successfully uploaded images, please wait for the approval of all data.");
                 }
-                showSuccessMessage(context, context.isArabic ? 'تم رفع الصور بنجاح' : "Successfully uploaded images");
+                showSuccessMessage(
+                    context,
+                    context.isArabic
+                        ? 'تم رفع الصور بنجاح'
+                        : "Successfully uploaded images");
               } else {
                 context.pop();
-                showErrorMessage(context, context.isArabic ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.' : 'An error occurred while uploading images. Please try again.');
+                showErrorMessage(
+                    context,
+                    context.isArabic
+                        ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.'
+                        : 'An error occurred while uploading images. Please try again.');
               }
             })
         : await RideMethodHelper().uploadCarLicense(
-            licenseExpiryDate: rideVehicleExpireDateController.text, carLicenseBehindImage: state.vehicleBackPicture!, carLicenseFrontImage: state.vehicleFrontPicture!, onSuccessUploaded: (bool isSuccess) async{
-      if (isSuccess) {
-        driverInfo?.isUploadCarLicense = true;
-        emit(state.copyWith(driverInfo: driverInfo, status: RideStates.success));
-        if (state.driverInfo?.isUploadDriverLicense == true &&
-            state.driverInfo?.isUploadDriverId == true &&
-            state.driverInfo?.isUploadCarLicense == true &&
-            state.driverInfo?.isUploadConfirmIdentifier == true &&
-            state.driverInfo?.isUploadDriverImage == true &&
-            state.driverInfo?.isUploadCarImage == true) {
-          await fetchRideDriverInfo(context,false);
-          showSuccessMessage(context,
-              context.isArabic ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.' : "Successfully uploaded images, please wait for the approval of all data.");
-        }
-        emit(state.copyWith(status: RideStates.success));
-      } else {
-        showErrorMessage(context, context.isArabic ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.' : 'An error occurred while uploading images. Please try again.');
-      }
-    });
+            licenseExpiryDate: rideVehicleExpireDateController.text,
+            carLicenseBehindImage: state.vehicleBackPicture!,
+            carLicenseFrontImage: state.vehicleFrontPicture!,
+            onSuccessUploaded: (bool isSuccess) async {
+              if (isSuccess) {
+                driverInfo?.isUploadCarLicense = true;
+                emit(state.copyWith(
+                    driverInfo: driverInfo, status: RideStates.success));
+                if (state.driverInfo?.isUploadDriverLicense == true &&
+                    state.driverInfo?.isUploadDriverId == true &&
+                    state.driverInfo?.isUploadCarLicense == true &&
+                    state.driverInfo?.isUploadConfirmIdentifier == true &&
+                    state.driverInfo?.isUploadDriverImage == true &&
+                    state.driverInfo?.isUploadCarImage == true) {
+                  await fetchRideDriverInfo(context, false);
+                  showSuccessMessage(
+                      context,
+                      context.isArabic
+                          ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.'
+                          : "Successfully uploaded images, please wait for the approval of all data.");
+                }
+                emit(state.copyWith(status: RideStates.success));
+              } else {
+                showErrorMessage(
+                    context,
+                    context.isArabic
+                        ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.'
+                        : 'An error occurred while uploading images. Please try again.');
+              }
+            });
     state.isShipping == true
         ? await LoadingMethodHelper().uploadCarImage(
             carImage: state.vehiclePicture!,
             onSuccessUploaded: (bool isSuccess) async {
               if (isSuccess) {
                 loaderInfo?.isUploadCarImage = true;
-                emit(state.copyWith(loaderInfo: loaderInfo, status: RideStates.success));
+                emit(state.copyWith(
+                    loaderInfo: loaderInfo, status: RideStates.success));
                 if (state.loaderInfo?.isUploadDriverLicense == true &&
                     state.loaderInfo?.isUploadDriverId == true &&
                     state.loaderInfo?.isUploadCarLicense == true &&
                     state.loaderInfo?.isUploadCarImage == true) {
-                  await fetchLoaderInfo(context,false);
-                  showSuccessMessage(context,
-                      context.isArabic ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.' : "Successfully uploaded images, please wait for the approval of all data.");
+                  await fetchLoaderInfo(context, false);
+                  showSuccessMessage(
+                      context,
+                      context.isArabic
+                          ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.'
+                          : "Successfully uploaded images, please wait for the approval of all data.");
                 }
                 context.pop();
                 context.pop();
-                emit(state.copyWith(status: RideStates.success, isUploadCarImage: isSuccess));
+                emit(state.copyWith(
+                    status: RideStates.success, isUploadCarImage: isSuccess));
               } else {
                 context.pop();
-                showErrorMessage(context, context.isArabic ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.' : 'An error occurred while uploading images. Please try again.');
+                showErrorMessage(
+                    context,
+                    context.isArabic
+                        ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.'
+                        : 'An error occurred while uploading images. Please try again.');
               }
             })
-        : await RideMethodHelper().uploadCarImage(carImage: state.vehiclePicture!,onSuccessUploaded: (bool isSuccess) async {
-      log('uploadCarImageSuccessCubit $isSuccess');
+        : await RideMethodHelper().uploadCarImage(
+            carImage: state.vehiclePicture!,
+            onSuccessUploaded: (bool isSuccess) async {
+              log('uploadCarImageSuccessCubit $isSuccess');
 
-      if (isSuccess) {
-        driverInfo?.isUploadCarImage = true;
-        emit(state.copyWith(driverInfo: driverInfo, status: RideStates.success));
-        if (state.driverInfo?.isUploadDriverLicense == true &&
-            state.driverInfo?.isUploadDriverId == true &&
-            state.driverInfo?.isUploadCarLicense == true &&
-            state.driverInfo?.isUploadConfirmIdentifier == true &&
-            state.driverInfo?.isUploadDriverImage == true &&
-            state.driverInfo?.isUploadCarImage == true) {
-          await fetchRideDriverInfo(context,false);
-          showSuccessMessage(context,
-              context.isArabic ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.' : "Successfully uploaded images, please wait for the approval of all data.");
-        }
-        context.pop();
-        context.pop();
-        emit(state.copyWith(status: RideStates.success));
-      } else {
-        context.pop();
-        showErrorMessage(context, context.isArabic ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.' : 'An error occurred while uploading images. Please try again.');
-      }
-        });
+              if (isSuccess) {
+                driverInfo?.isUploadCarImage = true;
+                emit(state.copyWith(
+                    driverInfo: driverInfo, status: RideStates.success));
+                if (state.driverInfo?.isUploadDriverLicense == true &&
+                    state.driverInfo?.isUploadDriverId == true &&
+                    state.driverInfo?.isUploadCarLicense == true &&
+                    state.driverInfo?.isUploadConfirmIdentifier == true &&
+                    state.driverInfo?.isUploadDriverImage == true &&
+                    state.driverInfo?.isUploadCarImage == true) {
+                  await fetchRideDriverInfo(context, false);
+                  showSuccessMessage(
+                      context,
+                      context.isArabic
+                          ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.'
+                          : "Successfully uploaded images, please wait for the approval of all data.");
+                }
+                context.pop();
+                context.pop();
+                emit(state.copyWith(status: RideStates.success));
+              } else {
+                context.pop();
+                showErrorMessage(
+                    context,
+                    context.isArabic
+                        ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.'
+                        : 'An error occurred while uploading images. Please try again.');
+              }
+            });
     emit(state.copyWith(status: RideStates.success));
   }
 
@@ -1422,29 +1729,41 @@ class RideCubit extends Cubit<RideState> {
       emit(state.copyWith(status: RideStates.loadingSubmit));
       DriverInfoEntity? driverInfo = state.driverInfo;
       showLoadingDialog(context, canPop: false);
-      await RideMethodHelper().uploadDrugAnalysis(dragAnalysisDate: rideDragAnalysisExpireDateController.text, dragAnalysis: state.personalDrugAnalysisPicture!, onSuccessUploaded: (bool isSuccess) async{
-        if (isSuccess) {
-          driverInfo?.isUploadDrugAnalysis = true;
-          emit(state.copyWith(driverInfo: driverInfo, status: RideStates.success));
-          if (state.driverInfo?.isUploadDriverLicense == true &&
-              state.driverInfo?.isUploadDriverId == true &&
-              state.driverInfo?.isUploadCarLicense == true &&
-              state.driverInfo?.isUploadConfirmIdentifier == true &&
-              state.driverInfo?.isUploadDriverImage == true &&
-              state.driverInfo?.isUploadCarImage == true) {
-            await fetchRideDriverInfo(context,false);
-            showSuccessMessage(context,
-                context.isArabic ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.' : "Successfully uploaded images, please wait for the approval of all data.");
-          }
-          context.pop();
-          context.pop();
-          emit(state.copyWith(status: RideStates.success));
-        } else {
-          context.pop();
-          showErrorMessage(context, context.isArabic ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.' : 'An error occurred while uploading images. Please try again.');
-        }
-      });
-      emit(state.copyWith(status: RideStates.success, isUploadDrugAnalysis: true));
+      await RideMethodHelper().uploadDrugAnalysis(
+          dragAnalysisDate: rideDragAnalysisExpireDateController.text,
+          dragAnalysis: state.personalDrugAnalysisPicture!,
+          onSuccessUploaded: (bool isSuccess) async {
+            if (isSuccess) {
+              driverInfo?.isUploadDrugAnalysis = true;
+              emit(state.copyWith(
+                  driverInfo: driverInfo, status: RideStates.success));
+              if (state.driverInfo?.isUploadDriverLicense == true &&
+                  state.driverInfo?.isUploadDriverId == true &&
+                  state.driverInfo?.isUploadCarLicense == true &&
+                  state.driverInfo?.isUploadConfirmIdentifier == true &&
+                  state.driverInfo?.isUploadDriverImage == true &&
+                  state.driverInfo?.isUploadCarImage == true) {
+                await fetchRideDriverInfo(context, false);
+                showSuccessMessage(
+                    context,
+                    context.isArabic
+                        ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.'
+                        : "Successfully uploaded images, please wait for the approval of all data.");
+              }
+              context.pop();
+              context.pop();
+              emit(state.copyWith(status: RideStates.success));
+            } else {
+              context.pop();
+              showErrorMessage(
+                  context,
+                  context.isArabic
+                      ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.'
+                      : 'An error occurred while uploading images. Please try again.');
+            }
+          });
+      emit(state.copyWith(
+          status: RideStates.success, isUploadDrugAnalysis: true));
     }
   }
 
@@ -1453,29 +1772,41 @@ class RideCubit extends Cubit<RideState> {
       emit(state.copyWith(status: RideStates.loadingSubmit));
       DriverInfoEntity? driverInfo = state.driverInfo;
       showLoadingDialog(context, canPop: false);
-      await RideMethodHelper().uploadCriminalRecord(criminalRecordDate: rideCriminalRecordExpireDateController.text, criminalRecordImage: state.personalCriminalRecordPicture!, onSuccessUploaded: (bool isSuccess) async{
-        if (isSuccess) {
-          driverInfo?.isUploadCriminalRecord = true;
-          emit(state.copyWith(driverInfo: driverInfo, status: RideStates.success));
-          if (state.driverInfo?.isUploadDriverLicense == true &&
-              state.driverInfo?.isUploadDriverId == true &&
-              state.driverInfo?.isUploadCarLicense == true &&
-              state.driverInfo?.isUploadConfirmIdentifier == true &&
-              state.driverInfo?.isUploadDriverImage == true &&
-              state.driverInfo?.isUploadCarImage == true) {
-            await fetchRideDriverInfo(context,false);
-            showSuccessMessage(context,
-                context.isArabic ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.' : "Successfully uploaded images, please wait for the approval of all data.");
-          }
-          context.pop();
-          context.pop();
-          emit(state.copyWith(status: RideStates.success));
-        } else {
-          context.pop();
-          showErrorMessage(context, context.isArabic ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.' : 'An error occurred while uploading images. Please try again.');
-        }
-      });
-      emit(state.copyWith(status: RideStates.success, isUploadCriminalRecord: true));
+      await RideMethodHelper().uploadCriminalRecord(
+          criminalRecordDate: rideCriminalRecordExpireDateController.text,
+          criminalRecordImage: state.personalCriminalRecordPicture!,
+          onSuccessUploaded: (bool isSuccess) async {
+            if (isSuccess) {
+              driverInfo?.isUploadCriminalRecord = true;
+              emit(state.copyWith(
+                  driverInfo: driverInfo, status: RideStates.success));
+              if (state.driverInfo?.isUploadDriverLicense == true &&
+                  state.driverInfo?.isUploadDriverId == true &&
+                  state.driverInfo?.isUploadCarLicense == true &&
+                  state.driverInfo?.isUploadConfirmIdentifier == true &&
+                  state.driverInfo?.isUploadDriverImage == true &&
+                  state.driverInfo?.isUploadCarImage == true) {
+                await fetchRideDriverInfo(context, false);
+                showSuccessMessage(
+                    context,
+                    context.isArabic
+                        ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.'
+                        : "Successfully uploaded images, please wait for the approval of all data.");
+              }
+              context.pop();
+              context.pop();
+              emit(state.copyWith(status: RideStates.success));
+            } else {
+              context.pop();
+              showErrorMessage(
+                  context,
+                  context.isArabic
+                      ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.'
+                      : 'An error occurred while uploading images. Please try again.');
+            }
+          });
+      emit(state.copyWith(
+          status: RideStates.success, isUploadCriminalRecord: true));
     }
   }
 
@@ -1485,29 +1816,41 @@ class RideCubit extends Cubit<RideState> {
       DriverInfoEntity? driverInfo = state.driverInfo;
       showLoadingDialog(context, canPop: false);
       await RideMethodHelper().uploadTechnicalExamination(
-          technicalExaminationDate: rideTechnicalExaminationExpireDateController.text, technicalExaminationImage: state.personalTechnicalExaminationPicture!, onSuccessUploaded: (bool isSuccess) async{
-        if (isSuccess) {
-          driverInfo?.isUploadTechnicalExamination = true;
-          emit(state.copyWith(driverInfo: driverInfo, status: RideStates.success));
-          if (state.driverInfo?.isUploadDriverLicense == true &&
-              state.driverInfo?.isUploadDriverId == true &&
-              state.driverInfo?.isUploadCarLicense == true &&
-              state.driverInfo?.isUploadConfirmIdentifier == true &&
-              state.driverInfo?.isUploadDriverImage == true &&
-              state.driverInfo?.isUploadCarImage == true) {
-            await fetchRideDriverInfo(context,false);
-            showSuccessMessage(context,
-                context.isArabic ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.' : "Successfully uploaded images, please wait for the approval of all data.");
-          }
-          context.pop();
-          context.pop();
-          emit(state.copyWith(status: RideStates.success));
-        } else {
-          context.pop();
-          showErrorMessage(context, context.isArabic ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.' : 'An error occurred while uploading images. Please try again.');
-        }
-      });
-      emit(state.copyWith(status: RideStates.success, isUploadTechnicalExamination: true));
+          technicalExaminationDate:
+              rideTechnicalExaminationExpireDateController.text,
+          technicalExaminationImage: state.personalTechnicalExaminationPicture!,
+          onSuccessUploaded: (bool isSuccess) async {
+            if (isSuccess) {
+              driverInfo?.isUploadTechnicalExamination = true;
+              emit(state.copyWith(
+                  driverInfo: driverInfo, status: RideStates.success));
+              if (state.driverInfo?.isUploadDriverLicense == true &&
+                  state.driverInfo?.isUploadDriverId == true &&
+                  state.driverInfo?.isUploadCarLicense == true &&
+                  state.driverInfo?.isUploadConfirmIdentifier == true &&
+                  state.driverInfo?.isUploadDriverImage == true &&
+                  state.driverInfo?.isUploadCarImage == true) {
+                await fetchRideDriverInfo(context, false);
+                showSuccessMessage(
+                    context,
+                    context.isArabic
+                        ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.'
+                        : "Successfully uploaded images, please wait for the approval of all data.");
+              }
+              context.pop();
+              context.pop();
+              emit(state.copyWith(status: RideStates.success));
+            } else {
+              context.pop();
+              showErrorMessage(
+                  context,
+                  context.isArabic
+                      ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.'
+                      : 'An error occurred while uploading images. Please try again.');
+            }
+          });
+      emit(state.copyWith(
+          status: RideStates.success, isUploadTechnicalExamination: true));
     }
   }
 
@@ -1531,7 +1874,11 @@ class RideCubit extends Cubit<RideState> {
         workingType: state.selectedPlan ?? '',
         personalPicture: state.personalPicture?.path,
         isShipping: state.isShipping,
-        subcategoryIds: (state.rideSubCategories ?? []).where((e) => e.isEnabled == true).toList().map((e) => e.subCategoryId).toList());
+        subcategoryIds: (state.rideSubCategories ?? [])
+            .where((e) => e.isEnabled == true)
+            .toList()
+            .map((e) => e.subCategoryId)
+            .toList());
     await Storage().saveDriverEntity(params);
     await Storage().removeDriverNoSocketEntity();
     context.go(Routes.RIDE_HOME);
@@ -1540,30 +1887,32 @@ class RideCubit extends Cubit<RideState> {
   onSetSavedData() async {
     RegisterRideSpecialEntity? data = await Storage().getDriverEntity();
     print("data?.personalPicture${data?.personalPicture}");
-    rideNameController.text = data?.driverFirstName??'';
-    rideSurNameController.text = data?.driverLastName??'';
-    rideDateOfBirthController.text = data?.birthday??'';
-    ridePersonalDocLicenseNumController.text = data?.driverLicenseNumber??'';
-    ridePersonalDocIdNumController.text = data?.idNumber??'';
-    rideVehiclePlateNumberController.text = data?.plateInfo??'';
-    ridePhoneNumberController.text = data?.phone??'';
-    ridePricingPerKmController.text = data?.pricingPerKm??'';
-    rideVehicleProductionYearController.text = data?.vehicleYear??'';
+    rideNameController.text = data?.driverFirstName ?? '';
+    rideSurNameController.text = data?.driverLastName ?? '';
+    rideDateOfBirthController.text = data?.birthday ?? '';
+    ridePersonalDocLicenseNumController.text = data?.driverLicenseNumber ?? '';
+    ridePersonalDocIdNumController.text = data?.idNumber ?? '';
+    rideVehiclePlateNumberController.text = data?.plateInfo ?? '';
+    ridePhoneNumberController.text = data?.phone ?? '';
+    ridePricingPerKmController.text = data?.pricingPerKm ?? '';
+    rideVehicleProductionYearController.text = data?.vehicleYear ?? '';
     emit(state.copyWith(
-        hasAirCondition:data?.airConditioner,
-        selectedGov:data?.city,
-        isSmoking:data?.smoker,
-        selectedBrand:data?.vehicleBrand,
-        selectedColors:(state.colors!=null||(state.colors?.isNotEmpty??false))?state.colors?.firstWhere((e) => e.id == data?.vehicleColor):null,
-        selectedModel:data?.vehicleModel,
-        selectedPlan:data?.workingType,
-        personalPicture:XFile(data?.personalPicture??''),
-        savedRideSubCategories:data?.subcategoryIds??[],
+      hasAirCondition: data?.airConditioner,
+      selectedGov: data?.city,
+      isSmoking: data?.smoker,
+      selectedBrand: data?.vehicleBrand,
+      selectedColors:
+          (state.colors != null || (state.colors?.isNotEmpty ?? false))
+              ? state.colors?.firstWhere((e) => e.id == data?.vehicleColor)
+              : null,
+      selectedModel: data?.vehicleModel,
+      selectedPlan: data?.workingType,
+      personalPicture: XFile(data?.personalPicture ?? ''),
+      savedRideSubCategories: data?.subcategoryIds ?? [],
     ));
   }
 
   //model brand color city plan
-
 
   bool isLoadingSubmitRegister = false;
 
@@ -1574,21 +1923,25 @@ class RideCubit extends Cubit<RideState> {
       return;
     }
     if (formKey.currentState!.validate()) {
-      if (state.selectedBrand == null || (state.selectedBrand?.isEmpty ?? false)) {
+      if (state.selectedBrand == null ||
+          (state.selectedBrand?.isEmpty ?? false)) {
         showErrorMessage(context, "Please select vehicle brand");
         return;
       }
 
-      if (state.selectedModel == null || (state.selectedModel?.isEmpty ?? false)) {
+      if (state.selectedModel == null ||
+          (state.selectedModel?.isEmpty ?? false)) {
         showErrorMessage(context, "Please select vehicle Model");
         return;
       }
-      if (state.selectedColors == null || (state.selectedColors?.id.isEmpty ?? false)) {
+      if (state.selectedColors == null ||
+          (state.selectedColors?.id.isEmpty ?? false)) {
         showErrorMessage(context, "Please select color");
         return;
       }
 
-      if (state.selectedPlan == null || (state.selectedPlan?.isEmpty ?? false)) {
+      if (state.selectedPlan == null ||
+          (state.selectedPlan?.isEmpty ?? false)) {
         showErrorMessage(context, "Please select plan");
         return;
       }
@@ -1617,8 +1970,13 @@ class RideCubit extends Cubit<RideState> {
           vehicleModel: state.selectedModel ?? '',
           vehicleYear: rideVehicleProductionYearController.text,
           workingType: state.selectedPlan ?? '',
-          subcategoryIds: (state.rideSubCategories ?? []).where((e) => e.isEnabled == true).toList().map((e) => e.subCategoryId).toList());
-      final Either<Failure, bool> result = await registerRideSpecialUseCase(params);
+          subcategoryIds: (state.rideSubCategories ?? [])
+              .where((e) => e.isEnabled == true)
+              .toList()
+              .map((e) => e.subCategoryId)
+              .toList());
+      final Either<Failure, bool> result =
+          await registerRideSpecialUseCase(params);
 
       result.fold(
         (failure) {
@@ -1627,31 +1985,45 @@ class RideCubit extends Cubit<RideState> {
           emit(state.copyWith(status: RideStates.error, failure: failure));
         },
         (data) async {
-          await RideMethodHelper().uploadDriverImage(driverImage: state.personalPicture!, onSuccessUploaded: (bool isSuccess) async{
-            if (isSuccess) {
-              driverInfo?.isUploadDriverImage = true;
-              emit(state.copyWith(driverInfo: driverInfo, status: RideStates.success));
-              if (state.driverInfo?.isUploadDriverLicense == true &&
-                  state.driverInfo?.isUploadDriverId == true &&
-                  state.driverInfo?.isUploadCarLicense == true &&
-                  state.driverInfo?.isUploadConfirmIdentifier == true &&
-                  state.driverInfo?.isUploadDriverImage == true &&
-                  state.driverInfo?.isUploadCarImage == true) {
-                await fetchRideDriverInfo(context,false);
-                showSuccessMessage(context,
-                    context.isArabic ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.' : "Successfully uploaded images, please wait for the approval of all data.");
-              }
-              context.pop();
-              context.pop();
-              emit(state.copyWith(status: RideStates.success));
-            } else {
-              context.pop();
-              showErrorMessage(context, context.isArabic ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.' : 'An error occurred while uploading images. Please try again.');
-            }
-          });
-          await fetchRideDriverInfo(context,false);
+          await RideMethodHelper().uploadDriverImage(
+              driverImage: state.personalPicture!,
+              onSuccessUploaded: (bool isSuccess) async {
+                if (isSuccess) {
+                  driverInfo?.isUploadDriverImage = true;
+                  emit(state.copyWith(
+                      driverInfo: driverInfo, status: RideStates.success));
+                  if (state.driverInfo?.isUploadDriverLicense == true &&
+                      state.driverInfo?.isUploadDriverId == true &&
+                      state.driverInfo?.isUploadCarLicense == true &&
+                      state.driverInfo?.isUploadConfirmIdentifier == true &&
+                      state.driverInfo?.isUploadDriverImage == true &&
+                      state.driverInfo?.isUploadCarImage == true) {
+                    await fetchRideDriverInfo(context, false);
+                    showSuccessMessage(
+                        context,
+                        context.isArabic
+                            ? 'تم رفع جميع الصور برجاء انتظار الموافقة علي جميع البيانات.'
+                            : "Successfully uploaded images, please wait for the approval of all data.");
+                  }
+                  context.pop();
+                  context.pop();
+                  emit(state.copyWith(status: RideStates.success));
+                } else {
+                  context.pop();
+                  showErrorMessage(
+                      context,
+                      context.isArabic
+                          ? 'حدث مشكلة في رفع الصور. برجاء المحاولة مره اخري.'
+                          : 'An error occurred while uploading images. Please try again.');
+                }
+              });
+          await fetchRideDriverInfo(context, false);
           await fetchRideDriverPictureOptional(context);
-          showSuccessMessage(context, context.isArabic ? "تم التسجيل بنجاح" : "Registered successfully");
+          showSuccessMessage(
+              context,
+              context.isArabic
+                  ? "تم التسجيل بنجاح"
+                  : "Registered successfully");
           context.pushReplacement(Routes.UploadRiderImages);
           isLoadingSubmitRegister = false;
           emit(state.copyWith(status: RideStates.success));
@@ -1674,9 +2046,12 @@ class RideCubit extends Cubit<RideState> {
           phone: ridePhoneNumberController.text,
           plateInfo: rideVehiclePlateNumberController.text,
           // subcategoryId: "62c8baa08e28a58a3edf57ed",
-          subcategoryId: (state.rideSubCategories ?? []).firstWhere((e) => e.isEnabled == true).subCategoryId,
+          subcategoryId: (state.rideSubCategories ?? [])
+              .firstWhere((e) => e.isEnabled == true)
+              .subCategoryId,
           carModel: rideCarModelController.text);
-      final Either<Failure, bool> result = await registerRideNotSpecialUseCase(params);
+      final Either<Failure, bool> result =
+          await registerRideNotSpecialUseCase(params);
 
       result.fold(
         (failure) {
@@ -1686,9 +2061,13 @@ class RideCubit extends Cubit<RideState> {
         },
         (data) async {
           isLoadingSubmitRegister = false;
-          await fetchRideDriverInfo(context,false);
+          await fetchRideDriverInfo(context, false);
           emit(state.copyWith(status: RideStates.success));
-          showSuccessMessage(context, context.isArabic ? "تم التسجيل بنجاح" : "Registered successfully");
+          showSuccessMessage(
+              context,
+              context.isArabic
+                  ? "تم التسجيل بنجاح"
+                  : "Registered successfully");
           context.pushReplacement(Routes.completeRegisterScreen);
           // context.pushReplacement(Routes.UploadRiderImages);
         },
@@ -1710,7 +2089,9 @@ class RideCubit extends Cubit<RideState> {
           location: state.selectedGov ?? '',
           firstName: rideNameController.text,
           lastName: rideSurNameController.text,
-          categoryId: (state.shippingSubCategories ?? []).firstWhere((e) => e.isEnabled == true).subCategoryId,
+          categoryId: (state.shippingSubCategories ?? [])
+              .firstWhere((e) => e.isEnabled == true)
+              .subCategoryId,
           carModel: rideCarModelController.text);
       final Either<Failure, bool> result = await loadingRegisterUseCase(params);
 
@@ -1722,29 +2103,33 @@ class RideCubit extends Cubit<RideState> {
         },
         (data) async {
           isLoadingSubmitRegister = false;
-          await fetchLoaderInfo(context,false);
+          await fetchLoaderInfo(context, false);
           emit(state.copyWith(status: RideStates.success));
-          showSuccessMessage(context, context.isArabic ? "تم التسجيل بنجاح" : "Registered successfully");
+          showSuccessMessage(
+              context,
+              context.isArabic
+                  ? "تم التسجيل بنجاح"
+                  : "Registered successfully");
           context.pushReplacement(Routes.completeRegisterScreen);
         },
       );
     }
   }
 
-  uploadRecord(String tripId,String mediaId) async {
-    final Either<Failure, bool> result = await recordingTripUseCase(RecordingTripUseCaseParams( tripId,  mediaId));
+  uploadRecord(String tripId, String mediaId) async {
+    final Either<Failure, bool> result =
+        await recordingTripUseCase(RecordingTripUseCaseParams(tripId, mediaId));
 
     result.fold(
-          (failure) {
+      (failure) {
         isLoadingSubmitRegister = false;
         emit(state.copyWith(status: RideStates.error, failure: failure));
       },
-          (data) async {
+      (data) async {
         emit(state.copyWith(status: RideStates.success));
       },
     );
   }
-
 
   ///record trip
   final record = Record();
@@ -1778,11 +2163,12 @@ class RideCubit extends Cubit<RideState> {
       await UploadRecord().mediaUrl(
         tripId: tripId,
         path: path ?? "",
-        subcategoryId: subcategoryId, onSuccess: (String mediaId, String tripId) async {
+        subcategoryId: subcategoryId,
+        onSuccess: (String mediaId, String tripId) async {
           log("tripId$tripId");
           log("mediaId$mediaId");
-          await uploadRecord(tripId,mediaId);
-      },
+          await uploadRecord(tripId, mediaId);
+        },
       );
       // await recordingTripUseCase(RecordingTripUseCaseParams( tripId,  'mediaId'));
       return path;
@@ -1791,20 +2177,17 @@ class RideCubit extends Cubit<RideState> {
       return null;
     }
   }
-
-
-
   Future<void> emitDriverLocation(BuildContext context) async {
     final result = await updateSocketLocationUseCase(
-        UpdateSocketLocationParams(latitude: 31.241106, longitude: 30.047558)
-    );
-    result.fold(
-            (l) => emit(state.copyWith(failure: l, status: RideStates.error)),
+        UpdateSocketLocationParams(latitude: 31.241106, longitude: 30.047558));
+    result
+        .fold((l) => emit(state.copyWith(failure: l, status: RideStates.error)),
             (r) async {
-              if(r==true)showSuccessMessage(context, "Location Updated Successfully");
-        });
+      if (r == true) {
+        showSuccessMessage(context, "Location Updated Successfully");
+      }
+    });
   }
-
 
   void removeRideOfferFromRideOffers(RideOfferEntity offer) {
     offer.isExpired = true;
@@ -1813,12 +2196,13 @@ class RideCubit extends Cubit<RideState> {
 
   void listenToRideOffers() {
     listenToRideOffersUseCase((offer) {
-      final updatedOffers = List<RideOfferEntity>.from(state.rideOffers)..add(offer);
+      final updatedOffers = List<RideOfferEntity>.from(state.rideOffers)
+        ..add(offer);
 
-      emit(state.copyWith(status: RideStates.success, rideOffers: updatedOffers));
+      emit(state.copyWith(
+          status: RideStates.success, rideOffers: updatedOffers));
     });
   }
-
 
   @override
   Future<void> close() {

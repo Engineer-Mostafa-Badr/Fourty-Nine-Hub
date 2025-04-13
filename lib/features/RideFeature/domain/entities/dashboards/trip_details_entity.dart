@@ -4,28 +4,24 @@ class TripDetailsEntity {
   final String id;
   final double price;
   final String status;
-  final int distance;
-  final int duration;
+  final String pickupTime;
   final bool isPremium;
-  final bool autoAccept;
   final int passengers;
-  final bool freeTripForDriver;
-  final String paymentMethod;
+  final String note;
   final LocationEntity startLocation;
   final LocationEntity targetLocation;
+  final String createdAt;
 
   TripDetailsEntity({
     required this.id,
     required this.price,
     required this.status,
-    required this.distance,
-    required this.duration,
+    required this.pickupTime,
     required this.isPremium,
-    required this.autoAccept,
     required this.passengers,
-    required this.freeTripForDriver,
-    required this.paymentMethod,
+    required this.note,
     required this.startLocation,
     required this.targetLocation,
+    required this.createdAt,
   });
 }

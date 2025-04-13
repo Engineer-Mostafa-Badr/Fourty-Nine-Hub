@@ -11,6 +11,7 @@ enum DashboardsStates {
   loadingRating,
   loadingModels,
   error,
+  errorOffers,
   success,
   successOffer,
   successRating,
@@ -27,6 +28,7 @@ extension DashboardsStatex on DashboardsState {
   bool get isLoadingCreateOffer => status == DashboardsStates.loadingCreateOffer;
   bool get isLoadingRating => status == DashboardsStates.loadingRating;
   bool get isError => status == DashboardsStates.error;
+  bool get isErrorOffers => status == DashboardsStates.errorOffers;
   bool get isSuccess => status == DashboardsStates.success;
   bool get isSuccessOffer => status == DashboardsStates.successOffer;
   bool get isSuccessRating => status == DashboardsStates.successRating;

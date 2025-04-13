@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/strings/labels.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -11,8 +13,15 @@ import 'package:fourtyninehub/routes/pages.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../../common/widgets/stateless/buttons/app_button.dart';
 import '../../common/widgets/stateless/buttons/default_button.dart';
 import '../../common/widgets/stateless/buttons/elevated_button.dart';
+import '../../features/RideFeature/presentation/pages/widgets/dialog_widget/show_custom_dialog_trip.dart';
+import '../../features/RideFeature/presentation/pages/widgets/font_manager.dart';
+import '../../features/subscripe/presentation/controllers/subscription_controller.dart';
+import '../../helpers/subscription_method.dart';
+import '../../service_locator/service_locator.dart';
+import '../enums/wallet_types_enums.dart';
 import '../utils/custom_show_dialog.dart';
 
 showErrorMessage(BuildContext context, String message) {
@@ -379,3 +388,106 @@ void showConfirmDialog(
   //   ),
   // );
 }
+
+showSubscribeDialog(BuildContext context, String subCategoryId) {
+    showCustomDialogTrip(
+        context,
+        Column(
+          spacing: 12,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              LocaleKeys.alert.localize,
+              style: const TextStyle(
+                fontSize: 20,
+                color: Colors.red,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text('Please Subscribe for more trips',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: FontSize.s16,
+                  color: context.isDarkMode ? Colors.white : Colors.black,
+                )),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                AppButton(
+                    width: context.screenWidth / 3.4,
+                    label: 'Close',
+                    backColor: AppColors.SECONDARY_COLOR_DARK2,
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    }),
+                const SizedBox(width: 16),
+                AppButton(
+                    width: context.screenWidth / 3.4,
+                    label: 'Subscribe',
+                    backColor: AppColors.PRIMARY_COLOR,
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      SubscriptionMethod().subscribe(
+                          subscribeId: subCategoryId,
+                          showRegular: true,
+                          title: '');
+                    }),
+              ],
+            ),
+            const SizedBox(height: 16),
+          ],
+        ));
+  }
+
+  showDebtDialog(BuildContext context, String subCategoryId) {
+    showCustomDialogTrip(
+        context,
+        Column(
+          spacing: 12,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              LocaleKeys.alert.localize,
+              style: const TextStyle(
+                fontSize: 20,
+                color: Colors.red,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text('Please pay the Debt for more trips',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: FontSize.s16,
+                  color: context.isDarkMode ? Colors.white : Colors.black,
+                )),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                AppButton(
+                    width: context.screenWidth / 3.4,
+                    label: 'Close',
+                    backColor: AppColors.SECONDARY_COLOR_DARK2,
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    }),
+                const SizedBox(width: 16),
+                AppButton(
+                    width: context.screenWidth / 3.4,
+                    label: 'Pay',
+                    backColor: AppColors.PRIMARY_COLOR,
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      serviceLocator<SubscriptionController>()
+                          .showActiveSubscriptionAmounts(
+                              walletType: WalletTypes.mainWallet, price: 50);
+                    }),
+              ],
+            ),
+            const SizedBox(height: 16),
+          ],
+        ));
+  }

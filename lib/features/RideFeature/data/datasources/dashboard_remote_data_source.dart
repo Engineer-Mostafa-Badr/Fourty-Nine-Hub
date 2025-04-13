@@ -37,6 +37,8 @@ abstract class TripRemoteDataSource {
       UpdateSettingsDashboardUsecaseParam params);
   Future<Either<Failure, bool>> createNewOffer(
       CreateNewOfferDashboardUsecaseParam params);
+  Future<Either<Failure, bool>> createNewOfferNonSocket(
+      CreateNewOfferDashboardUsecaseParam params);
   Future<Either<Failure, bool>> createDriverRating(
       CreateUpdateDriverRatingUsecaseParam params);
   Future<Either<Failure, bool>> updateDriverRating(
@@ -129,12 +131,14 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
       return Left(ServerFailure(message: e.toString()));
     }
   }
+
   @override
-  Future<Either<Failure, bool>> createDriverRating(
-      CreateUpdateDriverRatingUsecaseParam params) async {
+  Future<Either<Failure, bool>> createNewOfferNonSocket(
+      CreateNewOfferDashboardUsecaseParam params) async {
     try {
-      final response = await _apiConsumer
-          .post(EndPoints.createDriverRating, data: params.toJson());
+      final response = await _apiConsumer.post(
+          EndPoints.createNewOfferNonSocket(params.tripId),
+          data: params.toJson());
 
       return response.fold((failure) => Left(failure), (data) {
         return Right(data['status']);
@@ -143,12 +147,29 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
       return Left(ServerFailure(message: e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, bool>> createDriverRating(
+      CreateUpdateDriverRatingUsecaseParam params) async {
+    try {
+      final response = await _apiConsumer.post(EndPoints.createDriverRating,
+          data: params.toJson());
+
+      return response.fold((failure) => Left(failure), (data) {
+        return Right(data['status']);
+      });
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
   @override
   Future<Either<Failure, bool>> updateDriverRating(
       CreateUpdateDriverRatingUsecaseParam params) async {
     try {
-      final response = await _apiConsumer
-          .put(EndPoints.updateDriverRating(params.tripId), data: params.toJson()['newComment']);
+      final response = await _apiConsumer.put(
+          EndPoints.updateDriverRating(params.tripId),
+          data: params.toJson()['newComment']);
 
       return response.fold((failure) => Left(failure), (data) {
         return Right(data['status']);

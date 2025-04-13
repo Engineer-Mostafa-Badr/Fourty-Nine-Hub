@@ -43,6 +43,8 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'core/service/cache_service.dart';
 import 'core/themes/light_theme.dart';
 import 'features/OnBoarding/Presentation/Controllers/on_boarding_cubit.dart';
+import 'features/RideFeature/presentation/controllers/client_trips_cubit/client_trips_cubit.dart';
+import 'features/RideFeature/presentation/controllers/dashboards_cubit/dashboards_cubit.dart';
 import 'features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'features/notifications/presentation/cubits/get_status_all_services_notifications/get_status_all_services_notifications_cubit.dart';
@@ -256,6 +258,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         // BlocProvider(
         //   create: (context) => AuthenticationRideCubit(),
         // ),
+        BlocProvider(
+                  create: (context) => serviceLocator<DashboardsCubit>(),
+        ),
+        BlocProvider(
+                  create: (context) => serviceLocator<ClientTripsCubit>(),
+        ),
         BlocProvider<GetServicesNotificationsCubit>(
           create: (context) => GetServicesNotificationsCubit(
             getNotficationsUseCase: serviceLocator(),
