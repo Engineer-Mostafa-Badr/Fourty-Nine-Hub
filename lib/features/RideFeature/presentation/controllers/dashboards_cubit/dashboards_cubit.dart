@@ -17,6 +17,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/ge
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_accept_offer_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_change_trip_price_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_new_trip_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_remove_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_update_trip_auto_accept_case.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/dialog_widget/show_custom_dialog_trip.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/font_manager.dart';
@@ -55,6 +56,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   final ListenToUpdateTripPriceUseCase listenToUpdateTripPriceUseCase;
   final ListenToAcceptOfferUseCase listenToAcceptOfferUseCase;
   final ListenToNewTripUseCase listenToNewTripUseCase;
+  final ListenToRemoveTripUseCase listenToRemoveTripUseCase;
   DashboardsCubit(
     this.getAvailableTripsUsecase,
     this.getPastTripsUsecase,
@@ -69,13 +71,31 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       this.listenToUpdateTripPriceUseCase,
       this.listenToAcceptOfferUseCase,
       this.listenToNewTripUseCase,
+      this.listenToRemoveTripUseCase,
   ) : super(const DashboardsState());
   List<TripEntity> availableTripsNonSocket = [];
 
   void listenToNewTrip() {
     CliLogger.info('Listen To New Trip');
+    // TripsResponseEntity
     listenToNewTripUseCase((trip) {
+      List<AvailableRideTripEntity> list = state.availableRideTrips ?? [];
+      list.insert(0, trip);
+      emit(state.copyWith(availableRideTrips: list));
+      log(trip.toString());
+    });
+  }
 
+  void listenToRemoveTrip() {
+    CliLogger.info('Remove Trip');
+    // TripsResponseEntity
+    listenToRemoveTripUseCase((tripId) {
+      List<AvailableRideTripEntity> list = state.availableRideTrips ?? [];
+      log("tripId.toString()${tripId.toString()}");
+      if(tripId.isNotEmpty)list.removeWhere((e)=>e.id==tripId);
+      // log(trip.toString());
+      // list.insert(0, trip);
+      emit(state.copyWith(availableRideTrips: list));
     });
   }
 

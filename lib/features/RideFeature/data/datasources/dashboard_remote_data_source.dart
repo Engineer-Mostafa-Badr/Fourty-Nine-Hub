@@ -11,6 +11,7 @@ import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/update
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/accept_offer_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/trip_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/trips_response_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_auto_accept_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_price_entity.dart';
 import 'package:fourtyninehub/shared_web_socket.dart';
@@ -43,7 +44,8 @@ abstract class TripRemoteDataSource {
   void listenToUpdateTripAutoAccept(Function(UpdateTripAutoAcceptEntity trip) params);
   void listenToAcceptOffer(Function(AcceptOfferEntity trip) params);
   void listenToUpdateTripPrice(Function(UpdateTripPriceEntity trip) params);
-  void listenToNewTrip(Function(TripEntity trip) params);
+  void listenToNewTrip(Function(AvailableRideTripEntity trip) params);
+  void listenToRemoveTrip(Function(String tripId) params);
 }
 
 class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
@@ -234,17 +236,36 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
   }
 
   @override
-  void listenToNewTrip(Function(TripEntity trip) params) {
+  void listenToNewTrip(Function(AvailableRideTripEntity trip) params) {
     try {
       CliLogger.info("trip NewTrip ");
       log("trip NewTrip ");
-      SharedWebSocket.socket!.on(SocketIOListeners.getAllTrip, (data) {
+      SharedWebSocket.socket!.on(SocketIOListeners.newAvailableTrip, (data) {
         // final decodedData = jsonDecode(data);
         // CliLogger.info("offer data :  $decodedData");
         // params(RideOfferModel.fromJson(decodedData));
         CliLogger.info("New Trip data :  $data");
         log("New Trip data :  $data");
-        params(TripModel.fromJson(data['updatedTripPrice']));
+        log("New Trip data['newAvailableTrip'] :  ${data['newAvailableTrip']}");
+        params(AvailableRideTripModel.fromJson(data['newAvailableTrip']));
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to trip price error $e");
+    }
+  }
+
+  @override
+  void listenToRemoveTrip(Function(String tripId) params) {
+    try {
+      CliLogger.info("Listen to Remove Trip ");
+      log("Listen to Remove Trip ");
+      SharedWebSocket.socket!.on(SocketIOListeners.removeTrip, (data) {
+        // final decodedData = jsonDecode(data);
+        // CliLogger.info("offer data :  $decodedData");
+        // params(RideOfferModel.fromJson(decodedData));
+        CliLogger.info("Remove Trip data :  $data");
+        log("Remove Trip data :  $data");
+        params(data['removedTripId']['id']);
       });
     } catch (e) {
       CliLogger.info("can't listen to trip price error $e");

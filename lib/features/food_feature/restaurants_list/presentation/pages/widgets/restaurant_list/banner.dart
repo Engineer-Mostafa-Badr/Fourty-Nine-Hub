@@ -39,7 +39,7 @@ class MealBanner extends StatelessWidget {
               ? MainCategoryEntity(
                   id: state.mainCategory?.id ?? "",
                   name: context.isArabic ? 'أكلة' : 'Meal',
-                  image: state.mainCategory?.image ?? "",
+                  image: state.mainCategory?.banner ?? "",
                   banner: state.mainCategory?.banner ?? "",
                   cover: state.mainCategory?.cover ?? "",
                   isFavorite: state.mainCategory?.isFavorite ?? false,

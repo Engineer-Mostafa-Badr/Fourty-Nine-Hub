@@ -47,8 +47,8 @@ class AvailableRideTripItem extends StatelessWidget {
                         height: 50,
                         decoration: const BoxDecoration(shape: BoxShape.circle),
                         clipBehavior: Clip.antiAliasWithSaveLayer,
-                        child: tripEntity.clientImage.isNotEmpty ? Image.network(tripEntity.clientImage, fit: BoxFit.cover,) : Image.asset(
-                          Assets.personalImage,
+                        child: tripEntity.clientGender=='male' ? Image.asset(Assets.maleImagePlaceholder, fit: BoxFit.cover,) : Image.asset(
+                          Assets.femaleImagePlacehlder,
                           fit: BoxFit.cover,
                         ),
                       ),
