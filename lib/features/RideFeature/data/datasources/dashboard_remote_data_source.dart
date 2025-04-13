@@ -45,6 +45,7 @@ abstract class TripRemoteDataSource {
   void listenToAcceptOffer(Function(AcceptOfferEntity trip) params);
   void listenToUpdateTripPrice(Function(UpdateTripPriceEntity trip) params);
   void listenToNewTrip(Function(AvailableRideTripEntity trip) params);
+  void listenToRemoveTrip(Function(String tripId) params);
 }
 
 class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
@@ -247,6 +248,24 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
         log("New Trip data :  $data");
         log("New Trip data['newAvailableTrip'] :  ${data['newAvailableTrip']}");
         params(AvailableRideTripModel.fromJson(data['newAvailableTrip']));
+      });
+    } catch (e) {
+      CliLogger.info("can't listen to trip price error $e");
+    }
+  }
+
+  @override
+  void listenToRemoveTrip(Function(String tripId) params) {
+    try {
+      CliLogger.info("Listen to Remove Trip ");
+      log("Listen to Remove Trip ");
+      SharedWebSocket.socket!.on(SocketIOListeners.removeTrip, (data) {
+        // final decodedData = jsonDecode(data);
+        // CliLogger.info("offer data :  $decodedData");
+        // params(RideOfferModel.fromJson(decodedData));
+        CliLogger.info("Remove Trip data :  $data");
+        log("Remove Trip data :  $data");
+        params(data['removedTripId']['id']);
       });
     } catch (e) {
       CliLogger.info("can't listen to trip price error $e");
