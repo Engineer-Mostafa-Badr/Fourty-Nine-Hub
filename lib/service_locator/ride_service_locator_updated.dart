@@ -38,8 +38,11 @@ import '../features/RideFeature/data/repositories/shipping_repository_imp.dart';
 import '../features/RideFeature/domain/repositories/shipping_repository.dart';
 import '../features/RideFeature/domain/usecases/create_loading_trip_usecase.dart';
 import '../features/RideFeature/domain/usecases/get_client_offers_usecase.dart';
+import '../features/RideFeature/domain/usecases/get_loading_offers_usecase.dart';
 import '../features/RideFeature/domain/usecases/get_ride_categories_usecase.dart';
+import '../features/RideFeature/domain/usecases/make_loading_request_trip_usecase.dart';
 import '../features/RideFeature/domain/usecases/make_non_tracking_request_trip_usecase.dart';
+import '../features/RideFeature/presentation/controllers/client_trips_cubit/client_trips_cubit.dart';
 
 class RideServiceLocatorUpdated {
   static void execute({required GetIt serviceLocator}) {
@@ -118,13 +121,15 @@ class RideServiceLocatorUpdated {
         AcceptOfferByClientUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<UpdateTripAutoAcceptByClientUseCase>(() =>
         UpdateTripAutoAcceptByClientUseCase(repository: serviceLocator()));
+    serviceLocator.registerLazySingleton<MakeLoadingRequestTripUsecase>(() =>
+        MakeLoadingRequestTripUsecase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetLoadingOffersUsecase>(() =>
+        GetLoadingOffersUsecase(serviceLocator()));
 
 
     // ---------------------------------- cubits ----------------------------------
 
     serviceLocator.registerLazySingleton<RideCubit>(() => RideCubit(
-          serviceLocator(),
-          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
@@ -162,6 +167,14 @@ class RideServiceLocatorUpdated {
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+        ));
+    serviceLocator.registerFactory<ClientTripsCubit>(() => ClientTripsCubit(
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

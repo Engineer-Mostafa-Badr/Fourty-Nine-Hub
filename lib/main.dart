@@ -13,7 +13,6 @@ import 'package:fourtyninehub/common/theme/cubit/states.dart';
 import 'package:fourtyninehub/core/localization/localization_service.dart';
 import 'package:fourtyninehub/core/themes/dark_theme.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/call/presentation/controller/call_controller/call_cubit.dart';
 import 'package:fourtyninehub/features/call/presentation/controller/send_call_controller.dart/send_call_cubit.dart';
 import 'package:fourtyninehub/features/call/presentation/pages/whatsapp_screen.dart';
@@ -39,6 +38,7 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:geolocator/geolocator.dart';
 import 'core/service/cache_service.dart';
 import 'core/themes/light_theme.dart';
+import 'features/RideFeature/presentation/controllers/client_trips_cubit/client_trips_cubit.dart';
 import 'features/RideFeature/presentation/controllers/dashboards_cubit/dashboards_cubit.dart';
 import 'features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -246,6 +246,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         // ),
         BlocProvider(
                   create: (context) => serviceLocator<DashboardsCubit>(),
+        ),
+        BlocProvider(
+                  create: (context) => serviceLocator<ClientTripsCubit>(),
         ),
         BlocProvider<GetServicesNotificationsCubit>(
           create: (context) => GetServicesNotificationsCubit(

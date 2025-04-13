@@ -73,14 +73,11 @@ import 'package:path_provider/path_provider.dart';
 
 import '../../../../../core/data/datasources/remote/socket/socket_data_source.dart';
 import '../../../../../core/error/failure.dart';
-import '../../../domain/entities/get_offers_entity.dart';
 import '../../../../../shared_web_socket.dart';
 import '../../../domain/entities/ride_category_entity.dart';
-import '../../../domain/usecases/get_client_offers_usecase.dart';
 import '../../../domain/usecases/get_ride_categories_usecase.dart';
 import 'package:record/record.dart';
 
-import '../../../domain/usecases/make_non_tracking_request_trip_usecase.dart';
 
 class RideCubit extends Cubit<RideState> {
   bool isComfort = false;
@@ -96,8 +93,8 @@ class RideCubit extends Cubit<RideState> {
   bool hasPendingShownBottomSheet = false;
   bool hasAcceptedShownBottomSheet = false;
 
-
   bool selectedCategoryIsSocket = true;
+  String subCategoryId = '';
 
   Map<String, String> socketCategories = {
     'captain': '62c8ba9f8e28a58a3edf57eb',
@@ -107,6 +104,20 @@ class RideCubit extends Cubit<RideState> {
     'taxi': '62c8ba9e8e28a58a3edf57e9',
     'suv': '62c8baa28e28a58a3edf57f1',
     'scooter': '6698736fdaa111da2d775627',
+  };
+  Map<String, String> trukCategories = {
+    'Trucycle': '63044ea31df1280e87614fe4',
+    'Delivery ': '62c8bab78e28a58a3edf5819',
+    'Pickup': '62c8baad8e28a58a3edf5805',
+    'Jumbo': '62c8baae8e28a58a3edf5807',
+    'Tow': '62c8bab48e28a58a3edf5813',
+    'Money': '62c8bab68e28a58a3edf5817',
+    'Trailer': '62c8baaf8e28a58a3edf5809',
+    'Flatbed': '62c8bab28e28a58a3edf580f',
+    'Tank ': '62c8bab18e28a58a3edf580d',
+    'Tipper': '62c8bab08e28a58a3edf580b',
+    'Refriger': '62c8bab38e28a58a3edf5811',
+    'Transport': '62c8bab88e28a58a3edf581b',
   };
 
   final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
@@ -139,9 +150,7 @@ class RideCubit extends Cubit<RideState> {
   final GetLoadingInfoUseCase getLoadingInfoUseCase;
   final MakeRequestTripUseCase makeRequestTripUseCase;
   final RecordingTripUseCase recordingTripUseCase;
-  final MakeNonTrackingRequestTripUsecase makeNonTrackingRequestTripUsecase;
   final UpdateSocketLocationUseCase updateSocketLocationUseCase;
-  final GetClientOffersUsecase getClientOffersUseCase;
 
   RideCubit(
     this.getRideCategories,
@@ -171,12 +180,10 @@ class RideCubit extends Cubit<RideState> {
     this.listenToRideOffersUseCase,
     this.acceptOfferByClientUseCase,
     this.updateTripAutoAcceptByClientUseCase,
-      this.updateSocketLocationUseCase,
-      this.makeNonTrackingRequestTripUsecase,
-    this.getClientOffersUseCase,
-  ) : super( RideState(
-    rideOffers: [],
-  )){
+    this.updateSocketLocationUseCase,
+  ) : super(RideState(
+          rideOffers: [],
+        )) {
     listenToRideOffers();
   }
 
@@ -187,10 +194,10 @@ class RideCubit extends Cubit<RideState> {
     await Future.wait([
       _fetchUserLocation(),
       _fetchUserLocation(),
-      fetchRideDriverInfo(context,false),
-      fetchRideDriverInfo(context,true),
+      fetchRideDriverInfo(context, false),
+      fetchRideDriverInfo(context, true),
       retrieveClientLatestTrip(),
-      fetchRideDriverInfo(context,false),
+      fetchRideDriverInfo(context, false),
       getCostPerKm(),
       fetchLoaderInfo(context, false),
       fetchLoaderInfo(context, true),
@@ -205,10 +212,15 @@ class RideCubit extends Cubit<RideState> {
     emit(state.copyWith(status: RideStates.success));
   }
 
+  bool isTruk = false;
   void checkSelectedCategoryIsSocket(String selectedCategory) {
     if (socketCategories.containsValue(selectedCategory)) {
       selectedCategoryIsSocket = true;
-    }else{
+    } else if (trukCategories.containsValue(selectedCategory)) {
+      selectedCategoryIsSocket = false;
+      isTruk = true;
+    } else {
+      isTruk = false;
       selectedCategoryIsSocket = false;
     }
     log(selectedCategoryIsSocket.toString());
@@ -631,77 +643,95 @@ class RideCubit extends Cubit<RideState> {
     );
 
     result.fold(
-          (failure) => emit(state.copyWith(status: RideStates.error, failure: failure)),
-          (rideRequestTrip){
-            log("tripId${rideRequestTrip.id}");
-            emit(state.copyWith(status: RideStates.success, requestedTrip: rideRequestTrip));
-          },
+      (failure) =>
+          emit(state.copyWith(status: RideStates.error, failure: failure)),
+      (rideRequestTrip) {
+        log("tripId${rideRequestTrip.id}");
+        emit(state.copyWith(
+            status: RideStates.success, requestedTrip: rideRequestTrip));
+      },
     );
   }
 
   Future<void> updateTripAutoAcceptStatus({required bool isAutoAccept}) async {
-
-    final Either<Failure, bool> result = await updateTripAutoAcceptByClientUseCase(
+    final Either<Failure, bool> result =
+        await updateTripAutoAcceptByClientUseCase(
       UpdateTripAutoAcceptByClientUseCaseParams(
         isAutoAccept: isAutoAccept,
       ),
     );
 
     result.fold(
-          (failure) => emit(state.copyWith(status: RideStates.error, failure: failure)),
-          (status){
-            state.requestedTrip!.autoAccept = isAutoAccept;
-            emit(state.copyWith(status: RideStates.success));
-          },
+      (failure) =>
+          emit(state.copyWith(status: RideStates.error, failure: failure)),
+      (status) {
+        state.requestedTrip!.autoAccept = isAutoAccept;
+        emit(state.copyWith(status: RideStates.success));
+      },
     );
   }
 
   Future<void> retrieveClientLatestTrip() async {
-
     final Either<Failure, RideRequestTripEntity> result =
         await retrieveClientLatestTripUseCase(const NoParams());
 
     result.fold(
-          (failure) => emit(state.copyWith(status: RideStates.error, failure: failure)),
-          (rideRequestTrip){
-            state.requestedTrip = rideRequestTrip;
-            if(state.requestedTrip!.status != TripState.canceled.name && state.requestedTrip!.status != TripState.completed.name){
-              GetLocationFromAddressEntity currentLocation = GetLocationFromAddressEntity(
-                lat: state.requestedTrip!.startCoordinates![0],
-                lng: state.requestedTrip!.startCoordinates![1],
-                address: state.requestedTrip!.from!,
-              );
-              GetLocationFromAddressEntity toLocation = GetLocationFromAddressEntity(
-                lat: state.requestedTrip!.targetCoordinates![0],
-                lng: state.requestedTrip!.targetCoordinates![1],
-                address: state.requestedTrip!.to!,
-              );
-              emit(state.copyWith(status: RideStates.success, requestedTrip: rideRequestTrip, currentLocation: currentLocation, toLocation: toLocation));
-            }
-            emit(state.copyWith(status: RideStates.success, requestedTrip: rideRequestTrip));
-          },
+      (failure) =>
+          emit(state.copyWith(status: RideStates.error, failure: failure)),
+      (rideRequestTrip) {
+        state.requestedTrip = rideRequestTrip;
+        if (state.requestedTrip!.status != TripState.canceled.name &&
+            state.requestedTrip!.status != TripState.completed.name) {
+          GetLocationFromAddressEntity currentLocation =
+              GetLocationFromAddressEntity(
+            lat: state.requestedTrip!.startCoordinates![0],
+            lng: state.requestedTrip!.startCoordinates![1],
+            address: state.requestedTrip!.from!,
+          );
+          GetLocationFromAddressEntity toLocation =
+              GetLocationFromAddressEntity(
+            lat: state.requestedTrip!.targetCoordinates![0],
+            lng: state.requestedTrip!.targetCoordinates![1],
+            address: state.requestedTrip!.to!,
+          );
+          emit(state.copyWith(
+              status: RideStates.success,
+              requestedTrip: rideRequestTrip,
+              currentLocation: currentLocation,
+              toLocation: toLocation));
+        }
+        emit(state.copyWith(
+            status: RideStates.success, requestedTrip: rideRequestTrip));
+      },
     );
   }
 
   Future<void> acceptOfferByClient({required String offerId}) async {
-    final Either<Failure, RideRequestTripEntity> result = await acceptOfferByClientUseCase(offerId);
+    final Either<Failure, RideRequestTripEntity> result =
+        await acceptOfferByClientUseCase(offerId);
 
     result.fold(
-          (failure) => emit(state.copyWith(status: RideStates.error, failure: failure)),
-          (rideRequestTrip) {
-            state.requestedTrip = rideRequestTrip;
-            GetLocationFromAddressEntity currentLocation = GetLocationFromAddressEntity(
-              lat: state.requestedTrip!.startCoordinates![0],
-              lng: state.requestedTrip!.startCoordinates![1],
-              address: state.requestedTrip!.from!,
-            );
-            GetLocationFromAddressEntity toLocation = GetLocationFromAddressEntity(
-              lat: state.requestedTrip!.targetCoordinates![0],
-              lng: state.requestedTrip!.targetCoordinates![1],
-              address: state.requestedTrip!.to!,
-            );
-            emit(state.copyWith(status: RideStates.success, requestedTrip: rideRequestTrip, currentLocation: currentLocation, toLocation: toLocation));
-          },
+      (failure) =>
+          emit(state.copyWith(status: RideStates.error, failure: failure)),
+      (rideRequestTrip) {
+        state.requestedTrip = rideRequestTrip;
+        GetLocationFromAddressEntity currentLocation =
+            GetLocationFromAddressEntity(
+          lat: state.requestedTrip!.startCoordinates![0],
+          lng: state.requestedTrip!.startCoordinates![1],
+          address: state.requestedTrip!.from!,
+        );
+        GetLocationFromAddressEntity toLocation = GetLocationFromAddressEntity(
+          lat: state.requestedTrip!.targetCoordinates![0],
+          lng: state.requestedTrip!.targetCoordinates![1],
+          address: state.requestedTrip!.to!,
+        );
+        emit(state.copyWith(
+            status: RideStates.success,
+            requestedTrip: rideRequestTrip,
+            currentLocation: currentLocation,
+            toLocation: toLocation));
+      },
     );
   }
 
@@ -2118,30 +2148,6 @@ class RideCubit extends Cubit<RideState> {
       return null;
     }
   }
-
-  Future<void> makeNonTrackingRequestTrip(BuildContext context,
-      MakeNonTrackingRequestTripUsecaseParam param) async {
-    if (isClosed) {
-      return;
-    }
-    emit(state.copyWith(status: RideStates.loadingSubmit));
-
-    final Either<Failure, bool> result =
-        await makeNonTrackingRequestTripUsecase(param);
-
-    if (isClosed) return;
-    result.fold(
-      (failure) {
-        log("Failure ${getFailureMessage(failure, context)}");
-        emit(state.copyWith(status: RideStates.error, failure: failure));
-      },
-      (settings) {
-        log("Suzccess");
-        emit(state.copyWith(status: RideStates.success));
-      },
-    );
-  }
-
   Future<void> emitDriverLocation(BuildContext context) async {
     final result = await updateSocketLocationUseCase(
         UpdateSocketLocationParams(latitude: 31.241106, longitude: 30.047558));
@@ -2154,33 +2160,6 @@ class RideCubit extends Cubit<RideState> {
     });
   }
 
-  Future<void> getClientOffers(BuildContext context) async {
-    if (isClosed) {
-      return;
-    }
-    emit(state.copyWith(status: RideStates.loading));
-
-    final Either<Failure, GetOffersResponseEntity> result =
-        await getClientOffersUseCase();
-
-    if (isClosed) return;
-    result.fold(
-      (failure) {
-        log("Failure ${getFailureMessage(failure, context)}");
-        emit(state.copyWith(status: RideStates.error, failure: failure));
-      },
-      (offers) {
-        log("Suzccess");
-        emit(state.copyWith(
-            status: RideStates.success, offers: offers.data.offers));
-        showSuccessMessage(
-            context,
-            context.isArabic
-                ? "تم استرجاع العروض بنجاح"
-                : "Offers retrieved successfully");
-      },
-    );
-  }
   void removeRideOfferFromRideOffers(RideOfferEntity offer) {
     offer.isExpired = true;
     emit(state.copyWith(status: RideStates.success));
@@ -2188,12 +2167,13 @@ class RideCubit extends Cubit<RideState> {
 
   void listenToRideOffers() {
     listenToRideOffersUseCase((offer) {
-      final updatedOffers = List<RideOfferEntity>.from(state.rideOffers)..add(offer);
+      final updatedOffers = List<RideOfferEntity>.from(state.rideOffers)
+        ..add(offer);
 
-      emit(state.copyWith(status: RideStates.success, rideOffers: updatedOffers));
+      emit(state.copyWith(
+          status: RideStates.success, rideOffers: updatedOffers));
     });
   }
-
 
   @override
   Future<void> close() {

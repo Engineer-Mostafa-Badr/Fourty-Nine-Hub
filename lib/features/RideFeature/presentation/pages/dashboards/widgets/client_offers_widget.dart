@@ -14,14 +14,14 @@ import '../../../../domain/entities/dashboards/trip_entity.dart';
 
 class ClientOffersWidget extends StatelessWidget {
   final String modeType;
-  final TripEntity? tripEntity;
+  final TripEntity? offers;
   const ClientOffersWidget(
-      {super.key, this.modeType = 'truk', this.tripEntity});
+      {super.key, this.modeType = 'truk', this.offers});
 
   @override
   Widget build(BuildContext context) {
     DateTime dateTime = DateTime.parse(
-        tripEntity?.tripDetails?.createdAt ?? '2025-03-11T21:50:21.998Z');
+        offers?.tripDetails?.createdAt ?? '2025-03-11T21:50:21.998Z');
     String formattedDate =
         "${dateTime.day.toString().padLeft(2, '0')}/${dateTime.month.toString().padLeft(2, '0')}/${dateTime.year}";
     String formattedTime =
@@ -48,16 +48,16 @@ class ClientOffersWidget extends StatelessWidget {
                           decoration:
                               const BoxDecoration(shape: BoxShape.circle),
                           clipBehavior: Clip.antiAliasWithSaveLayer,
-                          child: tripEntity?.clientDetails?.profilePictureUrl ==
+                          child: offers?.clientDetails?.profilePictureUrl ==
                                       null ||
-                                  tripEntity!
+                                  offers!
                                       .clientDetails!.profilePictureUrl.isEmpty
                               ? Image.asset(
                                   Assets.maleImagePlaceholder,
                                   fit: BoxFit.cover,
                                 )
                               : Image.network(
-                                  tripEntity!.clientDetails!.profilePictureUrl,
+                                  offers!.clientDetails!.profilePictureUrl,
                                 )),
                     ),
                     Positioned(
@@ -76,7 +76,7 @@ class ClientOffersWidget extends StatelessWidget {
                                       width: 8, height: 8),
                                   const Sizer(width: 4),
                                   Label(
-                                      text: tripEntity
+                                      text: offers
                                               ?.clientDetails?.rating?.count
                                               .toString() ??
                                           '0',
@@ -85,11 +85,11 @@ class ClientOffersWidget extends StatelessWidget {
                   ],
                 ),
                 Label(
-                    text: tripEntity?.clientDetails?.firstName ?? '',
+                    text: offers?.clientDetails?.firstName ?? '',
                     style: Styles.mediumText()),
                 Label(
                     text:
-                        '(${tripEntity?.clientDetails?.rating?.average ?? 0})',
+                        '(${offers?.clientDetails?.rating?.average ?? 0})',
                     style: Styles.smallText())
               ])),
           const Sizer(width: 32),
@@ -120,7 +120,7 @@ class ClientOffersWidget extends StatelessWidget {
                                 Expanded(
                                     flex: 8,
                                     child: Label(
-                                        text: tripEntity?.tripDetails
+                                        text: offers?.tripDetails
                                                 ?.startLocation.title ??
                                             'Cairo International Airport',
                                         style: Styles.headerText()))
@@ -136,7 +136,7 @@ class ClientOffersWidget extends StatelessWidget {
                                 Expanded(
                                     flex: 8,
                                     child: Label(
-                                        text: tripEntity?.tripDetails
+                                        text: offers?.tripDetails
                                                 ?.targetLocation.title ??
                                             'Cairo International Airport',
                                         style: Styles.mediumText(
@@ -150,21 +150,21 @@ class ClientOffersWidget extends StatelessWidget {
                           flex: 3,
                           child: Column(
                             children: [
-                              tripEntity?.clientDetails?.profilePictureUrl ==
+                              offers?.clientDetails?.profilePictureUrl ==
                                           null ||
-                                      tripEntity!.clientDetails!
+                                      offers!.clientDetails!
                                           .profilePictureUrl.isEmpty
                                   ? Image.asset(Assets.rideIcon,
                                       width: 40, height: 40, fit: BoxFit.cover)
                                   : Image.network(
-                                      tripEntity!.subCategory!.pictureUrl,
+                                      offers!.subCategory!.pictureUrl,
                                       width: 40,
                                       height: 40,
                                       fit: BoxFit.contain),
                               Label(
                                   text: context.isArabic
-                                      ? (tripEntity?.subCategory?.nameAr ?? '')
-                                      : (tripEntity?.subCategory?.nameEn ?? ''),
+                                      ? (offers?.subCategory?.nameAr ?? '')
+                                      : (offers?.subCategory?.nameEn ?? ''),
                                   style: Styles.mediumText(fontSize: 25))
                             ],
                           )),
@@ -173,14 +173,14 @@ class ClientOffersWidget extends StatelessWidget {
                   Label(
                     text: modeType == 'truk'
                         ? "${LocaleKeys.cargoDescription.tr()} : Car"
-                        : '${LocaleKeys.passenger.tr()} : ${tripEntity?.tripDetails?.passengers ?? 0}',
+                        : '${LocaleKeys.passenger.tr()} : ${offers?.tripDetails?.passengers ?? 0}',
                     style: Styles.mediumText(fontSize: 32),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Label(
-                          text: "${tripEntity?.tripDetails?.price ?? 300}",
+                          text: "${offers?.tripDetails?.price ?? 300}",
                           style:
                               Styles.mediumText(fontWeight: FontWeight.w700)),
                       const Sizer(width: 4),

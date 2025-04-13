@@ -726,7 +726,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                           child: ClickableWidget(
                               onTap: () {
                                 if (context.isUserLoggedIn) {
-                                  context.push(Routes.rideLoadingRequestScreen);
+                                  context.push(Routes.rideLoadingRequestScreen,extra: false);
                                 } else {
                                   context.push(Routes.LOGIN);
                                 }
@@ -748,7 +748,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                           child: ClickableWidget(
                               onTap: () {
                                 if (context.isUserLoggedIn) {
-                                  context.push(Routes.rideLoadingRequestScreen);
+                                  context.push(Routes.rideLoadingRequestScreen,extra: true);
                                 } else {
                                   context.push(Routes.LOGIN);
                                 }
@@ -827,7 +827,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
             ),
             child: BlocBuilder<RideCubit, RideState>(
               builder: (context, state) {
-                var cubit = serviceLocator<RideCubit>();
+                // var cubit = serviceLocator<RideCubit>();
                 return SingleChildScrollView(
                   child: Column(
                     spacing: 8,
@@ -837,7 +837,11 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                       _buildCategoryList("shipping",
                           state.shippingCategory?.subCategories ?? []),
                       if (!context.read<RideCubit>().selectedCategoryIsSocket)
-                        const RidePersonalMoreInfoScreen(),
+                        RidePersonalMoreInfoScreen(
+                          isTruk: context.read<RideCubit>().isTruk,
+                          subCategoryId:
+                              context.read<RideCubit>().subCategoryId,
+                        ),
                       context.read<RideCubit>().selectedCategoryIsSocket
                           ? _customLocationField(
                               isTo: false,
@@ -1090,6 +1094,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         _selectedCategoryIndex = 0;
                         subCategories.insert(0, subCategories.removeAt(index));
                       }
+                      context.read<RideCubit>().subCategoryId =
+                          subCategory.subCategoryId;
                       context.read<RideCubit>().checkSelectedCategoryIsSocket(
                           subCategory.subCategoryId);
                     });

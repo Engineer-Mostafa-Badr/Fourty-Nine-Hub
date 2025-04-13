@@ -28,6 +28,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/running_trips
 import 'package:fourtyninehub/features/RideFeature/domain/repositories/ride_repository.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_pending_trip_by_client_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_car_years_and_types_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/make_loading_request_trip_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_trip_auto_accept_by_client_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_categories_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_socket_location_usecase.dart';
@@ -330,5 +331,15 @@ class RideRepositoryImplementation extends RideRepository {
   @override
   Future<Either<Failure, bool>> updateTripAutoAcceptByClient(UpdateTripAutoAcceptByClientUseCaseParams params) async{
     return await rideRemoteDataSource.updateTripAutoAcceptByClient(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> makeLoadingRequestTrip(MakeLoadingRequestTripUsecaseParam params) async{
+    return await rideRemoteDataSource.makeLoadingRequestTrip(params);
+  }
+  
+  @override
+  Future<Either<Failure, GetOffersResponseEntity>> getLoadingOffers() async{
+    return await rideRemoteDataSource.getLoadingOffers();
   }
 }

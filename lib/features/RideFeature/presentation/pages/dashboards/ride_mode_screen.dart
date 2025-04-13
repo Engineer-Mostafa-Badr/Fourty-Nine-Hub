@@ -46,11 +46,11 @@ class _RideModeScreenState extends State<RideModeScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final dashboardCubit = context.read<DashboardsCubit>();
       if (!dashboardCubit.isClosed) {
-        widget.params.isSocket != true
+        widget.params.isSocket == true
             ? dashboardCubit.loadAvailableRideTrips(context)
             : dashboardCubit.getAvailableTrips(context);
         dashboardCubit.getPastTrips(context,
-            widget.params.isSocket != true ? "tracking" : 'non-tracking');
+            widget.params.isSocket == true ? "tracking" : 'non-tracking');
         dashboardCubit.getSettings(context);
       }
     });
@@ -59,7 +59,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
   void _onScroll() {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
-      widget.params.isSocket != true
+      widget.params.isSocket == true
           ? context.read<DashboardsCubit>().getAvailableRideTrips(context)
           : context.read<DashboardsCubit>().getAvailableTrips(context);
     }
@@ -107,7 +107,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                             children: [
                               const Icon(Icons.arrow_back),
                               Text(
-                                  widget.params.isSocket != true
+                                  widget.params.isSocket == true
                                       ? LocaleKeys.rideMode.tr()
                                       // : widget.params.modeType == 'truk'?
                                       : LocaleKeys.trukMode.tr(),
@@ -126,7 +126,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             _buildTabItem(0, LocaleKeys.availableTrips.tr()),
-                            if (widget.params.isSocket != true)
+                            if (widget.params.isSocket == true)
                               _buildTabItem(1, LocaleKeys.runningTrips.tr()),
                             _buildTabItem(2, LocaleKeys.pastTrips.tr()),
                             _buildFilterIcon(),
@@ -144,7 +144,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                   child: state.isLoadingAvailable
                                       ? const Center(
                                           child: CircularProgressIndicator())
-                                      : widget.params.isSocket != true
+                                      : widget.params.isSocket == true
                                           ? cubit.isLoadingMore
                                               ? const Center(
                                                   child:
@@ -175,7 +175,9 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                                       child: CircularProgressIndicator())
                                                   : ListView.separated(
                                                       controller: _availableTripsScrollController,
-                                                      itemBuilder: (context, index) => TrukBusWidget(contextScreen: context,
+                                                      itemBuilder: (context, index) => TrukBusWidget(
+                                                            contextScreen:
+                                                                context,
                                                             tripEntity: state
                                                                     .availableTrips![
                                                                 index],
@@ -225,7 +227,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                                 ? const Center(
                                     child: CircularProgressIndicator())
                                 : SettingsWidget(
-                                    modeType: widget.params.isSocket != true
+                                    modeType: widget.params.isSocket == true
                                         ? 'ride'
                                         : 'truk',
                                     settings: state.settings))

@@ -160,11 +160,9 @@ class TrukBusWidget extends StatelessWidget {
                               flex: 3,
                               child: Column(
                                 children: [
-                                  tripEntity?.clientDetails
-                                                  ?.profilePictureUrl ==
+                                  tripEntity?.subCategory?.pictureUrl ==
                                               null ||
-                                          tripEntity!.clientDetails!
-                                              .profilePictureUrl.isEmpty
+                                          tripEntity!.subCategory!.pictureUrl.isEmpty
                                       ? Image.asset(Assets.rideIcon,
                                           width: 40,
                                           height: 40,

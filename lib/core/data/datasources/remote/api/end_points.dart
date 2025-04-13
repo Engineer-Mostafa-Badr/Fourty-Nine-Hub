@@ -1284,7 +1284,9 @@ class EndPoints {
   static String getLoadingInfo = '/loading/driver/info?subCategory=62c8baad8e28a58a3edf5805';
   static String makeTripRequest = '/ride/trips/request';
   static String makeNonTrackingTripRequest = '/ride/non-tracking/trips/client';
+  static String makeLoadingTripRequest = '/loading/trip/createLoadingTrip';
   static String getClientOffers = '/ride/non-tracking/offers';
+  static String getLoadingOffers = '/loading/trip/offers';
 
   static String updateDriverLocation() {
     return '/ride/update-driver-location';

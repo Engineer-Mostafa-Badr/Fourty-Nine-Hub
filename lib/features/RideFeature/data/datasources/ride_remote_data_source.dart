@@ -78,6 +78,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/ge
 import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/available_ride_trip_model.dart';
 
 import '../../domain/entities/get_offers_entity.dart';
+import '../../domain/usecases/make_loading_request_trip_usecase.dart';
 import '../../domain/usecases/make_non_tracking_request_trip_usecase.dart';
 import '../models/dashboards/get_offers_response_model.dart';
 
@@ -97,7 +98,8 @@ abstract class RideRemoteDataSource {
   Future<Either<Failure, RideRequestTripEntity>> requestTrip(
       RequestTripUseCaseParams params);
   Future<Either<Failure, RideRequestTripEntity>> retrieveClientLatestTrip();
-  Future<Either<Failure, RideRequestTripEntity>> acceptOfferByClient(String offerId);
+  Future<Either<Failure, RideRequestTripEntity>> acceptOfferByClient(
+      String offerId);
   Future<Either<Failure, bool>> checkRealAmountEnough(double params);
   Future<Either<Failure, List<DriversInSubcategoryEntity>>>
       getDriversInSubcategory(String subCategoryId);
@@ -121,9 +123,11 @@ abstract class RideRemoteDataSource {
   Future<Either<Failure, List<RunningTripsEntity>>> getAllRunningTrips(
       GetAllRunningTripsUseCaseParams params);
 
-  Future<Either<Failure, bool>> updateTripAutoAcceptByClient(UpdateTripAutoAcceptByClientUseCaseParams params);
+  Future<Either<Failure, bool>> updateTripAutoAcceptByClient(
+      UpdateTripAutoAcceptByClientUseCaseParams params);
 
-  Future<Either<Failure, List<CompletedTripsEntity>>> getAllCompletedTrips(GetAllCompletedTripsUseCaseParams params);
+  Future<Either<Failure, List<CompletedTripsEntity>>> getAllCompletedTrips(
+      GetAllCompletedTripsUseCaseParams params);
 
   Future<Either<Failure, GetLocationFromAddressEntity>> getLocationFromAddress(
       GetLocationFromAddressUseCaseParams params);
@@ -174,8 +178,11 @@ abstract class RideRemoteDataSource {
   Future<Either<Failure, bool>> makeNonTrackingRequestTrip(
       MakeNonTrackingRequestTripUsecaseParam params);
   Future<Either<Failure, GetOffersResponseEntity>> getClientOffers();
+  Future<Either<Failure, GetOffersResponseEntity>> getLoadingOffers();
 
   void listenToRideOffers(Function(RideOfferEntity offer) params);
+  Future<Either<Failure, bool>> makeLoadingRequestTrip(
+      MakeLoadingRequestTripUsecaseParam params);
 }
 
 class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
@@ -918,6 +925,7 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
       return Left(ServerFailure(message: e.toString()));
     }
   }
+
   @override
   void listenToRideOffers(Function(RideOfferEntity offer) params) {
     try {
@@ -934,13 +942,15 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, RideRequestTripEntity>> acceptOfferByClient(String offerId) async {
+  Future<Either<Failure, RideRequestTripEntity>> acceptOfferByClient(
+      String offerId) async {
     try {
       final response = await _apiConsumer.put(
         EndPoints.acceptOfferByClient(offerId),
       );
       return response.fold((failure) => Left(failure), (data) {
-        return Right(RideRequestTripModel.fromJson(data['data']['tripDetails']));
+        return Right(
+            RideRequestTripModel.fromJson(data['data']['tripDetails']));
       });
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
@@ -948,7 +958,8 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, bool>> updateTripAutoAcceptByClient(UpdateTripAutoAcceptByClientUseCaseParams params) async {
+  Future<Either<Failure, bool>> updateTripAutoAcceptByClient(
+      UpdateTripAutoAcceptByClientUseCaseParams params) async {
     try {
       final response = await _apiConsumer.put(
         EndPoints.updateTripAutoAcceptByClient(),
@@ -963,12 +974,43 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, GetOffersResponseEntity>>
-      getClientOffers() async {
+  Future<Either<Failure, GetOffersResponseEntity>> getClientOffers() async {
     try {
       final response = await _apiConsumer.get(EndPoints.getClientOffers);
 
-     return response.fold((failure) => Left(failure), (data) {
+      return response.fold((failure) => Left(failure), (data) {
+        GetOffersResponseModel getOffersResponse =
+            GetOffersResponseModel.fromJson(data);
+        return Right(getOffersResponse);
+      });
+    } catch (e) {
+      print("e.toString ${e.toString()}");
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> makeLoadingRequestTrip(
+      MakeLoadingRequestTripUsecaseParam params) async {
+    try {
+      final response = await _apiConsumer.post(
+        EndPoints.makeLoadingTripRequest,
+        data: params.toJson(),
+      );
+
+      return response.fold((failure) => Left(failure), (data) {
+        return Right(data['status']);
+      });
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+  @override
+  Future<Either<Failure, GetOffersResponseEntity>> getLoadingOffers() async {
+    try {
+      final response = await _apiConsumer.get(EndPoints.getLoadingOffers);
+
+      return response.fold((failure) => Left(failure), (data) {
         GetOffersResponseModel getOffersResponse =
             GetOffersResponseModel.fromJson(data);
         return Right(getOffersResponse);

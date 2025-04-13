@@ -3,25 +3,24 @@ import 'package:fourtyninehub/features/RideFeature/domain/repositories/ride_repo
 
 import '../../../../../core/error/failure.dart';
 
-class MakeNonTrackingRequestTripUsecase {
+class MakeLoadingRequestTripUsecase {
   final RideRepository _repo;
-  MakeNonTrackingRequestTripUsecase(this._repo);
+  MakeLoadingRequestTripUsecase(this._repo);
 
   Future<Either<Failure, bool>> call(
-      MakeNonTrackingRequestTripUsecaseParam params) {
-    return _repo.makeNonTrackingRequestTrip(params);
+      MakeLoadingRequestTripUsecaseParam params) {
+    return _repo.makeLoadingRequestTrip(params);
   }
 }
 
-class MakeNonTrackingRequestTripUsecaseParam {
-  MakeNonTrackingRequestTripUsecaseParam({
+class MakeLoadingRequestTripUsecaseParam {
+  MakeLoadingRequestTripUsecaseParam({
     this.subcategoryId,
     this.fromTitle,
     this.toTitle,
     this.price,
     this.date,
     this.phone,
-    this.passengers,
     this.isPremium,
     this.description,
   });
@@ -32,19 +31,17 @@ class MakeNonTrackingRequestTripUsecaseParam {
   double? price;
   DateTime? date;
   String? phone;
-  int? passengers;
   bool? isPremium;
   String? description;
 
   Map<String, dynamic> toJson() => {
-        "subcategoryId": subcategoryId ?? "",
-        "fromTitle": fromTitle ?? "",
-        "toTitle": toTitle ?? "",
+        "categoryId": subcategoryId ?? "",
+        "startLocation": fromTitle ?? "",
+        "targetLocation": toTitle ?? "",
         "price": price ?? 0.0,
-        "date": date?.toIso8601String(),
+        "time": date?.toIso8601String(),
         "phone": phone ?? "",
-        "passengers": passengers ?? 0,
         "isPremium": isPremium ?? false,
-        "description": description ?? "",
+        "desc": description ?? "",
       };
 }

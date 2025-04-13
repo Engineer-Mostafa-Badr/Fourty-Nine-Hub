@@ -59,8 +59,8 @@ Future<dynamic> customBottomSheet(context, RideCubit rideCubit,
   );
 }
 Future<dynamic> customBottomSheet2(context,
-    {required child, height = 150, required String title}) {
-  return showModalBottomSheet(
+    {required child,double? height , required String title}) {
+  return showModalBottomSheet(constraints: BoxConstraints(maxHeight: height ?? 750),
     backgroundColor: AppColors.whiteColor,
     context: context,
     shape: const RoundedRectangleBorder(
