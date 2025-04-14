@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateless/loaders/loader.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
@@ -11,6 +12,7 @@ import 'package:fourtyninehub/features/health_feature/doctor_details/presentatio
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/header.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/reviews.dart';
 
+import '../../../../../common/widgets/stateless/loaders/default_loader.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 
 class DoctorDetailsParams {
@@ -66,11 +68,10 @@ class _DoctorDetailsViewState extends State<DoctorDetailsView> {
         child: BlocBuilder<DoctorDetailsCubit, DoctorDetailsState>(
           builder: (context, state) {
             if (state.isLoading) {
-              return const Center(child: CircularProgressIndicator());
+              return const DLoader();
             } else {
               return ListView(
                 children: [
-
                   const DoctorDetailsAccountHeader(),
                   const Sizer(),
                   const DoctorDetailsCard(),

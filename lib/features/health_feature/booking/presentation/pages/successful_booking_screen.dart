@@ -10,10 +10,15 @@ import '../widgets/booking_successed/booking_summary_info.dart';
 import '../widgets/booking_successed/thanks_header.dart';
 
 class SuccessfulBookingScreen extends StatelessWidget {
-  const SuccessfulBookingScreen({super.key});
+  final dynamic doctorDetailsCubit;
+
+  const SuccessfulBookingScreen({super.key, this.doctorDetailsCubit});
 
   @override
   Widget build(BuildContext context) {
+    context.read<BookDoctorAppointmentCubit>().init(doctorDetailsCubit);
+    final doctor = context.read<BookDoctorAppointmentCubit>().doctor;
+    final bookingController = context.read<BookDoctorAppointmentCubit>();
     return CustomScaffold(
       appBar: const HomeAppbar(
         isWithBackArrow: true,
@@ -34,7 +39,10 @@ class SuccessfulBookingScreen extends StatelessWidget {
                 const Sizer(height: 30),
 
                 /// Booking summary info
-                const BookingSummaryInfo(),
+
+                 BookingSummaryInfo(
+                  doctor:doctor
+                ),
 
                 /// make size
                 const Sizer(height: 194),

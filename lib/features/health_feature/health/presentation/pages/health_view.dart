@@ -46,42 +46,58 @@ class _HealthViewState extends State<HealthView> {
                     children: [
                       const HealthBanner(),
                       const Sizer(),
-                      if (state.isDoctor == false) const RegistrationBanner(),
-                      // RegistrationBanner(),
-                      // DoctorModeBanner(
-                      //   isWaitingApproval: isWaitingApproval,
-                      // ),
-                      // if (isWaitingApproval) WaitingAprovalText(),
+                      state.isDoctor == false? const RegistrationBanner():  DoctorModeBanner(
+            isWaitingApproval: isWaitingApproval,
+            ),
+
+                      if (isWaitingApproval) WaitingAprovalText(),
                       const Sizer(),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                              child: CurrentHistoryBooking(
-                            title: context.isArabic
-                                ? 'الحجوزات الحالية'
-                                : 'Current Booking',
-                            isSelected: history == 1 ? true : false,
-                            onTap: () {
-                              setState(() {
-                                history = 1;
-                              });
-                            },
-                          )),
-                          const Sizer(),
-                          Expanded(
-                              child: CurrentHistoryBooking(
-                            title: context.isArabic
-                                ? 'تاريخ الحجوزات'
-                                : 'Booking History',
-                            isSelected: history == 2 ? true : false,
-                            onTap: () {
-                              setState(() {
-                                history = 2;
-                              });
-                            },
-                          )),
-                        ],
+                      Padding(
+                        padding:  EdgeInsets.symmetric(horizontal: 20.0.w),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Icon(Icons.search,size: 50.sp,),
+                            const Sizer(),
+                            Expanded(
+                                child: CurrentHistoryBooking(
+                                  title: LocaleKeys.favouriteAds.localize,
+                                  isSelected: history == 3 ? true : false,
+                                  onTap: () {
+                                    setState(() {
+                                      history = 3;
+                                    });
+                                  },
+                                )),
+                            const Sizer(),
+                            Expanded(
+                                child: CurrentHistoryBooking(
+                                  title: context.isArabic
+                                      ? 'تاريخ الحجوزات'
+                                      : 'Booking History',
+                                  isSelected: history == 2 ? true : false,
+                                  onTap: () {
+                                    setState(() {
+                                      history = 2;
+                                    });
+                                  },
+                                )),
+                          const  Sizer(),
+                            Expanded(
+                                child: CurrentHistoryBooking(
+                              title: context.isArabic
+                                  ? 'الحجوزات الحالية'
+                                  : 'Current Booking',
+                              isSelected: history == 1 ? true : false,
+                              onTap: () {
+                                setState(() {
+                                  history = 1;
+                                });
+                              },
+                            )),
+
+                          ],
+                        ),
                       ),
                       const Sizer(
                         height: 20,

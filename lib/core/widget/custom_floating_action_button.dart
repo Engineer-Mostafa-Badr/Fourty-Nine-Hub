@@ -8,12 +8,14 @@ class CustomFloatingActionButton extends StatelessWidget {
       required this.onPressed,
       this.icon,
       this.text,
-      this.fontSize});
+      this.fontSize,
+      this.iconSize});
 
   final void Function() onPressed;
   final IconData? icon;
   final String? text;
   final double? fontSize;
+  final double? iconSize;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +38,7 @@ class CustomFloatingActionButton extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (icon != null) Icon(icon, color: Colors.white, size: 24),
+              if (icon != null) Icon(icon, color: Colors.white, size:iconSize?? 24),
               if (icon != null) const SizedBox(width: 8),
               if (text != null)
                 Text(

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -8,6 +10,8 @@ import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
+import '../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
+import '../../../doctor_details/presentation/cubit/doctor_details_cubit.dart';
 import '../cubit/book_doctor_appointment_cubit.dart';
 import '../widgets/booking_confirmation/booking_check_box_widget.dart';
 import '../widgets/booking_confirmation/booking_submit_button.dart';
@@ -28,8 +32,7 @@ class BookingConfirmationScreen extends StatefulWidget {
 class _BookingConfirmationScreenState extends State<BookingConfirmationScreen> {
   final _formKey = GlobalKey<FormState>();
   bool _isBookingForSomeoneElse = false;
-  String _patientName = 'Mohammed Gamal';
-  String _patientPhone = '+201067831945';
+
   late TextEditingController _nameController;
   late TextEditingController _phoneController;
 
@@ -37,8 +40,6 @@ class _BookingConfirmationScreenState extends State<BookingConfirmationScreen> {
   void initState() {
     super.initState();
     context.read<BookDoctorAppointmentCubit>().init(widget.doctorDetailsCubit);
-    _nameController = TextEditingController(text: _patientName);
-    _phoneController = TextEditingController(text: _patientPhone);
   }
 
   @override
@@ -53,6 +54,7 @@ class _BookingConfirmationScreenState extends State<BookingConfirmationScreen> {
     final doctor = context.read<BookDoctorAppointmentCubit>().doctor;
     final bookingController = context.read<BookDoctorAppointmentCubit>();
 
+    final user=context.read<UserCubit>().state.data;
     return CustomScaffold(
       appBar: const HomeAppbar(
         isWithBackArrow: true,
@@ -102,19 +104,22 @@ class _BookingConfirmationScreenState extends State<BookingConfirmationScreen> {
                       phoneController:
                           bookingController.phoneNumberTextController,
                       nameController: bookingController.nameTextController,
-                      Time: "2023-10-01 12:00 PM",
-                      location: "Naser City, Cairo",
-                      fees: "100 EGP",
-                      patientName: _patientName,
-                      patientPhone: _patientPhone),
+                      Time:  "${widget.doctorDetailsCubit.selectedAppointment.startTime } : ${widget.doctorDetailsCubit.selectedAppointment.endTime }  ",
+                      location: "${ user?.city}"??" ",
+                      fees: "${doctor?.clinicPrice} ${LocaleKeys.egp.localize} "??" ",
+                      patientName: user?.fullName??" " ,
+                      patientPhone: user?.phone??""),
 
                   const Sizer(height: 170),
                   // Submit Button
                   BookingButton(
                     onTap: () {
-                      context.pushNamed(Routes.SUCCESSFULLBOOKING);
+                      context.pushNamed(Routes.SUCCESSFULLBOOKING
+                      ,extra: widget.doctorDetailsCubit
+
+                      );
                     },
-                    title: 'Submit',
+                    title: LocaleKeys.submit.localize,
                   ),
                 ],
               ),
@@ -123,5 +128,7 @@ class _BookingConfirmationScreenState extends State<BookingConfirmationScreen> {
         },
       ),
     );
+
+
   }
 }
