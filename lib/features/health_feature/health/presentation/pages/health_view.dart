@@ -20,6 +20,8 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
+import '../widgets/cards/favourite_ads_card.dart';
+
 class HealthView extends StatefulWidget {
   HealthView({super.key});
 
@@ -59,6 +61,7 @@ class _HealthViewState extends State<HealthView> {
                           children: [
                             Icon(Icons.search,size: 50.sp,),
                             const Sizer(),
+                            /// current historu
                             Expanded(
                                 child: CurrentHistoryBooking(
                                   title: LocaleKeys.favouriteAds.localize,
@@ -70,6 +73,7 @@ class _HealthViewState extends State<HealthView> {
                                   },
                                 )),
                             const Sizer(),
+                            /// current booking
                             Expanded(
                                 child: CurrentHistoryBooking(
                                   title: context.isArabic
@@ -83,6 +87,7 @@ class _HealthViewState extends State<HealthView> {
                                   },
                                 )),
                           const  Sizer(),
+                            /// current booking
                             Expanded(
                                 child: CurrentHistoryBooking(
                               title: context.isArabic
@@ -127,6 +132,12 @@ class _HealthViewState extends State<HealthView> {
                           children: [
                             BookingHistoryCard(title: 'Dr.Ahmed Ibrahim',isSubscribed: true,),
                             BookingHistoryCard(title: 'Dr.Ahmed Ibrahim',isSubscribed: true,),
+                          ],
+                        ),      if(history==3)
+                        Column(
+                          children: [
+
+                            FavouriteAdsCard (onFavourite: () {  }, onRequest: () {  },),
                           ],
                         ),
 
