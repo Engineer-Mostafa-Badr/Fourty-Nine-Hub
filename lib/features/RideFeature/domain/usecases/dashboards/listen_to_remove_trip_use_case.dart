@@ -8,13 +8,13 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/up
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_price_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/repositories/trip_repository.dart';
 
-class ListenToNewTripUseCase
-    extends NormalUseCase<void, Function(AvailableRideTripEntity)> {
+class ListenToRemoveTripUseCase
+    extends NormalUseCase<void, Function(String)> {
   final TripRepository _repo;
-  ListenToNewTripUseCase(this._repo);
+  ListenToRemoveTripUseCase(this._repo);
 
   @override
-  void call(Function(AvailableRideTripEntity trip) params) {
-    return _repo.listenToNewTrip(params);
+  void call(Function(String tripId) params) {
+    return _repo.listenToRemoveTrip(params);
   }
 }

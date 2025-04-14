@@ -14,10 +14,21 @@ class CreateNewOfferDashboardUsecase {
   }
 }
 
+class CreateNewOfferNonSocketUsecase {
+  final TripRepository repository;
+
+  CreateNewOfferNonSocketUsecase(this.repository);
+
+  Future<Either<Failure, bool>> call(
+      CreateNewOfferDashboardUsecaseParam params) async {
+    return repository.createNewOfferNonSocket(params);
+  }
+}
+
 class CreateNewOfferDashboardUsecaseParam {
   CreateNewOfferDashboardUsecaseParam({
     required this.priceOffer,
-    required this.location,
+     this.location,
     required this.tripId,
   });
 
@@ -27,7 +38,7 @@ class CreateNewOfferDashboardUsecaseParam {
 
   Map<String, dynamic> toJson() => {
         "priceOffer": priceOffer,
-        "location": location?.toJson(),
+        // "location": location?.toJson(),
         "tripId": tripId
       };
 }

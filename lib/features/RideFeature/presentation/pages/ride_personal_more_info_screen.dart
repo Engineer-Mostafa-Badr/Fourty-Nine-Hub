@@ -1,19 +1,34 @@
+import 'dart:developer';
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/custom_date_picker.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/custom_pickup_container.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/image_text_row.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/pickup_text_form_field.dart';
+import 'package:go_router/go_router.dart';
 
-import '../../../../core/widget/custom_scaffold.dart';
+import '../../../../core/error/failure.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
+import '../../../../routes/routes.dart';
+import '../../domain/usecases/make_loading_request_trip_usecase.dart';
+import '../../domain/usecases/make_non_tracking_request_trip_usecase.dart';
+import '../controllers/client_trips_cubit/client_trips_cubit.dart';
+import 'widgets/pickup_target_location_widget.dart';
 
 class RidePersonalMoreInfoScreen extends StatefulWidget {
-  RidePersonalMoreInfoScreen({super.key});
+  final bool isTruk;
+  final String subCategoryId;
+  const RidePersonalMoreInfoScreen(
+      {super.key, this.isTruk = false, required this.subCategoryId});
 
   @override
   State<RidePersonalMoreInfoScreen> createState() =>
@@ -27,74 +42,158 @@ class _RidePersonalMoreInfoScreenState
   int _numberOfPassengers = 0;
   bool _isExpanded = false;
   String offerPrice = '';
+  late ClientTripsCubit cubit;
+  TextEditingController phoneController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    cubit = context.read<ClientTripsCubit>();
+    if (widget.isTruk) {
+      cubit.makeLoadingTripParam = MakeLoadingRequestTripUsecaseParam();
+      log(cubit.makeLoadingTripParam.toJson().toString());
+    } else {
+      cubit.makeNonTrackingTripParam = MakeNonTrackingRequestTripUsecaseParam();
+      log(cubit.makeNonTrackingTripParam.toJson().toString());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            spacing: 8,
-            children: [
-              const SizedBox(
-                height: 120,
-              ),
-              PickUpLocationCard(
-                title: LocaleKeys.pickupLocation.localize,
-                firstColor: AppColors.c19D176,
-              ),
-              PickUpLocationCard(
-                title: LocaleKeys.destination.localize,
+    return BlocConsumer<ClientTripsCubit, ClientTripsState>(
+      listener: (context, state) {
+        if (state.isErrorCreateTrip) {
+          String errorName = getFailureName(state.failure!, context);
+          errorName == 'DebtError'
+              ? showDebtDialog(context, '')
+              : errorName == 'SubscribeError'
+                  ? showSubscribeDialog(context, '')
+                  : showErrorMessage(
+                      context, getFailureMessage(state.failure!, context));
+        }
+        if (state.isSuccessCreateTrip) {
+          showSuccessMessage(context, LocaleKeys.requestSentSuccess.localize);
+          _selectedTime = LocaleKeys.pickupTime.localize;
+          _selectedDate = LocaleKeys.pickupDate.localize;
+          _numberOfPassengers = 0;
+          _isExpanded = false;
+          offerPrice = '';
+          phoneController.clear();
+          if (widget.isTruk) {
+            cubit.makeLoadingTripParam = MakeLoadingRequestTripUsecaseParam();
+          } else {
+            cubit.makeNonTrackingTripParam =
+                MakeNonTrackingRequestTripUsecaseParam();
+          }
+        }
+      },
+      builder: (context, state) {
+        return ListView(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          children: [
+            PickUpLocationCard(cubit: cubit, firstColor: AppColors.c19D176),
+            const SizedBox(height: 8),
+            PickUpLocationCard(
+                cubit: cubit,
                 firstColor: AppColors.c3897F0,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () async {
-                        final TimeOfDay? selectedTime = await showTimePicker(
-                          context: context,
-                          initialTime: TimeOfDay.now(),
-                        );
+                isStartLocation: false),
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () async {
+                      final TimeOfDay? selectedTime = await showTimePicker(
+                        context: context,
+                        initialTime: TimeOfDay.now(),
+                      );
 
-                        if (selectedTime != null) {
-                          setState(() {
-                            _selectedTime = selectedTime.format(context);
-                          });
-                        }
-                      },
-                      child: PickUpContainer(
-                        fontWeight: FontWeight.w500,
-                        title: _selectedTime,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 7,
-                  ),
-                  Expanded(
-                    child: CustomDatePickerButton(
-                      selectedDate: _selectedDate,
-                      onDateSelected: (newDate) {
+                      if (selectedTime != null) {
                         setState(() {
-                          _selectedDate = newDate;
+                          _selectedTime = selectedTime.format(context);
+                          final now = DateTime.now();
+                          if (widget.isTruk) {
+                            cubit.makeLoadingTripParam.date = DateTime(
+                              now.year,
+                              now.month,
+                              now.day,
+                              selectedTime.hour,
+                              selectedTime.minute,
+                            );
+                          } else {
+                            cubit.makeNonTrackingTripParam.date = DateTime(
+                              now.year,
+                              now.month,
+                              now.day,
+                              selectedTime.hour,
+                              selectedTime.minute,
+                            );
+                          }
                         });
-                      },
+                      }
+                    },
+                    child: PickUpContainer(
+                      fontWeight: FontWeight.w500,
+                      title: _selectedTime,
                     ),
                   ),
-                ],
-              ),
+                ),
+                const SizedBox(width: 7),
+                Expanded(
+                  child: CustomDatePickerButton(
+                    selectedDate: _selectedDate,
+                    onDateSelected: (newDate) {
+                      setState(() {
+                        _selectedDate = newDate;
+                        final parsedDate =
+                            DateFormat('dd/MM/yyyy').parse(newDate);
+                        if (widget.isTruk) {
+                          final currentTime =
+                              cubit.makeLoadingTripParam.date ?? DateTime.now();
+                          cubit.makeLoadingTripParam.date = DateTime(
+                            parsedDate.year,
+                            parsedDate.month,
+                            parsedDate.day,
+                            currentTime.hour,
+                            currentTime.minute,
+                          );
+                        } else {
+                          final currentTime =
+                              cubit.makeNonTrackingTripParam.date ??
+                                  DateTime.now();
+                          cubit.makeNonTrackingTripParam.date = DateTime(
+                            parsedDate.year,
+                            parsedDate.month,
+                            parsedDate.day,
+                            currentTime.hour,
+                            currentTime.minute,
+                          );
+                          log("Selected date: ${cubit.makeNonTrackingTripParam.date}");
+                        }
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            if (widget.isTruk) ...[
               PickUpTextFormField(
+                onFieldSubmitted: (value) {
+                  cubit.makeLoadingTripParam.description = value;
+                  log(cubit.makeLoadingTripParam.description.toString());
+                },
                 hintText: LocaleKeys.cargoDescription.localize,
-                maxLines: 4,
+                maxLines: 3,
+                controller: TextEditingController(),
               ),
+              const SizedBox(height: 8)
+            ] else ...[
               GestureDetector(
                 onTap: () {
                   setState(() {
-                    _isExpanded =
-                        !_isExpanded;
+                    _isExpanded = !_isExpanded;
                   });
                 },
                 child: PickUpContainer(
@@ -109,10 +208,10 @@ class _RidePersonalMoreInfoScreenState
                     return GestureDetector(
                       onTap: () {
                         setState(() {
-                          _numberOfPassengers =
-                              index + 1; 
-                          _isExpanded =
-                              false; 
+                          _numberOfPassengers = index + 1;
+                          cubit.makeNonTrackingTripParam.passengers =
+                              _numberOfPassengers;
+                          _isExpanded = false;
                         });
                       },
                       child: Container(
@@ -125,68 +224,202 @@ class _RidePersonalMoreInfoScreenState
                         child: Text(
                           '${index + 1}',
                           style: const TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16,
-                          ),
+                              fontWeight: FontWeight.w500, fontSize: 16),
                         ),
                       ),
                     );
                   }),
                 ),
-              PickUpTextFormField(
-                hintText: LocaleKeys.phone.localize,
-              ),
-              GestureDetector(
-                onTap: () => _showOfferFareBottomSheet(context),
-                child: PickUpContainer(
-                  title: LocaleKeys.offerPrice.localize,
-                ),
-              ),
-              ImageTextRow(
-                  imagePath: Assets.logo,
-                  text: LocaleKeys.appNotDeduct.localize),
-              ImageTextRow(
-                  imagePath: Assets.logo,
-                  text: LocaleKeys.premiumPackageCashBack.localize),
-              ImageTextRow(
-                  imagePath: Assets.logo,
-                  text: LocaleKeys.freeCancellation.localize),
-              const SizedBox(height: 15,),
-              Row(
-                children: [
-                  Expanded(child: AppButton(
-                    radius: 15,
-                    height: 44,
-                      backColor: AppColors.PRIMARY_COLOR_DARK,
-                      style: const TextStyle(
-                        color: AppColors.whiteColor,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500
-                      ),
-                      label:LocaleKeys.premium_request.localize, onPressed: (){})),
-                  const SizedBox(width: 4,),
-                  Expanded(child: AppButton(
-                    radius: 15,
-                    height: 44,
-                      backColor: AppColors.PRIMARY_COLOR,
-                      style: const TextStyle(
-                        color: AppColors.whiteColor,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500
-                      ),
-                      label: LocaleKeys.request.localize, onPressed: (){})),
-                ],
-              ),
             ],
-          ),
-        ),
-      ),
+            const SizedBox(height: 8),
+            PickUpTextFormField(
+              controller: phoneController,
+              onChanged: (value) {
+                if (widget.isTruk) {
+                  cubit.makeLoadingTripParam.phone = value;
+                  log(cubit.makeLoadingTripParam.phone.toString());
+                } else {
+                  cubit.makeNonTrackingTripParam.phone = value;
+                  log(cubit.makeNonTrackingTripParam.phone.toString());
+                }
+              },
+              maxLines: 1,
+              hintText: cubit.makeNonTrackingTripParam.phone == null ||
+                      cubit.makeNonTrackingTripParam.phone!.isEmpty
+                  ? LocaleKeys.phone.localize
+                  : cubit.makeNonTrackingTripParam.phone!,
+            ),
+            const SizedBox(height: 8),
+            GestureDetector(
+              onTap: () => _showOfferFareBottomSheet(context),
+              child: PickUpContainer(
+                title: offerPrice.isEmpty
+                    ? LocaleKeys.offerPrice.localize
+                    : offerPrice,
+              ),
+            ),
+            const SizedBox(height: 8),
+            ImageTextRow(
+                imagePath: Assets.logo, text: LocaleKeys.appNotDeduct.localize),
+            const SizedBox(height: 8),
+            ImageTextRow(
+                imagePath: Assets.logo,
+                text: LocaleKeys.premiumPackageCashBack.localize),
+            const SizedBox(height: 8),
+            ImageTextRow(
+                imagePath: Assets.logo,
+                text: LocaleKeys.freeCancellation.localize),
+            const SizedBox(height: 15),
+            state.isLoadingSubmit
+                ? const Center(child: CircularProgressIndicator())
+                : SizedBox(
+                    height: 40,
+                    child: Row(
+                      spacing: 6,
+                      children: [
+                        Expanded(
+                            flex: 2,
+                            child: AppButton(
+                                radius: 15,
+                                label: LocaleKeys.premiumRequest.tr(),
+                                onPressed: () {
+                                  if (context.isUserLoggedIn) {
+                                    if (widget.isTruk) {
+                                      cubit.makeLoadingTripParam.isPremium =
+                                          true;
+                                      cubit.makeLoadingTripParam.price =
+                                          double.tryParse(offerPrice) ?? 0.0;
+                                      log(cubit.makeLoadingTripParam
+                                          .toJson()
+                                          .toString());
+                                      if (cubit.makeLoadingTripParam.date ==
+                                              null ||
+                                          cubit.makeLoadingTripParam.phone ==
+                                              null ||
+                                          cubit.makeLoadingTripParam.phone!
+                                              .isEmpty ||
+                                          cubit.makeLoadingTripParam.price ==
+                                              0.0) {
+                                        showErrorMessage(context,
+                                            "Please fill all required fields.");
+                                      } else {
+                                        cubit.makeLoadingRequestTrip(context);
+                                      }
+                                    } else {
+                                      cubit.makeNonTrackingTripParam.isPremium =
+                                          true;
+                                      cubit.makeNonTrackingTripParam
+                                          .subcategoryId = widget.subCategoryId;
+                                      cubit.makeNonTrackingTripParam.price =
+                                          double.tryParse(offerPrice) ?? 0.0;
+                                      log(cubit.makeNonTrackingTripParam
+                                          .toJson()
+                                          .toString());
+                                      if (cubit.makeNonTrackingTripParam.date == null ||
+                                          cubit.makeNonTrackingTripParam.phone ==
+                                              null ||
+                                          cubit.makeNonTrackingTripParam.phone!
+                                              .isEmpty ||
+                                          cubit.makeNonTrackingTripParam
+                                                  .price ==
+                                              0.0 ||
+                                          (!widget.isTruk &&
+                                              (cubit.makeNonTrackingTripParam
+                                                          .passengers ==
+                                                      null ||
+                                                  cubit.makeNonTrackingTripParam
+                                                          .passengers ==
+                                                      0))) {
+                                        showErrorMessage(context,
+                                            "Please fill all required fields.");
+                                      } else {
+                                        cubit.makeNonTrackingRequestTrip(
+                                            context);
+                                      }
+                                    }
+                                  } else {
+                                    context.push(Routes.LOGIN);
+                                  }
+                                },
+                                backColor: AppColors.SECONDARY_COLOR_DARK2,
+                                width: MediaQuery.of(context).size.width)),
+                        Expanded(
+                            flex: 2,
+                            child: AppButton(
+                                radius: 15,
+                                label: LocaleKeys.request.tr(),
+                                onPressed: () async {
+                                  if (context.isUserLoggedIn) {
+                                    if (widget.isTruk) {
+                                      cubit.makeLoadingTripParam.isPremium =
+                                          false;
+                                      cubit.makeLoadingTripParam.price =
+                                          double.tryParse(offerPrice) ?? 0.0;
+                                      log(cubit.makeLoadingTripParam
+                                          .toJson()
+                                          .toString());
+                                      if (cubit.makeLoadingTripParam.date ==
+                                              null ||
+                                          cubit.makeLoadingTripParam.phone ==
+                                              null ||
+                                          cubit.makeLoadingTripParam.phone!
+                                              .isEmpty ||
+                                          cubit.makeLoadingTripParam.price ==
+                                              0.0) {
+                                        showErrorMessage(context,
+                                            "Please fill all required fields.");
+                                      } else {
+                                        cubit.makeLoadingRequestTrip(context);
+                                      }
+                                    } else {
+                                      cubit.makeNonTrackingTripParam.isPremium =
+                                          false;
+                                      cubit.makeNonTrackingTripParam
+                                          .subcategoryId = widget.subCategoryId;
+                                      cubit.makeNonTrackingTripParam.price =
+                                          double.tryParse(offerPrice) ?? 0.0;
+                                      log(cubit.makeNonTrackingTripParam
+                                          .toJson()
+                                          .toString());
+                                      if (cubit.makeNonTrackingTripParam.date == null ||
+                                          cubit.makeNonTrackingTripParam.phone ==
+                                              null ||
+                                          cubit.makeNonTrackingTripParam.phone!
+                                              .isEmpty ||
+                                          cubit.makeNonTrackingTripParam
+                                                  .price ==
+                                              0.0 ||
+                                          (!widget.isTruk &&
+                                              (cubit.makeNonTrackingTripParam
+                                                          .passengers ==
+                                                      null ||
+                                                  cubit.makeNonTrackingTripParam
+                                                          .passengers ==
+                                                      0))) {
+                                        showErrorMessage(context,
+                                            "Please fill all required fields.");
+                                      } else {
+                                        cubit.makeNonTrackingRequestTrip(
+                                            context);
+                                      }
+                                    }
+                                  } else {
+                                    context.push(Routes.LOGIN);
+                                  }
+                                },
+                                backColor: AppColors.PRIMARY_COLOR,
+                                width: MediaQuery.of(context).size.width)),
+                      ],
+                    ),
+                  )
+          ],
+        );
+      },
     );
   }
 
   void _showOfferFareBottomSheet(BuildContext context) {
     TextEditingController offerPriceController = TextEditingController();
-
     showModalBottomSheet(
       context: context,
       backgroundColor: AppColors.whiteColor,
@@ -266,10 +499,10 @@ class _RidePersonalMoreInfoScreenState
                     radius: 15,
                     backColor: AppColors.PRIMARY_COLOR,
                     onPressed: () {
+                      Navigator.pop(context);
                       setState(() {
                         offerPrice = offerPriceController.text;
                       });
-                      Navigator.pop(context);
                     },
                     label: LocaleKeys.done.localize,
                     style: const TextStyle(
@@ -284,59 +517,5 @@ class _RidePersonalMoreInfoScreenState
         );
       },
     );
-  }
-}
-
-
-
-
-
-
-class PickUpLocationCard extends StatelessWidget {
-  final String title;
-  final Color? firstColor;
-
-  const PickUpLocationCard({super.key, required this.title, this.firstColor});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        height: 48,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: const Color(0xFFF5F5F5),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Row(
-          children: [
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 12),
-              width: 16,
-              height: 16,
-              decoration: BoxDecoration(
-                color: firstColor,
-                shape: BoxShape.circle,
-              ),
-              child: Center(
-                child: Container(
-                  width: 8,
-                  height: 8,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-              ),
-            ),
-            // Text "PickUp Location"
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-          ],
-        ));
   }
 }
