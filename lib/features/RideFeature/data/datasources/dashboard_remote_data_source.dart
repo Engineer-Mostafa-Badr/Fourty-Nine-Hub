@@ -43,6 +43,8 @@ abstract class TripRemoteDataSource {
       CreateUpdateDriverRatingUsecaseParam params);
   Future<Either<Failure, bool>> updateDriverRating(
       CreateUpdateDriverRatingUsecaseParam params);
+  Future<Either<Failure, bool>> acceptTrip(
+      String params);
   void listenToUpdateTripAutoAccept(Function(UpdateTripAutoAcceptEntity trip) params);
   void listenToAcceptOffer(Function(AcceptOfferEntity trip) params);
   void listenToUpdateTripPrice(Function(UpdateTripPriceEntity trip) params);
@@ -108,6 +110,20 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
     try {
       final response = await _apiConsumer.put(EndPoints.getSettingsDashboard,
           data: params.toJson());
+
+      return response.fold((failure) => Left(failure), (data) {
+        return Right(data['status']);
+      });
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> acceptTrip(
+      String params) async {
+    try {
+      final response = await _apiConsumer.put(EndPoints.acceptTripRider(params));
 
       return response.fold((failure) => Left(failure), (data) {
         return Right(data['status']);

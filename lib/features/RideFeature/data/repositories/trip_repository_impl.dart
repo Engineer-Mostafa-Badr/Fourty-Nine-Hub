@@ -62,6 +62,11 @@ class TripRepositoryImpl implements TripRepository {
   }
 
   @override
+  Future<Either<Failure, bool>> acceptTrip(String params) async{
+   return await remoteDataSource.acceptTrip(params);
+  }
+
+  @override
   void listenToUpdateTripAutoAccept(Function(UpdateTripAutoAcceptEntity trip) params) {
     remoteDataSource.listenToUpdateTripAutoAccept(params);
   }
