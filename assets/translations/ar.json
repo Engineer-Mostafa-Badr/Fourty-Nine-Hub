@@ -289,7 +289,7 @@
   "competitions": "المسابقات",
   "requestWithdraw": "طلب سحب",
   "requestTransaction": "طلب للمعاملات الشخصية",
-  "requestTransfer": "طلب معاملة",
+  "requestTransfer": "طلب تحويل",
   "years": "سنوات",
   "transfer": "تحويل",
   "save": "حفظ",
@@ -1494,7 +1494,6 @@
   "newPost": "منشور جديد",
   "addExplanatoryNote": "اضافة شرح توضيحي",
   "searchForAUser": "البحث عن مستخدم",
-  "taggedPeople": "الأشخاص المُشار إليهم",
   "status": "الحالات",
   "otpCode": "الكود",
   "weHaveSentACodeTo": "لقد ارسلنا لك كود الي ",
@@ -1508,5 +1507,7 @@
   "taggedPeople": "الأشخاص المُشار إليهم",
   "addACommentsFor": "أضف تعليقًا لـ",
   "commentAdded": "تم إضافة التعليق",
-  "areYouSureYouWantToDeleteThisComment": "هل أنت متأكد أنك تريد حذف هذا التعليق؟"
+  "areYouSureYouWantToDeleteThisComment": "هل أنت متأكد أنك تريد حذف هذا التعليق؟",
+  "addLocation": "إضافة موقع",
+  "addMusic": "إضافة موسيقى"
 }

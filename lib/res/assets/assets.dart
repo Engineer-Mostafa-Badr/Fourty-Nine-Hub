@@ -78,6 +78,9 @@ abstract class Assets {
   static String videoIcon = 'assets/icons/video_icon.svg';
   static String profile2BlackIcon = 'assets/icons/profile_2_black_icon.svg';
   static String profile2GreyIcon = 'assets/icons/profile_2_grey_icon.svg';
+  static String instagramTagPeopleIcon = 'assets/icons/instagram_tag_people_icon.svg';
+  static String instagramLocationIcon = 'assets/icons/instagram_location_icon.svg';
+  static String instagramMusicIcon = 'assets/icons/instagram_music_icon.svg';
 
   // Commets
   static String commentIconsIcon = 'assets/icons/comment_icons_icon.svg';

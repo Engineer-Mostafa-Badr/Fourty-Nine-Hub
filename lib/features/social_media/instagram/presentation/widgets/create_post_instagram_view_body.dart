@@ -119,7 +119,7 @@ class CreatePostInstagramViewBody extends StatelessWidget {
                           } else {
                             context.pushNamed(
                               Routes.CREATEPOSTSECONDPAGEINSTAGRAM,
-                              // extra: state.selectedImages,
+                              extra: context.read<CreatePostInstagramCubit>(),
                             );
                             // context
                             //     .read<CreatePostInstagramCubit>()

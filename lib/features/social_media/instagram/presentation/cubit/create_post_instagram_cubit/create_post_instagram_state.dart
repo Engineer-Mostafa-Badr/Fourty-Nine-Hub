@@ -11,12 +11,12 @@ extension CreatePostInstagramStateX on CreatePostInstagramStates {
 
 class CreatePostInstagramState {
   final CreatePostInstagramStates status;
-  final List<AssetEntity> images;
-  final List<Future<File?>> selectedImages;
+  final List<File> images;
+  final List<File> selectedImages;
   final bool isPermissionGranted;
   final int postTypeSelectedIndex;
   final bool multiSelect;
-  final List<AssetEntity> selectedMeda;
+  final List<File> selectedMeda;
   final String? errMessage;
   final int currentPage;
   final bool hasMoreImages;
@@ -36,12 +36,12 @@ class CreatePostInstagramState {
 
   CreatePostInstagramState copyWith({
     CreatePostInstagramStates? status,
-    List<AssetEntity>? images,
-    List<Future<File?>>? selectedImages,
+    List<File>? images,
+    List<File>? selectedImages,
     bool? isPermissionGranted,
     int? postTypeSelectedIndex,
     bool? multiSelect,
-    List<AssetEntity>? selectedMeda,
+    List<File>? selectedMeda,
     String? errMessage,
     int? currentPage,
     bool? hasMoreImages,

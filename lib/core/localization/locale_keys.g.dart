@@ -1486,7 +1486,6 @@ abstract class  LocaleKeys {
   static const newPost = 'newPost';
   static const addExplanatoryNote = 'addExplanatoryNote';
   static const searchForAUser = 'searchForAUser';
-  static const taggedPeople = 'taggedPeople';
   static const status = 'status';
   static const otpCode = 'otpCode';
   static const weHaveSentACodeTo = 'weHaveSentACodeTo';
@@ -1497,8 +1496,11 @@ abstract class  LocaleKeys {
   static const bad = 'bad';
   static const rateTheRestaurant = 'rateTheRestaurant';
   static const restaurantRateYou = 'restaurantRateYou';
+  static const taggedPeople = 'taggedPeople';
   static const addACommentsFor = 'addACommentsFor';
   static const commentAdded = 'commentAdded';
   static const areYouSureYouWantToDeleteThisComment = 'areYouSureYouWantToDeleteThisComment';
+  static const addLocation = 'addLocation';
+  static const addMusic = 'addMusic';
 
 }

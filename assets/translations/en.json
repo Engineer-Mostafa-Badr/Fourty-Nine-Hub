@@ -1524,5 +1524,7 @@
   "restaurantRateYou": "Restaurant rate you",
   "addACommentsFor": "Add a comments for",
   "commentAdded": "Comment added",
-  "areYouSureYouWantToDeleteThisComment": "Are you sure you want to delete this comment?"
+  "areYouSureYouWantToDeleteThisComment": "Are you sure you want to delete this comment?",
+  "addLocation": "Add location",
+  "addMusic": "Add music"
 }
