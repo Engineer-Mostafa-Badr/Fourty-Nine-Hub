@@ -49,10 +49,10 @@ class SubCategoriesRestaurantCard extends StatelessWidget {
       onTap: () => context.push(Routes.RESTAURANTDETAILS, extra: item),
       child: isVertical
           ? VerticalRestaurantCard(
-              item: item,
-              mealId: mealId,
-              favouriteRestaurant: (String id) => favouriteRestaurant(id),
-            )
+        item: item,
+        mealId: mealId,
+        favouriteRestaurant: (String id) => favouriteRestaurant(id),
+      )
           : HorizontalRestaurantCard(item: item),
     );
   }
@@ -65,9 +65,9 @@ class VerticalRestaurantCard extends StatelessWidget {
 
   const VerticalRestaurantCard(
       {super.key,
-      this.item,
-      required this.mealId,
-      required this.favouriteRestaurant});
+        this.item,
+        required this.mealId,
+        required this.favouriteRestaurant});
 
   @override
   Widget build(BuildContext context) {
@@ -148,10 +148,10 @@ class PropertyCard extends StatelessWidget {
 
   const PropertyCard(
       {super.key,
-      required this.item,
-      required this.mealId,
-      required this.favouriteRestaurant,
-      required this.myRestaurant});
+        required this.item,
+        required this.mealId,
+        required this.favouriteRestaurant,
+        required this.myRestaurant});
 
   String formatViews(int views) {
     if (views >= 1000000) {
@@ -195,11 +195,11 @@ class PropertyCard extends StatelessWidget {
                           ),
                         ),
                         Label(text: LocaleKeys.views.localize,
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          color: AppColors.c6C6C6C
-                        ),
+                          style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              color: AppColors.c6C6C6C
+                          ),
                         ),
                       ],
                     ),
@@ -207,8 +207,8 @@ class PropertyCard extends StatelessWidget {
                       text: item.subscriptionType ?? "N/A" ,
                       textAlign: TextAlign.right,
                       style: const TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 16
+                          fontWeight: FontWeight.w700,
+                          fontSize: 16
                       ),
                     ),
                   ],
@@ -243,7 +243,7 @@ class PropertyCard extends StatelessWidget {
               Flexible(
                   flex: 2,
                   child:
-                      DetailsSection(item: item, myRestaurant: myRestaurant)),
+                  DetailsSection(item: item, myRestaurant: myRestaurant)),
               if (!myRestaurant) const SizedBox(height: 4),
               if (!myRestaurant)
                 Row(
@@ -252,7 +252,7 @@ class PropertyCard extends StatelessWidget {
                     SizedBox(
                         width: 180,
                         child: PremiumAndRequestButtons(item: item)),
-                    // CallMessageReportButtons(item: item),
+                    CallMessageReportButtons(item: item),
                   ],
                 ),
             ],
@@ -311,16 +311,16 @@ class EliteBanner extends StatelessWidget {
             color: subscriptionType == 'Premium subscription'
                 ? AppColors.SECONDARY_COLOR
                 : subscriptionType == 'Regular subscription'
-                    ? AppColors.PRIMARY_COLOR
-                    : null,
+                ? AppColors.PRIMARY_COLOR
+                : null,
           ),
           const Sizer(),
           Text(
             subscriptionType == 'Premium subscription'
                 ? LocaleKeys.premium.localize
                 : subscriptionType == 'Regular subscription'
-                    ? LocaleKeys.regular.localize
-                    : LocaleKeys.notSubscribed.localize,
+                ? LocaleKeys.regular.localize
+                : LocaleKeys.notSubscribed.localize,
             textAlign: TextAlign.start,
             style: const TextStyle(
               fontSize: 18,
@@ -341,9 +341,9 @@ class FavoriteButton extends StatelessWidget {
 
   const FavoriteButton(
       {super.key,
-      required this.item,
-      required this.mealId,
-      required this.favouriteRestaurant});
+        required this.item,
+        required this.mealId,
+        required this.favouriteRestaurant});
 
   @override
   Widget build(BuildContext context) {
@@ -395,13 +395,13 @@ class DetailsSection extends StatelessWidget {
               Text(
                 item.name ?? '',
                 style:
-                    const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
               ),
               const SizedBox(width: 5),
               Expanded(
                 child: Text(
                   "${context.isArabic ? item.subcategoryId?.nameAr : item.subcategoryId?.nameEn ?? ''}"
-                  "${item.description != null ? "," : ""} ${item.description ?? ''}",
+                      "${item.description != null ? "," : ""} ${item.description ?? ''}",
                   style: const TextStyle(
                       fontWeight: FontWeight.w600, fontSize: 12),
                   overflow: TextOverflow.ellipsis,
@@ -415,7 +415,7 @@ class DetailsSection extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                     Label(text: item.rateName ?? "N/A"),
+                    Label(text: item.rateName ?? "N/A"),
                     // const Icon(
                     //   Icons.star_rounded,
                     //   color: AppColors.ACCENT_COLOR,
@@ -512,7 +512,7 @@ class DetailsSection extends StatelessWidget {
                   children: [
                     const Icon(Icons.location_on_rounded),
                     Text(
-                        // textAlign: TextAlign.end,
+                      // textAlign: TextAlign.end,
                         '${context.isArabic ? item.government?.governorateNameAr ?? '' : item.government?.governorateNameEn ?? ''}, ${context.isArabic ? item.city?.cityNameAr : item.city?.cityNameEn ?? ''}',
                         style: const TextStyle(
                           fontWeight: FontWeight.w600,
@@ -655,7 +655,7 @@ class CallMessageReportButtons extends StatelessWidget {
           // ),
           IconButton(
             icon: SvgPicture.asset(
-               Assets.phoneIconRed,
+              Assets.phoneIconRed,
               width: 18,
               height: 18,
               color:  isChatEnabled
@@ -725,15 +725,15 @@ class CallMessageReportButtons extends StatelessWidget {
                 : AppColors.GREY_DARK_COLOR,
             onPressed: isChatEnabled
                 ? () {
-                    BlocProvider.of<RestaurantsCubit>(context)
-                        .getExpiredOrders();
-                    // Implement message functionality here
-                  }
+              BlocProvider.of<RestaurantsCubit>(context)
+                  .getExpiredOrders();
+              // Implement message functionality here
+            }
                 : () {
-                    SubscriptionMethod().subscribe(
-                        subscribeId: item.subcategoryId?.id ?? '',
-                        title: item.name ?? '');
-                  },
+              SubscriptionMethod().subscribe(
+                  subscribeId: item.subcategoryId?.id ?? '',
+                  title: item.name ?? '');
+            },
           ),
           // const SizedBox(width: 4),
           IconButton(
