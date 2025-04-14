@@ -1510,5 +1510,7 @@
   "addACommentsFor": "أضف تعليقًا لـ",
   "commentAdded": "تم إضافة التعليق",
   "areYouSureYouWantToDeleteThisComment": "هل أنت متأكد أنك تريد حذف هذا التعليق؟",
-  "responseStatus": "حالة الرد"
+  "responseStatus": "حالة الرد",
+  "imBookingOfAnotherClient": "أقوم بالحجز نيابة عن عميل آخر"
+
 }

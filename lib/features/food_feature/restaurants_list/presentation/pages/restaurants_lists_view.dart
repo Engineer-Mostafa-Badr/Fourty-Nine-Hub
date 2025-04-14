@@ -240,7 +240,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
     // return CustomApproveMealButton(text:  LocaleKeys.serveClientsByClickRegister.tr() ,onPressed: (){},);
     //        if (!(state.isResturant?.isRestaurant ?? false))
     return Padding(
-      padding: EdgeInsetsDirectional.symmetric(horizontal: 20,vertical: 8),
+      padding: EdgeInsetsDirectional.symmetric(horizontal: 0,vertical: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -490,7 +490,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
 
   Widget _buildSearchAndExpiredRequests() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 5),
       child: Row(
         children: [
           Row(
@@ -527,6 +527,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                   )),
             ],
           ),
+          SizedBox(width: 5,),
           Expanded(
             child: InkWell(
               onTap: () {

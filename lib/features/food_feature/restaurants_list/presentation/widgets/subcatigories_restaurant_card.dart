@@ -179,7 +179,7 @@ class PropertyCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Padding(
-                padding:EdgeInsetsDirectional.symmetric(vertical: 8,horizontal: 12),
+                padding:const EdgeInsetsDirectional.symmetric(vertical: 8,horizontal: 12),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -188,14 +188,14 @@ class PropertyCard extends StatelessWidget {
                       children: [
                         SvgPicture.asset(Assets.viewCountIcon,color: Colors.grey,),
                         Label(text: formatViews(item.totalViews!.toInt()),
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w400,
                               color: AppColors.c6C6C6C
                           ),
                         ),
                         Label(text: LocaleKeys.views.localize,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w400,
                           color: AppColors.c6C6C6C
@@ -593,30 +593,133 @@ class CallMessageReportButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isChatEnabled = item.enableOrDisableChat != 'disable';
+    final isChatEnabled = item.enableOrDisableChat?.toLowerCase() == 'enable';
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 0),
       child: Row(
         children: [
+          // IconButton(
+          //   icon:  SvgPicture.asset(Assets.phoneIconRed,
+          //   width: 18,
+          //     height: 18,
+          //   ),
+          //   color: isChatEnabled
+          //       ? AppColors.PRIMARY_COLOR
+          //       : AppColors.GREY_DARK_COLOR,
+          //   onPressed: isChatEnabled
+          //       ? () {
+          //     showModalBottomSheet(
+          //       context: context,
+          //       backgroundColor: cardDarkColor(context),
+          //       shape: const RoundedRectangleBorder(
+          //         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+          //       ),
+          //       builder: (_) {
+          //         return Padding(
+          //           padding: const EdgeInsets.all(16.0),
+          //           child: Column(
+          //             mainAxisSize: MainAxisSize.min,
+          //             children: [
+          //               ElevatedButton(
+          //                 onPressed: () {
+          //                   Navigator.pop(context); // close current sheet
+          //                   _showFreeCallBottomSheet(context, item);
+          //                 },
+          //                 child: const Text("Free Call"),
+          //               ),
+          //               ElevatedButton(
+          //                 onPressed: () {
+          //                   launchUrlString("tel://${item.number}");
+          //                 },
+          //                 child: const Text("Regular Call"),
+          //               ),
+          //             ],
+          //           ),
+          //         );
+          //       },
+          //     );
+          //   }
+          //       : () {
+          //     SubscriptionMethod().subscribe(
+          //       subscribeId: item.subcategoryId?.id ?? '',
+          //       title: item.name ?? '',
+          //     );
+          //   },
+          //   // onPressed: isChatEnabled
+          //   //     ? () => launchUrlString("tel://${item.number}")
+          //   //     : () {
+          //   //         SubscriptionMethod().subscribe(
+          //   //             subscribeId: item.subcategoryId?.id ?? '',
+          //   //             title: item.name ?? '');
+          //   //       },
+          // ),
           IconButton(
-            icon:  SvgPicture.asset(Assets.phoneIconRed,
-            width: 18,
+            icon: SvgPicture.asset(
+               Assets.phoneIconRed,
+              width: 18,
               height: 18,
+              color:  isChatEnabled
+                  ? AppColors.PRIMARY_COLOR_DARK
+                  : AppColors.GREY_DARK_COLOR,
             ),
             color: isChatEnabled
                 ? AppColors.PRIMARY_COLOR
                 : AppColors.GREY_DARK_COLOR,
             onPressed: isChatEnabled
-                ? () => launchUrlString("tel://${item.number}")
+                ? () {
+              showModalBottomSheet(
+                context: context,
+                backgroundColor: cardDarkColor(context),
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                ),
+                builder: (_) {
+                  return Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      spacing: 16,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        AppButton(
+                          backColor: AppColors.PRIMARY_COLOR,
+                          color: AppColors.whiteColor,
+                          onPressed: () {
+                            Navigator.pop(context); // Close first sheet
+                            // _showFreeCallBottomSheet(context, item);
+                          },
+                          label:  "Free Call",
+                        ),
+                        AppButton(
+                          backColor: AppColors.cD9D9D9,
+                          color: AppColors.black,
+                          onPressed: () {
+                            Navigator.pop(context); // Close first sheet
+                            _showRegularCallBottomSheet(context, item); // Open second
+                          },
+                          label:  "Regular Call",
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              );
+            }
                 : () {
-                    SubscriptionMethod().subscribe(
-                        subscribeId: item.subcategoryId?.id ?? '',
-                        title: item.name ?? '');
-                  },
+              SubscriptionMethod().subscribe(
+                subscribeId: item.subcategoryId?.id ?? '',
+                title: item.name ?? '',
+              );
+            },
           ),
+
+
           // const SizedBox(width: 4),
           IconButton(
-            icon: SvgPicture.asset(Assets.mailIconRed),
+            icon: SvgPicture.asset(Assets.mailIconRed,
+              color:  isChatEnabled
+                  ? AppColors.PRIMARY_COLOR_DARK
+                  : AppColors.GREY_DARK_COLOR,
+            ),
             color: isChatEnabled
                 ? AppColors.PRIMARY_COLOR
                 : AppColors.GREY_DARK_COLOR,
@@ -657,6 +760,251 @@ class CallMessageReportButtons extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+  // void _showRegularCallBottomSheet(BuildContext context, Restaurant item) {
+  //   bool isBookingForAnotherClient = false;
+  //   final TextEditingController phoneController = TextEditingController(text: item.number ?? '');
+  //   showModalBottomSheet(
+  //     context: context,
+  //     isScrollControlled: true,
+  //     backgroundColor: cardDarkColor(context),
+  //     shape: const RoundedRectangleBorder(
+  //       borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+  //     ),
+  //     builder: (context) {
+  //       return StatefulBuilder(
+  //         builder: (context, setState) {
+  //           return Padding(
+  //             padding: EdgeInsets.only(
+  //               left: 16,
+  //               right: 16,
+  //               bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+  //               top: 16,
+  //             ),
+  //             child: Column(
+  //               mainAxisSize: MainAxisSize.min,
+  //               children: [
+  //                 CheckboxListTile(
+  //                   activeColor: AppColors.PRIMARY_COLOR,
+  //                   contentPadding: EdgeInsets.zero,
+  //                   value: isBookingForAnotherClient,
+  //                   onChanged: (value) {
+  //                     setState(() {
+  //                       isBookingForAnotherClient = value!;
+  //                       if (isBookingForAnotherClient) {
+  //                         phoneController.clear();
+  //                       } else {
+  //                         phoneController.text = item.number ?? '';
+  //                       }
+  //                     });
+  //                   },
+  //
+  //                   // onChanged: (value) {
+  //                   //   setState(() {
+  //                   //     isBookingForAnotherClient = value!;
+  //                   //   });
+  //                   // },
+  //                   title: Text(
+  //                     LocaleKeys.imBookingOfAnotherClient.localize,
+  //                     style: const TextStyle(
+  //                       fontWeight: FontWeight.w600,
+  //                       fontSize: 16,
+  //                       color: AppColors.c717171,
+  //                     ),
+  //                     maxLines: 2,
+  //                     overflow: TextOverflow.ellipsis,
+  //                   ),
+  //                   controlAffinity: ListTileControlAffinity.leading,
+  //                   dense: true, // reduces vertical padding
+  //                   visualDensity:  VisualDensity(horizontal: -4, vertical: -4),
+  //                 ),
+  //                 const SizedBox(height: 10),
+  //                 TextField(
+  //                   enabled: isBookingForAnotherClient,
+  //                   controller: phoneController,
+  //                   keyboardType: TextInputType.phone,
+  //                   style: TextStyle(
+  //                     color: Colors.black.withOpacity(0.8)
+  //                   ),
+  //                   decoration: InputDecoration(
+  //                     prefixIcon: Padding(
+  //                       padding: const EdgeInsets.all(12.0), // Adjust padding as needed
+  //                       child: SvgPicture.asset(
+  //                         color: AppColors.PRIMARY_COLOR,
+  //                         Assets.phoneIconRed,
+  //                         width: 18,
+  //                         height: 18,
+  //                         fit: BoxFit.contain,
+  //                       ),
+  //                     ),
+  //                     hintText: LocaleKeys.phone.localize,
+  //                     filled: true,
+  //                     fillColor: Colors.grey.shade200,
+  //                     border: OutlineInputBorder(
+  //                       borderRadius: BorderRadius.circular(12),
+  //                       borderSide: BorderSide.none,
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 const SizedBox(height: 20),
+  //                 SizedBox(
+  //                   width: double.infinity,
+  //                   child: AppButton(
+  //                     backColor: AppColors.PRIMARY_COLOR,
+  //                     color: AppColors.whiteColor,
+  //                     label: LocaleKeys.submit.localize,
+  //                     onPressed: () {
+  //                       final enteredNumber = phoneController.text.trim();
+  //                       if (isBookingForAnotherClient) {
+  //                         if (enteredNumber.isEmpty) {
+  //                           // Show error
+  //                           ScaffoldMessenger.of(context).showSnackBar(
+  //                             const SnackBar(
+  //                               content: Text("Please enter a phone number"),
+  //                             ),
+  //                           );
+  //                           return;
+  //                         }
+  //                         launchUrlString("tel://$enteredNumber");
+  //                       } else {
+  //                         launchUrlString("tel://${item.number}");
+  //                       }
+  //
+  //                       Navigator.pop(context);
+  //                     },
+  //                   ),
+  //                 )
+  //               ],
+  //             ),
+  //           );
+  //         },
+  //       );
+  //     },
+  //   );
+  // }
+  void _showRegularCallBottomSheet(BuildContext context, Restaurant item) {
+    bool isBookingForAnotherClient = false;
+    bool hasPhoneError = false;
+    final TextEditingController phoneController = TextEditingController(text: item.number ?? '');
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: cardDarkColor(context),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            phoneController.addListener(() {
+              if (hasPhoneError && phoneController.text.isNotEmpty) {
+                setState(() {
+                  hasPhoneError = false;
+                });
+              }
+            });
+
+            return Padding(
+              padding: EdgeInsets.only(
+                left: 16,
+                right: 16,
+                bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+                top: 16,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CheckboxListTile(
+                    activeColor: AppColors.PRIMARY_COLOR,
+                    contentPadding: EdgeInsets.zero,
+                    value: isBookingForAnotherClient,
+                    onChanged: (value) {
+                      setState(() {
+                        isBookingForAnotherClient = value!;
+                        hasPhoneError = false;
+                        if (isBookingForAnotherClient) {
+                          phoneController.clear();
+                        } else {
+                          phoneController.text = item.number ?? '';
+                        }
+                      });
+                    },
+                    title: Text(
+                      LocaleKeys.imBookingOfAnotherClient.localize,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                        color: AppColors.c717171,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    controlAffinity: ListTileControlAffinity.leading,
+                    dense: true,
+                    visualDensity: VisualDensity(horizontal: -4, vertical: -4),
+                  ),
+                  const SizedBox(height: 10),
+                  TextField(
+                    enabled: isBookingForAnotherClient,
+                    controller: phoneController,
+                    keyboardType: TextInputType.phone,
+                    style: TextStyle(
+                      color: Colors.black.withOpacity(0.8),
+                    ),
+                    decoration: InputDecoration(
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: SvgPicture.asset(
+                          color: AppColors.PRIMARY_COLOR,
+                          Assets.phoneIconRed,
+                          width: 18,
+                          height: 18,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                      hintText: LocaleKeys.phone.localize,
+                      errorText: hasPhoneError ? LocaleKeys.enterPhoneNumber.localize : null,
+                      filled: true,
+                      fillColor: Colors.grey.shade200,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: double.infinity,
+                    child: AppButton(
+                      backColor: AppColors.PRIMARY_COLOR,
+                      color: AppColors.whiteColor,
+                      label: LocaleKeys.submit.localize,
+                      onPressed: () {
+                        final enteredNumber = phoneController.text.trim();
+                        if (isBookingForAnotherClient) {
+                          if (enteredNumber.isEmpty) {
+                            setState(() {
+                              hasPhoneError = true;
+                            });
+                            return;
+                          }
+                          launchUrlString("tel://$enteredNumber");
+                        } else {
+                          launchUrlString("tel://${item.number}");
+                        }
+
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
     );
   }
 
