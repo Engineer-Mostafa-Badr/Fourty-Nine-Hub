@@ -274,8 +274,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                       AdInterstitialTop.showInterstitialAd();
                       context.push(Routes.RIDE_HOME);
                     },
-                    shadowColor: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
-                    image: Assets.car2Image,
+                    shadowColor: Color(0xff8000FF),                    image: Assets.car2Image,
                     title: LocaleKeys.ride.localize,
                   ),
                 ),
@@ -287,7 +286,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                       AdInterstitialTop.showInterstitialAd();
                       context.push(Routes.VISITA);
                     },
-                    shadowColor: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
+                    shadowColor: Color(0xff4997D0),
                     image: Assets.doctorImage,
                     title: LocaleKeys.health.localize,
                   ),
@@ -301,7 +300,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                       HandleCashback.setCount('beAStarCount', context);
                       context.push(Routes.FOOD);
                     },
-                    shadowColor: Colors.deepOrange.withValues(alpha: .7),
+                    shadowColor: Color(0xffFF7F00),
                     image: Assets.mealImage,
                     title: LocaleKeys.meal.localize,
                   ),
@@ -337,7 +336,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                       AdInterstitialTop.showInterstitialAd();
                       context.push(Routes.MARRIAGESUBCATEGORIES);
                     },
-                    shadowColor: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
+                    shadowColor: Color(0xffFFC0CB),
                     image: Assets.marriage,
                     title: LocaleKeys.marriage.localize,
                   ),

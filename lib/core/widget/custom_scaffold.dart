@@ -13,6 +13,7 @@ import '../../common/widgets/stateless/labels/label.dart';
 import '../../features/settings/presentation/cubit/choice_ruler_cubit.dart';
 import '../../features/settings/presentation/cubit/floating_navigator_cubit.dart';
 import '../../features/social_media/chat/chat_view/presentation/pages/chats_view.dart';
+import '../../main.dart';
 import '../../res/assets/assets.dart';
 import '../../res/style/app_colors.dart';
 import '../../routes/routes.dart';
@@ -65,55 +66,63 @@ class _CustomScaffoldState extends State<CustomScaffold>
         var floatingNavigatorCubit = FloatingNavigatorCubit.get(context);
         if (floatingNavigatorCubit.floatingNavigatorEnable &&
             widget.showNavBAr) {
-          return FloatingDraggableWidget(
-            mainScreenWidget: MainScaffold(
-              showNavBAr: widget.showNavBAr,
-              backgroundColor: widget.backgroundColor,
-              floatingActionButtonLocation: widget.floatingActionButtonLocation,
-              floatingActionButton: widget.floatingActionButton,
-              drawer: widget.drawer,
-              bottomNavigationBar: widget.bottomNavigationBar,
-              body: widget.body,
-              appBar: widget.appBar,
-              extendBody: widget.extendBody,
-              extendBodyBehindAppBar: widget.extendBodyBehindAppBar,
-              bottomSheet: widget.bottomSheet,
-              resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
-              enableCustomAppBar: widget.enableCustomAppBar,
-              rulerWidget: rulerWidget(),
-            ),
-            floatingWidget: GestureDetector(
-              onTap: () {
-                floatingNavigatorCubit.changeFloatingNavigator();
-              },
-              child: Column(
-                children: [
-                  Container(
-                    width: 32,
-                    height: 32,
-                    decoration: BoxDecoration(
-                        color: AppColors.SECONDARY_COLOR,
-                        borderRadius: BorderRadius.circular(15.r)),
-                    child: const Icon(
-                      Icons.swap_horiz_rounded,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 32,
-                    height: 28,
-                    child: FittedBox(
-                      child: Label(
-                        text: 'Move',
+          return SizedBox(
+            width: double.infinity,
+            height: double.infinity,
+            child: FloatingDraggableWidget(
+              mainScreenWidget: MainScaffold(
+                showNavBAr: widget.showNavBAr,
+                backgroundColor: widget.backgroundColor,
+                floatingActionButtonLocation:
+                    widget.floatingActionButtonLocation,
+                floatingActionButton: widget.floatingActionButton,
+                drawer: widget.drawer,
+                bottomNavigationBar: widget.bottomNavigationBar,
+                body: widget.body,
+                appBar: widget.appBar,
+                extendBody: widget.extendBody,
+                extendBodyBehindAppBar: widget.extendBodyBehindAppBar,
+                bottomSheet: widget.bottomSheet,
+                resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
+                enableCustomAppBar: widget.enableCustomAppBar,
+                rulerWidget: rulerWidget(),
+              ),
+              floatingWidget: GestureDetector(
+                onTap: () {
+                  floatingNavigatorCubit.changeFloatingNavigator();
+                },
+                child: Column(
+                  children: [
+                    Container(
+                      width: 32,
+                      height: 32,
+                      decoration: BoxDecoration(
+                          color: AppColors.SECONDARY_COLOR,
+                          borderRadius: BorderRadius.circular(15.r)),
+                      child: const Icon(
+                        Icons.swap_horiz_rounded,
+                        color: Colors.white,
                       ),
                     ),
-                  ),
-                ],
+                     SizedBox(
+                      width: 32,
+                      height: 28,
+                      child: FittedBox(
+                        child: Label(
+                          text: LocaleKeys.move.localize,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
+              floatingWidgetHeight: 60,
+              floatingWidgetWidth: 50,
+              dy: MediaQuery.sizeOf(navigatorKey.currentState!.context).height /
+                      2 +
+                  100,
+              autoAlign: true,
             ),
-            floatingWidgetHeight: 60,
-            floatingWidgetWidth: 50,
-            autoAlign: true,
           );
         } else {
           return MainScaffold(
@@ -287,7 +296,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                       height: 100,
                       width: 10,
                       decoration: BoxDecoration(
-                        color: Colors.red,
+                        color: AppColors.SECONDARY_COLOR,
                         border: const BorderDirectional(
                           end: BorderSide(
                             color: AppColors.PRIMARY_COLOR,
@@ -394,7 +403,11 @@ class MainScaffold extends StatelessWidget {
                       alignment: Alignment.centerLeft,
                       children: [
                         body,
-                           if ((choiceRulerCubit.choiceRulerStatus||floatingNavigatorCubit.floatingNavigatorStatus)&&showNavBAr) rulerWidget,
+                        if ((choiceRulerCubit.choiceRulerStatus ||
+                                floatingNavigatorCubit
+                                    .floatingNavigatorStatus) &&
+                            showNavBAr)
+                          rulerWidget,
                       ],
                     ),
                   ),
@@ -423,7 +436,8 @@ class MainScaffold extends StatelessWidget {
                   children: [
                     body,
                     if ((choiceRulerCubit.choiceRulerStatus ||
-                        floatingNavigatorCubit.floatingNavigatorStatus)&& showNavBAr)
+                            floatingNavigatorCubit.floatingNavigatorStatus) &&
+                        showNavBAr)
                       rulerWidget,
                   ],
                 ),

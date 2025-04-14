@@ -5,6 +5,7 @@ abstract class Assets {
   static String starIcon = 'assets/images/star.svg';
   static String addImage = 'assets/images/addImage.svg';
   static String icon = 'assets/images/icon.png';
+  static String logoHub = 'assets/icons/logoHub.png';
   static String tube = 'assets/images/tube.png';
   static String joinTrip = 'assets/images/join_trip.png';
   static String tube1 = 'assets/images/tube1.png';

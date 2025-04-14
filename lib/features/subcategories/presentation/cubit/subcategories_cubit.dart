@@ -158,6 +158,8 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
   }
 
   Future<List<SubCategoryEntity>> getCustomPageSubcategories() async {
+    print('getCustomPageSubcategories');
+
     List<SubCategoryEntity> data = [];
     emit(state.copyWith(status: SubcategoriesStates.loading));
     final user = UserCubit.to.state.data?.id;
@@ -179,6 +181,8 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
   }
 
   Future<List<SubCategoryEntity>> getMarriageSubcategories() async {
+    print('getMarriageSubcategories');
+
     List<SubCategoryEntity> data = [];
     // emit(state.copyWith(status: SubcategoriesStates.loading));
     // await UserCubit.to.getUser();
@@ -205,6 +209,8 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
   }
 
   Future<List<SubCategoryEntity>> getMyMarriage(String id) async {
+    print("getMyMarriage");
+
     List<SubCategoryEntity> data = [];
     // emit(state.copyWith(status: SubcategoriesStates.loading));
     // await UserCubit.to.getUser();
@@ -242,6 +248,8 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
   }
 
   Future loadMarriageData({required String subCategoryId}) async {
+    print("loadMarriageData");
+
     // if (fromTab == true) {
     emit(state.copyWith(status: SubcategoriesStates.loadingAds));
     // }
@@ -265,9 +273,8 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
       PagingController(firstPageKey: 1);
 
   void loadInitialData({required String subCategoryId}) async {
-    print("Yaneeeeeeee");
+    print("loadInitialData");
     emit(state.copyWith(status: SubcategoriesStates.loading));
-    marriageAds.clear();
     currentPage = 1;
     hasMoreData = true;
     await Future.wait([
@@ -278,8 +285,9 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
   }
 
   loadInitMarriage({required String subCategoryId}) async {
+    print('loadInitMarriage');
+
     print("Yaneeeeeeee");
-    marriageAds.clear();
     currentPage = 1;
     hasMoreData = true;
     await getMarriageAds(
@@ -289,9 +297,9 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
     emit(state.copyWith(status: SubcategoriesStates.adsSuccess));
   }
 
-  List<AdModel> marriageAds = [];
-  List<AdModel> marriageMyAds = [];
-  List<AdRequestEntity> adsRequestsLog = [];
+  // List<AdModel> marriageAds = [];
+  // List<AdModel> marriageMyAds = [];
+  // List<AdRequestEntity> adsRequestsLog = [];
   bool isLoadingMore = false;
   bool hasMoreData = true;
   int currentPage = 1;
@@ -300,6 +308,8 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
   Future getMarriageAds({
     required String subCategoryId,
   }) async {
+    state.copyWith(status: SubcategoriesStates.loadingAds);
+
     print('getMarriageAds');
     final userId = UserCubit.to.isLoggedIn ? UserCubit.to.state.data?.id : '';
     print('return is ${!hasMoreData || isLoadingMore}');
@@ -323,8 +333,6 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
       (failure) => emit(
           state.copyWith(failure: failure, status: SubcategoriesStates.error)),
       (data) async {
-        marriageAds.addAll(data);
-
         if (data.length < pageSize) {
           hasMoreData = false;
         } else {
@@ -332,7 +340,7 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
         }
 
         isLoadingMore = false;
-        print("objectmarriageAds${marriageAds.length}");
+        print("objectmarriageAds${data.length}");
         emit(state.copyWith(ads: data, status: SubcategoriesStates.adsSuccess));
       },
     );
@@ -344,7 +352,6 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
       (failure) => emit(
           state.copyWith(failure: failure, status: SubcategoriesStates.error)),
       (data) async {
-        marriageMyAds.addAll(data);
         emit(state.copyWith(
             myAds: data, status: SubcategoriesStates.adsSuccess));
       },
@@ -357,7 +364,6 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
   }) async {
     print("Gettinghiii");
 
-    marriageAds.clear();
     currentPage = 1;
     hasMoreData = true;
     isLoadingMore = false;
@@ -382,6 +388,8 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
     required FilterModel model,
     required String filter,
   }) async {
+    state.copyWith(status: SubcategoriesStates.loadingAds);
+
     print("objectasdsad");
     if (!hasMoreData || isLoadingMore) return;
 
@@ -406,7 +414,6 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
       (failure) => emit(
           state.copyWith(failure: failure, status: SubcategoriesStates.error)),
       (data) {
-        marriageAds.addAll(data);
 
         if (data.length < pageSize) {
           hasMoreData = false;
@@ -415,7 +422,7 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
         }
 
         isLoadingMore = false;
-        print("objectmarriageAds${marriageAds.length}");
+        print("objectmarriageAds${data.length}");
         emit(state.copyWith(ads: data, status: SubcategoriesStates.adsSuccess));
       },
     );
@@ -479,8 +486,6 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
       (failure) => emit(
           state.copyWith(failure: failure, status: SubcategoriesStates.error)),
       (data) {
-        adsRequestsLog.clear();
-        adsRequestsLog.addAll(data);
         emit(state.copyWith(adsRequestsLog: data));
       },
     );

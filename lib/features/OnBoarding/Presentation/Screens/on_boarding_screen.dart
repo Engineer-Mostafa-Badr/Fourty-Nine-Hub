@@ -167,7 +167,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   ),
                 ),
                 const Sizer(
-                  height: 150,
+                  height: 96,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),

@@ -43,6 +43,7 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'core/service/cache_service.dart';
 import 'core/themes/light_theme.dart';
 import 'features/OnBoarding/Presentation/Controllers/on_boarding_cubit.dart';
+import 'features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'features/notifications/presentation/cubits/get_status_all_services_notifications/get_status_all_services_notifications_cubit.dart';
@@ -186,13 +187,13 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         //     create: (context) =>
         //         CheckTripEndCubit(repository: serviceLocator())),
         BlocProvider(
-          create: (context) => serviceLocator<UserCubit>()..getUser(),
+          create: (context) => serviceLocator<UserCubit>(),//..getUser(),
         ),
         BlocProvider(
-          create: (context) => serviceLocator<CreatePostCubit>()..loadData(),
+          create: (context) => serviceLocator<CreatePostCubit>(),//..loadData(),
         ),
         BlocProvider(
-          create: (context) => serviceLocator<SecretsCubit>()..getAllSecrets(),
+          create: (context) => serviceLocator<SecretsCubit>(),//..getAllSecrets(),
         ),
         BlocProvider(
           create: (context) =>
@@ -203,18 +204,16 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ),
         //to initialize preloading
         BlocProvider<ReelsCubit>(
-          create: (_) => serviceLocator<ReelsCubit>()..fetchReels(),
+          create: (_) => serviceLocator<ReelsCubit>(),//..fetchReels(),
         ),
         BlocProvider(
           create: (BuildContext context) => serviceLocator<SearchCubit>(),
         ),
         BlocProvider(
-            create: (context) =>
-            serviceLocator<PreloadBloc>()..getVideosFromApi()),
-        BlocProvider(
-          create: (BuildContext context) =>
-          serviceLocator<MainCategoriesCubit>()..loadData(),
+          create: (context) =>
+              serviceLocator<PreloadBloc>(), //..getVideosFromApi()
         ),
+
         // BlocProvider(
         //   create: (BuildContext context) => serviceLocator<RideCubit>(),
         // ),
@@ -243,9 +242,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           ),
         ),
         BlocProvider<GetStatusAllServicesNotificationsCubit>(
-          create: (context) => GetStatusAllServicesNotificationsCubit(
-            serviceLocator(),
-          ),
+          create: (context) =>
+              serviceLocator<GetStatusAllServicesNotificationsCubit>(),
         ),
         BlocProvider<GetSocialNotificationsCubit>(
           create: (context) => GetSocialNotificationsCubit(
@@ -253,27 +251,26 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             context: context,
           ),
         ),
-        // BlocProvider(
-        //   create: (context) => AuthenticationRideCubit(),
-        // ),
         BlocProvider<GetServicesNotificationsCubit>(
           create: (context) => GetServicesNotificationsCubit(
             getNotficationsUseCase: serviceLocator(),
             context: context,
           ),
         ),
+        // BlocProvider(
+        //   create: (context) => AuthenticationRideCubit(),
+        // ),
         BlocProvider<NotificationSocketIoCubit>(
             create: (context) => NotificationSocketIoCubit(
               context: context,
               notificationListenerUseCase: serviceLocator(),
             )),
-        BlocProvider(create: (context) => serviceLocator<ShippingCubit>()),
+        // BlocProvider(create: (context) => serviceLocator<ShippingCubit>()),
         BlocProvider(
           create: (context) => FloatingNavigatorCubit()
             ..getFloatingNavigatorStatus()
             ..getEnableFloatingNavigatorStatus(),
         ),
-
         BlocProvider(
           create: (context) => ChoiceRulerCubit()
             ..getChoiceRulerStatus()
@@ -286,9 +283,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         splitScreenMode: true,
         builder: (context, child) {
           context.read<SecretsCubit>().state.secrets?.zegoAppId;
-          if (context.read<ReelsCubit>().state.globalReels.isEmpty) {
-            context.read<ReelsCubit>().fetchReels();
-          }
+          // if (context.read<ReelsCubit>().state.globalReels.isEmpty) {
+          //   context.read<ReelsCubit>().fetchReels();
+          // }
           return BlocBuilder<ThemeCubit, ThemeStates>(
             builder: (BuildContext context, state) {
               return FutureBuilder<bool>(

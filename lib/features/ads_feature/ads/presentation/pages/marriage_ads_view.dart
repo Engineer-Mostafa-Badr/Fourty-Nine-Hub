@@ -18,8 +18,6 @@ import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/marr
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/premium_request_button.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/request_button.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
-import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
-import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcategories_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/widgets/available_trip_button.dart';
@@ -53,9 +51,7 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
   void initState() {
     context
         .read<SubcategoriesCubit>()
-        // .loadInitialData(subCategoryId: widget.mainCategory.id);
-    .loadInitialData(subCategoryId: '62c8b5b09332225799fe335e');
-
+        .loadInitialData(subCategoryId: '62c8b5b09332225799fe335e');
     _scrollController = ScrollController()..addListener(_onScroll);
 
     super.initState();
@@ -70,40 +66,40 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
     }
   }
 
-  bool _isFilterApplied = false;
-
-  Future<void> _applyFilter(
-      BuildContext context, SubcategoriesCubit controller) async {
-    if (_isFilterApplied) return; // Prevent duplicate execution
-    _isFilterApplied = true;
-
-    dynamic data = await context.push(
-      Routes.GOVERNORATEFILTERADS,
-      extra: CategorizationEntity(
-        mainCategory: controller.state.mainCategory!,
-        subCategory: controller.state.subCategories![controller
-                .state.subCategories!
-                .indexWhere((element) => element.isSelected == true) ??
-            0],
-      ),
-    );
-
-    if (data != null) {
-      controller.state.city = data.cityId;
-      controller.state.governorate = data.governorateId;
-      controller.changeFilterModel(data);
-      await controller.loadFilterData(model: data, filter: 'user');
-    }
-
-    _isFilterApplied = false; // Reset the flag
-  }
+  // bool _isFilterApplied = false;
+  //
+  // Future<void> _applyFilter(
+  //     BuildContext context, SubcategoriesCubit controller) async {
+  //   if (_isFilterApplied) return; // Prevent duplicate execution
+  //   _isFilterApplied = true;
+  //
+  //   dynamic data = await context.push(
+  //     Routes.GOVERNORATEFILTERADS,
+  //     extra: CategorizationEntity(
+  //       mainCategory: controller.state.mainCategory!,
+  //       subCategory: controller.state.subCategories![controller
+  //               .state.subCategories!
+  //               .indexWhere((element) => element.isSelected == true) ??
+  //           0],
+  //     ),
+  //   );
+  //
+  //   if (data != null) {
+  //     controller.state.city = data.cityId;
+  //     controller.state.governorate = data.governorateId;
+  //     controller.changeFilterModel(data);
+  //     await controller.loadFilterData(model: data, filter: 'user');
+  //   }
+  //
+  //   _isFilterApplied = false; // Reset the flag
+  // }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SubcategoriesCubit, SubcategoriesState>(
         builder: (context, state) {
       var controller = context.read<SubcategoriesCubit>();
-      if (!state.isAdsSuccess) {
+      if (state.isLoadingAds) {
         return Container(
           color: Theme.of(context).scaffoldBackgroundColor,
           width: double.infinity,
@@ -118,7 +114,7 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
               if (AuthHelper().isLoggedIn()) {
                 context.push(Routes.CREATEAD,
                     extra: CategorizationEntity(
-                      mainCategory: state.mainCategory!,
+                        mainCategory: state.mainCategory!,
                         // mainCategory: widget.mainCategory,
                         subCategory: state.subCategories![state.subCategories
                                 ?.indexWhere(
@@ -194,7 +190,8 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                                             0]));
                                 if (data != null) {
                                   print("data.cityId${data.cityId}");
-                                  print("data.governorateId${data.governorateId}");
+                                  print(
+                                      "data.governorateId${data.governorateId}");
                                   print("objectsdaa");
                                   controller.state.city = data.cityId;
                                   controller.state.governorate =
@@ -275,12 +272,12 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                         )
                       : ListView.builder(
                           controller: _scrollController,
-                          itemCount: controller.marriageAds.length,
+                          itemCount: state.ads?.length??0,
                           physics: const BouncingScrollPhysics(),
                           itemBuilder: (context, index) => ClickableWidget(
                                 onTap: () {
                                   context.push(Routes.ADdetails,
-                                      extra: controller.marriageAds[index].id);
+                                      extra: state.ads?[index].id);
                                 },
                                 child: Container(
                                   margin: EdgeInsets.only(bottom: 20.h),
@@ -298,8 +295,7 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                                         Row(
                                           children: [
                                             ImageFromInternet(
-                                              image: controller
-                                                  .marriageAds[index]
+                                              image: state.ads![index]
                                                   .images
                                                   .first,
                                               height: 80.h,
@@ -310,13 +306,12 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                                               width: 15,
                                             ),
                                             Label(
-                                                text: controller
-                                                    .marriageAds[index].title)
+                                                text: state.ads![index].title)
                                           ],
                                         ),
                                         const Sizer(),
                                         Label(
-                                            text: controller.marriageAds[index]
+                                            text: state.ads![index]
                                                 .description),
                                         const Sizer(),
                                         Row(
@@ -351,7 +346,8 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                                                           .isDarkMode
                                                       ? AppColors
                                                           .DARK_BLUE_COLOR
-                                                          .withValues(alpha: 0.95)
+                                                          .withValues(
+                                                              alpha: 0.95)
                                                       : AppColors.LIGHT_COLOR,
                                                   context: context,
                                                   shape:
@@ -394,19 +390,16 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                                                               Expanded(
                                                                 flex: 3,
                                                                 child:
-                                                                PremiumRequestButton(
-                                                                  adId: controller
-                                                                      .marriageAds[
+                                                                    PremiumRequestButton(
+                                                                  adId: state.ads![
                                                                           index]
                                                                       .id,
                                                                   subCategoryId:
-                                                                      controller
-                                                                              .marriageAds[index]
+                                                                  state.ads![index]
                                                                               .subCategoryId ??
                                                                           '',
                                                                   subscriptionStatus:
-                                                                      controller
-                                                                              .marriageAds[index]
+                                                                  state.ads![index]
                                                                               .subscriptionStatus ??
                                                                           '',
                                                                 ),
@@ -417,13 +410,11 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                                                                 flex: 3,
                                                                 child:
                                                                     RequestButton(
-                                                                  adId: controller
-                                                                      .marriageAds[
+                                                                  adId: state.ads![
                                                                           index]
                                                                       .id,
                                                                   subscriptionStatus:
-                                                                      controller
-                                                                              .marriageAds[index]
+                                                                  state.ads![index]
                                                                               .subscriptionStatus ??
                                                                           '',
                                                                 ),
@@ -440,8 +431,7 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
 
                                             Expanded(
                                               child: CallMessageButtons(
-                                                otherUserId: controller
-                                                        .marriageAds[index]
+                                                otherUserId: state.ads![index]
                                                         .userId ??
                                                     '',
                                                 subcategoryId: state
@@ -455,12 +445,10 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
                                                             0]
                                                         .id ??
                                                     '',
-                                                phone: controller
-                                                        .marriageAds[index]
+                                                phone: state.ads![index]
                                                         .phone ??
                                                     '',
-                                                id: controller
-                                                    .marriageAds[index].id,
+                                                id: state.ads![index].id,
                                                 hasReport: true,
                                               ),
                                             ),
@@ -475,17 +463,15 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
             ),
           ),
         );
-      } else {
+      }
+      else {
         return CustomScaffold(
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(30),
             child: BackAppBar(
               label: context.isArabic
-                  ? state.mainCategory!.name
-                  : state.mainCategory!.nameEn,
-              // label: context.isArabic
-              //     ? widget.mainCategory.name
-              //     : widget.mainCategory.nameEn,
+                  ? 'زواج'
+                  : 'Marriage',
             ),
           ),
           floatingActionButton: CustomFloatingButtonAds(
@@ -510,24 +496,6 @@ class _MarriageSubCategoriesViewState extends State<MarriageSubCategoriesView> {
               }
             },
           ),
-          // CustomFloatingActionButton(
-          //   onPressed: () {
-          //     if (AuthHelper().isLoggedIn()) {
-          //       context.push(Routes.CREATEAD,
-          //           extra: CategorizationEntity(
-          //               mainCategory: widget.mainCategory,
-          //               subCategory: state.subCategories![state.subCategories
-          //                       ?.indexWhere(
-          //                           (element) => element.isSelected == true) ??
-          //                   0],
-          //               fromMarriage: true));
-          //     } else {
-          //       context.push(Routes.LOGIN);
-          //     }
-          //   },
-          //   text:
-          //       "${LocaleKeys.add.localize} ${LocaleKeys.ad.localize} ${context.isArabic ? "${context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameAr}" : "${context.read<SubcategoriesCubit>().state.subCategories?[context.read<SubcategoriesCubit>().state.subCategories?.indexWhere((element) => element.isSelected == true) ?? 0].nameEn}"}",
-          // ),
           body: MarriageAdsViewBody(
             controller: controller,
             state: state,

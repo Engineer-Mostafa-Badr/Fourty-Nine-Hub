@@ -167,11 +167,9 @@ class RideCubit extends Cubit<RideState> {
     emit(state.copyWith(status: RideStates.loading));
     await Future.wait([
       _fetchUserLocation(),
-      _fetchUserLocation(),
       fetchRideDriverInfo(context,false),
       fetchRideDriverInfo(context,true),
       retrieveClientLatestTrip(),
-      fetchRideDriverInfo(context,false),
       getCostPerKm(),
       fetchLoaderInfo(context,false),
       fetchLoaderInfo(context,true),

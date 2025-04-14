@@ -372,6 +372,7 @@ import '../features/food_feature/restaurant_details/presentation/cubit/restauran
 import '../features/food_feature/restaurant_details/presentation/pages/restaurant_details_view.dart';
 import '../features/food_feature/restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
 import '../features/food_feature/restaurants_list/presentation/pages/restaurants_lists_view.dart';
+import '../features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import '../features/fourty_nine/presentation/pages/fourty_nine.dart';
 import '../features/fourty_nine/presentation/pages/main_categories_cards_view.dart';
 import '../features/fourty_nine/presentation/pages/main_categories_taps_view.dart';
@@ -404,6 +405,10 @@ import '../features/new_trip_join/presentation/view/screen/new_route_screen.dart
 import '../features/new_trip_join/presentation/view/screen/new_trip_join_screen.dart';
 import '../features/new_trip_join/presentation/view/screen/pick_me_info_screen.dart';
 import '../features/new_trip_join/presentation/view/screen/trip_Join_info_screen.dart';
+import '../features/notifications/presentation/cubits/get_app_notifications/get_app_notifications_cubit.dart';
+import '../features/notifications/presentation/cubits/get_services_notifications/get_services_notifications_cubit.dart';
+import '../features/notifications/presentation/cubits/get_social_notifications/get_social_notifications_cubit.dart';
+import '../features/notifications/presentation/cubits/get_status_all_services_notifications/get_status_all_services_notifications_cubit.dart';
 import '../features/notifications/presentation/pages/notification_view.dart';
 import '../features/payment/presentation/pages/payment_view.dart';
 import '../features/quraan/presentation/pages/quraan_view.dart';
@@ -466,6 +471,10 @@ class AppPages {
                 BlocProvider(
                   create: (context) =>
                       serviceLocator<StarCubit>()..getAllTalent(),
+                ),
+                BlocProvider(
+                  create: (context) =>
+                  serviceLocator<MainCategoriesCubit>()..loadData(),
                 ),
                 // BlocProvider(
                 //   create: (context) => serviceLocator<ThumbnailsCubit>(),
@@ -1121,10 +1130,39 @@ class AppPages {
                   name: Routes.ACCOUNT,
                   builder: (context, state) => const NotificationView(),
                   routes: [
+                    // GoRoute(
+                    //   path: Paths.NOTIFICATIONS,
+                    //   name: Routes.NOTIFICATIONS,
+                    //   builder: (context, state) => MultiBlocProvider(
+                    //     providers: [
+                    //       BlocProvider<GetAppNotificationsCubit>(
+                    //         create: (context) =>
+                    //             serviceLocator<GetAppNotificationsCubit>(),
+                    //       ),
+                    //       BlocProvider<GetStatusAllServicesNotificationsCubit>(
+                    //         create: (context) => serviceLocator<
+                    //             GetStatusAllServicesNotificationsCubit>(),
+                    //       ),
+                    //       BlocProvider<GetSocialNotificationsCubit>(
+                    //         create: (context) => GetSocialNotificationsCubit(
+                    //           getNotficationsUseCase: serviceLocator(),
+                    //           context: context,
+                    //         ),
+                    //       ),
+                    //       BlocProvider<GetServicesNotificationsCubit>(
+                    //         create: (context) => GetServicesNotificationsCubit(
+                    //           getNotficationsUseCase: serviceLocator(),
+                    //           context: context,
+                    //         ),
+                    //       ),
+                    //     ],
+                    //     child: const NotificationView(),
+                    //   ),
+                    // ),
                     GoRoute(
                       path: Paths.NOTIFICATIONS,
                       name: Routes.NOTIFICATIONS,
-                      builder: (context, state) => const NotificationView(),
+                      builder: (context, state) =>  const NotificationView(),
                     ),
                     GoRoute(
                         path: Paths.SETTINGS,
