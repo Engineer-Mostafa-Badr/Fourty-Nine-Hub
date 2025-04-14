@@ -21,9 +21,6 @@ class DoctorDetailsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final doctorDetailsCubit = context.read<DoctorDetailsCubit>();
     final doctor = doctorDetailsCubit.state.doctor;
-    print( doctor?.address.address);
-    print( doctor?.address.address);
-    print( doctor?.address.address);
     return Column(
       children: [
         if (doctor?.callsPrice.isNotEmpty ?? false)

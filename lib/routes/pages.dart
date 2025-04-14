@@ -1696,7 +1696,8 @@ class AppPages {
                             BlocProvider<BookDoctorAppointmentCubit>(
                                 create: (_) => serviceLocator(),
                                 child: SuccessfulBookingScreen(
-
+                                  doctorDetailsCubit:
+                                  (state.extra) as DoctorDetailsCubit,
                                 )
                                 )),
                     GoRoute(

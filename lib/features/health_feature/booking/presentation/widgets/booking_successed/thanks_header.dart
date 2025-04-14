@@ -28,7 +28,7 @@ class ThanksHeader extends StatelessWidget {
         ),
         Column(
           children:  [
-            Sizer(height: 30,),
+            const Sizer(height: 30,),
             CircleAvatar(
               radius: 160.r,
               backgroundColor: AppColors.RIGHT_SGIN,

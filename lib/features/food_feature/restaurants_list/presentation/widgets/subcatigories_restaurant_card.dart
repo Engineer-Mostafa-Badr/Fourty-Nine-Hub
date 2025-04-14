@@ -252,7 +252,7 @@ class PropertyCard extends StatelessWidget {
                     SizedBox(
                         width: 180,
                         child: PremiumAndRequestButtons(item: item)),
-                    CallMessageReportButtons(item: item),
+                    // CallMessageReportButtons(item: item),
                   ],
                 ),
             ],
