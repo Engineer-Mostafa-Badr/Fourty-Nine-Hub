@@ -11,7 +11,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_auto_accept_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/auto_accept_trip_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_available_ride_trips_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_available_trips_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/listen_to_accept_offer_use_case.dart';
@@ -59,6 +59,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   final ListenToAcceptOfferUseCase listenToAcceptOfferUseCase;
   final ListenToNewTripUseCase listenToNewTripUseCase;
   final ListenToRemoveTripUseCase listenToRemoveTripUseCase;
+  final AutoAcceptTripUseCase autoAcceptTripUseCase;
   DashboardsCubit(
     this.getAvailableTripsUsecase,
     this.getPastTripsUsecase,
@@ -75,6 +76,7 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       this.listenToAcceptOfferUseCase,
       this.listenToNewTripUseCase,
       this.listenToRemoveTripUseCase,
+      this.autoAcceptTripUseCase,
   ) : super(const DashboardsState());
   List<TripEntity> availableTripsNonSocket = [];
 
@@ -317,6 +319,21 @@ class DashboardsCubit extends Cubit<DashboardsState> {
       (settings) {
         log("Suzccess");
         emit(state.copyWith(status: DashboardsStates.successOffer));
+      },
+    );
+  }
+
+  Future<void> autoAcceptTrip(BuildContext context, String id) async {
+    emit(state.copyWith(status: DashboardsStates.loadingAcceptTrip));
+    final Either<Failure, bool> result = await autoAcceptTripUseCase(id);
+    result.fold(
+      (failure) {
+        log("Failure ${getFailureMessage(failure, context)}");
+        emit(state.copyWith(status: DashboardsStates.error, failure: failure));
+      },
+      (data) {
+        log("Suzccess");
+        emit(state.copyWith(status: DashboardsStates.successAcceptTrip));
       },
     );
   }

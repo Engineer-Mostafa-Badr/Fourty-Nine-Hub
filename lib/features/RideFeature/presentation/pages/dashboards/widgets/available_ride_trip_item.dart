@@ -116,6 +116,9 @@ class AvailableRideTripItem extends StatelessWidget {
                         onTap: () {
                           if(tripEntity.isAutoAccept==false){
                             cubit.createOffer(tripId: tripEntity.id,price: tripEntity.price??0, context: context, subCategoryId: tripEntity.subcategoryId);
+                          }else{
+                            // autoAcceptTrip
+                            cubit.autoAcceptTrip(context, tripEntity.id);
                           }
                         },
                 child: Container(
