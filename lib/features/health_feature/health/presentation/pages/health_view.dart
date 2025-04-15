@@ -20,6 +20,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
+import '../../../doctor_filter/presentation/widgets/doctor_card.dart';
 import '../widgets/cards/custom_search_health.dart';
 import '../widgets/cards/favourite_ads_card.dart';
 
@@ -190,6 +191,7 @@ class _HealthViewState extends State<HealthView> {
             print("Searching for: $query");
             },
             ),
+              /// add doctor entities here
             // Your other widgets
             ]
             ),

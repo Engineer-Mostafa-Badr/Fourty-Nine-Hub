@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
+
+import '../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../../res/style/styles.dart';
 
 class CustomSearchHealth extends StatelessWidget {
   final Function(String)? onSearch;
@@ -19,23 +23,13 @@ class CustomSearchHealth extends StatelessWidget {
         ),
       ),
       child: Row(
-        children: [
-          Expanded(
-            child: TextFormField(
-              onChanged: onSearch,
-              decoration: const InputDecoration(
-                icon: Icon(Icons.search, color: Colors.black54),
-                hintText: 'Search',
-                hintStyle: TextStyle(
-                  color: Colors.black87,
-                  fontWeight: FontWeight.w500,
-                ),
-                border: InputBorder.none,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );;
+          children: [
+            Sizer(width: 20,),
+          Icon(Icons.search,size: 30,),
+      Sizer(width: 15,),
+      Text("Search",style: Styles.mediumText(color: AppColors.black),
+      ),]
+    ),
+    );
   }
 }
