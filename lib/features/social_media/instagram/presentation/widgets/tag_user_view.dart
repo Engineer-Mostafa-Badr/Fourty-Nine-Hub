@@ -66,7 +66,6 @@ class _TagUserViewState extends State<TagUserView> {
                         color: Colors.black.withValues(alpha: 128),
                         fontSize: 32,
                     ),
-
                   ),
                 ),
               )
