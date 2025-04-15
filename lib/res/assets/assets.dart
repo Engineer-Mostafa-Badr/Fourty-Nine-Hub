@@ -424,4 +424,9 @@ abstract class Assets {
   static String crown = 'assets/49-New-icons/crown.png';
   static String starGold = 'assets/49-New-icons/star_gold.png';
   static String winners = "assets/49-New-icons/winners.png";
+
+  //SpotLight
+  static String bitmoji = "assets/images/bitmoji.png";
+  static String spotlight_profile = "assets/images/spotlight_profile.png";
+
 }
