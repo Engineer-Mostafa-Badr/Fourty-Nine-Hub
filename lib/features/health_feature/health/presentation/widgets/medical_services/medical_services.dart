@@ -35,7 +35,7 @@ class _HealthMedicalServicesState extends State<HealthMedicalServices> {
   Widget build(BuildContext context) {
     return BlocBuilder<HealthCubit, HealthState>(builder: (context, state) {
       return SizedBox(
-        height: 0.25.sh,
+        height: 0.28.sh,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -81,7 +81,7 @@ class _HealthMedicalServicesState extends State<HealthMedicalServices> {
                                 Icon(
                                   Icons.arrow_forward_ios,
                                   color: AppColors.PRIMARY_COLOR_DARK,
-                                  size: 0.06.sw,
+                                  size: 30.h,
                                 ),
                               ],
                             ),

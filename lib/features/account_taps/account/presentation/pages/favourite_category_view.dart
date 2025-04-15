@@ -26,12 +26,16 @@ class _FavouriteCategoryViewState extends State<FavouriteCategoryView> {
       body: BlocBuilder<FavouriteCategoryCubit, FavouriteCategoryState>(
         builder: (context, state) {
           final controller = context.read<FavouriteCategoryCubit>();
-          return state.status == StateStatus.loading
-              ? const Center(
-                  // ignore: unnecessary_const
-                  child: const CircularProgressIndicator(),
-                )
-              : state.data!.isNotEmpty && state.data != null
+          if(state.status == StateStatus.initial){controller.loadData();}
+          if (state.status == StateStatus.loading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if(state.status == StateStatus.error){
+            return Center(child: Text(state.failure!.toString()));
+          }
+          return state.data!.isNotEmpty && state.data != null
                   ? GridView.builder(
                       padding: EdgeInsets.all(24.w),
                       gridDelegate:
@@ -42,9 +46,6 @@ class _FavouriteCategoryViewState extends State<FavouriteCategoryView> {
                         crossAxisSpacing: 16,
                       ),
                       itemCount: state.data?.length ?? 0,
-                      // separatorBuilder: (context, i) => Sizer(
-                      //   height: 0.h,
-                      // ),
                       itemBuilder: (context, i) => Padding(
                         padding: const EdgeInsets.only(bottom: 10.0),
                         child: InkWell(
@@ -65,6 +66,7 @@ class _FavouriteCategoryViewState extends State<FavouriteCategoryView> {
                             print('state.data![i]: ${state.data![i].id}');
                           },
                           child: MainCategoryBanner(
+                            fromFavorite: true,
                             category: state.data![i],
                             canRegister: false,
                             onFavorite: () async {

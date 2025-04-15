@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/Social_home.dart';
@@ -7,6 +10,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../res/assets/assets.dart';
 import '../../../res/style/app_colors.dart';
+import '../../../res/style/styles.dart';
 import '../../../routes/routes.dart';
 
 class FloatingButton extends StatelessWidget {
@@ -43,16 +47,34 @@ class FloatingButton extends StatelessWidget {
               },
         backgroundColor: Colors.white,
         child: icon != null
-            ? Image.asset(
-                Assets.floatImage,
-                color: AppColors.PRIMARY_COLOR,
-                height: 50.h,
-                width: 50.w,
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    Assets.floatImage,
+                    color: AppColors.PRIMARY_COLOR,
+                    height: 50.h,
+                    width: 50.w,
+                  ),
+                  Label(
+                    text: LocaleKeys.social.localize,
+                    style: Styles.smallText(color: AppColors.PRIMARY_COLOR),
+                  ),
+                ],
               )
-            : Image.asset(
-                Assets.logo,
-                height: 50.h,
-                width: 50.w,
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    Assets.logo,
+                    height: 50.h,
+                    width: 50.w,
+                  ),
+                  Label(
+                    text: LocaleKeys.home.localize,
+                    style: Styles.smallText(color: AppColors.PRIMARY_COLOR),
+                  ),
+                ],
               ),
       ),
     );

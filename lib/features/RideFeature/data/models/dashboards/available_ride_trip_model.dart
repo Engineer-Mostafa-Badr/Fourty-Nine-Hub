@@ -46,7 +46,7 @@ class AvailableRideTripModel extends AvailableRideTripEntity {
       clientId: json['clientDetails']['id']??'',
       clientImage: json['clientDetails']['profilePicture']??'',
       clientName: json['clientDetails']['firstName']??'',
-      clientGender: json['clientDetails']['id']??'',
+      clientGender: json['clientDetails']['gender']??'',
       clientRatingCount: json['clientDetails']['rating']['ratingCount']??0,
       clientRatingAverage: json['clientDetails']['rating']['average']??0,
       createdAt: json['createdAt'],

@@ -37,7 +37,13 @@ import '../features/RideFeature/data/datasources/shipping_remote_data_source.dar
 import '../features/RideFeature/data/repositories/shipping_repository_imp.dart';
 import '../features/RideFeature/domain/repositories/shipping_repository.dart';
 import '../features/RideFeature/domain/usecases/create_loading_trip_usecase.dart';
+import '../features/RideFeature/domain/usecases/get_client_offers_usecase.dart';
+import '../features/RideFeature/domain/usecases/get_loading_offers_usecase.dart';
 import '../features/RideFeature/domain/usecases/get_ride_categories_usecase.dart';
+import '../features/RideFeature/domain/usecases/make_loading_request_trip_usecase.dart';
+import '../features/RideFeature/domain/usecases/make_non_tracking_request_trip_usecase.dart';
+import '../features/RideFeature/presentation/controllers/client_trips_cubit/client_trips_cubit.dart';
+import '../features/ride/RideRequest/presentation/cubit/NoSocket/check_trip_end_cubit.dart';
 
 class RideServiceLocatorUpdated {
   static void execute({required GetIt serviceLocator}) {
@@ -104,14 +110,22 @@ class RideServiceLocatorUpdated {
         MakeRequestTripUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<RecordingTripUseCase>(() =>
         RecordingTripUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<MakeNonTrackingRequestTripUsecase>(() =>
+        MakeNonTrackingRequestTripUsecase(serviceLocator()));
     serviceLocator.registerLazySingleton<UpdateSocketLocationUseCase>(() =>
         UpdateSocketLocationUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetClientOffersUsecase>(() =>
+        GetClientOffersUsecase(serviceLocator()));
     serviceLocator.registerLazySingleton<ListenToRideOffersUseCase>(() =>
         ListenToRideOffersUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<AcceptOfferByClientUseCase>(() =>
         AcceptOfferByClientUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<UpdateTripAutoAcceptByClientUseCase>(() =>
         UpdateTripAutoAcceptByClientUseCase(repository: serviceLocator()));
+    serviceLocator.registerLazySingleton<MakeLoadingRequestTripUsecase>(() =>
+        MakeLoadingRequestTripUsecase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetLoadingOffersUsecase>(() =>
+        GetLoadingOffersUsecase(serviceLocator()));
 
 
     // ---------------------------------- cubits ----------------------------------
@@ -146,6 +160,9 @@ class RideServiceLocatorUpdated {
           serviceLocator(),
           serviceLocator(),
         ));
+    // serviceLocator.registerLazySingleton<CheckTripEndCubit>(() => CheckTripEndCubit(
+    //       serviceLocator(),
+    //     ));
     serviceLocator.registerFactory<RideRegisterCubit>(() => RideRegisterCubit(
           serviceLocator(),
           serviceLocator(),
@@ -154,6 +171,14 @@ class RideServiceLocatorUpdated {
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+          serviceLocator(),
+        ));
+    serviceLocator.registerFactory<ClientTripsCubit>(() => ClientTripsCubit(
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

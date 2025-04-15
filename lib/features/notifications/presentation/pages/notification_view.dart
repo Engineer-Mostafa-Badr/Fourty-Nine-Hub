@@ -36,7 +36,7 @@ List<String> titles = [
   LocaleKeys.fourtyNineNotifications.localize,
   LocaleKeys.socialNotifications.localize,
   LocaleKeys.serviceNoifications.localize,
-  LocaleKeys.status.localize,
+  LocaleKeys.responseStatus.localize,
 ];
 
 class _NotificationViewState extends State<NotificationView> {
@@ -130,6 +130,7 @@ class _NotificationViewState extends State<NotificationView> {
                         ServicesIconBuilder(),
                         StatusIconBuilder(),
                       ],
+                      // indicatorColor: Theme.of(context).primaryColor,
                     ),
                     Expanded(
                       child: TabBarView(

@@ -16,6 +16,7 @@ class BookRegularAppointmentUseCase
 }
 
 class BookAppointmentParams {
+  String name = '';
   String phone = '';
   String notes = '';
   String address = '';
@@ -28,6 +29,7 @@ class BookAppointmentParams {
   Map<String, dynamic> toJson() {
     return {
       'phone': phone,
+      'name': name,
       if (address.isNotEmpty) 'address': address,
       'additionalNotes': notes,
       'gender': gender.name.toLowerCase(),

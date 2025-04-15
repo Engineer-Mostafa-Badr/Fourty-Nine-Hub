@@ -38,10 +38,13 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/secrets/controller/secrets_cubit.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 import 'core/service/cache_service.dart';
 import 'core/themes/light_theme.dart';
 import 'features/OnBoarding/Presentation/Controllers/on_boarding_cubit.dart';
+import 'features/RideFeature/presentation/controllers/client_trips_cubit/client_trips_cubit.dart';
+import 'features/RideFeature/presentation/controllers/dashboards_cubit/dashboards_cubit.dart';
 import 'features/account_taps/wallet/presentation/cubit/wallet_cubit.dart';
 import 'features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'features/notifications/presentation/cubits/get_status_all_services_notifications/get_status_all_services_notifications_cubit.dart';
@@ -49,11 +52,11 @@ import 'features/settings/presentation/cubit/choice_ruler_cubit.dart';
 import 'features/settings/presentation/cubit/floating_navigator_cubit.dart';
 import 'firebase_options.dart';
 import 'routes/pages.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 bool isActivate = false;
+bool isShowOnboarding = false;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -96,8 +99,9 @@ void main() async {
   );
   // ZegoGiftManager().cache.cache(giftItemList);
   isActivate = await CacheManager.getActivation() ?? false;
+  isShowOnboarding = await CacheManager.getShowOnboarding() ?? false;
   await CacheManager.getFloatingNavigator();
-  //Admob.initialize();l
+  //Admob.initialize();
 
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -108,8 +112,12 @@ void main() async {
   await customPageCubit.fetchActivate();
 
   // final isActivated =  false;
-
-  final initialRoute = isActivate ? Routes.PAGEPREVIEW : Routes.HOME;
+  // Routes.onBoardingScreen
+  final initialRoute = !isShowOnboarding
+      ? Routes.onBoardingScreen
+      : isActivate
+          ? Routes.PAGEPREVIEW
+          : Routes.HOME;
 
   AppPages.initializeRouter(initialRoute);
   runApp(
@@ -250,6 +258,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         // BlocProvider(
         //   create: (context) => AuthenticationRideCubit(),
         // ),
+        BlocProvider(
+                  create: (context) => serviceLocator<DashboardsCubit>(),
+        ),
+        BlocProvider(
+                  create: (context) => serviceLocator<ClientTripsCubit>(),
+        ),
         BlocProvider<GetServicesNotificationsCubit>(
           create: (context) => GetServicesNotificationsCubit(
             getNotficationsUseCase: serviceLocator(),

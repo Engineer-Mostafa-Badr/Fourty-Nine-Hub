@@ -70,17 +70,24 @@ class _ResponseStatusBuilderState extends State<ResponseStatusBuilder> {
                 ),
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Label(
-                      text: context.isArabic
-                          ? cubit.status[index]['nameAr']!
-                          : cubit.status[index]['nameEn']!,
-                      style: Styles.mediumText(
-                        fontSize: 32,
-                        fontWeight: FontWeight.w600,
+                    Container(
+                      constraints:  BoxConstraints(
+                        maxWidth: MediaQuery.of(context).size.width * 0.5,
+                      ),
+                      // color: Colors.red,
+                      child: Label(
+                        text: context.isArabic
+                            ? cubit.status[index]['nameAr']!
+                            : cubit.status[index]['nameEn']!,
+                        style: Styles.mediumText(
+                          fontSize: 32,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
-                    const Spacer(),
+                    // Spacer(),
                     Label(
                       text: context.isArabic
                           ? cubit.status[index]['valueAr']!

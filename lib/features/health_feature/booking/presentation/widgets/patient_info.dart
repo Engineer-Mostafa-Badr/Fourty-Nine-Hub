@@ -71,13 +71,13 @@ class BookDoctorAppointmentPatientInfoCard extends StatelessWidget {
                       hint: LocaleKeys.notes.localize),
                   if (type == 'visitHome') ...[
                     const Sizer(),
-                    DefaultTextFormField(
-                        currentFocusNode: controller.addressFocusNode,
-                        currentController: controller.addressController,
-                        keyboardType: TextInputType.text,
-                        validator: (value) =>
-                            Validator().emptyValidation(value),
-                        hint: LocaleKeys.address.localize)
+                    // DefaultTextFormField(
+                    //     currentFocusNode: controller.addressFocusNode,
+                    //     currentControlleler: controller.addressController,
+                    //     keyboardType: TextInputType.text,
+                    //     validator: (value) =>
+                    //         Validator().emptyValidation(value),
+                    //     hint: LocaleKeys.address.localize)
                   ],
                 ],
               ),

@@ -427,6 +427,7 @@ class CodegenLoader extends AssetLoader{
   "messageSentSuccessfully": "تم إرسال الرسالة بنجاح",
   "days": "يوم",
   "comments": "تعليقات",
+  "commentsRates": "تعلقيات/تقيمات",
   "comment": "تعليق",
   "like": "أعجبني",
   "sad": "أحزنني",
@@ -763,7 +764,7 @@ class CodegenLoader extends AssetLoader{
   "receiveFawry": "طلب بطاقة الصفراء الخاص بك ناجح! تم خصم 50. ستتلقى إشعارًا عندما تكون بطاقتك جاهزة للاستلام في أي فرع من فوري.",
   "doYellowCard": "هل لديك بطاقة صفراء؟",
   "yellowCardNumber": "رقم هاتف البطاقة الصفراء",
-  "atLeast300YellowCard": "تحتاج إلى 300 على الأقل لطلب بطاقة صفراء.",
+  "atLeast300YellowCard": "تحتاج إلى 400 على الأقل لطلب بطاقة صفراء.",
   "WillBeDeducted": "طلب بطاقة صفراء (سيتم خصم 50)",
   "iDFrontAndBack": "قم بتحميل هويتك (الوجه والظهر):",
   "uploadFrontID": "تحميل الهوية الأمامية",
@@ -1523,7 +1524,8 @@ class CodegenLoader extends AssetLoader{
   "restaurantRateYou": "تقييم المطعم لك",
   "addACommentsFor": "أضف تعليقًا لـ",
   "commentAdded": "تم إضافة التعليق",
-  "areYouSureYouWantToDeleteThisComment": "هل أنت متأكد أنك تريد حذف هذا التعليق؟"
+  "areYouSureYouWantToDeleteThisComment": "هل أنت متأكد أنك تريد حذف هذا التعليق؟",
+  "responseStatus": "حالة الرد"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -1940,6 +1942,7 @@ static const Map<String,dynamic> _en = {
   "noFriendsSuggested": "No Friends Suggested",
   "days": "d",
   "comments": "Comments",
+  "commentsRates": "comments/rates",
   "comment": "Comment",
   "like": "Like",
   "sad": "Sad",
@@ -2324,7 +2327,7 @@ static const Map<String,dynamic> _en = {
   "receiveFawry": "Your Yellow Card request is successful! 50 has been deducted. You will receive a notification when your card is ready for pickup at any Fawry branch.",
   "doYellowCard": "Do you have a Yellow Card?",
   "yellowCardNumber": "Yellow Card Phone Number",
-  "atLeast300YellowCard": "You need at least 300 to request a Yellow Card.",
+  "atLeast300YellowCard": "You need at least 400 to request a Yellow Card.",
   "WillBeDeducted": "Request Yellow Card (50 will be deducted)",
   "iDFrontAndBack": "Upload Your ID (Front and Back):",
   "uploadFrontID": "Upload Front ID",
@@ -3051,7 +3054,8 @@ static const Map<String,dynamic> _en = {
   "restaurantRateYou": "Restaurant rate you",
   "addACommentsFor": "Add a comments for",
   "commentAdded": "Comment added",
-  "areYouSureYouWantToDeleteThisComment": "Are you sure you want to delete this comment?"
+  "areYouSureYouWantToDeleteThisComment": "Are you sure you want to delete this comment?",
+  "responseStatus": "Response Status"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

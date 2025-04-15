@@ -11,7 +11,6 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/utils/location_tracker.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/setting_subcategory_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/settings_dashboard_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/sub_category_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_settings_dashboard_usecase.dart';
