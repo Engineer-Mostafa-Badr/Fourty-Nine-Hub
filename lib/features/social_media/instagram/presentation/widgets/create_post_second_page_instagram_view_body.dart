@@ -78,8 +78,7 @@ class _CreatePostSecondPageInstagramViewBodyState
                     extra: context
                         .read<CreatePostInstagramCubit>()
                         .state
-                        .images
-                        .first,
+                        .selectedImages,
                   );
                   // Navigator.push(
                   //   context,

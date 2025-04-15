@@ -1502,5 +1502,6 @@ abstract class  LocaleKeys {
   static const areYouSureYouWantToDeleteThisComment = 'areYouSureYouWantToDeleteThisComment';
   static const addLocation = 'addLocation';
   static const addMusic = 'addMusic';
+  static const whoIsThis = 'whoIsThis';
 
 }

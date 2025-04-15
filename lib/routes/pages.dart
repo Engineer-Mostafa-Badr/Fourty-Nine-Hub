@@ -1209,7 +1209,7 @@ class AppPages {
                   return BlocProvider(
                     create: (context) => serviceLocator<TagUsersCubit>(),
                     child: TagUserView(
-                      image: state.extra as File,
+                      images: state.extra as List<File>,
                     ),
                   );
                 },

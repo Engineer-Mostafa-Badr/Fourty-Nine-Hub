@@ -148,74 +148,74 @@ class _InstagramViewBodyState extends State<InstagramViewBody> {
             SliverToBoxAdapter(
               child: _buildTabBar(context),
             ),
-            const SliverToBoxAdapter(
-              child: SizedBox(
-                height: 82,
-                child: ChatStories(),
-              ),
-            ),
-            const SliverToBoxAdapter(
-              child: SizedBox(
-                height: 16,
-              ),
-            ),
-            SliverList.separated(
-              itemCount: state.posts.length + (state.hasMorePosts ? 1 : 0),
-              separatorBuilder: (context, index) => const SizedBox(
-                height: 10,
-              ),
-              itemBuilder: (context, index) {
-                if (index == state.posts.length) {
-                  return _isLoading
-                      ? const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Center(child: CircularProgressIndicator()),
-                        )
-                      : const SizedBox();
-                }
-                if ((index + 1) % 4 == 0 && index ~/ 4 < 6) {
-                  // Show item from another list
-                  return BlocBuilder<ReelInstagramCubit, ReelInstagramState>(
-                    builder: (context, state) {
-                      if (state.status.isLoading) {
-                        return Shimmer.fromColors(
-                          baseColor: Colors.grey[300]!,
-                          highlightColor: Colors.grey[100]!,
-                          child: ListView.builder(
-                            itemCount: 5,
-                            itemBuilder: (context, index) {
-                              return Container(
-                                height: 340,
-                                width: 222,
-                                color: Colors.grey,
-                              );
-                            },
-                          ),
-                        );
-                      } else if (state.status.isSuccess) {
-                        return SuggestReelsInstagramSection(
-                          reels: state.reels!,
-                        );
-                      }
-                      return Container(
-                        height: 100,
-                        width: 100,
-                        color: Colors.red,
-                      );
-                    },
-                  );
-                } else {
-                  // Show regular product
-                  // return ProductItem(item: mainProductList[index]);
-
-                  return PostInstagramWidget(
-                    key: ValueKey('post_${state.posts[index].id}'),
-                    instagramPostEntity: state.posts[index],
-                    // isVisible: _visibleVideos[state.posts[index].id] ?? false,
-                  );
-                }
-              },
-            ),
+            // const SliverToBoxAdapter(
+            //   child: SizedBox(
+            //     height: 82,
+            //     child: ChatStories(),
+            //   ),
+            // ),
+            // const SliverToBoxAdapter(
+            //   child: SizedBox(
+            //     height: 16,
+            //   ),
+            // ),
+            // SliverList.separated(
+            //   itemCount: state.posts.length + (state.hasMorePosts ? 1 : 0),
+            //   separatorBuilder: (context, index) => const SizedBox(
+            //     height: 10,
+            //   ),
+            //   itemBuilder: (context, index) {
+            //     if (index == state.posts.length) {
+            //       return _isLoading
+            //           ? const Padding(
+            //               padding: EdgeInsets.all(8.0),
+            //               child: Center(child: CircularProgressIndicator()),
+            //             )
+            //           : const SizedBox();
+            //     }
+            //     if ((index + 1) % 4 == 0 && index ~/ 4 < 6) {
+            //       // Show item from another list
+            //       return BlocBuilder<ReelInstagramCubit, ReelInstagramState>(
+            //         builder: (context, state) {
+            //           if (state.status.isLoading) {
+            //             return Shimmer.fromColors(
+            //               baseColor: Colors.grey[300]!,
+            //               highlightColor: Colors.grey[100]!,
+            //               child: ListView.builder(
+            //                 itemCount: 5,
+            //                 itemBuilder: (context, index) {
+            //                   return Container(
+            //                     height: 340,
+            //                     width: 222,
+            //                     color: Colors.grey,
+            //                   );
+            //                 },
+            //               ),
+            //             );
+            //           } else if (state.status.isSuccess) {
+            //             return SuggestReelsInstagramSection(
+            //               reels: state.reels!,
+            //             );
+            //           }
+            //           return Container(
+            //             height: 100,
+            //             width: 100,
+            //             color: Colors.red,
+            //           );
+            //         },
+            //       );
+            //     } else {
+            //       // Show regular product
+            //       // return ProductItem(item: mainProductList[index]);
+            //
+            //       return PostInstagramWidget(
+            //         key: ValueKey('post_${state.posts[index].id}'),
+            //         instagramPostEntity: state.posts[index],
+            //         // isVisible: _visibleVideos[state.posts[index].id] ?? false,
+            //       );
+            //     }
+            //   },
+            // ),
           ],
         );
       },

@@ -81,6 +81,7 @@ abstract class Assets {
   static String instagramTagPeopleIcon = 'assets/icons/instagram_tag_people_icon.svg';
   static String instagramLocationIcon = 'assets/icons/instagram_location_icon.svg';
   static String instagramMusicIcon = 'assets/icons/instagram_music_icon.svg';
+  static String instagramTriangleBlackIcon = 'assets/icons/instagram_triangle_black_icon.svg';
 
   // Commets
   static String commentIconsIcon = 'assets/icons/comment_icons_icon.svg';
