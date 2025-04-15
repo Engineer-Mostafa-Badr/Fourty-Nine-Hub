@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateless/loaders/default_loader.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/doctors_list_cubit/doctors_list_cubit.dart';
@@ -110,7 +111,7 @@ class _DoctorsListViewState extends State<DoctorsListView> {
                       ),
                       if (context.read<DoctorsListCubit>().isLoadingMore)
                         const Center(
-                          child: CircularProgressIndicator(),
+                          child: DLoader(),
                         )
                     ],
                   );

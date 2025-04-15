@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
+import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -10,7 +11,9 @@ import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../res/style/styles.dart';
 
 class DoctorSubcategoryFilterView extends StatelessWidget {
   const DoctorSubcategoryFilterView({super.key, required this.type});
@@ -22,8 +25,9 @@ class DoctorSubcategoryFilterView extends StatelessWidget {
     return CustomScaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(30),
-        child: BackAppBar(
-          label: LocaleKeys.speciality.localize,
+        child: HomeAppbar(
+          color: AppColors.whiteColor,
+          isWithBackArrow: true,
         ),
       ),
       body: Padding(
@@ -34,6 +38,8 @@ class DoctorSubcategoryFilterView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Label(text: LocaleKeys.governorate.localize ,style: Styles.headerText(fontWeight: FontWeight.w600),),
+            Sizer(),
             DefaultTextFormField(
               hintColor: Theme.of(context).scaffoldBackgroundColor,
               currentFocusNode: doctorSubcategoryFilter.searchFocusNode,
