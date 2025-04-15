@@ -20,6 +20,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
+import '../widgets/cards/custom_search_health.dart';
 import '../widgets/cards/favourite_ads_card.dart';
 
 class HealthView extends StatefulWidget {
@@ -43,106 +44,160 @@ class _HealthViewState extends State<HealthView> {
             // if (state.isLoading) {
             //   return const Center(child: CircularProgressIndicator());
             // } else {
-              return ListView(
-                    padding: EdgeInsets.all(16.0.w),
+            return ListView(
+              padding: EdgeInsets.all(16.0.w),
+              children: [
+                const HealthBanner(),
+                const Sizer(),
+                state.isDoctor == false
+                    ? const RegistrationBanner()
+                    : DoctorModeBanner(
+                        isWaitingApproval: isWaitingApproval,
+                      ),
+                if (isWaitingApproval) WaitingAprovalText(),
+                const Sizer(),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20.0.w),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const HealthBanner(),
-                      const Sizer(),
-                      state.isDoctor == false? const RegistrationBanner():  DoctorModeBanner(
-            isWaitingApproval: isWaitingApproval,
-            ),
-
-                      if (isWaitingApproval) WaitingAprovalText(),
-                      const Sizer(),
-                      Padding(
-                        padding:  EdgeInsets.symmetric(horizontal: 20.0.w),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Icon(Icons.search,size: 50.sp,),
-                            const Sizer(),
-                            /// current historu
-                            Expanded(
-                                child: CurrentHistoryBooking(
-                                  title: LocaleKeys.favouriteAds.localize,
-                                  isSelected: history == 3 ? true : false,
-                                  onTap: () {
-                                    setState(() {
-                                      history = 3;
-                                    });
-                                  },
-                                )),
-                            const Sizer(),
-                            /// current booking
-                            Expanded(
-                                child: CurrentHistoryBooking(
-                                  title: context.isArabic
-                                      ? 'تاريخ الحجوزات'
-                                      : 'Booking History',
-                                  isSelected: history == 2 ? true : false,
-                                  onTap: () {
-                                    setState(() {
-                                      history = 2;
-                                    });
-                                  },
-                                )),
-                          const  Sizer(),
-                            /// current booking
-                            Expanded(
-                                child: CurrentHistoryBooking(
-                              title: context.isArabic
-                                  ? 'الحجوزات الحالية'
-                                  : 'Current Booking',
-                              isSelected: history == 1 ? true : false,
-                              onTap: () {
-                                setState(() {
-                                  history = 1;
-                                });
-                              },
-                            )),
-
-                          ],
+                      /// search icon
+                      GestureDetector(
+                        child: Icon(
+                          Icons.search,
+                          size: 50.sp,
                         ),
+                        onTap: () {
+                          setState(() {
+                            history = 4;
+                          });
+                        },
                       ),
-                      const Sizer(
-                        height: 20,
-                      ),
-                      if(history==0)
-                        const Column(
-                          children: [
-                            HealthBookingTypesWidgt(),
-                            Sizer(),
-                            HealthSubCategories(),
-                            Sizer(),
-                            HealthMedicalServices(),
-                            Sizer(),
-                            HealthBookings(),
-                            Sizer(),
-                          ],
-                        ),
-                      if(history==1)
-                        const Column(
-                          children: [
-                            CurrentBookingCard(title: 'Ibrahim',isSubscribed: false,),
-                            CurrentBookingCard(title: 'Ibrahim',isSubscribed: false,),
-                          ],
-                        ),
-                      if(history==2)
-                        const Column(
-                          children: [
-                            BookingHistoryCard(title: 'Dr.Ahmed Ibrahim',isSubscribed: true,),
-                            BookingHistoryCard(title: 'Dr.Ahmed Ibrahim',isSubscribed: true,),
-                          ],
-                        ),      if(history==3)
-                        Column(
-                          children: [
 
-                            FavouriteAdsCard (onFavourite: () {  }, onRequest: () {  },),
-                          ],
-                        ),
+                      const Sizer(),
 
+                      /// current historu
+                      Expanded(
+                          child: CurrentHistoryBooking(
+                        title: LocaleKeys.favouriteAds.localize,
+                        isSelected: history == 3 ? true : false,
+                        onTap: () {
+                          setState(() {
+                            history = 3;
+                          });
+                        },
+                      )),
+                      const Sizer(),
+
+                      /// current booking
+                      Expanded(
+                          child: CurrentHistoryBooking(
+                        title: context.isArabic
+                            ? 'تاريخ الحجوزات'
+                            : 'Booking History',
+                        isSelected: history == 2 ? true : false,
+                        onTap: () {
+                          setState(() {
+                            history = 2;
+                          });
+                        },
+                      )),
+                      const Sizer(),
+
+                      /// current booking
+                      Expanded(
+                          child: CurrentHistoryBooking(
+                        title: context.isArabic
+                            ? 'الحجوزات الحالية'
+                            : 'Current Booking',
+                        isSelected: history == 1 ? true : false,
+                        onTap: () {
+                          setState(() {
+                            history = 1;
+                          });
+                        },
+                      )),
                     ],
-                  );
+                  ),
+                ),
+                const Sizer(
+                  height: 20,
+                ),
+                if (history == 0)
+                  const Column(
+                    children: [
+                      HealthBookingTypesWidgt(),
+                      Sizer(),
+                      HealthSubCategories(),
+                      Sizer(),
+                      HealthMedicalServices(),
+                      Sizer(),
+                      HealthBookings(),
+                      Sizer(),
+                    ],
+                  ),
+                if (history == 1)
+                  const Column(
+                    children: [
+                      CurrentBookingCard(
+                        title: 'Ibrahim',
+                        isSubscribed: false,
+                      ),
+                      CurrentBookingCard(
+                        title: 'Ibrahim',
+                        isSubscribed: false,
+                      ),
+                    ],
+                  ),
+                if (history == 2)
+                  const Column(
+                    children: [
+                      BookingHistoryCard(
+                        title: 'Dr.Ahmed Ibrahim',
+                        isSubscribed: true,
+                      ),
+                      BookingHistoryCard(
+                        title: 'Dr.Ahmed Ibrahim',
+                        isSubscribed: true,
+                      ),
+                    ],
+                  ),
+                if (history == 3)
+                  Column(
+                    children: [
+                      FavouriteAdsCard(
+                        onFavourite: () {},
+                        onRequest: () {},
+                        SubType: LocaleKeys.premium.localize,
+                      ),
+                      FavouriteAdsCard(
+                        onFavourite: () {},
+                        onRequest: () {},
+                        SubType: LocaleKeys.regular.localize,
+                      ),
+                      FavouriteAdsCard(
+                        onFavourite: () {},
+                        onRequest: () {},
+                        SubType: LocaleKeys.notSubscribed.localize,
+                      ),
+                    ],
+                  ),
+                if(history==4)  Column(
+            children: [
+            CustomSearchHealth(
+            onSearch: (query) {
+            // Handle search query
+            print("Searching for: $query");
+            },
+            ),
+            // Your other widgets
+            ]
+            ),
+                const Sizer(
+                  height: 20,
+                ),
+              ],
+            );
             //}
           },
         ));
