@@ -31,6 +31,15 @@ class SpotLightProfileScreen extends StatelessWidget {
               expandedHeight: MediaQuery.of(context).size.height * 0.42,
               pinned: false,
               backgroundColor: Colors.transparent,
+              actions: [
+                ClickableWidget(
+                  child: const Icon(Icons.camera_alt, color: Colors.black),
+                  onTap: () {},
+                ),
+                const Sizer(
+                  width: 30,
+                )
+              ],
               flexibleSpace: FlexibleSpaceBar(
                 background: SizedBox(
                   child: Stack(
@@ -45,16 +54,11 @@ class SpotLightProfileScreen extends StatelessWidget {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                ClickableWidget(
-                                  child: const Icon(Icons.arrow_back,
-                                      color: Colors.black),
-                                  onTap: () => Navigator.of(context).pop(),
-                                ),
-                                ClickableWidget(
-                                  child: const Icon(Icons.camera_alt,
-                                      color: Colors.black),
-                                  onTap: () {},
-                                ),
+                                // ClickableWidget(
+                                //   child: const Icon(Icons.camera_alt,
+                                //       color: Colors.black),
+                                //   onTap: () {},
+                                // ),
                               ],
                             ),
                           ),

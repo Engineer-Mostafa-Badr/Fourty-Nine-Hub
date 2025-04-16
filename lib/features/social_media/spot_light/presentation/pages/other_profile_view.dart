@@ -27,25 +27,6 @@ class SpotLightOtherProfileScreen extends StatelessWidget {
               expandedHeight: MediaQuery.of(context).size.height * 0.42,
               pinned: false,
               backgroundColor: Colors.transparent,
-              flexibleSpace: const FlexibleSpaceBar(
-                background: SizedBox(
-                  child: Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: SafeArea(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 12.0, vertical: 10),
-                            child: Icon(Icons.arrow_back, color: Colors.black),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
             ),
             SliverToBoxAdapter(
               child: Container(

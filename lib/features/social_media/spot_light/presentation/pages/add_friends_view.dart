@@ -102,7 +102,7 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
                             builder: (context) => const AllContactsView(),
                           ),
                         )),
-                ...List.generate(3, (index) {
+                ...List.generate(5, (index) {
                   int totalIndex = index + 3;
                   if (blockedIndexes.contains(totalIndex)) {
                     return blockedUserTile(totalIndex);
