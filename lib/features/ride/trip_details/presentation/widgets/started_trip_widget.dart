@@ -22,8 +22,11 @@ class StartedTripWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: const BackAppBar(
-        label: 'Trip Details',
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(30),
+        child: BackAppBar(
+          label: 'Trip Details',
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),

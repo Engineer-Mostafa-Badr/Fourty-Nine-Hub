@@ -5,14 +5,15 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/authentication/domain/repositories/auth_repository.dart';
 
 import '../../../../core/utils/device_id.dart';
+import '../entities/register_by_phone_entity.dart';
 
-class RegisterByPhoneUseCase extends UseCase<void, RegisterByPhoneParams> {
+class RegisterByPhoneUseCase extends UseCase<RegisterByPhoneEntity, RegisterByPhoneParams> {
   final AuthRepository _repository;
 
   RegisterByPhoneUseCase(this._repository);
 
   @override
-  Future<Either<Failure, void>> call(RegisterByPhoneParams params) {
+  Future<Either<Failure, RegisterByPhoneEntity>> call(RegisterByPhoneParams params) {
     return _repository.registerByPhone(params);
   }
 }

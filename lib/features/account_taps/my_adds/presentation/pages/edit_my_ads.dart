@@ -1,9 +1,9 @@
 import 'dart:io';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/default_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
@@ -55,12 +55,18 @@ class _EditMyAdsState extends State<EditMyAds> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: BackAppBar(label: LocaleKeys.editMyAds.localize),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          label: LocaleKeys.editMyAds.localize,
+        ),
+      ),
       body: BlocProvider<CreateAdCubit>(
         create: (BuildContext context) => serviceLocator()
           ..loadDataInEdit(
               subCategoryId: widget.categorization.mainCategory?.id ?? '',
-              id: widget.categorization.id, fromMarriage: false),
+              id: widget.categorization.id,
+              fromMarriage: false),
         child: BlocConsumer<CreateAdCubit, CreateAdState>(
           listener: (BuildContext context, CreateAdState state) {
             if (state.status == CreateAdStates.updateSuccess) {
@@ -135,10 +141,9 @@ class _EditMyAdsState extends State<EditMyAds> {
                                       label: '+',
                                       onTap: () {
                                         controller.uploadImage(
-                                          subCategoryId: widget
-                                              .categorization.subCategory.id,
-                                          context: context
-                                        );
+                                            subCategoryId: widget
+                                                .categorization.subCategory.id,
+                                            context: context);
                                       },
                                       isBordered: true,
                                       style: Styles.headerText(
@@ -265,7 +270,6 @@ class _EditMyAdsState extends State<EditMyAds> {
                                                                 File(state
                                                                     .files![
                                                                         index]
-
                                                                     .path),
                                                               ),
                                                             ),

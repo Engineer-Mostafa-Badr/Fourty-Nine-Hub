@@ -467,9 +467,22 @@ class CreateAdCubit extends Cubit<CreateAdState> {
           page: 1,
           subCategoryId: categorize.subCategory.id);
       if (categorize.fromMarriage == true) {
+
+        // final response = await _filterAdUseCase(model);
+        // response.fold(
+        //         (l) => emit(state.copyWith(failure: l, status: CreateAdStates.error)),
+        //         (data) {
+        //           print("data:: ${data.first}");
+        //           print("data:: ${data.last}");
+        //       context.pop(model);
+        //     });
+        print("model::: ${model.toJson()}");
         context.pop(model);
+        // context.pop(model);
         return;
       }
+      print("model::: not return");
+
       final response = await _filterAdUseCase(model);
       response.fold(
           (l) => emit(state.copyWith(failure: l, status: CreateAdStates.error)),

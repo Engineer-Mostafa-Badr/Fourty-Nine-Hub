@@ -79,10 +79,10 @@ class InstagramCubit extends Cubit<InstagramState> {
       : super(InstagramState());
 
   void loadData() async {
-    await getFeed(1);
+    // await getFeed(1);
     feedPagingController.addPageRequestListener((pageKey) {
       print("initStatePageKey : $pageKey");
-      getFeed(pageKey);
+      // getFeed(pageKey);
     });
   }
 
@@ -271,43 +271,43 @@ class InstagramCubit extends Cubit<InstagramState> {
       PagingController(firstPageKey: 1);
 
 // get feed posts
-  Future<void> getFeed(int page) async {
-    final response =
-        await _getFeedUseCase(TwitterFeedParams(limit: 5, page: page));
-    List<PostEntity> advertisements = [];
-    List<PostEntity> reels = [];
-    List<PostEntity> savedReels = [];
-    savedReels.addAll(state.reels ?? []);
-    response.fold(
-        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-        (data) async {
-      if (data.isNotEmpty) {
-        advertisements = await getAdvertisements();
-        reels = await getReels();
-        savedReels.addAll(reels);
-        reels.map((element) => element.type = 'reels').toList();
-      }
-      List<PostEntity> totalPosts = [];
-      totalPosts.addAll(data);
-      totalPosts.addAll(advertisements);
-      totalPosts.addAll(reels);
-      final isLastPage = totalPosts.length < (6);
-      if (page == 1) {
-        print("page == 1 $page");
-        feedPagingController.itemList = [];
-      }
-      if (isLastPage) {
-        print("isLastPage = $isLastPage");
-        feedPagingController.appendLastPage(totalPosts);
-      } else {
-        print("isNotLastPage = $isLastPage");
-        final nextPageKey = page + 1;
-        feedPagingController.appendPage(totalPosts, nextPageKey);
-      }
-      emit(state.copyWith(
-          posts: totalPosts, reels: savedReels, status: StateStatus.initial));
-    });
-  }
+  // Future<void> getFeed(int page) async {
+  //   final response =
+  //       await _getFeedUseCase(TwitterFeedParams(limit: 5, page: page));
+  //   List<PostEntity> advertisements = [];
+  //   List<PostEntity> reels = [];
+  //   List<PostEntity> savedReels = [];
+  //   savedReels.addAll(state.reels ?? []);
+  //   response.fold(
+  //       (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+  //       (data) async {
+  //     if (data.isNotEmpty) {
+  //       advertisements = await getAdvertisements();
+  //       reels = await getReels();
+  //       savedReels.addAll(reels);
+  //       reels.map((element) => element.type = 'reels').toList();
+  //     }
+  //     List<PostEntity> totalPosts = [];
+  //     totalPosts.addAll(data);
+  //     totalPosts.addAll(advertisements);
+  //     totalPosts.addAll(reels);
+  //     final isLastPage = totalPosts.length < (6);
+  //     if (page == 1) {
+  //       print("page == 1 $page");
+  //       feedPagingController.itemList = [];
+  //     }
+  //     if (isLastPage) {
+  //       print("isLastPage = $isLastPage");
+  //       feedPagingController.appendLastPage(totalPosts);
+  //     } else {
+  //       print("isNotLastPage = $isLastPage");
+  //       final nextPageKey = page + 1;
+  //       feedPagingController.appendPage(totalPosts, nextPageKey);
+  //     }
+  //     emit(state.copyWith(
+  //         posts: totalPosts, reels: savedReels, status: StateStatus.initial));
+  //   });
+  // }
 
   //get media
   getGlobalMedia(int page) async {
@@ -374,24 +374,24 @@ class InstagramCubit extends Cubit<InstagramState> {
     return advertisements;
   }
 
-  // get reels
-  Future<List<PostEntity>> getReels() async {
-    final response = await _instagramReelsUseCase(
-        TwitterFeedParams(limit: 1, page: state.newPage! + 1));
-    List<PostEntity> reels = [];
-    response.fold(
-        (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
-        (data) {
-      reels.addAll(data);
-      int? page = state.newPage! + 1;
-      print("newPage:${state.newPage}");
-      print("newPage:$page");
-      emit(state.copyWith(
-          newPage: page, posts: data, status: StateStatus.success));
-    });
-    print("reels:${reels.length}");
-    return reels;
-  }
+  // // get reels
+  // Future<List<PostEntity>> getReels() async {
+  //   final response = await _instagramReelsUseCase(
+  //       TwitterFeedParams(limit: 1, page: state.newPage! + 1));
+  //   List<PostEntity> reels = [];
+  //   response.fold(
+  //       (l) => emit(state.copyWith(failure: l, status: StateStatus.error)),
+  //       (data) {
+  //     reels.addAll(data);
+  //     int? page = state.newPage! + 1;
+  //     print("newPage:${state.newPage}");
+  //     print("newPage:$page");
+  //     emit(state.copyWith(
+  //         newPage: page, posts: data, status: StateStatus.success));
+  //   });
+  //   print("reels:${reels.length}");
+  //   return reels;
+  // }
 
   getUserReels(int page, String userId) async {
     final response = await _userReelsUseCase(

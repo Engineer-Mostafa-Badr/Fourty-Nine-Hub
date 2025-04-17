@@ -29,11 +29,14 @@ class SearchRestaurantView extends StatelessWidget {
     return BlocBuilder<SearchRestaurantsCubit, SearchRestaurantState>(
         builder: (context, state) {
       return CustomScaffold(
-        appBar: BackAppBar(
-          label: "${LocaleKeys.search.tr()} ${LocaleKeys.restaurants.tr()}",
-          leading: IconButton(
-            onPressed: () => searchCubit.back(),
-            icon: const Icon(Icons.arrow_back),
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(30),
+          child: BackAppBar(
+            label: "${LocaleKeys.search.tr()} ${LocaleKeys.restaurants.tr()}",
+            leading: IconButton(
+              onPressed: () => searchCubit.back(),
+              icon: const Icon(Icons.arrow_back),
+            ),
           ),
         ),
         body: Padding(

@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../common/widgets/form/text_fields/form_text_field.dart';
-import '../../../ads_feature/filter_ads/presentation/pages/widgets/custom_text_field.dart';
 
 class CaptainRideDetails extends StatelessWidget {
   const CaptainRideDetails({super.key});
@@ -23,11 +25,11 @@ class CaptainRideDetails extends StatelessWidget {
           },
         ),
         title: Text(
-          'Ride Details',
+          LocaleKeys.rideDetails.localize,
           style: TextStyle(
-              fontSize: 50.sp,
-              fontWeight: FontWeight.w600,
-              color: AppColors.black),
+            fontSize: 50.sp,
+            fontWeight: FontWeight.w600,
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -37,9 +39,8 @@ class CaptainRideDetails extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Captain ride with \nYou',
+                context.isArabic ? "كابتن يركب معك" : 'Captain ride with \nYou',
                 style: TextStyle(
-                  color: AppColors.black,
                   fontSize: 40.sp,
                   fontWeight: FontWeight.w700,
                 ),
@@ -52,18 +53,22 @@ class CaptainRideDetails extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Feb 13 - 12:41 PM',
+                        context.isArabic
+                            ? "13 فبراير - 12:41 مساءً"
+                            : 'Feb 13 - 12:41 PM',
                         style: TextStyle(
                           fontSize: 30.sp,
-                          color: AppColors.black,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
                       const SizedBox(height: 5),
-                      const Text(
-                        '150 EGP',
+                      Text(
+                        context.isArabic ? "150 جنيه مصري" : '150 EGP',
                         style: TextStyle(
-                          fontSize: 16,
+                          color: context.isDarkMode
+                              ? Colors.white
+                              : AppColors.PRIMARY_COLOR,
+                          fontSize: 32.sp,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -74,40 +79,84 @@ class CaptainRideDetails extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               rideLocation(
-                'Cairo International Airport',
-                '12:10 PM',
+                context.isArabic
+                    ? "مطار القاهرة الدولي"
+                    : 'Cairo International Airport',
+                context.isArabic ? "12:10 مساءً" : '12:10 PM',
                 Assets.circleGreen,
               ),
               rideLocation(
-                'Cairo International Airport',
-                '12:41 PM',
+                context.isArabic
+                    ? "مطار القاهرة الدولي"
+                    : 'Cairo International Airport',
+                context.isArabic ? "12:10 مساءً" : '12:10 PM',
                 Assets.circleBlue,
               ),
               const SizedBox(height: 16),
-              ratingSection('You rate 1st client'),
-              const SizedBox(height: 5),
-              ratingSection('You rate 2nd client'),
-              const SizedBox(height: 5),
-              ratingSection('You rate 3rd client'),
-              const SizedBox(height: 16),
-              ratingSection('First client rate you', isModifiable: false),
-              SizedBox(height: 30.h),
-              ratingSection('Second client rate you', isModifiable: false),
-              SizedBox(height: 30.h),
-              ratingSection('Third client rate you', isModifiable: false),
-              const SizedBox(height: 16),
-              MyTextField(
-                fillColor: Color(0xffF5F5F5),
-                noBorder: true,
-                hint: "Write your problem",
-                borderRadius: BorderRadius.circular(20),
+              ratingSection(
+                context.isArabic
+                    ? "أنت تقيم العميل الأول"
+                    : 'You rate 1st client',
+                isRated: false,
               ),
-              const SizedBox(height: 8),
-              MyTextField(
-                fillColor: Color(0xffF5F5F5),
-                noBorder: true,
-                hint: "Write your phone number",
-                //     borderRadius: BorderRadius.circular(20),
+              const SizedBox(height: 5),
+              ratingSection(
+                context.isArabic
+                    ? "أنت تقيم العميل التاني"
+                    : 'You rate 2nd client',
+                isRated: false,
+              ),
+              const SizedBox(height: 5),
+              ratingSection(
+                context.isArabic
+                    ? "أنت تقيم العميل الثالث "
+                    : 'You rate 3rd client',
+                isRated: false,
+              ),
+              const SizedBox(height: 16),
+              ratingSection(
+                context.isArabic
+                    ? "العميل الأول الذي قيمك"
+                    : 'First client rate you',
+                isModifiable: false,
+              ),
+              SizedBox(height: 30.h),
+              ratingSection(
+                context.isArabic
+                    ? "العميل الثاني الذي قيمك"
+                    : 'Second client rate you',
+                isModifiable: false,
+              ),
+              SizedBox(height: 30.h),
+              ratingSection(
+                context.isArabic
+                    ? "العميل الثالث الذي قيمك"
+                    : 'Third client rate you',
+                isModifiable: false,
+              ),
+              const SizedBox(height: 16),
+              FormTextField(
+                hintStyle: TextStyle(
+                  color:
+                      context.isDarkMode ? Colors.white : Colors.grey.shade600,
+                ),
+                hint: context.isArabic ? "اكتب مشكلتك" : "Write your problem",
+                fillColor:
+                    context.isDarkMode ? Colors.white : const Color(0xffF5F5F5),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              const SizedBox(height: 16),
+              FormTextField(
+                hintStyle: TextStyle(
+                  color:
+                      context.isDarkMode ? Colors.white : Colors.grey.shade600,
+                ),
+                hint: context.isArabic
+                    ? "اكتب رقم هاتفك"
+                    : "Write your phone number",
+                fillColor:
+                    context.isDarkMode ? Colors.white : const Color(0xffF5F5F5),
+                borderRadius: BorderRadius.circular(15),
               ),
               const SizedBox(height: 16),
               SizedBox(
@@ -118,8 +167,15 @@ class CaptainRideDetails extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 12),
                   ),
                   onPressed: () {},
-                  child: const Text('Request emergency support',
-                      style: TextStyle(color: Colors.white)),
+                  child: Text(
+                      context.isArabic
+                          ? "طلب الدعم في حالات الطوارئ"
+                          : 'Request emergency support',
+                      style: TextStyle(
+                        fontSize: 28.sp,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      )),
                 ),
               ),
             ],
@@ -137,14 +193,12 @@ class CaptainRideDetails extends StatelessWidget {
         style: TextStyle(
           fontSize: 28.sp,
           fontWeight: FontWeight.w600,
-          color: AppColors.black,
         ),
       ),
       subtitle: Text(
         'Heliopolis, El Nozha, Cairo Governorate',
         style: TextStyle(
           fontSize: 25.sp,
-          color: AppColors.black,
           fontWeight: FontWeight.w400,
         ),
       ),
@@ -152,14 +206,17 @@ class CaptainRideDetails extends StatelessWidget {
         time,
         style: TextStyle(
           fontSize: 28.sp,
-          color: AppColors.black,
           fontWeight: FontWeight.w700,
         ),
       ),
     );
   }
 
-  Widget ratingSection(String text, {bool isModifiable = true}) {
+  Widget ratingSection(
+    String text, {
+    bool isModifiable = true,
+    bool isRated = true,
+  }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -168,22 +225,31 @@ class CaptainRideDetails extends StatelessWidget {
           style: TextStyle(
             fontSize: 28.sp,
             fontWeight: FontWeight.w700,
-            color: AppColors.black,
           ),
         ),
         Row(
           children: [
-            const Text('Good', style: TextStyle(fontSize: 16)),
-            RatingBarIndicator(
-              rating: 3,
-              itemBuilder: (context, index) => const Icon(
-                Icons.star,
-                color: Colors.amber,
+            if (isRated)
+              Row(
+                children: [
+                  const Text(
+                    "Good",
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                  RatingBarIndicator(
+                    rating: 3,
+                    itemBuilder: (context, index) => const Icon(
+                      Icons.star,
+                      color: Colors.amber,
+                    ),
+                    itemCount: 5,
+                    itemSize: 20,
+                    direction: Axis.horizontal,
+                  ),
+                ],
               ),
-              itemCount: 5,
-              itemSize: 20,
-              direction: Axis.horizontal,
-            ),
             const SizedBox(width: 8),
             if (isModifiable)
               Container(
@@ -194,14 +260,15 @@ class CaptainRideDetails extends StatelessWidget {
                   color: Color(0xffF3F3F3),
                 ),
                 child: Center(
-                    child: Text(
-                  "Modify",
-                  style: TextStyle(
-                    fontSize: 28.sp,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.black,
+                  child: Text(
+                    LocaleKeys.rate.localize,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 28.sp,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
-                )),
+                ),
               )
           ],
         ),

@@ -29,9 +29,12 @@ class LuckyWheelView extends StatelessWidget {
   Widget build(BuildContext context) {
     final spinWheelCubit = BlocProvider.of<SpinWheelCubit>(context);
     return CustomScaffold(
-      appBar: BackAppBar(
-        centerTitle: false,
-        label: LocaleKeys.luckyWheel.localize,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          centerTitle: false,
+          label: LocaleKeys.luckyWheel.localize,
+        ),
       ),
       body: BlocConsumer<WheelCubit, BasicState<WheelEntity>>(
         listener: (BuildContext context, BasicState<WheelEntity> state) {

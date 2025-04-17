@@ -597,32 +597,46 @@ class CustomDeActivateDialog extends StatelessWidget {
     return AlertDialog(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       surfaceTintColor: Theme.of(context).scaffoldBackgroundColor,
-      title: Text(
-        LocaleKeys.deActivateCustomPage.localize,
-        style: Styles.headerText(
-            color: Theme.of(context).textTheme.bodyMedium?.color),
-      ),
-      content: Text(
-        LocaleKeys.areYouSureToDeActivate.localize,
-      ),
-      actions: [
-        CustomElevatedButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text(LocaleKeys.cancel.localize,
-              style: Styles.smallText(color: AppColors.whiteColor)),
+      title: Center(
+        child: Text(
+          LocaleKeys.deActivateCustomPage.localize,
+          style: Styles.headerText(
+              color: Theme.of(context).textTheme.bodyMedium?.color),
         ),
-        CustomElevatedButton(
-          onPressed: () async {
-            await context.read<CustomPageCubit>().updateActivate(false);
-            // Restart.restartApp();
-            Phoenix.rebirth(context);
-          },
-          child: Text(
-            LocaleKeys.yes.localize,
-            style: Styles.smallText(color: AppColors.whiteColor),
+      ),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            LocaleKeys.areYouSureToDeActivate.localize,
           ),
-        ),
-      ],
+          Sizer(height: 16,),
+          Row(
+            children: [
+              Expanded(
+                child: CustomElevatedButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(LocaleKeys.cancel.localize,
+                      style: Styles.smallText(color: AppColors.whiteColor)),
+                ),
+              ),
+              Sizer(),
+              Expanded(
+                child: CustomElevatedButton(
+                  onPressed: () async {
+                    await context.read<CustomPageCubit>().updateActivate(false);
+                    // Restart.restartApp();
+                    Phoenix.rebirth(context);
+                  },
+                  child: Text(
+                    LocaleKeys.yes.localize,
+                    style: Styles.smallText(color: AppColors.whiteColor),
+                  ),
+                ),
+              ),
+          ])
+        ],
+      ),
     );
   }
 }

@@ -32,7 +32,10 @@ class TruckVehicleInformationScreen extends StatelessWidget {
     TextEditingController licensePlateNumberController =
         TextEditingController();
     return CustomScaffold(
-      appBar: const HomeAppbar(),
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(30),
+        child: HomeAppbar(),
+      ),
       body: Column(
         children: [
           Expanded(

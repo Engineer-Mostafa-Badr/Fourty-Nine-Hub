@@ -43,8 +43,11 @@ class _DoctorUnhandledAppointmentsViewState
         DoctorUnhandledAppointmentsState>(
       listener: (context, state) {},
       child: CustomScaffold(
-        appBar: BackAppBar(
-          label: LocaleKeys.unhandledAppointments.localize,
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(30),
+          child: BackAppBar(
+            label: LocaleKeys.unhandledAppointments.localize,
+          ),
         ),
         body: BlocBuilder<DoctorUnhandledAppointmentsCubit,
             DoctorUnhandledAppointmentsState>(

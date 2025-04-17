@@ -45,8 +45,11 @@ class _AllAppointmentsViewState extends State<AllAppointmentsView> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: BackAppBar(
-        label: LocaleKeys.allAppointments.localize,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          label: LocaleKeys.allAppointments.localize,
+        ),
       ),
       body: BlocBuilder<AllAppointmentsCubit, AllAppointmentsState>(
         builder: (context, state) {

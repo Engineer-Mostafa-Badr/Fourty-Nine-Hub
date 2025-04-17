@@ -25,7 +25,6 @@ class WelcomeRideRegister extends StatefulWidget {
 }
 
 class _WelcomeRideRegisterState extends State<WelcomeRideRegister> {
-
   @override
   void initState() {
     if(widget.isShipping) {
@@ -40,9 +39,11 @@ class _WelcomeRideRegisterState extends State<WelcomeRideRegister> {
 
   @override
   Widget build(BuildContext context) {
-
     return CustomScaffold(
-      appBar: const HomeAppbar(),
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(30),
+        child: HomeAppbar(),
+      ),
       body: BlocBuilder<RideRegisterCubit, RideRegisterState>(
         builder: (context,state) {
           var cubit = context.read<RideRegisterCubit>();

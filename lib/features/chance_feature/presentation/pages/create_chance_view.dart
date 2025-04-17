@@ -16,8 +16,11 @@ class CreateChanceView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-        appBar: BackAppBar(
-          label: LocaleKeys.CreateChance.localize,
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(30),
+          child: BackAppBar(
+            label: LocaleKeys.CreateChance.localize,
+          ),
         ),
         body: BlocProvider<ChanceCubit>(
             create: (BuildContext context) => serviceLocator(),

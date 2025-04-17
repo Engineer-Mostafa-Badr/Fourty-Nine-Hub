@@ -10,12 +10,11 @@ import 'package:fourtyninehub/core/widget/custom_floating_action_button.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_states.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/edit_page_cubit/edit_page_cubit.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../../core/messages/messages.dart';
 import '../../../../../res/style/styles.dart';
-import '../../../../../routes/routes.dart';
 import '../../../../../service_locator/service_locator.dart';
+import 'navigator_subcategories_view.dart';
 
 class FavouriteCategory extends StatefulWidget {
   const FavouriteCategory({super.key});
@@ -123,6 +122,7 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
       child: Scaffold(
         body: BlocBuilder<CustomPageCubit, CustomPageState>(
           builder: (BuildContext context, state) {
+            final cubit = context.read<CustomPageCubit>();
             if (state.status == CustomPageStates.success) {
               return Column(
                 children: [
@@ -142,8 +142,25 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
                               onChanged: (bool? value) {},
                             ),
                             onTap: () {
-                              context.push(Routes.NavigatorSubCategoriesView,
-                                  extra: state.favourite![index]);
+                              context
+                                  .read<CustomPageCubit>()
+                                  .fetchFavouriteSubCat(
+                                      state.favourite![index].id);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => BlocProvider.value(
+                                    value: cubit
+                                      ..fetchFavouriteSubCat(
+                                          state.favourite![index].id),
+                                    child: NavigatorSubCategoriesView(
+                                      mainCategory: state.favourite![index],
+                                    ),
+                                  ),
+                                ),
+                              );
+                              // context.push(Routes.NavigatorSubCategoriesView,
+                              //     extra: state.favourite![index]);
                             },
                             title: Text(
                               context.isArabic

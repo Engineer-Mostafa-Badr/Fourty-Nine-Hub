@@ -57,9 +57,12 @@ class _InstagramAllDiscoverPeopleState extends State<InstagramAllDiscoverPeople>
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: BackAppBar(label: !context.isArabic
-          ? 'Discover people'
-          : 'أشخاص قد تعرفهم',),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(label: !context.isArabic
+            ? 'Discover people'
+            : 'أشخاص قد تعرفهم',),
+      ),
       body: BlocConsumer<InstagramCubit, InstagramState>(
           listener: (context, state) {
             if (state.status == StateStatus.error) {

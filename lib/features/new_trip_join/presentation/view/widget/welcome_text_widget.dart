@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import '../../../../../res/style/app_colors.dart';
 
 class WelcomeTextWidget extends StatefulWidget {
@@ -27,7 +31,6 @@ class _WelcomeTextWidgetState extends State<WelcomeTextWidget> {
     _overlayEntry = OverlayEntry(
       builder: (context) => Stack(
         children: [
-          // لإغلاق التولتيب عند الضغط في أي مكان خارجها
           Positioned.fill(
             child: GestureDetector(
               onTap: _removeTooltip,
@@ -35,28 +38,33 @@ class _WelcomeTextWidgetState extends State<WelcomeTextWidget> {
             ),
           ),
           Positioned(
-            top: 220,
+            top: 180,
             left: position.dx + size.width / 2 - 125,
             right: 50,
             child: Material(
-              color: Colors.transparent,
               child: Container(
-                width: 350,
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: context.isDarkMode
+                      ? Colors.transparent
+                      : Color(0xffFFFFFF),
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 6,
-                    ),
+                        //  color: Colors.black.withOpacity(0.2),
+                        //   blurRadius: 6,
+                        ),
                   ],
                 ),
-                child: const Text(
-                  "Initiate route & wait for 1 hour to give user time to book a seat in the same car with the same captain.",
+                child: Text(
+                  context.isArabic
+                      ? "ابدأ المسار وانتظر لمدة ساعة لإعطاء المستخدم الوقت لحجز مقعد في نفس السيارة مع نفس القبطان."
+                      : "Initiate route & wait for 1 hour to give user time to book a seat in the same car with the same captain.",
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    fontSize: 28.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
@@ -76,9 +84,9 @@ class _WelcomeTextWidgetState extends State<WelcomeTextWidget> {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const Text(
-          'Welcome to Captain Share!',
-          style: TextStyle(
+        Text(
+          LocaleKeys.welcomeToCaptainShare.localize,
+          style: const TextStyle(
             fontSize: 17,
             fontWeight: FontWeight.w700,
             color: AppColors.SECONDARY_COLOR,

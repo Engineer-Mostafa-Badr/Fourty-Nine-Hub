@@ -93,7 +93,10 @@ class _SocialHomeViewState extends State<SocialHomeView>
     super.build(context);
     return Scaffold(
       appBar: widget.params?.hideAppBar == false
-          ? const HomeAppbar(isWithBackArrow: true)
+          ? const PreferredSize(
+              preferredSize: Size.fromHeight(30),
+              child: HomeAppbar(isWithBackArrow: true),
+            )
           : null,
       body: Column(
         children: [

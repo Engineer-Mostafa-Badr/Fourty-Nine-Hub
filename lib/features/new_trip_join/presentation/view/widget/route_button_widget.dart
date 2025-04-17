@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../res/assets/assets.dart';
@@ -54,7 +56,7 @@ class RouteButtonWidget extends StatelessWidget {
                 SvgPicture.asset(Assets.addIcon),
                 SizedBox(width: 10.w),
                 Text(
-                  "Create Route",
+                  LocaleKeys.createRoute.localize,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 28.sp,

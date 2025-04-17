@@ -54,7 +54,10 @@ class _TinderSubCategoryAdsViewState extends State<TinderSubCategoryAdsView>
     final tinderCubit = context.watch<TinderViewCubit>();
 
     return CustomScaffold(
-      appBar: const HomeAppbar(),
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(30),
+        child: HomeAppbar(),
+      ),
       body: LayoutBuilder(
         builder: (context, constraints) {
           final isSmallScreen = constraints.maxWidth < 600;

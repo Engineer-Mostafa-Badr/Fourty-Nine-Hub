@@ -62,10 +62,17 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
   //   );
   // }
 
+  @override
+  Future<void> close() {
+    print("🔥 OnBoardingCubit is being closed!");
+    return super.close();
+  }
+
   Future<void> changeOnboardingData(int currentIndex) async {
-    print('isClosed: $isClosed before emit');
-    if (isClosed) return; // Prevent emitting after closing
-    // emit(state),
+    if (isClosed) {
+      print("🚨 Cannot emit state, cubit is already closed.");
+      return;
+    }
     print('currentIndex: $currentIndex after emit');
     emit(
       state.copyWith(
@@ -76,6 +83,5 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
       ),
     );
     print('currentIndex: $currentIndex before emit');
-
   }
 }

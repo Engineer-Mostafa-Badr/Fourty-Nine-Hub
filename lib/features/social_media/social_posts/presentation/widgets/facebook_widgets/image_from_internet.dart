@@ -34,24 +34,25 @@ class ImageFromInternet extends StatelessWidget {
   Widget build(BuildContext context) {
     return CachedNetworkImage(
       imageUrl: image,
-      imageBuilder: (context, imageProvider) =>
-      isSvg==true?SvgPicture.network(
-        image,
-        height: height,
-        width: width,
-        fit: fit ?? BoxFit.fill,
-      ): Container(
-        height: height,
-        width: width,
-        decoration: BoxDecoration(
-          borderRadius: borderRadius,
-          shape: isCircle == true ? BoxShape.circle : BoxShape.rectangle,
-          image: DecorationImage(
-            image: imageProvider,
-            fit: fit ?? BoxFit.fill,
-          ),
-        ),
-      ),
+      imageBuilder: (context, imageProvider) => isSvg == true
+          ? SvgPicture.network(
+              image,
+              height: height,
+              width: width,
+              fit: fit ?? BoxFit.fill,
+            )
+          : Container(
+              height: height,
+              width: width,
+              decoration: BoxDecoration(
+                borderRadius: borderRadius,
+                shape: isCircle == true ? BoxShape.circle : BoxShape.rectangle,
+                image: DecorationImage(
+                  image: imageProvider,
+                  fit: fit ?? BoxFit.fill,
+                ),
+              ),
+            ),
       errorWidget: (context, url, error) => Container(
         height: height,
         width: width,

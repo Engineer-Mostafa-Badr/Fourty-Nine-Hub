@@ -21,8 +21,11 @@ class WalletHistory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: const BackAppBar(
-        label: Labels.history,
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(30),
+        child: BackAppBar(
+          label: Labels.history,
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),

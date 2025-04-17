@@ -53,8 +53,11 @@ class _RestaurantExpiredRequestsScreenState
   Widget build(BuildContext context) {
     return CustomScaffold(
       backgroundColor: scaffoldDarkColor(context),
-      appBar: BackAppBar(
-        label: LocaleKeys.expiredRequests.tr(),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          label: LocaleKeys.expiredRequests.tr(),
+        ),
       ),
       body: BlocBuilder<RestaurantsCubit, RestaurantsListState>(
           builder: (context, state) {

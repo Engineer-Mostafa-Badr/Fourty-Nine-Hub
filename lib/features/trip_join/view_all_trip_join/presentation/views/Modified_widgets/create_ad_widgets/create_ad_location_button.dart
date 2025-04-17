@@ -44,22 +44,20 @@ class _StartTextFieldAndFindButtonState
         height: 76.h,
         child: Stack(
           children: [
-            Expanded(
-              child: FormTextField(
-                  height: 76.h,
-                prefix: Icon(Icons.trip_origin, color: widget.iconColor, size: 24),
-                  type: TextInputType.phone,
-                  style: Styles.mediumText(),
-                  constraints: const BoxConstraints(
-                      maxHeight: 52, minHeight: 52),
-                  fillColor: AppColors.colorGreyLight,
-                  borderRadius: BorderRadius.circular(30.h),
-                  controller: startingController,
-                  hint: widget.hint,
-                  validator: (value) {
-                    return null;
-                  }),
-            ),
+            FormTextField(
+                height: 76.h,
+              prefix: Icon(Icons.trip_origin, color: widget.iconColor, size: 24),
+                type: TextInputType.phone,
+                style: Styles.mediumText(),
+                constraints: const BoxConstraints(
+                    maxHeight: 52, minHeight: 52),
+                fillColor: AppColors.colorGreyLight,
+                borderRadius: BorderRadius.circular(30.h),
+                controller: startingController,
+                hint: widget.hint,
+                validator: (value) {
+                  return null;
+                }),
             Align(
               alignment:context.isArabic?Alignment.topLeft: Alignment.topRight,
               child: FindLocationButton(

@@ -48,14 +48,14 @@ class _RideModeScreenState extends State<RideModeScreen> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final dashboardCubit = context.read<DashboardsCubit>();
-      if (!dashboardCubit.isClosed) {
+      // if (!dashboardCubit.isClosed) {
         widget.params.isSocket == true
-            ? dashboardCubit.loadAvailableRideTrips(context)
+            ? [dashboardCubit.loadAvailableRideTrips(context),dashboardCubit.listenToUpdateTripAutoAccept(),dashboardCubit.listenToUpdateTripPrice(),dashboardCubit.listenToAcceptOffer()]
             : dashboardCubit.getAvailableTrips(context);
         dashboardCubit.getPastTrips(context,
             widget.params.isSocket == true ? "tracking" : 'non-tracking');
         dashboardCubit.getSettings(context);
-      }
+      // }
     });
   }
 

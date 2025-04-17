@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 
 class PriceAndSeatWidget extends StatelessWidget {
   const PriceAndSeatWidget({
@@ -10,27 +12,25 @@ class PriceAndSeatWidget extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text(
-          "Price/Seat",
+        Text(
+          context.isArabic ? "السعر/المقعد" : "Price/Seat",
           style: TextStyle(
-            fontSize: 16,
+            fontSize: 32.sp,
             fontWeight: FontWeight.bold,
-            color: Colors.black,
           ),
         ),
         const SizedBox(width: 20),
         RichText(
-          text: const TextSpan(
+          text: TextSpan(
             text: "60 ",
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: Colors.black,
             ),
             children: [
               TextSpan(
-                text: "EGP",
-                style: TextStyle(
+                text: context.isArabic ? "جنيه مصري" : "EGP",
+                style: const TextStyle(
                   color: Colors.red,
                 ),
               ),

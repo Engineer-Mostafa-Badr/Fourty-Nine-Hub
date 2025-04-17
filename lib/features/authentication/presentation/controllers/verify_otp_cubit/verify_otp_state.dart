@@ -9,8 +9,9 @@ final class VerifyOtpLoading extends VerifyOtpState {}
 
 final class VerifyOtpSuccess extends VerifyOtpState {
   final UserTokensEntity userTokensEntity;
+  final GiftMessageEntity giftMessageEntity;
 
-  VerifyOtpSuccess({required this.userTokensEntity});
+  VerifyOtpSuccess({required this.userTokensEntity,required this.giftMessageEntity});
 }
 
 final class VerifyOtpError extends VerifyOtpState {

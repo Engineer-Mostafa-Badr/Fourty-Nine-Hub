@@ -1,8 +1,5 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_countdown_timer/current_remaining_time.dart';
-import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/default_button.dart';
@@ -51,10 +48,16 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
         } else if (state is ResendOtpSuccess) {
           showSuccessMessage(context, 'resend otp success');
         } else if (state is VerifyOtpSuccess) {
-          await CacheManager.saveAccessToken(state.userTokensEntity.accessToken);
-          await CacheManager.saveRefreshToken(state.userTokensEntity.refreshToken);
-          context.read<NotificationSocketIoCubit>().notificationListener(languageCode: 'en');
-          context.read<NotificationSocketIoCubit>().clearAllNotificationsAndRefeatchAfterLogin(languageCode: 'en');
+          await CacheManager.saveAccessToken(
+              state.userTokensEntity.accessToken);
+          await CacheManager.saveRefreshToken(
+              state.userTokensEntity.refreshToken);
+          context
+              .read<NotificationSocketIoCubit>()
+              .notificationListener(languageCode: 'en');
+          context
+              .read<NotificationSocketIoCubit>()
+              .clearAllNotificationsAndRefeatchAfterLogin(languageCode: 'en');
 
           serviceLocator<UserCubit>()
             ..setLogin(true)
@@ -78,46 +81,58 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                     context: context,
                     builder: (BuildContext context) {
                       return Dialog(
-                        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                        backgroundColor:
+                            Theme.of(context).scaffoldBackgroundColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(24.0.r),
                         ),
                         child: Container(
-                          padding: EdgeInsets.all(30.0.w),
+                          padding: const EdgeInsets.all(16),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               Text(
                                 LocaleKeys.congratulations.localize,
                                 style: Styles.headerText(
-                                    color: AppColors.SECONDARY_COLOR, fontSize: 45.sp),
+                                  color: AppColors.SECONDARY_COLOR,
+                                ),
                               ),
-                              SizedBox(height: 16.h),
+                              Sizer(),
                               Text(
-                                LocaleKeys.giftApp.localize,
+                                  context.isArabic
+                                      ? state.giftMessageEntity.ar
+                                      : state.giftMessageEntity.en,
                                 textAlign: TextAlign.center,
                                 style: Styles.mediumText(),
                               ),
                               SizedBox(height: 40.h),
-                              ElevatedButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Theme.of(context).primaryColor,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(16.0.r),
-                                  ),
-                                ),
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 40.0.w,
-                                    vertical: 24.h,
-                                  ),
-                                  child: Text(
-                                    LocaleKeys.close.localize,
-                                    style: TextStyle(
-                                        color: Theme.of(context).scaffoldBackgroundColor),
+                              SizedBox(
+                                height: 40,
+                                width: double.infinity,
+                                child: Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8),
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                            AppColors.SECONDARY_COLOR,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(16.0.r),
+                                        ),
+                                      ),
+                                      child: Label(
+                                        text: LocaleKeys.close.localize,
+                                        style: Styles.mediumText(
+                                          color: Theme.of(context)
+                                              .scaffoldBackgroundColor,
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -134,9 +149,12 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
       },
       child: CustomScaffold(
         enableCustomAppBar: true,
-        appBar: const BackAppBar(
-          label: 'OTP Verify For Email',
-          enableCustomAppBar: true,
+        appBar: const PreferredSize(
+          preferredSize: Size.fromHeight(30),
+          child: BackAppBar(
+            label: 'OTP Verify For Email',
+            enableCustomAppBar: true,
+          ),
         ),
         bottomSheet: SizedBox(
           child: DefaultButton(
@@ -199,8 +217,6 @@ class _RegisterVerifyOTPState extends State<RegisterVerifyOTP> {
                   pinTheme: PinTheme(
                     shape: PinCodeFieldShape.box,
                     borderRadius: BorderRadius.circular(4),
-                    // fieldHeight: 50.h,
-                    // fieldWidth: 50.w,
                     activeFillColor: context.theme.scaffoldBackgroundColor,
                     selectedFillColor: context.theme.scaffoldBackgroundColor,
                     inactiveFillColor: context.theme.scaffoldBackgroundColor,
