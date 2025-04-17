@@ -27,10 +27,12 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_request_
 import 'package:fourtyninehub/features/RideFeature/domain/entities/running_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/repositories/ride_repository.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_pending_trip_by_client_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/click_global_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_car_years_and_types_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_trip_auto_accept_by_client_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_categories_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_socket_location_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_trip_price_use_case.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/features/ride/driver_dashboard/domain/entities/driver_statistics_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/accept_trip_by_driver_use_case.dart';
@@ -54,6 +56,8 @@ import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entit
 import '../../../../core/error/failure.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_available_ride_trips_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/available_ride_trip_model.dart';
+
+import '../../../account_taps/my_adds/domain/entity/click_entity.dart';
 
 class RideRepositoryImplementation extends RideRepository {
 
@@ -287,5 +291,15 @@ class RideRepositoryImplementation extends RideRepository {
   @override
   Future<Either<Failure, bool>> updateTripAutoAcceptByClient(UpdateTripAutoAcceptByClientUseCaseParams params) async{
     return await rideRemoteDataSource.updateTripAutoAcceptByClient(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateTripPrice(UpdateTripPriceUseCaseParams params) {
+    return rideRemoteDataSource.updateTripPrice(params);
+  }
+
+  @override
+  Future<Either<Failure, ClickEntity>> click(ClickParams params) {
+    return rideRemoteDataSource.click(params);
   }
 }

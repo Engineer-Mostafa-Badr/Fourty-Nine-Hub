@@ -1,3 +1,4 @@
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_request_trip_entity.dart';
 
 class RideRequestTripModel extends RideRequestTripEntity {
@@ -15,6 +16,8 @@ class RideRequestTripModel extends RideRequestTripEntity {
     required super.duration,
     required super.passengers,
     required super.price,
+    required super.lowestFare,
+    required super.highestFare,
     required super.paymentMethod,
     required super.status,
     required super.autoAccept,
@@ -40,18 +43,42 @@ class RideRequestTripModel extends RideRequestTripEntity {
     required super.vehiclePicture,
     required super.vehiclePlateNumber,
     required super.polyline,
+    required super.wayPointOne,
+    required super.wayPointTwo,
+    required super.wayPointOneTitle,
+    required super.wayPointTwoTitle,
   });
 
   factory RideRequestTripModel.fromJson(Map<String, dynamic> json) {
 
+    List<List<double>> parsedPolyline = [];
+
+    if (json['polyline'] != null) {
+      if (json['polyline'] is String) {
+        // Decode the encoded polyline string
+        PolylinePoints polylinePoints = PolylinePoints();
+        List<PointLatLng> decoded = polylinePoints.decodePolyline(json['polyline']);
+        parsedPolyline = decoded.map((e) => [e.latitude, e.longitude]).toList();
+      } else if (json['polyline'] is List) {
+        // Use the list directly
+        parsedPolyline = (json['polyline'] as List)
+            .map((e) => (e as List).map((p) => (p as num).toDouble()).toList())
+            .toList();
+      }
+    }
+
     return RideRequestTripModel(
       id: json['_id'] ?? '', // Handle null by providing an empty string
-      userId: json['userId'] ?? '',
+      // userId: json['userId'] ?? '',
+      userId: '',
       riderId: json['riderId'] ?? '',
-      subCategoryId: json['subCategoryId'] ?? '',
+      // subCategoryId: json['subCategoryId'] ?? '',
+      subCategoryId: '',
       carTypeId: json['carTypeId'] ?? '',
       from: json['fromTitle'] ?? 'Unknown',
       to: json['toTitle'] ?? 'Unknown',
+      wayPointOneTitle: json['wayPointOneTitle'] ?? 'Unknown',
+      wayPointTwoTitle: json['wayPointTwoTitle'] ?? 'Unknown',
       startCoordinates: (json['startLocation']?['coordinates'] as List<dynamic>?)
           ?.map((coord) => (coord as num?)?.toDouble() ?? 0.0)
           .toList() ??
@@ -60,10 +87,20 @@ class RideRequestTripModel extends RideRequestTripEntity {
           ?.map((coord) => (coord as num?)?.toDouble() ?? 0.0)
           .toList() ??
           [0.0, 0.0], // Default empty coordinates
+      wayPointOne: (json['wayPointOne']?['coordinates'] as List<dynamic>?)
+          ?.map((coord) => (coord as num?)?.toDouble() ?? 0.0)
+          .toList() ??
+          [0.0, 0.0],
+      wayPointTwo: (json['wayPointTwo']?['coordinates'] as List<dynamic>?)
+          ?.map((coord) => (coord as num?)?.toDouble() ?? 0.0)
+          .toList() ??
+          [0.0, 0.0],
       distance: (json['distance'] as num?)?.toDouble() ?? 0.0, // Default to 0.0
       duration: json['duration'] ?? 0, // Default to 0
       passengers: json['passengers'] ?? 1, // Default to 1 passenger
       price: (json['price'] as num?)?.toDouble() ?? 0.0, // Default to 0.0
+      lowestFare: (json['lowestFare'] as num?)?.toDouble() ?? 0.0, // Default to 0.0
+      highestFare: (json['highestFare'] as num?)?.toDouble() ?? 0.0, // Default to 0.0
       paymentMethod: json['paymentMethod'] ?? 'Cash', // Default payment method
       status: json['status'] ?? 'Pending', // Default status
       autoAccept: json['autoAccept'] ?? false, // Default to false
@@ -88,14 +125,15 @@ class RideRequestTripModel extends RideRequestTripEntity {
       vehicleColor: json['vehicleDetails']?['color'] ?? '',
       vehiclePlateNumber: json['vehicleDetails']?['plateInfo'] ?? '',
       vehiclePicture: json['vehicleDetails']?['carPictureUrl'],
-      polyline: json['polyline'] != null
-          ? (json['polyline'] as List)
-          .map((e) =>
-          (e as List)
-              .map((p) => (p as num).toDouble())
-              .toList())
-          .toList()
-          : [],
+      // polyline: json['polyline'] != null
+      //     ? (json['polyline'] as List)
+      //     .map((e) =>
+      //     (e as List)
+      //         .map((p) => (p as num).toDouble())
+      //         .toList())
+      //     .toList()
+      //     : [],
+      polyline: parsedPolyline,
     );
   }
 }
