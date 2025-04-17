@@ -178,24 +178,26 @@ class RideCubit extends Cubit<RideState> {
   ) : super( RideState(
     rideOffers: [],
   )){
-    listenToRideOffers();
+    if(SharedWebSocket.socket != null){
+      listenToRideOffers();
 
-    //action: start arriving counter
-    SharedWebSocket.socket!.on("RIDE:DRIVER_GO_TO_CLIENT_TO_START_TRIP", (data) {
-      CliLogger.info("RIDE:DRIVER_GO_TO_CLIENT_TO_START_TRIP:  $data");
-    });
-    //action: the driver has arrived
-    SharedWebSocket.socket!.on("RIDE:DRIVER_HAS_ARRIVED_AT_CLIENT", (data) {
-      CliLogger.info("RIDE:DRIVER_HAS_ARRIVED_AT_CLIENT:  $data");
-    });
-    // near by driver
-    SharedWebSocket.socket!.on("nearbyDriversAvailable", (data) {
-      CliLogger.info("nearbyDriversAvailable:  $data");
-    });
-    // trip started socket event
-    SharedWebSocket.socket!.on("RIDE:DRIVER_STARTED_TRIP", (data) {
-      CliLogger.info("RIDE:DRIVER_STARTED_TRIP:  $data");
-    });
+      //action: start arriving counter
+      SharedWebSocket.socket!.on("RIDE:DRIVER_GO_TO_CLIENT_TO_START_TRIP", (data) {
+        CliLogger.info("RIDE:DRIVER_GO_TO_CLIENT_TO_START_TRIP:  $data");
+      });
+      //action: the driver has arrived
+      SharedWebSocket.socket!.on("RIDE:DRIVER_HAS_ARRIVED_AT_CLIENT", (data) {
+        CliLogger.info("RIDE:DRIVER_HAS_ARRIVED_AT_CLIENT:  $data");
+      });
+      // near by driver
+      SharedWebSocket.socket!.on("nearbyDriversAvailable", (data) {
+        CliLogger.info("nearbyDriversAvailable:  $data");
+      });
+      // trip started socket event
+      SharedWebSocket.socket!.on("RIDE:DRIVER_STARTED_TRIP", (data) {
+        CliLogger.info("RIDE:DRIVER_STARTED_TRIP:  $data");
+      });
+    }
   }
 
   bool loadingHomeData = false;
