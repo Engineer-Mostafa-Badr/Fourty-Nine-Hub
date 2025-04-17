@@ -27,6 +27,7 @@ class SubscriptionPlansWidget extends StatefulWidget {
   final String subCategoryId;
   final String? title;
   final bool? showRegular;
+  final Function? onSubscribe;
 
   const SubscriptionPlansWidget({
     super.key,
@@ -35,6 +36,7 @@ class SubscriptionPlansWidget extends StatefulWidget {
     required this.subCategoryId,
     this.title,
     this.showRegular,
+    this.onSubscribe,
   });
 
   @override
@@ -309,7 +311,8 @@ class _SubscriptionPlansWidgetState extends State<SubscriptionPlansWidget> {
                                   ),
                                 );
                             if (context.mounted) {
-                              context.push(Routes.HOME);
+                              widget.onSubscribe != null ? widget.onSubscribe!() : context.push(Routes.HOME);
+
                               // context.pushReplacement(Routes.HOME);
                               context
                                   .read<MainCategoriesCubit>()

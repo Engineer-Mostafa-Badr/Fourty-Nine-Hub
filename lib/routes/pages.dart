@@ -519,7 +519,7 @@ class AppPages {
                 builder: (context, state) => BlocProvider(
                   create: (context) => serviceLocator<StarCubit>()
                     ..loadInitialData()
-                    ..getAllTalent(),
+                    ..getPaginatedMyStar(1),
                   child: const MyTalentView(),
                 ),
               ),
