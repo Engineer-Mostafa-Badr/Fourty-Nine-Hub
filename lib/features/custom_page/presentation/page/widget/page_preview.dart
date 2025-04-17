@@ -21,7 +21,12 @@ import 'package:fourtyninehub/features/social_media/twitter/presentation/pages/t
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:restart_app/restart_app.dart';
 
+import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateless/buttons/app_button.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../core/utils/custom_show_dialog.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../social_media/social_posts/presentation/pages/Social_home.dart';
 import '../../../../social_media/stories/presentation/cubit/stories_cubit.dart';
@@ -77,7 +82,7 @@ class _PagePreviewState extends State<PagePreview>
               bottom: TabBar(
                 dividerColor: Colors.transparent,
                 indicator: BoxDecoration(
-                  color: Colors.red.withOpacity(0.1), // Light red background
+                  color: Colors.red.withValues(alpha: 0.1), // Light red background
                   borderRadius: BorderRadius.circular(8), // Rounded corners
                 ),
                 labelStyle: const TextStyle(
@@ -182,21 +187,90 @@ class _PagePreviewState extends State<PagePreview>
                                 Styles.smallText(color: AppColors.whiteColor),
                           ),
                           onPressed: () async {
-                            await context
-                                .read<CustomPageCubit>()
-                                .updateActivate(true);
-                            // Restart.restartApp();
-                            Phoenix.rebirth(context);
+                            showAnimatedDialog(
+                              context,
+                              AlertDialog(
+                                content:Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Label(
+                                        text: 'Restart to Apply',
+                                        style: Styles.headerText(fontWeight: FontWeight.w400)),
+                                    const Sizer(),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: AppButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            label: LocaleKeys.cancel.localize,
+                                          ),
+                                        ),
+                                        const Sizer(width: 16,),
+                                        Expanded(
+                                          child: AppButton(
+                                            backColor: AppColors.PRIMARY_COLOR,
+                                            onPressed: () {
+                                              context
+                                                  .read<CustomPageCubit>()
+                                                  .updateActivate(true);
+                                              Restart.restartApp();
+                                            },
+                                            label: 'Restart',
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
                           },
                         ),
                         CustomElevatedButton(
                           onPressed: () async {
-                            await context
-                                .read<CustomPageCubit>()
-                                .updateActivate(false);
-                            Phoenix.rebirth(context);
-
-                            // Restart.restartApp();
+                            showAnimatedDialog(
+                              context,
+                              AlertDialog(
+                                content:Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Label(
+                                        text: 'Restart to Apply',
+                                        style: Styles.headerText(fontWeight: FontWeight.w400)),
+                                    const Sizer(),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: AppButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            label: LocaleKeys.cancel.localize,
+                                          ),
+                                        ),
+                                        const Sizer(width: 16,),
+                                        Expanded(
+                                          child: AppButton(
+                                            backColor: AppColors.PRIMARY_COLOR,
+                                            onPressed: () {
+                                              context
+                                                  .read<CustomPageCubit>()
+                                                  .updateActivate(true);
+                                              Restart.restartApp();
+                                            },
+                                            label: 'Restart',
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
                           },
                           child: Text(
                             LocaleKeys.saveWithOutActivate.localize,

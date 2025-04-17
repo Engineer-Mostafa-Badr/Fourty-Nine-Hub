@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/localization/locale_keys.g.dart';
+import '../../../features/notifications/presentation/cubits/get_unread_notifications_count/get_unread_notifications_count_cubit.dart';
+import '../../../features/notifications/presentation/widgets/icon_with_view_count.dart';
+import '../../../res/style/app_colors.dart';
+import '../../../res/style/styles.dart';
 import '../../../routes/routes.dart';
+import '../stateless/labels/label.dart';
 import 'bottom_painter.dart';
 
 class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
@@ -31,25 +37,25 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     List<BottomItemModel> pages = <BottomItemModel>[
       BottomItemModel(
-        icon: FontAwesomeIcons.list,
-        label: 'reels',
-        index: 1,
-        cacheKey: 'reelsCount',
-        image: Assets.reels,
-        route: Routes.REELS,
+        icon: FontAwesomeIcons.bowlFood,
+        label: LocaleKeys.ads.localize,
+        index: 0,
+        cacheKey: 'adCount',
+        image: Assets.spcialAdsIcon,
+        route: Routes.FOOD,
       ),
       BottomItemModel(
-        icon: FontAwesomeIcons.bowlFood,
-        label: 'meal',
-        index: 0,
-        cacheKey: 'mealsCount',
-        image: Assets.food,
-        route: Routes.FOOD,
+        icon: FontAwesomeIcons.list,
+        label: LocaleKeys.reels.localize,
+        index: 1,
+        cacheKey: 'reelsCount',
+        image: Assets.reelBar,
+        route: Routes.REELS,
       ),
       BottomItemModel(
         icon: FontAwesomeIcons.plus,
         // Change to a health-related icon
-        label: 'health',
+        label: LocaleKeys.health.localize,
         cacheKey: 'healthCount',
         image: Assets.health,
         index: 2,
@@ -59,19 +65,19 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
       BottomItemModel(
         icon: FontAwesomeIcons.plus,
         // Change to a health-related icon
-        label: 'health',
-        cacheKey: 'healthCount',
-        image: Assets.health,
+        label: LocaleKeys.notifications.localize,
+        cacheKey: 'notificationsCount',
+        image: Assets.bell,
         index: 3,
         // Ensure this index matches the health item
-        route: Routes.VISITA,
+        route: Routes.NOTIFICATIONS,
       ),
       BottomItemModel(
         icon: FontAwesomeIcons.car,
-        label: 'ride',
-        cacheKey: 'rideCount',
-        index: 3,
-        image: Assets.ride,
+        label: LocaleKeys.more.localize,
+        cacheKey: 'drawerCount',
+        index: 4,
+        image: Assets.ellipsis,
         route: Routes.RIDE_HOME,
       ),
     ];
@@ -79,11 +85,15 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
     return CustomBottomNavigationBar(
       currentIndex: index,
       onTap: (index) {
-        final selectedItem = pages[index];
-        if (selectedItem.route != ModalRoute.of(context)?.settings.name) {
-          selectedItem.action(context);
+        if (index == 4) {
+          Scaffold.of(context).openDrawer();
+        } else {
+          final selectedItem = pages[index];
+          if (selectedItem.route != ModalRoute.of(context)?.settings.name) {
+            selectedItem.action(context);
+          }
+          HandleCashback.setCount(pages[index].cacheKey ?? '', context);
         }
-        HandleCashback.setCount(pages[index].cacheKey ?? '', context);
       },
       items: pages,
       scrollController: scrollController,
@@ -92,7 +102,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(75);
 }
 
 class CustomBottomNavigationBar extends StatefulWidget {
@@ -125,7 +135,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
   final ScrollController scrollController;
   bool isScrollingDown;
 
-  double bottomNavBarHeight = 90.h; // Initial height of the bottom bar
+  double bottomNavBarHeight = 75; // Initial height of the bottom bar
 
   _CustomBottomNavigationBarState({
     required this.scrollController,
@@ -150,7 +160,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
         if (isScrollingDown) {
           setState(() {
             isScrollingDown = false;
-            bottomNavBarHeight = 90.h; // Show the bottom bar
+            bottomNavBarHeight = 75; // Show the bottom bar
           });
         }
       }
@@ -163,7 +173,6 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
       duration: const Duration(milliseconds: 400),
       height: bottomNavBarHeight, // Use the dynamic height
       color: Colors.transparent,
-
       child: CustomPaint(
         painter: BottomBarPainter(
           color: Colors.transparent,
@@ -183,10 +192,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: List.generate(widget.items.length, (index) {
-                // int index1 = context.isArabic ? 2 : 1;
-                // int index2 = context.isArabic ? 1 : 2;
-
                 return Expanded(
                   child: GestureDetector(
                     onTap: () {
@@ -194,67 +201,59 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                         widget.onTap(index);
                       }
                     },
-                    // child: Padding(
-                    //   // padding: EdgeInsets.zero,
-                    //   padding:EdgeInsets.only(right: 30,left: 30),
-                    //   // padding: index == index1
-                    //   //     ? EdgeInsets.only(right: 30.w)
-                    //   //     : index == index2
-                    //   //         ? EdgeInsets.only(left: 60.w)
-                    //   //         : EdgeInsets.zero,
-                    //   // Conditionally render the Icon or SvgPicture
-                    //   child: index == 2 // Index for "health"
-                    //       ? Image.asset(
-                    //           widget.items[index].image!,
-                    //           //width: 90.w,
-                    //           height: widget.items[index].height * 2.h,
-                    //         )
-                    //       : Image.asset(
-                    //           widget.items[index].image!,
-                    //           color: index!=1?AppColors.PRIMARY_COLOR:null,
-                    //           height: widget.items[index].height * 1.8.h,
-                    //         ),
-                    // ),
                     child: Padding(
-                      // padding: EdgeInsets.only(
-                      //   left: index == 1 ? 1.0 : 20.0,  // Less padding for the first icon
-                      //   right: index == 2 ? 1.0 : 20.0, // Less padding for the last icon
-                      // ),
-                      // padding: EdgeInsetsDirectional.only(
-                      //   start: index == 1 ? 1.0 : 35.0,
-                      //   end: index == 2 ? 1.0 : 35.0,
-                      // ),
                       padding: EdgeInsetsDirectional.zero,
                       child: ClickableWidget(
-                        child: index != 2
-                            ? Container(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 16.0),
-
-                                child: SvgPicture.asset(
-                                  widget.items[index].image!,
-                                  height: widget.items[index].height * 1.8.h,
-                                ),
+                        child: index == 3
+                            ? Builder(
+                                builder: (context) {
+                                  final getUnreadNotificationsCountCubit =
+                                      context.watch<
+                                          GetUnreadNotificationsCountCubit>();
+                                  return Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      CustomNotificationWidget(
+                                        icon: Image.asset(
+                                          Assets.notification,
+                                          height: widget.items[index].height,
+                                          width: widget.items[index].height-4,
+                                        ),
+                                        unreadCount:
+                                            getUnreadNotificationsCountCubit
+                                                    .unreadNotificationsCountEntity
+                                                    ?.total ??
+                                                0,
+                                      ),
+                                      Label(
+                                        text: widget.items[index].label,
+                                        style: Styles.smallText(),
+                                      ),
+                                    ],
+                                  );
+                                },
                               )
-                            : Container(),
+                            : index != 2
+                                ? Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 16.0),
+                                    child: Column(children: [
+                                      SvgPicture.asset(
+                                        widget.items[index].image!,
+                                        height: widget.items[index].height,
+                                        width: widget.items[index].height,
+                                        color: index == 4 ||index == 1
+                                            ? AppColors.PRIMARY_COLOR
+                                            : null,
+                                      ),
+                                      Label(
+                                        text: widget.items[index].label,
+                                        style: Styles.smallText(),
+                                      ),
+                                    ],),
+                                  )
+                                : Container(),
                       ),
-                      // index == 2 // Index for "health"
-                      //     ? Image.asset(
-                      //   widget.items[index].image!,
-                      //   height: widget.items[index].height * 1.8.h,
-                      //   height: widget.items[index].height * 2.h, // Adjust height for middle item
-                      // height: 32, // Adjust height for middle item
-                      // width: 32, // Adjust height for middle item
-                      // )
-                      //     : Image.asset(
-                      //   widget.items[index].image!,
-                      //   color: index != 1 ? AppColors.PRIMARY_COLOR : null,
-                      //   height: widget.items[index].height * 1.8.h,
-                      //   height: 32,
-                      // width: 32, // Adjust height for middle item
-                      //
-                      // height: widget.items[index].height * 1.8.h,
-                      // ),
                     ),
                   ),
                 );
@@ -283,7 +282,7 @@ class BottomItemModel {
     this.image,
     this.cacheKey,
     required this.route,
-    this.height = 20,
+    this.height = 24,
   });
 
   void action(BuildContext context) {

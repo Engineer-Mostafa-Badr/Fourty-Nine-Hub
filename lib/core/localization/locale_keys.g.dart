@@ -409,6 +409,7 @@ abstract class  LocaleKeys {
   static const messageSentSuccessfully = 'messageSentSuccessfully';
   static const days = 'days';
   static const comments = 'comments';
+  static const commentsRates = 'commentsRates';
   static const comment = 'comment';
   static const like = 'like';
   static const sad = 'sad';
@@ -1492,5 +1493,15 @@ abstract class  LocaleKeys {
   static const weHaveSentACodeTo = 'weHaveSentACodeTo';
   static const oTPVerifyFor = 'oTPVerifyFor';
   static const resendOtpSuccess = 'resendOtpSuccess';
+  static const restaurantMode = 'restaurantMode';
+  static const yourRate = 'yourRate';
+  static const bad = 'bad';
+  static const rateTheRestaurant = 'rateTheRestaurant';
+  static const restaurantRateYou = 'restaurantRateYou';
+  static const addACommentsFor = 'addACommentsFor';
+  static const commentAdded = 'commentAdded';
+  static const areYouSureYouWantToDeleteThisComment = 'areYouSureYouWantToDeleteThisComment';
+  static const responseStatus = 'responseStatus';
+  static const socialExplain = 'socialExplain';
 
 }

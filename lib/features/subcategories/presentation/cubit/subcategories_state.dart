@@ -4,12 +4,13 @@ class SubcategoriesState {
   final Failure? failure;
   final SubcategoriesStates status;
   final int? subCatIndex;
+  final String? selectedSubCatId;
   final List<AdModel>? ads;
   String? city;
   String? governorate;
   final FilterModel? filterModel;
   final List<AdModel>? myAds;
-  final List<AdModel>? adsRequestsLog;
+  final List<AdRequestEntity>? adsRequestsLog;
 
   final List<SubCategoryEntity>? subCategories;
   final List<SubCategoryEntity>? customPageSubCategories;
@@ -28,13 +29,15 @@ class SubcategoriesState {
       this.mainCategory,
       this.marriageSubCategories,
       this.subCatIndex = 0,
-      this.status = SubcategoriesStates.loading});
+      this.status = SubcategoriesStates.loading,
+      this.selectedSubCatId});
 
   SubcategoriesState copyWith({
     Failure? failure,
     SubcategoriesStates? status,
     MainCategoryEntity? mainCategory,
     int? subCatIndex,
+    String? selectedSubCatId,
     String? city,
     String? governorate,
     FilterModel? filterModel,
@@ -43,7 +46,7 @@ class SubcategoriesState {
     List<SubCategoryEntity>? marriageSubCategories,
     List<AdModel>? ads,
     List<AdModel>? myAds,
-    List<AdModel>? adsRequestsLog,
+    List<AdRequestEntity>? adsRequestsLog,
   }) {
     return SubcategoriesState(
       failure: failure ?? this.failure,
@@ -57,6 +60,7 @@ class SubcategoriesState {
           marriageSubCategories ?? this.marriageSubCategories,
       myAds: myAds ?? this.myAds,
       adsRequestsLog: adsRequestsLog ?? this.adsRequestsLog,
+      selectedSubCatId: selectedSubCatId ?? this.selectedSubCatId,
     );
   }
 }

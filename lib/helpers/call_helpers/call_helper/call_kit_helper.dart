@@ -3,8 +3,8 @@ import 'package:flutter_callkit_incoming_yoer/entities/call_event.dart';
 import 'package:flutter_callkit_incoming_yoer/entities/call_kit_params.dart';
 import 'package:flutter_callkit_incoming_yoer/entities/ios_params.dart';
 import 'package:flutter_callkit_incoming_yoer/flutter_callkit_incoming.dart';
-import 'package:fourtyninehub/features/call/domain/entities/call_data.dart';
-import "package:fourtyninehub/res/assets/assets.dart";
+import '../../../features/call/domain/entities/call_data.dart';
+import '../../../res/assets/assets.dart';
 
 abstract class CallKitHelper {
   Future<void> showCallkitIncoming({
@@ -26,9 +26,10 @@ class CallKitHelperImpl implements CallKitHelper {
     required void Function(String reason) onCallDecline,
   }) async {
     final params = CallKitParams(
+      handle: "49 HUB...",
       id: callData.uid,
       nameCaller: callData.callerName,
-      appName: '49',
+      appName: '49 HUB...',
       avatar: callData.callerImage,
       type: 0,
       duration: callDuration * 1000,
@@ -36,18 +37,17 @@ class CallKitHelperImpl implements CallKitHelper {
       textDecline: 'رفض',
       extra: <String, dynamic>{'userId': '1a2b3c4d'},
       headers: <String, dynamic>{'apiKey': 'Abc@123!', 'platform': 'flutter'},
-      android:  AndroidParams(
+      android: AndroidParams(
         isCustomNotification: true,
         isShowLogo: true,
-        incomingCallNotificationChannelName:
-            "Incomming call from Tqneen Customer",
+        incomingCallNotificationChannelName: "Incomming call from 49 Customer",
         ringtonePath: 'system_ringtone_default',
-        backgroundColor: '#1068A8',
+        backgroundColor: '#121212',
         backgroundUrl: Assets.logo,
         actionColor: '#4CAF50',
         // textColor: '#ffffff',
       ),
-      ios:  IOSParams(
+      ios: IOSParams(
         iconName: Assets.logo,
         handleType: '',
         supportsVideo: true,

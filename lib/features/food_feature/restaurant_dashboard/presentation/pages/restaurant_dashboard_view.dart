@@ -20,6 +20,7 @@ import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/elevated_button.dart';
 import '../../../../../core/utils/custom_show_dialog.dart';
@@ -33,6 +34,7 @@ import '../../../create_restaurant/views/widgets/photo/restaurant_photo_picker.d
 import '../../../edit_food/presentation/pages/edit_food_view.dart';
 import '../cubit/restaurant_dashboard_cubit.dart';
 import '../widgets/restaurant_order_card.dart';
+import '../widgets/restaurant_photo_widget.dart';
 
 class RestaurantDashboardView extends StatefulWidget {
   final String restaurantId;
@@ -437,7 +439,7 @@ class RestaurantSettingScreen extends StatelessWidget {
               // const Divider(),
               const RestaurantStatisticsView(),
               const Sizer(),
-              CreateRestaurantProfilePhotoPicker(
+              RestaurantPhotoPicker(
                   subcategoryId: state.info
                       ?.subcategoryId?.id ??
                       ''
@@ -765,7 +767,14 @@ class RestaurantSettingScreen extends StatelessWidget {
 //     );
 //   }
 // }
+
+
+
 class CustomBottomSheet extends StatelessWidget {
+  final String phone;
+
+  const CustomBottomSheet({super.key, required this.phone});
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -776,35 +785,47 @@ class CustomBottomSheet extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             AppButton(
-                height: 44,
-                color: AppColors.LIGHT_COLOR,
-                backColor: context.isDarkMode
-                    ? AppColors.PRIMARY_COLOR_DARK
-                    : AppColors.PRIMARY_COLOR,
-                label: LocaleKeys.freeCall.localize,
-                style: const TextStyle(
-                    color: AppColors.whiteColor,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 18),
-                onPressed: () {}),
+              height: 44,
+              color: AppColors.LIGHT_COLOR,
+              backColor: context.isDarkMode
+                  ? AppColors.PRIMARY_COLOR_DARK
+                  : AppColors.PRIMARY_COLOR,
+              label: LocaleKeys.freeCall.localize,
+              style: const TextStyle(
+                  color: AppColors.whiteColor,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18),
+              onPressed: () async {
+                final Uri phoneUri = Uri(scheme: 'tel', path: phone);
+                if (await canLaunchUrl(phoneUri)) {
+                  await launchUrl(phoneUri);
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Could not launch $phone')),
+                  );
+                }
+              },
+            ),
             const SizedBox(height: 10),
             AppButton(
-                height: 44,
-                color: AppColors.LIGHT_COLOR,
-                backColor: AppColors.cD9D9D9,
-                label: LocaleKeys.regularCall.localize,
-                style: const TextStyle(
-                    color: AppColors.black,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 18),
-                onPressed: () {}),
+              height: 44,
+              color: AppColors.LIGHT_COLOR,
+              backColor: AppColors.cD9D9D9,
+              label: LocaleKeys.regularCall.localize,
+              style: const TextStyle(
+                  color: AppColors.black,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18),
+              onPressed: () {
+                // You can implement another action for regular calls here
+              },
+            ),
           ],
         ),
       ),
     );
   }
 }
-
 void showConfirmationDialog(
   BuildContext context, {
   required String title,

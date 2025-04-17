@@ -199,7 +199,7 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
       emit(state.copyWith(status: RestaurantDetailsStates.loading, cart: null));
     }
 
-    const url = 'https://49dev.com/api/v1/food/getCart';
+    const url = 'https://49backend.com/api/v1/food/getCart';
 
     try {
       final response = await apiConsumer.get(url);
@@ -259,7 +259,7 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
   }) async {
     emit(state.copyWith(status: RestaurantDetailsStates.loading));
 
-    const url = 'https://49dev.com/api/v1/food/make-order-premium';
+    const url = 'https://49backend.com/api/v1/food/make-order-premium';
 
     final data = {
       "cartId": cartId,
@@ -342,7 +342,7 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
   }) async {
     emit(state.copyWith(status: RestaurantDetailsStates.loading));
 
-    const url = 'https://49dev.com/api/v1/food/make-order';
+    const url = 'https://49backend.com/api/v1/food/make-order';
 
     final data = {
       "cartId": cartId,
@@ -368,7 +368,7 @@ class RestaurantDetailsCubit extends Cubit<RestaurantDetailsState> {
         final orderData =
             data['data']; // Adjust based on your API response structure
         // final order = Order.fromJson(orderData);
-        log("${data['message']}    const url = 'https://49dev.com/api/v1/food/make-order';");
+        log("${data['message']}    const url = 'https://49backend.com/api/v1/food/make-order';");
         Navigator.pop(context);
         showSuccessMessage(context, data['message']);
         // WidgetsBinding.instance.addPostFrameCallback(

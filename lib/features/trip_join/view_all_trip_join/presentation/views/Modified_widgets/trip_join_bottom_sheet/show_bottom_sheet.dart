@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_bottom_sheet/submit_bottom_sheet.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
-Future<dynamic> JoinTripBottomSheet(context,{required Color topButtonColor,required Color bottomButtonColor,required String topButtonTitle,required String bottomButtonTitle}) {
+Future<dynamic> JoinTripBottomSheet(context,{required Color topButtonColor,required Color bottomButtonColor,required String topButtonTitle,required String bottomButtonTitle,required void Function() onTap}) {
   return showModalBottomSheet(
     backgroundColor: AppColors.whiteColor,
     context: context,
@@ -46,7 +49,7 @@ Future<dynamic> JoinTripBottomSheet(context,{required Color topButtonColor,requi
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     ElevatedButton(
-                      onPressed: (){ Navigator.of(context).pop();},
+                      onPressed: onTap,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: topButtonColor,
                         foregroundColor: Colors.white,
@@ -70,7 +73,7 @@ Future<dynamic> JoinTripBottomSheet(context,{required Color topButtonColor,requi
                     ),
                     const Sizer(),
                     ElevatedButton(
-                      onPressed: (){ Navigator.of(context).pop();},
+                      onPressed: onTap,
                       style: ElevatedButton.styleFrom(
                         backgroundColor:bottomButtonColor,
                         foregroundColor: Colors.white,

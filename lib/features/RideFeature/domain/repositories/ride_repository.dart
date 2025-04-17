@@ -51,6 +51,10 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/ge
 import '../../../../core/error/failure.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_statistics_entity.dart';
 
+import '../entities/get_offers_entity.dart';
+import '../usecases/make_loading_request_trip_usecase.dart';
+import '../usecases/make_non_tracking_request_trip_usecase.dart';
+
 import '../../../account_taps/my_adds/domain/entity/click_entity.dart';
 
 abstract class RideRepository {
@@ -93,10 +97,14 @@ abstract class RideRepository {
   Future<Either<Failure, bool>> recordingTrip(RecordingTripUseCaseParams params);
   Future<Either<Failure, bool>> updateTripAutoAcceptByClient(UpdateTripAutoAcceptByClientUseCaseParams params);
   Future<Either<Failure, bool>> makeRequestTrip();
+  Future<Either<Failure, bool>> makeNonTrackingRequestTrip(MakeNonTrackingRequestTripUsecaseParam params);
+  Future<Either<Failure, bool>> makeLoadingRequestTrip(MakeLoadingRequestTripUsecaseParam params);
   Future<Either<Failure, bool>> updateTripPriceFromClient(UpdateTripPriceFromClientUseCaseParams params);
   Future<Either<Failure, bool>> updateTripPrice(UpdateTripPriceUseCaseParams params);
   Future<Either<Failure, ActivityTripEntity>> getAllActivityTrips(GetAllActivityTripsUseCaseParams params);
   Future<Either<Failure, List<HistoryTripForUserEntity>>> getAllHistoryTripsForUser();
+  Future<Either<Failure, GetOffersResponseEntity>> getClientOffers();
+  Future<Either<Failure, GetOffersResponseEntity>> getLoadingOffers();
   Future<Either<Failure, List<HistoryTripForRiderEntity>>> getAllHistoryTripsForRider(GetAllHistoryTripsForRiderUseCaseParams params);
   Future<Either<Failure, DriverInfoEntity>> getRideDriverInfo(bool refresh);
   Future<Either<Failure, DriverPictureOptionalEntity>> getDriverPictureOptional();

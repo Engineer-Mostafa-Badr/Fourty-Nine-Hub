@@ -2,7 +2,6 @@ import 'package:either_dart/either.dart';
 import 'package:equatable/equatable.dart';
 import 'package:fourtyninehub/features/call/domain/entities/agora_info_entity.dart';
 import 'package:fourtyninehub/features/call/domain/repositories/call_repository.dart';
-
 class GetAgoraTokenUsecase {
   final CallRepository _callRepository;
 

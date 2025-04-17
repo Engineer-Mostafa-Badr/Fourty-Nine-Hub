@@ -37,7 +37,12 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:restart_app/restart_app.dart';
 import 'package:shimmer/shimmer.dart';
+
+import '../../../../../common/widgets/dynamic/bottom_navigator.dart';
+import '../../../../../common/widgets/dynamic/floating_button.dart';
+import '../../../../../core/utils/custom_show_dialog.dart';
 
 class ServicePagePreview extends StatefulWidget {
   const ServicePagePreview({super.key});
@@ -138,11 +143,29 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
         BlocProvider(
           create: (context) => serviceLocator<MainCategoriesTapsCubit>(),
           child: Builder(builder: (context) {
-            return SizedBox(
-              height: 300,
-              child: MainCategoriesFlipCardsView(
-                isAppBarShow: false,
-                data: context.read<MainCategoriesTapsCubit>().mainCategories,
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: SizedBox(
+                height: 350,
+                child: MainCategoriesFlipCardsView(
+                  isAppBarShow: false,
+                  data: context.read<MainCategoriesTapsCubit>().mainCategories,
+                ),
+              ),
+            );
+          }),
+        ),
+        BlocProvider(
+          create: (context) => serviceLocator<MainCategoriesTapsCubit>(),
+          child: Builder(builder: (context) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: SizedBox(
+                height: 350,
+                child: MainCategoriesFlipCardsView(
+                  isAppBarShow: false,
+                  data: context.read<MainCategoriesTapsCubit>().mainCategories,
+                ),
               ),
             );
           }),
@@ -170,152 +193,255 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
       },
       child: Scaffold(
         key: _scaffoldKey,
-        bottomNavigationBar: CustomPageBottonNavBar(
-          scrollController: scrollController, currentIndex: 2,
+        bottomNavigationBar: BottomNavigator(
+          scrollController: scrollController,
           isScrollingDown: _isScrollingDown,
-          // mainCategory: 1,
-          // index: 2,
+          mainCategory: 1,
+          index: 2,
         ),
+        floatingActionButton: _isScrollingDown
+            ? null
+            : const FloatingButton(
+          changeView: 1,
+          icon: Icons.person,
+        ),
+        floatingActionButtonLocation:
+        FloatingActionButtonLocation.centerDocked,
+        // bottomNavigationBar: CustomPageBottonNavBar(
+        //   scrollController: scrollController,
+        //   currentIndex: 2,
+        //   isScrollingDown: _isScrollingDown,
+        //   // mainCategory: 1,
+        //   // index: 2,
+        // ),
         drawer: const DrawerWidget(),
-        body: CustomScrollView(
-          // controller: scrollController,
-          // padding: EdgeInsets.symmetric(horizontal: 20.w),
-          slivers: [
-            // const SliverToBoxAdapter(child: AddBanner()),
-            //wallet
-            SliverToBoxAdapter(
-              child: context.read<UserCubit>().isLoggedIn
-                  ? const WalletWidget()
-                  : const SizedBox.shrink(),
-            ),
-            // SliverToBoxAdapter(child: _buildStarWidget()),
-            const SliverToBoxAdapter(child: Sizer()),
-            SliverToBoxAdapter(
-              child: ScrollableTextWithAnimation(
-                textDirection:
-                    context.isArabic ? TextDirection.rtl : TextDirection.ltr,
-              ),
-            ),
-            const SliverToBoxAdapter(child: Sizer()),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Row(children: [
-                  Expanded(child: _buildStarWidget()),
-                  const Sizer(
-                    width: 32,
+        body: Stack(
+          children: [
+            CustomScrollView(
+              // controller: scrollController,
+              // padding: EdgeInsets.symmetric(horizontal: 20.w),
+              slivers: [
+                // const SliverToBoxAdapter(child: AddBanner()),
+                //wallet
+                SliverToBoxAdapter(
+                  child: context.read<UserCubit>().isLoggedIn
+                      ? const WalletWidget()
+                      : const SizedBox.shrink(),
+                ),
+                // SliverToBoxAdapter(child: _buildStarWidget()),
+                const SliverToBoxAdapter(child: Sizer()),
+                SliverToBoxAdapter(
+                  child: ScrollableTextWithAnimation(
+                    textDirection: context.isArabic
+                        ? TextDirection.rtl
+                        : TextDirection.ltr,
                   ),
-                  Expanded(
-                    child: _pickMeAndComeWithUWidget(),
+                ),
+                const SliverToBoxAdapter(child: Sizer()),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Row(children: [
+                      const Sizer(width: 8),
+
+                      Expanded(
+                        child: _buildStarWidget(
+                          onTap: () {
+                            AdInterstitialTop.loadIntersitialAd();
+                            AdInterstitialTop.showInterstitialAd();
+                            context.push(Routes.RIDE_HOME);
+                          },
+                          shadowColor: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
+                          image: Assets.car2Image,
+                          title: LocaleKeys.ride.localize,
+                        ),
+                      ),
+                      const Sizer(width: 32),
+                      Expanded(
+                        child: _buildStarWidget(
+                          onTap: () {
+                            AdInterstitialTop.loadIntersitialAd();
+                            AdInterstitialTop.showInterstitialAd();
+                            context.push(Routes.VISITA);
+                          },
+                          shadowColor: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
+                          image: Assets.doctorImage,
+                          title: LocaleKeys.health.localize,
+                        ),
+                      ),
+                      const Sizer(width: 32),
+                      Expanded(
+                        child: _buildStarWidget(
+                          onTap: () {
+                            AdInterstitialTop.loadIntersitialAd();
+                            AdInterstitialTop.showInterstitialAd();
+                            HandleCashback.setCount('beAStarCount', context);
+                            context.push(Routes.FOOD);
+                          },
+                          shadowColor: Colors.deepOrange.withValues(alpha: .7),
+                          image: Assets.mealImage,
+                          title: LocaleKeys.meal.localize,
+                        ),
+                      ),
+                      const Sizer(width: 8),
+
+                    ]),
                   ),
-                ]),
-              ),
-            ),
-            const SliverToBoxAdapter(child: Sizer()),
-            SliverToBoxAdapter(
-              child: CustomAnimatedText(
-                text: LocaleKeys.youCanDeActivatePage.localize,
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return const CustomDeActivateDialog();
+                ),
+                const SliverToBoxAdapter(child: Sizer()),
+                const SliverToBoxAdapter(child: Sizer()),
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child:Row(children: [
+                      const Sizer(width: 8),
+
+                      Expanded(child: _pickMeAndComeWithUWidget()),
+                      const Sizer(width: 32),
+                      Expanded(
+                        child: _buildStarWidget(
+                          onTap: () {
+                            AdInterstitialTop.loadIntersitialAd();
+                            AdInterstitialTop.showInterstitialAd();
+                            HandleCashback.setCount('beAStarCount', context);
+                            context.push(Routes.BE_STAR);
+                          },
+                          shadowColor: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
+                          image: Assets.tube1,
+                          title: LocaleKeys.tube.localize,
+                        ),
+                      ),
+                      const Sizer(width: 32),
+                      Expanded(
+                        child: _buildStarWidget(
+                          onTap: () {
+                            AdInterstitialTop.loadIntersitialAd();
+                            AdInterstitialTop.showInterstitialAd();
+                            context.push(Routes.MARRIAGESUBCATEGORIES);
+                          },
+                          shadowColor: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
+                          image: Assets.marriage,
+                          title: LocaleKeys.marriage.localize,
+                        ),
+                      ),
+                      const Sizer(width: 8),
+
+                    ],),
+                  ),
+                ),
+                const SliverToBoxAdapter(child: Sizer()),
+                SliverToBoxAdapter(
+                  child: CustomAnimatedText(
+                    text: LocaleKeys.youCanDeActivatePage.localize,
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return const CustomDeActivateDialog();
+                        },
+                      );
                     },
-                  );
-                },
-              ),
-            ),
-            // SliverToBoxAdapter(child: _buildTenPercentWidget()),
-            const SliverToBoxAdapter(child: Sizer()),
-            // _buildMainCategoriesViews(),
-            // const Sizer(),
-            //main cats
-            BlocProvider(
-              create: (BuildContext context) =>
-                  serviceLocator<MainCategoriesCubit>()
-                    ..getMainCategoryCustomPage(),
-              child: BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
-                builder: (context, state) {
-                  final controller = context.read<MainCategoriesCubit>();
-                  if (state.status == StateStatus.loading) {
-                    return const SliverToBoxAdapter(
-                        child: MainCategoriesShimmerLoading());
-                  }
-                  if (state.customPage != null) {
-                    return SliverToBoxAdapter(
-                      child: getMainCategoryWidgets(controller, state)[
-                          CacheManager.getInt(
-                              CacheManager.selectedCategoryView)!],
-                    );
-                  } else {
-                    return const SliverToBoxAdapter(child: SizedBox.shrink());
-                  }
-                },
-              ),
+                  ),
+                ),
+                // SliverToBoxAdapter(child: _buildTenPercentWidget()),
+                const SliverToBoxAdapter(child: Sizer()),
+                // _buildMainCategoriesViews(),
+                // const Sizer(),
+                //main cats
+                BlocProvider(
+                  create: (BuildContext context) =>
+                      serviceLocator<MainCategoriesCubit>()
+                        ..getMainCategoryCustomPage(),
+                  child: BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
+                    builder: (context, state) {
+                      final controller = context.read<MainCategoriesCubit>();
+                      if (state.status == StateStatus.loading) {
+                        if (CacheManager.getInt(
+                                CacheManager.selectedCategoryView) ==
+                            1) {
+                          return SliverPadding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
+                            sliver: SliverGrid(
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                mainAxisSpacing: 10,
+                              ),
+                              delegate: SliverChildBuilderDelegate(
+                                (BuildContext context, int index) {
+                                  return Shimmer.fromColors(
+                                    baseColor: Colors.grey[100]!,
+                                    highlightColor: Colors.white24,
+                                    child: Container(
+                                      height: 200,
+                                      width: double.infinity,
+                                      margin: EdgeInsets.symmetric(
+                                          horizontal: 10.w),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 10.w),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey,
+                                        borderRadius:
+                                            BorderRadius.circular(20.r),
+                                        border: Border.all(color: Colors.grey),
+                                      ),
+                                    ),
+                                  );
+                                },
+                                childCount: 10,
+                              ),
+                            ),
+                          );
+                        }
+                        if (CacheManager.getInt(
+                                CacheManager.selectedCategoryView) ==
+                            2) {
+                          return SliverToBoxAdapter(
+                            child: Shimmer.fromColors(
+                              baseColor: Colors.grey[100]!,
+                              highlightColor: Colors.white24,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0),
+                                child: Container(
+                                  height: 400,
+                                  width: double.infinity,
+                                  margin:
+                                      EdgeInsets.symmetric(horizontal: 10.w),
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 10.w),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.AUTH_CONTAINER_COLOR,
+                                    borderRadius: BorderRadius.circular(20.r),
+                                    border: Border.all(color: Colors.grey),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        } else {
+                          return const SliverToBoxAdapter(
+                              child: MainCategoriesShimmerLoading());
+                        }
+                      }
+                      if (state.customPage != null) {
+                        return SliverToBoxAdapter(
+                          child: getMainCategoryWidgets(controller, state)[
+                              CacheManager.getInt(
+                                  CacheManager.selectedCategoryView)!],
+                        );
+                      } else {
+                        return const SliverToBoxAdapter(
+                            child: SizedBox.shrink());
+                      }
+                    },
+                  ),
+                ),
+              ],
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  // Widget _buildMainCategoriesViews() {
-  //   return Container(
-  //     decoration: BoxDecoration(
-  //         color: Theme.of(context).scaffoldBackgroundColor,
-  //         borderRadius: BorderRadius.circular(20.r),
-  //         boxShadow: const [
-  //           BoxShadow(
-  //             color: AppColors.GRAY_LIGHT_COLOR3,
-  //             blurRadius: 5,
-  //             spreadRadius: 5,
-  //           )
-  //         ]),
-  //     child: ClipRRect(
-  //       borderRadius: BorderRadius.circular(20.r),
-  //       child: Row(
-  //         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //         children: [
-  //           _buildItemTabBar(
-  //             SvgPicture.asset(
-  //               Assets.threeDots,
-  //               height: 34.h,
-  //               width: 34.h,
-  //             ),
-  //             Routes.MAINCATEGORIESTREE,
-  //             () => HandleCashback.setCount('threeDotsCount', context),
-  //           ),
-  //           _buildItemTabBar(
-  //               SvgPicture.asset(
-  //                 Assets.mobile,
-  //                 height: 34.h,
-  //                 width: 34.h,
-  //               ),
-  //               Routes.MAINCATEGORIESCARDS, () {
-  //             AdInterstitialTop.loadIntersitialAd();
-  //             AdInterstitialTop.showInterstitialAd();
-  //             HandleCashback.setCount('mainCategoriesSliderCount', context);
-  //           }),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
-
-  Widget _buildItemTabBar(
-    Widget icon,
-    String routeName,
-    Function() onTab,
-  ) {
-    return InkWell(
-      onTap: () {
-        onTab();
-        context.push(routeName);
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 6.h.w, horizontal: 10.h),
-        decoration: const BoxDecoration(),
-        child: icon,
       ),
     );
   }
@@ -337,48 +463,96 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
     );
   }
 
-  Widget _buildStarWidget() {
-    return SizedBox(
-      height: kToolbarHeight * 2.h,
-      width: double.infinity,
-      child: GestureDetector(
-        onTap: () {
-          AdInterstitialTop.loadIntersitialAd();
-          AdInterstitialTop.showInterstitialAd();
-          HandleCashback.setCount('beAStarCount', context);
-          context.push(Routes.BE_STAR);
-        },
-        child: Container(
-          height: kToolbarHeight * 2.h,
-          decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            borderRadius: BorderRadius.circular(40.r),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
-                spreadRadius: 5,
-                blurRadius: 5,
-                offset: const Offset(1, 1),
-              )
-            ],
-            image: DecorationImage(
-                image: AssetImage(Assets.tube1), fit: BoxFit.fill),
-          ),
-          child: Center(
-            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Label(
-                text: LocaleKeys.tube.localize,
-                style: Styles.mediumText(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 45,
-                ),
-              )
-            ]),
-          ),
+  Widget _buildStarWidget({
+    void Function()? onTap,
+    required Color shadowColor,
+    required String title,
+    required String image,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        // height: kToolbarHeight * 2.h,
+        height: 64,
+        decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          borderRadius: BorderRadius.circular(40.r),
+          boxShadow: [
+            BoxShadow(
+              color: shadowColor,
+              spreadRadius: 5,
+              blurRadius: 5,
+              offset: const Offset(1, 1),
+            )
+          ],
+        ),
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Image.asset(
+              image,
+              fit: BoxFit.fill,
+              width: double.infinity,
+            ),
+            Container(
+              color: Colors.black38,
+            ),
+            Label(
+              text: title,
+              style: Styles.mediumText(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 45,
+              ),
+            ),
+          ],
         ),
       ),
     );
+    // return SizedBox(
+    //   height: kToolbarHeight * 2.h,
+    //   width: double.infinity,
+    //   child: GestureDetector(
+    //     onTap: () {
+    //       AdInterstitialTop.loadIntersitialAd();
+    //       AdInterstitialTop.showInterstitialAd();
+    //       HandleCashback.setCount('beAStarCount', context);
+    //       context.push(Routes.BE_STAR);
+    //     },
+    //     child: Container(
+    //       height: kToolbarHeight * 2.h,
+    //       decoration: BoxDecoration(
+    //         color: Theme
+    //             .of(context)
+    //             .scaffoldBackgroundColor,
+    //         borderRadius: BorderRadius.circular(40.r),
+    //         boxShadow: [
+    //           BoxShadow(
+    //             color: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
+    //             spreadRadius: 5,
+    //             blurRadius: 5,
+    //             offset: const Offset(1, 1),
+    //           )
+    //         ],
+    //         image: DecorationImage(
+    //             image: AssetImage(Assets.tube1), fit: BoxFit.fill),
+    //       ),
+    //       child: Center(
+    //         child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+    //           Label(
+    //             text: LocaleKeys.tube.localize,
+    //             style: Styles.mediumText(
+    //               color: Colors.white,
+    //               fontWeight: FontWeight.bold,
+    //               fontSize: 45,
+    //             ),
+    //           )
+    //         ]),
+    //       ),
+    //     ),
+    //   ),
+    // );
   }
 
   Widget itemAuctionAndInstallmentWidget(
@@ -443,7 +617,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
         route != null ? context.push(route) : null;
       },
       child: Container(
-        height: kToolbarHeight * 2.h,
+        height: 64,
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(40.r),
@@ -610,30 +784,71 @@ class CustomDeActivateDialog extends StatelessWidget {
           Text(
             LocaleKeys.areYouSureToDeActivate.localize,
           ),
-          Sizer(height: 16,),
-          Row(
-            children: [
-              Expanded(
-                child: CustomElevatedButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: Text(LocaleKeys.cancel.localize,
-                      style: Styles.smallText(color: AppColors.whiteColor)),
+          Sizer(
+            height: 16,
+          ),
+          Row(children: [
+            Expanded(
+              child: CustomElevatedButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text(LocaleKeys.cancel.localize,
+                    style: Styles.smallText(color: AppColors.whiteColor)),
+              ),
+            ),
+            Sizer(),
+            Expanded(
+              child: CustomElevatedButton(
+                onPressed: () async {
+                  // await context.read<CustomPageCubit>().updateActivate(false);
+                  // // Restart.restartApp();
+                  // Phoenix.rebirth(context);
+                  showAnimatedDialog(
+                    context,
+                    AlertDialog(
+                      content:Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Label(
+                              text: 'Restart to Apply',
+                              style: Styles.headerText(fontWeight: FontWeight.w400)),
+                          const Sizer(),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: AppButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  label: LocaleKeys.cancel.localize,
+                                ),
+                              ),
+                              const Sizer(width: 16,),
+                              Expanded(
+                                child: AppButton(
+                                  backColor: AppColors.PRIMARY_COLOR,
+                                  onPressed: () {
+                                    context
+                                        .read<CustomPageCubit>()
+                                        .updateActivate(true);
+                                    Restart.restartApp();
+                                  },
+                                  label: 'Restart',
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+                child: Text(
+                  LocaleKeys.yes.localize,
+                  style: Styles.smallText(color: AppColors.whiteColor),
                 ),
               ),
-              Sizer(),
-              Expanded(
-                child: CustomElevatedButton(
-                  onPressed: () async {
-                    await context.read<CustomPageCubit>().updateActivate(false);
-                    // Restart.restartApp();
-                    Phoenix.rebirth(context);
-                  },
-                  child: Text(
-                    LocaleKeys.yes.localize,
-                    style: Styles.smallText(color: AppColors.whiteColor),
-                  ),
-                ),
-              ),
+            ),
           ])
         ],
       ),
@@ -766,27 +981,21 @@ class MainCategoriesListView extends StatelessWidget {
               );
             }
           },
-          child: MainCategoryBanner(
-            category: state.customPage![index],
-            onFavorite: () async {
-              var result = await controller
-                  .toggleFavoriteMedicalService(state.customPage![index].id);
-              print("result$result");
-              return result;
-            },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: MainCategoryBanner(
+              category: state.customPage![index],
+              onFavorite: () async {
+                var result = await controller
+                    .toggleFavoriteMedicalService(state.customPage![index].id);
+                print("result$result");
+                return result;
+              },
+            ),
           ),
         );
       },
       separatorBuilder: (BuildContext context, int index) => const Sizer(),
     );
-  }
-}
-
-class SliverGridView extends StatelessWidget {
-  const SliverGridView({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column();
   }
 }

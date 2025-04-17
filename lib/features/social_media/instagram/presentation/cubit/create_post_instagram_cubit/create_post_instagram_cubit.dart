@@ -119,6 +119,10 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
 
   Future<void> loadImages(context) async {
     emit(state.copyWith(status: CreatePostInstagramStates.loading));
+  }
+
+  Future<void> loadImages2(context) async {
+    emit(state.copyWith(status: CreatePostInstagramStates.loading));
     final hasPermission = await _requestPermission();
     if (hasPermission) {
       final List<AssetEntity> initialImages = await _fetchAllImages(0, 80);
@@ -149,6 +153,7 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
 
   Future<List<AssetEntity>> _fetchAllImages(int page, int pageSize) async {
     final List<AssetPathEntity> albums = await PhotoManager.getAssetPathList(
+      onlyAll: true,
       // type: RequestType.fromTypes([RequestType.image, RequestType.video]), // جلب الصور فقط
       type: RequestType.image,
     );

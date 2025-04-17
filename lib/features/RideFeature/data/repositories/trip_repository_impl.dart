@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/accept_offer_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/trips_response_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_auto_accept_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_price_entity.dart';
@@ -46,6 +47,10 @@ class TripRepositoryImpl implements TripRepository {
   Future<Either<Failure, bool>> createNewOffer(CreateNewOfferDashboardUsecaseParam params) async{
     return await remoteDataSource.createNewOffer(params);
   }
+  @override
+  Future<Either<Failure, bool>> createNewOfferNonSocket(CreateNewOfferDashboardUsecaseParam params) async{
+    return await remoteDataSource.createNewOfferNonSocket(params);
+  }
 
   @override
   Future<Either<Failure, bool>> createDriverRating(CreateUpdateDriverRatingUsecaseParam params) async{
@@ -54,6 +59,11 @@ class TripRepositoryImpl implements TripRepository {
   @override
   Future<Either<Failure, bool>> updateDriverRating(CreateUpdateDriverRatingUsecaseParam params) async{
    return await remoteDataSource.updateDriverRating(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> acceptTrip(String params) async{
+   return await remoteDataSource.acceptTrip(params);
   }
 
   @override
@@ -69,6 +79,16 @@ class TripRepositoryImpl implements TripRepository {
   @override
   void listenToUpdateTripPrice(Function(UpdateTripPriceEntity trip) params) {
     remoteDataSource.listenToUpdateTripPrice(params);
+  }
+
+  @override
+  void listenToNewTrip(Function(AvailableRideTripEntity trip) params) {
+    remoteDataSource.listenToNewTrip(params);
+  }
+
+  @override
+  void listenToRemoveTrip(Function(String tripId) params) {
+    remoteDataSource.listenToRemoveTrip(params);
   }
 
 }

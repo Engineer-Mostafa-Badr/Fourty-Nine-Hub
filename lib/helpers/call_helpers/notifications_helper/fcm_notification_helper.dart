@@ -5,12 +5,12 @@ import 'package:either_dart/either.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/services.dart';
-import 'package:fourtyninehub/firebase_options.dart';
-import 'package:fourtyninehub/helpers/call_helpers/call_helper/call_with_notification_helper.dart';
-import 'package:fourtyninehub/helpers/call_helpers/notifications_helper/send_notification_params.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import '../call_helper/call_with_notification_helper.dart';
+import 'send_notification_params.dart';
+import '../../../service_locator/service_locator.dart';
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:http/http.dart';
+import '../../../firebase_options.dart';
 
 abstract class FcmNotificationHelper {
   Future<void> setup();
@@ -184,8 +184,22 @@ Future<void> _onBackgroundMessage(RemoteMessage message) async {
 
 Future<void> _handleNotification(RemoteMessage message) async {
   log('++++++++++++++notification received++ ${message.data}');
-  serviceLocator<CallWithNotificationHelper>()
-      .handleIncomingCallNotification(message.data);
+  
+  try {
+    // Using Future.delayed to ensure the app is more stable when accessing Provider
+    await Future.delayed(const Duration(milliseconds: 300));
+    
+    if (serviceLocator.isRegistered<CallWithNotificationHelper>()) {
+      serviceLocator<CallWithNotificationHelper>()
+          .handleIncomingCallNotification(message.data);
+    } else {
+      log('Warning: CallWithNotificationHelper not registered in serviceLocator');
+    }
+  } catch (e, stackTrace) {
+    // Prevent app crashes by handling the exception
+    log('Error handling notification: $e');
+    log('Stack trace: $stackTrace');
+  }
 
   // TODO: Handle other notification types
 }

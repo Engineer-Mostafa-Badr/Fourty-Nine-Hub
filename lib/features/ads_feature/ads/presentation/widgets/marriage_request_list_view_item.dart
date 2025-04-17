@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
+import 'package:fourtyninehub/features/ads_feature/ad_requests/domain/entities/ad_request_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/marriage_call_message_buttons.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcategories_cubit.dart';
@@ -11,6 +11,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+
 class MarriageRequestListViewItem extends StatelessWidget {
   const MarriageRequestListViewItem({
     super.key,
@@ -18,14 +19,14 @@ class MarriageRequestListViewItem extends StatelessWidget {
     required this.state,
   });
 
-  final AdModel marriageAds;
+  final AdRequestEntity marriageAds;
   final SubcategoriesState state;
 
   @override
   Widget build(BuildContext context) {
     return ClickableWidget(
       onTap: () {
-        context.push(Routes.ADdetails, extra: marriageAds.id);
+        context.push(Routes.ADdetails, extra: marriageAds.adId);
       },
       child: Container(
         // margin: EdgeInsets.only(bottom: 20.h),
@@ -49,7 +50,8 @@ class MarriageRequestListViewItem extends StatelessWidget {
                   Row(
                     children: [
                       ImageFromInternet(
-                        image: marriageAds.images.first,
+// TODO
+                        image: marriageAds.subCategoryId,
                         height: 40,
                         width: 40,
                         isCircle: true,
@@ -58,7 +60,7 @@ class MarriageRequestListViewItem extends StatelessWidget {
                         width: 8,
                       ),
                       Label(
-                        text: marriageAds.title,
+                        text: marriageAds.adTitle,
                         style: Styles.headerText(
                           height: 1.60,
                         ),
@@ -69,7 +71,7 @@ class MarriageRequestListViewItem extends StatelessWidget {
                     height: 4,
                   ),
                   Label(
-                    text: marriageAds.description,
+                    text: marriageAds.adDesc,
                     style: Styles.mediumText(fontSize: 24, height: 1.40),
                     maxLines: 5,
                   ),
@@ -103,7 +105,7 @@ class MarriageRequestListViewItem extends StatelessWidget {
               padding:
                   const EdgeInsets.only(left: 18, right: 18, top: 4, bottom: 8),
               child: MarriageCallMessageButtons(
-                otherUserId: marriageAds.userId ?? '',
+                otherUserId: marriageAds.adUserId ?? '',
                 subcategoryId: state
                         .subCategories?[state.subCategories?.indexWhere(
                                 (element) => element.isSelected == true) ??
@@ -111,7 +113,7 @@ class MarriageRequestListViewItem extends StatelessWidget {
                         .id ??
                     '',
                 phone: marriageAds.phone ?? '',
-                id: marriageAds.id,
+                id: marriageAds.adId,
                 hasReport: true,
               ),
             ),

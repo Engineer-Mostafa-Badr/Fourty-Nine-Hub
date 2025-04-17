@@ -66,6 +66,8 @@ abstract class SocketIOListeners {
   static const String updateTripAutoAccept = 'RIDE:UPDATED_TRIP_AUTO_ACCEPT';
   static const String updateTripPrice = 'RIDE:UPDATED_TRIP_PRICE';
   static const String acceptDriverOffer = 'RIDE:ACCEPTED_OFFER_FROM_CLIENT';
+  static const String newAvailableTrip = 'REID:NEW_AVAILABLE_TRIP';
+  static const String removeTrip = 'REMOVE_TRIP_FROM_LIST';
 }
 
 abstract class SocketIOEvents {
@@ -129,7 +131,7 @@ abstract class SocketIOEvents {
 //   initSocketConnection(userToken) async {
 //     try {
 //       socket = io(
-//           'https://49dev.com',
+//           'https://49backend.com',
 //           OptionBuilder()
 //               .setTransports(['websocket'])
 //               .disableAutoConnect()

@@ -1,22 +1,24 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:math';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/core/enums/call_enums_manager.dart';
-import 'package:fourtyninehub/features/call/domain/entities/call_data.dart';
-import 'package:fourtyninehub/features/call/domain/usecases/get_agora_token_usecase.dart';
-import 'package:fourtyninehub/features/call/presentation/controller/call_controller/call_cubit.dart';
-import 'package:fourtyninehub/features/call/presentation/controller/call_controller/call_state.dart';
-import 'package:fourtyninehub/features/call/presentation/controller/send_call_controller.dart/send_call_cubit.dart';
-import 'package:fourtyninehub/helpers/call_helpers/call_helper/call_kit_helper.dart';
-import 'package:fourtyninehub/helpers/call_helpers/notifications_helper/fcm_notification_helper.dart';
-import 'package:fourtyninehub/helpers/call_helpers/notifications_helper/send_notification_params.dart';
-import 'package:fourtyninehub/main.dart';
-import 'package:fourtyninehub/res/style/const.dart';
-import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:flutter/material.dart';
+import '../../../core/enums/call_enums_manager.dart';
+import '../../../features/call/domain/entities/call_data.dart';
+import '../../../features/call/domain/usecases/get_agora_token_usecase.dart';
+import '../../../features/call/presentation/controller/call_controller/call_cubit.dart';
+import '../../../features/call/presentation/controller/call_controller/call_state.dart';
+import '../../../features/call/presentation/controller/send_call_controller.dart/send_call_cubit.dart';
+import 'call_kit_helper.dart';
+import '../notifications_helper/fcm_notification_helper.dart';
+import '../notifications_helper/send_notification_params.dart';
+import '../../../res/style/const.dart';
+import '../../../service_locator/service_locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../main.dart';
+import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 
 class CallWithNotificationHelper {
   final FcmNotificationHelper _notificationHelper;
@@ -103,7 +105,8 @@ class CallWithNotificationHelper {
           context!.read<CallCubit>().state is HasCall &&
           (context!.read<CallCubit>().state as HasCall).callData.channel ==
               data['channel']) {
-        log('====================++++++++++++++++notification +++++++++++++++++====================');
+        print(
+            '====================++++++++++++++++notification +++++++++++++++++====================');
         context!.read<CallCubit>().endCall();
       }
       _callKitHelper.stopCalling();
@@ -114,16 +117,27 @@ class CallWithNotificationHelper {
       }
     } else if (data['action'] == CallActions.receiverAcceptedCall.name) {
       print("The Data sended for calling is $data");
-      _connectToCall(CallData.fromMap(data, true), false);
+      connectToCall(CallData.fromMap(data, true), false);
     }
   }
 
-  void _connectToCall(CallData data, bool isFromCheckComingCall) async {
+  void connectToCall(CallData data, bool isFromCheckComingCall, {bool isFromCheckIfThereIsACall = false}) async {
+   
     if (context != null) {
+      await serviceLocator<SharedPreferences>().reload();
+
+      serviceLocator<SharedPreferences>()
+          .setString('call_data', json.encode(data.toMap(isRealCall: data.isRealCall)));
+         
       if (data.isRealCall == true.toString()) {
         if (data.isCaller) {
           context!.read<SendCallCubit>().setCallConnected();
-        }
+           print("The context is $context and the data is $data");
+        } else  if(isFromCheckIfThereIsACall){
+            context!.read<SendCallCubit>().setCallConnected();
+
+            print("Checking if there is a call for data: $data");
+          }
         context!.read<CallCubit>().startCall(data, isFromCheckComingCall);
       } else {
         context!.read<CallCubit>().startCall(data, isFromCheckComingCall);
@@ -145,7 +159,7 @@ class CallWithNotificationHelper {
               json.encode(data.toMap(isRealCall: true.toString())));
         } else {
           print("accept call data $data");
-          _connectToCall(data, true);
+          connectToCall(data, true);
         }
         sendActionNotification(
           data,
@@ -180,7 +194,9 @@ class CallWithNotificationHelper {
   }) async {
     final cubit = context.read<SendCallCubit>();
     cubit.setCallLoading();
-
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
+    final random = Random().nextInt(10000);
+    final id = 'room_${timestamp}_$random';
     final callData = CallData(
       isRealCall: isRealCall,
       callType: callType,
@@ -189,6 +205,7 @@ class CallWithNotificationHelper {
       uid: uid,
       zegoAppId: zegoAppId.toString(),
       zegoAppSign: zegoAppSign,
+      zegoRoomId: id,
       callerName: callerName,
       callerImage: callerImage,
       receiverImage: receiverImage,
@@ -247,7 +264,8 @@ class CallWithNotificationHelper {
               );
             },
           );
-        } else if (serviceType == 'zego') {
+        } else if (serviceType == 'zegocloud') {
+          print('I am in zego call');
           final notificationParams = SendNotificationParams(
             to: receiverToken,
             additionalData: {

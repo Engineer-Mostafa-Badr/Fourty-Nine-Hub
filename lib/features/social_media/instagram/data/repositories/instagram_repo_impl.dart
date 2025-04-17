@@ -3,10 +3,13 @@ import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/social_media/instagram/data/models/instagram_post_data_model.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/entities/comment_instagram_data_entiry.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/followers_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/following_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/reel_instagram_data_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/user_tag_entity.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/add_comment_use_case.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/delete_comment_use_case.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_user_media_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_reels_usecase.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
@@ -74,5 +77,21 @@ class InstagramRepoImpl implements InstagramRepo {
   @override
   Future<Either<Failure, List<UserTagEntity>>> getUserTag(String username) {
     return _remoteDataSource.getUserTag(username);
+  }
+
+  @override
+  Future<Either<Failure, CommentInstagramDataEntiry>> getComment(
+      String postId) {
+    return _remoteDataSource.getComment(postId);
+  }
+
+  @override
+  Future<Either<Failure, bool>> addComment(AddCommentParams params) {
+    return _remoteDataSource.addComment(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteComment(DeleteCommentParams params) {
+    return _remoteDataSource.deleteComment(params);
   }
 }
