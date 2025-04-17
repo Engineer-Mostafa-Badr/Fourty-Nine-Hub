@@ -20,6 +20,7 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
+import '../../../../../service_locator/service_locator.dart';
 import '../widgets/cards/favourite_ads_card.dart';
 
 import 'package:flutter/material.dart';
@@ -58,11 +59,13 @@ class _HealthViewState extends State<HealthView> {
   bool _showHistory = false;
   bool _showCurrent = false;
 
+// When buttons are clicked:
   void _toggleView(String viewType) {
+    final cubit = context.read<HealthCubit>();
+
     setState(() {
       if (viewType == 'favourite') {
         _showFavourite = !_showFavourite;
-        // Ensure only one view is shown at a time
         if (_showFavourite) {
           _showHistory = false;
           _showCurrent = false;
@@ -72,12 +75,14 @@ class _HealthViewState extends State<HealthView> {
         if (_showHistory) {
           _showFavourite = false;
           _showCurrent = false;
+          cubit.switchBookingType('history');
         }
       } else if (viewType == 'current') {
         _showCurrent = !_showCurrent;
         if (_showCurrent) {
           _showFavourite = false;
           _showHistory = false;
+          cubit.switchBookingType('current');
         }
       }
     });
@@ -167,33 +172,24 @@ class _HealthViewState extends State<HealthView> {
 
               // Current Booking view
               if (_showCurrent)
-                const Column(
-                  children: [
-                    CurrentBookingCard(
-                      title: 'Ibrahim',
-                      isSubscribed: false,
-                    ),
-                    CurrentBookingCard(
-                      title: 'Ibrahim',
-                      isSubscribed: false,
-                    ),
-                  ],
+                BlocProvider(
+                  create: (context) => serviceLocator<HealthCubit>(
+                    // Pass your dependencies here
+                  )..loadInitialBooking('current'),
+                  child: CurrentBookingsScreen(
+                    onClose: () => setState(() => _showCurrent = false),
+                  ),
                 ),
 
               // History view
               if (_showHistory)
-                const Column(
-                  children: [
-                    BookingHistoryCard(
-                      title: 'Dr.Ahmed Ibrahim',
-                      isSubscribed: true,
-                    ),
-                    BookingHistoryCard(
-                      title: 'Dr.Ahmed Ibrahim',
-                      isSubscribed: true,
-                    ),
-                  ],
+                BlocProvider(
+                  create: (context) => serviceLocator<HealthCubit>()..loadInitialBooking('history'),
+                  child: BookingHistoryScreen(
+                    onClose: () => setState(() => _showHistory = false),
+                  ),
                 ),
+
 
               // Favourite Ads view
               if (_showFavourite)

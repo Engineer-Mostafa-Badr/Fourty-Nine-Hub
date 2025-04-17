@@ -574,6 +574,7 @@ class PremiumAndRequestButtons extends StatelessWidget {
   }) {
     return Flexible(
       child: AppButton(
+        radius: 15,
         height: 60.h,
         padding: 0,
         margin: 0,

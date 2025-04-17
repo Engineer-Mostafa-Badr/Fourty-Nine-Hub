@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -12,16 +13,108 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../domain/entities/booking_entity.dart';
+import '../../controllers/health_cubit/health_cubit.dart';
+class CurrentBookingsScreen extends StatefulWidget {
+  const CurrentBookingsScreen({super.key, this.onClose});
+  final VoidCallback? onClose;
+
+  @override
+  State<CurrentBookingsScreen> createState() => _CurrentBookingsScreenState();
+}
+
+class _CurrentBookingsScreenState extends State<CurrentBookingsScreen> {
+  late ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController()..addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      context.read<HealthCubit>().getBookings('current');
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<HealthCubit, HealthState>(
+      builder: (context, state) {
+        final cubit = context.read<HealthCubit>();
+
+        if (state.status == HealthStates.loading && cubit.currentBookings.isEmpty) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        return SizedBox(
+          height: MediaQuery.of(context).size.height * 0.8,
+          child: Column(
+            children: [
+              // if (widget.onClose != null)
+              //   Align(
+              //     alignment: Alignment.topRight,
+              //     child: IconButton(
+              //       icon: const Icon(Icons.close),
+              //       onPressed: widget.onClose,
+              //     ),
+              //   ),
+              Expanded(
+                child: cubit.currentBookings.isEmpty
+                    ? Center(
+                  child: Text(
+                    context.isArabic ? 'لا توجد حجوزات حالية' : 'No current bookings',
+                    style: Styles.headerText(
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.grey,
+                    ),
+                  ),
+                )
+                    : ListView.separated(
+                  controller: _scrollController,
+                  itemCount: cubit.currentBookings.length,
+                  itemBuilder: (context, index) {
+                    final booking = cubit.currentBookings[index];
+                    return Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: CurrentBookingCard(
+                        booking: booking,
+                      ),
+                    );
+                  },
+                  separatorBuilder: (context, index) => const Sizer(),
+                ),
+              ),
+              if (state.isLoadingMoreBooking!)
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: CircularProgressIndicator(),
+                ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+
 class CurrentBookingCard extends StatefulWidget {
-  // ignore: prefer_const_constructors_in_immutables
   const CurrentBookingCard({
     super.key,
-    required this.title,
-    required this.isSubscribed,
+    required this.booking,
   });
 
-  final String title;
-  final bool isSubscribed;
+  final BookingEntity booking;
 
   @override
   State<CurrentBookingCard> createState() => _CurrentBookingCardState();
@@ -30,13 +123,17 @@ class CurrentBookingCard extends StatefulWidget {
 class _CurrentBookingCardState extends State<CurrentBookingCard> {
   @override
   Widget build(BuildContext context) {
+    final doctor = widget.booking.doctor;
+    final address = doctor?.address;
+    final rating = doctor?.rating;
+    final subCategory = doctor?.subCategory;
+
     return Padding(
-      padding: EdgeInsets.symmetric(
-        vertical: 10.h,
-      ),
+      padding: EdgeInsets.symmetric(vertical: 10.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+
           Stack(
             children: [
               HealthCustomCard(
@@ -45,21 +142,24 @@ class _CurrentBookingCardState extends State<CurrentBookingCard> {
                 children: [
                   const Sizer(),
                   _tripCardInfoWidget(
-                    title: widget.title,
-                    icon: widget.isSubscribed
-                        ? 'assets/images/doctor_profile.jpeg'
-                        : Assets.maleUser,
+                    title: '${doctor?.firstName ?? ''} ${doctor?.lastName ?? ''}',
+                    icon: doctor?.profilePicture ?? Assets.maleUser,
+                    specialty: subCategory?.nameAr ?? subCategory?.nameEn ?? 'Specialty',
+                    date: widget.booking.day ?? 'N/A',
+                    time: widget.booking.startTime ?? 'N/A',
+                    rating: rating?.average?.toStringAsFixed(1) ?? '0.0',
                   ),
                   const Sizer(),
                   Row(
                     children: [
                       Icon(
                         Icons.location_on_sharp,
-                        color: AppColors.PRIMARY_COLOR,size: 48.h,
+                        color: AppColors.PRIMARY_COLOR,
+                        size: 48.h,
                       ),
                       const Sizer(),
                       Label(
-                        text: 'Nasr City, Cairo',
+                        text: address?.address ?? 'Address not available',
                         style: Styles.mediumText(fontWeight: FontWeight.w500),
                       )
                     ],
@@ -68,9 +168,10 @@ class _CurrentBookingCardState extends State<CurrentBookingCard> {
                   Row(
                     children: [
                       SvgPicture.asset(
-
                         Assets.cash,
-                        fit: BoxFit.cover,height: 48.h,width: 48.h,
+                        fit: BoxFit.cover,
+                        height: 48.h,
+                        width: 48.h,
                       ),
                       const Sizer(),
                       Expanded(
@@ -80,7 +181,7 @@ class _CurrentBookingCardState extends State<CurrentBookingCard> {
                         ),
                       ),
                       Label(
-                        text: '100 ${LocaleKeys.egp.localize}',
+                        text: doctor?.callsPrice ?? 'Price not available',
                         style: Styles.mediumText(fontWeight: FontWeight.w500),
                       )
                     ],
@@ -90,11 +191,12 @@ class _CurrentBookingCardState extends State<CurrentBookingCard> {
                     children: [
                       Icon(
                           Icons.watch_later_outlined,
-                          color: AppColors.black,size: 48.h
+                          color: AppColors.black,
+                          size: 48.h
                       ),
                       const Sizer(),
                       Label(
-                        text: '${context.isArabic?'وقت الانتظار':'Waiting time'}: 10 ${context.isArabic?'دقيقة':'min'}',
+                        text: '${context.isArabic?'وقت الانتظار':'Waiting time'}: ${doctor?.waitingTime ?? 'N/A'} ${context.isArabic?'دقيقة':'min'}',
                         style: Styles.mediumText(fontWeight: FontWeight.w500),
                       )
                     ],
@@ -102,7 +204,7 @@ class _CurrentBookingCardState extends State<CurrentBookingCard> {
                   const Sizer(),
                   HealthCardButtonsSection(
                     isButton: false,
-                    isSubscribed: widget.isSubscribed,
+                    isSubscribed: doctor?.isPremium ?? false,
                     buttonTitle: '',
                     onTap: (){},
                   ),
@@ -116,9 +218,13 @@ class _CurrentBookingCardState extends State<CurrentBookingCard> {
     );
   }
 
-  _tripCardInfoWidget({
+  Widget _tripCardInfoWidget({
     required String title,
     required String icon,
+    required String specialty,
+    required String date,
+    required String time,
+    required String rating,
   }) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -134,7 +240,13 @@ class _CurrentBookingCardState extends State<CurrentBookingCard> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
                   ),
-                  child: Image.asset(
+                  child: icon.startsWith('http')
+                      ? Image.network(
+                    icon,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => Image.asset(Assets.maleUser),
+                  )
+                      : Image.asset(
                     icon,
                     fit: BoxFit.cover,
                   ),
@@ -143,20 +255,25 @@ class _CurrentBookingCardState extends State<CurrentBookingCard> {
               ],
             ),
             Positioned(
-                top: 0,
-                right: 0,
-                child: Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.cF5F5F5,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                        child: Row(children: [
-                          SvgPicture.asset(Assets.star2, width: 8, height: 8),
-                          const Sizer(width: 4),
-                          Label(text: '4.4', style: Styles.smallText())
-                        ]))))
+              top: 0,
+              right: 0,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: AppColors.cF5F5F5,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                  child: Row(
+                      children: [
+                        SvgPicture.asset(Assets.star2, width: 8, height: 8),
+                        const Sizer(width: 4),
+                        Label(text: rating, style: Styles.smallText())
+                      ]
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
         const Sizer(),
@@ -166,32 +283,33 @@ class _CurrentBookingCardState extends State<CurrentBookingCard> {
             children: [
               Label(
                 text: title,
-                style:
-                Styles.headerText(fontWeight: FontWeight.w600, fontSize: 32),
+                style: Styles.headerText(fontWeight: FontWeight.w600, fontSize: 32),
               ),
-              if (widget.isSubscribed)
-                Label(
-                  text: 'Ear/Nose',
-                  style: Styles.mediumText(),
-                )
+              Label(
+                text: specialty,
+                style: Styles.mediumText(),
+              )
             ],
           ),
         ),
         Column(
           children: [
             Label(
-              text: '20/01/2025',
-              style:
-              Styles.mediumText(),
+              text: date,
+              style: Styles.mediumText(),
             ),
-              Label(
-                text: '07:00 PM',
-                style: Styles.mediumText(),
-              )
+            Label(
+              text: time,
+              style: Styles.mediumText(),
+            )
           ],
         )
       ],
     );
   }
-
 }
+
+
+
+
+

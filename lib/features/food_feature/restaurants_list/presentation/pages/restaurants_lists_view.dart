@@ -106,7 +106,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
       children: [
         const MealBanner(),
         // if (!(state.isResturant?.isRestaurant ?? false))
-          _buildRegisterRestaurantPrompt(state),
+        _buildRegisterRestaurantPrompt(state),
         const Sizer(),
         // if ((state.isResturant?.isRestaurant ?? false) &&
         //     (state.isResturant?.approved ?? false))
@@ -127,9 +127,11 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
         if (_showExpire)
           BlocProvider(
             key: ValueKey("expired-${DateTime.now().millisecondsSinceEpoch}"),
-            create: (context) => serviceLocator<RestaurantsCubit>()..loadInitialExpiredOrders(),
+            create: (context) =>
+                serviceLocator<RestaurantsCubit>()..loadInitialExpiredOrders(),
             child: RestaurantExpiredRequestsScreen(
-              key: ValueKey("expired-screen-${DateTime.now().millisecondsSinceEpoch}"),
+              key: ValueKey(
+                  "expired-screen-${DateTime.now().millisecondsSinceEpoch}"),
               onClose: () => setState(() => _showExpire = false),
             ),
           ),
@@ -236,11 +238,12 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
       ],
     );
   }
+
   Widget _buildRegisterRestaurantPrompt(RestaurantsListState state) {
     // return CustomApproveMealButton(text:  LocaleKeys.serveClientsByClickRegister.tr() ,onPressed: (){},);
     //        if (!(state.isResturant?.isRestaurant ?? false))
     return Padding(
-      padding: EdgeInsetsDirectional.symmetric(horizontal: 0,vertical: 8),
+      padding: EdgeInsetsDirectional.symmetric(horizontal: 0, vertical: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -266,66 +269,67 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
             // },
             child: Stack(
               children: [
-
-
                 Container(
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: state.isResturant?.isRestaurant == false
                           ? [
-                        Color(0xFF0B1035),
-                        Color(0xFF161F68),
-                        Color(0xFF1B2781),
-                        Color(0xFF1E2B8E),
-                        Color(0xFF1F2D95),
-                        Color(0xFF0B1035),
-                      ]
+                              Color(0xFF0B1035),
+                              Color(0xFF161F68),
+                              Color(0xFF1B2781),
+                              Color(0xFF1E2B8E),
+                              Color(0xFF1F2D95),
+                              Color(0xFF0B1035),
+                            ]
                           : [
-                        Color(0xFFF33D49),
-                        Color(0xFFC0303A),
-                        Color(0xFFA72A32),
-                        Color(0xFF9A272E),
-                        Color(0xFF93252C),
-                        Color(0xFF90242B),
-                      ],
+                              Color(0xFFF33D49),
+                              Color(0xFFC0303A),
+                              Color(0xFFA72A32),
+                              Color(0xFF9A272E),
+                              Color(0xFF93252C),
+                              Color(0xFF90242B),
+                            ],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
                     borderRadius: BorderRadius.circular(15),
                   ),
-
                   child: ElevatedButton(
                     onPressed: (state.isResturant?.approved == false)
                         ? null // Disabled
                         : (state.isResturant?.approved == true)
-                        ? () async {
-                      var result = await context.push(
-                        Routes.RestaurantDashboard,
-                        extra: state.isResturant!.restaurantId!,
-                      );
-                      if (result == true) {
-                        context.read<RestaurantsCubit>().loadData();
-                      }
-                    }
-                        : () {
-                      if (context.read<UserCubit>().isLoggedIn) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                BlocProvider<CreateRestaurantCubit>(
-                                  create: (context) => serviceLocator<CreateRestaurantCubit>()..loadData(),
-                                  child: CreateRestaurantForm(
-                                    from: 'create',
-                                    restaurantId: state.isResturant?.restaurantId ?? '',
-                                  ),
-                                ),
-                          ),
-                        );
-                      } else {
-                        context.push(Routes.REGISTER);
-                      }
-                    },
+                            ? () async {
+                                var result = await context.push(
+                                  Routes.RestaurantDashboard,
+                                  extra: state.isResturant!.restaurantId!,
+                                );
+                                if (result == true) {
+                                  context.read<RestaurantsCubit>().loadData();
+                                }
+                              }
+                            : () {
+                                if (context.read<UserCubit>().isLoggedIn) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          BlocProvider<CreateRestaurantCubit>(
+                                        create: (context) => serviceLocator<
+                                            CreateRestaurantCubit>()
+                                          ..loadData(),
+                                        child: CreateRestaurantForm(
+                                          from: 'create',
+                                          restaurantId:
+                                              state.isResturant?.restaurantId ??
+                                                  '',
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  context.push(Routes.REGISTER);
+                                }
+                              },
                     // onPressed: state.isResturant?.approved == false  ? ()async{
                     //   var result = await context.push(Routes.RestaurantDashboard,
                     //       extra: state.isResturant!.restaurantId!);
@@ -365,24 +369,29 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                       ),
                       child: Container(
                         alignment: Alignment.center,
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 12.0),
                         child: Text(
-                          state.isResturant?.isRestaurant == false  ?  LocaleKeys.serveClientsByClickRegister.tr() : LocaleKeys.restaurantMode.localize,
+                          state.isResturant?.isRestaurant == false
+                              ? LocaleKeys.serveClientsByClickRegister.tr()
+                              : LocaleKeys.restaurantMode.localize,
                           style: Styles.mediumText(color: Colors.white),
                         ),
                       ),
                     ),
                   ),
                 ),
-                if (state.isResturant?.approved == false && state.isResturant?.approved != null)
-                Positioned.fill(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.5), // Optional opacity for transparency
-                      borderRadius: BorderRadius.circular(15),
+                if (state.isResturant?.approved == false &&
+                    state.isResturant?.approved != null)
+                  Positioned.fill(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.5),
+                        // Optional opacity for transparency
+                        borderRadius: BorderRadius.circular(15),
+                      ),
                     ),
                   ),
-                ),
               ],
             ),
 
@@ -399,14 +408,14 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
             state.isResturant?.approved == true
                 ? const SizedBox() // show SizedBox if approved is true
                 : Label(
-              style: const TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 14,
-                color: AppColors.PRIMARY_COLOR_DARK,
-              ),
-              textAlign: TextAlign.end,
-              text: LocaleKeys.waitingApproval.localize,
-            ),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                      color: AppColors.PRIMARY_COLOR_DARK,
+                    ),
+                    textAlign: TextAlign.end,
+                    text: LocaleKeys.waitingApproval.localize,
+                  ),
 
           // if(state.isResturant?.approved != null)
           //   Label(
@@ -430,7 +439,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
               MaterialPageRoute(
                 builder: (context) => BlocProvider<CreateRestaurantCubit>(
                   create: (context) =>
-                  serviceLocator<CreateRestaurantCubit>()..loadData(),
+                      serviceLocator<CreateRestaurantCubit>()..loadData(),
                   child: CreateRestaurantForm(
                     from: 'create',
                     restaurantId: state.isResturant?.restaurantId ?? '',
@@ -451,8 +460,8 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
         ),
       ),
     );
-
   }
+
   // Widget _buildRegisterRestaurantPrompt(RestaurantsListState state) {
   //   // return CustomApproveMealButton(text:  LocaleKeys.serveClientsByClickRegister.tr() ,onPressed: (){},);
   //   return Padding(
@@ -527,46 +536,90 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                   )),
             ],
           ),
-          SizedBox(width: 5,),
-          Expanded(
-            child: InkWell(
-              onTap: () {
-                if (context.read<UserCubit>().isLoggedIn) {
-                  setState(() {
-                    _showLog = !_showLog;
-                    if (_showLog) {
-                      _showSearch = false;
-                      _showExpire = false;
-                    }
-                    ;
-                  });
-                } else {
-                  context.push(Routes.LOGIN);
-                }
-              },
-              child: Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(6),
-                decoration: BoxDecoration(
-                    border: Border.all(
-                        color: _showLog
-                            ? AppColors.PRIMARY_COLOR_DARK
-                            : AppColors.PRIMARY_COLOR),
-                    borderRadius: BorderRadius.circular(15),
-                    color:
-                    _showLog ? AppColors.PRIMARY_COLOR : AppColors.cD9D9D9),
-                child: Label(
-                  text: LocaleKeys.requestLog.localize,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      color: _showLog ? AppColors.whiteColor : AppColors.black),
-                ),
-              ),
-            ),
+          SizedBox(
+            width: 5,
           ),
-          SizedBox(width: 5,),
+          BlocBuilder<RestaurantsCubit, RestaurantsListState>(
+            builder: (context, state) {
+              return Expanded(
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        if (context.read<UserCubit>().isLoggedIn) {
+                          setState(() {
+                            _showLog = !_showLog;
+                            if (_showLog) {
+                              _showSearch = false;
+                              _showExpire = false;
+                            }
+                          });
+                        } else {
+                          context.push(Routes.LOGIN);
+                        }
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(6),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: _showLog
+                                ? AppColors.PRIMARY_COLOR_DARK
+                                : AppColors.PRIMARY_COLOR,
+                          ),
+                          borderRadius: BorderRadius.circular(15),
+                          color: _showLog
+                              ? AppColors.PRIMARY_COLOR
+                              : AppColors.cD9D9D9,
+                        ),
+                        child: Label(
+                          text: LocaleKeys.requestLog.localize,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: _showLog
+                                ? AppColors.whiteColor
+                                : AppColors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      top: -10,
+                      right: -6,
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: const BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                        constraints: const BoxConstraints(
+                          minWidth: 20,
+                          minHeight: 20,
+                        ),
+                        child: Center(
+                          child: Text(
+                            '${context.read<RestaurantsCubit>().state.reqCount?.count ?? "0"}',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+          SizedBox(
+            width: 5,
+          ),
           Expanded(
             child: InkWell(
               onTap: () {
@@ -606,13 +659,12 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
               ),
             ),
           ),
-
         ],
       ),
     );
   }
-
 }
+
 class CustomApproveMealButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
@@ -628,7 +680,9 @@ class CustomApproveMealButton extends StatelessWidget {
     required this.onPressed,
     this.isDisabled = false,
     this.isRed = false,
-    this.isPending = false, this.status = 'pending', this.onTap,
+    this.isPending = false,
+    this.status = 'pending',
+    this.onTap,
   });
 
   @override
@@ -646,21 +700,21 @@ class CustomApproveMealButton extends StatelessWidget {
                   gradient: LinearGradient(
                     colors: isRed
                         ? [
-                      AppColors.cF33D49,
-                      AppColors.cC0303A,
-                      AppColors.cA72A32,
-                      AppColors.c9A272E,
-                      AppColors.c93252C,
-                      AppColors.c90242B,
-                    ]
+                            AppColors.cF33D49,
+                            AppColors.cC0303A,
+                            AppColors.cA72A32,
+                            AppColors.c9A272E,
+                            AppColors.c93252C,
+                            AppColors.c90242B,
+                          ]
                         : [
-                      AppColors.c0B1035,
-                      AppColors.c161F68,
-                      AppColors.c1B2781,
-                      AppColors.c1E2B8E,
-                      AppColors.c1F2D95,
-                      AppColors.c0B1035,
-                    ],
+                            AppColors.c0B1035,
+                            AppColors.c161F68,
+                            AppColors.c1B2781,
+                            AppColors.c1E2B8E,
+                            AppColors.c1F2D95,
+                            AppColors.c0B1035,
+                          ],
                   ),
                   borderRadius: BorderRadius.circular(15),
                   boxShadow: [
@@ -672,7 +726,6 @@ class CustomApproveMealButton extends StatelessWidget {
                   ],
                 ),
               ),
-
               if (isDisabled)
                 Container(
                   height: 50,
@@ -699,76 +752,69 @@ class CustomApproveMealButton extends StatelessWidget {
                       color: isDisabled ? Colors.grey[400] : Colors.white,
                       shadows: isDisabled
                           ? [
-                        const Shadow(
-                          color: Color(0xFFFFFFFF),
-                          offset: Offset(0, 1),
-                          blurRadius: 4,
-                        ),
-                        const Shadow(
-                          color: Color(0xFFD9D9D9),
-                          offset: Offset(1, 0),
-                          blurRadius: 4,
-
-                        ),
-                        const Shadow(
-                          color: Color(0xFFFFFFFF),
-                          offset: Offset(0, 0),
-                          blurRadius: 4,
-                        ),
-                        const Shadow(
-                          color: Color(0xFFD9D9D9),
-                          offset: Offset(0, 0),
-                          blurRadius: 4,
-
-                        ),
-                        const Shadow(
-                          color: Color(0xFF3C3C43),
-                          offset: Offset(0, 0),
-                          blurRadius: 4,
-
-                        ),
-                        const Shadow(
-                          color: Color(0xFF818181),
-                          offset: Offset(0, 0),
-                          blurRadius: 4,
-
-                        ),
-                      ] :  [
-                        const Shadow(
-                          color: Color(0xFFFFFFFF),
-                          offset: Offset(0, 1),
-                          blurRadius: 4,
-                        ),
-                        const Shadow(
-                          color: Color(0xFFD9D9D9),
-                          offset: Offset(1, 0),
-                          blurRadius: 4,
-
-                        ),
-                        const Shadow(
-                          color: Color(0xFFFFFFFF),
-                          offset: Offset(0, 0),
-                          blurRadius: 4,
-                        ),
-                        const Shadow(
-                          color: Color(0xFFD9D9D9),
-                          offset: Offset(0, 0),
-                          blurRadius: 4,
-
-                        ),
-                        const Shadow(
-                          color: Color(0xFF3C3C43),
-                          offset: Offset(0, 0),
-                          blurRadius: 4,
-
-                        ),
-                        const Shadow(
-                          color: Color(0xFF818181),
-                          offset: Offset(0, 0),
-                          blurRadius: 4,
-
-                        ),
-                      ],
+                              const Shadow(
+                                color: Color(0xFFFFFFFF),
+                                offset: Offset(0, 1),
+                                blurRadius: 4,
+                              ),
+                              const Shadow(
+                                color: Color(0xFFD9D9D9),
+                                offset: Offset(1, 0),
+                                blurRadius: 4,
+                              ),
+                              const Shadow(
+                                color: Color(0xFFFFFFFF),
+                                offset: Offset(0, 0),
+                                blurRadius: 4,
+                              ),
+                              const Shadow(
+                                color: Color(0xFFD9D9D9),
+                                offset: Offset(0, 0),
+                                blurRadius: 4,
+                              ),
+                              const Shadow(
+                                color: Color(0xFF3C3C43),
+                                offset: Offset(0, 0),
+                                blurRadius: 4,
+                              ),
+                              const Shadow(
+                                color: Color(0xFF818181),
+                                offset: Offset(0, 0),
+                                blurRadius: 4,
+                              ),
+                            ]
+                          : [
+                              const Shadow(
+                                color: Color(0xFFFFFFFF),
+                                offset: Offset(0, 1),
+                                blurRadius: 4,
+                              ),
+                              const Shadow(
+                                color: Color(0xFFD9D9D9),
+                                offset: Offset(1, 0),
+                                blurRadius: 4,
+                              ),
+                              const Shadow(
+                                color: Color(0xFFFFFFFF),
+                                offset: Offset(0, 0),
+                                blurRadius: 4,
+                              ),
+                              const Shadow(
+                                color: Color(0xFFD9D9D9),
+                                offset: Offset(0, 0),
+                                blurRadius: 4,
+                              ),
+                              const Shadow(
+                                color: Color(0xFF3C3C43),
+                                offset: Offset(0, 0),
+                                blurRadius: 4,
+                              ),
+                              const Shadow(
+                                color: Color(0xFF818181),
+                                offset: Offset(0, 0),
+                                blurRadius: 4,
+                              ),
+                            ],
                     ),
                   ),
                 ),
@@ -777,10 +823,15 @@ class CustomApproveMealButton extends StatelessWidget {
           ),
           const Sizer(),
           Text(
-            status==RegistrationStatus.rejected.status?"rejected"
-                :status==RegistrationStatus.pending.status?"waiting for approval"
-                :status==RegistrationStatus.initial.status?"Pending":'',
-            style: const TextStyle(color: Colors.red),)
+            status == RegistrationStatus.rejected.status
+                ? "rejected"
+                : status == RegistrationStatus.pending.status
+                    ? "waiting for approval"
+                    : status == RegistrationStatus.initial.status
+                        ? "Pending"
+                        : '',
+            style: const TextStyle(color: Colors.red),
+          )
         ],
       ),
     );
