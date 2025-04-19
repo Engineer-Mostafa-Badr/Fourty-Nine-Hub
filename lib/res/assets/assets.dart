@@ -432,4 +432,6 @@ abstract class Assets {
   static String ellipsis = "assets/icons/ellipsis.svg";
   static String reelBar = "assets/icons/reelBar.svg";
   static String grid = "assets/icons/grid.png";
+  // simple loadings
+  static String circleLoader= 'assets/lottie/loader.json';
 }

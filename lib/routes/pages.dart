@@ -1677,7 +1677,8 @@ class AppPages {
                             BlocProvider<BookDoctorAppointmentCubit>(
                                 create: (_) => serviceLocator(),
                                 child: SuccessfulBookingScreen(
-
+                                  doctorDetailsCubit:
+                                  (state.extra) as DoctorDetailsCubit,
                                 )
                                 )),
                     GoRoute(
@@ -1764,7 +1765,7 @@ class AppPages {
                   builder: (context, state) => MultiBlocProvider(
                         providers: [
                           BlocProvider<RestaurantsCubit>(
-                            create: (context) => serviceLocator()..loadData(),
+                            create: (context) => serviceLocator()..loadData()..getReqCount(),
                           ),
                         ],
                         child: const RestaurantsListsView(),

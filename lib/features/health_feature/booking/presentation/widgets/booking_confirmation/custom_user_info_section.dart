@@ -9,10 +9,8 @@ import 'custom_booking_info_row.dart';
 
 class CustomUserInfoSection extends StatelessWidget {
   final String patientName;
-
   final String patientPhone;
   bool isBookingForSomeoneElse = false;
-
   final TextEditingController nameController;
   final TextEditingController phoneController;
   FocusNode? currentFocusNode;
@@ -20,8 +18,9 @@ class CustomUserInfoSection extends StatelessWidget {
   final String Time;
   final String location;
   final String fees;
-
   final BuildContext context;
+
+
 
   CustomUserInfoSection(
       {required this.context,
@@ -84,7 +83,6 @@ class CustomUserInfoSection extends StatelessWidget {
         CustomBookingInfoRow(
           context: context,
           icon: Icons.access_time,
-          // title: '02:00 PM : 11:55 PM Sunday 06 April',
           title: Time,
         ),
 

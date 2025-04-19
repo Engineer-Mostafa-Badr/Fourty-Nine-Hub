@@ -32,31 +32,48 @@ class CreateDoctorLicensePhotoPicker extends StatelessWidget {
           children: [
             Column(
               children: [
+                // BlocBuilder<CreateDoctorCubit, CreateDoctorState>(
+                //   buildWhen: (previous, current) =>
+                //       current is CreateDoctorUploadPracticingFrontImage ||
+                //       current is CreateDoctorInitial,
+                //   builder: (context, state) {
+                //     return CustomImagePickerHealth(
+                //       isUploaded:
+                //           state is CreateDoctorUploadPracticingFrontImage,
+                //       onTap: () async {
+                //         await createDoctorCubit.uploadPracticingFrontImage(
+                //             context: context);
+                //       },
+                //     );
+                //     // if (state is CreateDoctorUploadPracticingFrontImage) {
+                //     //   return ImagePickerPlaceholder(
+                //     //     image: Image.file(
+                //     //       File(state.file.path),
+                //     //     ),
+                //     //   );
+                //     // }
+                //     // return ImagePickerPlaceholder(
+                //     //   title: context.isArabic ? 'الوجه' : 'Front',
+                //     // );
+                //   },
+                // ),
                 BlocBuilder<CreateDoctorCubit, CreateDoctorState>(
                   buildWhen: (previous, current) =>
-                      current is CreateDoctorUploadPracticingFrontImage ||
+                  current is CreateDoctorUploadPracticingFrontImage ||
                       current is CreateDoctorInitial,
                   builder: (context, state) {
                     return CustomImagePickerHealth(
-                      isUploaded:
-                          state is CreateDoctorUploadPracticingFrontImage,
+                      isUploaded: state is CreateDoctorUploadPracticingFrontImage,
+                      imageFile: state is CreateDoctorUploadPracticingFrontImage
+                          ? File(state.file.path)
+                          : null,
                       onTap: () async {
-                        await createDoctorCubit.uploadPracticingFrontImage(
-                            context: context);
+                        await createDoctorCubit.uploadPracticingFrontImage(context: context);
                       },
                     );
-                    // if (state is CreateDoctorUploadPracticingFrontImage) {
-                    //   return ImagePickerPlaceholder(
-                    //     image: Image.file(
-                    //       File(state.file.path),
-                    //     ),
-                    //   );
-                    // }
-                    // return ImagePickerPlaceholder(
-                    //   title: context.isArabic ? 'الوجه' : 'Front',
-                    // );
                   },
                 ),
+
                 const SizedBox(
                   height: 4,
                 ),
@@ -74,31 +91,48 @@ class CreateDoctorLicensePhotoPicker extends StatelessWidget {
             ),
             Column(
               children: [
+                // BlocBuilder<CreateDoctorCubit, CreateDoctorState>(
+                //   buildWhen: (previous, current) =>
+                //       current is CreateDoctorUploadPracticingBehindImage ||
+                //       current is CreateDoctorInitial,
+                //   builder: (context, state) {
+                //     return CustomImagePickerHealth(
+                //       isUploaded:
+                //           state is CreateDoctorUploadPracticingBehindImage,
+                //       onTap: () async {
+                //         await createDoctorCubit.uploadPracticingBehindImage(
+                //             context: context);
+                //       },
+                //     );
+                //     // if (state is CreateDoctorUploadPracticingFrontImage) {
+                //     //   return ImagePickerPlaceholder(
+                //     //     image: Image.file(
+                //     //       File(state.file.path),
+                //     //     ),
+                //     //   );
+                //     // }
+                //     // return ImagePickerPlaceholder(
+                //     //   title: context.isArabic ? 'الوجه' : 'Front',
+                //     // );
+                //   },
+                // ),
                 BlocBuilder<CreateDoctorCubit, CreateDoctorState>(
                   buildWhen: (previous, current) =>
-                      current is CreateDoctorUploadPracticingBehindImage ||
+                  current is CreateDoctorUploadPracticingBehindImage ||
                       current is CreateDoctorInitial,
                   builder: (context, state) {
                     return CustomImagePickerHealth(
-                      isUploaded:
-                          state is CreateDoctorUploadPracticingBehindImage,
+                      isUploaded: state is CreateDoctorUploadPracticingBehindImage,
+                      imageFile: state is CreateDoctorUploadPracticingBehindImage
+                          ? File(state.file.path)
+                          : null,
                       onTap: () async {
-                        await createDoctorCubit.uploadPracticingBehindImage(
-                            context: context);
+                        await createDoctorCubit.uploadPracticingBehindImage(context: context);
                       },
                     );
-                    // if (state is CreateDoctorUploadPracticingFrontImage) {
-                    //   return ImagePickerPlaceholder(
-                    //     image: Image.file(
-                    //       File(state.file.path),
-                    //     ),
-                    //   );
-                    // }
-                    // return ImagePickerPlaceholder(
-                    //   title: context.isArabic ? 'الوجه' : 'Front',
-                    // );
                   },
                 ),
+
                 const SizedBox(
                   height: 4,
                 ),

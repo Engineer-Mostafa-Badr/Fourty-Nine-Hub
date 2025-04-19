@@ -1441,4 +1441,9 @@ class EndPoints {
   static String updateTripAutoAcceptByClient() {
     return '/ride/client/trips/auto-accept';
   }
+
+  static const getBookingCurrent = '/health/bookings';
+  static const getReqLogCount = '/food/request-logs-unseen-count';
+  static const setRequestLogSeen = '/food/set-request-is-seen/';
+
 }
