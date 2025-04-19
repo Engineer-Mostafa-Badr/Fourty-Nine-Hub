@@ -47,6 +47,10 @@ class TripRepositoryImpl implements TripRepository {
   Future<Either<Failure, bool>> createNewOffer(CreateNewOfferDashboardUsecaseParam params) async{
     return await remoteDataSource.createNewOffer(params);
   }
+  @override
+  Future<Either<Failure, bool>> createNewOfferNonSocket(CreateNewOfferDashboardUsecaseParam params) async{
+    return await remoteDataSource.createNewOfferNonSocket(params);
+  }
 
   @override
   Future<Either<Failure, bool>> createDriverRating(CreateUpdateDriverRatingUsecaseParam params) async{
@@ -55,6 +59,11 @@ class TripRepositoryImpl implements TripRepository {
   @override
   Future<Either<Failure, bool>> updateDriverRating(CreateUpdateDriverRatingUsecaseParam params) async{
    return await remoteDataSource.updateDriverRating(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> acceptTrip(String params) async{
+   return await remoteDataSource.acceptTrip(params);
   }
 
   @override
@@ -73,8 +82,13 @@ class TripRepositoryImpl implements TripRepository {
   }
 
   @override
-  void listenToNewTrip(Function(TripEntity trip) params) {
+  void listenToNewTrip(Function(AvailableRideTripEntity trip) params) {
     remoteDataSource.listenToNewTrip(params);
+  }
+
+  @override
+  void listenToRemoveTrip(Function(String tripId) params) {
+    remoteDataSource.listenToRemoveTrip(params);
   }
 
 }

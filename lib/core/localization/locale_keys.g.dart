@@ -1502,5 +1502,7 @@ abstract class  LocaleKeys {
   static const commentAdded = 'commentAdded';
   static const areYouSureYouWantToDeleteThisComment = 'areYouSureYouWantToDeleteThisComment';
   static const responseStatus = 'responseStatus';
+  static const socialExplain = 'socialExplain';
+  static const imBookingOfAnotherClient = 'imBookingOfAnotherClient';
 
 }

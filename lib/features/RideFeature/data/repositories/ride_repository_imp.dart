@@ -27,12 +27,14 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_request_
 import 'package:fourtyninehub/features/RideFeature/domain/entities/running_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/repositories/ride_repository.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_pending_trip_by_client_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/click_global_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_car_years_and_types_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/make_loading_request_trip_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_trip_auto_accept_by_client_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_categories_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_socket_location_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_trip_price_use_case.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
-import 'package:fourtyninehub/features/ride/driver_dashboard/domain/entities/driver_statistics_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/accept_trip_by_driver_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_client.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_rider.dart';
@@ -41,7 +43,6 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_activ
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_completed_trips_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_history_trips_for_rider_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_running_trips_usecase.dart';
-import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_car_years_and_types_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_location_from_address_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/partial_payment_in_trip.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/recording_trip_use_case.dart';
@@ -49,14 +50,16 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/rider_in_star
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/start_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_driver_location_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_trip_price_from_client_use_case.dart';
-import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 
 import '../../../../core/error/failure.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_available_ride_trips_use_case.dart';
-import 'package:fourtyninehub/features/RideFeature/data/models/dashboards/available_ride_trip_model.dart';
+
+import '../../domain/entities/get_offers_entity.dart';
+import '../../domain/usecases/make_non_tracking_request_trip_usecase.dart';
+
+import '../../../account_taps/my_adds/domain/entity/click_entity.dart';
 
 class RideRepositoryImplementation extends RideRepository {
-
   final RideRemoteDataSource rideRemoteDataSource;
 
   RideRepositoryImplementation(this.rideRemoteDataSource);
@@ -64,12 +67,14 @@ class RideRepositoryImplementation extends RideRepository {
   ////////////////////////////Nasr//////////////////////////
 
   @override
-  Future<Either<Failure, RideCategoryEntityUpdated>> getRideCategories(GetRideCategoriesParams params) async {
+  Future<Either<Failure, RideCategoryEntityUpdated>> getRideCategories(
+      GetRideCategoriesParams params) async {
     return await rideRemoteDataSource.getRideCategories(params);
   }
 
   @override
-  Future<Either<Failure, RideCategoryEntityUpdated>> getShippingCategories(GetRideCategoriesParams params) async {
+  Future<Either<Failure, RideCategoryEntityUpdated>> getShippingCategories(
+      GetRideCategoriesParams params) async {
     return await rideRemoteDataSource.getShippingCategories(params);
   }
 
@@ -79,27 +84,32 @@ class RideRepositoryImplementation extends RideRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> registerRideNotSpecial(RegisterRideNotSpecialEntity params) async{
+  Future<Either<Failure, bool>> registerRideNotSpecial(
+      RegisterRideNotSpecialEntity params) async {
     return await rideRemoteDataSource.registerRideNotSpecial(params);
   }
 
   @override
-  Future<Either<Failure, bool>> registerRideSpecial(RegisterRideSpecialEntity params) async{
+  Future<Either<Failure, bool>> registerRideSpecial(
+      RegisterRideSpecialEntity params) async {
     return await rideRemoteDataSource.registerRideSpecial(params);
   }
 
   @override
-  Future<Either<Failure, List<DriversInSubcategoryEntity>>> getDriversInSubcategory(String subCategoryId) async{
+  Future<Either<Failure, List<DriversInSubcategoryEntity>>>
+      getDriversInSubcategory(String subCategoryId) async {
     return await rideRemoteDataSource.getDriversInSubcategory(subCategoryId);
   }
 
   @override
-  Future<Either<Failure, RideRequestTripEntity>> requestTrip(RequestTripUseCaseParams params) async{
+  Future<Either<Failure, RideRequestTripEntity>> requestTrip(
+      RequestTripUseCaseParams params) async {
     return await rideRemoteDataSource.requestTrip(params);
   }
 
   @override
-  Future<Either<Failure, RideRequestTripEntity>> retrieveClientLatestTrip() async{
+  Future<Either<Failure, RideRequestTripEntity>>
+      retrieveClientLatestTrip() async {
     return await rideRemoteDataSource.retrieveClientLatestTrip();
   }
 
@@ -109,169 +119,207 @@ class RideRepositoryImplementation extends RideRepository {
   }
 
   @override
-  Future<Either<Failure, RideExpectedPriceEntity>> getExpectedPrice(RideExpectedPriceParams params) async {
+  Future<Either<Failure, RideExpectedPriceEntity>> getExpectedPrice(
+      RideExpectedPriceParams params) async {
     return await rideRemoteDataSource.getExpectedPrice(params);
   }
 
   @override
-  Future<Either<Failure, RideDriverStatisticsEntity>> getDriverStatistics() async {
+  Future<Either<Failure, RideDriverStatisticsEntity>>
+      getDriverStatistics() async {
     return await rideRemoteDataSource.getDriverStatistics();
   }
 
   @override
-  Future<Either<Failure, bool>> deleteRideRegistration() async{
+  Future<Either<Failure, bool>> deleteRideRegistration() async {
     return await rideRemoteDataSource.deleteRideRegistration();
   }
 
   @override
-  Future<Either<Failure, List<String>>> getRideBrands() async{
+  Future<Either<Failure, List<String>>> getRideBrands() async {
     return await rideRemoteDataSource.getRideBrands();
   }
+
   @override
-  Future<Either<Failure, List<String>>> getRideModels(String brand) async{
+  Future<Either<Failure, List<String>>> getRideModels(String brand) async {
     return await rideRemoteDataSource.getRideModels(brand);
   }
 
   @override
-  Future<Either<Failure, List<CarYearsAndTypesEntity>>> getCarYearsAndTypes(GetCarYearsAndTypesParams params) async{
+  Future<Either<Failure, List<CarYearsAndTypesEntity>>> getCarYearsAndTypes(
+      GetCarYearsAndTypesParams params) async {
     return await rideRemoteDataSource.getCarYearsAndTypes(params);
   }
 
   @override
-  Future<Either<Failure, List<RideColorEntity>>> getRideCarColors() async{
+  Future<Either<Failure, List<RideColorEntity>>> getRideCarColors() async {
     return await rideRemoteDataSource.getRideCarColors();
   }
 
   @override
-  Future<Either<Failure, List<GovernorateEntity>>> getGovernorates() async{
+  Future<Either<Failure, List<GovernorateEntity>>> getGovernorates() async {
     return await rideRemoteDataSource.getGovernorates();
   }
 
   @override
-  Future<Either<Failure, DriverInfoEntity>> getRideDriverInfo(bool refresh) async{
+  Future<Either<Failure, DriverInfoEntity>> getRideDriverInfo(
+      bool refresh) async {
     return await rideRemoteDataSource.getRideDriverInfo(refresh);
   }
 
   @override
-  Future<Either<Failure, DriverPictureOptionalEntity>> getDriverPictureOptional() async{
+  Future<Either<Failure, DriverPictureOptionalEntity>>
+      getDriverPictureOptional() async {
     return await rideRemoteDataSource.getDriverPictureOptional();
   }
 
   @override
-  Future<Either<Failure, bool>> updateDriverLocation(UpdateDriverLocationUseCaseParams params) async{
+  Future<Either<Failure, bool>> updateDriverLocation(
+      UpdateDriverLocationUseCaseParams params) async {
     return await rideRemoteDataSource.updateDriverLocation(params);
   }
 
   @override
-  Future<Either<Failure, List<RunningTripsEntity>>> getAllRunningTrips(GetAllRunningTripsUseCaseParams params) async {
+  Future<Either<Failure, List<RunningTripsEntity>>> getAllRunningTrips(
+      GetAllRunningTripsUseCaseParams params) async {
     return await rideRemoteDataSource.getAllRunningTrips(params);
   }
 
   @override
-  Future<Either<Failure, List<CompletedTripsEntity>>> getAllCompletedTrips(GetAllCompletedTripsUseCaseParams params) async {
+  Future<Either<Failure, List<CompletedTripsEntity>>> getAllCompletedTrips(
+      GetAllCompletedTripsUseCaseParams params) async {
     return await rideRemoteDataSource.getAllCompletedTrips(params);
   }
 
   @override
-  Future<Either<Failure, GetLocationFromAddressEntity>> getLocationFromAddress(GetLocationFromAddressUseCaseParams params) async {
+  Future<Either<Failure, GetLocationFromAddressEntity>> getLocationFromAddress(
+      GetLocationFromAddressUseCaseParams params) async {
     return await rideRemoteDataSource.getLocationFromAddress(params);
   }
 
   @override
-  Future<Either<Failure, bool>> acceptTripByDriver(AcceptTripByDriverUseCaseParams params) async {
+  Future<Either<Failure, bool>> acceptTripByDriver(
+      AcceptTripByDriverUseCaseParams params) async {
     return await rideRemoteDataSource.acceptTripByDriver(params);
   }
 
   @override
-  Future<Either<Failure, bool>> riderInStartLocation(RiderInStartLocationUseCaseParams params) async {
+  Future<Either<Failure, bool>> riderInStartLocation(
+      RiderInStartLocationUseCaseParams params) async {
     return await rideRemoteDataSource.riderInStartLocation(params);
   }
 
   @override
-  Future<Either<Failure, bool>> startTrip(StartTripUseCaseParams params) async{
+  Future<Either<Failure, bool>> startTrip(StartTripUseCaseParams params) async {
     return await rideRemoteDataSource.startTrip(params);
   }
 
   @override
-  Future<Either<Failure, bool>> partialPaymentInTrip(PartialPaymentInTripUseCaseParams params) async {
+  Future<Either<Failure, bool>> partialPaymentInTrip(
+      PartialPaymentInTripUseCaseParams params) async {
     return await rideRemoteDataSource.partialPaymentInTrip(params);
   }
 
   @override
-  Future<Either<Failure, bool>> completeTrip(CompleteTripUseCaseParams params) async {
+  Future<Either<Failure, bool>> completeTrip(
+      CompleteTripUseCaseParams params) async {
     return await rideRemoteDataSource.completeTrip(params);
   }
 
   @override
-  Future<Either<Failure, bool>> cancelTripByRider(CancelTripByRiderUseCaseParams params) async {
+  Future<Either<Failure, bool>> cancelTripByRider(
+      CancelTripByRiderUseCaseParams params) async {
     return await rideRemoteDataSource.cancelTripByRider(params);
   }
 
   @override
-  Future<Either<Failure, bool>> cancelTripByClient(CancelTripByClientUseCaseParams params) async {
+  Future<Either<Failure, bool>> cancelTripByClient(
+      CancelTripByClientUseCaseParams params) async {
     return await rideRemoteDataSource.cancelTripByClient(params);
   }
 
   @override
-  Future<Either<Failure, bool>> cancelPendingTripByClient(CancelPendingTripByClientUseCaseParams params) async {
+  Future<Either<Failure, bool>> cancelPendingTripByClient(
+      CancelPendingTripByClientUseCaseParams params) async {
     return await rideRemoteDataSource.cancelPendingTripByClient(params);
   }
 
   @override
-  Future<Either<Failure, bool>> recordingTrip(RecordingTripUseCaseParams params) async {
+  Future<Either<Failure, bool>> recordingTrip(
+      RecordingTripUseCaseParams params) async {
     return await rideRemoteDataSource.recordingTrip(params);
   }
 
   @override
-  Future<Either<Failure, bool>> updateTripPriceFromClient(UpdateTripPriceFromClientUseCaseParams params) async {
+  Future<Either<Failure, bool>> updateTripPriceFromClient(
+      UpdateTripPriceFromClientUseCaseParams params) async {
     return await rideRemoteDataSource.updateTripPriceFromClient(params);
   }
 
   @override
-  Future<Either<Failure, ActivityTripEntity>> getAllActivityTrips(GetAllActivityTripsUseCaseParams params) async{
+  Future<Either<Failure, ActivityTripEntity>> getAllActivityTrips(
+      GetAllActivityTripsUseCaseParams params) async {
     return await rideRemoteDataSource.getAllActivityTrips(params);
   }
 
   @override
-  Future<Either<Failure, List<HistoryTripForUserEntity>>> getAllHistoryTripsForUser() async {
+  Future<Either<Failure, List<HistoryTripForUserEntity>>>
+      getAllHistoryTripsForUser() async {
     return await rideRemoteDataSource.getAllHistoryTripsForUser();
   }
 
   @override
-  Future<Either<Failure, List<HistoryTripForRiderEntity>>> getAllHistoryTripsForRider(GetAllHistoryTripsForRiderUseCaseParams params) async {
+  Future<Either<Failure, List<HistoryTripForRiderEntity>>>
+      getAllHistoryTripsForRider(
+          GetAllHistoryTripsForRiderUseCaseParams params) async {
     return await rideRemoteDataSource.getAllHistoryTripsForRider(params);
   }
 
   @override
-  Future<Either<Failure, CostPerKmEntity>> getCostPerKm() async{
+  Future<Either<Failure, CostPerKmEntity>> getCostPerKm() async {
     return await rideRemoteDataSource.getCostPerKm();
   }
 
   @override
-  Future<Either<Failure, bool>> loadingRegister(LoadingRegisterEntity params) async {
+  Future<Either<Failure, bool>> loadingRegister(
+      LoadingRegisterEntity params) async {
     return await rideRemoteDataSource.loadingRegister(params);
   }
 
   @override
-  Future<Either<Failure, LoadingInfoEntity>> getLoadingInfo(bool refresh) async{
+  Future<Either<Failure, LoadingInfoEntity>> getLoadingInfo(
+      bool refresh) async {
     return await rideRemoteDataSource.getLoadingInfo(refresh);
   }
 
   @override
-  Future<Either<Failure, bool>> makeRequestTrip() async{
+  Future<Either<Failure, bool>> makeRequestTrip() async {
     return await rideRemoteDataSource.makeRequestTrip();
   }
 
   @override
-  Future<Either<Failure, List<AvailableRideTripEntity>>> getAvailableRideTrips(AvailableRideTripsUseCaseParams params) async {
+  Future<Either<Failure, List<AvailableRideTripEntity>>> getAvailableRideTrips(
+      AvailableRideTripsUseCaseParams params) async {
     final data = await rideRemoteDataSource.getAvailableRideTrips(params);
     return data;
   }
 
   @override
-  Future<Either<Failure, bool>> listenToUpdateLocation(UpdateSocketLocationParams params) async {
+  Future<Either<Failure, bool>> makeNonTrackingRequestTrip(
+      MakeNonTrackingRequestTripUsecaseParam params) async {
+    return await rideRemoteDataSource.makeNonTrackingRequestTrip(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> listenToUpdateLocation(
+      UpdateSocketLocationParams params) async {
     final data = await rideRemoteDataSource.listenToUpdateLocation(params);
     return data;
+  }
+
+  @override
+  Future<Either<Failure, GetOffersResponseEntity>> getClientOffers() async{
+    return await rideRemoteDataSource.getClientOffers();
   }
 
   @override
@@ -287,5 +335,25 @@ class RideRepositoryImplementation extends RideRepository {
   @override
   Future<Either<Failure, bool>> updateTripAutoAcceptByClient(UpdateTripAutoAcceptByClientUseCaseParams params) async{
     return await rideRemoteDataSource.updateTripAutoAcceptByClient(params);
+  }
+
+  @override
+  Future<Either<Failure, bool>> makeLoadingRequestTrip(MakeLoadingRequestTripUsecaseParam params) async{
+    return await rideRemoteDataSource.makeLoadingRequestTrip(params);
+  }
+
+  @override
+  Future<Either<Failure, GetOffersResponseEntity>> getLoadingOffers() async{
+    return await rideRemoteDataSource.getLoadingOffers();
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateTripPrice(UpdateTripPriceUseCaseParams params) {
+    return rideRemoteDataSource.updateTripPrice(params);
+  }
+
+  @override
+  Future<Either<Failure, ClickEntity>> click(ClickParams params) {
+    return rideRemoteDataSource.click(params);
   }
 }

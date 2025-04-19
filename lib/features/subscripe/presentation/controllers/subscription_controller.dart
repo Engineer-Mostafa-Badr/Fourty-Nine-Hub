@@ -62,6 +62,7 @@ class SubscriptionController {
       {List<WalletTypes>? wallets,
       required String subCategoryId,
       String? title,
+        final Function? onSubscribe,
       bool? showRegular}) async {
     if (!_isBottomSheetShown) {
       _isBottomSheetShown = true;
@@ -85,6 +86,7 @@ class SubscriptionController {
           widget: SubscriptionPlansWidget(
             showRegular: showRegular ?? true,
             title: title,
+            onSubscribe: onSubscribe,
             subscribePlans: plans,
             subCategoryId: subCategoryId,
             paymentMenthods: wallets ??

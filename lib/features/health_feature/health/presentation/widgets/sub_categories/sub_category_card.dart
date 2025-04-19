@@ -36,6 +36,7 @@ class _HealthSubCategoryCardState extends State<HealthSubCategoryCard> {
       onTap: () {
         AdInterstitialTop.loadIntersitialAd();
         AdInterstitialTop.showInterstitialAd();
+        print("The x ${widget.subCategory.id}");
         serviceLocator<HealthSharedData>().doctorSearchParams.subCategory =
             widget.subCategory;
         context.push(Routes.VISITADOCTORLIST,
