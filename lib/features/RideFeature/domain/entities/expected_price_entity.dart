@@ -16,7 +16,7 @@ class RideExpectedPriceEntity{
   final List<double> targetLocation;
   final double distance;
   final double duration;
-  final List<List<double>> polyline;
+  List<List<double>> polyline;
   final double comfort;
   final double nonSmoking;
   final double autoAccept;

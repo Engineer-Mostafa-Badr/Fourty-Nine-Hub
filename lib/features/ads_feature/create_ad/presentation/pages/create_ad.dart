@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -70,9 +71,7 @@ class _CreateAdViewState extends State<CreateAdView> {
       return CustomScaffold(
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(30),
-          child: BackAppBar(
-            label: LocaleKeys.createAd.localize,
-          ),
+          child:HomeAppbar(),
         ),
         body: BlocBuilder<CreateAdCubit, CreateAdState>(
           // buildWhen: (previous, current) => previous.status == current.status,
@@ -94,50 +93,12 @@ class _CreateAdViewState extends State<CreateAdView> {
                       CustomHeaderForm(
                         categorization: widget.categorization,
                       ),
-                      // Row(
-                      //   children: [
-                      //     SquareImage(
-                      //       width: kToolbarHeight * .8,
-                      //       height: kToolbarHeight * .8,
-                      //       radius: 10,
-                      //       url: widget.categorization.subCategory.image,
-                      //     ),
-                      //     const Sizer(),
-                      //     Expanded(
-                      //       child: Column(
-                      //         crossAxisAlignment: CrossAxisAlignment.start,
-                      //         children: [
-                      //           Label(
-                      //             text: context.isArabic
-                      //                 ? widget.categorization.subCategory.nameAr
-                      //                 : widget
-                      //                     .categorization.subCategory.nameEn,
-                      //             style: Styles.mediumText(
-                      //                 fontWeight: FontWeight.bold),
-                      //           ),
-                      //           Label(
-                      //               text: context.isArabic
-                      //                   ? widget.categorization.mainCategory
-                      //                           .name ??
-                      //                       ""
-                      //                   : widget.categorization.mainCategory
-                      //                       .nameEn!),
-                      //         ],
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
-                      const SizedBox(
-                        height: 16,
+
+                      const Sizer(
+                        height: 20,
                       ),
-                      const Divider(
-                        thickness: 2,
-                        height: 0,
-                        color: Color(0xFFD9D9D9),
-                      ),
-                      const SizedBox(
-                        height: 8,
-                      ),
+
+
                       _buildImagePicker(),
 
                       if (widget.categorization.fromMarriage == false)
@@ -243,27 +204,25 @@ class _CreateAdViewState extends State<CreateAdView> {
                             ),
                           ],
                         ),
-                      const SizedBox(
-                        height: 8,
+                      const Sizer(
+                        height:10,
                       ),
-                      Padding(
-                        padding: const EdgeInsetsDirectional.only(start: 16),
-                        child: Label(
-                          text: widget.categorization.fromMarriage == false
-                              ? LocaleKeys.adTitle.localize
-                              : LocaleKeys.name.localize,
-                          style: Styles.mediumText(
-                            fontSize: 32,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 4,
-                      ),
+                      // Padding(
+                      //   padding: const EdgeInsetsDirectional.only(start: 16),
+                      //   child: Label(
+                      //     text: widget.categorization.fromMarriage == false
+                      //         ? LocaleKeys.adTitle.localize
+                      //         : LocaleKeys.name.localize,
+                      //     style: Styles.mediumText(
+                      //       fontSize: 32,
+                      //     ),
+                      //   ),
+                      // ),
+
                       CreateAdTextFormField(
                         onChanged: (v) => controller.title = v,
                         hintText: widget.categorization.fromMarriage == false
-                            ? LocaleKeys.title.localize
+                            ? LocaleKeys.adTitle.localize
                             : LocaleKeys.name.localize,
                         keyboardType: TextInputType.name,
                         validator: (value) {
@@ -299,20 +258,18 @@ class _CreateAdViewState extends State<CreateAdView> {
                       //     }
                       //   },
                       // ),
-                      const SizedBox(
-                        height: 4,
-                      ),
-                      Padding(
-                        padding: const EdgeInsetsDirectional.only(start: 16),
-                        child: Label(
-                          text: LocaleKeys.desc.localize,
-                          style: Styles.mediumText(
-                            fontSize: 32,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 4,
+
+                      // Padding(
+                      //   padding: const EdgeInsetsDirectional.only(start: 16),
+                      //   child: Label(
+                      //     text: LocaleKeys.desc.localize,
+                      //     style: Styles.mediumText(
+                      //       fontSize: 32,
+                      //     ),
+                      //   ),
+                      // ),
+                      const Sizer(
+                        height:10,
                       ),
                       CreateAdTextFormField(
                         hintText: LocaleKeys.desc.localize,
@@ -330,16 +287,16 @@ class _CreateAdViewState extends State<CreateAdView> {
                           }
                         },
                       ),
-                      const SizedBox(
-                        height: 4,
+                      const Sizer(
+                        height:10,
                       ),
-                      Padding(
-                        padding: const EdgeInsetsDirectional.only(start: 16),
-                        child: Label(
-                          text: LocaleKeys.phone.localize,
-                          style: Styles.mediumText(fontSize: 32),
-                        ),
-                      ),
+                      // Padding(
+                      //   padding: const EdgeInsetsDirectional.only(start: 16),
+                      //   child: Label(
+                      //     text: LocaleKeys.phone.localize,
+                      //     style: Styles.mediumText(fontSize: 32),
+                      //   ),
+                      // ),
                       CreateAdTextFormField(
                         hintText: LocaleKeys.phone.localize,
                         onChanged: (v) => controller.phone = v,
@@ -352,19 +309,17 @@ class _CreateAdViewState extends State<CreateAdView> {
                           }
                         },
                       ),
-                      const SizedBox(
-                        height: 4,
+                      const Sizer(
+                        height: 10,
                       ),
-                      Padding(
-                        padding: const EdgeInsetsDirectional.only(start: 16),
-                        child: Label(
-                          text: LocaleKeys.governorate.localize,
-                          style: Styles.mediumText(fontSize: 32),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 4,
-                      ),
+                      // Padding(
+                      //   padding: const EdgeInsetsDirectional.only(start: 16),
+                      //   child: Label(
+                      //     text: LocaleKeys.governorate.localize,
+                      //     style: Styles.mediumText(fontSize: 32),
+                      //   ),
+                      // ),
+
                       CreateAdDropdownMenu<GovernorateEntity>(
                         value: state.governorate!.isEmpty
                             ? null
@@ -449,8 +404,8 @@ class _CreateAdViewState extends State<CreateAdView> {
                       //   ),
                       // ),
 
-                      const SizedBox(
-                        height: 4,
+                      const Sizer(
+                        height: 10,
                       ),
                       state.status == CreateAdStates.loadCities
                           ? const Center(child: CircularProgressIndicator())
@@ -553,22 +508,22 @@ class _CreateAdViewState extends State<CreateAdView> {
                                     //     }).toList(),
                                     //   ),
                                     // ),
-                                    const SizedBox(
-                                      height: 4,
+                                    const Sizer(
+                                      height: 10,
                                     ),
                                   ],
                                 )
                               : const SizedBox.shrink(),
                       if (widget.categorization.fromMarriage == false) ...[
-                        Padding(
-                          padding: const EdgeInsetsDirectional.only(start: 16),
-                          child: Label(
-                            text: state.isPrice == true
-                                ? LocaleKeys.price.localize
-                                : LocaleKeys.salary.localize,
-                            style: Styles.mediumText(fontSize: 32),
-                          ),
-                        ),
+                        // Padding(
+                        //   padding: const EdgeInsetsDirectional.only(start: 16),
+                        //   child: Label(
+                        //     text: state.isPrice == true
+                        //         ? LocaleKeys.price.localize
+                        //         : LocaleKeys.salary.localize,
+                        //     style: Styles.mediumText(fontSize: 32),
+                        //   ),
+                        // ),
                         CreateAdTextFormField(
                           onChanged: (v) => controller.price = v,
                           hintText: state.isPrice == true
@@ -606,8 +561,8 @@ class _CreateAdViewState extends State<CreateAdView> {
                         //   },
                         // )
                       ],
-                      const SizedBox(
-                        height: 4,
+                      const Sizer(
+                        height: 10,
                       ),
                       ListView.builder(
                         physics: const NeverScrollableScrollPhysics(),
@@ -710,11 +665,12 @@ class _CreateAdViewState extends State<CreateAdView> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SvgPicture.asset(
-                          Assets.uploadIcon,
-                          color: const Color(0xff0B1035),
-                        ),
-                        const SizedBox(
+                        // SvgPicture.asset(
+                        //   Assets.uploadIcon,
+                        //   color: const Color(0xff0B1035),
+                        // ),
+                        Icon(Icons.file_upload_outlined,size: 30,color: AppColors.c0B1035,),
+                        const Sizer(
                           width: 8,
                         ),
                         Label(
@@ -727,7 +683,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                         ),
                       ],
                     ),
-                    const SizedBox(
+                    const Sizer(
                       height: 4,
                     ),
                     // BadgedLabel(
@@ -761,8 +717,8 @@ class _CreateAdViewState extends State<CreateAdView> {
                 ),
               ),
             ),
-            const SizedBox(
-              height: 8,
+            const Sizer(
+              height: 20,
             ),
             if (state.images?.isNotEmpty ?? false)
               SizedBox(

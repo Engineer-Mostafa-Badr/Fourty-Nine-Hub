@@ -1,7 +1,7 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:io';
 
 import 'package:flutter/src/widgets/basic.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/ride_register/ride_register_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/creminal_record_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/drug_analysis.dart';
@@ -31,9 +31,6 @@ import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wa
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/balance_wallet_view.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/cashback_view.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/gift_view.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/gift_view.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/gift_wallet_view.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/winners_gift_view.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/pages/winners_gift_view.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/presentation/cubit/ad_details_cubit.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_requests/presentation/cubit/ad_requests_cubit.dart';
@@ -74,7 +71,6 @@ import 'package:fourtyninehub/features/food_feature/edit_food/presentation/cubit
 import 'package:fourtyninehub/features/food_feature/edit_food/presentation/pages/edit_food_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_dashboard_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/pages/restaurant_dashboard_view.dart';
-import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/pages/restaurant_orders.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/restaurant.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/cubit/create_resturant_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/presentation/pages/create_resturant_view.dart';
@@ -82,7 +78,7 @@ import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_taps_cubit/main_categories_taps_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/slider_cubit.dart/slider_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/booking/presentation/cubit/all_appointments_cubit/all_appointments_cubit.dart';
-import 'package:fourtyninehub/features/health_feature/booking/presentation/pages/all_appointments.dart';
+import 'package:fourtyninehub/features/health_feature/booking/presentation/pages/all_appointments_screen.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/pages/create_doctor_view.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_dashboard/presentation/controllers/all_doctor_reservations/all_doctor_reservations_cubit.dart';
@@ -289,7 +285,6 @@ import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/useca
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/view_all_trip_join_usecase.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/cubits/request_trip_join_cubit/request_trip_join_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/cubits/view_all_trip_join_cubit/view_all_trip_join_cubit.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/avaiable_trips_view.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/trip_join_create_ad_view.dart';
 import 'package:fourtyninehub/features/zoom/presentation/controller/stream_cubit.dart';
 import 'package:fourtyninehub/features/zoom/presentation/widgets/join_meeting_screen.dart';
@@ -361,10 +356,7 @@ import '../features/authentication/presentation/pages/register/register_verify_o
 import '../features/authentication/presentation/pages/register/register_verify_phone_otp.dart';
 import '../features/azkaar/presentation/pages/azkar_view.dart';
 import '../features/competition/presentation/pages/competition_view.dart';
-import '../features/competition/presentation/pages/winners.dart';
-import '../features/custom_page/data/model/custom_page_cat_model.dart';
 import '../features/custom_page/domain/entity/custom_page_categories_entity.dart';
-import '../features/custom_page/presentation/cubit/custom_page_cubit.dart';
 import '../features/custom_page/presentation/page/widget/navigator_subcategories_view.dart';
 import '../features/food_feature/cusine_restaurants/presentation/pages/cusine_restaurants_view.dart';
 import '../features/food_feature/food_cart/presentation/pages/cart_view.dart';
@@ -376,6 +368,8 @@ import '../features/fourty_nine/presentation/pages/fourty_nine.dart';
 import '../features/fourty_nine/presentation/pages/main_categories_cards_view.dart';
 import '../features/fourty_nine/presentation/pages/main_categories_taps_view.dart';
 import '../features/health_feature/booking/presentation/cubit/book_doctor_appointment_cubit.dart';
+import '../features/health_feature/booking/presentation/pages/booking_confirmation_screen.dart';
+import '../features/health_feature/booking/presentation/pages/successful_booking_screen.dart';
 import '../features/health_feature/booking/presentation/pages/visita_booking.dart';
 import '../features/health_feature/doctor_details/presentation/cubit/doctor_details_cubit.dart';
 import '../features/health_feature/doctor_details/presentation/pages/DoctorDetails.dart';
@@ -393,21 +387,14 @@ import '../features/mazadat_feature/auction_details/presentation/pages/Mazad_det
 import '../features/mazadat_feature/auction_list/presentation/cubit/auction_list_cubit.dart';
 import '../features/mazadat_feature/auction_list/presentation/pages/Mazadat_view.dart';
 import '../features/mazadat_feature/create_auction/presentation/pages/create_auction_view.dart';
-import '../features/new_trip_join/captainshare/screen/captain_share_info_screen.dart';
-import '../features/new_trip_join/captainshare/screen/captain_share_screen.dart';
 import '../features/new_trip_join/driver/screen/captain_ride_details.dart';
-import '../features/new_trip_join/driver/screen/ride_mode_screen.dart';
-import '../features/new_trip_join/driver/screen/running_and_past_trips_screen.dart';
-import '../features/new_trip_join/presentation/view/screen/new_route_screen.dart';
-import '../features/new_trip_join/presentation/view/screen/new_trip_join_screen.dart';
-import '../features/new_trip_join/presentation/view/screen/pick_me_info_screen.dart';
-import '../features/new_trip_join/presentation/view/screen/trip_Join_info_screen.dart';
 import '../features/notifications/presentation/pages/notification_view.dart';
 import '../features/payment/presentation/pages/payment_view.dart';
 import '../features/quraan/presentation/pages/quraan_view.dart';
 import '../features/register/driver_register/presentation/cubit/driver_register_cubit.dart';
 import '../features/register/driver_register/presentation/pages/driver_register_view.dart';
 import '../features/requests_history/presentation/cubit/request_history_cubit.dart';
+import '../features/ride/RideRequest/presentation/cubit/NoSocket/check_trip_end_cubit.dart';
 import '../features/ride/driver_dashboard/presentation/cubit/driver_dashboard_cubit.dart';
 import '../features/ride/driver_dashboard/presentation/pages/driver_dashboard_view.dart';
 import '../features/ride/trip_details/presentation/cubit/trip_details_cubit.dart';
@@ -428,11 +415,7 @@ import '../features/social_media/social_posts/presentation/cubit/social_posts_cu
 import '../features/social_media/social_posts/presentation/pages/Social_home.dart';
 import '../features/social_media/social_posts/presentation/pages/other_account_view.dart';
 import '../features/social_media/twitter/presentation/bloc/twitter_bloc.dart';
-import '../features/social_media/twitter/presentation/pages/twitter_post_details_notify.dart';
-import '../features/social_media/twitter/presentation/pages/twitter_view.dart';
-import '../features/star_feature/presentation/pages/get_all_talents.dart';
 import '../features/star_feature/presentation/pages/my_talent.dart';
-import '../features/star_feature/presentation/pages/widgets/all_winner_grid_view.dart';
 import '../features/subcategories/presentation/cubit/subcategories_cubit.dart';
 import '../features/subcategories/presentation/pages/custom_page_sub_categories_view.dart';
 import '../features/trip_join/view_all_trip_join/presentation/views/trip_join_view.dart';
@@ -536,7 +519,7 @@ class AppPages {
                 builder: (context, state) => BlocProvider(
                   create: (context) => serviceLocator<StarCubit>()
                     ..loadInitialData()
-                    ..getAllTalent(),
+                    ..getPaginatedMyStar(1),
                   child: const MyTalentView(),
                 ),
               ),
@@ -1675,10 +1658,29 @@ class AppPages {
                         builder: (context, state) =>
                             BlocProvider<BookDoctorAppointmentCubit>(
                                 create: (_) => serviceLocator(),
-                                child: VisitaBooking(
+
+                              child: BookingConfirmationScreen(
+                                    doctorDetailsCubit:
+                                        (state.extra) as DoctorDetailsCubit,
+                                )
+
+                                // child: VisitaBooking(
+                                //   doctorDetailsCubit:
+                                //       (state.extra) as DoctorDetailsCubit,
+                                // )
+                                )),
+                    GoRoute(
+                        path: Paths.SUCCESSFULLBOOKING,
+                        name: Routes.SUCCESSFULLBOOKING,
+                        // BookDoctorAppointmentCubit
+                        builder: (context, state) =>
+                            BlocProvider<BookDoctorAppointmentCubit>(
+                                create: (_) => serviceLocator(),
+                                child: SuccessfulBookingScreen(
                                   doctorDetailsCubit:
-                                      (state.extra) as DoctorDetailsCubit,
-                                ))),
+                                  (state.extra) as DoctorDetailsCubit,
+                                )
+                                )),
                     GoRoute(
                         path: Paths.DOCTORDASHBOARD,
                         name: Routes.DOCTORDASHBOARD,
@@ -1763,7 +1765,7 @@ class AppPages {
                   builder: (context, state) => MultiBlocProvider(
                         providers: [
                           BlocProvider<RestaurantsCubit>(
-                            create: (context) => serviceLocator()..loadData(),
+                            create: (context) => serviceLocator()..loadData()..getReqCount(),
                           ),
                         ],
                         child: const RestaurantsListsView(),
@@ -2605,7 +2607,7 @@ class AppPages {
                       create: (context) => serviceLocator<RideCubit>(),
                     ),
                   ],
-                  child: TripJoinCreateAdView(),
+                  child: const TripJoinCreateAdView(),
                   //const TripJoinView(),
                 ),
               ),
@@ -3215,10 +3217,8 @@ class AppPages {
               GoRoute(
                 path: Paths.rideModeScreen,
                 name: Routes.rideModeScreen,
-                builder: (context, state) => BlocProvider(
-                  create: (context) => serviceLocator<DashboardsCubit>(),
-                  child: RideModeScreen(params: state.extra as RideModeParams),
-                ),
+                builder: (context, state) =>
+                    RideModeScreen(params: state.extra as RideModeParams),
               ),
               GoRoute(
                   path: Paths.rideDashboardDetailsScreen,
@@ -3242,7 +3242,8 @@ class AppPages {
                             create: (context) => serviceLocator<RideCubit>(),
                           ),
                         ],
-                        child: const RideLoadingRequestScreen(),
+                        child: RideLoadingRequestScreen(
+                            isTruk: state.extra as bool),
                       )),
               GoRoute(
                 path: Paths.supportRideScreen,
@@ -3257,12 +3258,12 @@ class AppPages {
               GoRoute(
                 path: Paths.emergencyContactsScreen,
                 name: Routes.emergencyContactsScreen,
-                builder: (context, state) => EmergencyContactsScreen(),
+                builder: (context, state) => const EmergencyContactsScreen(),
               ),
               GoRoute(
                 path: Paths.rideArrivedScreen,
                 name: Routes.rideArrivedScreen,
-                builder: (context, state) => RideArrivedScreen(),
+                builder: (context, state) => const RideArrivedScreen(),
               ),
               GoRoute(
                 path: Paths.ratingDriverScreen,
@@ -3272,7 +3273,7 @@ class AppPages {
               GoRoute(
                 path: Paths.completeRideScreen,
                 name: Routes.completeRideScreen,
-                builder: (context, state) => CompleteRideScreen(),
+                builder: (context, state) => const CompleteRideScreen(),
               ),
               GoRoute(
                 path: Paths.newTripJoinScreen,

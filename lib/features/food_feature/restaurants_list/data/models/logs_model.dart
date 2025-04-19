@@ -8,11 +8,14 @@ class LogsRequestLogsModel extends LogsRequestLogsEntity {
     super.orders,
     super.total,
     super.createdAt,
+    super.seen,
     super.subscriptionType,
     super.currencyEn,
     super.currencyAr,
     super.userRateRestaurant,
     super.restaurantRateUser,
+    super.userRateRestaurantName,
+    super.restaurantRateUserName,
   });
 
   factory LogsRequestLogsModel.fromJson(Map<String, dynamic> json) {
@@ -20,14 +23,21 @@ class LogsRequestLogsModel extends LogsRequestLogsEntity {
       id: json['_id'],
       userId: json['userId'] != null ? UserIdLogsModel.fromJson(json['userId']) : null,
       restaurantId: json['restaurantId'] != null ? RestaurantIdLogsModel.fromJson(json['restaurantId']) : null,
-      orders: json['orders'] != null ? List<OrderLogsModel>.from(json['orders'].map((x) => OrderLogsModel.fromJson(x))) : null,
+      orders: json['orders'] != null
+          ? List<OrderLogsModel>.from(json['orders'].map((x) => OrderLogsModel.fromJson(x)))
+          : null,
       total: json['total'],
       createdAt: json['createdAt'],
+      seen: json['seen'],
       subscriptionType: json['subscriptionType'],
       currencyEn: json['currencyEn'],
       currencyAr: json['currencyAr'],
-      userRateRestaurant: json['userRateRestaurant'],
+      userRateRestaurant: json['userRateRestaurant'] != null
+          ? UserRateRestaurantModel.fromJson(json['userRateRestaurant'])
+          : null,
       restaurantRateUser: json['restaurantRateUser'],
+      userRateRestaurantName: json['userRateRestaurantName'],
+      restaurantRateUserName: json['restaurantRateUserName'],
     );
   }
 }
@@ -52,34 +62,31 @@ class UserIdLogsModel extends UserIdLogsEntity {
       id: json['id'],
     );
   }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'firstName': firstName,
-      'lastName': lastName,
-      'gender': gender,
-      'restaurantRate': restaurantRate,
-      'USER_PROFILE': (userProfile as UserProfileLogsModel?)?.toJson(),
-      'id': id,
-    };
-  }
 }
 
 class UserProfileLogsModel extends UserProfileLogsEntity {
-  UserProfileLogsModel({
-    super.profilePictureKey,
-  });
+  UserProfileLogsModel({super.profilePictureKey});
 
   factory UserProfileLogsModel.fromJson(Map<String, dynamic> json) {
     return UserProfileLogsModel(
-      profilePictureKey: json['profilePictureKey'],
+      profilePictureKey: json['profilePictureKey'] != null
+          ? ProfilePictureKeyModel.fromJson(json['profilePictureKey'])
+          : null,
     );
   }
+}
 
-  Map<String, dynamic> toJson() {
-    return {
-      'profilePictureKey': profilePictureKey,
-    };
+class ProfilePictureKeyModel extends ProfilePictureKeyEntity {
+  ProfilePictureKeyModel({
+    super.id,
+    super.mediaKey,
+  });
+
+  factory ProfilePictureKeyModel.fromJson(Map<String, dynamic> json) {
+    return ProfilePictureKeyModel(
+      id: json['_id'],
+      mediaKey: json['mediaKey'],
+    );
   }
 }
 
@@ -95,18 +102,11 @@ class RestaurantIdLogsModel extends RestaurantIdLogsEntity {
     return RestaurantIdLogsModel(
       id: json['_id'],
       name: json['name'],
-      subcategoryId: json['subcategoryId'] != null ? SubcategoryIdLogsModel.fromJson(json['subcategoryId']) : null,
-      totalRating: json['totalRating']?.toDouble(),
+      subcategoryId: json['subcategoryId'] != null
+          ? SubcategoryIdLogsModel.fromJson(json['subcategoryId'])
+          : null,
+      totalRating: (json['totalRating'] ?? 0).toDouble(),
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      '_id': id,
-      'name': name,
-      'subcategoryId': (subcategoryId as SubcategoryIdLogsModel?)?.toJson(),
-      'totalRating': totalRating,
-    };
   }
 }
 
@@ -123,14 +123,6 @@ class SubcategoryIdLogsModel extends SubcategoryIdLogsEntity {
       nameAr: json['nameAr'],
       nameEn: json['nameEn'],
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      '_id': id,
-      'nameAr': nameAr,
-      'nameEn': nameEn,
-    };
   }
 }
 
@@ -157,30 +149,53 @@ class OrderLogsModel extends OrderLogsEntity {
 class FoodIdLogsModel extends FoodIdLogsEntity {
   FoodIdLogsModel({
     super.foodName,
+    super.picture,
     super.id,
   });
 
   factory FoodIdLogsModel.fromJson(Map<String, dynamic> json) {
     return FoodIdLogsModel(
       foodName: json['foodName'],
+      picture: json['picture'] != null ? FoodPictureModel.fromJson(json['picture']) : null,
       id: json['id'],
     );
   }
 }
 
-class LogsRequestLogsResponse {
-  final bool status;
-  final List<LogsRequestLogsModel>? data;
-
-  LogsRequestLogsResponse({
-    required this.status,
-    this.data,
+class FoodPictureModel extends FoodPictureEntity {
+  FoodPictureModel({
+    super.id,
+    super.mediaKey,
   });
 
-  factory LogsRequestLogsResponse.fromJson(Map<String, dynamic> json) {
-    return LogsRequestLogsResponse(
-      status: json['status'],
-      data: json['data'] != null ? List<LogsRequestLogsModel>.from(json['data'].map((x) => LogsRequestLogsModel.fromJson(x))) : null,
+  factory FoodPictureModel.fromJson(Map<String, dynamic> json) {
+    return FoodPictureModel(
+      id: json['_id'],
+      mediaKey: json['mediaKey'],
+    );
+  }
+}
+
+class UserRateRestaurantModel extends UserRateRestaurantEntity {
+  UserRateRestaurantModel({
+    super.id,
+    super.userId,
+    super.restaurantId,
+    super.comment,
+    super.rate,
+    super.createdAt,
+    super.updatedAt,
+  });
+
+  factory UserRateRestaurantModel.fromJson(Map<String, dynamic> json) {
+    return UserRateRestaurantModel(
+      id: json['_id'],
+      userId: json['userId'],
+      restaurantId: json['restaurantId'],
+      comment: json['comment'],
+      rate: json['rate'],
+      createdAt: json['createdAt'],
+      updatedAt: json['updatedAt'],
     );
   }
 }

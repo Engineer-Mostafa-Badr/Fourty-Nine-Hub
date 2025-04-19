@@ -7,9 +7,11 @@ class SubscriptionMethod {
     required String subscribeId,
     required String title,
     bool? showRegular,
+    final Function? onSubscribe,
   }) {
     serviceLocator<SubscriptionController>().showSubscriptionPlans(
       showRegular: showRegular,
+      onSubscribe: onSubscribe,
       wallets: [
         WalletTypes.mainWallet,
       ],

@@ -7,6 +7,8 @@ import 'package:fourtyninehub/core/widget/custom_floating_action_button.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/page_preview.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
+import '../../../../../res/assets/assets.dart';
+
 class ChooseCategoriesViwBody extends StatefulWidget {
   const ChooseCategoriesViwBody({super.key});
 
@@ -24,21 +26,27 @@ class _ChooseCategoriesViwBodyState extends State<ChooseCategoriesViwBody> {
     super.initState();
   }
 
-  final List<Icon> _icons = const [
-    Icon(
+  final List<Widget> _icons = [
+    const Icon(
       Icons.list,
     ),
-    Icon(
+    const Icon(
       Icons.grid_view,
     ),
-    Icon(
+    const Icon(
       Icons.view_carousel,
+    ),
+    Image.asset(
+      Assets.grid,
+      width: 24,
+      height: 24,
     ),
   ];
   final List<String> _items = [
     'List View',
-    'Gride View',
+    'Home View',
     'Slider View',
+    'Grid View',
   ];
 
   @override

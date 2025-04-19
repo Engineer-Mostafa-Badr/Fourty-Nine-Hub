@@ -46,11 +46,13 @@ import '../features/food_feature/restaurants_list/data/datasources/restaurants_r
 import '../features/food_feature/restaurants_list/data/repositories/restaurant_list_repo_impl.dart';
 import '../features/food_feature/restaurants_list/domain/repositories/resturant_list_repo.dart';
 import '../features/food_feature/restaurants_list/domain/usecases/add_rate_restaurant_use_case.dart';
+import '../features/food_feature/restaurants_list/domain/usecases/get_req_logs_count_use_case.dart';
 import '../features/food_feature/restaurants_list/domain/usecases/get_req_logs_use_case.dart';
 import '../features/food_feature/restaurants_list/domain/usecases/get_user_order_use_case.dart';
 import '../features/food_feature/restaurants_list/domain/usecases/getsubcategory_restaurants_usecase.dart';
 import '../features/food_feature/restaurants_list/domain/usecases/get_nearby_restaurants_usecase.dart';
 import '../features/food_feature/restaurants_list/domain/usecases/get_trending_restaurants_usecase.dart';
+import '../features/food_feature/restaurants_list/domain/usecases/set_request_log_seen_use_case.dart';
 import '../features/food_feature/restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
 
 class FoodServiceLocator {
@@ -126,6 +128,10 @@ class FoodServiceLocator {
         () => GetReqLogsUseCase(
               serviceLocator(),
             ));
+    serviceLocator.registerLazySingleton<SetRequestLogSeenUseCase>(
+        () => SetRequestLogSeenUseCase(
+              serviceLocator(),
+            ));
     serviceLocator.registerLazySingleton<AddRateRestaurantUseCase>(
         () => AddRateRestaurantUseCase(
               serviceLocator(),
@@ -135,10 +141,16 @@ class FoodServiceLocator {
         () => ToggleRestaurantFavouriteUseCase(
               serviceLocator(),
             ));
+    serviceLocator.registerLazySingleton<GetReqLogsCountUseCase>(
+        () => GetReqLogsCountUseCase(
+              serviceLocator(),
+            ));
     serviceLocator.registerLazySingleton<RestaurantMenuCubit>(
         () => RestaurantMenuCubit(serviceLocator()));
     serviceLocator.registerLazySingleton<RestaurantSharedData>(
         () => RestaurantSharedData());
+
+
     serviceLocator.registerFactory<CreateRestaurantCubit>(
       () => CreateRestaurantCubit(
         serviceLocator(),
@@ -151,6 +163,8 @@ class FoodServiceLocator {
       ),
     );
     serviceLocator.registerFactory<RestaurantsCubit>(() => RestaurantsCubit(
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

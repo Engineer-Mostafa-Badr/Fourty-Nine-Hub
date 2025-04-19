@@ -3,9 +3,11 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/appointment_booking_entity.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/entities/booking_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/doctor_info_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/favorite_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/health_subcategory_entity.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/usecases/get_booking_use_case.dart';
 
 import '../../domain/repositories/health_repo.dart';
 import '../datasources/health_remote_datasource.dart';
@@ -62,5 +64,10 @@ class HealthRepoImpl implements HealthRepo {
   @override
   Future<Either<Failure, bool>> cancelAppointment(String id) {
     return _remoteDataSource.cancelAppointment(id);
+  }
+
+  @override
+  Future<Either<Failure, List<BookingEntity>>> getBooking({required GetBookingParams params}) {
+    return _remoteDataSource.getBooking(params:params);
   }
 }

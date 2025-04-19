@@ -654,7 +654,7 @@ class _FoodRequestBottomSheetState extends State<FoodRequestBottomSheet> {
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16.0),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(15),
                       ),
                       backgroundColor: AppColors.PRIMARY_COLOR_DARK,
                     ),

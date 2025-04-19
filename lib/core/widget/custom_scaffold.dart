@@ -211,7 +211,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               //       const TimeOfDay(hour: 0, minute: 0),
                               // ),
                               // onTap: () => context.push(Routes.onBoardingScreen),
-                              onTap: () => context.push(Routes.RIDE),
+                              onTap: () => context.push(Routes.RIDE_HOME),
                             ),
                             drawerRollWidget(
                               label: LocaleKeys.loading.localize,

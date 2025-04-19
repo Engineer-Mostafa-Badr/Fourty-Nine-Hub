@@ -51,6 +51,7 @@ abstract class AppColors {
   static const c1F2D95 = Color(0xFF1F2D95);
   static const cD9D9D9 = Color(0xFFD9D9D9);
   static const c6C6C6C = Color(0xFF6C6C6C);
+  static const c717171 = Color(0xFF717171);
 
   static const cF33D49 = Color(0xFFF33D49);
   static const cC0303A = Color(0xFFC0303A);
@@ -80,6 +81,7 @@ abstract class AppColors {
   static const GREY_DARK_COLOR = Color(0xFF707070);
   static const GREY_BORDER_COLOR = Color(0xFFDEDEDE);
   static const WHATS_APP_COLOR = Color(0xFF55CD6C);
+  static const RIGHT_SGIN = Color(0xFF7BBA69);
   static const Arrow_Icon_color = Color(0xff374957);
   static const AUTH_CONTAINER_COLOR = Colors.white;
   static const CHECK_MARK_COLOR = Color(0xFF55CD6C);

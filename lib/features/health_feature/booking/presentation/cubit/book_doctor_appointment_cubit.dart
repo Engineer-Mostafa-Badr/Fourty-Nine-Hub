@@ -11,6 +11,7 @@ import 'package:fourtyninehub/res/strings/labels.dart';
 part 'book_doctor_appointment_state.dart';
 
 class BookDoctorAppointmentCubit extends Cubit<BookDoctorAppointmentState> {
+  final nameTextController = TextEditingController();
   final phoneNumberTextController = TextEditingController();
   final phoneFousNode = FocusNode();
   final ageFocusNode = FocusNode();
@@ -18,7 +19,7 @@ class BookDoctorAppointmentCubit extends Cubit<BookDoctorAppointmentState> {
   final notesFocusNode = FocusNode();
   final notesController = TextEditingController();
   final addressFocusNode = FocusNode();
-  final addressController = TextEditingController();
+  // final addressController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
   final BookRegularAppointmentUseCase _bookRegularAppointmentUseCase;
@@ -50,7 +51,8 @@ class BookDoctorAppointmentCubit extends Cubit<BookDoctorAppointmentState> {
     notesFocusNode.dispose();
     notesController.dispose();
     addressFocusNode.dispose();
-    addressController.dispose();
+    nameTextController.dispose();
+    // addressController.dispose();
     return super.close();
   }
 
@@ -86,8 +88,8 @@ class BookDoctorAppointmentCubit extends Cubit<BookDoctorAppointmentState> {
   }
 
   void _saveText() {
+    _params.name = nameTextController.text;
     _params.notes = notesController.text;
-    _params.address = addressController.text;
     _params.phone = phoneNumberTextController.text;
     _params.age = ageController.text;
   }

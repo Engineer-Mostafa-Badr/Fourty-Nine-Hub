@@ -8,19 +8,21 @@ class CustomFloatingActionButton extends StatelessWidget {
       required this.onPressed,
       this.icon,
       this.text,
-      this.fontSize});
+      this.fontSize,
+      this.iconSize});
 
   final void Function() onPressed;
   final IconData? icon;
   final String? text;
   final double? fontSize;
+  final double? iconSize;
 
   @override
   Widget build(BuildContext context) {
     // return FloatingActionButton(onPressed: onPressed);
     return SizedBox(
-      width: MediaQuery.sizeOf(context).width * .4, // عرض الزر الجديد
-      height: 56, // ارتفاع الزر الجديد
+      width: MediaQuery.sizeOf(context).width * .5,
+      height: 56,
       child: RawMaterialButton(
         onPressed: onPressed,
         fillColor: AppColors.PRIMARY_COLOR,
@@ -36,7 +38,7 @@ class CustomFloatingActionButton extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (icon != null) Icon(icon, color: Colors.white, size: 24),
+              if (icon != null) Icon(icon, color: Colors.white, size:iconSize?? 24),
               if (icon != null) const SizedBox(width: 8),
               if (text != null)
                 Text(

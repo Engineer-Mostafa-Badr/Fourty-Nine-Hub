@@ -2,12 +2,14 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/lo
 
 class LocationModel extends LocationEntity {
   const LocationModel(
-      {required super.title, required CoordinatesModel super.coordinates});
+      {required super.title, 
+      // required CoordinatesModel super.coordinates
+      });
 
   factory LocationModel.fromJson(Map<String, dynamic> json) {
     return LocationModel(
       title: json['title'],
-      coordinates: CoordinatesModel.fromJson(json['coordinates']),
+      // coordinates: CoordinatesModel.fromJson(json['coordinates']),
     );
   }
 }
