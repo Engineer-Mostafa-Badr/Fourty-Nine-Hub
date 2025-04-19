@@ -25,7 +25,7 @@ class EditPage extends StatefulWidget {
 
 class _EditPageState extends State<EditPage> {
   List<Widget> pages = const [
-    NavigateBar(),
+    // NavigateBar(),
     SocialPage(),
     FavouriteCategory(),
     ChooseCategoriesViwBody(),
@@ -35,7 +35,7 @@ class _EditPageState extends State<EditPage> {
   ];
 
   List<String> appBarTitle = [
-    LocaleKeys.navigateBar.localize,
+    // LocaleKeys.navigateBar.localize,
     LocaleKeys.socialPage.localize,
     LocaleKeys.favoriteCategory.localize,
     LocaleKeys.chooseCategoryView.localize,

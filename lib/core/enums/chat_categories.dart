@@ -1,3 +1,4 @@
+
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
 enum ChatCategories {

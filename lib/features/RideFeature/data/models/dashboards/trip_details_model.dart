@@ -7,15 +7,10 @@ class TripDetailsModel extends TripDetailsEntity {
     required super.id,
     required super.price,
     required super.status,
-    required super.distance,
-    required super.duration,
     required super.isPremium,
-    required super.autoAccept,
     required super.passengers,
-    required super.freeTripForDriver,
-    required super.paymentMethod,
     required LocationModel super.startLocation,
-    required LocationModel super.targetLocation,
+    required LocationModel super.targetLocation, required super.pickupTime, required super.note, required super.createdAt,
   });
 
   factory TripDetailsModel.fromJson(Map<String, dynamic> json) {
@@ -23,15 +18,13 @@ class TripDetailsModel extends TripDetailsEntity {
       id: json['id'],
       price: json['price'].toDouble(),
       status: json['status'],
-      distance: json['distance'],
-      duration: json['duration'],
+      pickupTime: json['pickupTime'],
       isPremium: json['isPremium'],
-      autoAccept: json['autoAccept'],
       passengers: json['passengers'],
-      freeTripForDriver: json['freeTripForDriver'],
-      paymentMethod: json['paymentMethod'],
+      note: json['note'],
       startLocation: LocationModel.fromJson(json['startLocation']),
       targetLocation: LocationModel.fromJson(json['targetLocation']),
+      createdAt: json['createdAt'],
     );
   }
 }

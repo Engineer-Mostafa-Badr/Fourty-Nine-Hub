@@ -90,6 +90,7 @@ class _BottomCardRequestState extends State<BottomCardRequest> {
                         ),
                       ),
                       const SizedBox(height: 12),
+                      OfferRow(rideCubit: widget.rideCubit,),
                       Row(
                         children: [
                           ConstrainedBox(
@@ -192,6 +193,77 @@ class _BottomCardRequestState extends State<BottomCardRequest> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class OfferRow extends StatelessWidget {
+  const OfferRow({super.key, required this.rideCubit});
+  final RideCubit rideCubit;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider.value(
+      value: rideCubit,
+      child: Builder(
+        builder: (context) {
+          return BlocBuilder<RideCubit, RideState>(
+            builder: (context, state) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Decrease Button
+                    GestureDetector(
+                      onTap: () async {
+                        if ((state.requestedTrip!.price! - 3) < state.requestedTrip!.lowestFare!) return;
+                        await rideCubit.updateTripPriceStatus(newOfferPrice: -3);
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+                        decoration: BoxDecoration(
+                          color: ((state.requestedTrip!.price! - 3) < state.requestedTrip!.lowestFare!) ? const Color(0xffD9D9D9) : AppColors.PRIMARY_COLOR,
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child:  Text(
+                          "-3",
+                          style: TextStyle(color: ((state.requestedTrip!.price! - 3) < state.requestedTrip!.lowestFare!) ? AppColors.PRIMARY_COLOR : Colors.white, fontSize: 18),
+                        ),
+                      ),
+                    ),
+                    const Spacer(), // Space between buttons and text
+                    // Offer Text
+                     Text(
+                      context.isArabic ? "ج.م ${state.requestedTrip!.price!.toInt()}" : "EGP ${state.requestedTrip!.price!.toInt()}",
+                      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    ),
+                    const Spacer(), // Space between text and buttons
+                    // Increase Button
+                    GestureDetector(
+                      onTap: () async {
+                        if ((state.requestedTrip!.price! + 3) > state.requestedTrip!.highestFare!) return;
+                        await rideCubit.updateTripPriceStatus(newOfferPrice: 3);
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+                        decoration: BoxDecoration(
+                          color: ((state.requestedTrip!.price! + 3) > state.requestedTrip!.highestFare!) ? const Color(0xffD9D9D9) :  AppColors.PRIMARY_COLOR,
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child:  Text(
+                          "+3",
+                          style: TextStyle(color:((state.requestedTrip!.price! + 3) > state.requestedTrip!.highestFare!) ? AppColors.PRIMARY_COLOR: Colors.white, fontSize: 18),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+          );
+        }
       ),
     );
   }

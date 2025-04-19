@@ -20,6 +20,7 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:restart_app/restart_app.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../core/utils/custom_show_dialog.dart';
@@ -107,17 +108,17 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                         ),
                                       );
                                     }),
-                                drawerListTile(
-                                  image: Assets.microphone,
-                                  label:
-                                      LocaleKeys.advertiseYourCompany.localize,
-                                  onTap: () {
-                                    AdInterstitialTop.loadIntersitialAd();
-                                    AdInterstitialTop.showInterstitialAd();
-                                    Navigator.pop(context);
-                                    return context.push(Routes.CREATECOMPANYAD);
-                                  },
-                                ),
+                                // drawerListTile(
+                                //   image: Assets.microphone,
+                                //   label:
+                                //       LocaleKeys.advertiseYourCompany.localize,
+                                //   onTap: () {
+                                //     AdInterstitialTop.loadIntersitialAd();
+                                //     AdInterstitialTop.showInterstitialAd();
+                                //     Navigator.pop(context);
+                                //     return context.push(Routes.CREATECOMPANYAD);
+                                //   },
+                                // ),
                                 drawerListTile(
                                     image: Assets.quran,
                                     label: LocaleKeys.quraan.localize,
@@ -213,7 +214,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     image: Assets.rideIcon,
                                     onTap: () {
                                       context.pop();
-                                      context.push(Routes.RIDE);
+                                      context.push(Routes.RIDE_HOME);
                                     }),
                                 drawerRollWidget(
                                   label: LocaleKeys.loading.localize,
@@ -239,6 +240,14 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   onTap: () {
                                     context.pop();
                                     context.push(Routes.FOOD);
+                                  },
+                                ),
+                                drawerRollWidget(
+                                  label: LocaleKeys.marriage.localize,
+                                  image: Assets.married,
+                                  onTap: () {
+                                    context.pop();
+                                    context.push(Routes.MARRIAGESUBCATEGORIES);
                                   },
                                 ),
                                 drawerRollWidget(
@@ -523,8 +532,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
         leading: image != null && icon == null
             ? Image.asset(
                 image,
-                width: 40.h,
-                height: 40.h,
+                width: image == Assets.contact_us_icon ? 35.h : 40.h,
+                height: image == Assets.contact_us_icon ? 35.h : 40.h,
                 fit: BoxFit.cover,
               )
             : Icon(
@@ -935,9 +944,44 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 value:
                     context.read<CustomPageCubit>().state.activate!.customPage,
                 onChanged: (value) async {
-                  await context.read<CustomPageCubit>().updateActivate(value);
-                  Phoenix.rebirth(context);
-                  // Restart.restartApp();
+                  showAnimatedDialog(
+                    context,
+                    AlertDialog(
+                      content:Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Label(
+                              text: 'Restart to Apply',
+                              style: Styles.headerText(fontWeight: FontWeight.w400)),
+                          const Sizer(),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: AppButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  label: LocaleKeys.cancel.localize,
+                                ),
+                              ),
+                              const Sizer(width: 16,),
+                              Expanded(
+                                child: AppButton(
+                                  backColor: AppColors.PRIMARY_COLOR,
+                                  onPressed: () {
+                                    context.read<CustomPageCubit>().updateActivate(value);
+                                    Restart.restartApp();
+                                  },
+                                  label: 'Restart',
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
                 },
               ),
               SizedBox(

@@ -15,7 +15,6 @@ import 'package:go_router/go_router.dart';
 import '../../../../../../res/assets/assets.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/styles.dart';
-import '../../../../domain/entities/dashboards/trip_entity.dart';
 import '../../widgets/dialog_widget/show_custom_dialog_trip.dart';
 import 'edit_price_widget.dart';
 
@@ -47,8 +46,8 @@ class AvailableRideTripItem extends StatelessWidget {
                         height: 50,
                         decoration: const BoxDecoration(shape: BoxShape.circle),
                         clipBehavior: Clip.antiAliasWithSaveLayer,
-                        child: tripEntity.clientImage.isNotEmpty ? Image.network(tripEntity.clientImage, fit: BoxFit.cover,) : Image.asset(
-                          Assets.personalImage,
+                        child: tripEntity.clientGender=='male' ? Image.asset(Assets.maleImagePlaceholder, fit: BoxFit.cover,) : Image.asset(
+                          Assets.femaleImagePlacehlder,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -117,6 +116,9 @@ class AvailableRideTripItem extends StatelessWidget {
                         onTap: () {
                           if(tripEntity.isAutoAccept==false){
                             cubit.createOffer(tripId: tripEntity.id,price: tripEntity.price??0, context: context, subCategoryId: tripEntity.subcategoryId);
+                          }else{
+                            // autoAcceptTrip
+                            cubit.autoAcceptTrip(context, tripEntity.id);
                           }
                         },
                 child: Container(

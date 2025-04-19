@@ -21,8 +21,8 @@ class CustomFloatingActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     // return FloatingActionButton(onPressed: onPressed);
     return SizedBox(
-      width: MediaQuery.sizeOf(context).width * .4, // عرض الزر الجديد
-      height: 56, // ارتفاع الزر الجديد
+      width: MediaQuery.sizeOf(context).width * .5,
+      height: 56,
       child: RawMaterialButton(
         onPressed: onPressed,
         fillColor: AppColors.PRIMARY_COLOR,

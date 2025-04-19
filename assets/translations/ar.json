@@ -749,7 +749,7 @@
   "receiveFawry": "طلب بطاقة الصفراء الخاص بك ناجح! تم خصم 50. ستتلقى إشعارًا عندما تكون بطاقتك جاهزة للاستلام في أي فرع من فوري.",
   "doYellowCard": "هل لديك بطاقة صفراء؟",
   "yellowCardNumber": "رقم هاتف البطاقة الصفراء",
-  "atLeast300YellowCard": "تحتاج إلى 300 على الأقل لطلب بطاقة صفراء.",
+  "atLeast300YellowCard": "تحتاج إلى 400 على الأقل لطلب بطاقة صفراء.",
   "WillBeDeducted": "طلب بطاقة صفراء (سيتم خصم 50)",
   "iDFrontAndBack": "قم بتحميل هويتك (الوجه والظهر):",
   "uploadFrontID": "تحميل الهوية الأمامية",
@@ -1510,6 +1510,8 @@
   "addACommentsFor": "أضف تعليقًا لـ",
   "commentAdded": "تم إضافة التعليق",
   "areYouSureYouWantToDeleteThisComment": "هل أنت متأكد أنك تريد حذف هذا التعليق؟",
+  "responseStatus": "حالة الرد",
+  "socialExplain":"احصل على المال إذا قمت بالنشر والمشاهدة والإعجاب على أي واجهة تريدها!"
   "responseStatus": "حالة الرد",
   "imBookingOfAnotherClient": "أقوم بالحجز نيابة عن عميل آخر"
 

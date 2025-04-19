@@ -441,7 +441,7 @@ class RestaurantDashboardCubit extends Cubit<RestaurantDashboardState> {
   }
 
   // Future<void> changeConnectivityStatus(isActive) async {
-  //   const url = 'https://49dev.com/api/v1/restaurants/modify-active';
+  //   const url = 'https://49backend.com/api/v1/restaurants/modify-active';
   //
   //   final res =await apiConsumer.patch(url, data: {
   //     'isActive': isActive,

@@ -5,13 +5,16 @@ enum DashboardsStates {
   loading,
   loadingAcceptOffer,
   loadingAvailable,
+  loadingAcceptTrip,
   loadingPast,
   loadingSettings,
   loadingCreateOffer,
   loadingRating,
   loadingModels,
   error,
+  errorOffers,
   success,
+  successAcceptTrip,
   successOffer,
   successRating,
 }
@@ -19,6 +22,7 @@ enum DashboardsStates {
 extension DashboardsStatex on DashboardsState {
   bool get isInitial => status == DashboardsStates.initState;
   bool get isLoading => status == DashboardsStates.loading;
+  bool get isLoadingAcceptTrip => status == DashboardsStates.loadingAcceptTrip;
   bool get isLoadingAcceptOffer => status == DashboardsStates.loadingAcceptOffer;
   bool get isLoadingModels => status == DashboardsStates.loadingModels;
   bool get isLoadingAvailable => status == DashboardsStates.loadingAvailable;
@@ -27,9 +31,11 @@ extension DashboardsStatex on DashboardsState {
   bool get isLoadingCreateOffer => status == DashboardsStates.loadingCreateOffer;
   bool get isLoadingRating => status == DashboardsStates.loadingRating;
   bool get isError => status == DashboardsStates.error;
+  bool get isErrorOffers => status == DashboardsStates.errorOffers;
   bool get isSuccess => status == DashboardsStates.success;
   bool get isSuccessOffer => status == DashboardsStates.successOffer;
   bool get isSuccessRating => status == DashboardsStates.successRating;
+  bool get isSuccessAcceptTrip => status == DashboardsStates.successAcceptTrip;
 }
 
 class DashboardsState

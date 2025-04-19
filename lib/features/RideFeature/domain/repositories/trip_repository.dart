@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/accept_offer_entity.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/available_ride_trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/trip_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_auto_accept_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/update_trip_price_entity.dart';
@@ -18,11 +19,14 @@ abstract class TripRepository {
    Future<Either<Failure, SettingsDashboardEntityResponse>> getSettings();
    Future<Either<Failure, bool>> updateSettings(UpdateSettingsDashboardUsecaseParam params);
    Future<Either<Failure, bool>> createNewOffer(CreateNewOfferDashboardUsecaseParam params);
+   Future<Either<Failure, bool>> createNewOfferNonSocket(CreateNewOfferDashboardUsecaseParam params);
    Future<Either<Failure, bool>> createDriverRating(CreateUpdateDriverRatingUsecaseParam params);
    Future<Either<Failure, bool>> updateDriverRating(CreateUpdateDriverRatingUsecaseParam params);
+   Future<Either<Failure, bool>> acceptTrip(String params);
    void listenToUpdateTripAutoAccept(Function(UpdateTripAutoAcceptEntity trip) params);
    void listenToUpdateTripPrice(Function(UpdateTripPriceEntity trip) params);
-   void listenToNewTrip(Function(TripEntity trip) params);
+   void listenToNewTrip(Function(AvailableRideTripEntity trip) params);
+   void listenToRemoveTrip(Function(String tripId) params);
    void listenToAcceptOffer(Function(AcceptOfferEntity trip) params);
 
 

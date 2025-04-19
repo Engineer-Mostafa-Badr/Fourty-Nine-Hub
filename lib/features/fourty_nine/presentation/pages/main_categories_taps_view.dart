@@ -93,7 +93,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
               ),
             )
           : null,
-      enableCustomAppBar: true,
+      enableCustomAppBar:widget.isAppBarShow? true:false,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
         child: Column(

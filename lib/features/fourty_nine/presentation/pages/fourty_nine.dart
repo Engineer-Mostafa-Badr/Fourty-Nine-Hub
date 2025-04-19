@@ -27,6 +27,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../../common/widgets/dynamic/bottom_navigator.dart';
+import '../../../../common/widgets/dynamic/custom_bottom_navigator.dart';
 import '../../../../common/widgets/dynamic/drawer.dart';
 import '../../../../common/widgets/dynamic/floating_button.dart';
 import '../../../../common/widgets/dynamic/sizer.dart';
@@ -165,13 +166,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
             child: HomeAppbar(
               isWithBackArrow: false,
               language: true,
-              // leading: IconButton(
-              //   icon: const Icon(Icons.menu,size: 50,), // The menu icon
-              //   onPressed: () {
-              //     HandleCashback.setCount('drawerCount', context);
-              //     _scaffoldKey.currentState?.openDrawer(); // Open the drawer
-              //   },
-              // ),
+              // isHaveLeading: true,
             ),
           ),
           bottomNavigationBar: BottomNavigator(
@@ -188,7 +183,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                 ),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
-          drawer: const DrawerWidget(),
+          // drawer: const DrawerWidget(),
           body: ListView(
             controller: scrollController,
             shrinkWrap: true,
@@ -250,16 +245,106 @@ class _FourtyNineViewState extends State<FourtyNineView>
               //     Expanded(child: _buildStarWidget()),
               //   ],
               // ),
+              // const Sizer(),
+              // Row(children: [
+              //   Expanded(
+              //     child: _buildStarWidget(
+              //       onTap: () {
+              //         AdInterstitialTop.loadIntersitialAd();
+              //         AdInterstitialTop.showInterstitialAd();
+              //         context.push(Routes.BE_STAR);
+              //       },
+              //       shadowColor: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
+              //       image: Assets.car2Image,
+              //       title: LocaleKeys.ride.localize,
+              //     ),
+              //   ),
+              //   const Sizer(width: 32),
+              //   Expanded(child: _pickMeAndComeWithUWidget()),
+              // ]),
+              // const Sizer(),
               const Sizer(),
-              //pick me and come with U
               Row(children: [
-                Expanded(child: _buildStarWidget()),
-                const Sizer(
-                  width: 32,
+                const Sizer(width: 8),
+
+                Expanded(
+                  child: _buildStarWidget(
+                    onTap: () {
+                      AdInterstitialTop.loadIntersitialAd();
+                      AdInterstitialTop.showInterstitialAd();
+                      context.push(Routes.RIDE_HOME);
+                    },
+                    shadowColor: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
+                    image: Assets.car2Image,
+                    title: LocaleKeys.ride.localize,
+                  ),
                 ),
-                Expanded(child: _pickMeAndComeWithUWidget()),
+                const Sizer(width: 32),
+                Expanded(
+                  child: _buildStarWidget(
+                    onTap: () {
+                      AdInterstitialTop.loadIntersitialAd();
+                      AdInterstitialTop.showInterstitialAd();
+                      context.push(Routes.VISITA);
+                    },
+                    shadowColor: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
+                    image: Assets.doctorImage,
+                    title: LocaleKeys.health.localize,
+                  ),
+                ),
+                const Sizer(width: 32),
+                Expanded(
+                  child: _buildStarWidget(
+                    onTap: () {
+                      AdInterstitialTop.loadIntersitialAd();
+                      AdInterstitialTop.showInterstitialAd();
+                      HandleCashback.setCount('beAStarCount', context);
+                      context.push(Routes.FOOD);
+                    },
+                    shadowColor: Colors.deepOrange.withValues(alpha: .7),
+                    image: Assets.mealImage,
+                    title: LocaleKeys.meal.localize,
+                  ),
+                ),
+                const Sizer(width: 8),
+
               ]),
-              // _pickMeAndComeWithUWidget(),
+              const Sizer(),
+              const Sizer(),
+              Row(children: [
+                const Sizer(width: 8),
+
+                  Expanded(child: _pickMeAndComeWithUWidget()),
+                const Sizer(width: 32),
+                Expanded(
+                  child: _buildStarWidget(
+                    onTap: () {
+                      AdInterstitialTop.loadIntersitialAd();
+                      AdInterstitialTop.showInterstitialAd();
+                      HandleCashback.setCount('beAStarCount', context);
+                      context.push(Routes.BE_STAR);
+                    },
+                    shadowColor: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
+                    image: Assets.tube1,
+                    title: LocaleKeys.tube.localize,
+                  ),
+                ),
+                const Sizer(width: 32),
+                Expanded(
+                  child: _buildStarWidget(
+                    onTap: () {
+                      AdInterstitialTop.loadIntersitialAd();
+                      AdInterstitialTop.showInterstitialAd();
+                      context.push(Routes.MARRIAGESUBCATEGORIES);
+                    },
+                    shadowColor: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
+                    image: Assets.marriage,
+                    title: LocaleKeys.marriage.localize,
+                  ),
+                ),
+                const Sizer(width: 8),
+
+              ],),
               const Sizer(),
               // _buildTenPercentWidget(),
               // const Sizer(),
@@ -318,7 +403,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                           const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisSpacing: 10,
                               crossAxisCount: 2,
-                              childAspectRatio: 2 / 3),
+                              childAspectRatio: .9),
                       itemCount: state.data?.length ?? 0,
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
@@ -384,13 +469,12 @@ class _FourtyNineViewState extends State<FourtyNineView>
         ),
         GestureDetector(
           onTap: () {
-            if(context.read<UserCubit>().isLoggedIn){
-
-            }else {
+            if (context.read<UserCubit>().isLoggedIn) {
+            } else {
               Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const FavouriteScreensView()));
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const FavouriteScreensView()));
             }
           },
           child: Container(
@@ -433,7 +517,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
       },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-        height: 45,
+        height: 40,
         decoration: BoxDecoration(
           color: AppColors.BG_GRAY_COLOR,
           borderRadius: BorderRadius.circular(20.r),
@@ -460,22 +544,23 @@ class _FourtyNineViewState extends State<FourtyNineView>
     );
   }
 
-  Widget _buildStarWidget() {
+  Widget _buildStarWidget({
+    void Function()? onTap,
+    required Color shadowColor,
+    required String title,
+    required String image,
+  }) {
     return GestureDetector(
-      onTap: () {
-        AdInterstitialTop.loadIntersitialAd();
-        AdInterstitialTop.showInterstitialAd();
-        HandleCashback.setCount('beAStarCount', context);
-        context.push(Routes.BE_STAR);
-      },
+      onTap: onTap,
       child: Container(
-        height: kToolbarHeight * 2.h,
+        // height: kToolbarHeight * 2.h,
+        height: 64,
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(40.r),
           boxShadow: [
             BoxShadow(
-              color: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
+              color: shadowColor,
               spreadRadius: 5,
               blurRadius: 5,
               offset: const Offset(1, 1),
@@ -487,7 +572,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
           alignment: Alignment.center,
           children: [
             Image.asset(
-              Assets.tube1,
+              image,
               fit: BoxFit.fill,
               width: double.infinity,
             ),
@@ -495,7 +580,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
               color: Colors.black38,
             ),
             Label(
-              text: LocaleKeys.tube.localize,
+              text: title,
               style: Styles.mediumText(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
@@ -560,7 +645,8 @@ class _FourtyNineViewState extends State<FourtyNineView>
         route != null ? context.push(route) : null;
       },
       child: Container(
-        height: kToolbarHeight * 2.h,
+        // height: kToolbarHeight * 2.h,
+        height: 64,
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(40.r),

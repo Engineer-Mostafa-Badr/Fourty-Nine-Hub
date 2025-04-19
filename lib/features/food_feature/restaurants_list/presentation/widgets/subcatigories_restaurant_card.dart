@@ -384,7 +384,7 @@ class DetailsSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         // mainAxisAlignment: MainAxisAlignment.spaceAround,
-        spacing: 8,
+        spacing: 6,
         children: [
           const SizedBox(
             height: 8,

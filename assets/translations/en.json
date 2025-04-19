@@ -799,7 +799,7 @@
   "receiveFawry": "Your Yellow Card request is successful! 50 has been deducted. You will receive a notification when your card is ready for pickup at any Fawry branch.",
   "doYellowCard": "Do you have a Yellow Card?",
   "yellowCardNumber": "Yellow Card Phone Number",
-  "atLeast300YellowCard": "You need at least 300 to request a Yellow Card.",
+  "atLeast300YellowCard": "You need at least 400 to request a Yellow Card.",
   "WillBeDeducted": "Request Yellow Card (50 will be deducted)",
   "iDFrontAndBack": "Upload Your ID (Front and Back):",
   "uploadFrontID": "Upload Front ID",
@@ -1528,5 +1528,6 @@
   "commentAdded": "Comment added",
   "areYouSureYouWantToDeleteThisComment": "Are you sure you want to delete this comment?",
   "responseStatus": "Response Status",
+  "socialExplain": "Get money if you post, view and like on any interface you like!",
   "imBookingOfAnotherClient": "I am booking on behalf of another Client"
 }
