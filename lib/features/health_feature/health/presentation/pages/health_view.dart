@@ -8,6 +8,7 @@ import 'package:fourtyninehub/features/health_feature/health/presentation/widget
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/booking/bookgins.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/cards/booking_history_card.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/cards/current_booking_card.dart';
+import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/cards/request_log_card.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/current_history_booking.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/doctor_mode_banner.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/medical_services/medical_services.dart';
@@ -191,6 +192,7 @@ class _HealthViewState extends State<HealthView> {
             print("Searching for: $query");
             },
             ),
+            const RequestLogCard(),
               /// add doctor entities here
             // Your other widgets
             ]
