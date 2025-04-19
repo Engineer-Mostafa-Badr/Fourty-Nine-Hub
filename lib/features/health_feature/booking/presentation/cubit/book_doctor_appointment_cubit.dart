@@ -15,9 +15,9 @@ class BookDoctorAppointmentCubit extends Cubit<BookDoctorAppointmentState> {
   final phoneNumberTextController = TextEditingController();
   final phoneFousNode = FocusNode();
   final ageFocusNode = FocusNode();
-  final ageController = TextEditingController();
+  // final ageController = TextEditingController();
   final notesFocusNode = FocusNode();
-  final notesController = TextEditingController();
+  // final notesController = TextEditingController();
   final addressFocusNode = FocusNode();
   // final addressController = TextEditingController();
   final formKey = GlobalKey<FormState>();
@@ -47,9 +47,9 @@ class BookDoctorAppointmentCubit extends Cubit<BookDoctorAppointmentState> {
     phoneNumberTextController.dispose();
     phoneFousNode.dispose();
     ageFocusNode.dispose();
-    ageController.dispose();
+    // ageController.dispose();
     notesFocusNode.dispose();
-    notesController.dispose();
+    // notesController.dispose();
     addressFocusNode.dispose();
     nameTextController.dispose();
     // addressController.dispose();
@@ -57,6 +57,9 @@ class BookDoctorAppointmentCubit extends Cubit<BookDoctorAppointmentState> {
   }
 
   Future<void> regularBooking() async {
+    print(phoneNumberTextController.text);
+    print(nameTextController.text);
+    // print(ageController.text);
     _validate(afterValidation: () async {
       emit(BookDoctorAppointmentStartLoadingState());
       final response = await _bookRegularAppointmentUseCase.call(_params);
@@ -89,9 +92,9 @@ class BookDoctorAppointmentCubit extends Cubit<BookDoctorAppointmentState> {
 
   void _saveText() {
     _params.name = nameTextController.text;
-    _params.notes = notesController.text;
+    // _params.notes = notesController.text;
     _params.phone = phoneNumberTextController.text;
-    _params.age = ageController.text;
+    // _params.age = ageController.text;
   }
 
   void selectGender(GenderType gender) {
