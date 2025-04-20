@@ -266,7 +266,9 @@ abstract class Routes {
   static const CASHBACK = '/Cashback';
   static const newRideModeScreen = '/NewRideModeScreen';
 
-
+  // reels
+  static const UseSoundScreen = '/UseSoundScreen';
+  static const AddStoryScreen = '/AddStoryScreen';
 }
 
 abstract class Paths {
@@ -521,4 +523,7 @@ abstract class Paths {
   // Cashback
   static const CASHBACK = 'CashBack';
 
+  //reels
+  static const useSoundScreen = 'UseSoundScreen';
+  static const addStoryScreen = 'AddStoryScreen';
 }

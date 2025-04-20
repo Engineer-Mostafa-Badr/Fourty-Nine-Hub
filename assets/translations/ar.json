@@ -544,7 +544,7 @@
   "totalPrice": "السعر الإجمالي",
   "brand": "ماركة",
   "publish_permiun": "نشر مميز",
-  "welcome_pick_me":"مرحباً بك في جاي معاك",
+  "welcome_pick_me": "مرحباً بك في جاي معاك",
   "tool_help_question": "أنشئ رحلة وأضف رحلتك. انتظر تواصل أصحاب السيارات معك. شارك الرحلة ووفّر المال!",
   "model": "  طراز",
   "publish": "نشر",
@@ -1475,5 +1475,9 @@
   "areYouSureUpdate": "Are you sure you want to update",
   "exploreTripsThatAreActiveAtTheMoment": "استكشف الرحلات النشطة في الوقت الحالي",
   "youWillFindFewerDriversIfYouSelectThisOption": "ستجد عددًا أقل من السائقين إذا قمت بتحديد هذا الخيار",
-  "initiateRouteWaitFor1HourToGiveUserTimeToBookASeatInTheSameCarWithTheSameCaptain": "ابدأ المسار وانتظر لمدة ساعة لإعطاء المستخدم الوقت لحجز مقعد في نفس السيارة مع نفس القبطان."
+  "initiateRouteWaitFor1HourToGiveUserTimeToBookASeatInTheSameCarWithTheSameCaptain": "ابدأ المسار وانتظر لمدة ساعة لإعطاء المستخدم الوقت لحجز مقعد في نفس السيارة مع نفس القبطان.",
+  "useThisSound": "استخدم هذا الصوت",
+  "collab": "تعاون",
+  "layout": "تَخطِيط",
+  "mixReel": "بكرات مختلطة"
 }

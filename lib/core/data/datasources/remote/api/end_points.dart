@@ -52,9 +52,9 @@ class EndPoints {
   static const logout = '/auth/logout';
 
   static const pageSize = 10;
-  static const developmentWebSocketBaseUrl = 'https://49dev.com';
-  static const developmentBaseUrl = 'https://49dev.com/api/v1';
-  static const productionBaseUrl = 'https://49dev.com/api/v1';
+  static const developmentWebSocketBaseUrl = 'https://49backend.com';
+  static const developmentBaseUrl = 'https://49backend.com/api/v1';
+  static const productionBaseUrl = 'https://49backend.com/api/v1';
   static const storageBaseUrl = 'https://49-space.fra1.digitaloceanspaces.com/';
   static const login = '/auth/login';
   static const getProfile = '/users/profile';
@@ -178,17 +178,22 @@ class EndPoints {
   static const customPageCat = '/navigators/navigateCategories';
   static const updateCustomPageCat = '/navigators/customPage-subcategories';
   static const activate = '/navigators/customPage';
-  static customPageSubCat(String mainCategoryId) => '/navigators/subcategories/$mainCategoryId';
+  static customPageSubCat(String mainCategoryId) =>
+      '/navigators/subcategories/$mainCategoryId';
 
   // Star
-  static String   allStar(StarPaginationParams params) =>
+  static String allStar(StarPaginationParams params) =>
       '/talent/?page=${params.page}&limit=${params.limit}&subCategory=${Constants.tubeSubCategory}';
   static String winnerStar(StarPaginationParams params) =>
       '/talent/all-winner?page=${params.page}&limit=${params.limit}&subCategory=${Constants.tubeSubCategory}';
-  static String myStar = '/talent/my-talent?subCategory=${Constants.tubeSubCategory}';
-  static String uploadStar = '/talent/upload?subCategory=${Constants.tubeSubCategory}';
-  static String bannerTalent = '/talent/banner?subCategory=${Constants.tubeSubCategory}';
-  static String deleteMyStar({required String id}) => '/talent/$id?subCategory=${Constants.tubeSubCategory}';
+  static String myStar =
+      '/talent/my-talent?subCategory=${Constants.tubeSubCategory}';
+  static String uploadStar =
+      '/talent/upload?subCategory=${Constants.tubeSubCategory}';
+  static String bannerTalent =
+      '/talent/banner?subCategory=${Constants.tubeSubCategory}';
+  static String deleteMyStar({required String id}) =>
+      '/talent/$id?subCategory=${Constants.tubeSubCategory}';
 
   //My Ads
   static const myAdsAuction = '/ads/allMyAds/auction';
@@ -240,7 +245,8 @@ class EndPoints {
   static const sendForgetPasswordOTP = '/auth/forget-password';
   static const verifyForgetPasswordOTP = '/auth/verify/otp';
   static const createNewForgetPassword = '/auth/reset-password';
-  static const createNewForgetPasswordByQuestions = '/auth/reset-password-questions';
+  static const createNewForgetPasswordByQuestions =
+      '/auth/reset-password-questions';
   static const changePassword = '/auth/change-password';
   static const notifications = '/notifications';
   static const unreadNotificationsCount = '/notifications/unread/count';
@@ -253,7 +259,6 @@ class EndPoints {
   static const onlyWithPrivacy = '/privacy/exclusion/only-with';
   static const exceptFromPrivacy = '/privacy/exclusion/except-from';
   static const exclusionPrivacy = '/privacy/exclusion?feature=';
-
 
   static const searchUserPrivacy = '/search/users/';
   static const deleteAccount = '/users/settings/delete-account';
@@ -287,7 +292,8 @@ class EndPoints {
   // ride
   static String bannerDataRider = "$developmentBaseUrl/ride/get-thumbnail-ride";
   static String getDriverRide = "$developmentBaseUrl/ride/riders/Info";
-  static String specialRegister = "$developmentBaseUrl/ride/drivers/registration/special";
+  static String specialRegister =
+      "$developmentBaseUrl/ride/drivers/registration/special";
   static String loadingRegister = "$developmentBaseUrl/loading/driver/register";
   static String riderRegister = "$developmentBaseUrl/ride/riders/register";
   static String expectedPrice = "$developmentBaseUrl/ride/trips/expected/price";
@@ -530,8 +536,8 @@ class EndPoints {
   static const updatePrivacy = '/stories/privacy';
   static const getFollowers =
       '/follow/followers?subCategory=66b77e77bb35968b535dc944';
-  static addReelComment(AddReelCommentParams params) =>
-      '/reels/comments/${params.reelId}';
+  // static addReelComment(AddReelCommentParams params) =>
+  //     '/reels/comments/${params.reelId}';
   static addReelReply(AddReelReplyParams params) =>
       '/reels/comments/${params.reelId}';
 
@@ -546,8 +552,10 @@ class EndPoints {
   static String mainSubCategories({required GetSubCategoriesParams params}) {
     return '/categories/subcategories/${params.mainCategoryId}?userId=${params.userId}';
   }
-  static String customPageSubCategories({required GetCustomPageSubCategoriesParams params}) {
-    return '/navigators/navigateCategories-enable/${params.mainCategoryId??'62c8b5779332225799fe3304'}';
+
+  static String customPageSubCategories(
+      {required GetCustomPageSubCategoriesParams params}) {
+    return '/navigators/navigateCategories-enable/${params.mainCategoryId ?? '62c8b5779332225799fe3304'}';
   }
 
   static const riderInfoRegister = '/ride/riders/register';
@@ -1182,9 +1190,11 @@ class EndPoints {
   }
 
   // gecoding google api url
-  static String geocodingUrl ='https://maps.googleapis.com/maps/api/geocode/json';
+  static String geocodingUrl =
+      'https://maps.googleapis.com/maps/api/geocode/json';
   // trip join
-  static String tripJoinExpectedPrice ="/ride/come-with-you/trip/expectedPrice";
+  static String tripJoinExpectedPrice =
+      "/ride/come-with-you/trip/expectedPrice";
   static String getCarBrand = "/ride/riders/brands";
   static String getCarModelByBrand = "/ride/riders/models";
   static String getCarYearType = "/ride/riders/car-years-and-types";
@@ -1248,25 +1258,32 @@ class EndPoints {
   static String getDriversInSubcategory(String subCategoryId) {
     return '/ride/riders/drivers/$subCategoryId';
   }
+
   static String requestTrip(String subcategoryId) {
     return '/ride/trips/newTrip/$subcategoryId';
   }
+
   static String retrieveClientLatestTrip = '/ride/client/trips/latest';
   static String getExpectedPrice(String id) {
     return '/ride/trips/expected/price/$id';
   }
+
   static String getAvailableTrips(AvailableRideTripsUseCaseParams params) {
     return '/ride/driver/trips/available/not-tracking?limit=${params.limit}&page=${params.page}';
   }
-  static String getPastTrips(int page,String type) {
+
+  static String getPastTrips(int page, String type) {
     return '/ride/driver/trips/past?tripType=$type&limit=20&page=$page';
   }
+
   static String createNewOffer(String id) {
     return '/ride/offers/new/offer/$id';
   }
+
   static String updateDriverRating(String id) {
     return '/ride/trip/rating/$id/client';
   }
+
   static String createDriverRating = '/ride/trip/rating/driver';
   static String getSettingsDashboard = '/ride/driver/info/settings';
   static String deleteRideRegistration = '/ride/riders';
@@ -1278,7 +1295,8 @@ class EndPoints {
   static String getRideDriverInfo = '/ride/driver/info';
   static String getRideDriverPictureOptional = '/ride/info/picture-optional';
   static String getCostPerKm = '/ride/driver/info/fair-cost';
-  static String getLoadingInfo = '/loading/driver/info?subCategory=62c8baad8e28a58a3edf5805';
+  static String getLoadingInfo =
+      '/loading/driver/info?subCategory=62c8baad8e28a58a3edf5805';
   static String makeTripRequest = '/ride/trips/request';
 
   static String updateDriverLocation() {
@@ -1337,11 +1355,11 @@ class EndPoints {
     return '/ride/trips/cancel-by-client/$tripId';
   }
 
-  static String cancelPendingTripByClient(String tripId){
+  static String cancelPendingTripByClient(String tripId) {
     return '/ride/client/trips/pending/cancel/$tripId';
   }
 
-  static String recordingTrip(String tripId){
+  static String recordingTrip(String tripId) {
     return '/ride/trips/record-voice/$tripId';
   }
 

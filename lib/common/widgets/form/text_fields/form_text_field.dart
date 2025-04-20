@@ -36,6 +36,9 @@ class FormTextField extends StatelessWidget {
   final BorderRadius? borderRadius;
   final BoxConstraints? constraints;
   final TextStyle? textStyle;
+  final Color? borderColor;
+  final Color? borderSide;
+
   FormTextField(
       {super.key,
       this.initialValue,
@@ -68,7 +71,9 @@ class FormTextField extends StatelessWidget {
       this.validator,
       this.required,
       this.controller,
-      this.textStyle});
+      this.textStyle,
+      this.borderColor,
+      this.borderSide});
 
   bool validate = false;
 
@@ -137,16 +142,16 @@ class FormTextField extends StatelessWidget {
             enabledBorder: noBorder
                 ? InputBorder.none
                 : OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: AppColors.GREYFIELD,
+                    borderSide: BorderSide(
+                      color: borderSide ?? AppColors.GREYFIELD,
                     ),
                     borderRadius: borderRadius ?? BorderRadius.circular(5),
                   ),
             focusedBorder: noBorder
                 ? InputBorder.none
                 : OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: AppColors.GREYFIELD,
+                    borderSide: BorderSide(
+                      color: borderColor ?? AppColors.GREYFIELD,
                     ),
                     borderRadius: borderRadius ?? BorderRadius.circular(5),
                   ),

@@ -104,20 +104,21 @@ class DI {
     serviceLocator.registerLazySingleton(() => PreloadBloc());
     serviceLocator.registerLazySingleton<ReelsCubit>(
       () => ReelsCubit(
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator(),
-          serviceLocator()),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        serviceLocator(),
+        //  serviceLocator(),
+      ),
     );
 
     await Firebase.initializeApp(
@@ -404,16 +405,19 @@ class DI {
     serviceLocator.registerLazySingleton(() => SendCallCubit());
     serviceLocator.registerLazySingleton(() => CallCubit());
     serviceLocator.registerLazySingleton<FcmNotificationHelper>(
-            () => FcmNotificationHelperImpl(serviceLocator()));
+        () => FcmNotificationHelperImpl(serviceLocator()));
     serviceLocator.registerLazySingleton(() => FirebaseMessaging.instance);
-    serviceLocator.registerLazySingleton(() => GetAgoraTokenUsecase(serviceLocator()));
+    serviceLocator
+        .registerLazySingleton(() => GetAgoraTokenUsecase(serviceLocator()));
     serviceLocator.registerLazySingleton<CallRepository>(
-            () => CallRepositoryImpl(serviceLocator()));
+        () => CallRepositoryImpl(serviceLocator()));
     serviceLocator.registerLazySingleton<CallRemoteDatasource>(
-            () => CallRemoteDatasourceImpl());
+        () => CallRemoteDatasourceImpl());
 
-    serviceLocator.registerLazySingleton<CallKitHelper>(() => CallKitHelperImpl());
-    serviceLocator.registerLazySingleton<CallWithNotificationHelper>(
-            () => CallWithNotificationHelper(serviceLocator(), serviceLocator(), serviceLocator()));
-    }
+    serviceLocator
+        .registerLazySingleton<CallKitHelper>(() => CallKitHelperImpl());
+    serviceLocator.registerLazySingleton<CallWithNotificationHelper>(() =>
+        CallWithNotificationHelper(
+            serviceLocator(), serviceLocator(), serviceLocator()));
+  }
 }
