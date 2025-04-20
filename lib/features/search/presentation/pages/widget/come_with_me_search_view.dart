@@ -6,6 +6,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/search/domain/entity/trip_come_with_you_entity.dart';
+import 'package:fourtyninehub/features/search/domain/use_case/fetch_search_use_case.dart';
 import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
 import 'package:fourtyninehub/features/search/presentation/pages/widget/build_Item_trip_come.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/domain/usecases/request_trip_join_usecase.dart';
@@ -14,12 +15,14 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ComeWithMeSearchView extends StatefulWidget {
   const ComeWithMeSearchView({
     super.key,
+    required this.params
   });
+  final SearchParams params;
 
   @override
   State<ComeWithMeSearchView> createState() =>
@@ -27,6 +30,40 @@ class ComeWithMeSearchView extends StatefulWidget {
 }
 
 class _ViewAllTripJoinCardBuilderState extends State<ComeWithMeSearchView> {
+
+
+  late ScrollController _scrollController;
+  late SearchCubit _cubit;
+
+  @override
+  void initState() {
+    super.initState();
+    _cubit = context.read<SearchCubit>();
+    _scrollController = ScrollController()..addListener(_onScroll);
+  }
+
+  void _onScroll() async{
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      final prefs = await SharedPreferences.getInstance();
+      String? filter = prefs.getString('filter');
+      SearchParams searchParams = SearchParams(
+          filter: filter,
+          params: widget.params.params,
+          search: widget.params.search
+      );
+      context.read<SearchCubit>().getPaginatedTripComeSearch(
+          params:searchParams);
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -38,88 +75,52 @@ class _ViewAllTripJoinCardBuilderState extends State<ComeWithMeSearchView> {
           // }
           final controller = context.read<SearchCubit>();
           if (controller.searchController.text.isNotEmpty) {
-            return PagedListView<int, TripComeWithYouEntity>(
-              pagingController: controller.searchPagingTripComeController,
-              builderDelegate: PagedChildBuilderDelegate<TripComeWithYouEntity>(
-                noItemsFoundIndicatorBuilder: (context) {
-                  return Center(
-                    child: Text(
-                      LocaleKeys.noData.localize,
-                      style: Styles.mediumText(),
-                    ),
-                  );
-                },
-                itemBuilder: (context, item, index) {
-                  return BuildItemTripCome(
-                    tripJoinCardEntity: item,
-                    requestOnTap: () async {
-                      await showModalBottomSheet(
-                        context: context,
-                        isDismissible: true,
-                        isScrollControlled: true,
-                        builder: (_) {
-                          return BlocProvider(
-                            create: (_) => RequestTripJoinCubit(
-                              requestTripJoinUseCase:
-                                  serviceLocator<RequstTripJoinUseCase>(),
-                            ),
-                            child: RequstTripJoinBottomSheet(
-                                tripJoinCardEntity: state.tripCome![index]),
-                          );
-                        },
-                      );
-                    },
-                    subscribeMessageOnTap: () async {
-                      // if (await _isPremuim(
-                      //   tripJoinCardEntity,
-                      //   tripJoinCardEntity.categoryId ?? '',
-                      //   LocaleKeys.tripjoinPremuimSubscription.localize,
-                      // )) {}
-                    },
-                  );
-                },
-                noMoreItemsIndicatorBuilder: (context) => Container(),
-                firstPageProgressIndicatorBuilder: (context) =>
-                    const CupertinoActivityIndicator(),
-                newPageProgressIndicatorBuilder: (context) =>
-                    const CupertinoActivityIndicator(),
-              ),
+            return ListView.builder(
+              controller: _scrollController,
+              physics: const AlwaysScrollableScrollPhysics(),
+              itemCount: controller.tripComeSearch.length,
+              itemBuilder: (context, index) {
+                return BuildItemTripCome(
+                  tripJoinCardEntity: controller.tripComeSearch[index],
+                  requestOnTap: () async {
+                    await showModalBottomSheet(
+                      context: context,
+                      isDismissible: true,
+                      isScrollControlled: true,
+                      builder: (_) {
+                        return BlocProvider(
+                          create: (_) => RequestTripJoinCubit(
+                            requestTripJoinUseCase:
+                            serviceLocator<RequstTripJoinUseCase>(),
+                          ),
+                          child: RequstTripJoinBottomSheet(
+                              tripJoinCardEntity: state.tripCome![index]),
+                        );
+                      },
+                    );
+                  },
+                  subscribeMessageOnTap: () async {
+                    // if (await _isPremuim(
+                    //   tripJoinCardEntity,
+                    //   tripJoinCardEntity.categoryId ?? '',
+                    //   LocaleKeys.tripjoinPremuimSubscription.localize,
+                    // )) {}
+                  },
+                );
+              },
             );
           }
 
           return Center(
-            child: Text(LocaleKeys.noResultsFound.localize),
+            child: Text(
+              LocaleKeys.noData.localize,
+              style: Styles.mediumText(),
+            ),
           );
         },
       ),
     );
   }
-
-  // Future<bool> _isPremuim(TripComeWithYouEntity tripJoinCardEntity,
-  //     String subCategoryId, String title) async {
-  //   if (tripJoinCardEntity.subscribedPremium == null ||
-  //       tripJoinCardEntity.subscribedPremium == false) {
-  //     await serviceLocator<SubscriptionController>().showSubscriptionPlans(
-  //       // wallets: [
-  //       //   tripJoinCardEntity.paymentMethod?.toWalletType ?? WalletTypes.balance
-  //       // ],
-  //       subCategoryId: subCategoryId,
-  //       title: title,
-  //     );
-  //     return false;
-  //   }
-  //    return true;
-  // }
-  // void _reportOnTap(BuildContext context, int index) {
-  //   bottomSheet(
-  //       context: context,
-  //       widget: ReportViewTripJoin(
-  //         id: viewAllTripJoinCubit.tripJoinCards[index].userId ?? '',
-  //         cardId: viewAllTripJoinCubit.tripJoinCards[index].id ?? '',
-  //         categoryId:
-  //         viewAllTripJoinCubit.tripJoinCards[index].categoryId ?? '',
-  //       ));
-  // }
 }
 
 class RequstTripJoinBottomSheet extends StatefulWidget {

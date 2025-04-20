@@ -8,18 +8,18 @@ import 'package:fourtyninehub/features/health_feature/doctor_filter/domain/repos
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/appointment_booking_entity.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
 import '../../../../../../core/abstract/use_case.dart';
-
-class GetDoctorListUseCase
-    extends UseCase<List<DoctorEntity>, DoctorSearchParams> {
-  final DoctorListRepo _repo;
-  GetDoctorListUseCase(this._repo);
-
-  @override
-  Future<Either<Failure, List<DoctorEntity>>> call(DoctorSearchParams params) {
-    return _repo.getDoctorsList(params: params);
-  }
-}
-
+//
+// class GetDoctorListUseCase
+//     extends UseCase<List<DoctorEntity>, DoctorSearchParams> {
+//   final DoctorListRepo _repo;
+//   GetDoctorListUseCase(this._repo);
+//
+//   @override
+//   Future<Either<Failure, List<DoctorEntity>>> call(DoctorSearchParams params) {
+//     return _repo.getDoctorsList(params: params);
+//   }
+// }
+//
 class DoctorSearchParams {
   int page = 1;
   int limit = 10;

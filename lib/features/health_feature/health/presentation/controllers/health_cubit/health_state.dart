@@ -21,9 +21,11 @@ class HealthState {
   final bool? isDoctor;
   final bool? isApproved;
   final bool? isLoadingMoreBooking;
+  final bool? isLoadingMoreMostBooking;
   final List<BookingEntity>? currentBookings;
   final List<BookingEntity>? historyBookings;
   final String? activeBookingType;
+  final List<MostBookingEntity>? mostBooking;
   const HealthState({
     this.status = HealthStates.loading,
     this.failure,
@@ -39,6 +41,8 @@ class HealthState {
      this.currentBookings,
      this.historyBookings,
      this.activeBookingType,
+     this.mostBooking,
+    this.isLoadingMoreMostBooking = false,
   });
 
   HealthState copyWith({
@@ -53,9 +57,11 @@ class HealthState {
     List<GovernorateEntity>? governorates,
     Banner? banner,
     bool? isLoadingMoreBooking,
+    bool? isLoadingMoreMostBooking,
     List<BookingEntity>? currentBookings,
     List<BookingEntity>? historyBookings,
     String? activeBookingType,
+    List<MostBookingEntity>? mostBooking,
   }) {
     return HealthState(
       status: status ?? this.status,
@@ -72,6 +78,8 @@ class HealthState {
       currentBookings: currentBookings ?? this.currentBookings,
       historyBookings: historyBookings ?? this.historyBookings,
       activeBookingType: activeBookingType ?? this.activeBookingType,
+      mostBooking: mostBooking ?? this.mostBooking,
+      isLoadingMoreMostBooking: isLoadingMoreMostBooking ?? this.isLoadingMoreMostBooking,
     );
   }
 }

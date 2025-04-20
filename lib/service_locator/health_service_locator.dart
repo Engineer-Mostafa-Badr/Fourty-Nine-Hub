@@ -85,7 +85,9 @@ import 'package:get_it/get_it.dart';
 import '../features/health_feature/booking/data/repositories/book_doctor_appointment_repo_impl.dart';
 import '../features/health_feature/booking/domain/repositories/book_doctor_appointment_repo.dart';
 import '../features/health_feature/booking/presentation/cubit/book_doctor_appointment_cubit.dart';
+import '../features/health_feature/doctor_filter/domain/usecases/get_doctor_list_use_case.dart';
 import '../features/health_feature/health/domain/usecases/get_booking_use_case.dart';
+import '../features/health_feature/health/domain/usecases/get_most_booking_use_case.dart';
 
 class HealthServiceLocator {
   static void execute({required GetIt serviceLocator}) async {
@@ -253,6 +255,8 @@ class HealthServiceLocator {
         () => DoctorCancelAppointmentUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetBookingUseCase>(
         () => GetBookingUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetMostBookingUseCase>(
+        () => GetMostBookingUseCase(serviceLocator()));
     // -------------------------- cubits --------------------------
     serviceLocator.registerSingleton<HealthSharedData>(HealthSharedData());
     serviceLocator.registerFactory<DoctorDetailsCubit>(() => DoctorDetailsCubit(
@@ -280,6 +284,7 @@ class HealthServiceLocator {
               serviceLocator(),
             ));
     serviceLocator.registerFactory<HealthCubit>(() => HealthCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

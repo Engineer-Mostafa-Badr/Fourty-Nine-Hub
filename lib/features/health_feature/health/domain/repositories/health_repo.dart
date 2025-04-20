@@ -5,7 +5,9 @@ import 'package:fourtyninehub/features/health_feature/health/domain/entities/fav
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/health_subcategory_entity.dart';
 import '../../../../../core/error/failure.dart';
 import '../entities/appointment_booking_entity.dart';
+import '../entities/most_booking_entity.dart';
 import '../usecases/get_booking_use_case.dart';
+import '../usecases/get_most_booking_use_case.dart';
 
 abstract class HealthRepo {
   Future<Either<Failure, List<BookedAppointmentEntity>>> getMyBookingsHistory();
@@ -25,4 +27,5 @@ abstract class HealthRepo {
   Future<Either<Failure, DoctorInfoEntity>> getDoctorInfo();
   Future<Either<Failure, bool>> cancelAppointment(String id);
   Future<Either<Failure, List<BookingEntity>>> getBooking({required GetBookingParams params});
+  Future<Either<Failure, List<MostBookingEntity>>> getMostBooking({required GetMostBookingParams params});
 }

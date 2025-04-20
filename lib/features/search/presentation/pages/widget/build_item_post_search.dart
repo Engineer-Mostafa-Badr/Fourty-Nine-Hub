@@ -98,27 +98,27 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
       final controller = context.read<SearchCubit>();
       if (widget.from == 'posts') {
         if (controller
-                .searchPagingPostsController.itemList?[widget.index].type ==
+                .postsSearch[widget.index].type ==
             'advertisement') {
           return FacebookAdvertisementCard(
             post:
-                controller.searchPagingPostsController.itemList![widget.index],
+                controller.postsSearch[widget.index],
           );
         } else if (controller
-                .searchPagingPostsController.itemList![widget.index].type ==
+                .postsSearch[widget.index].type ==
             'twitter_post') {
           return FacebookTweetCard(
             post:
-                controller.searchPagingPostsController.itemList![widget.index],
+                controller.postsSearch[widget.index],
           );
         } else {
           var myPost = widget.from == 'details'
               ? widget.post
-              : controller.searchPagingPostsController.itemList![widget.index];
+              : controller.postsSearch[widget.index];
           return InkWell(
             onTap: (widget.from == 'posts' && widget.post.isShared == true)
                 ? () => widget.showPostDetails(controller
-                    .searchPagingPostsController.itemList![widget.index])
+                    .postsSearch[widget.index])
                 : null,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -402,11 +402,11 @@ class _FacebookPostCardState extends State<BuildItemPostSearch> {
       } else {
         var myPost = widget.from == 'details'
             ? widget.post
-            : controller.searchPagingPostsController.itemList![widget.index];
+            : controller.postsSearch[widget.index];
         return InkWell(
           onTap: (widget.from == 'posts' && widget.post.isShared == true)
               ? () => widget.showPostDetails(controller
-                  .searchPagingPostsController.itemList![widget.index])
+                  .postsSearch[widget.index])
               : null,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

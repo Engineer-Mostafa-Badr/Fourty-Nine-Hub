@@ -1526,7 +1526,9 @@ class CodegenLoader extends AssetLoader{
   "commentAdded": "تم إضافة التعليق",
   "areYouSureYouWantToDeleteThisComment": "هل أنت متأكد أنك تريد حذف هذا التعليق؟",
   "responseStatus": "حالة الرد",
-  "imBookingOfAnotherClient": "أقوم بالحجز نيابة عن عميل آخر"
+  "socialExplain": "احصل على المال إذا قمت بالنشر والمشاهدة والإعجاب على أي واجهة تريدها!",
+  "imBookingOfAnotherClient": "أقوم بالحجز نيابة عن عميل آخر",
+  "mostBooking": "معظم الحجوزات"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -3057,7 +3059,9 @@ static const Map<String,dynamic> _en = {
   "commentAdded": "Comment added",
   "areYouSureYouWantToDeleteThisComment": "Are you sure you want to delete this comment?",
   "responseStatus": "Response Status",
-  "imBookingOfAnotherClient": "I am booking on behalf of another Client"
+  "socialExplain": "Get money if you post, view and like on any interface you like!",
+  "imBookingOfAnotherClient": "I am booking on behalf of another Client",
+  "mostBooking": "Most Booking"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

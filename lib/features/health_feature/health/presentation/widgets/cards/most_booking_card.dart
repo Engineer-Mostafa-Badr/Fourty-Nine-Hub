@@ -17,21 +17,20 @@ import 'package:url_launcher/url_launcher_string.dart';
 import '../../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../../helpers/subscription_method.dart';
 import '../../../../../food_feature/food_cart/presentation/pages/cart_view.dart';
+import '../../../../../food_feature/restaurants_list/presentation/widgets/subcatigories_restaurant_card.dart';
 import '../../../../../social_media/instagram/presentation/widgets/comment_widget_insta.dart';
 import '../../../../../social_media/twitter/presentation/widgets/report_view.dart';
 import '../../../domain/entities/most_booking_entity.dart';
 import '../../controllers/health_cubit/health_cubit.dart';
-
-
-class DoctorsListView extends StatefulWidget {
-  const DoctorsListView({super.key, this.onClose});
+class MostBookingScreen extends StatefulWidget {
+  const MostBookingScreen({super.key, this.onClose});
   final VoidCallback? onClose;
 
   @override
-  State<DoctorsListView> createState() => _DoctorsListViewState();
+  State<MostBookingScreen> createState() => _MostBookingScreenState();
 }
 
-class _DoctorsListViewState extends State<DoctorsListView> {
+class _MostBookingScreenState extends State<MostBookingScreen> {
   late ScrollController _scrollController;
 
   @override
@@ -97,7 +96,7 @@ class _DoctorsListViewState extends State<DoctorsListView> {
                     final booking = cubit.mostBooking[index];
                     return Padding(
                       padding: const EdgeInsets.all(4.0),
-                      child: DoctorListCard(
+                      child: MostBookingCard(
                         data: booking,
                       ),
                     );
@@ -118,8 +117,8 @@ class _DoctorsListViewState extends State<DoctorsListView> {
   }
 }
 
-class DoctorListCard extends StatefulWidget {
-  const  DoctorListCard({
+class MostBookingCard extends StatefulWidget {
+  const  MostBookingCard({
     super.key,
     required this.data,
   });
@@ -127,10 +126,10 @@ class DoctorListCard extends StatefulWidget {
   final MostBookingEntity data;
 
   @override
-  State<DoctorListCard> createState() => _DoctorListCardState();
+  State<MostBookingCard> createState() => _MostBookingCardState();
 }
 
-class _DoctorListCardState extends State<DoctorListCard> {
+class _MostBookingCardState extends State<MostBookingCard> {
   String formatViews(int views) {
     if (views >= 1000000) {
       return "${(views / 1000000).toStringAsFixed(1)}M";
@@ -150,11 +149,11 @@ class _DoctorListCardState extends State<DoctorListCard> {
         // padding:const EdgeInsets.all(10) ,
         decoration: BoxDecoration(
             border: Border.all(
-                color: AppColors.black.withOpacity(0.7),
-                width: 1
+              color: AppColors.black.withOpacity(0.7),
+              width: 1
             ),
-            borderRadius: BorderRadius.circular(15)
-        ),
+          borderRadius: BorderRadius.circular(15) 
+          ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -350,7 +349,7 @@ class _DoctorListCardState extends State<DoctorListCard> {
                       Label(
                         text: '${widget.data.bookingCount ?? 0}/${LocaleKeys.book.localize}',
                         style: Styles.mediumText(fontWeight: FontWeight.w500,
-                            color: AppColors.PRIMARY_COLOR_DARK
+                        color: AppColors.PRIMARY_COLOR_DARK
                         ),
                       )
                     ],

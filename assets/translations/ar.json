@@ -1512,6 +1512,7 @@
   "areYouSureYouWantToDeleteThisComment": "هل أنت متأكد أنك تريد حذف هذا التعليق؟",
   "responseStatus": "حالة الرد",
   "socialExplain":"احصل على المال إذا قمت بالنشر والمشاهدة والإعجاب على أي واجهة تريدها!",
-  "imBookingOfAnotherClient": "أقوم بالحجز نيابة عن عميل آخر"
+  "imBookingOfAnotherClient": "أقوم بالحجز نيابة عن عميل آخر",
+  "mostBooking": "معظم الحجوزات"
 
 }
