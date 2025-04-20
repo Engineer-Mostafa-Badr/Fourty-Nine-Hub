@@ -7,6 +7,7 @@ class TabItemWidget extends StatelessWidget {
   final String icon;
   final int index;
   final TabController tabController;
+  final void Function()? onTap;
 
   const TabItemWidget({
     super.key,
@@ -14,6 +15,7 @@ class TabItemWidget extends StatelessWidget {
     required this.icon,
     required this.index,
     required this.tabController,
+    this.onTap,
   });
 
   @override
@@ -51,7 +53,14 @@ class TabItemWidget extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(top: -14, right: -6, child: SvgPicture.asset(icon)),
+          Positioned(
+            top: -14,
+            right: -6,
+            child: GestureDetector(
+              onTap: onTap,
+              child: SvgPicture.asset(icon),
+            ),
+          ),
         ],
       ),
     );

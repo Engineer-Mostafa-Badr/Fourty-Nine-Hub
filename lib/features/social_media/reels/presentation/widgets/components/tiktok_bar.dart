@@ -107,8 +107,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                 if (context
                     .read<ReelsCubit>()
                     .state
-                    .controllers[
-                        context.read<ReelsCubit>().state.focusedIndex]!
+                    .controllers[context.read<ReelsCubit>().state.focusedIndex]!
                     .value
                     .isPlaying) {
                   context
@@ -127,18 +126,18 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
               const Sizer(
                 height: 50,
               ),
-              Image.asset(
-                Assets.volumeOff,
-                color: Colors.white,
-                width: 15,
-                height: 15,
-              ),
-              Image.asset(
-                Assets.volumeOn,
-                color: Colors.white,
-                width: 20,
-                height: 20,
-              )
+              // Image.asset(
+              //   Assets.volumeOff,
+              //   color: Colors.white,
+              //   width: 15,
+              //   height: 15,
+              // ),
+              // Image.asset(
+              //   Assets.volumeOn,
+              //   color: Colors.white,
+              //   width: 20,
+              //   height: 20,
+              // )
             ],
           ),
           Row(
@@ -147,8 +146,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                 if (context
                     .read<ReelsCubit>()
                     .state
-                    .controllers[
-                        context.read<ReelsCubit>().state.focusedIndex]!
+                    .controllers[context.read<ReelsCubit>().state.focusedIndex]!
                     .value
                     .isPlaying) {
                   context
@@ -170,8 +168,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                 if (context
                     .read<ReelsCubit>()
                     .state
-                    .controllers[
-                        context.read<ReelsCubit>().state.focusedIndex]!
+                    .controllers[context.read<ReelsCubit>().state.focusedIndex]!
                     .value
                     .isPlaying) {
                   context
@@ -211,45 +208,6 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
               color: Colors.white,
             ),
           )
-        ],
-      ),
-    );
-    return Directionality(
-      textDirection: TextDirection.ltr,
-      child: Column(
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              // LIVE Icon with Glow Effect
-
-              const Sizer(),
-
-              const Spacer(), // Explore Tab
-
-              const Spacer(),
-              // Search Icon with custom SVG
-              _buildSearchIcon(onTap: () {
-                if (context
-                    .read<ReelsCubit>()
-                    .state
-                    .controllers[
-                        context.read<ReelsCubit>().state.focusedIndex]!
-                    .value
-                    .isPlaying) {
-                  context
-                      .read<ReelsCubit>()
-                      .state
-                      .controllers[
-                          context.read<ReelsCubit>().state.focusedIndex]
-                      ?.pause();
-                }
-                context.push(Routes.Tinder);
-              }),
-              const Sizer(),
-            ],
-          ),
         ],
       ),
     );

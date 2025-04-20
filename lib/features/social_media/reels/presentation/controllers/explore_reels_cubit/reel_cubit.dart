@@ -45,7 +45,7 @@ class ReelsCubit extends Cubit<ReelsState> {
   final SaveReelUseCase _saveReelUseCase;
   final ShareReelUseCase _shareReelUseCase;
   final LikeReelUseCase _likeReelUseCase;
-  final AddReelCommentUseCase _addCommentUseCase;
+  //final AddReelCommentUseCase _addCommentUseCase;
   final AddReelReplyUseCase _addReplyUseCase;
   final GetCommentsUseCase _getCommentsUseCase;
   final ToggleCommentLikeUseCase _toggleCommentLikeUseCase;
@@ -61,14 +61,19 @@ class ReelsCubit extends Cubit<ReelsState> {
       this._saveReelUseCase,
       this._shareReelUseCase,
       this._likeReelUseCase,
-      this._addCommentUseCase,
+      //  this._addCommentUseCase,
       this._addReplyUseCase,
       this._getCommentsUseCase,
       this._toggleCommentLikeUseCase,
       this._reelsWithSameAudioUseCase,
       this._uploadReelUseCase,
       this._uploadVideoReelUseCase)
-      : super(ReelsState(urls: [], controllers: {}, focusedIndex: 0, reloadCounter: 0, isLoading: false));
+      : super(ReelsState(
+            urls: [],
+            controllers: {},
+            focusedIndex: 0,
+            reloadCounter: 0,
+            isLoading: false));
 
   var pauseChild = false;
 
@@ -334,45 +339,46 @@ class ReelsCubit extends Cubit<ReelsState> {
     return message;
   }
 
-  Future<void> addComment(BuildContext context, String reelId, String comment,
-      {String? receiverComment, String? parentCommentId}) async {
-    emit(state.copyWith(isCommenting: true));
-    final result = await _addCommentUseCase(
-        AddReelCommentParams(comment: comment, reelId: reelId));
-    result.fold((failure) {
-      showErrorMessage(context, getFailureMessage(failure, context));
-      emit(state.copyWith(
-        isCommenting: false,
-        commentErrorMessage: "An error occurred while adding the comment",
-      ));
-    }, (addCommentResponse) {
-      final newComment = CommentData(
-        id: addCommentResponse.data.id,
-        reelId: addCommentResponse.data.reelId,
-        comment: addCommentResponse.data.comment,
-        createdAt: addCommentResponse.data.createdAt,
-        updatedAt: addCommentResponse.data.updatedAt,
-        likeCount: 0,
-        isLiked: false,
-        user: UserComment(
-          firstName: context.read<UserCubit>().state.data!.firstName,
-          id: context.read<UserCubit>().state.data!.id,
-          lastName: context.read<UserCubit>().state.data!.lastName,
-          profilePictureSignedUrl:
-              context.read<UserCubit>().state.data!.profilePicture ??
-                  UIConst.profilePlaceHolder,
-        ),
-        parentId: addCommentResponse.data.parentId,
-        receiverComment: addCommentResponse.data.receiverComment,
-        replies: [], // Initialize with an empty replies list
-      );
-      comments.insert(0, newComment);
-      emit(state.copyWith(
-        isCommenting: false,
-        commentResponse: addCommentResponse,
-      ));
-    });
-  }
+  // Future<void> addComment(BuildContext context, String comment,
+  //     {String? receiverComment, String? parentCommentId}) async {
+  //   emit(state.copyWith(isCommenting: true));
+  //   final result = await _addCommentUseCase(AddReelCommentParams(
+  //     comment: comment,
+  //   ));
+  //   result.fold((failure) {
+  //     showErrorMessage(context, getFailureMessage(failure, context));
+  //     emit(state.copyWith(
+  //       isCommenting: false,
+  //       commentErrorMessage: "An error occurred while adding the comment",
+  //     ));
+  //   }, (addCommentResponse) {
+  //     final newComment = CommentData(
+  //       id: addCommentResponse.data.id,
+  //       reelId: addCommentResponse.data.reelId,
+  //       comment: addCommentResponse.data.comment,
+  //       createdAt: addCommentResponse.data.createdAt,
+  //       updatedAt: addCommentResponse.data.updatedAt,
+  //       likeCount: 0,
+  //       isLiked: false,
+  //       user: UserComment(
+  //         firstName: context.read<UserCubit>().state.data!.firstName,
+  //         id: context.read<UserCubit>().state.data!.id,
+  //         lastName: context.read<UserCubit>().state.data!.lastName,
+  //         profilePictureSignedUrl:
+  //             context.read<UserCubit>().state.data!.profilePicture ??
+  //                 UIConst.profilePlaceHolder,
+  //       ),
+  //       parentId: addCommentResponse.data.parentId,
+  //       receiverComment: addCommentResponse.data.receiverComment,
+  //       replies: [], // Initialize with an empty replies list
+  //     );
+  //     comments.insert(0, newComment);
+  //     emit(state.copyWith(
+  //       isCommenting: false,
+  //       commentResponse: addCommentResponse,
+  //     ));
+  //   });
+  // }
 
   Future<void> addReplayComment(
       BuildContext context, String reelId, String comment,
@@ -597,12 +603,6 @@ class ReelsCubit extends Cubit<ReelsState> {
     this.receiverComment = receiverComment;
     emit(state.copyWith(isCreatingReply: true));
   }
-
-
-
-
-
-
 
   //Preloading
   //

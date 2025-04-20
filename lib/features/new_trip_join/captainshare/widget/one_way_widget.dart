@@ -60,14 +60,14 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                     RichText(
                       text: TextSpan(
                         text: "50 ",
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
                         ),
                         children: [
                           TextSpan(
                             text: context.isArabic ? "جنيه مصري" : "EGP",
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.red,
                               fontSize: 12,
                             ),
@@ -77,88 +77,92 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      children: [
-                        Text(
-                          LocaleKeys.booked.localize,
-                          style: TextStyle(
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.bold,
+                SizedBox(height: 16.h),
+                Padding(
+                  padding: EdgeInsets.only(top: 12.h),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        children: [
+                          Text(
+                            LocaleKeys.booked.localize,
+                            style: TextStyle(
+                              fontSize: 20.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 4),
-                        SvgPicture.asset(Assets.bookedMan),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Text(
-                          LocaleKeys.free.localize,
-                          style: TextStyle(
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.bold,
+                          SizedBox(height: 8.h),
+                          SvgPicture.asset(Assets.bookedMan),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Text(
+                            LocaleKeys.free.localize,
+                            style: TextStyle(
+                              fontSize: 20.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 4),
-                        SvgPicture.asset(
-                          Assets.freeIcon,
-                          color:
-                              context.isDarkMode ? Colors.white : Colors.black,
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Text(
-                          LocaleKeys.free.localize,
-                          style: TextStyle(
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        SvgPicture.asset(
-                          Assets.freeIcon,
-                          color:
-                              context.isDarkMode ? Colors.white : Colors.black,
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Text(
-                          LocaleKeys.seat.localize,
-                          style: TextStyle(
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.bold,
+                          SizedBox(height: 8.h),
+                          SvgPicture.asset(
+                            Assets.freeIcon,
                             color: context.isDarkMode
                                 ? Colors.white
-                                : AppColors.PRIMARY_COLOR,
+                                : Colors.black,
                           ),
-                        ),
-                        const SizedBox(height: 4),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 10, left: 5),
-                          child: Text(
-                            widget.statusDriver ?? "",
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Text(
+                            LocaleKeys.free.localize,
                             style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w900,
+                              fontSize: 20.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 8.h),
+                          SvgPicture.asset(
+                            Assets.freeIcon,
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : Colors.black,
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Text(
+                            LocaleKeys.seat.localize,
+                            style: TextStyle(
+                              fontSize: 20.sp,
+                              fontWeight: FontWeight.bold,
                               color: context.isDarkMode
                                   ? Colors.white
                                   : AppColors.PRIMARY_COLOR,
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                          // const SizedBox(height: 4),
+                          Padding(
+                            padding: EdgeInsets.only(top: 15.h, left: 8.h),
+                            child: Text(
+                              widget.statusDriver ?? "",
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.w900,
+                                color: context.isDarkMode
+                                    ? Colors.white
+                                    : AppColors.PRIMARY_COLOR,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-                const SizedBox(height: 2),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Row(
@@ -194,6 +198,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                     ],
                   ),
                 ),
+
                 const SizedBox(height: 8),
                 Row(
                   children: [
@@ -285,7 +290,7 @@ class _OneWayWidgetState extends State<OneWayWidget> {
         ),
         Positioned(
           bottom: 9,
-          left: 170,
+          left: 270.h,
           child: GestureDetector(
             onTap: () {
               setState(() {
@@ -298,11 +303,10 @@ class _OneWayWidgetState extends State<OneWayWidget> {
             ),
           ),
         ),
-        // الـ Container اللي هيظهر أو يختفي حسب الضغط
         if (_showContainer)
           const Positioned(
             top: 0,
-            bottom: 75, // تحديد المكان اللي هيظهر فيه الـ Container
+            bottom: 80, // تحديد المكان اللي هيظهر فيه الـ Container
             left: 0,
             right: 0,
             child: AddressWidget(),

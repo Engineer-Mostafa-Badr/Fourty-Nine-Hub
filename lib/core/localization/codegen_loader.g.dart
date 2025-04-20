@@ -1496,6 +1496,10 @@ class CodegenLoader extends AssetLoader{
   "areYouSureUpdate": "Are you sure you want to update",
   "exploreTripsThatAreActiveAtTheMoment": "استكشف الرحلات النشطة في الوقت الحالي",
   "youWillFindFewerDriversIfYouSelectThisOption": "ستجد عددًا أقل من السائقين إذا قمت بتحديد هذا الخيار",
+  "useThisSound": "استخدم هذا الصوت",
+  "collab": "تعاون",
+  "layout": "تَخطِيط",
+  "mixReel": "بكرات مختلطة",
   "initiateRouteWaitFor1HourToGiveUserTimeToBookASeatInTheSameCarWithTheSameCaptain": "ابدأ المسار وانتظر لمدة ساعة لإعطاء المستخدم الوقت لحجز مقعد في نفس السيارة مع نفس القبطان.",
   "myTalent": "موهبتي",
   "addTalent": "إضافة موهبة",
@@ -1526,6 +1530,7 @@ class CodegenLoader extends AssetLoader{
   "commentAdded": "تم إضافة التعليق",
   "areYouSureYouWantToDeleteThisComment": "هل أنت متأكد أنك تريد حذف هذا التعليق؟",
   "responseStatus": "حالة الرد",
+  "socialExplain": "احصل على المال إذا قمت بالنشر والمشاهدة والإعجاب على أي واجهة تريدها!",
   "imBookingOfAnotherClient": "أقوم بالحجز نيابة عن عميل آخر"
 };
 static const Map<String,dynamic> _en = {
@@ -3032,6 +3037,10 @@ static const Map<String,dynamic> _en = {
   "oTPVerifyFor": "OTP Verify for ",
   "resendOtpSuccess": "resend otp success",
   "youWillFindFewerDriversIfYouSelectThisOption": "You will find fewer drivers if you select this option!",
+  "useThisSound": "Use this sound",
+  "collab": "Collab",
+  "layout": "layout",
+  "mixReel": "mix Reel",
   "initiateRouteWaitFor1HourToGiveUserTimeToBookASeatInTheSameCarWithTheSameCaptain": "Initiate route & wait for 1 hour to give user time to book a seat in the same car with the same captain.",
   "addTalent": "Add Talent",
   "myTalent": "My Talent",
@@ -3057,6 +3066,7 @@ static const Map<String,dynamic> _en = {
   "commentAdded": "Comment added",
   "areYouSureYouWantToDeleteThisComment": "Are you sure you want to delete this comment?",
   "responseStatus": "Response Status",
+  "socialExplain": "Get money if you post, view and like on any interface you like!",
   "imBookingOfAnotherClient": "I am booking on behalf of another Client"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};

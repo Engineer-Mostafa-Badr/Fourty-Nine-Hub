@@ -6,18 +6,22 @@ class CustomButton extends StatelessWidget {
       required this.onPressed,
       required this.color,
       required this.text,
-      required this.textStyle});
+      required this.textStyle,
+      this.height,
+      this.width});
 
   final void Function() onPressed;
   final Color color;
   final String text;
   final TextStyle textStyle;
+  final double? height;
+  final double? width;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: MediaQuery.sizeOf(context).width * .4,
-      height: 44, // ارتفاع الزر الجديد
+      width: width ?? MediaQuery.sizeOf(context).width * .4,
+      height: height ?? 44, // ارتفاع الزر الجديد
       child: RawMaterialButton(
         onPressed: onPressed,
         fillColor: color,
