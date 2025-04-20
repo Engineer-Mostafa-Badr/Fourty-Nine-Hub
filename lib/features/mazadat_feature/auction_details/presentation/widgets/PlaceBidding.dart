@@ -48,8 +48,11 @@ class _PlaceBiddingState extends State<PlaceBidding> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: const BackAppBar(
-        label: Labels.bid,
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(30),
+        child: BackAppBar(
+          label: Labels.bid,
+        ),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,

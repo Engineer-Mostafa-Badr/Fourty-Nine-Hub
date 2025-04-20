@@ -3,21 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
-import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/utils/handle_cashback.dart';
-import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/country_dropdown.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/create_ad_widgets/create_ad_location_button.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/create_ad_widgets/trip_join_ad_buttons.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/create_ad_widgets/trip_join_bottom_section.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/infoButton.dart';
-import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_map_section.dart';
-import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:latlong2/latlong.dart';
@@ -69,27 +63,19 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: CustomScaffold(
-            resizeToAvoidBottomInset: true,
-            appBar: HomeAppbar(
-              showChat: true,
-              isWithBackArrow: false,
-              language: true,
-              leading: IconButton(
-                icon: const Icon(Icons.menu), // The menu icon
-                onPressed: () {
-                  HandleCashback.setCount('drawerCount', context);
-                  _scaffoldKey.currentState?.openDrawer(); // Open the drawer
-                },
-              ),
-            ),
+        child: SharedScaffold(
+            mainCategoryId: 1,isWithBackArrow: false,
             body: Padding(
               padding: EdgeInsets.symmetric(horizontal: 32.0.h),
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const WelcomeTextWidget(),
+                    WelcomeTextWidget(
+                      title: LocaleKeys.welcomeToTripjoin.localize,
+                      infoMessage:
+                          "Create Ad for a trip with your car, wait users to contact you. Share trip & gain money!",
+                    ),
                     const Sizer(),
                     _buildTopImage(),
                     const Sizer(),

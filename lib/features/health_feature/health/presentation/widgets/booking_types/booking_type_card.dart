@@ -5,6 +5,7 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:fourtyninehub/features/health_feature/health/data/models/filter_option_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/appointment_booking_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
@@ -38,6 +39,7 @@ class HealthBookingTypeCard extends StatelessWidget {
             Expanded(child: Image.asset(bookingFilterModel.image)),
             Text(
               bookingFilterModel.bookingType.translatedName,
+              style: Styles.mediumText(),
             ),
           ],
         ),

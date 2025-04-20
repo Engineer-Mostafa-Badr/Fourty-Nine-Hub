@@ -57,9 +57,12 @@ class _RestaurantDetailsViewState extends State<RestaurantDetailsView> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: BackAppBar(
-        label: LocaleKeys.restaurantMenu.tr(),
-        backColor: context.theme.appBarTheme.backgroundColor,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(50),
+        child: BackAppBar(
+          label: LocaleKeys.restaurantMenu.tr(),
+          backColor: context.theme.appBarTheme.backgroundColor,
+        ),
       ),
       // backgroundColor: scaffoldDarkColor(context),
       extendBody: true,

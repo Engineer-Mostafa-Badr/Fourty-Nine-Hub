@@ -48,8 +48,6 @@ abstract class Routes {
   static const SOCIAL = '/Social';
   static const FacebookSuggestPeople = '/Social/FacebookSuggestPeople';
   static const OTHERSACCOUNT = '/Social/OthersAccount';
-  static const INSTAGRAMPROFILE = '/Instagram/InstagramProfile';
-  static const InstagramSuggestPeople = '/Instagram/InstagramSuggestPeople';
   static const EDITPROFILE = '/Social/OthersAccount/EditProfile';
   static const REELS = '/Social/REELS';
   static const MUSICREELS = '/Social/REELS/MUSICREELS';
@@ -102,6 +100,7 @@ abstract class Routes {
   static const EDITDOCTORPROFILE = '/Visita/EditDoctorProfile';
   static const VISITADOCTORDETAILS = '/Visita/DoctorDetails';
   static const VISITABOOKING = '/Visita/VisitaBooking';
+  static const SUCCESSFULLBOOKING = 'SucessfullBooking';
   static const DOCTORDASHBOARD = '/Visita/DoctorDashboard';
   static const EDITDOCTORPERSONALINFO = '/Visita/EditDoctorPersonalInfo';
   static const EDITDOCTORTIMETABLE = '/Visita/EditDoctorTimeTable';
@@ -144,7 +143,6 @@ abstract class Routes {
   static const MAZADDETAILS = '/Mazadat/MazadDetails';
   static const CREATEAUCTION = '/Mazadat/CreateAuction';
 
-  static const INSTAGRAM = '/Instagram';
   static const ZOOM = '/Zoom';
   static const MEETINGROOM = '/Zoom/MeetingRoom';
   static const CALLSCREEN = '/Zoom/CallScreen';
@@ -190,6 +188,7 @@ abstract class Routes {
   static const Married = '/Married';
   static const BE_STAR_DETAILS = '/BeAStar/BeAStarDetails';
   static const AVAILABLE_TRIPS = '/AvailableTrips';
+  static const All_PickMe_View = '/AllPickMeView';
   static const TRIP_JOIN_REQUEST_NOTIFICATIONS = '/TripJoinRequestNotification';
   static const TRIP_JOIN_REQUEST_HISTORY = '/TripJoinRequestHistory';
   static const TRIP_JOIN_REQUEST_HISTORY_Pick_Me =
@@ -261,11 +260,21 @@ abstract class Routes {
   static const CHANGEPASSWORD = '/ChangePassword';
   static const CHANGEPASSWORDSECOND = '/ChangePasswordSecond';
   static const VERIFICATION = '/Verification';
+  static const registerVerifyPhoneOTP = '/RegisterVerifyPhoneOTP';
 
   // Cashback
   static const CASHBACK = '/Cashback';
   static const newRideModeScreen = '/NewRideModeScreen';
 
+  // Instagram
+  static const INSTAGRAM = '/Instagram';
+  static const INSTAGRAMPROFILE = '/Instagram/InstagramProfile';
+  static const INSTAGRAMCOMMENT = '/Instagram/InstagramComment';
+  static const InstagramSuggestPeople = '/Instagram/InstagramSuggestPeople';
+  static const ADDSTORYINSTAGRAM = '/AddStoryInstagram';
+  static const CREATEPOSTINSTAGRAM = '/Instagram/CreatePostInstagram';
+  static const CREATEPOSTSECONDPAGEINSTAGRAM =
+      '/Instagram/CreatePostInstagram/CreatePostSecondPageInstagram';
   // reels
   static const UseSoundScreen = '/UseSoundScreen';
   static const AddStoryScreen = '/AddStoryScreen';
@@ -313,12 +322,9 @@ abstract class Paths {
   static const GIFT = 'Gift';
   static const WALLETHISTORY = 'WalletHistory';
   static const TRANSFERMONEY = 'TransferMoney';
-  static const INSTAGRAM = 'Instagram';
   static const SOCIAL = 'Social';
   static const FacebookSuggestPeople = 'FacebookSuggestPeople';
   static const OTHERSACCOUNT = 'OthersAccount';
-  static const INSTAGRAMPROFILE = 'InstagramProfile';
-  static const InstagramSuggestPeople = 'InstagramSuggestPeople';
   static const MAZADAT = 'Mazadat';
   static const IMAGESPAGEVIEW = 'ImagesPageView';
   static const SHOWIMAGESVIEW = 'ShowImagesView';
@@ -358,6 +364,7 @@ abstract class Paths {
   static const VISITAEMERGENCY = 'VisitaEmergency';
   static const VISITADOCTORDETAILS = 'DoctorDetails';
   static const VISITABOOKING = 'VisitaBooking';
+  static const SUCCESSFULLBOOKING = 'SucessfullBooking';
   static const CREATEDOCTOR = 'CreateDoctor';
   static const EDITDOCTORPROFILE = 'EditDoctorProfile';
   static const FILTERDOCTORSUBCATEGORY = 'FilterDoctorSubcategory';
@@ -440,6 +447,7 @@ abstract class Paths {
   static const Married = 'Married';
   static const BE_STAR_DETAILS = 'BeAStarDetails';
   static const AVAILABLE_TRIPS = 'AvailableTrips';
+  static const All_PickMe_View = 'AllPickMeView';
   static const TRIP_JOIN_REQUEST_NOTIFICATIONS = 'TripJoinRequestNotification';
   static const TRIP_JOIN_REQUEST_HISTORY = 'TripJoinRequestHistory';
   static const TRIP_JOIN_REQUEST_HISTORY_Pick_Me =
@@ -514,6 +522,7 @@ abstract class Paths {
   static const ratingDriverScreen = 'RatingDriverScreen';
   static const completeRideScreen = 'CompleteRideScreen';
   static const newRideModeScreen = 'NewRideModeScreen';
+  static const registerVerifyPhoneOTP = 'RegisterVerifyPhoneOTP';
 
   // Change Password
   static const CHANGEPASSWORD = 'ChangePassword';
@@ -526,4 +535,12 @@ abstract class Paths {
   //reels
   static const useSoundScreen = 'UseSoundScreen';
   static const addStoryScreen = 'AddStoryScreen';
+  // Instagram
+  static const INSTAGRAM = 'Instagram';
+  static const INSTAGRAMPROFILE = 'InstagramProfile';
+  static const INSTAGRAMCOMMENT = 'InstagramComment';
+  static const InstagramSuggestPeople = 'InstagramSuggestPeople';
+  static const ADDSTORYINSTAGRAM = 'AddStoryInstagram';
+  static const CREATEPOSTINSTAGRAM = 'CreatePostInstagram';
+  static const CREATEPOSTSECONDPAGEINSTAGRAM = 'CreatePostSecondPageInstagram';
 }

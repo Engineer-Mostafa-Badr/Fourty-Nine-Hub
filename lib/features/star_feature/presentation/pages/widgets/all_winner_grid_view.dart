@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 
+import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/utils/duration_helper.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../domain/entity/star_winner_entity.dart';
@@ -85,7 +87,7 @@ class AllWinnerGridView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      "${star.user.viewNumber.toShortScale} views ",
+                      "${star.user.viewNumber.toShortScale} ${LocaleKeys.views.localize} ",
                       style: TextStyle(
                         fontSize: 20.sp,
                         color: Colors.white,
@@ -93,7 +95,7 @@ class AllWinnerGridView extends StatelessWidget {
                     ),
                     SizedBox(width: 10.w),
                     Text(
-                      "Rating ${star.user.averageRating.toShortScale} ",
+                      "${LocaleKeys.winner_rating.localize} ${star.user.averageRating.toShortScale} ",
                       style: TextStyle(
                         fontSize: 20.sp,
                         color: Colors.white,
@@ -108,7 +110,8 @@ class AllWinnerGridView extends StatelessWidget {
                 SizedBox(height: 4.h),
                 Text(
                   DurationHelper()
-                      .getTimeDifference(DateTime.parse(star.createdAt!)),
+                      .getTimeDifference(DateTime.parse(star.createdAt!))
+                      .localize,
                   style: TextStyle(
                     fontSize: 28.sp,
                     color: Colors.white,
@@ -116,7 +119,7 @@ class AllWinnerGridView extends StatelessWidget {
                 ),
                 SizedBox(height: 4.h),
                 Text(
-                  '1000 EGP',
+                  '1000 ${LocaleKeys.egp.localize}',
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 26.sp,

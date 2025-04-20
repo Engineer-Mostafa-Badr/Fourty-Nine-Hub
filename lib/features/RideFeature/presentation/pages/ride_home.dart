@@ -16,11 +16,11 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/loading_info_
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_offer_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/record_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/upload_rider_images.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/expired_trips_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/osm_search_and_pick.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_personal_more_info_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/ride_status_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/running_trips_screen.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/bottom_button_ride_status_widget.dart';
@@ -28,6 +28,8 @@ import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/bo
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/bottom_sheet/custom_reserve_ride_bottomsheet.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/driver_header_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/feedback_widget.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/location_info_widget.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/payment_info_widget.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/top_card_request.dart';
 import 'package:fourtyninehub/helpers/subscription_method.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/widgets/custom_ride_button.dart';
@@ -35,6 +37,7 @@ import 'package:latlong2/latlong.dart';
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../../common/widgets/stateless/appbar/nested_appbar.dart';
 import '../../../../common/widgets/stateless/dynamic/shared_scaffold.dart';
+import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../service_locator/service_locator.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -137,7 +140,15 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
     );
     serviceLocator<RideCubit>().hasPendingShownBottomSheet = false;
   }
+  String getArrivalTimeString(double? seconds) {
+    if (seconds == null) return "";
 
+    final now = DateTime.now();
+    final arrivalTime = now.add(Duration(seconds: seconds.toInt()));
+    final formattedTime = "${arrivalTime.minute.toString().padLeft(2, '0')}:${arrivalTime.second.toString().padLeft(2, '0')}";
+
+    return formattedTime;
+  }
   void _showAcceptedTripBottomSheet() async {
     await showModalBottomSheet(
       backgroundColor: Colors.transparent,
@@ -151,6 +162,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         child: Builder(
           builder: (context) {
             return BlocBuilder<RideCubit, RideState>(builder: (context, state) {
+              log("mabdooon ${state.requestedTrip?.vehicleModel ?? ""} ${state.requestedTrip?.vehicleBrand ?? ""}");
               return DraggableScrollableSheet(
                 initialChildSize: 0.4,
                 minChildSize: 0.2,
@@ -169,21 +181,23 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         padding: const EdgeInsets.all(16.0),
                         child: Column(
                           children: [
-                            const DriverHeaderWidget(
-                              carModel: "carModel",
-                              rideStatus: "rideStatus",
-                              carImageUrl: "driverImage",
-                              carName: "driverName",
-                              carNumber: "carNumber",
+                             DriverHeaderWidget(
+                              // carModel: "${state.requestedTrip?.vehicleModel ?? ""} ${state.requestedTrip?.vehicleBrand ?? ""}",
+                               carModel: "Model",
+                               rideStatus: context.isArabic
+                                   ? "سيتم الوصول في ${getArrivalTimeString(state.requestedTrip?.driverIsArrivingIn)}"
+                                   : "You'll be Arriving at ${getArrivalTimeString(state.requestedTrip?.driverIsArrivingIn)}",
+                              carImageUrl: state.requestedTrip?.vehiclePicture ?? "https://www.hyundai.com/content/dam/hyundai/in/en/data/find-a-car/i20/Highlights/pc/i20_Modelpc.png",
+                              carName: "",
+                              carNumber: state.requestedTrip?.vehiclePlateNumber ?? "",
                             ),
                             const Divider(
                               height: 2,
                             ),
-
                             ActionButtonsWidget(
-                              driverImageUrl: "driverImage",
-                              driverRating: 12.2,
-                              driverName: "driverName",
+                              driverImageUrl: state.requestedTrip?.driverProfilePicture ?? Assets.maleImagePlaceholder,
+                              driverRating: state.requestedTrip?.driverRating ?? 0.0,
+                              driverName: state.requestedTrip?.driverFirstName ?? "",
                               onContactDriver: () {
                                 context.push(Routes.ratingClientScreen);
                               },
@@ -202,12 +216,12 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                               height: 2,
                             ),
 
-                            // PaymentInfoWidget(price: price),
+                            // PaymentInfoWidget(price: state.requestedTrip?.price?.toInt() ?? 0),
                             //
 
                             // LocationInfoWidget(
-                            //   from: 'أول العاشر من رمضان',
-                            //   to: 'المنطقة الصناعية الثالثة العاشر من رمضان (10th of Ramadan City 1) العالمية',
+                            //   from: state.requestedTrip?.from ?? "",
+                            //   to: state.requestedTrip?.to ?? "",
                             // ),
 
                             BottomRideStatusWidget(
@@ -253,6 +267,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 await context
                     .read<RideCubit>()
                     .acceptOfferByClient(offerId: offerEntity.offerId);
+                context.pop();
                 _showAcceptedTripBottomSheet();
               },
             );
@@ -318,7 +333,9 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                         appBars: const [],
                         body: Stack(
                           children: [
-                            _buildTopImage(),
+                            context.read<RideCubit>().selectedCategoryIsSocket
+                                ? _buildTopImage()
+                                : const SizedBox.shrink(),
                             state.requestedTrip == null
                                 ? _buildBottomSheet()
                                 : state.requestedTrip!.status ==
@@ -327,18 +344,20 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                             TripState.canceled.name
                                     ? _buildBottomSheet()
                                     : const SizedBox.shrink(),
-                            state.requestedTrip == null
-                                ? _carTruckBtn(
-                                    driverInfo: state.driverInfo,
-                                    loadingInfo: state.loaderInfo)
-                                : state.requestedTrip!.status ==
-                                            TripState.completed.name ||
-                                        state.requestedTrip!.status ==
-                                            TripState.canceled.name
+                            !context.read<RideCubit>().selectedCategoryIsSocket
+                                ? const SizedBox()
+                                : state.requestedTrip == null
                                     ? _carTruckBtn(
                                         driverInfo: state.driverInfo,
                                         loadingInfo: state.loaderInfo)
-                                    : const SizedBox.shrink(),
+                                    : (state.requestedTrip!.status ==
+                                                TripState.completed.name ||
+                                            state.requestedTrip!.status ==
+                                                TripState.canceled.name)
+                                        ? _carTruckBtn(
+                                            driverInfo: state.driverInfo,
+                                            loadingInfo: state.loaderInfo)
+                                        : const SizedBox.shrink(),
                           ],
                         ),
                       ),
@@ -351,8 +370,14 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
   }
 
   Widget _buildTopMap(RideState state, BuildContext context) {
-    List<LatLng> routePoints =
-        _convertPolylineToLatLng(state.rideExpectedPrice?.polyline ?? []);
+    List<LatLng> routePoints = [];
+    if (state.requestedTrip == null || state.requestedTrip!.status == TripState.canceled.name || state.requestedTrip!.status == TripState.completed.name) {
+      routePoints =
+          _convertPolylineToLatLng(state.rideExpectedPrice?.polyline ?? []);
+    }
+    else {
+      routePoints = _convertPolylineToLatLng(state.requestedTrip!.polyline);
+    }
 
     if (state.currentLocation != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -554,7 +579,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                       context.push(Routes.rideModeScreen,
                           extra: RideModeParams(
                               modeType: 'ride',
-                              isSocket: driverInfo?.driverType == 'socket'
+                              isSocket: driverInfo.driverType == 'socket'
                                   ? true
                                   : false));
                     }
@@ -705,286 +730,318 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         spacing: 4,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Padding(
-            padding: const EdgeInsetsDirectional.only(end: 16.0, start: 16.0),
-            child: Row(
-              spacing: 6,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Expanded(
-                  child: Badge(
-                    backgroundColor: AppColors.PRIMARY_COLOR_DARK,
-                    textColor: Colors.white,
-                    padding: const EdgeInsets.all(2),
-                    label: const Text('1'),
-                    isLabelVisible: false,
-                    child: ClickableWidget(
-                        onTap: () {
-                          if (context.isUserLoggedIn) {
-                          } else {
-                            context.push(Routes.LOGIN);
-                          }
-                        },
-                        child: _tripsWidget(
-                            context.isArabic ? "عروض الرحلات" : "Ride Offers",
-                            color: const Color(0xffD9D9D9))),
+          context.read<RideCubit>().selectedCategoryIsSocket
+              ? Padding(
+                  padding:
+                      const EdgeInsetsDirectional.only(end: 16.0, start: 16.0),
+                  child: Row(
+                    spacing: 6,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        child: Badge(
+                          backgroundColor: AppColors.PRIMARY_COLOR_DARK,
+                          textColor: Colors.white,
+                          padding: const EdgeInsets.all(2),
+                          label: const Text('1'),
+                          isLabelVisible: false,
+                          child: ClickableWidget(
+                              onTap: () {
+                                if (context.isUserLoggedIn) {
+                                  context.push(Routes.rideLoadingRequestScreen,extra: false);
+                                } else {
+                                  context.push(Routes.LOGIN);
+                                }
+                              },
+                              child: _tripsWidget(
+                                  context.isArabic
+                                      ? "عروض الرحلات"
+                                      : "Ride Offers",
+                                  color: const Color(0xffD9D9D9))),
+                        ),
+                      ),
+                      Expanded(
+                        child: Badge(
+                          backgroundColor: AppColors.PRIMARY_COLOR_DARK,
+                          textColor: Colors.white,
+                          padding: const EdgeInsets.all(2),
+                          label: const Text('1K'),
+                          isLabelVisible: true,
+                          child: ClickableWidget(
+                              onTap: () {
+                                if (context.isUserLoggedIn) {
+                                  context.push(Routes.rideLoadingRequestScreen,extra: true);
+                                } else {
+                                  context.push(Routes.LOGIN);
+                                }
+                              },
+                              child: _tripsWidget(
+                                  context.isArabic
+                                      ? "عروض التحميل"
+                                      : "Loading Offers",
+                                  color: const Color(0xffD9D9D9))),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-                Expanded(
-                  child: Badge(
-                    backgroundColor: AppColors.PRIMARY_COLOR_DARK,
-                    textColor: Colors.white,
-                    padding: const EdgeInsets.all(2),
-                    label: const Text('1K'),
-                    isLabelVisible: true,
-                    child: ClickableWidget(
-                        onTap: () {
-                          if (context.isUserLoggedIn) {
-                          } else {
-                            context.push(Routes.LOGIN);
-                          }
-                        },
-                        child: _tripsWidget(
-                            context.isArabic
-                                ? "عروض التحميل"
-                                : "Loading Offers",
-                            color: const Color(0xffD9D9D9))),
+                )
+              : const SizedBox(),
+          context.read<RideCubit>().selectedCategoryIsSocket
+              ? Padding(
+                  padding: const EdgeInsetsDirectional.only(
+                      end: 16.0, start: 16.0, bottom: 16),
+                  child: Row(
+                    spacing: 6,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        child: ClickableWidget(
+                            onTap: () {
+                              if (context.isUserLoggedIn) {
+                                context.push(Routes.RIDEACTIVITY);
+                              } else {
+                                context.push(Routes.LOGIN);
+                              }
+                            },
+                            child: _tripsWidget(LocaleKeys.activity.tr(),
+                                color: AppColors.GREYCARD)),
+                      ),
+                      Expanded(
+                        child: ClickableWidget(
+                            onTap: () {
+                              context.push(Routes.RIDERUNNINGTRIPS,
+                                  extra: RunningTripParams(
+                                    rideCubit: serviceLocator<RideCubit>(),
+                                  ));
+                            },
+                            child: _tripsWidget(LocaleKeys.runningTrips.tr(),
+                                color: AppColors.GREYCARD)),
+                      ),
+                      Expanded(
+                        child: ClickableWidget(
+                            onTap: () {
+                              context.push(Routes.RIDEEXPIREDTRIPE,
+                                  extra: ExpiredTripsScreenParams(
+                                    rideCubit: serviceLocator<RideCubit>(),
+                                  ));
+                            },
+                            child: _tripsWidget(LocaleKeys.expiredTrips.tr(),
+                                color: AppColors.GREYCARD)),
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsetsDirectional.only(
-                end: 16.0, start: 16.0, bottom: 16),
-            child: Row(
-              spacing: 6,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Expanded(
-                  child: ClickableWidget(
-                      onTap: () {
-                        if (context.isUserLoggedIn) {
-                          context.push(Routes.RIDEACTIVITY);
-                        } else {
-                          context.push(Routes.LOGIN);
-                        }
-                      },
-                      child: _tripsWidget(LocaleKeys.activity.tr(),
-                          color: AppColors.GREYCARD)),
-                ),
-                Expanded(
-                  child: ClickableWidget(
-                      onTap: () {
-                        context.push(Routes.RIDERUNNINGTRIPS,
-                            extra: RunningTripParams(
-                              rideCubit: serviceLocator<RideCubit>(),
-                            ));
-                      },
-                      child: _tripsWidget(LocaleKeys.runningTrips.tr(),
-                          color: AppColors.GREYCARD)),
-                ),
-                Expanded(
-                  child: ClickableWidget(
-                      onTap: () {
-                        context.push(Routes.RIDEEXPIREDTRIPE,
-                            extra: ExpiredTripsScreenParams(
-                              rideCubit: serviceLocator<RideCubit>(),
-                            ));
-                      },
-                      child: _tripsWidget(LocaleKeys.expiredTrips.tr(),
-                          color: AppColors.GREYCARD)),
-                ),
-              ],
-            ),
-          ),
+                )
+              : const SizedBox(),
           Container(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.9,
+            ),
             padding:
                 const EdgeInsets.only(left: 10, right: 10, bottom: 16, top: 8),
             decoration: BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(25),
-                topRight: Radius.circular(25),
-              ),
+              borderRadius: !context.read<RideCubit>().selectedCategoryIsSocket
+                  ? null
+                  : const BorderRadius.only(
+                      topLeft: Radius.circular(25),
+                      topRight: Radius.circular(25),
+                    ),
             ),
             child: BlocBuilder<RideCubit, RideState>(
               builder: (context, state) {
-                var cubit = serviceLocator<RideCubit>();
-                return Column(
-                  spacing: 8,
-                  children: [
-                    _buildCategoryList(
-                        "ride", state.rideCategory?.subCategories ?? []),
-                    _buildCategoryList("shipping",
-                        state.shippingCategory?.subCategories ?? []),
-                    _customLocationField(
-                      isTo: false,
-                      color: Colors.green,
-                      text: state.currentLocation?.address,
-                      onPressed: () async {
-                        context.push(
-                          Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
-                          extra: RideOpenStreetMapSearchAndPickParams(
+                // var cubit = serviceLocator<RideCubit>();
+                return SingleChildScrollView(
+                  child: Column(
+                    spacing: 8,
+                    children: [
+                      _buildCategoryList(
+                          "ride", state.rideCategory?.subCategories ?? []),
+                      _buildCategoryList("shipping",
+                          state.shippingCategory?.subCategories ?? []),
+                      if (!context.read<RideCubit>().selectedCategoryIsSocket)
+                        RidePersonalMoreInfoScreen(
+                          isTruk: context.read<RideCubit>().isTruk,
+                          subCategoryId:
+                          context.read<RideCubit>().subCategoryId,
+                        ),
+                      context.read<RideCubit>().selectedCategoryIsSocket? _customLocationField(
+                        isTo: false,
+                        color: Colors.green,
+                        text: state.currentLocation?.address,
+                        onPressed: () async {
+                          context.push(
+                            Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
+                            extra: RideOpenStreetMapSearchAndPickParams(
+                              onPicked: (pickedData) async {
+                                serviceLocator<RideCubit>().updateFromLocation(
+                                  lat: pickedData.latLong.latitude,
+                                  lng: pickedData.latLong.longitude,
+                                  address: pickedData.addressName,
+                                );
+                                context.pop();
+                              },
+                            ),
+                          );
+                        },
+                      ) : const SizedBox(),
+                      context.read<RideCubit>().selectedCategoryIsSocket? _customLocationField(
+                        isTo: true,
+                        color: Colors.blue,
+                        text: state.toLocation?.address,
+                        onPressed: () async {
+                          context.push(Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
+                              extra: RideOpenStreetMapSearchAndPickParams(
                             onPicked: (pickedData) async {
-                              serviceLocator<RideCubit>().updateFromLocation(
+                              serviceLocator<RideCubit>().updateToLocation(
                                 lat: pickedData.latLong.latitude,
                                 lng: pickedData.latLong.longitude,
                                 address: pickedData.addressName,
                               );
+                              await context
+                                  .read<RideCubit>()
+                                  .fetchRideExpectedPrice(id: 'id');
                               context.pop();
                             },
-                          ),
-                        );
-                      },
-                    ),
-                    _customLocationField(
-                      isTo: true,
-                      color: Colors.blue,
-                      text: state.toLocation?.address,
-                      onPressed: () async {
-                        context.push(Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
-                            extra: RideOpenStreetMapSearchAndPickParams(
-                          onPicked: (pickedData) async {
-                            serviceLocator<RideCubit>().updateToLocation(
-                              lat: pickedData.latLong.latitude,
-                              lng: pickedData.latLong.longitude,
-                              address: pickedData.addressName,
-                            );
-                            await context
-                                .read<RideCubit>()
-                                .fetchRideExpectedPrice(id: 'id');
-                            context.pop();
-                          },
-                        ));
-                      },
-                    ),
-                    _fareField(),
-                    SizedBox(
-                      height: 40,
-                      child: Row(
-                        spacing: 6,
-                        children: [
-                          Expanded(
-                              flex: 2,
-                              child: AppButton(
-                                  radius: 15,
-                                  label: LocaleKeys.premiumRequest.tr(),
-                                  onPressed: () {
-                                    if (context.isUserLoggedIn) {
-                                      if (state.toLocation != null &&
-                                          state.currentLocation != null) {
-                                        SubscriptionMethod().subscribe(
-                                            subscribeId: state
+                          ));
+                        },
+                      ) : const SizedBox(),
+                      context.read<RideCubit>().selectedCategoryIsSocket? _fareField() : const SizedBox(),
+                      context.read<RideCubit>().selectedCategoryIsSocket? SizedBox(
+                        height: 40,
+                        child: Row(
+                          spacing: 6,
+                          children: [
+                            Expanded(
+                                flex: 2,
+                                child: AppButton(
+                                    radius: 15,
+                                    label: LocaleKeys.premiumRequest.tr(),
+                                    onPressed: () async {
+                                      if (context.isUserLoggedIn) {
+                                        if (state.toLocation != null &&
+                                            state.currentLocation != null) {
+                                          bool isSubscribed = await context.read<RideCubit>().isSubscribed(userId: UserCubit.to.state.data?.id??'', subcategoryId: state.rideCategory?.subCategories[_selectedCategoryIndex!].subCategoryId??'');
+                                          if (!isSubscribed) {
+                                            SubscriptionMethod().subscribe(
+                                                subscribeId: state
                                                     .rideCategory
                                                     ?.subCategories[
-                                                        _selectedCategoryIndex!]
+                                                _selectedCategoryIndex!]
                                                     .subCategoryId ??
-                                                '',
-                                            showRegular: false,
-                                            title: LocaleKeys
-                                                .premiumRequest.localize);
-                                        showModalBottomSheet(
-                                          context: context,
-                                          isScrollControlled: true,
-                                          backgroundColor: Colors.transparent,
-                                          builder: (context) =>
-                                              CustomReserveRideBottomSheet(
-                                            rideCubit:
-                                                serviceLocator<RideCubit>(),
-                                            selectedCategoryId: state
-                                                    .rideCategory
-                                                    ?.subCategories[
-                                                        _selectedCategoryIndex!]
-                                                    .subCategoryId ??
-                                                '',
-                                            isPremium: true,
-                                          ),
-                                        );
-                                      } else {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                              context.isArabic
-                                                  ? "يرجى تحديد الموقع"
-                                                  : "Please select location", // Ensure you define this key in your localization file
-                                              textAlign: TextAlign.center,
-                                            ),
-                                            backgroundColor: Colors.red,
-                                            duration:
-                                                const Duration(seconds: 2),
-                                          ),
-                                        );
-                                      }
-                                    } else {
-                                      context.push(Routes.LOGIN);
-                                    }
-                                  },
-                                  backColor: AppColors.SECONDARY_COLOR_DARK2,
-                                  width: MediaQuery.of(context).size.width)),
-                          Expanded(
-                              flex: 2,
-                              child: state.isLoadingSubmit
-                                  ? const Center(
-                                      child: CircularProgressIndicator())
-                                  : AppButton(
-                                      radius: 15,
-                                      label: LocaleKeys.request.tr(),
-                                      onPressed: () async {
-                                        if (context.isUserLoggedIn) {
-                                          if (state.toLocation != null &&
-                                              state.currentLocation != null) {
+                                                    '',
+                                                onSubscribe: () {
+                                                  context.pop();
+                                                  context.pop();
+                                                },
+                                                showRegular: false,
+
+                                                title: LocaleKeys
+                                                    .premiumRequest.localize);
+                                          }
+                                          else{
                                             showModalBottomSheet(
                                               context: context,
                                               isScrollControlled: true,
-                                              backgroundColor:
-                                                  Colors.transparent,
+                                              backgroundColor: Colors.transparent,
                                               builder: (context) =>
-                                                  BlocProvider.value(
-                                                      value: serviceLocator<
-                                                          RideCubit>(),
-                                                      child:
-                                                          CustomReserveRideBottomSheet(
-                                                        rideCubit:
-                                                            serviceLocator<
-                                                                RideCubit>(),
-                                                        selectedCategoryId: state
-                                                                .rideCategory
-                                                                ?.subCategories[
-                                                                    _selectedCategoryIndex!]
-                                                                .subCategoryId ??
-                                                            '',
-                                                        isPremium: false,
-                                                      )),
-                                            );
-                                          } else {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              SnackBar(
-                                                content: Text(
-                                                  context.isArabic
-                                                      ? "يرجى تحديد الموقع"
-                                                      : "Please select location", // Ensure you define this key in your localization file
-                                                  textAlign: TextAlign.center,
-                                                ),
-                                                backgroundColor: Colors.red,
-                                                duration:
-                                                    const Duration(seconds: 2),
-                                              ),
+                                                  CustomReserveRideBottomSheet(
+                                                    rideCubit:
+                                                    serviceLocator<RideCubit>(),
+                                                    selectedCategoryId: state
+                                                        .rideCategory
+                                                        ?.subCategories[
+                                                    _selectedCategoryIndex!]
+                                                        .subCategoryId ??
+                                                        '',
+                                                    isPremium: true,
+                                                  ),
                                             );
                                           }
                                         } else {
-                                          context.push(Routes.LOGIN);
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                context.isArabic
+                                                    ? "يرجى تحديد الموقع"
+                                                    : "Please select location", // Ensure you define this key in your localization file
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              backgroundColor: Colors.red,
+                                              duration:
+                                                  const Duration(seconds: 2),
+                                            ),
+                                          );
                                         }
-                                      },
-                                      backColor: AppColors.PRIMARY_COLOR,
-                                      width:
-                                          MediaQuery.of(context).size.width)),
-                        ],
-                      ),
-                    )
-                  ],
+                                      } else {
+                                        context.push(Routes.LOGIN);
+                                      }
+                                    },
+                                    backColor: AppColors.SECONDARY_COLOR_DARK2,
+                                    width: MediaQuery.of(context).size.width)),
+                            Expanded(
+                                flex: 2,
+                                child: state.isLoadingSubmit
+                                    ? const Center(
+                                        child: CircularProgressIndicator())
+                                    : AppButton(
+                                        radius: 15,
+                                        label: LocaleKeys.request.tr(),
+                                        onPressed: () async {
+                                          if (context.isUserLoggedIn) {
+                                            if (state.toLocation != null &&
+                                                state.currentLocation != null) {
+                                              showModalBottomSheet(
+                                                context: context,
+                                                isScrollControlled: true,
+                                                backgroundColor:
+                                                    Colors.transparent,
+                                                builder: (context) =>
+                                                    BlocProvider.value(
+                                                        value: serviceLocator<
+                                                            RideCubit>(),
+                                                        child:
+                                                            CustomReserveRideBottomSheet(
+                                                          rideCubit:
+                                                              serviceLocator<
+                                                                  RideCubit>(),
+                                                          selectedCategoryId: state
+                                                                  .rideCategory
+                                                                  ?.subCategories[
+                                                                      _selectedCategoryIndex!]
+                                                                  .subCategoryId ??
+                                                              '',
+                                                          isPremium: false,
+                                                        )),
+                                              );
+                                            } else {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                  content: Text(
+                                                    context.isArabic
+                                                        ? "يرجى تحديد الموقع"
+                                                        : "Please select location", // Ensure you define this key in your localization file
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                  backgroundColor: Colors.red,
+                                                  duration:
+                                                      const Duration(seconds: 2),
+                                                ),
+                                              );
+                                            }
+                                          } else {
+                                            context.push(Routes.LOGIN);
+                                          }
+                                        },
+                                        backColor: AppColors.PRIMARY_COLOR,
+                                        width:
+                                            MediaQuery.of(context).size.width)),
+                          ],
+                        ),
+                      ): const SizedBox.shrink(),
+                      ],
+                  ),
                 );
               },
             ),
@@ -1034,13 +1091,17 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                     setState(() {
                       if (_selectedCategoryType == type &&
                           _selectedCategoryIndex == index) {
-                        _selectedCategoryType = null;
-                        _selectedCategoryIndex = null;
+                        // _selectedCategoryType = null;
+                        // _selectedCategoryIndex = null;
                       } else {
                         _selectedCategoryType = type;
                         _selectedCategoryIndex = 0;
                         subCategories.insert(0, subCategories.removeAt(index));
                       }
+                      context.read<RideCubit>().subCategoryId =
+                          subCategory.subCategoryId;
+                      context.read<RideCubit>().checkSelectedCategoryIsSocket(
+                          subCategory.subCategoryId);
                     });
                   },
                   child: _categoryItem(

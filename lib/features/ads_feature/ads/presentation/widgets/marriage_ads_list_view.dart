@@ -21,11 +21,12 @@ class MarriageAdsListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('state.ads! ${state.ads!.length}');
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: ListView.builder(
         controller: _scrollController,
-        itemCount: controller.marriageAds.length,
+        itemCount: state.ads!.length,
         physics: const BouncingScrollPhysics(),
         itemBuilder: (context, index) => Padding(
           padding: const EdgeInsets.only(bottom: 8),
@@ -33,20 +34,21 @@ class MarriageAdsListView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               MarriageAdsListViewItem(
-                marriageAds: controller.marriageAds[index],
+                marriageAds: state.ads![index],
                 state: state,
               ),
-              Padding(
-                padding: const EdgeInsetsDirectional.only(start: 10.0),
-                child: Label(
-                  text: LocaleKeys.pleaseSubscribeToContactTheClient.localize,
-                  style: Styles.headerText(
-                    fontSize: 28,
-                    color: const Color(0xFFFF3308),
-                    height: 1.57,
+              if (state.ads![index].subscriptionStatus == 'not subscribed')
+                Padding(
+                  padding: const EdgeInsetsDirectional.only(start: 10.0),
+                  child: Label(
+                    text: LocaleKeys.pleaseSubscribeToContactTheClient.localize,
+                    style: Styles.headerText(
+                      fontSize: 28,
+                      color: const Color(0xFFFF3308),
+                      height: 1.57,
+                    ),
                   ),
                 ),
-              ),
             ],
           ),
         ),

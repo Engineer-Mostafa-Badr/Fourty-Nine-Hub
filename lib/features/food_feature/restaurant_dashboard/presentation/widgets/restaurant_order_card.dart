@@ -31,7 +31,6 @@ class RestaurantOrderCard extends StatelessWidget {
       builder: (context) {
         final order = item;
         final user = order.userInfo;
-        final food = order.orders[0].foodId;
 
         return Card(
             color: Colors.white,

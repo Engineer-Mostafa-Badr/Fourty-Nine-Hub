@@ -145,6 +145,7 @@ bottomSheet({
   bool isScrollControlled = false,
   bool asAlertDialog = false,
   bool isDismissible = true,
+  double padding = 16,
 }) async {
   await showModalBottomSheet(
       context: context,
@@ -157,7 +158,7 @@ bottomSheet({
           asAlertDialog: asAlertDialog,
           child: Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(16),
+            padding: EdgeInsets.all(padding),
             // margin: const EdgeInsets.all(kToolbarHeight),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.only(

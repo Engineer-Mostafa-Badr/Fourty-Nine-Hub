@@ -135,5 +135,7 @@ ThemeData get lightTheme => ThemeData(
       textButtonTheme: const TextButtonThemeData(),
       listTileTheme: const ListTileThemeData(),
       dividerTheme: const DividerThemeData(),
-      tabBarTheme: const TabBarTheme(),
+      tabBarTheme: const TabBarTheme(
+        indicatorColor: AppColors.PRIMARY_COLOR,
+      ),
     );

@@ -4,6 +4,7 @@ import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/cubit/create_doctor_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/presentation/widgets/create_doctor_view_body.dart';
+
 import '../../../../../core/widget/custom_scaffold.dart';
 
 class CreateDoctorView extends StatelessWidget {
@@ -31,7 +32,10 @@ class CreateDoctorView extends StatelessWidget {
         }
       },
       child: const CustomScaffold(
-        appBar: HomeAppbar(),
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(30),
+          child: HomeAppbar(),
+        ),
         body: CreateDoctorViewBody(),
       ),
     );

@@ -11,13 +11,13 @@ class DriverHeaderWidget extends StatelessWidget {
   final String carNumber;
 
   const DriverHeaderWidget({
-    Key? key,
+    super.key,
     required this.rideStatus,
     required this.carModel,
     required this.carImageUrl,
     required this.carName,
     required this.carNumber,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -60,11 +60,11 @@ class DriverHeaderWidget extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 4),
-              Text(
-                carName,
-                style: const TextStyle(fontSize: 10),
-              ),
-              const SizedBox(height: 2),
+              // Text(
+              //   carName,
+              //   style: const TextStyle(fontSize: 10),
+              // ),
+              // const SizedBox(height: 2),
               Text(
                 carNumber,
                 style: const TextStyle(

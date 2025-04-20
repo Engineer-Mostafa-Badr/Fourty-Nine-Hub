@@ -27,6 +27,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/accept_trip_b
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_pending_trip_by_client_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_client.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_rider.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/click_global_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/complete_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_activity_trips.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_completed_trips_use_case.dart';
@@ -44,10 +45,17 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_trip_a
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_trip_price_from_client_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_color_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_car_years_and_types_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_trip_price_use_case.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/get_available_ride_trips_use_case.dart';
 import '../../../../core/error/failure.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/driver_statistics_entity.dart';
+
+import '../entities/get_offers_entity.dart';
+import '../usecases/make_loading_request_trip_usecase.dart';
+import '../usecases/make_non_tracking_request_trip_usecase.dart';
+
+import '../../../account_taps/my_adds/domain/entity/click_entity.dart';
 
 abstract class RideRepository {
 
@@ -89,13 +97,19 @@ abstract class RideRepository {
   Future<Either<Failure, bool>> recordingTrip(RecordingTripUseCaseParams params);
   Future<Either<Failure, bool>> updateTripAutoAcceptByClient(UpdateTripAutoAcceptByClientUseCaseParams params);
   Future<Either<Failure, bool>> makeRequestTrip();
+  Future<Either<Failure, bool>> makeNonTrackingRequestTrip(MakeNonTrackingRequestTripUsecaseParam params);
+  Future<Either<Failure, bool>> makeLoadingRequestTrip(MakeLoadingRequestTripUsecaseParam params);
   Future<Either<Failure, bool>> updateTripPriceFromClient(UpdateTripPriceFromClientUseCaseParams params);
+  Future<Either<Failure, bool>> updateTripPrice(UpdateTripPriceUseCaseParams params);
   Future<Either<Failure, ActivityTripEntity>> getAllActivityTrips(GetAllActivityTripsUseCaseParams params);
   Future<Either<Failure, List<HistoryTripForUserEntity>>> getAllHistoryTripsForUser();
+  Future<Either<Failure, GetOffersResponseEntity>> getClientOffers();
+  Future<Either<Failure, GetOffersResponseEntity>> getLoadingOffers();
   Future<Either<Failure, List<HistoryTripForRiderEntity>>> getAllHistoryTripsForRider(GetAllHistoryTripsForRiderUseCaseParams params);
   Future<Either<Failure, DriverInfoEntity>> getRideDriverInfo(bool refresh);
   Future<Either<Failure, DriverPictureOptionalEntity>> getDriverPictureOptional();
   Future<Either<Failure, List<AvailableRideTripEntity>>> getAvailableRideTrips(AvailableRideTripsUseCaseParams params);
   void listenToRideOffers(Function(RideOfferEntity offer) params);
   Future<Either<Failure, bool>> listenToUpdateLocation(UpdateSocketLocationParams params);
+  Future<Either<Failure, ClickEntity>> click(ClickParams params);
 }

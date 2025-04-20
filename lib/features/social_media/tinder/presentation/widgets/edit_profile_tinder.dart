@@ -20,8 +20,11 @@ class EditProfileTinder extends StatelessWidget {
   Widget build(BuildContext context) {
     final userCubit = context.read<UserCubit>();
     return CustomScaffold(
-      appBar: BackAppBar(
-        label: LocaleKeys.editProfile.localize,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          label: LocaleKeys.editProfile.localize,
+        ),
       ),
       body: BlocProvider<TinderViewCubit>(
         create: (BuildContext context) => serviceLocator()

@@ -36,7 +36,10 @@ class DragAnalyticsScreen extends StatelessWidget {
       LocaleKeys.aSelfieWithTheLicense.localize,
     ];
     return CustomScaffold(
-      appBar: const HomeAppbar(),
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(30),
+        child: HomeAppbar(),
+      ),
       body: Column(
         children: [
           Expanded(

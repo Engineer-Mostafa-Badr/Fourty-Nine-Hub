@@ -89,9 +89,12 @@ class _EditProfileViewState extends State<EditProfileView> {
       },
       builder: (context, state) {
         return CustomScaffold(
-          appBar: BackAppBar(
-            label: LocaleKeys.editProfile.localize,
-            enableCustomAppBar: true,
+          appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(30),
+            child: BackAppBar(
+              label: LocaleKeys.editProfile.localize,
+              enableCustomAppBar: true,
+            ),
           ),
           enableCustomAppBar: true,
           body: Padding(

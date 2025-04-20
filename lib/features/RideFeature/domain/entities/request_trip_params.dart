@@ -3,6 +3,8 @@ class RequestTripUseCaseParams {
   final double price;
   final String fromTitle;
   final String toTitle;
+  final String? wayPointOneTitle;
+  final String? wayPointTwoTitle;
   final double distance;
   final int duration;
   final List<double> startLocation;
@@ -23,6 +25,8 @@ class RequestTripUseCaseParams {
     required this.price,
     required this.fromTitle,
     required this.toTitle,
+    required this.wayPointOneTitle,
+    required this.wayPointTwoTitle,
     required this.distance,
     required this.duration,
     required this.startLocation,
@@ -50,6 +54,8 @@ class RequestTripUseCaseParams {
     "targetLocation": targetLocation,
     if (wayPointOne != null) "wayPointOne": wayPointOne,
     if (wayPointTwo != null) "wayPointTwo": wayPointTwo,
+    if (wayPointOneTitle != null) "wayPointOneTitle": wayPointOneTitle,
+    if (wayPointTwoTitle != null) "wayPointTwoTitle": wayPointTwoTitle,
     "calculate_b": calculateB,
     "paymentMethod" : paymentMethod,
     "passengers" : passengers,

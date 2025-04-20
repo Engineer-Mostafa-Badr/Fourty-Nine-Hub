@@ -8,8 +8,11 @@ import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../res/style/styles.dart';
 
 class DoctorGovernorateFilterView extends StatelessWidget {
   const DoctorGovernorateFilterView({super.key, required this.type});
@@ -19,8 +22,11 @@ class DoctorGovernorateFilterView extends StatelessWidget {
     final doctorGovernorateFilter =
         context.read<DoctorGovernorateFilterCubit>();
     return CustomScaffold(
-      appBar: BackAppBar(
-        label: LocaleKeys.governorate.localize,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: HomeAppbar(
+          isWithBackArrow: true,
+        ),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(
@@ -30,6 +36,8 @@ class DoctorGovernorateFilterView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Label(text: LocaleKeys.governorate.localize,style: Styles.headerText(),),
+            Sizer(),
             DefaultTextFormField(
               currentFocusNode: doctorGovernorateFilter.searchFocusNode,
               currentController: doctorGovernorateFilter.searchController,
@@ -58,9 +66,8 @@ class DoctorGovernorateFilterView extends StatelessWidget {
               builder: (context, state) {
                 if (state is DoctorGovernorateFilterLoaded) {
                   return Expanded(
-                      child: ListView.separated(
+                      child: ListView.builder(
                     itemCount: state.governorates.length,
-                    separatorBuilder: (context, index) => const Divider(),
                     itemBuilder: (context, index) => GovernorateListTitle(
                       governorate: state.governorates[index],
                       type: type,

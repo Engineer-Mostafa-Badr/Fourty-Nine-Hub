@@ -54,13 +54,16 @@ class _TransactionSuccessScreenState extends State<TransactionSuccessScreen> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: BackAppBar(
-        label: LocaleKeys.transactionSuccessful.localize,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.of(context).popUntil((route) => route.isFirst);
-          },
-          icon: const Icon(Icons.arrow_back),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          label: LocaleKeys.transactionSuccessful.localize,
+          leading: IconButton(
+            onPressed: () {
+              Navigator.of(context).popUntil((route) => route.isFirst);
+            },
+            icon: const Icon(Icons.arrow_back),
+          ),
         ),
       ),
       body: Column(

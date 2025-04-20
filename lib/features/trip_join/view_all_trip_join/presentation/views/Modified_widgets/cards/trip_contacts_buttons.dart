@@ -74,7 +74,7 @@ class _ContactsTripButtonsState extends State<ContactsTripButtons> {
                     topButtonColor: AppColors.PRIMARY_COLOR,
                     topButtonTitle:LocaleKeys.freeCall.localize ,
                     bottomButtonColor: AppColors.BG_GRAY_COLOR,
-                    bottomButtonTitle: LocaleKeys.regularCall.localize),
+                    bottomButtonTitle: LocaleKeys.regularCall.localize,onTap:()=> Navigator.of(context).pop()),
                 // !context.read<UserCubit>().isLoggedIn
                 //     ? () => context.push(Routes.LOGIN)
                 //     :

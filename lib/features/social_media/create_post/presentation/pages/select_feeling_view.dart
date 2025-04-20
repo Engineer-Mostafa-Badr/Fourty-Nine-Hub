@@ -46,8 +46,11 @@ class _SelectFeelingViewState extends State<SelectFeelingView> {
     return Padding(
       padding: EdgeInsets.only(top: 20.h),
       child: CustomScaffold(
-        appBar: BackAppBar(
-          label: LocaleKeys.selectFeeling.localize,
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(30),
+          child: BackAppBar(
+            label: LocaleKeys.selectFeeling.localize,
+          ),
         ),
         body: BlocBuilder<CreatePostCubit,CreatePostState>(
             builder: (context,state) {

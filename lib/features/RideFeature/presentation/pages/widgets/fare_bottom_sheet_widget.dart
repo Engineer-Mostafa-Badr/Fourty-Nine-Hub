@@ -18,9 +18,9 @@ class FareBottomSheetWidget extends StatelessWidget {
     required this.selectedCategoryPrice,
     required this.selectedCategoryName,
   }) : _controller = TextEditingController(
-    text:
-    selectedCategoryPrice > 0 ? selectedCategoryPrice.toString() : '',
-  );
+          text:
+              selectedCategoryPrice > 0 ? selectedCategoryPrice.toString() : '',
+        );
 
   final RideCubit rideCubit;
   final double selectedCategoryPrice;
@@ -130,106 +130,104 @@ class FareBottomSheetWidget2 extends StatelessWidget {
   FareBottomSheetWidget2({
     super.key,
     required this.selectedCategoryPrice,
-    required this.dashboardsCubit,
+    // required this.dashboardsCubit,
     required this.id,
+    required this.contextScreen,
+    required this.subCategoryId,
   }) : _controller = TextEditingController(
-    text:
-    selectedCategoryPrice > 0 ? selectedCategoryPrice.toString() : '',
-  );
+          text:
+              selectedCategoryPrice > 0 ? selectedCategoryPrice.toString() : '',
+        );
 
   final double selectedCategoryPrice;
   final String id;
-  final DashboardsCubit dashboardsCubit;
+  final String subCategoryId;
+  final BuildContext contextScreen;
+  // final DashboardsCubit dashboardsCubit;
   final TextEditingController _controller;
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: dashboardsCubit,
-      child: BlocBuilder<DashboardsCubit, DashboardsState>(
-        builder: (context, state) {
-          return Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                TextFormField(
-                  controller: _controller,
-                  autofocus: true,
-                  cursorColor: AppColors.PRIMARY_COLOR,
-                  cursorHeight: 50,
-                  keyboardType: TextInputType.number,
-                  style: const TextStyle(
-                    color: AppColors.PRIMARY_COLOR,
+    return BlocBuilder<DashboardsCubit, DashboardsState>(
+      builder: (context, state) {
+        return Form(
+          key: _formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextFormField(
+                controller: _controller,
+                autofocus: true,
+                cursorColor: AppColors.PRIMARY_COLOR,
+                cursorHeight: 50,
+                keyboardType: TextInputType.number,
+                style: const TextStyle(
+                  color: AppColors.PRIMARY_COLOR,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 40,
+                ),
+                textAlign: TextAlign.center,
+                decoration: InputDecoration(
+                  floatingLabelBehavior: FloatingLabelBehavior.never,
+                  hintText: context.isArabic ? 'ج.م' : 'EGP',
+                  hintStyle: const TextStyle(
+                    color: Color(0xff96979B),
                     fontWeight: FontWeight.w500,
                     fontSize: 40,
                   ),
-                  textAlign: TextAlign.center,
-                  decoration: InputDecoration(
-                    floatingLabelBehavior: FloatingLabelBehavior.never,
-                    hintText: context.isArabic ? 'ج.م' : 'EGP',
-                    hintStyle: const TextStyle(
-                      color: Color(0xff96979B),
-                      fontWeight: FontWeight.w500,
-                      fontSize: 40,
+                  fillColor: Colors.white,
+                  filled: true,
+                  border: const UnderlineInputBorder(),
+                  focusedBorder: const UnderlineInputBorder(),
+                  enabledBorder: const UnderlineInputBorder(),
+                  errorBorder: const UnderlineInputBorder(),
+                  disabledBorder: const UnderlineInputBorder(),
+                  focusedErrorBorder: const UnderlineInputBorder(),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return context.isArabic
+                        ? 'يرجى إدخال مبلغ'
+                        : 'Please enter an amount';
+                  }
+                  // final double? amount = double.tryParse(value);
+                  // final double minFare =
+                  //     state.rideExpectedPrice?.lowestFare ?? 0;
+                  // final double maxFare =
+                  //     state.rideExpectedPrice?.highestFare ?? double.infinity;
+                  // if (amount == null || amount < minFare || amount > maxFare) {
+                  //   return context.isArabic
+                  //       ? 'يجب أن يكون المبلغ بين $minFare و $maxFare'
+                  //       : 'Amount must be between $minFare and $maxFare';
+                  // }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 20),
+              AppButton(
+                      // iconWidget: state.isLoadingCreateOffer
+                      //     ? const CircularProgressIndicator.adaptive()
+                      //     : null,
+                      width: double.infinity,
+                      label: LocaleKeys.done.tr(),
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                           Navigator.pop(context);
+                          BlocProvider.of<DashboardsCubit>(context)
+                              .createNewOfferNonSocket(
+                                  contextScreen,
+                                  CreateNewOfferDashboardUsecaseParam(
+                                      priceOffer: double.parse(_controller.text).toInt(),
+                                      tripId: id),subCategoryId);
+                        }
+                      },
+                      backColor: AppColors.PRIMARY_COLOR,
                     ),
-                    fillColor: Colors.white,
-                    filled: true,
-                    border: const UnderlineInputBorder(),
-                    focusedBorder: const UnderlineInputBorder(),
-                    enabledBorder: const UnderlineInputBorder(),
-                    errorBorder: const UnderlineInputBorder(),
-                    disabledBorder: const UnderlineInputBorder(),
-                    focusedErrorBorder: const UnderlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return context.isArabic
-                          ? 'يرجى إدخال مبلغ'
-                          : 'Please enter an amount';
-                    }
-                    // final double? amount = double.tryParse(value);
-                    // final double minFare =
-                    //     state.rideExpectedPrice?.lowestFare ?? 0;
-                    // final double maxFare =
-                    //     state.rideExpectedPrice?.highestFare ?? double.infinity;
-                    // if (amount == null || amount < minFare || amount > maxFare) {
-                    //   return context.isArabic
-                    //       ? 'يجب أن يكون المبلغ بين $minFare و $maxFare'
-                    //       : 'Amount must be between $minFare and $maxFare';
-                    // }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 20),
-                AppButton(
-                  iconWidget: state.isLoadingCreateOffer
-                      ? const CircularProgressIndicator.adaptive()
-                      : null,
-                  width: double.infinity,
-                  label: LocaleKeys.done.tr(),
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      dashboardsCubit.createNewOffer(
-                          context,
-                          CreateNewOfferDashboardUsecaseParam(
-                              priceOffer: int.parse(_controller.text),
-                              location: CreateOfferLocation(
-                                latitude: 0.0,
-                                longitude: 0.0,
-                              ),
-                              tripId: id)).then((value){
-                        Navigator.pop(context);
-                      });
-                    }
-                  },
-                  backColor: AppColors.PRIMARY_COLOR,
-                ),
-              ],
-            ),
-          );
-        },
-      ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

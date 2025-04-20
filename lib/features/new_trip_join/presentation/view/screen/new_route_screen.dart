@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
 import 'package:go_router/go_router.dart';
@@ -39,15 +40,19 @@ class _NewRouteScreenState extends State<NewRouteScreen> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: HomeAppbar(
-        key: _scaffoldKey,
-        isWithBackArrow: false,
-        language: true,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back), // The menu icon
-          onPressed: () {
-            Navigator.pop(context);
-          },
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: HomeAppbar(
+          key: _scaffoldKey,
+          isWithBackArrow: false,
+          language: true,
+          leading: IconButton(
+            icon: const Icon(Icons.menu), // The menu icon
+            onPressed: () {
+              HandleCashback.setCount('drawerCount', context);
+              _scaffoldKey.currentState?.openDrawer(); // Open the drawer
+            },
+          ),
         ),
       ),
       body: const NewRouteBody(),

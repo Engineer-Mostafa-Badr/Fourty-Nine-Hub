@@ -92,7 +92,6 @@ class DoctorDetailsAppointmentsCard extends StatelessWidget {
                     const Sizer(),
               ))
         ],
-        const DoctorDetailsDivider(),
       ],
     );
   }

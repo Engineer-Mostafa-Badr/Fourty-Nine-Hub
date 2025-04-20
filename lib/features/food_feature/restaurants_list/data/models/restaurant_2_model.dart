@@ -65,6 +65,8 @@ class Restaurant2Model extends Restaurant {
     super.description, // Description is not in your JSON, so this may not be used
     super.isFavorite,
     super.enableOrDisableChat, // Chat enabled/disabled status
+    super.rateName,
+    super.totalViews,
   });
 
   // Factory method for creating an instance from a JSON map

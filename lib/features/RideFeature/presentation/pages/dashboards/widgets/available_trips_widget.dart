@@ -124,14 +124,14 @@ class AvailableTripsWidget extends StatelessWidget {
                       child: AppButton(
                         radius: 15,
                         height: 30,
-                        label: !tripEntity.isAutoAccept
+                        label: tripEntity.isAutoAccept==false
                             ? LocaleKeys.acceptAnothePrice.tr()
                             : LocaleKeys.refuse.tr(),
                         style: Styles.mediumText(
                             color: Colors.white,
-                            fontSize: !tripEntity.isAutoAccept ? 23 : 28),
+                            fontSize: tripEntity.isAutoAccept==false ? 23 : 28),
                         onPressed: () {
-                          if (!tripEntity.isAutoAccept) {
+                          if (tripEntity.isAutoAccept==false) {
                             showModalBottomSheet(
                               backgroundColor: AppColors.whiteColor,
                               context: context,
@@ -140,7 +140,7 @@ class AvailableTripsWidget extends StatelessWidget {
                                       top: Radius.circular(15))),
                               isScrollControlled: true,
                               builder: (BuildContext context) =>
-                                  EditPriceWidget(tripEntity: tripEntity, price: tripEntity.price, onSendOffer: (num offer) {
+                                  EditPriceWidget(tripEntity: tripEntity, price: tripEntity.price??0, onSendOffer: (num offer) {
                                     context.pop();
                                     // cubit.createOffer(tripId: tripEntity.id, price: offer);
 

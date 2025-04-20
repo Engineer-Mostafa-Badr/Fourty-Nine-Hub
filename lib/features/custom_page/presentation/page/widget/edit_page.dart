@@ -25,7 +25,7 @@ class EditPage extends StatefulWidget {
 
 class _EditPageState extends State<EditPage> {
   List<Widget> pages = const [
-    NavigateBar(),
+    // NavigateBar(),
     SocialPage(),
     FavouriteCategory(),
     ChooseCategoriesViwBody(),
@@ -35,7 +35,7 @@ class _EditPageState extends State<EditPage> {
   ];
 
   List<String> appBarTitle = [
-    LocaleKeys.navigateBar.localize,
+    // LocaleKeys.navigateBar.localize,
     LocaleKeys.socialPage.localize,
     LocaleKeys.favoriteCategory.localize,
     LocaleKeys.chooseCategoryView.localize,
@@ -51,31 +51,34 @@ class _EditPageState extends State<EditPage> {
           return CustomScaffold(
             enableCustomAppBar: true,
             // backgroundColor: Colors.transparent,
-            appBar: BackAppBar(
-              enableCustomAppBar: true,
-              leading: Builder(builder: (context) {
-                return IconButton(
-                    onPressed: () {
-                      if (BlocProvider.of<EditPageCubit>(context).currentIndex >
-                          0) {
-                        BlocProvider.of<EditPageCubit>(context).changePage(
-                            BlocProvider.of<EditPageCubit>(context)
-                                    .currentIndex -
-                                1);
-                      } else {
-                        log("index ${BlocProvider.of<EditPageCubit>(context).currentIndex}");
+            appBar: PreferredSize(
+              preferredSize: const Size.fromHeight(30),
+              child: BackAppBar(
+                enableCustomAppBar: true,
+                leading: Builder(builder: (context) {
+                  return IconButton(
+                      onPressed: () {
+                        if (BlocProvider.of<EditPageCubit>(context).currentIndex >
+                            0) {
+                          BlocProvider.of<EditPageCubit>(context).changePage(
+                              BlocProvider.of<EditPageCubit>(context)
+                                      .currentIndex -
+                                  1);
+                        } else {
+                          log("index ${BlocProvider.of<EditPageCubit>(context).currentIndex}");
 
-                        Navigator.of(context).pop();
-                      }
-                    },
-                    icon: Icon(
-                      Icons.arrow_back,
-                      size: 40.w,
-                      color: Colors.white,
-                    ));
-              }),
-              label: appBarTitle[
-                  BlocProvider.of<EditPageCubit>(context).currentIndex],
+                          Navigator.of(context).pop();
+                        }
+                      },
+                      icon: Icon(
+                        Icons.arrow_back,
+                        size: 40.w,
+                        color: Colors.white,
+                      ));
+                }),
+                label: appBarTitle[
+                    BlocProvider.of<EditPageCubit>(context).currentIndex],
+              ),
             ),
             body: pages[BlocProvider.of<EditPageCubit>(context).currentIndex],
           );

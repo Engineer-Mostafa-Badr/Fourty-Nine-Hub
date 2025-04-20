@@ -93,7 +93,10 @@ class _SocialHomeViewState extends State<SocialHomeView>
     super.build(context);
     return Scaffold(
       appBar: widget.params?.hideAppBar == false
-          ? const HomeAppbar(isWithBackArrow: true)
+          ? const PreferredSize(
+              preferredSize: Size.fromHeight(30),
+              child: HomeAppbar(isWithBackArrow: true),
+            )
           : null,
       body: Column(
         children: [
@@ -105,8 +108,7 @@ class _SocialHomeViewState extends State<SocialHomeView>
                         context.push(Routes.GIFT);
                       },
                       child: Label(
-                        text:
-                            'Get money if you post, view,like\nand seen on any interface you like!',
+                        text:LocaleKeys.socialExplain.localize,
                         style: Styles.headerText(
                           color: AppColors.SECONDARY_COLOR,
                           shadows: const [

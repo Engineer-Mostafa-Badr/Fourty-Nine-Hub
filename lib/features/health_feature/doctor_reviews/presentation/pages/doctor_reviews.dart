@@ -53,7 +53,9 @@ class _DoctorReviewsState extends State<DoctorReviews> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: BackAppBar(label: LocaleKeys.adRequests.localize),
+      appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(30),
+          child: BackAppBar(label: LocaleKeys.adRequests.localize)),
       body: const Column(
         children: [],
       ),

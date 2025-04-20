@@ -20,7 +20,10 @@ class TruckWelcomeRideRegister extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: const HomeAppbar(),
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(30),
+        child: HomeAppbar(),
+      ),
       body: Column(
         children: [
           Expanded(
@@ -66,7 +69,8 @@ class TruckWelcomeRideRegister extends StatelessWidget {
                                         ),
                                         width: 50,
                                         height: 50,
-                                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                                        clipBehavior:
+                                            Clip.antiAliasWithSaveLayer,
                                         child: Image.asset(
                                           Assets.maleImagePlaceholder,
                                         ),
@@ -79,7 +83,8 @@ class TruckWelcomeRideRegister extends StatelessWidget {
                                         width: 50,
                                         height: 50,
                                         padding: EdgeInsets.all(12),
-                                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                                        clipBehavior:
+                                            Clip.antiAliasWithSaveLayer,
                                         child: Image.asset(
                                           Assets.phone,
                                         ),

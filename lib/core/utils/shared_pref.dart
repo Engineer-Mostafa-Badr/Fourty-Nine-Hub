@@ -183,7 +183,7 @@ class CacheManager {
       return false;
     }
   }
-  static Future<bool> getShowOnboarding() async {
+  static Future<bool>? getShowOnboarding() async {
     try {
       final prefs = await SharedPreferences.getInstance();
       print('isShowOnboarding ${prefs.getBool(showOnboarding)}');

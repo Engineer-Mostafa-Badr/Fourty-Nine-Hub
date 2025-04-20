@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/stateless/loaders/default_loader.dart';
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/cubit/doctor_details_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_details/presentation/widgets/doctor_review_card.dart';
@@ -61,16 +62,19 @@ class _AllReviewsState extends State<AllReviews> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: BackAppBar(
-        label: Labels.reviews,
-        backColor: cardDarkColor(context),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          label: Labels.reviews,
+          backColor: cardDarkColor(context),
+        ),
       ),
       body: BlocBuilder<DoctorDetailsCubit, DoctorDetailsState>(
           builder: (context, state) {
         var cubit = context.read<DoctorDetailsCubit>();
 
         if (state.isLoading) {
-          return const Center(child: CircularProgressIndicator());
+          return const DLoader();
         } else {
           if (cubit.rates.isEmpty) {
             return const Center(child: Text('No reviews yet'));

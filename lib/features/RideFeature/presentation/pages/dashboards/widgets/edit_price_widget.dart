@@ -8,7 +8,6 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/dashboards/av
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../../../res/assets/assets.dart';
-import '../../../../domain/entities/dashboards/trip_entity.dart';
 import '../../widgets/font_manager.dart';
 
 class EditPriceWidget extends StatefulWidget {
@@ -26,7 +25,7 @@ class _EditPriceWidgetState extends State<EditPriceWidget> {
   void initState() {
     super.initState();
     setState(() {
-      price = widget.tripEntity?.price.toInt() ?? 0;
+      price = (widget.tripEntity?.price??0).toInt();
     });
   }
 

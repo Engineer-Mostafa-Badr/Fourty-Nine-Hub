@@ -23,7 +23,7 @@ abstract class ApiConsumer {
     Map<String, dynamic>? headers,
     Map<String, dynamic>? queryParameters,
     Map<String, dynamic>? data,
-    bool refresh = false,
+        bool refresh = false,
   });
 
   Future<Either<Failure, Map<String, dynamic>>> post(
@@ -32,7 +32,7 @@ abstract class ApiConsumer {
     FormData? formData,
     Map<String, dynamic>? queryParameters,
     Map<String, dynamic>? headers,
-    bool refresh = false,
+        bool refresh = false,
   });
 
   Future<Either<Failure, Map<String, dynamic>>> patch(
@@ -40,7 +40,7 @@ abstract class ApiConsumer {
     Map<String, dynamic>? data,
     Map<String, dynamic>? queryParameters,
     Map<String, dynamic>? headers,
-    bool refresh = false,
+        bool refresh = false,
   });
 
   Future<Either<Failure, Map<String, dynamic>>> put(
@@ -48,7 +48,7 @@ abstract class ApiConsumer {
     Map<String, dynamic>? data,
     Map<String, dynamic>? queryParameters,
     Map<String, dynamic>? headers,
-    bool refresh = false,
+        bool refresh = false,
   });
 
   Future<Either<Failure, Map<String, dynamic>>> delete(
@@ -56,7 +56,7 @@ abstract class ApiConsumer {
     Map<String, dynamic>? data,
     Map<String, dynamic>? queryParameters,
     Map<String, dynamic>? headers,
-    bool refresh = false,
+        bool refresh = false,
   });
 
   void attachToken(UserTokensEntity? token);
@@ -96,13 +96,12 @@ class BaseApiConsumer extends ApiConsumer {
 
   //addAll({"x-api-key":"2fef55aee2e4efa73d64120ecad8092262fd4f1b912ca1d5460d70a47eaf4684"})
   @override
-  Future<Either<Failure, Map<String, dynamic>>> patch(
-    String url, {
-    Map<String, dynamic>? data,
-    Map<String, dynamic>? queryParameters,
-    Map<String, dynamic>? headers,
-    bool refresh = false,
-  }) async {
+  Future<Either<Failure, Map<String, dynamic>>> patch(String url,
+      {Map<String, dynamic>? data,
+      Map<String, dynamic>? queryParameters,
+      Map<String, dynamic>? headers,
+        bool refresh = false,
+      }) async {
     try {
       final result = await _dio.patch(
         url,
@@ -146,13 +145,12 @@ class BaseApiConsumer extends ApiConsumer {
   }
 
   @override
-  Future<Either<Failure, Map<String, dynamic>>> delete(
-    String url, {
-    Map<String, dynamic>? data,
-    Map<String, dynamic>? queryParameters,
-    Map<String, dynamic>? headers,
-    bool refresh = false,
-  }) async {
+  Future<Either<Failure, Map<String, dynamic>>> delete(String url,
+      {Map<String, dynamic>? data,
+      Map<String, dynamic>? queryParameters,
+      Map<String, dynamic>? headers,
+        bool refresh = false,
+      }) async {
     try {
       final result = await _dio.delete(
         url,
@@ -184,35 +182,34 @@ class BaseApiConsumer extends ApiConsumer {
   }
 
   @override
-  Future<Either<Failure, Map<String, dynamic>>> get(
-    String url, {
-    Map<String, dynamic>? queryParameters,
-    Map<String, dynamic>? data,
-    Map<String, dynamic>? headers,
-    bool refresh = false,
-  }) async {
+  Future<Either<Failure, Map<String, dynamic>>> get(String url,
+      {Map<String, dynamic>? queryParameters,
+      Map<String, dynamic>? data,
+      Map<String, dynamic>? headers,
+        bool refresh = false,
+      }) async {
     try {
       log(data.toString());
       final connectivityResult = await Connectivity().checkConnectivity();
 
+
       bool networkStatus = connectivityResult == ConnectivityResult.none;
       log("result.toString()$networkStatus");
 
-      final result = await _dio.get(
-        url,
-        data: data,
-        queryParameters: queryParameters,
-        options: buildCacheOptions(
-          const Duration(hours: 3),
-          maxStale: const Duration(days: 7),
-          forceRefresh: networkStatus ? true : refresh,
-          options: Options(headers: {
-            ...?headers,
-            "x-api-key":
-                "2fef55aee2e4efa73d64120ecad8092262fd4f1b912ca1d5460d70a47eaf4684",
-          }),
-        ),
-      );
+      final result = await _dio.get(url,
+          data: data,
+          queryParameters: queryParameters,
+          options: buildCacheOptions(
+            const Duration(hours: 3),
+            maxStale: const Duration(days: 7),
+            forceRefresh: networkStatus?true:refresh,
+            options: Options(headers: {
+              ...?headers,
+              "x-api-key":
+              "2fef55aee2e4efa73d64120ecad8092262fd4f1b912ca1d5460d70a47eaf4684",
+            }),
+          ),
+          );
       log("result.toString()${result.toString()}", name: url);
       print('Welcome ${result.data['status']}');
       if (result.data['status']) {
@@ -234,14 +231,13 @@ class BaseApiConsumer extends ApiConsumer {
   }
 
   @override
-  Future<Either<Failure, Map<String, dynamic>>> post(
-    String url, {
-    Map<String, dynamic>? data,
-    FormData? formData,
-    Map<String, dynamic>? queryParameters,
-    Map<String, dynamic>? headers,
-    bool refresh = false,
-  }) async {
+  Future<Either<Failure, Map<String, dynamic>>> post(String url,
+      {Map<String, dynamic>? data,
+      FormData? formData,
+      Map<String, dynamic>? queryParameters,
+      Map<String, dynamic>? headers,
+        bool refresh = false,
+      }) async {
     try {
       log(data.toString());
       if (url.contains('/chat/get-chats')) {
@@ -258,7 +254,7 @@ class BaseApiConsumer extends ApiConsumer {
           options: Options(headers: {
             ...?headers,
             "x-api-key":
-                "2fef55aee2e4efa73d64120ecad8092262fd4f1b912ca1d5460d70a47eaf4684",
+            "2fef55aee2e4efa73d64120ecad8092262fd4f1b912ca1d5460d70a47eaf4684",
           }),
         ),
       );
@@ -291,13 +287,12 @@ class BaseApiConsumer extends ApiConsumer {
   }
 
   @override
-  Future<Either<Failure, Map<String, dynamic>>> put(
-    String url, {
-    Map<String, dynamic>? data,
-    Map<String, dynamic>? queryParameters,
-    Map<String, dynamic>? headers,
-    bool refresh = false,
-  }) async {
+  Future<Either<Failure, Map<String, dynamic>>> put(String url,
+      {Map<String, dynamic>? data,
+      Map<String, dynamic>? queryParameters,
+      Map<String, dynamic>? headers,
+        bool refresh = false,
+      }) async {
     try {
       final result = await _dio.put(url,
           data: data,
@@ -309,14 +304,14 @@ class BaseApiConsumer extends ApiConsumer {
             options: Options(headers: {
               ...?headers,
               "x-api-key":
-                  "2fef55aee2e4efa73d64120ecad8092262fd4f1b912ca1d5460d70a47eaf4684",
+              "2fef55aee2e4efa73d64120ecad8092262fd4f1b912ca1d5460d70a47eaf4684",
             }),
           )
           // options: Options(headers: {
           //   ...?headers,
           //   // Your custom header
           // })
-          );
+      );
       log(result.data.toString(), name: "url");
       if (getSuccessState(result.data)) {
         log('iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
@@ -361,7 +356,7 @@ class BaseApiConsumer extends ApiConsumer {
       if (e.response?.statusCode == 413) {
         return const ServerFailure(
           message: 'File size is too large',
-          name: 'Unknown Error',
+          name:  'Unknown Error',
         );
       } else if (e.response?.statusCode == 401) {
         if (error != null) {

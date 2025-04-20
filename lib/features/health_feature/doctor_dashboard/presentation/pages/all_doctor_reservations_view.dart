@@ -15,8 +15,11 @@ class AllDoctorReservationsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      appBar: const BackAppBar(
-        label: Labels.todayAppointments,
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(30),
+        child: BackAppBar(
+          label: Labels.todayAppointments,
+        ),
       ),
       body: BlocBuilder<AllDoctorReservationsCubit, AllDoctorReservationsState>(
         builder: (context, state) {

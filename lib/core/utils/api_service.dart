@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 
 class ApiService {
-  final String _baseUrl = 'https://49backend.com';
+  final String _baseUrl = 'https://49backend.com/';
 
   final Dio dio;
 
@@ -15,10 +15,8 @@ class ApiService {
     var response = await dio.get(
       '$_baseUrl$url',
       options: Options(
-        headers: {
-          'Authorization': 'Bearer $token',
-          "x-api-key":
-              "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91",
+        headers: {'Authorization': 'Bearer $token',
+          "x-api-key": "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91",
         },
       ),
       queryParameters: params,
@@ -47,11 +45,8 @@ class ApiService {
       data: data,
       queryParameters: query,
       options: Options(
-        headers: {
-          'Authorization': 'Bearer $token',
-          "x-api-key":
-              "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91",
-        },
+        headers: {'Authorization': 'Bearer $token',
+          "x-api-key": "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91",},
       ),
     );
     return response.data;
@@ -64,11 +59,7 @@ class ApiService {
     var response = await dio.delete(
       '$_baseUrl$url',
       options: Options(
-        headers: {
-          'Authorization': 'Bearer $token',
-          "x-api-key":
-              "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91",
-        },
+        headers: {'Authorization': 'Bearer $token', "x-api-key": "25c8d94c24f45386b47e8ed21251555611181858a23b8d6b371ff5dc5313cb91",},
       ),
     );
     // Check if the response is a Map or a List

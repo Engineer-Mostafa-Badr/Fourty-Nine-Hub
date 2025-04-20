@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/ads/native_ad_card.dart';
+import 'package:fourtyninehub/common/widgets/stateless/loaders/default_loader.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -119,13 +120,14 @@ class _UserAdsState extends State<UserAds> {
                 ),
               ],
             );
+            // return Text("hello");
           },
           noMoreItemsIndicatorBuilder: (context) => Container(),
           firstPageProgressIndicatorBuilder: (context) => Container(
               margin: const EdgeInsets.only(top: 150),
-              child: const Center(child: CircularProgressIndicator())),
+              child: const DLoader()),
           newPageProgressIndicatorBuilder: (context) =>
-              const Center(child: CircularProgressIndicator())),
+           const   DLoader()),
     );
   }
 }

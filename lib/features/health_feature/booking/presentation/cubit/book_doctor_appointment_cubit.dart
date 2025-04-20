@@ -11,14 +11,15 @@ import 'package:fourtyninehub/res/strings/labels.dart';
 part 'book_doctor_appointment_state.dart';
 
 class BookDoctorAppointmentCubit extends Cubit<BookDoctorAppointmentState> {
+  final nameTextController = TextEditingController();
   final phoneNumberTextController = TextEditingController();
   final phoneFousNode = FocusNode();
   final ageFocusNode = FocusNode();
-  final ageController = TextEditingController();
+  // final ageController = TextEditingController();
   final notesFocusNode = FocusNode();
-  final notesController = TextEditingController();
+  // final notesController = TextEditingController();
   final addressFocusNode = FocusNode();
-  final addressController = TextEditingController();
+  // final addressController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
   final BookRegularAppointmentUseCase _bookRegularAppointmentUseCase;
@@ -46,15 +47,19 @@ class BookDoctorAppointmentCubit extends Cubit<BookDoctorAppointmentState> {
     phoneNumberTextController.dispose();
     phoneFousNode.dispose();
     ageFocusNode.dispose();
-    ageController.dispose();
+    // ageController.dispose();
     notesFocusNode.dispose();
-    notesController.dispose();
+    // notesController.dispose();
     addressFocusNode.dispose();
-    addressController.dispose();
+    nameTextController.dispose();
+    // addressController.dispose();
     return super.close();
   }
 
   Future<void> regularBooking() async {
+    print(phoneNumberTextController.text);
+    print(nameTextController.text);
+    // print(ageController.text);
     _validate(afterValidation: () async {
       emit(BookDoctorAppointmentStartLoadingState());
       final response = await _bookRegularAppointmentUseCase.call(_params);
@@ -86,10 +91,10 @@ class BookDoctorAppointmentCubit extends Cubit<BookDoctorAppointmentState> {
   }
 
   void _saveText() {
-    _params.notes = notesController.text;
-    _params.address = addressController.text;
+    _params.name = nameTextController.text;
+    // _params.notes = notesController.text;
     _params.phone = phoneNumberTextController.text;
-    _params.age = ageController.text;
+    // _params.age = ageController.text;
   }
 
   void selectGender(GenderType gender) {

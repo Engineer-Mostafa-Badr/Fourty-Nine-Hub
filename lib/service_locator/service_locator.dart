@@ -145,7 +145,7 @@ class DI {
     // CliLogger.info('token outside getit $token');
     // socket
     // serviceLocator.registerLazySingleton<Socket>(() => io(
-    //     'https://49dev.com',
+    //     'https://49backend.com',
     //     OptionBuilder()
     //         .setTransports(['websocket'])
     //         .disableAutoConnect()
@@ -393,7 +393,7 @@ class DI {
   //   CliLogger.info('token outside getit $token');
   //   // socket
   //   serviceLocator.registerFactory<Socket>(() => io(
-  //       'https://49dev.com',
+  //       'https://49backend.com',
   //       OptionBuilder()
   //           .setTransports(['websocket'])
   //           .disableAutoConnect()

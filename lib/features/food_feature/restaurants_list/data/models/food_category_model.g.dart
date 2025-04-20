@@ -15,7 +15,9 @@ FoodCategoryModel _$FoodCategoryModelFromJson(Map<String, dynamic> json) =>
       picture: json['picture'] as String?,
       nameAr: json['nameAr'] as String?,
       nameEn: json['nameEn'] as String?,
-      isFavorite: json['isFavorite'] as bool?,
+      fromAsset: json['fromAsset'] as bool? ?? false,
+      isSelected: json['isSelected'] as bool? ?? false,
+      isFavorite: json['isFavorite'] as bool? ?? false,
       numberOfRestaurant: (json['numberOfRestaurant'] as num?)?.toInt(),
     );
 
@@ -30,6 +32,8 @@ Map<String, dynamic> _$FoodCategoryModelToJson(FoodCategoryModel instance) =>
       'nameEn': instance.nameEn,
       'numberOfRestaurant': instance.numberOfRestaurant,
       'isFavorite': instance.isFavorite,
+      'isSelected': instance.isSelected,
+      'fromAsset': instance.fromAsset,
     };
 
 const _$ParentEnumMap = {

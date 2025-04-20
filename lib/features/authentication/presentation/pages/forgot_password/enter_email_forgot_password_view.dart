@@ -24,9 +24,12 @@ class EnterEmailForgotPasswordView extends StatelessWidget {
     final cubit = context.read<ForgotPasswordCubit>();
     return CustomScaffold(
       enableCustomAppBar: true,
-      appBar: BackAppBar(
-        enableCustomAppBar: true,
-        label: LocaleKeys.forget.localize,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          enableCustomAppBar: true,
+          label: LocaleKeys.forget.localize,
+        ),
       ),
       body: BlocConsumer<ForgotPasswordCubit, ForgotPasswordState>(
         listener: (context, state) {

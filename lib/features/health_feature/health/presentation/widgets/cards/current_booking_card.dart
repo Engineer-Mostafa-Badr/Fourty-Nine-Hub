@@ -1,0 +1,315 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/cards/health_card_bottom_section.dart';
+import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/cards/health_custom_card.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
+
+import '../../../domain/entities/booking_entity.dart';
+import '../../controllers/health_cubit/health_cubit.dart';
+class CurrentBookingsScreen extends StatefulWidget {
+  const CurrentBookingsScreen({super.key, this.onClose});
+  final VoidCallback? onClose;
+
+  @override
+  State<CurrentBookingsScreen> createState() => _CurrentBookingsScreenState();
+}
+
+class _CurrentBookingsScreenState extends State<CurrentBookingsScreen> {
+  late ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController()..addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      context.read<HealthCubit>().getBookings('current');
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<HealthCubit, HealthState>(
+      builder: (context, state) {
+        final cubit = context.read<HealthCubit>();
+
+        if (state.status == HealthStates.loading && cubit.currentBookings.isEmpty) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        return SizedBox(
+          height: MediaQuery.of(context).size.height * 0.8,
+          child: Column(
+            children: [
+              // if (widget.onClose != null)
+              //   Align(
+              //     alignment: Alignment.topRight,
+              //     child: IconButton(
+              //       icon: const Icon(Icons.close),
+              //       onPressed: widget.onClose,
+              //     ),
+              //   ),
+              Expanded(
+                child: cubit.currentBookings.isEmpty
+                    ? Center(
+                  child: Text(
+                    context.isArabic ? 'لا توجد حجوزات حالية' : 'No current bookings',
+                    style: Styles.headerText(
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.grey,
+                    ),
+                  ),
+                )
+                    : ListView.separated(
+                  controller: _scrollController,
+                  itemCount: cubit.currentBookings.length,
+                  itemBuilder: (context, index) {
+                    final booking = cubit.currentBookings[index];
+                    return Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: CurrentBookingCard(
+                        booking: booking,
+                      ),
+                    );
+                  },
+                  separatorBuilder: (context, index) => const Sizer(),
+                ),
+              ),
+              if (state.isLoadingMoreBooking!)
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: CircularProgressIndicator(),
+                ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+
+class CurrentBookingCard extends StatefulWidget {
+  const CurrentBookingCard({
+    super.key,
+    required this.booking,
+  });
+
+  final BookingEntity booking;
+
+  @override
+  State<CurrentBookingCard> createState() => _CurrentBookingCardState();
+}
+
+class _CurrentBookingCardState extends State<CurrentBookingCard> {
+  @override
+  Widget build(BuildContext context) {
+    final doctor = widget.booking.doctor;
+    final address = doctor?.address;
+    final rating = doctor?.rating;
+    final subCategory = doctor?.subCategory;
+
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 10.h),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+
+          Stack(
+            children: [
+              HealthCustomCard(
+                padding: EdgeInsets.symmetric(horizontal: 16.h),
+                radiusGeometry: BorderRadius.circular(20.h),
+                children: [
+                  const Sizer(),
+                  _tripCardInfoWidget(
+                    title: '${doctor?.firstName ?? ''} ${doctor?.lastName ?? ''}',
+                    icon: doctor?.profilePicture ?? Assets.maleUser,
+                    specialty: subCategory?.nameAr ?? subCategory?.nameEn ?? 'Specialty',
+                    date: widget.booking.day ?? 'N/A',
+                    time: widget.booking.startTime ?? 'N/A',
+                    rating: rating?.average?.toStringAsFixed(1) ?? '0.0',
+                  ),
+                  const Sizer(),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.location_on_sharp,
+                        color: AppColors.PRIMARY_COLOR,
+                        size: 48.h,
+                      ),
+                      const Sizer(),
+                      Label(
+                        text: address?.address ?? 'Address not available',
+                        style: Styles.mediumText(fontWeight: FontWeight.w500),
+                      )
+                    ],
+                  ),
+                  const Sizer(),
+                  Row(
+                    children: [
+                      SvgPicture.asset(
+                        Assets.cash,
+                        fit: BoxFit.cover,
+                        height: 48.h,
+                        width: 48.h,
+                      ),
+                      const Sizer(),
+                      Expanded(
+                        child: Label(
+                          text: context.isArabic ? 'خدمة' : 'Fees',
+                          style: Styles.mediumText(fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                      Label(
+                        text: doctor?.callsPrice ?? 'Price not available',
+                        style: Styles.mediumText(fontWeight: FontWeight.w500),
+                      )
+                    ],
+                  ),
+                  const Sizer(),
+                  Row(
+                    children: [
+                      Icon(
+                          Icons.watch_later_outlined,
+                          color: AppColors.black,
+                          size: 48.h
+                      ),
+                      const Sizer(),
+                      Label(
+                        text: '${context.isArabic?'وقت الانتظار':'Waiting time'}: ${doctor?.waitingTime ?? 'N/A'} ${context.isArabic?'دقيقة':'min'}',
+                        style: Styles.mediumText(fontWeight: FontWeight.w500),
+                      )
+                    ],
+                  ),
+                  const Sizer(),
+                  HealthCardButtonsSection(
+                    isButton: false,
+                    isSubscribed: doctor?.isPremium ?? false,
+                    buttonTitle: '',
+                    onTap: (){},
+                  ),
+                  const Sizer(),
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _tripCardInfoWidget({
+    required String title,
+    required String icon,
+    required String specialty,
+    required String date,
+    required String time,
+    required String rating,
+  }) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Stack(
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: 112.h,
+                  height: 112.h,
+                  clipBehavior: Clip.antiAliasWithSaveLayer,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: icon.startsWith('http')
+                      ? Image.network(
+                    icon,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => Image.asset(Assets.maleUser),
+                  )
+                      : Image.asset(
+                    icon,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                const Sizer(),
+              ],
+            ),
+            Positioned(
+              top: 0,
+              right: 0,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: AppColors.cF5F5F5,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                  child: Row(
+                      children: [
+                        SvgPicture.asset(Assets.star2, width: 8, height: 8),
+                        const Sizer(width: 4),
+                        Label(text: rating, style: Styles.smallText())
+                      ]
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        const Sizer(),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Label(
+                text: title,
+                style: Styles.headerText(fontWeight: FontWeight.w600, fontSize: 32),
+              ),
+              Label(
+                text: specialty,
+                style: Styles.mediumText(),
+              )
+            ],
+          ),
+        ),
+        Column(
+          children: [
+            Label(
+              text: date,
+              style: Styles.mediumText(),
+            ),
+            Label(
+              text: time,
+              style: Styles.mediumText(),
+            )
+          ],
+        )
+      ],
+    );
+  }
+}
+
+
+
+
+

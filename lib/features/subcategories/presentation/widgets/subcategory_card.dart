@@ -42,7 +42,7 @@ class _SubCategoryCardState extends State<SubCategoryCard> {
               mainCategory: widget.mainCategory, subCategory: widget.item)),
       child: Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
+          color: AppColors.GRAY_LIGHT_COLOR3,
           borderRadius: BorderRadius.circular(30.r),
         ),
         clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -83,7 +83,7 @@ class _SubCategoryCardState extends State<SubCategoryCard> {
             Row(
               children: [
                 IconAppButton(
-                    icon: Icons.add_box_outlined,
+                    icon: Icons.add_circle_outline_rounded,
                     size: 40.h,
                     color: Theme.of(context).primaryColor,
                     onPressed: () {
