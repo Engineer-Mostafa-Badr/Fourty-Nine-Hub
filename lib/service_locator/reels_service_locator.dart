@@ -75,11 +75,11 @@ class ReelsServiceLocator {
       ),
     );
 
-    serviceLocator.registerLazySingleton<AddReelCommentUseCase>(
-      () => AddReelCommentUseCase(
-        serviceLocator(),
-      ),
-    );
+    // serviceLocator.registerLazySingleton<AddReelCommentUseCase>(
+    //   () => AddReelCommentUseCase(
+    //     serviceLocator(),
+    //   ),
+    // );
 
     serviceLocator.registerLazySingleton<AddReelReplyUseCase>(
       () => AddReelReplyUseCase(

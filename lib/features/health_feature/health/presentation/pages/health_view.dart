@@ -103,8 +103,8 @@ class _HealthViewState extends State<HealthView> {
               state.isDoctor == false
                   ? const RegistrationBanner()
                   : DoctorModeBanner(
-                isWaitingApproval: isWaitingApproval,
-              ),
+                      isWaitingApproval: isWaitingApproval,
+                    ),
               if (isWaitingApproval) WaitingAprovalText(),
               const Sizer(),
               Padding(
@@ -174,8 +174,9 @@ class _HealthViewState extends State<HealthView> {
               if (_showCurrent)
                 BlocProvider(
                   create: (context) => serviceLocator<HealthCubit>(
-                    // Pass your dependencies here
-                  )..loadInitialBooking('current'),
+                      // Pass your dependencies here
+                      )
+                    ..loadInitialBooking('current'),
                   child: CurrentBookingsScreen(
                     onClose: () => setState(() => _showCurrent = false),
                   ),
@@ -184,7 +185,8 @@ class _HealthViewState extends State<HealthView> {
               // History view
               if (_showHistory)
                 BlocProvider(
-                  create: (context) => serviceLocator<HealthCubit>()..loadInitialBooking('history'),
+                  create: (context) => serviceLocator<HealthCubit>()
+                    ..loadInitialBooking('history'),
                   child: BookingHistoryScreen(
                     onClose: () => setState(() => _showHistory = false),
                   ),

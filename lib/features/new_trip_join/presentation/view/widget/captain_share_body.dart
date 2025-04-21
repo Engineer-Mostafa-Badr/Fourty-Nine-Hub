@@ -103,10 +103,6 @@ class _CaptainShareBodyState extends State<CaptainShareBody>
         const SizedBox(height: 8),
         const Center(child: HeaderTextWidget()),
         const SizedBox(height: 16),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: TabBarRowWidget(tabController: widget._tabController),
-        ),
         Expanded(
             child: TabBarContentWidget(tabController: widget._tabController)),
       ],

@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import '../../../../core/localization/locale_keys.g.dart';
-import '../../../../res/assets/assets.dart';
-import '../../../../res/style/app_colors.dart';
 import '../../driver/widget/available_ride_mode_widget.dart';
+import '../../presentation/view/widget/taps/tab_bar_row_widget.dart';
 import 'one_way_widget.dart';
 
 class TabBarContentWidget extends StatefulWidget {
@@ -38,36 +36,49 @@ class _TabBarContentWidgetState extends State<TabBarContentWidget> {
     [""], // Ongoing Trips
     [""], // Past Trips
   ];
+  bool _hasTappedTab = false; // ✅ أضفنا دا
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(height: 10.h),
         Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-            decoration: BoxDecoration(
-              color: const Color(0xffD9D9D9),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: AnimatedBuilder(
-              animation: widget.tabController,
-              builder: (context, child) {
-                int index = widget.tabController.index;
-                return Text(
-                  context.isArabic ? hintsArabic[index] : hints[index],
-                  style: TextStyle(
-                    color: const Color(0xffFF0808),
-                    fontSize: 25.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
-                );
-              },
-            ),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: TabBarRowWidget(
+            onTap: () {
+              setState(() {
+                _hasTappedTab = !_hasTappedTab; // ✅ يقلب الحالة
+              });
+            },
+            tabController: widget.tabController,
           ),
         ),
+        SizedBox(height: 10.h),
+        if (_hasTappedTab)
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+              decoration: BoxDecoration(
+                color: const Color(0xffD9D9D9),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: AnimatedBuilder(
+                animation: widget.tabController,
+                builder: (context, child) {
+                  int index = widget.tabController.index;
+                  return Text(
+                    context.isArabic ? hintsArabic[index] : hints[index],
+                    style: TextStyle(
+                      color: const Color(0xffFF0808),
+                      fontSize: 25.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
         Expanded(
           child: TabBarView(
             controller: widget.tabController,
