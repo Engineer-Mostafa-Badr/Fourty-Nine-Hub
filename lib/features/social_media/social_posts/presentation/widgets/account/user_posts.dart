@@ -108,13 +108,13 @@ class _UserPostsState extends State<UserPosts> {
                                           await controller.onPostComment(
                                               params: params,
                                               from: 'userPosts');
-                                      var currentPost = controller
-                                          .userPostsPagingController.itemList
-                                          ?.firstWhere((element) =>
-                                              element.id == params.postId);
-                                      currentPost?.commentsCount =
-                                          (currentPost.commentsCount + 1);
-                                      return result;
+                                      // var currentPost = controller
+                                      //     .userPostsPagingController.itemList
+                                      //     ?.firstWhere((element) =>
+                                      //         element.id == params.postId);
+                                      // currentPost?.commentsCount =
+                                      //     (currentPost.commentsCount + 1);
+                                      // return result;
                                     },
                                     onCommentReply:
                                         (ReplyOnCommentParams params) async {
@@ -126,49 +126,49 @@ class _UserPostsState extends State<UserPosts> {
                                             commentId: params.commentId),
                                         from: 'feed',
                                       );
-                                      var currentPost = controller
-                                          .userPostsPagingController.itemList
-                                          ?.firstWhere((element) =>
-                                              element.id == params.postId);
-                                      currentPost?.commentsCount =
-                                          (currentPost.commentsCount + 1);
-                                      return result;
+                                      // var currentPost = controller
+                                      //     .userPostsPagingController.itemList
+                                      //     ?.firstWhere((element) =>
+                                      //         element.id == params.postId);
+                                      // currentPost?.commentsCount =
+                                      //     (currentPost.commentsCount + 1);
+                                      // return result;
                                     },
                                     onDeleteComment: (String id) async {
                                       var currentPost = controller
                                           .userPostsPagingController
                                           .itemList?[index];
-                                      var result =
-                                          await controller.deleteComment(
-                                              context: context,
-                                              commentId: id,
-                                              postId: controller
-                                                  .userPostsPagingController
-                                                  .itemList![index]
-                                                  .id,
-                                              from: 'feed');
-                                      currentPost?.commentsCount =
-                                          (currentPost.commentsCount - 1);
-                                      setState(() {});
-                                      return result;
+                                      // var result =
+                                      //     await controller.deleteComment(
+                                      //         context: context,
+                                      //         commentId: id,
+                                      //         postId: controller
+                                      //             .userPostsPagingController
+                                      //             .itemList![index]
+                                      //             .id,
+                                      //         from: 'feed');
+                                      // currentPost?.commentsCount =
+                                      //     (currentPost.commentsCount - 1);
+                                      // setState(() {});
+                                      // return result;
                                     },
                                     onDeleteReply: (String id) async {
                                       var currentPost = controller
                                           .userPostsPagingController
                                           .itemList?[index];
-                                      var result =
-                                          await controller.deleteComment(
-                                              context: context,
-                                              commentId: id,
-                                              postId: controller
-                                                  .userPostsPagingController
-                                                  .itemList![index]
-                                                  .id,
-                                              from: 'feed');
-                                      currentPost?.commentsCount =
-                                          (currentPost.commentsCount - 1);
-                                      setState(() {});
-                                      return result;
+                                      // var result =
+                                      //     await controller.deleteComment(
+                                      //         context: context,
+                                      //         commentId: id,
+                                      //         postId: controller
+                                      //             .userPostsPagingController
+                                      //             .itemList![index]
+                                      //             .id,
+                                      //         from: 'feed');
+                                      // currentPost?.commentsCount =
+                                      //     (currentPost.commentsCount - 1);
+                                      // setState(() {});
+                                      // return result;
                                     },
                                     from: 'feed',
                                     onEditComment:

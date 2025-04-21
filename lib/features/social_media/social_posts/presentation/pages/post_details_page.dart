@@ -148,41 +148,41 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                                         .itemList![index],
                                     onCommentReply:
                                         (ReplyOnCommentParams params) async {
-                                      var result =
-                                          await widget.onCommentReply(params);
-
-                                      state.postDetails?.commentsCount =
-                                          (state.postDetails!.commentsCount +
-                                              1);
-                                      setState(() {});
-                                      return result;
+                                      // var result =
+                                      //     await widget.onCommentReply(params);
+                                      //
+                                      // state.postDetails?.commentsCount =
+                                      //     (state.postDetails!.commentsCount +
+                                      //         1);
+                                      // setState(() {});
+                                      // return result;
                                     },
                                     onDeleteComment: (String id) async {
-                                      var result =
-                                          await widget.onDeleteComment(id);
-                                      state.postDetails?.commentsCount =
-                                          (state.postDetails!.commentsCount -
-                                              1);
-                                      controller
-                                          .commentsPagingController.itemList
-                                          ?.removeWhere(
-                                              (element) => element.id == id);
-
-                                      setState(() {});
-                                      return result;
+                                      // var result =
+                                      //     await widget.onDeleteComment(id);
+                                      // state.postDetails?.commentsCount =
+                                      //     (state.postDetails!.commentsCount -
+                                      //         1);
+                                      // controller
+                                      //     .commentsPagingController.itemList
+                                      //     ?.removeWhere(
+                                      //         (element) => element.id == id);
+                                      //
+                                      // setState(() {});
+                                      // return result;
                                     },
                                     onDeleteReply: (String id) async {
-                                      var result =
-                                          await widget.onDeleteReply(id);
-                                      state.postDetails?.commentsCount =
-                                          (state.postDetails!.commentsCount -
-                                              1);
-                                      controller
-                                          .repliesPagingController.itemList
-                                          ?.removeWhere(
-                                              (element) => element.id == id);
-                                      setState(() {});
-                                      return result;
+                                      // var result =
+                                      //     await widget.onDeleteReply(id);
+                                      // state.postDetails?.commentsCount =
+                                      //     (state.postDetails!.commentsCount -
+                                      //         1);
+                                      // controller
+                                      //     .repliesPagingController.itemList
+                                      //     ?.removeWhere(
+                                      //         (element) => element.id == id);
+                                      // setState(() {});
+                                      // return result;
                                     });
                               },
                               noMoreItemsIndicatorBuilder: (context) =>
@@ -267,8 +267,8 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                               ),
                             );
                             // widget.post.commentsCount=(widget.post.commentsCount!+1);
-                            state.postDetails?.commentsCount =
-                                (state.postDetails!.commentsCount + 1);
+                            // state.postDetails?.commentsCount =
+                            //     (state.postDetails!.commentsCount + 1);
                             commentTextController.clear();
                             FocusScope.of(context).unfocus();
                             setState(() {});

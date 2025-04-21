@@ -764,7 +764,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
             ?.firstWhere((element) => element.id == params.postId);
         print("comment count${currentPost?.commentsCount}");
 
-        currentPost?.commentsCount = (currentPost.commentsCount + 1);
+        // currentPost?.commentsCount = (currentPost.commentsCount + 1);
       }
       emit(state.copyWith(status: StateStatus.success));
     });
@@ -786,7 +786,7 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
             ?.firstWhere((element) => element.id == params.postId);
         print("commmmmment count${currentPost?.commentsCount}");
 
-        currentPost?.commentsCount = (currentPost.commentsCount + 1);
+        // currentPost?.commentsCount = (currentPost.commentsCount + 1);
       }
 
       emit(state.copyWith(newComment: data, status: StateStatus.success));
@@ -917,11 +917,11 @@ class SocialPostsCubit extends Cubit<SocialPostsState> {
             ?.firstWhere((element) => element.id == postId);
         print("commmmmment count${currentPost?.commentsCount}");
 
-        currentPost?.commentsCount = (currentPost.commentsCount - 1);
+        // currentPost?.commentsCount = (currentPost.commentsCount - 1);
       } else {
         if (state.postDetails != null) {
-          state.postDetails?.commentsCount =
-              (state.postDetails!.commentsCount - 1);
+          // state.postDetails?.commentsCount =
+          //     (state.postDetails!.commentsCount - 1);
         }
       }
       emit(state.copyWith(status: StateStatus.success));

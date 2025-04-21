@@ -14,178 +14,139 @@ class PostModel extends PostEntity {
     required super.id,
     super.content,
     super.location,
-    super.createdAt,
-    super.createAt,
-    required super.type,
-    required super.audio,
-    super.angryCount,
-    super.commentsCount,
-    super.images,
+    super.photo,
+    super.type,
     super.gifUrl,
     super.lifeEvent,
+    super.images,
     super.users,
+    super.likedUsers,
+    super.sadUsers,
+    super.wowUsers,
+    super.hahaUsers,
+    super.angryUsers,
+    super.loveUsers,
+    super.audio,
     super.isShared,
-    super.likesCount,
-    super.loveCount,
-    super.totalCount,
-    super.hahaCount,
-    super.sadCount,
-    super.commentPrivacy,
-    super.privacy,
-    super.sharesCount,
+    super.isDocumentation,
     super.isLove,
     super.isLikes,
     super.isWow,
     super.isSad,
     super.isAngry,
     super.isHaha,
-    super.activity,
-    super.feeling,
-    super.backgroundColor,
-    super.comments,
-    super.firstComment,
-    super.isReact,
-    super.shares,
-    super.isDocumentation,
-    super.advertisementType,
-    super.post,
-    super.description,
-    super.mainPost,
-    super.isApproved,
     required super.user,
+    super.feeling,
+    super.activity,
+    super.privacy,
+    super.commentPrivacy,
+    super.commentsCount,
+    super.sharesCount,
+    super.likesCount,
+    super.loveCount,
+    super.hahaCount,
     super.wowCount,
+    super.sadCount,
+    super.angryCount,
+    super.totalCount,
+    super.backgroundColor,
     super.name,
     super.videoMedia,
     super.audioMedia,
-    required super.photo,
-    required super.angryUsers,
-    required super.hahaUsers,
-    required super.likedUsers,
-    required super.loveUsers,
-    required super.sadUsers,
-    required super.wowUsers,
+    super.shares,
+    super.mainPost,
+    super.comments,
+    super.firstComment,
+    super.isReact,
+    super.advertisementType,
+    super.post,
+    super.description,
+    super.isApproved,
+    super.createdAt,
+    super.createAt,
   });
+
   factory PostModel.fromJson(Map<String, dynamic> json) {
+    final user = TwitterUserModel.fromJson(json['user'] ?? {});
+
+    List<TwitterUserModel> parseUserList(dynamic data) {
+      if (data is List) {
+        return data.map((item) => TwitterUserModel.fromJson(item)).toList();
+      }
+      return [];
+    }
+
+    List<String> parseMediaList(dynamic data) {
+      if (data is List) {
+        return data.map((m) {
+          return m['mediaKey']?.toString() ?? m['photo']?.toString() ?? '';
+        }).where((e) => e.isNotEmpty).toList();
+      }
+      return [];
+    }
+
     return PostModel(
-        id: json['_id']??json['id'] ?? '',
-        content: json['content'] ?? '',
-        location: json['location'] != null
-            ? LocationModel.fromJson(json['location'])
-            : null,
-        type: json['type'] ?? '',
-        gifUrl: json['gifUrl'] ?? '',
-        images:json['mediaDetails']!=null?List<String>.from(json['mediaDetails'].map(
-                (mediaItem) => mediaItem['photo'] ?? mediaItem['mediaKey'])):json['media'] != null
-            ? List<String>.from(json['media'].map(
-                (mediaItem) => mediaItem['photo'] ?? mediaItem['mediaKey']))
-            : null,
-        isShared: json['isShared'] ?? false,
-        advertisementType: json['advertisement_type'] ?? '',
-        post: json['post'] ?? '',
-        description: json['description'] ?? '',
-        name: json['name'] ?? '',
-        videoMedia: json['videoMedia'] ?? '',
-        audioMedia: json['audioMedia'] ?? '',
-        // totalPrice: json['totalPrice'] ?? '',
-        isApproved: json['isApproved'] ?? false,
-        isReact: json['isReact'] ?? false,
-        isLove: json['isLove'] ?? false,
-        isLikes: json['isLikes'] ?? false,
-        isWow: json['isWow'] ?? false,
-        isSad: json['isSad'] ?? false,
-        isAngry: json['isAngry'] ?? false,
-        isHaha: json['isHaha'] ?? false,
-        isDocumentation: json['twitter_documentation'] ?? false,
-        activity: json['activity'] != null
-            ? ActivityModel.fromJson(json['activity'])
-            : null,
-        lifeEvent: json['liveEvent'] != null
-            ? LifeEventPostModel.fromJson(json['liveEvent'])
-            : null,
-        feeling: json['feeling'] != null
-            ? FeelingModel.fromJson(json['feeling'])
-            : null,
-        mainPost: json['mainPost'] != null
-            ? MainPostModel.fromJson(json['mainPost'])
-            : null,
-        user: json['owner'] is String
-                ? json['owner']
-                : TwitterUserModel.fromJson(json['owner']),
-        privacy: json['privacy'] ?? 0,
-        commentPrivacy: json['commentPrivacy'] ?? 0,
-        sharesCount: json['sharesCount'] ?? 0,
-        likesCount: json['likesCount'] ?? 0,
-        loveCount: json['loveCount'] ?? 0,
-        wowCount: json['wowCount'] ?? 0,
-        sadCount: json['sadCount'] ?? 0,
-        angryCount: json['angryCount'] ?? 0,
-        hahaCount: json['hahaCount'] ?? 0,
-        totalCount: json['totalCount'] ?? 0,
-        createdAt: json['createdAt'] != null
-            ? DateTime.parse(json['createdAt'])
-            : null,
-        createAt:
-            json['createAt'] != null ? DateTime.parse(json['createAt']) : null,
-        shares: json['shares'] != null ? List<String>.from(json['shares']) : [],
-        commentsCount: json['commentsCount'] ?? 0,
-        comments: json['comments'] == null
-            ? null
-            : json['comments'] is List<String>
-                ? json['comments'] as List<String>
-                : (json['comments'] as List)
-                    .map(
-                        (e) => e is String ? e : InstagramPostModel.fromJson(e))
-                    .toList(),
-        firstComment: json['firstComment'] != null
-            ? InstagramPostModel.fromJson(json['firstComment'])
-            : null,
-        // love: json['love'] != null ? List<String>.from(json['love']) : [],
-        // love: json['love'] == null
-        //     ? null
-        //     : (json['love'] as List)
-        //     .map((e) => TwitterUserModel.fromJson(e))
-        //     .toList(),
-        users: json['tags'] == null
-            ? null
-            : (json['tags'] as List)
-                .map((e) => TwitterUserModel.fromJson(e))
-                .toList(),
-        audio: json['audios'] == null
-            ? null
-            : (json['audios'] as List)
-                .map((e) => AudioModel.fromJson(e))
-                .toList(),
-        likedUsers: json['likedUsers'] == null
-            ? null
-            : (json['likedUsers'] as List)
-                .map((e) => TwitterUserModel.fromJson(e))
-                .toList(),
-        sadUsers: json['sadUsers'] == null
-            ? null
-            : (json['sadUsers'] as List)
-                .map((e) => TwitterUserModel.fromJson(e))
-                .toList(),
-        wowUsers: json['wowUsers'] == null
-            ? null
-            : (json['wowUsers'] as List)
-                .map((e) => TwitterUserModel.fromJson(e))
-                .toList(),
-        hahaUsers: json['hahaUsers'] == null
-            ? null
-            : (json['hahaUsers'] as List)
-                .map((e) => TwitterUserModel.fromJson(e))
-                .toList(),
-        angryUsers: json['angryUsers'] == null
-            ? null
-            : (json['angryUsers'] as List)
-                .map((e) => TwitterUserModel.fromJson(e))
-                .toList(),
-        loveUsers: json['loveUsers'] == null
-            ? null
-            : (json['loveUsers'] as List)
-                .map((e) => TwitterUserModel.fromJson(e))
-                .toList(),
-        photo: json['photo'] ?? '',
-        backgroundColor: json['background_color']);
+      id: json['_id']?.toString() ?? '',
+      content: json['content']?.toString(),
+      location: json['location'] is Map ? LocationModel.fromJson(json['location']) : null,
+      photo: user.image,
+      type: json['type']?.toString() ?? 'normal_post',
+      gifUrl: json['gifUrl']?.toString(),
+      lifeEvent: json['liveEvent'] != null || json['liveEventPostId'] != null
+          ? LifeEventPostModel.fromJson(json['liveEvent'] ?? {'_id': json['liveEventPostId']})
+          : null,
+      images: parseMediaList(json['media']),
+      users: parseUserList(json['tags']),
+      likedUsers: parseUserList(json['likes']),
+      sadUsers: parseUserList(json['sad']),
+      wowUsers: parseUserList(json['wow']),
+      hahaUsers: parseUserList(json['haha']),
+      angryUsers: parseUserList(json['angry']),
+      loveUsers: parseUserList(json['love']),
+      audio: json['audioId'] != null && json['audioId'] != ''
+          ? [AudioModel(id: json['audioId'].toString(), mediaKey: '', sound: '')]
+          : [], // Handle null or empty audioId
+      isShared: json['isShared'] == true,
+      isDocumentation: json['twitter_documentation'] == true,
+      isLove: json['isLove'] == true,
+      isLikes: json['isLikes'] == true,
+      isWow: json['isWow'] == true,
+      isSad: json['isSad'] == true,
+      isAngry: json['isAngry'] == true,
+      isHaha: json['isHaha'] == true,
+      user: user,
+      feeling: json['feeling'] is Map ? FeelingModel.fromJson(json['feeling']) : null,
+      activity: json['activity'] is Map ? ActivityModel.fromJson(json['activity']) : null,
+      privacy: (json['privacy'] as num?)?.toInt() ?? 1,
+      commentPrivacy: (json['commentPrivacy'] as num?)?.toInt() ?? 2,
+      commentsCount: (json['commentsCount'] as num?)?.toInt() ?? 0,
+      sharesCount: (json['sharesCount'] as num?)?.toInt() ?? 0,
+      likesCount: (json['likesCount'] as num?)?.toInt() ?? 0,
+      loveCount: (json['loveCount'] as num?)?.toInt() ?? 0,
+      hahaCount: (json['hahaCount'] as num?)?.toInt() ?? 0,
+      wowCount: (json['wowCount'] as num?)?.toInt() ?? 0,
+      sadCount: (json['sadCount'] as num?)?.toInt() ?? 0,
+      angryCount: (json['angryCount'] as num?)?.toInt() ?? 0,
+      totalCount: (json['totalCount'] as num?)?.toInt() ?? 0,
+      backgroundColor: json['background_color']?.toString(),
+      name: json['name']?.toString(),
+      videoMedia: json['videoMedia']?.toString(),
+      audioMedia: json['audioMedia']?.toString(),
+      shares: (json['shares'] as List?)?.map((s) => s.toString()).toList() ?? [],
+      mainPost: json['mainPost'] is Map ? MainPostModel.fromJson(json['mainPost']) : null,
+      comments: (json['comments'] as List?)?.map((c) {
+        return c is String ?  InstagramPostModel.fromJson(json['firstComment']) : InstagramPostModel.fromJson(c);
+      }).toList() ?? [],
+      firstComment: json['firstComment'] is Map
+          ? InstagramPostModel.fromJson(json['firstComment'])
+          : null,
+      isReact: json['isReact'] == true,
+      advertisementType: json['advertisement_type']?.toString(),
+      post: json['post']?.toString(),
+      description: json['description']?.toString(),
+      isApproved: json['isApproved'] == true,
+      createdAt: json['createdAt'] is String ? DateTime.tryParse(json['createdAt']) : null,
+      createAt: json['createAt'] is String ? DateTime.tryParse(json['createAt']) : null,
+    );
   }
 }
