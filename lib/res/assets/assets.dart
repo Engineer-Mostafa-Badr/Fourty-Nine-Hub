@@ -439,4 +439,8 @@ abstract class Assets {
   static String bitmoji = "assets/images/bitmoji.png";
   static String spotlight_profile = "assets/images/spotlight_profile.png";
 
+  //Find
+  static String find_inbox = "assets/icons/find_inbox.png";
+
+
 }

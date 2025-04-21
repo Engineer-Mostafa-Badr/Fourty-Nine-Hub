@@ -33,14 +33,12 @@ class FormTextField extends StatelessWidget {
   final Color? borderColor;
   final bool noBorder;
   final bool? readOnly;
-  final TextStyle? hintStyle;
   final BorderRadius? borderRadius;
   final BoxConstraints? constraints;
   final TextStyle? textStyle;
   FormTextField(
       {super.key,
       this.initialValue,
-      this.hintStyle,
       this.action,
       this.maxLength,
       this.obsecure,

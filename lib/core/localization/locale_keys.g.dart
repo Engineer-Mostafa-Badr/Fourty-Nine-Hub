@@ -1504,5 +1504,6 @@ abstract class  LocaleKeys {
   static const responseStatus = 'responseStatus';
   static const socialExplain = 'socialExplain';
   static const imBookingOfAnotherClient = 'imBookingOfAnotherClient';
+  static const firstImpressionMessage = 'firstImpressionMessage';
 
 }

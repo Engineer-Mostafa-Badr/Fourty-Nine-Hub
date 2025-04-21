@@ -196,6 +196,7 @@ class _HealthViewState extends State<HealthView> {
                 Column(
                   children: [
                     FavouriteAdsCard(
+                      SubType: LocaleKeys.subscribe.localize,
                       onFavourite: () {},
                       onRequest: () {},
                     ),
