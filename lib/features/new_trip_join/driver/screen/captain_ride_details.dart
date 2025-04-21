@@ -136,7 +136,7 @@ class CaptainRideDetails extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               FormTextField(
-                hintStyle: TextStyle(
+                style: TextStyle(
                   color:
                       context.isDarkMode ? Colors.white : Colors.grey.shade600,
                 ),
@@ -147,7 +147,7 @@ class CaptainRideDetails extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               FormTextField(
-                hintStyle: TextStyle(
+                style: TextStyle(
                   color:
                       context.isDarkMode ? Colors.white : Colors.grey.shade600,
                 ),

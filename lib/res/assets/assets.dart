@@ -482,4 +482,13 @@ abstract class Assets {
   static String grid = "assets/icons/grid.png";
   // simple loadings
   static String circleLoader= 'assets/lottie/loader.json';
+
+  //SpotLight
+  static String bitmoji = "assets/images/bitmoji.png";
+  static String spotlight_profile = "assets/images/spotlight_profile.png";
+
+  //Find
+  static String find_inbox = "assets/icons/find_inbox.png";
+
+
 }

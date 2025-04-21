@@ -1533,5 +1533,6 @@
   "areYouSureYouWantToDeleteThisComment": "Are you sure you want to delete this comment?",
   "responseStatus": "Response Status",
   "socialExplain": "Get money if you post, view and like on any interface you like!",
-  "imBookingOfAnotherClient": "I am booking on behalf of another Client"
+  "imBookingOfAnotherClient": "I am booking on behalf of another Client",
+  "firstImpressionMessage": "send a message before matching to help get their attention. sat what made them stand out, hype them up, or make them laugh."
 }

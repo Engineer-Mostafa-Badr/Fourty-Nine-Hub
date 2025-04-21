@@ -192,16 +192,18 @@ class _HealthViewState extends State<HealthView> {
                   ),
                 ),
 
+
               // Favourite Ads view
-              // if (_showFavourite)
-              //   Column(
-              //     children: [
-              //       FavouriteAdsCard(
-              //         onFavourite: () {},
-              //         onRequest: () {},
-              //       ),
-              //     ],
-              //   ),
+              if (_showFavourite)
+                Column(
+                  children: [
+                    FavouriteAdsCard(
+                      SubType: LocaleKeys.subscribe.localize,
+                      onFavourite: () {},
+                      onRequest: () {},
+                    ),
+                  ],
+                ),
             ],
           );
         },
