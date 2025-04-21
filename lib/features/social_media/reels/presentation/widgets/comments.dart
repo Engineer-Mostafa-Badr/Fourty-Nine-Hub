@@ -804,7 +804,7 @@ void showTikTokStyleReplySheet(
                 SizedBox(width: 20.w),
                 Expanded(
                   child: FormTextField(
-                    hintStyle: TextStyle(
+                    style: TextStyle(
                       color: context.isDarkMode
                           ? Colors.white
                           : Colors.grey.shade600,
