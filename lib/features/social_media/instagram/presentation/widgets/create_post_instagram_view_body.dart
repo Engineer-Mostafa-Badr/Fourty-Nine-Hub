@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/error/custom_error.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -87,8 +88,7 @@ class CreatePostInstagramViewBody extends StatelessWidget {
         }
         if (state.status.isError) {
           return CustomError(
-            errMessage:
-                state.errMessage ?? LocaleKeys.somethingWentWrong.localize,
+            errMessage: getFailureMessage(state.failure?? UnknownFailure(''), context),
           );
         }
         return Stack(

@@ -273,9 +273,11 @@ abstract class Routes {
   static const InstagramSuggestPeople = '/InstagramSuggestPeople';
   static const ADDSTORYINSTAGRAM = '/AddStoryInstagram';
   static const CREATEPOSTINSTAGRAM = '/CreatePostInstagram';
-  static const CREATEPOSTSECONDPAGEINSTAGRAM =
-      '/CreatePostSecondPageInstagram';
+  static const CREATEPOSTSECONDPAGEINSTAGRAM = '/CreatePostSecondPageInstagram';
   static const TAGUSER = '/TagUser';
+  static const INSTAGRAMADDLOCATION = '/InstagramAddLocation';
+  static const INSTAGRAMADDMUSIC = '/InstagramAddMusic';
+  static const SINGLEPOSTINSTAGRAM = '/SinglePostInstagram';
 }
 
 abstract class Paths {
@@ -539,4 +541,7 @@ abstract class Paths {
   static const CREATEPOSTINSTAGRAM = 'CreatePostInstagram';
   static const CREATEPOSTSECONDPAGEINSTAGRAM = 'CreatePostSecondPageInstagram';
   static const TAGUSER = 'TagUser';
+  static const INSTAGRAMADDLOCATION = 'InstagramAddLocation';
+  static const INSTAGRAMADDMUSIC = 'InstagramAddMusic';
+  static const SINGLEPOSTINSTAGRAM = 'SinglePostInstagram';
 }

@@ -79,9 +79,14 @@ abstract class Assets {
   static String profile2BlackIcon = 'assets/icons/profile_2_black_icon.svg';
   static String profile2GreyIcon = 'assets/icons/profile_2_grey_icon.svg';
   static String instagramTagPeopleIcon = 'assets/icons/instagram_tag_people_icon.svg';
+  static String instagramTagPeopleRedIcon =  'assets/icons/instagram_tag_people_red_icon.svg';
   static String instagramLocationIcon = 'assets/icons/instagram_location_icon.svg';
+  static String instagramLocationRedIcon = 'assets/icons/instagram_location_red_icon.svg';
   static String instagramMusicIcon = 'assets/icons/instagram_music_icon.svg';
+  static String instagramMusicRedIcon = 'assets/icons/instagram_music_red_icon.svg';
   static String instagramTriangleBlackIcon = 'assets/icons/instagram_triangle_black_icon.svg';
+  static String instagramRefreshRedIcon = 'assets/icons/instagram_refresh_red_icon.svg';
+  static String instagramSearchIcon = 'assets/icons/instagram_search_icon.svg';
 
   // Commets
   static String commentIconsIcon = 'assets/icons/comment_icons_icon.svg';

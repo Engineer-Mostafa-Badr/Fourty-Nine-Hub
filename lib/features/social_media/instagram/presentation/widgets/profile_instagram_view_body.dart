@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/entities/profile_instagram_data_entity.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/profile_instagram_cubit/profile_instagram_cubit.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/auto_play_video_widget.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/birthday_section.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/buttons_profile_instagram_section.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/discover_people_profile_instagram_list_view_item.dart';
@@ -7,8 +13,13 @@ import 'package:fourtyninehub/features/social_media/instagram/presentation/widge
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/post_instagram_widget.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/subtitle_and_name_under_header_instagram.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/top_navigation_bar_profile_instagram.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/vedio_suggest_reels_item.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import 'package:fourtyninehub/helpers/media_helper.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
+import 'package:video_player/video_player.dart';
 
 class ProfileInstagramViewBody extends StatefulWidget {
   const ProfileInstagramViewBody({super.key});
@@ -73,11 +84,11 @@ class _ProfileInstagramViewBodyState extends State<ProfileInstagramViewBody>
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Label(
-                  text: 'discover people',
+                  text: LocaleKeys.discoverPeople.localize,
                   style: Styles.mediumText(),
                 ),
                 Label(
-                  text: 'see all',
+                  text: LocaleKeys.seeAll.localize,
                   style: Styles.mediumText(
                     color: const Color(0xFFFF3308),
                   ),
@@ -130,17 +141,46 @@ class _ProfileInstagramViewBodyState extends State<ProfileInstagramViewBody>
               }),
         ),
         if (tabController.index == 0)
-          SliverGrid.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              crossAxisSpacing: 2.0,
-              mainAxisSpacing: 2.0,
-              childAspectRatio: 125 / 158,
-            ),
-            itemBuilder: (context, index) {
-              return const ImageFromInternet(
-                image: testImage,
-                fit: BoxFit.fill,
+          BlocBuilder<ProfileInstagramCubit, ProfileInstagramState>(
+            builder: (context, state) {
+              final List<InstagramProfilePostEntity> myPosts =
+                  state.profileData!.postsEntity;
+              return SliverGrid.builder(
+                itemCount: myPosts.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 2.0,
+                  mainAxisSpacing: 2.0,
+                  childAspectRatio: 125 / 158,
+                ),
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () {
+                      context.pushNamed(
+                        Routes.SINGLEPOSTINSTAGRAM,
+                        extra: myPosts[index],
+                      );
+                    },
+                    child: (MediaHelper.getMediaTypeFromExtension(
+                                myPosts[index].mediaUrls.first)) ==
+                            MediaType.image
+                        ? ImageFromInternet(
+                            image: myPosts[index].mediaUrls[0],
+                            fit: BoxFit.cover,
+                          )
+                        : Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Colors.black.withValues(alpha: 0.5),
+                            ),
+                            child: VideoPlayer(
+                              VideoPlayerController.networkUrl(
+                                Uri.parse(myPosts[index].mediaUrls[0]),
+                              ),
+                            ),
+                          ),
+                  );
+                },
               );
             },
           ),

@@ -4,13 +4,13 @@ import 'package:fourtyninehub/features/social_media/reels/domain/entities/reel_e
 import 'package:video_player/video_player.dart';
 
 class ReelCard extends StatelessWidget {
-  final ReelEntity reel;
+  final String reelUrl;
   final VideoPlayerController? controller;
   final bool isPlaying;
 
   const ReelCard({
     super.key,
-    required this.reel,
+    required this.reelUrl,
     this.controller,
     this.isPlaying = false,
   });
@@ -33,7 +33,7 @@ class ReelCard extends StatelessWidget {
       child: controller != null && controller!.value.isInitialized
           ? VideoPlayer(controller!)
           : Image.network(
-              reel.thumbnailUrl,
+              reelUrl,
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) {
                 return Container(

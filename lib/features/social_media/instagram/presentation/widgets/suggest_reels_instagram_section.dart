@@ -152,7 +152,7 @@ class _SuggestReelsInstagramSectionState
                     end: index == widget.reels.length - 1 ? 20 : 0,
                   ),
                   child: ReelCard(
-                    reel: widget.reels[index],
+                    reelUrl: widget.reels[index].thumbnailUrl,
                     controller: _controllers[reel.id],
                     isPlaying: _currentlyPlayingId == reel.id,
                   ),

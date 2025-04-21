@@ -24,7 +24,6 @@ class _InstgramImagesPostWidgetState extends State<InstgramImagesPostWidget> {
   @override
   Widget build(BuildContext context) {
     if (widget.instagramPostEntity.medias.length == 1) {
-      log(widget.instagramPostEntity.medias.first);
       return ImagePostWidget(
         // imageUrl: widget.images.first,
         instagramPostEntity: widget.instagramPostEntity,

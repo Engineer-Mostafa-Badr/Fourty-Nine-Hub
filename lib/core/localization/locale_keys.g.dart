@@ -409,6 +409,7 @@ abstract class  LocaleKeys {
   static const messageSentSuccessfully = 'messageSentSuccessfully';
   static const days = 'days';
   static const comments = 'comments';
+  static const commentsRates = 'commentsRates';
   static const comment = 'comment';
   static const like = 'like';
   static const sad = 'sad';
@@ -1500,8 +1501,18 @@ abstract class  LocaleKeys {
   static const addACommentsFor = 'addACommentsFor';
   static const commentAdded = 'commentAdded';
   static const areYouSureYouWantToDeleteThisComment = 'areYouSureYouWantToDeleteThisComment';
+  static const responseStatus = 'responseStatus';
+  static const socialExplain = 'socialExplain';
   static const addLocation = 'addLocation';
   static const addMusic = 'addMusic';
   static const whoIsThis = 'whoIsThis';
+  static const inviteCollaborators = 'inviteCollaborators';
+  static const tapPhotoToTagPeople = 'tapPhotoToTagPeople';
+  static const selectALocation = 'selectALocation';
+  static const searchForALocation = 'searchForALocation';
+  static const seePlacesNearYou = 'seePlacesNearYou';
+  static const toIncludeNearbyPlacesTurnOnLocationServices = 'toIncludeNearbyPlacesTurnOnLocationServices';
+  static const turnOnLocationServices = 'turnOnLocationServices';
+  static const captionMustBeAdded = 'captionMustBeAdded';
 
 }

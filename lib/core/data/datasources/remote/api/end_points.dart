@@ -733,7 +733,8 @@ class EndPoints {
     return '/inst/posts?page=${params.page}&limit=${params.limit}';
   }
 
-  static String getUserTag = '/inst/tags';
+  static String getUserTag({required int page, required int limit}) =>
+      '/inst/tags?page=$page&limit=$limit';
 
   static String createReel(CreateReelParams params) {
     return '/reels/views/${params.reelId}';
@@ -812,6 +813,16 @@ class EndPoints {
   static String deleteCommentInstagram(String postId, String commentId) {
     return '/inst/posts/$postId/comments/$commentId';
   }
+
+  static String createRequestPostInstagram = '/inst/posts/create-request';
+
+  static String getProfileInstagram(
+          {required String userId, required int page, required int limit}) =>
+      '/inst/profiles/$userId?page=$page&limit=$limit';
+
+  static String getReelsSpecificUser(
+          {required String userId, required int page, required int limit}) =>
+      '/reels/users/$userId?page=$page&limit=$limit';
 
   static String reactOnTwitterPost(String postId) {
     return '/twitter/post/react/$postId?subCategory=${Constants.twitterSubCategory}';
@@ -1323,6 +1334,7 @@ class EndPoints {
   static String getExpectedPrice(String id) {
     return '/ride/trips/expected/price/$id';
   }
+
   static String getAvailableTrips(AvailableRideTripsUseCaseParams params) {
     return '/ride/driver/trips/available/not-tracking?limit=${params.limit}&page=${params.page}';
   }
@@ -1330,15 +1342,19 @@ class EndPoints {
   static String getPastTrips(int page, String type) {
     return '/ride/driver/trips/past?tripType=$type&limit=20&page=$page';
   }
+
   static String createNewOffer(String id) {
     return '/ride/offers/new/offer/$id';
   }
+
   static String createNewOfferNonSocket(String id) {
     return '/ride/non-tracking/offers/trip/$id';
   }
+
   static String updateDriverRating(String id) {
     return '/ride/trip/rating/$id/client';
   }
+
   static String createDriverRating = '/ride/trip/rating/driver';
   static String getSettingsDashboard = '/ride/driver/info/settings';
   static String deleteRideRegistration = '/ride/riders';

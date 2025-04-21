@@ -3,6 +3,12 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/common/functions/global/upload_file.dart';
+import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/entities/create_post_request_entity.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/entities/location_instagram_entity.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/entities/user_tag_entity.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/create_post_request_use_case.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
@@ -11,7 +17,10 @@ import 'package:photo_manager/photo_manager.dart';
 part 'create_post_instagram_state.dart';
 
 class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
-  CreatePostInstagramCubit() : super(const CreatePostInstagramState());
+  CreatePostInstagramCubit(this.createPostInstagramUseCase)
+      : super(const CreatePostInstagramState());
+
+  final CreateRequestPostInstagramUseCase createPostInstagramUseCase;
 
   // Future<File?>? selectedImage;
   List postTypes = ["Post", "Story", "Reel"];
@@ -22,6 +31,92 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
       Routes.CREATEPOSTSECONDPAGEINSTAGRAM,
       extra: state.selectedImages,
     );
+  }
+
+  Future<void> createPost({required String caption}) async {
+    final List<CreatePostRequestEntity> createPostRequests = await createRequestPost(
+      CreatePostRequestInstagramParams(
+        content: caption,
+        media: state.selectedImages.map((File e) {
+          return MediaCreatePostInstagramParams(
+            itemId: state.selectedImages.indexOf(e).toString(),
+            type: "image",
+            size: e.lengthSync(),
+          );
+        }).toList()
+      )
+    );
+  }
+
+  Future<List<CreatePostRequestEntity>> createRequestPost(
+      CreatePostRequestInstagramParams params) async {
+    final result = await createPostInstagramUseCase.call(params);
+    result.fold(
+      (failure) {
+        emit(
+        state.copyWith(
+          status: CreatePostInstagramStates.failure,
+          failure: failure,
+        ),
+      );
+        return [   ];
+      },
+      (data) {
+        return data;
+      },
+    );
+    return [];
+  }
+
+  // Future<void> _uploadMedia() async {
+  //   final result = await UploadFile().uploadImage(
+  //     subCategoryId: "66b6167938e6690c102ffa9c",
+  //     onUploaded: (media) {
+  //       emit(state.copyWith(
+  //           uploadedImage: File(media.file.path),
+  //           uploadStatus: StateStatus.success,
+  //           imageMediaId: media.mediaId));
+  //     },
+  //     context: context,
+  //   );
+  //   if (result != null) {
+  //   } else {
+  //     emit(state.copyWith(uploadStatus: StateStatus.error));
+  //   }
+  // }
+
+  void addLocation(LocationInstagramEntity location) {
+    emit(state.copyWith(
+      location: location,
+    ));
+  }
+
+  void removeLocation() {
+    emit(state.copyWith(
+      location: null,
+    ));
+  }
+
+  void addUserTag(UserTagEntity user) {
+    final updatedTags = List<UserTagEntity>.from(state.usersTag);
+
+    final alreadyExists = updatedTags.any((u) => u.id == user.id);
+
+    if (!alreadyExists) {
+      updatedTags.add(user);
+      emit(state.copyWith(usersTag: updatedTags));
+    }
+  }
+
+  void removeUserTag(UserTagEntity user) {
+    final updatedTags = List<UserTagEntity>.from(state.usersTag)
+      ..removeWhere((u) => u.id == user.id);
+    emit(state.copyWith(usersTag: updatedTags));
+  }
+
+  void removeAllUserTag() {
+    final updatedTags = List<UserTagEntity>.from(state.usersTag)..clear();
+    emit(state.copyWith(usersTag: updatedTags));
   }
 
   Future<void> pickImage() async {
@@ -43,8 +138,7 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
   void onTapImage(index) {
     if (state.multiSelect) {
       // تعديل selectedMeda
-      List<File> newSelectedMeda =
-          List<File>.from(state.selectedMeda);
+      List<File> newSelectedMeda = List<File>.from(state.selectedMeda);
       if (newSelectedMeda.contains(state.images[index])) {
         newSelectedMeda.remove(state.images[index]);
       } else {
@@ -116,6 +210,7 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
   void changePostType(int index) {
     emit(state.copyWith(postTypeSelectedIndex: index));
   }
+
   final List<Widget> _mediaList = [];
   // final List<File> path = [];
   File? _file;

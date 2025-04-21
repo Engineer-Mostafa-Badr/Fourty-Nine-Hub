@@ -23,7 +23,7 @@ class InstagramUserInfoWithMentionPostWidget extends StatelessWidget {
     this.songName,
     required this.userId,
   });
-  final List<UserTagEntity> userTags;
+  final List<InstagramPostUserTagEntity> userTags;
   final bool isReel;
   final bool thereMusic;
   final String imageUrl;

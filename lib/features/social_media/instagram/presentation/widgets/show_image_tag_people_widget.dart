@@ -2,21 +2,21 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/create_post_instagram_cubit/create_post_instagram_cubit.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class ShowImageTagPeopleWidget extends StatefulWidget {
   const ShowImageTagPeopleWidget({
     super.key,
-    required this.images,
     required this.onTap,
   });
 
-  final List<File> images;
   final void Function() onTap;
 
   @override
@@ -25,11 +25,22 @@ class ShowImageTagPeopleWidget extends StatefulWidget {
 }
 
 class _ShowImageTagPeopleWidgetState extends State<ShowImageTagPeopleWidget> {
+  late final List<File> images;
+
+  @override
+  void initState() {
+    images = context.read<CreatePostInstagramCubit>().state.selectedImages;
+    super.initState();
+  }
   final List<Offset> _tapPositions = [];
 
   /// تقوم باستقبال موقع الضغط
   void _handleTapDown(TapDownDetails details) {
     setState(() {
+      /// قمت بإضافة هذا السطر لأقوم بمسح كل مواقع الضغط السابقة لأنني
+      /// اريد علامة ضغط واحدة فقط وكسلت بأن اقوم بتعديل الملف كله 😂
+      _tapPositions.clear();
+
       _tapPositions.add(details.localPosition);
     });
   }
@@ -71,7 +82,7 @@ class _ShowImageTagPeopleWidgetState extends State<ShowImageTagPeopleWidget> {
   @override
   Widget build(BuildContext context) {
     return PageView.builder(
-      itemCount: widget.images.length,
+      itemCount: images.length,
       itemBuilder: (context, index) {
         return Stack(
           children: [
@@ -81,7 +92,7 @@ class _ShowImageTagPeopleWidgetState extends State<ShowImageTagPeopleWidget> {
                 widget.onTap();
               },
               child: Image.file(
-                widget.images[index],
+                images[index],
                 fit: BoxFit.contain,
                 width: double.infinity,
                 height: double.infinity,

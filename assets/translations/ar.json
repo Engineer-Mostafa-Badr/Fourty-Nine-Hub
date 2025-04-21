@@ -1513,5 +1513,13 @@
   "socialExplain":"احصل على المال إذا قمت بالنشر والمشاهدة والإعجاب على أي واجهة تريدها!",
   "addLocation": "إضافة موقع",
   "addMusic": "إضافة موسيقى",
-  "whoIsThis": "من هذا"
+  "whoIsThis": "من هذا",
+  "inviteCollaborators": "دعوة المتعاونين",
+  "tapPhotoToTagPeople": "اضغط على الصورة للإشارة إلى شخص",
+  "selectALocation": "حدد موقعًا",
+  "searchForALocation": "ابحث عن موقع...",
+  "seePlacesNearYou": "شاهد الأماكن القريبة منك",
+  "toIncludeNearbyPlacesTurnOnLocationServices": "لتضمين الأماكن القريبة، فعّل خدمات الموقع",
+  "turnOnLocationServices": "فعّل خدمات الموقع",
+  "captionMustBeAdded": "يجب إضافة تعليق"
 }
