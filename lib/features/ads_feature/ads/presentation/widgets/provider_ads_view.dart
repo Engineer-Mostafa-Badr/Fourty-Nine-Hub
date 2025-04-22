@@ -63,7 +63,7 @@ class ProviderAdsView extends StatelessWidget {
                               // context.read<AdvertisementCubit>().loadFilterData(
                               //     model: data,
                               //     filter: userType);
-                              controller.loadFilterData(
+                              controller.loadFilterAdsData(
                                   model: data, filter: userType);
                             }
                           }),
@@ -96,7 +96,7 @@ class ProviderAdsView extends StatelessWidget {
                               // context.read<AdvertisementCubit>().loadFilterData(
                               //     model: data,
                               //     filter: userType);
-                              controller.loadFilterData(
+                              controller.loadFilterAdsData(
                                   model: data, filter: userType);
                             }
                           }),

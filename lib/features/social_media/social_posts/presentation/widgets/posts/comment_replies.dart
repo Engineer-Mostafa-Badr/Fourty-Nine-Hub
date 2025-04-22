@@ -61,7 +61,7 @@ class _CommentRepliesState extends State<CommentReplies> {
           iconTheme: const IconThemeData(color: Colors.grey),
           title: Label(
               text:
-                  '${controller.repliesPagingController.itemList?.length ?? 0} ${LocaleKeys.replies.localize}',
+                  '${controller.commentReplies.length ?? 0} ${LocaleKeys.replies.localize}',
               style: Styles.mediumText()),
           leading: IconButton(
               onPressed: () => context.pop(), icon: const Icon(Icons.clear)),
@@ -69,47 +69,47 @@ class _CommentRepliesState extends State<CommentReplies> {
         ),
         body: Column(
           children: [
-            Expanded(
-              child: PagedListView<int, CommentEntity>(
-                padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 5),
-                pagingController: controller.repliesPagingController,
-                shrinkWrap: true,
-                physics: const BouncingScrollPhysics(
-                    parent: AlwaysScrollableScrollPhysics()),
-                builderDelegate: PagedChildBuilderDelegate<CommentEntity>(
-                    noItemsFoundIndicatorBuilder: (context) {
-                      print(
-                          controller.repliesPagingController.itemList?.length);
-                      return Padding(
-                          padding: const EdgeInsets.only(top: 200),
-                          child: Center(
-                            child: Text(
-                              LocaleKeys.noReplied.localize,
-                              style: Styles.mediumText(),
-                            ),
-                          ));
-                    },
-                    itemBuilder: (context, item, index) {
-                      return _buildCommentCard(
-                          reply: controller
-                              .repliesPagingController.itemList![index],
-                          onDeleteReply: (String id) async {
-                            var result = await widget.onDeleteReply(id);
-                            if (result == true) {
-                              controller.repliesPagingController.itemList
-                                  ?.removeWhere((element) => element.id == id);
-                              setState(() {});
-                            }
-                          });
-                    },
-                    noMoreItemsIndicatorBuilder: (context) => Container(),
-                    firstPageProgressIndicatorBuilder: (context) => Container(
-                        margin: const EdgeInsets.only(top: 150),
-                        child: const CupertinoActivityIndicator()),
-                    newPageProgressIndicatorBuilder: (context) =>
-                        const CupertinoActivityIndicator()),
-              ),
-            ),
+            // Expanded(
+            //   child: PagedListView<int, CommentEntity>(
+            //     padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 5),
+            //     pagingController: controller.repliesPagingController,
+            //     shrinkWrap: true,
+            //     physics: const BouncingScrollPhysics(
+            //         parent: AlwaysScrollableScrollPhysics()),
+            //     builderDelegate: PagedChildBuilderDelegate<CommentEntity>(
+            //         noItemsFoundIndicatorBuilder: (context) {
+            //           print(
+            //               controller.repliesPagingController.itemList?.length);
+            //           return Padding(
+            //               padding: const EdgeInsets.only(top: 200),
+            //               child: Center(
+            //                 child: Text(
+            //                   LocaleKeys.noReplied.localize,
+            //                   style: Styles.mediumText(),
+            //                 ),
+            //               ));
+            //         },
+            //         itemBuilder: (context, item, index) {
+            //           return _buildCommentCard(
+            //               reply: controller
+            //                   .repliesPagingController.itemList![index],
+            //               onDeleteReply: (String id) async {
+            //                 var result = await widget.onDeleteReply(id);
+            //                 if (result == true) {
+            //                   controller.repliesPagingController.itemList
+            //                       ?.removeWhere((element) => element.id == id);
+            //                   setState(() {});
+            //                 }
+            //               });
+            //         },
+            //         noMoreItemsIndicatorBuilder: (context) => Container(),
+            //         firstPageProgressIndicatorBuilder: (context) => Container(
+            //             margin: const EdgeInsets.only(top: 150),
+            //             child: const CupertinoActivityIndicator()),
+            //         newPageProgressIndicatorBuilder: (context) =>
+            //             const CupertinoActivityIndicator()),
+            //   ),
+            // ),
             Container(
                 height: kToolbarHeight,
                 decoration: const BoxDecoration(),
@@ -150,7 +150,7 @@ class _CommentRepliesState extends State<CommentReplies> {
                                   commentId: widget.commentId));
                           final user = context.read<UserCubit>().state.data;
                           print("add");
-                          controller.repliesPagingController.itemList?.insert(
+                          controller.commentReplies.insert(
                             0,
                             CommentModel(
                               id: data.id,

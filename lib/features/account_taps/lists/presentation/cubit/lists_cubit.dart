@@ -10,7 +10,6 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/delete_friend_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/un_follow_user_usecase.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '../../../../../core/error/failure.dart';
 
 part 'lists_state.dart';
@@ -37,139 +36,139 @@ class ListsCubit extends Cubit<ListsState> {
 
   void loadFriends(String search) async {
     getFriends(1, search);
-    friendsPagingController.addPageRequestListener((pageKey) {
-      print("initStatePageKey : $pageKey");
-      getFriends(pageKey, search);
-    });
+    // friendsPagingController.addPageRequestListener((pageKey) {
+    //   print("initStatePageKey : $pageKey");
+    //   getFriends(pageKey, search);
+    // });
   }
 
   void loadFollowers(String search) async {
     getFollowers(1, search);
-    followersPagingController.addPageRequestListener((pageKey) {
-      print("initStatePageKey : $pageKey");
-      getFollowers(pageKey, search);
-    });
+    // followersPagingController.addPageRequestListener((pageKey) {
+    //   print("initStatePageKey : $pageKey");
+    //   getFollowers(pageKey, search);
+    // });
   }
 
   void loadRequests(String search) async {
     getRequests(1, search);
-    requestsPagingController.addPageRequestListener((pageKey) {
-      print("initStatePageKey : $pageKey");
-      getRequests(pageKey, search);
-    });
+    // requestsPagingController.addPageRequestListener((pageKey) {
+    //   print("initStatePageKey : $pageKey");
+    //   getRequests(pageKey, search);
+    // });
   }
 
   void loadBlocked(String search) async {
     getBlocked(1, search);
-    blockedPagingController.addPageRequestListener((pageKey) {
-      print("initStatePageKey : $pageKey");
-      getBlocked(pageKey, search);
-    });
+    // blockedPagingController.addPageRequestListener((pageKey) {
+    //   print("initStatePageKey : $pageKey");
+    //   getBlocked(pageKey, search);
+    // });
   }
 
   final int pageSize = 10;
-  final PagingController<int, UserFriendEntity> friendsPagingController =
-      PagingController(firstPageKey: 1);
-
-  final PagingController<int, UserFriendEntity> followersPagingController =
-      PagingController(firstPageKey: 1);
-
-  final PagingController<int, UserFriendEntity> requestsPagingController =
-      PagingController(firstPageKey: 1);
-
-  final PagingController<int, UserFriendEntity> blockedPagingController =
-      PagingController(firstPageKey: 1);
+  // final PagingController<int, UserFriendEntity> friendsPagingController =
+  //     PagingController(firstPageKey: 1);
+  //
+  // final PagingController<int, UserFriendEntity> followersPagingController =
+  //     PagingController(firstPageKey: 1);
+  //
+  // final PagingController<int, UserFriendEntity> requestsPagingController =
+  //     PagingController(firstPageKey: 1);
+  //
+  // final PagingController<int, UserFriendEntity> blockedPagingController =
+  //     PagingController(firstPageKey: 1);
 
   Future<void> getFriends(int page, String search) async {
-    final response = await _getFriendsUsecase
-        .call(TwitterFeedParams(page: page, limit: pageSize, search: search));
-    response
-        .fold((l) => emit(state.copWith(failure: l, status: ListsStates.error)),
-            (data) {
-      final isLastPage = data.length < pageSize;
-      if (page == 1) {
-        print("page == 1 $page");
-        friendsPagingController.itemList = [];
-      }
-      if (isLastPage) {
-        print("isLastPage = $isLastPage");
-        friendsPagingController.appendLastPage(data);
-      } else {
-        print("isNotLastPage = $isLastPage");
-        final nextPageKey = page + 1;
-        friendsPagingController.appendPage(data, nextPageKey);
-      }
-      emit(state.copWith(friends: data, status: ListsStates.success));
-    });
+    // final response = await _getFriendsUsecase
+    //     .call(TwitterFeedParams(page: page, limit: pageSize, search: search));
+    // response
+    //     .fold((l) => emit(state.copWith(failure: l, status: ListsStates.error)),
+    //         (data) {
+    //   final isLastPage = data.length < pageSize;
+    //   if (page == 1) {
+    //     print("page == 1 $page");
+    //     friendsPagingController.itemList = [];
+    //   }
+    //   if (isLastPage) {
+    //     print("isLastPage = $isLastPage");
+    //     friendsPagingController.appendLastPage(data);
+    //   } else {
+    //     print("isNotLastPage = $isLastPage");
+    //     final nextPageKey = page + 1;
+    //     friendsPagingController.appendPage(data, nextPageKey);
+    //   }
+    //   emit(state.copWith(friends: data, status: ListsStates.success));
+    // });
   }
 
   Future<void> getFollowers(int page, String search) async {
-    final response = await _getFollowersUseCase
-        .call(TwitterFeedParams(page: page, limit: pageSize, search: search));
-    response
-        .fold((l) => emit(state.copWith(failure: l, status: ListsStates.error)),
-            (data) {
-      final isLastPage = data.length < pageSize;
-      if (page == 1) {
-        print("page == 1 $page");
-        followersPagingController.itemList = [];
-      }
-      if (isLastPage) {
-        print("isLastPage = $isLastPage");
-        followersPagingController.appendLastPage(data);
-      } else {
-        print("isNotLastPage = $isLastPage");
-        final nextPageKey = page + 1;
-        followersPagingController.appendPage(data, nextPageKey);
-      }
-      emit(state.copWith(followers: data, status: ListsStates.initial));
-    });
+    // final response = await _getFollowersUseCase
+    //     .call(TwitterFeedParams(page: page, limit: pageSize, search: search));
+    // response
+    //     .fold((l) => emit(state.copWith(failure: l, status: ListsStates.error)),
+    //         (data) {
+    //   final isLastPage = data.length < pageSize;
+    //   if (page == 1) {
+    //     print("page == 1 $page");
+    //     followersPagingController.itemList = [];
+    //   }
+    //   if (isLastPage) {
+    //     print("isLastPage = $isLastPage");
+    //     followersPagingController.appendLastPage(data);
+    //   } else {
+    //     print("isNotLastPage = $isLastPage");
+    //     final nextPageKey = page + 1;
+    //     followersPagingController.appendPage(data, nextPageKey);
+    //   }
+    //   emit(state.copWith(followers: data, status: ListsStates.initial));
+    // });
   }
 
   Future<void> getRequests(int page, String search) async {
-    final response = await _getFriendRequestsUsecase
-        .call(TwitterFeedParams(page: page, limit: pageSize, search: search));
-    response
-        .fold((l) => emit(state.copWith(failure: l, status: ListsStates.error)),
-            (data) {
-      final isLastPage = data.length < pageSize;
-      if (page == 1) {
-        print("page == 1 $page");
-        requestsPagingController.itemList = [];
-      }
-      if (isLastPage) {
-        print("isLastPage = $isLastPage");
-        requestsPagingController.appendLastPage(data);
-      } else {
-        print("isNotLastPage = $isLastPage");
-        final nextPageKey = page + 1;
-        requestsPagingController.appendPage(data, nextPageKey);
-      }
-      emit(state.copWith(requests: data, status: ListsStates.initial));
-    });
+    // final response = await _getFriendRequestsUsecase
+    //     .call(TwitterFeedParams(page: page, limit: pageSize, search: search));
+    // response
+    //     .fold((l) => emit(state.copWith(failure: l, status: ListsStates.error)),
+    //         (data) {
+    //   final isLastPage = data.length < pageSize;
+    //   if (page == 1) {
+    //     print("page == 1 $page");
+    //     requestsPagingController.itemList = [];
+    //   }
+    //   if (isLastPage) {
+    //     print("isLastPage = $isLastPage");
+    //     requestsPagingController.appendLastPage(data);
+    //   } else {
+    //     print("isNotLastPage = $isLastPage");
+    //     final nextPageKey = page + 1;
+    //     requestsPagingController.appendPage(data, nextPageKey);
+    //   }
+    //   emit(state.copWith(requests: data, status: ListsStates.initial));
+    // });
   }
 
   Future<void> getBlocked(int page, String search) async {
-    final response = await _getBlockedUseCase
-        .call(TwitterFeedParams(page: page, limit: pageSize, search: search));
-    response
-        .fold((l) => emit(state.copWith(failure: l, status: ListsStates.error)),
-            (data) {
-      final isLastPage = data.length < pageSize;
-      if (page == 1) {
-        print("page == 1 $page");
-        blockedPagingController.itemList = [];
-      }
-      if (isLastPage) {
-        print("isLastPage = $isLastPage");
-        blockedPagingController.appendLastPage(data);
-      } else {
-        print("isNotLastPage = $isLastPage");
-        final nextPageKey = page + 1;
-        blockedPagingController.appendPage(data, nextPageKey);
-      }
-      emit(state.copWith(blocked: data, status: ListsStates.initial));
-    });
+    // final response = await _getBlockedUseCase
+    //     .call(TwitterFeedParams(page: page, limit: pageSize, search: search));
+    // response
+    //     .fold((l) => emit(state.copWith(failure: l, status: ListsStates.error)),
+    //         (data) {
+    //   final isLastPage = data.length < pageSize;
+    //   if (page == 1) {
+    //     print("page == 1 $page");
+    //     blockedPagingController.itemList = [];
+    //   }
+    //   if (isLastPage) {
+    //     print("isLastPage = $isLastPage");
+    //     blockedPagingController.appendLastPage(data);
+    //   } else {
+    //     print("isNotLastPage = $isLastPage");
+    //     final nextPageKey = page + 1;
+    //     blockedPagingController.appendPage(data, nextPageKey);
+    //   }
+    //   emit(state.copWith(blocked: data, status: ListsStates.initial));
+    // });
   }
 
   void changeListType({required ListTypes type}) async {
