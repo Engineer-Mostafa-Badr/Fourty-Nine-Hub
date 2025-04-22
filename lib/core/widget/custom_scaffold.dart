@@ -104,7 +104,7 @@ class _CustomScaffoldState extends State<CustomScaffold>
                         color: Colors.white,
                       ),
                     ),
-                     SizedBox(
+                    SizedBox(
                       width: 32,
                       height: 28,
                       child: FittedBox(
@@ -214,67 +214,93 @@ class _CustomScaffoldState extends State<CustomScaffold>
                             drawerRollWidget(
                               label: LocaleKeys.ride.localize,
                               image: Assets.rideIcon,
-                              // onTap: () => showTimePicker(
-                              //   context: context,
-                              //   initialTime:
-                              //       const TimeOfDay(hour: 0, minute: 0),
-                              // ),
-                              // onTap: () => context.push(Routes.onBoardingScreen),
-                              onTap: () => context.push(Routes.RIDE_HOME),
+                              onTap: () {
+                                floatingNavigatorCubit.changeFloatingNavigator();
+                                context.push(Routes.RIDE_HOME);
+                              },
                             ),
                             drawerRollWidget(
                               label: LocaleKeys.loading.localize,
                               image: Assets.loading,
                               // onTap: () {},
-                              onTap: () =>
-                                  context.push(Routes.createLoadingTripScreen),
+                              onTap: () {
+                                floatingNavigatorCubit.changeFloatingNavigator();
+                                context.push(Routes.createLoadingTripScreen);
+                              },
                             ),
                             drawerRollWidget(
                               label: LocaleKeys.health.localize,
                               image: Assets.healthIcon,
-                              onTap: () => context.push(Routes.VISITA),
+                              onTap: () {
+                                floatingNavigatorCubit.changeFloatingNavigator();
+                                context.push(Routes.VISITA);
+                              },
                             ),
                             drawerRollWidget(
                               label: LocaleKeys.meal.localize,
                               image: Assets.meal,
-                              onTap: () => context.push(Routes.FOOD),
+                              onTap: () {
+                                floatingNavigatorCubit.changeFloatingNavigator();
+                                context.push(Routes.FOOD);
+                              },
+                            ),
+                            drawerRollWidget(
+                              label: LocaleKeys.marriage.localize,
+                              image: Assets.married,
+                              onTap: () {
+                                floatingNavigatorCubit.changeFloatingNavigator();
+                                context.push(Routes.MARRIAGESUBCATEGORIES);
+                              },
                             ),
                             drawerRollWidget(
                               label: LocaleKeys.find.localize,
                               image: Assets.find,
-                              onTap: () => context.push(Routes.Tinder),
+                              onTap: () {
+                                floatingNavigatorCubit.changeFloatingNavigator();
+                                context.push(Routes.Tinder);
+                              },
                             ),
                             drawerRollWidget(
                               label: LocaleKeys.reel.localize,
                               image: Assets.reel,
-                              onTap: () => context.push(Routes.REELS),
+                              onTap: () {
+                                floatingNavigatorCubit.changeFloatingNavigator();
+                                context.push(Routes.REELS);
+                              },
                             ),
                             drawerRollWidget(
                               label: LocaleKeys.spotlight.localize,
                               image: Assets.spotlight,
-                              onTap: () => context.push(Routes.SPOTLIGHT),
+                              onTap: () {
+                                floatingNavigatorCubit.changeFloatingNavigator();
+                                context.push(Routes.SPOTLIGHT);
+                              },
                             ),
-                            // drawerRollWidget(
-                            //   label: LocaleKeys.meet.localize,
-                            //   image: Assets.meet,
-                            //   onTap: () => context.push(Routes.MEETINGROOM),
-                            // ),
                             drawerRollWidget(
                               label: LocaleKeys.live.localize,
                               image: Assets.liveIcon,
-                              onTap: () => context.push(Routes.LIVE),
+                              onTap: () {
+                                floatingNavigatorCubit.changeFloatingNavigator();
+                                context.push(Routes.LIVE);
+                              },
                             ),
                             drawerRollWidget(
                               label: LocaleKeys.snap.localize,
                               image: Assets.snap,
-                              onTap: () => context.push(Routes.SNAP),
+                              onTap: () {
+                                floatingNavigatorCubit.changeFloatingNavigator();
+                                context.push(Routes.SNAP);
+                              },
                             ),
                             drawerRollWidget(
                               label: LocaleKeys.chat.localize,
                               image: Assets.whatsApp,
                               padding: const EdgeInsets.all(2),
-                              onTap: () => context.push(Routes.CHAT,
-                                  extra: ChatsViewParams()),
+                              onTap: () {
+                                floatingNavigatorCubit.changeFloatingNavigator();
+                                context.push(Routes.CHAT,
+                                    extra: ChatsViewParams());
+                              },
                             ),
                           ],
                         ),

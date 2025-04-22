@@ -1503,5 +1503,12 @@ abstract class  LocaleKeys {
   static const areYouSureYouWantToDeleteThisComment = 'areYouSureYouWantToDeleteThisComment';
   static const responseStatus = 'responseStatus';
   static const socialExplain = 'socialExplain';
+  static const endToEndDescription = 'endToEndDescription';
+  static const yourChatsAndCallArePrivate = 'yourChatsAndCallArePrivate';
+  static const textAndVoiceMessages = 'textAndVoiceMessages';
+  static const audioAndVideoCalls = 'audioAndVideoCalls';
+  static const photoVideosAndDocuments = 'photoVideosAndDocuments';
+  static const locationSharing = 'locationSharing';
+  static const statusUpdates = 'statusUpdates';
 
 }

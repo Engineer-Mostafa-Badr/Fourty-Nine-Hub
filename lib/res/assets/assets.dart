@@ -6,6 +6,7 @@ abstract class Assets {
   static String addImage = 'assets/images/addImage.svg';
   static String icon = 'assets/images/icon.png';
   static String logoHub = 'assets/icons/logoHub.png';
+  static String logoWithoutText = 'assets/icons/logoWithoutText.png';
   static String tube = 'assets/images/tube.png';
   static String joinTrip = 'assets/images/join_trip.png';
   static String tube1 = 'assets/images/tube1.png';
@@ -433,4 +434,8 @@ abstract class Assets {
   static String ellipsis = "assets/icons/ellipsis.svg";
   static String reelBar = "assets/icons/reelBar.svg";
   static String grid = "assets/icons/grid.png";
+  static String check = "assets/icons/check.png";
+  static String doubleCheck = "assets/icons/doubleCheck.png";
+  static String doubleCheckSeen = "assets/icons/doubleCheckSeen.png";
+  static String chatStatus = "assets/icons/chatStatus.png";
 }

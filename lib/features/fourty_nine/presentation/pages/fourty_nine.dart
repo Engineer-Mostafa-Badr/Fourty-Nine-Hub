@@ -85,7 +85,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
     appOpenAdManager.loadAd();
     WidgetsBinding.instance.addObserver(this);
 
-    await checkLogin();
+    // await checkLogin();
     super.didChangeDependencies();
     _setupScrollController();
 
@@ -190,8 +190,6 @@ class _FourtyNineViewState extends State<FourtyNineView>
             padding: EdgeInsets.symmetric(horizontal: 20.w),
             children: [
               const AddBanner(),
-              //carousel slider
-              // const Sizer(),
               const AnnounceWidget(),
               const Sizer(),
               !context.read<UserCubit>().isLoggedIn
@@ -469,11 +467,12 @@ class _FourtyNineViewState extends State<FourtyNineView>
         GestureDetector(
           onTap: () {
             if (context.read<UserCubit>().isLoggedIn) {
-            } else {
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => const FavouriteScreensView()));
+            } else {
+
             }
           },
           child: Container(

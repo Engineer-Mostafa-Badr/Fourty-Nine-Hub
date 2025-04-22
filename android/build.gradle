@@ -1,19 +1,18 @@
 buildscript {
-    ext.kotlin_version = '2.0.21'
+    ext.kotlin_version = '1.9.20'  // Changed from 2.0.21 to 1.9.20 to match Flutter's expected version
     repositories {
         google()
         mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.5.1'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10"
-        classpath "com.google.gms:google-services:4.4.2"
+        classpath 'com.android.tools.build:gradle:7.3.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "com.google.gms:google-services:4.4.0"
         configurations.all {
             exclude group: 'com.mapbox.common', module: 'common'
             exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-android-core'
         }
-
     }
 }
 

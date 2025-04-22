@@ -74,7 +74,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   ],
                 ),
                 const Sizer(
-                  height: 96,
+                  height: 64,
                 ),
                 Expanded(
                   child: Directionality(
@@ -100,8 +100,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                           const SizedBox(height: 32),
                           Text(
                             context.isArabic ? state.titleAr : state.titleEn,
-                            // ? cubit.titlesAr[state.currentIndex]
-                            // : cubit.titlesEn[state.currentIndex],
                             style: Styles.headerText(
                                 color: context.isDarkMode
                                     ? AppColors.AUTH_CONTAINER_COLOR

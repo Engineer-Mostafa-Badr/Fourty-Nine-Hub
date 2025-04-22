@@ -12,9 +12,7 @@ import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/request_p
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/usecases/filter_ad_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-
-import '../../../../../core/error/failure.dart';
+import '../../../../../../core/error/failure.dart';
 import '../../../../requests_history/domain/entities/trip_entity.dart';
 import '../../data/models/Ad_model.dart';
 import '../../domain/usecases/get_ads_usecase.dart';
@@ -59,165 +57,255 @@ class AdvertisementCubit extends Cubit<AdsState> {
   //   }
   // }
 
-  void loadData({required String subCategoryId,
-    required String filter,
-    required bool fromTab}) async {
-    if (fromTab == true) {
-      emit(state.copyWith(status: AdsStates.loading));
-    }
-    await getAds(subCategoryId: subCategoryId, filter: filter, page: 1);
-    adsPagingController.addPageRequestListener((pageKey) {
-      print("initStatePageKey : $pageKey");
-      getAds(subCategoryId: subCategoryId, filter: filter, page: pageKey);
-    });
-    emit(state.copyWith(status: AdsStates.success));
-  }
+  // void loadData({required String subCategoryId,
+  //   required String filter,
+  //   required bool fromTab}) async {
+  //   if (fromTab == true) {
+  //     emit(state.copyWith(status: AdsStates.loading));
+  //   }
+  //   await getAds(subCategoryId: subCategoryId, filter: filter, page: 1);
+  //   adsPagingController.addPageRequestListener((pageKey) {
+  //     print("initStatePageKey : $pageKey");
+  //     getAds(subCategoryId: subCategoryId, filter: filter, page: pageKey);
+  //   });
+  //   emit(state.copyWith(status: AdsStates.success));
+  // }
 
-  void loadMarriageData({required String subCategoryId,
-    required String filter,
-    required bool fromTab}) async {
-    if (fromTab == true) {
-      emit(state.copyWith(status: AdsStates.loading));
-    }
-    await getMarriageAds(subCategoryId: subCategoryId, page: 1);
-    adsPagingController.addPageRequestListener((pageKey) {
-      print("initStatePageKey : $pageKey");
-      getMarriageAds(subCategoryId: subCategoryId, page: pageKey);
-    });
-    emit(state.copyWith(status: AdsStates.success));
-  }
+  // void loadMarriageData({required String subCategoryId,
+  //   required String filter,
+  //   required bool fromTab}) async {
+  //   if (fromTab == true) {
+  //     emit(state.copyWith(status: AdsStates.loading));
+  //   }
+  //   await getMarriageAds(subCategoryId: subCategoryId, page: 1);
+  //   adsPagingController.addPageRequestListener((pageKey) {
+  //     print("initStatePageKey : $pageKey");
+  //     getMarriageAds(subCategoryId: subCategoryId, page: pageKey);
+  //   });
+  //   emit(state.copyWith(status: AdsStates.success));
+  // }
 
-  void loadFilterData({
-    required FilterModel model,
-    required String filter,
-  }) async {
-    emit(state.copyWith(status: AdsStates.loading));
-    await filterAds(model: model, filter: filter, page: 1);
-    adsPagingController.addPageRequestListener((pageKey) {
-      print("initStatePageKey : $pageKey");
-      filterAds(model: model, filter: filter, page: pageKey);
-    });
-    emit(state.copyWith(status: AdsStates.success));
-  }
+  // void loadFilterData({
+  //   required FilterModel model,
+  //   required String filter,
+  // }) async {
+  //   emit(state.copyWith(status: AdsStates.loading));
+  //   await filterAds(model: model, filter: filter, page: 1);
+  //   // adsPagingController.addPageRequestListener((pageKey) {
+  //   //   print("initStatePageKey : $pageKey");
+  //   //   filterAds(model: model, filter: filter, page: pageKey);
+  //   // });
+  //   emit(state.copyWith(status: AdsStates.success));
+  // }
 
-  void onRefresh() async {
-    adsPagingController.refresh();
-  }
+  // void onRefresh() async {
+  //   adsPagingController.refresh();
+  // }
 
   void changeState(FilterModel model, bool hasFilter) {
     emit(state.copyWith(filterModel: model, hasFilter: hasFilter));
   }
 
-  filterAds({
-    required FilterModel model,
-    required int page,
-    required String filter,
-  }) async {
-    if (page == 1) {
-      adsPagingController.itemList = [];
-    }
-    // emit(state.copyWith(status: AdsStates.filterLoading));
-    print("object");
-    print(page);
-    print(filter);
-    print("objectHiiiiiiiiiiii");
-
+  Future loadFilterAdsData({required FilterModel model,
+    required String filter,}) async {
+    loadAds=true;
+    ads.clear();
+    adsPage = 1;
+    hasMoreAdsData = true;
+    emit(state.copyWith(status: AdsStates.loading));
+    await filterAds(model:model,filter:filter);
+    loadAds=false;
+    emit(state.copyWith(status: AdsStates.success));
+  }
+  Future<void> filterAds(
+      {required FilterModel model,
+        required String filter,}
+      ) async {
+    final userId = UserCubit.to.isLoggedIn ? UserCubit.to.state.data?.id : '';
+    print(hasMoreAdsData);
+    print(isLoadingAdsMore);
+    if (!hasMoreAdsData || isLoadingAdsMore) return;
+    isLoadingAdsMore = true;
+    emit(state.copyWith(status: AdsStates.loading));
     FilterModel filterModel = FilterModel(
         price: model.price,
         props: model.props,
         cityId: state.city,
         governorateId: state.governorate,
-        limit: 15,
-        page: page,
+        limit: pageSize,
+        page: adsPage,
         subCategoryId: model.subCategoryId,
         filter: filter);
     final response = await _filterAdUseCase(filterModel);
-    response
-        .fold((l) => emit(state.copyWith(failure: l, status: AdsStates.error)),
-            (data) {
-          final isLastPage = data.length < 10;
-          if (page == 1) {
-            print("page == 1 $page");
-            adsPagingController.itemList = [];
-          }
-          if (isLastPage) {
-            print("isLastPage = $isLastPage");
-            adsPagingController.appendLastPage(data);
+    response.fold(
+            (l) => emit(state.copyWith(failure: l, status: AdsStates.error)),
+            (data) async {
+          ads.addAll(data);
+          if (data.length < pageSize) {
+            hasMoreAdsData = false;
           } else {
-            print("isNotLastPage = $isLastPage");
-            final nextPageKey = page + 1;
-            adsPagingController.appendPage(data, nextPageKey);
+            adsPage++;
           }
-          print(data.toString());
+          isLoadingAdsMore = false;
+          emit(state.copyWith(status: AdsStates.success));
         });
   }
+  // filterAds({
+  //   required FilterModel model,
+  //   required int page,
+  //   required String filter,
+  // }) async {
+  //   if (page == 1) {
+  //     adsPagingController.itemList = [];
+  //   }
+  //   // emit(state.copyWith(status: AdsStates.filterLoading));
+  //   print("object");
+  //   print(page);
+  //   print(filter);
+  //   print("objectHiiiiiiiiiiii");
+  //
+  //   FilterModel filterModel = FilterModel(
+  //       price: model.price,
+  //       props: model.props,
+  //       cityId: state.city,
+  //       governorateId: state.governorate,
+  //       limit: 15,
+  //       page: page,
+  //       subCategoryId: model.subCategoryId,
+  //       filter: filter);
+  //   final response = await _filterAdUseCase(filterModel);
+  //   response
+  //       .fold((l) => emit(state.copyWith(failure: l, status: AdsStates.error)),
+  //           (data) {
+  //         final isLastPage = data.length < 10;
+  //         if (page == 1) {
+  //           print("page == 1 $page");
+  //           adsPagingController.itemList = [];
+  //         }
+  //         if (isLastPage) {
+  //           print("isLastPage = $isLastPage");
+  //           adsPagingController.appendLastPage(data);
+  //         } else {
+  //           print("isNotLastPage = $isLastPage");
+  //           final nextPageKey = page + 1;
+  //           adsPagingController.appendPage(data, nextPageKey);
+  //         }
+  //         print(data.toString());
+  //       });
+  // }
 
-  final PagingController<int, AdModel> adsPagingController =
-  PagingController(firstPageKey: 1);
+  // final PagingController<int, AdModel> adsPagingController =
+  // PagingController(firstPageKey: 1);
 
-  getAds({required String subCategoryId,
-    required String filter,
-    required int page}) async {
+  List<AdModel> ads = [];
+  bool loadAds = false;
+  Future loadAdsData({required String subCategoryId,
+    required String filter}) async {
+    loadAds=true;
+    ads.clear();
+    adsPage = 1;
+    hasMoreAdsData = true;
+    emit(state.copyWith(status: AdsStates.loading));
+    await getAds(subCategoryId:subCategoryId,filter:filter);
+    loadAds=false;
+    emit(state.copyWith(status: AdsStates.success));
+  }
+  bool isLoadingAdsMore = false;
+  bool hasMoreAdsData = true;
+  int adsPage = 1;
+  int pageSize = 10;
+  Future<void> getAds(
+  {required String subCategoryId,
+  required String filter}
+  ) async {
     final userId = UserCubit.to.isLoggedIn ? UserCubit.to.state.data?.id : '';
-
-    if (page == 1) {
-      adsPagingController.itemList = [];
-    }
+    print(hasMoreAdsData);
+    print(isLoadingAdsMore);
+    if (!hasMoreAdsData || isLoadingAdsMore) return;
+    isLoadingAdsMore = true;
+    emit(state.copyWith(status: AdsStates.loading));
     final response = await _getAdsUseCase(GetAdsParams(
         subCategoryId: subCategoryId,
         filter: filter,
-        page: page,
+        page: adsPage,
         limit: 10,
         userId: userId));
-    response
-        .fold((l) => emit(state.copyWith(failure: l, status: AdsStates.error)),
+    response.fold(
+            (l) => emit(state.copyWith(failure: l, status: AdsStates.error)),
             (data) async {
-          final isLastPage = data.length < 10;
-          if (page == 1) {
-            print("page == 1 $page");
-            adsPagingController.itemList = [];
-          }
-          if (isLastPage) {
-            print("isLastPage = $isLastPage");
-            print(data.length);
-            print(data.toString());
-            adsPagingController.appendLastPage(data);
+          ads.addAll(data);
+          if (data.length < pageSize) {
+            hasMoreAdsData = false;
           } else {
-            print("isNotLastPage = $isLastPage");
-            final nextPageKey = page + 1;
-            adsPagingController.appendPage(data, nextPageKey);
+            adsPage++;
           }
+          isLoadingAdsMore = false;
+          emit(state.copyWith(status: AdsStates.success));
         });
   }
+  // getAds({required String subCategoryId,
+  //   required String filter,
+  //   required int page}) async {
+  //   final userId = UserCubit.to.isLoggedIn ? UserCubit.to.state.data?.id : '';
+  //
+  //   if (page == 1) {
+  //     adsPagingController.itemList = [];
+  //   }
+  //   final response = await _getAdsUseCase(GetAdsParams(
+  //       subCategoryId: subCategoryId,
+  //       filter: filter,
+  //       page: page,
+  //       limit: 10,
+  //       userId: userId));
+  //   response
+  //       .fold((l) => emit(state.copyWith(failure: l, status: AdsStates.error)),
+  //           (data) async {
+  //         final isLastPage = data.length < 10;
+  //         if (page == 1) {
+  //           print("page == 1 $page");
+  //           adsPagingController.itemList = [];
+  //         }
+  //         if (isLastPage) {
+  //           print("isLastPage = $isLastPage");
+  //           print(data.length);
+  //           print(data.toString());
+  //           adsPagingController.appendLastPage(data);
+  //         } else {
+  //           print("isNotLastPage = $isLastPage");
+  //           final nextPageKey = page + 1;
+  //           adsPagingController.appendPage(data, nextPageKey);
+  //         }
+  //       });
+  // }
 
-  getMarriageAds({required String subCategoryId, required int page}) async {
-    final userId = UserCubit.to.isLoggedIn ? UserCubit.to.state.data?.id : '';
-
-    if (page == 1) {
-      adsPagingController.itemList = [];
-    }
-    final response = await _getAdsUseCase(GetAdsParams(
-        subCategoryId: subCategoryId, page: page, limit: 10, userId: userId));
-    response
-        .fold((l) => emit(state.copyWith(failure: l, status: AdsStates.error)),
-            (data) async {
-          final isLastPage = data.length < 10;
-          if (page == 1) {
-            print("page == 1 $page");
-            adsPagingController.itemList = [];
-          }
-          if (isLastPage) {
-            print("isLastPage = $isLastPage");
-            print(data.length);
-            print(data.toString());
-            adsPagingController.appendLastPage(data);
-          } else {
-            print("isNotLastPage = $isLastPage");
-            final nextPageKey = page + 1;
-            adsPagingController.appendPage(data, nextPageKey);
-          }
-        });
-  }
+  // getMarriageAds({required String subCategoryId, required int page}) async {
+  //   final userId = UserCubit.to.isLoggedIn ? UserCubit.to.state.data?.id : '';
+  //
+  //   if (page == 1) {
+  //     adsPagingController.itemList = [];
+  //   }
+  //   final response = await _getAdsUseCase(GetAdsParams(
+  //       subCategoryId: subCategoryId, page: page, limit: 10, userId: userId));
+  //   response
+  //       .fold((l) => emit(state.copyWith(failure: l, status: AdsStates.error)),
+  //           (data) async {
+  //         final isLastPage = data.length < 10;
+  //         if (page == 1) {
+  //           print("page == 1 $page");
+  //           adsPagingController.itemList = [];
+  //         }
+  //         if (isLastPage) {
+  //           print("isLastPage = $isLastPage");
+  //           print(data.length);
+  //           print(data.toString());
+  //           adsPagingController.appendLastPage(data);
+  //         } else {
+  //           print("isNotLastPage = $isLastPage");
+  //           final nextPageKey = page + 1;
+  //           adsPagingController.appendPage(data, nextPageKey);
+  //         }
+  //       });
+  // }
 
   Future<void> getPickMeAds() async {
     final response = await _getAllPickMeUseCase(const NoParams());

@@ -20,6 +20,7 @@ class UserAdsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AdvertisementCubit, AdsState>(builder: (context, state) {
+      print('userType $userType');
       final controller = context.read<AdvertisementCubit>();
       return Column(children: [
         const Sizer(),
@@ -43,7 +44,7 @@ class UserAdsView extends StatelessWidget {
                                     mainCategory: params.mainCategory,
                                     subCategory: params.subCategory));
                             if (data != null) {
-                              controller.loadFilterData(
+                              controller.loadFilterAdsData(
                                   model: data, filter: userType);
                             }
                           }),
@@ -68,7 +69,7 @@ class UserAdsView extends StatelessWidget {
                             if (data != null) {
                               controller.state.city = data.cityId;
                               controller.state.governorate = data.governorateId;
-                              controller.loadFilterData(
+                              controller.loadFilterAdsData(
                                   model: data, filter: userType);
                             }
                           }),

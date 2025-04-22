@@ -274,12 +274,13 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                                   otherId: widget.post.user.id??'',
                                   categoryId: ChatCategoriesIds.social,
                                 );
+                                print('chat:: $chat');
                                 context.pop();
                                 context.push(
                                   Routes.CHAT,
                                   extra: ChatsViewParams(
-                                    isFromStartChat: true,
-                                    initialTabIndex: 0,
+                                    // isFromStartChat: true,
+                                    // initialTabIndex: 0,
                                     selectedChat: chat,
                                   ),
                                 );
@@ -290,6 +291,7 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                                   otherId: widget.post.user.id,
                                   categoryId: ChatCategoriesIds.greet,
                                 );
+                                print('chat:: $chat');
                                 context.pop();
                                 context.push(
                                   Routes.CHAT,
@@ -315,8 +317,8 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                               context.push(
                                 Routes.CHAT,
                                 extra: ChatsViewParams(
-                                  isFromStartChat: true,
-                                  initialTabIndex: 0,
+                                  // isFromStartChat: true,
+                                  // initialTabIndex: 0,
                                   selectedChat: chat,
                                 ),
                               );

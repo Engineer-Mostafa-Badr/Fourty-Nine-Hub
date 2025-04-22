@@ -235,9 +235,9 @@ class _LoginViewState extends State<LoginView> {
               ..setLogin(true)
               ..attachToken()
               ..getUser().then((value) async {
-                serviceLocator<GetWalletCubit>().getWallet();
-                serviceLocator<WalletCubit>().getWallet();
-                serviceLocator<MainCategoriesCubit>().getWallet();
+                // serviceLocator<GetWalletCubit>().getWallet();
+                // serviceLocator<WalletCubit>().getWallet();
+                // serviceLocator<MainCategoriesCubit>().getWallet();
                 String? accessToken = await CacheManager.getAccessToken();
                 String? refreshToken = await CacheManager.getRefreshToken();
                 debugPrint(
@@ -432,6 +432,7 @@ class _LoginWidgetState extends State<LoginWidget> {
       children: [
         DefaultTextFormField(
           currentController: loginCubit.emailTextController,
+          keyboardType: TextInputType.emailAddress,
           borderColor: Colors.black,
           // fillColor: const Color(0xFFEEEEEE),
           hint:

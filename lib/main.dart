@@ -114,6 +114,7 @@ void main() async {
 
   // final isActivated =  false;
   // Routes.onBoardingScreen
+  print('will go onBoardingScreen ${!isShowOnboarding}');
   final initialRoute = !isShowOnboarding
       ? Routes.onBoardingScreen
       : isActivate
@@ -192,10 +193,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           create: (context) => serviceLocator<UserCubit>(),//..getUser(),
         ),
         BlocProvider(
-          create: (context) => serviceLocator<CreatePostCubit>(),//..loadData(),
+          create: (context) => serviceLocator<CreatePostCubit>()..loadData(),
         ),
         BlocProvider(
-          create: (context) => serviceLocator<SecretsCubit>(),//..getAllSecrets(),
+          create: (context) => serviceLocator<SecretsCubit>()..getAllSecrets(),
         ),
         BlocProvider(
           create: (context) =>
@@ -208,14 +209,13 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         BlocProvider<ReelsCubit>(
           create: (_) => serviceLocator<ReelsCubit>(),//..fetchReels(),
         ),
-        BlocProvider(
-          create: (BuildContext context) => serviceLocator<SearchCubit>(),
-        ),
+        // BlocProvider(
+        //   create: (BuildContext context) => serviceLocator<SearchCubit>(),
+        // ),
         BlocProvider(
           create: (context) =>
               serviceLocator<PreloadBloc>(), //..getVideosFromApi()
         ),
-
         // BlocProvider(
         //   create: (BuildContext context) => serviceLocator<RideCubit>(),
         // ),
@@ -228,10 +228,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         BlocProvider<FirebaseNotficationsCubit>(
           create: (context) => FirebaseNotficationsCubit(serviceLocator()),
         ),
-        BlocProvider<JoinTripCarPoolCubit>(
-            create: (context) =>
-                JoinTripCarPoolCubit(joinTripCarpoolUsecase: serviceLocator())),
-
+        // BlocProvider<JoinTripCarPoolCubit>(
+        //     create: (context) =>
+        //         serviceLocator<JoinTripCarPoolCubit>()),
         BlocProvider<GetUnreadNotificationsCountCubit>(
           create: (context) => GetUnreadNotificationsCountCubit(
             getUnreadNotificationsCountUseCase: serviceLocator(),

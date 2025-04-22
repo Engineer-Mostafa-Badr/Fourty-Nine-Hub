@@ -25,7 +25,7 @@ class EmojiKeyboard extends StatelessWidget {
         emojiViewConfig: const EmojiViewConfig(
           backgroundColor: Colors.white,
         ),
-        swapCategoryAndBottomBar: true,
+        // swapCategoryAndBottomBar: true,
         skinToneConfig: const SkinToneConfig(),
         categoryViewConfig: CategoryViewConfig(
           backgroundColor: Colors.white,
@@ -112,15 +112,15 @@ class WhatsAppCategoryViewState extends State<_WhatsAppCategoryView>
   }
 
   Widget _buildBackspaceButton() {
-    if (widget.config.categoryViewConfig.showBackspaceButton) {
+    // if (widget.config.categoryViewConfig.showBackspaceButton) {
       return BackspaceButton(
         widget.config,
         widget.state.onBackspacePressed,
         widget.state.onBackspaceLongPressed,
         widget.config.categoryViewConfig.backspaceColor,
       );
-    }
-    return const SizedBox.shrink();
+    // }
+    // return const SizedBox.shrink();
   }
 }
 

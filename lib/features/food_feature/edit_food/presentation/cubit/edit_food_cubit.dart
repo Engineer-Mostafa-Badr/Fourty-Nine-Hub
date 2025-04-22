@@ -174,14 +174,16 @@ class EditFoodCubit extends Cubit<EditFoodState> {
 
   UserEntity? user;
   Future<void> _getUser() async {
-    await serviceLocator<UserCubit>()
-        .getUser()
-        .then((Either<Failure, UserEntity>? value) {
-      value?.fold(
-        (failure) => print("Failed to get user: $failure"),
-        (u) => user = u,
-      );
-    });
+
+    user= serviceLocator<UserCubit>().state.data;
+    // await serviceLocator<UserCubit>()
+    //     .getUser()
+    //     .then((Either<Failure, UserEntity>? value) {
+    //   value?.fold(
+    //     (failure) => print("Failed to get user: $failure"),
+    //     (u) => user = u,
+    //   );
+    // });
   }
 
   Future<void> isRestaurant() async {

@@ -188,11 +188,11 @@ class AuthServiceLocator {
         // serviceLocator()
       )..attachToken(),
     );
-    serviceLocator.registerSingleton(
-      GetWalletCubit(
-        serviceLocator(),
-      )..getWallet(),
-    );
+    // serviceLocator.registerSingleton(
+    //   GetWalletCubit(
+    //     serviceLocator(),
+    //   )..getWallet(),
+    // );
     serviceLocator.registerFactory(
       () => ForgotPasswordCubit(
         serviceLocator(),

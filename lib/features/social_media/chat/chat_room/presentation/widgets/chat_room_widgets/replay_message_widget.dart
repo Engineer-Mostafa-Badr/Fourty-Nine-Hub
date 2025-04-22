@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/reply_message_entity.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -24,17 +25,22 @@ class ReplayMessageWidget extends StatelessWidget {
           children: [
             Container(
               width: 4,
-              color: AppColors.PRIMARY_COLOR,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4),
+                color: anotherUserName == 'You'
+                    ? AppColors.PRIMARY_COLOR
+                    : AppColors.SECONDARY_COLOR,
+              ),
             ),
             const SizedBox(
               width: 8,
             ),
-            Expanded(child: buildReplayMessage()),
+            Expanded(child: buildReplayMessage(context)),
           ],
         ),
       );
 
-  Widget buildReplayMessage() => Column(
+  Widget buildReplayMessage(BuildContext context) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
@@ -42,6 +48,10 @@ class ReplayMessageWidget extends StatelessWidget {
             children: [
               Label(
                 text: anotherUserName ?? '',
+                color: anotherUserName == 'You'
+                    ? AppColors.PRIMARY_COLOR
+                    : AppColors.SECONDARY_COLOR,
+                // style: S,
               ),
               if (onCancelReplay != null)
                 GestureDetector(
@@ -58,6 +68,9 @@ class ReplayMessageWidget extends StatelessWidget {
           ),
           Label(
             text: messageEntity?.text ?? replyMessage?.text ?? '',
+            color: context.isDarkMode
+                ? Colors.white
+                : Colors.black,
           ),
         ],
       );

@@ -142,7 +142,7 @@ class AccountServiceLocator {
         FavouriteSubCategoryCubit(
             serviceLocator(), serviceLocator(), serviceLocator()));
     serviceLocator.registerFactory<FavouriteCategoryCubit>(() =>
-        FavouriteCategoryCubit(serviceLocator(), serviceLocator())..loadData());
+        FavouriteCategoryCubit(serviceLocator(), serviceLocator()));
     serviceLocator
         .registerFactory<ShareAppCubit>(() => ShareAppCubit(serviceLocator()));
 
@@ -169,7 +169,8 @@ class AccountServiceLocator {
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),
-        )..loadData());
+        ),//..loadData()
+    );
 
     serviceLocator.registerFactory<WalletTwoCubit>(
       () => WalletTwoCubit(

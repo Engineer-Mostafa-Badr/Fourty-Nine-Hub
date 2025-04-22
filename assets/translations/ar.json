@@ -1511,5 +1511,12 @@
   "commentAdded": "تم إضافة التعليق",
   "areYouSureYouWantToDeleteThisComment": "هل أنت متأكد أنك تريد حذف هذا التعليق؟",
   "responseStatus": "حالة الرد",
-  "socialExplain":"احصل على المال إذا قمت بالنشر والمشاهدة والإعجاب على أي واجهة تريدها!"
+  "socialExplain":"احصل على المال إذا قمت بالنشر والمشاهدة والإعجاب على أي واجهة تريدها!",
+  "endToEndDescription": "يحافظ التشفير الشامل على رسائلك ومكالماتك الشخصية بينك وبين الأشخاص الذين تختارهم. ولا يمكن حتى لتطبيق 49 قراءة هذه الرسائل أو الاستماع إليها. وهذا يشمل:",
+  "yourChatsAndCallArePrivate": "محادثاتك ومكالماتك خاصة",
+  "textAndVoiceMessages": "الرسائل النصية والصوتية",
+  "audioAndVideoCalls": "المكالمات الصوتية والفيديو",
+  "photoVideosAndDocuments": "صور وفيديو ووثائق",
+  "locationSharing": "مشاركة الموقع",
+  "statusUpdates": "تحديثات الحالة"
 }
