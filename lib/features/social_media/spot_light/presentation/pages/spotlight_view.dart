@@ -643,7 +643,8 @@ class DiscoverSectionState extends State<DiscoverSection> {
                         builder: (context) => const SpotLightOtherProfileScreen(),
                       ),
                     ),
-                    child: CircleAvatar(
+                    child:
+                    CircleAvatar(
                       radius: 32.w,
                       backgroundColor: AppColors.AUTH_CONTAINER_COLOR,
                       backgroundImage: AssetImage(
