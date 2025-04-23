@@ -228,15 +228,15 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
               case 5:
                 await prefs.setString('filter', 'ads');
                 break;
-              case 6:
-                await prefs.setString('filter', 'comeWithYouTrips');
-                break;
-              case 7:
-                await prefs.setString('filter', 'carpoolTrips');
-                break;
-              case 8:
-                await prefs.setString('filter', 'rideTrips');
-                break;
+              // case 6:
+              //   await prefs.setString('filter', 'comeWithYouTrips');
+              //   break;
+              // case 7:
+              //   await prefs.setString('filter', 'carpoolTrips');
+              //   break;
+              // case 8:
+              //   await prefs.setString('filter', 'rideTrips');
+              //   break;
             }
 
             final searchText = _searchController.text.trim();
@@ -289,9 +289,9 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
             CustomTapWidget(text: LocaleKeys.mainCategory.localize),
             CustomTapWidget(text: LocaleKeys.subCategory.localize),
             CustomTapWidget(text: LocaleKeys.ads.localize),
-            CustomTapWidget(text: LocaleKeys.tripJoin.localize),
-            CustomTapWidget(text: LocaleKeys.carpool.localize),
-            CustomTapWidget(text: LocaleKeys.ride.localize),
+            // CustomTapWidget(text: LocaleKeys.tripJoin.localize),
+            // CustomTapWidget(text: LocaleKeys.carpool.localize),
+            // CustomTapWidget(text: LocaleKeys.ride.localize),
           ],
         ),
       ),
@@ -315,19 +315,16 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
           ),
           const SubCategorySearchView(),
           AdsSearchView(
-            params: SearchParams(
-              search: _searchController.text,
-              params: PaginationParams(page: 1),
-            ),
+
           ),
-          ComeWithMeSearchView(
-            params: SearchParams(
-              search: _searchController.text,
-              params: PaginationParams(page: 1),
-            ),
-          ),
-          const Center(child: Text('Trip')),
-          const Center(child: Text('Trip')),
+          // ComeWithMeSearchView(
+          //   params: SearchParams(
+          //     search: _searchController.text,
+          //     params: PaginationParams(page: 1),
+          //   ),
+          // ),
+          // const Center(child: Text('Trip')),
+          // const Center(child: Text('Trip')),
         ],
       ),
     );

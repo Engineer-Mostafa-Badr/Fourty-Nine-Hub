@@ -106,6 +106,7 @@ class SearchCubit extends Cubit<SearchState> {
       userSearch: [],
       posts: [],
       reels: [],
+      search: [],
       // other models too
     ));
   }
@@ -120,40 +121,91 @@ class SearchCubit extends Cubit<SearchState> {
 
 
   List<MainCategoryEntity> paginatedSearch = [];
+
   bool loadPaginatedSearch = false;
   Future loadPaginatedSearchData({required SearchParams params}) async {
-    loadPaginatedSearch=true;
+    loadPaginatedSearch = true;
     paginatedSearch.clear();
     paginatedSearchPage = 1;
-    hasMoreAdsData = true;
+    hasMorePaginatedSearchData = true; // 🔥 Reset this here
     emit(state.copyWith(status: SearchStates.loading));
-    await getPaginatedSearch(params:params);
-    loadPaginatedSearch=false;
+
+    await getPaginatedSearch(params: params);
+
+    loadPaginatedSearch = false;
     emit(state.copyWith(status: SearchStates.success));
   }
+
   bool isLoadingPaginatedSearchMore = false;
   bool hasMorePaginatedSearchData = true;
   int paginatedSearchPage = 1;
-  Future<void> getPaginatedSearch(
-      {required SearchParams params}
-      ) async {
+
+  Future<void> getPaginatedSearch({required SearchParams params}) async {
     if (!hasMorePaginatedSearchData || isLoadingPaginatedSearchMore) return;
+
     isLoadingPaginatedSearchMore = true;
     emit(state.copyWith(status: SearchStates.loading));
+
     final response = await _fetchSearchUseCase.call(params);
+
     response.fold(
-            (l) => emit(state.copyWith(failure: l, status: SearchStates.error)),
-            (data) async {
-          paginatedSearch.addAll(data);
-          if (data.length < pageSize) {
-            hasMorePaginatedSearchData = false;
-          } else {
-            paginatedSearchPage++;
-          }
-          isLoadingPaginatedSearchMore = false;
-          emit(state.copyWith(status: SearchStates.success));
-        });
+          (l) => emit(state.copyWith(failure: l, status: SearchStates.error)),
+          (data) async {
+        paginatedSearch.addAll(data);
+
+        // FIX: If it's the first page and data is empty,
+        // we should keep `hasMorePaginatedSearchData = true` for future retries.
+        if (params.params.page == 1 && data.isEmpty) {
+          hasMorePaginatedSearchData = true;
+        } else if (data.length < pageSize) {
+          hasMorePaginatedSearchData = false;
+        } else {
+          paginatedSearchPage++;
+        }
+
+        isLoadingPaginatedSearchMore = false;
+        emit(state.copyWith(status: SearchStates.success, search: paginatedSearch));
+      },
+    );
   }
+
+  // Future loadPaginatedSearchData({required SearchParams params}) async {
+  //   loadPaginatedSearch=true;
+  //   paginatedSearch.clear();
+  //   paginatedSearchPage = 1;
+  //   hasMoreAdsData = true;
+  //   emit(state.copyWith(status: SearchStates.loading));
+  //
+  //   await getPaginatedSearch(params:params);
+  //
+  //   loadPaginatedSearch=false;
+  //   emit(state.copyWith(status: SearchStates.success));
+  // }
+  //
+  //
+  // bool isLoadingPaginatedSearchMore = false;
+  // bool hasMorePaginatedSearchData = true;
+  // int paginatedSearchPage = 1;
+  // Future<void> getPaginatedSearch(
+  //     {required SearchParams params}
+  //     ) async {
+  //   if (!hasMorePaginatedSearchData || isLoadingPaginatedSearchMore) return;
+  //   isLoadingPaginatedSearchMore = true;
+  //   emit(state.copyWith(status: SearchStates.loading));
+  //   final response = await _fetchSearchUseCase.call(params);
+  //   response.fold(
+  //           (l) => emit(state.copyWith(failure: l, status: SearchStates.error)),
+  //           (data) async {
+  //         paginatedSearch.addAll(data);
+  //         if (data.length < pageSize) {
+  //           hasMorePaginatedSearchData = false;
+  //         } else {
+  //           paginatedSearchPage++;
+  //         }
+  //         isLoadingPaginatedSearchMore = false;
+  //         emit(state.copyWith(status: SearchStates.success,search: paginatedSearch));
+  //       });
+  // }
 
 
   List<SubCategoryEntity> subCategoriesSearch = [];
@@ -242,39 +294,88 @@ class SearchCubit extends Cubit<SearchState> {
 
   List<AdsSearchEntity> adsSearch = [];
   bool loadAds = false;
-  Future loadAdsData({required SearchParams params}) async {
-    loadAds=true;
-    adsSearch.clear();
-    adsSearchPage = 1;
-    hasMoreAdsData = true;
-    emit(state.copyWith(status: SearchStates.loading));
-    await getPaginatedAdsSearch(params:params);
-    loadAds=false;
-    emit(state.copyWith(status: SearchStates.success));
-  }
   bool isLoadingAdsMore = false;
   bool hasMoreAdsData = true;
   int adsSearchPage = 1;
-  Future<void> getPaginatedAdsSearch(
-      {required SearchParams params}
-      ) async {
+
+  Future<void> loadAdsData({required SearchParams params}) async {
+    loadAds = true;
+    adsSearch.clear();
+    adsSearchPage = 1;
+    hasMoreAdsData = true;
+    isLoadingAdsMore = false;
+
+    emit(state.copyWith(status: SearchStates.loading));
+
+    await getPaginatedAdsSearch(params: params);
+
+    loadAds = false;
+    // ❌ No need to emit success again here
+  }
+
+  Future<void> getPaginatedAdsSearch({required SearchParams params}) async {
     if (!hasMoreAdsData || isLoadingAdsMore) return;
+
     isLoadingAdsMore = true;
     emit(state.copyWith(status: SearchStates.loading));
+
     final response = await _fetchAdsSearchUseCase.call(params);
     response.fold(
-            (l) => emit(state.copyWith(failure: l, status: SearchStates.error)),
-            (data) async {
-          adsSearch.addAll(data);
-          if (data.length < pageSize) {
-            hasMoreAdsData = false;
-          } else {
-            adsSearchPage++;
-          }
-          isLoadingAdsMore = false;
-          emit(state.copyWith(status: SearchStates.success));
-        });
+          (l) {
+        isLoadingAdsMore = false;
+        emit(state.copyWith(failure: l, status: SearchStates.error));
+      },
+          (data) {
+        adsSearch.addAll(data);
+
+        if (data.length < pageSize) {
+          hasMoreAdsData = false;
+        } else {
+          adsSearchPage++;
+        }
+
+        isLoadingAdsMore = false;
+        emit(state.copyWith(
+          status: SearchStates.success,
+          adsSearch: adsSearch,
+        ));
+      },
+    );
   }
+
+  // Future loadAdsData({required SearchParams params}) async {
+  //   loadAds=true;
+  //   adsSearch.clear();
+  //   adsSearchPage = 1;
+  //   hasMoreAdsData = true;
+  //   emit(state.copyWith(status: SearchStates.loading));
+  //   await getPaginatedAdsSearch(params:params);
+  //   loadAds=false;
+  //   emit(state.copyWith(status: SearchStates.success));
+  // }
+  // bool isLoadingAdsMore = false;
+  // bool hasMoreAdsData = true;
+  // int adsSearchPage = 1;
+  // Future<void> getPaginatedAdsSearch(
+  //     {required SearchParams params}
+  //     ) async {
+  //   if (!hasMoreAdsData || isLoadingAdsMore) return;
+  //   isLoadingAdsMore = true;
+  //   emit(state.copyWith(status: SearchStates.loading));
+  //   final response = await _fetchAdsSearchUseCase.call(params);
+  //   response.fold(
+  //           (l) => emit(state.copyWith(failure: l, status: SearchStates.error)),
+  //           (data) async {
+  //         adsSearch.addAll(data);
+  //         if (data.length < pageSize) {
+  //           hasMoreAdsData = false;
+  //         } else {
+  //           adsSearchPage++;
+  //         }
+  //         isLoadingAdsMore = false;
+  //         emit(state.copyWith(status: SearchStates.success));
+  //       });
+  // }
 
 
 
@@ -318,38 +419,53 @@ class SearchCubit extends Cubit<SearchState> {
 
   List<ReelsSearchEntity> reelsSearch = [];
   bool loadReelsSearch = false;
-  Future loadReelsSearchData({required SearchParams params}) async {
-    loadReelsSearch=true;
-    reelsSearch.clear();
-    reelsSearchPage = 1;
-    hasMoreAdsData = true;
-    emit(state.copyWith(status: SearchStates.loading));
-    await getPaginatedReelsSearch(params:params);
-    loadReelsSearch=false;
-    emit(state.copyWith(status: SearchStates.success));
-  }
   bool isLoadingReelsSearchMore = false;
   bool hasMoreReelsSearchData = true;
   int reelsSearchPage = 1;
-  Future<void> getPaginatedReelsSearch(
-      {required SearchParams params}
-      ) async {
+
+  Future<void> loadReelsSearchData({required SearchParams params}) async {
+    loadReelsSearch = true;
+    reelsSearch.clear();
+    reelsSearchPage = 1;
+    hasMoreReelsSearchData = true;
+    isLoadingReelsSearchMore = false;
+
+    emit(state.copyWith(status: SearchStates.loading));
+
+    await getPaginatedReelsSearch(params: params);
+
+    loadReelsSearch = false;
+    // ❌ Don't re-emit success here; it's handled in getPaginatedReelsSearch
+  }
+
+  Future<void> getPaginatedReelsSearch({required SearchParams params}) async {
     if (!hasMoreReelsSearchData || isLoadingReelsSearchMore) return;
+
     isLoadingReelsSearchMore = true;
     emit(state.copyWith(status: SearchStates.loading));
+
     final response = await _fetchReelSearchUseCase.call(params);
     response.fold(
-            (l) => emit(state.copyWith(failure: l, status: SearchStates.error)),
-            (data) async {
-          reelsSearch.addAll(data);
-          if (data.length < pageSize) {
-            hasMoreReelsSearchData = false;
-          } else {
-            reelsSearchPage++;
-          }
-          isLoadingReelsSearchMore = false;
-          emit(state.copyWith(status: SearchStates.success));
-        });
+          (l) {
+        isLoadingReelsSearchMore = false;
+        emit(state.copyWith(failure: l, status: SearchStates.error));
+      },
+          (data) {
+        reelsSearch.addAll(data);
+
+        if (data.length < pageSize) {
+          hasMoreReelsSearchData = false;
+        } else {
+          reelsSearchPage++;
+        }
+
+        isLoadingReelsSearchMore = false;
+        emit(state.copyWith(
+          status: SearchStates.success,
+          reels: List<ReelsSearchEntity>.from(reelsSearch),
+        ));
+      },
+    );
   }
 
 
