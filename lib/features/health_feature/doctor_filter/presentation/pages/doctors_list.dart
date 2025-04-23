@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateless/loaders/default_loader.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/doctors_list_cubit/doctors_list_cubit.dart';
@@ -7,6 +9,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 import '../widgets/doctor_card.dart';
@@ -64,12 +67,7 @@ class _DoctorsListViewState extends State<DoctorsListView> {
     return BlocListener<DoctorsListCubit, DoctorsListState>(
       listener: (context, state) {},
       child: CustomScaffold(
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(30),
-          child: BackAppBar(
-            label: LocaleKeys.doctorList.localize,
-          ),
-        ),
+        appBar: HomeAppbar(isWithBackArrow: true,),
         body: BlocBuilder<DoctorsListCubit, DoctorsListState>(
             builder: (context, state) {
           if (state.isLoading) {
@@ -85,7 +83,15 @@ class _DoctorsListViewState extends State<DoctorsListView> {
                     ),
                   )
                 : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Padding(
+                        padding:  EdgeInsets.symmetric(horizontal: 30.w),
+                        child: Label(
+                          text: LocaleKeys.doctorList.localize,
+                          style: Styles.headerText(),
+                        ),
+                      ),
                       Expanded(
                         child: ListView.separated(
                             controller: _scrollController,
@@ -105,7 +111,7 @@ class _DoctorsListViewState extends State<DoctorsListView> {
                       ),
                       if (context.read<DoctorsListCubit>().isLoadingMore)
                         const Center(
-                          child: CircularProgressIndicator(),
+                          child: DLoader(),
                         )
                     ],
                   );

@@ -1,6 +1,7 @@
 
 import 'dart:developer';
 
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/entities/expected_price_entity.dart';
 
 class RideExpectedPriceModel extends RideExpectedPriceEntity{
@@ -8,6 +9,25 @@ class RideExpectedPriceModel extends RideExpectedPriceEntity{
 
   //fromJson
   factory RideExpectedPriceModel.fromJson(Map<String, dynamic> json) {
+
+    List<List<double>> parsedPolyline = [];
+
+    if (json['polyline'] != null) {
+      if (json['polyline'] is String) {
+        // Decode the encoded polyline string
+        log("Polyline: ${json['polyline']}");
+        PolylinePoints polylinePoints = PolylinePoints();
+        List<PointLatLng> decoded = polylinePoints.decodePolyline(json['polyline']);
+        log("Decoded polyline: $decoded");
+        parsedPolyline = decoded.map((e) => [e.longitude, e.latitude]).toList();
+        log("Parsed polyline: $parsedPolyline");
+      } else if (json['polyline'] is List) {
+        // Use the list directly
+        parsedPolyline = (json['polyline'] as List)
+            .map((e) => (e as List).map((p) => (p as num).toDouble()).toList())
+            .toList();
+      }
+    }
     return RideExpectedPriceModel(
       priceForCaptain: (json['priceForCaptain'] ?? 0).toDouble(),
       priceForWomen: (json['priceForWomen'] ?? 0).toDouble(),
@@ -34,14 +54,15 @@ class RideExpectedPriceModel extends RideExpectedPriceEntity{
       ],
       distance: (json['distance'] ?? 0).toDouble(),
       duration: (json['duration'] ?? 0).toDouble(),
-      polyline: json['polyline'] != null
-          ? (json['polyline'] as List)
-          .map((e) =>
-          (e as List)
-              .map((p) => (p as num).toDouble())
-              .toList())
-          .toList()
-          : [],
+      // polyline: json['polyline'] != null
+      //     ? (json['polyline'] as List)
+      //     .map((e) =>
+      //     (e as List)
+      //         .map((p) => (p as num).toDouble())
+      //         .toList())
+      //     .toList()
+      //     : [],
+      polyline: parsedPolyline,
       type: json['type'] ?? 'openRouteService',
       comfort: (json['options']?['comfort'] ?? 0).toDouble(),
       autoAccept: (json['options']?['autoAccept'] ?? 0).toDouble(),

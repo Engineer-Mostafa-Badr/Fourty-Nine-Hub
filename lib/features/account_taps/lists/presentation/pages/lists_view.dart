@@ -10,7 +10,6 @@ import 'package:fourtyninehub/features/account_taps/lists/domain/entities/user_f
 import 'package:fourtyninehub/features/account_taps/lists/presentation/cubit/lists_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/lists/presentation/widgets/list_item_card.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/accept_reject_friend_request_use_case.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../core/localization/locales.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
@@ -175,7 +174,7 @@ class _ListsViewState extends State<ListsView>
                       child: CircularProgressIndicator.adaptive(),
                     )
                   : _buildListUsersWidget(
-                      controller: controller.friendsPagingController,
+                      // controller: controller.friendsPagingController,
                       list: state.friends ?? [],
                       type: ListTypes.friends,
                       removeRequest: (params) {},
@@ -226,7 +225,7 @@ class _ListsViewState extends State<ListsView>
               child: state.isLoading
                   ? const Center(child: CircularProgressIndicator.adaptive())
                   : _buildListUsersWidget(
-                      controller: controller.followersPagingController,
+                      // controller: controller.followersPagingController,
                       list: state.followers ?? [],
                       type: ListTypes.followers,
                       removeRequest: (params) {},
@@ -277,7 +276,7 @@ class _ListsViewState extends State<ListsView>
               child: state.isLoading
                   ? const Center(child: CircularProgressIndicator.adaptive())
                   : _buildListUsersWidget(
-                      controller: controller.requestsPagingController,
+                      // controller: controller.requestsPagingController,
                       list: state.requests ?? [],
                       type: ListTypes.requests,
                       removeRequest: (params) async {
@@ -338,7 +337,7 @@ class _ListsViewState extends State<ListsView>
               child: state.isLoading
                   ? const Center(child: CircularProgressIndicator.adaptive())
                   : _buildListUsersWidget(
-                      controller: controller.blockedPagingController,
+                      // controller: controller.blockedPagingController,
                       list: state.blocked ?? [],
                       type: ListTypes.blocked,
                       removeRequest: (params) {},
@@ -391,7 +390,7 @@ class _ListsViewState extends State<ListsView>
   Widget _buildListUsersWidget({
     required List<dynamic> list,
     required ListTypes type,
-    required PagingController<int, UserFriendEntity> controller,
+    // required PagingController<int, UserFriendEntity> controller,
     required Function(AcceptRejectFriendRequestParams) removeRequest,
     required Function(AcceptRejectFriendRequestParams) acceptRequest,
     required Function(String) unblockUser,
@@ -406,28 +405,29 @@ class _ListsViewState extends State<ListsView>
         ),
       );
     }
-    return RefreshIndicator(
-      onRefresh: () async {
-        return Future.sync(() => controller.refresh());
-      },
-      child: PagedListView.separated(
-        pagingController: controller,
-        separatorBuilder: (context, index) => const Divider(),
-        builderDelegate: PagedChildBuilderDelegate<UserFriendEntity>(
-          itemBuilder: (context, item, index) {
-            return ListItemCard(
-              type: type,
-              user: item,
-              removeRequest: removeRequest,
-              acceptRequest: acceptRequest,
-              unblockUser: unblockUser,
-              deleteFriend: deleteFriend,
-              unfollowUser: unfollowUser,
-            );
-          },
-        ),
-      ),
-    );
+    return Container();
+    // return RefreshIndicator(
+    //   onRefresh: () async {
+    //     return Future.sync(() => controller.refresh());
+    //   },
+    //   child: PagedListView.separated(
+    //     pagingController: controller,
+    //     separatorBuilder: (context, index) => const Divider(),
+    //     builderDelegate: PagedChildBuilderDelegate<UserFriendEntity>(
+    //       itemBuilder: (context, item, index) {
+    //         return ListItemCard(
+    //           type: type,
+    //           user: item,
+    //           removeRequest: removeRequest,
+    //           acceptRequest: acceptRequest,
+    //           unblockUser: unblockUser,
+    //           deleteFriend: deleteFriend,
+    //           unfollowUser: unfollowUser,
+    //         );
+    //       },
+    //     ),
+    //   ),
+    // );
   }
 
   Widget listItem({

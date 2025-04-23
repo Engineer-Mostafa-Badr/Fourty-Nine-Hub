@@ -1,18 +1,22 @@
 import 'dart:developer';
+import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/cubit/tinder_cubit.dart';
 import 'package:fourtyninehub/features/social_media/tinder/presentation/widgets/edit_profile_tinder.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -42,9 +46,11 @@ class UserProfilePageState extends State<UserProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return context.watch<TinderViewCubit>().state.profileUserData == null
-        ? _buildLoadingScaffold()
-        : _buildProfileScaffold(context);
+    return
+        // context.watch<TinderViewCubit>().state.profileUserData == null
+        //   ? _buildLoadingScaffold()
+        // :
+        _buildProfileScaffold(context);
   }
 
   CustomScaffold _buildLoadingScaffold() {
@@ -60,23 +66,27 @@ class UserProfilePageState extends State<UserProfilePage> {
   }
 
   CustomScaffold _buildProfileScaffold(BuildContext context) {
-    final userCubit = context.read<UserCubit>();
+    // final userCubit = context.read<UserCubit>();
     return CustomScaffold(
+      backgroundColor: Colors.black,
       floatingActionButton: _buildFloatingActionButton(context),
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(30),
         child: BackAppBar(
-          label: LocaleKeys.profile.localize,
+          label: 'Mohamed Magdy',
         ),
       ),
       extendBodyBehindAppBar: true,
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: () async {
-            await context
-                .read<TinderViewCubit>()
-                .fetchUserProfile(userId: userCubit.state.data!.id);
+            setState(() {});
           },
+          //async {
+          //   await context
+          //       .read<TinderViewCubit>()
+          //       .fetchUserProfile(userId: userCubit.state.data!.id);
+          // },
           child: SingleChildScrollView(
             // physics: const BouncingScrollPhysics(),
             child: Padding(
@@ -86,7 +96,7 @@ class UserProfilePageState extends State<UserProfilePage> {
                 children: [
                   _buildSwipeCard(context),
                   _buildUserInfo(context),
-                  _buildStats(context),
+                  // _buildStats(context),
                   const Sizer(
                     height: kToolbarHeight * 1.5,
                   ),
@@ -121,80 +131,229 @@ class UserProfilePageState extends State<UserProfilePage> {
     );
   }
 
-  Future<void> _handleImageUpload(BuildContext context) async {
-    try {
-      final uploadResult = await UploadFile().uploadImage(
-        subCategoryId: '66af974f8bf69f9469944746',
-        onUploaded: (uploadedFile) async {
-          final userCubit = context.read<UserCubit>();
-          final tinderCubit = context.read<TinderViewCubit>();
-
-          // await tinderCubit.uploadPictures(pictures: [uploadedFile.mediaId]);
-          // await tinderCubit
-          //     .fetchUserProfile(userId: userCubit.state.data!.id)
-          //     .then((value) => tinderCubit.resetStoryIndex());
-        }, context: context,
-      );
-
-      if (uploadResult == null) {
-        log("Image upload failed: No file selecjhgjgted.");
-      }
-    } catch (e) {
-      log("Image upload failed: $e");
-    }
-  }
+  // Future<void> _handleImageUpload(BuildContext context) async {
+  //   try {
+  //     final uploadResult = await UploadFile().uploadImage(
+  //       subCategoryId: '66af974f8bf69f9469944746',
+  //       onUploaded: (uploadedFile) async {
+  //         final userCubit = context.read<UserCubit>();
+  //         final tinderCubit = context.read<TinderViewCubit>();
+  //
+  //         // await tinderCubit.uploadPictures(pictures: [uploadedFile.mediaId]);
+  //         // await tinderCubit
+  //         //     .fetchUserProfile(userId: userCubit.state.data!.id)
+  //         //     .then((value) => tinderCubit.resetStoryIndex());
+  //       }, context: context,
+  //     );
+  //
+  //     if (uploadResult == null) {
+  //       log("Image upload failed: No file selecjhgjgted.");
+  //     }
+  //   } catch (e) {
+  //      log("Image upload failed: $e");
+  //
+  //   }
+  // }
 
   Widget _buildUserInfo(BuildContext context) {
-    final profileData = context.watch<TinderViewCubit>().state.profileUserData;
-    final userId = profileData?.userId;
+    // final profileData = context.watch<TinderViewCubit>().state.profileUserData;
+    // final userId = profileData?.userId;
 
+    return Column(
+      children: [
+        _buildInfoContainer(
+            prefixIcon: Icons.search,
+            title: 'Looking For',
+            child: Label(
+              text: 'New Friends',
+              style: Styles.headerText(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 48),
+            )),
+        const Sizer(),
+        _buildInfoContainer(
+            prefixIcon: Icons.keyboard_double_arrow_right,
+            suffixIcon: Icons.more_horiz,
+            title: 'About Me',
+            child: Label(
+              text: 'Fighter',
+              style: Styles.headerText(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 48),
+            )),
+        const Sizer(),
+        _buildInfoContainer(
+          prefixIcon: Icons.person_pin_rounded,
+          suffixIcon: Icons.more_horiz,
+          title: 'Essentials',
+          child: Column(
+            children: [
+              _buildInfoContent(
+                title: '10 Miles Away',
+                icon: Icons.location_on_outlined,
+              ),
+              const Sizer(),
+              _buildInfoContent(
+                title: '188cm',
+                icon: Icons.straighten_outlined,
+              ),
+              const Sizer(),
+              _buildInfoContent(
+                title: 'cairo university',
+                icon: Icons.location_on_outlined,
+              ),
+            ],
+          ),
+        ),
+        const Sizer(),
+        _buildInfoContainer(
+          prefixIcon:Icons.label ,
+          title: 'Life Style',
+          child: Column(
+            children: [
+              _buildInfoContent(
+                headerText: 'Drinking',
+                title: 'on special occasions',
+                icon:FontAwesomeIcons.glassWater,
+              ),
+              const Sizer(),
+              _buildInfoContent(
+                headerText: 'Smoking',
+                title: 'Smoker',
+                icon: FontAwesomeIcons.smoking,
+              ),
+              const Sizer(),
+              _buildInfoContent(
+                headerText: 'Workout',
+                title: 'sometimes',
+                icon: FontAwesomeIcons.dumbbell,
+              ),const Sizer(),
+              _buildInfoContent(
+                headerText: 'Pets',
+                title: 'Cat',
+                icon: FontAwesomeIcons.cat,
+              ),
+            ],
+          )
+        ),
+        const Sizer(),
+        _buildInfoContainer(
+          prefixIcon:Icons.label ,
+          title: 'Basics',
+          child: Column(
+            children: [
+              _buildInfoContent(
+                headerText: 'communication style',
+                title: 'big time texter',
+                icon:FontAwesomeIcons.glassWater,
+              ),
+              const Sizer(),
+              _buildInfoContent(
+                headerText: 'love style',
+                title: 'thoughtful gestures',
+                icon: FontAwesomeIcons.smoking,
+              ),
+              const Sizer(),
+              _buildInfoContent(
+                headerText: 'education',
+                title: 'bechelors',
+                icon: FontAwesomeIcons.dumbbell,
+              ),const Sizer(),
+              _buildInfoContent(
+                headerText: 'zodiac',
+                title: 'cancer',
+                icon: FontAwesomeIcons.cat,
+              ),
+            ],
+          )
+        ),
+        const Sizer(),
+      ],
+    );
+  }
+
+  Widget _buildInfoContent({required IconData icon, required String title, String? headerText}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if(headerText!=null)
+          Label(
+            text: headerText,
+            style: Styles.headerText(
+              fontSize: 32,
+              fontWeight: FontWeight.w500,
+              color: Colors.white,
+            ),
+          ),
+        Container(
+          decoration: const BoxDecoration(
+            border: BorderDirectional(
+                bottom: BorderSide(color: Color(0XFF808080), width: 1)),
+          ),
+          child: ListTile(
+            contentPadding: EdgeInsets.zero,
+            shape: const BorderDirectional(
+                bottom: BorderSide(color: Color(0XFF808080), width: 1)),
+            visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+            leading: Icon(
+              icon,
+              color: const Color(0xFF808080),
+            ),
+            title: Label(
+              text: title,
+              style: Styles.headerText(
+                fontSize: 32,
+                fontWeight: FontWeight.w500,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildInfoContainer({
+    required IconData prefixIcon,
+    required String title,
+    IconData? suffixIcon,
+    required Widget child,
+  }) {
     return Container(
-      margin: const EdgeInsets.only(top: 10.0),
+      margin: EdgeInsets.symmetric(vertical: 10.h),
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
-        color: context.isDarkMode ? Colors.black26 : Colors.white,
-        borderRadius: BorderRadius.circular(10.0),
+        color:const Color(0xFF262626),
+        borderRadius: BorderRadius.circular(16.0),
         boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 5)],
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            capitalizeAndSplit(
-                "${userId?.firstName ?? ''} ${userId?.lastName ?? ''}"),
-            textScaler: TextScaler.noScaling,
-            style: TextStyle(
-              color:
-                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
-              fontSize: 55.sp,
-              fontWeight: FontWeight.bold,
+          Row(children: [
+            Icon(
+              prefixIcon,
+              color: Colors.white,
             ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            userId?.email ?? '',
-            textScaler: TextScaler.noScaling,
-            style: TextStyle(
-              color: context.isDarkMode
-                  ? Colors.white.withOpacity(0.8)
-                  : AppColors.PRIMARY_COLOR.withOpacity(0.8),
-              fontSize: 40.sp,
-              fontWeight: FontWeight.w300,
-            ),
-          ),
-          const Divider(),
-          if (userId?.birthday != null)
-            _buildListTile(
-              icon: Icons.cake,
-              iconColor: Colors.redAccent,
-              title: LocaleKeys.user_info_date_of_birth.localize,
-              subtitle: userId?.birthday ?? '',
-            ),
-          _buildListTile(
-            icon: Icons.person,
-            iconColor: Colors.redAccent,
-            title: LocaleKeys.user_info_gender.localize,
-            subtitle: getGender(context, userId?.gender ?? ''),
-          ),
+            Sizer(),
+            Expanded(
+                child: Label(
+              text: title,
+              style: Styles.headerText(
+                  fontSize: 32,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500),
+            )),
+            if (suffixIcon != null)
+              Icon(
+                suffixIcon,
+                color: Colors.white,
+              ),
+          ]),
+          Sizer(),
+          child
         ],
       ),
     );
@@ -237,7 +396,7 @@ class UserProfilePageState extends State<UserProfilePage> {
   }
 
   Widget _buildStats(BuildContext context) {
-    final profileData = context.watch<TinderViewCubit>().state.profileUserData;
+    //   final profileData = context.watch<TinderViewCubit>().state.profileUserData;
 
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10.h),
@@ -250,12 +409,15 @@ class UserProfilePageState extends State<UserProfilePage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildStatItem(LocaleKeys.user_info_followers.localize,
-              profileData?.followersCount.toString() ?? '0'),
-          _buildStatItem(LocaleKeys.user_info_following.localize,
-              profileData?.followingCount.toString() ?? '0'),
-          _buildStatItem(LocaleKeys.user_info_friends.localize,
-              profileData?.friendsCount.toString() ?? '0'),
+          _buildStatItem(LocaleKeys.user_info_followers.localize, '2000'
+              //profileData?.followersCount.toString() ?? '0'
+              ),
+          _buildStatItem(LocaleKeys.user_info_following.localize, '2000'
+              //  profileData?.followingCount.toString() ?? '0'
+              ),
+          _buildStatItem(LocaleKeys.user_info_friends.localize, '3003'
+              //profileData?.friendsCount.toString() ?? '0'
+              ),
         ],
       ),
     );
@@ -296,8 +458,15 @@ class SwipeCardDemoState extends State<SwipeCardDemo> {
 
   void _nextStory() {
     setState(() {
-      final pictures =
-          context.read<TinderViewCubit>().state.profileUserData?.pictures ?? [];
+      final pictures = [
+        Assets.spotlight_profile,
+        Assets.spotlight_profile,
+        Assets.spotlight_profile,
+        Assets.spotlight_profile,
+      ];
+
+      // final pictures =
+      //     context.read<TinderViewCubit>().state.profileUserData?.pictures ?? [];
       _currentStoryIndex = (_currentStoryIndex < pictures.length - 1)
           ? _currentStoryIndex + 1
           : pictures.length - 1;
@@ -331,31 +500,43 @@ class SwipeCardDemoState extends State<SwipeCardDemo> {
   }
 
   Widget _buildCard(BuildContext context) {
-    final pictures =
-        context.watch<TinderViewCubit>().state.profileUserData?.pictures ?? [];
-    final imageUrl = pictures.isNotEmpty
-        ? pictures.reversed.toList()[_currentStoryIndex].mediaKey
-        : UIConst.profilePlaceHolder;
+    final pictures = [
+      Assets.spotlight_profile,
+      Assets.spotlight_profile,
+      Assets.spotlight_profile,
+      Assets.spotlight_profile,
+    ];
+    // context.watch<TinderViewCubit>().state.profileUserData?.pictures ?? [];
+    final imageUrl = pictures[_currentStoryIndex];
+    // pictures.isNotEmpty
+    //     ? pictures.reversed.toList()[_currentStoryIndex].mediaKey
+    //     : UIConst.profilePlaceHolder;
 
-    return Card(
+    return Card(margin: EdgeInsets.zero,
       clipBehavior: Clip.hardEdge,
       elevation: 4,
       child: Stack(
         children: [
           Hero(
-            tag: UniqueKey(),
-            child: Image.network(
-              imageUrl,
-              width: double.infinity,
-              errorBuilder: (context, error, stackTrace) => Image.network(
-                UIConst.profilePlaceHolder,
+              tag: UniqueKey(),
+              child: Image.asset(
+                imageUrl,
                 fit: BoxFit.fitHeight,
                 height: double.infinity,
+              )
+              // Image.network(
+              //   imageUrl,
+              //   width: double.infinity,
+              //   errorBuilder: (context, error, stackTrace) =>
+              //       Image.network(
+              //     UIConst.profilePlaceHolder,
+              //     fit: BoxFit.fitHeight,
+              //     height: double.infinity,
+              //   ),
+              //   fit: BoxFit.cover,
+              //   height: double.infinity,
+              // ),
               ),
-              fit: BoxFit.cover,
-              height: double.infinity,
-            ),
-          ),
           Positioned.directional(
             top: 10,
             start: 10,

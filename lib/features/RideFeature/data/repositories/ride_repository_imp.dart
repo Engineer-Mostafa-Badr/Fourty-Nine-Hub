@@ -27,11 +27,13 @@ import 'package:fourtyninehub/features/RideFeature/domain/entities/ride_request_
 import 'package:fourtyninehub/features/RideFeature/domain/entities/running_trips_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/repositories/ride_repository.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_pending_trip_by_client_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/click_global_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_car_years_and_types_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/make_loading_request_trip_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_trip_auto_accept_by_client_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_ride_categories_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_socket_location_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_trip_price_use_case.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/accept_trip_by_driver_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_client.dart';
@@ -54,6 +56,8 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/dashboards/ge
 
 import '../../domain/entities/get_offers_entity.dart';
 import '../../domain/usecases/make_non_tracking_request_trip_usecase.dart';
+
+import '../../../account_taps/my_adds/domain/entity/click_entity.dart';
 
 class RideRepositoryImplementation extends RideRepository {
   final RideRemoteDataSource rideRemoteDataSource;
@@ -312,7 +316,7 @@ class RideRepositoryImplementation extends RideRepository {
     final data = await rideRemoteDataSource.listenToUpdateLocation(params);
     return data;
   }
-  
+
   @override
   Future<Either<Failure, GetOffersResponseEntity>> getClientOffers() async{
     return await rideRemoteDataSource.getClientOffers();
@@ -337,9 +341,19 @@ class RideRepositoryImplementation extends RideRepository {
   Future<Either<Failure, bool>> makeLoadingRequestTrip(MakeLoadingRequestTripUsecaseParam params) async{
     return await rideRemoteDataSource.makeLoadingRequestTrip(params);
   }
-  
+
   @override
   Future<Either<Failure, GetOffersResponseEntity>> getLoadingOffers() async{
     return await rideRemoteDataSource.getLoadingOffers();
+  }
+
+  @override
+  Future<Either<Failure, bool>> updateTripPrice(UpdateTripPriceUseCaseParams params) {
+    return rideRemoteDataSource.updateTripPrice(params);
+  }
+
+  @override
+  Future<Either<Failure, ClickEntity>> click(ClickParams params) {
+    return rideRemoteDataSource.click(params);
   }
 }

@@ -275,6 +275,9 @@ abstract class Routes {
   static const CREATEPOSTINSTAGRAM = '/Instagram/CreatePostInstagram';
   static const CREATEPOSTSECONDPAGEINSTAGRAM =
       '/Instagram/CreatePostInstagram/CreatePostSecondPageInstagram';
+  // reels
+  static const UseSoundScreen = '/UseSoundScreen';
+  static const AddStoryScreen = '/AddStoryScreen';
 }
 
 abstract class Paths {
@@ -529,6 +532,9 @@ abstract class Paths {
   // Cashback
   static const CASHBACK = 'CashBack';
 
+  //reels
+  static const useSoundScreen = 'UseSoundScreen';
+  static const addStoryScreen = 'AddStoryScreen';
   // Instagram
   static const INSTAGRAM = 'Instagram';
   static const INSTAGRAMPROFILE = 'InstagramProfile';

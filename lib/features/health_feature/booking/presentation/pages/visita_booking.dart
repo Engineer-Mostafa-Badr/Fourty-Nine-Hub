@@ -86,10 +86,10 @@ class _VisitaBookingState extends State<VisitaBooking> {
               child: ListView(
                 children: [
                   const BookingDoctorProfileWidget(),
-                  BookDoctorAppointmentPatientInfoCard(
-                    type: widget
-                        .doctorDetailsCubit.selectedAppointment.appointmentType,
-                  ),
+                  // BookDoctorAppointmentPatientInfoCard(
+                  //   type: widget
+                  //       .doctorDetailsCubit.selectedAppointment.appointmentType,
+                  // ),
                   const BookDoctorAppointmentTimeCard(),
                   const BookDoctorAppointmentLocationInfoCard(),
                   const BookDoctorAppointmentFeesCard(),

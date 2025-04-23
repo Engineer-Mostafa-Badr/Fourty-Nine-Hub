@@ -43,6 +43,7 @@ class _CreateDoctorProfilePhotoPickerState
             builder: (context, state) {
               return CustomImagePickerHealth(
                 isUploaded: state is CreateDoctorUploadProfileImage,
+                imageFile: state is CreateDoctorUploadProfileImage ? File(state.file.path) : null,
                 onTap: () async {
                   if (state is CreateDoctorUploadProfileImage) {
                     await createDoctorCubit.uploadProfileImage(

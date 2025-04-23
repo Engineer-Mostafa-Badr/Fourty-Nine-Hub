@@ -39,6 +39,7 @@ class DoctorsListCubit extends Cubit<DoctorsListState> {
   //   response.fold((failure) => emit(state.copyWith(status: DoctorsListStates.error, failure: failure)),
   //       (data) => emit(state.copyWith(status: DoctorsListStates.success, doctors: data)));
   // }
+
   getDoctors() async {
     print("object");
     if (!hasMoreData || isLoadingMore) return;

@@ -14,8 +14,6 @@ import 'package:fourtyninehub/features/subcategories/domain/entities/sub_categor
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/subcategory_card.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../common/widgets/stateless/images/square_image.dart';
@@ -42,49 +40,49 @@ class _SubCategorySearchViewState extends State<SubCategorySearchView> {
           //   return const Center(child: CircularProgressIndicator());
           // }
           final controller = context.read<SearchCubit>();
-          if (controller.searchController.text.isNotEmpty) {
-            return PagedGridView<int, SubCategoryEntity>(
-              pagingController: controller.searchPagingSubCategoryController,
-              builderDelegate: PagedChildBuilderDelegate<SubCategoryEntity>(
-                noItemsFoundIndicatorBuilder: (context) {
-                  return Center(
-                    child: Text(
-                      LocaleKeys.noData.localize,
-                      style: Styles.mediumText(),
-                    ),
-                  );
-                },
-                itemBuilder: (context, item, index) {
-                  return SubCategoryCard(
-                    mainCategory: (state.mainCategory != null &&
-                            index < state.mainCategory!.length)
-                        ? state.mainCategory![index]
-                        : MainCategoryEntity(
-                            id: '',
-                            nameEn: '',
-                            image: '',
-                            banner: '',
-                            cover: '',
-                            total: 0,
-                          ),
-                    item: item,
-                    onFav: () async {
-                      var result = await controller
-                          .toggleSubCategoryToFavorites(item.id);
-                      return result;
-                    },
-                  );
-                },
-                noMoreItemsIndicatorBuilder: (context) => Container(),
-                firstPageProgressIndicatorBuilder: (context) =>
-                    const CupertinoActivityIndicator(),
-                newPageProgressIndicatorBuilder: (context) =>
-                    const CupertinoActivityIndicator(),
-              ),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3, childAspectRatio: 1),
-            );
-          }
+          // if (controller.searchController.text.isNotEmpty) {
+          //   return PagedGridView<int, SubCategoryEntity>(
+          //     pagingController: controller.searchPagingSubCategoryController,
+          //     builderDelegate: PagedChildBuilderDelegate<SubCategoryEntity>(
+          //       noItemsFoundIndicatorBuilder: (context) {
+          //         return Center(
+          //           child: Text(
+          //             LocaleKeys.noData.localize,
+          //             style: Styles.mediumText(),
+          //           ),
+          //         );
+          //       },
+          //       itemBuilder: (context, item, index) {
+          //         return SubCategoryCard(
+          //           mainCategory: (state.mainCategory != null &&
+          //                   index < state.mainCategory!.length)
+          //               ? state.mainCategory![index]
+          //               : MainCategoryEntity(
+          //                   id: '',
+          //                   nameEn: '',
+          //                   image: '',
+          //                   banner: '',
+          //                   cover: '',
+          //                   total: 0,
+          //                 ),
+          //           item: item,
+          //           onFav: () async {
+          //             var result = await controller
+          //                 .toggleSubCategoryToFavorites(item.id);
+          //             return result;
+          //           },
+          //         );
+          //       },
+          //       noMoreItemsIndicatorBuilder: (context) => Container(),
+          //       firstPageProgressIndicatorBuilder: (context) =>
+          //           const CupertinoActivityIndicator(),
+          //       newPageProgressIndicatorBuilder: (context) =>
+          //           const CupertinoActivityIndicator(),
+          //     ),
+          //     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          //         crossAxisCount: 3, childAspectRatio: 1),
+          //   );
+          // }
           return Center(
             child: Text(LocaleKeys.noResultsFound.localize),
           );

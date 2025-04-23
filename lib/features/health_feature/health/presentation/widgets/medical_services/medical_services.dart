@@ -54,9 +54,7 @@ class _HealthMedicalServicesState extends State<HealthMedicalServices> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Label(
-                            text: context.isArabic
-                                ? 'الخدمات الطبية'
-                                : 'Medical Service',
+                            text:  LocaleKeys.medicalService.localize,
                             style: Styles.headerText(),
                           ),
                           ClickableWidget(

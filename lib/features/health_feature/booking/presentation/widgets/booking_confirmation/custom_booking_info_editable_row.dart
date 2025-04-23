@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../../../../../../common/widgets/form/text_fields/first_name_text_form_field.dart';
-import '../../../../../../common/widgets/form/text_fields/phone_number_text_field.dart';
+import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/styles.dart';
 
@@ -10,7 +10,7 @@ class CustomBookingInfoEditableRow extends StatelessWidget {
 
   final IconData icon;
   final String label;
-  final String value;
+  // final String value;
   final bool isEditablePhone;
   final bool isEditableName;
   final FocusNode? currentFocusNode;
@@ -23,7 +23,7 @@ class CustomBookingInfoEditableRow extends StatelessWidget {
   required this.context,
     required this.icon,
     required this.label,
-    required this.value,
+    // required this.value,
     required this.isEditablePhone,
     required this.isEditableName,
    this.currentFocusNode,
@@ -56,20 +56,16 @@ class CustomBookingInfoEditableRow extends StatelessWidget {
           ),
           Expanded(
             child: isEditableName
-                ? FirstNameTextFormField(
-              currentController: controller,
-              fillColor: AppColors.BG_GRAY_COLOR,
-            )
-                : isEditablePhone
-                ? CustomPhoneTextFormField(
-              fillColor: AppColors.BG_GRAY_COLOR,
-              currentFocusNode: currentFocusNode!,
-              nextFocusNode: nextFocusNode!,
-              currentController: controller,
-              onInputChanged: (String value) {},
-            )
+
+          ? DefaultTextFormField(currentController: controller, hint: LocaleKeys.fullName.localize,
+            fillColor: AppColors.BG_GRAY_COLOR,  borderColor: Colors.transparent)
+                : isEditablePhone?
+
+            DefaultTextFormField(currentController: controller, hint: LocaleKeys.name.localize,
+    fillColor: AppColors.BG_GRAY_COLOR,keyboardType: TextInputType.phone,
+            borderColor: Colors.transparent,)
                 : Text(
-              value,
+              controller.text,
               style: Styles.mediumText(color: AppColors.black),
             ),
           ),

@@ -60,7 +60,7 @@ class RideState {
   final GetLocationFromAddressEntity? toLocation;
   final GetLocationFromAddressEntity? wayPointOne;
   final GetLocationFromAddressEntity? wayPointTwo;
-  final RideExpectedPriceEntity? rideExpectedPrice;
+  RideExpectedPriceEntity? rideExpectedPrice;
   RideRequestTripEntity? requestedTrip;
   final List<CompletedTripsEntity>? completedTrips;
   List<RideOfferEntity> rideOffers;

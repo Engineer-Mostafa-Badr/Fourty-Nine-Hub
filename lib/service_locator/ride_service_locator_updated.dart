@@ -3,6 +3,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/repositories/ride_repo
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/accept_offer_by_client_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_pending_trip_by_client_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/check_real_amount_enough_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/click_global_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_activity_trips.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_completed_trips_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_running_trips_usecase.dart';
@@ -27,6 +28,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/request_trip_
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/retrieve_client_latest_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_trip_auto_accept_by_client_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_socket_location_usecase.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_trip_price_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/ride_register/ride_register_cubit.dart';
 import 'package:get_it/get_it.dart';
@@ -122,6 +124,10 @@ class RideServiceLocatorUpdated {
         AcceptOfferByClientUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<UpdateTripAutoAcceptByClientUseCase>(() =>
         UpdateTripAutoAcceptByClientUseCase(repository: serviceLocator()));
+    serviceLocator.registerLazySingleton<UpdateTripPriceUseCase>(() =>
+        UpdateTripPriceUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<ClickUseCase>(() =>
+        ClickUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<MakeLoadingRequestTripUsecase>(() =>
         MakeLoadingRequestTripUsecase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetLoadingOffersUsecase>(() =>
@@ -131,6 +137,8 @@ class RideServiceLocatorUpdated {
     // ---------------------------------- cubits ----------------------------------
 
     serviceLocator.registerLazySingleton<RideCubit>(() => RideCubit(
+          serviceLocator(),
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

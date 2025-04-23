@@ -303,7 +303,7 @@ class TripRequestCard extends StatelessWidget {
             fontWeight: FontWeight.w700,
           ),
         ),
-        const Spacer(),
+        // const Spacer(),
         Text(
           orderData.total?.toString() ?? '0',
           style: const TextStyle(

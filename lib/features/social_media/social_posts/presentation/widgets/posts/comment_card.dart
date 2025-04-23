@@ -176,7 +176,7 @@ class _CommentCardState extends State<CommentCard> {
                       isScrollControlled: true,
                       widget: BlocProvider.value(
                         value: serviceLocator<SocialPostsCubit>()
-                          ..loadReplies(context, widget.comment.id),
+                          ..loadCommentRepliesData(context:context, commentId:widget.comment.id),
                         child: CommentReplies(
                           replies: const [],
                           postId: widget.comment.post,

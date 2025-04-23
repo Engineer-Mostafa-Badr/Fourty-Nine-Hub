@@ -12,7 +12,7 @@ import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/request_p
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/usecases/filter_ad_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import '../../../../../../core/error/failure.dart';
+import '../../../../../core/error/failure.dart';
 import '../../../../requests_history/domain/entities/trip_entity.dart';
 import '../../data/models/Ad_model.dart';
 import '../../domain/usecases/get_ads_usecase.dart';

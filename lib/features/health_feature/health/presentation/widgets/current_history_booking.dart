@@ -24,7 +24,7 @@ class CurrentHistoryBooking extends StatelessWidget {
             color: isSelected?AppColors.PRIMARY_COLOR:AppColors.GREYBG,
             border: Border.all(
                 color:isSelected?AppColors.SECONDARY_COLOR:AppColors.PRIMARY_COLOR,
-                width: 2)),
+                width: 1)),
         child: Center(
           child: Text(
             title.localize,
