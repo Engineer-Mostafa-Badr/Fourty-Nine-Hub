@@ -1472,6 +1472,10 @@ abstract class  LocaleKeys {
   static const areYouSureUpdate = 'areYouSureUpdate';
   static const exploreTripsThatAreActiveAtTheMoment = 'exploreTripsThatAreActiveAtTheMoment';
   static const youWillFindFewerDriversIfYouSelectThisOption = 'youWillFindFewerDriversIfYouSelectThisOption';
+  static const useThisSound = 'useThisSound';
+  static const collab = 'collab';
+  static const layout = 'layout';
+  static const mixReel = 'mixReel';
   static const initiateRouteWaitFor1HourToGiveUserTimeToBookASeatInTheSameCarWithTheSameCaptain = 'initiateRouteWaitFor1HourToGiveUserTimeToBookASeatInTheSameCarWithTheSameCaptain';
   static const myTalent = 'myTalent';
   static const addTalent = 'addTalent';
@@ -1503,6 +1507,8 @@ abstract class  LocaleKeys {
   static const areYouSureYouWantToDeleteThisComment = 'areYouSureYouWantToDeleteThisComment';
   static const responseStatus = 'responseStatus';
   static const socialExplain = 'socialExplain';
+  static const imBookingOfAnotherClient = 'imBookingOfAnotherClient';
+  static const firstImpressionMessage = 'firstImpressionMessage';
   static const endToEndDescription = 'endToEndDescription';
   static const yourChatsAndCallArePrivate = 'yourChatsAndCallArePrivate';
   static const textAndVoiceMessages = 'textAndVoiceMessages';
