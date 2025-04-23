@@ -160,7 +160,6 @@ class _AddNewPickMeViewState extends State<AddNewPickMeView> {
                       padding: EdgeInsets.only(top: 8.0.h, bottom: 20.h),
                       child: const PremiumAndRequestWidget(),
                     ),
-
                   ],
                 ),
               ),
