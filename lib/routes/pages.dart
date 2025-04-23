@@ -223,17 +223,26 @@ import 'package:fourtyninehub/features/social_media/create_post/domain/entities/
 import 'package:fourtyninehub/features/social_media/create_post/presentation/pages/life_event_sub_categories.dart';
 import 'package:fourtyninehub/features/social_media/edit_profile/presentation/cubit/edit_profile_cubit.dart';
 import 'package:fourtyninehub/features/social_media/edit_profile/presentation/pages/edit_profile_view.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/Post/create_post_instagram_cubit.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/entities/profile_instagram_data_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/Post/get_posts_instagram_cubit.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/create_post_instagram_cubit/create_post_instagram_cubit.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_add_location_cubit/instagram_add_location_cubit.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_add_music_cubit/instagram_add_music_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/profile_instagram_cubit/profile_instagram_cubit.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/single_post_instagram_cubit/single_post_instagram_cubit.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/tag_users_cubit/tag_users_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/add_story_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/comment_instagram_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/create_post_instagram_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/create_post_second_page_instagram_view.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/instagram_add_location_view.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/instagram_add_music_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/instgram_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/profile_instagram_view.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/single_post_instagram_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/instagram_all_discover_people.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/tag_user_view.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_home_screen.dart';
 import 'package:fourtyninehub/features/social_media/live_streaming/presentation/pages/live_stream_view.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
@@ -1248,55 +1257,183 @@ class AppPages {
               ),
 
               GoRoute(
-                path: Paths.INSTAGRAM,
-                name: Routes.INSTAGRAM,
+                path: Paths.TAGUSER,
+                name: Routes.TAGUSER,
+                builder: (context, state) {
+                  final cubit = state.extra as CreatePostInstagramCubit;
+                  return MultiBlocProvider(
+                    providers: [
+                      BlocProvider(
+                        create: (context) => serviceLocator<TagUsersCubit>(),
+                      ),
+                      BlocProvider.value(
+                        value: cubit,
+                      ),
+                    ],
+                    child: TagUserView(),
+                  );
+                },
+              ),
+              GoRoute(
+                path: Paths.INSTAGRAMADDLOCATION,
+                name: Routes.INSTAGRAMADDLOCATION,
+                builder: (context, state) {
+                  final cubit = state.extra as CreatePostInstagramCubit;
+                  return MultiBlocProvider(
+                    providers: [
+                      BlocProvider(
+                        create: (context) =>
+                            serviceLocator<InstagramAddLocationCubit>(),
+                      ),
+                      BlocProvider.value(
+                        value: cubit,
+                      ),
+                    ],
+                    child: const InstagramAddLocationView(),
+                  );
+                },
+              ),
+
+              GoRoute(
+                path: Paths.INSTAGRAMADDMUSIC,
+                name: Routes.INSTAGRAMADDMUSIC,
+                builder: (context, state) {
+                  final cubit = state.extra as CreatePostInstagramCubit;
+                  return MultiBlocProvider(
+                    providers: [
+                      BlocProvider(
+                        create: (context) =>
+                            serviceLocator<InstagramAddMusicCubit>(),
+                      ),
+                      BlocProvider.value(
+                        value: cubit,
+                      ),
+                    ],
+                    child: const InstagramAddMusicView(),
+                  );
+                },
+              ),
+
+              GoRoute(
+                path: Paths.INSTAGRAMPROFILE,
+                name: Routes.INSTAGRAMPROFILE,
+                builder: (context, state) {
+                  final String? id = state.extra as String?;
+
+                  return BlocProvider(
+                    create: (_) => serviceLocator<ProfileInstagramCubit>()
+                      ..getUserProfile(userId: id ?? ''),
+                    child: ProfileInstagramView(
+                      userId: id ?? '',
+                    ),
+                  );
+                },
+              ),
+              GoRoute(
+                path: Paths.SINGLEPOSTINSTAGRAM,
+                name: Routes.SINGLEPOSTINSTAGRAM,
+                builder: (context, state) {
+                  final InstagramProfilePostEntity post =
+                      state.extra as InstagramProfilePostEntity;
+
+                  return BlocProvider(
+                    create: (context) =>
+                        serviceLocator<SinglePostInstagramCubit>()
+                          ..getPost(post.id),
+                    child: SinglePostInstagramView(
+                      postId: post.id,
+                    ),
+                  );
+                },
+              ),
+              GoRoute(
+                path: Paths.CREATEPOSTINSTAGRAM,
+                name: Routes.CREATEPOSTINSTAGRAM,
                 routes: [
                   GoRoute(
-                    path: Paths.INSTAGRAMPROFILE,
-                    name: Routes.INSTAGRAMPROFILE,
+                    path: Paths.CREATEPOSTSECONDPAGEINSTAGRAM,
+                    name: Routes.CREATEPOSTSECONDPAGEINSTAGRAM,
                     builder: (context, state) {
-                      final String? id = state.extra as String?;
-
-                      return BlocProvider<ProfileInstagramCubit>(
-                        create: (_) => serviceLocator<ProfileInstagramCubit>()
-                          ..getUserProfile(id: id ?? ''),
-                        child: const ProfileInstagramView(),
+                      final CreatePostInstagramCubit cubit =
+                          state.extra as CreatePostInstagramCubit;
+                      return BlocProvider.value(
+                        value: cubit,
+                        child: const CreatePostSecondPageInstagramView(
+                            // selectedImages: state.extra as List<Future<File?>>,
+                            ),
                       );
                     },
                   ),
-                  GoRoute(
-                    path: Paths.CREATEPOSTINSTAGRAM,
-                    name: Routes.CREATEPOSTINSTAGRAM,
-                    routes: [
-                      GoRoute(
-                        path: Paths.CREATEPOSTSECONDPAGEINSTAGRAM,
-                        name: Routes.CREATEPOSTSECONDPAGEINSTAGRAM,
-                        builder: (context, state) =>
-                            CreatePostSecondPageInstagramView(
-                                // selectedImages: state.extra as List<Future<File?>>,
-                                ),
-                      ),
-                    ],
-                    builder: (context, state) =>
-                        const CreatePostInstagramView(),
-                  ),
-                  GoRoute(
-                    path: Paths.InstagramSuggestPeople,
-                    name: Routes.InstagramSuggestPeople,
-                    routes: const [],
-                    builder: (context, state) => BlocProvider<InstagramCubit>(
-                      create: (_) => serviceLocator(),
-                      child: const InstagramAllDiscoverPeople(),
-                    ),
-                  ),
-                  GoRoute(
-                    path: Paths.INSTAGRAMCOMMENT,
-                    name: Routes.INSTAGRAMCOMMENT,
-                    builder: (context, state) => CommentInstagramView(
-                      postId: state.extra as String,
-                    ),
-                  ),
                 ],
+                builder: (context, state) => const CreatePostInstagramView(),
+              ),
+              GoRoute(
+                path: Paths.InstagramSuggestPeople,
+                name: Routes.InstagramSuggestPeople,
+                routes: const [],
+                builder: (context, state) => BlocProvider<InstagramCubit>(
+                  create: (_) => serviceLocator(),
+                  child: const InstagramAllDiscoverPeople(),
+                ),
+              ),
+              GoRoute(
+                path: Paths.INSTAGRAMCOMMENT,
+                name: Routes.INSTAGRAMCOMMENT,
+                builder: (context, state) => CommentInstagramView(
+                  postId: state.extra as String,
+                ),
+              ),
+
+              GoRoute(
+                path: Paths.INSTAGRAM,
+                name: Routes.INSTAGRAM,
+                // routes: [
+                //   GoRoute(
+                //     path: Paths.INSTAGRAMPROFILE,
+                //     name: Routes.INSTAGRAMPROFILE,
+                //     builder: (context, state) {
+                //       final String? id = state.extra as String?;
+                //
+                //       return BlocProvider<ProfileInstagramCubit>(
+                //         create: (_) => serviceLocator<ProfileInstagramCubit>()
+                //           ..getUserProfile(id: id ?? ''),
+                //         child: const ProfileInstagramView(),
+                //       );
+                //     },
+                //   ),
+                //   GoRoute(
+                //     path: Paths.CREATEPOSTINSTAGRAM,
+                //     name: Routes.CREATEPOSTINSTAGRAM,
+                //     routes: [
+                //       GoRoute(
+                //         path: Paths.CREATEPOSTSECONDPAGEINSTAGRAM,
+                //         name: Routes.CREATEPOSTSECONDPAGEINSTAGRAM,
+                //         builder: (context, state) =>
+                //             CreatePostSecondPageInstagramView(
+                //                 // selectedImages: state.extra as List<Future<File?>>,
+                //                 ),
+                //       ),
+                //     ],
+                //     builder: (context, state) =>
+                //         const CreatePostInstagramView(),
+                //   ),
+                //   GoRoute(
+                //     path: Paths.InstagramSuggestPeople,
+                //     name: Routes.InstagramSuggestPeople,
+                //     routes: const [],
+                //     builder: (context, state) => BlocProvider<InstagramCubit>(
+                //       create: (_) => serviceLocator(),
+                //       child: const InstagramAllDiscoverPeople(),
+                //     ),
+                //   ),
+                //   GoRoute(
+                //     path: Paths.INSTAGRAMCOMMENT,
+                //     name: Routes.INSTAGRAMCOMMENT,
+                //     builder: (context, state) => CommentInstagramView(
+                //       postId: state.extra as String,
+                //     ),
+                //   ),
+                // ],
                 builder: (context, state) => MultiBlocProvider(
                   providers: [
                     BlocProvider(
@@ -1306,10 +1443,10 @@ class AppPages {
                     BlocProvider(
                       create: (context) => serviceLocator<StoryCubit>(),
                     ),
-                    BlocProvider(
-                      create: (context) => CreatePostInstagramCubit(
-                          repository: serviceLocator()),
-                    ),
+                    // BlocProvider(
+                    //   create: (context) => CreatePostInstagramCubit(
+                    //       repository: serviceLocator()),
+                    // ),
                     BlocProvider(
                       create: (context) => GetPostsInstagramCubit(
                           getPostsUseCase: serviceLocator()),

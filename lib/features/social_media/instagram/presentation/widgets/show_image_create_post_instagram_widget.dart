@@ -21,81 +21,125 @@ class ShowImageCreatePostInstagramWidget extends StatelessWidget {
           previous.selectedImages != current.selectedImages,
       builder: (context, state) {
         return AnimatedContainer(
-          duration: const Duration(milliseconds: 500),
-          width: double.infinity,
-          height: context
-                  .read<CreatePostInstagramCubit>()
-                  .state
-                  .selectedImages
-                  .isEmpty
-              ? 0
-              : MediaQuery.of(context).size.height * 0.35,
-          child: context
-                  .read<CreatePostInstagramCubit>()
-                  .state
-                  .selectedImages
-                  .isEmpty
-              ? const SizedBox()
-              : FutureBuilder<File?>(
-                  future: state.selectedImages.last,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return Stack(
-                        children: [
-                          SizedBox(
-                            width: double.infinity,
-                            height: MediaQuery.of(context).size.height * 0.45,
-                            child: InteractiveViewer(
-                              boundaryMargin: const EdgeInsets.all(20),
-                              minScale: 1.0, // الحد الأدنى للتكبير
-                              maxScale: 4.0, // الحد الأقصى للتكبير
-                              scaleEnabled: true, // تمكين التكبير
-                              child: Image.file(snapshot.data!,
-                                  fit: BoxFit.cover
-                                  // fit, // تضمن عرض الصورة بالكامل مع الحفاظ على الأبعاد
-                                  ),
+            duration: const Duration(milliseconds: 500),
+            width: double.infinity,
+            height: context
+                    .read<CreatePostInstagramCubit>()
+                    .state
+                    .selectedImages
+                    .isEmpty
+                ? 0
+                : MediaQuery.of(context).size.height * 0.35,
+            child: context
+                    .read<CreatePostInstagramCubit>()
+                    .state
+                    .selectedImages
+                    .isEmpty
+                ? const SizedBox()
+                : Stack(
+                    children: [
+                      SizedBox(
+                        width: double.infinity,
+                        height: MediaQuery.of(context).size.height * 0.45,
+                        child: InteractiveViewer(
+                          boundaryMargin: const EdgeInsets.all(20),
+                          minScale: 1.0, // الحد الأدنى للتكبير
+                          maxScale: 4.0, // الحد الأقصى للتكبير
+                          scaleEnabled: true, // تمكين التكبير
+                          child: Image.file(state.selectedImages.last, fit: BoxFit.cover
+                              // fit, // تضمن عرض الصورة بالكامل مع الحفاظ على الأبعاد
+                              ),
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        child: GestureDetector(
+                          onTap: () {
+                            // setState(() {
+                            //   if (fit == BoxFit.contain) {
+                            //     fit = BoxFit.cover;
+                            //   } else {
+                            //     fit = BoxFit.contain;
+                            //   }
+                            // });
+                          },
+                          child: Container(
+                            width: 37,
+                            height: 37,
+                            margin: const EdgeInsets.all(10),
+                            padding: const EdgeInsets.all(3),
+                            decoration: const ShapeDecoration(
+                              color: Color(0xFFD9D9D9),
+                              shape: OvalBorder(),
+                            ),
+                            child: SvgPicture.asset(
+                              Assets.expandIcon,
                             ),
                           ),
-                          Positioned(
-                            bottom: 0,
-                            child: GestureDetector(
-                              onTap: () {
-                                // setState(() {
-                                //   if (fit == BoxFit.contain) {
-                                //     fit = BoxFit.cover;
-                                //   } else {
-                                //     fit = BoxFit.contain;
-                                //   }
-                                // });
-                              },
-                              child: Container(
-                                width: 37,
-                                height: 37,
-                                margin: const EdgeInsets.all(10),
-                                padding: const EdgeInsets.all(3),
-                                decoration: const ShapeDecoration(
-                                  color: Color(0xFFD9D9D9),
-                                  shape: OvalBorder(),
-                                ),
-                                child: SvgPicture.asset(
-                                  Assets.expandIcon,
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
-                      );
-                    } else {
-                      return Center(
-                        child: Text(
-                          "${LocaleKeys.select.localize} ${LocaleKeys.photo.localize}",
-                          style: Styles.headerText(fontWeight: FontWeight.w400),
                         ),
-                      );
-                    }
-                  },
-                ),
-        );
+                      )
+                    ],
+                  )
+            // : FutureBuilder<File?>(
+            //     future: state.selectedImages.last,
+            //     builder: (context, snapshot) {
+            //       if (snapshot.hasData) {
+            //         return Stack(
+            //           children: [
+            //             SizedBox(
+            //               width: double.infinity,
+            //               height: MediaQuery.of(context).size.height * 0.45,
+            //               child: InteractiveViewer(
+            //                 boundaryMargin: const EdgeInsets.all(20),
+            //                 minScale: 1.0, // الحد الأدنى للتكبير
+            //                 maxScale: 4.0, // الحد الأقصى للتكبير
+            //                 scaleEnabled: true, // تمكين التكبير
+            //                 child: Image.file(snapshot.data!,
+            //                     fit: BoxFit.cover
+            //                     // fit, // تضمن عرض الصورة بالكامل مع الحفاظ على الأبعاد
+            //                     ),
+            //               ),
+            //             ),
+            //             Positioned(
+            //               bottom: 0,
+            //               child: GestureDetector(
+            //                 onTap: () {
+            //                   // setState(() {
+            //                   //   if (fit == BoxFit.contain) {
+            //                   //     fit = BoxFit.cover;
+            //                   //   } else {
+            //                   //     fit = BoxFit.contain;
+            //                   //   }
+            //                   // });
+            //                 },
+            //                 child: Container(
+            //                   width: 37,
+            //                   height: 37,
+            //                   margin: const EdgeInsets.all(10),
+            //                   padding: const EdgeInsets.all(3),
+            //                   decoration: const ShapeDecoration(
+            //                     color: Color(0xFFD9D9D9),
+            //                     shape: OvalBorder(),
+            //                   ),
+            //                   child: SvgPicture.asset(
+            //                     Assets.expandIcon,
+            //                   ),
+            //                 ),
+            //               ),
+            //             )
+            //           ],
+            //         );
+            //       } else {
+            //         return Center(
+            //           child: Text(
+            //             "${LocaleKeys.select.localize} ${LocaleKeys.photo.localize}",
+            //             style: Styles.headerText(fontWeight: FontWeight.w400),
+            //           ),
+            //         );
+            //       }
+            //     },
+            //   ),
+            );
       },
     );
   }

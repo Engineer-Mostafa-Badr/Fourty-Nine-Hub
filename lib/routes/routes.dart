@@ -268,9 +268,9 @@ abstract class Routes {
 
   // Instagram
   static const INSTAGRAM = '/Instagram';
-  static const INSTAGRAMPROFILE = '/Instagram/InstagramProfile';
-  static const INSTAGRAMCOMMENT = '/Instagram/InstagramComment';
-  static const InstagramSuggestPeople = '/Instagram/InstagramSuggestPeople';
+  static const INSTAGRAMPROFILE = '/InstagramProfile';
+  static const INSTAGRAMCOMMENT = '/InstagramComment';
+  static const InstagramSuggestPeople = '/InstagramSuggestPeople';
   static const ADDSTORYINSTAGRAM = '/AddStoryInstagram';
   static const CREATEPOSTINSTAGRAM = '/Instagram/CreatePostInstagram';
   static const CREATEPOSTSECONDPAGEINSTAGRAM =
@@ -278,6 +278,10 @@ abstract class Routes {
   // reels
   static const UseSoundScreen = '/UseSoundScreen';
   static const AddStoryScreen = '/AddStoryScreen';
+  static const TAGUSER = '/TagUser';
+  static const INSTAGRAMADDLOCATION = '/InstagramAddLocation';
+  static const INSTAGRAMADDMUSIC = '/InstagramAddMusic';
+  static const SINGLEPOSTINSTAGRAM = '/SinglePostInstagram';
 }
 
 abstract class Paths {
@@ -543,4 +547,8 @@ abstract class Paths {
   static const ADDSTORYINSTAGRAM = 'AddStoryInstagram';
   static const CREATEPOSTINSTAGRAM = 'CreatePostInstagram';
   static const CREATEPOSTSECONDPAGEINSTAGRAM = 'CreatePostSecondPageInstagram';
+  static const TAGUSER = 'TagUser';
+  static const INSTAGRAMADDLOCATION = 'InstagramAddLocation';
+  static const INSTAGRAMADDMUSIC = 'InstagramAddMusic';
+  static const SINGLEPOSTINSTAGRAM = 'SinglePostInstagram';
 }

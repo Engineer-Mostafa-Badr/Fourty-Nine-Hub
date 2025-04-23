@@ -733,7 +733,8 @@ class EndPoints {
     return '/inst/posts?page=${params.page}&limit=${params.limit}';
   }
 
-  static String getUserTag = '/inst/tags';
+  static String getUserTag({required int page, required int limit}) =>
+      '/inst/tags?page=$page&limit=$limit';
 
   static String createReel(CreateReelParams params) {
     return '/reels/views/${params.reelId}';
@@ -812,6 +813,23 @@ class EndPoints {
   static String deleteCommentInstagram(String postId, String commentId) {
     return '/inst/posts/$postId/comments/$commentId';
   }
+
+  static String createRequestPostInstagram = '/inst/posts/create-request';
+
+  static String getProfileInstagram(
+          {required String userId, required int page, required int limit}) =>
+      '/inst/profiles/$userId?page=$page&limit=$limit';
+
+  static String getReelsSpecificUser(
+          {required String userId, required int page, required int limit}) =>
+      '/reels/users/$userId?page=$page&limit=$limit';
+
+  static String getSinglePostInstagram({required String postId}) =>
+      '/inst/posts/$postId';
+
+  static String getSuggestFollowInstagram(
+          {required int page, required int limit}) =>
+      '/user-follow/suggestions?page=$page&limit=$limit';
 
   static String reactOnTwitterPost(String postId) {
     return '/twitter/post/react/$postId?subCategory=${Constants.twitterSubCategory}';
