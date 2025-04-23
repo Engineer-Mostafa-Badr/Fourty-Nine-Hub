@@ -166,10 +166,10 @@ class CompetitionListViewItem extends StatelessWidget {
             children: [
               PercentageCompetitionWidget(
                 currency: currency,
-                currentPoints: competition.countOfRequest!,
-                totalPoints: competition.maxRequests!,
-                price: competition.amount!,
-                percentage: (competition.amount! / competition.withdrawLimit!),
+                currentPoints: competition.countOfRequest??0,
+                totalPoints: competition.maxRequests??0,
+                price: competition.amount??0,
+                percentage: ((competition.amount??0) / (competition.withdrawLimit??0)),
               ),
               const SizedBox(
                 height: 4,
@@ -229,7 +229,7 @@ class CompetitionListViewItem extends StatelessWidget {
               const SizedBox(
                 height: 16,
               ),
-              competition.awaitApproval!
+              competition.awaitApproval==true
                   ? CustomButtonWalletAndGiftAndCashback(
                       title: LocaleKeys.waitingApproval.localize,
                       //'Request Transfer',
@@ -240,8 +240,8 @@ class CompetitionListViewItem extends StatelessWidget {
                       title: LocaleKeys.requestTransfer.localize,
                       //'Request Transfer',
                       onPressed: onPressed,
-                      status: competition.countOfRequest! >
-                          competition.maxRequests!,
+                      status: (competition.countOfRequest??0) >
+                          (competition.maxRequests??0),
                     ),
               const SizedBox(
                 height: 8,
@@ -261,8 +261,8 @@ class CompetitionListViewItem extends StatelessWidget {
                       children: [
                         Label(
                           text: context.isArabic
-                              ? competition.descriptionGiftWalletAr!
-                              : competition.descriptionGiftWalletEn!,
+                              ? competition.descriptionGiftWalletAr??''
+                              : competition.descriptionGiftWalletEn??'',
                           style: Styles.mediumText(fontSize: 20),
                           maxLines: 5,
                         ),

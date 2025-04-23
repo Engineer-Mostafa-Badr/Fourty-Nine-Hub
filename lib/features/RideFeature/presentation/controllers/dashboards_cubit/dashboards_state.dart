@@ -46,11 +46,13 @@ class DashboardsState
   final List<TripEntity>? availableTrips;
   final List<TripEntity>? pastTrips;
   final SettingsDashboardEntity? settings;
+  final int? currentIndex;
   final List<AvailableRideTripEntity>? availableRideTrips;
   const DashboardsState(
       {this.failure,
       this.pastTrips,
       this.settings,
+      this.currentIndex=0,
       this.status = DashboardsStates.initState,
       this.availableTrips,
       this.availableRideTrips,
@@ -62,12 +64,14 @@ class DashboardsState
       List<TripEntity>? availableTrips,
       List<AvailableRideTripEntity>? availableRideTrips,
       SettingsDashboardEntity? settings,
+      int? currentIndex,
       }) {
     return DashboardsState(
       status: status ?? this.status,
       failure: failure ?? this.failure,
       pastTrips: pastTrips ?? this.pastTrips,
       settings: settings ?? this.settings,
+      currentIndex: currentIndex ?? this.currentIndex,
       availableTrips: availableTrips ?? this.availableTrips,
       availableRideTrips: availableRideTrips ?? this.availableRideTrips,
     );

@@ -259,19 +259,19 @@ class MainCategoriesCubit extends Cubit<MainCategoriesState> {
     return result;
   }
 
-  // Future<void> getWallet() async {
-  //   if (state.wallet != null) return;
-  //   print('getWallet getWallet');
-  //   final response = await _getWalletHomeUseCase.call(const NoParams());
-  //   response.fold((l) {
-  //     emit(state.copyWith(failure: l, status: StateStatus.error));
-  //   }, (data) {
-  //     emit(state.copyWith(
-  //       wallet: data,
-  //     ));
-  //     print("state.wallet?.giftWallet ${state.wallet?.giftWallet}");
-  //   });
-  // }
+  Future<void> getWallet() async {
+    if (state.wallet != null) return;
+    print('getWallet getWallet');
+    final response = await _getWalletHomeUseCase.call(const NoParams());
+    response.fold((l) {
+      emit(state.copyWith(failure: l, status: StateStatus.error));
+    }, (data) {
+      emit(state.copyWith(
+        wallet: data,
+      ));
+      print("state.wallet?.giftWallet ${state.wallet?.giftWallet}");
+    });
+  }
 
   Future<void> getCurrency() async {
     final response = await _currencyUseCase.call(const NoParams());

@@ -91,4 +91,9 @@ class TripRepositoryImpl implements TripRepository {
     remoteDataSource.listenToRemoveTrip(params);
   }
 
+  @override
+  Future<Either<Failure, bool>> getRunningTrip() async{
+    return await remoteDataSource.getRunningTrip();
+  }
+
 }
