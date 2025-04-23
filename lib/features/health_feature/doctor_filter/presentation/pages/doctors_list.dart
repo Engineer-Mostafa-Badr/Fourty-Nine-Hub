@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
@@ -100,23 +101,6 @@ class _DoctorsListViewState extends State<DoctorsListView> {
               //   :
             Column(
                     children: [
-                      // Expanded(
-                      //   child: ListView.separated(
-                      //       controller: _scrollController,
-                      //       padding: EdgeInsets.symmetric(
-                      //           horizontal: 15, vertical: 10.h),
-                      //       itemBuilder: (context, index) => DoctorCard(
-                      //             doctor: context
-                      //                 .read<DoctorsListCubit>()
-                      //                 .doctors[index],
-                      //             type: widget.params.type ?? '',
-                      //           ),
-                      //       separatorBuilder: (context, index) => const Sizer(),
-                      //       itemCount: context
-                      //           .read<DoctorsListCubit>()
-                      //           .doctors
-                      //           .length),
-                      // ),
                       Expanded(
                         child: cubit.doctorsList.isEmpty
                             ? Center(
@@ -207,15 +191,14 @@ class _DoctorListCardState extends State<DoctorListCard> {
                     children: [
                       SvgPicture.asset(Assets.viewCountIcon,color: Colors.grey,),
                       Label(text: formatViews(widget.data.viewCount?.toInt() ?? 0),
-                        style: const TextStyle(
-                            fontSize: 12,
+                        style: Styles.mediumText(
                             fontWeight: FontWeight.w400,
                             color: AppColors.c6C6C6C
-                        ),
+                        )
                       ),
                       Label(text: LocaleKeys.views.localize,
-                        style: const TextStyle(
-                            fontSize: 12,
+                        style:Styles.mediumText(
+                            // fontSize: 12,
                             fontWeight: FontWeight.w400,
                             color: AppColors.c6C6C6C
                         ),
@@ -225,10 +208,10 @@ class _DoctorListCardState extends State<DoctorListCard> {
                   Label(
                     text: widget.data.subscriptionType ?? "N/A" ,
                     textAlign: TextAlign.right,
-                    style: const TextStyle(
+                    style: Styles.mediumText(
                         color: AppColors.PRIMARY_COLOR_DARK,
                         fontWeight: FontWeight.w700,
-                        fontSize: 16
+                        // fontSize: 16
                     ),
                   ),
                 ],
@@ -251,29 +234,9 @@ class _DoctorListCardState extends State<DoctorListCard> {
                         children: [
                           ClipRRect(
                             borderRadius: BorderRadius.circular(15),
-                            child: Image.network(
-                              widget.data.profilePicture ?? '',
+                            child: ImageFromInternet(image: widget.data.profilePicture ?? '',
                               width: 56,
                               height: 56,
-                              fit: BoxFit.cover,
-                              loadingBuilder: (context, child, loadingProgress) {
-                                if (loadingProgress == null) return child;
-                                return Container(
-                                  width: 56,
-                                  height: 56,
-                                  alignment: Alignment.center,
-                                  child: const CircularProgressIndicator(strokeWidth: 2),
-                                );
-                              },
-                              errorBuilder: (context, error, stackTrace) {
-                                return Container(
-                                  width: 56,
-                                  height: 56,
-                                  color: Colors.grey[300],
-                                  alignment: Alignment.center,
-                                  child: const Icon(Icons.error, color: Colors.red, size: 24),
-                                );
-                              },
                             ),
                           ),
                           Positioned(
@@ -292,9 +255,9 @@ class _DoctorListCardState extends State<DoctorListCard> {
                                   const SizedBox(width: 2),
                                   Text(
                                     "${widget.data.averageRating ?? 0}",
-                                    style: const TextStyle(
+                                    style: Styles.smallText(
                                       color: Colors.black,
-                                      fontSize: 10,
+                                      // fontSize: 10,
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
@@ -311,9 +274,9 @@ class _DoctorListCardState extends State<DoctorListCard> {
                           children: [
                             Text(
                               "${widget.data.firstName ?? "N/A"} ${widget.data.lastName ?? ""}",
-                              style: const TextStyle(
+                              style: Styles.mediumText(
                                 fontWeight: FontWeight.w600,
-                                fontSize: 16,
+                                // fontSize: 16,
                               ),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
@@ -323,9 +286,9 @@ class _DoctorListCardState extends State<DoctorListCard> {
                               context.isArabic
                                   ? widget.data.subCategory?.first.nameAr ?? "N/A"
                                   : widget.data.subCategory?.first.nameEn ?? "N/A",
-                              style: const TextStyle(
+                              style: Styles.mediumText(
                                 fontWeight: FontWeight.w400,
-                                fontSize: 14,
+                                // fontSize: 14,
                               ),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
@@ -341,6 +304,7 @@ class _DoctorListCardState extends State<DoctorListCard> {
                       Icon(Icons.location_on_rounded,color:context.isDarkMode
                           ? AppColors.PRIMARY_COLOR_DARK : AppColors.PRIMARY_COLOR,),
                       Expanded(child: Label(
+                        style: Styles.mediumText(),
                         text: context.isArabic
                             ? "${widget.data.address?.governorate?.governorateNameAr ?? "N/A"} , ${widget.data.address?.city?.cityNameAr ?? "N/A"}"
                             : "${widget.data.address?.governorate?.governorateNameEn ?? "N/A"} , ${widget.data.address?.city?.cityNameEn ?? "N/A"}",
@@ -396,8 +360,8 @@ class _DoctorListCardState extends State<DoctorListCard> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SizedBox(
-                          width: 180,
+                      Expanded(
+                        flex: 5,
                           child: PremiumAndRequestButtons(item: widget.data)),
                       CallMessageReportButtons(item: widget.data),
                     ],

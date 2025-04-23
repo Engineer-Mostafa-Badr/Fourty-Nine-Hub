@@ -169,10 +169,11 @@ class _DoctorListCardState extends State<DoctorListCard> {
                     children: [
                       SvgPicture.asset(Assets.viewCountIcon,color: Colors.grey,),
                       Label(text: formatViews(widget.data.viewCount?.toInt() ?? 0),
-                        style: const TextStyle(
-                            fontSize: 12,
+                        style: Styles.smallText(
                             fontWeight: FontWeight.w400,
-                            color: AppColors.c6C6C6C
+                            color: AppColors.c6C6C6C,
+                          fontSize: 12,
+
                         ),
                       ),
                       Label(text: LocaleKeys.views.localize,

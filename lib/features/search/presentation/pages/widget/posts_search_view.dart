@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,18 +24,23 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class PostsSearchView extends StatefulWidget {
-  const PostsSearchView({super.key, required this.params});
+import '../../../../../common/models/public/pagination_params.dart';
 
-  final SearchParams params;
+
+
+
+class PostsSearchView extends StatefulWidget {
+  const PostsSearchView({Key? key}) : super(key: key);
+
 
   @override
   State<PostsSearchView> createState() => _PostsSearchViewState();
 }
 
 class _PostsSearchViewState extends State<PostsSearchView> {
-  late ScrollController _scrollController;
-  late SearchCubit _cubit;
+  late final ScrollController _scrollController;
+  late final SearchCubit _cubit;
+  static const _scrollThreshold = 200.0;
 
   @override
   void initState() {
@@ -42,23 +49,28 @@ class _PostsSearchViewState extends State<PostsSearchView> {
     _scrollController = ScrollController()..addListener(_onScroll);
   }
 
-  Future<void> _onScroll() async {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
+  void _onScroll() async {
+    final max = _scrollController.position.maxScrollExtent;
+    final current = _scrollController.position.pixels;
+    if (current >= max - _scrollThreshold &&
+        !_cubit.isLoadingPostsSearchMore &&
+        _cubit.hasMorePostsSearchData) {
       final prefs = await SharedPreferences.getInstance();
-      String? filter = prefs.getString('filter');
-      SearchParams searchParams = SearchParams(
-          filter: filter,
-          params: widget.params.params,
-          search: widget.params.search);
-      context.read<SearchCubit>().getPaginatedPostsSearch(params: searchParams);
+      final filter = prefs.getString('filter') ?? '';
+      final params = SearchParams(
+        search: _cubit.searchController.text.trim(),
+        filter: filter,
+        params: PaginationParams(page: _cubit.postsSearchPage),
+      );
+      _cubit.getPaginatedPostsSearch(params: params);
     }
   }
 
   @override
   void dispose() {
-    _scrollController.removeListener(_onScroll);
-    _scrollController.dispose();
+    _scrollController
+      ..removeListener(_onScroll)
+      ..dispose();
     super.dispose();
   }
 
@@ -78,6 +90,7 @@ class _PostsSearchViewState extends State<PostsSearchView> {
             return Center(child: Text('No posts found.'));
           }
           return ListView.builder(
+            controller: _scrollController, // Add this line
             itemCount: posts.length,
             itemBuilder: (context, index) {
               return ListTile(
@@ -85,6 +98,7 @@ class _PostsSearchViewState extends State<PostsSearchView> {
               );
             },
           );
+
         }
 
         // Handle error state
@@ -100,6 +114,9 @@ class _PostsSearchViewState extends State<PostsSearchView> {
 
   }
 }
+
+
+
 /*
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 30.h, horizontal: 10.w),

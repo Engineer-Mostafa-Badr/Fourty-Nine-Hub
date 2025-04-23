@@ -22,31 +22,8 @@ import '../../../../../common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
 import '../../../../../service_locator/service_locator.dart';
-import '../widgets/cards/favourite_ads_card.dart';
 
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
-import 'package:fourtyninehub/core/extensions/context_extension.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/features/health_feature/health/presentation/controllers/health_cubit/health_cubit.dart';
-import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/banner.dart';
-import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/booking/bookgins.dart';
-import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/cards/booking_history_card.dart';
-import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/cards/current_booking_card.dart';
-import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/current_history_booking.dart';
-import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/doctor_mode_banner.dart';
-import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/medical_services/medical_services.dart';
-import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/booking_types/booking_types.dart';
-import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/registration_banner.dart';
-import 'package:fourtyninehub/features/health_feature/health/presentation/widgets/sub_categories/sub_categories.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:fourtyninehub/res/style/styles.dart';
-import '../../../../../common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
-import '../widgets/cards/favourite_ads_card.dart';
 
 class HealthView extends StatefulWidget {
   HealthView({super.key});

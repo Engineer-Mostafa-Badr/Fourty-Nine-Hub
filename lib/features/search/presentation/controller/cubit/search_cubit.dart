@@ -58,6 +58,15 @@ class SearchCubit extends Cubit<SearchState> {
   final GetMainCategoriesUseCase _getMainCategoriesUseCase;
 
 
+  void clearPostsSearchResults() {
+    postsSearch.clear();
+    postsSearchPage = 1;
+    hasMorePostsSearchData = true;
+    emit(state.copyWith(
+      posts: [],
+      status: SearchStates.initial,
+    ));
+  }
 
   SearchCubit(
     this._fetchSearchUseCase,
@@ -92,6 +101,14 @@ class SearchCubit extends Cubit<SearchState> {
     print(content);
   }
 
+  void clearSearchResults() {
+    emit(state.copyWith(
+      userSearch: [],
+      posts: [],
+      reels: [],
+      // other models too
+    ));
+  }
 
 
   initPref() async {
@@ -141,19 +158,27 @@ class SearchCubit extends Cubit<SearchState> {
 
   List<SubCategoryEntity> subCategoriesSearch = [];
   bool loadSubCategoriesSearch = false;
+
+
   Future loadSubCategoriesSearchData({required SearchParams params}) async {
-    loadSubCategoriesSearch=true;
+    loadSubCategoriesSearch = true;
     subCategoriesSearch.clear();
     subCategoriesSearchPage = 1;
-    hasMoreAdsData = true;
+    hasMoreSubCategoriesSearchData = true; // 🔥 Reset this!
     emit(state.copyWith(status: SearchStates.loading));
-    await getPaginatedSubCategorySearch(params:params);
-    loadSubCategoriesSearch=false;
+
+    await getPaginatedSubCategorySearch(params: params);
+
+    loadSubCategoriesSearch = false;
     emit(state.copyWith(status: SearchStates.success));
   }
+
+
   bool isLoadingSubCategoriesSearchMore = false;
   bool hasMoreSubCategoriesSearchData = true;
   int subCategoriesSearchPage = 1;
+
+
   Future<void> getPaginatedSubCategorySearch(
       {required SearchParams params}
       ) async {
@@ -171,7 +196,7 @@ class SearchCubit extends Cubit<SearchState> {
             subCategoriesSearchPage++;
           }
           isLoadingSubCategoriesSearchMore = false;
-          emit(state.copyWith(status: SearchStates.success));
+          emit(state.copyWith(status: SearchStates.success,searchSubCategory:subCategoriesSearch ));
         });
   }
 
@@ -192,6 +217,7 @@ class SearchCubit extends Cubit<SearchState> {
   bool isLoadingUsersSearchMore = false;
   bool hasMoreUsersSearchData = true;
   int usersSearchPage = 1;
+
   Future<void> getPaginatedUserSearch(
       {required SearchParams params}
       ) async {
@@ -329,16 +355,41 @@ class SearchCubit extends Cubit<SearchState> {
 
   List<PostEntity> postsSearch = [];
   bool loadPostsSearch = false;
-  Future loadPostsSearchData({required SearchParams params}) async {
-    loadPostsSearch=true;
+
+  // Future<void> loadPostsSearchData({required SearchParams params}) async {
+  //   loadPostsSearch = true;
+  //   postsSearch.clear();
+  //   postsSearchPage = 1;
+  //   hasMorePostsSearchData = true;
+  //   isLoadingPostsSearchMore = false; // Important reset!
+  //
+  //   emit(state.copyWith(status: SearchStates.loading));
+  //
+  //   await getPaginatedPostsSearch(params: params);
+  //
+  //   loadPostsSearch = false;
+  //   // emit(state.copyWith(status: SearchStates.success));
+  // }
+
+  Future<void> loadPostsSearchData({required SearchParams params}) async {
+    loadPostsSearch = true;
     postsSearch.clear();
     postsSearchPage = 1;
-    hasMoreAdsData = true;
+    hasMorePostsSearchData = true;
+    isLoadingPostsSearchMore = false; // Important reset!
+
     emit(state.copyWith(status: SearchStates.loading));
-    await getPaginatedPostsSearch(params:params);
-    loadPostsSearch=false;
-    emit(state.copyWith(status: SearchStates.success));
+
+    await getPaginatedPostsSearch(params: params);
+
+    loadPostsSearch = false;
+    // ❌ Remove this emit. It's already emitted inside getPaginatedPostsSearch
+    // emit(state.copyWith(status: SearchStates.success));
   }
+
+
+
+
   bool isLoadingPostsSearchMore = false;
   bool hasMorePostsSearchData = true;
   int postsSearchPage = 1;

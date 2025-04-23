@@ -19,6 +19,7 @@ import '../../../../../../helpers/subscription_method.dart';
 import '../../../../../food_feature/food_cart/presentation/pages/cart_view.dart';
 import '../../../../../food_feature/restaurants_list/presentation/widgets/subcatigories_restaurant_card.dart';
 import '../../../../../social_media/instagram/presentation/widgets/comment_widget_insta.dart';
+import '../../../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../../../../../social_media/twitter/presentation/widgets/report_view.dart';
 import '../../../domain/entities/most_booking_entity.dart';
 import '../../controllers/health_cubit/health_cubit.dart';
@@ -168,15 +169,19 @@ class _MostBookingCardState extends State<MostBookingCard> {
                     children: [
                       SvgPicture.asset(Assets.viewCountIcon,color: Colors.grey,),
                       Label(text: formatViews(widget.data.viewCount?.toInt() ?? 0),
-                        style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                            color: AppColors.c6C6C6C
-                        ),
+                        style:Styles.smallText(
+                            color: AppColors.c6C6C6C,
+                          // fontSize: 12
+                        )
+                        // const TextStyle(
+                        //     fontSize: 12,
+                        //     fontWeight: FontWeight.w400,
+                        //     color: AppColors.c6C6C6C
+                        // ),
                       ),
                       Label(text: LocaleKeys.views.localize,
-                        style: const TextStyle(
-                            fontSize: 12,
+                        style:  Styles.mediumText(
+                            // fontSize: 12,
                             fontWeight: FontWeight.w400,
                             color: AppColors.c6C6C6C
                         ),
@@ -186,10 +191,10 @@ class _MostBookingCardState extends State<MostBookingCard> {
                   Label(
                     text: widget.data.subscriptionType ?? "N/A" ,
                     textAlign: TextAlign.right,
-                    style: const TextStyle(
+                    style: Styles.mediumText(
                         color: AppColors.PRIMARY_COLOR_DARK,
                         fontWeight: FontWeight.w700,
-                        fontSize: 16
+                        // fontSize: 16
                     ),
                   ),
                 ],
@@ -210,32 +215,38 @@ class _MostBookingCardState extends State<MostBookingCard> {
                       Stack(
                         clipBehavior: Clip.none,
                         children: [
+
                           ClipRRect(
                             borderRadius: BorderRadius.circular(15),
-                            child: Image.network(
-                              widget.data.profilePicture ?? '',
+                            child:ImageFromInternet(
+                              image: widget.data.profilePicture ?? '',
                               width: 56,
                               height: 56,
-                              fit: BoxFit.cover,
-                              loadingBuilder: (context, child, loadingProgress) {
-                                if (loadingProgress == null) return child;
-                                return Container(
-                                  width: 56,
-                                  height: 56,
-                                  alignment: Alignment.center,
-                                  child: const CircularProgressIndicator(strokeWidth: 2),
-                                );
-                              },
-                              errorBuilder: (context, error, stackTrace) {
-                                return Container(
-                                  width: 56,
-                                  height: 56,
-                                  color: Colors.grey[300],
-                                  alignment: Alignment.center,
-                                  child: const Icon(Icons.error, color: Colors.red, size: 24),
-                                );
-                              },
                             ),
+                            // Image.network(
+                            //   widget.data.profilePicture ?? '',
+                            //   width: 56,
+                            //   height: 56,
+                            //   fit: BoxFit.cover,
+                            //   loadingBuilder: (context, child, loadingProgress) {
+                            //     if (loadingProgress == null) return child;
+                            //     return Container(
+                            //       width: 56,
+                            //       height: 56,
+                            //       alignment: Alignment.center,
+                            //       child: const CircularProgressIndicator(strokeWidth: 2),
+                            //     );
+                            //   },
+                            //   errorBuilder: (context, error, stackTrace) {
+                            //     return Container(
+                            //       width: 56,
+                            //       height: 56,
+                            //       color: Colors.grey[300],
+                            //       alignment: Alignment.center,
+                            //       child: const Icon(Icons.error, color: Colors.red, size: 24),
+                            //     );
+                            //   },
+                            // ),
                           ),
                           Positioned(
                             top: 0,
@@ -253,9 +264,9 @@ class _MostBookingCardState extends State<MostBookingCard> {
                                   const SizedBox(width: 2),
                                   Text(
                                     "${widget.data.averageRating ?? 0}",
-                                    style: const TextStyle(
+                                    style:  Styles.smallText(
                                       color: Colors.black,
-                                      fontSize: 10,
+                                      // fontSize: 10,
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
@@ -272,9 +283,9 @@ class _MostBookingCardState extends State<MostBookingCard> {
                           children: [
                             Text(
                               "${widget.data.firstName ?? "N/A"} ${widget.data.lastName ?? ""}",
-                              style: const TextStyle(
+                              style: Styles.mediumText(
                                 fontWeight: FontWeight.w600,
-                                fontSize: 16,
+                                // fontSize: 16,
                               ),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
@@ -284,9 +295,9 @@ class _MostBookingCardState extends State<MostBookingCard> {
                               context.isArabic
                                   ? widget.data.subCategory?.first.nameAr ?? "N/A"
                                   : widget.data.subCategory?.first.nameEn ?? "N/A",
-                              style: const TextStyle(
+                              style:Styles.mediumText(
                                 fontWeight: FontWeight.w400,
-                                fontSize: 14,
+                                // fontSize: 14,
                               ),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
@@ -302,6 +313,10 @@ class _MostBookingCardState extends State<MostBookingCard> {
                       Icon(Icons.location_on_rounded,color:context.isDarkMode
                           ? AppColors.PRIMARY_COLOR_DARK : AppColors.PRIMARY_COLOR,),
                       Expanded(child: Label(
+                        style: Styles.headerText(
+                          fontSize: 24,
+                          color: Colors.black,
+                        ),
                         text: context.isArabic
                             ? "${widget.data.address?.governorate?.governorateNameAr ?? "N/A"} , ${widget.data.address?.city?.cityNameAr ?? "N/A"}"
                             : "${widget.data.address?.governorate?.governorateNameEn ?? "N/A"} , ${widget.data.address?.city?.cityNameEn ?? "N/A"}",
@@ -357,8 +372,8 @@ class _MostBookingCardState extends State<MostBookingCard> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SizedBox(
-                          width: 180,
+                      Expanded(
+                          flex: 5,
                           child: PremiumAndRequestButtons(item: widget.data)),
                       CallMessageReportButtons(item: widget.data),
                     ],

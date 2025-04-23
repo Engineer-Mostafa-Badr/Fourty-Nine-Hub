@@ -124,7 +124,7 @@ dependencies:
   snapping_bottom_sheet: ^1.0.4
   social_media_recorder: ^1.1.13
   socket_io_client: ^2.0.3+1
-  sqflite: ^2.4.2
+  sqflite:
   # ^2.3.3+1
   statemachine: ^3.3.1
   step_progress_indicator: null
