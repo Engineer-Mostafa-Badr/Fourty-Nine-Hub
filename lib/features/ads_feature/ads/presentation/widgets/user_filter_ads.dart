@@ -8,7 +8,6 @@ import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cu
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_view.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class UserFilterAds extends StatefulWidget {
   const UserFilterAds(
@@ -25,24 +24,42 @@ class UserFilterAds extends StatefulWidget {
 }
 
 class _UserFilterAdsState extends State<UserFilterAds> {
+  late ScrollController _scrollController;
   @override
   void initState() {
-    context
-        .read<AdvertisementCubit>()
-        .loadFilterData(model: widget.model, filter: widget.userType);
-
     super.initState();
+    _scrollController = ScrollController()..addListener(_onScroll);
+
+  }
+
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      context
+          .read<AdvertisementCubit>()
+          .loadFilterAdsData(model: widget.model, filter: widget.userType);
+
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AdvertisementCubit, AdsState>(builder: (context, state) {
-      final controller = context.read<AdvertisementCubit>();
-      return PagedListView<int, AdModel>(
-        pagingController: controller.adsPagingController,
-        builderDelegate: PagedChildBuilderDelegate<AdModel>(
-            noItemsFoundIndicatorBuilder: (context) {
-              print(controller.adsPagingController.itemList?.length);
+    return BlocBuilder<AdvertisementCubit, AdsState>(
+      builder: (context, state) {
+        return ListView.builder(
+          controller: _scrollController,
+          physics: const AlwaysScrollableScrollPhysics(),
+          itemCount: context
+              .read<AdvertisementCubit>()
+            .ads.length +
+              (context
+                  .read<AdvertisementCubit>()
+                .isLoadingAdsMore ? 1 : 0),
+          itemBuilder: (context, index) {
+            if(context
+                .read<AdvertisementCubit>()
+                .ads.isEmpty) {
               return Center(
                 child: Text(
                   LocaleKeys.noAds.localize,
@@ -54,32 +71,30 @@ class _UserFilterAdsState extends State<UserFilterAds> {
                   ),
                 ),
               );
-            },
-            itemBuilder: (context, item, index) {
-              return CategoriesExtension.fromId(
-                      widget.params.mainCategory.id ?? '')
-                  .view(
-                item: item,
-                onFav: (String id) async {
-                  var result = await controller.favouriteAd(id);
-                  return result;
-                },
-                onRemoveFav: (String id) async {
-                  var result = await controller.unFavouriteAd(id);
-                  return result;
-                },
-              );
-            },
-            noMoreItemsIndicatorBuilder: (context) => Container(),
-            firstPageProgressIndicatorBuilder: (context) => Container(
-                margin: const EdgeInsets.only(top: 150),
-                child: const CupertinoActivityIndicator(
-                    color: AppColors.PRIMARY_COLOR)),
-            newPageProgressIndicatorBuilder: (context) =>
-                const CupertinoActivityIndicator(
-                  color: AppColors.PRIMARY_COLOR,
-                )),
-      );
-    });
+            }
+
+            final ad =
+            context
+                .read<AdvertisementCubit>()
+                .ads[index];
+            return CategoriesExtension.fromId(
+                widget.params.mainCategory.id ?? '')
+                .view(
+              item: ad,
+              onFav: (String id) async {
+                var result = await context
+                    .read<AdvertisementCubit>().favouriteAd(id);
+                return result;
+              },
+              onRemoveFav: (String id) async {
+                var result = await context
+                    .read<AdvertisementCubit>().unFavouriteAd(id);
+                return result;
+              },
+            );
+          },
+        );
+      }
+    );
   }
 }

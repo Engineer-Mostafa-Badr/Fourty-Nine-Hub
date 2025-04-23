@@ -80,9 +80,9 @@ class SearchRestaurantsCubit extends Cubit<SearchRestaurantState> {
   }
 
   loadData() async {
-    await AppPages.router.routerDelegate.navigatorKey.currentContext!
-        .read<UserCubit>()
-        .getUser();
+    // await AppPages.router.routerDelegate.navigatorKey.currentContext!
+    //     .read<UserCubit>()
+    //     .getUser();
     if (AppPages.router.routerDelegate.navigatorKey.currentContext!
             .read<UserCubit>()
             .state

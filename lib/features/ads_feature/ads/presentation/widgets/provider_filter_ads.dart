@@ -7,7 +7,6 @@ import 'package:fourtyninehub/features/ads_feature/ads/presentation/cubit/ads_cu
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_view.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class ProviderFilterAds extends StatefulWidget {
   const ProviderFilterAds(
@@ -26,55 +25,71 @@ class ProviderFilterAds extends StatefulWidget {
 }
 
 class _ProviderFilterAdsState extends State<ProviderFilterAds> {
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    widget.controller
-        .loadFilterData(model: widget.model, filter: widget.userType);
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   widget.controller
+  //       .loadFilterAdsData(model: widget.model, filter: widget.userType);
+  //
+  //   // super.initState();
+  // }
 
-    // super.initState();
+  late ScrollController _scrollController;
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController()..addListener(_onScroll);
+
+  }
+
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+        widget.controller.loadFilterAdsData(
+            model: widget.model, filter: widget.userType
+        );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return PagedListView<int, AdModel>(
-      pagingController: widget.controller.adsPagingController,
-      builderDelegate: PagedChildBuilderDelegate<AdModel>(
-          noItemsFoundIndicatorBuilder: (context) {
-            print(widget.controller.adsPagingController.itemList?.length);
-            return Center(
-              child: Text(
-                LocaleKeys.noAds.localize,
-                style: TextStyle(
-                  color: context.isDarkMode
-                      ? AppColors.LIGHT_COLOR
-                      : AppColors.DARK_BLUE_COLOR,
-                  fontSize: 18,
-                ),
+    return ListView.builder(
+      controller: _scrollController,
+      physics: const AlwaysScrollableScrollPhysics(),
+      itemCount: widget.controller.ads.length +
+          (widget.controller.isLoadingAdsMore ? 1 : 0),
+      itemBuilder: (context, index) {
+        if(widget.controller.ads.isEmpty) {
+          return Center(
+            child: Text(
+              LocaleKeys.noAds.localize,
+              style: TextStyle(
+                color: context.isDarkMode
+                    ? AppColors.LIGHT_COLOR
+                    : AppColors.DARK_BLUE_COLOR,
+                fontSize: 18,
               ),
-            );
+            ),
+          );
+        }
+
+        final ad =
+        widget.controller.ads[index];
+        return CategoriesExtension.fromId(
+            widget.params.mainCategory.id ?? '')
+            .view(
+          item: ad,
+          onFav: (String id) async {
+            var result = await widget.controller.favouriteAd(id);
+            return result;
           },
-          itemBuilder: (context, item, index) {
-            return CategoriesExtension.fromId(
-                    widget.params.mainCategory.id ?? '')
-                .view(
-              item: item,
-              onFav: (String id) async {
-                var result = await widget.controller.favouriteAd(id);
-                return result;
-              },
-              onRemoveFav: (String id) async {
-                var result = await widget.controller.unFavouriteAd(id);
-                return result;
-              },
-            );
+          onRemoveFav: (String id) async {
+            var result = await widget.controller.unFavouriteAd(id);
+            return result;
           },
-          noMoreItemsIndicatorBuilder: (context) => Container(),
-          firstPageProgressIndicatorBuilder: (context) => Container(
-              margin: const EdgeInsets.only(top: 150),
-              child: const Center(child: CircularProgressIndicator())),
-          newPageProgressIndicatorBuilder: (context) =>
-              const Center(child: CircularProgressIndicator())),
+        );
+      },
     );
   }
 }

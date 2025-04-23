@@ -50,6 +50,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/accept_trip_b
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_pending_trip_by_client_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_client.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/cancel_trip_by_rider.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/click_global_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/complete_trip_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_activity_trips.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/get_all_completed_trips_use_case.dart';
@@ -66,6 +67,7 @@ import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_driver
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_socket_location_usecase.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_trip_auto_accept_by_client_use_case.dart';
 import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_trip_price_from_client_use_case.dart';
+import 'package:fourtyninehub/features/RideFeature/domain/usecases/update_trip_price_use_case.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/data/models/governrate_model.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
 import 'package:icons_launcher/utils/cli_logger.dart';
@@ -81,6 +83,9 @@ import '../../domain/entities/get_offers_entity.dart';
 import '../../domain/usecases/make_loading_request_trip_usecase.dart';
 import '../../domain/usecases/make_non_tracking_request_trip_usecase.dart';
 import '../models/dashboards/get_offers_response_model.dart';
+import '../../../../shared_web_socket.dart';
+import '../../../account_taps/my_adds/data/model/click_model.dart';
+import '../../../account_taps/my_adds/domain/entity/click_entity.dart';
 
 abstract class RideRemoteDataSource {
   ////////////////////Nasr////////////////////
@@ -160,8 +165,10 @@ abstract class RideRemoteDataSource {
   Future<Either<Failure, bool>> updateTripPriceFromClient(
       UpdateTripPriceFromClientUseCaseParams params);
 
-  Future<Either<Failure, ActivityTripEntity>> getAllActivityTrips(
-      GetAllActivityTripsUseCaseParams params);
+  Future<Either<Failure, bool>> updateTripPrice(UpdateTripPriceUseCaseParams params);
+
+  Future<Either<Failure, ActivityTripEntity>> getAllActivityTrips(GetAllActivityTripsUseCaseParams params);
+
 
   Future<Either<Failure, List<HistoryTripForUserEntity>>>
       getAllHistoryTripsForUser();
@@ -181,6 +188,9 @@ abstract class RideRemoteDataSource {
   Future<Either<Failure, GetOffersResponseEntity>> getLoadingOffers();
 
   void listenToRideOffers(Function(RideOfferEntity offer) params);
+
+  Future<Either<Failure, ClickEntity>> click(ClickParams params);
+
   Future<Either<Failure, bool>> makeLoadingRequestTrip(
       MakeLoadingRequestTripUsecaseParam params);
 }
@@ -307,8 +317,9 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
 
       return response.fold((failure) => Left(failure), (data) {
         log('requested trip id before : ${data['data']['trip']['_id']}');
-        RideRequestTripModel rideRequestTripModel =
-            RideRequestTripModel.fromJson(data['data']['trip']);
+        RideRequestTripModel rideRequestTripModel = RideRequestTripModel.fromJson(data['data']['trip']);
+        rideRequestTripModel.highestFare = data['data']?['fareRange']?['highestFare']?.toDouble() ?? 0.0;
+        rideRequestTripModel.lowestFare = data['data']?['fareRange']?['lowestFare']?.toDouble() ?? 0.0;
         log('requested trip id after : ${rideRequestTripModel.id}');
         return Right(rideRequestTripModel);
       });
@@ -326,8 +337,9 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
       );
 
       return response.fold((failure) => Left(failure), (data) {
-        RideRequestTripModel rideRequestTripModel =
-            RideRequestTripModel.fromJson(data['data']['latestTrip']);
+        RideRequestTripModel rideRequestTripModel = RideRequestTripModel.fromJson(data['data']['latestTrip']);
+        rideRequestTripModel.highestFare = data['data']?['fareRange']?['highestFare']?.toDouble() ?? 0.0;
+        rideRequestTripModel.lowestFare = data['data']?['fareRange']?['lowestFare']?.toDouble() ?? 0.0;
         return Right(rideRequestTripModel);
       });
     } catch (e) {
@@ -949,8 +961,10 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
         EndPoints.acceptOfferByClient(offerId),
       );
       return response.fold((failure) => Left(failure), (data) {
-        return Right(
-            RideRequestTripModel.fromJson(data['data']['tripDetails']));
+        RideRequestTripModel rideRequestTripModel = RideRequestTripModel.fromJson(data['data']['tripDetails']);
+        rideRequestTripModel.highestFare = data['data']?['fareRange']?['highestFare']?.toDouble() ?? 0.0;
+        rideRequestTripModel.lowestFare = data['data']?['fareRange']?['lowestFare']?.toDouble() ?? 0.0;
+        return Right(rideRequestTripModel);
       });
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
@@ -1020,4 +1034,28 @@ class RideRemoteDataSourceImplementation implements RideRemoteDataSource {
       return Left(ServerFailure(message: e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, bool>> updateTripPrice(UpdateTripPriceUseCaseParams params) async {
+    try {
+      final response = await _apiConsumer.put(
+        EndPoints.updateTripPrice(),
+        data: params.toJson(),
+      );
+      return response.fold((failure) => Left(failure), (data) {
+        return Right(data['status']);
+      });
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, ClickEntity>> click(ClickParams params) async {
+    final response =
+    await _apiConsumer.post(EndPoints.clickGlobal, data: params.toJson());
+    return response.fold(
+            (failure) => Left(failure), (data) => Right(ClickModel.fromJson(data)));
+  }
+
 }

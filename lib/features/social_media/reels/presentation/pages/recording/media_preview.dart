@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -71,9 +69,9 @@ class _MediaPreviewScreenState extends State<MediaPreviewScreen> {
 
     final command = '-i $originalPath -vf "$filterCommand" $filteredVideoPath';
 
-    await FFmpegKit.execute(command).then((session) {
-      session.getReturnCode();
-    });
+    // await FFmpegKit.execute(command).then((session) {
+    //   session.getReturnCode();
+    // });
 
     return filteredVideoPath;
   }

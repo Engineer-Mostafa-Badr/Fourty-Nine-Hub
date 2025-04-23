@@ -1,0 +1,149 @@
+import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+
+import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
+import '../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../../common/widgets/stateless/labels/label.dart';
+import '../../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../../res/assets/assets.dart';
+import '../../../../../../res/style/app_colors.dart';
+import '../../../../../../res/style/styles.dart';
+
+class MessagesAreEndToEndEncrypted extends StatelessWidget {
+  const MessagesAreEndToEndEncrypted({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    List<Map<String, dynamic>> items = [
+      {
+        'title': LocaleKeys.textAndVoiceMessages.localize,
+        'icon': Icons.message_outlined,
+      },
+      {
+        'title': LocaleKeys.audioAndVideoCalls.localize,
+        'icon': Icons.phone,
+      },
+      {
+        'title': LocaleKeys.photoVideosAndDocuments.localize,
+        'icon': Icons.attach_file_rounded,
+      },
+      {
+        'title': LocaleKeys.audioAndVideoCalls.localize,
+        'icon': Icons.location_pin,
+      },
+      {
+        'title': LocaleKeys.audioAndVideoCalls.localize,
+        'icon': null,
+        'image': Assets.chatStatus,
+      },
+    ];
+    return GestureDetector(
+      onTap: () {
+        bottomSheet(
+          context: context,
+          widget: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Sizer(height: 16),
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
+                  color: Colors.black38,
+                ),
+                width: 64,
+                height: 4,
+              ),
+              const Sizer(height: 24),
+              Label(
+                text: LocaleKeys.yourChatsAndCallArePrivate.localize,
+                style: Styles.headerText(),
+              ),
+              const Sizer(height: 32),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Label(
+                    text: LocaleKeys.endToEndDescription.localize,
+                    style: Styles.mediumText(),
+                    maxLines: 4,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+              const Sizer(height: 24),
+              ...List.generate(
+                5,
+                (index) => Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      if (items[index]['icon'] != null)
+                        Icon(
+                          items[index]['icon'],
+                          color: Colors.black.withValues(alpha: 0.7),
+                        )
+                      else
+                        Image.asset(
+                          items[index]['image'],
+                          width: 24,
+                          height: 24,
+                        ),
+                      const Sizer(),
+                      Label(
+                        text: items[index]['title'],
+                        style: Styles.mediumText(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black.withValues(alpha: 0.7),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Icon(
+              Icons.lock_outline,
+              size: 24,
+            ),
+            Column(
+              children: [
+                Label(
+                    text: "${LocaleKeys.yourPersonalMessages.localize} ",
+                    style: Styles.mediumText(
+                        fontWeight: FontWeight.bold, fontSize: 28)),
+                Label(
+                  text: LocaleKeys.endToEndEncryption.localize,
+                  style: Styles.mediumText(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 28,
+                    color: AppColors.PRIMARY_COLOR_DARK,
+                  ),
+                ),
+              ],
+            ),
+            const Icon(
+              Icons.lock_outline,
+              size: 24,
+              color: Colors.transparent,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

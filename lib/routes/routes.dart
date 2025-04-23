@@ -272,6 +272,12 @@ abstract class Routes {
   static const INSTAGRAMCOMMENT = '/InstagramComment';
   static const InstagramSuggestPeople = '/InstagramSuggestPeople';
   static const ADDSTORYINSTAGRAM = '/AddStoryInstagram';
+  static const CREATEPOSTINSTAGRAM = '/Instagram/CreatePostInstagram';
+  static const CREATEPOSTSECONDPAGEINSTAGRAM =
+      '/Instagram/CreatePostInstagram/CreatePostSecondPageInstagram';
+  // reels
+  static const UseSoundScreen = '/UseSoundScreen';
+  static const AddStoryScreen = '/AddStoryScreen';
   static const CREATEPOSTINSTAGRAM = '/CreatePostInstagram';
   static const CREATEPOSTSECONDPAGEINSTAGRAM = '/CreatePostSecondPageInstagram';
   static const TAGUSER = '/TagUser';
@@ -532,6 +538,9 @@ abstract class Paths {
   // Cashback
   static const CASHBACK = 'CashBack';
 
+  //reels
+  static const useSoundScreen = 'UseSoundScreen';
+  static const addStoryScreen = 'AddStoryScreen';
   // Instagram
   static const INSTAGRAM = 'Instagram';
   static const INSTAGRAMPROFILE = 'InstagramProfile';

@@ -190,6 +190,8 @@ class ChatsCubit extends Cubit<ChatsState> {
 
         // Combine pinned and unpinned chats, with pinned chats appearing first
         final sortedChats = [...pinnedChatList, ...unpinnedChatList];
+        // print('sortedChats[0].lastMessage?.media.length ${sortedChats[1].lastMessage!.media.length}');
+        // print('sortedChats[0].lastMessage?.media[0].type ${sortedChats[1].lastMessage!.media[0].type}');
 
         // Emit the sorted chat list
         emit(state.copyWith(chats: sortedChats, status: ChatsStates.success));
@@ -416,6 +418,7 @@ class ChatsCubit extends Cubit<ChatsState> {
   }
 
   Future<void> getOnlineOfflineStatus({required ChatEntity chat}) async {
+    if(chat.isAdmin == 'admin') return;
     final respons = await _getOnlineOfflineStatusUseCase(chat.userId);
     respons.fold((l) => null, (r) {
       log("status = ${r.status}");

@@ -279,6 +279,7 @@ import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/publish_trip_join/publish_trip_join_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/starting_location/starting_location_cubit.dart';
 import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/cubits/trip_join_view/trip_join_view_cubit.dart';
+
 //import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/trip_join_view.dart';
 //import 'package:fourtyninehub/features/trip_join/add_new_trip_join/presentation/views/trip_join_view.dart';
 import 'package:fourtyninehub/features/trip_join/get_requests_pick_me/data/models/get_requests_pick_me_model.dart';
@@ -321,6 +322,7 @@ import '../features/RideFeature/presentation/pages/connection_call_screen.dart';
 import '../features/RideFeature/presentation/pages/create_loading_trip_screen.dart';
 import '../features/RideFeature/presentation/pages/current_ride_home.dart';
 import '../features/RideFeature/presentation/pages/dashboards/ride_dashboard_details_screen.dart';
+
 //import '../features/RideFeature/presentation/pages/dashboards/ride_mode_screen.dart';
 import '../features/RideFeature/presentation/pages/osm_search_and_pick.dart';
 import '../features/RideFeature/presentation/pages/rating_client_screen.dart';
@@ -373,6 +375,7 @@ import '../features/food_feature/restaurant_details/presentation/cubit/restauran
 import '../features/food_feature/restaurant_details/presentation/pages/restaurant_details_view.dart';
 import '../features/food_feature/restaurants_list/presentation/cubit/restaurants_list_cubit.dart';
 import '../features/food_feature/restaurants_list/presentation/pages/restaurants_lists_view.dart';
+import '../features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import '../features/fourty_nine/presentation/pages/fourty_nine.dart';
 import '../features/fourty_nine/presentation/pages/main_categories_cards_view.dart';
 import '../features/fourty_nine/presentation/pages/main_categories_taps_view.dart';
@@ -397,6 +400,16 @@ import '../features/mazadat_feature/auction_list/presentation/cubit/auction_list
 import '../features/mazadat_feature/auction_list/presentation/pages/Mazadat_view.dart';
 import '../features/mazadat_feature/create_auction/presentation/pages/create_auction_view.dart';
 import '../features/new_trip_join/driver/screen/captain_ride_details.dart';
+import '../features/new_trip_join/driver/screen/ride_mode_screen.dart';
+import '../features/new_trip_join/driver/screen/running_and_past_trips_screen.dart';
+import '../features/new_trip_join/presentation/view/screen/new_route_screen.dart';
+import '../features/new_trip_join/presentation/view/screen/new_trip_join_screen.dart';
+import '../features/new_trip_join/presentation/view/screen/pick_me_info_screen.dart';
+import '../features/new_trip_join/presentation/view/screen/trip_Join_info_screen.dart';
+import '../features/notifications/presentation/cubits/get_app_notifications/get_app_notifications_cubit.dart';
+import '../features/notifications/presentation/cubits/get_services_notifications/get_services_notifications_cubit.dart';
+import '../features/notifications/presentation/cubits/get_social_notifications/get_social_notifications_cubit.dart';
+import '../features/notifications/presentation/cubits/get_status_all_services_notifications/get_status_all_services_notifications_cubit.dart';
 import '../features/notifications/presentation/pages/notification_view.dart';
 import '../features/payment/presentation/pages/payment_view.dart';
 import '../features/quraan/presentation/pages/quraan_view.dart';
@@ -420,6 +433,8 @@ import '../features/social_media/club_house/presentation/pages/club_house_home_s
 import '../features/social_media/create_post/presentation/pages/create_life_event.dart';
 import '../features/social_media/create_post/presentation/pages/create_post_view.dart';
 import '../features/social_media/create_post/presentation/pages/life_event.dart';
+import '../features/social_media/reels/presentation/screen/add_story_screen.dart';
+import '../features/social_media/reels/presentation/screen/use_sound_screen.dart';
 import '../features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
 import '../features/social_media/social_posts/presentation/pages/Social_home.dart';
 import '../features/social_media/social_posts/presentation/pages/other_account_view.dart';
@@ -455,6 +470,10 @@ class AppPages {
                 BlocProvider(
                   create: (context) =>
                       serviceLocator<StarCubit>()..getAllTalent(),
+                ),
+                BlocProvider(
+                  create: (context) =>
+                      serviceLocator<MainCategoriesCubit>()..loadData(),
                 ),
                 // BlocProvider(
                 //   create: (context) => serviceLocator<ThumbnailsCubit>(),
@@ -528,7 +547,7 @@ class AppPages {
                 builder: (context, state) => BlocProvider(
                   create: (context) => serviceLocator<StarCubit>()
                     ..loadInitialData()
-                    ..getAllTalent(),
+                    ..getPaginatedMyStar(1),
                   child: const MyTalentView(),
                 ),
               ),
@@ -596,8 +615,11 @@ class AppPages {
               GoRoute(
                 path: Paths.MAINCATEGORIESCARDS,
                 name: Routes.MAINCATEGORIESCARDS,
-                builder: (context, state) => MainCategoriesFlipCardsView(
-                  data: state.extra as List<MainCategoryEntity>,
+                builder: (context, state) => BlocProvider(
+                  create: (context) => serviceLocator<MainCategoriesCubit>(),
+                  child: MainCategoriesFlipCardsView(
+                    data: state.extra as List<MainCategoryEntity>,
+                  ),
                 ),
               ),
               GoRoute(
@@ -778,7 +800,7 @@ class AppPages {
                 name: Routes.MARRIAGESUBCATEGORIES,
                 builder: (context, state) => BlocProvider(
                   create: (context) => serviceLocator<SubcategoriesCubit>(),
-                  child: const MarriageSubCategoriesView(
+                  child: MarriageSubCategoriesView(
                       // mainCategory: state.extra as MainCategoryEntity,
                       ),
                 ),
@@ -794,9 +816,9 @@ class AppPages {
                     BlocProvider(
                       create: (_) => serviceLocator<VerifyOtpCubit>(),
                     ),
-                    BlocProvider(
-                      create: (_) => serviceLocator<GetWalletCubit>(),
-                    ),
+                    // BlocProvider(
+                    //   create: (_) => serviceLocator<GetWalletCubit>(),
+                    // ),
                     BlocProvider(
                       create: (_) => serviceLocator<UserCubit>(),
                     ),
@@ -1020,6 +1042,10 @@ class AppPages {
                             create: (_) =>
                                 serviceLocator<SubscriptionWalletCubit>(),
                           ),
+                          BlocProvider(
+                            create: (_) =>
+                                serviceLocator<MainCategoriesCubit>(),
+                          ),
                         ],
                         child: const WalletView(
                             // type: state.extra as WalletTypes,
@@ -1046,7 +1072,10 @@ class AppPages {
               GoRoute(
                 path: Paths.CASHBACK,
                 name: Routes.CASHBACK,
-                builder: (context, state) => const CashbackView(),
+                builder: (context, state) => BlocProvider<MainCategoriesCubit>(
+                  create: (_) => serviceLocator(),
+                  child: const CashbackView(),
+                ),
               ),
 
               GoRoute(
@@ -1062,7 +1091,11 @@ class AppPages {
               GoRoute(
                 path: Paths.GIFT,
                 name: Routes.GIFT,
-                builder: (context, state) => const GiftView(),
+                builder: (context, state) => BlocProvider(
+                  create: (context) =>
+                      serviceLocator<MainCategoriesCubit>()..loadData(),
+                  child: const GiftView(),
+                ),
               ),
               // GoRoute(
               //   path: Paths.GIFT,
@@ -1109,6 +1142,35 @@ class AppPages {
                   name: Routes.ACCOUNT,
                   builder: (context, state) => const NotificationView(),
                   routes: [
+                    // GoRoute(
+                    //   path: Paths.NOTIFICATIONS,
+                    //   name: Routes.NOTIFICATIONS,
+                    //   builder: (context, state) => MultiBlocProvider(
+                    //     providers: [
+                    //       BlocProvider<GetAppNotificationsCubit>(
+                    //         create: (context) =>
+                    //             serviceLocator<GetAppNotificationsCubit>(),
+                    //       ),
+                    //       BlocProvider<GetStatusAllServicesNotificationsCubit>(
+                    //         create: (context) => serviceLocator<
+                    //             GetStatusAllServicesNotificationsCubit>(),
+                    //       ),
+                    //       BlocProvider<GetSocialNotificationsCubit>(
+                    //         create: (context) => GetSocialNotificationsCubit(
+                    //           getNotficationsUseCase: serviceLocator(),
+                    //           context: context,
+                    //         ),
+                    //       ),
+                    //       BlocProvider<GetServicesNotificationsCubit>(
+                    //         create: (context) => GetServicesNotificationsCubit(
+                    //           getNotficationsUseCase: serviceLocator(),
+                    //           context: context,
+                    //         ),
+                    //       ),
+                    //     ],
+                    //     child: const NotificationView(),
+                    //   ),
+                    // ),
                     GoRoute(
                       path: Paths.NOTIFICATIONS,
                       name: Routes.NOTIFICATIONS,
@@ -1414,9 +1476,14 @@ class AppPages {
                   name: Routes.SOCIAL,
                   builder: (context, state) {
                     final params = state.extra as dynamic;
-                    return SocialHomeView(
-                      payload: params ??
-                          SocialParams(userId: '', index: 0, hideAppBar: false),
+                    return BlocProvider(
+                      create: (context) =>
+                          serviceLocator<SocialPostsCubit>()..loadData(),
+                      child: SocialHomeView(
+                        payload: params ??
+                            SocialParams(
+                                userId: '', index: 0, hideAppBar: false),
+                      ),
                     );
                   },
                   routes: [
@@ -1607,8 +1674,15 @@ class AppPages {
               GoRoute(
                 path: Paths.CHAT,
                 name: Routes.CHAT,
-                builder: (context, state) => BlocProvider<ChatsCubit>(
-                  create: (_) => serviceLocator(),
+                builder: (context, state) => MultiBlocProvider(
+                  providers: [
+                    BlocProvider<ChatsCubit>(
+                      create: (_) => serviceLocator(),
+                    ),
+                    // BlocProvider(
+                    //   create: (context) => serviceLocator<ChatRoomCubit>(),
+                    // ),
+                  ],
                   child:
                       ChatView(chatsViewParams: state.extra as ChatsViewParams),
                 ),
@@ -1811,7 +1885,11 @@ class AppPages {
                         builder: (context, state) =>
                             BlocProvider<BookDoctorAppointmentCubit>(
                                 create: (_) => serviceLocator(),
-                                child: SuccessfulBookingScreen())),
+                                child: SuccessfulBookingScreen(
+                                  doctorDetailsCubit:
+                                  (state.extra) as DoctorDetailsCubit,
+                                )
+                                )),
                     GoRoute(
                         path: Paths.DOCTORDASHBOARD,
                         name: Routes.DOCTORDASHBOARD,
@@ -1896,7 +1974,7 @@ class AppPages {
                   builder: (context, state) => MultiBlocProvider(
                         providers: [
                           BlocProvider<RestaurantsCubit>(
-                            create: (context) => serviceLocator()..loadData(),
+                            create: (context) => serviceLocator()..loadData()..getReqCount(),
                           ),
                         ],
                         child: const RestaurantsListsView(),
@@ -3545,6 +3623,38 @@ class AppPages {
                       ),
                     ],
                     child: const NewRideModeScreen(),
+                  );
+                },
+              ),
+              GoRoute(
+                path: Paths.useSoundScreen,
+                name: Routes.UseSoundScreen,
+                builder: (context, state) {
+                  return MultiBlocProvider(
+                    providers: [
+                      BlocProvider<DestGetLatAndLongCubit>(
+                        create: (context) => DestGetLatAndLongCubit(
+                            getLatLongFromAddressRemoteDataSource:
+                                serviceLocator()),
+                      ),
+                    ],
+                    child: const UseSoundScreen(),
+                  );
+                },
+              ),
+              GoRoute(
+                path: Paths.addStoryScreen,
+                name: Routes.AddStoryScreen,
+                builder: (context, state) {
+                  return MultiBlocProvider(
+                    providers: [
+                      BlocProvider<DestGetLatAndLongCubit>(
+                        create: (context) => DestGetLatAndLongCubit(
+                            getLatLongFromAddressRemoteDataSource:
+                                serviceLocator()),
+                      ),
+                    ],
+                    child: const AddStoryScreen(),
                   );
                 },
               ),

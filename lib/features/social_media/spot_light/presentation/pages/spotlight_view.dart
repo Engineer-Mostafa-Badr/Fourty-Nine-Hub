@@ -8,13 +8,19 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locales.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/unified_widget_view.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/search_app_users.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
+import 'package:fourtyninehub/features/social_media/spot_light/presentation/pages/other_profile_view.dart';
+import 'package:fourtyninehub/features/social_media/spot_light/presentation/pages/profile_view.dart';
+import 'package:fourtyninehub/features/social_media/spot_light/presentation/widgets/friends_stories.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../../common/widgets/stateless/buttons/iconAppButton.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
@@ -26,6 +32,7 @@ import '../../../stories/presentation/cubit/stories_cubit.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
+//Todo:Mohamed Magdy: جميع الاكواد اللي معمول لها كومينت هي اكواد فيها لوجيك انا شايلها عشان اشتغل علي ال يو اي او اكواد ملغيه انا عاملها كومنت عشان لو اللي هيربط يستفاد منها او ياخد اجزاء منها
 class SpotlightView extends StatefulWidget {
   const SpotlightView({super.key});
 
@@ -85,71 +92,73 @@ class _SpotlightViewState extends State<SpotlightView> {
     final userId = userCubit.state.data?.id ?? '';
 
     return CustomScaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(30),
-        child: BackAppBar(
-          label: LocaleKeys.spotlight_title.tr(),
-          actions: [
-            IconButton(
-              onPressed: () {
-                context.push(
-                  Routes.OTHERSACCOUNT,
-                  extra: userId,
-                );
-              },
-              icon: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                child: Icon(
-                  Icons.person,
-                  size: 50.sp,
-                ),
-              ),
-            ),
-            IconButton(
-                onPressed: () {
-                  showDialog(
-                      context: context, builder: (_) => const SearchAppUsers());
-                },
-                icon: Icon(
-                  Icons.search,
-                  size: 50.sp,
-                )),
-          ],
-        ),
-      ),
-      body: isLoggedIn
-          ? CustomScrollView(
-              controller: _scrollController,
-              physics: const BouncingScrollPhysics(),
-              slivers: [
-                const SliverToBoxAdapter(
-                  child: Column(
-                    children: [
-                      FriendsList(),
-                      Sizer(),
-                      FollowingSection(),
-                      Sizer(),
-                    ],
-                  ),
-                ),
-                SliverToBoxAdapter(
-                  child: DiscoverSection(isFetchingMore: _isFetchingMore),
-                ),
-                if (_isFetchingMore)
-                  const SliverToBoxAdapter(
-                    child: Padding(
-                      padding: EdgeInsets.all(16.0),
-                      child: Center(
-                        child: CircularProgressIndicator(),
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(50),
+          child: BackAppBar(
+            label: LocaleKeys.spotlight_title.tr(),
+            actions: [
+              CircleAvatar(
+                radius: 35.h, // Responsive radius
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    Positioned.fill(
+                      child: ClickableWidget(
+                        onTap: ()=>Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) =>const SpotLightProfileScreen(),
+                          ),
+                        ),
+                        child: CircleAvatar(
+                          backgroundColor: AppColors.PRIMARY_COLOR,
+                          backgroundImage: AssetImage(
+                            Assets.personalImage,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-              ],
-            )
-          : const Center(
-              child: CupertinoActivityIndicator(),
+                  ],
+                ),
+              ),
+              const Sizer(),
+            ],
+          ),
+        ),
+        body:
+            // isLoggedIn
+            //     ?
+            CustomScrollView(
+          controller: _scrollController,
+          physics: const BouncingScrollPhysics(),
+          slivers: [
+            const SliverToBoxAdapter(
+              child: Column(
+                children: [
+                  FriendsList(),
+                  Sizer(),
+                  FollowingSection(),
+                  Sizer(),
+                ],
+              ),
             ),
-    );
+            SliverToBoxAdapter(
+              child: DiscoverSection(isFetchingMore: _isFetchingMore),
+            ),
+            if (_isFetchingMore)
+              const SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+              ),
+          ],
+        )
+        // : const Center(
+        //     child: CupertinoActivityIndicator(),
+        //   ),
+        );
   }
 }
 
@@ -168,14 +177,16 @@ class FriendsList extends StatelessWidget {
             child: Text(
               LocaleKeys.friends_title.tr(),
               textScaler: TextScaler.noScaling,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 50.sp),
+              style: Styles.headerText(
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           BlocProvider<StoryCubit>(
             create: (_) => serviceLocator()
               ..fetchStories()
               ..getMutedStories(),
-            child: const ChatStories(),
+            child: const FriendsStories(),
           ),
         ],
       ),
@@ -217,14 +228,6 @@ class _FollowingSectionState extends State<FollowingSection> {
     _previousScrollPosition = currentScrollPosition;
   }
 
-  // void _onScroll() {
-  //   if (_scrollController.position.pixels >=
-  //           _scrollController.position.maxScrollExtent - 200 &&
-  //       !_isFetchingMore) {
-  //     _fetchMoreReels();
-  //   }
-  // }
-
   Future<void> _fetchMoreReels() async {
     setState(() {
       _isFetchingMore = true;
@@ -256,17 +259,17 @@ class _FollowingSectionState extends State<FollowingSection> {
           child: Text(
             LocaleKeys.following_title.tr(), // Localized text
             textScaler: TextScaler.noScaling, // Adjusting for scaling
-            style: TextStyle(fontSize: 50.sp, fontWeight: FontWeight.bold),
+            style: Styles.headerText(fontWeight: FontWeight.bold),
           ),
         ),
         SizedBox(
-          height: MediaQuery.of(context).size.width * 0.6,
+          height: MediaQuery.of(context).size.width * 0.65,
           width: double.infinity,
           child: BlocConsumer<ReelsCubit, ReelsState>(
             builder: (context, state) {
-              if (state.reelsForFollowing?.isEmpty ?? false) {
-                return Center(child: Text(LocaleKeys.noFollowing.localize));
-              }
+              // if (state.reelsForFollowing?.isEmpty ?? false) {
+              //   return Center(child: Text(LocaleKeys.noFollowing.localize));
+              // }
               return Stack(
                 children: [
                   NotificationListener<ScrollNotification>(
@@ -280,27 +283,28 @@ class _FollowingSectionState extends State<FollowingSection> {
                       controller: _scrollController,
                       physics: const BouncingScrollPhysics(),
                       scrollDirection: Axis.horizontal,
-                      itemCount: (state.reelsForFollowing?.length ?? 0),
+                      itemCount: 5,
+                      //(state.reelsForFollowing?.length ?? 0),
                       itemBuilder: (context, index) {
-                        final reel = state.reelsForFollowing![index];
+                        // final reel = state.reelsForFollowing![index];
                         return SizedBox(
-                          width: MediaQuery.of(context).size.width / 2.5,
+                          width: MediaQuery.of(context).size.width * 0.4,
                           child: Padding(
                             padding: EdgeInsets.symmetric(
-                                horizontal: 20.w, vertical: 12.h),
-                            child: _buildReelCard(context, reel, index),
+                                horizontal: 2.w, vertical: 6.h),
+                            child: _buildReelCard(context, index),
                           ),
                         );
                       },
                     ),
                   ),
-                  if (_isFetchingMore)
-                    const Positioned(
-                      right: 16,
-                      top: 16,
-                      bottom: 16,
-                      child: Center(child: CircularProgressIndicator()),
-                    ),
+                  // if (_isFetchingMore)
+                  //   const Positioned(
+                  //     right: 16,
+                  //     top: 16,
+                  //     bottom: 16,
+                  //     child: Center(child: CircularProgressIndicator()),
+                  //   ),
                 ],
               );
             },
@@ -311,78 +315,82 @@ class _FollowingSectionState extends State<FollowingSection> {
     );
   }
 
-  Widget _buildReelCard(BuildContext context, Reel reel, int index) {
+  Widget _buildReelCard(
+      BuildContext context,
+      //Reel reel,
+      int index) {
     return GestureDetector(
-      onTap: () async {
-        await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => BlocProvider.value(
-                value: serviceLocator<ReelsCubit>(),
-                child: CustomScaffold(
-                  extendBodyBehindAppBar: true,
-                  extendBody: true,
-                  appBar: AppBar(
-                    backgroundColor: Colors.transparent,
-                    elevation: 0,
-                    leading: IconAppButton(
-                      icon: Icons.arrow_back,
-                      size: 50.h,
-                      color: context.isDarkMode ? Colors.white : Colors.grey,
-                      onPressed: () => context.pop(),
-                    ),
-                    actions: const [
-                      // const Spacer(),
-                      // Padding(
-                      //   padding: const EdgeInsets.all(8.0),
-                      //   child: IconButton(
-                      //     onPressed: () async {
-                      //       // context.pop();
-                      //       await Navigator.push(
-                      //           context,
-                      //           MaterialPageRoute(
-                      //             builder: (context) =>
-                      //                 const ReelsRecordingScreen(
-                      //                     // advertisementType: 'reel',
-                      //                     // comeFromCompany: 'company',
-                      //                     // totalPrice: '500',
-                      //                     ),
-                      //           ));
-                      //     },
-                      //     icon: FaIcon(
-                      //       Icons.camera_alt_outlined,
-                      //       color: context.isDarkMode
-                      //           ? Colors.white
-                      //           : Colors.grey,
-                      //       size: 50.h,
-                      //     ),
-                      //   ),
-                      // )
-                    ],
-                  ),
-                  body: UnifiedReelItem(
-                    reel: reel,
-                    isVisible: true,
-                    index: index,
-                    itemType: ReelItemType.spotlight,
-                  ),
-                  // MainReelItem(
-                  //   key: ValueKey(reel.id),
-                  //   reel: reel,
-                  //   fromSpotlight: true,
-                  //   isVisible: true,
-                  // )
-                  // SpotlightReelItem(
-                  //   key: ValueKey(reel.id),
-                  //   reel: reel,
-                  //   isVisible: true,
-                  // ),,
-                )),
-          ),
-        );
-      },
+      onTap: () {},
+      // async {
+      //   await Navigator.push(
+      //     context,
+      //     MaterialPageRoute(
+      //       builder: (context) => BlocProvider.value(
+      //           value: serviceLocator<ReelsCubit>(),
+      //           child: CustomScaffold(
+      //             extendBodyBehindAppBar: true,
+      //             extendBody: true,
+      //             appBar: AppBar(
+      //               backgroundColor: Colors.transparent,
+      //               elevation: 0,
+      //               leading: IconAppButton(
+      //                 icon: Icons.arrow_back,
+      //                 size: 50.h,
+      //                 color: context.isDarkMode ? Colors.white : Colors.grey,
+      //                 onPressed: () => context.pop(),
+      //               ),
+      //               actions: const [
+      //                 // const Spacer(),
+      //                 // Padding(
+      //                 //   padding: const EdgeInsets.all(8.0),
+      //                 //   child: IconButton(
+      //                 //     onPressed: () async {
+      //                 //       // context.pop();
+      //                 //       await Navigator.push(
+      //                 //           context,
+      //                 //           MaterialPageRoute(
+      //                 //             builder: (context) =>
+      //                 //                 const ReelsRecordingScreen(
+      //                 //                     // advertisementType: 'reel',
+      //                 //                     // comeFromCompany: 'company',
+      //                 //                     // totalPrice: '500',
+      //                 //                     ),
+      //                 //           ));
+      //                 //     },
+      //                 //     icon: FaIcon(
+      //                 //       Icons.camera_alt_outlined,
+      //                 //       color: context.isDarkMode
+      //                 //           ? Colors.white
+      //                 //           : Colors.grey,
+      //                 //       size: 50.h,
+      //                 //     ),
+      //                 //   ),
+      //                 // )
+      //               ],
+      //             ),
+      //             body: UnifiedReelItem(
+      //               reel: reel,
+      //               isVisible: true,
+      //               index: index,
+      //               itemType: ReelItemType.spotlight,
+      //             ),
+      //             // MainReelItem(
+      //             //   key: ValueKey(reel.id),
+      //             //   reel: reel,
+      //             //   fromSpotlight: true,
+      //             //   isVisible: true,
+      //             // )
+      //             // SpotlightReelItem(
+      //             //   key: ValueKey(reel.id),
+      //             //   reel: reel,
+      //             //   isVisible: true,
+      //             // ),,
+      //           )),
+      //     ),
+      //   );
+      // },
       child: Card(
-        elevation: 8,
+        // elevation: 8,
         clipBehavior: Clip.hardEdge,
         child: Stack(
           alignment: AlignmentDirectional.bottomStart,
@@ -392,30 +400,13 @@ class _FollowingSectionState extends State<FollowingSection> {
             //   width: double.infinity,
             //   height: double.infinity,
             //   fit: BoxFit.cover,
-            //   errorBuilder: (context, error, stackTrace) =>
-            //       const Center(child: CupertinoActivityIndicator()),
+            //   errorBuilder: (context, error, stackTrace) =>const SizedBox.shrink(),
+            //
             // ),
-            // Positioned(
-            //   bottom: 8,
-            //   left: 2,
-            //   child: Row(
-            //     children: [
-            //       const Icon(
-            //         Icons.play_arrow,
-            //         color: Colors.white,
-            //         size: 16,
-            //       ),
-            //       const SizedBox(width: 4),
-            //       Text(
-            //         reel.viewCount.toString(),
-            //         textScaler: TextScaler.noScaling,
-            //         style: const TextStyle(color: Colors.white),
-            //       ),
-            //     ],
-            //   ),
-            // ),
-            Image.network(
-              reel.thumbnailSignedUrl,
+
+            //Todo: delete this wigdet and leave the network image above
+            Image.asset(
+              Assets.spotlight_profile,
               width: double.infinity,
               height: double.infinity,
               fit: BoxFit.cover,
@@ -424,30 +415,46 @@ class _FollowingSectionState extends State<FollowingSection> {
             ),
             Padding(
               padding: EdgeInsets.all(12.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.end,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  CircleAvatar(
-                    radius: 32.w,
-                    backgroundColor: AppColors.AUTH_CONTAINER_COLOR,
-                    child: ImageFromInternet(
-                      image: reel.user.profilePictureSignedUrl ??
-                          UIConst.profilePlaceHolder,
-                      height: 60.h,
-                      width: 60.w,
-                      isCircle: true,
+                  ClickableWidget(
+                    onTap:()=>Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const SpotLightOtherProfileScreen(),
+                      ),
+                    ),
+                    child: CircleAvatar(
+                      radius: 40.w,
+                      backgroundColor: AppColors.PRIMARY_COLOR,
+                      //Todo: remove the background image and uncomment the child
+                      backgroundImage: AssetImage(
+                        Assets.personalImage,
+                      ),
+                      // child:ImageFromInternet(
+                      //   image: reel.user.profilePictureSignedUrl ??
+                      //       UIConst.profilePlaceHolder,
+                      //   height: 60.h,
+                      //   width: 60.w,
+                      //   isCircle: true,
+                      // ),
                     ),
                   ),
-                  SizedBox(
-                    height: 10.h,
-                  ),
+                  const Sizer(),
                   Label(
-                      text:
-                          '${reel.user.firstName} ${_getFirstTwoWords(reel.user.lastName)}'),
-                  Label(
-                    text: formatDate('${reel.createdAt}'),
+                    text: 'Ali\nMohamed',
+                    //'${reel.user.firstName} ${_getFirstTwoWords(reel.user.lastName)}'
+                    style: Styles.headerText(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 32),
                   ),
+                  // Label(
+                  //   text:
+                  //   formatDate('${reel.createdAt}'
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -455,36 +462,6 @@ class _FollowingSectionState extends State<FollowingSection> {
         ),
       ),
     );
-  }
-
-  String formatDate(String createdAt) {
-    final DateTime dateTime = DateTime.parse(createdAt);
-    final DateTime now = DateTime.now();
-
-    final DateTime today = DateTime(now.year, now.month, now.day);
-    final DateTime yesterday = today.subtract(const Duration(days: 1));
-
-    if (dateTime.isAfter(today)) {
-      return LocaleKeys.today.localize;
-    } else if (dateTime.isAfter(yesterday)) {
-      return LocaleKeys.yesterday.localize;
-    } else {
-      return context.locale == Locales.english
-          ? DateFormat('dd/MM/yyyy', 'en').format(dateTime)
-          : DateFormat('yyyy/MM/dd', 'ar')
-              .format(dateTime); // Format: 12-3-2022
-    }
-  }
-
-  String _getFirstTwoWords(String fullName) {
-    List<String> words = fullName.split(" ");
-    if (words.length > 1) {
-      // Capitalize the first letter of each word
-      words = words.map((word) {
-        return word[0].toUpperCase() + word.substring(1).toLowerCase();
-      }).toList();
-    }
-    return words.length > 1 ? '${words[0]} ${words[1]}' : words[0];
   }
 }
 
@@ -509,16 +486,18 @@ class DiscoverSectionState extends State<DiscoverSection> {
           child: Text(
             LocaleKeys.discover_title.tr(), // Localized text
             textScaler: TextScaler.noScaling,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 50.sp),
+            style: Styles.headerText(
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
         Flexible(
           child: BlocBuilder<ReelsCubit, ReelsState>(
             builder: (context, state) {
-              if ((state.globalReels.isEmpty) &&
-                  !(state.globalReelsIsLoading)) {
-                return const Center(child: CupertinoActivityIndicator());
-              }
+              // if ((state.globalReels.isEmpty) &&
+              //     !(state.globalReelsIsLoading)) {
+              //   return const Center(child: CupertinoActivityIndicator());
+              // }
 
               return GridView.builder(
                 padding: EdgeInsets.symmetric(
@@ -530,22 +509,26 @@ class DiscoverSectionState extends State<DiscoverSection> {
                   crossAxisCount: 2,
                   mainAxisSpacing: 8.h,
                   crossAxisSpacing: 8.w,
-                  childAspectRatio: 0.7,
+                  childAspectRatio: 0.6,
                 ),
-                itemCount: (state.globalReels.length) +
-                    (widget.isFetchingMore ? 1 : 0),
+                itemCount: 12,
+                // (state.globalReels.length) +
+                //     (widget.isFetchingMore ? 1 : 0),
                 itemBuilder: (context, index) {
-                  if (index == (state.globalReels.length) &&
-                      widget.isFetchingMore) {
-                    return const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: CupertinoActivityIndicator(
-                        color: Colors.black,
-                      ),
-                    );
-                  }
-                  final reel = state.globalReels[index];
-                  return _buildReelCard(context, reel, index);
+                  // if (index == (state.globalReels.length) &&
+                  //     widget.isFetchingMore) {
+                  //   return const Padding(
+                  //     padding: EdgeInsets.all(8.0),
+                  //     child: CupertinoActivityIndicator(
+                  //       color: Colors.black,
+                  //     ),
+                  //   );
+                  // }
+                  // final reel = state.globalReels[index];
+                  return _buildReelCard(
+                      context,
+                      //reel,
+                      index);
                 },
               );
             },
@@ -555,100 +538,93 @@ class DiscoverSectionState extends State<DiscoverSection> {
     );
   }
 
-  Widget _buildReelCard(BuildContext context, Reel reel, int index) {
+  Widget _buildReelCard(
+      BuildContext context,
+      //Reel reel,
+      int index) {
     return GestureDetector(
-      onTap: () async {
-        await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => BlocProvider.value(
-              value: serviceLocator<ReelsCubit>(),
-              child: CustomScaffold(
-                extendBodyBehindAppBar: true,
-                extendBody: true,
-                appBar: AppBar(
-                  backgroundColor: Colors.transparent,
-                  elevation: 0,
-                  leading: IconAppButton(
-                    icon: Icons.arrow_back,
-                    size: 50.h,
-                    color: context.isDarkMode ? Colors.white : Colors.grey,
-                    onPressed: () => context.pop(),
-                  ),
-                  actions: const [
-                    // const Spacer(),
-                    // Padding(
-                    //   padding: const EdgeInsets.all(8.0),
-                    //   child: IconButton(
-                    //     onPressed: () async {
-                    //       // context.pop();
-                    //       await Navigator.push(
-                    //           context,
-                    //           MaterialPageRoute(
-                    //             builder: (context) =>
-                    //                 const ReelsRecordingScreen(
-                    //                     // advertisementType: 'reel',
-                    //                     // comeFromCompany: 'company',
-                    //                     // totalPrice: '500',
-                    //                     ),
-                    //           ));
-                    //     },
-                    //     icon: FaIcon(
-                    //       Icons.camera_alt_outlined,
-                    //       color: context.isDarkMode
-                    //           ? Colors.white
-                    //           : Colors.grey,
-                    //       size: 50.h,
-                    //     ),
-                    //   ),
-                    // )
-                  ],
-                ),
-                body: UnifiedReelItem(
-                  reel: reel,
-                  index: index,
-                  isVisible: true,
-                  itemType: ReelItemType.spotlight,
-                ),
-                // SpotlightReelItem(
-                //   key: ValueKey(reel.id),
-                //   reel: reel,
-                //   isVisible: true,
-                // ),,
-              ),
-            ),
-          ),
-        );
-      },
+      onTap: () {},
+      //Todo:  خلي اللي معموله كومينت مكان (){}
+      // async {
+      //   await Navigator.push(
+      //     context,
+      //     MaterialPageRoute(
+      //       builder: (context) => BlocProvider.value(
+      //         value: serviceLocator<ReelsCubit>(),
+      //         child: CustomScaffold(
+      //           extendBodyBehindAppBar: true,
+      //           extendBody: true,
+      //           appBar: AppBar(
+      //             backgroundColor: Colors.transparent,
+      //             elevation: 0,
+      //             leading: IconAppButton(
+      //               icon: Icons.arrow_back,
+      //               size: 50.h,
+      //               color: context.isDarkMode ? Colors.white : Colors.grey,
+      //               onPressed: () => context.pop(),
+      //             ),
+      //             actions: const [
+      //               // const Spacer(),
+      //               // Padding(
+      //               //   padding: const EdgeInsets.all(8.0),
+      //               //   child: IconButton(
+      //               //     onPressed: () async {
+      //               //       // context.pop();
+      //               //       await Navigator.push(
+      //               //           context,
+      //               //           MaterialPageRoute(
+      //               //             builder: (context) =>
+      //               //                 const ReelsRecordingScreen(
+      //               //                     // advertisementType: 'reel',
+      //               //                     // comeFromCompany: 'company',
+      //               //                     // totalPrice: '500',
+      //               //                     ),
+      //               //           ));
+      //               //     },
+      //               //     icon: FaIcon(
+      //               //       Icons.camera_alt_outlined,
+      //               //       color: context.isDarkMode
+      //               //           ? Colors.white
+      //               //           : Colors.grey,
+      //               //       size: 50.h,
+      //               //     ),
+      //               //   ),
+      //               // )
+      //             ],
+      //           ),
+      //           body: UnifiedReelItem(
+      //             reel: reel,
+      //             index: index,
+      //             isVisible: true,
+      //             itemType: ReelItemType.spotlight,
+      //           ),
+      //           // SpotlightReelItem(
+      //           //   key: ValueKey(reel.id),
+      //           //   reel: reel,
+      //           //   isVisible: true,
+      //           // ),,
+      //         ),
+      //       ),
+      //     ),
+      //   );
+      // },
       child: Card(
-        elevation: 8,
         clipBehavior: Clip.hardEdge,
         child: Stack(
           alignment: AlignmentDirectional.bottomStart,
           children: [
-            // Positioned(
-            //   bottom: 8,
-            //   left: 2,
-            //   child: Row(
-            //     children: [
-            //       const Icon(
-            //         Icons.play_arrow,
-            //         color: Colors.white,
-            //         size: 16,
-            //       ),
-            //       const SizedBox(
-            //           width: 4
-            //       ),
-            //       Text(
-            //         reel.viewCount.toString(),
-            //         textScaler: TextScaler.noScaling,
-            //         style: const TextStyle(color: Colors.white),
-            //       ),
-            //     ],
-            //   ),
+            // Image.network(
+            //   reel.thumbnailSignedUrl,
+            //   width: double.infinity,
+            //   height: double.infinity,
+            //   fit: BoxFit.cover,
+            //   errorBuilder: (context, error, stackTrace) =>
+            //       const SizedBox.shrink(),
             // ),
-            Image.network(
-              reel.thumbnailSignedUrl,
+
+            // Todo: delete this widget and leave the network image above
+            Image.asset(
+              Assets.spotlight_profile,
               width: double.infinity,
               height: double.infinity,
               fit: BoxFit.cover,
@@ -661,24 +637,48 @@ class DiscoverSectionState extends State<DiscoverSection> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  CircleAvatar(
-                    radius: 32.w,
-                    backgroundColor: AppColors.AUTH_CONTAINER_COLOR,
-                    child: ImageFromInternet(
-                      image: reel.user.profilePictureSignedUrl ??
-                          UIConst.profilePlaceHolder,
-                      height: 60.h,
-                      width: 60.w,
-                      isCircle: true,
+                  ClickableWidget(
+                    onTap:()=>Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const SpotLightOtherProfileScreen(),
+                      ),
+                    ),
+                    child: CircleAvatar(
+                      radius: 32.w,
+                      backgroundColor: AppColors.AUTH_CONTAINER_COLOR,
+                      backgroundImage: AssetImage(
+                        Assets.personalImage,
+                      ),
+                      // child:ImageFromInternet(
+                      //   image: reel.user.profilePictureSignedUrl ??
+                      //       UIConst.profilePlaceHolder,
+                      //   height: 60.h,
+                      //   width: 60.w,
+                      //   isCircle: true,
+                      // ),
                     ),
                   ),
-                  SizedBox(
-                    height: 10.h,
+                  const Sizer(),
+                  RichText(
+                    textAlign: TextAlign.start,
+                    text: TextSpan(children: [
+                      TextSpan(
+                        text: 'Ali\n',
+                        style: Styles.mediumText(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            fontSize: 32),
+                      ),
+                      TextSpan(
+                        text: context.isArabic ? 'امس' : 'Yesterday',
+                        style:
+                            Styles.smallText(color: Colors.white, fontSize: 24),
+                      ),
+                    ]
+                        // Localized text
+
+                        ),
                   ),
-                  Label(
-                      text:
-                          '${reel.user.firstName} ${_getFirstTwoWords(reel.user.lastName)}'),
-                  Label(text: formatDate('${reel.createdAt}')),
                 ],
               ),
             ),
@@ -687,34 +687,34 @@ class DiscoverSectionState extends State<DiscoverSection> {
       ),
     );
   }
-
-  String formatDate(String createdAt) {
-    final DateTime dateTime = DateTime.parse(createdAt);
-    final DateTime now = DateTime.now();
-
-    final DateTime today = DateTime(now.year, now.month, now.day);
-    final DateTime yesterday = today.subtract(const Duration(days: 1));
-
-    if (dateTime.isAfter(today)) {
-      return LocaleKeys.today.localize;
-    } else if (dateTime.isAfter(yesterday)) {
-      return LocaleKeys.yesterday.localize;
-    } else {
-      return context.locale == Locales.english
-          ? DateFormat('dd/MM/yyyy', 'en').format(dateTime)
-          : DateFormat('yyyy/MM/dd', 'ar')
-              .format(dateTime); // Format: 12-3-2022
-    }
-  }
-
-  String _getFirstTwoWords(String fullName) {
-    List<String> words = fullName.split(" ");
-    if (words.length > 1) {
-      // Capitalize the first letter of each word
-      words = words.map((word) {
-        return word[0].toUpperCase() + word.substring(1).toLowerCase();
-      }).toList();
-    }
-    return words.length > 1 ? '${words[0]} ${words[1]}' : words[0];
-  }
+//
+// String formatDate(String createdAt) {
+//   final DateTime dateTime = DateTime.parse(createdAt);
+//   final DateTime now = DateTime.now();
+//
+//   final DateTime today = DateTime(now.year, now.month, now.day);
+//   final DateTime yesterday = today.subtract(const Duration(days: 1));
+//
+//   if (dateTime.isAfter(today)) {
+//     return LocaleKeys.today.localize;
+//   } else if (dateTime.isAfter(yesterday)) {
+//     return LocaleKeys.yesterday.localize;
+//   } else {
+//     return context.locale == Locales.english
+//         ? DateFormat('dd/MM/yyyy', 'en').format(dateTime)
+//         : DateFormat('yyyy/MM/dd', 'ar')
+//             .format(dateTime); // Format: 12-3-2022
+//   }
+// }
+//
+// String _getFirstTwoWords(String fullName) {
+//   List<String> words = fullName.split(" ");
+//   if (words.length > 1) {
+//     // Capitalize the first letter of each word
+//     words = words.map((word) {
+//       return word[0].toUpperCase() + word.substring(1).toLowerCase();
+//     }).toList();
+//   }
+//   return words.length > 1 ? '${words[0]} ${words[1]}' : words[0];
+// }
 }

@@ -418,6 +418,7 @@
 
 import 'dart:developer';
 import 'dart:io';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -468,7 +469,8 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
   @override
   void dispose() {
     _messageFocusNode.dispose();
-    _messageTextController.dispose();
+    print('_messageTextController:: ${_messageTextController.text}');
+    // _messageTextController.dispose();
     super.dispose();
   }
 
@@ -481,17 +483,16 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              _isRecording
-                  ? const SizedBox.shrink()
-                  : Expanded(
-                      flex: 6,
-                      child: Column(
-                        children: [
-                          _replayedMessageCard(),
-                          _textField(),
-                        ],
-                      ),
-                    ),
+              if (!_isRecording)
+                Expanded(
+                  flex: 6,
+                  child: Column(
+                    children: [
+                      _replayedMessageCard(),
+                      _textField(),
+                    ],
+                  ),
+                ),
               const Sizer(),
               Expanded(
                 flex: 1,
@@ -525,7 +526,8 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
 
             setState(() {});
           },
-          encode: AudioEncoderType.AAC, // Ensure it's recorded in AAC
+          encode: AudioEncoderType.AAC,
+          // Ensure it's recorded in AAC
 
           sendRequestFunction: (File soundFile, String time) async {
             await context.read<ChatRoomCubit>().stopRecording();
@@ -638,23 +640,14 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
           },
           child: Container(
             decoration: BoxDecoration(
-              boxShadow: state.replayedMessage == null
-                  ? [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 1,
-                        blurRadius: 5,
-                        offset: const Offset(0, 3),
-                      ),
-                    ]
-                  : [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 1,
-                        blurRadius: 1,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.2),
+                  spreadRadius: 1,
+                  blurRadius: 5,
+                  offset: const Offset(0, 3),
+                ),
+              ],
               borderRadius: BorderRadius.vertical(
                 top: topRadius,
                 bottom: radius,
@@ -739,7 +732,6 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
                   ],
                 ),
               ),
-
               //  Scrollbar(
               //   controller: _scrollController,
               //   interactive: true,
@@ -814,28 +806,28 @@ class _SendMessageWidgetState extends State<SendMessageWidget> {
         if (state.replayedMessage != null) {
           return Container(
             padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              boxShadow: const [
+            decoration: const BoxDecoration(
+              boxShadow: [
                 BoxShadow(
                   color: AppColors.PRIMARY_COLOR,
                   blurRadius: 7,
                   spreadRadius: -5,
                 )
               ],
-              borderRadius: BorderRadius.vertical(top: radius),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
               color: AppColors.BACKGROUND_COLOR,
             ),
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 16),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.vertical(top: radius),
+                borderRadius: BorderRadius.circular(12),
                 color: AppColors.GRAY_LIGHT_COLOR3,
               ),
               child: ReplayMessageWidget(
                 messageEntity: state.replayedMessage!,
                 onCancelReplay: () =>
                     context.read<ChatRoomCubit>().cancelReplay(),
-                anotherUserName: state.replayedMessage!.byMe == true
+                anotherUserName: state.replayedMessage!.byMe
                     ? 'You'
                     : context.read<ChatsCubit>().selectedChat.name,
                 // state.chatData?.chat?.contact?.name ??

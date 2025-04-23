@@ -44,6 +44,12 @@ class _SearchViewState extends State<SearchView>
     super.dispose();
   }
 
+  getFilterName()async{
+    final prefs = await SharedPreferences.getInstance();
+    String? filter = prefs.getString('filter');
+    return filter??'';
+  }
+
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
@@ -74,8 +80,8 @@ class _SearchViewState extends State<SearchView>
                       final prefs = await SharedPreferences.getInstance();
                       String? filter = prefs.getString('filter');
                       if (filter == 'totalUsers') {
-                        context.read<SearchCubit>().loadDataUser(
-                              SearchParams(
+                        context.read<SearchCubit>().loadUsersSearchData(
+                              params:SearchParams(
                                 search: v,
                                 filter: filter ?? '',
                                 params: PaginationParams(page: 1),
@@ -83,8 +89,8 @@ class _SearchViewState extends State<SearchView>
                             );
                       }
                       if (filter == 'reels') {
-                        context.read<SearchCubit>().loadDataReel(
-                              SearchParams(
+                        context.read<SearchCubit>().loadReelsSearchData(
+                              params:SearchParams(
                                 search: v,
                                 filter: filter ?? '',
                                 params: PaginationParams(page: 1),
@@ -92,8 +98,8 @@ class _SearchViewState extends State<SearchView>
                             );
                       }
                       if (filter == 'posts') {
-                        context.read<SearchCubit>().loadDataPosts(
-                              SearchParams(
+                        context.read<SearchCubit>().loadPostsSearchData(
+                              params:SearchParams(
                                 search: v,
                                 filter: filter ?? '',
                                 params: PaginationParams(page: 1),
@@ -101,8 +107,8 @@ class _SearchViewState extends State<SearchView>
                             );
                       }
                       if (filter == 'mainCategories') {
-                        context.read<SearchCubit>().loadDataMainCategory(
-                              SearchParams(
+                        context.read<SearchCubit>().loadPaginatedSearchData(
+                              params:SearchParams(
                                 search: v,
                                 filter: filter ?? '',
                                 params: PaginationParams(page: 1),
@@ -110,8 +116,8 @@ class _SearchViewState extends State<SearchView>
                             );
                       }
                       if (filter == 'subCategories') {
-                        context.read<SearchCubit>().loadDataSubCategory(
-                              SearchParams(
+                        context.read<SearchCubit>().loadSubCategoriesSearchData(
+                              params:SearchParams(
                                 search: v,
                                 filter: filter ?? '',
                                 params: PaginationParams(page: 1),
@@ -119,8 +125,8 @@ class _SearchViewState extends State<SearchView>
                             );
                       }
                       if (filter == 'ads') {
-                        context.read<SearchCubit>().loadDataMainAds(
-                              SearchParams(
+                        context.read<SearchCubit>().loadAdsData(
+                              params:SearchParams(
                                 search: v,
                                 filter: filter ?? '',
                                 params: PaginationParams(page: 1),
@@ -128,8 +134,8 @@ class _SearchViewState extends State<SearchView>
                             );
                       }
                       if (filter == 'comeWithYouTrips') {
-                        context.read<SearchCubit>().loadDataTrip(
-                              SearchParams(
+                        context.read<SearchCubit>().loadTripComeSearchData(
+                              params:SearchParams(
                                 search: v,
                                 filter: filter ?? '',
                                 params: PaginationParams(page: 1),
@@ -191,8 +197,8 @@ class _SearchViewState extends State<SearchView>
             // Fetch data for the selected tab
             String? filter = prefs.getString('filter');
             if (filter == 'totalUsers') {
-              context.read<SearchCubit>().loadDataUser(
-                    SearchParams(
+              context.read<SearchCubit>().loadUsersSearchData(
+                    params:SearchParams(
                       search: context.read<SearchCubit>().searchController.text,
                       filter: filter ?? '',
                       params: PaginationParams(page: 1),
@@ -200,8 +206,8 @@ class _SearchViewState extends State<SearchView>
                   );
             }
             if (filter == 'reels') {
-              context.read<SearchCubit>().loadDataReel(
-                    SearchParams(
+              context.read<SearchCubit>().loadReelsSearchData(
+                    params:SearchParams(
                       search: context.read<SearchCubit>().searchController.text,
                       filter: filter ?? '',
                       params: PaginationParams(page: 1),
@@ -209,8 +215,8 @@ class _SearchViewState extends State<SearchView>
                   );
             }
             if (filter == 'posts') {
-              context.read<SearchCubit>().loadDataPosts(
-                    SearchParams(
+              context.read<SearchCubit>().loadPostsSearchData(
+                    params:SearchParams(
                       search: context.read<SearchCubit>().searchController.text,
                       filter: filter ?? '',
                       params: PaginationParams(page: 1),
@@ -218,8 +224,8 @@ class _SearchViewState extends State<SearchView>
                   );
             }
             if (filter == 'mainCategories') {
-              context.read<SearchCubit>().loadDataMainCategory(
-                    SearchParams(
+              context.read<SearchCubit>().loadPaginatedSearchData(
+                    params:SearchParams(
                       search: context.read<SearchCubit>().searchController.text,
                       filter: filter ?? '',
                       params: PaginationParams(page: 1),
@@ -227,8 +233,8 @@ class _SearchViewState extends State<SearchView>
                   );
             }
             if (filter == 'subCategories') {
-              context.read<SearchCubit>().loadDataSubCategory(
-                    SearchParams(
+              context.read<SearchCubit>().loadSubCategoriesSearchData(
+                    params:SearchParams(
                       search: context.read<SearchCubit>().searchController.text,
                       filter: filter ?? '',
                       params: PaginationParams(page: 1),
@@ -236,8 +242,8 @@ class _SearchViewState extends State<SearchView>
                   );
             }
             if (filter == 'ads') {
-              context.read<SearchCubit>().loadDataMainAds(
-                    SearchParams(
+              context.read<SearchCubit>().loadAdsData(
+                    params: SearchParams(
                       search: context.read<SearchCubit>().searchController.text,
                       filter: filter ?? '',
                       params: PaginationParams(page: 1),
@@ -245,8 +251,8 @@ class _SearchViewState extends State<SearchView>
                   );
             }
             if (filter == 'comeWithYouTrips') {
-              context.read<SearchCubit>().loadDataTrip(
-                    SearchParams(
+              context.read<SearchCubit>().loadTripComeSearchData(
+                    params:SearchParams(
                       search: context.read<SearchCubit>().searchController.text,
                       filter: filter ?? '',
                       params: PaginationParams(page: 1),
@@ -280,16 +286,40 @@ class _SearchViewState extends State<SearchView>
       body: TabBarView(
         controller: _tabController,
         physics: const NeverScrollableScrollPhysics(),
-        children: const [
-          ProfileSearchView(),
-          ReelSearchView(),
-          PostsSearchView(),
-          MainCategorySearchView(),
-          SubCategorySearchView(),
-          AdsSearchView(),
-          ComeWithMeSearchView(),
-          Center(child: Text('Trip')),
-          Center(child: Text('Trip')),
+        children: [
+          const ProfileSearchView(),
+          const ReelSearchView(),
+          PostsSearchView(
+            params: SearchParams(
+              search: context.read<SearchCubit>().searchController.text,
+              filter: getFilterName(),
+              params: PaginationParams(page: 1),
+            ),
+          ),
+          MainCategorySearchView(
+            params: SearchParams(
+              search: context.read<SearchCubit>().searchController.text,
+              filter: getFilterName(),
+              params: PaginationParams(page: 1),
+            ),
+          ),
+          const SubCategorySearchView(),
+          AdsSearchView(
+            params: SearchParams(
+              search: context.read<SearchCubit>().searchController.text,
+              // filter: getFilterName(),
+              params: PaginationParams(page: 1),
+            ),
+          ),
+          ComeWithMeSearchView(
+            params: SearchParams(
+              search: context.read<SearchCubit>().searchController.text,
+              filter: getFilterName(),
+              params: PaginationParams(page: 1),
+            ),
+          ),
+          const Center(child: Text('Trip')),
+          const Center(child: Text('Trip')),
         ],
       ),
     );

@@ -9,8 +9,11 @@ import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_vi
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/provider_ads.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/provider_filter_ads.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../../../../res/style/styles.dart';
 
 class ProviderAdsView extends StatelessWidget {
   const ProviderAdsView(
@@ -39,12 +42,15 @@ class ProviderAdsView extends StatelessWidget {
                   children: [
                     Expanded(
                       child: BadgedLabel(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
                           label: LocaleKeys.filter.localize,
+                          style: Styles.headerText(color: AppColors.whiteColor,
+                              fontWeight:FontWeight.w400 ),
+
                           width: 170.h,
                           padding: EdgeInsets.symmetric(
                               vertical: 15.h, horizontal: 5.w),
-                          icon: Icons.filter_alt_rounded,
-                          iconLeading: Icons.arrow_drop_down,
+                          iconLeading: Icons.keyboard_arrow_down_rounded,
                           onTap: () async {
                             dynamic data = await context.push(Routes.FILTERADS,
                                 extra: CategorizationEntity(
@@ -57,7 +63,7 @@ class ProviderAdsView extends StatelessWidget {
                               // context.read<AdvertisementCubit>().loadFilterData(
                               //     model: data,
                               //     filter: userType);
-                              controller.loadFilterData(
+                              controller.loadFilterAdsData(
                                   model: data, filter: userType);
                             }
                           }),
@@ -67,12 +73,14 @@ class ProviderAdsView extends StatelessWidget {
                     ),
                     Expanded(
                       child: BadgedLabel(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                           label: LocaleKeys.city.localize,
                           width: 170.h,
-                          icon: Icons.filter_alt_rounded,
+                          style: Styles.headerText(fontWeight:FontWeight.w400 ,color: AppColors.whiteColor),
+
                           padding: EdgeInsets.symmetric(
                               vertical: 15.h, horizontal: 5.w),
-                          iconLeading: Icons.arrow_drop_down,
+                          iconLeading: Icons.keyboard_arrow_down_rounded,
                           onTap: () async {
                             dynamic data = await context.push(
                                 Routes.GOVERNORATEFILTERADS,
@@ -88,7 +96,7 @@ class ProviderAdsView extends StatelessWidget {
                               // context.read<AdvertisementCubit>().loadFilterData(
                               //     model: data,
                               //     filter: userType);
-                              controller.loadFilterData(
+                              controller.loadFilterAdsData(
                                   model: data, filter: userType);
                             }
                           }),

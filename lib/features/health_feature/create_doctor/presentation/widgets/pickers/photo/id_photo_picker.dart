@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -31,18 +33,21 @@ class CreateDoctorIDPhotoPicker extends StatelessWidget {
               children: [
                 BlocBuilder<CreateDoctorCubit, CreateDoctorState>(
                   buildWhen: (previous, current) =>
-                      current is CreateDoctorUploadIdFrontImage ||
+                  current is CreateDoctorUploadIdFrontImage ||
                       current is CreateDoctorInitial,
                   builder: (context, state) {
                     return CustomImagePickerHealth(
                       isUploaded: state is CreateDoctorUploadIdFrontImage,
+                      imageFile: state is CreateDoctorUploadIdFrontImage
+                          ? File(state.file.path)
+                          : null,
                       onTap: () async {
-                        await createDoctorCubit.uploadIdFrontImage(
-                            context: context);
+                        await createDoctorCubit.uploadIdFrontImage(context: context);
                       },
                     );
                   },
                 ),
+
                 const SizedBox(
                   height: 4,
                 ),
@@ -85,18 +90,21 @@ class CreateDoctorIDPhotoPicker extends StatelessWidget {
               children: [
                 BlocBuilder<CreateDoctorCubit, CreateDoctorState>(
                   buildWhen: (previous, current) =>
-                      current is CreateDoctorUploadIdBehindImage ||
+                  current is CreateDoctorUploadIdBehindImage ||
                       current is CreateDoctorInitial,
                   builder: (context, state) {
                     return CustomImagePickerHealth(
                       isUploaded: state is CreateDoctorUploadIdBehindImage,
+                      imageFile: state is CreateDoctorUploadIdBehindImage
+                          ? File(state.file.path)
+                          : null,
                       onTap: () async {
-                        await createDoctorCubit.uploadIdBehindImage(
-                            context: context);
+                        await createDoctorCubit.uploadIdBehindImage(context: context);
                       },
                     );
                   },
                 ),
+
                 const SizedBox(
                   height: 4,
                 ),

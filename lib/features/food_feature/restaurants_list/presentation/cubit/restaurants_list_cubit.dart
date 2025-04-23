@@ -24,7 +24,6 @@ import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favo
 import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favorite_subcategory.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../../../../core/data/datasources/remote/api/api_consumer.dart';
 import '../../../../../core/enums/main_services_enum.dart';
@@ -32,13 +31,17 @@ import '../../../../social_media/social_posts/domain/usecases/get_post_comments_
 import '../../../../subcategories/domain/entities/sub_category_entity.dart';
 import '../../data/models/expired_requests_model.dart';
 import '../../data/models/restaurant_2_model.dart';
+import '../../domain/entities/log_count_entity.dart';
 import '../../domain/entities/logs_entity.dart';
 import '../../domain/entities/rate_response_entity.dart';
 import '../../domain/entities/restaurant_entity.dart';
+import '../../domain/entities/set_request_seen_entity.dart';
 import '../../domain/entities/user_order_entity.dart';
 import '../../domain/usecases/add_rate_restaurant_use_case.dart';
+import '../../domain/usecases/get_req_logs_count_use_case.dart';
 import '../../domain/usecases/get_req_logs_use_case.dart';
 import '../../domain/usecases/get_user_order_use_case.dart';
+import '../../domain/usecases/set_request_log_seen_use_case.dart';
 
 part 'restaurants_list_state.dart';
 
@@ -65,7 +68,8 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
   final GetReqLogsUseCase getReqLogsUseCase;
   final ApiConsumer apiConsumer;
   final AddRateRestaurantUseCase addRateRestaurantUseCase;
-
+  final GetReqLogsCountUseCase getReqLogsCountUseCase;
+  final SetRequestLogSeenUseCase setRequestLogSeenUseCase;
   RestaurantsCubit(
     this._getMainCategoryDetailsUseCase,
     this._getAllRestaurantUseCase,
@@ -82,7 +86,7 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
     this._getExpiredOrdersUseCase,
     this._toggleRestaurantFavouriteUseCase,
     this._getUserOrderUseCase,
-    this.getReqLogsUseCase, this.addRateRestaurantUseCase,
+    this.getReqLogsUseCase, this.addRateRestaurantUseCase, this.getReqLogsCountUseCase, this.setRequestLogSeenUseCase,
   ) : super(const RestaurantsListState());
 
   final service = MainServicesEnum.food;
@@ -96,6 +100,67 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
     print("Next State: ${change.nextState.status}");
     super.onChange(change);
   }
+
+  Future<void> setReqSeen({required String params}) async {
+    emit(state.copyWith(status: RestaurantsListStates.loading));
+
+    final response = await setRequestLogSeenUseCase(SetRequestLogSeenParams(requestId: params));
+
+    response.fold(
+          (failure) {
+        emit(state.copyWith(failure: failure, status: RestaurantsListStates.error));
+      },
+          (setData) async {
+        emit(state.copyWith(
+          setRequestLogSeenEntity: setData,
+          status: RestaurantsListStates.success,
+
+        ));
+       await getReqCount();
+         loadInitialReqLogs();
+
+
+          },
+    );
+  }
+
+  Future<void> getReqCount() async {
+    emit(state.copyWith(status: RestaurantsListStates.loading));
+
+    final response = await getReqLogsCountUseCase(NoParams());
+
+    response.fold(
+          (failure) {
+        emit(state.copyWith(failure: failure, status: RestaurantsListStates.error));
+      },
+          (reqCount) {
+        emit(state.copyWith(
+          reqCount: reqCount,
+          status: RestaurantsListStates.success,
+
+        ));
+      },
+    );
+  }
+  void updateLogEntity(LogsRequestLogsEntity updatedEntity) {
+    // Get current state
+    final currentState = state;
+
+    // Check if we have logs in the current state
+    if (currentState.logsEntity != null) {
+      // Create updated list by replacing the matching log
+      final updatedList = currentState.logsEntity!.map((log) =>
+      log.id == updatedEntity.id ? updatedEntity : log
+      ).toList();
+
+      // Emit new state with updated list
+      emit(currentState.copyWith(
+        logsEntity: updatedList,
+        status: RestaurantsListStates.success,
+      ));
+    }
+  }
+
   Future<void> rateRestaurant({required AddRateRestaurantParams params}) async {
     emit(state.copyWith(status: RestaurantsListStates.loading));
 
@@ -114,6 +179,10 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
       },
     );
   }
+
+
+
+
   Future<void> loadData() async {
     await _getUser();
     _getMainCategoryDetails();
@@ -124,14 +193,15 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
   }
 
   Future<void> _getUser() async {
-    await serviceLocator<UserCubit>()
-        .getUser()
-        .then((Either<Failure, UserEntity>? value) {
-      value?.fold(
-        (failure) => print("Failed to get user: $failure"),
-        (u) => user = u,
-      );
-    });
+    user= UserCubit.to.state.data;
+    // await serviceLocator<UserCubit>()
+    //     .getUser()
+    //     .then((Either<Failure, UserEntity>? value) {
+    //   value?.fold(
+    //     (failure) => print("Failed to get user: $failure"),
+    //     (u) => user = u,
+    //   );
+    // });
   }
 
   Future<bool> toggleFavoriteSubcategory(String subcategoryId) async {
@@ -253,9 +323,6 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
   //   );
   // }
 
-  final PagingController<int, UserOrderEntity> userOrderPagingController =
-      PagingController(firstPageKey: 1);
-
   void loadOrderData() async {
     subCategories.clear();
     currentPage = 1;
@@ -297,10 +364,6 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
   }
 
   int pageSize = 10;
-  final PagingController<int, Restaurant2Model> restaurantsPagingController =
-      PagingController(firstPageKey: 1);
-  final PagingController<int, LogsRequestLogsEntity> reqLogPagingController =
-      PagingController(firstPageKey: 1);
 
   void loadInitialData() async {
     subCategories.clear();

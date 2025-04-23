@@ -54,6 +54,8 @@ class RestaurantsListState {
   final List<LogsRequestLogsEntity>? logsEntity;
   final bool? isLoadingMoreLogs;
   final RateResponseEntity? rateResponseEntity;
+  final RequestLogCountEntity? reqCount;
+  final SetRequestSeenEntity? setRequestLogSeenEntity;
 
   const RestaurantsListState({
     this.expiredRequestsResponse,
@@ -79,6 +81,8 @@ class RestaurantsListState {
     this.userOrderEntity,
     this.logsEntity,
     this.rateResponseEntity,
+    this.reqCount,
+    this.setRequestLogSeenEntity,
   });
 
   RestaurantsListState copyWith({
@@ -106,6 +110,8 @@ class RestaurantsListState {
     List<UserOrderEntity>? userOrderEntity,
     List<LogsRequestLogsEntity>? logsEntity,
     RateResponseEntity? rateResponseEntity,
+    RequestLogCountEntity? reqCount,
+    SetRequestSeenEntity? setRequestLogSeenEntity,
   }) {
     return RestaurantsListState(
       status: status ?? this.status,
@@ -117,7 +123,7 @@ class RestaurantsListState {
       isLoadingExpiredOrdersMore:
           isLoadingExpiredOrdersMore ?? this.isLoadingExpiredOrdersMore,
       isLoadingUserOrdersMore:
-      isLoadingUserOrdersMore ?? this.isLoadingUserOrdersMore,
+          isLoadingUserOrdersMore ?? this.isLoadingUserOrdersMore,
       isLoadingRestaurantsMore:
           isLoadingRestaurantsMore ?? this.isLoadingRestaurantsMore,
       allRestaurant: allRestaurant ?? this.allRestaurant,
@@ -136,6 +142,8 @@ class RestaurantsListState {
       logsEntity: logsEntity ?? this.logsEntity,
       isLoadingMoreLogs: isLoadingMoreLogs ?? this.isLoadingMoreLogs,
       rateResponseEntity: rateResponseEntity ?? this.rateResponseEntity,
+      reqCount: reqCount ?? this.reqCount,
+      setRequestLogSeenEntity: setRequestLogSeenEntity ?? this.setRequestLogSeenEntity,
     );
   }
 }

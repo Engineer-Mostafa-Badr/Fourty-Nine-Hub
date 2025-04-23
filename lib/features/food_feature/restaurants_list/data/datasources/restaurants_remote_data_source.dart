@@ -14,15 +14,20 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usec
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 
 import '../../../../../res/assets/jsons.dart';
+import '../../domain/entities/log_count_entity.dart';
 import '../../domain/entities/logs_entity.dart';
 import '../../domain/entities/rate_response_entity.dart';
+import '../../domain/entities/set_request_seen_entity.dart';
 import '../../domain/entities/user_order_entity.dart';
 import '../../domain/usecases/add_rate_restaurant_use_case.dart';
 import '../../domain/usecases/get_user_order_use_case.dart';
+import '../../domain/usecases/set_request_log_seen_use_case.dart';
 import '../models/food_category_model.dart';
+import '../models/log_count_model.dart';
 import '../models/logs_model.dart';
 import '../models/rate_response_model.dart';
 import '../models/restaurant_model.dart';
+import '../models/set_request_seen_model.dart';
 import '../models/user_order_model.dart';
 
 abstract class RestaurantsRemoteDataSource {
@@ -62,6 +67,9 @@ abstract class RestaurantsRemoteDataSource {
       PaginationParams params);
 
   Future<Either<Failure, RateResponseEntity>> addRateRestaurant({required AddRateRestaurantParams params});
+  Future<Either<Failure, RequestLogCountEntity>> getReqCount();
+
+  Future<Either<Failure, SetRequestSeenEntity >> setLogSeen({required SetRequestLogSeenParams params});
 
 }
 
@@ -294,6 +302,34 @@ class RestaurantsRemoteDataSourceImpl implements RestaurantsRemoteDataSource {
           (data) {
         final blockHealthModel = RateResponseModel.fromJson(data);
         return Right(blockHealthModel);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, RequestLogCountEntity>> getReqCount() async{
+    final url = "${EndPoints.getReqLogCount}";
+
+    final response = await _apiConsumer.get(url,);
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        return Right(RequestLogCountModel.fromJson(data));
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, SetRequestSeenEntity>> setLogSeen({required SetRequestLogSeenParams params})async {
+    final url = "${EndPoints.setRequestLogSeen}${params.requestId}";
+
+    final response = await _apiConsumer.put(url);
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        return Right(SetRequestSeenModel.fromJson(data));
       },
     );
   }
