@@ -1,0 +1,2 @@
+C:/Users/MEGZ/StudioProjects/49-mobile-app/android/app/.cxx/Debug/4s146d3k/x86/CMakeFiles/edit_cache.dir
+C:/Users/MEGZ/StudioProjects/49-mobile-app/android/app/.cxx/Debug/4s146d3k/x86/CMakeFiles/rebuild_cache.dir
