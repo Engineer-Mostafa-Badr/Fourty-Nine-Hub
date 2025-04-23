@@ -158,7 +158,7 @@ class RideModeButton extends StatelessWidget {
               ),
               child: Center(
                 child: Text(
-                  context.isArabic ? 'وضع الركوب' : 'Ride Mode',
+                  context.isArabic ? 'وضع السائق' : 'Ride Mode',
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 20,
