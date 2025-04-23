@@ -9,8 +9,6 @@ import 'package:fourtyninehub/features/search/domain/entity/user_search_entity.d
 import 'package:fourtyninehub/features/search/presentation/controller/cubit/search_cubit.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/routes/routes.dart';
-import 'package:go_router/go_router.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/app_colors.dart';
@@ -29,33 +27,33 @@ class ProfileSearchView extends StatelessWidget {
           //   return const Center(child: CircularProgressIndicator());
           // }
           final controller = context.read<SearchCubit>();
-          if (controller.searchController.text.isNotEmpty) {
-            return PagedListView<int, UserSearchEntity>(
-              pagingController: controller.searchPagingUserController,
-              builderDelegate: PagedChildBuilderDelegate<UserSearchEntity>(
-                noItemsFoundIndicatorBuilder: (context) {
-                  return Center(
-                    child: Text(
-                      LocaleKeys.noData.localize,
-                      style: Styles.mediumText(),
-                    ),
-                  );
-                },
-                itemBuilder: (context, item, index) {
-                  return InkWell(
-                      onTap: () {
-                        context.push(Routes.OTHERSACCOUNT, extra: item.id);
-                      },
-                      child: buildItem(item));
-                },
-                noMoreItemsIndicatorBuilder: (context) => Container(),
-                firstPageProgressIndicatorBuilder: (context) =>
-                    const CupertinoActivityIndicator(),
-                newPageProgressIndicatorBuilder: (context) =>
-                    const CupertinoActivityIndicator(),
-              ),
-            );
-          }
+          // if (controller.searchController.text.isNotEmpty) {
+          //   return PagedListView<int, UserSearchEntity>(
+          //     pagingController: controller.searchPagingUserController,
+          //     builderDelegate: PagedChildBuilderDelegate<UserSearchEntity>(
+          //       noItemsFoundIndicatorBuilder: (context) {
+          //         return Center(
+          //           child: Text(
+          //             LocaleKeys.noData.localize,
+          //             style: Styles.mediumText(),
+          //           ),
+          //         );
+          //       },
+          //       itemBuilder: (context, item, index) {
+          //         return InkWell(
+          //             onTap: () {
+          //               context.push(Routes.OTHERSACCOUNT, extra: item.id);
+          //             },
+          //             child: buildItem(item));
+          //       },
+          //       noMoreItemsIndicatorBuilder: (context) => Container(),
+          //       firstPageProgressIndicatorBuilder: (context) =>
+          //           const CupertinoActivityIndicator(),
+          //       newPageProgressIndicatorBuilder: (context) =>
+          //           const CupertinoActivityIndicator(),
+          //     ),
+          //   );
+          // }
           return Center(
             child: Text(LocaleKeys.noResultsFound.localize),
           );

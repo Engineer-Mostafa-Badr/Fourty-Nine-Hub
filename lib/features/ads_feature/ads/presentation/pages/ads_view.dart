@@ -47,17 +47,17 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
     _tabController = TabController(length: 2, vsync: this);
 
     if (widget.params.mainCategory.nameEn == 'Dating') {
-      context.read<AdvertisementCubit>().loadData(
+      context.read<AdvertisementCubit>().loadAdsData(
           subCategoryId: widget.params.subCategory.id,
           filter: 'male',
-          fromTab: true);
+          );
     } else {
-      context.read<AdvertisementCubit>().loadData(
+      context.read<AdvertisementCubit>().loadAdsData(
           subCategoryId: widget.params.subCategory.id,
           filter: widget.params.subCategory.hasAuction == true
               ? 'sale'
               : 'provider',
-          fromTab: true);
+          );
     }
   }
 
@@ -143,33 +143,33 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                         state.city = '';
                         state.governorate = '';
                         if (widget.params.mainCategory.nameEn == 'Dating') {
-                          controller.loadData(
+                          controller.loadAdsData(
                               subCategoryId: widget.params.subCategory.id,
                               filter: 'female',
-                              fromTab: true);
+                              );
                         } else {
-                          controller.loadData(
+                          controller.loadAdsData(
                               subCategoryId: widget.params.subCategory.id,
                               filter:
                                   widget.params.subCategory.hasAuction == true
                                       ? 'rent'
                                       : 'user',
-                              fromTab: true);
+                              );
                         }
                       } else {
                         if (widget.params.mainCategory.nameEn == 'Dating') {
-                          controller.loadData(
+                          controller.loadAdsData(
                               subCategoryId: widget.params.subCategory.id,
                               filter: 'male',
-                              fromTab: true);
+                              );
                         } else {
-                          controller.loadData(
+                          controller.loadAdsData(
                               subCategoryId: widget.params.subCategory.id,
                               filter:
                                   widget.params.subCategory.hasAuction == true
                                       ? 'sale'
                                       : 'provider',
-                              fromTab: true);
+                              );
                         }
                       }
                     },
