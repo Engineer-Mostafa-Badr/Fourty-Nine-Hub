@@ -9,7 +9,6 @@ import 'package:fourtyninehub/features/search/presentation/controller/cubit/sear
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:video_player/video_player.dart';
 
@@ -31,40 +30,40 @@ class _ReelSearchViewState extends State<ReelSearchView> {
           //   return const Center(child: CircularProgressIndicator());
           // }
           final controller = context.read<SearchCubit>();
-          if (controller.searchController.text.isNotEmpty) {
-            return PagedGridView<int, ReelsSearchEntity>(
-              pagingController: controller.searchPagingReelsController,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, // Number of columns
-                crossAxisSpacing: 10, // Horizontal space between items
-                mainAxisSpacing: 10, // Vertical space between items
-              ),
-              builderDelegate: PagedChildBuilderDelegate<ReelsSearchEntity>(
-                noItemsFoundIndicatorBuilder: (context) {
-                  return Center(
-                    child: Text(
-                      LocaleKeys.noData.localize,
-                      style: Styles.mediumText(),
-                    ),
-                  );
-                },
-                itemBuilder: (context, item, index) {
-                  return InkWell(
-                      onTap: () {
-                        //  context.push(Routes.OTHERSACCOUNT,extra: item.id);
-                      },
-                      child: VideoGridItem(
-                        videoUrl: state.reels![index],
-                      ));
-                },
-                noMoreItemsIndicatorBuilder: (context) => Container(),
-                firstPageProgressIndicatorBuilder: (context) =>
-                    const CupertinoActivityIndicator(),
-                newPageProgressIndicatorBuilder: (context) =>
-                    const CupertinoActivityIndicator(),
-              ),
-            );
-          }
+          // if (controller.searchController.text.isNotEmpty) {
+          //   return PagedGridView<int, ReelsSearchEntity>(
+          //     pagingController: controller.searchPagingReelsController,
+          //     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          //       crossAxisCount: 2, // Number of columns
+          //       crossAxisSpacing: 10, // Horizontal space between items
+          //       mainAxisSpacing: 10, // Vertical space between items
+          //     ),
+          //     builderDelegate: PagedChildBuilderDelegate<ReelsSearchEntity>(
+          //       noItemsFoundIndicatorBuilder: (context) {
+          //         return Center(
+          //           child: Text(
+          //             LocaleKeys.noData.localize,
+          //             style: Styles.mediumText(),
+          //           ),
+          //         );
+          //       },
+          //       itemBuilder: (context, item, index) {
+          //         return InkWell(
+          //             onTap: () {
+          //               //  context.push(Routes.OTHERSACCOUNT,extra: item.id);
+          //             },
+          //             child: VideoGridItem(
+          //               videoUrl: state.reels![index],
+          //             ));
+          //       },
+          //       noMoreItemsIndicatorBuilder: (context) => Container(),
+          //       firstPageProgressIndicatorBuilder: (context) =>
+          //           const CupertinoActivityIndicator(),
+          //       newPageProgressIndicatorBuilder: (context) =>
+          //           const CupertinoActivityIndicator(),
+          //     ),
+          //   );
+          // }
           return Center(
             child: Text(LocaleKeys.noResultsFound.localize),
           );

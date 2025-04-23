@@ -31,8 +31,8 @@ abstract class ReelsRemoteDataSource {
 
   Future<Either<Failure, ReelLikeResponse>> likeReel(String reelId);
 
-  Future<Either<Failure, AddCommentResponse>> addComment(
-      AddReelCommentParams params);
+  // Future<Either<Failure, AddCommentResponse>> addComment(
+  //     AddReelCommentParams params);
 
   Future<Either<Failure, AddCommentResponse>> addReply(
       AddReelReplyParams params);
@@ -160,19 +160,19 @@ class ReelsRemoteDataSourceImpl implements ReelsRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, AddCommentResponse>> addComment(
-      AddReelCommentParams params) async {
-    final response = await _apiConsumer.post(
-      EndPoints.addReelComment(params),
-      data: params.toJson(),
-    );
-    return response.fold(
-      (failure) => Left(failure),
-      (response) => Right(
-        AddCommentResponse.fromJson(response),
-      ),
-    );
-  }
+  // Future<Either<Failure, AddCommentResponse>> addComment(
+  //     AddReelCommentParams params) async {
+  //   final response = await _apiConsumer.post(
+  //     EndPoints.addReelComment(params),
+  //     data: params.toJson(),
+  //   );
+  //   return response.fold(
+  //     (failure) => Left(failure),
+  //     (response) => Right(
+  //       AddCommentResponse.fromJson(response),
+  //     ),
+  //   );
+  // }
 
   @override
   Future<Either<Failure, AddCommentResponse>> addReply(

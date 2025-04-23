@@ -29,7 +29,6 @@ class _RestaurantHeaderState extends State<RestaurantHeader> {
   @override
   Widget build(BuildContext context) {
     final double imageHeight = MediaQuery.of(context).size.width * 0.5;
-
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 30.w),
       child: ClipRRect(
@@ -40,6 +39,7 @@ class _RestaurantHeaderState extends State<RestaurantHeader> {
           child: Stack(
             fit: StackFit.expand,
             children: [
+              // Restaurant images
               ImagesProfileForRestaurant(
                 autoPlay: true,
                 restaurantMedia: widget.restaurant.restaurantMedia,
@@ -47,6 +47,7 @@ class _RestaurantHeaderState extends State<RestaurantHeader> {
                 widthForImages: MediaQuery.of(context).size.width,
               ),
 
+              // Overlay gradient
               Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
@@ -60,84 +61,85 @@ class _RestaurantHeaderState extends State<RestaurantHeader> {
                 ),
               ),
 
-              // (3) البيانات النصية (الاسم والتقييم)
-              Align(
-                alignment: AlignmentDirectional.topEnd,
-                child: Padding(
-                  padding: EdgeInsets.all(30.w),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        widget.restaurant.name ?? '',
-                        style: Styles.headerText(
-                          fontSize: 40,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+              // Text section (restaurant name, favorite icon, and review rating)
+              Padding(
+                padding: EdgeInsets.all(30.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // Restaurant name
+                        IconButton(
+                          iconSize: 32,
+                          icon: Icon(
+                            isFavorite ? Icons.favorite : Icons.favorite_border,
+                            color: Colors.redAccent,
+                          ),
+                          onPressed: () async {
+                            final success = await context
+                                .read<RestaurantDetailsCubit>()
+                                .toggleFavoriteRestaurant(widget.restaurant.id ?? "", context);
+                            if (success) {
+                              setState(() {
+                                isFavorite = !isFavorite;
+                              });
+                            }
+                          },
                         ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              color: AppColors.whiteColor,
-                              borderRadius: BorderRadius.circular(10),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              widget.restaurant.name ?? '',
+                              style: Styles.headerText(
+                                fontSize: 40,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
                             ),
-                            child: Row(
+                            Row(
                               children: [
-                                const Icon(
-                                  Icons.star_rounded,
-                                  color: AppColors.ACCENT_COLOR,
-                                  size: 20,
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: AppColors.whiteColor,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      const Icon(
+                                        Icons.star_rounded,
+                                        color: AppColors.ACCENT_COLOR,
+                                        size: 20,
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        '${widget.restaurant.totalRating ?? '0.0'} ',
+                                        style: Styles.mediumText(
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                const SizedBox(width: 4),
+                                SizedBox(width: 10),
                                 Text(
-                                  '${widget.restaurant.totalRating ?? '0.0'} ',
+                                  '(${widget.restaurant.numberOfReviews ?? 0} ${LocaleKeys.reviews.localize})',
                                   style: Styles.mediumText(
-                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white70,
                                   ),
                                 ),
                               ],
                             ),
-                          ),
-                          10.horizontalSpace,
-                          Text(
-                            '(${widget.restaurant.numberOfReviews ?? 0} ${LocaleKeys.reviews.localize})',
-                            style: Styles.mediumText(
-                              color: Colors.white70,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
 
-              // (4) زر المفضّلة في أعلى اليمين
-             Align(
-              alignment: AlignmentDirectional.topStart,
-                child: IconButton(
-                  iconSize: 32,
-                  icon: Icon(
-                    isFavorite ? Icons.favorite : Icons.favorite_border,
-                    color: Colors.redAccent,
-                  ),
-                  onPressed: () async {
-                    /// استدعاء Cubit لعمل Toggle
-                    final success = await context
-                        .read<RestaurantDetailsCubit>()
-                        .toggleFavoriteRestaurant(widget.restaurant.id ?? "",context);
+                          ],
+                        ),
+                        // Favorite icon
 
-                    if (success) {
-                      /// إذا نجح الطلب، اقلب الحالة المحلية وأظهر Snackbar
-                      setState(() {
-                        isFavorite = !isFavorite;
-                      });
-                  
-                    }
-                  },
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -145,5 +147,124 @@ class _RestaurantHeaderState extends State<RestaurantHeader> {
         ),
       ),
     );
+
+    // return Padding(
+    //   padding: EdgeInsets.symmetric(horizontal: 30.w),
+    //   child: ClipRRect(
+    //     borderRadius: BorderRadius.circular(20),
+    //     child: SizedBox(
+    //       width: double.infinity,
+    //       height: imageHeight,
+    //       child: Stack(
+    //         fit: StackFit.expand,
+    //         children: [
+    //           ImagesProfileForRestaurant(
+    //             autoPlay: true,
+    //             restaurantMedia: widget.restaurant.restaurantMedia,
+    //             heightCarousel: imageHeight,
+    //             widthForImages: MediaQuery.of(context).size.width,
+    //           ),
+    //
+    //           Container(
+    //             decoration: BoxDecoration(
+    //               gradient: LinearGradient(
+    //                 colors: [
+    //                   Colors.black.withOpacity(0.6),
+    //                   Colors.transparent,
+    //                 ],
+    //                 begin: Alignment.bottomCenter,
+    //                 end: Alignment.topCenter,
+    //               ),
+    //             ),
+    //           ),
+    //
+    //           // (3) البيانات النصية (الاسم والتقييم)
+    //           Align(
+    //             alignment: AlignmentDirectional.topEnd,
+    //             child: Padding(
+    //               padding: EdgeInsets.all(30.w),
+    //               child: Column(
+    //                 crossAxisAlignment: CrossAxisAlignment.center,
+    //                 children: [
+    //                   Text(
+    //                     widget.restaurant.name ?? '',
+    //                     style: Styles.headerText(
+    //                       fontSize: 40,
+    //                       fontWeight: FontWeight.bold,
+    //                       color: Colors.white,
+    //                     ),
+    //                   ),
+    //                   Row(
+    //                     mainAxisAlignment: MainAxisAlignment.end,
+    //                     children: [
+    //                       Container(
+    //                         decoration: BoxDecoration(
+    //                           color: AppColors.whiteColor,
+    //                           borderRadius: BorderRadius.circular(10),
+    //                         ),
+    //                         child: Row(
+    //                           children: [
+    //                             const Icon(
+    //                               Icons.star_rounded,
+    //                               color: AppColors.ACCENT_COLOR,
+    //                               size: 20,
+    //                             ),
+    //                             const SizedBox(width: 4),
+    //                             Text(
+    //                               '${widget.restaurant.totalRating ?? '0.0'} ',
+    //                               style: Styles.mediumText(
+    //                                 fontWeight: FontWeight.w500,
+    //                               ),
+    //                             ),
+    //                           ],
+    //                         ),
+    //                       ),
+    //                       10.horizontalSpace,
+    //                       Text(
+    //                         '(${widget.restaurant.numberOfReviews ?? 0} ${LocaleKeys.reviews.localize})',
+    //                         style: Styles.mediumText(
+    //                           color: Colors.white70,
+    //                         ),
+    //                       ),
+    //                     ],
+    //                   ),
+    //                 ],
+    //               ),
+    //             ),
+    //           ),
+    //
+    //           // (4) زر المفضّلة في أعلى اليمين
+    //          Padding(
+    //            padding:  EdgeInsetsDirectional.only(top: 20,start: 8),
+    //            child: Align(
+    //             alignment: AlignmentDirectional.topStart,
+    //               child: IconButton(
+    //                 iconSize: 32,
+    //                 icon: Icon(
+    //                   isFavorite ? Icons.favorite : Icons.favorite_border,
+    //                   color: Colors.redAccent,
+    //                 ),
+    //                 onPressed: () async {
+    //                   /// استدعاء Cubit لعمل Toggle
+    //                   final success = await context
+    //                       .read<RestaurantDetailsCubit>()
+    //                       .toggleFavoriteRestaurant(widget.restaurant.id ?? "",context);
+    //
+    //                   if (success) {
+    //                     /// إذا نجح الطلب، اقلب الحالة المحلية وأظهر Snackbar
+    //                     setState(() {
+    //                       isFavorite = !isFavorite;
+    //                     });
+    //
+    //                   }
+    //                 },
+    //               ),
+    //             ),
+    //          ),
+    //         ],
+    //       ),
+    //     ),
+    //   ),
+    // );
   }
 }

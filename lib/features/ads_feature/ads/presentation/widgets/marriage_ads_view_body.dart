@@ -199,6 +199,7 @@ class MarriageAdsViewBody extends StatelessWidget {
         const SizedBox(
           height: 16,
         ),
+        if (state.subCategories != null)
         SizedBox(
           height: 32,
           child: ListView.separated(
@@ -240,7 +241,9 @@ class MarriageAdsViewBody extends StatelessWidget {
     if (state.status == SubcategoriesStates.loadingAds) {
       return const CustomLoading();
     }
-
+    if(state.status == SubcategoriesStates.loadingAds){
+      return const CircularProgressIndicator();
+    }
     // My Ads
     if (context.read<SubcategoriesCubit>().isMyAdsOpen) {
       if (state.myAds == null) {
@@ -278,6 +281,7 @@ class MarriageAdsViewBody extends StatelessWidget {
       if (state.adsRequestsLog!.isEmpty) {
         return CustomEmptyWidget(label: LocaleKeys.noRequests.localize);
       }
+
       return MarriageRequest(
         scrollController: _scrollController,
         controller: controller,
@@ -317,6 +321,7 @@ class MarriageAdsViewBody extends StatelessWidget {
         label: LocaleKeys.noAds.localize,
       );
     }
+
 
     return MarriageAdsListView(
       scrollController: _scrollController,

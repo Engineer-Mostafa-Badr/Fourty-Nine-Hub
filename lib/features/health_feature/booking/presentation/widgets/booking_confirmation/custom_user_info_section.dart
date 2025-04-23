@@ -8,11 +8,8 @@ import 'custom_booking_info_editable_row.dart';
 import 'custom_booking_info_row.dart';
 
 class CustomUserInfoSection extends StatelessWidget {
-  final String patientName;
 
-  final String patientPhone;
   bool isBookingForSomeoneElse = false;
-
   final TextEditingController nameController;
   final TextEditingController phoneController;
   FocusNode? currentFocusNode;
@@ -20,8 +17,9 @@ class CustomUserInfoSection extends StatelessWidget {
   final String Time;
   final String location;
   final String fees;
-
   final BuildContext context;
+
+
 
   CustomUserInfoSection(
       {required this.context,
@@ -33,8 +31,7 @@ class CustomUserInfoSection extends StatelessWidget {
       this.currentFocusNode,
       this.nextFocusNode,
       required this.isBookingForSomeoneElse,
-      required this.patientName,
-      required this.patientPhone});
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +42,7 @@ class CustomUserInfoSection extends StatelessWidget {
           context: context,
           icon: Icons.person,
           label: LocaleKeys.name.localize,
-          value: patientName,
+          // value: patientName,
           isEditableName: isBookingForSomeoneElse,
           isEditablePhone: false,
           controller: nameController,
@@ -60,11 +57,17 @@ class CustomUserInfoSection extends StatelessWidget {
         const Sizer(height: 11),
 
         /// Phone Field (editable when checkbox is checked)
+        //     CustomPhoneTextFormField(
+        //                     currentFocusNode: controller.phoneFousNode,
+        //                     currentController: controller.phoneNumberTextController,
+        //                     onInputChanged: (value) {},
+        //                     nextFocusNode: null,
+        //                   ),
         CustomBookingInfoEditableRow(
           context: context,
           icon: Icons.phone,
           label:LocaleKeys.name.localize,
-          value: patientPhone,
+          // value: patientPhone,
           isEditablePhone: isBookingForSomeoneElse,
           currentFocusNode: currentFocusNode,
           nextFocusNode: nextFocusNode,
@@ -84,7 +87,6 @@ class CustomUserInfoSection extends StatelessWidget {
         CustomBookingInfoRow(
           context: context,
           icon: Icons.access_time,
-          // title: '02:00 PM : 11:55 PM Sunday 06 April',
           title: Time,
         ),
 

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/gift_two_cubit/gift_two_cubit.dart';
@@ -28,9 +29,7 @@ class GiftViewBody extends StatelessWidget {
       child: BlocBuilder<GiftTwoCubit, GiftTwoState>(
         builder: (context, state) {
           if (state.status.isLoading || state.status.isInitial) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const CustomLoading();
           } else if (state.status.isSuccess) {
             final gift = state.giftAndCompetitionEntity!;
             return SingleChildScrollView(

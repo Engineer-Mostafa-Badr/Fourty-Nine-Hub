@@ -39,9 +39,9 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
   bool isFloatingButtonVisible = true;
 
   void initState() {
-    context
-        .read<SubcategoriesCubit>()
-        .init(mainCategoryId: widget.mainCategory.id);
+    // context
+    //     .read<SubcategoriesCubit>()
+    //     .init(mainCategoryId: widget.mainCategory.id);
     context
         .read<SubcategoriesCubit>()
         .init(mainCategoryId: widget.mainCategory.id);

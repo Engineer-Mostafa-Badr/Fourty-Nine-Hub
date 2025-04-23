@@ -15,6 +15,6 @@ class SecretsServiceLocator {
     serviceLocator.registerFactory<GetAllSecretsUseCase>(
         () => GetAllSecretsUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<SecretsCubit>(
-        () => SecretsCubit(serviceLocator())..getAllSecrets());
+        () => SecretsCubit(serviceLocator()));
   }
 }

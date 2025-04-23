@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/pages/doctors_list.dart';
@@ -7,15 +8,22 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../res/style/styles.dart';
+
 class CityListTitle extends StatelessWidget {
   final CityEntity city;
+
   const CityListTitle({super.key, required this.city, required this.type});
+
   final String type;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(context.isArabic ? city.nameAr : city.nameEn),
+      title: Label(
+        text: context.isArabic ? city.nameAr : city.nameEn,
+        style: Styles.headerText(fontWeight: FontWeight.w600),
+      ),
       onTap: () {
         serviceLocator<HealthSharedData>().doctorSearchParams.city = city;
 

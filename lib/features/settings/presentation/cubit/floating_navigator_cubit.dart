@@ -20,7 +20,9 @@ class FloatingNavigatorCubit extends Cubit<FloatingNavigatorState> {
   }
 
   Future<void> getFloatingNavigatorStatus() async {
-    floatingNavigatorStatus = await CacheManager.getFloatingNavigator();
+    await CacheManager.isFloatingNavigatorOpen(false);
+    // floatingNavigatorStatus = await CacheManager.getFloatingNavigator();
+    floatingNavigatorStatus = false;
     emit(GetFloatNavigatorStatusState());
   }
 

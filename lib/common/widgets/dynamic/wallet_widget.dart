@@ -6,12 +6,12 @@ import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
-import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/localization/locale_keys.g.dart';
+import '../../../features/payment/presentation/cache_out_cubit/payment_cubit.dart';
 import '../../../res/style/app_colors.dart';
 import '../../../res/style/styles.dart';
 import '../stateless/labels/label.dart';
@@ -42,24 +42,26 @@ class _WalletWidgetState extends State<WalletWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<MainCategoriesCubit>(
-      create: (BuildContext context) => serviceLocator()..getWallet(),
-      child: BlocBuilder<MainCategoriesCubit, MainCategoriesState>(
+    return BlocProvider(
+      create: (BuildContext context) =>
+          serviceLocator<PaymentCacheOutCubit>()..getWallet(),
+      child: BlocBuilder<PaymentCacheOutCubit, PaymentCacheOutState>(
         builder: (BuildContext context, state) {
           return Container(
             // height: (isOpen?200:100).h,
             margin: EdgeInsets.symmetric(vertical: 10.h, horizontal: 5.w),
             padding: const EdgeInsets.all(5),
             decoration: BoxDecoration(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                borderRadius: BorderRadius.circular(12.r),
-                boxShadow: const [
-                  BoxShadow(
-                    color: AppColors.GRAY_LIGHT_COLOR3,
-                    blurRadius: 5,
-                    spreadRadius: 5,
-                  )
-                ]),
+              color: Theme.of(context).scaffoldBackgroundColor,
+              borderRadius: BorderRadius.circular(12.r),
+              boxShadow: const [
+                BoxShadow(
+                  color: AppColors.GRAY_LIGHT_COLOR3,
+                  blurRadius: 5,
+                  spreadRadius: 5,
+                ),
+              ],
+            ),
             child: Column(
               children: [
                 ClickableWidget(

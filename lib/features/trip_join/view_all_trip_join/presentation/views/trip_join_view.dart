@@ -240,7 +240,7 @@ class _TripJoinViewState extends State<TripJoinView>
               textDirection: context.isArabic ? TextDirection.rtl : TextDirection.ltr,
               child: GestureDetector(
                 onTap: () {
-                  context.push(Routes.pickMeInfoScreen);
+                  context.push(Routes.tripJoinInfoScreen);
                 },
                 child: Container(
                   height: 48.h,

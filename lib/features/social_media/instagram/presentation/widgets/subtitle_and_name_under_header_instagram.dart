@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/profile_instagram_cubit/profile_instagram_cubit.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
@@ -15,7 +17,7 @@ class SubTitleAndNameUnderHeaderInstagram extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Label(
-            text: 'UIUX designer',
+            text: context.read<ProfileInstagramCubit>().state.profileData!.bio,
             style: Styles.mediumText(),
           ),
           const SizedBox(
@@ -30,25 +32,29 @@ class SubTitleAndNameUnderHeaderInstagram extends StatelessWidget {
                 width: 3,
               ),
               Label(
-                text: 'ahmed mohamed',
+                text: context
+                    .read<ProfileInstagramCubit>()
+                    .state
+                    .profileData!
+                    .username,
                 style: Styles.headerText(
                   fontSize: 24,
                   height: 1.33,
                 ),
               ),
-              const SizedBox(
-                width: 12,
-              ),
-              SvgPicture.asset(
-                Assets.facebook2Icon,
-              ),
-              Label(
-                text: ' ahmed mohamed',
-                style: Styles.headerText(
-                  fontSize: 24,
-                  height: 1.33,
-                ),
-              ),
+              // const SizedBox(
+              //   width: 12,
+              // ),
+              // SvgPicture.asset(
+              //   Assets.facebook2Icon,
+              // ),
+              // Label(
+              //   text: ' ahmed mohamed',
+              //   style: Styles.headerText(
+              //     fontSize: 24,
+              //     height: 1.33,
+              //   ),
+              // ),
             ],
           ),
         ],

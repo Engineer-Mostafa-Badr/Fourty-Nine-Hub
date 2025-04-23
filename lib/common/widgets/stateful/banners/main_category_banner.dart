@@ -52,10 +52,6 @@ class _MainCategoryBannerState extends State<MainCategoryBanner> {
 
   @override
   void initState() {
-    print('widget.category');
-    print(widget.category.image);
-    print(widget.category.banner);
-    print(widget.category.cover);
     if (widget.fromFavorite ?? false) {
       widget.isFavorite = true;
       widget.category.isFavorite = true;

@@ -14,22 +14,23 @@ class ShowImagesCreatePostSecond extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: MediaQuery.sizeOf(context).height * 0.25,
+      height: MediaQuery.sizeOf(context).height * 0.35,
       child: BlocBuilder<CreatePostInstagramCubit, CreatePostInstagramState>(
         builder: (context, state) {
           return PageView.builder(
             itemCount: state.selectedImages.length,
             itemBuilder: (context, index) {
-              return FutureBuilder<File?>(
-                future: state.selectedImages[index],
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return Image.file(snapshot.data!);
-                  } else {
-                    return const CircularProgressIndicator();
-                  }
-                },
-              );
+              return Image.file(state.selectedImages[index], fit: BoxFit.cover);
+              // return FutureBuilder<File?>(
+              //   future: state.selectedImages[index],
+              //   builder: (context, snapshot) {
+              //     if (snapshot.hasData) {
+              //       return Image.file(snapshot.data!);
+              //     } else {
+              //       return const CircularProgressIndicator();
+              //     }
+              //   },
+              // );
             },
           );
         },

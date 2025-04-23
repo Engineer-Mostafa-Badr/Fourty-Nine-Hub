@@ -26,7 +26,6 @@ class _FavouriteCategoryViewState extends State<FavouriteCategoryView> {
       body: BlocBuilder<FavouriteCategoryCubit, FavouriteCategoryState>(
         builder: (context, state) {
           final controller = context.read<FavouriteCategoryCubit>();
-          if(state.status == StateStatus.initial){controller.loadData();}
           if (state.status == StateStatus.loading) {
             return const Center(
               child: CircularProgressIndicator(),

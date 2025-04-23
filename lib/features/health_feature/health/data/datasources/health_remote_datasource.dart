@@ -8,9 +8,13 @@ import 'package:fourtyninehub/features/health_feature/health/data/models/categor
 import 'package:fourtyninehub/features/health_feature/health/data/models/doctor_info_model.dart';
 import 'package:fourtyninehub/features/health_feature/health/data/models/health_subcategory_model.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/appointment_booking_entity.dart';
+import 'package:fourtyninehub/features/health_feature/health/domain/entities/booking_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/doctor_info_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/favorite_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/health_subcategory_entity.dart';
+
+import '../../domain/usecases/get_booking_use_case.dart';
+import '../models/booking_model.dart';
 
 abstract class HealthRemoteDataSource {
   Future<Either<Failure, List<BookedAppointmentEntity>>> getMyBookingsHistory();
@@ -27,6 +31,9 @@ abstract class HealthRemoteDataSource {
   Future<Either<Failure, bool>> isDoctorApproval();
   Future<Either<Failure, DoctorInfoEntity>> getDoctorInfo();
   Future<Either<Failure, bool>> cancelAppointment(String id);
+
+  Future<Either<Failure, List<BookingEntity>>> getBooking({required GetBookingParams params});
+
 }
 
 class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
@@ -116,5 +123,23 @@ class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
     final response = await _apiConsumer.delete(EndPoints.cancelAppointment(id));
     return response.fold(
         (failure) => Left(failure), (data) => Right((data['status'])));
+  }
+
+  @override
+  Future<Either<Failure, List<BookingEntity>>> getBooking({required GetBookingParams params})async {
+    final url =
+        "${EndPoints.getBookingCurrent}?type=${params.type}&page=${params.page}&limit=${params.limit}";
+
+    final response = await _apiConsumer.get(url);
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final restaurantList = (data['data']['bookings'] as List)
+            .map((e) => BookingModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+        return Right(restaurantList);
+      },
+    );
   }
 }

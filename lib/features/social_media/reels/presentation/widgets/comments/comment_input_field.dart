@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -11,15 +12,17 @@ import 'package:fourtyninehub/features/social_media/social_posts/presentation/wi
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 
+import '../../../../../../res/assets/assets.dart';
+
 class CommentInputField extends StatefulWidget {
   final TextEditingController commentController;
-  final Reel reel;
+  // final Reel reel;
   final ScrollController scrollController;
   final FocusNode focusNode;
   final bool isReplying;
   const CommentInputField({
     super.key,
-    required this.reel,
+    //  required this.reel,
     required this.commentController,
     required this.isReplying,
     required this.scrollController,
@@ -34,11 +37,12 @@ class CommentInputFieldState extends State<CommentInputField> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: MediaQuery.of(context).viewInsets,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0)
-              .add(EdgeInsetsDirectional.only(end: 20.w, bottom: 10.h)),
-          child: Row(children: [
+      padding: MediaQuery.of(context).viewInsets,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0)
+            .add(EdgeInsetsDirectional.only(end: 20.w, bottom: 10.h)),
+        child: Row(
+          children: [
             ImageFromInternet(
               width: 50,
               height: 50,
@@ -60,7 +64,8 @@ class CommentInputFieldState extends State<CommentInputField> {
                 },
                 decoration: InputDecoration(
                   filled: true,
-                  suffixIcon: widget.commentController.text.isNotEmpty
+                  suffixIcon:
+                   widget.commentController.text.isNotEmpty
                       ? Container(
                           margin: EdgeInsetsDirectional.only(
                               end: 10.w, top: 10, bottom: 10),
@@ -75,29 +80,25 @@ class CommentInputFieldState extends State<CommentInputField> {
                               final reelsCubit = context.read<ReelsCubit>();
                               if (reelsCubit.receiverComment != null &&
                                   reelsCubit.parentCommentId != null) {
-                                await reelsCubit.addReplayComment(
-                                  context,
-                                  widget.reel.id,
-                                  widget.commentController.text.trim(),
-                                  parentCommentId: reelsCubit.parentCommentId,
-                                  receiverComment: reelsCubit.receiverComment,
-                                );
+                                // await reelsCubit.addReplayComment(
+                                //     context,
+                                //     //   widget.reel.id,
+
+                                //     widget.commentController.text.trim());
                               } else {
-                                await reelsCubit.addComment(
-                                    context,
-                                    widget.reel.id,
-                                    widget.commentController.text);
-                                if (widget.scrollController.hasClients &&
-                                    widget.scrollController.position
-                                            .maxScrollExtent >
-                                        0) {
-                                  widget.scrollController.animateTo(
-                                    widget.scrollController.position
-                                        .minScrollExtent,
-                                    duration: const Duration(milliseconds: 500),
-                                    curve: Curves.easeOut,
-                                  );
-                                }
+                                // await reelsCubit.addComment(
+                                //     context, widget.commentController.text);
+                                // if (widget.scrollController.hasClients &&
+                                //     widget.scrollController.position
+                                //             .maxScrollExtent >
+                                //         0) {
+                                //   widget.scrollController.animateTo(
+                                //     widget.scrollController.position
+                                //         .minScrollExtent,
+                                //     duration: const Duration(milliseconds: 500),
+                                //     curve: Curves.easeOut,
+                                //   );
+                                // }
                               }
                               widget.commentController.clear();
                               widget.focusNode.unfocus();
@@ -115,7 +116,27 @@ class CommentInputFieldState extends State<CommentInputField> {
                             ),
                           ),
                         )
-                      : null,
+                      : Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SvgPicture.asset(
+                              Assets.mentionIcon,
+                            ),
+                            SizedBox(width: 25.w),
+                            SvgPicture.asset(
+                              Assets.emojiIcon,
+                            ),
+                            SizedBox(width: 25.w),
+                            SvgPicture.asset(
+                              Assets.galleryIcon,
+                            ),
+                            SizedBox(width: 25.w),
+                            SvgPicture.asset(
+                              Assets.giftCommentIcon,
+                            ),
+                            SizedBox(width: 25.w),
+                          ],
+                        ),
                   fillColor:
                       context.isDarkMode ? Colors.grey[800] : Colors.black12,
                   hintText: LocaleKeys.add_comment_hint.localize,
@@ -140,7 +161,9 @@ class CommentInputFieldState extends State<CommentInputField> {
                 keyboardType: TextInputType.multiline,
               ),
             )
-          ]),
-        ));
+          ],
+        ),
+      ),
+    );
   }
 }

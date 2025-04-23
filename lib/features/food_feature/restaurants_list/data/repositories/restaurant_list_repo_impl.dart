@@ -5,13 +5,16 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/food_category_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/is_restaurant_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_2_model.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/log_count_entity.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/logs_entity.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/rate_response_entity.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/set_request_seen_entity.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/user_order_entity.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/add_rate_restaurant_use_case.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/create_restaurant.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/get_user_order_use_case.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/getsubcategory_restaurants_usecase.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/set_request_log_seen_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 
 import '../../domain/repositories/resturant_list_repo.dart';
@@ -114,5 +117,15 @@ class RestaurantListRepoImpl implements RestaurantListRepo {
   @override
   Future<Either<Failure, RateResponseEntity>> addRateRestaurant({required AddRateRestaurantParams params}) {
   return _remoteDataSource.addRateRestaurant(params: params);
+  }
+
+  @override
+  Future<Either<Failure, RequestLogCountEntity>> getReqCount() {
+    return _remoteDataSource.getReqCount();
+  }
+
+  @override
+  Future<Either<Failure, SetRequestSeenEntity>> setLogSeen({required SetRequestLogSeenParams params}) {
+    return _remoteDataSource.setLogSeen(params: params);
   }
 }

@@ -1472,6 +1472,10 @@ abstract class  LocaleKeys {
   static const areYouSureUpdate = 'areYouSureUpdate';
   static const exploreTripsThatAreActiveAtTheMoment = 'exploreTripsThatAreActiveAtTheMoment';
   static const youWillFindFewerDriversIfYouSelectThisOption = 'youWillFindFewerDriversIfYouSelectThisOption';
+  static const useThisSound = 'useThisSound';
+  static const collab = 'collab';
+  static const layout = 'layout';
+  static const mixReel = 'mixReel';
   static const initiateRouteWaitFor1HourToGiveUserTimeToBookASeatInTheSameCarWithTheSameCaptain = 'initiateRouteWaitFor1HourToGiveUserTimeToBookASeatInTheSameCarWithTheSameCaptain';
   static const myTalent = 'myTalent';
   static const addTalent = 'addTalent';
@@ -1487,7 +1491,6 @@ abstract class  LocaleKeys {
   static const newPost = 'newPost';
   static const addExplanatoryNote = 'addExplanatoryNote';
   static const searchForAUser = 'searchForAUser';
-  static const taggedPeople = 'taggedPeople';
   static const status = 'status';
   static const otpCode = 'otpCode';
   static const weHaveSentACodeTo = 'weHaveSentACodeTo';
@@ -1498,10 +1501,34 @@ abstract class  LocaleKeys {
   static const bad = 'bad';
   static const rateTheRestaurant = 'rateTheRestaurant';
   static const restaurantRateYou = 'restaurantRateYou';
+  static const taggedPeople = 'taggedPeople';
   static const addACommentsFor = 'addACommentsFor';
   static const commentAdded = 'commentAdded';
   static const areYouSureYouWantToDeleteThisComment = 'areYouSureYouWantToDeleteThisComment';
   static const responseStatus = 'responseStatus';
+  static const addLocation = 'addLocation';
+  static const addMusic = 'addMusic';
+  static const whoIsThis = 'whoIsThis';
+  static const inviteCollaborators = 'inviteCollaborators';
+  static const tapPhotoToTagPeople = 'tapPhotoToTagPeople';
+  static const selectALocation = 'selectALocation';
+  static const searchForALocation = 'searchForALocation';
+  static const seePlacesNearYou = 'seePlacesNearYou';
+  static const toIncludeNearbyPlacesTurnOnLocationServices = 'toIncludeNearbyPlacesTurnOnLocationServices';
+  static const turnOnLocationServices = 'turnOnLocationServices';
+  static const captionMustBeAdded = 'captionMustBeAdded';
+  static const youDontHaveReels = 'youDontHaveReels';
+  static const youDontHavePosts = 'youDontHavePosts';
+  static const followedBy = 'followedBy';
   static const socialExplain = 'socialExplain';
+  static const imBookingOfAnotherClient = 'imBookingOfAnotherClient';
+  static const firstImpressionMessage = 'firstImpressionMessage';
+  static const endToEndDescription = 'endToEndDescription';
+  static const yourChatsAndCallArePrivate = 'yourChatsAndCallArePrivate';
+  static const textAndVoiceMessages = 'textAndVoiceMessages';
+  static const audioAndVideoCalls = 'audioAndVideoCalls';
+  static const photoVideosAndDocuments = 'photoVideosAndDocuments';
+  static const locationSharing = 'locationSharing';
+  static const statusUpdates = 'statusUpdates';
 
 }

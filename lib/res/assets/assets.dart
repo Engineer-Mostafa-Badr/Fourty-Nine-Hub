@@ -5,6 +5,8 @@ abstract class Assets {
   static String starIcon = 'assets/images/star.svg';
   static String addImage = 'assets/images/addImage.svg';
   static String icon = 'assets/images/icon.png';
+  static String logoHub = 'assets/icons/logoHub.png';
+  static String logoWithoutText = 'assets/icons/logoWithoutText.png';
   static String tube = 'assets/images/tube.png';
   static String joinTrip = 'assets/images/join_trip.png';
   static String tube1 = 'assets/images/tube1.png';
@@ -78,6 +80,15 @@ abstract class Assets {
   static String videoIcon = 'assets/icons/video_icon.svg';
   static String profile2BlackIcon = 'assets/icons/profile_2_black_icon.svg';
   static String profile2GreyIcon = 'assets/icons/profile_2_grey_icon.svg';
+  static String instagramTagPeopleIcon = 'assets/icons/instagram_tag_people_icon.svg';
+  static String instagramTagPeopleRedIcon =  'assets/icons/instagram_tag_people_red_icon.svg';
+  static String instagramLocationIcon = 'assets/icons/instagram_location_icon.svg';
+  static String instagramLocationRedIcon = 'assets/icons/instagram_location_red_icon.svg';
+  static String instagramMusicIcon = 'assets/icons/instagram_music_icon.svg';
+  static String instagramMusicRedIcon = 'assets/icons/instagram_music_red_icon.svg';
+  static String instagramTriangleBlackIcon = 'assets/icons/instagram_triangle_black_icon.svg';
+  static String instagramRefreshRedIcon = 'assets/icons/instagram_refresh_red_icon.svg';
+  static String instagramSearchIcon = 'assets/icons/instagram_search_icon.svg';
 
   // Commets
   static String commentIconsIcon = 'assets/icons/comment_icons_icon.svg';
@@ -425,6 +436,54 @@ abstract class Assets {
   static String crown = 'assets/49-New-icons/crown.png';
   static String starGold = 'assets/49-New-icons/star_gold.png';
   static String winners = "assets/49-New-icons/winners.png";
+
+  // reels icon
+  static String giftReelsIcon = 'assets/icons/giftReelIcon.svg';
+  static String loveIcon = 'assets/icons/LikeIcon.svg';
+  static String disLikeIcon = 'assets/icons/disLikeIcon.svg';
+  static String mentionIcon = 'assets/icons/mentionIcon.svg';
+  static String galleryIcon = 'assets/icons/galleryIcon.svg';
+  static String giftCommentIcon = 'assets/icons/giftCommentIcon.svg';
+  static String emojiIcon = 'assets/icons/emojiIcon.svg';
+  static String mixReelIcon = 'assets/icons/mixReelIcon.svg';
+  static String layoutIcon = 'assets/icons/layoutIcon.svg';
+  static String dividerIcon = 'assets/icons/dividerIcon.svg';
+  static String collabIcon = 'assets/icons/collabIcon.svg';
+  static String useSoundIcon = 'assets/icons/useSoundIcon.svg';
+  static String searchSoundIcon = 'assets/icons/searchIcon.svg';
+  static String shareSoundIcon = 'assets/icons/shareIcon.svg';
+  static String resumeIcon = 'assets/icons/renumeIcon.svg';
+  static String pauseIcon = 'assets/icons/pauseIcon.svg';
+  static String addFavIcon = 'assets/icons/addFavIcon.svg';
+  static String addedFavIcon = 'assets/icons/addedFavIcon.svg';
+  static String addSoundIcon = 'assets/icons/addSoundIcon.svg';
+  static String checkIcon = 'assets/icons/checkIcon.svg';
+  static String lineIcon = 'aassets/icons/lineIcon.svg';
+  static String linePng = 'assets/icons/line.png';
+  static String amrImage = 'assets/icons/amrImage.png';
+  static String aaIcon = 'assets/icons/aIcon.svg';
+  static String stickerIcon = 'assets/icons/stickerIcon.svg';
+  static String cameraStoryIcon = 'assets/icons/cameraStoryIcon.svg';
+  static String deleteComIcon = 'assets/icons/deleteComIcon.svg';
+  static String copyComIcon = 'assets/icons/copyComIcon.svg';
+  static String replyIcon = 'assets/icons/replyIcon.svg';
+  static String reportComIcon = 'assets/icons/reportComIcon.svg';
+  static String shareWithIcon = 'assets/icons/shareWithIcon.svg';
+  static String onlineUserIcon = 'assets/icons/onlineUserIcon.svg';
+  static String whatsIcon = 'assets/icons/whatsIcon.svg';
+  static String faceIcon = 'assets/icons/faceIcon.svg';
+  static String arrowIcon = 'assets/icons/arrowIcon.svg';
+  static String snapIcon = 'assets/icons/snapIcon.svg';
+  static String smsIcon = 'assets/icons/smsIcon.svg';
+  static String telegramIcon = 'assets/icons/telegramIcon.svg';
+  static String emailIcon = 'assets/icons/emailIcon.svg';
+  static String facebookMessenger = 'assets/icons/facebook Messenger.png';
+  static String coppyLinkIcon = 'assets/icons/coppyLinkIcon.svg';
+  static String comReelIcon = 'assets/icons/comReelIcon.svg';
+  static String shareReelIcon = 'assets\icons\shareReelIcon.svg';
+  static String notIcon = 'assets/icons/notIcon.svg';
+  static String addStoryIcon = 'assets/icons/addStoryIcon.svg';
+  static String promoteIcon = 'assets/icons/promoteIcon.svg';
   static String mealImage = "assets/images/mealImage.jpg";
   static String car2Image = "assets/images/car.jpg";
   static String doctorImage = "assets/images/doctor.jpg";
@@ -432,4 +491,19 @@ abstract class Assets {
   static String ellipsis = "assets/icons/ellipsis.svg";
   static String reelBar = "assets/icons/reelBar.svg";
   static String grid = "assets/icons/grid.png";
+  static String check = "assets/icons/check.png";
+  static String doubleCheck = "assets/icons/doubleCheck.png";
+  static String doubleCheckSeen = "assets/icons/doubleCheckSeen.png";
+  static String chatStatus = "assets/icons/chatStatus.png";
+  // simple loadings
+  static String circleLoader= 'assets/lottie/loader.json';
+
+  //SpotLight
+  static String bitmoji = "assets/images/bitmoji.png";
+  static String spotlight_profile = "assets/images/spotlight_profile.png";
+
+  //Find
+  static String find_inbox = "assets/icons/find_inbox.png";
+
+
 }

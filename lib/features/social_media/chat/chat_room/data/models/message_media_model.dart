@@ -11,11 +11,11 @@ class MessageMediaModel extends MessageMediaEntity {
 
   factory MessageMediaModel.fromJson(Map<String, dynamic> json) {
     return MessageMediaModel(
-      id: json['_id'],
-      url: json['mediaKey'],
+      id: json['_id']??'',
+      url: json['mediaKey']??'',
       type: (json['mimetype'] as String).split('/').first.getFileTypeEnum(),
-      fileName: json['fileName'],
-      fileSize: json['size'],
+      fileName: json['fileName']??'',
+      fileSize: json['size']??0,
     );
   }
 

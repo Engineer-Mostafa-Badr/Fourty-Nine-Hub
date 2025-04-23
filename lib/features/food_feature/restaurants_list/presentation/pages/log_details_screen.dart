@@ -38,11 +38,18 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
 
   void _updateRating(double newRating) {
     setState(() {
+      // Create a new UserRateRestaurantEntity with the updated rating
+      final updatedRate = _currentLogsEntity.userRateRestaurant?.copyWith(
+        rate: newRating.toInt(),  // Update only the rate
+      );
+
+      // Update the _currentLogsEntity with the new UserRateRestaurantEntity
       _currentLogsEntity = _currentLogsEntity.copyWith(
-        userRateRestaurant: newRating.toInt(),
+        userRateRestaurant: updatedRate,  // Replace the old one
       );
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -121,7 +128,7 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
                                   fontSize: 16, fontWeight: FontWeight.w600),
                             ),
                             RatingBar(
-                              initialRating: _currentLogsEntity.userRateRestaurant?.toDouble() ?? 0,
+                              initialRating: _currentLogsEntity.userRateRestaurant?.rate?.toDouble() ?? 0,
                               // initialRating:
                               //     widget.logsEntity.userRateRestaurant?.toDouble() ?? 0,
                               ignoreGestures: true,
@@ -225,7 +232,7 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
               backgroundImage:
                   widget.logsEntity.userId?.userProfile?.profilePictureKey != null
                       ? NetworkImage(
-                          widget.logsEntity.userId!.userProfile!.profilePictureKey!)
+                          widget.logsEntity.userId!.userProfile!.profilePictureKey!.mediaKey!)
                       : null,
               child: widget.logsEntity.userId?.userProfile?.profilePictureKey == null
                   ? const Icon(

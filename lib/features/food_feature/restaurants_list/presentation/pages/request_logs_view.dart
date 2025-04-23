@@ -59,6 +59,18 @@ class _RestaurantRequestLogsScreenState
     return BlocBuilder<RestaurantsCubit, RestaurantsListState>(
         builder: (context, state) {
           final controller = context.read<RestaurantsCubit>();
+          if (state.isLoading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (controller.reqLogs.isEmpty ) {
+            return Center(
+              child: Text(
+                LocaleKeys.noData.tr(),
+              ),
+            );
+          }
 
           if (!state.isLoading) {
             return SizedBox(
@@ -117,15 +129,8 @@ class TripLogRequestCard extends StatelessWidget {
         ),
         InkWell(
           onTap: () async {
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (_) => BlocProvider<RestaurantsCubit>(
-            //       create: (context) => serviceLocator<RestaurantsCubit>(),
-            //       child: LogDetailsScreen(logsEntity: orderData),
-            //     ),
-            //   ),
-            // );
+            if(orderData.seen == false)
+              context.read<RestaurantsCubit>().setReqSeen(params: orderData.id ?? '');
             final updatedLogsEntity = await Navigator.push(
               context,
               MaterialPageRoute(
@@ -138,24 +143,40 @@ class TripLogRequestCard extends StatelessWidget {
             if (updatedLogsEntity != null) {
               context.read<RestaurantsCubit>().loadInitialReqLogs();
             }
-            // Navigator.push(context, MaterialPageRoute(builder: (context)=> LogDetailsScreen(logsEntity: orderData,)));
           },
+          // onTap: () async {
+          //   if(orderData.seen == false)
+          //   context.read<RestaurantsCubit>().setReqSeen(params: orderData.id ?? '');
+          //
+          //   final updatedLogsEntity = await Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //       builder: (_) => BlocProvider<RestaurantsCubit>(
+          //         create: (context) => serviceLocator<RestaurantsCubit>(),
+          //         child: LogDetailsScreen(logsEntity: orderData),
+          //       ),
+          //     ),
+          //   );
+          //
+          //   if (updatedLogsEntity != null) {
+          //     // Update your list with the new data here
+          //     context.read<RestaurantsCubit>().updateLogEntity(updatedLogsEntity);
+          //   }
+          // },
+
           child: Container(
                   // elevation: context.isDarkMode ? 0 : 2,
                  decoration: BoxDecoration(
-                     color: AppColors.cD9D9D9,
-                   // border: Border.all(
-                   //   color: AppColors.black,
-                   // ),
+                     color: orderData.seen  == true ? Colors.white : AppColors.cD9D9D9,
                    borderRadius: BorderRadius.circular(15)
                  ),
                   child: Row(
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(15),
-                        child: orderData.userId?.userProfile?.profilePictureKey != null && orderData.userId!.userProfile!.profilePictureKey!.isNotEmpty
+                        child: orderData.userId?.userProfile?.profilePictureKey != null && orderData.userId!.userProfile!.profilePictureKey!.mediaKey!.isNotEmpty
                             ? Image.network(
-                          orderData.userId!.userProfile!.profilePictureKey!,
+                          orderData.userId!.userProfile!.profilePictureKey!.mediaKey!,
                           width: 100,
                           height: 80,
                           fit: BoxFit.cover,
@@ -192,7 +213,9 @@ class TripLogRequestCard extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Text(
-                              orderData.orders?[index].foodId?.foodName ?? 'Unknown',
+                              (orderData.orders != null && index < orderData.orders!.length)
+                                  ? orderData.orders![index].foodId?.foodName ?? 'Unknown'
+                                  : 'Unknown',
                               style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600
@@ -202,7 +225,9 @@ class TripLogRequestCard extends StatelessWidget {
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              (orderData.orders?[index].price ?? 0.0).toStringAsFixed(2),
+                              (orderData.orders != null && index < orderData.orders!.length)
+                                  ? (orderData.orders![index].price ?? 0.0).toStringAsFixed(2)
+                                  : '0.00',
                               style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600
@@ -211,6 +236,7 @@ class TripLogRequestCard extends StatelessWidget {
                           ],
                         ),
                       ),
+
 
                     ],
                   ),
@@ -222,3 +248,86 @@ class TripLogRequestCard extends StatelessWidget {
 
 
 }
+
+/*
+  child: Container(
+            decoration: BoxDecoration(
+              color: orderData.seen == true ? Colors.white : AppColors.cD9D9D9,
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Row(
+              children: [
+                // Image
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: orderData.userId?.userProfile?.profilePictureKey != null &&
+                      orderData.userId!.userProfile!.profilePictureKey!.mediaKey!.isNotEmpty
+                      ? Image.network(
+                    orderData.userId!.userProfile!.profilePictureKey!.mediaKey!,
+                    width: 100,
+                    height: 80,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        width: 100,
+                        height: 70,
+                        color: Colors.grey[200],
+                        child: const Icon(
+                          Icons.broken_image,
+                          size: 40,
+                          color: Colors.grey,
+                        ),
+                      );
+                    },
+                  )
+                      : Container(
+                    width: 100,
+                    height: 70,
+                    color: Colors.grey[200],
+                    child: const Icon(
+                      Icons.broken_image,
+                      size: 40,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+
+                // 🛠️ MAIN CONTENT (Fixed)
+                Expanded(
+                  child: SizedBox(
+                    height: 80,
+                    child: Column(
+                      spacing: 5,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start, // 👈 force top alignment
+                      children: [
+                        const SizedBox(height: 5),
+                        Text(
+                          (orderData.orders != null && index < orderData.orders!.length)
+                              ? orderData.orders![index].foodId?.foodName ?? 'Unknown'
+                              : 'Unknown',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Text(
+                          (orderData.orders != null && index < orderData.orders!.length)
+                              ? (orderData.orders![index].price ?? 0.0).toStringAsFixed(2)
+                              : '0.00',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+   */

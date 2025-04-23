@@ -169,7 +169,6 @@ class _AvailableRideModeWidgetState extends State<AvailableRideModeWidget> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 2),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Row(

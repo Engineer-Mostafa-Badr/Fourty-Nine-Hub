@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/instagram_post_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/image_post_widget.dart';
@@ -24,7 +22,6 @@ class _InstgramImagesPostWidgetState extends State<InstgramImagesPostWidget> {
   @override
   Widget build(BuildContext context) {
     if (widget.instagramPostEntity.medias.length == 1) {
-      log(widget.instagramPostEntity.medias.first);
       return ImagePostWidget(
         // imageUrl: widget.images.first,
         instagramPostEntity: widget.instagramPostEntity,
