@@ -13,8 +13,11 @@ import 'package:fourtyninehub/features/health_feature/health/domain/entities/doc
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/favorite_entity.dart';
 import 'package:fourtyninehub/features/health_feature/health/domain/entities/health_subcategory_entity.dart';
 
+import '../../domain/entities/most_booking_entity.dart';
 import '../../domain/usecases/get_booking_use_case.dart';
+import '../../domain/usecases/get_most_booking_use_case.dart';
 import '../models/booking_model.dart';
+import '../models/most_booking_model.dart';
 
 abstract class HealthRemoteDataSource {
   Future<Either<Failure, List<BookedAppointmentEntity>>> getMyBookingsHistory();
@@ -33,6 +36,8 @@ abstract class HealthRemoteDataSource {
   Future<Either<Failure, bool>> cancelAppointment(String id);
 
   Future<Either<Failure, List<BookingEntity>>> getBooking({required GetBookingParams params});
+
+  Future<Either<Failure, List<MostBookingEntity>>> getMostBooking({required GetMostBookingParams params});
 
 }
 
@@ -137,6 +142,24 @@ class HealthRemoteDataSourceImpl implements HealthRemoteDataSource {
           (data) {
         final restaurantList = (data['data']['bookings'] as List)
             .map((e) => BookingModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+        return Right(restaurantList);
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<MostBookingEntity>>> getMostBooking({required GetMostBookingParams params}) async{
+    final url =
+        "${EndPoints.getMostBooking}?orderBy=popularity&page=${params.page}&limit=${params.limit}";
+
+    final response = await _apiConsumer.get(url);
+
+    return response.fold(
+          (l) => Left(l),
+          (data) {
+        final restaurantList = (data['data']["doctors"] as List)
+            .map((e) => MostBookingModel.fromJson(e as Map<String, dynamic>))
             .toList();
         return Right(restaurantList);
       },

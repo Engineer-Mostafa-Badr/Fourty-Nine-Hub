@@ -9,8 +9,12 @@ import 'package:fourtyninehub/features/search/presentation/controller/cubit/sear
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:video_player/video_player.dart';
+
+import '../../../../../common/models/public/pagination_params.dart';
+import '../../../domain/use_case/fetch_search_use_case.dart';
 
 class ReelSearchView extends StatefulWidget {
   const ReelSearchView({super.key});
@@ -20,58 +24,93 @@ class ReelSearchView extends StatefulWidget {
 }
 
 class _ReelSearchViewState extends State<ReelSearchView> {
+  late final ScrollController _scrollController;
+  late final SearchCubit _cubit;
+  static const _scrollThreshold = 200.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _cubit = context.read<SearchCubit>();
+    _scrollController = ScrollController()..addListener(_onScroll);
+  }
+
+  void _onScroll() async {
+    final max = _scrollController.position.maxScrollExtent;
+    final current = _scrollController.position.pixels;
+    final searchText = _cubit.searchController.text.trim();
+
+    if (searchText.isEmpty) return;
+
+    if (current >= max - _scrollThreshold &&
+        !_cubit.isLoadingReelsSearchMore &&
+        _cubit.hasMoreReelsSearchData) {
+      final prefs = await SharedPreferences.getInstance();
+      final filter = prefs.getString('filter') ?? '';
+      final params = SearchParams(
+        search: searchText,
+        filter: filter,
+        params: PaginationParams(page: _cubit.reelsSearchPage),
+      );
+      _cubit.getPaginatedReelsSearch(params: params);
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController
+      ..removeListener(_onScroll)
+      ..dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 20.w),
       child: BlocBuilder<SearchCubit, SearchState>(
-        builder: (BuildContext context, state) {
-          // if(state.status ==SearchStates.loading){
-          //   return const Center(child: CircularProgressIndicator());
-          // }
-          final controller = context.read<SearchCubit>();
-          // if (controller.searchController.text.isNotEmpty) {
-          //   return PagedGridView<int, ReelsSearchEntity>(
-          //     pagingController: controller.searchPagingReelsController,
-          //     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          //       crossAxisCount: 2, // Number of columns
-          //       crossAxisSpacing: 10, // Horizontal space between items
-          //       mainAxisSpacing: 10, // Vertical space between items
-          //     ),
-          //     builderDelegate: PagedChildBuilderDelegate<ReelsSearchEntity>(
-          //       noItemsFoundIndicatorBuilder: (context) {
-          //         return Center(
-          //           child: Text(
-          //             LocaleKeys.noData.localize,
-          //             style: Styles.mediumText(),
-          //           ),
-          //         );
-          //       },
-          //       itemBuilder: (context, item, index) {
-          //         return InkWell(
-          //             onTap: () {
-          //               //  context.push(Routes.OTHERSACCOUNT,extra: item.id);
-          //             },
-          //             child: VideoGridItem(
-          //               videoUrl: state.reels![index],
-          //             ));
-          //       },
-          //       noMoreItemsIndicatorBuilder: (context) => Container(),
-          //       firstPageProgressIndicatorBuilder: (context) =>
-          //           const CupertinoActivityIndicator(),
-          //       newPageProgressIndicatorBuilder: (context) =>
-          //           const CupertinoActivityIndicator(),
-          //     ),
-          //   );
-          // }
-          return Center(
-            child: Text(LocaleKeys.noResultsFound.localize),
+        builder: (context, state) {
+          final reels = _cubit.reelsSearch;
+
+          if (state.status == SearchStates.loading && reels.isEmpty) {
+            return const Center(child: CupertinoActivityIndicator());
+          }
+
+          if (reels.isEmpty) {
+            return Center(
+              child: Text(
+                LocaleKeys.noResultsFound.localize,
+                style: Styles.mediumText(),
+              ),
+            );
+          }
+
+          return GridView.builder(
+            controller: _scrollController,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+            ),
+            itemCount: reels.length + (_cubit.isLoadingReelsSearchMore ? 1 : 0),
+            itemBuilder: (context, index) {
+              if (index >= reels.length) {
+                return const CupertinoActivityIndicator();
+              }
+              return InkWell(
+                onTap: () {
+                  context.push(Routes.REELS);
+                },
+                child: VideoGridItem(videoUrl: reels[index]),
+              );
+            },
           );
         },
       ),
     );
   }
 }
+
 
 class VideoGridItem extends StatefulWidget {
   final ReelsSearchEntity videoUrl;

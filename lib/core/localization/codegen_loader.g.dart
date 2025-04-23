@@ -1539,7 +1539,8 @@ class CodegenLoader extends AssetLoader{
   "audioAndVideoCalls": "المكالمات الصوتية والفيديو",
   "photoVideosAndDocuments": "صور وفيديو ووثائق",
   "locationSharing": "مشاركة الموقع",
-  "statusUpdates": "تحديثات الحالة"
+  "statusUpdates": "تحديثات الحالة",
+  "mostBooking": "معظم الحجوزات"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -3083,7 +3084,8 @@ static const Map<String,dynamic> _en = {
   "audioAndVideoCalls": "Audio and video calls",
   "photoVideosAndDocuments": "Photo, videos and documents",
   "locationSharing": "Location sharing",
-  "statusUpdates": "Status updates"
+  "statusUpdates": "Status updates",
+  "mostBooking": "Most Booking"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

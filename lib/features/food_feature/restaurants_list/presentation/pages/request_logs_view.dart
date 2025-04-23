@@ -74,7 +74,7 @@ class _RestaurantRequestLogsScreenState
 
           if (!state.isLoading) {
             return SizedBox(
-              height:MediaQuery.sizeOf(context).height * .8,
+              height:MediaQuery.sizeOf(context).height ,
               child: Column(
                 children: [
                   Expanded(

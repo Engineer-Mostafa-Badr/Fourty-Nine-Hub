@@ -16,7 +16,7 @@ class SearchState {
   final PostEntity? postDetails;
   final CommentEntity? newComment;
   final List<MainCategoryEntity>? mainCategory;
-
+ 
   SearchState({
     this.status = SearchStates.loading,
     this.failure,

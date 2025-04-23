@@ -68,9 +68,7 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
           child: ListView(
             children: [
               Container(
-                // elevation: context.isDarkMode ? 0 : 2,
                 decoration: BoxDecoration(
-                    // color: cardDarkColor(context),
                     border: Border.all(
                       color: AppColors.black,
                     ),
@@ -90,13 +88,13 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Label(
-                          text: LocaleKeys.noRating.localize,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 16,
-                              color: AppColors.black),
-                        ),
+                       Expanded(child:  Label(
+                         text: LocaleKeys.noRating.localize,
+                         style: const TextStyle(
+                             fontWeight: FontWeight.w700,
+                             fontSize: 16,
+                             color: AppColors.black),
+                       ),),
                         ElevatedButton(
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.cF3F3F3),
@@ -113,13 +111,13 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
                   : Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Label(
-                          text: LocaleKeys.yourRate.localize,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 16,
-                              color: AppColors.black),
-                        ),
+                      Expanded(child:Label(
+                      text: LocaleKeys.yourRate.localize,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 16,
+                          color: AppColors.black),
+                    ),),
                         Row(
                           children: [
                             const Label(
@@ -283,7 +281,7 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
         ),
         const SizedBox(width: 8),
         Expanded(
-          flex: 2,
+          flex: 1,
           child: Center(child: _buildRestaurantDetails(context)),
         ),
       ],
@@ -357,32 +355,32 @@ class _LogDetailsScreenState extends State<LogDetailsScreen> {
 
   Widget _buildTotalAndCurrency() {
     return Row(
+      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start, // Align at the top in case of wrapping
       children: [
         Text(
-          "${LocaleKeys.total.tr()}: ",
-          style: const TextStyle(
+          "${LocaleKeys.total.tr()}:",
+          style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w700,
           ),
         ),
-        // const Spacer(),
+        // Wrap to allow overflow handling
         Text(
           widget.logsEntity.total?.toString() ?? '0',
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w700,
           ),
-        ),
-        Text(
-          " ${widget.logsEntity.currencyEn ?? ''}",
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-          ),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,  // Prevents overflow if text is too large
         ),
       ],
     );
   }
+
+
+
 
   Widget _buildFooter(BuildContext context) {
     return Row(
@@ -554,136 +552,3 @@ class _RatingBottomSheetState extends State<RatingBottomSheet> {
   }
 }
 
-// class RatingBottomSheet extends StatefulWidget {
-//   final String restaurantId;
-//   final RestaurantsCubit cubit;
-//
-//   const RatingBottomSheet({
-//     super.key,
-//     required this.restaurantId,
-//     required this.cubit,
-//   });
-//
-//   @override
-//   _RatingBottomSheetState createState() => _RatingBottomSheetState();
-// }
-//
-// class _RatingBottomSheetState extends State<RatingBottomSheet> {
-//   double _rating = 0;
-//   TextEditingController _commentController = TextEditingController();
-//
-//   @override
-//   void dispose() {
-//     _commentController.dispose();
-//     super.dispose();
-//   }
-//
-//   void _sendRating(BuildContext context) {
-//     if (_rating > 0) {
-//       final params = AddRateRestaurantParams(
-//         restaurantId: widget.restaurantId,
-//         rate: _rating,
-//         comment: "Elmon",
-//       );
-//
-//       // Call the Cubit to rate the restaurant
-//       widget.cubit.rateRestaurant(params: params);
-//
-//       // Wait for the response and then refresh the list
-//       widget.cubit.rateRestaurant(params: params).then((_) {
-//         // Refresh the data after rating is submitted
-//         widget.cubit.loadInitialReqLogs();
-//       });
-//       Navigator.pop(context); // Close the bottom sheet after sending the rating
-//       Navigator.pop(context); // Close the bottom sheet after sending the rating
-//       Navigator.pop(context); // Close the bottom sheet after sending the rating
-//     } else {
-//       // Show an error if no rating or comment is provided
-//       ScaffoldMessenger.of(context).showSnackBar(
-//         const SnackBar(content: Text('Please provide a rating ')),
-//       );
-//     }
-//   }
-//
-//   // Method to return the text based on the rating
-//   String getRatingText() {
-//     if (_rating == 1) {
-//       return LocaleKeys.bad.localize;
-//     } else if (_rating == 2) {
-//       return LocaleKeys.poor2.localize;
-//     } else if (_rating == 3) {
-//       return LocaleKeys.good.localize;
-//     } else if (_rating == 4) {
-//       return LocaleKeys.veryGood.localize;
-//     } else if (_rating == 5) {
-//       return LocaleKeys.excellent.localize;
-//     }
-//     return '';
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       width: double.infinity,
-//       padding: const EdgeInsets.all(16),
-//       decoration: const BoxDecoration(
-//         color: Colors.white,
-//         borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
-//       ),
-//       child: Column(
-//         mainAxisSize: MainAxisSize.min,
-//         children: [
-//           Label(
-//             text: LocaleKeys.rateTheRestaurant.localize,
-//             style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),
-//           ),
-//           const SizedBox(height: 8),
-//           // Rating Bar
-//           RatingBar(
-//             initialRating: _rating,
-//             ignoreGestures: false,
-//             // Allow interaction
-//             itemPadding: const EdgeInsets.symmetric(horizontal: 3),
-//             ratingWidget: RatingWidget(
-//               full: SvgPicture.asset(Assets.star1),
-//               half: SvgPicture.asset(Assets.star1),
-//               // You can adjust the half icon if needed
-//               empty: SvgPicture.asset(Assets.starEmpty),
-//             ),
-//             itemSize: 40,
-//             // Adjust the size of the star
-//             onRatingUpdate: (rating) {
-//               setState(() {
-//                 _rating = rating;
-//               });
-//             },
-//           ),
-//           const SizedBox(height: 16),
-//           // Displaying the rating text based on the selected rating
-//           Text(
-//             getRatingText(),
-//             style: const TextStyle(
-//               fontSize: 16,
-//               fontWeight: FontWeight.w600,
-//               color: Colors.black,
-//             ),
-//           ),
-//           const SizedBox(height: 24),
-//           AppButton(
-//               backColor: AppColors.PRIMARY_COLOR,
-//               color: AppColors.whiteColor,
-//               // style: ElevatedButton.styleFrom(
-//               //   backgroundColor: AppColors.PRIMARY_COLOR,
-//               //   padding: const EdgeInsets.symmetric(vertical: 12),
-//               //   shape: RoundedRectangleBorder(
-//               //     borderRadius: BorderRadius.circular(8),
-//               //   ),
-//               // ),
-//
-//               onPressed: () => _sendRating(context),
-//               label: LocaleKeys.send.localize),
-//         ],
-//       ),
-//     );
-//   }
-// }
