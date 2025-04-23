@@ -126,7 +126,7 @@ class _TripJoinViewState extends State<TripJoinView>
                                 iconColor: const Color(0xffF33D49),
                                 textColor: const Color(0xffF33D49),
                                 imagePath: Assets.locationTripIcon,
-                                title: 'Trip Join',
+                                title: 'Trip Joinnnn',
                                 onTap: () {},
                                 icon: Assets.car,
                               ),
