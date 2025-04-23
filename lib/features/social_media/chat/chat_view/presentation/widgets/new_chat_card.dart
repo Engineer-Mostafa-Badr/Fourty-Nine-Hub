@@ -17,7 +17,6 @@ import '../../../../../../res/style/styles.dart';
 import '../../../../../../routes/routes.dart';
 import '../../../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../../tinder/data/shared/shared.dart';
-import '../../../chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
 import '../../../chat_room/presentation/widgets/label_colors_map.dart';
 import '../../domain/entities/chat_entity.dart';
 import '../chat_cubit/chats_cubit.dart';
@@ -382,12 +381,10 @@ class _NewChatCardState extends State<NewChatCard> {
                   child: Row(
                     children: [
                       if (widget.chat!.lastMessage != null &&
-                          (widget.chat!.lastMessage?.media.isNotEmpty ??
-                              false))
+                          (widget.chat!.lastMessage?.media.isNotEmpty ?? false))
                         Row(
                           children: [
-                            if (widget
-                                .chat!.lastMessage?.media.first.type ==
+                            if (widget.chat!.lastMessage?.media.first.type ==
                                 FileTypeEnum.image)
                               const Icon(
                                 Icons.image,
@@ -395,7 +392,7 @@ class _NewChatCardState extends State<NewChatCard> {
                                 size: 20,
                               )
                             else if (widget
-                                .chat!.lastMessage?.media.first.type ==
+                                    .chat!.lastMessage?.media.first.type ==
                                 FileTypeEnum.video)
                               const Icon(
                                 Icons.video_camera_back,
@@ -403,28 +400,28 @@ class _NewChatCardState extends State<NewChatCard> {
                                 size: 20,
                               )
                             else if (widget
-                                  .chat!.lastMessage?.media.first.type ==
-                                  FileTypeEnum.audio)
-                                const Icon(
-                                  Icons.mic,
-                                  color: Colors.black45,
-                                  size: 20,
-                                )
-                              else if (widget
                                     .chat!.lastMessage?.media.first.type ==
-                                    FileTypeEnum.document)
-                                  const Icon(
-                                    Icons.description,
-                                    color: Colors.black45,
-                                    size: 20,
-                                  ),
+                                FileTypeEnum.audio)
+                              const Icon(
+                                Icons.mic,
+                                color: Colors.black45,
+                                size: 20,
+                              )
+                            else if (widget
+                                    .chat!.lastMessage?.media.first.type ==
+                                FileTypeEnum.document)
+                              const Icon(
+                                Icons.description,
+                                color: Colors.black45,
+                                size: 20,
+                              ),
                           ],
                         ),
                       Label(
                           text: widget.chat?.lastMessage?.text == null
                               ? context.isArabic
-                              ? "لا توجد رسائل حتي الان"
-                              : "No messages until now"
+                                  ? "لا توجد رسائل حتي الان"
+                                  : "No messages until now"
                               : '${widget.chat?.lastMessage?.text}',
                           style: Styles.mediumText(
                             fontSize: 28,
@@ -463,14 +460,20 @@ class _NewChatCardState extends State<NewChatCard> {
   _unreadMessagesCount() {
     if (widget.chat?.unreadCount == 0) return const SizedBox();
 
-    return CircleAvatar(
-      maxRadius: 10,
-      backgroundColor: AppColors.PRIMARY_COLOR,
-      child: Label(
-        text: '${widget.chat?.unreadCount}',
-        style: Styles.mediumText(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
+    return Container(
+      margin: const EdgeInsetsDirectional.only(end: 8),
+      decoration: const BoxDecoration(
+        color: AppColors.PRIMARY_COLOR,
+        shape: BoxShape.circle,
+      ),
+      height: 20,
+      width: 20,
+      child: Center(
+        child: Label(
+          text: '${widget.chat?.unreadCount}',
+          style: Styles.smallText(
+            color: Colors.white,
+          ),
         ),
       ),
     );

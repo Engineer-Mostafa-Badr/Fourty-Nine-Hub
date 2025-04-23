@@ -13,7 +13,6 @@ import 'package:go_router/go_router.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
-import '../../../../service_locator/service_locator.dart';
 import '../Controllers/on_boarding_cubit.dart';
 
 class OnBoardingScreen extends StatefulWidget {
@@ -60,7 +59,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                     InkWell(
                       onTap: () {
                         CacheManager.isShowOnboarding(true);
-                        context.go(Routes.LOGIN);
+                        context.go(Routes.HOME);
                       },
                       child: Label(
                         text: LocaleKeys.skip.localize,
