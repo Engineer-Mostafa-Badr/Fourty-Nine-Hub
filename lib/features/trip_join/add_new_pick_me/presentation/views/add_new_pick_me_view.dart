@@ -161,6 +161,7 @@ class _AddNewPickMeViewState extends State<AddNewPickMeView> {
                       child: const PremiumAndRequestWidget(),
                     ),
                   ],
+
                 ),
               ),
             )));
