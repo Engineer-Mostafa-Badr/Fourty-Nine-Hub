@@ -40,7 +40,7 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
     super.initState();
     print('✅ INIT SEARCH VIEW');
     context.read<SearchCubit>().initPref();
-    _tabController = TabController(length: 9, vsync: this);
+    _tabController = TabController(length: 6, vsync: this);
     _searchController = context.read<SearchCubit>().searchController;
     _searchController.addListener(_onSearchChanged);
   }
@@ -172,11 +172,13 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
 
     return CustomScaffold(
       appBar: AppBar(
+        elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Theme.of(context).primaryColor),
           onPressed: () => Navigator.pop(context),
         ),
         title: Card(
+          elevation: 0,
           color: Colors.white,
           shape: OutlineInputBorder(
             borderRadius: BorderRadius.circular(40.r),
@@ -228,15 +230,6 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
               case 5:
                 await prefs.setString('filter', 'ads');
                 break;
-              // case 6:
-              //   await prefs.setString('filter', 'comeWithYouTrips');
-              //   break;
-              // case 7:
-              //   await prefs.setString('filter', 'carpoolTrips');
-              //   break;
-              // case 8:
-              //   await prefs.setString('filter', 'rideTrips');
-              //   break;
             }
 
             final searchText = _searchController.text.trim();
@@ -275,10 +268,14 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
                 break;
             }
           },
-          labelColor: Theme.of(context).primaryColor,
+          labelColor: Colors.white,
           unselectedLabelColor: AppColors.GREY_NORMAL_COLOR,
-          indicatorColor: AppColors.SECONDARY_COLOR,
-          dividerColor: AppColors.GREY_LIGHT_COLOR,
+          indicator: BoxDecoration(
+            color: Theme.of(context).primaryColor,
+            borderRadius: BorderRadius.circular(15.r),
+          ),
+          indicatorSize: TabBarIndicatorSize.label,
+          indicatorPadding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 6.h),
           padding: EdgeInsets.only(right: 40.w),
           labelPadding: EdgeInsets.only(left: 20.w),
           labelStyle: Styles.mediumText(fontSize: 32),
@@ -289,9 +286,6 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
             CustomTapWidget(text: LocaleKeys.mainCategory.localize),
             CustomTapWidget(text: LocaleKeys.subCategory.localize),
             CustomTapWidget(text: LocaleKeys.ads.localize),
-            // CustomTapWidget(text: LocaleKeys.tripJoin.localize),
-            // CustomTapWidget(text: LocaleKeys.carpool.localize),
-            // CustomTapWidget(text: LocaleKeys.ride.localize),
           ],
         ),
       ),
