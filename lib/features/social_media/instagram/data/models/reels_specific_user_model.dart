@@ -9,7 +9,7 @@ class ReelsSpecificUserDataModel extends ReelsSpecificUserDataEntity {
   factory ReelsSpecificUserDataModel.fromJson(Map<String, dynamic> json) {
     return ReelsSpecificUserDataModel(
       reels: List<ReelsSpecificUserModel>.from(
-        (json['reels'] ?? []).map((r) => ReelsSpecificUserModel.fromJson(r)),
+        (json['reels'] as List).map((r) => ReelsSpecificUserModel.fromJson(r)),
       ),
       pagination: PaginationSpecificUserModel.fromJson(json['pagination']),
     );

@@ -1539,5 +1539,8 @@
   "seePlacesNearYou": "See places near you",
   "toIncludeNearbyPlacesTurnOnLocationServices": "To include nearby places, turn on location services.",
   "turnOnLocationServices": "Turn on Location Services",
-  "captionMustBeAdded": "Caption must be added"
+  "captionMustBeAdded": "Caption must be added",
+  "youDontHaveReels": "You don't have reels",
+  "youDontHavePosts": "You don't have posts",
+  "followedBy": "Followed by"
 }

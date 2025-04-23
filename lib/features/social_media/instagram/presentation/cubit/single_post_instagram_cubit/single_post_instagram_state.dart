@@ -1,10 +1,33 @@
 part of 'single_post_instagram_cubit.dart';
 
-sealed class SinglePostInstagramState extends Equatable {
-  const SinglePostInstagramState();
+enum SinglePostInstagramStatus { initial, loading, success, failure }
 
-  @override
-  List<Object> get props => [];
+extension SinglePostInstagramStatusX on SinglePostInstagramStatus {
+  bool get isInitial => this == SinglePostInstagramStatus.initial;
+  bool get isLoading => this == SinglePostInstagramStatus.loading;
+  bool get isSuccess => this == SinglePostInstagramStatus.success;
+  bool get isFailure => this == SinglePostInstagramStatus.failure;
 }
 
-final class SinglePostInstagramInitial extends SinglePostInstagramState {}
+class SinglePostInstagramState {
+  final SinglePostInstagramStatus status;
+  final SinglePostInstagramEntity? postData;
+  final Failure? failure;
+  const SinglePostInstagramState({
+    this.status = SinglePostInstagramStatus.initial,
+    this.postData,
+    this.failure,
+  });
+
+  SinglePostInstagramState copyWith({
+    SinglePostInstagramStatus? status,
+    SinglePostInstagramEntity? postData,
+    Failure? failure,
+  }) {
+    return SinglePostInstagramState(
+      status: status ?? this.status,
+      postData: postData ?? this.postData,
+      failure: failure ?? this.failure,
+    );
+  }
+}

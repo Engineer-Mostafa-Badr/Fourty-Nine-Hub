@@ -3,11 +3,13 @@ import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/features/social_media/instagram/data/models/instagram_post_data_model.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/comment_instagram_data_entiry.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/create_post_request_entity.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/entities/data_suggest_follow_instagram_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/followers_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/following_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/profile_instagram_data_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/reel_instagram_data_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/reels_specific_user_entity.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/entities/single_post_instagram_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/user_tag_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/add_comment_use_case.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/create_post_request_use_case.dart';
@@ -15,6 +17,7 @@ import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/de
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_profile_use_case.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_reels_specific_user_use_case.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_user_media_usecase.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_suggest_follow_instagram_use_case.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_reels_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_tag_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
@@ -61,4 +64,10 @@ abstract class InstagramRepo {
 
   Future<Either<Failure, ProfileInstagramDataEntity>> getInstagramProfile(
       GetInstagramProfileParams params);
+
+  Future<Either<Failure, SinglePostInstagramEntity>> getSinglePostInstagram(
+      String postId);
+
+  Future<Either<Failure, DataSuggestFollowInstagramEntity>>
+      getSuggestFollowInstagram(GetSuggestFollowInstagramParams params);
 }

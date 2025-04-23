@@ -5,7 +5,6 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/profile_instagram_data_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/profile_instagram_cubit/profile_instagram_cubit.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/auto_play_video_widget.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/birthday_section.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/buttons_profile_instagram_section.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/discover_people_profile_instagram_list_view_item.dart';
@@ -13,7 +12,6 @@ import 'package:fourtyninehub/features/social_media/instagram/presentation/widge
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/post_instagram_widget.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/subtitle_and_name_under_header_instagram.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/top_navigation_bar_profile_instagram.dart';
-import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/vedio_suggest_reels_item.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/helpers/media_helper.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -98,24 +96,32 @@ class _ProfileInstagramViewBodyState extends State<ProfileInstagramViewBody>
           ),
         ),
         SliverToBoxAdapter(
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height * 0.2,
-            child: ListView.separated(
-              itemCount: 10,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: EdgeInsetsDirectional.only(
-                    start: index == 0 ? 10 : 0,
-                    end: index == 10 ? 10 : 0,
+          child: BlocBuilder<ProfileInstagramCubit, ProfileInstagramState>(
+            builder: (context, state) {
+              return SizedBox(
+                height: state.suggestFollowsData!.suggestions.isEmpty
+                    ? 0
+                    : MediaQuery.of(context).size.height * 0.2,
+                child: ListView.separated(
+                  itemCount: state.suggestFollowsData!.suggestions.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: EdgeInsetsDirectional.only(
+                        start: index == 0 ? 10 : 0,
+                        end: index == 10 ? 10 : 0,
+                      ),
+                      child: DiscoverPeopleProfileInstagramListViewItem(
+                        suggest: state.suggestFollowsData!.suggestions[index],
+                      ),
+                    );
+                  },
+                  separatorBuilder: (context, index) => const SizedBox(
+                    width: 16,
                   ),
-                  child: const DiscoverPeopleProfileInstagramListViewItem(),
-                );
-              },
-              separatorBuilder: (context, index) => const SizedBox(
-                width: 16,
-              ),
-            ),
+                ),
+              );
+            },
           ),
         ),
         const SliverToBoxAdapter(
@@ -145,6 +151,18 @@ class _ProfileInstagramViewBodyState extends State<ProfileInstagramViewBody>
             builder: (context, state) {
               final List<InstagramProfilePostEntity> myPosts =
                   state.profileData!.postsEntity;
+              if (myPosts.isEmpty) {
+                return SliverToBoxAdapter(
+                  child: Container(
+                    padding: const EdgeInsets.all(24),
+                    alignment: Alignment.center,
+                    child: Label(
+                      text: LocaleKeys.youDontHavePosts.localize,
+                      style: Styles.headerText(),
+                    ),
+                  ),
+                );
+              }
               return SliverGrid.builder(
                 itemCount: myPosts.length,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -185,45 +203,61 @@ class _ProfileInstagramViewBodyState extends State<ProfileInstagramViewBody>
             },
           ),
         if (tabController.index == 1)
-          SliverGrid.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              crossAxisSpacing: 2.0,
-              mainAxisSpacing: 2.0,
-              childAspectRatio: 125 / 158,
-            ),
-            itemBuilder: (context, index) {
-              return Stack(
-                children: [
-                  const ImageFromInternet(
-                    image: testImage,
-                    fit: BoxFit.fill,
-                  ),
-                  PositionedDirectional(
-                    start: 8,
-                    bottom: 8,
-                    child: Row(
-                      children: [
-                        Label(
-                          text: '2,567',
-                          style: Styles.mediumText(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24,
-                            color: Colors.white,
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 2,
-                        ),
-                        const Icon(
-                          Icons.visibility_rounded,
-                          color: Colors.white,
-                          size: 15,
-                        ),
-                      ],
+          BlocBuilder<ProfileInstagramCubit, ProfileInstagramState>(
+            builder: (context, state) {
+              if (state.reelsData!.reels.isEmpty) {
+                return SliverToBoxAdapter(
+                  child: Container(
+                    padding: const EdgeInsets.all(24),
+                    alignment: Alignment.center,
+                    child: Label(
+                      text: LocaleKeys.youDontHaveReels.localize,
+                      style: Styles.headerText(),
                     ),
                   ),
-                ],
+                );
+              }
+              return SliverGrid.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 2.0,
+                  mainAxisSpacing: 2.0,
+                  childAspectRatio: 125 / 158,
+                ),
+                itemBuilder: (context, index) {
+                  return Stack(
+                    children: [
+                      const ImageFromInternet(
+                        image: testImage,
+                        fit: BoxFit.fill,
+                      ),
+                      PositionedDirectional(
+                        start: 8,
+                        bottom: 8,
+                        child: Row(
+                          children: [
+                            Label(
+                              text: '2,567',
+                              style: Styles.mediumText(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 24,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 2,
+                            ),
+                            const Icon(
+                              Icons.visibility_rounded,
+                              color: Colors.white,
+                              size: 15,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+                },
               );
             },
           ),

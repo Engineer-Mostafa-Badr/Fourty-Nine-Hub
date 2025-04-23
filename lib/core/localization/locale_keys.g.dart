@@ -1514,5 +1514,8 @@ abstract class  LocaleKeys {
   static const toIncludeNearbyPlacesTurnOnLocationServices = 'toIncludeNearbyPlacesTurnOnLocationServices';
   static const turnOnLocationServices = 'turnOnLocationServices';
   static const captionMustBeAdded = 'captionMustBeAdded';
+  static const youDontHaveReels = 'youDontHaveReels';
+  static const youDontHavePosts = 'youDontHavePosts';
+  static const followedBy = 'followedBy';
 
 }

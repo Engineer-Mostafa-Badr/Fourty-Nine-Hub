@@ -14,6 +14,8 @@ import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/ge
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_reels_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_user_media_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_posts_use_case.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_single_post_instagram_use_case.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_suggest_follow_instagram_use_case.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_reels_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_tag_use_case.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/comment_instagram_cubit/comments_instagram_cubit.dart';
@@ -103,6 +105,16 @@ class InstagramServiceLocator {
               serviceLocator<InstagramRepo>(),
             ));
 
+    serviceLocator.registerLazySingleton<GetSinglePostInstagramUseCase>(
+        () => GetSinglePostInstagramUseCase(
+              serviceLocator<InstagramRepo>(),
+            ));
+
+    serviceLocator.registerLazySingleton<GetSuggestFollowInstagramUseCase>(
+        () => GetSuggestFollowInstagramUseCase(
+              serviceLocator<InstagramRepo>(),
+            ));
+
     serviceLocator.registerFactory<InstagramCubit>(() => InstagramCubit(
           serviceLocator(),
           serviceLocator(),
@@ -146,6 +158,7 @@ class InstagramServiceLocator {
       () => ProfileInstagramCubit(
         serviceLocator<GetInstagramProfileUseCase>(),
         serviceLocator<GetInstagramReelsSpecificUserUseCase>(),
+        serviceLocator<GetSuggestFollowInstagramUseCase>(),
       ),
     );
     serviceLocator.registerLazySingleton<ReelInstagramCubit>(
@@ -167,6 +180,12 @@ class InstagramServiceLocator {
 
     serviceLocator.registerLazySingleton<InstagramAddMusicCubit>(
       () => InstagramAddMusicCubit(),
+    );
+
+    serviceLocator.registerLazySingleton<SinglePostInstagramCubit>(
+      () => SinglePostInstagramCubit(
+        serviceLocator<GetSinglePostInstagramUseCase>(),
+      ),
     );
   }
 }
