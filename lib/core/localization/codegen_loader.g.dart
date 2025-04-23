@@ -1531,7 +1531,15 @@ class CodegenLoader extends AssetLoader{
   "areYouSureYouWantToDeleteThisComment": "هل أنت متأكد أنك تريد حذف هذا التعليق؟",
   "responseStatus": "حالة الرد",
   "socialExplain": "احصل على المال إذا قمت بالنشر والمشاهدة والإعجاب على أي واجهة تريدها!",
-  "imBookingOfAnotherClient": "أقوم بالحجز نيابة عن عميل آخر"
+  "imBookingOfAnotherClient": "أقوم بالحجز نيابة عن عميل آخر",
+  "firstImpressionMessage": "ارسل رسالة قبل المطابقة للمساعدة في جذب انتباههم. حدد ما الذي جعلهم مميزين، أو قم بتشجيعهم، أو اجعلهم يضحكون.",
+  "endToEndDescription": "يحافظ التشفير الشامل على رسائلك ومكالماتك الشخصية بينك وبين الأشخاص الذين تختارهم. ولا يمكن حتى لتطبيق 49 قراءة هذه الرسائل أو الاستماع إليها. وهذا يشمل:",
+  "yourChatsAndCallArePrivate": "محادثاتك ومكالماتك خاصة",
+  "textAndVoiceMessages": "الرسائل النصية والصوتية",
+  "audioAndVideoCalls": "المكالمات الصوتية والفيديو",
+  "photoVideosAndDocuments": "صور وفيديو ووثائق",
+  "locationSharing": "مشاركة الموقع",
+  "statusUpdates": "تحديثات الحالة"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -3067,7 +3075,15 @@ static const Map<String,dynamic> _en = {
   "areYouSureYouWantToDeleteThisComment": "Are you sure you want to delete this comment?",
   "responseStatus": "Response Status",
   "socialExplain": "Get money if you post, view and like on any interface you like!",
-  "imBookingOfAnotherClient": "I am booking on behalf of another Client"
+  "imBookingOfAnotherClient": "I am booking on behalf of another Client",
+  "firstImpressionMessage": "send a message before matching to help get their attention. sat what made them stand out, hype them up, or make them laugh.",
+  "endToEndDescription": "End to end encryption keeps your personal messages and calls between you and the people you choose. not even 49 app can read or listen to them. this includes your:",
+  "yourChatsAndCallArePrivate": "Your chats and calls are private",
+  "textAndVoiceMessages": "Text and voice messages",
+  "audioAndVideoCalls": "Audio and video calls",
+  "photoVideosAndDocuments": "Photo, videos and documents",
+  "locationSharing": "Location sharing",
+  "statusUpdates": "Status updates"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

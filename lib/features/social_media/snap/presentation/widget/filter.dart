@@ -56,9 +56,9 @@ class _HomePageState extends State<HomePage> {
     if (!deepArController.isInitialized) {
       await deepArController.initialize(
         androidLicenseKey:
-            '930f25b8068f75e888da6f36ca5e7743d7922d9e9b33f36390e980176eaf4e84a2a048142d9b1310',
+        '930f25b8068f75e888da6f36ca5e7743d7922d9e9b33f36390e980176eaf4e84a2a048142d9b1310',
         iosLicenseKey:
-            '111a528fa021dbf6a64decfb751ca354e59793f11926845436472e094038cd491de29c031f9ead7f',
+        '111a528fa021dbf6a64decfb751ca354e59793f11926845436472e094038cd491de29c031f9ead7f',
       );
     }
   }
@@ -66,12 +66,12 @@ class _HomePageState extends State<HomePage> {
   Future<void> _captureAndSaveImage() async {
     try {
       RenderRepaintBoundary? boundary =
-          _key.currentContext!.findRenderObject() as RenderRepaintBoundary?;
+      _key.currentContext!.findRenderObject() as RenderRepaintBoundary?;
 
       if (boundary != null) {
         ui.Image image = await boundary.toImage(pixelRatio: 3.0);
         ByteData? byteData =
-            await image.toByteData(format: ui.ImageByteFormat.png);
+        await image.toByteData(format: ui.ImageByteFormat.png);
 
         if (byteData != null) {
           Uint8List pngBytes = byteData.buffer.asUint8List();
@@ -126,15 +126,15 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget buildCameraPreview() => RepaintBoundary(
-        key: _key,
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height * 0.78,
-          child: Transform.scale(
-            scale: 1.6,
-            child: DeepArPreview(deepArController),
-          ),
-        ),
-      );
+    key: _key,
+    child: SizedBox(
+      height: MediaQuery.of(context).size.height * 0.78,
+      child: Transform.scale(
+        scale: 1.6,
+        child: DeepArPreview(deepArController),
+      ),
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -176,13 +176,13 @@ class _HomePageState extends State<HomePage> {
                                   Center(
                                     child: Container(
                                       padding:
-                                          EdgeInsets.symmetric(horizontal: 5.w),
+                                      EdgeInsets.symmetric(horizontal: 5.w),
                                       height:
-                                          MediaQuery.of(context).size.height *
-                                              0.13, // Responsive circle height
+                                      MediaQuery.of(context).size.height *
+                                          0.13, // Responsive circle height
                                       width:
-                                          MediaQuery.of(context).size.height *
-                                              0.13, // Responsive circle width
+                                      MediaQuery.of(context).size.height *
+                                          0.13, // Responsive circle width
                                       decoration: BoxDecoration(
                                         shape: BoxShape.circle,
                                         border: Border.all(
@@ -209,7 +209,7 @@ class _HomePageState extends State<HomePage> {
                                         padding: EdgeInsets.all(40.w),
                                         child: AnimatedContainer(
                                           duration:
-                                              const Duration(milliseconds: 300),
+                                          const Duration(milliseconds: 300),
                                           width: selectedFilterIndex == index
                                               ? 90.w
                                               : 70.w,
@@ -270,9 +270,9 @@ class _HomePageState extends State<HomePage> {
                   backgroundColor: AppColors.AUTH_CONTAINER_COLOR,
                   child: ImageFromInternet(
                     image: serviceLocator<UserCubit>()
-                            .state
-                            .data!
-                            .profilePicture ??
+                        .state
+                        .data!
+                        .profilePicture ??
                         UIConst.profilePlaceHolder,
                     height: 90.h,
                     width: 90.w,

@@ -15,11 +15,14 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../../core/widget/custom_scaffold.dart';
+import '../widgets/end_to_end_Encrypted_widget.dart';
+import '../widgets/new_chat_card.dart';
 
 class OptionsChatsViewParams {
   final ChatsCubit chatsCubit;
   final String category;
   final bool isSecret;
+
   OptionsChatsViewParams(
       {required this.chatsCubit,
       required this.category,
@@ -28,6 +31,7 @@ class OptionsChatsViewParams {
 
 class OptionsChatsView extends StatefulWidget {
   const OptionsChatsView({super.key, required this.params});
+
   final OptionsChatsViewParams params;
 
   @override
@@ -53,7 +57,6 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
         child: Builder(builder: (context) {
           return CustomScaffold(
             appBar: AppBar(
-              // backgroundColor: AppColors.PRIMARY_COLOR,
               elevation: 0,
               leadingWidth: 26,
               leading: IconButton(
@@ -102,12 +105,18 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                           ),
                           IconButton(
                             onPressed: () async {
-                              await context.read<ChatsCubit>().changeArchiveChat(isArchivedTab: true);
-                              final unarchivedChatsCount = context.read<ChatsCubit>().selectedChats.length;
+                              await context
+                                  .read<ChatsCubit>()
+                                  .changeArchiveChat(isArchivedTab: true);
+                              final unarchivedChatsCount = context
+                                  .read<ChatsCubit>()
+                                  .selectedChats
+                                  .length;
 
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  backgroundColor: const Color(0xff1A1A1A), // Set background color to blue
+                                  backgroundColor: const Color(0xff1A1A1A),
+                                  // Set background color to blue
                                   content: BlocProvider.value(
                                     value: context.read<ChatsCubit>(),
                                     child: Builder(
@@ -116,7 +125,9 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                                           TextSpan(
                                             children: [
                                               TextSpan(
-                                                text: context.isArabic ? "تم إلغاء أرشفة " : "Unarchived ",
+                                                text: context.isArabic
+                                                    ? "تم إلغاء أرشفة "
+                                                    : "Unarchived ",
                                                 style: const TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 16,
@@ -124,7 +135,8 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                                                 ),
                                               ),
                                               TextSpan(
-                                                text: "$unarchivedChatsCount ", // Count
+                                                text: "$unarchivedChatsCount ",
+                                                // Count
                                                 style: const TextStyle(
                                                   color: Colors.white,
                                                   fontWeight: FontWeight.bold,
@@ -132,7 +144,9 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                                                 ),
                                               ),
                                               TextSpan(
-                                                text: context.isArabic ? "محادثة" : "chats",
+                                                text: context.isArabic
+                                                    ? "محادثة"
+                                                    : "chats",
                                                 style: const TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 16,
@@ -147,9 +161,13 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                                   ),
                                   action: SnackBarAction(
                                     label: context.isArabic ? "تراجع" : "UNDO",
-                                    textColor: AppColors.PRIMARY_COLOR_DARK, // Set "Undo" text color to gray
+                                    textColor: AppColors.PRIMARY_COLOR_DARK,
+                                    // Set "Undo" text color to gray
                                     onPressed: () async {
-                                      await context.read<ChatsCubit>().changeArchiveChat(isArchivedTab: true);
+                                      await context
+                                          .read<ChatsCubit>()
+                                          .changeArchiveChat(
+                                              isArchivedTab: true);
                                     },
                                   ),
                                   duration: const Duration(seconds: 3),
@@ -160,7 +178,6 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                               Future.delayed(const Duration(seconds: 3), () {
                                 context.read<ChatsCubit>().clearSelectedChats();
                               });
-
                             },
                             icon: const Icon(
                               Icons.unarchive_outlined,
@@ -187,12 +204,20 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                                       //     .read<ChatsCubit>()
                                       //     .lockChats(isLockedTap: true);
 
-                                      await context.read<ChatsCubit>().lockChats(isLockedTap: true);
-                                      final unlockedChatsCount = context.read<ChatsCubit>().selectedChats.length;
+                                      await context
+                                          .read<ChatsCubit>()
+                                          .lockChats(isLockedTap: true);
+                                      final unlockedChatsCount = context
+                                          .read<ChatsCubit>()
+                                          .selectedChats
+                                          .length;
 
-                                      ScaffoldMessenger.of(context).showSnackBar(
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
                                         SnackBar(
-                                          backgroundColor: const Color(0xff1A1A1A), // Set background color
+                                          backgroundColor:
+                                              const Color(0xff1A1A1A),
+                                          // Set background color
                                           content: BlocProvider.value(
                                             value: context.read<ChatsCubit>(),
                                             child: Builder(
@@ -201,27 +226,36 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                                                   TextSpan(
                                                     children: [
                                                       TextSpan(
-                                                        text: context.isArabic ? "تم إلغاء قفل " : "Unlocked ",
+                                                        text: context.isArabic
+                                                            ? "تم إلغاء قفل "
+                                                            : "Unlocked ",
                                                         style: const TextStyle(
                                                           color: Colors.white,
                                                           fontSize: 16,
-                                                          fontWeight: FontWeight.bold,
+                                                          fontWeight:
+                                                              FontWeight.bold,
                                                         ),
                                                       ),
                                                       TextSpan(
-                                                        text: "$unlockedChatsCount ", // Count
+                                                        text:
+                                                            "$unlockedChatsCount ",
+                                                        // Count
                                                         style: const TextStyle(
                                                           color: Colors.white,
-                                                          fontWeight: FontWeight.bold,
+                                                          fontWeight:
+                                                              FontWeight.bold,
                                                           fontSize: 16,
                                                         ),
                                                       ),
                                                       TextSpan(
-                                                        text: context.isArabic ? "محادثة" : "chats",
+                                                        text: context.isArabic
+                                                            ? "محادثة"
+                                                            : "chats",
                                                         style: const TextStyle(
                                                           color: Colors.white,
                                                           fontSize: 16,
-                                                          fontWeight: FontWeight.bold,
+                                                          fontWeight:
+                                                              FontWeight.bold,
                                                         ),
                                                       ),
                                                     ],
@@ -231,10 +265,16 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                                             ),
                                           ),
                                           action: SnackBarAction(
-                                            label: context.isArabic ? "تراجع" : "UNDO",
-                                            textColor: AppColors.PRIMARY_COLOR_DARK, // Set "Undo" text color to gray
+                                            label: context.isArabic
+                                                ? "تراجع"
+                                                : "UNDO",
+                                            textColor:
+                                                AppColors.PRIMARY_COLOR_DARK,
+                                            // Set "Undo" text color to gray
                                             onPressed: () async {
-                                              await context.read<ChatsCubit>().lockChats(isLockedTap: true);
+                                              await context
+                                                  .read<ChatsCubit>()
+                                                  .lockChats(isLockedTap: true);
                                             },
                                           ),
                                           duration: const Duration(seconds: 3),
@@ -242,10 +282,12 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                                       );
 
 // Clear selected chats after 3 seconds
-                                      Future.delayed(const Duration(seconds: 3), () {
-                                        context.read<ChatsCubit>().clearSelectedChats();
+                                      Future.delayed(const Duration(seconds: 3),
+                                          () {
+                                        context
+                                            .read<ChatsCubit>()
+                                            .clearSelectedChats();
                                       });
-
                                     }
                                   },
                                   itemBuilder: (context) {
@@ -279,8 +321,13 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                         ? LocaleKeys.anonymous.tr()
                         : widget.params.category == "LockedChats"
                             ? LocaleKeys.lockChat.tr()
-                            : context.isArabic?"المؤرشفة":"Archived",
-                style: Styles.headerText(color: Colors.black,fontWeight: FontWeight.w500,),
+                            : context.isArabic
+                                ? "المؤرشفة"
+                                : "Archived",
+                style: Styles.headerText(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
             body: _body(),
@@ -291,87 +338,166 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
   }
 
   Widget _body() {
-    return FutureBuilder(
-        future: widget.params.category == ChatCategoriesIds.greet
-            ? widget.params.chatsCubit.getGreetChats()
-            : widget.params.category == ChatCategoriesIds.anonymous
-                ? widget.params.chatsCubit.getAnonymousChats()
-                : widget.params.category == "LockedChats"
-                    ? widget.params.chatsCubit.getLockedChats()
-                    : widget.params.chatsCubit.getArchivedChats(),
-        builder: (context, snapshot) {
-          return BlocBuilder<ChatsCubit, ChatsState>(
-            builder: (context, state) {
-              return state.chats == null || state.isLoading
-                  ? const Center(
-                      child: CircularProgressIndicator.adaptive(),
-                    )
-                  : state.chats!.isEmpty
-                      ? Center(
-                          child: Label(
-                              text: LocaleKeys.noChatsUntilNow.tr(),
-                              style: Styles.mediumText(
-                                  fontWeight: FontWeight.bold, fontSize: 34)),
-                        )
-                      : ListView.separated(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, index) => (!state
-                                      .chats![index].archived) &&
-                                  widget.params.category == "Archive"
-                              ? const SizedBox()
-                              : Slidable(
-                                  key: ValueKey(index),
-                                  closeOnScroll: false,
-                                  endActionPane: ActionPane(
-                                    motion: const ScrollMotion(),
-                                    dismissible:
-                                        DismissiblePane(onDismissed: () {}),
-                                    children: [
-                                      SlidableAction(
-                                        onPressed: (value) {
-                                          // bottomSheet(
-                                          //     backColor:
-                                          //         Theme.of(context).scaffoldBackgroundColor,
-                                          //     context: context,
-                                          //     isScrollControlled: true,
-                                          //     widget: MoreIconBottomSheet(
-                                          //       ChatCategoryEntity: state.chats![index],
-                                          //       chatsCubit: chatCubit,
-                                          //     ));
-                                        },
-                                        backgroundColor: const Color.fromARGB(
-                                            255, 191, 191, 191),
-                                        foregroundColor: Colors.white,
-                                        icon: Icons.more_horiz,
-                                        label: LocaleKeys.more.tr(),
-                                        padding: EdgeInsets.zero,
-                                      ),
-                                      SlidableAction(
-                                        onPressed: (value) async {},
-                                        backgroundColor:
-                                            AppColors.PRIMARY_COLOR,
-                                        foregroundColor: Colors.white,
-                                        icon: Icons.delete_outlined,
-                                        label: state.chats![index].archived
-                                            ? LocaleKeys.unarchive.tr()
-                                            : LocaleKeys.archive.tr(),
-                                        padding: EdgeInsets.zero,
-                                      ),
-                                    ],
+    return Column(
+      children: [
+        FutureBuilder(
+            future: widget.params.category == ChatCategoriesIds.greet
+                ? widget.params.chatsCubit.getGreetChats()
+                : widget.params.category == ChatCategoriesIds.anonymous
+                    ? widget.params.chatsCubit.getAnonymousChats()
+                    : widget.params.category == "LockedChats"
+                        ? widget.params.chatsCubit.getLockedChats()
+                        : widget.params.chatsCubit.getArchivedChats(),
+            builder: (context, snapshot) {
+              return BlocBuilder<ChatsCubit, ChatsState>(
+                builder: (context, state) {
+                  if (state.chats == null || state.isLoading) {
+                    return const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 16.0),
+                      child: Center(
+                        child: CircularProgressIndicator.adaptive(),
+                      ),
+                    );
+                  } else if (state.chats!.isEmpty) {
+                    return Center(
+                      child: Label(
+                          text: LocaleKeys.noChatsUntilNow.tr(),
+                          style: Styles.mediumText(
+                              fontWeight: FontWeight.bold, fontSize: 34)),
+                    );
+                  } else {
+                    return ListView.separated(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) => (!state
+                                  .chats![index].archived) &&
+                              widget.params.category == "Archive"
+                          ? const SizedBox()
+                          : Slidable(
+                              key: ValueKey(index),
+                              closeOnScroll: false,
+                              endActionPane: ActionPane(
+                                motion: const ScrollMotion(),
+                                dismissible:
+                                    DismissiblePane(onDismissed: () {}),
+                                children: [
+                                  SlidableAction(
+                                    onPressed: (value) {
+                                      // bottomSheet(
+                                      //     backColor:
+                                      //         Theme.of(context).scaffoldBackgroundColor,
+                                      //     context: context,
+                                      //     isScrollControlled: true,
+                                      //     widget: MoreIconBottomSheet(
+                                      //       ChatCategoryEntity: state.chats![index],
+                                      //       chatsCubit: chatCubit,
+                                      //     ));
+                                    },
+                                    backgroundColor: const Color.fromARGB(
+                                        255, 191, 191, 191),
+                                    foregroundColor: Colors.white,
+                                    icon: Icons.more_horiz,
+                                    label: LocaleKeys.more.tr(),
+                                    padding: EdgeInsets.zero,
                                   ),
-                                  child: ChatCard(
-                                    isSecret: false,
-                                    chat: state.chats?[index],
-                                    chatsCubit: widget.params.chatsCubit,
+                                  SlidableAction(
+                                    onPressed: (value) async {},
+                                    backgroundColor: AppColors.PRIMARY_COLOR,
+                                    foregroundColor: Colors.white,
+                                    icon: Icons.delete_outlined,
+                                    label: state.chats![index].archived
+                                        ? LocaleKeys.unarchive.tr()
+                                        : LocaleKeys.archive.tr(),
+                                    padding: EdgeInsets.zero,
                                   ),
-                                ),
-                          separatorBuilder: (context, index) =>
-                              const SizedBox(),
-                          itemCount: state.chats?.length ?? 0,
-                        );
-            },
-          );
-        });
+                                ],
+                              ),
+                              child: NewChatCard(
+                                isSecret: widget.params.category == ChatCategoriesIds.anonymous,
+                                chat: state.chats?[index],
+                                chatsCubit: widget.params.chatsCubit,
+                              ),
+                            ),
+                      separatorBuilder: (context, index) => const SizedBox(),
+                      itemCount: state.chats?.length ?? 0,
+                    );
+                  }
+
+                  // return state.chats == null || state.isLoading
+                  //     ? const Center(
+                  //         child: CircularProgressIndicator.adaptive(),
+                  //       )
+                  //     : state.chats!.isEmpty
+                  //         ? Center(
+                  //             child: Label(
+                  //                 text: LocaleKeys.noChatsUntilNow.tr(),
+                  //                 style: Styles.mediumText(
+                  //                     fontWeight: FontWeight.bold,
+                  //                     fontSize: 34)),
+                  //           )
+                  //         : ListView.separated(
+                  //             // shrinkWrap: true,
+                  //             physics: const NeverScrollableScrollPhysics(),
+                  //             itemBuilder: (context, index) => (!state
+                  //                         .chats![index].archived) &&
+                  //                     widget.params.category == "Archive"
+                  //                 ? const SizedBox()
+                  //                 : Slidable(
+                  //                     key: ValueKey(index),
+                  //                     closeOnScroll: false,
+                  //                     endActionPane: ActionPane(
+                  //                       motion: const ScrollMotion(),
+                  //                       dismissible:
+                  //                           DismissiblePane(onDismissed: () {}),
+                  //                       children: [
+                  //                         SlidableAction(
+                  //                           onPressed: (value) {
+                  //                             // bottomSheet(
+                  //                             //     backColor:
+                  //                             //         Theme.of(context).scaffoldBackgroundColor,
+                  //                             //     context: context,
+                  //                             //     isScrollControlled: true,
+                  //                             //     widget: MoreIconBottomSheet(
+                  //                             //       ChatCategoryEntity: state.chats![index],
+                  //                             //       chatsCubit: chatCubit,
+                  //                             //     ));
+                  //                           },
+                  //                           backgroundColor:
+                  //                               const Color.fromARGB(
+                  //                                   255, 191, 191, 191),
+                  //                           foregroundColor: Colors.white,
+                  //                           icon: Icons.more_horiz,
+                  //                           label: LocaleKeys.more.tr(),
+                  //                           padding: EdgeInsets.zero,
+                  //                         ),
+                  //                         SlidableAction(
+                  //                           onPressed: (value) async {},
+                  //                           backgroundColor:
+                  //                               AppColors.PRIMARY_COLOR,
+                  //                           foregroundColor: Colors.white,
+                  //                           icon: Icons.delete_outlined,
+                  //                           label: state.chats![index].archived
+                  //                               ? LocaleKeys.unarchive.tr()
+                  //                               : LocaleKeys.archive.tr(),
+                  //                           padding: EdgeInsets.zero,
+                  //                         ),
+                  //                       ],
+                  //                     ),
+                  //                     child: ChatCard(
+                  //                       isSecret: false,
+                  //                       chat: state.chats?[index],
+                  //                       chatsCubit: widget.params.chatsCubit,
+                  //                     ),
+                  //                   ),
+                  //             separatorBuilder: (context, index) =>
+                  //                 const SizedBox(),
+                  //             itemCount: state.chats?.length ?? 0,
+                  //           );
+                },
+              );
+            }),
+        const MessagesAreEndToEndEncrypted(),
+      ],
+    );
   }
 }

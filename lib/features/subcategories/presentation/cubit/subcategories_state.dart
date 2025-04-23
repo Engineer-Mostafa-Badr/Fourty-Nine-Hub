@@ -16,13 +16,14 @@ class SubcategoriesState {
   final List<SubCategoryEntity>? customPageSubCategories;
   final List<SubCategoryEntity>? marriageSubCategories;
   final MainCategoryEntity? mainCategory;
+
   SubcategoriesState(
       {this.failure,
       this.subCategories,
       this.ads,
       this.city = '',
       this.governorate = '',
-        this.customPageSubCategories,
+      this.customPageSubCategories,
       this.filterModel,
       this.myAds,
       this.adsRequestsLog,
@@ -53,7 +54,8 @@ class SubcategoriesState {
       status: status ?? this.status,
       ads: ads ?? this.ads,
       subCategories: subCategories ?? this.subCategories,
-      customPageSubCategories: customPageSubCategories ?? this.customPageSubCategories,
+      customPageSubCategories:
+          customPageSubCategories ?? this.customPageSubCategories,
       subCatIndex: subCatIndex ?? this.subCatIndex,
       mainCategory: mainCategory ?? this.mainCategory,
       marriageSubCategories:
@@ -69,8 +71,12 @@ enum SubcategoriesStates { loading, loadingAds, adsSuccess, initState, error }
 
 extension SubcategoriesStateX on SubcategoriesState {
   bool get isLoading => status == SubcategoriesStates.loading;
+
   bool get isInitState => status == SubcategoriesStates.initState;
+
   bool get isError => status == SubcategoriesStates.error;
+
   bool get isLoadingAds => status == SubcategoriesStates.loadingAds;
+
   bool get isAdsSuccess => status == SubcategoriesStates.adsSuccess;
 }

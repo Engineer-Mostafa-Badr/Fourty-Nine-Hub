@@ -13,7 +13,6 @@ import 'package:go_router/go_router.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
 import '../../../../routes/routes.dart';
-import '../../../../service_locator/service_locator.dart';
 import '../Controllers/on_boarding_cubit.dart';
 
 class OnBoardingScreen extends StatefulWidget {
@@ -60,7 +59,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                     InkWell(
                       onTap: () {
                         CacheManager.isShowOnboarding(true);
-                        context.go(Routes.LOGIN);
+                        context.go(Routes.HOME);
                       },
                       child: Label(
                         text: LocaleKeys.skip.localize,
@@ -74,7 +73,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   ],
                 ),
                 const Sizer(
-                  height: 96,
+                  height: 64,
                 ),
                 Expanded(
                   child: Directionality(
@@ -100,8 +99,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                           const SizedBox(height: 32),
                           Text(
                             context.isArabic ? state.titleAr : state.titleEn,
-                            // ? cubit.titlesAr[state.currentIndex]
-                            // : cubit.titlesEn[state.currentIndex],
                             style: Styles.headerText(
                                 color: context.isDarkMode
                                     ? AppColors.AUTH_CONTAINER_COLOR
@@ -167,7 +164,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   ),
                 ),
                 const Sizer(
-                  height: 150,
+                  height: 96,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),

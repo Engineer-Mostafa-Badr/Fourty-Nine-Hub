@@ -18,7 +18,7 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
     Assets.onBoarding8,
     Assets.onBoarding9,
     Assets.onBoarding10,
-    Assets.onBoarding11,
+    // Assets.onBoarding11,
     Assets.onBoarding12,
   ];
   List<String> titlesEn = [
@@ -32,7 +32,7 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
     'Enjoy endless content! Flip through Reels and discover fun clips at every moment.',
     'Share your moments! Add stories and share your diary with your friends easily.',
     'Communicate without limits! Start chatting with your friends anytime and easily.',
-    'Communicate freely! Enter voice rooms and talk to others easily and clearly.',
+    // 'Communicate freely! Enter voice rooms and talk to others easily and clearly.',
     'Go live! Share your moments with the world in a live broadcast without borders.',
   ];
   List<String> titlesAr = [
@@ -46,7 +46,7 @@ class OnBoardingCubit extends Cubit<OnBoardingState> {
     'استمتع بمحتوى لا ينتهي! تصفح الريلز واكتشف مقاطع ممتعة في كل لحظة.',
     'شارك لحظاتك! أضف القصص وشارك يومياتك مع أصدقائك بسهولة.',
     'تواصل بلا حدود! ابدأ الدردشة مع أصدقائك في أي وقت وبسهولة.',
-    'تواصل بحرية! ادخل غرف الصوت وتحدث مع الآخرين بسهولة ووضوح.',
+    // 'تواصل بحرية! ادخل غرف الصوت وتحدث مع الآخرين بسهولة ووضوح.',
     'انطلق بالبث المباشر! شارك لحظاتك مع العالم في بث مباشر بلا حدود.',
   ];
 

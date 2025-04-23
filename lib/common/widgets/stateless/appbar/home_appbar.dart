@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -35,6 +34,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
   final bool isHaveLeading;
   final double? toolbarHeight;
   final Widget? leading;
+  final Widget? inChat;
   final PreferredSizeWidget? bottom;
 
   const HomeAppbar({
@@ -53,6 +53,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
     this.color = AppColors.PRIMARY_COLOR,
     this.language = false,
     this.isHaveLeading = false,
+    this.inChat,
   });
 
   @override
@@ -65,8 +66,7 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
 
     return AppBar(
       bottom: bottom,
-      leading:
-      isHaveLeading
+      leading: isHaveLeading
           ? InkWell(
               child: Image.asset(
                 Assets.menu,
@@ -77,9 +77,10 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                 HandleCashback.setCount('drawerCount', context);
                 Scaffold.of(context).openDrawer();
               },
-            ):
-           Container(),
+            )
+          : Container(),
       title: Row(
+        textDirection: TextDirection.ltr,
         children: [
           const SizedBox(
             width: 16,
@@ -95,24 +96,9 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                   print("object");
                 }
               },
-              child: Row(
-                children: [
-                  SizedBox(
-                    height: 50.h,
-                    width: 50.h,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(5.r),
-                      child: Image(
-                        image: AssetImage(Assets.icon),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  Label(
-                      text: 'HUB',
-                      style: Styles.headerText(
-                          color: AppColors.SECONDARY_COLOR, fontSize: 40)),
-                ],
+              child: Image.asset(
+                Assets.logoHub,
+                height: 30,
               ),
             ),
           // if (showLanguage)
@@ -142,14 +128,15 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
               width: 80.w,
               padding: EdgeInsets.symmetric(horizontal: 5.w),
               child: TextAppButton(
-                  label: LocaleKeys.lang.tr(),
+                  label: LocaleKeys.lang.localize,
                   style: Styles.headerText(color: AppColors.SECONDARY_COLOR),
                   onPressed: () {
                     HandleCashback.setCount('langCount', context);
-                    if (context.locale == Locales.english) {
-                      changeLang(locale: Locales.arabic, context: context);
-                    } else {
+                    // if (context.locale == Locales.arabic) {
+                    if (LocaleKeys.lang.localize == 'En') {
                       changeLang(locale: Locales.english, context: context);
+                    } else {
+                      changeLang(locale: Locales.arabic, context: context);
                     }
                     Future.delayed(const Duration(seconds: 1)).then((_) {
                       // ignore: use_build_context_synchronously
@@ -187,7 +174,8 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
                       style: Styles.mediumText())),
             ),
           // if (language)
-          InkWell(
+          // if(inChat != null)
+          inChat??InkWell(
             onTap: () async {
               await context.read<UserCubit>().resetUnreadedChatsCounter();
               if (isCurrentRoute(context, Routes.CHAT) == true) {
@@ -212,6 +200,8 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
               ),
             ),
           ),
+          // if(inChat == null)
+
           const Sizer(),
           // const Sizer(),
           // SizedBox(

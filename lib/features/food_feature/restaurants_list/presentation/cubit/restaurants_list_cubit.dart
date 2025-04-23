@@ -193,14 +193,15 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
   }
 
   Future<void> _getUser() async {
-    await serviceLocator<UserCubit>()
-        .getUser()
-        .then((Either<Failure, UserEntity>? value) {
-      value?.fold(
-        (failure) => print("Failed to get user: $failure"),
-        (u) => user = u,
-      );
-    });
+    user= UserCubit.to.state.data;
+    // await serviceLocator<UserCubit>()
+    //     .getUser()
+    //     .then((Either<Failure, UserEntity>? value) {
+    //   value?.fold(
+    //     (failure) => print("Failed to get user: $failure"),
+    //     (u) => user = u,
+    //   );
+    // });
   }
 
   Future<bool> toggleFavoriteSubcategory(String subcategoryId) async {

@@ -1509,5 +1509,12 @@ abstract class  LocaleKeys {
   static const socialExplain = 'socialExplain';
   static const imBookingOfAnotherClient = 'imBookingOfAnotherClient';
   static const firstImpressionMessage = 'firstImpressionMessage';
+  static const endToEndDescription = 'endToEndDescription';
+  static const yourChatsAndCallArePrivate = 'yourChatsAndCallArePrivate';
+  static const textAndVoiceMessages = 'textAndVoiceMessages';
+  static const audioAndVideoCalls = 'audioAndVideoCalls';
+  static const photoVideosAndDocuments = 'photoVideosAndDocuments';
+  static const locationSharing = 'locationSharing';
+  static const statusUpdates = 'statusUpdates';
 
 }

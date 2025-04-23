@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -8,6 +9,7 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/Social_home.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
 import '../../../res/assets/assets.dart';
 import '../../../res/style/app_colors.dart';
 import '../../../res/style/styles.dart';
@@ -36,8 +38,8 @@ class FloatingButton extends StatelessWidget {
             ? () => onTap!()
             : () {
                 HandleCashback.setCount('socialCount', context);
-
                 if (changeView == 1) {
+                  context.read<CreatePostCubit>().loadData();
                   context.push(Routes.SOCIAL,
                       extra: SocialParams(
                           userId: UserCubit.to.state.data?.id ?? '', index: 0));
@@ -66,7 +68,7 @@ class FloatingButton extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset(
-                    Assets.logo,
+                    Assets.logoWithoutText,
                     height: 50.h,
                     width: 50.w,
                   ),

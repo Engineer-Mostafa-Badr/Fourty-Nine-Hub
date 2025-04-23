@@ -818,7 +818,7 @@ class SearchCubit extends Cubit<SearchState> {
 
   Future<void> loadDataMain() async {
     emit(state.copyWith(status: SearchStates.loading));
-    await UserCubit.to.getUser();
+    // await UserCubit.to.getUser();
     {
       final user = UserCubit.to.state.data?.id;
       print('userId1$user');

@@ -16,6 +16,8 @@ import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_w
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/main_category_use_case.dart';
 
 import '../../../domain/usecases/request_withdraw_wallet_use_case.dart';
+import '../wallet_cubit.dart';
+
 part 'wallet_two_state.dart';
 
 class WalletTwoCubit extends Cubit<WalletTwoState> {
@@ -126,7 +128,6 @@ class WalletTwoCubit extends Cubit<WalletTwoState> {
         (failure) => throw failure,
         (wallet) => wallet,
       );
-
       // Fetch Wallet History
       final walletHistoryResponse = await _walletHistoryUseCase.call(
         WalletHistoryParams(
@@ -209,69 +210,70 @@ class WalletTwoCubit extends Cubit<WalletTwoState> {
     }
   }
 
-  Future<void> getWallet() async {
-    // final response = await _getWalletUseCase.call(const NoParams());
-
-    // response.fold(
-    //   (failure) {
-    //     emit(WalletError(failure: failure));
-    //   },
-    //   (wallet) {
-    //     emit(WalletSuccess(wallet: wallet));
-    //   },
-    // );
-  }
-
-  Future<void> fetchWalletHistory(
-      {required int currentPage, required int pageSize}) async {
-    // final response = await _walletHistoryUseCase.call(
-    //   WalletHistoryParams(
-    //     page: currentPage,
-    //     limit: pageSize,
-    //   ),
-    // );
-
-    // response.fold(
-    //   (failure) {
-    //     emit(WalletTwoError(failure: failure));
-    //   },
-    //   (histories) {
-    //     emit(WalletHistorySuccess(histories: histories));
-    //   },
-    // );
-  }
-
-  Future<void> fetchWalletSubscription() async {
-    // final response = await _subscriptionWalletUseCase.call(const NoParams());
-
-    // response.fold(
-    //   (failure) {
-    //     emit(WalletTwoError(failure: failure));
-    //   },
-    //   (subscription) {
-    //     emit(WalletSubscriptionSuccess(subscriptions: subscription));
-    //   },
-    // );
-  }
-
-  Future<void> fetchMainCategory({
-    required PaginationParams paginationParams,
-  }) async {
-    // final response = await _mainCategoryUseCase.call(
-    //   MainCategoryParams(
-    //     paginationParams: paginationParams,
-    //   ),
-    // );
-
-    // response.fold(
-    //   (failure) {
-    //     emit(WalletTwoError(failure: failure));
-    //   },
-    //   (mainCategories) {
-    //     emit(WalletMainCategorySuccess(mainCategories: mainCategories));
-    //   },
-    // );
-  }
+  //
+  // Future<void> getWallet() async {
+  //   // final response = await _getWalletUseCase.call(const NoParams());
+  //
+  //   // response.fold(
+  //   //   (failure) {
+  //   //     emit(WalletError(failure: failure));
+  //   //   },
+  //   //   (wallet) {
+  //   //     emit(WalletSuccess(wallet: wallet));
+  //   //   },
+  //   // );
+  // }
+  //
+  // Future<void> fetchWalletHistory(
+  //     {required int currentPage, required int pageSize}) async {
+  //   // final response = await _walletHistoryUseCase.call(
+  //   //   WalletHistoryParams(
+  //   //     page: currentPage,
+  //   //     limit: pageSize,
+  //   //   ),
+  //   // );
+  //
+  //   // response.fold(
+  //   //   (failure) {
+  //   //     emit(WalletTwoError(failure: failure));
+  //   //   },
+  //   //   (histories) {
+  //   //     emit(WalletHistorySuccess(histories: histories));
+  //   //   },
+  //   // );
+  // }
+  //
+  // Future<void> fetchWalletSubscription() async {
+  //   // final response = await _subscriptionWalletUseCase.call(const NoParams());
+  //
+  //   // response.fold(
+  //   //   (failure) {
+  //   //     emit(WalletTwoError(failure: failure));
+  //   //   },
+  //   //   (subscription) {
+  //   //     emit(WalletSubscriptionSuccess(subscriptions: subscription));
+  //   //   },
+  //   // );
+  // }
+  //
+  // Future<void> fetchMainCategory({
+  //   required PaginationParams paginationParams,
+  // }) async {
+  //   // final response = await _mainCategoryUseCase.call(
+  //   //   MainCategoryParams(
+  //   //     paginationParams: paginationParams,
+  //   //   ),
+  //   // );
+  //
+  //   // response.fold(
+  //   //   (failure) {
+  //   //     emit(WalletTwoError(failure: failure));
+  //   //   },
+  //   //   (mainCategories) {
+  //   //     emit(WalletMainCategorySuccess(mainCategories: mainCategories));
+  //   //   },
+  //   // );
+  // }
 
   @override
   void onChange(Change<WalletTwoState> change) {
