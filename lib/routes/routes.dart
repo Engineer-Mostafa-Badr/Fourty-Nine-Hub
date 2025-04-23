@@ -278,8 +278,6 @@ abstract class Routes {
   // reels
   static const UseSoundScreen = '/UseSoundScreen';
   static const AddStoryScreen = '/AddStoryScreen';
-  static const CREATEPOSTINSTAGRAM = '/CreatePostInstagram';
-  static const CREATEPOSTSECONDPAGEINSTAGRAM = '/CreatePostSecondPageInstagram';
   static const TAGUSER = '/TagUser';
   static const INSTAGRAMADDLOCATION = '/InstagramAddLocation';
   static const INSTAGRAMADDMUSIC = '/InstagramAddMusic';
