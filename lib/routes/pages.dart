@@ -1274,8 +1274,13 @@ class AppPages {
                   final InstagramProfilePostEntity post =
                       state.extra as InstagramProfilePostEntity;
 
-                  return SinglePostInstagramView(
-                    post: post,
+                  return BlocProvider(
+                    create: (context) =>
+                        serviceLocator<SinglePostInstagramCubit>()
+                          ..getPost(post.id),
+                    child: SinglePostInstagramView(
+                      postId: post.id,
+                    ),
                   );
                 },
               ),

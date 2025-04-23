@@ -824,6 +824,13 @@ class EndPoints {
           {required String userId, required int page, required int limit}) =>
       '/reels/users/$userId?page=$page&limit=$limit';
 
+  static String getSinglePostInstagram({required String postId}) =>
+      '/inst/posts/$postId';
+
+  static String getSuggestFollowInstagram(
+          {required int page, required int limit}) =>
+      '/user-follow/suggestions?page=$page&limit=$limit';
+
   static String reactOnTwitterPost(String postId) {
     return '/twitter/post/react/$postId?subCategory=${Constants.twitterSubCategory}';
   }

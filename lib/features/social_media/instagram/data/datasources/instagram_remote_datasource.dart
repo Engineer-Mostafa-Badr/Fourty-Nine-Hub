@@ -4,20 +4,24 @@ import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/common/models/public/pagination_params.dart';
 import 'package:fourtyninehub/features/social_media/instagram/data/models/comment_instagram_data_model.dart';
 import 'package:fourtyninehub/features/social_media/instagram/data/models/create_post_request_model.dart';
+import 'package:fourtyninehub/features/social_media/instagram/data/models/data_suggest_follow_instagram_model.dart';
 import 'package:fourtyninehub/features/social_media/instagram/data/models/followers_model.dart';
 import 'package:fourtyninehub/features/social_media/instagram/data/models/following_model.dart';
 import 'package:fourtyninehub/features/social_media/instagram/data/models/instagram_post_data_model.dart';
 import 'package:fourtyninehub/features/social_media/instagram/data/models/profile_instagram_data_model.dart';
 import 'package:fourtyninehub/features/social_media/instagram/data/models/reel_instagram_data_model.dart';
 import 'package:fourtyninehub/features/social_media/instagram/data/models/reels_specific_user_model.dart';
+import 'package:fourtyninehub/features/social_media/instagram/data/models/single_post_instagram_model.dart';
 import 'package:fourtyninehub/features/social_media/instagram/data/models/user_tag_model.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/comment_instagram_data_entiry.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/create_post_request_entity.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/entities/data_suggest_follow_instagram_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/followers_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/following_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/profile_instagram_data_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/reel_instagram_data_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/reels_specific_user_entity.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/entities/single_post_instagram_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/user_tag_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/add_comment_use_case.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/create_post_request_use_case.dart';
@@ -27,6 +31,7 @@ import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/ge
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_instagram_user_media_usecase.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_suggest_follow_instagram_use_case.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_reels_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_tag_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/data/models/post_model.dart';
@@ -72,6 +77,12 @@ abstract class InstagramRemoteDataSource {
 
   Future<Either<Failure, ReelsSpecificUserDataEntity>> getReelsSpecificUser(
       GetInstagramReelsSpecificUserParams params);
+
+  Future<Either<Failure, SinglePostInstagramEntity>> getSinglePostInstagram(
+      String postId);
+
+  Future<Either<Failure, DataSuggestFollowInstagramEntity>>
+      getSuggestFollowInstagram(GetSuggestFollowInstagramParams params);
 }
 
 class InstagramRemoteDataSourceImpl implements InstagramRemoteDataSource {
@@ -379,7 +390,61 @@ class InstagramRemoteDataSourceImpl implements InstagramRemoteDataSource {
         },
         (data) {
           final responseData =
-              ReelsSpecificUserDataModel.fromJson(data['data']);
+              ReelsSpecificUserDataModel.fromJson(data['data']['reels']);
+          return Right(responseData);
+        },
+      );
+    } catch (e) {
+      final error = (e is Map && e['error'] is Map) ? e['error'] as Map : null;
+      log('error: ${e.toString()}');
+      return Left(
+          UnknownFailure(error != null ? error.toString() : 'Unknown error'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, SinglePostInstagramEntity>> getSinglePostInstagram(
+      String postId) async {
+    final response = await _apiConsumer.get(
+      EndPoints.getSinglePostInstagram(postId: postId),
+    );
+
+    try {
+      return response.fold(
+        (l) {
+          return Left(l);
+        },
+        (data) {
+          final responseData = SinglePostInstagramModel.fromJson(data['data']);
+          return Right(responseData);
+        },
+      );
+    } catch (e) {
+      final error = (e is Map && e['error'] is Map) ? e['error'] as Map : null;
+      log('error: ${e.toString()}');
+      return Left(
+          UnknownFailure(error != null ? error.toString() : 'Unknown error'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, DataSuggestFollowInstagramEntity>>
+      getSuggestFollowInstagram(GetSuggestFollowInstagramParams params) async {
+    final response = await _apiConsumer.get(
+      EndPoints.getSuggestFollowInstagram(
+        page: params.page,
+        limit: params.limit,
+      ),
+    );
+
+    try {
+      return response.fold(
+        (l) {
+          return Left(l);
+        },
+        (data) {
+          final responseData =
+              DataSuggestFollowInstagramModel.fromJson(data['data']);
           return Right(responseData);
         },
       );
