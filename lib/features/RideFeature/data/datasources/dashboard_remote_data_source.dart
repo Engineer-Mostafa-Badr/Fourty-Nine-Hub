@@ -37,6 +37,7 @@ abstract class TripRemoteDataSource {
       UpdateSettingsDashboardUsecaseParam params);
   Future<Either<Failure, bool>> createNewOffer(
       CreateNewOfferDashboardUsecaseParam params);
+  Future<Either<Failure, bool>> getRunningTrip();
   Future<Either<Failure, bool>> createNewOfferNonSocket(
       CreateNewOfferDashboardUsecaseParam params);
   Future<Either<Failure, bool>> createDriverRating(
@@ -297,15 +298,26 @@ class TripRemoteDataSourceImplementation implements TripRemoteDataSource {
       CliLogger.info("Listen to Remove Trip ");
       log("Listen to Remove Trip ");
       SharedWebSocket.socket!.on(SocketIOListeners.removeTrip, (data) {
-        // final decodedData = jsonDecode(data);
-        // CliLogger.info("offer data :  $decodedData");
-        // params(RideOfferModel.fromJson(decodedData));
         CliLogger.info("Remove Trip data :  $data");
         log("Remove Trip data :  $data");
         params(data['removedTripId']['id']);
       });
     } catch (e) {
       CliLogger.info("can't listen to trip price error $e");
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> getRunningTrip() async {
+    try {
+      final response = await _apiConsumer.get(
+          'EndPoints.updateDriverRating(params.tripId)',);
+
+      return response.fold((failure) => Left(failure), (data) {
+        return Right(data['status']);
+      });
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
     }
   }
 }
