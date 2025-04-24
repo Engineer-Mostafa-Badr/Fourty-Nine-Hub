@@ -43,7 +43,7 @@ class CallingCard extends StatelessWidget {
                         Expanded(
                           child: Label(
                               text: 'May 21,6:50 PM',
-                              style: Styles.mediumText(color: Colors.grey)),
+                              style: Styles.smallText(color: Colors.grey)),
                         ),
                       ],
                     ),

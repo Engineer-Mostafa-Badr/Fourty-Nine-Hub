@@ -1,9 +1,10 @@
-import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/message_media_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/message_shared_contacts_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/data/models/reply_message_model.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_sender_entity.dart';
 import 'package:fourtyninehub/res/style/const.dart';
+
+import 'message_media_model.dart';
 
 class MessageModel extends MessageEntity {
   MessageModel({
@@ -42,6 +43,14 @@ class MessageModel extends MessageEntity {
               .map((e) => MessageMediaModel.fromJson(e))
               .toList()
           : [],
+      // media: json['media'] != null
+      //     ? (json['media'] as List).firstWhere(
+      //         (e) =>
+      //             e == 'image' ||
+      //             e == 'video' ||
+      //             e == 'audio',
+      //         orElse: () => {})
+      //     : [],
       sender: MessageSenderEntity(
         id: json['ownerUserId'] ?? '',
         name: json['username'] ?? '',

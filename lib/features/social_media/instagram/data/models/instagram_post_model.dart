@@ -2,7 +2,9 @@ import 'package:fourtyninehub/features/social_media/instagram/data/models/commen
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/instagram_post_entity.dart';
 
 import 'package:fourtyninehub/features/social_media/instagram/data/models/comment_instagram_model.dart';
+import 'package:fourtyninehub/features/social_media/instagram/data/models/user_tag_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/instagram_post_entity.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/entities/user_tag_entity.dart';
 
 class InstagramPostModel extends InstagramPostEntity {
   InstagramPostModel({
@@ -47,8 +49,10 @@ class InstagramPostModel extends InstagramPostEntity {
       )
           : [],
       userTags: json['userTags'] != null
-          ? List<UserTagsModel>.from(
-        json['userTags'].map((x) => UserTagsModel.fromJson(x)).toList(),
+          ? List<InstagramPostUserTagEntity>.from(
+        json['userTags']
+            .map((x) => InstagramPostUserTagModel.fromJson(x))
+            .toList(),
       )
           : [],
       hashtags: json['hashtags'] != null
@@ -64,21 +68,46 @@ class InstagramPostModel extends InstagramPostEntity {
   }
 }
 
-class UserTagsModel extends UserTagEntity {
-  UserTagsModel({
-    required super.username,
-    required super.firstName,
-    required super.lastName,
-    required super.profilePictureUrl,
-  });
+class InstagramPostUserTagModel extends InstagramPostUserTagEntity {
+  InstagramPostUserTagModel(
+      {required super.username,
+      required super.firstName,
+      required super.lastName,
+      required super.profilePictureUrl});
 
-  factory UserTagsModel.fromJson(Map<String, dynamic> json) {
-    return UserTagsModel(
-      username: json['username']?.toString() ?? '', // Default to empty string if null
-      firstName: json['firstName']?.toString() ?? '', // Default to empty string if null
-      lastName: json['lastName']?.toString() ?? '', // Default to empty string if null
-      profilePictureUrl: json['profilePictureUrl']?.toString() ?? '', // Default to empty string if null
+  factory InstagramPostUserTagModel.fromJson(Map<String, dynamic> json) {
+    return InstagramPostUserTagModel(
+      username: json['username'] ?? '',
+      firstName: json['firstName'] ?? '',
+      lastName: json['lastName'] ?? '',
+      profilePictureUrl: json['profilePictureUrl'] ?? '',
     );
   }
 }
 
+// class CommentsModel extends CommentsEntity {
+//   CommentsModel({required super.id});
+
+//   factory CommentsModel.fromJson(Map<String, dynamic> json) {
+//     return CommentsModel(
+//       id: json['id'],
+//     );
+//   }
+// }
+
+// class UserTagsModel extends UserTagEntity {
+//   UserTagsModel(
+//       {required super.username,
+//       required super.firstName,
+//       required super.lastName,
+//       required super.profilePictureUrl});
+//
+//   factory UserTagsModel.fromJson(Map<String, dynamic> json) {
+//     return UserTagsModel(
+//       username: json['username'],
+//       firstName: json['firstName'],
+//       lastName: json['lastName'],
+//       profilePictureUrl: json['profilePictureUrl'],
+//     );
+//   }
+// }

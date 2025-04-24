@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -19,6 +20,7 @@ import 'package:go_router/go_router.dart';
 import 'package:readmore/readmore.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../routes/routes.dart';
@@ -122,34 +124,34 @@ class _UserSection extends StatelessWidget {
                 margin: const EdgeInsets.only(top: 5),
                 padding: const EdgeInsets.only(left: 10),
                 child: GestureDetector(
-                            onTap: () {
-                // setState(() {
-                //   _isCollapsed = !_isCollapsed;
-                // });
-                            },
-                            child: SizedBox(
-                width: 0.7.sw,
-                child: ReadMoreText(
-                  "Simple DescriptionSimple DescriptionSimple DescriptionSimple DescriptionSimple DescriptionSimple DescriptionSimple DescriptionSimple DescriptionSimple DescriptionSimple DescriptionSimple DescriptionSimple Description",
-                  trimLines: 1,
-                  colorClickableText: AppColors.PRIMARY_COLOR_DARK,
-                  trimMode: TrimMode.Line,
-                  trimCollapsedText: ' See more',
-                  trimExpandedText: ' Hide',
-                  // isExpandable: ,
-                  // isCollapsed: ValueNotifier(_isCollapsed),
-                  textScaler: TextScaler.noScaling,
-                  lessStyle: Styles.headerText(
-                    color: AppColors.PRIMARY_COLOR_DARK,
+                  onTap: () {
+                    // setState(() {
+                    //   _isCollapsed = !_isCollapsed;
+                    // });
+                  },
+                  child: SizedBox(
+                    width: 0.7.sw,
+                    child: ReadMoreText(
+                      "Simple DescriptionSimple DescriptionSimple DescriptionSimple DescriptionSimple DescriptionSimple DescriptionSimple DescriptionSimple DescriptionSimple DescriptionSimple DescriptionSimple DescriptionSimple Description",
+                      trimLines: 1,
+                      colorClickableText: AppColors.PRIMARY_COLOR_DARK,
+                      trimMode: TrimMode.Line,
+                      trimCollapsedText: ' See more',
+                      trimExpandedText: ' Hide',
+                      // isExpandable: ,
+                      // isCollapsed: ValueNotifier(_isCollapsed),
+                      textScaler: TextScaler.noScaling,
+                      lessStyle: Styles.headerText(
+                        color: AppColors.PRIMARY_COLOR_DARK,
+                      ),
+                      moreStyle: Styles.headerText(
+                        fontSize: 30,
+                        color: AppColors.PRIMARY_COLOR_DARK,
+                      ),
+                      style: Styles.mediumText(color: Colors.white),
+                    ),
                   ),
-                  moreStyle: Styles.headerText(
-                    fontSize: 30,
-                    color: AppColors.PRIMARY_COLOR_DARK,
-                  ),
-                  style: Styles.mediumText(color: Colors.white),
                 ),
-                            ),
-                          ),
               ),
               const Sizer(),
               Padding(
@@ -157,16 +159,21 @@ class _UserSection extends StatelessWidget {
                 child: Row(
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 3),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.3),
-                        borderRadius: BorderRadius.circular(30)
-                      ),
+                          color: Colors.white.withOpacity(0.3),
+                          borderRadius: BorderRadius.circular(30)),
                       child: const Row(
                         children: [
-                          Icon(FontAwesomeIcons.music, size: 13,),
+                          Icon(
+                            FontAwesomeIcons.music,
+                            size: 13,
+                          ),
                           Sizer(),
-                          Text("taleen-nabil • Original audio",),
+                          Text(
+                            "taleen-nabil • Original audio",
+                          ),
                         ],
                       ),
                     ),
@@ -194,7 +201,7 @@ class _UserAvatar extends StatefulWidget {
 class _UserAvatarState extends State<_UserAvatar> {
   @override
   Widget build(BuildContext context) {
-        final controller = context.read<SocialPostsCubit>();
+    final controller = context.read<SocialPostsCubit>();
 
     return Container(
       width: 90.h,
@@ -224,60 +231,59 @@ class _UserAvatarState extends State<_UserAvatar> {
               //     ? 70.h
               //     : 20.h, // Adjust based on item type if needed
               backgroundImage: widget.reel.user.profilePictureSignedUrl != null
-                  ? CachedNetworkImageProvider(widget.reel.user.profilePictureSignedUrl!)
+                  ? CachedNetworkImageProvider(
+                      widget.reel.user.profilePictureSignedUrl!)
                   : null,
               child: widget.reel.user.profilePictureSignedUrl == null
                   ? const Icon(Icons.person, color: Colors.white)
                   : null,
             ),
-            widget.reel.user.isSentRequest?Container():
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: -5,
-              child: GestureDetector(
-                onTap: () async {
-                  if (context.read<UserCubit>().isLoggedIn) {
-                      if (widget.reel.user.areFriends == true) {
-                      } else {
-                        if (widget.reel.user.isSentRequest ==
-                            true) {
-                          var result =
-                              await controller.removeFriendRequest(
+            widget.reel.user.isSentRequest
+                ? Container()
+                : Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: -5,
+                    child: GestureDetector(
+                      onTap: () async {
+                        if (context.read<UserCubit>().isLoggedIn) {
+                          if (widget.reel.user.areFriends == true) {
+                          } else {
+                            if (widget.reel.user.isSentRequest == true) {
+                              var result = await controller.removeFriendRequest(
                                   context: context,
                                   userId: widget.reel.user.id);
-                          if (result == true) {
-                            widget.reel.user.isSentRequest =
-                                false;
-                            setState(() {});
+                              if (result == true) {
+                                widget.reel.user.isSentRequest = false;
+                                setState(() {});
+                              }
+                            } else {
+                              var result = await controller.friendRequest(
+                                  context: context,
+                                  userId: widget.reel.user.id);
+                              if (result == true) {
+                                widget.reel.user.isSentRequest = true;
+                                setState(() {});
+                              }
+                            }
                           }
                         } else {
-                          var result =
-                              await controller.friendRequest(
-                                  context: context,
-                                  userId: widget.reel.user.id);
-                          if (result == true) {
-                            widget.reel.user.isSentRequest =
-                                true;
-                            setState(() {});
-                          }
+                          context.push(Routes.LOGIN);
                         }
-                      }
-                    } else {
-                      context.push(Routes.LOGIN);
-                    }
-                },
-                child: Container(
-                  width: 15,
-                  height: 15,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.red
-                  ),
-                  child: const Center(child: Icon(Icons.add, size: 13,)),
-                ),
-              ),
-            )
+                      },
+                      child: Container(
+                        width: 15,
+                        height: 15,
+                        decoration: const BoxDecoration(
+                            shape: BoxShape.circle, color: Colors.red),
+                        child: const Center(
+                            child: Icon(
+                          Icons.add,
+                          size: 13,
+                        )),
+                      ),
+                    ),
+                  )
           ],
         ),
       ),
@@ -331,46 +337,51 @@ class _UserInfoState extends State<_UserInfo> {
                     style: _nameTextStyle,
                   ),
                 ),
-                const Sizer(width: 40,),
-                widget.reel.user.isFollowed?Container():
-                GestureDetector(
-                  onTap: () async {
-                    if (context.read<UserCubit>().isLoggedIn) {
-                                  if (widget.reel.user.isFollowed == true) {
-                                    var result =
-                                        await controller.unFollowRequest(
-                                            context: context,
-                                            userId: widget.reel.user.id);
-                                    if (result == true) {
-                                      widget.reel.user.isFollowed = false;
-                                      setState(() {});
-                                    }
-                                  } else {
-                                    var result = await controller.followRequest(
-                                        context: context,
-                                        userId: widget.reel.user.id);
-                                    if (result == true) {
-                                      widget.reel.user.isFollowed = true;
-                                      setState(() {});
-                                    }
-                                  }
-                                } else {
-                                  context.push(Routes.LOGIN);
-                                }
-
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      border: Border.all(color: Colors.white),
-                      boxShadow: const [
-                        BoxShadow(color: Colors.black, blurRadius: 30)
-                      ]
-                    ),
-                    child: Text(LocaleKeys.follow.localize, style: Styles.mediumText(fontWeight: FontWeight.bold, color: Colors.white),),
-                  ),
+                const Sizer(
+                  width: 40,
                 ),
+                widget.reel.user.isFollowed
+                    ? Container()
+                    : GestureDetector(
+                        onTap: () async {
+                          if (context.read<UserCubit>().isLoggedIn) {
+                            if (widget.reel.user.isFollowed == true) {
+                              var result = await controller.unFollowRequest(
+                                  context: context,
+                                  userId: widget.reel.user.id);
+                              if (result == true) {
+                                widget.reel.user.isFollowed = false;
+                                setState(() {});
+                              }
+                            } else {
+                              var result = await controller.followRequest(
+                                  context: context,
+                                  userId: widget.reel.user.id);
+                              if (result == true) {
+                                widget.reel.user.isFollowed = true;
+                                setState(() {});
+                              }
+                            }
+                          } else {
+                            context.push(Routes.LOGIN);
+                          }
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(color: Colors.white),
+                              boxShadow: const [
+                                BoxShadow(color: Colors.black, blurRadius: 30)
+                              ]),
+                          child: Text(
+                            LocaleKeys.follow.localize,
+                            style: Styles.mediumText(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
+                        ),
+                      ),
                 if (widget.reel.user.verified)
                   const Icon(
                     Icons.verified,
@@ -555,57 +566,51 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
         //     }
         //   },
         // ),
-        const SizedBox(height: 12),
-        _buildReactionButton(
-          iconWidget: Icon(
-            Icons.favorite,
-            size: iconSize,
-            color: reel.likeCount > 0 ? Colors.red : Colors.white,
-            shadows: iconShadows,
-          ),
-          count: reel.likeCount.toString(),
-          onTap: () {
-            if (!serviceLocator<UserCubit>().isLoggedIn) {
-              context.push(Routes.LOGIN);
-            } else {
-              _handleLikeAction(context, reelsCubit);
-            }
-          },
+        SizedBox(
+          height: 20,
         ),
-        // const SizedBox(height: 4),
+        LiveWidget(),
+        const SizedBox(height: 12),
+        LoveButton(
+          count: reel.likeCount.toString(),
+          // onTap: () {
+          //   if (!serviceLocator<UserCubit>().isLoggedIn) {
+          //     context.push(Routes.LOGIN);
+          //   } else {
+          //     _handleLikeAction(context, reelsCubit);
+          //   }
+          // },
+        ),
+
+        const SizedBox(height: 15),
 
         // Comment Icon
         _buildReactionButton(
           iconWidget: SizedBox(
-            child: SvgPicture.string(
-              commentIconSvg,
-              width: 0.15.sw,
-              height: 0.15.sw,
-              fit: BoxFit.contain,
-            ),
-          ),
+              child: SvgPicture.asset(
+            Assets.comReelIcon,
+          )),
           count: reel.commentCount.toString(),
           onTap: () {
             if (!serviceLocator<UserCubit>().isLoggedIn) {
               context.push(Routes.LOGIN);
             } else {
-              _handleCommentAction(context, reelsCubit);
+              _handleCommentAction(
+                context,
+              );
             }
           },
         ),
-        // const SizedBox(height: 6),
+        const SizedBox(height: 15),
 
         // Bookmark Icon
-        
-        // const SizedBox(height: 6),
 
         // Share Icon (Reversed)
         _buildReactionButton(
-          iconWidget: Icon(
-            Icons.reply,
-            size: iconSize,
+          iconWidget: SvgPicture.asset(
+            Assets.shareIcon,
             color: Colors.white,
-            shadows: iconShadows,
+            width: 25,
           ),
           count: reel.shareCount.toString(),
           isReversed: true,
@@ -633,28 +638,30 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
                     children: [
                       _buildReactionButton(
                         mainAxisAlignment: MainAxisAlignment.center,
-                          iconWidget: Icon(
-                            Icons.report,
-                            size: iconSize,
-                            color: Colors.white,
-                            shadows: iconShadows,
-                          ),
-                          count: LocaleKeys.report.localize,
-                          onTap: () {
-                            if (!serviceLocator<UserCubit>().isLoggedIn) {
-                              context.push(Routes.LOGIN);
-                            } else {
-                              _showReportBottomSheet(context);
-                            }
-                          },
+                        iconWidget: Icon(
+                          Icons.report,
+                          size: iconSize,
+                          color: Colors.white,
+                          shadows: iconShadows,
                         ),
-                        const Sizer(),
+                        count: LocaleKeys.report.localize,
+                        onTap: () {
+                          if (!serviceLocator<UserCubit>().isLoggedIn) {
+                            context.push(Routes.LOGIN);
+                          } else {
+                            _showReportBottomSheet(context);
+                          }
+                        },
+                      ),
+                      const Sizer(),
                       _buildReactionButton(
                         mainAxisAlignment: MainAxisAlignment.center,
                         iconWidget: Icon(
                           Icons.bookmark,
                           size: iconSize,
-                          color: reel.saveCount == 0 ? Colors.white : Colors.yellowAccent,
+                          color: reel.saveCount == 0
+                              ? Colors.white
+                              : Colors.yellowAccent,
                           shadows: iconShadows,
                         ),
                         count: LocaleKeys.save.localize,
@@ -684,23 +691,20 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
   }
 
   // Helper widget for building reaction buttons with scaling animation
-  Widget _buildReactionButton({
-    required Widget iconWidget,
-    required VoidCallback onTap,
-    required String count,
-    bool isReversed = false,
-    MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start
-  }) {
+  Widget _buildReactionButton(
+      {required Widget iconWidget,
+      required VoidCallback onTap,
+      required String count,
+      bool isReversed = false,
+      MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start}) {
     final Widget animatedIcon = iconWidget.animate().scale(duration: 200.ms);
 
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(color: Colors.black.withOpacity(0.4), blurRadius: 30)
-          ]
-        ),
+        decoration: BoxDecoration(boxShadow: [
+          BoxShadow(color: Colors.black.withOpacity(0.4), blurRadius: 30)
+        ]),
         child: Column(
           mainAxisAlignment: mainAxisAlignment,
           children: [
@@ -741,11 +745,19 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
   }
 
   Future<void> _handleCommentAction(
-      BuildContext context, ReelsCubit cubit) async {
+    BuildContext context,
+    //  ReelsCubit cubit,
+  ) async {
     try {
-      await showCommentsBottomSheet(context, reel: reel);
+      await showCommentsBottomSheet(
+        context,
+        //  reel: reel,
+      );
     } catch (e) {
-      _showSnackBar(context, 'Error showing comments: $e');
+      _showSnackBar(
+        context,
+        'Error showing comments: $e',
+      );
     }
   }
 
@@ -772,8 +784,6 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
     }
   }
 
- 
-
   Future<void> _showReportBottomSheet(BuildContext context) async {
     await showModalBottomSheet(
       context: context,
@@ -793,6 +803,102 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
   void _showSnackBar(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(message)),
+    );
+  }
+}
+
+class LiveWidget extends StatefulWidget {
+  const LiveWidget({super.key});
+
+  @override
+  State<LiveWidget> createState() => _LiveWidgetState();
+}
+
+class _LiveWidgetState extends State<LiveWidget>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 1000),
+      vsync: this,
+    )..repeat(reverse: true); // بيرجع تاني عشان يدي تأثير مستمر
+
+    _animation = Tween<double>(begin: 1.0, end: 1.1).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      clipBehavior: Clip.none,
+      alignment: Alignment.center,
+      children: [
+        // الدائرة الخارجية بإطار وردي
+        Container(
+          width: 55,
+          height: 55,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(width: 3, color: Colors.pink),
+          ),
+          padding: const EdgeInsets.all(3),
+          child: ScaleTransition(
+            scale: _animation,
+            child: Container(
+              margin: const EdgeInsets.all(3),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                  image: AssetImage(Assets.maleUser), // استخدم صورتك هنا
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
+        ),
+
+        // النقطة البيضاء في المنتصف
+        const Positioned(
+          child: CircleAvatar(
+            radius: 5,
+            backgroundColor: Colors.white,
+          ),
+        ),
+
+        // كلمة LIVE
+        Positioned(
+          bottom: -10,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.pink,
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+              child: Text(
+                'LIVE',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1,
+                  fontSize: 10,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -830,37 +936,45 @@ class RotatingCircularButton extends StatelessWidget {
           ),
           child: InkWell(
             onTap: () {
-              if (!serviceLocator<UserCubit>().isLoggedIn) {
-                context.push(Routes.LOGIN);
-              } else {
-                if (context
-                    .read<ReelsCubit>()
-                    .state
-                    .controllers[
-                        context.read<ReelsCubit>().state.focusedIndex]!
-                    .value
-                    .isPlaying) {
-                  context
-                      .read<ReelsCubit>()
-                      .state
-                      .controllers[
-                          context.read<ReelsCubit>().state.focusedIndex]
-                      ?.pause();
-                }
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => BlocProvider.value(
-                      value: serviceLocator<ReelsCubit>()
-                        ..fetchReelsWithSameAudio(reel.audio.id),
-                      child: InstagramAudioScreen(
-                        audio: reel.audio,
-                        reel: reel,
+              showModalBottomSheet(
+                context: context,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                ),
+                builder: (context) {
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(height: 32.h),
+                      SvgPicture.asset(Assets.dividerIcon),
+                      SoundOptionBottomSheet(
+                        onTap: () {
+                          context.pushNamed(Routes.UseSoundScreen);
+                        },
+                        icon: Assets.useSoundIcon,
+                        title: context.isArabic
+                            ? 'استخدم هذا الصوت'
+                            : 'Use this sound',
                       ),
-                    ),
-                  ),
-                );
-              }
+                      SoundOptionBottomSheet(
+                        onTap: () {},
+                        icon: Assets.collabIcon,
+                        title: context.isArabic ? 'تعاون' : 'Collab',
+                      ),
+                      SoundOptionBottomSheet(
+                        onTap: () {},
+                        icon: Assets.layoutIcon,
+                        title: context.isArabic ? 'تَخطِيط' : 'layout',
+                      ),
+                      SoundOptionBottomSheet(
+                        onTap: () {},
+                        icon: Assets.mixReelIcon,
+                        title: context.isArabic ? 'بكرات مختلطة' : 'Mix Reel',
+                      ),
+                    ],
+                  );
+                },
+              );
             },
             child: Stack(
               children: [
@@ -881,6 +995,133 @@ class RotatingCircularButton extends StatelessWidget {
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class SoundOptionBottomSheet extends StatelessWidget {
+  const SoundOptionBottomSheet({
+    super.key,
+    required this.icon,
+    required this.title,
+    this.onTap,
+  });
+
+  final String icon;
+  final String title;
+  final void Function()? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: SvgPicture.asset(icon),
+      title: Text(title, style: TextStyle(fontWeight: FontWeight.w500)),
+      onTap: onTap,
+    );
+  }
+}
+
+class LoveButton extends StatefulWidget {
+  final String count;
+  final bool isReversed;
+  final MainAxisAlignment mainAxisAlignment;
+  final TextStyle? countTextStyle;
+
+  const LoveButton({
+    Key? key,
+    required this.count,
+    this.isReversed = false,
+    this.mainAxisAlignment = MainAxisAlignment.start,
+    this.countTextStyle,
+  }) : super(key: key);
+
+  @override
+  State<LoveButton> createState() => _LoveButtonState();
+}
+
+class _LoveButtonState extends State<LoveButton>
+    with SingleTickerProviderStateMixin {
+  bool isLoved = false;
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+  late Animation<Color?> _colorAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 400),
+      vsync: this,
+    );
+
+    _scaleAnimation = TweenSequence<double>([
+      TweenSequenceItem(
+          tween: Tween(begin: 1.0, end: 1.8)
+              .chain(CurveTween(curve: Curves.easeOut)),
+          weight: 50),
+      TweenSequenceItem(
+          tween: Tween(begin: 1.8, end: 1.0)
+              .chain(CurveTween(curve: Curves.easeIn)),
+          weight: 50),
+    ]).animate(_controller);
+
+    _colorAnimation = ColorTween(begin: Colors.white, end: Colors.red)
+        .animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void toggleLove() {
+    setState(() {
+      isLoved = !isLoved;
+    });
+
+    _controller.forward(from: 0); // يشغل الأنيميشن من الأول
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: toggleLove,
+      child: Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.4),
+              blurRadius: 30,
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: widget.mainAxisAlignment,
+          children: [
+            AnimatedBuilder(
+              animation: _controller,
+              builder: (context, child) {
+                return Transform.scale(
+                  scale: _scaleAnimation.value,
+                  child: Icon(
+                    Icons.favorite,
+                    color: isLoved ? _colorAnimation.value : Colors.white,
+                    size: 34,
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 4),
+            Text(
+              widget.count,
+              style:
+                  widget.countTextStyle ?? const TextStyle(color: Colors.white),
+            ),
+          ],
         ),
       ),
     );

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/post_instagram_widget.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -44,7 +46,7 @@ class BirthdaySection extends StatelessWidget {
                     height: 4,
                   ),
                   Label(
-                    text: 'New',
+                    text: LocaleKeys.nnew.localize,
                     style: Styles.mediumText(
                       color: Colors.black.withValues(alpha: 153),
                     ),

@@ -24,7 +24,6 @@ import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favo
 import 'package:fourtyninehub/features/subcategories/domain/usecases/toggle_favorite_subcategory.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../../../../core/data/datasources/remote/api/api_consumer.dart';
 import '../../../../../core/enums/main_services_enum.dart';
@@ -194,14 +193,15 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
   }
 
   Future<void> _getUser() async {
-    await serviceLocator<UserCubit>()
-        .getUser()
-        .then((Either<Failure, UserEntity>? value) {
-      value?.fold(
-        (failure) => print("Failed to get user: $failure"),
-        (u) => user = u,
-      );
-    });
+    user= UserCubit.to.state.data;
+    // await serviceLocator<UserCubit>()
+    //     .getUser()
+    //     .then((Either<Failure, UserEntity>? value) {
+    //   value?.fold(
+    //     (failure) => print("Failed to get user: $failure"),
+    //     (u) => user = u,
+    //   );
+    // });
   }
 
   Future<bool> toggleFavoriteSubcategory(String subcategoryId) async {
@@ -323,9 +323,6 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
   //   );
   // }
 
-  final PagingController<int, UserOrderEntity> userOrderPagingController =
-      PagingController(firstPageKey: 1);
-
   void loadOrderData() async {
     subCategories.clear();
     currentPage = 1;
@@ -367,10 +364,6 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
   }
 
   int pageSize = 10;
-  final PagingController<int, Restaurant2Model> restaurantsPagingController =
-      PagingController(firstPageKey: 1);
-  final PagingController<int, LogsRequestLogsEntity> reqLogPagingController =
-      PagingController(firstPageKey: 1);
 
   void loadInitialData() async {
     subCategories.clear();

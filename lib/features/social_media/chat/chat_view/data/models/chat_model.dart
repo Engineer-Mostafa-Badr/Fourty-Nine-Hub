@@ -26,6 +26,7 @@ class ChatModel extends ChatEntity {
     super.lables,
     super.isBirthdayMonth,
     super.fcmToken,
+    super.gender,
   });
 
   factory ChatModel.fromJson(Map<String, dynamic> json) => ChatModel(
@@ -62,5 +63,6 @@ class ChatModel extends ChatEntity {
           : [],
         // ignore: prefer_if_null_operators
         pinnedMessageId: json['pinnedMessage'],
+        gender: json['gender']??'male',
       );
 }

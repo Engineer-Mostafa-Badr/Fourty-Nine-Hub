@@ -28,6 +28,7 @@ class ChatEntity {
   List<GetLablesEntity> lables = [];
   bool isBirthdayMonth = false;
   bool isSearching = false;
+  String gender = 'male';
   String? messageDraft;
   String? fcmToken;
 
@@ -60,5 +61,6 @@ class ChatEntity {
     this.isSearching = false,
     this.messageDraft,
     this.fcmToken,
+    this.gender='male',
   });
 }

@@ -2,7 +2,6 @@ import 'package:auto_scroll_text/auto_scroll_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/ads/app_open_model.dart';
 import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
@@ -21,7 +20,6 @@ import 'package:fourtyninehub/core/utils/shared_pref.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/cubit/custom_page_cubit.dart';
-import 'package:fourtyninehub/features/custom_page/presentation/page/widget/custom_page_botton_nav_bar.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_taps_cubit/main_categories_taps_cubit.dart';
@@ -146,7 +144,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: SizedBox(
-                height: 350,
+                height: 300,
                 child: MainCategoriesFlipCardsView(
                   isAppBarShow: false,
                   data: context.read<MainCategoriesTapsCubit>().mainCategories,
@@ -158,16 +156,11 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
         BlocProvider(
           create: (context) => serviceLocator<MainCategoriesTapsCubit>(),
           child: Builder(builder: (context) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: SizedBox(
-                height: 350,
-                child: MainCategoriesFlipCardsView(
+            return SizedBox(
+                height: MediaQuery.sizeOf(context).height,
+                child: const MainCategoriesGridView(
                   isAppBarShow: false,
-                  data: context.read<MainCategoriesTapsCubit>().mainCategories,
-                ),
-              ),
-            );
+                ));
           }),
         ),
       ];
@@ -202,11 +195,10 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
         floatingActionButton: _isScrollingDown
             ? null
             : const FloatingButton(
-          changeView: 1,
-          icon: Icons.person,
-        ),
-        floatingActionButtonLocation:
-        FloatingActionButtonLocation.centerDocked,
+                changeView: 1,
+                icon: Icons.person,
+              ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         // bottomNavigationBar: CustomPageBottonNavBar(
         //   scrollController: scrollController,
         //   currentIndex: 2,
@@ -243,7 +235,6 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Row(children: [
                       const Sizer(width: 8),
-
                       Expanded(
                         child: _buildStarWidget(
                           onTap: () {
@@ -251,7 +242,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
                             AdInterstitialTop.showInterstitialAd();
                             context.push(Routes.RIDE_HOME);
                           },
-                          shadowColor: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
+                          shadowColor: Color(0xff8000FF),
                           image: Assets.car2Image,
                           title: LocaleKeys.ride.localize,
                         ),
@@ -264,7 +255,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
                             AdInterstitialTop.showInterstitialAd();
                             context.push(Routes.VISITA);
                           },
-                          shadowColor: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
+                          shadowColor: Color(0xff4997D0),
                           image: Assets.doctorImage,
                           title: LocaleKeys.health.localize,
                         ),
@@ -278,13 +269,12 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
                             HandleCashback.setCount('beAStarCount', context);
                             context.push(Routes.FOOD);
                           },
-                          shadowColor: Colors.deepOrange.withValues(alpha: .7),
+                          shadowColor: Color(0xffFF7F00),
                           image: Assets.mealImage,
                           title: LocaleKeys.meal.localize,
                         ),
                       ),
                       const Sizer(width: 8),
-
                     ]),
                   ),
                 ),
@@ -293,40 +283,41 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
                 SliverToBoxAdapter(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child:Row(children: [
-                      const Sizer(width: 8),
-
-                      Expanded(child: _pickMeAndComeWithUWidget()),
-                      const Sizer(width: 32),
-                      Expanded(
-                        child: _buildStarWidget(
-                          onTap: () {
-                            AdInterstitialTop.loadIntersitialAd();
-                            AdInterstitialTop.showInterstitialAd();
-                            HandleCashback.setCount('beAStarCount', context);
-                            context.push(Routes.BE_STAR);
-                          },
-                          shadowColor: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
-                          image: Assets.tube1,
-                          title: LocaleKeys.tube.localize,
+                    child: Row(
+                      children: [
+                        const Sizer(width: 8),
+                        Expanded(child: _pickMeAndComeWithUWidget()),
+                        const Sizer(width: 32),
+                        Expanded(
+                          child: _buildStarWidget(
+                            onTap: () {
+                              AdInterstitialTop.loadIntersitialAd();
+                              AdInterstitialTop.showInterstitialAd();
+                              HandleCashback.setCount('beAStarCount', context);
+                              context.push(Routes.BE_STAR);
+                            },
+                            shadowColor:
+                                AppColors.SECONDARY_COLOR.withValues(alpha: .7),
+                            image: Assets.tube1,
+                            title: LocaleKeys.tube.localize,
+                          ),
                         ),
-                      ),
-                      const Sizer(width: 32),
-                      Expanded(
-                        child: _buildStarWidget(
-                          onTap: () {
-                            AdInterstitialTop.loadIntersitialAd();
-                            AdInterstitialTop.showInterstitialAd();
-                            context.push(Routes.MARRIAGESUBCATEGORIES);
-                          },
-                          shadowColor: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
-                          image: Assets.marriage,
-                          title: LocaleKeys.marriage.localize,
+                        const Sizer(width: 32),
+                        Expanded(
+                          child: _buildStarWidget(
+                            onTap: () {
+                              AdInterstitialTop.loadIntersitialAd();
+                              AdInterstitialTop.showInterstitialAd();
+                              context.push(Routes.MARRIAGESUBCATEGORIES);
+                            },
+                            shadowColor: Color(0xffFFC0CB),
+                            image: Assets.marriage,
+                            title: LocaleKeys.marriage.localize,
+                          ),
                         ),
-                      ),
-                      const Sizer(width: 8),
-
-                    ],),
+                        const Sizer(width: 8),
+                      ],
+                    ),
                   ),
                 ),
                 const SliverToBoxAdapter(child: Sizer()),
@@ -357,8 +348,11 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
                       final controller = context.read<MainCategoriesCubit>();
                       if (state.status == StateStatus.loading) {
                         if (CacheManager.getInt(
-                                CacheManager.selectedCategoryView) ==
-                            1) {
+                                    CacheManager.selectedCategoryView) ==
+                                1 ||
+                            CacheManager.getInt(
+                                    CacheManager.selectedCategoryView) ==
+                                3) {
                           return SliverPadding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 16.0),
@@ -492,7 +486,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
           children: [
             Image.asset(
               image,
-              fit: BoxFit.fill,
+              fit: BoxFit.cover,
               width: double.infinity,
             ),
             Container(
@@ -805,13 +799,14 @@ class CustomDeActivateDialog extends StatelessWidget {
                   showAnimatedDialog(
                     context,
                     AlertDialog(
-                      content:Column(
+                      content: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Label(
                               text: 'Restart to Apply',
-                              style: Styles.headerText(fontWeight: FontWeight.w400)),
+                              style: Styles.headerText(
+                                  fontWeight: FontWeight.w400)),
                           const Sizer(),
                           Row(
                             children: [
@@ -823,7 +818,9 @@ class CustomDeActivateDialog extends StatelessWidget {
                                   label: LocaleKeys.cancel.localize,
                                 ),
                               ),
-                              const Sizer(width: 16,),
+                              const Sizer(
+                                width: 16,
+                              ),
                               Expanded(
                                 child: AppButton(
                                   backColor: AppColors.PRIMARY_COLOR,

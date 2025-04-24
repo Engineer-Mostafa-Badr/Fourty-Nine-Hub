@@ -143,7 +143,7 @@ class NormalPostScreen extends StatelessWidget {
                           widget: BlocProvider.value(
                             value:
                             serviceLocator<SocialPostsCubit>()
-                              ..loadComments(context, postEntity.id),
+                              ..loadPostCommentsData(context:context, postId:postEntity.id),
                             child: FacebookPostComments(
                               postId: postEntity.id,
                               onAddComment:

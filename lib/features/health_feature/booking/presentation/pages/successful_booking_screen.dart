@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/functions/helper/routing_helper.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
+import '../../../../../routes/routes.dart';
 import '../cubit/book_doctor_appointment_cubit.dart';
 import '../widgets/booking_confirmation/booking_submit_button.dart';
 import '../widgets/booking_successed/booking_summary_info.dart';
@@ -17,8 +21,8 @@ class SuccessfulBookingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<BookDoctorAppointmentCubit>().init(doctorDetailsCubit);
-    final doctor = context.read<BookDoctorAppointmentCubit>().doctor;
     final bookingController = context.read<BookDoctorAppointmentCubit>();
+
     return CustomScaffold(
       appBar: const HomeAppbar(
         isWithBackArrow: true,
@@ -41,15 +45,18 @@ class SuccessfulBookingScreen extends StatelessWidget {
                 /// Booking summary info
 
                  BookingSummaryInfo(
-                  doctor:doctor
+                  doctor:bookingController.doctor
                 ),
 
                 /// make size
                 const Sizer(height: 194),
                 // Submit Button
                 BookingButton(
-                  onTap: () {},
-                  title: 'Done',
+                  onTap: () {
+                    context.pushAndRemoveUntil(
+                        Routes.SUCCESSFULLBOOKING, (route) => route == Routes.HOME);
+                  },
+                  title: LocaleKeys.done.localize,
                 ),
               ],
             ),

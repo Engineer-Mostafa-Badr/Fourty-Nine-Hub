@@ -5,6 +5,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/common/widgets/stateless/loaders/default_loader.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -46,17 +47,17 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
     _tabController = TabController(length: 2, vsync: this);
 
     if (widget.params.mainCategory.nameEn == 'Dating') {
-      context.read<AdvertisementCubit>().loadData(
+      context.read<AdvertisementCubit>().loadAdsData(
           subCategoryId: widget.params.subCategory.id,
           filter: 'male',
-          fromTab: true);
+          );
     } else {
-      context.read<AdvertisementCubit>().loadData(
+      context.read<AdvertisementCubit>().loadAdsData(
           subCategoryId: widget.params.subCategory.id,
           filter: widget.params.subCategory.hasAuction == true
               ? 'sale'
               : 'provider',
-          fromTab: true);
+          );
     }
   }
 
@@ -142,33 +143,33 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                         state.city = '';
                         state.governorate = '';
                         if (widget.params.mainCategory.nameEn == 'Dating') {
-                          controller.loadData(
+                          controller.loadAdsData(
                               subCategoryId: widget.params.subCategory.id,
                               filter: 'female',
-                              fromTab: true);
+                              );
                         } else {
-                          controller.loadData(
+                          controller.loadAdsData(
                               subCategoryId: widget.params.subCategory.id,
                               filter:
                                   widget.params.subCategory.hasAuction == true
                                       ? 'rent'
                                       : 'user',
-                              fromTab: true);
+                              );
                         }
                       } else {
                         if (widget.params.mainCategory.nameEn == 'Dating') {
-                          controller.loadData(
+                          controller.loadAdsData(
                               subCategoryId: widget.params.subCategory.id,
                               filter: 'male',
-                              fromTab: true);
+                              );
                         } else {
-                          controller.loadData(
+                          controller.loadAdsData(
                               subCategoryId: widget.params.subCategory.id,
                               filter:
                                   widget.params.subCategory.hasAuction == true
                                       ? 'sale'
                                       : 'provider',
-                              fromTab: true);
+                              );
                         }
                       }
                     },
@@ -187,11 +188,12 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                                   : LocaleKeys.user.localize),
                     ],
                   ),
+                  /// Provider Ads and User Ads
                   state.status == AdsStates.loading
                       ? Center(
                           child: Padding(
                             padding: EdgeInsets.only(top: 20.h),
-                            child: const CircularProgressIndicator(),
+                            child: const DLoader(),
                           ),
                         )
                       : Expanded(
@@ -199,11 +201,13 @@ class _AdsViewState extends State<AdsView> with SingleTickerProviderStateMixin {
                           physics: const NeverScrollableScrollPhysics(),
                           controller: _tabController,
                           children: [
+                            /// provider Ads view
                             ProviderAdsView(
                               params: widget.params,
                               userType: userType,
                               controller: controller,
                             ),
+                            /// user ads View
                             UserAdsView(
                               params: widget.params,
                               userType: userType,

@@ -54,9 +54,9 @@ class _SearchAppUsersState extends State<SearchAppUsers> {
                           controller: searchController,
                           onChanged: (v) {
                             if (v.isNotEmpty) {
-                              controller.loadSearchUsers(v);
+                              controller.loadUsersSearchData(search:v);
                             } else {
-                              controller.usersPagingController.itemList = [];
+                              controller.usersSearch = [];
                             }
                           },
                           decoration: InputDecoration(
@@ -89,10 +89,10 @@ class _SearchAppUsersState extends State<SearchAppUsers> {
                   ],
                 ),
                 const Sizer(),
-                if (controller.usersPagingController.itemList != null)
-                  Expanded(
-                      child: _buildListUsersWidget(
-                          controller: controller.usersPagingController))
+                // if (controller.usersSearch.isNotEmpty)
+                //   Expanded(
+                //       child: _buildListUsersWidget(
+                //           controller: controller.usersPagingController))
               ],
             ),
           );

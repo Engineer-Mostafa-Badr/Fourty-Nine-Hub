@@ -126,7 +126,7 @@ class _TripJoinViewState extends State<TripJoinView>
                                 iconColor: const Color(0xffF33D49),
                                 textColor: const Color(0xffF33D49),
                                 imagePath: Assets.locationTripIcon,
-                                title: 'Trip Join',
+                                title: 'Trip Joinnnn',
                                 onTap: () {},
                                 icon: Assets.car,
                               ),
@@ -240,7 +240,7 @@ class _TripJoinViewState extends State<TripJoinView>
               textDirection: context.isArabic ? TextDirection.rtl : TextDirection.ltr,
               child: GestureDetector(
                 onTap: () {
-                  context.push(Routes.pickMeInfoScreen);
+                  context.push(Routes.tripJoinInfoScreen);
                 },
                 child: Container(
                   height: 48.h,

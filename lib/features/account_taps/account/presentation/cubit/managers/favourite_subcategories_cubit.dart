@@ -68,7 +68,7 @@ class FavouriteSubCategoryCubit extends Cubit<FavouriteSubCategoryState> {
   // }
   Future<void> loadDataMain() async {
     emit(state.copyWith(status: StateStatus.loading));
-    await UserCubit.to.getUser();
+    // await UserCubit.to.getUser();
     {
       final user = UserCubit.to.state.data?.id;
       print('userId1$user');

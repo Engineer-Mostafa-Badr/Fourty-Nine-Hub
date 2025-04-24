@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_model.dart';
@@ -24,7 +25,8 @@ class ReelsWidget extends StatefulWidget {
     super.key,
     required this.isLoading,
     required this.controller,
-    required this.index, required this.receiverId,
+    required this.index,
+    required this.receiverId,
   });
 
   final bool isLoading;
@@ -144,7 +146,7 @@ class _ReelsWidgetState extends State<ReelsWidget>
         child: DoubleTapHeart(
           iconSize: 40,
           animationDuration: const Duration(seconds: 1),
-          heartIcon: Icons.favorite,
+          heartIcon: Icons.favorite_outline,
           iconColor: Colors.pink,
           onDoubleTap: () async {
             log("LSdkjflskdjflskdjflsdf o");
@@ -179,11 +181,10 @@ class _ReelsWidgetState extends State<ReelsWidget>
           },
           child: Stack(
             children: [
-              
               VideoPlayer(widget.controller),
               buildPlayPauseIcon(),
               Positioned.fill(
-                bottom: MediaQuery.of(context).size.height*0.0,
+                bottom: MediaQuery.of(context).size.height * 0.0,
                 child: Padding(
                   padding: const EdgeInsets.only(right: 20),
                   child: Row(
@@ -192,25 +193,29 @@ class _ReelsWidgetState extends State<ReelsWidget>
                       const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.keyboard_double_arrow_left_sharp, color: Colors.white,),
+                          Icon(
+                            Icons.keyboard_double_arrow_left_sharp,
+                            color: Colors.white,
+                          ),
                         ],
                       ),
                       GestureDetector(
                         onTap: () {
                           if (!serviceLocator<UserCubit>().isLoggedIn) {
-              context.push(Routes.LOGIN);
-            } else {
-              _showGiftBottomSheet(context);
-            }
+                            context.push(Routes.LOGIN);
+                          } else {
+                            _showGiftBottomSheet(context);
+                          }
                         },
                         child: Container(
-                          decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(color: Colors.black.withOpacity(0.9), blurRadius: 30)
-          ]
-        ),
-                          child: Image.asset(Assets.giftBoxIcon, width: 30, height: 30, color: Colors.white,))),
-                      
+                          decoration: BoxDecoration(boxShadow: [
+                            BoxShadow(
+                                color: Colors.black.withOpacity(0.9),
+                                blurRadius: 30)
+                          ]),
+                          child: SvgPicture.asset(Assets.giftReelsIcon),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -252,7 +257,8 @@ class _ReelsWidgetState extends State<ReelsWidget>
       ),
     );
   }
-   Future<void> _showGiftBottomSheet(BuildContext context) async {
+
+  Future<void> _showGiftBottomSheet(BuildContext context) async {
     await showGiftBottomSheet(context, receiverId: "widget.receiverId");
   }
 }

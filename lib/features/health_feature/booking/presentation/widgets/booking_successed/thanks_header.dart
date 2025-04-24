@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 
 import '../../../../../../res/style/app_colors.dart';
 import '../../../../../../res/style/styles.dart';
+import '../../cubit/book_doctor_appointment_cubit.dart';
 
 class ThanksHeader extends StatelessWidget {
   const ThanksHeader({super.key});
 
   @override
   Widget build(BuildContext context) {
+   final doctor =context.read<BookDoctorAppointmentCubit>().doctor;
     return Column(
       children: [
         Padding(
@@ -41,7 +44,7 @@ class ThanksHeader extends StatelessWidget {
     color: AppColors.GREY_DARK_COLOR
     ),),
             Text(
-              "Dr. Ibrahim Ahmed",
+              doctor.fullName,
               style:Styles.headerText(
     color: AppColors.GREY_DARK_COLOR
     ),

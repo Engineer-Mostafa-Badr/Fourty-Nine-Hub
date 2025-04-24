@@ -3,11 +3,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/pages/osm_search_and_pick.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
+import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../../../../common/widgets/stateless/appbar/home_appbar.dart';
@@ -16,6 +21,9 @@ import '../../../../../core/widget/custom_scaffold.dart';
 import '../../../../../core/widget/custom_switch_button.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
+import '../../../../settings/presentation/pages/widgets/custombutton.dart';
+import '../../../../trip_join/view_all_trip_join/presentation/views/Modified_widgets/create_ad_widgets/create_ad_location_button.dart';
+import '../../../../trip_join/view_all_trip_join/presentation/views/Modified_widgets/create_ad_widgets/find_location_button.dart';
 import '../widget/alert_text_widget.dart';
 import '../widget/premium_and_request_widget.dart';
 import '../widget/price_and_seat_widget.dart';
@@ -68,6 +76,12 @@ class _NewRouteBodyState extends State<NewRouteBody> {
   bool isLadyDriver = false;
   final MapController _mapController = MapController();
 
+  List<double>? currentLocation;
+  List<double>? toLocation;
+  String? currentAddress;
+  String? toAddress;
+
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -75,15 +89,63 @@ class _NewRouteBodyState extends State<NewRouteBody> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           //     const NewRouteTextWidget(),
-          SizedBox(height: 10.h),
+          SizedBox(height: 20.h),
           const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            padding: EdgeInsets.symmetric(
+              horizontal: 15,
+            ),
             child: WelcomeTextWidget(),
           ),
           const SizedBox(height: 10),
           _buildTopImage(),
           SizedBox(height: 10.h),
-          const PriceAndSeatWidget(),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: _customLocationField(
+              isTo: false,
+              context: context,
+              color: Colors.green,
+              text: currentAddress,
+              onPressed: () async {
+                context.push(
+                  Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
+                  extra: RideOpenStreetMapSearchAndPickParams(
+                    onPicked: (pickedData) async {
+                      currentAddress = pickedData.addressName;
+                      currentLocation = [pickedData.latLong.latitude, pickedData.latLong.longitude];
+                      context.pop();
+                      setState(() {
+
+                      });
+                    },
+                  ),
+                );
+              },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: _customLocationField(
+              isTo: true,
+              context: context,
+              color: Colors.blue,
+              text:toAddress,
+              onPressed: () async {
+                context.push(Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
+                    extra: RideOpenStreetMapSearchAndPickParams(
+                      onPicked: (pickedData) async {
+                        toAddress = pickedData.addressName;
+                        toLocation = [pickedData.latLong.latitude, pickedData.latLong.longitude];
+                        context.pop();
+                        setState(() {});
+                      },
+                    ));
+              },
+            ),
+          ),
+           const PriceAndSeatWidget(
+
+           ),
           SizedBox(height: 10.h),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -203,25 +265,15 @@ class _NewRouteBodyState extends State<NewRouteBody> {
                   ),
                   const SizedBox(height: 20),
                   Center(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.PRIMARY_COLOR,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 100, vertical: 10),
-                      ),
-                      onPressed: () => Navigator.pop(context),
-                      child: Text(
-                        LocaleKeys.cancel.localize,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
+                      child: CustomButton(
+                    width: double.infinity,
+                    onPressed: () {
+                      context.pop();
+                    },
+                    color: AppColors.PRIMARY_COLOR,
+                    text: LocaleKeys.cancel.localize,
+                    textStyle: const TextStyle(color: Colors.white),
+                  )),
                 ],
               ),
             ),
@@ -229,14 +281,67 @@ class _NewRouteBodyState extends State<NewRouteBody> {
         });
   }
 
-  Widget _buildTopMap(RideState state, BuildContext context) {
-    List<LatLng> routePoints =
-        _convertPolylineToLatLng(state.rideExpectedPrice?.polyline ?? []);
+  Widget _customLocationField({
+    required Color color,
+    required String? text,
+    required bool isTo,
+    required Function()? onPressed,
+    required BuildContext context,
+  }) {
+    if (text == null) {
+      if (isTo == true) {
+        text = 'To';
+      } else {
+        text = 'From';
+      }
+    }
 
-    if (state.currentLocation != null) {
+    return InkWell(
+      onTap: onPressed,
+      child: Container(
+        height: 40,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: const Color(0xFFEEEEEE),
+        ),
+        child: Row(
+          children: [
+            CircleAvatar(
+              backgroundColor: Colors.transparent,
+              child: CircleAvatar(
+                backgroundColor: color,
+                radius: 10,
+                child: const CircleAvatar(
+                    backgroundColor: Colors.white, radius: 5),
+              ),
+            ),
+            Expanded(
+              child: Text(
+                text == 'From'
+                    ? context.isArabic
+                    ? "من"
+                    : "From"
+                    : text == 'To'
+                    ? context.isArabic
+                    ? "إلى"
+                    : "To"
+                    : text!,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTopMap(BuildContext context) {
+
+    if (currentLocation != null && currentLocation!.isNotEmpty) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _mapController.move(
-          LatLng(state.currentLocation!.lat!, state.currentLocation!.lng!),
+          LatLng(currentLocation![0], currentLocation![1]),
           12.0,
         );
       });
@@ -244,15 +349,13 @@ class _NewRouteBodyState extends State<NewRouteBody> {
 
     return SizedBox(
       width: double.infinity,
-      height: state.requestedTrip != null
-          ? MediaQuery.of(context).size.height
-          : MediaQuery.of(context).size.height * 0.5,
+      height:MediaQuery.of(context).size.height * 0.5,
       child: FlutterMap(
         mapController: _mapController,
         options: MapOptions(
           initialCenter: LatLng(
-            state.currentLocation?.lat ?? 30.033333,
-            state.currentLocation?.lng ?? 31.233334,
+            currentLocation?[0]?? 30.0596113,
+            currentLocation?[1] ?? 31.1760625,
           ),
           initialZoom: 12.0,
         ),
@@ -262,53 +365,37 @@ class _NewRouteBodyState extends State<NewRouteBody> {
           ),
           MarkerLayer(
             markers: [
-              if (state.currentLocation != null)
+              if (currentLocation != null && currentLocation!.isNotEmpty)
                 Marker(
                   point: LatLng(
-                      state.currentLocation!.lat!, state.currentLocation!.lng!),
+                    currentLocation?[0]?? 0.0,
+                    currentLocation?[1] ?? 0.0,),
                   width: 40,
                   height: 40,
                   child: const Icon(Icons.location_pin,
                       color: Colors.blue, size: 40),
                 ),
-              if (state.toLocation != null)
+              if (toLocation != null)
                 Marker(
-                  point: LatLng(state.toLocation!.lat!, state.toLocation!.lng!),
+                  point: LatLng(toLocation![0], toLocation![1]),
                   width: 40,
                   height: 40,
                   child: const Icon(Icons.location_pin,
                       color: Colors.red, size: 40),
                 ),
-              if (state.wayPointOne != null)
-                Marker(
-                  point:
-                      LatLng(state.wayPointOne!.lat!, state.wayPointOne!.lng!),
-                  width: 40,
-                  height: 40,
-                  child: const Icon(Icons.location_pin,
-                      color: Colors.green, size: 40),
-                ),
-              if (state.wayPointTwo != null)
-                Marker(
-                  point:
-                      LatLng(state.wayPointTwo!.lat!, state.wayPointTwo!.lng!),
-                  width: 40,
-                  height: 40,
-                  child: const Icon(Icons.location_pin,
-                      color: Colors.green, size: 40),
-                ),
+
             ],
           ),
-          if (routePoints.isNotEmpty)
-            PolylineLayer(
-              polylines: [
-                Polyline(
-                  points: routePoints,
-                  color: Colors.blue,
-                  strokeWidth: 4.0,
-                ),
-              ],
-            ),
+          // if (routePoints.isNotEmpty)
+          //   PolylineLayer(
+          //     polylines: [
+          //       Polyline(
+          //         points: routePoints,
+          //         color: Colors.blue,
+          //         strokeWidth: 4.0,
+          //       ),
+          //     ],
+          //   ),
         ],
       ),
     );
@@ -323,7 +410,7 @@ class _NewRouteBodyState extends State<NewRouteBody> {
       return Builder(builder: (context) {
         return Stack(
           children: [
-            _buildTopMap(state, context),
+            _buildTopMap(context),
           ],
         );
       });

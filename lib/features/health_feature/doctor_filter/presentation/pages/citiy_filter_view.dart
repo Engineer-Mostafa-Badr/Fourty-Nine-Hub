@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
+import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/health_feature/doctor_filter/presentation/controllers/city_filter_cubit/doctor_city_filter_cubit.dart';
@@ -10,6 +13,7 @@ import 'package:fourtyninehub/features/health_feature/health/presentation/contro
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../common/widgets/stateless/loaders/default_loader.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
 
@@ -41,8 +45,8 @@ class _DoctorCityFilterViewState extends State<DoctorCityFilterView> {
     return CustomScaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(30),
-        child: BackAppBar(
-          label: LocaleKeys.city.localize,
+        child:HomeAppbar(
+          isWithBackArrow: true,
         ),
       ),
       body: Padding(
@@ -53,6 +57,8 @@ class _DoctorCityFilterViewState extends State<DoctorCityFilterView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Label(text: LocaleKeys.city.localize,style: Styles.headerText(),),
+            Sizer(),
             DefaultTextFormField(
               currentFocusNode: doctorCityFilter.searchFocusNode,
               currentController: doctorCityFilter.searchController,
@@ -68,9 +74,8 @@ class _DoctorCityFilterViewState extends State<DoctorCityFilterView> {
                 switch (state) {
                   case DoctorCityFilterLoaded _:
                     return Expanded(
-                        child: ListView.separated(
+                        child: ListView.builder(
                       itemCount: state.cities.length,
-                      separatorBuilder: (context, index) => const Divider(),
                       itemBuilder: (context, index) => CityListTitle(
                         city: state.cities[index],
                         type: widget.type,
@@ -79,7 +84,7 @@ class _DoctorCityFilterViewState extends State<DoctorCityFilterView> {
                   case DoctorCityFilterError _:
                     return Center(child: Text(state.message));
                   default:
-                    return const Center(child: CircularProgressIndicator());
+                    return Center(child: const DLoader());
                 }
               },
             ),

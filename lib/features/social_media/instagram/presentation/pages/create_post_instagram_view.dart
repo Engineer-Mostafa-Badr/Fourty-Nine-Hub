@@ -12,12 +12,11 @@ class CreatePostInstagramView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
-      body: SafeArea(
-        child: BlocProvider(
-          create: (context) =>
-              serviceLocator<CreatePostInstagramCubit>()..loadImages(context),
-          child: const CreatePostInstagramViewBody(),
+    return BlocProvider(
+      create: (context) => serviceLocator<CreatePostInstagramCubit>()..loadImages(context),
+      child: const CustomScaffold(
+        body: SafeArea(
+          child: CreatePostInstagramViewBody(),
         ),
       ),
     );

@@ -7,7 +7,8 @@ import 'tab_item_widget.dart';
 
 class TabBarRowWidget extends StatelessWidget {
   final TabController tabController;
-  const TabBarRowWidget({super.key, required this.tabController});
+  final void Function()? onTap;
+  const TabBarRowWidget({super.key, required this.tabController, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -15,29 +16,33 @@ class TabBarRowWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         TabItemWidget(
-            text: context.isArabic ? "الرحلات\n المتاحة" : "Available\nTrips",
+            onTap: onTap,
+            text: context.isArabic ? "رحلات \n متاحه" : "Available\nTrips",
             icon: Assets.ideaIcon,
             index: 0,
             tabController: tabController),
         SizedBox(width: 28.w),
         TabItemWidget(
+            onTap: onTap,
             text: context.isArabic ? "حجوزاتي" : "My\nBookings",
             icon: Assets.ideaIcon,
             index: 1,
             tabController: tabController),
         SizedBox(width: 28.w),
         TabItemWidget(
-            text: context.isArabic ? "رحلات \nالجري" : "Running\nTrips",
+            onTap: onTap,
+            text: context.isArabic ? "رحلات \nجارية " : "Running\nTrips",
             icon: Assets.ideaIcon,
             index: 2,
             tabController: tabController),
         SizedBox(width: 28.w),
         TabItemWidget(
-            text:
-                context.isArabic ? "الرحلات منتهية الصلاحية" : "Expired\nTrips",
-            icon: Assets.ideaIcon,
-            index: 3,
-            tabController: tabController),
+          onTap: onTap,
+          text: context.isArabic ? "رحلات \n منتهية " : "Expired\nTrips",
+          icon: Assets.ideaIcon,
+          index: 3,
+          tabController: tabController,
+        ),
       ],
     );
   }
