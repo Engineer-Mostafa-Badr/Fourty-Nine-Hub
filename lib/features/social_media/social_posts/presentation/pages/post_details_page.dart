@@ -267,8 +267,8 @@ class _PostDetailsPageState extends State<PostDetailsPage> {
                               ),
                             );
                             // widget.post.commentsCount=(widget.post.commentsCount!+1);
-                            state.postDetails?.commentsCount =
-                                (state.postDetails!.commentsCount + 1);
+                            // state.postDetails?.commentsCount =
+                            //     (state.postDetails!.commentsCount + 1);
                             commentTextController.clear();
                             FocusScope.of(context).unfocus();
                             setState(() {});
