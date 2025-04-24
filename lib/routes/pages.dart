@@ -1845,6 +1845,7 @@ class AppPages {
                       name: Routes.VISITADOCTORLIST,
                       builder: (context, state) =>
                           BlocProvider<DoctorsListCubit>(
+                          // BlocProvider<HealthCubit>(
                         create: (context) => serviceLocator(),
                         child: DoctorsListView(
                           params: state.extra as DoctorsListParams,

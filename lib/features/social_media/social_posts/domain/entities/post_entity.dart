@@ -12,124 +12,116 @@ import '../../../../../res/assets/assets.dart';
 
 class PostEntity {
   final String id;
-  String? content;
-  LocationModel? location;
-  final String photo;
-  String? type;
-  String? gifUrl;
-  LifeEventPostEntity? lifeEvent;
-  final List<String>? images;
-  final List<TwitterUserModel>? users;
-  final List<TwitterUserModel>? likedUsers;
-  final List<TwitterUserModel>? sadUsers;
-  final List<TwitterUserModel>? wowUsers;
-  final List<TwitterUserModel>? hahaUsers;
-  final List<TwitterUserModel>? angryUsers;
-  final List<TwitterUserModel>? loveUsers;
-  List<AudioEntity>? audio;
+  final String? content;
+  final LocationModel? location;
+  final String? photo;
+  final String type;
+  final String? gifUrl;
+  final LifeEventPostEntity? lifeEvent;
+  final List<String> images;
+  final List<TwitterUserModel> users;
+  final List<TwitterUserModel> likedUsers;
+  final List<TwitterUserModel> sadUsers;
+  final List<TwitterUserModel> wowUsers;
+  final List<TwitterUserModel> hahaUsers;
+  final List<TwitterUserModel> angryUsers;
+  final List<TwitterUserModel> loveUsers;
+  final List<AudioEntity> audio;
   final bool isShared;
-  bool isDocumentation;
-  bool isLove;
-  bool isLikes;
-  bool isWow;
-  bool isSad;
-  bool isAngry;
-  bool isHaha;
+  final bool isDocumentation;
+  final bool isLove;
+  final bool isLikes;
+  final bool isWow;
+  final bool isSad;
+  final bool isAngry;
+  final bool isHaha;
   final TwitterUserModel user;
-  FeelingEntity? feeling;
-  ActivityEntity? activity;
+  final FeelingEntity? feeling;
+  final ActivityEntity? activity;
   final int privacy;
   final int commentPrivacy;
-  num commentsCount;
-  final num sharesCount;
-  num likesCount;
-  num loveCount;
-  num hahaCount;
-  num wowCount;
-  num sadCount;
-  num angryCount;
-  num totalCount;
-  String? backgroundColor;
-  String? name;
-  String? videoMedia;
-  String? audioMedia;
-
-  // Twitter-specific
-  List<String>? shares;
-  MainPostEntity? mainPost;
-  List<dynamic>? comments;
-  InstagramPostEntity? firstComment;
-  bool isReact;
-
-  // Advertisement-specific
-  String? advertisementType;
-  String? post;
-  String? description;
-  bool isApproved;
-
-  DateTime? createdAt;
-  DateTime? createAt;
-
-  Duration get publishedDuration => TimeUtils.calculateDuration(createdAt);
-
-  String get sinceTime => TimeUtils.getSinceTime(createdAt);
+  final int commentsCount;
+  final int sharesCount;
+  final int likesCount;
+  final int loveCount;
+  final int hahaCount;
+  final int wowCount;
+  final int sadCount;
+  final int angryCount;
+  final int totalCount;
+  final String? backgroundColor;
+  final String? name;
+  final String? videoMedia;
+  final String? audioMedia;
+  final List<String> shares;
+  final MainPostEntity? mainPost;
+  final List<InstagramPostEntity> comments;
+  final InstagramPostEntity? firstComment;
+  final bool isReact;
+  final String? advertisementType;
+  final String? post;
+  final String? description;
+  final bool isApproved;
+  final DateTime? createdAt;
+  final DateTime? createAt;
 
   PostEntity({
     required this.id,
     this.content,
     this.location,
-    required this.type,
-    this.images,
-    this.users,
+    this.photo,
+    this.type = 'normal_post',
     this.gifUrl,
     this.lifeEvent,
-    this.firstComment,
-    required this.user,
-    this.commentPrivacy = 1,
-    this.privacy = 1,
+    this.images = const [],
+    this.users = const [],
+    this.likedUsers = const [],
+    this.sadUsers = const [],
+    this.wowUsers = const [],
+    this.hahaUsers = const [],
+    this.angryUsers = const [],
+    this.loveUsers = const [],
+    this.audio = const [],
     this.isShared = false,
+    this.isDocumentation = false,
     this.isLove = false,
     this.isLikes = false,
     this.isWow = false,
     this.isSad = false,
     this.isAngry = false,
-    this.isDocumentation = false,
     this.isHaha = false,
+    required this.user,
+    this.feeling,
+    this.activity,
+    this.privacy = 1,
+    this.commentPrivacy = 2,
     this.commentsCount = 0,
     this.sharesCount = 0,
     this.likesCount = 0,
     this.loveCount = 0,
+    this.hahaCount = 0,
     this.wowCount = 0,
     this.sadCount = 0,
     this.angryCount = 0,
-    this.hahaCount = 0,
     this.totalCount = 0,
-    this.createdAt,
-    this.feeling,
-    this.activity,
     this.backgroundColor,
-    this.shares,
+    this.name,
+    this.videoMedia,
+    this.audioMedia,
+    this.shares = const [],
     this.mainPost,
-    this.comments,
+    this.comments = const [],
+    this.firstComment,
     this.isReact = false,
     this.advertisementType,
     this.post,
     this.description,
-    this.name,
-    this.videoMedia,
-    this.audioMedia,
-    this.createAt,
     this.isApproved = false,
-    required this.photo,
-    required this.angryUsers,
-    required this.hahaUsers,
-    required this.likedUsers,
-    required this.loveUsers,
-    required this.sadUsers,
-    required this.wowUsers,
-    required this.audio,
+    this.createdAt,
+    this.createAt,
   });
 }
+
 
 enum Reaction { like, haha, love, wow, sad, angry }
 

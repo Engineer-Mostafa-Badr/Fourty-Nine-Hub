@@ -248,25 +248,6 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           GestureDetector(
-            // onTap: () {
-            //   if (context.read<UserCubit>().isLoggedIn) {
-            //     Navigator.push(
-            //       context,
-            //       MaterialPageRoute(
-            //         builder: (context) => BlocProvider<CreateRestaurantCubit>(
-            //           create: (context) =>
-            //           serviceLocator<CreateRestaurantCubit>()..loadData(),
-            //           child: CreateRestaurantForm(
-            //             from: 'create',
-            //             restaurantId: state.isResturant?.restaurantId ?? '',
-            //           ),
-            //         ),
-            //       ),
-            //     );
-            //   } else {
-            //     context.push(Routes.REGISTER);
-            //   }
-            // },
             child: Stack(
               children: [
                 Container(
@@ -462,40 +443,6 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
     );
   }
 
-  // Widget _buildRegisterRestaurantPrompt(RestaurantsListState state) {
-  //   // return CustomApproveMealButton(text:  LocaleKeys.serveClientsByClickRegister.tr() ,onPressed: (){},);
-  //   return Padding(
-  //     padding: EdgeInsets.only(top: 10.h),
-  //     child: GestureDetector(
-  //       onTap: () {
-  //         if (context.read<UserCubit>().isLoggedIn) {
-  //           Navigator.push(
-  //             context,
-  //             MaterialPageRoute(
-  //               builder: (context) => BlocProvider<CreateRestaurantCubit>(
-  //                 create: (context) =>
-  //                     serviceLocator<CreateRestaurantCubit>()..loadData(),
-  //                 child: CreateRestaurantForm(
-  //                   from: 'create',
-  //                   restaurantId: state.isResturant?.restaurantId ?? '',
-  //                 ),
-  //               ),
-  //             ),
-  //           );
-  //         } else {
-  //           context.push(Routes.REGISTER);
-  //         }
-  //       },
-  //       child: Padding(
-  //         padding: const EdgeInsets.symmetric(horizontal: 5.0),
-  //         child: Text(
-  //           LocaleKeys.serveClientsByClickRegister.tr(),
-  //           style: Styles.mediumText(color: Colors.red),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
 
   Widget _buildSearchAndExpiredRequests() {
     return Padding(

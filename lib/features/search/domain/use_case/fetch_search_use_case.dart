@@ -24,7 +24,7 @@ class SearchParams {
   final PaginationParams params;
 
   SearchParams(
-      {required this.search, required this.params, this.filter});
+      {required this.search, required this.params,  this.filter});
 
   Map<String, dynamic> toJson() => {
         'search': search,

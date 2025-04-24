@@ -257,13 +257,13 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                         index: i + 1,
                                         length: controller.feedPagingController
                                             .itemList![index].images!.length,
-                                        onDoubleTap: () {
-                                          controller.feedPagingController
-                                                  .itemList?[index].isLove =
-                                              !controller.feedPagingController
-                                                  .itemList![index].isLove;
-                                          setState(() {});
-                                        },
+                                        // onDoubleTap: () {
+                                        //   controller.feedPagingController
+                                        //           .itemList?[index].isLove =
+                                        //       !controller.feedPagingController
+                                        //           .itemList![index].isLove;
+                                        //   setState(() {});
+                                        // },
                                       ),
                                     );
                                   }),
@@ -356,33 +356,33 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                             react: 'love',
                                           ),
                                         );
-                                        if (reacted == true) {
-                                          controller.feedPagingController
-                                                  .itemList?[index].isLove =
-                                              !controller.feedPagingController
-                                                  .itemList![index].isLove;
-                                          if (controller.feedPagingController
-                                                  .itemList?[index].isLove ==
-                                              false) {
-                                            controller
-                                                .feedPagingController
-                                                .itemList?[index]
-                                                .loveCount = (controller
-                                                    .feedPagingController
-                                                    .itemList![index]
-                                                    .loveCount -
-                                                1);
-                                          } else {
-                                            controller
-                                                .feedPagingController
-                                                .itemList?[index]
-                                                .loveCount = (controller
-                                                    .feedPagingController
-                                                    .itemList![index]
-                                                    .loveCount +
-                                                1);
-                                          }
-                                        }
+                                        // if (reacted == true) {
+                                        //   controller.feedPagingController
+                                        //           .itemList?[index].isLove =
+                                        //       !controller.feedPagingController
+                                        //           .itemList![index].isLove;
+                                        //   if (controller.feedPagingController
+                                        //           .itemList?[index].isLove ==
+                                        //       false) {
+                                        //     controller
+                                        //         .feedPagingController
+                                        //         .itemList?[index]
+                                        //         .loveCount = (controller
+                                        //             .feedPagingController
+                                        //             .itemList![index]
+                                        //             .loveCount -
+                                        //         1);
+                                        //   } else {
+                                        //     controller
+                                        //         .feedPagingController
+                                        //         .itemList?[index]
+                                        //         .loveCount = (controller
+                                        //             .feedPagingController
+                                        //             .itemList![index]
+                                        //             .loveCount +
+                                        //         1);
+                                        //   }
+                                        // }
                                         setState(() {});
                                       },
                                       color: controller.feedPagingController
@@ -468,18 +468,18 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                                               commentId: params
                                                                   .commentId),
                                                     );
-                                                    var currentPost = controller
-                                                        .feedPagingController
-                                                        .itemList
-                                                        ?.firstWhere(
-                                                            (element) =>
-                                                                element.id ==
-                                                                params.postId);
-                                                    currentPost?.commentsCount =
-                                                        (currentPost
-                                                                .commentsCount +
-                                                            1);
-                                                    return result;
+                                                    // var currentPost = controller
+                                                    //     .feedPagingController
+                                                    //     .itemList
+                                                    //     ?.firstWhere(
+                                                    //         (element) =>
+                                                    //             element.id ==
+                                                    //             params.postId);
+                                                    // currentPost?.commentsCount =
+                                                    //     (currentPost
+                                                    //             .commentsCount +
+                                                    //         1);
+                                                    // return result;
                                                   },
                                                   onAddComment:
                                                       (PostCommentParams
@@ -926,16 +926,16 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                   )),
                             ])),
                           ),
-                        Padding(
-                          padding:
-                              EdgeInsetsDirectional.symmetric(horizontal: 20.w),
-                          child: Text(
-                              controller.feedPagingController.itemList?[index]
-                                      .sinceTime ??
-                                  '',
-                              style: Styles.mediumText(
-                                  color: AppColors.GREY_NORMAL_COLOR)),
-                        ),
+                        // Padding(
+                        //   padding:
+                        //       EdgeInsetsDirectional.symmetric(horizontal: 20.w),
+                        //   child: Text(
+                        //       controller.feedPagingController.itemList?[index]
+                        //               .sinceTime ??
+                        //           '',
+                        //       style: Styles.mediumText(
+                        //           color: AppColors.GREY_NORMAL_COLOR)),
+                        // ),
                       ],
                     );
                   } else {
@@ -991,33 +991,33 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                             react: 'love',
                                           ),
                                         );
-                                        if (reacted == true) {
-                                          controller.feedPagingController
-                                                  .itemList?[index].isLove =
-                                              !controller.feedPagingController
-                                                  .itemList![index].isLove;
-                                          if (controller.feedPagingController
-                                                  .itemList?[index].isLove ==
-                                              false) {
-                                            controller
-                                                .feedPagingController
-                                                .itemList?[index]
-                                                .loveCount = (controller
-                                                    .feedPagingController
-                                                    .itemList![index]
-                                                    .loveCount -
-                                                1);
-                                          } else {
-                                            controller
-                                                .feedPagingController
-                                                .itemList?[index]
-                                                .loveCount = (controller
-                                                    .feedPagingController
-                                                    .itemList![index]
-                                                    .loveCount +
-                                                1);
-                                          }
-                                        }
+                                        // if (reacted == true) {
+                                        //   controller.feedPagingController
+                                        //           .itemList?[index].isLove =
+                                        //       !controller.feedPagingController
+                                        //           .itemList![index].isLove;
+                                        //   if (controller.feedPagingController
+                                        //           .itemList?[index].isLove ==
+                                        //       false) {
+                                        //     controller
+                                        //         .feedPagingController
+                                        //         .itemList?[index]
+                                        //         .loveCount = (controller
+                                        //             .feedPagingController
+                                        //             .itemList![index]
+                                        //             .loveCount -
+                                        //         1);
+                                        //   } else {
+                                        //     controller
+                                        //         .feedPagingController
+                                        //         .itemList?[index]
+                                        //         .loveCount = (controller
+                                        //             .feedPagingController
+                                        //             .itemList![index]
+                                        //             .loveCount +
+                                        //         1);
+                                        //   }
+                                        // }
                                         setState(() {});
                                       },
                                       color: controller.feedPagingController
@@ -1103,18 +1103,18 @@ class _InstagramPostsState extends State<InstagramPosts> {
                                                               commentId: params
                                                                   .commentId),
                                                     );
-                                                    var currentPost = controller
-                                                        .feedPagingController
-                                                        .itemList
-                                                        ?.firstWhere(
-                                                            (element) =>
-                                                                element.id ==
-                                                                params.postId);
-                                                    currentPost?.commentsCount =
-                                                        (currentPost
-                                                                .commentsCount +
-                                                            1);
-                                                    return result;
+                                                    // var currentPost = controller
+                                                    //     .feedPagingController
+                                                    //     .itemList
+                                                    //     ?.firstWhere(
+                                                    //         (element) =>
+                                                    //             element.id ==
+                                                    //             params.postId);
+                                                    // currentPost?.commentsCount =
+                                                    //     (currentPost
+                                                    //             .commentsCount +
+                                                    //         1);
+                                                    // return result;
                                                   },
                                                   onAddComment:
                                                       (PostCommentParams
@@ -1242,16 +1242,16 @@ class _InstagramPostsState extends State<InstagramPosts> {
                               ),
                             ],
                           ),
-                        Padding(
-                          padding:
-                              EdgeInsetsDirectional.symmetric(horizontal: 20.w),
-                          child: Text(
-                              controller.feedPagingController.itemList?[index]
-                                      .sinceTime ??
-                                  '',
-                              style: Styles.mediumText(
-                                  color: AppColors.GREY_NORMAL_COLOR)),
-                        ),
+                        // Padding(
+                        //   padding:
+                        //       EdgeInsetsDirectional.symmetric(horizontal: 20.w),
+                        //   child: Text(
+                        //       controller.feedPagingController.itemList?[index]
+                        //               .sinceTime ??
+                        //           '',
+                        //       style: Styles.mediumText(
+                        //           color: AppColors.GREY_NORMAL_COLOR)),
+                        // ),
                         Container(
                           height: 5.h,
                           width: double.infinity,

@@ -1555,5 +1555,7 @@
   "audioAndVideoCalls": "Audio and video calls",
   "photoVideosAndDocuments": "Photo, videos and documents",
   "locationSharing": "Location sharing",
-  "statusUpdates": "Status updates"
+  "statusUpdates": "Status updates",
+  "mostBooking": "Most Booking"
+
 }

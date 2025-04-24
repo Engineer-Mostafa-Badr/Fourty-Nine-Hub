@@ -581,12 +581,12 @@ class InstagramCubit extends Cubit<InstagramState> {
               state.copyWith(failure: failure, status: StateStatus.error),
             ), (data) {
       model = data;
-      feedPagingController.itemList
-          ?.firstWhere((element) => element.id == params.postId)
-          .commentsCount = (feedPagingController.itemList!
-              .firstWhere((element) => element.id == params.postId)
-              .commentsCount +
-          1);
+      // feedPagingController.itemList
+      //     ?.firstWhere((element) => element.id == params.postId)
+          // .commentsCount = (feedPagingController.itemList!
+          //     .firstWhere((element) => element.id == params.postId)
+          //     .commentsCount +
+          // 1);
       print(
           "CommentsCount ${feedPagingController.itemList?.firstWhere((element) => element.id == params.postId).commentsCount}");
       emit(state.copyWith(newComment: data, status: StateStatus.success));
@@ -637,7 +637,7 @@ class InstagramCubit extends Cubit<InstagramState> {
         var currentPost = feedPagingController.itemList
             ?.firstWhere((element) => element.id == postId);
         print("comment count${currentPost?.commentsCount}");
-        currentPost?.commentsCount = (currentPost.commentsCount - 1);
+        // currentPost?.commentsCount = (currentPost.commentsCount - 1);
       }
       emit(state.copyWith(status: StateStatus.success));
       showSuccessMessage(context, "Comment delete successfully");

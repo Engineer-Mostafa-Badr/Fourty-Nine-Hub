@@ -133,7 +133,6 @@ class _CurrentBookingCardState extends State<CurrentBookingCard> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           Stack(
             children: [
               HealthCustomCard(

@@ -17,21 +17,21 @@ import 'package:url_launcher/url_launcher_string.dart';
 import '../../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../../helpers/subscription_method.dart';
 import '../../../../../food_feature/food_cart/presentation/pages/cart_view.dart';
+import '../../../../../food_feature/restaurants_list/presentation/widgets/subcatigories_restaurant_card.dart';
 import '../../../../../social_media/instagram/presentation/widgets/comment_widget_insta.dart';
+import '../../../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import '../../../../../social_media/twitter/presentation/widgets/report_view.dart';
 import '../../../domain/entities/most_booking_entity.dart';
 import '../../controllers/health_cubit/health_cubit.dart';
-
-
-class DoctorsListView extends StatefulWidget {
-  const DoctorsListView({super.key, this.onClose});
+class MostBookingScreen extends StatefulWidget {
+  const MostBookingScreen({super.key, this.onClose});
   final VoidCallback? onClose;
 
   @override
-  State<DoctorsListView> createState() => _DoctorsListViewState();
+  State<MostBookingScreen> createState() => _MostBookingScreenState();
 }
 
-class _DoctorsListViewState extends State<DoctorsListView> {
+class _MostBookingScreenState extends State<MostBookingScreen> {
   late ScrollController _scrollController;
 
   @override
@@ -97,7 +97,7 @@ class _DoctorsListViewState extends State<DoctorsListView> {
                     final booking = cubit.mostBooking[index];
                     return Padding(
                       padding: const EdgeInsets.all(4.0),
-                      child: DoctorListCard(
+                      child: MostBookingCard(
                         data: booking,
                       ),
                     );
@@ -118,8 +118,8 @@ class _DoctorsListViewState extends State<DoctorsListView> {
   }
 }
 
-class DoctorListCard extends StatefulWidget {
-  const  DoctorListCard({
+class MostBookingCard extends StatefulWidget {
+  const  MostBookingCard({
     super.key,
     required this.data,
   });
@@ -127,10 +127,10 @@ class DoctorListCard extends StatefulWidget {
   final MostBookingEntity data;
 
   @override
-  State<DoctorListCard> createState() => _DoctorListCardState();
+  State<MostBookingCard> createState() => _MostBookingCardState();
 }
 
-class _DoctorListCardState extends State<DoctorListCard> {
+class _MostBookingCardState extends State<MostBookingCard> {
   String formatViews(int views) {
     if (views >= 1000000) {
       return "${(views / 1000000).toStringAsFixed(1)}M";
@@ -150,11 +150,11 @@ class _DoctorListCardState extends State<DoctorListCard> {
         // padding:const EdgeInsets.all(10) ,
         decoration: BoxDecoration(
             border: Border.all(
-                color: AppColors.black.withOpacity(0.7),
-                width: 1
+              color: AppColors.black.withOpacity(0.7),
+              width: 1
             ),
-            borderRadius: BorderRadius.circular(15)
-        ),
+          borderRadius: BorderRadius.circular(15) 
+          ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
@@ -169,16 +169,19 @@ class _DoctorListCardState extends State<DoctorListCard> {
                     children: [
                       SvgPicture.asset(Assets.viewCountIcon,color: Colors.grey,),
                       Label(text: formatViews(widget.data.viewCount?.toInt() ?? 0),
-                        style: Styles.smallText(
-                            fontWeight: FontWeight.w400,
+                        style:Styles.smallText(
                             color: AppColors.c6C6C6C,
-                          fontSize: 12,
-
-                        ),
+                          // fontSize: 12
+                        )
+                        // const TextStyle(
+                        //     fontSize: 12,
+                        //     fontWeight: FontWeight.w400,
+                        //     color: AppColors.c6C6C6C
+                        // ),
                       ),
                       Label(text: LocaleKeys.views.localize,
-                        style: const TextStyle(
-                            fontSize: 12,
+                        style:  Styles.mediumText(
+                            // fontSize: 12,
                             fontWeight: FontWeight.w400,
                             color: AppColors.c6C6C6C
                         ),
@@ -188,10 +191,10 @@ class _DoctorListCardState extends State<DoctorListCard> {
                   Label(
                     text: widget.data.subscriptionType ?? "N/A" ,
                     textAlign: TextAlign.right,
-                    style: const TextStyle(
+                    style: Styles.mediumText(
                         color: AppColors.PRIMARY_COLOR_DARK,
                         fontWeight: FontWeight.w700,
-                        fontSize: 16
+                        // fontSize: 16
                     ),
                   ),
                 ],
@@ -212,32 +215,38 @@ class _DoctorListCardState extends State<DoctorListCard> {
                       Stack(
                         clipBehavior: Clip.none,
                         children: [
+
                           ClipRRect(
                             borderRadius: BorderRadius.circular(15),
-                            child: Image.network(
-                              widget.data.profilePicture ?? '',
+                            child:ImageFromInternet(
+                              image: widget.data.profilePicture ?? '',
                               width: 56,
                               height: 56,
-                              fit: BoxFit.cover,
-                              loadingBuilder: (context, child, loadingProgress) {
-                                if (loadingProgress == null) return child;
-                                return Container(
-                                  width: 56,
-                                  height: 56,
-                                  alignment: Alignment.center,
-                                  child: const CircularProgressIndicator(strokeWidth: 2),
-                                );
-                              },
-                              errorBuilder: (context, error, stackTrace) {
-                                return Container(
-                                  width: 56,
-                                  height: 56,
-                                  color: Colors.grey[300],
-                                  alignment: Alignment.center,
-                                  child: const Icon(Icons.error, color: Colors.red, size: 24),
-                                );
-                              },
                             ),
+                            // Image.network(
+                            //   widget.data.profilePicture ?? '',
+                            //   width: 56,
+                            //   height: 56,
+                            //   fit: BoxFit.cover,
+                            //   loadingBuilder: (context, child, loadingProgress) {
+                            //     if (loadingProgress == null) return child;
+                            //     return Container(
+                            //       width: 56,
+                            //       height: 56,
+                            //       alignment: Alignment.center,
+                            //       child: const CircularProgressIndicator(strokeWidth: 2),
+                            //     );
+                            //   },
+                            //   errorBuilder: (context, error, stackTrace) {
+                            //     return Container(
+                            //       width: 56,
+                            //       height: 56,
+                            //       color: Colors.grey[300],
+                            //       alignment: Alignment.center,
+                            //       child: const Icon(Icons.error, color: Colors.red, size: 24),
+                            //     );
+                            //   },
+                            // ),
                           ),
                           Positioned(
                             top: 0,
@@ -255,9 +264,9 @@ class _DoctorListCardState extends State<DoctorListCard> {
                                   const SizedBox(width: 2),
                                   Text(
                                     "${widget.data.averageRating ?? 0}",
-                                    style: const TextStyle(
+                                    style:  Styles.smallText(
                                       color: Colors.black,
-                                      fontSize: 10,
+                                      // fontSize: 10,
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
@@ -274,9 +283,9 @@ class _DoctorListCardState extends State<DoctorListCard> {
                           children: [
                             Text(
                               "${widget.data.firstName ?? "N/A"} ${widget.data.lastName ?? ""}",
-                              style: const TextStyle(
+                              style: Styles.mediumText(
                                 fontWeight: FontWeight.w600,
-                                fontSize: 16,
+                                // fontSize: 16,
                               ),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
@@ -286,9 +295,9 @@ class _DoctorListCardState extends State<DoctorListCard> {
                               context.isArabic
                                   ? widget.data.subCategory?.first.nameAr ?? "N/A"
                                   : widget.data.subCategory?.first.nameEn ?? "N/A",
-                              style: const TextStyle(
+                              style:Styles.mediumText(
                                 fontWeight: FontWeight.w400,
-                                fontSize: 14,
+                                // fontSize: 14,
                               ),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
@@ -304,6 +313,10 @@ class _DoctorListCardState extends State<DoctorListCard> {
                       Icon(Icons.location_on_rounded,color:context.isDarkMode
                           ? AppColors.PRIMARY_COLOR_DARK : AppColors.PRIMARY_COLOR,),
                       Expanded(child: Label(
+                        style: Styles.headerText(
+                          fontSize: 24,
+                          color: Colors.black,
+                        ),
                         text: context.isArabic
                             ? "${widget.data.address?.governorate?.governorateNameAr ?? "N/A"} , ${widget.data.address?.city?.cityNameAr ?? "N/A"}"
                             : "${widget.data.address?.governorate?.governorateNameEn ?? "N/A"} , ${widget.data.address?.city?.cityNameEn ?? "N/A"}",
@@ -351,7 +364,7 @@ class _DoctorListCardState extends State<DoctorListCard> {
                       Label(
                         text: '${widget.data.bookingCount ?? 0}/${LocaleKeys.book.localize}',
                         style: Styles.mediumText(fontWeight: FontWeight.w500,
-                            color: AppColors.PRIMARY_COLOR_DARK
+                        color: AppColors.PRIMARY_COLOR_DARK
                         ),
                       )
                     ],
@@ -359,8 +372,8 @@ class _DoctorListCardState extends State<DoctorListCard> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      SizedBox(
-                          width: 180,
+                      Expanded(
+                          flex: 5,
                           child: PremiumAndRequestButtons(item: widget.data)),
                       CallMessageReportButtons(item: widget.data),
                     ],
