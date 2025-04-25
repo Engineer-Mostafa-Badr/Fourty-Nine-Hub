@@ -86,7 +86,7 @@ class _BookingHistoryScreenState extends State<BookingHistoryScreen> {
                   separatorBuilder: (context, index) => const Sizer(),
                 ),
               ),
-              if (state.isLoadingMoreBooking!)
+              if (state.isLoadingMoreBooking == true)
                 const Padding(
                   padding: EdgeInsets.all(8.0),
                   child: CircularProgressIndicator(),

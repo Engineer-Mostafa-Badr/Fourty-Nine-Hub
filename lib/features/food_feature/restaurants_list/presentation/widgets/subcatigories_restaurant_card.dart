@@ -186,22 +186,23 @@ class PropertyCard extends StatelessWidget {
                   children: [
                     SvgPicture.asset(
                       Assets.viewCountIcon,
-                      color: Colors.grey,
+                      color:context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR,
                     ),
                     Label(
                       text: formatViews(item.totalViews!.toInt()),
-                      style: const TextStyle(
-                        fontSize: 12,
+                      style:  Styles.mediumText(
+                        // fontSize: 12,
                         fontWeight: FontWeight.w400,
-                        color: AppColors.c6C6C6C,
+                        // color: AppColors.c6C6C6C,
+                        color:context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR,
                       ),
                     ),
                     Label(
                       text: LocaleKeys.views.localize,
-                      style: const TextStyle(
-                        fontSize: 12,
+                      style:  Styles.mediumText(
+                        // fontSize: 12,
                         fontWeight: FontWeight.w400,
-                        color: AppColors.c6C6C6C,
+                        color:context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR,
                       ),
                     ),
                   ],
@@ -209,9 +210,10 @@ class PropertyCard extends StatelessWidget {
                 Label(
                   text: item.subscriptionType ?? "N/A",
                   textAlign: TextAlign.right,
-                  style: const TextStyle(
+                  style: Styles.mediumText(
                     fontWeight: FontWeight.w700,
-                    fontSize: 16,
+                    color:context.isDarkMode ? AppColors.whiteColor :  AppColors.PRIMARY_COLOR_DARK,
+                    // fontSize: 16,
                   ),
                 ),
               ],
@@ -519,6 +521,7 @@ class DetailsSection extends StatelessWidget {
                     RatingBar(
                       initialRating: item.totalRating ?? 0,
                       ignoreGestures: true,
+                      allowHalfRating: true,
                       itemPadding: const EdgeInsets.symmetric(horizontal: 3),
                       ratingWidget: RatingWidget(
                         full: SvgPicture.asset(Assets.star1),

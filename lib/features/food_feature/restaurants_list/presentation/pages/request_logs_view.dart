@@ -166,10 +166,12 @@ class TripLogRequestCard extends StatelessWidget {
 
           child: Container(
                   // elevation: context.isDarkMode ? 0 : 2,
-                 decoration: BoxDecoration(
-                     color: orderData.seen  == true ? Colors.white : AppColors.cD9D9D9,
-                   borderRadius: BorderRadius.circular(15)
-                 ),
+            decoration: BoxDecoration(
+              color: context.isDarkMode
+                  ? (orderData.seen == true ? AppColors.PRIMARY_COLOR : AppColors.PRIMARY_COLOR_LIGHT)
+                  : (orderData.seen == true ? AppColors.GRAY_LIGHT_COLOR3 : AppColors.cD9D9D9),
+              borderRadius: BorderRadius.circular(15),
+            ),
                   child: Row(
                     children: [
                       ClipRRect(

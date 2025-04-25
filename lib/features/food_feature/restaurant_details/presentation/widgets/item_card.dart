@@ -153,7 +153,7 @@ class _ItemCardState extends State<ItemCard> {
 
             // QUANTITY AND ADD TO CART - STATIC POSITION
             Container(
-              padding: const EdgeInsets.only(top: 8, right: 8), // Match main content alignment
+              padding:  EdgeInsetsDirectional.only(top: 8, end: 8), // Match main content alignment
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [

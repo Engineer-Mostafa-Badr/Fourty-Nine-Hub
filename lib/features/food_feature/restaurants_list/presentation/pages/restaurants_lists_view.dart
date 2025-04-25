@@ -105,12 +105,8 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
       shrinkWrap: true,
       children: [
         const MealBanner(),
-        // if (!(state.isResturant?.isRestaurant ?? false))
         _buildRegisterRestaurantPrompt(state),
         const Sizer(),
-        // if ((state.isResturant?.isRestaurant ?? false) &&
-        //     (state.isResturant?.approved ?? false))
-        //   const ResturantDashboardButton(),
         _buildSearchAndExpiredRequests(),
         if (_showSearch)
           BlocProvider(
@@ -135,7 +131,6 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
               onClose: () => setState(() => _showExpire = false),
             ),
           ),
-
         if (_showLog)
           BlocProvider(
             create: (context) =>
@@ -240,13 +235,12 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
   }
 
   Widget _buildRegisterRestaurantPrompt(RestaurantsListState state) {
-    // return CustomApproveMealButton(text:  LocaleKeys.serveClientsByClickRegister.tr() ,onPressed: (){},);
-    //        if (!(state.isResturant?.isRestaurant ?? false))
     return Padding(
       padding: EdgeInsetsDirectional.symmetric(horizontal: 0, vertical: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          if (context.read<UserCubit>().isLoggedIn)
           GestureDetector(
             child: Stack(
               children: [
@@ -387,7 +381,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
           ),
           if (state.isResturant?.approved != null)
             state.isResturant?.approved == true
-                ? const SizedBox() // show SizedBox if approved is true
+                ? const SizedBox()
                 : Label(
                     style: const TextStyle(
                       fontWeight: FontWeight.w600,
@@ -397,53 +391,10 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                     textAlign: TextAlign.end,
                     text: LocaleKeys.waitingApproval.localize,
                   ),
-
-          // if(state.isResturant?.approved != null)
-          //   Label(
-          //     style: TextStyle(
-          //       fontWeight: FontWeight.w600,
-          //       fontSize: 14,
-          //       color: AppColors.PRIMARY_COLOR_DARK
-          //     ),
-          //     textAlign: TextAlign.end,
-          //       text: state.isResturant?.approved == false ? LocaleKeys.waitingApproval.localize :null),
         ],
       ),
     );
-    return Padding(
-      padding: EdgeInsets.only(top: 10.h),
-      child: GestureDetector(
-        onTap: () {
-          if (context.read<UserCubit>().isLoggedIn) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => BlocProvider<CreateRestaurantCubit>(
-                  create: (context) =>
-                      serviceLocator<CreateRestaurantCubit>()..loadData(),
-                  child: CreateRestaurantForm(
-                    from: 'create',
-                    restaurantId: state.isResturant?.restaurantId ?? '',
-                  ),
-                ),
-              ),
-            );
-          } else {
-            context.push(Routes.REGISTER);
-          }
-        },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 5.0),
-          child: Text(
-            LocaleKeys.serveClientsByClickRegister.tr(),
-            style: Styles.mediumText(color: Colors.red),
-          ),
-        ),
-      ),
-    );
   }
-
-
   Widget _buildSearchAndExpiredRequests() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -465,12 +416,12 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                     context.push(Routes.LOGIN);
                   }
                 },
-                child: Icon(
+                child:Icon(
                   _showSearch ? Icons.search_off_rounded : Icons.search,
                   color: _showSearch
-                      ? AppColors.PRIMARY_COLOR_DARK
-                      : AppColors.PRIMARY_COLOR,
-                ),
+                      ? (context.isDarkMode ? AppColors.PRIMARY_COLOR_DARK : AppColors.PRIMARY_COLOR_DARK)
+                      : (context.isDarkMode ? AppColors.PRIMARY_COLOR_DARK : AppColors.PRIMARY_COLOR),
+                )
               ),
               const Sizer(),
               InkWell(
@@ -479,7 +430,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                   },
                   child: Icon(
                     Icons.shopping_cart,
-                    color: Colors.black,
+                    // color: Colors.black,
                   )),
             ],
           ),
