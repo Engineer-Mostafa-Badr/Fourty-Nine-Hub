@@ -211,6 +211,10 @@ class RideCubit extends Cubit<RideState> {
       SharedWebSocket.socket!.on("RIDE:DRIVER_STARTED_TRIP", (data) {
         CliLogger.info("RIDE:DRIVER_STARTED_TRIP:  $data");
       });
+      // trip ended socket event
+      SharedWebSocket.socket!.on("RIDE:DRIVER_COMPLETED_TRIP", (data) {
+        CliLogger.info("RIDE:DRIVER_COMPLETED_TRIP:  $data");
+      });
     }
   }
 

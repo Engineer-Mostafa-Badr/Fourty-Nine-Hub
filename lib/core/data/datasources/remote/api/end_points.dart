@@ -1471,4 +1471,8 @@ class EndPoints {
   static const getBookingCurrent = '/health/bookings';
   static const getReqLogCount = '/food/request-logs-unseen-count';
   static const setRequestLogSeen = '/food/set-request-is-seen/';
+  static const getMostBooking = '/health/doctors';
+
+  static const getDoctorList = '/health/doctors';
+
 }

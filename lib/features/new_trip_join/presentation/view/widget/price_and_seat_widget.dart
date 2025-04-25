@@ -1,17 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:go_router/go_router.dart';
 
-class PriceAndSeatWidget extends StatelessWidget {
+import '../../../../../routes/routes.dart';
+import '../../../../RideFeature/presentation/pages/osm_search_and_pick.dart';
+
+class PriceAndSeatWidget extends StatefulWidget {
   const PriceAndSeatWidget({
     super.key,
   });
+
+
+  @override
+  State<PriceAndSeatWidget> createState() => _PriceAndSeatWidgetState();
+}
+
+class _PriceAndSeatWidgetState extends State<PriceAndSeatWidget> {
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+
         Text(
           context.isArabic ? "السعر/المقعد" : "Price/Seat",
           style: TextStyle(

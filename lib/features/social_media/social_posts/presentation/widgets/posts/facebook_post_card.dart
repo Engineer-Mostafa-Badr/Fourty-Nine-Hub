@@ -915,9 +915,9 @@ class _FacebookPostCardState extends State<FacebookPostCard> {
                       _buildActivityFeelingWidget(post),
                       RichText(
                           text: TextSpan(children: [
-                            TextSpan(
-                                text: "${post.sinceTime}.",
-                                style: Styles.mediumText(color: Colors.grey)),
+                            // TextSpan(
+                            //     text: "${post.sinceTime}.",
+                            //     style: Styles.mediumText(color: Colors.grey)),
                             const WidgetSpan(
                                 child: Sizer()),
 

@@ -151,11 +151,11 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                                 image: sortedPosts[index].images![i],
                                 index: i + 1,
                                 length: sortedPosts[index].images!.length,
-                                onDoubleTap: () {
-                                  sortedPosts[index].isLove =
-                                      !sortedPosts[index].isLove;
-                                  setState(() {});
-                                },
+                                // onDoubleTap: () {
+                                //   sortedPosts[index].o =
+                                //       !sortedPosts[index].isLove;
+                                //   setState(() {});
+                                // },
                               );
                             }),
                       ),
@@ -208,20 +208,20 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                                           react: 'love',
                                         ),
                                       );
-                                      if (reacted == true) {
-                                        sortedPosts[index].isLove =
-                                            !sortedPosts[index].isLove;
-                                        if (sortedPosts[index].isLove ==
-                                            false) {
-                                          sortedPosts[index].loveCount =
-                                              (sortedPosts[index].loveCount -
-                                                  1);
-                                        } else {
-                                          sortedPosts[index].loveCount =
-                                              (sortedPosts[index].loveCount +
-                                                  1);
-                                        }
-                                      }
+                                      // if (reacted == true) {
+                                      //   sortedPosts[index].isLove =
+                                      //       !sortedPosts[index].isLove;
+                                      //   if (sortedPosts[index].isLove ==
+                                      //       false) {
+                                      //     sortedPosts[index].loveCount =
+                                      //         (sortedPosts[index].loveCount -
+                                      //             1);
+                                      //   } else {
+                                      //     sortedPosts[index].loveCount =
+                                      //         (sortedPosts[index].loveCount +
+                                      //             1);
+                                      //   }
+                                      // }
                                       setState(() {});
                                     },
                                     color: sortedPosts[index].isLove == true
@@ -291,15 +291,15 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                                                             commentId: params
                                                                 .commentId),
                                                   );
-                                                  var currentPost = sortedPosts
-                                                      .firstWhere((element) =>
-                                                          element.id ==
-                                                          params.postId);
-                                                  currentPost.commentsCount =
-                                                      (currentPost
-                                                              .commentsCount +
-                                                          1);
-                                                  return result;
+                                                  // var currentPost = sortedPosts
+                                                  //     .firstWhere((element) =>
+                                                  //         element.id ==
+                                                  //         params.postId);
+                                                  // currentPost.commentsCount =
+                                                  //     (currentPost
+                                                  //             .commentsCount +
+                                                  //         1);
+                                                  // return result;
                                                 },
                                                 onAddComment: (PostCommentParams
                                                     params) async {
@@ -722,13 +722,13 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                                 )),
                           ])),
                         ),
-                      Padding(
-                        padding:
-                            EdgeInsetsDirectional.symmetric(horizontal: 20.w),
-                        child: Text(sortedPosts[index].sinceTime,
-                            style: Styles.mediumText(
-                                color: AppColors.GREY_NORMAL_COLOR)),
-                      ),
+                      // Padding(
+                      //   padding:
+                      //       EdgeInsetsDirectional.symmetric(horizontal: 20.w),
+                      //   child: Text(sortedPosts[index].sinceTime,
+                      //       style: Styles.mediumText(
+                      //           color: AppColors.GREY_NORMAL_COLOR)),
+                      // ),
                     ],
                   );
                 } else {
@@ -776,20 +776,20 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                                           react: 'love',
                                         ),
                                       );
-                                      if (reacted == true) {
-                                        sortedPosts[index].isLove =
-                                            !sortedPosts[index].isLove;
-                                        if (sortedPosts[index].isLove ==
-                                            false) {
-                                          sortedPosts[index].loveCount =
-                                              (sortedPosts[index].loveCount -
-                                                  1);
-                                        } else {
-                                          sortedPosts[index].loveCount =
-                                              (sortedPosts[index].loveCount +
-                                                  1);
-                                        }
-                                      }
+                                      // if (reacted == true) {
+                                      //   sortedPosts[index].isLove =
+                                      //       !sortedPosts[index].isLove;
+                                      //   if (sortedPosts[index].isLove ==
+                                      //       false) {
+                                      //     sortedPosts[index].loveCount =
+                                      //         (sortedPosts[index].loveCount -
+                                      //             1);
+                                      //   } else {
+                                      //     sortedPosts[index].loveCount =
+                                      //         (sortedPosts[index].loveCount +
+                                      //             1);
+                                      //   }
+                                      // }
                                       setState(() {});
                                     },
                                     color: sortedPosts[index].isLove == true
@@ -863,10 +863,10 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                                                       .firstWhere((element) =>
                                                           element.id ==
                                                           params.postId);
-                                                  currentPost.commentsCount =
-                                                      (currentPost
-                                                              .commentsCount +
-                                                          1);
+                                                  // currentPost.commentsCount =
+                                                  //     (currentPost
+                                                  //             .commentsCount +
+                                                  //         1);
                                                   return result;
                                                 },
                                                 onAddComment: (PostCommentParams
@@ -981,13 +981,13 @@ class _InstagramProfilePostsViewState extends State<InstagramProfilePostsView> {
                             ),
                           ],
                         ),
-                      Padding(
-                        padding:
-                            EdgeInsetsDirectional.symmetric(horizontal: 20.w),
-                        child: Text(sortedPosts[index].sinceTime,
-                            style: Styles.mediumText(
-                                color: AppColors.GREY_NORMAL_COLOR)),
-                      ),
+                      // Padding(
+                      //   padding:
+                      //       EdgeInsetsDirectional.symmetric(horizontal: 20.w),
+                      //   child: Text(sortedPosts[index].sinceTime,
+                      //       style: Styles.mediumText(
+                      //           color: AppColors.GREY_NORMAL_COLOR)),
+                      // ),
                       Container(
                         height: 5.h,
                         width: double.infinity,

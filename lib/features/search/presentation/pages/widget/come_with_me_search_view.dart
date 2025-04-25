@@ -15,6 +15,7 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ComeWithMeSearchView extends StatefulWidget {
   const ComeWithMeSearchView({
@@ -41,11 +42,18 @@ class _ViewAllTripJoinCardBuilderState extends State<ComeWithMeSearchView> {
     _scrollController = ScrollController()..addListener(_onScroll);
   }
 
-  void _onScroll() {
+  void _onScroll() async{
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
+      final prefs = await SharedPreferences.getInstance();
+      String? filter = prefs.getString('filter');
+      SearchParams searchParams = SearchParams(
+          filter: filter,
+          params: widget.params.params,
+          search: widget.params.search
+      );
       context.read<SearchCubit>().getPaginatedTripComeSearch(
-          params:widget.params);
+          params:searchParams);
     }
   }
 

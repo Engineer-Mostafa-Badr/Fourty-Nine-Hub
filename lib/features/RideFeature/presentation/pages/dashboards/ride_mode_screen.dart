@@ -34,7 +34,6 @@ class RideModeScreen extends StatefulWidget {
 class _RideModeScreenState extends State<RideModeScreen> {
   final ScrollController _scrollController = ScrollController();
   late ScrollController _availableTripsScrollController;
-  int _selectedIndex = 0;
 
   @override
   void initState() {
@@ -125,17 +124,37 @@ class _RideModeScreenState extends State<RideModeScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            _buildTabItem(0, LocaleKeys.availableTrips.tr()),
+                            _buildTabItem(cubit.state.currentIndex??0,0, LocaleKeys.availableTrips.tr(),() {
+                              cubit.changeIndex(0,context);
+                              // setState(() {
+                              //   _selectedIndex = 0;
+                              // });
+                            },),
                             if (widget.params.isSocket == true)
-                              _buildTabItem(1, LocaleKeys.runningTrips.tr()),
-                            _buildTabItem(2, LocaleKeys.pastTrips.tr()),
-                            _buildFilterIcon(),
+                              _buildTabItem(cubit.state.currentIndex??0,1, LocaleKeys.runningTrips.tr(),() {
+                                cubit.changeIndex(1,context);
+                                // setState(() {
+                                //   _selectedIndex = 1;
+                                // });
+                              },),
+                            _buildTabItem(cubit.state.currentIndex??0,2, LocaleKeys.pastTrips.tr(),() {
+                              cubit.changeIndex(2,context);
+                              // setState(() {
+                              //   _selectedIndex = 2;
+                              // });
+                            },),
+                            _buildFilterIcon( () {
+                              cubit.changeIndex(3,context);
+                              // setState(() {
+                              //   _selectedIndex = 3;
+                              // });
+                            },cubit.state.currentIndex??0),
                           ],
                         ),
                       ),
                       const SizedBox(height: 10),
                       // Available Trips
-                      if (_selectedIndex == 0)
+                      if (cubit.state.currentIndex == 0)
                         Expanded(
                           child: (state.settings?.isReady ?? true)
                               ? Padding(
@@ -190,13 +209,13 @@ class _RideModeScreenState extends State<RideModeScreen> {
                               : const NotReadyAvailableTripsWidget(),
                         )
                       // running Trips
-                      else if (_selectedIndex == 1)
+                      else if (cubit.state.currentIndex == 1)
                         Expanded(
                             child: DynamicMapWithPolyline(
                                 url: getMapUrl(context, type: "mapBox"),
                                 apiKey: getApiKey(context, type: "mapBox")))
                       // Past Trips
-                      else if (_selectedIndex == 2)
+                      else if (cubit.state.currentIndex == 2)
                         Expanded(
                           child: Padding(
                             padding:
@@ -221,7 +240,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
                           ),
                         )
                       // Settings
-                      else if (_selectedIndex == 3)
+                      else if (cubit.state.currentIndex == 3)
                         Expanded(
                             child: state.isLoadingSettings
                                 ? const Center(
@@ -242,22 +261,19 @@ class _RideModeScreenState extends State<RideModeScreen> {
     );
   }
 
-  Widget _buildTabItem(int index, String title) {
+  Widget _buildTabItem(int currentIndex,int index, String title,GestureTapCallback? onTap) {
     return Expanded(
       flex: 3,
       child: GestureDetector(
-        onTap: () {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
+        onTap:onTap,
+
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 6),
           margin: const EdgeInsets.symmetric(horizontal: 5),
           height: 30,
           alignment: AlignmentDirectional.center,
           decoration: BoxDecoration(
-            color: _selectedIndex == index
+            color: currentIndex == index
                 ? AppColors.PRIMARY_COLOR
                 : AppColors.GREYBG,
             borderRadius: BorderRadius.circular(10),
@@ -267,7 +283,7 @@ class _RideModeScreenState extends State<RideModeScreen> {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-                color: _selectedIndex == index
+                color: currentIndex == index
                     ? AppColors.whiteColor
                     : AppColors.black,
                 fontSize: 10,
@@ -278,28 +294,24 @@ class _RideModeScreenState extends State<RideModeScreen> {
     );
   }
 
-  Widget _buildFilterIcon() {
+  Widget _buildFilterIcon(GestureTapCallback? onTap,int selectedIndex) {
     return Expanded(
       flex: 2,
       child: GestureDetector(
-        onTap: () {
-          setState(() {
-            _selectedIndex = 3;
-          });
-        },
+        onTap:onTap,
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           margin: const EdgeInsets.symmetric(horizontal: 5),
           height: 30,
           decoration: BoxDecoration(
-            color: _selectedIndex == 3
+            color: selectedIndex == 3
                 ? AppColors.PRIMARY_COLOR
                 : AppColors.GREYBG,
             borderRadius: BorderRadius.circular(20),
           ),
           child: Image.asset(
             Assets.option,
-            color: _selectedIndex == 3 ? AppColors.whiteColor : AppColors.black,
+            color: selectedIndex == 3 ? AppColors.whiteColor : AppColors.black,
           ),
         ),
       ),

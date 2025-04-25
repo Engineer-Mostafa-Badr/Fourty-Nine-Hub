@@ -1523,6 +1523,7 @@ abstract class  LocaleKeys {
   static const followedBy = 'followedBy';
   static const socialExplain = 'socialExplain';
   static const imBookingOfAnotherClient = 'imBookingOfAnotherClient';
+  static const mostBooking = 'mostBooking';
   static const firstImpressionMessage = 'firstImpressionMessage';
   static const endToEndDescription = 'endToEndDescription';
   static const yourChatsAndCallArePrivate = 'yourChatsAndCallArePrivate';

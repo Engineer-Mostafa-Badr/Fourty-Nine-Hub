@@ -80,6 +80,10 @@ class DashboardsCubit extends Cubit<DashboardsState> {
   ) : super(const DashboardsState());
   List<TripEntity> availableTripsNonSocket = [];
 
+  void changeIndex(int index,BuildContext context){
+    emit(state.copyWith(currentIndex: index, status: DashboardsStates.success));
+    if(index==0)loadAvailableRideTrips(context);
+  }
   void listenToNewTrip() {
     CliLogger.info('Listen To New Trip');
     // TripsResponseEntity
