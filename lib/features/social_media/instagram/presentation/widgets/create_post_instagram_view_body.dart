@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/error/custom_error.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -10,6 +12,8 @@ import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/app_bar_create_post_instagram.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/floating_action_button_create_post_instagram.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/post_body_create_post_instagram.dart';
+import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
@@ -88,7 +92,8 @@ class CreatePostInstagramViewBody extends StatelessWidget {
         }
         if (state.status.isError) {
           return CustomError(
-            errMessage: getFailureMessage(state.failure?? UnknownFailure(''), context),
+            errMessage:
+                getFailureMessage(state.failure ?? UnknownFailure(''), context),
           );
         }
         return Stack(
@@ -101,9 +106,10 @@ class CreatePostInstagramViewBody extends StatelessWidget {
                 return Column(
                   children: [
                     AppBarCreatePostInstagram(
-                      postType: context
+                      postIndex: context
                           .read<CreatePostInstagramCubit>()
-                          .postTypes[state.postTypeSelectedIndex],
+                          .postTypes[state.postTypeSelectedIndex]
+                          .index,
                       onPressed: () {
                         if (state.postTypeSelectedIndex == 0) {
                           bool isEmpty = context
@@ -142,10 +148,10 @@ class CreatePostInstagramViewBody extends StatelessWidget {
                             // selectedImage: selectedImage,
                             ),
                       ),
-                    if (state.postTypeSelectedIndex == 1)
-                      const Expanded(child: Placeholder()),
+                    // if (state.postTypeSelectedIndex == 1)
+                    //   const Expanded(child: Placeholder()),
                     if (state.postTypeSelectedIndex == 2)
-                      const Expanded(child: Placeholder()),
+                      const Expanded(child: ReelBodyCreatePostInstagram()),
                   ],
                 );
               },
@@ -204,6 +210,92 @@ class CreatePostInstagramViewBody extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+}
+
+class ReelBodyCreatePostInstagram extends StatelessWidget {
+  const ReelBodyCreatePostInstagram({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Row(
+            children: [
+              Label(
+                text: LocaleKeys.recents.localize,
+                style: Styles.mediumText(
+                  fontSize: 36,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(
+                width: 6,
+              ),
+              const Icon(
+                Icons.keyboard_arrow_down,
+                size: 16,
+              ),
+              const Spacer(),
+              InkWell(
+                borderRadius: BorderRadius.circular(10),
+                onTap: () {},
+                child: Container(
+                  padding: const EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: SvgPicture.asset(
+                    Assets.createPostInstagramMultiImageIcon,
+                    height: 20,
+                    width: 20,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        Expanded(
+          child: GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              crossAxisSpacing: 3,
+              mainAxisSpacing: 3,
+              childAspectRatio: 123 / 221,
+            ),
+            itemCount: 14, // images.length + (state.hasMoreImages ? 1 : 0),
+            itemBuilder: (context, index) {
+              return Stack(
+                children: [
+                  Container(
+                    color: Colors.teal,
+                  ),
+                  Positioned.directional(
+                    textDirection: TextDirection.ltr,
+                    bottom: 6,
+                    end: 5,
+                    child: Label(
+                      text: '0:12',
+                      style: Styles.smallText(
+                        fontSize: 24,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }

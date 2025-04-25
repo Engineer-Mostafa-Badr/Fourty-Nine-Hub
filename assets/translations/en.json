@@ -263,6 +263,7 @@
   "pay": "Pay",
   "postSuccessfully": "Post Successfully",
   "post": "Post",
+  "post2": "Post",
   "uploadImage": "Upload Image",
   "fieldIsRequired": "Field is required",
   "character": "You can't type more than 150 characters",
@@ -399,6 +400,7 @@
   "followerList": "Followers List",
   "friendRequest": "Friend Request",
   "followRequest": "Follow Request",
+  "followRequests": "Follow Requests",
   "public": "Public",
   "followers": "Followers",
   "onlyMe": "Only Me",
@@ -1556,6 +1558,8 @@
   "photoVideosAndDocuments": "Photo, videos and documents",
   "locationSharing": "Location sharing",
   "statusUpdates": "Status updates",
-  "mostBooking": "Most Booking"
-
+  "mostBooking": "Most Booking",
+  "manage": "Manage",
+  "newReel": "New Reel",
+  "newStory": "New Story"
 }

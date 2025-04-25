@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/create_post_instagram_cubit/create_post_instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
-import 'package:photo_manager/photo_manager.dart';
 
 class PostBodyCreatePostInstagramGridView extends StatelessWidget {
   const PostBodyCreatePostInstagramGridView({
@@ -42,50 +41,48 @@ class PostBodyCreatePostInstagramGridView extends StatelessWidget {
             if (index < state.images.length) {
               return GestureDetector(
                   onTap: () {
-                    context
-                        .read<CreatePostInstagramCubit>()
-                        .onTapImage(index);
+                    context.read<CreatePostInstagramCubit>().onTapImage(index);
                   },
                   child:
-                  // true ?
-                  ImageFromInternet(
+                      // true ?
+                      ImageFromInternet(
                     image: images[index].path,
                     fromFile: true,
                   )
-                // :
+                  // :
 
-                //  Container(
-                //     alignment: Alignment.topRight,
-                //     padding: const EdgeInsets.all(8),
-                //     decoration: BoxDecoration(
-                //         image: DecorationImage(
-                //       image: MemoryImage(snapshot.data!),
-                //       fit: BoxFit.cover,
-                //     )),
-                //     child: multiSelect
-                //         ? Container(
-                //             width: 25,
-                //             height: 25,
-                //             decoration: BoxDecoration(
-                //                 shape: BoxShape.circle,
-                //                 color: Colors.white.withOpacity(0.4),
-                //                 border: Border.all(color: Colors.white)),
-                //             child: Center(
-                //                 child:
-                //                     selectedMeda.contains(images[index])
-                //                         ? Text(
-                //                             (selectedMeda.indexOf(
-                //                                         images[index]) +
-                //                                     1)
-                //                                 .toString(),
-                //                             style: Styles.headerText(
-                //                                 color: Colors.white,
-                //                                 fontSize: 30),
-                //                           )
-                //                         : null),
-                //           )
-                //         : null),
-              );
+                  //  Container(
+                  //     alignment: Alignment.topRight,
+                  //     padding: const EdgeInsets.all(8),
+                  //     decoration: BoxDecoration(
+                  //         image: DecorationImage(
+                  //       image: MemoryImage(snapshot.data!),
+                  //       fit: BoxFit.cover,
+                  //     )),
+                  //     child: multiSelect
+                  //         ? Container(
+                  //             width: 25,
+                  //             height: 25,
+                  //             decoration: BoxDecoration(
+                  //                 shape: BoxShape.circle,
+                  //                 color: Colors.white.withOpacity(0.4),
+                  //                 border: Border.all(color: Colors.white)),
+                  //             child: Center(
+                  //                 child:
+                  //                     selectedMeda.contains(images[index])
+                  //                         ? Text(
+                  //                             (selectedMeda.indexOf(
+                  //                                         images[index]) +
+                  //                                     1)
+                  //                                 .toString(),
+                  //                             style: Styles.headerText(
+                  //                                 color: Colors.white,
+                  //                                 fontSize: 30),
+                  //                           )
+                  //                         : null),
+                  //           )
+                  //         : null),
+                  );
               // return FutureBuilder<File?>(
               //   // future: images[index].originBytes, // تصغير الصور
               //   future: images[index].file,

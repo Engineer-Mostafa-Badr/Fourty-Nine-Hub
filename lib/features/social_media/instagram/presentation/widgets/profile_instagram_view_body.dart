@@ -75,25 +75,36 @@ class _ProfileInstagramViewBodyState extends State<ProfileInstagramViewBody>
         const SliverToBoxAdapter(
           child: ButtonsProfileInstagramSection(),
         ),
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 24),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Label(
-                  text: LocaleKeys.discoverPeople.localize,
-                  style: Styles.mediumText(),
-                ),
-                Label(
-                  text: LocaleKeys.seeAll.localize,
-                  style: Styles.mediumText(
-                    color: const Color(0xFFFF3308),
-                  ),
-                ),
-              ],
-            ),
-          ),
+        BlocBuilder<ProfileInstagramCubit, ProfileInstagramState>(
+          builder: (context, state) {
+            return SliverToBoxAdapter(
+              child: false
+                  //  state.suggestFollowsData!.suggestions.isEmpty
+                  ? const SizedBox()
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 24),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Label(
+                            text: LocaleKeys.discoverPeople.localize,
+                            style: Styles.mediumText(),
+                          ),
+                          InkWell(
+                            onTap: () {},
+                            child: Label(
+                              text: LocaleKeys.seeAll.localize,
+                              style: Styles.mediumText(
+                                color: const Color(0xFFFF3308),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+            );
+          },
         ),
         SliverToBoxAdapter(
           child: BlocBuilder<ProfileInstagramCubit, ProfileInstagramState>(

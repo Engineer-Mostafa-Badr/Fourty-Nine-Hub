@@ -261,6 +261,7 @@
   "pay": "الدفع",
   "postSuccessfully": "تم النشر بنجاح",
   "post": "نشر",
+  "post2": "منشور",
   "uploadImage": "تحميل الصورة",
   "fieldIsRequired": "هذا الحقل مطلوب",
   "character": "لا يمكنك كتابة أكثر من 150 حرفًا",
@@ -515,6 +516,7 @@
   "followerList": "قائمة المتابعين",
   "friendRequest": "طلب الصداقة",
   "followRequest": "طلب المتابعة",
+  "followRequests": "طلبات المتابعة",
   "public": "عام",
   "followers": "المتابعون",
   "onlyMe": "أنا فقط",
@@ -1538,5 +1540,8 @@
   "audioAndVideoCalls": "المكالمات الصوتية والفيديو",
   "photoVideosAndDocuments": "صور وفيديو ووثائق",
   "locationSharing": "مشاركة الموقع",
-  "statusUpdates": "تحديثات الحالة"
+  "statusUpdates": "تحديثات الحالة",
+  "manage": "إدارة",
+  "newReel": "ريل جديد",
+  "newStory": "قصة جديدة"
 }
