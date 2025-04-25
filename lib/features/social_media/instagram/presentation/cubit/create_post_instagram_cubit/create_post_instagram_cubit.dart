@@ -5,6 +5,8 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/functions/global/upload_file.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/create_post_request_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/location_instagram_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/user_tag_entity.dart';
@@ -23,7 +25,7 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
   final CreateRequestPostInstagramUseCase createPostInstagramUseCase;
 
   // Future<File?>? selectedImage;
-  List postTypes = ["Post", "Story", "Reel"];
+  List<CteatePostTypeInstagram> postTypes = CteatePostTypeInstagram.postTypes;
 
   void nextPage(BuildContext context) {
     log('nextPage ------------------------------------------------------------');
@@ -34,18 +36,16 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
   }
 
   Future<void> createPost({required String caption}) async {
-    final List<CreatePostRequestEntity> createPostRequests = await createRequestPost(
-      CreatePostRequestInstagramParams(
-        content: caption,
-        media: state.selectedImages.map((File e) {
-          return MediaCreatePostInstagramParams(
-            itemId: state.selectedImages.indexOf(e).toString(),
-            type: "image",
-            size: e.lengthSync(),
-          );
-        }).toList()
-      )
-    );
+    final List<CreatePostRequestEntity> createPostRequests =
+        await createRequestPost(CreatePostRequestInstagramParams(
+            content: caption,
+            media: state.selectedImages.map((File e) {
+              return MediaCreatePostInstagramParams(
+                itemId: state.selectedImages.indexOf(e).toString(),
+                type: "image",
+                size: e.lengthSync(),
+              );
+            }).toList()));
   }
 
   Future<List<CreatePostRequestEntity>> createRequestPost(
@@ -54,12 +54,12 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
     result.fold(
       (failure) {
         emit(
-        state.copyWith(
-          status: CreatePostInstagramStates.failure,
-          failure: failure,
-        ),
-      );
-        return [   ];
+          state.copyWith(
+            status: CreatePostInstagramStates.failure,
+            failure: failure,
+          ),
+        );
+        return [];
       },
       (data) {
         return data;
@@ -420,4 +420,39 @@ class CreatePostInstagramCubit extends Cubit<CreatePostInstagramState> {
       emit(state.copyWith(hasMoreImages: false));
     }
   }
+}
+
+class CteatePostTypeInstagram {
+  final PostType postType;
+  final String title;
+  final int index;
+
+  const CteatePostTypeInstagram({
+    required this.postType,
+    required this.title,
+    required this.index,
+  });
+  static List<CteatePostTypeInstagram> postTypes = [
+    CteatePostTypeInstagram(
+      postType: PostType.post,
+      title: LocaleKeys.post2.localize,
+      index: 0,
+    ),
+    CteatePostTypeInstagram(
+      postType: PostType.story,
+      title: LocaleKeys.story.localize,
+      index: 1,
+    ),
+    CteatePostTypeInstagram(
+      postType: PostType.reel,
+      title: LocaleKeys.reel.localize,
+      index: 2,
+    ),
+  ];
+}
+
+enum PostType {
+  post,
+  story,
+  reel,
 }

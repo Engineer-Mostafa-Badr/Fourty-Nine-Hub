@@ -9,12 +9,25 @@ import 'package:go_router/go_router.dart';
 class AppBarCreatePostInstagram extends StatelessWidget {
   const AppBarCreatePostInstagram({
     super.key,
-    required this.postType,
+    required this.postIndex,
     required this.onPressed,
   });
 
-  final String postType;
+  final int postIndex;
   final void Function()? onPressed;
+
+  String getTitle(int postIndex) {
+    switch (postIndex) {
+      case 0:
+        return LocaleKeys.newPost.localize;
+      case 1:
+        return LocaleKeys.newStory.localize;
+      case 2:
+        return LocaleKeys.newReel.localize;
+      default:
+        return LocaleKeys.post.localize;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +46,7 @@ class AppBarCreatePostInstagram extends StatelessWidget {
           width: 12,
         ),
         Label(
-          text: '${LocaleKeys.nnew.localize} $postType',
+          text: getTitle(postIndex),
           style: Styles.headerText(
             fontSize: 40,
           ),

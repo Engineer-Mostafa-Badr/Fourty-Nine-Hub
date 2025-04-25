@@ -261,6 +261,7 @@
   "pay": "الدفع",
   "postSuccessfully": "تم النشر بنجاح",
   "post": "نشر",
+  "post2": "منشور",
   "uploadImage": "تحميل الصورة",
   "fieldIsRequired": "هذا الحقل مطلوب",
   "character": "لا يمكنك كتابة أكثر من 150 حرفًا",
@@ -1540,5 +1541,7 @@
   "photoVideosAndDocuments": "صور وفيديو ووثائق",
   "locationSharing": "مشاركة الموقع",
   "statusUpdates": "تحديثات الحالة",
-  "manage": "إدارة"
+  "manage": "إدارة",
+  "newReel": "ريل جديد",
+  "newStory": "قصة جديدة"
 }

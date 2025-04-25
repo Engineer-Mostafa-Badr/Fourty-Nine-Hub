@@ -263,6 +263,7 @@
   "pay": "Pay",
   "postSuccessfully": "Post Successfully",
   "post": "Post",
+  "post2": "Post",
   "uploadImage": "Upload Image",
   "fieldIsRequired": "Field is required",
   "character": "You can't type more than 150 characters",
@@ -1558,5 +1559,7 @@
   "locationSharing": "Location sharing",
   "statusUpdates": "Status updates",
   "mostBooking": "Most Booking",
-  "manage": "Manage"
+  "manage": "Manage",
+  "newReel": "New Reel",
+  "newStory": "New Story"
 }

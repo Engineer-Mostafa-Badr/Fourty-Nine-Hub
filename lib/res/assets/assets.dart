@@ -80,15 +80,25 @@ abstract class Assets {
   static String videoIcon = 'assets/icons/video_icon.svg';
   static String profile2BlackIcon = 'assets/icons/profile_2_black_icon.svg';
   static String profile2GreyIcon = 'assets/icons/profile_2_grey_icon.svg';
-  static String instagramTagPeopleIcon = 'assets/icons/instagram_tag_people_icon.svg';
-  static String instagramTagPeopleRedIcon =  'assets/icons/instagram_tag_people_red_icon.svg';
-  static String instagramLocationIcon = 'assets/icons/instagram_location_icon.svg';
-  static String instagramLocationRedIcon = 'assets/icons/instagram_location_red_icon.svg';
+  static String instagramTagPeopleIcon =
+      'assets/icons/instagram_tag_people_icon.svg';
+  static String instagramTagPeopleRedIcon =
+      'assets/icons/instagram_tag_people_red_icon.svg';
+  static String instagramLocationIcon =
+      'assets/icons/instagram_location_icon.svg';
+  static String instagramLocationRedIcon =
+      'assets/icons/instagram_location_red_icon.svg';
   static String instagramMusicIcon = 'assets/icons/instagram_music_icon.svg';
-  static String instagramMusicRedIcon = 'assets/icons/instagram_music_red_icon.svg';
-  static String instagramTriangleBlackIcon = 'assets/icons/instagram_triangle_black_icon.svg';
-  static String instagramRefreshRedIcon = 'assets/icons/instagram_refresh_red_icon.svg';
+  static String instagramMusicRedIcon =
+      'assets/icons/instagram_music_red_icon.svg';
+  static String instagramTriangleBlackIcon =
+      'assets/icons/instagram_triangle_black_icon.svg';
+  static String instagramRefreshRedIcon =
+      'assets/icons/instagram_refresh_red_icon.svg';
   static String instagramSearchIcon = 'assets/icons/instagram_search_icon.svg';
+
+  static String createPostInstagramMultiImageIcon =
+      'assets/icons/create_post_instagram_multi_image_icon.svg';
 
   // Commets
   static String commentIconsIcon = 'assets/icons/comment_icons_icon.svg';
@@ -496,7 +506,7 @@ abstract class Assets {
   static String doubleCheckSeen = "assets/icons/doubleCheckSeen.png";
   static String chatStatus = "assets/icons/chatStatus.png";
   // simple loadings
-  static String circleLoader= 'assets/lottie/loader.json';
+  static String circleLoader = 'assets/lottie/loader.json';
 
   //SpotLight
   static String bitmoji = "assets/images/bitmoji.png";
@@ -504,6 +514,4 @@ abstract class Assets {
 
   //Find
   static String find_inbox = "assets/icons/find_inbox.png";
-
-
 }
