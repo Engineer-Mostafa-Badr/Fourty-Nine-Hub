@@ -34,6 +34,7 @@ import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_suggest_follow_instagram_use_case.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_reels_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_tag_use_case.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/post_follow_user_instagram_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/data/models/post_model.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
@@ -83,6 +84,9 @@ abstract class InstagramRemoteDataSource {
 
   Future<Either<Failure, DataSuggestFollowInstagramEntity>>
       getSuggestFollowInstagram(GetSuggestFollowInstagramParams params);
+
+  Future<Either<Failure, bool>> postFollowUserInstagram(
+      PostFollowUserInstagramParams params);
 }
 
 class InstagramRemoteDataSourceImpl implements InstagramRemoteDataSource {
@@ -446,6 +450,30 @@ class InstagramRemoteDataSourceImpl implements InstagramRemoteDataSource {
           final responseData =
               DataSuggestFollowInstagramModel.fromJson(data['data']);
           return Right(responseData);
+        },
+      );
+    } catch (e) {
+      final error = (e is Map && e['error'] is Map) ? e['error'] as Map : null;
+      log('error: ${e.toString()}');
+      return Left(
+          UnknownFailure(error != null ? error.toString() : 'Unknown error'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> postFollowUserInstagram(
+      PostFollowUserInstagramParams params) async {
+    final response = await _apiConsumer.get(
+      EndPoints.postFollowUserInstagram(userId: params.userId),
+    );
+
+    try {
+      return response.fold(
+        (l) {
+          return Left(l);
+        },
+        (data) {
+          return const Right(true);
         },
       );
     } catch (e) {

@@ -513,6 +513,7 @@ abstract class  LocaleKeys {
   static const followerList = 'followerList';
   static const friendRequest = 'friendRequest';
   static const followRequest = 'followRequest';
+  static const followRequests = 'followRequests';
   static const public = 'public';
   static const followers = 'followers';
   static const onlyMe = 'onlyMe';
@@ -1530,5 +1531,6 @@ abstract class  LocaleKeys {
   static const photoVideosAndDocuments = 'photoVideosAndDocuments';
   static const locationSharing = 'locationSharing';
   static const statusUpdates = 'statusUpdates';
+  static const manage = 'manage';
 
 }

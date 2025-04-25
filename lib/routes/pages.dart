@@ -226,6 +226,7 @@ import 'package:fourtyninehub/features/social_media/edit_profile/presentation/pa
 import 'package:fourtyninehub/features/social_media/instagram/domain/entities/profile_instagram_data_entity.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/Post/get_posts_instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/create_post_instagram_cubit/create_post_instagram_cubit.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/follow_requests_instagram_cubit/follow_requests_instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_add_location_cubit/instagram_add_location_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_add_music_cubit/instagram_add_music_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/instagram_cubit.dart';
@@ -236,6 +237,7 @@ import 'package:fourtyninehub/features/social_media/instagram/presentation/pages
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/comment_instagram_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/create_post_instagram_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/create_post_second_page_instagram_view.dart';
+import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/follow_requests_instagram_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/instagram_add_location_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/instagram_add_music_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/pages/instgram_view.dart';
@@ -1270,7 +1272,7 @@ class AppPages {
                         value: cubit,
                       ),
                     ],
-                    child: TagUserView(),
+                    child: const TagUserView(),
                   );
                 },
               ),
@@ -1319,13 +1321,23 @@ class AppPages {
                 name: Routes.INSTAGRAMPROFILE,
                 builder: (context, state) {
                   final String? id = state.extra as String?;
-
                   return BlocProvider(
                     create: (_) => serviceLocator<ProfileInstagramCubit>()
                       ..getUserProfile(userId: id ?? ''),
                     child: ProfileInstagramView(
                       userId: id ?? '',
                     ),
+                  );
+                },
+              ),
+              GoRoute(
+                path: Paths.FOLLOWREQUESTSINSTAGRAM,
+                name: Routes.FOLLOWREQUESTSINSTAGRAM,
+                builder: (context, state) {
+                  return BlocProvider(
+                    create: (_) =>
+                        serviceLocator<FollowRequestsInstagramCubit>()..fetchInitialData(),
+                    child: const FollowRequestsInstagramView(),
                   );
                 },
               ),
@@ -1887,9 +1899,8 @@ class AppPages {
                                 create: (_) => serviceLocator(),
                                 child: SuccessfulBookingScreen(
                                   doctorDetailsCubit:
-                                  (state.extra) as DoctorDetailsCubit,
-                                )
-                                )),
+                                      (state.extra) as DoctorDetailsCubit,
+                                ))),
                     GoRoute(
                         path: Paths.DOCTORDASHBOARD,
                         name: Routes.DOCTORDASHBOARD,
@@ -1974,7 +1985,9 @@ class AppPages {
                   builder: (context, state) => MultiBlocProvider(
                         providers: [
                           BlocProvider<RestaurantsCubit>(
-                            create: (context) => serviceLocator()..loadData()..getReqCount(),
+                            create: (context) => serviceLocator()
+                              ..loadData()
+                              ..getReqCount(),
                           ),
                         ],
                         child: const RestaurantsListsView(),

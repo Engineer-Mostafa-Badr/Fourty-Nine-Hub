@@ -399,6 +399,7 @@
   "followerList": "Followers List",
   "friendRequest": "Friend Request",
   "followRequest": "Follow Request",
+  "followRequests": "Follow Requests",
   "public": "Public",
   "followers": "Followers",
   "onlyMe": "Only Me",
@@ -1555,5 +1556,6 @@
   "audioAndVideoCalls": "Audio and video calls",
   "photoVideosAndDocuments": "Photo, videos and documents",
   "locationSharing": "Location sharing",
-  "statusUpdates": "Status updates"
+  "statusUpdates": "Status updates",
+  "manage": "Manage"
 }
