@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 
 import '../../../../../res/assets/assets.dart';
 
@@ -66,7 +67,8 @@ class TripOptionWidget extends StatelessWidget {
           Text(
             title,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            maxLines: 2,
+            style: Styles.mediumText(
               fontWeight: FontWeight.bold,
               color: textColor,
             ),

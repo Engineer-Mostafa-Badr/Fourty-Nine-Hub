@@ -351,11 +351,11 @@ class FriendsStories extends StatelessWidget {
                     children: [
                       TextSpan(
                         text: 'Ali\n',
-                        style: Styles.mediumText(fontWeight: FontWeight.w400,),
+                        style: Styles.mediumText(fontWeight: FontWeight.w400,color: context.isDarkMode?Colors.white:Colors.black),
                       ),
                       TextSpan(
                         text: "Alimohamed",
-                        style: Styles.smallText(color: Colors.black.withOpacity(0.7)),
+                        style: Styles.smallText(color:context.isDarkMode?Colors.white:Colors.black.withOpacity(0.7)),
                       ),
                     ]
                   // Localized text

@@ -70,7 +70,7 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
                                 color: AppColors.DARK_GRAY_COLOR,
                               ),
                               const Sizer(),
-                              Label(text: '437k ${LocaleKeys.views}',style: Styles.mediumText(fontSize: 24,color: AppColors.DARK_GRAY_COLOR),)
+                              Label(text: '437k ${LocaleKeys.views.localize}',style: Styles.mediumText(fontSize: 24,color: AppColors.DARK_GRAY_COLOR),)
                             ],
                           ),
                         ),
