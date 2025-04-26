@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:go_router/go_router.dart';
@@ -24,10 +25,10 @@ class _PickMeInfoScreenState extends State<PickMeInfoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
+    return SharedScaffold(
       floatingActionButton: GestureDetector(
         onTap: () {
-          context.push(Routes.pickMeInfoScreen);
+          context.push(Routes.AddNewPickMe);
         },
         child: Container(
           width: 300.w,
@@ -48,21 +49,7 @@ class _PickMeInfoScreenState extends State<PickMeInfoScreen> {
           ),
         ),
       ),
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(30),
-        child: HomeAppbar(
-          isWithBackArrow: false,
-          language: true,
-          leading: IconButton(
-            icon: const Icon(Icons.menu), // The menu icon
-            onPressed: () {
-              HandleCashback.setCount('drawerCount', context);
-              _scaffoldKey.currentState?.openDrawer(); // Open the drawer
-            },
-          ),
-        ),
-      ),
-      body: const PickMeInfoInfoBody(),
+      body: const PickMeInfoInfoBody(), mainCategoryId: 1,
     );
   }
 }
