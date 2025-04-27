@@ -131,7 +131,7 @@ class ActivatePageBlocConsumer extends StatelessWidget {
                     context,
                     AlertDialog(
                       title: Label(
-                          text: 'The App will Restart to Apply Changes',
+                          text: LocaleKeys.restartToApply.localize,
                           style: Styles.mediumText(
                               fontSize: 65.sp, fontWeight: FontWeight.w400)),
                       actions: [
@@ -146,7 +146,7 @@ class ActivatePageBlocConsumer extends StatelessWidget {
                             controller.updateActivate(v);
                             Restart.restartApp();
                           },
-                          label: 'Restart',
+                          label: LocaleKeys.restart.localize,
                         ),
                       ],
                     ),

@@ -24,7 +24,7 @@ class SubCategoryListViewItem extends StatelessWidget {
       decoration: BoxDecoration(
         color: subCategory?.isSelected == true
             ? AppColors.PRIMARY_COLOR
-            : const Color(0xffE0E0E0),
+            : Colors.grey.shade700,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Label(

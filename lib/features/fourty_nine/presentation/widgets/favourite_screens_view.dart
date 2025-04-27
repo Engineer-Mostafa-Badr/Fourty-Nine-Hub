@@ -36,7 +36,6 @@ List<String> titles = [
 class _FavouriteScreensViewState extends State<FavouriteScreensView> {
   @override
   Widget build(BuildContext context) {
-    // serviceLocator<FirebaseHelper>().getToken();
     return MultiBlocProvider(
       providers: [
         BlocProvider<FavouriteCategoryCubit>(

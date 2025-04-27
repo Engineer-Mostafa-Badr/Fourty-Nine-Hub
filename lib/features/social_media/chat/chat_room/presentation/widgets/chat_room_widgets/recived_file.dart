@@ -27,7 +27,9 @@ class ReceivedFileCard extends StatefulWidget {
     super.key,
     required this.messageEntity,
   });
+
   final MessageEntity messageEntity;
+
   @override
   State<ReceivedFileCard> createState() => _ReceivedFileCardState();
 }

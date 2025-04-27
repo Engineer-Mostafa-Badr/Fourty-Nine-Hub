@@ -34,10 +34,10 @@ class SubCategoriesView extends StatefulWidget {
 }
 
 class _SubCategoriesViewState extends State<SubCategoriesView> {
-  @override
   late ScrollController scrollController;
   bool isFloatingButtonVisible = true;
 
+  @override
   void initState() {
     // context
     //     .read<SubcategoriesCubit>()

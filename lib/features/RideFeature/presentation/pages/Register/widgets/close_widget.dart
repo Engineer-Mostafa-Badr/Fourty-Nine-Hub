@@ -3,15 +3,18 @@ import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/utils/custom_show_dialog.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
-Widget closeWidget({required BuildContext context, required Function onAcceptSaveData, required Function closeRemoveData}) {
+Widget closeWidget(
+    {required BuildContext context,
+    required Function onAcceptSaveData,
+    required Function closeRemoveData}) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
@@ -30,6 +33,7 @@ Widget closeWidget({required BuildContext context, required Function onAcceptSav
                   style: Styles.headerText(
                     fontWeight: FontWeight.w500,
                     fontSize: 48,
+                    color: context.isDarkMode ? Colors.white : AppColors.black,
                   ),
                 ),
                 const Sizer(),
@@ -42,6 +46,7 @@ Widget closeWidget({required BuildContext context, required Function onAcceptSav
                   style: Styles.headerText(
                     fontWeight: FontWeight.w500,
                     fontSize: 26,
+                    color: context.isDarkMode ? Colors.white : AppColors.black,
                   ),
                 ),
                 const Sizer(),
@@ -80,6 +85,7 @@ Widget closeWidget({required BuildContext context, required Function onAcceptSav
           text: LocaleKeys.close.localize,
           style: Styles.mediumText(
             fontWeight: FontWeight.w400,
+            color: context.isDarkMode ? Colors.white : AppColors.black,
           ),
         ),
       ),
@@ -88,7 +94,7 @@ Widget closeWidget({required BuildContext context, required Function onAcceptSav
           showAnimatedDialog(
             context,
             AlertDialog(
-              backgroundColor: AppColors.AUTH_CONTAINER_COLOR,
+              backgroundColor: context.isDarkMode?Colors.grey.shade600 : AppColors.GREYBG,
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
               content: Column(
@@ -101,6 +107,8 @@ Widget closeWidget({required BuildContext context, required Function onAcceptSav
                     maxLines: 2,
                     style: Styles.headerText(
                       fontWeight: FontWeight.w500,
+                      color:
+                          context.isDarkMode ? Colors.white : AppColors.black,
                     ),
                   ),
                   const Sizer(),
@@ -145,10 +153,10 @@ Widget closeWidget({required BuildContext context, required Function onAcceptSav
             ),
           );
         },
-        child: const Icon(
+        child: Icon(
           Icons.close,
           // size: ,
-          color: AppColors.PRIMARY_COLOR,
+          color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
         ),
       ),
     ],

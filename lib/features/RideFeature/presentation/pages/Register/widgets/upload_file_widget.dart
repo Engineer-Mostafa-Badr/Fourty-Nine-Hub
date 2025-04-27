@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -25,7 +26,7 @@ class UploadFileWidget extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
-              color: AppColors.GREYBG,
+              color: context.isDarkMode ? Colors.grey.shade600 : AppColors.GREYBG,
               image: imageUrl != null ? DecorationImage(image: FileImage(File(imageUrl?.path??'')),fit: BoxFit.cover):null
             ),
             height: 100,
@@ -44,6 +45,7 @@ class UploadFileWidget extends StatelessWidget {
             style: Styles.smallText(
               fontSize: 22,
               fontWeight: FontWeight.w400,
+              color: context.isDarkMode ? Colors.white : AppColors.black,
             ),
             overflow: TextOverflow.visible,
             maxLines: 3,

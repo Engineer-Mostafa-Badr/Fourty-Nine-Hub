@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fourtyninehub/common/widgets/stateful/picker/date_picker_field.dart';
-import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/controllers/ride_register/ride_register_cubit.dart';
-import 'package:go_router/go_router.dart';
-
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateful/picker/date_picker_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
+import 'package:fourtyninehub/features/RideFeature/presentation/controllers/ride_register/ride_register_cubit.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+
 import '../widgets/upload_file_widget.dart';
 
 class CriminalRecordScreen extends StatelessWidget {
@@ -37,7 +35,8 @@ class CriminalRecordScreen extends StatelessWidget {
         children: [
           Expanded(
             child: SingleChildScrollView(
-              child: BlocBuilder<RideRegisterCubit, RideRegisterState>(builder: (context, state) {
+              child: BlocBuilder<RideRegisterCubit, RideRegisterState>(
+                  builder: (context, state) {
                 var cubit = context.read<RideRegisterCubit>();
                 return Padding(
                   padding: const EdgeInsets.only(
@@ -103,7 +102,8 @@ class CriminalRecordScreen extends StatelessWidget {
                         UploadFileWidget(
                           title: LocaleKeys.criminalRecord.localize,
                           onTap: () {
-                            cubit.onUploadPersonalCriminalRecordPicture(context);
+                            cubit
+                                .onUploadPersonalCriminalRecordPicture(context);
                           },
                           imageUrl: state.personalCriminalRecordPicture,
                         ),
@@ -115,9 +115,19 @@ class CriminalRecordScreen extends StatelessWidget {
                         //   hint: LocaleKeys.licenseNumber.localize,
                         // ),
                         const Sizer(),
-                        DatePickerTextField(color:AppColors.GREYBG,initialDate: DateTime.now(), minDate: DateTime(1900), maxDate: DateTime(2090),onDateSelected: (date){
-                          cubit.rideCriminalRecordExpireDateController.text = DateFormat('yyyy-MM-dd').format(date??DateTime.now());
-                        }, controller:cubit.rideCriminalRecordExpireDateController,hintText: LocaleKeys.expireDate.localize,),
+                        DatePickerTextField(
+                          initialDate: DateTime.now(),
+                          minDate: DateTime(1900),
+                          maxDate: DateTime(2090),
+                          onDateSelected: (date) {
+                            cubit.rideCriminalRecordExpireDateController.text =
+                                DateFormat('yyyy-MM-dd')
+                                    .format(date ?? DateTime.now());
+                          },
+                          controller:
+                              cubit.rideCriminalRecordExpireDateController,
+                          hintText: LocaleKeys.expireDate.localize,
+                        ),
                       ],
                     ),
                   ),
@@ -153,10 +163,17 @@ class CriminalRecordScreen extends StatelessWidget {
                 const Sizer(),
                 InkWell(
                   onTap: () {
-                    if (context.read<RideRegisterCubit>().state.personalCriminalRecordPicture == null) {
-                      showErrorMessage(context, "Please select criminal record");
+                    if (context
+                            .read<RideRegisterCubit>()
+                            .state
+                            .personalCriminalRecordPicture ==
+                        null) {
+                      showErrorMessage(
+                          context, "Please select criminal record");
                     } else {
-                      context.read<RideRegisterCubit>().onSubmitUploadingCriminalRecord(context);
+                      context
+                          .read<RideRegisterCubit>()
+                          .onSubmitUploadingCriminalRecord(context);
                     }
                   },
                   child: Container(

@@ -4,7 +4,9 @@ import 'package:flutter_fortune_wheel/flutter_fortune_wheel.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/base_status_enum.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -83,7 +85,9 @@ class LuckyWheelView extends StatelessWidget {
                                 ),
                                 const Spacer(),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  mainAxisAlignment: context.isArabic
+                                      ? MainAxisAlignment.start
+                                      : MainAxisAlignment.end,
                                   children: [
                                     Text(
                                       '${state.data?.amount.round() ?? 0}',
@@ -125,7 +129,9 @@ class LuckyWheelView extends StatelessWidget {
                                 ),
                                 const Spacer(),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  mainAxisAlignment: context.isArabic
+                                      ? MainAxisAlignment.end
+                                      : MainAxisAlignment.start,
                                   children: [
                                     Text(
                                       '${state.data?.points.round() ?? 0}',
@@ -156,12 +162,15 @@ class LuckyWheelView extends StatelessWidget {
                             items: state.data!.items
                                 .map(
                                   (e) => FortuneItem(
-                                    child: Text(
-                                      e.type == WheelItemTypes.point
+                                    child: Label(
+                                      text: e.type == WheelItemTypes.point
                                           ? '${e.value.round()} ${LocaleKeys.points.localize}'
                                           : '${e.value.round()} ${LocaleKeys.money.localize}',
-                                      style: Styles.mediumText(
-                                        fontSize: 40.sp,
+                                      style: Styles.headerText(
+                                        color: context.isDarkMode
+                                            ? Colors.white
+                                            : Colors.black,
+                                        fontWeight: FontWeight.normal
                                       ),
                                     ),
                                   ),

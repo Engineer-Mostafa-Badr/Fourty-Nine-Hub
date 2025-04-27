@@ -318,6 +318,7 @@ abstract class Assets {
   static String bell = 'assets/49-New-icons/bell.png';
   static String notification = 'assets/49-New-icons/notification.png';
   static String menu = 'assets/49-New-icons/menu.png';
+  static String menuSvg = 'assets/49-New-icons/menuSvg.svg';
   static String theme = 'assets/49-New-icons/Group 4.png';
   static String person = 'assets/49-New-icons/Group 6.png';
   static String noPerson = 'assets/49-New-icons/Group 5.png';
@@ -494,12 +495,14 @@ abstract class Assets {
   static String notIcon = 'assets/icons/notIcon.svg';
   static String addStoryIcon = 'assets/icons/addStoryIcon.svg';
   static String promoteIcon = 'assets/icons/promoteIcon.svg';
-  static String mealImage = "assets/images/mealImage.jpg";
-  static String car2Image = "assets/images/car.jpg";
-  static String doctorImage = "assets/images/doctor.jpg";
-  static String marriage = "assets/images/marriage.jpg";
+  static String mealImage = "assets/images/mealImage.png";
+  static String car2Image = "assets/images/car.png";
+  static String doctorImage = "assets/images/doctor.png";
+  static String marriage = "assets/images/marriage.png";
   static String ellipsis = "assets/icons/ellipsis.svg";
   static String reelBar = "assets/icons/reelBar.svg";
+  static String gridIcon = "assets/icons/gridIcon.png";
+  static String sliderIcon = "assets/icons/sliderIcon.png";
   static String grid = "assets/icons/grid.png";
   static String check = "assets/icons/check.png";
   static String doubleCheck = "assets/icons/doubleCheck.png";

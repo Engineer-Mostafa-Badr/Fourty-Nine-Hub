@@ -160,7 +160,7 @@ class CacheManager {
     try {
       final prefs = await SharedPreferences.getInstance();
       print('isFloatingNavigatorEnabled ${prefs.getBool(isFloatingNavigatorEnabled)}');
-      return prefs.getBool(isFloatingNavigatorEnabled) ?? true;
+      return prefs.getBool(isFloatingNavigatorEnabled) ?? false;
     } catch (e) {
       return false;
     }
@@ -178,7 +178,7 @@ class CacheManager {
     try {
       final prefs = await SharedPreferences.getInstance();
       print('isChoiceRulerEnabled ${prefs.getBool(isChoiceRulerEnabled)}');
-      return prefs.getBool(isChoiceRulerEnabled) ?? true;
+      return prefs.getBool(isChoiceRulerEnabled) ?? false;
     } catch (e) {
       return false;
     }

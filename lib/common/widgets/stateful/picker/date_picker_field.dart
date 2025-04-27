@@ -51,7 +51,7 @@ class _DatePickerTextFieldState extends State<DatePickerTextField> {
   Widget build(BuildContext context) {
     return DefaultTextFormField(
       currentController: widget.controller,
-      fillColor: AppColors.GREYBG,
+      fillColor: context.isDarkMode ? Colors.grey.shade600 : AppColors.GREYBG,
       borderColor: Colors.transparent,
       readOnly: true,
       onTap: () async {
@@ -89,7 +89,7 @@ class _DatePickerTextFieldState extends State<DatePickerTextField> {
           }
         }
       },
-      hint: widget.hintText??'',
+      hint: widget.hintText ?? '',
       keyboardType: TextInputType.number,
       validator: (v) {
         if (v == null || v.isEmpty) {

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
@@ -11,6 +12,7 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/localization/locale_keys.g.dart';
+import '../../../features/ads_feature/ads/presentation/pages/ads_view.dart';
 import '../../../features/notifications/presentation/cubits/get_unread_notifications_count/get_unread_notifications_count_cubit.dart';
 import '../../../features/notifications/presentation/widgets/icon_with_view_count.dart';
 import '../../../res/style/app_colors.dart';
@@ -42,7 +44,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         index: 0,
         cacheKey: 'adCount',
         image: Assets.spcialAdsIcon,
-        route: Routes.FOOD,
+        route: Routes.ADS,
       ),
       BottomItemModel(
         icon: FontAwesomeIcons.list,
@@ -77,7 +79,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
         label: LocaleKeys.more.localize,
         cacheKey: 'drawerCount',
         index: 4,
-        image: Assets.ellipsis,
+        image: Assets.menuSvg,
         route: Routes.RIDE_HOME,
       ),
     ];
@@ -87,7 +89,11 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
       onTap: (index) {
         if (index == 4) {
           Scaffold.of(context).openDrawer();
-        } else {
+        }
+        else if(index ==0){
+          // context.push(pages[index].route,extra: AdsViewParams(mainCategory: , subCategory: null));
+        }
+        else {
           final selectedItem = pages[index];
           if (selectedItem.route != ModalRoute.of(context)?.settings.name) {
             selectedItem.action(context);
@@ -218,6 +224,9 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                                           Assets.notification,
                                           height: widget.items[index].height,
                                           width: widget.items[index].height-4,
+                                          color: context.isDarkMode
+                                              ? Colors.white
+                                              : AppColors.PRIMARY_COLOR,
                                         ),
                                         unreadCount:
                                             getUnreadNotificationsCountCubit
@@ -242,9 +251,9 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                                         widget.items[index].image!,
                                         height: widget.items[index].height,
                                         width: widget.items[index].height,
-                                        color: index == 4 ||index == 1
-                                            ? AppColors.PRIMARY_COLOR
-                                            : null,
+                                        color: context.isDarkMode
+                                            ? Colors.white
+                                            : AppColors.PRIMARY_COLOR,
                                       ),
                                       Label(
                                         text: widget.items[index].label,

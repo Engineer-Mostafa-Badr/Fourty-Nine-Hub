@@ -79,6 +79,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   child: Directionality(
                     textDirection: context.textDirection,
                     child: PageView.builder(
+                      // allowImplicitScrolling: true,
+                      // physics: NeverScrollableScrollPhysics(),
                       itemCount: cubit.images.length,
                       itemBuilder: (context, index) => Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -181,7 +183,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                         cubit.changeOnboardingData(index);
                       } else {
                         CacheManager.isShowOnboarding(true);
-                        context.go(Routes.LOGIN);
+                        context.go(Routes.HOME);
                         // CacheHelper.put(key: 'showOnboarding', value: true);
                       }
                     },

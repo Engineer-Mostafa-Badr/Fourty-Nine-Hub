@@ -195,7 +195,7 @@ class _PagePreviewState extends State<PagePreview>
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Label(
-                                        text: 'Restart to Apply',
+                                        text: LocaleKeys.restartToApply.localize,
                                         style: Styles.headerText(
                                             fontWeight: FontWeight.w400)),
                                     const Sizer(),
@@ -221,7 +221,7 @@ class _PagePreviewState extends State<PagePreview>
                                                   .updateActivate(true);
                                               Restart.restartApp();
                                             },
-                                            label: 'Restart',
+                                            label: LocaleKeys.restart.localize,
                                           ),
                                         ),
                                       ],
@@ -242,7 +242,7 @@ class _PagePreviewState extends State<PagePreview>
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Label(
-                                        text: 'Restart to Apply',
+                                        text: LocaleKeys.restartToApply.localize,
                                         style: Styles.headerText(
                                             fontWeight: FontWeight.w400)),
                                     const Sizer(),
@@ -268,7 +268,7 @@ class _PagePreviewState extends State<PagePreview>
                                                   .updateActivate(true);
                                               Restart.restartApp();
                                             },
-                                            label: 'Restart',
+                                            label: LocaleKeys.restart.localize,
                                           ),
                                         ),
                                       ],

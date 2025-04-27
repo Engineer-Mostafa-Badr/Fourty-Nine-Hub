@@ -16,7 +16,6 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import '../../../../../common/widgets/form/text_fields/default_text_form_field.dart';
 import '../../../../../common/widgets/stateful/picker/date_picker.dart';
 import '../../../../../core/widget/custom_scaffold.dart';
-import '../../../../RideFeature/presentation/pages/widgets/country_dropdown.dart';
 import '../widgets/gover_dropdown.dart';
 
 class EditProfileView extends StatefulWidget {
@@ -39,12 +38,13 @@ class _EditProfileViewState extends State<EditProfileView> {
   final referrerTextController = TextEditingController();
   final bioTextController = TextEditingController();
   final statusController = TextEditingController();
-  String country = 'country'.tr();
+  String country = LocaleKeys.country.localize;
 
   @override
   void initState() {
+    // context.read<EditProfileCubit>().state.copyWith(status: EditProfileStates.initial);
     print(context.read<UserCubit>().state.data);
-    context.read<EditProfileCubit>().fetchRideGovernorates();
+    // context.read<EditProfileCubit>().fetchRideGovernorates();
     userNameTextController.text =
         "${context.read<UserCubit>().state.data?.username}" ?? '';
     nameTextController.text =
@@ -52,8 +52,14 @@ class _EditProfileViewState extends State<EditProfileView> {
             '';
     phoneTextController.text =
         context.read<UserCubit>().state.data?.phone ?? '';
-    cityTextController.text = context.read<UserCubit>().state.data?.city ?? '';
-    country = context.read<UserCubit>().state.data?.country ?? '';
+    if (context.read<UserCubit>().state.data?.country == null) {
+      cityTextController.text = LocaleKeys.country.localize;
+    } else if (context.read<UserCubit>().state.data?.country == '') {
+      cityTextController.text = LocaleKeys.country.localize;
+    } else {
+      cityTextController.text = context.read<UserCubit>().state.data!.country!;
+    }
+   country= cityTextController.text;
     context.read<EditProfileCubit>().state.selectedCountry = country;
     // DateFormat('hh:mm a')
     //     .format(DateTime.parse(
@@ -89,12 +95,9 @@ class _EditProfileViewState extends State<EditProfileView> {
       },
       builder: (context, state) {
         return CustomScaffold(
-          appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(30),
-            child: BackAppBar(
-              label: LocaleKeys.editProfile.localize,
-              enableCustomAppBar: true,
-            ),
+          appBar: BackAppBar(
+            label: LocaleKeys.editProfile.localize,
+            enableCustomAppBar: true,
           ),
           enableCustomAppBar: true,
           body: Padding(
@@ -420,6 +423,7 @@ class _EditProfileViewState extends State<EditProfileView> {
                               phone: phoneTextController.text,
                               job: jobTextController.text,
                               country: state.selectedCountry!,
+                              // country: '',
                               city: cityTextController.text,
                               birthday: dateTime.toString(),
                               maritalPrivacy:

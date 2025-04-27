@@ -1,12 +1,17 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/localization/locales.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
+import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_taps_cubit/main_categories_taps_cubit.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/subcategory_card.dart';
@@ -16,10 +21,15 @@ import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/stateful/banners/back_appbar.dart';
+import '../../../../common/models/public/pagination_params.dart';
+import '../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../service_locator/service_locator.dart';
 import '../../../ads_feature/ads/presentation/pages/marriage_ads_view.dart';
+import '../../../ads_feature/create_ad/domain/entities/categorization_entity.dart';
+import '../../../subcategories/domain/entities/sub_category_entity.dart';
 import '../../../subcategories/presentation/cubit/subcategories_cubit.dart';
+import '../../../subcategories/presentation/widgets/floating_add_button.dart';
 
 class MainCategoriesGridView extends StatefulWidget {
   const MainCategoriesGridView({super.key, this.isAppBarShow = true});
@@ -34,7 +44,9 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
     with TickerProviderStateMixin {
   late TabController _tabController;
   late ScrollController _scrollController;
+  late MainCategoryEntity _mainCategoryEntity;
   String labelName = "";
+  bool isFloatingButtonVisible = true;
 
   @override
   void initState() {
@@ -43,28 +55,37 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
         length: context.read<MainCategoriesTapsCubit>().mainCategories.length,
         vsync: this);
     _scrollController = ScrollController();
-
+    _fetchSubcategories();
     // Listen for tab changes
     _tabController.addListener(() {
       if (_tabController.indexIsChanging) {
         _scrollToSelectedTab(_tabController.index);
       }
+      _scrollController.addListener(() {
+        if (_scrollController.position.userScrollDirection ==
+            ScrollDirection.reverse) {
+          isFloatingButtonVisible = false;
+        } else {
+          isFloatingButtonVisible = true;
+        }
+        setState(() {});
+      });
     });
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    labelName = context.locale == Locales.english
+    labelName = context.isArabic
         ? context
             .read<MainCategoriesTapsCubit>()
             .mainCategories[0]
-            .nameEn
+            .name
             .toString()
         : context
             .read<MainCategoriesTapsCubit>()
             .mainCategories[0]
-            .name
+            .nameEn
             .toString();
   }
 
@@ -80,149 +101,258 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
     );
   }
 
+  List<SubCategoryEntity> subCategories = [];
+  String? selectedValue;
+  void _fetchSubcategories() async {
+    final subCategoriesList =
+    await context.read<SubcategoriesCubit>().getSubcategories(
+      paginationParams: PaginationParams(page: 1, limit: 200),
+    );
+    setState(() {
+      subCategories = subCategoriesList;
+    });
+  }
+  void _showDropdownMenu(BuildContext context) async {
+    print(context
+        .read<MainCategoriesTapsCubit>()
+        .selectedCategory);
+    print(subCategories);
+    if (subCategories.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(LocaleKeys.noCategoriesAvailable.localize)),
+      );
+      return;
+    }
+    final RenderBox button = context.findRenderObject() as RenderBox;
+    final RenderBox overlay =
+    Overlay.of(context).context.findRenderObject() as RenderBox;
+    final double bottomPadding =
+        MediaQuery.of(context).viewInsets.bottom + 200.0;
+
+    final RelativeRect position = RelativeRect.fromLTRB(
+      overlay.size.width - 300,
+      overlay.size.height - 300,
+      50,
+      bottomPadding,
+    );
+
+    final String? selected = await showMenu<String>(
+        color: Colors.white,
+        menuPadding: EdgeInsets.zero,
+        shadowColor: Colors.grey.shade300,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        context: context,
+        position: position,
+        items: [
+          PopupMenuItem<String>(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(
+                maxHeight: 600,
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: subCategories.map((SubCategoryEntity item) {
+                    return Column(
+                      children: [
+                        ListTile(
+                          contentPadding: const EdgeInsets.all(0),
+                          dense: true,
+                          title: Label(
+                              text:
+                              context.isArabic ? item.nameAr : item.nameEn,
+                              style: Styles.mediumText(
+                                  fontWeight: FontWeight.bold)),
+                          onTap: () {
+                            if (context.isUserLoggedIn) {
+                              Navigator.pop(context);
+                              context.push(Routes.CREATEAD,
+                                  extra: CategorizationEntity(
+                                      mainCategory: context
+                                          .read<MainCategoriesTapsCubit>()
+                                          .selectedCategory,
+                                      subCategory: item));
+                            } else {
+                              context.push(Routes.LOGIN);
+                            }
+                          },
+                        ),
+                        Divider(
+                          height: 1,
+                          thickness: 1,
+                          color: Colors.grey.shade300,
+                        )
+                      ],
+                    );
+                  }).toList(),
+                ),
+              ),
+            ),
+          ),
+        ]);
+
+    if (selected != null) {
+      setState(() {
+        selectedValue = selected;
+      });
+    }
+    print(selectedValue.toString());
+  }
+
   @override
   Widget build(BuildContext context) {
     final controller = context.read<MainCategoriesTapsCubit>();
-    return CustomScaffold(
-      appBar: widget.isAppBarShow
-          ? PreferredSize(
-              preferredSize: const Size.fromHeight(30),
-              child: BackAppBar(
-                label: labelName,
-                enableCustomAppBar: true,
-              ),
-            )
-          : null,
-      enableCustomAppBar:widget.isAppBarShow? true:false,
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
-        child: Column(
-          children: [
-            // WalletWidget(),
-            SizedBox(height: 10.h),
-            BlocBuilder<MainCategoriesTapsCubit, MainCategoriesTapsState>(
-                builder: (context, state) {
-              return SizedBox(
-                height: 70.h,
-                child: SingleChildScrollView(
-                  controller: _scrollController,
-                  scrollDirection: Axis.horizontal,
-                  child: TabBar(
-                      isScrollable: true,
-                      controller: _tabController,
-                      onTap: (i) {
-                        controller.selectMainCategory(i);
-                        setState(() {
-                          labelName = context.locale == Locales.english
-                              ? controller.mainCategories[i].nameEn.toString()
-                              : controller.mainCategories[i].name.toString();
-                        });
-                        print(labelName);
-                        // if (controller.mainCategories[i].id ==
-                        //     '62c8b5b09332225799fe335e') {
-                        //   context.push(Routes.MARRIAGESUBCATEGORIES,
-                        //       extra: controller.mainCategories[i]);
-                        // }
-                      },
-                      padding: EdgeInsets.zero,
-                      labelPadding: const EdgeInsetsDirectional.only(end: 10),
-                      indicatorColor: Colors.transparent,
-                      dividerColor: Colors.transparent,
-                      tabAlignment: TabAlignment.start,
-                      tabs: List.generate(controller.mainCategories.length,
-                          (index) {
-                        final category = controller.mainCategories[index];
-                        return Container(
-                          width: 220.w,
-                          // height: 70.h,
-                          alignment: AlignmentDirectional.center,
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: index == state.selectedIndex
-                                ? AppColors.PRIMARY_COLOR
-                                : null,
-                            border: Border.all(
-                              color: index == state.selectedIndex
-                                  ? AppColors.PRIMARY_COLOR
-                                  : Colors.red,
-                            ),
-                          ),
-                          child: Center(
-                            child: Text(
-                              context.locale == Locales.english
-                                  ? category.nameEn!
-                                  : category.name ?? "",
-                              style: Styles.mediumText(
-                                  color: index == state.selectedIndex
-                                      ? Colors.white
-                                      : Colors.grey),
-                              textAlign: TextAlign.center,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        );
-                      })),
+    return BlocProvider(
+      create: (context) => serviceLocator<SubcategoriesCubit>(),
+      child: CustomScaffold(
+        appBar: widget.isAppBarShow
+            ? PreferredSize(
+                preferredSize: const Size.fromHeight(30),
+                child: BackAppBar(
+                  label: labelName,
+                  enableCustomAppBar: true,
                 ),
-              );
-            }),
-            const Sizer(),
-            BlocBuilder<MainCategoriesTapsCubit, MainCategoriesTapsState>(
-              builder: (context, state) {
-                final controller = context.read<MainCategoriesTapsCubit>();
+              )
+            : null,
+        enableCustomAppBar: widget.isAppBarShow,
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
+          child: Column(
+            children: [
+              // WalletWidget(),
+              SizedBox(height: 10.h),
+              BlocBuilder<MainCategoriesTapsCubit, MainCategoriesTapsState>(
+                builder: (context, state) {
+                  return SizedBox(
+                    height: 70.h,
+                    child: SingleChildScrollView(
+                      controller: _scrollController,
+                      scrollDirection: Axis.horizontal,
+                      child: TabBar(
+                        isScrollable: true,
+                        controller: _tabController,
+                        onTap: (i) {
+                          controller.selectMainCategory(i);
+                          setState(() {
+                            labelName = context.locale == Locales.english
+                                ? controller.mainCategories[i].nameEn.toString()
+                                : controller.mainCategories[i].name.toString();
+                            // subCategories = controller.mainCategories[i].subcategories??[];
+                          });
+                          print(labelName);
+                          // if (controller.mainCategories[i].id ==
+                          //     '62c8b5b09332225799fe335e') {
+                          //   context.push(Routes.MARRIAGESUBCATEGORIES,
+                          //       extra: controller.mainCategories[i]);
+                          // }
+                        },
+                        padding: EdgeInsets.zero,
+                        labelPadding: const EdgeInsetsDirectional.only(end: 10),
+                        indicatorColor: Colors.transparent,
+                        dividerColor: Colors.transparent,
+                        tabAlignment: TabAlignment.start,
+                        tabs: List.generate(
+                          controller.mainCategories.length,
+                          (index) {
+                            final category = controller.mainCategories[index];
+                            return Container(
+                              width: 220.w,
+                              // height: 70.h,
+                              alignment: AlignmentDirectional.center,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                color: index == state.selectedIndex
+                                    ? AppColors.PRIMARY_COLOR
+                                    : null,
+                                border: Border.all(
+                                  color: index == state.selectedIndex
+                                      ? AppColors.PRIMARY_COLOR
+                                      : Colors.red,
+                                ),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  context.isArabic
+                                      ? category.name!
+                                      : category.nameEn ?? "",
+                                  style: Styles.mediumText(
+                                    color: index == state.selectedIndex
+                                        ? Colors.white
+                                        : Colors.grey,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+              const Sizer(),
+              BlocBuilder<MainCategoriesTapsCubit, MainCategoriesTapsState>(
+                builder: (context, state) {
+                  final controller = context.read<MainCategoriesTapsCubit>();
 
-                if (controller.mainCategories[state.selectedIndex].id ==
-                    '62c8b5b09332225799fe335e') {
-                  return BlocProvider(
-                    create: (context) => serviceLocator<SubcategoriesCubit>(),
-                    child: Expanded(
+                  if (controller.mainCategories[state.selectedIndex].id ==
+                      '62c8b5b09332225799fe335e') {
+                    return const Expanded(
                       child: MarriageSubCategoriesView(
                         // mainCategory:
                         //     controller.mainCategories[state.selectedIndex],
                         inGridView: true,
                       ),
-                    ),
-                  );
-                  // return Container();
-                }
-                if (state.subCategories != null &&
-                    state.subCategories!.isNotEmpty) {
-                  // final controller = context.read<MainCategoriesTapsCubit>();
+                    );
+                    // return Container();
+                  }
+                  if (state.subCategories != null &&
+                      state.subCategories!.isNotEmpty) {
+                    // final controller = context.read<MainCategoriesTapsCubit>();
 
-                  return Expanded(
-                    child: GridView.builder(
-                      padding: EdgeInsets.all(24.w),
-                      itemCount: state.subCategories?.length ?? 0,
-                      controller: controller.scrollController,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        childAspectRatio: .65,
-                        mainAxisSpacing: 16,
-                        crossAxisSpacing: 16,
+                    return Expanded(
+                      child: GridView.builder(
+                        padding: EdgeInsets.all(24.w),
+                        itemCount: state.subCategories?.length ?? 0,
+                        controller: controller.scrollController,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          childAspectRatio: .65,
+                          mainAxisSpacing: 16,
+                          crossAxisSpacing: 16,
+                        ),
+                        itemBuilder: (context, index) {
+                          final subCategory = state.subCategories![index];
+                          return SubCategoryCard(
+                            mainCategory: controller.selectedCategory,
+                            item: subCategory,
+                            onFav: () {
+                              print("object");
+                              return controller.toggleSubCategoryToFavorites(
+                                  state.subCategories![index].id);
+                            },
+                          );
+                        },
                       ),
-                      itemBuilder: (context, index) {
-                        final subCategory = state.subCategories![index];
-                        return SubCategoryCard(
-                          mainCategory: controller.selectedCategory,
-                          item: subCategory,
-                          onFav: () {
-                            print("object");
-                            return controller.toggleSubCategoryToFavorites(
-                                state.subCategories![index].id);
-                          },
-                        );
-                      },
-                    ),
-                  );
-                } else {
-                  return const SizedBox.shrink();
-                }
-              },
-            ),
-          ],
+                    );
+                  } else {
+                    return const SizedBox.shrink();
+                  }
+                },
+              ),
+            ],
+          ),
         ),
+        floatingActionButton: isFloatingButtonVisible
+            ? buildFloatingAction(context, () {
+          _showDropdownMenu(context);
+        })
+            : null,
       ),
     );
   }
