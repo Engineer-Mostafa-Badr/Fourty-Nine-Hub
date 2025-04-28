@@ -3,5 +3,9 @@ class AudioEntity {
   final String mediaKey;
   final String sound;
 
-  AudioEntity({required this.id, required this.mediaKey, required this.sound});
+  AudioEntity({
+    required this.id,
+    required this.mediaKey,
+    required this.sound,
+  });
 }

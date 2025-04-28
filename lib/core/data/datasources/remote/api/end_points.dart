@@ -831,6 +831,9 @@ class EndPoints {
           {required int page, required int limit}) =>
       '/user-follow/suggestions?page=$page&limit=$limit';
 
+  static String postFollowUserInstagram({required String userId}) =>
+      '/user-follow/follow/$userId';
+
   static String reactOnTwitterPost(String postId) {
     return '/twitter/post/react/$postId?subCategory=${Constants.twitterSubCategory}';
   }
@@ -1468,4 +1471,8 @@ class EndPoints {
   static const getBookingCurrent = '/health/bookings';
   static const getReqLogCount = '/food/request-logs-unseen-count';
   static const setRequestLogSeen = '/food/set-request-is-seen/';
+  static const getMostBooking = '/health/doctors';
+
+  static const getDoctorList = '/health/doctors';
+
 }

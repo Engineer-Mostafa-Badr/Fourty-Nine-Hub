@@ -54,10 +54,24 @@ class ChatProfileView extends StatelessWidget {
                   controller: controller,
                   decoration: InputDecoration(
                     hintText: title,
-                    border: UnderlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(
+                    filled: false,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                    border: const UnderlineInputBorder(
+                      borderSide: BorderSide(
                         color: AppColors.SECONDARY_COLOR,
+                        width: 2,
+                      ),
+                    ),
+                    focusedBorder:  const UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: AppColors.SECONDARY_COLOR,
+                        width: 2,
+                      ),
+                    ),
+                    enabledBorder:  const UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: AppColors.SECONDARY_COLOR,
+                        width: 2,
                       ),
                     ),
                   ),
@@ -348,7 +362,7 @@ class ChatProfileView extends StatelessWidget {
                             ),
                           ],
                         ),
-                        Spacer(),
+                        const Spacer(),
                         IconButton(
                           padding: const EdgeInsets.all(0),
                           icon: Icon(
@@ -361,7 +375,7 @@ class ChatProfileView extends StatelessWidget {
                             context: context,
                             title: context.isArabic
                                 ? "ادخل اسمك"
-                                : "enter your name",
+                                : "Enter Your Name",
                             initialValue:
                                 context.read<UserCubit>().state.data!.fullName,
                             onSave: (newValue) async {
@@ -409,7 +423,7 @@ class ChatProfileView extends StatelessWidget {
                             ),
                           ],
                         ),
-                        Spacer(),
+                        const Spacer(),
                         IconButton(
                             icon: Icon(
                               Icons.edit_outlined,

@@ -463,7 +463,7 @@ class _NewChatCardState extends State<NewChatCard> {
     return Container(
       margin: const EdgeInsetsDirectional.only(end: 8),
       decoration: const BoxDecoration(
-        color: AppColors.PRIMARY_COLOR,
+        color: AppColors.SECONDARY_COLOR,
         shape: BoxShape.circle,
       ),
       height: 20,

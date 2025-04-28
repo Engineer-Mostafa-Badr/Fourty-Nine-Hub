@@ -17,12 +17,14 @@ import '../../domain/entities/message_shared_contacts_entity.dart';
 class ContactsViewParams {
   final MessageEntity messageEntity;
   final ChatRoomCubit chatRoomCubit;
+
   ContactsViewParams(
       {required this.messageEntity, required this.chatRoomCubit});
 }
 
 class ContactsView extends StatefulWidget {
   const ContactsView({super.key, required this.contactsViewParams});
+
   final ContactsViewParams contactsViewParams;
 
   @override
@@ -62,7 +64,8 @@ class ContactsViewState extends State<ContactsView> {
             );
         return CustomScaffold(
           appBar: AppBar(
-            backgroundColor: AppColors.PRIMARY_COLOR, // Background color
+            backgroundColor: AppColors.PRIMARY_COLOR,
+            // Background color
             elevation: 0,
             leadingWidth: 26,
             leading: IconButton(
@@ -108,6 +111,7 @@ class ContactsViewState extends State<ContactsView> {
 
 class ContactCard extends StatefulWidget {
   const ContactCard({super.key, required this.contact});
+
   final MessageSharedContactsEntity contact;
 
   @override

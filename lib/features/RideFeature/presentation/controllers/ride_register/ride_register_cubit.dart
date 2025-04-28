@@ -243,6 +243,7 @@ class RideRegisterCubit extends Cubit<RideRegisterState> {
         emit(state.copyWith(status: RideRegisterStates.error, failure: failure));
       },
           (info) {
+            print("info.toJson()${info.toJson()}");
         emit(state.copyWith(
             status: RideRegisterStates.success,
             driverInfo: info,

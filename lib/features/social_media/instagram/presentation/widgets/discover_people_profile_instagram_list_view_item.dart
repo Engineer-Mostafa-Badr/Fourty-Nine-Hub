@@ -88,7 +88,11 @@ class DiscoverPeopleProfileInstagramListViewItem extends StatelessWidget {
             top: 0,
             end: 0,
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                context
+                    .read<ProfileInstagramCubit>()
+                    .removeFollowUser(suggest.userId);
+              },
               child: const Icon(
                 Icons.close,
               ),

@@ -471,19 +471,19 @@ class _UserPostCardState extends State<UserPostCard> {
                                       extra: post.user.id);
                                 }
                               }),
-                          RichText(
-                              text: TextSpan(children: [
-                            TextSpan(
-                                text: post.sinceTime,
-                                style: Styles.mediumText(color: Colors.grey)),
-                            const TextSpan(text: '  '),
-                            WidgetSpan(
-                                child: Icon(
-                              Icons.group,
-                              size: 30.sp,
-                              color: Colors.grey,
-                            ))
-                          ])),
+                          // RichText(
+                          //     text: TextSpan(children: [
+                          //   TextSpan(
+                          //       text: post.sinceTime,
+                          //       style: Styles.mediumText(color: Colors.grey)),
+                          //   const TextSpan(text: '  '),
+                          //   WidgetSpan(
+                          //       child: Icon(
+                          //     Icons.group,
+                          //     size: 30.sp,
+                          //     color: Colors.grey,
+                          //   ))
+                          // ])),
                         ],
                       ),
                     ),

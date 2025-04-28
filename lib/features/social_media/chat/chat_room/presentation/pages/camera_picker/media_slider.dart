@@ -4,6 +4,7 @@ part of 'camera_picker.dart';
 
 class MediaSliderView extends StatefulWidget {
   final ChatRoomCubit chatRoomCubit;
+
   const MediaSliderView({super.key, required this.chatRoomCubit});
 
   @override
@@ -394,6 +395,7 @@ class VideoPlayerCard extends StatefulWidget {
     super.key,
     required this.videoUrl,
   });
+
   final String videoUrl;
 
   @override

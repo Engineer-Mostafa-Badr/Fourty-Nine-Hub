@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 
 import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/account_taps/transfer_money/domain/entities/transfer_money_entity.dart';
+import 'package:fourtyninehub/features/account_taps/transfer_money/domain/use_case/fetch_user_use_case.dart';
 
 import 'package:fourtyninehub/features/account_taps/transfer_money/domain/use_case/transfer_money_use_case.dart';
 
@@ -21,7 +22,8 @@ class TransferMoneyRepositoryImpl extends TransferMoneyRepository {
   }
 
   @override
-  Future<Either<Failure, List<UserTransferMoneyEntity>>> fetchUser() {
-    return _transferMoneyRemoteDataSource.fetchUser();
+  Future<Either<Failure, List<UserTransferMoneyEntity>>> fetchUser(
+      FetchUserParams params) {
+    return _transferMoneyRemoteDataSource.fetchUser(params);
   }
 }

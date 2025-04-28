@@ -51,7 +51,7 @@ class _DatePickerTextFieldState extends State<DatePickerTextField> {
   Widget build(BuildContext context) {
     return DefaultTextFormField(
       currentController: widget.controller,
-      fillColor: AppColors.GREYBG,
+      fillColor: widget.color??AppColors.GREYBG,
       borderColor: Colors.transparent,
       readOnly: true,
       onTap: () async {

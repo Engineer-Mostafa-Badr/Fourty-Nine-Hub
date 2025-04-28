@@ -1,28 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateful/picker/date_picker_field.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
-import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_states.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/ride_register/ride_register_cubit.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/data/models/picture_optional_model/drag_analytics.dart';
-import 'package:fourtyninehub/features/ride/RideRequest/data/models/picture_optional_model/drag_analytics.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:fourtyninehub/routes/routes.dart';
 import 'package:intl/intl.dart';
-import '../widgets/close_widget.dart';
-import '../widgets/register_floating_action_button.dart';
 import '../widgets/upload_file_widget.dart';
 
 class DragAnalyticsScreen extends StatelessWidget {
@@ -67,9 +59,9 @@ class DragAnalyticsScreen extends StatelessWidget {
                               ),
                               IconButton(
                                 onPressed: () => context.pop(),
-                                icon: const Icon(
+                                icon: Icon(
                                   Icons.close,
-                                  color: AppColors.GREY_DARK_COLOR,
+                                  color: context.isDarkMode ? Colors.white : AppColors.GREY_DARK_COLOR,
                                 ),
                               )
                             ],
@@ -120,7 +112,7 @@ class DragAnalyticsScreen extends StatelessWidget {
                           //   hint: LocaleKeys.licenseNumber.localize,
                           // ),
                           const Sizer(),
-                          DatePickerTextField(color:AppColors.GREYBG,initialDate: DateTime.now(), minDate: DateTime(1900), maxDate: DateTime(2090),onDateSelected: (date){
+                          DatePickerTextField(color:context.isDarkMode?AppColors.GREY_DARK_COLOR:AppColors.GREYBG,initialDate: DateTime.now(), minDate: DateTime(1900), maxDate: DateTime(2090),onDateSelected: (date){
                             cubit.rideDragAnalysisExpireDateController.text = DateFormat('yyyy-MM-dd').format(date??DateTime.now());
                           }, controller:cubit.rideDragAnalysisExpireDateController,hintText: LocaleKeys.expireDate.localize,),
                         ],

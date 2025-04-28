@@ -263,6 +263,7 @@ abstract class  LocaleKeys {
   static const pay = 'pay';
   static const postSuccessfully = 'postSuccessfully';
   static const post = 'post';
+  static const post2 = 'post2';
   static const uploadImage = 'uploadImage';
   static const fieldIsRequired = 'fieldIsRequired';
   static const character = 'character';
@@ -513,6 +514,7 @@ abstract class  LocaleKeys {
   static const followerList = 'followerList';
   static const friendRequest = 'friendRequest';
   static const followRequest = 'followRequest';
+  static const followRequests = 'followRequests';
   static const public = 'public';
   static const followers = 'followers';
   static const onlyMe = 'onlyMe';
@@ -1491,6 +1493,7 @@ abstract class  LocaleKeys {
   static const newPost = 'newPost';
   static const addExplanatoryNote = 'addExplanatoryNote';
   static const searchForAUser = 'searchForAUser';
+  static const taggedPeople = 'taggedPeople';
   static const status = 'status';
   static const otpCode = 'otpCode';
   static const weHaveSentACodeTo = 'weHaveSentACodeTo';
@@ -1501,7 +1504,6 @@ abstract class  LocaleKeys {
   static const bad = 'bad';
   static const rateTheRestaurant = 'rateTheRestaurant';
   static const restaurantRateYou = 'restaurantRateYou';
-  static const taggedPeople = 'taggedPeople';
   static const addACommentsFor = 'addACommentsFor';
   static const commentAdded = 'commentAdded';
   static const areYouSureYouWantToDeleteThisComment = 'areYouSureYouWantToDeleteThisComment';
@@ -1522,6 +1524,7 @@ abstract class  LocaleKeys {
   static const followedBy = 'followedBy';
   static const socialExplain = 'socialExplain';
   static const imBookingOfAnotherClient = 'imBookingOfAnotherClient';
+  static const mostBooking = 'mostBooking';
   static const firstImpressionMessage = 'firstImpressionMessage';
   static const endToEndDescription = 'endToEndDescription';
   static const yourChatsAndCallArePrivate = 'yourChatsAndCallArePrivate';
@@ -1530,5 +1533,14 @@ abstract class  LocaleKeys {
   static const photoVideosAndDocuments = 'photoVideosAndDocuments';
   static const locationSharing = 'locationSharing';
   static const statusUpdates = 'statusUpdates';
+  static const oldPassword = 'oldPassword';
+  static const restartToApply = 'restartToApply';
+  static const restart = 'restart';
+  static const thereAreNoNotifications = 'thereAreNoNotifications';
+  static const manage = 'manage';
+  static const newReel = 'newReel';
+  static const newStory = 'newStory';
+  static const youHaveNoVideosToDisplay = 'youHaveNoVideosToDisplay';
+  static const youHaveNoImagesToDisplay = 'youHaveNoImagesToDisplay';
 
 }

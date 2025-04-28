@@ -483,9 +483,9 @@ class _FacebookGlobalPostCardState extends State<FacebookGlobalPostCard> {
                             }),
                         RichText(
                             text: TextSpan(children: [
-                          TextSpan(
-                              text: post.sinceTime,
-                              style: Styles.mediumText(color: Colors.grey)),
+                          // TextSpan(
+                          //     text: post.sinceTime,
+                          //     style: Styles.mediumText(color: Colors.grey)),
                           const WidgetSpan(
                               child: Icon(
                             Icons.group,

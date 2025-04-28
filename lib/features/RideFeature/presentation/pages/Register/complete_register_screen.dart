@@ -3,12 +3,12 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/utils/custom_show_dialog.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/pages/Register/Driver/upload_rider_images.dart';
-import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -26,7 +26,7 @@ class CompleteRegisterScreen extends StatelessWidget {
         showAnimatedDialog(
           context,
           AlertDialog(
-            backgroundColor: AppColors.AUTH_CONTAINER_COLOR,
+            backgroundColor: context.isDarkMode?AppColors.GREY_DARK_COLOR:AppColors.AUTH_CONTAINER_COLOR,
             contentPadding:
             const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
             content: Column(
@@ -41,21 +41,16 @@ class CompleteRegisterScreen extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                const Sizer(),
-                const Sizer(),
+                const Sizer(height: 30,),
                 Row(
                   children: [
                     Expanded(
                       child: AppButton(
                         label: LocaleKeys.cancel.localize,
-                        style: Styles.headerText(
-                          color: AppColors.AUTH_CONTAINER_COLOR,
-                        ),
+                        style: Styles.headerText(color: AppColors.AUTH_CONTAINER_COLOR),
                         onPressed: () {
                           context.pop();
-
-                          // Navigator.popAndPushNamed(
-                          //     context, Routes.welcomeRideRegister);
+                          // Navigator.popAndPushNamed(context, Routes.welcomeRideRegister);
                         },
                         radius: 15,
                         backColor:
@@ -67,9 +62,7 @@ class CompleteRegisterScreen extends StatelessWidget {
                     Expanded(
                       child: AppButton(
                         label: LocaleKeys.close.localize,
-                        style: Styles.headerText(
-                          color: AppColors.AUTH_CONTAINER_COLOR,
-                        ),
+                        style: Styles.headerText(color: AppColors.AUTH_CONTAINER_COLOR),
                         onPressed: (){
                           context.go(Routes.RIDE_HOME);
                         },
@@ -106,7 +99,10 @@ class CompleteRegisterScreen extends StatelessWidget {
                 Label(
                   text: LocaleKeys.thankYouWeWillRespondWithin24Hours.localize,
                   style: Styles.mediumText(
-                      fontSize: 32, fontWeight: FontWeight.w800),
+                      fontSize: 32, fontWeight: FontWeight.w800,
+                    color: context.isDarkMode?Colors.white:Colors.black
+
+                  ),
                 ),
                 const Sizer(),
                 Label(
@@ -115,13 +111,11 @@ class CompleteRegisterScreen extends StatelessWidget {
                   maxLines: 2,
                   textAlign: TextAlign.center,
                   style: Styles.mediumText(
-                      fontSize: 32, fontWeight: FontWeight.w500),
+                      fontSize: 32, fontWeight: FontWeight.w500,
+                      color: context.isDarkMode?Colors.white:Colors.black
+                  ),
                 ),
-                const Sizer(),
-                const Sizer(),
-                const Sizer(),
-                const Sizer(),
-                const Sizer(),
+                const Sizer(height: 75,),
                 AppButton(
                   label: LocaleKeys.completeRegistration.localize,
                   onPressed: () {

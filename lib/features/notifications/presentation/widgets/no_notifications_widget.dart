@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class NoNotificationsWidget extends StatelessWidget {
@@ -10,8 +13,10 @@ class NoNotificationsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Text(
-        'There are no notifications',
-        style: Styles.headerText(),
+        LocaleKeys.thereAreNoNotifications.localize,
+        style: Styles.headerText(
+          color: context.isDarkMode ? Colors.white : Colors.black,
+        ),
       ),
     );
   }

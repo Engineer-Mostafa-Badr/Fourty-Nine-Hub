@@ -4,6 +4,7 @@ import 'package:floating_draggable_widget/floating_draggable_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:go_router/go_router.dart';
@@ -179,21 +180,27 @@ class _CustomScaffoldState extends State<CustomScaffold>
               floatingNavigatorCubit.floatingNavigatorStatus
                   ? Container(
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Theme.of(context).scaffoldBackgroundColor,
                         borderRadius: BorderRadiusDirectional.horizontal(
                           end: Radius.circular(30.r),
                         ),
-                        border: const BorderDirectional(
+                        border: BorderDirectional(
                           end: BorderSide(
-                            color: AppColors.PRIMARY_COLOR,
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : AppColors.PRIMARY_COLOR,
                             width: 2,
                           ),
                           top: BorderSide(
-                            color: AppColors.PRIMARY_COLOR,
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : AppColors.PRIMARY_COLOR,
                             width: 2,
                           ),
                           bottom: BorderSide(
-                            color: AppColors.PRIMARY_COLOR,
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : AppColors.PRIMARY_COLOR,
                             width: 2,
                           ),
                         ),
@@ -215,24 +222,26 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               label: LocaleKeys.ride.localize,
                               image: Assets.rideIcon,
                               onTap: () {
-                                floatingNavigatorCubit.changeFloatingNavigator();
+                                floatingNavigatorCubit
+                                    .changeFloatingNavigator();
                                 context.push(Routes.RIDE_HOME);
                               },
                             ),
-                            drawerRollWidget(
-                              label: LocaleKeys.loading.localize,
-                              image: Assets.loading,
-                              // onTap: () {},
-                              onTap: () {
-                                floatingNavigatorCubit.changeFloatingNavigator();
-                                context.push(Routes.createLoadingTripScreen);
-                              },
-                            ),
+                            // drawerRollWidget(
+                            //   label: LocaleKeys.loading.localize,
+                            //   image: Assets.loading,
+                            //   // onTap: () {},
+                            //   onTap: () {
+                            //     floatingNavigatorCubit.changeFloatingNavigator();
+                            //     context.push(Routes.createLoadingTripScreen);
+                            //   },
+                            // ),
                             drawerRollWidget(
                               label: LocaleKeys.health.localize,
                               image: Assets.healthIcon,
                               onTap: () {
-                                floatingNavigatorCubit.changeFloatingNavigator();
+                                floatingNavigatorCubit
+                                    .changeFloatingNavigator();
                                 context.push(Routes.VISITA);
                               },
                             ),
@@ -240,7 +249,8 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               label: LocaleKeys.meal.localize,
                               image: Assets.meal,
                               onTap: () {
-                                floatingNavigatorCubit.changeFloatingNavigator();
+                                floatingNavigatorCubit
+                                    .changeFloatingNavigator();
                                 context.push(Routes.FOOD);
                               },
                             ),
@@ -248,7 +258,8 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               label: LocaleKeys.marriage.localize,
                               image: Assets.married,
                               onTap: () {
-                                floatingNavigatorCubit.changeFloatingNavigator();
+                                floatingNavigatorCubit
+                                    .changeFloatingNavigator();
                                 context.push(Routes.MARRIAGESUBCATEGORIES);
                               },
                             ),
@@ -256,7 +267,8 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               label: LocaleKeys.find.localize,
                               image: Assets.find,
                               onTap: () {
-                                floatingNavigatorCubit.changeFloatingNavigator();
+                                floatingNavigatorCubit
+                                    .changeFloatingNavigator();
                                 context.push(Routes.Tinder);
                               },
                             ),
@@ -264,7 +276,8 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               label: LocaleKeys.reel.localize,
                               image: Assets.reel,
                               onTap: () {
-                                floatingNavigatorCubit.changeFloatingNavigator();
+                                floatingNavigatorCubit
+                                    .changeFloatingNavigator();
                                 context.push(Routes.REELS);
                               },
                             ),
@@ -272,7 +285,8 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               label: LocaleKeys.spotlight.localize,
                               image: Assets.spotlight,
                               onTap: () {
-                                floatingNavigatorCubit.changeFloatingNavigator();
+                                floatingNavigatorCubit
+                                    .changeFloatingNavigator();
                                 context.push(Routes.SPOTLIGHT);
                               },
                             ),
@@ -280,7 +294,8 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               label: LocaleKeys.live.localize,
                               image: Assets.liveIcon,
                               onTap: () {
-                                floatingNavigatorCubit.changeFloatingNavigator();
+                                floatingNavigatorCubit
+                                    .changeFloatingNavigator();
                                 context.push(Routes.LIVE);
                               },
                             ),
@@ -288,7 +303,8 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               label: LocaleKeys.snap.localize,
                               image: Assets.snap,
                               onTap: () {
-                                floatingNavigatorCubit.changeFloatingNavigator();
+                                floatingNavigatorCubit
+                                    .changeFloatingNavigator();
                                 context.push(Routes.SNAP);
                               },
                             ),
@@ -297,7 +313,8 @@ class _CustomScaffoldState extends State<CustomScaffold>
                               image: Assets.whatsApp,
                               padding: const EdgeInsets.all(2),
                               onTap: () {
-                                floatingNavigatorCubit.changeFloatingNavigator();
+                                floatingNavigatorCubit
+                                    .changeFloatingNavigator();
                                 context.push(Routes.CHAT,
                                     extra: ChatsViewParams());
                               },
@@ -323,17 +340,23 @@ class _CustomScaffoldState extends State<CustomScaffold>
                       width: 10,
                       decoration: BoxDecoration(
                         color: AppColors.SECONDARY_COLOR,
-                        border: const BorderDirectional(
+                        border: BorderDirectional(
                           end: BorderSide(
-                            color: AppColors.PRIMARY_COLOR,
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : AppColors.PRIMARY_COLOR,
                             width: 2,
                           ),
                           top: BorderSide(
-                            color: AppColors.PRIMARY_COLOR,
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : AppColors.PRIMARY_COLOR,
                             width: 2,
                           ),
                           bottom: BorderSide(
-                            color: AppColors.PRIMARY_COLOR,
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : AppColors.PRIMARY_COLOR,
                             width: 2,
                           ),
                         ),

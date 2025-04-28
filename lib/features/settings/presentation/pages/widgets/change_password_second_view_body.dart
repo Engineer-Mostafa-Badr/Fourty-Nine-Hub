@@ -62,9 +62,9 @@ class _ChangePasswordSecondViewBodyState
               child: Column(
                 children: [
                   LabelAndTextFormField(
-                    label: 'Old Password',
+                    label:LocaleKeys.oldPassword.localize,
                     controller: forgotPasswordCubit.odlPasswordController,
-                    hint: 'Old Password',
+                    hint: LocaleKeys.oldPassword.localize,
                   ),
                   const SizedBox(
                     height: 8,
