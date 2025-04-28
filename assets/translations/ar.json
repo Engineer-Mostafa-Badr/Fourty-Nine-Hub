@@ -1549,5 +1549,7 @@
   "statusUpdates": "تحديثات الحالة",
   "manage": "إدارة",
   "newReel": "ريل جديد",
-  "newStory": "قصة جديدة"
+  "newStory": "قصة جديدة",
+  "youHaveNoVideosToDisplay": "ليس لديك مقاطع فيديو لعرضها",
+  "youHaveNoImagesToDisplay": "ليس لديك صور لعرضها"
 }

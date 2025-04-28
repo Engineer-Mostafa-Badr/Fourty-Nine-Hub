@@ -1566,5 +1566,7 @@
   "mostBooking": "Most Booking",
   "manage": "Manage",
   "newReel": "New Reel",
-  "newStory": "New Story"
+  "newStory": "New Story",
+  "youHaveNoVideosToDisplay": "You have no videos to display.",
+  "youHaveNoImagesToDisplay": "You have no images to display."
 }
