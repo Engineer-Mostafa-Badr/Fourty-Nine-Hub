@@ -797,7 +797,7 @@ class MessagesRemoteDataSourceImplementation
     return response.fold((failure) => Left(failure), (data) {
       List<MessageModel> messageModels = [];
 
-      for (var element in data['data']) {
+      for (var element in data['data']['messages']) {
         log("message text ${element['text']}");
         log("message byMe ${element['byMe']}");
         MessageModel messageModel = MessageModel.fromJson(element);
