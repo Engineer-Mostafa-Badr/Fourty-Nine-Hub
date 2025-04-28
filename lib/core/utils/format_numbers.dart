@@ -4,16 +4,57 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class FormatNumbers {
-  String formatNumber(num number, {int decimals = 1}) {
+  // String formatNumber(num number, {int decimals = 1}) {
+  //   if (number >= 1000 && number < 1000000) {
+  //     return '${(number / 1000).toStringAsFixed(decimals)}K';
+  //   } else if (number >= 1000000 && number < 1000000000) {
+  //     return '${(number / 1000000).toStringAsFixed(decimals)}M';
+  //   } else if (number >= 1000000000) {
+  //     return '${(number / 1000000000).toStringAsFixed(decimals)}B';
+  //   } else {
+  //     return number.toStringAsFixed(0);
+  //   }
+  // }
+
+  String formatNumber(num number,
+      {int decimals = 1, bool useArabicNumerals = false}) {
+    String formattedNumber;
+
     if (number >= 1000 && number < 1000000) {
-      return '${(number / 1000).toStringAsFixed(decimals)}K';
+      formattedNumber = '${(number / 1000).toStringAsFixed(decimals)} K';
     } else if (number >= 1000000 && number < 1000000000) {
-      return '${(number / 1000000).toStringAsFixed(decimals)}M';
+      formattedNumber = '${(number / 1000000).toStringAsFixed(decimals)} M';
     } else if (number >= 1000000000) {
-      return '${(number / 1000000000).toStringAsFixed(decimals)}B';
+      formattedNumber = '${(number / 1000000000).toStringAsFixed(decimals)} B';
     } else {
-      return number.toStringAsFixed(0);
+      formattedNumber = number.toStringAsFixed(0);
     }
+
+    if (useArabicNumerals) {
+      return _convertToArabicNumerals(formattedNumber);
+    }
+    return formattedNumber;
+  }
+
+  String _convertToArabicNumerals(String input) {
+    const Map<String, String> numeralsMap = {
+      '0': '٠',
+      '1': '١',
+      '2': '٢',
+      '3': '٣',
+      '4': '٤',
+      '5': '٥',
+      '6': '٦',
+      '7': '٧',
+      '8': '٨',
+      '9': '٩',
+      '.': '.',
+      'K': 'ألف ',
+      'M': 'مليون ',
+      'B': 'مليار ',
+    };
+
+    return input.split('').map((char) => numeralsMap[char] ?? char).join('');
   }
 
   String formatNumberByComma(BuildContext context, String? balance) {

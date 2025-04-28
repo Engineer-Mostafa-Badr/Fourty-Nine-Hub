@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/gift_competitions_entity.dart';
 import '../../../../../core/error/failure.dart';
 import '../entities/gift_and_competition_entity.dart';
 import '../entities/wallet/main_category_entity.dart';
