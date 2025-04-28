@@ -94,6 +94,9 @@ class RideCubit extends Cubit<RideState> {
   bool showWaypointOne = false;
   bool showWaypointTwo = false;
 
+  String? selectedCategoryType = "ride";
+  int? selectedCategoryIndex = 0;
+
   bool hasPendingShownBottomSheet = false;
   bool hasAcceptedShownBottomSheet = false;
 
@@ -401,23 +404,16 @@ class RideCubit extends Cubit<RideState> {
         emit(state.copyWith(status: RideStates.error, failure: failure));
       },
       (rideCategory) async {
-        // RegisterRideSpecialEntity? rideSocketCachedData = await Storage().getDriverEntity();
-        // RegisterRideNotSpecialEntity? rideNonSocketCachedData = await Storage().getDriverNoSocketEntity();
-        // List<SubCategoryEntityUpdated>? rideSubCategories = rideCategory.subCategories;
-        // print("data?.isShipping111${rideSocketCachedData?.isShipping}");
-        //   print("rideSocketCachedData?.isShipping${rideSocketCachedData?.isShipping}");
-        //   for (var item in rideSubCategories) {
-        //     List<String> subcategoryIds = [];
-        //     subcategoryIds.addAll(rideSocketCachedData?.subcategoryIds??[]);
-        //     subcategoryIds.add(rideNonSocketCachedData?.subcategoryId??'');
-        //     if (subcategoryIds.contains(item.subCategoryId)) {
-        //       item.isSelected = true;
-        //       item.isEnabled = true;
-        //     }else{
-        //       item.isSelected = false;
-        //       item.isEnabled = false;
-        //     }
-        //   }
+        if (selectedCategoryType == 'ride' && subCategoryId.isNotEmpty) {
+          final index = rideCategory.subCategories.indexWhere(
+                (sub) => sub.subCategoryId == subCategoryId,
+          );
+
+          if (index != -1) {
+            final matchedSubCategory = rideCategory.subCategories.removeAt(index);
+            rideCategory.subCategories.insert(0, matchedSubCategory);
+          }
+        }
         emit(state.copyWith(
             status: RideStates.success,
             rideCategory: rideCategory,
@@ -437,19 +433,16 @@ class RideCubit extends Cubit<RideState> {
       (failure) =>
           emit(state.copyWith(status: RideStates.error, failure: failure)),
       (rideCategory) async {
-        // LoadingRegisterEntity? loadingCachedData = await Storage().getLoaderEntity();
-        // List<SubCategoryEntityUpdated>? rideSubCategories = rideCategory.subCategories;
-        // for (var item in rideSubCategories) {
-        //   List<String> subcategoryIds = [];
-        //   subcategoryIds.add(loadingCachedData?.categoryId??'');
-        //   if (subcategoryIds.contains(item.subCategoryId)) {
-        //     item.isSelected = true;
-        //     item.isEnabled = true;
-        //   }else{
-        //     item.isSelected = false;
-        //     item.isEnabled = false;
-        //   }
-        // }
+        if (selectedCategoryType != 'ride' && subCategoryId.isNotEmpty) {
+          final index = rideCategory.subCategories.indexWhere(
+                (sub) => sub.subCategoryId == subCategoryId,
+          );
+
+          if (index != -1) {
+            final matchedSubCategory = rideCategory.subCategories.removeAt(index);
+            rideCategory.subCategories.insert(0, matchedSubCategory);
+          }
+        }
         emit(state.copyWith(
             status: RideStates.success,
             shippingCategory: rideCategory,
@@ -760,10 +753,10 @@ class RideCubit extends Cubit<RideState> {
             else{
               updateToLocation(lat: rideRequestTrip.targetCoordinates!.first, lng: rideRequestTrip.targetCoordinates!.last, address: rideRequestTrip.to!);
               updateCurrentLocation(lat: rideRequestTrip.startCoordinates!.first, lng: rideRequestTrip.startCoordinates!.last, address: rideRequestTrip.from!);
-              if(rideRequestTrip.wayPointOne != null){
+              if(rideRequestTrip.wayPointOne != null && rideRequestTrip.wayPointOne!.isNotEmpty){
                 updateWayPointOne(lat: rideRequestTrip.wayPointOne!.first, lng: rideRequestTrip.wayPointOne!.last, address: rideRequestTrip.wayPointOneTitle!);
               }
-              if(rideRequestTrip.wayPointTwo != null){
+              if(rideRequestTrip.wayPointTwo != null && rideRequestTrip.wayPointTwo!.isNotEmpty){
                 updateWayPointTwo(lat: rideRequestTrip.wayPointTwo!.first, lng: rideRequestTrip.wayPointTwo!.last, address: rideRequestTrip.wayPointTwoTitle!);
               }
             }
@@ -829,10 +822,10 @@ class RideCubit extends Cubit<RideState> {
             else{
               updateToLocation(lat: rideRequestTrip.targetCoordinates!.first, lng: rideRequestTrip.targetCoordinates!.last, address: rideRequestTrip.to!);
               updateCurrentLocation(lat: rideRequestTrip.startCoordinates!.first, lng: rideRequestTrip.startCoordinates!.last, address: rideRequestTrip.from!);
-              if(rideRequestTrip.wayPointOne != null){
+              if(rideRequestTrip.wayPointOne != null && rideRequestTrip.wayPointOne!.isNotEmpty){
                 updateWayPointOne(lat: rideRequestTrip.wayPointOne!.first, lng: rideRequestTrip.wayPointOne!.last, address: rideRequestTrip.wayPointOneTitle!);
               }
-              if(rideRequestTrip.wayPointTwo != null){
+              if(rideRequestTrip.wayPointTwo != null && rideRequestTrip.wayPointTwo!.isNotEmpty){
                 updateWayPointTwo(lat: rideRequestTrip.wayPointTwo!.first, lng: rideRequestTrip.wayPointTwo!.last, address: rideRequestTrip.wayPointTwoTitle!);
               }
             }
@@ -854,10 +847,10 @@ class RideCubit extends Cubit<RideState> {
             else{
               updateToLocation(lat: rideRequestTrip.targetCoordinates!.first, lng: rideRequestTrip.targetCoordinates!.last, address: rideRequestTrip.to!);
               updateCurrentLocation(lat: rideRequestTrip.startCoordinates!.first, lng: rideRequestTrip.startCoordinates!.last, address: rideRequestTrip.from!);
-              if(rideRequestTrip.wayPointOne != null){
+              if(rideRequestTrip.wayPointOne != null && rideRequestTrip.wayPointOne!.isNotEmpty){
                 updateWayPointOne(lat: rideRequestTrip.wayPointOne!.first, lng: rideRequestTrip.wayPointOne!.last, address: rideRequestTrip.wayPointOneTitle!);
               }
-              if(rideRequestTrip.wayPointTwo != null){
+              if(rideRequestTrip.wayPointTwo != null && rideRequestTrip.wayPointTwo!.isNotEmpty){
                 updateWayPointTwo(lat: rideRequestTrip.wayPointTwo!.first, lng: rideRequestTrip.wayPointTwo!.last, address: rideRequestTrip.wayPointTwoTitle!);
               }
             }
