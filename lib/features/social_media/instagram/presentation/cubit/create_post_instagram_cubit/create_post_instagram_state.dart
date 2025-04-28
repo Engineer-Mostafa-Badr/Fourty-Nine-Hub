@@ -11,61 +11,87 @@ extension CreatePostInstagramStateX on CreatePostInstagramStates {
 
 class CreatePostInstagramState {
   final CreatePostInstagramStates status;
-  final List<File> images;
-  final List<File> selectedImages;
+  final List<AssetEntity> galleryPost;
+  final List<AssetEntity> selectedGalleryPost;
+  final List<AssetEntity> galleryReels;
+  final List<AssetEntity> selectedGalleryReels;
+  final bool loadingReelsScreen;
+  // final bool isVideoInitialized;
   final bool isPermissionGranted;
   final int postTypeSelectedIndex;
-  final bool multiSelect;
-  final List<File> selectedMeda;
+  final bool multiSelectGalleryPost;
+  final bool multiSelectGalleryReel;
+  // final List<File> selectedMeda;
   final Failure? failure;
   final int currentPage;
   final bool hasMoreImages;
   final List<UserTagEntity> usersTag;
   final LocationInstagramEntity? location;
+  final bool isImageCover;
 
   const CreatePostInstagramState({
     this.status = CreatePostInstagramStates.loading,
-    this.images = const [],
-    this.selectedImages = const [],
+    this.galleryPost = const [],
+    this.selectedGalleryPost = const [],
+    this.galleryReels = const [],
+    this.selectedGalleryReels = const [],
+    this.loadingReelsScreen = false,
+    // this.isVideoInitialized = false,
     this.isPermissionGranted = false,
     this.postTypeSelectedIndex = 0,
-    this.multiSelect = false,
-    this.selectedMeda = const [],
+    this.multiSelectGalleryPost = false,
+    this.multiSelectGalleryReel = false,
+    // this.selectedMeda = const [],
     this.failure,
     this.currentPage = 0,
     this.hasMoreImages = true,
     this.usersTag = const [],
     this.location,
+    this.isImageCover = false,
   });
 
   CreatePostInstagramState copyWith({
     CreatePostInstagramStates? status,
-    List<File>? images,
-    List<File>? selectedImages,
+    List<AssetEntity>? galleryPost,
+    List<AssetEntity>? selectedGalleryPost,
+    List<AssetEntity>? galleryReels,
+    List<AssetEntity>? selectedGalleryReels,
+    // bool? isVideoInitialized,
+    bool? loadingReelsScreen,
     bool? isPermissionGranted,
     int? postTypeSelectedIndex,
-    bool? multiSelect,
-    List<File>? selectedMeda,
+    bool? multiSelectGalleryPost,
+    bool? multiSelectGalleryReel,
+    // List<File>? selectedMeda,
     Failure? failure,
     int? currentPage,
     bool? hasMoreImages,
     List<UserTagEntity>? usersTag,
     LocationInstagramEntity? location,
+    bool? isImageCover,
   }) {
     return CreatePostInstagramState(
       status: status ?? this.status,
-      images: images ?? this.images,
-      selectedImages: selectedImages ?? this.selectedImages,
+      galleryPost: galleryPost ?? this.galleryPost,
+      selectedGalleryPost: selectedGalleryPost ?? this.selectedGalleryPost,
+      galleryReels: galleryReels ?? this.galleryReels,
+      selectedGalleryReels: selectedGalleryReels ?? this.selectedGalleryReels,
+      loadingReelsScreen: loadingReelsScreen ?? this.loadingReelsScreen,
+      // isVideoInitialized: isVideoInitialized ?? this.isVideoInitialized,
       isPermissionGranted: isPermissionGranted ?? this.isPermissionGranted,
       postTypeSelectedIndex:
           postTypeSelectedIndex ?? this.postTypeSelectedIndex,
-      multiSelect: multiSelect ?? this.multiSelect,
-      selectedMeda: selectedMeda ?? this.selectedMeda,
+      multiSelectGalleryPost:
+          multiSelectGalleryPost ?? this.multiSelectGalleryPost,
+      multiSelectGalleryReel:
+          multiSelectGalleryReel ?? this.multiSelectGalleryReel,
+      // selectedMeda: selectedMeda ?? this.selectedMeda,
       failure: failure ?? this.failure,
       currentPage: currentPage ?? this.currentPage,
       hasMoreImages: hasMoreImages ?? this.hasMoreImages,
       usersTag: usersTag ?? this.usersTag,
       location: location ?? this.location,
+      isImageCover: isImageCover ?? this.isImageCover,
     );
   }
 }

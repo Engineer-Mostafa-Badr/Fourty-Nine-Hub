@@ -337,6 +337,7 @@ abstract class Assets {
   static String azkarPrayer = 'assets/drawerIcons/azkar_prayer.png';
   static String imageWhiteIcon = 'assets/icons/image_white_icon.svg';
   static String expandIcon = 'assets/icons/expand_icon.svg';
+  static String narrowIcon = 'assets/icons/narrow_icon.svg';
 
   //! audio
   static String notificationAudioApp = 'audio/notification.mp3';
