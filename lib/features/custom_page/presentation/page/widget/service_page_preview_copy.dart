@@ -471,6 +471,10 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(40.r),
+          image: DecorationImage(
+            image: AssetImage(image),
+            fit: BoxFit.fill,
+          ),
           boxShadow: [
             BoxShadow(
               color: shadowColor,
@@ -484,11 +488,12 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Image.asset(
-              image,
-              fit: BoxFit.cover,
-              width: double.infinity,
-            ),
+            // Image.asset(
+            //   image,
+            //   fit: BoxFit.fill,
+            //   // width: double.infinity,
+            //   // height: double.infinity,
+            // ),
             Container(
               color: Colors.black38,
             ),
@@ -615,6 +620,10 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(40.r),
+          image: DecorationImage(
+            image: AssetImage(Assets.joinTrip),
+            fit: BoxFit.fill,
+          ),
           boxShadow: [
             BoxShadow(
               color: AppColors.PRIMARY_COLOR.withValues(alpha: .8),
@@ -630,11 +639,11 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Image.asset(
-              Assets.joinTrip,
-              fit: BoxFit.fill,
-              width: double.infinity,
-            ),
+            // Image.asset(
+            //   Assets.joinTrip,
+            //   fit: BoxFit.fill,
+            //   width: double.infinity,
+            // ),
             Container(
               color: Colors.black38,
             ),

@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
@@ -57,14 +58,14 @@ class _MainCategoriesFlipCardsViewState
 
     // print('data is ${widget.data}');
     if (widget.data != null) {
-      labelName = context.locale == Locales.english
-          ? widget.data![0].nameEn.toString()
-          : widget.data![0].name.toString();
+      labelName = context.isArabic
+          ? widget.data![0].name.toString()
+          : widget.data![0].nameEn.toString();
     }
     if (mainCategoriesCubit.state.customPage != null) {
-      labelName = context.locale == Locales.english
-          ? mainCategoriesCubit.state.customPage![0].nameEn.toString()
-          : mainCategoriesCubit.state.customPage![0].name.toString();
+      labelName = context.isArabic
+          ? mainCategoriesCubit.state.customPage![0].name.toString()
+          : mainCategoriesCubit.state.customPage![0].nameEn.toString();
     }
     // labelName = context.locale == Locales.english
     //     ? mainCategoriesCubit.state.customPage != null
