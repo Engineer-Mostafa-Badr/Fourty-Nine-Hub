@@ -697,11 +697,6 @@ class AppPages {
                     create: (context) =>
                         serviceLocator<MainCategoriesTapsCubit>(),
                   ),
-                  // BlocProvider(
-                  //   create: (context) =>
-                  //       serviceLocator<SubcategoriesCubit>(),
-                  // ),
-
                 ], child: const MainCategoriesGridView()),
               ),
               GoRoute(

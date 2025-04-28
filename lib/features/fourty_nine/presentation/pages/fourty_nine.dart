@@ -216,7 +216,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                     velocity: const Velocity(pixelsPerSecond: Offset(30, 0)),
                     "${LocaleKeys.choosePreferredAppStyle.localize}..  ${LocaleKeys.clickHere.localize}!!                                         ",
                     style: Styles.headerText(
-                        fontSize: 30, color: AppColors.SECONDARY_COLOR),
+                        fontSize: 30, color: context.isDarkMode ? Colors.white : AppColors.SECONDARY_COLOR),
                     textDirection: context.isArabic
                         ? TextDirection.rtl
                         : TextDirection.ltr,
@@ -549,6 +549,10 @@ class _FourtyNineViewState extends State<FourtyNineView>
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(40.r),
+          image: DecorationImage(
+            image: AssetImage(image),
+            fit: BoxFit.fill,
+          ),
           boxShadow: [
             BoxShadow(
               color: shadowColor,
@@ -562,11 +566,12 @@ class _FourtyNineViewState extends State<FourtyNineView>
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Image.asset(
-              image,
-              fit: BoxFit.fill,
-              width: double.infinity,
-            ),
+            // Image.asset(
+            //   image,
+            //   fit: BoxFit.fill,
+            //   // width: double.infinity,
+            //   // height: double.infinity,
+            // ),
             Container(
               color: Colors.black38,
             ),
@@ -636,11 +641,14 @@ class _FourtyNineViewState extends State<FourtyNineView>
         route != null ? context.push(route) : null;
       },
       child: Container(
-        // height: kToolbarHeight * 2.h,
         height: 64,
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(40.r),
+          image: DecorationImage(
+            image: AssetImage(Assets.joinTrip),
+            fit: BoxFit.fill,
+          ),
           boxShadow: [
             BoxShadow(
               color: AppColors.PRIMARY_COLOR.withValues(alpha: .8),
@@ -656,11 +664,11 @@ class _FourtyNineViewState extends State<FourtyNineView>
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Image.asset(
-              Assets.joinTrip,
-              fit: BoxFit.fill,
-              width: double.infinity,
-            ),
+            // Image.asset(
+            //   Assets.joinTrip,
+            //   fit: BoxFit.fill,
+            //   width: double.infinity,
+            // ),
             Container(
               color: Colors.black38,
             ),
@@ -677,6 +685,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
       ),
     );
   }
+
 }
 
 /*  Row _auctionAndInstallmentWidget() {
