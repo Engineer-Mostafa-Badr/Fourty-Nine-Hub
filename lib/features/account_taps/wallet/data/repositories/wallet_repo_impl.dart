@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/data/models/wallet/wallet_model.dart';
-import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/gift_competitions_entity.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet/wallet_history_entity.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet/wallet_subscription_entity.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/add_subscribe_use_case.dart';
