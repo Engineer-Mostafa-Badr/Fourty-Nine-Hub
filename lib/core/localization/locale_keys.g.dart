@@ -1536,5 +1536,7 @@ abstract class  LocaleKeys {
   static const manage = 'manage';
   static const newReel = 'newReel';
   static const newStory = 'newStory';
+  static const youHaveNoVideosToDisplay = 'youHaveNoVideosToDisplay';
+  static const youHaveNoImagesToDisplay = 'youHaveNoImagesToDisplay';
 
 }

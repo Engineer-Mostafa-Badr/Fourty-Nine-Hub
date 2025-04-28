@@ -1,6 +1,3 @@
-
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -10,6 +7,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/create_post_instagram_cubit/create_post_instagram_cubit.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:wechat_assets_picker/wechat_assets_picker.dart';
 
 class ShowImageTagPeopleWidget extends StatefulWidget {
   const ShowImageTagPeopleWidget({
@@ -25,13 +23,14 @@ class ShowImageTagPeopleWidget extends StatefulWidget {
 }
 
 class _ShowImageTagPeopleWidgetState extends State<ShowImageTagPeopleWidget> {
-  late final List<File> images;
+  late final List<AssetEntity> images;
 
   @override
   void initState() {
-    images = context.read<CreatePostInstagramCubit>().state.selectedImages;
+    images = context.read<CreatePostInstagramCubit>().state.selectedGalleryPost;
     super.initState();
   }
+
   final List<Offset> _tapPositions = [];
 
   /// تقوم باستقبال موقع الضغط
@@ -91,12 +90,18 @@ class _ShowImageTagPeopleWidgetState extends State<ShowImageTagPeopleWidget> {
                 _handleTapDown(details);
                 widget.onTap();
               },
-              child: Image.file(
+              child: AssetEntityImage(
                 images[index],
                 fit: BoxFit.contain,
                 width: double.infinity,
                 height: double.infinity,
               ),
+              // child: Image.file(
+              //   images[index],
+              //   fit: BoxFit.contain,
+              //   width: double.infinity,
+              //   height: double.infinity,
+              // ),
             ),
             ..._tapPositions.map((position) => _buildTapIndicator(position)),
           ],
