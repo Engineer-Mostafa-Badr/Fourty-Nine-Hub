@@ -131,8 +131,10 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                               .isAdmin ==
                                           "admin"
                                       ? null
-                                      : () => context.push(Routes.VIEWCONTACT,
-                                          extra: chatsCubit),
+                                      : () => context.push(
+                                            Routes.VIEWCONTACT,
+                                            extra: chatsCubit,
+                                          ),
                                   child: Row(
                                     children: [
                                       context
@@ -259,19 +261,20 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                                                       context)
                                                                   .size
                                                                   .width *
-                                                              0.35),
-                                                  child:   Label(
-                                                     text: context
-                                                          .read<ChatsCubit>()
-                                                          .selectedChat
-                                                          .name,
-                                                      style:
-                                                          Styles.headerText(
-                                                        color: Colors.black,
-                                                        fontWeight:
-                                                            FontWeight.w400,
+                                                              0.30),
+                                                      child: Label(
+                                                        text: context
+                                                            .read<ChatsCubit>()
+                                                            .selectedChat
+                                                            .name,
+                                                        style:
+                                                            Styles.headerText(
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                        ),
                                                       ),
-                                                    ),),
+                                                    ),
                                                     context
                                                                 .read<
                                                                     ChatsCubit>()
@@ -443,7 +446,6 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                           );
                                         },
                                       ),
-                                      // const Sizer(width: 32),
                                       IconButton(
                                         icon: const Icon(
                                           Icons.call,
@@ -500,7 +502,6 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                                       )));
                                         },
                                       ),
-                                      // const Sizer(width: 20),
                                       PopupMenuButton(
                                         icon: const Icon(
                                           Icons.more_vert,
@@ -563,10 +564,6 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                       },
                                       color: Colors.black,
                                     ),
-                                  // if (widget.chatRoomCubit.selectedMessages
-                                  //         .length ==
-                                  //     1)
-                                  //   const Sizer(width: 16),
                                   if (widget.chatRoomCubit.selectedMessages
                                           .length ==
                                       1)
@@ -583,10 +580,6 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                         color: Colors.black,
                                       ),
                                     ),
-                                  // if (widget.chatRoomCubit.selectedMessages
-                                  //         .length ==
-                                  //     1)
-                                  //   const Sizer(width: 16),
                                   IconButton(
                                     onPressed: () async {
                                       // await chatsCubit.deleteChat();
@@ -599,7 +592,6 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                       color: Colors.black,
                                     ),
                                   ),
-                                  // const Sizer(width: 16),
                                   IconButton(
                                     onPressed: () async {
                                       context.push(

@@ -256,10 +256,7 @@ class _LoginViewState extends State<LoginView> {
         },
         child: Scaffold(
           resizeToAvoidBottomInset: true,
-          appBar: const PreferredSize(
-            preferredSize: Size.fromHeight(30),
-            child: BackAppBar(),
-          ),
+          appBar: const BackAppBar(),
           body: SingleChildScrollView(
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             controller: scrollController,
@@ -416,7 +413,7 @@ class LoginWidget extends StatefulWidget {
 }
 
 class _LoginWidgetState extends State<LoginWidget> {
-  bool obsecure = false;
+  bool obsecure = true;
 
   @override
   Widget build(BuildContext context) {

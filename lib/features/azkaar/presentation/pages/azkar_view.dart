@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
@@ -11,7 +10,6 @@ import 'package:fourtyninehub/features/azkaar/presentation/cubit/azkaar_state.da
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../common/widgets/form/text_fields/default_text_form_field.dart';
 import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
@@ -96,10 +94,7 @@ class _AzkarViewState extends State<AzkarView> {
                       borderSide: const BorderSide(color: Colors.transparent),
                     ),
                     hintText: LocaleKeys.search.localize,
-                    hintStyle: Styles.mediumText(
-                        color: context.isDarkMode
-                            ? Colors.white
-                            : AppColors.QUANTITY_COLOR),
+                    hintStyle: Styles.mediumText(color: Colors.black),
                   ),
                   controller: _cubit.searchController,
                   onSubmitted: (value) {
@@ -160,7 +155,7 @@ class _AzkarViewState extends State<AzkarView> {
         ),
         child: Row(
           children: [
-            Image.asset(Assets.azkarPrayer),
+            Image.asset(Assets.azkarPrayer,color: context.isDarkMode?AppColors.PRIMARY_COLOR:null,),
             Expanded(
               child: Align(
                 alignment: Alignment.center,

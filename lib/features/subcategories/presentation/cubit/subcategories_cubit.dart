@@ -137,14 +137,14 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
   }
 
   Future<List<SubCategoryEntity>> getSubcategories(
-      {required PaginationParams paginationParams}) async {
+      {required PaginationParams paginationParams,String? mainCategoryId}) async {
     List<SubCategoryEntity> data = [];
     emit(state.copyWith(status: SubcategoriesStates.loading));
     // await UserCubit.to.getUser();
     final user = UserCubit.to.state.data?.id;
     print('useeeerId===>$user}');
     final response = await _getSubcategoriesUsecase(GetSubCategoriesParams(
-        mainCategoryId: _mainCategoryId,
+        mainCategoryId: mainCategoryId??_mainCategoryId,
         paginationParams: paginationParams,
         userId: user ?? ''));
     response.fold(

@@ -97,7 +97,7 @@ class _NotificationCardState extends State<NotificationCard> {
                             margin: EdgeInsetsDirectional.only(end: 15.w),
                             height: kToolbarHeight,
                             width: kToolbarHeight,
-                            child: Image.asset(
+                            child: Image.network(
                               widget.notificationEntity.receiverId ==
                                       UserCubit.to.state.data?.id
                                   ? UserCubit.to.state.data?.profilePicture ??
@@ -106,7 +106,8 @@ class _NotificationCardState extends State<NotificationCard> {
                                       ? Assets.maleImagePlaceholder
                                       : Assets.femaleImagePlacehlder,
                               fit: BoxFit.fill,
-                            ));
+                            ),
+                        );
                       }
                       return Container(
                         height: kToolbarHeight,

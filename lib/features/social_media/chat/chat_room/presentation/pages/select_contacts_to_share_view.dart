@@ -13,6 +13,7 @@ import '../../../../../../core/widget/custom_scaffold.dart';
 
 class SelectContactsToShareView extends StatefulWidget {
   const SelectContactsToShareView({super.key, required this.chatRoomCubit});
+
   final ChatRoomCubit chatRoomCubit;
 
   @override
@@ -23,6 +24,7 @@ class SelectContactsToShareView extends StatefulWidget {
 class _SelectContactsToShareViewState extends State<SelectContactsToShareView> {
   bool _permissionDenied = false;
   List<Contact>? _contacts;
+
   @override
   void initState() {
     super.initState();

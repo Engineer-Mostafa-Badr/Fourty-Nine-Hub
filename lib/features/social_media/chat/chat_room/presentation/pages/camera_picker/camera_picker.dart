@@ -38,6 +38,7 @@ class CameraPickerViewPrams {
 
 class CameraPickerView extends StatelessWidget {
   final CameraPickerViewPrams prams;
+
   const CameraPickerView({super.key, required this.prams});
 
   @override
@@ -66,6 +67,7 @@ class _CamView extends StatefulWidget {
   final void Function(List<camera.XFile> media)? onDone;
 
   const _CamView({required this.onDone, required this.chatRoomCubit});
+
   final ChatRoomCubit chatRoomCubit;
 
   @override
@@ -316,7 +318,7 @@ class _CamViewState extends State<_CamView> {
 }
 
 class _BaseIcon extends StatelessWidget {
-  final Color?    color;
+  final Color? color;
   final IconData icon;
   final double? iconSize;
   final void Function()? onTap;
@@ -325,7 +327,7 @@ class _BaseIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell( 
+    return InkWell(
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.all(15.h),
