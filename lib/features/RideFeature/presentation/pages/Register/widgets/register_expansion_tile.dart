@@ -39,17 +39,13 @@ class _RegisterExpansionTileState extends State<RegisterExpansionTile> {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: context.isDarkMode ? Colors.grey.shade600 : AppColors.GREYBG,
+        color: context.isDarkMode?AppColors.GREY_DARK_COLOR:AppColors.GREYBG,
       ),
       child: ExpansionTile(
         controller: controller,
-        title: selectedTitle,
-        // Use state variable
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        backgroundColor:
-            context.isDarkMode ? Colors.grey.shade600 : AppColors.GREYBG,
+        title: selectedTitle, // Use state variable
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        backgroundColor: context.isDarkMode?AppColors.GREY_DARK_COLOR:AppColors.GREYBG,
         expandedAlignment: Alignment.centerLeft,
         expandedCrossAxisAlignment: CrossAxisAlignment.start,
         dense: true,
@@ -65,7 +61,7 @@ class _RegisterExpansionTileState extends State<RegisterExpansionTile> {
               padding: const EdgeInsets.all(16.0),
               children: List.generate(
                 widget.children.length,
-                (index) => InkWell(
+                    (index) => InkWell(
                   onTap: () {
                     if (widget.children.isNotEmpty) {
                       setState(() {
@@ -74,8 +70,7 @@ class _RegisterExpansionTileState extends State<RegisterExpansionTile> {
                       });
 
                       if (widget.onChange != null) {
-                        widget
-                            .onChange!(widget.children[index]); // Notify parent
+                        widget.onChange!(widget.children[index]); // Notify parent
                         if (widget.onSelect != null) {
                           widget.onSelect!(index);
                         }
