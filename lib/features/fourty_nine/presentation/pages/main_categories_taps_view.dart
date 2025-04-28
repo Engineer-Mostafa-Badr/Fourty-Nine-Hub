@@ -70,7 +70,12 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
         setState(() {});
       });
     });
-    _fetchSubcategories(stateSubCategories: context.read<MainCategoriesTapsCubit>().mainCategories.first.subcategories);
+    _fetchSubcategories(
+        stateSubCategories: context
+            .read<MainCategoriesTapsCubit>()
+            .mainCategories
+            .first
+            .subcategories);
   }
 
   @override
@@ -78,15 +83,15 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
     super.didChangeDependencies();
     labelName = context.isArabic
         ? context
-        .read<MainCategoriesTapsCubit>()
-        .mainCategories[0]
-        .name
-        .toString()
+            .read<MainCategoriesTapsCubit>()
+            .mainCategories[0]
+            .name
+            .toString()
         : context
-        .read<MainCategoriesTapsCubit>()
-        .mainCategories[0]
-        .nameEn
-        .toString();
+            .read<MainCategoriesTapsCubit>()
+            .mainCategories[0]
+            .nameEn
+            .toString();
   }
 
   // Scroll to the selected tab and make it the first tab in view
@@ -107,7 +112,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
   void _fetchSubcategories({
     List<SubCategoryEntity>? stateSubCategories,
   }) async {
-    final subCategoriesList =stateSubCategories??[];
+    final subCategoriesList = stateSubCategories ?? [];
     print(subCategoriesList);
     setState(() {
       subCategories = subCategoriesList;
@@ -125,7 +130,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
     }
     final RenderBox button = context.findRenderObject() as RenderBox;
     final RenderBox overlay =
-    Overlay.of(context).context.findRenderObject() as RenderBox;
+        Overlay.of(context).context.findRenderObject() as RenderBox;
     final double bottomPadding =
         MediaQuery.of(context).viewInsets.bottom + 200.0;
 
@@ -160,7 +165,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                         title: Label(
                             text: context.isArabic ? item.nameAr : item.nameEn,
                             style:
-                            Styles.mediumText(fontWeight: FontWeight.bold)),
+                                Styles.mediumText(fontWeight: FontWeight.bold)),
                         onTap: () {
                           if (context.isUserLoggedIn) {
                             Navigator.pop(context);
@@ -209,12 +214,12 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
           return CustomScaffold(
             appBar: widget.isAppBarShow
                 ? PreferredSize(
-              preferredSize: const Size.fromHeight(30),
-              child: BackAppBar(
-                label: labelName,
-                enableCustomAppBar: true,
-              ),
-            )
+                    preferredSize: const Size.fromHeight(30),
+                    child: BackAppBar(
+                      label: labelName,
+                      enableCustomAppBar: true,
+                    ),
+                  )
                 : null,
             enableCustomAppBar: widget.isAppBarShow,
             body: Padding(
@@ -236,16 +241,18 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                             onTap: (i) {
                               // controller.state.subCategories;
                               controller.selectMainCategory(i);
-                              _fetchSubcategories(stateSubCategories: controller.state.subCategories);
+                              _fetchSubcategories(
+                                  stateSubCategories:
+                                      controller.state.subCategories);
                               // _fetchSubcategories(
                               //     mainCategoryId:
                               //         controller.mainCategories[i].id);
                               setState(() {
                                 labelName = context.locale == Locales.english
                                     ? controller.mainCategories[i].nameEn
-                                    .toString()
+                                        .toString()
                                     : controller.mainCategories[i].name
-                                    .toString();
+                                        .toString();
                                 // subCategories = controller.mainCategories[i].subcategories??[];
                               });
                               print(labelName);
@@ -257,15 +264,15 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                             },
                             padding: EdgeInsets.zero,
                             labelPadding:
-                            const EdgeInsetsDirectional.only(end: 10),
+                                const EdgeInsetsDirectional.only(end: 10),
                             indicatorColor: Colors.transparent,
                             dividerColor: Colors.transparent,
                             tabAlignment: TabAlignment.start,
                             tabs: List.generate(
                               controller.mainCategories.length,
-                                  (index) {
+                              (index) {
                                 final category =
-                                controller.mainCategories[index];
+                                    controller.mainCategories[index];
                                 return Container(
                                   width: 220.w,
                                   // height: 70.h,
@@ -332,8 +339,8 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                                 context
                                     .read<SubcategoriesCubit>()
                                     .getRequestsLog(controller
-                                    .mainCategories[_tabController.index]
-                                    .id);
+                                        .mainCategories[_tabController.index]
+                                        .id);
 
                                 context
                                     .read<SubcategoriesCubit>()
@@ -357,8 +364,8 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                                 context
                                     .read<SubcategoriesCubit>()
                                     .getRequestsLog(controller
-                                    .mainCategories[_tabController.index]
-                                    .id);
+                                        .mainCategories[_tabController.index]
+                                        .id);
                                 context
                                     .read<SubcategoriesCubit>()
                                     .toggleMyAds('isRequestLogOpen');
@@ -375,7 +382,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                           child: HeaderButtonWidget(
                             title: LocaleKeys.myAds.localize,
                             isOpened:
-                            context.read<SubcategoriesCubit>().isMyAdsOpen,
+                                context.read<SubcategoriesCubit>().isMyAdsOpen,
                             onPressed: () {
                               // TODO: EDIT THIS
                               context
@@ -404,7 +411,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                         MainCategoriesTapsState>(
                       builder: (context, state) {
                         final controller =
-                        context.read<MainCategoriesTapsCubit>();
+                            context.read<MainCategoriesTapsCubit>();
 
                         if (controller.mainCategories[state.selectedIndex].id ==
                             '62c8b5b09332225799fe335e') {
@@ -427,7 +434,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                               itemCount: state.subCategories?.length ?? 0,
                               controller: controller.scrollController,
                               gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 3,
                                 childAspectRatio: .65,
                                 mainAxisSpacing: 16,
@@ -442,7 +449,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                                     print("object");
                                     return controller
                                         .toggleSubCategoryToFavorites(
-                                        state.subCategories![index].id);
+                                            state.subCategories![index].id);
                                   },
                                 );
                               },
@@ -458,8 +465,8 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
             ),
             floatingActionButton: isFloatingButtonVisible
                 ? buildFloatingAction(context, () {
-              _showDropdownMenu(context);
-            })
+                    _showDropdownMenu(context);
+                  })
                 : null,
           );
         },
@@ -550,7 +557,7 @@ class _MainCategoriesGrideViewSectionState
                         onFavorite: () async {
                           var result = await widget.controller
                               .toggleFavoriteMedicalService(
-                              widget.state.customPage![index].id);
+                                  widget.state.customPage![index].id);
                           print("result$result");
                           return result;
                         },
