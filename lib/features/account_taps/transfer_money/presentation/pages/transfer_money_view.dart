@@ -55,11 +55,11 @@ class _TransferMoneyViewState extends State<TransferMoneyView> {
           label: LocaleKeys.transferMoney.localize,
         ),
       ),
-      body: BlocProvider<TransferMoneyCubit>(
-        create: (BuildContext context) => serviceLocator()..loadData(),
+      body: BlocProvider(
+        create: (BuildContext context) => serviceLocator<TransferMoneyCubit>(),
         child: BlocConsumer<TransferMoneyCubit, TransferMoneyState>(
           listener: (BuildContext context, state) {
-            if (state.isTransferSuccess) {
+            if (state.isSuccess) {
               showSuccessMessage(
                   context, LocaleKeys.moneySuccessfully.localize);
               Navigator.push(
@@ -74,7 +74,7 @@ class _TransferMoneyViewState extends State<TransferMoneyView> {
                 selectedUsername = null;
               });
             }
-            if (state.isTransferError) {
+            if (state.isError) {
               showErrorMessage(
                 context,
                 getFailureMessage(
@@ -94,10 +94,12 @@ class _TransferMoneyViewState extends State<TransferMoneyView> {
 
             if (state.isLoading) {
               return const CustomLoading();
-            } else if (state.isSuccess ||
-                state.isTransferSuccess ||
-                state.isTransferError ||
-                state.isTransferLoading) {
+            } else if (state.isSuccess
+                // ||
+                // state.isTransferSuccess ||
+                // state.isTransferError ||
+                // state.isTransferLoading
+                ) {
               return Padding(
                 padding: const EdgeInsets.only(left: 16, right: 16),
                 child: Stack(
@@ -228,11 +230,11 @@ class _TransferMoneyViewState extends State<TransferMoneyView> {
                           const SizedBox(
                             height: 32,
                           ),
-                          if (state.isTransferLoading)
+                          if (state.transferLoading)
                             const Center(
                               child: CircularProgressIndicator(),
                             ),
-                          if (!state.isTransferLoading)
+                          if (!state.transferLoading)
                             AppButton(
                               label: LocaleKeys.confirm.localize,
                               style: Styles.headerText(
@@ -368,7 +370,7 @@ class _TransferMoneyViewState extends State<TransferMoneyView> {
               return CustomFailureWidget(
                 title: messageFailure,
                 onPressed: () {
-                  context.read<TransferMoneyCubit>().loadData();
+                  // context.read<TransferMoneyCubit>().loadData();
                 },
               );
             }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dartz/dartz.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/api_consumer.dart';
 import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
@@ -23,13 +25,20 @@ class TransferMoneyRemoteDataSourceImpl extends TransferMoneyRemoteDataSource {
   @override
   Future<Either<Failure, TransferMoneyEntity>> transferMoney(
       TransferMoneyParams params) async {
-    var response =
-        await _apiConsumer.post(EndPoints.transferMoney, data: params.toJson());
+    try {
+      var response = await _apiConsumer.post(EndPoints.transferMoney,
+          data: params.toJson());
 
-    return response.fold(
-      (failure) => Left(failure),
-      (response) => Right(TransferMoneyModel.fromJson(response['data'])),
-    );
+      return response.fold(
+        (failure) => Left(failure),
+        (response) => Right(TransferMoneyModel.fromJson(response['data'])),
+      );
+    } catch (e) {
+      final error = (e is Map && e['error'] is Map) ? e['error'] as Map : null;
+      log('error: ${e.toString()}');
+      return Left(
+          UnknownFailure(error != null ? error.toString() : 'Unknown error'));
+    }
   }
 
   @override

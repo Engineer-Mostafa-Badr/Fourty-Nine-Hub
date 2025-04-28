@@ -20,26 +20,30 @@ class TransferMoneyCubit extends Cubit<TransferMoneyState> {
     this._getWalletUseCase,
   ) : super(const TransferMoneyState());
 
-  WalletEntity? da;
-  Future<void> loadData() async {
-    // await fetchUsers();
-    // await getWallet();
-    emit(state.copyWith(status: TransferMoneyStates.loading));
-    var response = await _fetchUserUseCase(const NoParams());
-    return response.fold(
-      (l) =>
-          emit(state.copyWith(failure: l, status: TransferMoneyStates.error)),
-      (user) async {
-        emit(state.copyWith(users: user));
-        final response = await _getWalletUseCase.call(const NoParams());
-        response.fold((l) {
-          emit(state.copyWith(failure: l, status: TransferMoneyStates.error));
-        }, (data) {
-          da = data;
-          emit(state.copyWith(status: TransferMoneyStates.success, wallet: data));
-        });
-      },
-    );
+  // WalletEntity? da;
+  // Future<void> loadData() async {
+  //   // await fetchUsers();
+  //   // await getWallet();
+  //   emit(state.copyWith(status: TransferMoneyStates.loading));
+  //   var response = await _fetchUserUseCase(const NoParams());
+  //   return response.fold(
+  //     (l) =>
+  //         emit(state.copyWith(failure: l, status: TransferMoneyStates.error)),
+  //     (user) async {
+  //       emit(state.copyWith(users: user));
+  //       final response = await _getWalletUseCase.call(const NoParams());
+  //       response.fold((l) {
+  //         emit(state.copyWith(failure: l, status: TransferMoneyStates.error));
+  //       }, (data) {
+  //         da = data;
+  //         emit(state.copyWith(status: TransferMoneyStates.success, wallet: data));
+  //       });
+  //     },
+  //   );
+  // }
+
+  Future<void> searchUser({required String query}) async {
+    emit(state.copyWith(status: TransferMoneyStates.transferLoading));
   }
 
   TransferMoneyEntity? dataTransfer;
