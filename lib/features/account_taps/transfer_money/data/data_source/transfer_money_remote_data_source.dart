@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/data/datasources/remote/api/end_points.dart';
 import 'package:fourtyninehub/features/account_taps/transfer_money/data/model/transfer_money_model.dart';
 import 'package:fourtyninehub/features/account_taps/transfer_money/data/model/user_transfer_money_model.dart';
 import 'package:fourtyninehub/features/account_taps/transfer_money/domain/entities/transfer_money_entity.dart';
+import 'package:fourtyninehub/features/account_taps/transfer_money/domain/use_case/fetch_user_use_case.dart';
 
 import '../../../../../core/error/failure.dart';
 import '../../domain/entities/user_transfer_money_entity.dart';
@@ -14,7 +15,8 @@ import '../../domain/use_case/transfer_money_use_case.dart';
 abstract class TransferMoneyRemoteDataSource {
   Future<Either<Failure, TransferMoneyEntity>> transferMoney(
       TransferMoneyParams params);
-  Future<Either<Failure, List<UserTransferMoneyEntity>>> fetchUser();
+  Future<Either<Failure, List<UserTransferMoneyEntity>>> fetchUser(
+      FetchUserParams params);
 }
 
 class TransferMoneyRemoteDataSourceImpl extends TransferMoneyRemoteDataSource {
@@ -42,7 +44,8 @@ class TransferMoneyRemoteDataSourceImpl extends TransferMoneyRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, List<UserTransferMoneyEntity>>> fetchUser() async {
+  Future<Either<Failure, List<UserTransferMoneyEntity>>> fetchUser(
+      FetchUserParams params) async {
     var response = await _apiConsumer.get(EndPoints.fetchUsers);
 
     return response.fold(
