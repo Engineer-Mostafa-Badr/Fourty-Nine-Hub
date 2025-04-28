@@ -547,9 +547,7 @@ class AppPages {
                 path: Paths.MY_TALENT,
                 name: Routes.MY_TALENT,
                 builder: (context, state) => BlocProvider(
-                  create: (context) => serviceLocator<StarCubit>()
-                    ..loadInitialData()
-                    ..getPaginatedMyStar(1),
+                  create: (context) => serviceLocator<StarCubit>(),
                   child: const MyTalentView(),
                 ),
               ),

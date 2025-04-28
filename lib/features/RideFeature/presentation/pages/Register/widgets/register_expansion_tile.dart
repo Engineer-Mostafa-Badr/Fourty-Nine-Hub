@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class RegisterExpansionTile extends StatefulWidget {
@@ -38,13 +39,13 @@ class _RegisterExpansionTileState extends State<RegisterExpansionTile> {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: AppColors.GREYBG,
+        color: context.isDarkMode?AppColors.GREY_DARK_COLOR:AppColors.GREYBG,
       ),
       child: ExpansionTile(
         controller: controller,
         title: selectedTitle, // Use state variable
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        backgroundColor: AppColors.GREYBG,
+        backgroundColor: context.isDarkMode?AppColors.GREY_DARK_COLOR:AppColors.GREYBG,
         expandedAlignment: Alignment.centerLeft,
         expandedCrossAxisAlignment: CrossAxisAlignment.start,
         dense: true,
