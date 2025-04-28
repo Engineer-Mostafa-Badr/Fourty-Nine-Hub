@@ -151,7 +151,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: SizedBox(
-                height: 300,
+                height: 400,
                 child: MainCategoriesFlipCardsView(
                   isAppBarShow: false,
                   data: context.read<MainCategoriesTapsCubit>().mainCategories,

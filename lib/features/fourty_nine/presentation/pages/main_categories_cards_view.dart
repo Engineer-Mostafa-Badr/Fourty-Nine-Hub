@@ -88,135 +88,137 @@ class _MainCategoriesFlipCardsViewState
     return Scaffold(
       appBar: widget.isAppBarShow
           ? PreferredSize(
-              preferredSize: const Size.fromHeight(30),
-              child: BackAppBar(
-                label: mainCategories.isNotEmpty ? labelName : '',
-              ),
-            )
+        preferredSize: const Size.fromHeight(30),
+        child: BackAppBar(
+          label: mainCategories.isNotEmpty ? labelName : '',
+        ),
+      )
           : null,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(
-            height: MediaQuery.sizeOf(context).height*.7,
+            height: widget.isAppBarShow ? MediaQuery
+                .sizeOf(context)
+                .height * .7 : 400,
             child: Expanded(
               child: mainCategories.isEmpty
-                  ?  Center(
-                      child: Label(text: LocaleKeys.noCategoriesAvailable.localize,),
-                    )
+                  ? Center(
+                child: Label(text: LocaleKeys.noCategoriesAvailable.localize,),
+              )
                   : CardSwiper(
-                      padding:
-                          EdgeInsets.only(left: 10.w, right: 10.w, bottom: 20.h),
-                      cardsCount: mainCategories.length,
-                      onSwipe: (previousIndex, currentIndex, direction) {
-                        // setState(() {
-                        //   labelName = context.locale == Locales.english
-                        //       ? mainCategoriesCubit
-                        //           .state.customPage![currentIndex!].nameEn
-                        //           .toString()
-                        //       : mainCategoriesCubit
-                        //           .state.customPage![currentIndex!].name
-                        //           .toString();
-                        // });
-                        if (currentIndex != null &&
-                            currentIndex >= 0 &&
-                            currentIndex < mainCategories.length) {
-                          setState(() {
-                            labelName = (context.locale == Locales.english
-                                ? mainCategories[currentIndex].nameEn
-                                : mainCategories[currentIndex].name)!;
-                          });
-                        }
-                        return true;
-                      },
-                      cardBuilder:
-                          (context, index, percentThresholdX, percentThresholdY) {
-                        return GestureDetector(
-                          onTap: () {
-                            final item = mainCategories[index];
-                            if (item.id == '62c8b5b09332225799fe335e') {
-                              context.push(Routes.MARRIAGESUBCATEGORIES,
-                                  extra: item);
-                            } else {
-                              context.push(Routes.CustomPageSubCategoriesView,
-                                  extra: item);
-                            }
-                          },
-                          child: DecoratedBox(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(16.0),
-                              image: DecorationImage(
-                                fit: BoxFit.fill,
-                                image: CachedNetworkImageProvider(
-                                  mainCategories[index].banner,
+                padding:
+                EdgeInsets.only(left: 10.w, right: 10.w, bottom: 20.h),
+                cardsCount: mainCategories.length,
+                onSwipe: (previousIndex, currentIndex, direction) {
+                  // setState(() {
+                  //   labelName = context.locale == Locales.english
+                  //       ? mainCategoriesCubit
+                  //           .state.customPage![currentIndex!].nameEn
+                  //           .toString()
+                  //       : mainCategoriesCubit
+                  //           .state.customPage![currentIndex!].name
+                  //           .toString();
+                  // });
+                  if (currentIndex != null &&
+                      currentIndex >= 0 &&
+                      currentIndex < mainCategories.length) {
+                    setState(() {
+                      labelName = (context.locale == Locales.english
+                          ? mainCategories[currentIndex].nameEn
+                          : mainCategories[currentIndex].name)!;
+                    });
+                  }
+                  return true;
+                },
+                cardBuilder:
+                    (context, index, percentThresholdX, percentThresholdY) {
+                  return GestureDetector(
+                    onTap: () {
+                      final item = mainCategories[index];
+                      if (item.id == '62c8b5b09332225799fe335e') {
+                        context.push(Routes.MARRIAGESUBCATEGORIES,
+                            extra: item);
+                      } else {
+                        context.push(Routes.CustomPageSubCategoriesView,
+                            extra: item);
+                      }
+                    },
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16.0),
+                        image: DecorationImage(
+                          fit: BoxFit.fill,
+                          image: CachedNetworkImageProvider(
+                            mainCategories[index].banner,
+                          ),
+                        ),
+                        gradient: const LinearGradient(
+                          colors: [Colors.black, Colors.white],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                        ),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(16.0),
+                        child: Stack(
+                          children: [
+                            Positioned.fill(
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      color: Colors.black38,
+                                    ),
+                                  ],
                                 ),
-                              ),
-                              gradient: const LinearGradient(
-                                colors: [Colors.black, Colors.white],
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                              ),
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(16.0),
-                              child: Stack(
-                                children: [
-                                  Positioned.fill(
-                                    child: DecoratedBox(
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        boxShadow: const [
-                                          BoxShadow(
-                                            color: Colors.black38,
-                                          ),
-                                        ],
-                                      ),
-                                      child: Padding(
-                                        padding:
-                                            const EdgeInsetsDirectional.all(8),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                                boxShadow: const [
-                                                  BoxShadow(
-                                                    color: Colors.black26,
-                                                    spreadRadius: 0.03,
-                                                    blurRadius: 6,
-                                                  ),
-                                                ],
-                                              ),
-                                              child: Text(
-                                                mainCategories[index].name ?? '',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 60.sp,
-                                                  color: Colors.white,
-                                                ),
-                                                textAlign: TextAlign.start,
-                                              ),
+                                child: Padding(
+                                  padding:
+                                  const EdgeInsetsDirectional.all(8),
+                                  child: Column(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.end,
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                          BorderRadius.circular(10),
+                                          boxShadow: const [
+                                            BoxShadow(
+                                              color: Colors.black26,
+                                              spreadRadius: 0.03,
+                                              blurRadius: 6,
                                             ),
-                                            const SizedBox(height: 100),
                                           ],
                                         ),
+                                        child: Text(
+                                          mainCategories[index].name ?? '',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 60.sp,
+                                            color: Colors.white,
+                                          ),
+                                          textAlign: TextAlign.start,
+                                        ),
                                       ),
-                                    ),
+                                      const SizedBox(height: 100),
+                                    ],
                                   ),
-                                ],
+                                ),
                               ),
                             ),
-                          ),
-                        );
-                      },
+                          ],
+                        ),
+                      ),
                     ),
+                  );
+                },
+              ),
             ),
           ),
 

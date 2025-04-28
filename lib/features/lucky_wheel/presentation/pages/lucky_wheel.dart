@@ -65,23 +65,27 @@ class LuckyWheelView extends StatelessWidget {
                           child: Container(
                             padding: EdgeInsetsDirectional.symmetric(
                                 vertical: 15.h, horizontal: 15.w),
-                            decoration: BoxDecoration(
-                              borderRadius: const BorderRadius.only(
+                            decoration: const BoxDecoration(
+                              borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(30),
                                 topRight: Radius.circular(30),
                                 bottomLeft: Radius.circular(200),
                               ),
-                              color: Theme.of(context).primaryColor,
+                              color: AppColors.PRIMARY_COLOR,
                             ),
                             height: 80,
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: context.isArabic
+                                  ? CrossAxisAlignment.end
+                                  : CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   LocaleKeys.money.localize,
                                   style: Styles.mediumText(
-                                      color: Theme.of(context)
-                                          .scaffoldBackgroundColor),
+                                    color: context.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black,
+                                  ),
                                 ),
                                 const Spacer(),
                                 Row(
@@ -92,8 +96,10 @@ class LuckyWheelView extends StatelessWidget {
                                     Text(
                                       '${state.data?.amount.round() ?? 0}',
                                       style: Styles.mediumText(
-                                          color: Theme.of(context)
-                                              .scaffoldBackgroundColor),
+                                        color: context.isDarkMode
+                                            ? Colors.white
+                                            : Colors.black,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -119,13 +125,17 @@ class LuckyWheelView extends StatelessWidget {
                             ),
                             height: 80,
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
+                              crossAxisAlignment: context.isArabic
+                                  ? CrossAxisAlignment.start
+                                  : CrossAxisAlignment.end,
                               children: [
                                 Text(
                                   LocaleKeys.points.localize,
                                   style: Styles.mediumText(
-                                      color: Theme.of(context)
-                                          .scaffoldBackgroundColor),
+                                    color: context.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black,
+                                  ),
                                 ),
                                 const Spacer(),
                                 Row(
@@ -136,8 +146,10 @@ class LuckyWheelView extends StatelessWidget {
                                     Text(
                                       '${state.data?.points.round() ?? 0}',
                                       style: Styles.mediumText(
-                                          color: Theme.of(context)
-                                              .scaffoldBackgroundColor),
+                                        color: context.isDarkMode
+                                            ? Colors.white
+                                            : Colors.black,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -162,16 +174,19 @@ class LuckyWheelView extends StatelessWidget {
                             items: state.data!.items
                                 .map(
                                   (e) => FortuneItem(
+                                    style: FortuneItemStyle(
+                                        color: itemColor(context,
+                                            state.data!.items.indexOf(e)),
+                                        borderColor: Colors.transparent),
                                     child: Label(
                                       text: e.type == WheelItemTypes.point
                                           ? '${e.value.round()} ${LocaleKeys.points.localize}'
                                           : '${e.value.round()} ${LocaleKeys.money.localize}',
                                       style: Styles.headerText(
-                                        color: context.isDarkMode
-                                            ? Colors.white
-                                            : Colors.black,
-                                        fontWeight: FontWeight.normal
-                                      ),
+                                          color: context.isDarkMode
+                                              ? Colors.white
+                                              : Colors.black,
+                                          fontWeight: FontWeight.normal),
                                     ),
                                   ),
                                 )
@@ -203,5 +218,29 @@ class LuckyWheelView extends StatelessWidget {
         },
       ),
     );
+  }
+
+  Color itemColor(BuildContext context, int index) {
+    bool isDark = context.isDarkMode;
+
+    List<Color> darkColors = [
+      Colors.white.withValues(alpha: 0.1),
+      Colors.white.withValues(alpha: 0.2),
+      Colors.white.withValues(alpha: 0.3),
+      Colors.white.withValues(alpha: 0.4),
+      Colors.white.withValues(alpha: 0.45),
+    ];
+
+    List<Color> lightColors = [
+      Colors.black.withValues(alpha: 0.1),
+      Colors.black.withValues(alpha: 0.2),
+      Colors.black.withValues(alpha: 0.3),
+      Colors.black.withValues(alpha: 0.4),
+      Colors.black.withValues(alpha: 0.45),
+    ];
+
+    List<Color> colors = isDark ? darkColors : lightColors;
+
+    return colors[index % colors.length];
   }
 }
