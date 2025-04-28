@@ -58,8 +58,7 @@ class RideHome extends StatefulWidget {
 class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
   final _formKey = GlobalKey<FormState>();
-  String? _selectedCategoryType = "ride"; // Initially "ride"
-  int? _selectedCategoryIndex = 0; // Initially selecting the first category
+
   // String? _selectedCountry;
   final MapController _mapController = MapController();
 
@@ -293,6 +292,20 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
     }
   }
 
+  void _scrollToStart(String type) {
+    final ScrollController? activeController =
+    type == "ride" ? _rideScrollController : _shippingScrollController;
+
+    if (activeController != null && activeController.hasClients) {
+      activeController.animateTo(
+        0, // تحرك للبداية
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<RideCubit, RideState>(listener: (context, state) {
@@ -405,6 +418,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         children: [
           TileLayer(
             urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            // urlTemplate: context.isDarkMode ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" // Dark mode map
+            //     : "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", // Normal mode map
           ),
           MarkerLayer(
             markers: [
@@ -415,7 +430,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                   width: 40,
                   height: 40,
                   child: const Icon(Icons.location_pin,
-                      color: Colors.blue, size: 40),
+                      color: Colors.green, size: 40),
                 ),
               if (state.toLocation != null)
                 Marker(
@@ -423,7 +438,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                   width: 40,
                   height: 40,
                   child: const Icon(Icons.location_pin,
-                      color: Colors.red, size: 40),
+                      color: Colors.blue, size: 40),
                 ),
               if (state.wayPointOne != null)
                 Marker(
@@ -432,7 +447,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                   width: 40,
                   height: 40,
                   child: const Icon(Icons.location_pin,
-                      color: Colors.green, size: 40),
+                      color: Colors.red, size: 40),
                 ),
               if (state.wayPointTwo != null)
                 Marker(
@@ -441,7 +456,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                   width: 40,
                   height: 40,
                   child: const Icon(Icons.location_pin,
-                      color: Colors.green, size: 40),
+                      color: Colors.red, size: 40),
                 ),
             ],
           ),
@@ -472,6 +487,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         child: GestureDetector(
           onTap: () {
             customBottomSheet(context, serviceLocator<RideCubit>(),
+                isDarkMode: context.isDarkMode,
                 child: Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: Column(
@@ -766,7 +782,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                           textColor: Colors.white,
                           padding: const EdgeInsets.all(2),
                           label: const Text('1K'),
-                          isLabelVisible: true,
+                          isLabelVisible: false,
                           child: ClickableWidget(
                               onTap: () {
                                 if (context.isUserLoggedIn) {
@@ -920,13 +936,13 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                       if (context.isUserLoggedIn) {
                                         if (state.toLocation != null &&
                                             state.currentLocation != null) {
-                                          bool isSubscribed = await context.read<RideCubit>().isSubscribed(userId: UserCubit.to.state.data?.id??'', subcategoryId: state.rideCategory?.subCategories[_selectedCategoryIndex!].subCategoryId??'');
+                                          bool isSubscribed = await context.read<RideCubit>().isSubscribed(userId: UserCubit.to.state.data?.id??'', subcategoryId: state.rideCategory?.subCategories[context.read<RideCubit>().selectedCategoryIndex!].subCategoryId??'');
                                           if (!isSubscribed) {
                                             SubscriptionMethod().subscribe(
                                                 subscribeId: state
                                                     .rideCategory
                                                     ?.subCategories[
-                                                _selectedCategoryIndex!]
+                                                context.read<RideCubit>().selectedCategoryIndex!]
                                                     .subCategoryId ??
                                                     '',
                                                 onSubscribe: () {
@@ -950,7 +966,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                     selectedCategoryId: state
                                                         .rideCategory
                                                         ?.subCategories[
-                                                    _selectedCategoryIndex!]
+                                                    context.read<RideCubit>().selectedCategoryIndex!]
                                                         .subCategoryId ??
                                                         '',
                                                     isPremium: true,
@@ -1008,7 +1024,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                           selectedCategoryId: state
                                                                   .rideCategory
                                                                   ?.subCategories[
-                                                                      _selectedCategoryIndex!]
+                                                          serviceLocator<
+                                                              RideCubit>().selectedCategoryIndex!]
                                                                   .subCategoryId ??
                                                               '',
                                                           isPremium: false,
@@ -1056,7 +1073,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
       height: 26,
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-          color: color,
+          color: context.isDarkMode ? AppColors.GREY_DARK_COLOR : color,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(color: AppColors.DARK_BLUE_COLOR)),
       child: Center(
@@ -1084,18 +1101,18 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
               itemCount: subCategories.length,
               itemBuilder: (context, index) {
                 final subCategory = subCategories[index];
-                final bool isSelected = _selectedCategoryType == type &&
-                    _selectedCategoryIndex == index;
+                final bool isSelected = context.read<RideCubit>().selectedCategoryType == type &&
+                    context.read<RideCubit>().selectedCategoryIndex == index;
                 return GestureDetector(
                   onTap: () {
                     setState(() {
-                      if (_selectedCategoryType == type &&
-                          _selectedCategoryIndex == index) {
-                        // _selectedCategoryType = null;
-                        // _selectedCategoryIndex = null;
+                      if (context.read<RideCubit>().selectedCategoryType == type &&
+                          context.read<RideCubit>().selectedCategoryIndex == index) {
+                        // context.read<RideCubit>().selectedCategoryType = null;
+                        // context.read<RideCubit>().selectedCategoryIndex = null;
                       } else {
-                        _selectedCategoryType = type;
-                        _selectedCategoryIndex = 0;
+                        context.read<RideCubit>().selectedCategoryType = type;
+                        context.read<RideCubit>().selectedCategoryIndex = 0;
                         subCategories.insert(0, subCategories.removeAt(index));
                       }
                       context.read<RideCubit>().subCategoryId =
@@ -1103,6 +1120,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                       context.read<RideCubit>().checkSelectedCategoryIsSocket(
                           subCategory.subCategoryId);
                     });
+                    _scrollToStart(type);
                   },
                   child: _categoryItem(
                       context.isArabic
@@ -1176,7 +1194,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
           height: 40,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            color: const Color(0xFFEEEEEE),
+            color: context.isDarkMode ? AppColors.GREY_DARK_COLOR : const Color(0xFFEEEEEE),
           ),
           child: Row(
             children: [
@@ -1208,6 +1226,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 GestureDetector(
                   onTap: () {
                     customBottomSheet(context, serviceLocator<RideCubit>(),
+                        isDarkMode: context.isDarkMode,
                         child: AddStopsWidget(
                           rideCubit: serviceLocator<RideCubit>(),
                         ),
@@ -1229,38 +1248,64 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
     return BlocBuilder<RideCubit, RideState>(builder: (context, state) {
       String selectedCategoryName = "Captain";
       double selectedCategoryPrice = 0.0;
-      if (_selectedCategoryType == "ride") {
+      if (context.read<RideCubit>().selectedCategoryType == "ride") {
         selectedCategoryName = state.rideCategory
-                ?.subCategories[_selectedCategoryIndex!].subCategoryNameEn ??
+                ?.subCategories[context.read<RideCubit>().selectedCategoryIndex!].subCategoryNameEn ??
             "";
+
       } else {
         selectedCategoryName = state.shippingCategory
-                ?.subCategories[_selectedCategoryIndex!].subCategoryNameEn ??
+                ?.subCategories[context.read<RideCubit>().selectedCategoryIndex!].subCategoryNameEn ??
             "";
       }
-      if (selectedCategoryName == "Captain") {
+      log("""selectedCategoryName: $selectedCategoryName""");
+      if (selectedCategoryName.trim().toLowerCase() == "Captain".toLowerCase()) {
         selectedCategoryPrice = state.rideExpectedPrice?.priceForCaptain ?? 0.0;
-      } else if (selectedCategoryName == "Scooter") {
+      } else if (selectedCategoryName.trim().toLowerCase() == "Scooter".toLowerCase()) {
         selectedCategoryPrice = state.rideExpectedPrice?.priceForScooter ?? 0.0;
-      } else if (selectedCategoryName == "Taxi") {
+      } else if (selectedCategoryName.trim().toLowerCase() == "Taxi".toLowerCase()) {
         selectedCategoryPrice = state.rideExpectedPrice?.priceForTaxi ?? 0.0;
-      } else if (selectedCategoryName == "Suv") {
+      } else if (selectedCategoryName.trim().toLowerCase() == "Suv".toLowerCase()) {
         selectedCategoryPrice = state.rideExpectedPrice?.priceForSUV ?? 0.0;
+      } else if (selectedCategoryName.trim().toLowerCase() == "Lady".toLowerCase()) {
+        selectedCategoryPrice = state.rideExpectedPrice?.priceForWomen ?? 0.0;
+      } else if (selectedCategoryName.trim().toLowerCase() == "Premium".toLowerCase()) {
+        selectedCategoryPrice = state.rideExpectedPrice?.priceForPremium ?? 0.0;
+      } else if (selectedCategoryName.trim().toLowerCase() == "Intercity".toLowerCase()) {
+        selectedCategoryPrice = state.rideExpectedPrice?.priceForIntercity ?? 0.0;
       }
       return GestureDetector(
         onTap: () {
-          customBottomSheet(context, serviceLocator<RideCubit>(),
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: FareBottomSheetWidget(
-                  rideCubit: serviceLocator<RideCubit>(),
-                  selectedCategoryPrice: context
-                      .read<RideCubit>()
-                      .getTotalPrice(selectedCategoryPrice),
-                  selectedCategoryName: selectedCategoryName,
+          if(state.rideExpectedPrice == null){
+            ScaffoldMessenger.of(context)
+                .showSnackBar(
+              SnackBar(
+                content: Text(
+                  context.isArabic
+                      ? "يرجي اختيار موقع اولا قبل تعديل سعر الرحله"
+                      : "Please select a location first before editing the fare", // Ensure you define this key in your localization file
+                  textAlign: TextAlign.center,
                 ),
+                backgroundColor: Colors.red,
+                duration:
+                const Duration(seconds: 2),
               ),
-              title: LocaleKeys.offerYourFare.tr());
+            );
+          }else{
+            customBottomSheet(context, serviceLocator<RideCubit>(),
+                isDarkMode: context.isDarkMode,
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: FareBottomSheetWidget(
+                    rideCubit: serviceLocator<RideCubit>(),
+                    selectedCategoryPrice: context
+                        .read<RideCubit>()
+                        .getTotalPrice(selectedCategoryPrice),
+                    selectedCategoryName: selectedCategoryName,
+                  ),
+                ),
+                title: LocaleKeys.offerYourFare.tr());
+          }
         },
         child: SizedBox(
           height: 40,
@@ -1272,7 +1317,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   decoration: BoxDecoration(
-                    color: AppColors.GREYFIELD,
+                    color: context.isDarkMode ? AppColors.GREY_DARK_COLOR : AppColors.GREYFIELD,
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Row(
@@ -1289,7 +1334,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                               .toString())
                           : Text(LocaleKeys.offerYourFare.tr()),
                       const Spacer(),
-                      Image.asset('assets/icons/edit.png'),
+                      Icon(Icons.edit_outlined, color:context.isDarkMode? null: AppColors.DARK_BLUE_COLOR,),
                     ],
                   ),
                 ),
@@ -1298,19 +1343,37 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                 flex: 1,
                 child: GestureDetector(
                   onTap: () {
-                    customBottomSheet(context, serviceLocator<RideCubit>(),
-                        child: OptionsBottomsheetWidget(
-                          rideCubit: serviceLocator<RideCubit>(),
-                          selectedCategoryName: selectedCategoryName,
-                          selectedCategoryPrice: context
-                              .read<RideCubit>()
-                              .getTotalPrice(selectedCategoryPrice),
+                    if(state.rideExpectedPrice == null){
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            context.isArabic
+                                ? "يرجي اختيار موقع اولا قبل تعديل سعر الرحله"
+                                : "Please select a location first before editing the fare", // Ensure you define this key in your localization file
+                            textAlign: TextAlign.center,
+                          ),
+                          backgroundColor: Colors.red,
+                          duration:
+                          const Duration(seconds: 2),
                         ),
-                        title: LocaleKeys.options.tr());
+                      );
+                    }else{
+                      customBottomSheet(context, serviceLocator<RideCubit>(),
+                          isDarkMode: context.isDarkMode,
+                          child: OptionsBottomsheetWidget(
+                            rideCubit: serviceLocator<RideCubit>(),
+                            selectedCategoryName: selectedCategoryName,
+                            selectedCategoryPrice: context
+                                .read<RideCubit>()
+                                .getTotalPrice(selectedCategoryPrice),
+                          ),
+                          title: LocaleKeys.options.tr());
+                    }
                   },
                   child: SizedBox(
                     height: 25,
-                    child: Image.asset('assets/icons/option.png'),
+                    child: Icon(Icons.tune_outlined, color:context.isDarkMode? null: AppColors.DARK_BLUE_COLOR,),
                   ),
                 ),
               )

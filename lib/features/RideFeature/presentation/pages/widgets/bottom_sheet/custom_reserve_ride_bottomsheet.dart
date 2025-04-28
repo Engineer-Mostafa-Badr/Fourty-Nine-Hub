@@ -79,7 +79,7 @@ class _CustomReserveRideBottomSheetState
                         return Container(
                           decoration: BoxDecoration(
                             color: context.isDarkMode
-                                ? AppColors.black
+                                ? AppColors.QUANTITY_COLOR
                                 : Colors.white,
                             borderRadius: const BorderRadius.vertical(
                                 top: Radius.circular(20)),
@@ -670,7 +670,7 @@ class _CustomReserveRideBottomSheetState
           // color: selectedCategoryId == subcategory?.id ? Colors.blue[100] : Colors.transparent,
           border: Border.all(
             color: selectedCategoryId == subcategory?.id
-                ? Colors.black
+                ? context.isDarkMode ? Colors.white : Colors.black
                 : Colors.transparent,
             width: selectedCategoryId == subcategory?.id ? 2 : 1,
           ),
