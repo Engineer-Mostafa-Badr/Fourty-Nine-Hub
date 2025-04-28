@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateful/picker/date_picker_field.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
@@ -63,9 +64,9 @@ class CriminalRecordScreen extends StatelessWidget {
                             ),
                             IconButton(
                               onPressed: () => context.pop(),
-                              icon: const Icon(
+                              icon: Icon(
                                 Icons.close,
-                                color: AppColors.GREY_DARK_COLOR,
+                                color: context.isDarkMode?Colors.white:AppColors.GREY_DARK_COLOR,
                               ),
                             )
                           ],
@@ -115,7 +116,7 @@ class CriminalRecordScreen extends StatelessWidget {
                         //   hint: LocaleKeys.licenseNumber.localize,
                         // ),
                         const Sizer(),
-                        DatePickerTextField(color:AppColors.GREYBG,initialDate: DateTime.now(), minDate: DateTime(1900), maxDate: DateTime(2090),onDateSelected: (date){
+                        DatePickerTextField(color:context.isDarkMode?AppColors.GREY_DARK_COLOR:AppColors.GREYBG,initialDate: DateTime.now(), minDate: DateTime(1900), maxDate: DateTime(2090),onDateSelected: (date){
                           cubit.rideCriminalRecordExpireDateController.text = DateFormat('yyyy-MM-dd').format(date??DateTime.now());
                         }, controller:cubit.rideCriminalRecordExpireDateController,hintText: LocaleKeys.expireDate.localize,),
                       ],

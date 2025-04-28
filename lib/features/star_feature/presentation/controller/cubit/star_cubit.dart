@@ -10,7 +10,6 @@ import 'package:fourtyninehub/features/star_feature/domain/use_case/fetch_myl_st
 import 'package:fourtyninehub/features/star_feature/domain/use_case/fetch_winner_star_use_case.dart';
 import 'package:fourtyninehub/features/star_feature/domain/use_case/upload_my_star_use_case.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_state.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class StarCubit extends Cubit<StarState> {
   final FetchAllStarUseCase _allStarUseCase;
@@ -45,6 +44,83 @@ class StarCubit extends Cubit<StarState> {
     currentPage = 1;
     hasMoreData = true;
     await getAllTalent(refresh: true);
+  }
+
+  List<StarEntity> allTalents = [];
+  bool loadAllTalents = false;
+  Future loadAllTalentsData() async {
+    loadAllTalents=true;
+    allTalents.clear();
+    allTalentsPage = 1;
+    hasMoreAllTalentsData = true;
+    emit(state.copyWith(status: StarStates.loading));
+    await getAllTalents();
+    await Future.wait([
+      getAllTalents(),
+      fetchBanner()
+    ]);
+    loadAllTalents=false;
+    emit(state.copyWith(status: StarStates.success));
+  }
+  bool isLoadingAllTalentsMore = false;
+  bool hasMoreAllTalentsData = true;
+  int allTalentsPage = 1;
+  Future<void> getAllTalents() async {
+    print(hasMoreAllTalentsData);
+    print(isLoadingAllTalentsMore);
+    if (!hasMoreAllTalentsData || isLoadingAllTalentsMore) return;
+    isLoadingAllTalentsMore = true;
+    emit(state.copyWith(status: StarStates.loading));
+    final response = await _allStarUseCase(
+      StarPaginationParams(page: currentPage, limit: pageSize),
+    );
+    response.fold(
+            (l) => emit(state.copyWith(failure: l, status: StarStates.error)),
+            (data) async {
+          allTalents.addAll(data);
+          if (data.length < pageSize) {
+            hasMoreAllTalentsData = false;
+          } else {
+            allTalentsPage++;
+          }
+          isLoadingAllTalentsMore = false;
+          emit(state.copyWith(status: StarStates.initial));
+        });
+  }
+
+  List<StarEntity> myTalents = [];
+  bool loadMyTalents = false;
+  Future loadMyTalentsData() async {
+    loadMyTalents=true;
+    myTalents.clear();
+    myTalentsPage = 1;
+    hasMoreMyTalentsData = true;
+    emit(state.copyWith(status: StarStates.loading));
+    await getMyTalents();
+    loadMyTalents=false;
+    emit(state.copyWith(status: StarStates.success));
+  }
+  bool isLoadingMyTalentsMore = false;
+  bool hasMoreMyTalentsData = true;
+  int myTalentsPage = 1;
+  Future<void> getMyTalents() async {
+    if (!hasMoreMyTalentsData || isLoadingMyTalentsMore) return;
+    isLoadingMyTalentsMore = true;
+    emit(state.copyWith(status: StarStates.loading));
+    final response = await _fetchMylStarUseCase.call(const NoParams());
+
+    response.fold(
+            (l) => emit(state.copyWith(failure: l, status: StarStates.error)),
+            (data) async {
+          myTalents.addAll(data);
+          if (data.length < pageSize) {
+            hasMoreMyTalentsData = false;
+          } else {
+            myTalentsPage++;
+          }
+          isLoadingMyTalentsMore = false;
+          emit(state.copyWith(status: StarStates.success));
+        });
   }
 
   void loadInitialDataWinner() async {
@@ -120,37 +196,37 @@ class StarCubit extends Cubit<StarState> {
     );
   }
 
-  final PagingController<int, StarEntity> starPagingController =
-      PagingController(firstPageKey: 1);
+  // final PagingController<int, StarEntity> starPagingController =
+  //     PagingController(firstPageKey: 1);
 
-  Future<List<StarEntity>> getPaginatedMyStar(int page) async {
-    emit(state.copyWith(status: StarStates.loading));
-    List<StarEntity> main = [];
-    final response = await _fetchMylStarUseCase.call(const NoParams());
-
-    response.fold((l) {
-      print('Errrrrrrror :$l');
-      emit(state.copyWith(failure: l, status: StarStates.error));
-    }, (data) {
-      final isLastPage = data.length < pageSize;
-      if (page == 1) {
-        print("page == 1 $page");
-        starPagingController.itemList = [];
-      }
-      if (isLastPage) {
-        print("isLastPage = $isLastPage");
-        starPagingController.appendLastPage(data);
-      } else {
-        print("isNotLastPage = $isLastPage");
-        final nextPageKey = page + 1;
-        starPagingController.appendPage(data, nextPageKey);
-      }
-      print('Sussecc :$data');
-      main = data;
-      emit(state.copyWith(star: data, status: StarStates.success));
-    });
-    return main;
-  }
+  // Future<List<StarEntity>> getPaginatedMyStar(int page) async {
+  //   emit(state.copyWith(status: StarStates.loading));
+  //   List<StarEntity> main = [];
+  //   final response = await _fetchMylStarUseCase.call(const NoParams());
+  //
+  //   response.fold((l) {
+  //     print('Errrrrrrror :$l');
+  //     emit(state.copyWith(failure: l, status: StarStates.error));
+  //   }, (data) {
+  //     final isLastPage = data.length < pageSize;
+  //     if (page == 1) {
+  //       print("page == 1 $page");
+  //       starPagingController.itemList = [];
+  //     }
+  //     if (isLastPage) {
+  //       print("isLastPage = $isLastPage");
+  //       starPagingController.appendLastPage(data);
+  //     } else {
+  //       print("isNotLastPage = $isLastPage");
+  //       final nextPageKey = page + 1;
+  //       starPagingController.appendPage(data, nextPageKey);
+  //     }
+  //     print('Sussecc :$data');
+  //     main = data;
+  //     emit(state.copyWith(star: data, status: StarStates.success));
+  //   });
+  //   return main;
+  // }
 
   Future<void> uploadStar({
     required StarParams params,
