@@ -14,8 +14,8 @@ import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
-
 import 'package:go_router/go_router.dart';
+
 import '../../../../../tinder/data/shared/shared.dart';
 
 class AttachmentTypes extends StatefulWidget {
@@ -29,122 +29,121 @@ class AttachmentTypes extends StatefulWidget {
 
 class _AttachmentTypesState extends State<AttachmentTypes> {
   bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return isLoading
         ? const Center(
-            child: CircularProgressIndicator(
-            color: AppColors.PRIMARY_COLOR,
-          ))
+        child: CircularProgressIndicator(
+          color: AppColors.PRIMARY_COLOR,
+        ))
         : GridView(
-            shrinkWrap: true,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3),
-            children: [
-              _buildAttachmentTypeItem(
-                color: Colors.purple,
-                label: LocaleKeys.document.tr(),
-                icon: Icons.insert_drive_file_outlined,
-                onTap: () async {
-                  setState(() {
-                    isLoading = true;
-                  });
-                  await widget.chatRoomCubit.pickDocuments();
-                  if (widget.chatRoomCubit.media.isNotEmpty) {
-                    context.push(Routes.ONETIMEDOCUMENTMESSAGE,
-                        extra: OneTimeDocumentMessageViewParams(
-                          chatRoomCubit: widget.chatRoomCubit,
-                        ));
-                  }
-                  setState(() {
-                    isLoading = false;
-                  });
-                  context.pop();
-                },
-              ),
-              _buildAttachmentTypeItem(
-                color: Colors.redAccent,
-                label: LocaleKeys.camera.tr(),
-                icon: Icons.camera_alt,
-                onTap: () async {
-                  context.push(Routes.CHATROOMCAMERAPICKER,
-                      extra: CameraPickerViewPrams(
-                        chatRoomCubit: widget.chatRoomCubit,
-                      ));
-                },
-              ),
-              _buildAttachmentTypeItem(
-                  color: Colors.purpleAccent,
-                  label: LocaleKeys.gallery.tr(),
-                  onTap: () async {
-                    await widget.chatRoomCubit.pickMedia();
-                    context.push(
-                      Routes.MEDIASLIDER,
-                      extra: widget.chatRoomCubit,
-                    );
-                    context.pop();
-                  },
-                  icon: Icons.image_outlined),
-              _buildAttachmentTypeItem(
-                  color: Colors.orange[600]!,
-                  label: LocaleKeys.audio.tr(),
-                  onTap: () async {
-                    setState(() {
-                      isLoading = true;
-                    });
-                    await widget.chatRoomCubit.pickAudio();
-                    if (widget.chatRoomCubit.media.isNotEmpty) {
-                      List<File> tempMedia = [
-                        ...widget.chatRoomCubit.media
-                      ]; // spread operator
-                      widget.chatRoomCubit.media.clear();
-                      for (var media in tempMedia) {
-                        widget.chatRoomCubit.media.add(media);
-                        await widget.chatRoomCubit.sendMessage();
-                        widget.chatRoomCubit.media.clear();
-                      }
-                    }
-                    setState(() {
-                      isLoading = false;
-                    });
-                    context.pop();
-                  },
-                  icon: Icons.headphones_rounded),
+      shrinkWrap: true,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3),
+      children: [
+        _buildAttachmentTypeItem(
+          color: Colors.purple,
+          label: LocaleKeys.document.tr(),
+          icon: Icons.insert_drive_file_outlined,
+          onTap: () async {
+            setState(() {
+              isLoading = true;
+            });
+            await widget.chatRoomCubit.pickDocuments();
+            if (widget.chatRoomCubit.media.isNotEmpty) {
+              context.push(Routes.ONETIMEDOCUMENTMESSAGE,
+                  extra: OneTimeDocumentMessageViewParams(
+                    chatRoomCubit: widget.chatRoomCubit,
+                  ));
+            }
+            setState(() {
+              isLoading = false;
+            });
+            context.pop();
+          },
+        ),
+        _buildAttachmentTypeItem(
+          color: Colors.redAccent,
+          label: LocaleKeys.camera.tr(),
+          icon: Icons.camera_alt,
+          onTap: () async {
+            context.push(Routes.CHATROOMCAMERAPICKER,
+                extra: CameraPickerViewPrams(
+                  chatRoomCubit: widget.chatRoomCubit,
+                ));
+          },
+        ),
+        _buildAttachmentTypeItem(
+            color: Colors.purpleAccent,
+            label: LocaleKeys.gallery.tr(),
+            onTap: () async {
+              await widget.chatRoomCubit.pickMedia();
+              context.push(
+                Routes.MEDIASLIDER,
+                extra: widget.chatRoomCubit,
+              );
+              context.pop();
+            },
+            icon: Icons.image_outlined),
+        _buildAttachmentTypeItem(
+            color: Colors.orange[600]!,
+            label: LocaleKeys.audio.tr(),
+            onTap: () async {
+              setState(() {
+                isLoading = true;
+              });
+              await widget.chatRoomCubit.pickAudio();
+              if (widget.chatRoomCubit.media.isNotEmpty) {
+                List<File> tempMedia = [
+                  ...widget.chatRoomCubit.media
+                ]; // spread operator
+                widget.chatRoomCubit.media.clear();
+                for (var media in tempMedia) {
+                  widget.chatRoomCubit.media.add(media);
+                  await widget.chatRoomCubit.sendMessage();
+                  widget.chatRoomCubit.media.clear();
+                }
+              }
+              setState(() {
+                isLoading = false;
+              });
+              context.pop();
+            },
+            icon: Icons.headphones_rounded),
 
-              _buildAttachmentTypeItem(
-                  color: Colors.lightBlue,
-                  label: LocaleKeys.contact.tr(),
-                  icon: Icons.person,
-                  onTap: () {
-                    context.push(
-                      Routes.SELECTCONTACTSTOSHARE,
-                      extra: widget.chatRoomCubit,
-                    );
-                  }),
-              (widget.chatRoomCubit.chat.isAdmin != "admin" &&
-                  widget.chatRoomCubit.chat.isBirthdayMonth)
-                  ? _buildAttachmentTypeItem(
-                  color: Colors.green,
-                  label: context.isArabic? "هدية" : "Gift",
-                  icon: FontAwesomeIcons.cakeCandles,
-                  onTap: ()async{
-                    context.pop();
-                    await showGiftBottomSheet(
-                      context,
-                      receiverId: widget.chatRoomCubit.chat.userId,
-                    );
-
-                  }
-              ): const SizedBox(),
-            ],
-          );
+        _buildAttachmentTypeItem(
+            color: Colors.lightBlue,
+            label: LocaleKeys.contact.tr(),
+            icon: Icons.person,
+            onTap: () {
+              context.push(
+                Routes.SELECTCONTACTSTOSHARE,
+                extra: widget.chatRoomCubit,
+              );
+            }),
+        (widget.chatRoomCubit.chat.isAdmin != "admin" &&
+            widget.chatRoomCubit.chat.isBirthdayMonth)
+            ? _buildAttachmentTypeItem(
+            color: Colors.green,
+            label: context.isArabic ? "هدية" : "Gift",
+            icon: FontAwesomeIcons.cakeCandles,
+            onTap: () async {
+              context.pop();
+              await showGiftBottomSheet(
+                context,
+                receiverId: widget.chatRoomCubit.chat.userId,
+              );
+            }
+        ) : const SizedBox(),
+      ],
+    );
   }
 
-  Widget _buildAttachmentTypeItem(
-      {required Color color,
-      required String label,
-      required IconData icon,
-      void Function()? onTap}) {
+  Widget _buildAttachmentTypeItem({required Color color,
+    required String label,
+    required IconData icon,
+    void Function()? onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Column(

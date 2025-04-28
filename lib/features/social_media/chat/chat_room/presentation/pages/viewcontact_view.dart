@@ -2,8 +2,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/custom_switch_button.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/label_colors_map.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/widgets/widgets_contacts/view_contact_custom_divider.dart';
@@ -45,66 +50,47 @@ class _ViewContactViewState extends State<ViewContactView> {
                 );
           }
           return CustomScaffold(
-            appBar: AppBar(
-              elevation: 0,
-              backgroundColor: AppColors.PRIMARY_COLOR,
-              // title: Text(
-              //   'Ahmed Nasr',
-              //   style: Styles.headerText(
-              //     fontWeight: FontWeight.bold,
-              //     color: AppColors.BACKGROUND_COLOR,
-              //   ),
-              // ),
-              leading: IconButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                icon: const Icon(
-                  Icons.arrow_back,
-                  size: 26,
-                  color: AppColors.BACKGROUND_COLOR,
-                ),
-              ),
-            ),
+            appBar: const BackAppBar(),
             body: widget.chatsCubit.user == null
                 ? const Center(
                     child: CircularProgressIndicator(),
                   )
                 : Column(
                     children: [
-                      const SizedBox(
+                      const Sizer(
                         height: 24,
                       ),
                       InkWell(
-                        onTap: widget.chatsCubit.selectedChat.hasStory?(){
-                          // navigate to stories
-                        }
-                            :null,
+                        onTap: () {
+                          if (widget.chatsCubit.selectedChat.hasStory) {
+                            // navigate to stories
+                          }
+                        },
                         child: Container(
-                          // height: kToolbarHeight * .8,
-                          // width: kToolbarHeight * .8,
-                          decoration: widget.chatsCubit.selectedChat.hasStory? BoxDecoration(
-                              borderRadius: BorderRadius.circular(100),
-                              border: Border.all(
-                                color: AppColors.PRIMARY_COLOR_DARK,
-                                width: 4,
-                              )
-                          ): null,
+                          decoration: widget.chatsCubit.selectedChat.hasStory
+                              ? BoxDecoration(
+                                  borderRadius: BorderRadius.circular(100),
+                                  border: Border.all(
+                                    color: AppColors.PRIMARY_COLOR_DARK,
+                                    width: 4,
+                                  ))
+                              : null,
                           child: CircleAvatar(
                             // backgroundColor: Colors.transparent,
-                            radius: 54,
+                            radius: 80,
                             backgroundImage: CachedNetworkImageProvider(
-                              widget.chatsCubit.selectedChat.avatar ??
-                                  UIConst.profilePlaceHolder,
+                              widget.chatsCubit.selectedChat.avatar == ''
+                                  ? UIConst.profilePlaceHolder
+                                  : widget.chatsCubit.selectedChat.avatar,
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(
+                      const Sizer(
                         height: 24,
                       ),
-                      Text(
-                        widget.chatsCubit.user!.fullName,
+                      Label(
+                        text: widget.chatsCubit.user!.fullName,
                         style: Styles.headerText(
                           fontWeight: FontWeight.bold,
                           color: context.isDarkMode
@@ -112,37 +98,177 @@ class _ViewContactViewState extends State<ViewContactView> {
                               : AppColors.PRIMARY_COLOR,
                         ),
                       ),
-                      widget.chatsCubit.selectedChat.lables.isNotEmpty?   SizedBox(
-                        height: 30, // Adjust height as needed
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: widget.chatsCubit.selectedChat.lables.length,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.only(left: 16),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(Icons.label, size: 24, color: LabelColorsMap.getColor(widget.chatsCubit.selectedChat.lables[index].color,),),
-                                  const SizedBox(width: 4,),
-                                  Text(widget.chatsCubit.selectedChat.lables[index].name,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 14,
-                                  ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
+                      const Sizer(height: 4),
+                      Label(
+                        text: widget.chatsCubit.user!.phone ?? '',
+                        style: Styles.mediumText(
+                          // fontWeight: FontWeight.bold,
+                          color: context.isDarkMode
+                              ? AppColors.BACKGROUND_COLOR
+                              : Colors.black45,
                         ),
-                      ): const SizedBox(),
+                      ),
+                      if (widget.chatsCubit.selectedChat.lables.isNotEmpty)
+                        SizedBox(
+                          height: 30, // Adjust height as needed
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount:
+                                widget.chatsCubit.selectedChat.lables.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.only(left: 16),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      widget.chatsCubit.selectedChat
+                                          .lables[index].name,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 4,
+                                    ),
+                                    Icon(
+                                      Icons.label,
+                                      size: 24,
+                                      color: LabelColorsMap.getColor(
+                                        widget.chatsCubit.selectedChat
+                                            .lables[index].color,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      const Sizer(height: 8,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.black87,
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            height: 140.h,
+                            width: 200.w,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              spacing: 8,
+                              children: [
+                                const Icon(
+                                  Icons.call,
+                                  color: AppColors.SECONDARY_COLOR,
+                                ),
+                                Label(
+                                  text: context.isArabic ? 'صوت' : 'Audio',
+                                  style: Styles.mediumText(
+                                      fontWeight: FontWeight.normal
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          // if(widget.chatsCubit.selectedChat)
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.black87,
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            height: 140.h,
+                            width: 200.w,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              spacing: 8,
+                              children: [
+                                const Icon(
+                                  Icons.camera,
+                                  color: AppColors.SECONDARY_COLOR,
+                                ),
+                                Label(
+                                  text: context.isArabic ? 'فيديو' : 'Video',
+                                  style: Styles.mediumText(
+                                      fontWeight: FontWeight.normal
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.black87,
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            height: 140.h,
+                            width: 200.w,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              spacing: 8,
+                              children: [
+                                const Icon(
+                                  Icons.search,
+                                  color: AppColors.SECONDARY_COLOR,
+                                ),
+                                Label(
+                                  text: context.isArabic ? 'بحث' : 'Search',
+                                  style: Styles.mediumText(
+                                    fontWeight: FontWeight.normal
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Sizer(height: 8,),
                       const ViewContactCustomDivider(),
                       ViewContactStatusCart(
                         bio: widget.chatsCubit.user!.bio ?? '',
                       ),
+                      const Sizer(
+                        height: 4,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Row(
+                          children: [
+                            ConstrainedBox(
+                              constraints: BoxConstraints(
+                                maxWidth:
+                                    MediaQuery.of(context).size.width * 0.9,
+                              ),
+                              child: Label(
+                                text: widget.chatsCubit.selectedChat.lastSeen ??
+                                    '',
+                                style: Styles.mediumText(
+                                  color: context.isDarkMode
+                                      ? AppColors.BACKGROUND_COLOR
+                                      : Colors.black45,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                       const ViewContactCustomDivider(),
-                      const ViewContactEncriptionCart(),
+                      const ViewContactEncryptionCart(),
                       const SizedBox(
                         height: 16,
                       ),
@@ -196,31 +322,48 @@ class _ViewContactViewState extends State<ViewContactView> {
                                 ],
                               ),
                             ),
-                            IconButton(
-                              icon: Icon(
-                                widget.chatsCubit.selectedChat.locked
-                                    ? Icons.toggle_on
-                                    : Icons.toggle_off,
-                                color: widget.chatsCubit.selectedChat.locked
-                                    ? context.isDarkMode
-                                        ? AppColors.BACKGROUND_COLOR
-                                        : AppColors.PRIMARY_COLOR
-                                    : context.isDarkMode
-                                        ? AppColors.BACKGROUND_COLOR
-                                            .withOpacity(0.2)
-                                        : AppColors.PRIMARY_COLOR
-                                            .withOpacity(0.5),
-                                size: 44,
+                            CustomSwitchButton(
+                              value: widget.chatsCubit.selectedChat.locked,
+                              trackColor: const WidgetStatePropertyAll(
+                                AppColors.SECONDARY_COLOR,
                               ),
-                              onPressed: () async {
+                              trackOutlineColor: const WidgetStatePropertyAll(
+                                AppColors.SECONDARY_COLOR,
+                              ),
+                              activeTrackColor: AppColors.SECONDARY_COLOR,
+                              thumbColor: widget.chatsCubit.selectedChat.locked
+                                  ? const WidgetStatePropertyAll(Colors.white)
+                                  : const WidgetStatePropertyAll(
+                                      AppColors.SECONDARY_COLOR),
+                              onChanged: (t) async {
                                 await widget.chatsCubit.updateLockChat(
                                     chat: widget.chatsCubit.selectedChat);
                               },
                             ),
+                            // IconButton(
+                            //   icon: Icon(
+                            //     widget.chatsCubit.selectedChat.locked
+                            //         ? Icons.toggle_on
+                            //         : Icons.toggle_off,
+                            //     color: widget.chatsCubit.selectedChat.locked
+                            //         ? context.isDarkMode
+                            //             ? AppColors.BACKGROUND_COLOR
+                            //             : AppColors.PRIMARY_COLOR
+                            //         : context.isDarkMode
+                            //             ? AppColors.BACKGROUND_COLOR
+                            //                 .withOpacity(0.2)
+                            //             : AppColors.PRIMARY_COLOR
+                            //                 .withOpacity(0.5),
+                            //     size: 44,
+                            //   ),
+                            //   onPressed: () async {
+                            //     await widget.chatsCubit.updateLockChat(
+                            //         chat: widget.chatsCubit.selectedChat);
+                            //   },
+                            // ),
                           ],
                         ),
                       ),
-
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: Row(
@@ -247,40 +390,80 @@ class _ViewContactViewState extends State<ViewContactView> {
                                           : AppColors.PRIMARY_COLOR,
                                     ),
                                   ),
-                                  // ConstrainedBox(
-                                  //   constraints: BoxConstraints(
-                                  //     maxWidth:
-                                  //         MediaQuery.of(context).size.width * 0.75,
-                                  //   ),
-                                  //   child: Text(
-                                  //     LocaleKeys.disappearingMessages.tr(),
-                                  //     style: Styles.mediumText(
-                                  //       fontWeight: FontWeight.w400,
-                                  //       color: AppColors.DARK_GRAY_COLOR,
-                                  //     ),
-                                  //   ),
-                                  // ),
                                 ],
                               ),
                             ),
-                            IconButton(
-                              icon: Icon(
-                                widget.chatsCubit.selectedChat.isTimerActive
-                                    ? Icons.toggle_on
-                                    : Icons.toggle_off,
-                                color:
-                                    widget.chatsCubit.selectedChat.isTimerActive
-                                        ? context.isDarkMode
-                                            ? AppColors.BACKGROUND_COLOR
-                                            : AppColors.PRIMARY_COLOR
-                                        : context.isDarkMode
-                                            ? AppColors.BACKGROUND_COLOR
-                                                .withOpacity(0.2)
-                                            : AppColors.PRIMARY_COLOR
-                                                .withOpacity(0.5),
-                                size: 44,
+                            CustomSwitchButton(
+                              value:
+                                  widget.chatsCubit.selectedChat.isTimerActive,
+                              trackColor: const WidgetStatePropertyAll(
+                                AppColors.SECONDARY_COLOR,
                               ),
-                              onPressed: () async {
+                              trackOutlineColor: const WidgetStatePropertyAll(
+                                AppColors.SECONDARY_COLOR,
+                              ),
+                              activeTrackColor: AppColors.SECONDARY_COLOR,
+                              thumbColor: widget
+                                      .chatsCubit.selectedChat.isTimerActive
+                                  ? const WidgetStatePropertyAll(Colors.white)
+                                  : const WidgetStatePropertyAll(
+                                      AppColors.SECONDARY_COLOR),
+                              onChanged: (t) async {
+                                await widget.chatsCubit.updateChat(
+                                    chat: widget.chatsCubit.selectedChat);
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.perm_identity_rounded,
+                              color: AppColors.GREY_DARK_COLOR,
+                              size: 24,
+                            ),
+                            const SizedBox(
+                              width: 32.0,
+                            ),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    context.isArabic
+                                        ? 'تعيين كجهة اتصال'
+                                        : 'Assign as contact',
+                                    style: Styles.mediumText(
+                                      fontWeight: FontWeight.w600,
+                                      color: context.isDarkMode
+                                          ? AppColors.BACKGROUND_COLOR
+                                          : AppColors.PRIMARY_COLOR,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            CustomSwitchButton(
+                              value:
+                                  widget.chatsCubit.selectedChat.isTimerActive,
+                              trackColor: const WidgetStatePropertyAll(
+                                AppColors.SECONDARY_COLOR,
+                              ),
+                              trackOutlineColor: const WidgetStatePropertyAll(
+                                AppColors.SECONDARY_COLOR,
+                              ),
+                              activeTrackColor: AppColors.SECONDARY_COLOR,
+                              thumbColor: widget
+                                      .chatsCubit.selectedChat.isTimerActive
+                                  ? const WidgetStatePropertyAll(Colors.white)
+                                  : const WidgetStatePropertyAll(
+                                      AppColors.SECONDARY_COLOR,
+                                    ),
+                              onChanged: (t) async {
                                 await widget.chatsCubit.updateChat(
                                     chat: widget.chatsCubit.selectedChat);
                               },

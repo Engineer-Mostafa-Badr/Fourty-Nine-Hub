@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
@@ -44,11 +45,15 @@ class _LogoutWidgetState extends State<LogoutWidget> {
       children: [
         Label(
           text: LocaleKeys.logout.localize,
-          style: Styles.headerText(),
+          style: Styles.headerText(
+            color: context.isDarkMode ? Colors.white : Colors.black,
+          ),
         ),
         Label(
           text: LocaleKeys.sureLogout.localize,
-          style: Styles.mediumText(),
+          style: Styles.mediumText(
+            color: context.isDarkMode ? Colors.white : Colors.black,
+          ),
         ),
         const Sizer(),
         Row(

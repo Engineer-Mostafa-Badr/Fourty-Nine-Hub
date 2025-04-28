@@ -28,7 +28,9 @@ class ReceivedContactsCard extends StatefulWidget {
     super.key,
     required this.messageEntity,
   });
+
   final MessageEntity messageEntity;
+
   @override
   State<ReceivedContactsCard> createState() => _ReceivedContactsCardState();
 }

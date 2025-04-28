@@ -27,8 +27,6 @@ import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../../common/widgets/dynamic/bottom_navigator.dart';
-import '../../../../common/widgets/dynamic/custom_bottom_navigator.dart';
-import '../../../../common/widgets/dynamic/drawer.dart';
 import '../../../../common/widgets/dynamic/floating_button.dart';
 import '../../../../common/widgets/dynamic/sizer.dart';
 import '../../../../common/widgets/dynamic/wallet_widget.dart';
@@ -126,7 +124,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
     context
         .read<NotificationSocketIoCubit>()
         .notificationListener(languageCode: 'en');
-
+    _setupScrollController();
     super.initState();
   }
 
@@ -161,13 +159,10 @@ class _FourtyNineViewState extends State<FourtyNineView>
       child: ExitWidget(
         child: CustomScaffold(
           key: _scaffoldKey,
-          appBar: const PreferredSize(
-            preferredSize: Size.fromHeight(30),
-            child: HomeAppbar(
-              isWithBackArrow: false,
-              language: true,
-              // isHaveLeading: true,
-            ),
+          appBar: const HomeAppbar(
+            isWithBackArrow: false,
+            language: true,
+            // isHaveLeading: true,
           ),
           bottomNavigationBar: BottomNavigator(
             scrollController: scrollController,
@@ -264,7 +259,6 @@ class _FourtyNineViewState extends State<FourtyNineView>
               const Sizer(),
               Row(children: [
                 const Sizer(width: 8),
-
                 Expanded(
                   child: _buildStarWidget(
                     onTap: () {
@@ -272,7 +266,8 @@ class _FourtyNineViewState extends State<FourtyNineView>
                       AdInterstitialTop.showInterstitialAd();
                       context.push(Routes.RIDE_HOME);
                     },
-                    shadowColor: Color(0xff8000FF),                    image: Assets.car2Image,
+                    shadowColor: Color(0xff8000FF),
+                    image: Assets.car2Image,
                     title: LocaleKeys.ride.localize,
                   ),
                 ),
@@ -304,44 +299,44 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   ),
                 ),
                 const Sizer(width: 8),
-
               ]),
               const Sizer(),
               const Sizer(),
-              Row(children: [
-                const Sizer(width: 8),
-
+              Row(
+                children: [
+                  const Sizer(width: 8),
                   Expanded(child: _pickMeAndComeWithUWidget()),
-                const Sizer(width: 32),
-                Expanded(
-                  child: _buildStarWidget(
-                    onTap: () {
-                      AdInterstitialTop.loadIntersitialAd();
-                      AdInterstitialTop.showInterstitialAd();
-                      HandleCashback.setCount('beAStarCount', context);
-                      context.push(Routes.BE_STAR);
-                    },
-                    shadowColor: AppColors.SECONDARY_COLOR.withValues(alpha: .7),
-                    image: Assets.tube1,
-                    title: LocaleKeys.tube.localize,
+                  const Sizer(width: 32),
+                  Expanded(
+                    child: _buildStarWidget(
+                      onTap: () {
+                        AdInterstitialTop.loadIntersitialAd();
+                        AdInterstitialTop.showInterstitialAd();
+                        HandleCashback.setCount('beAStarCount', context);
+                        context.push(Routes.BE_STAR);
+                      },
+                      shadowColor:
+                          AppColors.SECONDARY_COLOR.withValues(alpha: .7),
+                      image: Assets.tube1,
+                      title: LocaleKeys.tube.localize,
+                    ),
                   ),
-                ),
-                const Sizer(width: 32),
-                Expanded(
-                  child: _buildStarWidget(
-                    onTap: () {
-                      AdInterstitialTop.loadIntersitialAd();
-                      AdInterstitialTop.showInterstitialAd();
-                      context.push(Routes.MARRIAGESUBCATEGORIES);
-                    },
-                    shadowColor: Color(0xffFFC0CB),
-                    image: Assets.marriage,
-                    title: LocaleKeys.marriage.localize,
+                  const Sizer(width: 32),
+                  Expanded(
+                    child: _buildStarWidget(
+                      onTap: () {
+                        AdInterstitialTop.loadIntersitialAd();
+                        AdInterstitialTop.showInterstitialAd();
+                        context.push(Routes.MARRIAGESUBCATEGORIES);
+                      },
+                      shadowColor: Color(0xffFFC0CB),
+                      image: Assets.marriage,
+                      title: LocaleKeys.marriage.localize,
+                    ),
                   ),
-                ),
-                const Sizer(width: 8),
-
-              ],),
+                  const Sizer(width: 8),
+                ],
+              ),
               const Sizer(),
               // _buildTenPercentWidget(),
               // const Sizer(),
@@ -455,10 +450,10 @@ class _FourtyNineViewState extends State<FourtyNineView>
       children: [
         Expanded(
           child: _buildItemTabBar(
-            const Icon(
-              Icons.grid_view,
-              color: AppColors.PRIMARY_COLOR,
-              size: 25,
+            Image.asset(
+              Assets.gridIcon,
+              width: 24,
+              height: 24,
             ),
             Routes.MAINCATEGORIESTREE,
             () => HandleCashback.setCount('threeDotsCount', context),
@@ -471,9 +466,7 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   context,
                   MaterialPageRoute(
                       builder: (context) => const FavouriteScreensView()));
-            } else {
-
-            }
+            } else {}
           },
           child: Container(
             height: 40,
@@ -487,10 +480,10 @@ class _FourtyNineViewState extends State<FourtyNineView>
         ),
         Expanded(
           child: _buildItemTabBar(
-            const Icon(
-              Icons.view_carousel,
-              color: AppColors.PRIMARY_COLOR,
-              size: 30,
+            Image.asset(
+              Assets.sliderIcon,
+              width: 24,
+              height: 24,
             ),
             Routes.MAINCATEGORIESCARDS,
             () {

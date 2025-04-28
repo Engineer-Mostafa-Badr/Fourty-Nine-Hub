@@ -23,6 +23,7 @@ import '../../../../../../core/widget/custom_scaffold.dart';
 
 class AttachementsView extends StatefulWidget {
   const AttachementsView({super.key, required this.chatRoomCubit});
+
   final ChatRoomCubit chatRoomCubit;
 
   @override
@@ -120,6 +121,7 @@ class DocumentsAttachementsTab extends StatefulWidget {
     super.key,
     required this.messages,
   });
+
   final List<MessageEntity> messages;
 
   @override
@@ -129,6 +131,7 @@ class DocumentsAttachementsTab extends StatefulWidget {
 
 class _DocumentsAttachementsTabState extends State<DocumentsAttachementsTab> {
   List<MessageEntity> documentMessages = [];
+
   @override
   initState() {
     super.initState();
@@ -175,6 +178,7 @@ class LinksAttachementsTab extends StatefulWidget {
     super.key,
     required this.messages,
   });
+
   final List<MessageEntity> messages;
 
   @override
@@ -245,6 +249,7 @@ class LinkCard extends StatelessWidget {
 
   final String linkMessage;
   final String? linkUrl;
+
   Future<void> _launchURL(String url) async {
     final Uri uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
@@ -328,6 +333,7 @@ class MediaAttachementsTab extends StatefulWidget {
     super.key,
     required this.messages,
   });
+
   final List<MessageEntity> messages;
 
   @override
@@ -337,6 +343,7 @@ class MediaAttachementsTab extends StatefulWidget {
 class _MediaAttachementsTabState extends State<MediaAttachementsTab> {
   List<MessageEntity> mediaMessages = [];
   List mediaMessagesLinks = [];
+
   @override
   initState() {
     super.initState();
@@ -503,6 +510,7 @@ class AttachmentsFileCard extends StatefulWidget {
     super.key,
     required this.messageEntity,
   });
+
   final MessageEntity messageEntity;
 
   @override

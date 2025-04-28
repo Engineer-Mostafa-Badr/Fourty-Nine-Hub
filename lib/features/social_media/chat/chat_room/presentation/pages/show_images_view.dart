@@ -8,6 +8,7 @@ import '../widgets/chat_room_widgets/message_card.dart';
 
 class ShowImagesView extends StatelessWidget {
   const ShowImagesView({super.key, required this.messageEntity});
+
   final MessageEntity messageEntity;
 
   @override

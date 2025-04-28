@@ -692,10 +692,17 @@ class AppPages {
               GoRoute(
                 path: Paths.MAINCATEGORIESTREE,
                 name: Routes.MAINCATEGORIESTREE,
-                builder: (context, state) => BlocProvider(
+                builder: (context, state) => MultiBlocProvider(providers: [
+                  BlocProvider(
                     create: (context) =>
                         serviceLocator<MainCategoriesTapsCubit>(),
-                    child: const MainCategoriesGridView()),
+                  ),
+                  // BlocProvider(
+                  //   create: (context) =>
+                  //       serviceLocator<SubcategoriesCubit>(),
+                  // ),
+
+                ], child: const MainCategoriesGridView()),
               ),
               GoRoute(
                 path: Paths.SUBCATEGORIES,

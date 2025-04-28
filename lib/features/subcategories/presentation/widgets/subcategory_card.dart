@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
-import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -9,7 +9,6 @@ import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/pages/ads_view.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:go_router/go_router.dart';
 
@@ -42,7 +41,7 @@ class _SubCategoryCardState extends State<SubCategoryCard> {
               mainCategory: widget.mainCategory, subCategory: widget.item)),
       child: Container(
         decoration: BoxDecoration(
-          color: AppColors.GRAY_LIGHT_COLOR3,
+          color: context.isDarkMode ? Colors.white24 : Colors.black26,
           borderRadius: BorderRadius.circular(30.r),
         ),
         clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -70,8 +69,7 @@ class _SubCategoryCardState extends State<SubCategoryCard> {
                           onPressed: () async {
                             var result = await widget.onFav();
                             if (result == true) {
-                              widget.item.isFavorite =
-                                  !widget.item.isFavorite!;
+                              widget.item.isFavorite = !widget.item.isFavorite!;
                               setState(() {});
                             }
                           },
@@ -96,14 +94,19 @@ class _SubCategoryCardState extends State<SubCategoryCard> {
                         context.push(Routes.LOGIN);
                       }
                     }),
-                SizedBox(width: 8.w,),
+                SizedBox(
+                  width: 8.w,
+                ),
                 Expanded(
                   child: Label(
                     text: context.isArabic
                         ? widget.item.nameAr
                         : widget.item.nameEn,
                     style: Styles.smallText(
-                        fontWeight: FontWeight.bold, fontSize: 24),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                      color: context.isDarkMode ? Colors.white : Colors.black,
+                    ),
                   ),
                 ),
               ],

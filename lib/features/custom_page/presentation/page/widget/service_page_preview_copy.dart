@@ -133,6 +133,13 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
     super.dispose();
   }
 
+  @override
+  void didChangeDependencies() async {
+    super.didChangeDependencies();
+    _setupScrollController();
+
+  }
+
   List<Widget> getMainCategoryWidgets(
           MainCategoriesCubit controller, MainCategoriesState state) =>
       [
@@ -144,7 +151,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: SizedBox(
-                height: 300,
+                height: 400,
                 child: MainCategoriesFlipCardsView(
                   isAppBarShow: false,
                   data: context.read<MainCategoriesTapsCubit>().mainCategories,
@@ -157,7 +164,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
           create: (context) => serviceLocator<MainCategoriesTapsCubit>(),
           child: Builder(builder: (context) {
             return SizedBox(
-                height: MediaQuery.sizeOf(context).height,
+                height: MediaQuery.sizeOf(context).height*.7,
                 child: const MainCategoriesGridView(
                   isAppBarShow: false,
                 ));
@@ -199,18 +206,11 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
                 icon: Icons.person,
               ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        // bottomNavigationBar: CustomPageBottonNavBar(
-        //   scrollController: scrollController,
-        //   currentIndex: 2,
-        //   isScrollingDown: _isScrollingDown,
-        //   // mainCategory: 1,
-        //   // index: 2,
-        // ),
         drawer: const DrawerWidget(),
         body: Stack(
           children: [
             CustomScrollView(
-              // controller: scrollController,
+              controller: scrollController,
               // padding: EdgeInsets.symmetric(horizontal: 20.w),
               slivers: [
                 // const SliverToBoxAdapter(child: AddBanner()),
@@ -804,7 +804,7 @@ class CustomDeActivateDialog extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Label(
-                              text: 'Restart to Apply',
+                              text: LocaleKeys.restartToApply.localize,
                               style: Styles.headerText(
                                   fontWeight: FontWeight.w400)),
                           const Sizer(),
@@ -830,7 +830,7 @@ class CustomDeActivateDialog extends StatelessWidget {
                                         .updateActivate(true);
                                     Restart.restartApp();
                                   },
-                                  label: 'Restart',
+                                  label: LocaleKeys.restart.localize,
                                 ),
                               ),
                             ],

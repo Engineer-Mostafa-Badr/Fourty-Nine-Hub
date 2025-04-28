@@ -299,8 +299,6 @@ class _RideRequestViewState extends State<RideRequestView> {
                                                   ),
                                                   const Spacer(),
                                                   CustomSwitchButton(
-                                                    activeColor:
-                                                        AppColors.PRIMARY_COLOR,
                                                     value: getTripInfoCubit
                                                             .model.autoAccept ??
                                                         false,

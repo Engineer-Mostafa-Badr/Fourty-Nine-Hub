@@ -21,6 +21,7 @@ class SelectContactToShareCart extends StatefulWidget {
 
 class _SelectContactToShareCartState extends State<SelectContactToShareCart> {
   bool isSelected = false;
+
   @override
   Widget build(BuildContext context) {
     return InkWell(

@@ -258,6 +258,7 @@ class OneTimeDocumentMessageViewParams {
 class OneTimeDocumentMessageView extends StatefulWidget {
   const OneTimeDocumentMessageView(
       {super.key, required this.oneTimeDocumentMessageViewParams});
+
   final OneTimeDocumentMessageViewParams oneTimeDocumentMessageViewParams;
 
   @override
@@ -269,6 +270,7 @@ class _OneTimeDocumentMessageViewState
     extends State<OneTimeDocumentMessageView> {
   int _selectedIndex = 0;
   late PageController _pageController;
+
   // String? fileSize;
   String? fileExtension;
   bool isLoading = false;
