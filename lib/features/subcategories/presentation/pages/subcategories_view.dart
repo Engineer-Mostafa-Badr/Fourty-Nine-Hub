@@ -39,9 +39,6 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
 
   @override
   void initState() {
-    // context
-    //     .read<SubcategoriesCubit>()
-    //     .init(mainCategoryId: widget.mainCategory.id);
     context
         .read<SubcategoriesCubit>()
         .init(mainCategoryId: widget.mainCategory.id);

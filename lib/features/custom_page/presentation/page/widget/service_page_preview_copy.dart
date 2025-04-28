@@ -164,7 +164,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
           create: (context) => serviceLocator<MainCategoriesTapsCubit>(),
           child: Builder(builder: (context) {
             return SizedBox(
-                height: MediaQuery.sizeOf(context).height,
+                height: MediaQuery.sizeOf(context).height*.7,
                 child: const MainCategoriesGridView(
                   isAppBarShow: false,
                 ));
