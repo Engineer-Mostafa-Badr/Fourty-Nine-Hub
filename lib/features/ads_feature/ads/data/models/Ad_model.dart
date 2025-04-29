@@ -2,8 +2,8 @@ import 'package:fourtyninehub/features/ads_feature/ads/data/models/ad_statistics
 import 'package:fourtyninehub/features/ads_feature/create_ad/data/models/create_ad_model.dart';
 
 import '../../../../authentication/data/models/user_model.dart';
-import '../../../../requests_history/data/models/address_model.dart';
 import '../../domain/entities/ad_entity.dart';
+import 'ads_address_model.dart';
 
 class AdModel extends AdEntity {
   AdModel(
@@ -62,7 +62,7 @@ class AdModel extends AdEntity {
         statistics: json['statistics'] == null
             ? null
             : AdStatisticsModel.fromJson(json['statistics']),
-        address: AddressModel.fromJson(json['address']),
+        address: AdsAddressModel.fromJson(json['address']),
         user: user,
         details: json['props'] == null
             ? []
