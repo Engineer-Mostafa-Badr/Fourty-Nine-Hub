@@ -84,7 +84,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                           : Colors.white,
                       // Background color
                       elevation: 0,
-                      leadingWidth: 26,
+                      leadingWidth: 20,
                       leading: IconButton(
                         onPressed: () {
                           if (context.read<ChatRoomCubit>().chat.isSearching) {
@@ -545,7 +545,7 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                               : Colors.black,
                                         ),
                                         color: context.isDarkMode
-                                            ? AppColors.PRIMARY_COLOR
+                                            ? AppColors.QUANTITY_COLOR
                                             : AppColors.BACKGROUND_COLOR,
                                         shape: const RoundedRectangleBorder(
                                           borderRadius: BorderRadius.all(
@@ -1100,8 +1100,8 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
         child: Text(
           LocaleKeys.muteNotifications.tr(),
           style: Styles.mediumText(
-              color:
-                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,),
+            color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+          ),
         ),
       ),
       // PopupMenuItem<int>(
@@ -1149,8 +1149,8 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
         child: Text(
           LocaleKeys.block.tr(),
           style: Styles.mediumText(
-              color:
-                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,),
+            color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+          ),
         ),
       ),
       PopupMenuItem<int>(
@@ -1162,8 +1162,8 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
         child: Text(
           LocaleKeys.clearChat.tr(),
           style: Styles.mediumText(
-              color:
-                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,),
+            color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+          ),
         ),
       ),
       PopupMenuItem<int>(
@@ -1171,8 +1171,8 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
         child: Text(
           context.isArabic ? "اضافة علامة للمحادثة" : "Label Chat",
           style: Styles.mediumText(
-              color:
-                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,),
+            color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+          ),
         ),
       ),
     ];
@@ -1285,9 +1285,10 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                     title: Text(
                       LocaleKeys.clearForMe.tr(),
                       style: Styles.mediumText(
-                          color: context.isDarkMode
-                              ? Colors.white
-                              : AppColors.PRIMARY_COLOR,),
+                        color: context.isDarkMode
+                            ? Colors.white
+                            : AppColors.PRIMARY_COLOR,
+                      ),
                     ),
                     leading: Radio<int>(
                       value: 0,
@@ -1304,9 +1305,10 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                     title: Text(
                       LocaleKeys.clearForEveryone.tr(),
                       style: Styles.mediumText(
-                          color: context.isDarkMode
-                              ? Colors.white
-                              : AppColors.PRIMARY_COLOR,),
+                        color: context.isDarkMode
+                            ? Colors.white
+                            : AppColors.PRIMARY_COLOR,
+                      ),
                     ),
                     leading: Radio<int>(
                       value: 1,
@@ -1328,9 +1330,10 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
               child: Text(
                 LocaleKeys.cancel.tr(),
                 style: Styles.mediumText(
-                    color: context.isDarkMode
-                        ? Colors.white
-                        : AppColors.PRIMARY_COLOR,),
+                  color: context.isDarkMode
+                      ? Colors.white
+                      : AppColors.PRIMARY_COLOR,
+                ),
               ),
               onPressed: () {
                 Navigator.of(context).pop();

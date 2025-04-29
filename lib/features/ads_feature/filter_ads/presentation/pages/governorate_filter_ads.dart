@@ -8,6 +8,7 @@ import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/default_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
@@ -15,6 +16,7 @@ import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/cat
 import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/cubit/create_ad_cubit.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/city.dart';
 import 'package:fourtyninehub/features/health_feature/create_doctor/domain/entities/governorate_entity.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
 
@@ -95,6 +97,7 @@ class _GovernorateFilterAdsViewState extends State<GovernorateFilterAdsView> {
                         color: Colors.grey, // Border color
                       ),
                     ),
+
                   ),
                   hint: Text(LocaleKeys.selectGovernorate.tr()),
                   value: null,
@@ -104,7 +107,7 @@ class _GovernorateFilterAdsViewState extends State<GovernorateFilterAdsView> {
                     print("state.city${state.city}");
                     controller.getCities(newValue?.id ?? '');
                   },
-                  dropdownColor: Colors.white,
+                  dropdownColor:context.isDarkMode?AppColors.QUANTITY_COLOR: Colors.white,
                   items: state.governorates
                       ?.map<DropdownMenuItem<GovernorateEntity>>(
                           (GovernorateEntity government) {
@@ -166,7 +169,7 @@ class _GovernorateFilterAdsViewState extends State<GovernorateFilterAdsView> {
                                       "state.governorate${state.governorate}");
                                   print("state.city${state.city}");
                                 },
-                                dropdownColor: Colors.white,
+                                dropdownColor:context.isDarkMode?AppColors.QUANTITY_COLOR: Colors.white,
                                 items: state.cities
                                     ?.map<DropdownMenuItem<CityEntity>>(
                                         (CityEntity city) {

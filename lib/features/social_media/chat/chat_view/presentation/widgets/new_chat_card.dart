@@ -429,18 +429,20 @@ class _NewChatCardState extends State<NewChatCard> {
                               ),
                           ],
                         ),
-                      Label(
-                          text: widget.chat?.lastMessage?.text == null
-                              ? context.isArabic
-                                  ? "لا توجد رسائل حتي الان"
-                                  : "No messages until now"
-                              : '${widget.chat?.lastMessage?.text}',
-                          style: Styles.mediumText(
-                            fontSize: 28,
-                            color: context.isDarkMode
-                                ? Colors.white54
-                                : AppColors.DARK_GRAY_COLOR,
-                          )),
+                      Expanded(
+                        child: Label(
+                            text: widget.chat?.lastMessage?.text == null
+                                ? context.isArabic
+                                    ? "لا توجد رسائل حتي الان"
+                                    : "No messages until now"
+                                : '${widget.chat?.lastMessage?.text}',
+                            style: Styles.mediumText(
+                              fontSize: 28,
+                              color: context.isDarkMode
+                                  ? Colors.white54
+                                  : AppColors.DARK_GRAY_COLOR,
+                            ),),
+                      ),
                     ],
                   ),
                 ),

@@ -123,43 +123,56 @@ class MessagesAreEndToEndEncrypted extends StatelessWidget {
           ),
         );
       },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Icon(
-              Icons.lock_outline,
-              size: 24,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 4),
+            child: Divider(
+              thickness: 1,
+              color:context.isDarkMode?Colors.white12: Colors.black12,
+              height: 5,
             ),
-            Column(
+
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Label(
-                  text: "${LocaleKeys.yourPersonalMessages.localize} ",
-                  style: Styles.mediumText(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 28,
-                    color:context.isDarkMode?Colors.white: Colors.black,
-                  ),
+                const Icon(
+                  Icons.lock_outline,
+                  size: 24,
                 ),
-                Label(
-                  text: LocaleKeys.endToEndEncryption.localize,
-                  style: Styles.mediumText(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 28,
-                    color: AppColors.PRIMARY_COLOR_DARK,
-                  ),
+                Column(
+                  children: [
+                    Label(
+                      text: "${LocaleKeys.yourPersonalMessages.localize} ",
+                      style: Styles.mediumText(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 28,
+                        color:context.isDarkMode?Colors.white: Colors.black,
+                      ),
+                    ),
+                    Label(
+                      text: LocaleKeys.endToEndEncryption.localize,
+                      style: Styles.mediumText(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 28,
+                        color: AppColors.PRIMARY_COLOR_DARK,
+                      ),
+                    ),
+                  ],
+                ),
+                const Icon(
+                  Icons.lock_outline,
+                  size: 24,
+                  color: Colors.transparent,
                 ),
               ],
             ),
-            const Icon(
-              Icons.lock_outline,
-              size: 24,
-              color: Colors.transparent,
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

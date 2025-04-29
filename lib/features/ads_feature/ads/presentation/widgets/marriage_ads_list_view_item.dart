@@ -93,15 +93,18 @@ class MarriageAdsListViewItem extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      SvgPicture.asset(Assets.mapPinIcon,
-                        color:
-                      context.isDarkMode ? Colors.white : null,
+                      SvgPicture.asset(
+                        Assets.mapPinIcon,
+                        color: context.isDarkMode ? Colors.white : null,
                       ),
                       const SizedBox(
                         width: 4,
                       ),
                       Label(
-                        text: marriageAds.address?.address??'',
+                        text: (context.isArabic
+                                ? marriageAds.address?.addressAr
+                                : marriageAds.address?.addressEn) ??
+                            '',
                         style: Styles.headerText(
                           fontSize: 24,
                           color:
@@ -114,8 +117,7 @@ class MarriageAdsListViewItem extends StatelessWidget {
               ),
             ),
             Divider(
-              color:
-              context.isDarkMode ? Colors.white : Colors.black,
+              color: context.isDarkMode ? Colors.white : Colors.black,
               height: 0,
             ),
             Padding(

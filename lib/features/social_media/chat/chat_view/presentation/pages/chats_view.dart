@@ -504,14 +504,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
             ),
             // const Divider(),
             _buildCategoryChats(),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 4),
-              child: Divider(
-                thickness: 1,
-                color: Colors.black12,
-                height: 5,
-              ),
-            ),
+
             const MessagesAreEndToEndEncrypted(),
           ],
         );
@@ -530,7 +523,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                   expandedOptions
                       ? FontAwesomeIcons.anglesUp
                       : FontAwesomeIcons.anglesDown,
-                  color: Colors.black.withValues(alpha: 0.3),
+                  color: context.isDarkMode ? Colors.white38 : Colors.black38,
                   size: 18,
                 ),
               ),
@@ -682,14 +675,15 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                   child: Label(
                       text: LocaleKeys.noChatsUntilNow.localize,
                       style: Styles.mediumText(
-                          fontWeight: FontWeight.bold, fontSize: 26)),
+                          fontWeight: FontWeight.bold, fontSize: 26,
+                      color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR
+                      ),),
                 )
               : Scrollbar(
                   // isAlwaysShown: true,  // Ensures the scrollbar is always visible
                   interactive: true,
                   thumbVisibility: true,
                   thickness: 3,
-
                   child: ListView.separated(
                     shrinkWrap: true,
                     physics: const AlwaysScrollableScrollPhysics(),
@@ -743,12 +737,12 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                               chatsCubit: chatsCubit,
                             ),
                           ),
-                    separatorBuilder: (context, index) => const Padding(
+                    separatorBuilder: (context, index) => Padding(
                       padding:
-                          EdgeInsets.symmetric(horizontal: 20.0, vertical: 4),
+                          const EdgeInsets.symmetric(horizontal: 20.0, vertical: 4),
                       child: Divider(
                         thickness: 1,
-                        color: Colors.black12,
+                        color:context.isDarkMode ? Colors.white12 : Colors.black12,
                         height: 5,
                       ),
                     ),

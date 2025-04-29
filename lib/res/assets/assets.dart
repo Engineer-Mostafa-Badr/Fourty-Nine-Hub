@@ -519,4 +519,5 @@ abstract class Assets {
   //Find
   static String find_inbox = "assets/icons/find_inbox.png";
   static String hotelFilter = "assets/icons/hotel.png";
+  static String comingSoon = "assets/icons/comingSoon.png";
 }
