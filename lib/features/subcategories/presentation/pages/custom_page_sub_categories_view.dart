@@ -269,9 +269,9 @@ class _CustomPageSubCategoriesViewState
   @override
   void initState() {
     print('widget.mainCategory.id ${widget.mainCategory.id}');
-    context
-        .read<SubcategoriesCubit>()
-        .init(mainCategoryId: widget.mainCategory.id);
+    // context
+    //     .read<SubcategoriesCubit>()
+    //     .init(mainCategoryId: widget.mainCategory.id);
     context
         .read<SubcategoriesCubit>()
         .init(mainCategoryId: widget.mainCategory.id);

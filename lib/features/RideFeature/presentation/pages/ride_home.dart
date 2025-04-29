@@ -418,6 +418,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         children: [
           TileLayer(
             urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            // urlTemplate: context.isDarkMode ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" // Dark mode map
+            //     : "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", // Normal mode map
           ),
           MarkerLayer(
             markers: [

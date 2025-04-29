@@ -41,6 +41,7 @@ import 'package:shimmer/shimmer.dart';
 import '../../../../../common/widgets/dynamic/bottom_navigator.dart';
 import '../../../../../common/widgets/dynamic/floating_button.dart';
 import '../../../../../core/utils/custom_show_dialog.dart';
+import '../../../../subcategories/presentation/cubit/subcategories_cubit.dart';
 
 class ServicePagePreview extends StatefulWidget {
   const ServicePagePreview({super.key});
@@ -123,7 +124,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
     context
         .read<NotificationSocketIoCubit>()
         .notificationListener(languageCode: 'en');
-    super.initState();
+    // super.initState();
   }
 
   @override
@@ -137,7 +138,6 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
   void didChangeDependencies() async {
     super.didChangeDependencies();
     _setupScrollController();
-
   }
 
   List<Widget> getMainCategoryWidgets(
@@ -160,14 +160,22 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
             );
           }),
         ),
-        BlocProvider(
-          create: (context) => serviceLocator<MainCategoriesTapsCubit>(),
+        MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => serviceLocator<MainCategoriesTapsCubit>(),
+            ),
+            BlocProvider(
+              create: (context) => serviceLocator<SubcategoriesCubit>(),
+            ),
+          ],
           child: Builder(builder: (context) {
             return SizedBox(
-                height: MediaQuery.sizeOf(context).height*.7,
-                child: const MainCategoriesGridView(
-                  isAppBarShow: false,
-                ));
+              height: MediaQuery.sizeOf(context).height * .7,
+              child: const MainCategoriesGridViewCustomPage(
+                isAppBarShow: false,
+              ),
+            );
           }),
         ),
       ];
@@ -471,6 +479,10 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(40.r),
+          image: DecorationImage(
+            image: AssetImage(image),
+            fit: BoxFit.fill,
+          ),
           boxShadow: [
             BoxShadow(
               color: shadowColor,
@@ -484,11 +496,12 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Image.asset(
-              image,
-              fit: BoxFit.cover,
-              width: double.infinity,
-            ),
+            // Image.asset(
+            //   image,
+            //   fit: BoxFit.fill,
+            //   // width: double.infinity,
+            //   // height: double.infinity,
+            // ),
             Container(
               color: Colors.black38,
             ),
@@ -615,6 +628,10 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(40.r),
+          image: DecorationImage(
+            image: AssetImage(Assets.joinTrip),
+            fit: BoxFit.fill,
+          ),
           boxShadow: [
             BoxShadow(
               color: AppColors.PRIMARY_COLOR.withValues(alpha: .8),
@@ -630,11 +647,11 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Image.asset(
-              Assets.joinTrip,
-              fit: BoxFit.fill,
-              width: double.infinity,
-            ),
+            // Image.asset(
+            //   Assets.joinTrip,
+            //   fit: BoxFit.fill,
+            //   width: double.infinity,
+            // ),
             Container(
               color: Colors.black38,
             ),
