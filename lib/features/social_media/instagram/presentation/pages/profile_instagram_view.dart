@@ -21,10 +21,10 @@ class ProfileInstagramView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileInstagramCubit, ProfileInstagramState>(
       builder: (context, state) {
-        if (state.status.isLoading || state.status.isInitial) {
+        if (state.isAnyLoading) {
           return const Scaffold(body: CustomLoading());
         }
-        if (state.status.isFailure) {
+        if (state.isAnyFailure) {
           return Scaffold(
             body: CustomFailureWidget(
               onPressed: () {
@@ -33,7 +33,11 @@ class ProfileInstagramView extends StatelessWidget {
                     .getUserProfile(userId: userId);
               },
               title: getFailureMessage(
-                  state.failure ?? UnknownFailure(''), context),
+                  state.profileFailure ??
+                      state.reelsFailure ??
+                      state.suggestFollowFailure ??
+                      UnknownFailure(''),
+                  context),
             ),
           );
         }

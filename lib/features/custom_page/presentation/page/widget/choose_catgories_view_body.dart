@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/utils/shared_pref.dart';
@@ -8,6 +9,8 @@ import 'package:fourtyninehub/features/custom_page/presentation/page/widget/page
 import 'package:fourtyninehub/res/style/styles.dart';
 
 import '../../../../../res/assets/assets.dart';
+import '../../../../../res/style/app_colors.dart';
+import 'edit_page.dart';
 
 class ChooseCategoriesViwBody extends StatefulWidget {
   const ChooseCategoriesViwBody({super.key});
@@ -26,27 +29,31 @@ class _ChooseCategoriesViwBodyState extends State<ChooseCategoriesViwBody> {
     super.initState();
   }
 
-  final List<Widget> _icons = [
-    const Icon(
+   List<Widget> _icons({Color? color}) => [
+     Icon(
       Icons.list,
+      color:color?? Colors.grey,
     ),
-    const Icon(
+     Icon(
       Icons.grid_view,
+       color:color?? Colors.grey,
     ),
-    const Icon(
+     Icon(
       Icons.view_carousel,
+       color:color?? Colors.grey,
     ),
     Image.asset(
       Assets.grid,
       width: 24,
       height: 24,
+      color:color?? Colors.grey,
     ),
   ];
-  final List<String> _items = [
-    'List View',
-    'Home View',
-    'Slider View',
-    'Grid View',
+  List<String> _items(BuildContext context) => [
+    context.isArabic?'عرض القائمة':'List View',
+    context.isArabic?'عرض الصفحة الرئيسية': 'Home View',
+    context.isArabic?'عرض شريط التمرير': 'Slider View',
+    context.isArabic?'عرض الشبكة': 'Grid View',
   ];
 
   @override
@@ -60,13 +67,13 @@ class _ChooseCategoriesViwBodyState extends State<ChooseCategoriesViwBody> {
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: _items.length,
+              itemCount: _items(context).length,
               itemBuilder: (context, index) {
                 return ListTile(
                   leading: Radio<int>(
                     value: index,
                     groupValue: _selectedItem,
-                    // activeColor: Theme.of(context).primaryColor,
+                    activeColor: AppColors.SECONDARY_COLOR,
                     onChanged: (int? value) {
                       setState(() {
                         _selectedItem = value!;
@@ -74,14 +81,14 @@ class _ChooseCategoriesViwBodyState extends State<ChooseCategoriesViwBody> {
                     },
                   ),
                   title: Text(
-                    _items[index],
+                    _items(context)[index],
                     style: Styles.mediumText(
                       fontSize: 65.sp,
                       fontWeight: FontWeight.w400,
                       color: Theme.of(context).primaryColor,
                     ),
                   ),
-                  trailing: _icons[index],
+                  trailing: _icons(color: _selectedItem == index ? AppColors.SECONDARY_COLOR : Colors.grey)[index],
                   selected: _selectedItem == index,
                   selectedTileColor: Colors.transparent,
                 );

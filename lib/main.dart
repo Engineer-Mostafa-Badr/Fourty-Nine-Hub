@@ -186,9 +186,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       providers: [
         BlocProvider(create: (context) => serviceLocator<SendCallCubit>()),
         BlocProvider(create: (context) => serviceLocator<CallCubit>()),
-        // BlocProvider(
-        //     create: (context) =>
-        //         CheckTripEndCubit(repository: serviceLocator())),
+        BlocProvider(
+            create: (context) =>serviceLocator<MainCategoriesCubit>()..getWallet()),
         BlocProvider(
           create: (context) => serviceLocator<UserCubit>(),//..getUser(),
         ),

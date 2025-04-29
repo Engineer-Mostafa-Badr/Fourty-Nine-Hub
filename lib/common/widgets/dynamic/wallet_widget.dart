@@ -48,15 +48,16 @@ class _WalletWidgetState extends State<WalletWidget> {
       child: BlocBuilder<PaymentCacheOutCubit, PaymentCacheOutState>(
         builder: (BuildContext context, state) {
           return Container(
-            // height: (isOpen?200:100).h,
             margin: EdgeInsets.symmetric(vertical: 10.h, horizontal: 5.w),
             padding: const EdgeInsets.all(5),
             decoration: BoxDecoration(
               color: Theme.of(context).scaffoldBackgroundColor,
               borderRadius: BorderRadius.circular(12.r),
-              boxShadow: const [
+              boxShadow: [
                 BoxShadow(
-                  color: AppColors.GRAY_LIGHT_COLOR3,
+                  color: context.isDarkMode
+                      ? Colors.grey.shade600
+                      : AppColors.GRAY_LIGHT_COLOR3,
                   blurRadius: 5,
                   spreadRadius: 5,
                 ),
@@ -93,7 +94,7 @@ class _WalletWidgetState extends State<WalletWidget> {
                         context.push(Routes.CASHBACK);
                       },
                           LocaleKeys.balance.tr(),
-                          '${FormatNumbers().formatNumber(state.wallet?.balance ?? 0)} ',
+                          '${FormatNumbers().formatNumber(state.wallet?.balance ?? 0, useArabicNumerals: context.isArabic)} ',
                           context.isArabic
                               ? state.wallet?.currencyAr ?? ''
                               : state.wallet?.currencyEn ?? ''),
@@ -114,7 +115,7 @@ class _WalletWidgetState extends State<WalletWidget> {
                         context.push(Routes.GIFT);
                       },
                           LocaleKeys.gift.tr(),
-                          '${FormatNumbers().formatNumber(state.wallet?.giftWallet ?? 0)} ',
+                          '${FormatNumbers().formatNumber(state.wallet?.giftWallet ?? 0, useArabicNumerals: context.isArabic)} ',
                           context.isArabic
                               ? state.wallet?.currencyAr ?? ''
                               : state.wallet?.currencyEn ?? ''),
@@ -136,7 +137,7 @@ class _WalletWidgetState extends State<WalletWidget> {
                         //showing
                       },
                           LocaleKeys.wallet.tr(),
-                          '${FormatNumbers().formatNumber(state.wallet?.realAmount ?? 0)} ',
+                          '${FormatNumbers().formatNumber(state.wallet?.realAmount ?? 0, useArabicNumerals: context.isArabic)} ',
                           context.isArabic
                               ? state.wallet?.currencyAr ?? ''
                               : state.wallet?.currencyEn ?? ''),
@@ -464,38 +465,45 @@ class _WalletWidgetState extends State<WalletWidget> {
 
   Widget buildItem(Function function, String title, String amount, currency) =>
       Expanded(
-          child: InkWell(
-        onTap: () {
-          function();
-        },
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Label(
+        child: InkWell(
+          onTap: () {
+            function();
+          },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Label(
                 text: title,
                 style: Styles.mediumText(
                   fontWeight: FontWeight.bold,
-                )),
-            Row(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: Label(
+                  color: context.isDarkMode ? Colors.white : Colors.black,
+                ),
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: Label(
                       text: amount.toString(),
                       style: Styles.mediumText(
                         fontWeight: FontWeight.bold,
-                      )),
-                ),
-                Expanded(
-                  child: Label(
+                        color: context.isDarkMode ? Colors.white : Colors.black,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Label(
                       text: currency,
                       style: Styles.mediumText(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.SECONDARY_COLOR)),
-                ),
-              ],
-            ),
-          ],
+                        fontWeight: FontWeight.bold,
+                        color:context.isDarkMode ? Colors.white : AppColors.SECONDARY_COLOR,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
-      ));
+      );
 }

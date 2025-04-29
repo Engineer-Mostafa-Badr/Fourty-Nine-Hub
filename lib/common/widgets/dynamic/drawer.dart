@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
@@ -15,7 +14,6 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/core/utils/hex_color_helper.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
-import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/get_wallet_cubit.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
@@ -31,6 +29,7 @@ import '../../../features/competition/presentation/cubit/competition_cubit/compe
 import '../../../features/competition/presentation/cubit/competition_cubit/competition_state.dart';
 import '../../../features/competition/presentation/view/special_ads_view.dart';
 import '../../../features/custom_page/presentation/cubit/custom_page_cubit.dart';
+import '../../../features/settings/presentation/cubit/choice_ruler_cubit.dart';
 import '../../../features/settings/presentation/cubit/floating_navigator_cubit.dart';
 import '../../../features/social_media/chat/chat_view/presentation/pages/chats_view.dart';
 import '../../../features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
@@ -190,7 +189,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     showAnimatedDialog(
                                       context,
                                       AlertDialog(
-                                        backgroundColor: Colors.white,
+                                        // backgroundColor: context.isDarkMode?AppColors.:Colors.white,
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(20),
@@ -214,16 +213,16 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     context.pop();
                                     context.push(Routes.RIDE_HOME);
                                   }),
-                              drawerRollWidget(
-                                label: LocaleKeys.loading.localize,
-                                image: Assets.loading,
-                                // onTap: () {},
-                                onTap: () {
-                                  context.pop();
-                                  context
-                                      .push(Routes.createLoadingTripScreen);
-                                },
-                              ),
+                              // drawerRollWidget(
+                              //   label: LocaleKeys.loading.localize,
+                              //   image: Assets.loading,
+                              //   // onTap: () {},
+                              //   onTap: () {
+                              //     context.pop();
+                              //     context
+                              //         .push(Routes.createLoadingTripScreen);
+                              //   },
+                              // ),
                               drawerRollWidget(
                                 label: LocaleKeys.health.localize,
                                 image: Assets.healthIcon,
@@ -524,39 +523,79 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     }
     return Padding(
       padding: EdgeInsets.only(top: 10.h),
-      child: ListTile(
-        onTap: () => onTap(),
-        leading: image != null && icon == null
-            ? Image.asset(
-                image,
-                width: image == Assets.contact_us_icon ? 35.h : 40.h,
-                height: image == Assets.contact_us_icon ? 35.h : 40.h,
-                fit: BoxFit.cover,
-              )
-            : Icon(
-                icon,
-                size: 45.w,
-                color: AppColors.PRIMARY_COLOR,
-              ),
-        title: Label(
-            text: label,
-            style: Styles.mediumText(
-              fontWeight: FontWeight.w500,
-              color: context.isDarkMode ? Colors.white : Colors.black,
-            )),
-        subtitle: (description != null)
-            ? Label(
-                text: description,
-                style: Styles.mediumText(
-                  fontWeight: FontWeight.w300,
-                  color: context.isDarkMode ? Colors.white : Colors.black,
-                ))
-            : null,
-        trailing: Icon(
-          Icons.arrow_forward_ios,
-          size: 28.w,
-        ),
-      ),
+      child: GestureDetector(
+          onTap: ()=>onTap(),
+          child: Padding(
+            padding: const EdgeInsetsDirectional.only(top: 12.0,bottom: 12.0,start: 16),
+            child: Row(
+              children: [
+                image != null && icon == null
+                    ? Image.asset(
+                  image,
+                  width: image == Assets.contact_us_icon ? 35.h : 40.h,
+                  height: image == Assets.contact_us_icon ? 35.h : 40.h,
+                  fit: BoxFit.cover,
+                )
+                    : Icon(
+                  icon,
+                  size: 45.w,
+                  color: AppColors.PRIMARY_COLOR,
+                ),
+                const Sizer(),
+                Label(
+                    text: label,
+                    style: Styles.mediumText(
+                      fontWeight: FontWeight.w500,
+                      color: context.isDarkMode ? Colors.white : Colors.black,
+                    )),
+                if(description != null)
+                     Label(
+                    text: description,
+                    style: Styles.mediumText(
+                      fontWeight: FontWeight.w300,
+                      color: context.isDarkMode ? Colors.white : Colors.black,
+                    )),
+                const Spacer(),
+                Icon(
+                  Icons.arrow_forward_ios,
+                  size: 28.w,
+                ),
+              ],
+            ),
+          ),),
+      // ListTile(
+      //   onTap: () => onTap(),
+      //   leading: image != null && icon == null
+      //       ? Image.asset(
+      //           image,
+      //           width: image == Assets.contact_us_icon ? 35.h : 40.h,
+      //           height: image == Assets.contact_us_icon ? 35.h : 40.h,
+      //           fit: BoxFit.cover,
+      //         )
+      //       : Icon(
+      //           icon,
+      //           size: 45.w,
+      //           color: AppColors.PRIMARY_COLOR,
+      //         ),
+      //   title: Label(
+      //       text: label,
+      //       style: Styles.mediumText(
+      //         fontWeight: FontWeight.w500,
+      //         color: context.isDarkMode ? Colors.white : Colors.black,
+      //       )),
+      //   subtitle: (description != null)
+      //       ? Label(
+      //           text: description,
+      //           style: Styles.mediumText(
+      //             fontWeight: FontWeight.w300,
+      //             color: context.isDarkMode ? Colors.white : Colors.black,
+      //           ))
+      //       : null,
+      //   trailing: Icon(
+      //     Icons.arrow_forward_ios,
+      //     size: 28.w,
+      //   ),
+      // ),
     );
   }
 
@@ -783,8 +822,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 ),
                                 child: ListTile(
                                   leading: const Icon(Icons.photo_library),
-                                  title: const Label(
-                                    text: 'Gallery',
+                                  title:  Label(
+                                    text: LocaleKeys.gallery.localize,
                                   ),
                                   onTap: () async {
                                     // Navigator.pop(context);
@@ -803,7 +842,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 ),
                                 child: ListTile(
                                   leading: const Icon(Icons.camera_alt),
-                                  title: const Label(text: 'Camera'),
+                                  title: Label(text: LocaleKeys.camera.localize),
                                   onTap: () async {
                                     // Navigator.pop(context);
                                     await context.read<UserCubit>().uploadPhoto(
@@ -949,7 +988,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Label(
-                              text: 'Restart to Apply',
+                              text: LocaleKeys.restartToApply.localize,
                               style: Styles.headerText(fontWeight: FontWeight.w400)),
                           const Sizer(),
                           Row(
@@ -970,7 +1009,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     context.read<CustomPageCubit>().updateActivate(value);
                                     Restart.restartApp();
                                   },
-                                  label: 'Restart',
+                                  label: LocaleKeys.restart.localize,
                                 ),
                               ),
                             ],
@@ -1009,6 +1048,29 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               Label(text: LocaleKeys.floatingNavigator.localize),
             ],
           ),
+          Row(
+            children: [
+              BlocBuilder<ChoiceRulerCubit, ChoiceRulerState>(
+                builder: (context, state) {
+                  var choiceRulerCubit = ChoiceRulerCubit.get(context);
+                  return CustomSwitchButton(
+                    value: choiceRulerCubit.choiceRulerEnabled,
+                    onChanged: (value) async {
+                      Navigator.pop(context);
+                      choiceRulerCubit
+                          .changeChoiceRulerEnabled();
+                    },
+                  );
+                },
+              ),
+              SizedBox(
+                width: 4.w,
+              ),
+              Label(
+                text: LocaleKeys.choiceRuler.localize,
+              ),
+            ],
+          )
         ],
       ),
     );

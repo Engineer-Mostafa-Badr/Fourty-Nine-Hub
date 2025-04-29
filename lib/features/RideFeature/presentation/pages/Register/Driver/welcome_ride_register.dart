@@ -92,7 +92,7 @@ class _WelcomeRideRegisterState extends State<WelcomeRideRegister> {
                                       decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(12),
                                           color: subCategory?.isSelected==true
-                                              ? AppColors.GREYBG
+                                              ?context.isDarkMode?AppColors.GREY_DARK_COLOR: AppColors.GREYBG
                                               : Colors.transparent),
                                       child: Column(
                                         mainAxisAlignment: MainAxisAlignment.center,
@@ -107,6 +107,7 @@ class _WelcomeRideRegisterState extends State<WelcomeRideRegister> {
                                             text: context.isArabic?subCategory?.subCategoryNameAr??'':subCategory?.subCategoryNameEn??'',
                                             style: Styles.mediumText(
                                               fontWeight: FontWeight.w400,
+                                              color: context.isDarkMode?Colors.white:Colors.black,
                                             ),
                                           ),
                                         ],

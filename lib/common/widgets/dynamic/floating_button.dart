@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
@@ -40,27 +41,37 @@ class FloatingButton extends StatelessWidget {
                 HandleCashback.setCount('socialCount', context);
                 if (changeView == 1) {
                   context.read<CreatePostCubit>().loadData();
-                  context.push(Routes.SOCIAL,
-                      extra: SocialParams(
-                          userId: UserCubit.to.state.data?.id ?? '', index: 0));
+                  context.push(
+                    Routes.SOCIAL,
+                    extra: SocialParams(
+                      userId: UserCubit.to.state.data?.id ?? '',
+                      index: 0,
+                    ),
+                  );
                 } else {
                   context.push(Routes.HOME);
                 }
               },
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         child: icon != null
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset(
                     Assets.floatImage,
-                    color: AppColors.PRIMARY_COLOR,
+                    color: context.isDarkMode
+                        ? Colors.white
+                        : AppColors.PRIMARY_COLOR,
                     height: 50.h,
                     width: 50.w,
                   ),
                   Label(
                     text: LocaleKeys.social.localize,
-                    style: Styles.smallText(color: AppColors.PRIMARY_COLOR),
+                    style: Styles.smallText(
+                      color: context.isDarkMode
+                          ? Colors.white
+                          : AppColors.PRIMARY_COLOR,
+                    ),
                   ),
                 ],
               )
@@ -74,7 +85,11 @@ class FloatingButton extends StatelessWidget {
                   ),
                   Label(
                     text: LocaleKeys.home.localize,
-                    style: Styles.smallText(color: AppColors.PRIMARY_COLOR),
+                    style: Styles.smallText(
+                      color: context.isDarkMode
+                          ? Colors.white
+                          : AppColors.PRIMARY_COLOR,
+                    ),
                   ),
                 ],
               ),

@@ -68,9 +68,7 @@ class ReplayMessageWidget extends StatelessWidget {
           ),
           Label(
             text: messageEntity?.text ?? replyMessage?.text ?? '',
-            color: context.isDarkMode
-                ? Colors.white
-                : Colors.black,
+            color: context.isDarkMode ? Colors.white : Colors.black,
           ),
         ],
       );

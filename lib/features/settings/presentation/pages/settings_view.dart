@@ -22,7 +22,6 @@ import '../../../../core/widget/custom_switch_list_title.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/styles.dart';
 import '../../../authentication/presentation/controllers/user_cubit/user_cubit.dart';
-import '../cubit/choice_ruler_cubit.dart';
 
 class SettingsView extends StatelessWidget {
   const SettingsView({super.key});
@@ -31,147 +30,143 @@ class SettingsView extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = context.read<UserCubit>();
     return CustomScaffold(
+      enableCustomAppBar: true,
+      appBar: BackAppBar(
+        label: LocaleKeys.settings.localize,
         enableCustomAppBar: true,
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(30),
-          child: BackAppBar(
-            label: LocaleKeys.settings.localize,
-            enableCustomAppBar: true,
-          ),
-        ),
-        body: BlocProvider<SettingCubit>(
-          create: (BuildContext context) => serviceLocator(),
-          child: BlocConsumer<SettingCubit, SettingState>(
-            listener: (BuildContext context, SettingState state) {
-              if (state.status == SettingStates.success1) {
-                showSuccessMessage(
-                  context,
-                  LocaleKeys.deleteSuccessfully.localize,
-                );
-                controller.logout(context);
-                context.push(Routes.HOME);
-              }
-              if (state.status == SettingStates.success1) {
-                showSuccessMessage(
-                  context,
-                  LocaleKeys.disableAccount.localize,
-                );
-                controller.logout(context);
-                context.push(Routes.HOME);
-              }
-            },
-            builder: (BuildContext context, state) {
-              print('Account isDisabled status: ${state.able?.isDisabled}');
-              return Column(
-                spacing: 16,
-                children: [
-                  Container(),
-                  if (context.read<UserCubit>().isLoggedIn)
-                    listTileWidget(context,
-                        image: Assets.editProfile,
-                        trailing:
-                            Icon(Icons.arrow_forward_ios_outlined, size: 40.h),
-                        label: LocaleKeys.editProfile.localize,
-                        onTap: () => context.push(Routes.EDITPROFILE)),
-                  if (context.read<UserCubit>().isLoggedIn)
-                    listTileWidget(context,
-                        image: Assets.changePassword,
-                        trailing:
-                            Icon(Icons.arrow_forward_ios_outlined, size: 40.h),
-                        label: LocaleKeys.changePassword.localize,
-                        onTap: () => context.push(Routes.CHANGEPASSWORDSECOND)),
-                  // if (context.read<UserCubit>().isLoggedIn)
-                  //   listTileWidget(
-                  //       image: Assets.disableAccount,
-                  //       trailing:
-                  //           Icon(Icons.arrow_forward_ios_outlined, size: 40.h),
-                  //       label: LocaleKeys.disableAccount.localize,
-                  //       onTap: () => showAreYouSure(
-                  //           title: LocaleKeys.alert.localize,
-                  //           subTitle: LocaleKeys.disable.localize,
-                  //           action: () async {
-                  //             // if (state.able?.isDisabled == false) {
-                  //             //   final prefs = await SharedPreferences.getInstance();
-                  //             //   await prefs.setBool("ISLOGIN", false);
-                  //             //   context.go(Routes.HOME);
-                  //             return context
-                  //                 .read<SettingCubit>()
-                  //                 .disableAccount();
-                  //             // } else {
-                  //             //   return context.read<SettingCubit>().enableAccount();
-                  //             // }
-                  //           },
-                  //           context: context)),
-                  if (context.read<UserCubit>().isLoggedIn)
-                    listTileWidget(context,
-                        image: Assets.deleteAccount,
-                        trailing: Icon(
-                          Icons.arrow_forward_ios_outlined,
-                          size: 40.h,
-                        ),
-                        label: LocaleKeys.deleteAccount.localize,
-                        onTap: () => showAreYouSure(
-                            title: LocaleKeys.alert.localize,
-                            subTitle: LocaleKeys.delete.localize,
-                            action: () async {
-                              context.read<SettingCubit>().deleteAccount();
-                              final prefs =
-                                  await SharedPreferences.getInstance();
-                              await prefs.setBool("ISLOGIN", false);
-                              context.go(Routes.HOME);
-                            },
-                            context: context)),
-                  BlocBuilder<ThemeCubit, ThemeStates>(
-                    builder: (BuildContext context, theme) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: CustomSwitchListTile(
-                          secondary: CircleAvatar(
-                            backgroundColor: Colors.white,
-                            radius: 44.w,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Image.asset(
-                                Assets.themeMode,
-                                width: 50.h,
-                                height: 50.h,
-                                fit: BoxFit.cover,
-                              ),
+      ),
+      body: BlocProvider<SettingCubit>(
+        create: (BuildContext context) => serviceLocator(),
+        child: BlocConsumer<SettingCubit, SettingState>(
+          listener: (BuildContext context, SettingState state) {
+            if (state.status == SettingStates.success1) {
+              showSuccessMessage(
+                context,
+                LocaleKeys.deleteSuccessfully.localize,
+              );
+              controller.logout(context);
+              context.push(Routes.HOME);
+            }
+            if (state.status == SettingStates.success1) {
+              showSuccessMessage(
+                context,
+                LocaleKeys.disableAccount.localize,
+              );
+              controller.logout(context);
+              context.push(Routes.HOME);
+            }
+          },
+          builder: (BuildContext context, state) {
+            print('Account isDisabled status: ${state.able?.isDisabled}');
+            return Column(
+              spacing: 16,
+              children: [
+                Container(),
+                if (context.read<UserCubit>().isLoggedIn)
+                  listTileWidget(context,
+                      image: Assets.editProfile,
+                      trailing:
+                          Icon(Icons.arrow_forward_ios_outlined, size: 40.h),
+                      label: LocaleKeys.editProfile.localize,
+                      onTap: () => context.push(Routes.EDITPROFILE)),
+                if (context.read<UserCubit>().isLoggedIn)
+                  listTileWidget(context,
+                      image: Assets.changePassword,
+                      trailing:
+                          Icon(Icons.arrow_forward_ios_outlined, size: 40.h),
+                      label: LocaleKeys.changePassword.localize,
+                      onTap: () => context.push(Routes.CHANGEPASSWORDSECOND)),
+                // if (context.read<UserCubit>().isLoggedIn)
+                //   listTileWidget(
+                //       image: Assets.disableAccount,
+                //       trailing:
+                //           Icon(Icons.arrow_forward_ios_outlined, size: 40.h),
+                //       label: LocaleKeys.disableAccount.localize,
+                //       onTap: () => showAreYouSure(
+                //           title: LocaleKeys.alert.localize,
+                //           subTitle: LocaleKeys.disable.localize,
+                //           action: () async {
+                //             // if (state.able?.isDisabled == false) {
+                //             //   final prefs = await SharedPreferences.getInstance();
+                //             //   await prefs.setBool("ISLOGIN", false);
+                //             //   context.go(Routes.HOME);
+                //             return context
+                //                 .read<SettingCubit>()
+                //                 .disableAccount();
+                //             // } else {
+                //             //   return context.read<SettingCubit>().enableAccount();
+                //             // }
+                //           },
+                //           context: context)),
+                if (context.read<UserCubit>().isLoggedIn)
+                  listTileWidget(context,
+                      image: Assets.deleteAccount,
+                      trailing: Icon(
+                        Icons.arrow_forward_ios_outlined,
+                        size: 40.h,
+                      ),
+                      label: LocaleKeys.deleteAccount.localize,
+                      onTap: () => showAreYouSure(
+                          title: LocaleKeys.alert.localize,
+                          subTitle: LocaleKeys.delete.localize,
+                          action: () async {
+                            context.read<SettingCubit>().deleteAccount();
+                            final prefs = await SharedPreferences.getInstance();
+                            await prefs.setBool("ISLOGIN", false);
+                            context.go(Routes.HOME);
+                          },
+                          context: context)),
+                BlocBuilder<ThemeCubit, ThemeStates>(
+                  builder: (BuildContext context, theme) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: CustomSwitchListTile(
+                        secondary: CircleAvatar(
+                          backgroundColor: Colors.white,
+                          radius: 44.w,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Image.asset(
+                              Assets.themeMode,
+                              width: 50.h,
+                              height: 50.h,
+                              fit: BoxFit.cover,
                             ),
                           ),
-                          title: theme is DarkThemeModeStates
-                              ? Label(
-                                  text: LocaleKeys.lightMode.localize,
-                                  style: Styles.mediumText(
-                                      fontSize: 65.sp,
-                                      fontWeight: FontWeight.w400,
-                                      color: context.isDarkMode
-                                          ? Colors.white
-                                          : Colors.black),
-                                )
-                              : Label(
-                                  text: LocaleKeys.darkMode.localize,
-                                  style: Styles.mediumText(
-                                      fontSize: 65.sp,
-                                      fontWeight: FontWeight.w400,
-                                      color: context.isDarkMode
-                                          ? Colors.white
-                                          : Colors.black),
-                                ),
-                          value: ThemeCubit.get(context).isDarkTheme,
-                          onChanged: (value) {
-                            if (theme is LightThemeModeStates) {
-                              ThemeCubit.get(context).darkThemeMode();
-                            }
-                            if (theme is DarkThemeModeStates) {
-                              ThemeCubit.get(context).lightThemeMode();
-                            }
-                          },
                         ),
-                      );
-                    },
-                  ),
-                  BlocBuilder<ChoiceRulerCubit, ChoiceRulerState>(
+                        title: theme is DarkThemeModeStates
+                            ? Label(
+                                text: LocaleKeys.lightMode.localize,
+                                style: Styles.mediumText(
+                                    fontSize: 65.sp,
+                                    fontWeight: FontWeight.w400,
+                                    color: context.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black,),
+                              )
+                            : Label(
+                                text: LocaleKeys.darkMode.localize,
+                                style: Styles.mediumText(
+                                    fontSize: 65.sp,
+                                    fontWeight: FontWeight.w400,
+                                    color: context.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black,),
+                              ),
+                        value: ThemeCubit.get(context).isDarkTheme,
+                        onChanged: (value) {
+                          if (theme is LightThemeModeStates) {
+                            ThemeCubit.get(context).darkThemeMode();
+                          }
+                          if (theme is DarkThemeModeStates) {
+                            ThemeCubit.get(context).lightThemeMode();
+                          }
+                        },
+                      ),
+                    );
+                  },
+                ),
+                /* BlocBuilder<ChoiceRulerCubit, ChoiceRulerState>(
                     builder: (context, state) {
                       var choiceRulerCubit = ChoiceRulerCubit.get(context);
                       return Padding(
@@ -207,12 +202,13 @@ class SettingsView extends StatelessWidget {
                         ),
                       );
                     },
-                  )
-                ],
-              );
-            },
-          ),
-        ));
+                  )*/
+              ],
+            );
+          },
+        ),
+      ),
+    );
   }
 
   Widget listTileWidget(BuildContext context,

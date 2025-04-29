@@ -100,36 +100,35 @@ class _SocialHomeViewState extends State<SocialHomeView>
           : null,
       body: Column(
         children: [
-          isShowExplain
-              ? Column(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        context.push(Routes.GIFT);
-                      },
-                      child: Label(
-                        text:LocaleKeys.socialExplain.localize,
-                        style: Styles.headerText(
-                          color: AppColors.SECONDARY_COLOR,
-                          shadows: const [
-                            Shadow(
-                              color: Colors.black12,
-                              offset: Offset(0, 4),
-                              blurRadius: 4,
-                            ),
-                            Shadow(
-                              color: Colors.black12,
-                              offset: Offset(0, 4),
-                              blurRadius: 4,
-                            ),
-                          ],
-                        ),
-                      ),
+          if(isShowExplain)
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: InkWell(
+              onTap: () {
+                context.push(Routes.GIFT);
+              },
+              child: Label(
+                text:LocaleKeys.socialExplain.localize,
+                style: Styles.headerText(
+                  color: AppColors.SECONDARY_COLOR,
+                  shadows: const [
+                    Shadow(
+                      color: Colors.black12,
+                      offset: Offset(0, 4),
+                      blurRadius: 4,
                     ),
-                    const Sizer(),
+                    Shadow(
+                      color: Colors.black12,
+                      offset: Offset(0, 4),
+                      blurRadius: 4,
+                    ),
                   ],
-                )
-              : Container(),
+                ),
+                textAlign: TextAlign.center,
+                maxLines: 3,
+              ),
+            ),
+          ),
           Expanded(
             child: DefaultTabController(
               length: 3,

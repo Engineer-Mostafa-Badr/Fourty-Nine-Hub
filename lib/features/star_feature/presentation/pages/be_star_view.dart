@@ -50,9 +50,8 @@ class _BeStarViewState extends State<BeStarView> {
     super.initState();
     _cubit = context.read<StarCubit>();
     _scrollController = ScrollController()..addListener(_onScroll);
-    _cubit.loadInitialData();
+    _cubit.loadAllTalentsData();
     _adsManager.preloadAds();
-    _cubit.fetchBanner();
   }
 
   void _onScroll() {

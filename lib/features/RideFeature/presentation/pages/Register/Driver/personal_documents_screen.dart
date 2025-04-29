@@ -5,6 +5,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/picker/date_picker_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
@@ -61,9 +62,9 @@ class PersonalDocumentsScreen extends StatelessWidget {
                               ),
                               IconButton(
                                 onPressed: () => context.pop(),
-                                icon: const Icon(
+                                icon: Icon(
                                   Icons.close,
-                                  color: AppColors.GREY_DARK_COLOR,
+                                  color: context.isDarkMode ? Colors.white : AppColors.GREY_DARK_COLOR,
                                 ),
                               )
                             ],
@@ -107,7 +108,7 @@ class PersonalDocumentsScreen extends StatelessWidget {
                             child: GridView.count(
                               physics: const NeverScrollableScrollPhysics(),
                               padding: EdgeInsets.zero,
-                              crossAxisCount: 3,
+                              crossAxisCount: 2,
                               childAspectRatio: .85,
                               mainAxisSpacing: 16,
                               crossAxisSpacing: 16,
@@ -130,7 +131,7 @@ class PersonalDocumentsScreen extends StatelessWidget {
                           ),
 
                           const Sizer(),
-                          DatePickerTextField(color:AppColors.GREYBG,initialDate: DateTime.now(), minDate: DateTime(1900), maxDate: DateTime(2090),onDateSelected: (date){
+                          DatePickerTextField(color:context.isDarkMode?AppColors.GREY_DARK_COLOR:AppColors.GREYBG,initialDate: DateTime.now(), minDate: DateTime(1900), maxDate: DateTime(2090),onDateSelected: (date){
                             cubit.ridePersonalDocExpireDateController.text = DateFormat('yyyy-MM-dd').format(date??DateTime.now());
                           }, controller:cubit.ridePersonalDocExpireDateController,hintText: LocaleKeys.expireDate.localize,),
                         ],

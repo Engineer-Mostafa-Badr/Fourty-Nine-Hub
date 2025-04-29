@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DeleteMessageBody extends StatelessWidget {
   final VoidCallback? deleteMessageFunction;
+
   const DeleteMessageBody({super.key, this.deleteMessageFunction});
 
   @override

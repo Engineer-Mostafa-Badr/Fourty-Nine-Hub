@@ -14,6 +14,7 @@ import 'package:fourtyninehub/features/custom_page/presentation/cubit/edit_page_
 
 import '../../../../../core/messages/messages.dart';
 import '../../../../../res/assets/assets.dart';
+import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../../../../../service_locator/service_locator.dart';
 import 'navigator_subcategories_view.dart';
@@ -185,6 +186,7 @@ class _FavouriteCategoryState extends State<FavouriteCategory> {
                                       Image.asset(
                                         Assets.checkCircle,
                                         width: 24,
+                                        color: AppColors.PRIMARY_COLOR,
                                       ),
                                   ],
                                 ),

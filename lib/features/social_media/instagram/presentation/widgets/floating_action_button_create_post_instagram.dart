@@ -2,10 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/create_post_instagram_cubit/create_post_instagram_cubit.dart';
+import 'package:fourtyninehub/features/social_media/stories/presentation/cubit/stories_cubit.dart';
+import 'package:fourtyninehub/features/social_media/stories/presentation/pages/create_story_screen.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
+import 'package:fourtyninehub/routes/routes.dart';
+import 'package:go_router/go_router.dart';
 
 class FloatingActionButtonCreatePostInstagram extends StatelessWidget {
   const FloatingActionButtonCreatePostInstagram({
@@ -45,10 +50,25 @@ class FloatingActionButtonCreatePostInstagram extends StatelessWidget {
                 return Padding(
                   padding: const EdgeInsetsDirectional.only(end: 16),
                   child: InkWell(
-                    onTap: () {
-                      context
-                          .read<CreatePostInstagramCubit>()
-                          .changePostType(index);
+                    onTap: () async {
+                      if (index == 1) {
+                        context.read<UserCubit>().isLoggedIn
+                            ? await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const CameraScreen(),
+                                ),
+                              )
+                            : context.push(Routes.LOGIN);
+                        if (!context.mounted) return;
+                        BlocProvider.of<StoryCubit>(context)
+                          ..fetchStories()
+                          ..getMutedStories();
+                      } else {
+                        context
+                            .read<CreatePostInstagramCubit>()
+                            .changePostType(index);
+                      }
                     },
                     child: BlocBuilder<CreatePostInstagramCubit,
                         CreatePostInstagramState>(
@@ -59,7 +79,8 @@ class FloatingActionButtonCreatePostInstagram extends StatelessWidget {
                         return Label(
                           text: context
                               .read<CreatePostInstagramCubit>()
-                              .postTypes[index],
+                              .postTypes[index]
+                              .title,
                           style: Styles.mediumText(
                             color: Colors.white,
                             fontWeight: state.postTypeSelectedIndex == index

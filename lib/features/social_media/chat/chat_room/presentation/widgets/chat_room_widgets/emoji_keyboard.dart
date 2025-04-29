@@ -1,12 +1,13 @@
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class EmojiKeyboard extends StatelessWidget {
   final TextEditingController? textController;
   final ScrollController? scrollController;
   final void Function(Category?, Emoji)? onEmojiSelected;
+
   const EmojiKeyboard(
       {super.key,
       this.textController,
@@ -113,12 +114,12 @@ class WhatsAppCategoryViewState extends State<_WhatsAppCategoryView>
 
   Widget _buildBackspaceButton() {
     // if (widget.config.categoryViewConfig.showBackspaceButton) {
-      return BackspaceButton(
-        widget.config,
-        widget.state.onBackspacePressed,
-        widget.state.onBackspaceLongPressed,
-        widget.config.categoryViewConfig.backspaceColor,
-      );
+    return BackspaceButton(
+      widget.config,
+      widget.state.onBackspacePressed,
+      widget.state.onBackspaceLongPressed,
+      widget.config.categoryViewConfig.backspaceColor,
+    );
     // }
     // return const SizedBox.shrink();
   }

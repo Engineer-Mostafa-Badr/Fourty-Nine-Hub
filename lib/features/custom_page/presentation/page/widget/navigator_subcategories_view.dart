@@ -40,7 +40,8 @@ class _NavigatorSubCategoriesViewState
       listener: (context, state) {},
       builder: (context, state) {
         return CustomScaffold(
-          backgroundColor: Theme.of(context).primaryColor,
+          enableCustomAppBar: true,
+
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(30),
             child: BackAppBar(
@@ -49,73 +50,65 @@ class _NavigatorSubCategoriesViewState
                   : widget.mainCategory.nameEn,
               textColor: Colors.white,
               iconColor: Colors.white,
+              enableCustomAppBar: true,
             ),
           ),
           body: Padding(
             padding: const EdgeInsets.only(top: 8.0),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(50.r),
-                ),
-              ),
-              clipBehavior: Clip.antiAliasWithSaveLayer,
-              child: BlocBuilder<CustomPageCubit, CustomPageState>(
-                builder: (context, state) {
-                  if (state.status == CustomPageStates.loading) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  if (state.status == CustomPageStates.error) {
-                    return Center(
-                      child: Text(state.failure.toString()),
-                    );
-                  }
-                  return ListView.separated(
-                      itemBuilder: (context, index) {
-                        var currentSubCategory = state.favouriteSubCat![index];
-                        return ListTile(
-                          leading: Checkbox(
-                            shape: const CircleBorder(),
-                            value: currentSubCategory.selected,
-                            checkColor:
-                                Theme.of(context).scaffoldBackgroundColor,
-                            activeColor: Theme.of(context).primaryColor,
-                            onChanged: (bool? value) {
-                              setState(() {
-                                currentSubCategory.selected =
-                                    !currentSubCategory.selected;
-                                print(currentSubCategory.selected);
-                                print(
-                                    "===================${currentSubCategory.selected}");
-                              });
-                              context
-                                  .read<CustomPageCubit>()
-                                  .updateCategoryModel(
-                                    subCategoryId:
-                                        state.favouriteSubCat![index].id,
-                                    categoryId: widget.mainCategory.id,
-                                  );
-                            },
-                          ),
-                          title: Text(
-                            context.isArabic
-                                ? state.favouriteSubCat![index].nameAr
-                                : state.favouriteSubCat![index].nameEn,
-                            style: Styles.mediumText(
-                                fontSize: 65.sp,
-                                fontWeight: FontWeight.w400,
-                                color: Theme.of(context).primaryColor),
-                          ),
-                          selected: state.favouriteSubCat![index].selected,
-                        );
-                      },
-                      separatorBuilder: (context, index) => const Sizer(),
-                      itemCount: state.favouriteSubCat!.length);
-                },
-              ),
+            child: BlocBuilder<CustomPageCubit, CustomPageState>(
+              builder: (context, state) {
+                if (state.status == CustomPageStates.loading) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                if (state.status == CustomPageStates.error) {
+                  return Center(
+                    child: Text(state.failure.toString()),
+                  );
+                }
+                return ListView.separated(
+                    itemBuilder: (context, index) {
+                      var currentSubCategory = state.favouriteSubCat![index];
+                      return ListTile(
+                        leading: Checkbox(
+                          shape: const CircleBorder(),
+                          value: currentSubCategory.selected,
+                          checkColor:
+                              Theme.of(context).scaffoldBackgroundColor,
+                          activeColor: Theme.of(context).primaryColor,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              currentSubCategory.selected =
+                                  !currentSubCategory.selected;
+                              print(currentSubCategory.selected);
+                              print(
+                                  "===================${currentSubCategory.selected}");
+                            });
+                            context
+                                .read<CustomPageCubit>()
+                                .updateCategoryModel(
+                                  subCategoryId:
+                                      state.favouriteSubCat![index].id,
+                                  categoryId: widget.mainCategory.id,
+                                );
+                          },
+                        ),
+                        title: Text(
+                          context.isArabic
+                              ? state.favouriteSubCat![index].nameAr
+                              : state.favouriteSubCat![index].nameEn,
+                          style: Styles.mediumText(
+                              fontSize: 65.sp,
+                              fontWeight: FontWeight.w400,
+                              color: Theme.of(context).primaryColor),
+                        ),
+                        selected: state.favouriteSubCat![index].selected,
+                      );
+                    },
+                    separatorBuilder: (context, index) => const Sizer(),
+                    itemCount: state.favouriteSubCat!.length);
+              },
             ),
           ),
           floatingActionButton: CustomFloatingActionButton(

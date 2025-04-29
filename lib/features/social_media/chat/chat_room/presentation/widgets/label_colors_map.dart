@@ -37,6 +37,7 @@ class LabelColorsMap {
     'Colors.pinkAccent': Colors.pinkAccent,
     'Colors.indigoAccent': Colors.indigoAccent,
   };
+
   static Color? getColor(String key) {
     return labelColors[key];
   }

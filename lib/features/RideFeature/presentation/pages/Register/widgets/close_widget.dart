@@ -3,6 +3,7 @@ import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/utils/custom_show_dialog.dart';
@@ -18,6 +19,7 @@ Widget closeWidget({required BuildContext context, required Function onAcceptSav
       InkWell(
         onTap: () {
           bottomSheet(
+            backColor: context.isDarkMode?AppColors.GREY_DARK_COLOR:AppColors.AUTH_CONTAINER_COLOR,
             context: context,
             // isDismissible: false,
             widget: Column(
@@ -88,7 +90,7 @@ Widget closeWidget({required BuildContext context, required Function onAcceptSav
           showAnimatedDialog(
             context,
             AlertDialog(
-              backgroundColor: AppColors.AUTH_CONTAINER_COLOR,
+              backgroundColor: context.isDarkMode?AppColors.GREY_DARK_COLOR:AppColors.AUTH_CONTAINER_COLOR,
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
               content: Column(

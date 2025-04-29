@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
@@ -20,8 +22,8 @@ class UploadImageRow extends StatelessWidget {
         Row(
           children: [
             Text(
-              disableUpload==true?"Update":"Upload",
-              style: TextStyle(color: disableUpload==true?AppColors.GREY_DARK_COLOR:AppColors.SECONDARY_COLOR),
+              disableUpload==true?context.isArabic?'تعديل':"Update":context.isArabic?'تحميل':"Upload",
+              style: TextStyle(color: disableUpload==true?AppColors.GREY_DARK_COLOR:AppColors.SECONDARY_COLOR,fontSize: 36.sp),
             ),
             const SizedBox(width: 5),
             ClickableWidget(

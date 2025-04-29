@@ -20,6 +20,7 @@ import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/ge
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_suggest_follow_instagram_use_case.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_reels_usecase.dart';
 import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/get_user_tag_use_case.dart';
+import 'package:fourtyninehub/features/social_media/instagram/domain/usecases/post_follow_user_instagram_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/entities/post_entity.dart';
 import 'package:fourtyninehub/features/social_media/twitter/domain/usecases/get_feed_usecase.dart';
 
@@ -70,4 +71,7 @@ abstract class InstagramRepo {
 
   Future<Either<Failure, DataSuggestFollowInstagramEntity>>
       getSuggestFollowInstagram(GetSuggestFollowInstagramParams params);
+
+  Future<Either<Failure, bool>> postFollowUserInstagram(
+      PostFollowUserInstagramParams params);
 }

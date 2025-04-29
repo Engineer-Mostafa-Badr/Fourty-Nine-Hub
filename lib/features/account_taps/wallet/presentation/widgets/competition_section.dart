@@ -127,7 +127,7 @@ class CompetitionsSection extends StatelessWidget {
                 showLoadingDialog(context);
                 await context.read<GiftTwoCubit>().requestTransferCompetition(
                       context,
-                      competitionId: competitions[competitionIndex].id!,
+                      competitionId: competitions[competitionIndex].id??'',
                     );
                 Navigator.pop(context);
               },

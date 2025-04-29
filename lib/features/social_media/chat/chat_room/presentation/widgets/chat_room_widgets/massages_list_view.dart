@@ -183,10 +183,8 @@ class MessagesListView extends StatelessWidget {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          if (shouldShowDate)
-                            DateWidget(
-                                date:
-                                    messageDate), // Insert date widget when date changes
+                          if (shouldShowDate) DateWidget(date: messageDate),
+                          // Insert date widget when date changes
                           MessageCard(
                             messageEntity: message,
                             anotherUserName: 'Anonymous',
