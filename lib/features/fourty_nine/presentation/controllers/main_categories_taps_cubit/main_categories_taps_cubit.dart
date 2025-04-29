@@ -31,12 +31,12 @@ class MainCategoriesTapsCubit extends Cubit<MainCategoriesTapsState> {
   final _mainCategories = FourtyNineSharedData.instance.mainCategories;
   List<SubCategoryEntity> _subCategories = [];
 
-  void selectMainCategory(int index) {
+  Future<void> selectMainCategory(int index) async {
     if (index != state.selectedIndex) {
       _subCategories = [];
       _paginationParams = PaginationParams.basic();
       emit(state.copyWith(selectedIndex: index, status: StateStatus.updated));
-      loadData();
+     await loadData();
     }
   }
 

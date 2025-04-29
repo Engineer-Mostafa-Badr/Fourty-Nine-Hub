@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/RideFeature/presentation/controllers/cubits/ride_cubit.dart';
 
 import '../../../../../../res/style/app_colors.dart';
 
 Future<dynamic> customBottomSheet(context, RideCubit rideCubit,
-    {required child, height = 150, required String title}) {
+    {required child, height = 150, required String title, bool isDarkMode = false}) {
   return showModalBottomSheet(
-    backgroundColor: AppColors.whiteColor,
+    backgroundColor: isDarkMode ? AppColors.QUANTITY_COLOR :  AppColors.whiteColor,
     context: context,
     shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(15))),
@@ -16,12 +17,12 @@ Future<dynamic> customBottomSheet(context, RideCubit rideCubit,
     builder: (context) => BlocProvider.value(
       value: rideCubit,
       child: Container(
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.only(
+          decoration:  BoxDecoration(
+            borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(25),
               topRight: Radius.circular(25),
             ),
-            color: AppColors.whiteColor,
+            color: context.isDarkMode ? AppColors.QUANTITY_COLOR : AppColors.whiteColor,
           ),
           padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom + 25,
@@ -40,14 +41,13 @@ Future<dynamic> customBottomSheet(context, RideCubit rideCubit,
                       onPressed: () {
                       },
                     ),
-                    Text(title,style: const TextStyle(fontSize: 16,fontWeight: FontWeight.w600)),
+                    Text(title,style: const TextStyle(fontSize: 18,fontWeight: FontWeight.w600)),
                     IconButton(
                       icon: SvgPicture.asset('assets/icons/close.svg'),
                       onPressed: () {
                         Navigator.pop(context);
                       },
                     ),
-
                   ],
                 ),
               ),
