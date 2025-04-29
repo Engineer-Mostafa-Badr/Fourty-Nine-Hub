@@ -14,6 +14,7 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/read_more_label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/file_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/domain/entities/message_entity.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_room/presentation/controllers/chat_room_cubit/chat_room_cubit.dart';
@@ -46,7 +47,7 @@ class MessageCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    final isArabic = LocaleKeys.more.tr() == "More";
+    final isArabic = LocaleKeys.more.localize == "More";
     final chatRoomCubit = context.read<ChatRoomCubit>();
     if (messageEntity.byMe) {
       if (messageEntity.isOneTimeViewMessage) {
@@ -446,10 +447,8 @@ class MessageCard extends StatelessWidget {
             style: Styles.mediumText(
               color: messageEntity.byMe
                   ? context.isDarkMode
-                      ? Colors.white
+                      ? Colors.black
                       : Colors.black
-                  // ? AppColors.PRIMARY_COLOR
-                  //     : AppColors.PRIMARY_COLOR
                   : context.isDarkMode
                       ? AppColors.BACKGROUND_COLOR
                       : AppColors.LIGHT_GRAY_COLOR2,
@@ -465,10 +464,8 @@ class MessageCard extends StatelessWidget {
                 style: Styles.smallText(
                   color: messageEntity.byMe
                       ? context.isDarkMode
-                          ? Colors.white
+                          ? Colors.black
                           : Colors.black
-                      // ? AppColors.PRIMARY_COLOR
-                      //     : AppColors.PRIMARY_COLOR
                       : context.isDarkMode
                           ? AppColors.BACKGROUND_COLOR
                           : AppColors.LIGHT_GRAY_COLOR2,
@@ -539,7 +536,7 @@ class MessageCard extends StatelessWidget {
     required BuildContext context,
   }) {
     final chatRoomCubit = context.read<ChatRoomCubit>();
-    final isArabic = LocaleKeys.more.tr() == "More";
+    final isArabic = LocaleKeys.more.localize == "More";
     return InkWell(
       onDoubleTap: () async {
         await chatRoomCubit.showDeletedMessage(message: messageEntity);
@@ -631,7 +628,7 @@ class MessageCard extends StatelessWidget {
     required BuildContext context,
   }) {
     final chatRoomCubit = context.read<ChatRoomCubit>();
-    final isArabic = LocaleKeys.more.tr() == "More";
+    final isArabic = LocaleKeys.more.localize == "More";
     return BlocBuilder<ChatRoomCubit, ChatRoomState>(
       builder: (context, state) {
         return SwipeTo(
@@ -737,8 +734,7 @@ class MessageCard extends StatelessWidget {
                                                       ? ReadMoreLabel(
                                                           // trimLines: 5,
                                                           text: LocaleKeys
-                                                              .opened
-                                                              .tr(),
+                                                              .opened.localize,
                                                           style:
                                                               Styles.mediumText(
                                                             color: context
@@ -769,7 +765,7 @@ class MessageCard extends StatelessWidget {
                                                                           .image
                                                                   ? LocaleKeys
                                                                       .photo
-                                                                      .tr()
+                                                                      .localize
                                                                   : messageEntity
                                                                               .media[
                                                                                   0]
@@ -778,16 +774,16 @@ class MessageCard extends StatelessWidget {
                                                                               .video
                                                                       ? LocaleKeys
                                                                           .video
-                                                                          .tr()
+                                                                          .localize
                                                                       : messageEntity.media[0].type ==
                                                                               FileTypeEnum
                                                                                   .audio
                                                                           ? LocaleKeys
                                                                               .audio
-                                                                              .tr()
+                                                                              .localize
                                                                           : LocaleKeys
                                                                               .file
-                                                                              .tr(),
+                                                                              .localize,
                                                           style:
                                                               Styles.mediumText(
                                                             color: context
@@ -815,7 +811,6 @@ class MessageCard extends StatelessWidget {
                                           color: context.isDarkMode
                                               ? Colors.white
                                               : Colors.black,
-                                          // color: AppColors.PRIMARY_COLOR,
                                         ),
                                       ),
                                       const SizedBox(width: 4),
@@ -849,7 +844,7 @@ class MessageCard extends StatelessWidget {
     required BuildContext context,
   }) {
     final chatRoomCubit = context.read<ChatRoomCubit>();
-    final isArabic = LocaleKeys.more.tr() == "More";
+    final isArabic = LocaleKeys.more.localize == "More";
     return BlocBuilder<ChatRoomCubit, ChatRoomState>(
       builder: (context, state) {
         return SwipeTo(
@@ -1064,8 +1059,6 @@ class MessageCard extends StatelessWidget {
                                             color: context.isDarkMode
                                                 ? Colors.white
                                                 : Colors.black,
-                                            // : AppColors.PRIMARY_COLOR
-                                            //     .withValues(alpha: 0.5)
                                           ),
                                         ),
                                         Expanded(
@@ -1073,7 +1066,8 @@ class MessageCard extends StatelessWidget {
                                                   .isOneTimeSeenMessage
                                               ? ReadMoreLabel(
                                                   // trimLines: 5,
-                                                  text: LocaleKeys.opened.tr(),
+                                                  text: LocaleKeys
+                                                      .opened.localize,
                                                   style: Styles.mediumText(
                                                     color: context.isDarkMode
                                                         ? Colors.white
@@ -1094,15 +1088,15 @@ class MessageCard extends StatelessWidget {
                                                       : messageEntity.media[0]
                                                                   .type ==
                                                               FileTypeEnum.image
-                                                          ? LocaleKeys.photo
-                                                              .tr()
+                                                          ? LocaleKeys
+                                                              .photo.localize
                                                           : messageEntity
                                                                       .media[0]
                                                                       .type ==
                                                                   FileTypeEnum
                                                                       .video
                                                               ? LocaleKeys.video
-                                                                  .tr()
+                                                                  .localize
                                                               : messageEntity
                                                                           .media[
                                                                               0]
@@ -1111,10 +1105,10 @@ class MessageCard extends StatelessWidget {
                                                                           .audio
                                                                   ? LocaleKeys
                                                                       .audio
-                                                                      .tr()
+                                                                      .localize
                                                                   : LocaleKeys
                                                                       .file
-                                                                      .tr(),
+                                                                      .localize,
                                                   style: Styles.mediumText(
                                                     color: context.isDarkMode
                                                         ? Colors.white
@@ -1132,7 +1126,6 @@ class MessageCard extends StatelessWidget {
                                             color: context.isDarkMode
                                                 ? Colors.white
                                                 : Colors.black,
-                                            // : AppColors.PRIMARY_COLOR,
                                           ),
                                         ),
                                       ],
@@ -1216,7 +1209,7 @@ class MessageCard extends StatelessWidget {
                                 size: 18,
                               ),
                               Label(
-                                text: LocaleKeys.forwarded.tr(),
+                                text: LocaleKeys.forwarded.localize,
                                 style: Styles.smallText(
                                   color: Colors.grey,
                                 ),
@@ -1228,9 +1221,7 @@ class MessageCard extends StatelessWidget {
                         // trimLines: 5,
                         text: messageEntity.text,
                         style: Styles.mediumText(
-                          color:
-                              context.isDarkMode ? Colors.white : Colors.black,
-                          // color: AppColors.PRIMARY_COLOR,
+                          color: Colors.black,
                         ),
                         textAlign: TextAlign.left,
                       ),
@@ -1243,8 +1234,7 @@ class MessageCard extends StatelessWidget {
               Label(
                 text: messageEntity.time,
                 style: Styles.smallText(
-                  color: context.isDarkMode ? Colors.white : Colors.black,
-                  // color: AppColors.PRIMARY_COLOR,
+                  color: Colors.black,
                 ),
               ),
               const SizedBox(width: 4),
@@ -1266,7 +1256,7 @@ class MessageCard extends StatelessWidget {
     required BuildContext context,
   }) {
     final chatRoomCubit = context.read<ChatRoomCubit>();
-    final isArabic = LocaleKeys.more.tr() == "More";
+    final isArabic = LocaleKeys.more.localize == "More";
     return InkWell(
       onTap: () {
         log("message sender id : ${messageEntity.sender.id}");
@@ -1441,7 +1431,7 @@ class MessageCard extends StatelessWidget {
                                                                 Label(
                                                                   text: LocaleKeys
                                                                       .forwarded
-                                                                      .tr(),
+                                                                      .localize,
                                                                   style: Styles
                                                                       .mediumText(
                                                                     color: Colors
@@ -1475,7 +1465,6 @@ class MessageCard extends StatelessWidget {
                                           color: context.isDarkMode
                                               ? Colors.white
                                               : Colors.black,
-                                          // : AppColors.PRIMARY_COLOR,
                                         ),
                                       ),
                                     ],
@@ -1531,7 +1520,7 @@ class _VoiceMessageCardState extends State<VoiceMessageCard> {
   @override
   Widget build(BuildContext context) {
     final chatRoomCubit = context.read<ChatRoomCubit>();
-    final isArabic = LocaleKeys.more.tr() == "More";
+    final isArabic = LocaleKeys.more.localize == "More";
     return InkWell(
       onTap: () {
         if (widget.messageEntity.isSelected) {
@@ -1654,7 +1643,6 @@ class _VoiceMessageCardState extends State<VoiceMessageCard> {
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 Container(
-                                  // margin: const EdgeInsetsDirectional.only(start: 16),
                                   decoration: const BoxDecoration(
                                     shape: BoxShape.circle,
                                   ),
@@ -1666,181 +1654,98 @@ class _VoiceMessageCardState extends State<VoiceMessageCard> {
                                     fit: BoxFit.cover,
                                   ),
                                 ),
-                                VoiceMessageView(
-                                  activeSliderColor: Colors.black,
-                                  playIcon: const Icon(
-                                    Icons.play_arrow_rounded,
-                                    color: Colors.black,
-                                  ),
-                                  pauseIcon: const Icon(
-                                    Icons.pause_rounded,
-                                    color: Colors.black,
-                                  ),
-                                  circlesColor: Colors.transparent,
-                                  circlesTextStyle:
-                                      Styles.smallText(color: Colors.black),
-                                  backgroundColor: widget.isSend
-                                      ? AppColors.MESSAGE_COLOR
-                                      : context.isDarkMode
-                                          ? AppColors.QUANTITY_COLOR
-                                          : AppColors.BACKGROUND_COLOR,
-                                  innerPadding: 0,
-                                  cornerRadius: 12,
-                                  controller: VoiceController(
-                                    audioSrc: widget.messageEntity.media[0].url,
-                                    maxDuration: const Duration(minutes: 1000),
-                                    isFile: false,
-                                    onComplete: () async {
-                                      isListeningNotifier.value = false;
-                                      if (!widget.messageEntity.byMe &&
-                                          !widget.messageEntity.isListened) {
-                                        await chatRoomCubit.setRecordAsListened(
-                                            message: widget.messageEntity);
-                                        // setState(() {
-                                        // widget.messageEntity.isListened = true;
-                                        // });
-                                      }
-                                      // log("Playing voice by me: ${widget.messageEntity.byMe}");
-                                      // log("Playing voice listened: ${widget.messageEntity.isListened}");
-                                      // setState(() {});
-                                      // setState(() {
-                                      //   widget.isListening = false;
-                                      // });
-                                    },
-                                    onPause: () async {
-                                      isListeningNotifier.value = false;
-                                      if (!widget.messageEntity.byMe &&
-                                          !widget.messageEntity.isListened) {
-                                        await chatRoomCubit.setRecordAsListened(
-                                            message: widget.messageEntity);
-                                        // setState(() {
-                                        // widget.messageEntity.isListened = true;
-                                        // });
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width * 0.7-50,
+                                  child: VoiceMessageView(
+                                    activeSliderColor: Colors.black,
+                                    playIcon: const Icon(
+                                      Icons.play_arrow_rounded,
+                                      color: Colors.black,
+                                    ),
+                                    pauseIcon: const Icon(
+                                      Icons.pause_rounded,
+                                      color: Colors.black,
+                                    ),
+                                    refreshIcon: const Icon(
+                                      Icons.refresh,
+                                      color: Colors.black,
+                                    ),
+                                    stopDownloadingIcon: const Icon(
+                                      Icons.close,
+                                      color: Colors.black,
+                                    ),
+                                    circlesColor: Colors.transparent,
+                                    circlesTextStyle:
+                                        Styles.smallText(color: Colors.black),
+                                    counterTextStyle:
+                                        Styles.smallText(color: Colors.black),
+                                    backgroundColor: widget.isSend
+                                        ? AppColors.MESSAGE_COLOR
+                                        : context.isDarkMode
+                                            ? AppColors.QUANTITY_COLOR
+                                            : AppColors.BACKGROUND_COLOR,
+                                    innerPadding: 0,
+                                    cornerRadius: 12,
+                                    controller: VoiceController(
+                                      audioSrc: widget.messageEntity.media[0].url,
+                                      maxDuration: const Duration(minutes: 1000),
+                                      isFile: false,
+                                      onComplete: () async {
+                                        isListeningNotifier.value = false;
+                                        if (!widget.messageEntity.byMe &&
+                                            !widget.messageEntity.isListened) {
+                                          await chatRoomCubit.setRecordAsListened(
+                                              message: widget.messageEntity);
+                                          // setState(() {
+                                          // widget.messageEntity.isListened = true;
+                                          // });
+                                        }
+                                        // log("Playing voice by me: ${widget.messageEntity.byMe}");
+                                        // log("Playing voice listened: ${widget.messageEntity.isListened}");
+                                        // setState(() {});
                                         // setState(() {
                                         //   widget.isListening = false;
                                         // });
-                                      }
-                                    },
-                                    onPlaying: () async {
-                                      isListeningNotifier.value = true;
-                                      if (!widget.messageEntity.byMe &&
-                                          !widget.messageEntity.isListened) {
-                                        await chatRoomCubit.setRecordAsListened(
-                                            message: widget.messageEntity);
+                                      },
+                                      onPause: () async {
+                                        isListeningNotifier.value = false;
+                                        if (!widget.messageEntity.byMe &&
+                                            !widget.messageEntity.isListened) {
+                                          await chatRoomCubit.setRecordAsListened(
+                                              message: widget.messageEntity);
+                                          // setState(() {
+                                          // widget.messageEntity.isListened = true;
+                                          // });
+                                          // setState(() {
+                                          //   widget.isListening = false;
+                                          // });
+                                        }
+                                      },
+                                      onPlaying: () async {
+                                        isListeningNotifier.value = true;
+                                        if (!widget.messageEntity.byMe &&
+                                            !widget.messageEntity.isListened) {
+                                          await chatRoomCubit.setRecordAsListened(
+                                              message: widget.messageEntity);
+                                          // setState(() {
+                                          // widget.messageEntity.isListened = true;
+                                          // });
+                                        }
                                         // setState(() {
-                                        // widget.messageEntity.isListened = true;
+                                        //   widget.isListening = true;
                                         // });
-                                      }
-                                      // setState(() {
-                                      //   widget.isListening = true;
-                                      // });
-                                    },
-                                    onError: (p0) {
-                                      // setState(() {
-                                      log("voice error : $p0");
-                                      // });
-                                    },
+                                      },
+                                      onError: (p0) {
+                                        // setState(() {
+                                        log("voice error : $p0");
+                                        // });
+                                      },
+                                    ),
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                          // Stack(
-                          //   children: [
-                          //     GestureDetector(
-                          //       onTap: () {
-                          //         log("voice message card tap is listened : ${widget.messageEntity.isListened}");
-                          //         log("voice message card tap : ${widget.messageEntity.toString()}");
-                          //       },
-                          //       child: VoiceMessageView(
-                          //         activeSliderColor: Colors.black,
-                          //         playIcon : const Icon(Icons.play_arrow_rounded, color: Colors.black,),
-                          //         circlesColor:
-                          //             widget.messageEntity.isListened
-                          //                 ? AppColors.PRIMARY_COLOR
-                          //                 : Colors.transparent,
-                          //         circlesTextStyle: Styles.smallText(color: Colors.black),
-                          //         backgroundColor: widget.isSend
-                          //             ? AppColors.MESSAGE_COLOR
-                          //             : context.isDarkMode
-                          //                 ? AppColors.QUANTITY_COLOR
-                          //                 : AppColors.BACKGROUND_COLOR,
-                          //         innerPadding: 12,
-                          //         cornerRadius: 12,
-                          //         controller: VoiceController(
-                          //           audioSrc: widget.messageEntity.media[0].url,
-                          //           maxDuration: const Duration(minutes: 1000),
-                          //           isFile: false,
-                          //           onComplete: () async {
-                          //             isListeningNotifier.value = false;
-                          //             if (!widget.messageEntity.byMe &&
-                          //                 !widget.messageEntity.isListened) {
-                          //               await chatRoomCubit.setRecordAsListened(
-                          //                   message: widget.messageEntity);
-                          //               // setState(() {
-                          //               // widget.messageEntity.isListened = true;
-                          //               // });
-                          //             }
-                          //             // log("Playing voice by me: ${widget.messageEntity.byMe}");
-                          //             // log("Playing voice listened: ${widget.messageEntity.isListened}");
-                          //             // setState(() {});
-                          //             // setState(() {
-                          //             //   widget.isListening = false;
-                          //             // });
-                          //           },
-                          //           onPause: () async {
-                          //             isListeningNotifier.value = false;
-                          //             if (!widget.messageEntity.byMe &&
-                          //                 !widget.messageEntity.isListened) {
-                          //               await chatRoomCubit.setRecordAsListened(
-                          //                   message: widget.messageEntity);
-                          //               // setState(() {
-                          //               // widget.messageEntity.isListened = true;
-                          //               // });
-                          //               // setState(() {
-                          //               //   widget.isListening = false;
-                          //               // });
-                          //             }
-                          //           },
-                          //           onPlaying: () async {
-                          //             isListeningNotifier.value = true;
-                          //             if (!widget.messageEntity.byMe &&
-                          //                 !widget.messageEntity.isListened) {
-                          //               await chatRoomCubit.setRecordAsListened(
-                          //                   message: widget.messageEntity);
-                          //               // setState(() {
-                          //               // widget.messageEntity.isListened = true;
-                          //               // });
-                          //             }
-                          //             // setState(() {
-                          //             //   widget.isListening = true;
-                          //             // });
-                          //           },
-                          //           onError: (p0) {
-                          //             // setState(() {
-                          //             log("voice error : $p0");
-                          //             // });
-                          //           },
-                          //         ),
-                          //       ),
-                          //     ),
-                          //     ValueListenableBuilder<bool>(
-                          //       valueListenable: isListeningNotifier,
-                          //       builder: (context, isListening, child) {
-                          //         return isListening
-                          //             ? const Positioned(
-                          //                 bottom: 0,
-                          //                 left: 34,
-                          //                 child: Icon(
-                          //                   Icons.more_horiz,
-                          //                   color: AppColors.PRIMARY_COLOR_DARK,
-                          //                 ),
-                          //               )
-                          //             : const SizedBox();
-                          //       },
-                          //     ),
-                          //   ],
-                          // ),
                         ),
                         const SizedBox(width: 8),
                         Padding(
@@ -1853,9 +1758,7 @@ class _VoiceMessageCardState extends State<VoiceMessageCard> {
                                 text: widget.messageEntity.time,
                                 style: Styles.smallText(
                                   color: widget.isSend
-                                      ? context.isDarkMode
-                                          ? Colors.white
-                                          : Colors.black
+                                      ? Colors.black
                                       : context.isDarkMode
                                           ? AppColors.BACKGROUND_COLOR
                                               .withValues(alpha: 0.5)
@@ -1937,9 +1840,7 @@ class ReplyRecivedMessageCard extends StatelessWidget {
                     ? AppColors.PRIMARY_COLOR
                     : AppColors.SECONDARY_COLOR,
                 borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(100),
                   topRight: Radius.circular(12),
-                  bottomLeft: Radius.circular(100),
                   bottomRight: Radius.circular(12),
                 ),
               ),
@@ -1964,7 +1865,6 @@ class ReplyRecivedMessageCard extends StatelessWidget {
                       // messageEntity.reply!.sender.name,
                       overflow: TextOverflow.ellipsis,
                       style: Styles.mediumText(
-                          // color: AppColors.PRIMARY_COLOR,
                           color:
                               context.isDarkMode ? Colors.white : Colors.black,
                           fontWeight: FontWeight.w500),
@@ -1980,9 +1880,9 @@ class ReplyRecivedMessageCard extends StatelessWidget {
                           ? messageEntity.reply!.media.isNotEmpty
                               ? messageEntity.reply!.media[0].type ==
                                       FileTypeEnum.image
-                                  ? LocaleKeys.photo.tr()
+                                  ? LocaleKeys.photo.localize
                                   : messageEntity.reply!.media[0].fileName ??
-                                      LocaleKeys.file.tr()
+                                      LocaleKeys.file.localize
                               : messageEntity.reply!.text
                           : messageEntity.reply!.text,
                       overflow: TextOverflow.ellipsis,
@@ -2073,9 +1973,7 @@ class ReplySendMessageCard extends StatelessWidget {
                     ? AppColors.PRIMARY_COLOR
                     : AppColors.SECONDARY_COLOR,
                 borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(100),
                   topRight: Radius.circular(12),
-                  bottomLeft: Radius.circular(100),
                   bottomRight: Radius.circular(12),
                 ),
               ),
@@ -2099,8 +1997,7 @@ class ReplySendMessageCard extends StatelessWidget {
                           : messageEntity.reply!.sender.name,
                       overflow: TextOverflow.ellipsis,
                       style: Styles.mediumText(
-                        // color: AppColors.PRIMARY_COLOR,
-                        color: context.isDarkMode ? Colors.white : Colors.black,
+                        color: Colors.black,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -2115,9 +2012,9 @@ class ReplySendMessageCard extends StatelessWidget {
                           ? messageEntity.reply!.media.isNotEmpty
                               ? messageEntity.reply!.media[0].type ==
                                       FileTypeEnum.image
-                                  ? LocaleKeys.photo.tr()
+                                  ? LocaleKeys.photo.localize
                                   : messageEntity.reply!.media[0].fileName ??
-                                      LocaleKeys.file.tr()
+                                      LocaleKeys.file.localize
                               : messageEntity.reply!.text
                           : messageEntity.reply!.text,
                       overflow: TextOverflow.ellipsis,

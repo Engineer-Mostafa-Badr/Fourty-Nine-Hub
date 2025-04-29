@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_entity.dart';
 import 'package:fourtyninehub/features/installment_feature/installment_details/presentation/cubit/installment_details_cubit.dart';
 import 'package:go_router/go_router.dart';
@@ -122,7 +123,13 @@ class _InstallmentsDetailsState extends State<InstallmentsDetails> {
             children: [
               const Icon(Icons.location_on_outlined),
               const Sizer(),
-              Expanded(child: Label(text: ad.address?.address ?? '')),
+              Expanded(
+                child: Label(
+                    text: (context.isArabic
+                            ? ad.address?.addressAr
+                            : ad.address?.addressEn) ??
+                        ''),
+              ),
               const Sizer(),
               Label(text: ad.formatedDate)
             ],
