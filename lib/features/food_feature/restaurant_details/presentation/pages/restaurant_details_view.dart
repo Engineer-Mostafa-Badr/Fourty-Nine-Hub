@@ -17,7 +17,7 @@ import '../../../restaurant_details/presentation/widgets/restaurant_header.dart'
 import '../cubit/restaurant_details_cubit.dart';
 
 class RestaurantDetailsView extends StatefulWidget {
-  final Restaurant restaurant;
+  final GetAllRestaurantEntity restaurant;
 
   const RestaurantDetailsView({super.key, required this.restaurant});
 

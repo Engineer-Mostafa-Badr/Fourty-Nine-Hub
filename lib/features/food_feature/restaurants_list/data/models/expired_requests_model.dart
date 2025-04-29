@@ -1,19 +1,19 @@
 // Main response class
 class ExpiredRequestsResponse {
   final bool status;
-  final List<OrderData>? data;
+  final List<OrderData> data;
 
   ExpiredRequestsResponse({
     required this.status,
-    this.data,
+    required this.data,
   });
 
   factory ExpiredRequestsResponse.fromJson(Map<String, dynamic> json) {
     return ExpiredRequestsResponse(
       status: json['status'] ?? false,
-      data: (json['data'] as List?)
-              ?.map((x) => OrderData.fromJson(x as Map<String, dynamic>))
-              .toList() ??
+      data: (json['data'] as List<dynamic>?)
+          ?.map((x) => OrderData.fromJson(x as Map<String, dynamic>))
+          .toList() ??
           [],
     );
   }
@@ -21,7 +21,7 @@ class ExpiredRequestsResponse {
   Map<String, dynamic> toJson() {
     return {
       'status': status,
-      'data': data?.map((x) => x.toJson()).toList(),
+      'data': data.map((x) => x.toJson()).toList(),
     };
   }
 }
@@ -34,8 +34,9 @@ class OrderData {
   final List<OrderItem>? orders;
   final int? total;
   final DateTime? createdAt;
-  final String? subscriptionType;
-  final String? currency;
+  final SubscriptionType? subscriptionType;
+  final String? currencyEn;
+  final String? currencyAr;
 
   OrderData({
     this.id,
@@ -45,28 +46,32 @@ class OrderData {
     this.total,
     this.createdAt,
     this.subscriptionType,
-    this.currency,
+    this.currencyEn,
+    this.currencyAr,
   });
 
   factory OrderData.fromJson(Map<String, dynamic> json) {
     return OrderData(
-      id: json['_id'] ?? json['id'] ?? '',
+      id: json['_id'],
       user: json['userId'] != null
-          ? User.fromJson(json['userId'] as Map<String, dynamic>)
-          : User(),
+          ? User.fromJson(json['userId'])
+          : null,
       restaurant: json['restaurantId'] != null
-          ? Restaurant.fromJson(json['restaurantId'] as Map<String, dynamic>)
-          : Restaurant(),
-      orders: (json['orders'] as List?)
-              ?.map((x) => OrderItem.fromJson(x as Map<String, dynamic>))
-              .toList() ??
+          ? Restaurant.fromJson(json['restaurantId'])
+          : null,
+      orders: (json['orders'] as List<dynamic>?)
+          ?.map((x) => OrderItem.fromJson(x))
+          .toList() ??
           [],
-      total: json['total'] is int ? json['total'] as int : 0,
+      total: json['total'] as int?,
       createdAt: json['createdAt'] != null
-          ? DateTime.tryParse(json['createdAt'] as String)
-          : DateTime.tryParse(''),
-      subscriptionType: json['subscriptionType'] ?? '',
-      currency: json['currency'] ?? '',
+          ? DateTime.tryParse(json['createdAt'])
+          : null,
+      subscriptionType: json['subscriptionType'] != null
+          ? SubscriptionType.fromJson(json['subscriptionType'])
+          : null,
+      currencyEn: json['currencyEn'],
+      currencyAr: json['currencyAr'],
     );
   }
 
@@ -78,47 +83,70 @@ class OrderData {
       'orders': orders?.map((x) => x.toJson()).toList(),
       'total': total,
       'createdAt': createdAt?.toIso8601String(),
-      'subscriptionType': subscriptionType,
-      'currency': currency,
+      'subscriptionType': subscriptionType?.toJson(),
+      'currencyEn': currencyEn,
+      'currencyAr': currencyAr,
+    };
+  }
+}
+
+// Subscription Type class
+class SubscriptionType {
+  final String? ar;
+  final String? en;
+
+  SubscriptionType({this.ar, this.en});
+
+  factory SubscriptionType.fromJson(Map<String, dynamic> json) {
+    return SubscriptionType(
+      ar: json['ar'],
+      en: json['en'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'ar': ar,
+      'en': en,
     };
   }
 }
 
 // User class
 class User {
-  final String? id;
   final String? firstName;
   final String? lastName;
   final String? gender;
   final UserProfile? userProfile;
+  final String? id;
 
   User({
-    this.id,
     this.firstName,
     this.lastName,
     this.gender,
     this.userProfile,
+    this.id,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      id: json['_id'] ?? json['id'] ?? '',
-      firstName: json['firstName'] ?? '',
-      lastName: json['lastName'] ?? '',
-      gender: json['gender'] ?? '',
+      firstName: json['firstName'],
+      lastName: json['lastName'],
+      gender: json['gender'],
       userProfile: json['USER_PROFILE'] != null
-          ? UserProfile.fromJson(json['USER_PROFILE'] as Map<String, dynamic>)
-          : UserProfile(),
+          ? UserProfile.fromJson(json['USER_PROFILE'])
+          : null,
+      id: json['id'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      '_id': id,
       'firstName': firstName,
       'lastName': lastName,
       'gender': gender,
       'USER_PROFILE': userProfile?.toJson(),
+      'id': id,
     };
   }
 }
@@ -132,9 +160,8 @@ class UserProfile {
   factory UserProfile.fromJson(Map<String, dynamic> json) {
     return UserProfile(
       profilePictureKey: json['profilePictureKey'] != null
-          ? ProfilePictureKey.fromJson(
-              json['profilePictureKey'] as Map<String, dynamic>)
-          : ProfilePictureKey(),
+          ? ProfilePictureKey.fromJson(json['profilePictureKey'])
+          : null,
     );
   }
 
@@ -154,8 +181,8 @@ class ProfilePictureKey {
 
   factory ProfilePictureKey.fromJson(Map<String, dynamic> json) {
     return ProfilePictureKey(
-      id: json['_id'] ?? json['id'] ?? '',
-      mediaKey: json['mediaKey'] ?? '',
+      id: json['_id'],
+      mediaKey: json['mediaKey'],
     );
   }
 
@@ -169,27 +196,27 @@ class ProfilePictureKey {
 
 // Restaurant class
 class Restaurant {
-  final String? id;
   final String? name;
   final Subcategory? subcategory;
+  final String? id;
 
-  Restaurant({this.id, this.name, this.subcategory});
+  Restaurant({this.name, this.subcategory, this.id});
 
   factory Restaurant.fromJson(Map<String, dynamic> json) {
     return Restaurant(
-      id: json['_id'] ?? json['id'] ?? '',
-      name: json['name'] ?? 'Unknown Restaurant',
+      name: json['name'],
       subcategory: json['subcategoryId'] != null
-          ? Subcategory.fromJson(json['subcategoryId'] as Map<String, dynamic>)
-          : Subcategory(),
+          ? Subcategory.fromJson(json['subcategoryId'])
+          : null,
+      id: json['id'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      '_id': id,
       'name': name,
       'subcategoryId': subcategory?.toJson(),
+      'id': id,
     };
   }
 }
@@ -204,9 +231,9 @@ class Subcategory {
 
   factory Subcategory.fromJson(Map<String, dynamic> json) {
     return Subcategory(
-      id: json['_id'] ?? json['id'] ?? '',
-      nameAr: json['nameAr'] ?? '',
-      nameEn: json['nameEn'] ?? '',
+      id: json['_id'],
+      nameAr: json['nameAr'],
+      nameEn: json['nameEn'],
     );
   }
 
@@ -221,39 +248,37 @@ class Subcategory {
 
 // OrderItem class
 class OrderItem {
-  final String? id;
   final Food? food;
   final int? quantity;
   final int? price;
   final int? totalPriceOfItem;
+  final String? id;
 
   OrderItem({
-    this.id,
     this.food,
     this.quantity,
     this.price,
     this.totalPriceOfItem,
+    this.id,
   });
 
   factory OrderItem.fromJson(Map<String, dynamic> json) {
     return OrderItem(
-      id: json['_id'] ?? json['id'] ?? "",
-      food: json['foodId'] != null
-          ? Food.fromJson(json['foodId'] as Map<String, dynamic>)
-          : Food(),
-      quantity: json['quantity'] ?? 0,
-      price: json['price'] ?? 0,
-      totalPriceOfItem: json['totalPriceOfItem'] ?? 0,
+      food: json['foodId'] != null ? Food.fromJson(json['foodId']) : null,
+      quantity: json['quantity'],
+      price: json['price'],
+      totalPriceOfItem: json['totalPriceOfItem'],
+      id: json['_id'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      '_id': id,
       'foodId': food?.toJson(),
       'quantity': quantity,
       'price': price,
       'totalPriceOfItem': totalPriceOfItem,
+      '_id': id,
     };
   }
 }
@@ -267,8 +292,8 @@ class Food {
 
   factory Food.fromJson(Map<String, dynamic> json) {
     return Food(
-      id: json['_id'] ?? json['id'] ?? '',
-      foodName: json['foodName'] ?? '',
+      id: json['_id'],
+      foodName: json['foodName'],
     );
   }
 

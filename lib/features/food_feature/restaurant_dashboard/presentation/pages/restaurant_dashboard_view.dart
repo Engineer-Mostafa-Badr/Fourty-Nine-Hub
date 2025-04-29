@@ -400,7 +400,7 @@ class RestaurantSettingScreen extends StatelessWidget {
                     Row(
                       children: [
                         RatingBar(
-                          initialRating:state.info!.totalRating ?? 0,
+                          initialRating:state.info!.totalRating?.toDouble() ?? 0,
                           ignoreGestures: true,
                           itemPadding: const EdgeInsets.symmetric(horizontal: 3),
                           ratingWidget: RatingWidget(

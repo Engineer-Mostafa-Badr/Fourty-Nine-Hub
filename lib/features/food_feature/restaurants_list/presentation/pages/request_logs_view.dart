@@ -64,10 +64,16 @@ class _RestaurantRequestLogsScreenState
               child: CircularProgressIndicator(),
             );
           }
-          if (controller.reqLogs.isEmpty ) {
+          if (controller.reqLogs.isEmpty) {
             return Center(
-              child: Text(
-                LocaleKeys.noData.tr(),
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height * .8, // Make sure it takes up full height
+                child: Center( // This will center it vertically and horizontally
+                  child: Text(
+                    LocaleKeys.noData.tr(),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               ),
             );
           }

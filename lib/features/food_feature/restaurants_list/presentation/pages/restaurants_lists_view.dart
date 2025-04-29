@@ -31,6 +31,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../../core/constants/registration_status.dart';
 import '../../../../../res/style/app_colors.dart';
+import 'favorite_ads.dart';
 
 class RestaurantsListsView extends StatefulWidget {
   const RestaurantsListsView({super.key});
@@ -74,6 +75,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
 
   bool _showSearch = false;
   bool _showExpire = false;
+  bool _showFavAds = false;
   bool _showLog = false;
 
   @override
@@ -139,7 +141,18 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
               onClose: () => setState(() => _showLog = false),
             ),
           ),
-        if (!_showSearch && !_showExpire && !_showLog)
+        if (_showFavAds)
+          BlocProvider(
+            create: (context) =>
+            serviceLocator<RestaurantsCubit>()..loadInitialFoodAds(),
+            child: RestaurantFavAdsScreen(
+              onClose: () => setState(() {
+                context.read<RestaurantsCubit>().loadInitialData();
+                _showFavAds = false;
+              }),
+            ),
+          ),
+        if (!_showSearch && !_showExpire && !_showLog && !_showFavAds)
           Padding(
             padding: EdgeInsets.all(10.w),
             child: Column(
@@ -201,14 +214,9 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                                           .read<RestaurantsCubit>()
                                           .toggleFavoriteRestaurant(id);
                                       if (result == true) {
-                                        context
-                                                .read<RestaurantsCubit>()
-                                                .restaurants[i]
-                                                .isFavorite =
-                                            !context
-                                                .read<RestaurantsCubit>()
-                                                .restaurants[i]
-                                                .isFavorite!;
+                                        context.read<RestaurantsCubit>().restaurants[i].isFavorite
+                                        = !context.read<RestaurantsCubit>().restaurants[i].isFavorite!;
+
                                       }
                                     },
                                   ),
@@ -395,6 +403,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
       ),
     );
   }
+
   Widget _buildSearchAndExpiredRequests() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -402,7 +411,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
         children: [
           Row(
             children: [
-              InkWell(
+              GestureDetector(
                 onTap: () {
                   if (context.read<UserCubit>().isLoggedIn) {
                     setState(() {
@@ -410,6 +419,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                       if (_showSearch) {
                         _showExpire = false;
                         _showLog = false;
+                        _showFavAds = false;
                       }
                     });
                   } else {
@@ -424,18 +434,60 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                 )
               ),
               const Sizer(),
-              InkWell(
+              GestureDetector(
                   onTap: () {
                     context.push(Routes.FOODCART);
                   },
                   child: Icon(
                     Icons.shopping_cart,
-                    // color: Colors.black,
+                    color:context.isDarkMode ? AppColors.whiteColor :  AppColors.PRIMARY_COLOR ,
                   )),
             ],
           ),
           SizedBox(
             width: 5,
+          ),
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                if (context.read<UserCubit>().isLoggedIn) {
+                  setState(() {
+                    _showFavAds = !_showFavAds;
+                    if (_showFavAds) {
+                      _showSearch = false;
+                      _showLog = false;
+                      _showExpire = false;
+                     }else if(!_showFavAds){
+                      context.read<RestaurantsCubit>().loadInitialRestaurantsData('');
+                    }
+                  });
+                } else {
+                  context.push(Routes.LOGIN);
+                }
+              },
+              child: Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                    border: Border.all(
+                        color: _showFavAds
+                            ? AppColors.PRIMARY_COLOR_DARK
+                            : AppColors.PRIMARY_COLOR),
+                    borderRadius: BorderRadius.circular(15),
+                    color: _showFavAds
+                        ? AppColors.PRIMARY_COLOR
+                        : AppColors.cD9D9D9),
+                child: Label(
+                  text: LocaleKeys.favouriteAds.localize,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color:
+                      _showFavAds ? AppColors.whiteColor : AppColors.black),
+                ),
+              ),
+            ),
           ),
           BlocBuilder<RestaurantsCubit, RestaurantsListState>(
             builder: (context, state) {
@@ -443,7 +495,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                 child: Stack(
                   clipBehavior: Clip.none,
                   children: [
-                    InkWell(
+                    GestureDetector(
                       onTap: () {
                         if (context.read<UserCubit>().isLoggedIn) {
                           setState(() {
@@ -451,6 +503,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                             if (_showLog) {
                               _showSearch = false;
                               _showExpire = false;
+                              _showFavAds = false;
                             }
                           });
                         } else {
@@ -519,7 +572,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
             width: 5,
           ),
           Expanded(
-            child: InkWell(
+            child: GestureDetector(
               onTap: () {
                 if (context.read<UserCubit>().isLoggedIn) {
                   setState(() {
@@ -527,6 +580,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                     if (_showExpire) {
                       _showSearch = false;
                       _showLog = false;
+                      _showFavAds = false;
                     }
                   });
                 } else {

@@ -10,9 +10,11 @@ import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases
 
 import '../../../../../core/error/failure.dart';
 import '../../data/models/restaurant_model.dart';
+import '../entities/food_ads_entity.dart';
 import '../entities/log_count_entity.dart';
 import '../entities/logs_entity.dart';
 import '../entities/rate_response_entity.dart';
+import '../entities/restaurant.dart';
 import '../entities/set_request_seen_entity.dart';
 import '../entities/user_order_entity.dart';
 import '../usecases/add_rate_restaurant_use_case.dart';
@@ -20,11 +22,11 @@ import '../usecases/get_user_order_use_case.dart';
 import '../usecases/set_request_log_seen_use_case.dart';
 
 abstract class RestaurantListRepo {
-  Future<Either<Failure, List<RestaurantModel>>> getNearByReasturants({
+  Future<Either<Failure, List<GetAllRestaurantEntity>>> getNearByReasturants({
     required double lat,
     required double lng,
   });
-  Future<Either<Failure, List<Restaurant2Model>>> getAllRestaurantsWithMenu(
+  Future<Either<Failure, List<GetAllRestaurantEntity>>> getAllRestaurantsWithMenu(
       {required PostCommentsParams params});
   Future<Either<Failure, IsRestaurantModel>> isRestaurant();
 
@@ -37,17 +39,19 @@ abstract class RestaurantListRepo {
 
   Future<Either<Failure, List<LogsRequestLogsEntity>>> getReqLogs(
       PaginationParams params);
+  Future<Either<Failure, List<GetAllRestaurantEntity>>> getFoodAds(
+      PaginationParams params);
 
-  Future<Either<Failure, List<RestaurantModel>>> getTrendingRestaurants({
+  Future<Either<Failure, List<GetAllRestaurantEntity>>> getTrendingRestaurants({
     required double lat,
     required double lng,
   });
-  Future<Either<Failure, List<Restaurant2Model>>> getSubCategoryRestaurants(
+  Future<Either<Failure, List<GetAllRestaurantEntity>>> getSubCategoryRestaurants(
       {required GetSubCategoryRestaurants params});
   Future<Either<Failure, List<FoodCategoryEntity>>>
       getMealCategoriesWithCountRestaurants(
           {required PostCommentsParams params});
-  Future<Either<Failure, List<Restaurant2Model>>> searchRestaurants(
+  Future<Either<Failure, List<GetAllRestaurantEntity>>> searchRestaurants(
       {required String city,
       required String subCategory,
       required String government,

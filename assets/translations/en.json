@@ -1556,6 +1556,7 @@
   "photoVideosAndDocuments": "Photo, videos and documents",
   "locationSharing": "Location sharing",
   "statusUpdates": "Status updates",
-  "mostBooking": "Most Booking"
+  "mostBooking": "Most Booking",
+  "confirmQuantity": "Press Confirm button to confirm the new quantity or we will take the old quantity"
 
 }

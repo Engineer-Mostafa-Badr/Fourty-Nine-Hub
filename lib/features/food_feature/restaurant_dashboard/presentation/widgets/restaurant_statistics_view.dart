@@ -60,10 +60,10 @@ class _RestaurantStatisticsViewState extends State<RestaurantStatisticsView> {
 
             _buildStatisticColumn(
               LocaleKeys.restaurantNumber.localize,
-              state.info?.number?.toString() ?? "N/A",
+              state.info?.phone?.toString() ?? "N/A",
             ),
             GestureDetector(
-              onTap: () => _showUpdateNumberBottomSheet(context, state.info?.number),
+              onTap: () => _showUpdateNumberBottomSheet(context, state.info?.phone),
               // Call bottom sheet method
               child: Container(
 

@@ -32,6 +32,7 @@ import '../../../../health_feature/create_doctor/domain/usecases/get_governorate
 import '../../../../health_feature/health/domain/usecases/get_health_subcategories.dart';
 import '../../../../health_feature/health/presentation/controllers/shared_data/health_shared_data.dart';
 import '../../../../subcategories/domain/entities/sub_category_entity.dart';
+import '../../../restaurants_list/domain/entities/restaurant.dart';
 import '../../../restaurants_list/domain/usecases/create_restaurant.dart';
 import '../../data/models/restaurant_orders_model.dart';
 import '../../domain/entity/complete_order_entity.dart';

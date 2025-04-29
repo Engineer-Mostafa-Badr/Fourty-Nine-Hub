@@ -11,7 +11,7 @@ import '../../../../../core/error/failure.dart';
 abstract class RestaurantDetailsRepo {
   Future<Either<Failure, List<RestaurantMenu>>> getMeals(
       {required GetMealsParams params});
-  Future<Either<Failure, Restaurant>> getRestaurantDetails(
+  Future<Either<Failure, GetAllRestaurantEntity>> getRestaurantDetails(
       {required String restaurantId});
   Future<Either<Failure, bool>> deleteFood({required String id});
   Future<Either<Failure, bool>> changeQuantity(

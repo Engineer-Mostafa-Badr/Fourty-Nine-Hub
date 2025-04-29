@@ -1531,5 +1531,6 @@ abstract class  LocaleKeys {
   static const photoVideosAndDocuments = 'photoVideosAndDocuments';
   static const locationSharing = 'locationSharing';
   static const statusUpdates = 'statusUpdates';
+  static const confirmQuantity = 'confirmQuantity';
 
 }

@@ -94,7 +94,7 @@ void main() async {
   await Geolocator.checkPermission().then(
         (value) {
       if (value == LocationPermission.denied) {
-        Geolocator.requestPermission();
+        // Geolocator.requestPermission();
       }
     },
   );

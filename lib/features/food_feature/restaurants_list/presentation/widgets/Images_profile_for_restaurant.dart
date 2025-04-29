@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/CarouselSlider.dart';
 import 'package:fourtyninehub/common/widgets/stateless/images/square_image.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_media_model.dart';
 
 import '../../../../../res/style/app_colors.dart';
+import '../../domain/entities/restaurant.dart';
 
 class ImagesProfileForRestaurant extends StatefulWidget {
   const ImagesProfileForRestaurant({
@@ -13,7 +13,7 @@ class ImagesProfileForRestaurant extends StatefulWidget {
     this.widthForImages,
     this.autoPlay,
   });
-  final List<RestaurantMediaModel>? restaurantMedia;
+  final List<RestaurantMediaEntity>? restaurantMedia;
   final double? heightCarousel;
   final double? widthForImages;
   final bool? autoPlay;

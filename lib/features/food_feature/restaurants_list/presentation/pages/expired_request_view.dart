@@ -265,7 +265,7 @@ class TripRequestCard extends StatelessWidget {
             ),
           ),
         _buildFoodDetails(),
-        _buildTotalAndCurrency(),
+        _buildTotalAndCurrency(context),
       ],
     );
   }
@@ -293,7 +293,7 @@ class TripRequestCard extends StatelessWidget {
     );
   }
 
-  Widget _buildTotalAndCurrency() {
+  Widget _buildTotalAndCurrency(BuildContext context) {
     return Row(
       children: [
         Text(
@@ -312,7 +312,7 @@ class TripRequestCard extends StatelessWidget {
           ),
         ),
         Text(
-          " ${orderData.currency ?? ''}",
+          "${context.isArabic ? orderData.currencyAr  : orderData.currencyEn ?? ''}",
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w700,
@@ -339,14 +339,15 @@ class TripRequestCard extends StatelessWidget {
         Flexible(
           flex: 5,
           child: Text(
-            orderData.subscriptionType?.toString() ??
-                LocaleKeys.noSubscription.tr(),
+            (context.isArabic ? orderData.subscriptionType?.ar : orderData.subscriptionType?.en)
+                ?? LocaleKeys.noSubscription.tr(),
             style: const TextStyle(
               fontSize: 12,
               color: AppColors.SECONDARY_COLOR_DARK,
               fontWeight: FontWeight.w600,
             ),
           ),
+
         ),
       ],
     );

@@ -1042,7 +1042,7 @@
   "totalOrder": "إجمالي الطلبات",
   "totalRevenue": "إجمالي الإيرادات",
   "avgRating": "متوسط التقييم",
-  "review": "مراجعة",
+  "review": "تقييمات",
   "subscriptionDeadline": "موعد انتهاء الاشتراك",
   "available": "متاح",
   "notAvailable": "غير متاح",
@@ -1538,5 +1538,7 @@
   "audioAndVideoCalls": "المكالمات الصوتية والفيديو",
   "photoVideosAndDocuments": "صور وفيديو ووثائق",
   "locationSharing": "مشاركة الموقع",
-  "statusUpdates": "تحديثات الحالة"
+  "statusUpdates": "تحديثات الحالة",
+  "confirmQuantity": "اضغط على زر التأكيد لتأكيد الكمية الجديدة أو سنأخذ الكمية القديمة"
+
 }

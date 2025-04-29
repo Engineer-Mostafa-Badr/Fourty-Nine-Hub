@@ -34,7 +34,7 @@ class RestaurantDashboardState {
   final Failure? failure;
   final String? successMessage;
   final String? subCategoryId;
-  final Restaurant2Model? info;
+  final GetAllRestaurantEntity? info;
   final RestaurantStatistics? statistics;
   final IsRestaurantModel? isRestaurant;
   final bool connected;
@@ -81,7 +81,7 @@ class RestaurantDashboardState {
     GetFoodRequestEntity? orders,
     GetFoodRequestEntity? availableOrders,
     GetFoodRequestEntity? pastOrders,
-    Restaurant2Model? info,
+    GetAllRestaurantEntity? info,
     RestaurantStatistics? statistics,
     bool? connected,
     String? subCategoryId,
