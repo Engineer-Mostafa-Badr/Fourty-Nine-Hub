@@ -128,7 +128,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                                             state.isSale == true &&
                                             state.isMale == true)
                                         ? AppColors.PRIMARY_COLOR
-                                        : Colors.white,
+                                        : context.isDarkMode?AppColors.GREY_DARK_COLOR:Colors.white,
                                     borderRadius: BorderRadius.circular(15),
                                     border: Border.all(
                                         color: AppColors.PRIMARY_COLOR)),
@@ -146,7 +146,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                                       color: (state.isUser == false ||
                                               state.isSale == false ||
                                               state.isMale == false)
-                                          ? AppColors.PRIMARY_COLOR
+                                          ? context.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR
                                           : Colors.white),
                                 ),
                               ),
@@ -178,7 +178,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                                               state.isSale == false ||
                                               state.isMale == false)
                                           ? AppColors.PRIMARY_COLOR
-                                          : Colors.white,
+                                          : context.isDarkMode?AppColors.GREY_DARK_COLOR:Colors.white,
                                       borderRadius: BorderRadius.circular(15),
                                       border: Border.all(
                                           color: AppColors.PRIMARY_COLOR)),
@@ -196,7 +196,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                                         color: (state.isUser == true &&
                                                 state.isSale == true &&
                                                 state.isMale == true)
-                                            ? AppColors.PRIMARY_COLOR
+                                            ? context.isDarkMode?AppColors.whiteColor:AppColors.PRIMARY_COLOR
                                             : Colors.white),
                                   ),
                                 ),
@@ -418,7 +418,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                                           start: 16),
                                       child: Label(
                                         text: LocaleKeys.city.localize,
-                                        style: Styles.mediumText(fontSize: 32),
+                                        style: Styles.mediumText(fontSize: 32,color: context.isDarkMode?AppColors.whiteColor:Colors.black),
                                       ),
                                     ),
                                     CreateAdDropdownMenu<CityEntity>(
@@ -435,7 +435,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                                               (CityEntity city) {
                                         return DropdownMenuItem<CityEntity>(
                                           value: city,
-                                          child: Text(city.nameEn),
+                                          child: Text(context.isArabic?city.nameAr:city.nameEn),
                                         );
                                       }).toList(),
                                       onChange: (CityEntity? newValue) {
@@ -639,7 +639,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                 padding: const EdgeInsets.all(16),
                 clipBehavior: Clip.antiAlias,
                 decoration: ShapeDecoration(
-                  color: const Color(0xFFD9D9D9),
+                  color: context.isDarkMode?AppColors.GREY_DARK_COLOR:const Color(0xFFD9D9D9),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
@@ -657,6 +657,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                     // if (!state.isImageUploading)
                     SvgPicture.asset(
                       Assets.image2Icon,
+                      color: context.isDarkMode?AppColors.whiteColor:null,
                     ),
                     const SizedBox(
                       height: 4,
@@ -669,7 +670,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                         //   Assets.uploadIcon,
                         //   color: const Color(0xff0B1035),
                         // ),
-                        Icon(Icons.file_upload_outlined,size: 30,color: AppColors.c0B1035,),
+                        Icon(Icons.file_upload_outlined,size: 30,color: context.isDarkMode?AppColors.whiteColor:AppColors.c0B1035,),
                         const Sizer(
                           width: 8,
                         ),
@@ -678,7 +679,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                           style: Styles.mediumText(
                             fontWeight: FontWeight.w500,
                             fontSize: 32,
-                            color: const Color(0xff0B1035),
+                            color:context.isDarkMode?AppColors.whiteColor: const Color(0xff0B1035),
                           ),
                         ),
                       ],
@@ -701,7 +702,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                       text: LocaleKeys.addImagesDesc.localize,
                       textStyle: Styles.mediumText(
                         fontSize: 24,
-                        color: const Color(0xff717171),
+                        color: context.isDarkMode?AppColors.whiteColor:const Color(0xff717171),
                       ),
                     ),
                     // Label(
@@ -722,8 +723,9 @@ class _CreateAdViewState extends State<CreateAdView> {
             ),
             if (state.images?.isNotEmpty ?? false)
               SizedBox(
-                height: 60,
+                height: 80,
                 child: ListView.separated(
+                  padding: EdgeInsets.symmetric(vertical: 10.h),
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
                       final image = state.images![index];

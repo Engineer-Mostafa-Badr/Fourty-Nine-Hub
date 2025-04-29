@@ -74,6 +74,7 @@ class _CallMessageButtonsState extends State<CallMessageButtons> {
                       : AppColors.DARK_GRAY_COLOR,
                   icon: SvgPicture.asset(
                     Assets.phoneIcon
+                      ,color: context.isDarkMode?Colors.white:null
                   ),
                   // icon: const Icon(Icons.call),
                   onPressed: !context.read<UserCubit>().isLoggedIn
@@ -190,7 +191,7 @@ class _CallMessageButtonsState extends State<CallMessageButtons> {
                           context.read<UserCubit>().isLoggedIn)
                       ? AppColors.PRIMARY_COLOR
                       : AppColors.DARK_GRAY_COLOR,
-                  icon: SvgPicture.asset(Assets.mailIcon),
+                  icon: SvgPicture.asset(Assets.mailIcon,color: context.isDarkMode?Colors.white:null),
                   // icon: const Icon(Icons.email),
                   onPressed: !context.read<UserCubit>().isLoggedIn
                       ? () => context.push(Routes.LOGIN)

@@ -35,7 +35,7 @@ class HeaderButtonWidget extends StatelessWidget {
           child: Text(
             title,
             style: Styles.headerText(
-              fontSize: 24,
+              fontSize: 22,
               color: isOpened ? Colors.white : Colors.black,
             ),
           ),

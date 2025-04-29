@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class CreateAdTextFormField extends StatelessWidget {
@@ -26,9 +28,9 @@ class CreateAdTextFormField extends StatelessWidget {
         maxLines: 1,
         keyboardType: keyboardType,
         onChanged: onChanged,
-        style: Styles.mediumText(fontSize: 32),
+        style: Styles.mediumText(fontSize: 32, color: context.isDarkMode?AppColors.whiteColor:Colors.black),
         decoration: InputDecoration(
-          fillColor: const Color(0xffF5F5F5),
+          fillColor: context.isDarkMode?AppColors.GREY_DARK_COLOR:const Color(0xffF5F5F5),
           filled: true,
           contentPadding: const EdgeInsetsDirectional.only(start: 16),
           border: OutlineInputBorder(
@@ -51,7 +53,7 @@ class CreateAdTextFormField extends StatelessWidget {
             borderRadius: BorderRadius.circular(15.0),
             borderSide: BorderSide.none,
           ),
-          hintStyle: Styles.mediumText(fontSize: 32),
+          hintStyle: Styles.mediumText(fontSize: 32,color: context.isDarkMode?AppColors.whiteColor:Colors.black),
           hintText: hintText,
           // prefix: Sizer(
           //   width: 20.w,
