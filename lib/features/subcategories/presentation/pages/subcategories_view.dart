@@ -9,6 +9,9 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/categorization_entity.dart';
 import 'package:fourtyninehub/features/fourty_nine/domain/entities/main_category_entity.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
+import 'package:fourtyninehub/features/subcategories/presentation/pages/ads_request_log_view.dart';
+import 'package:fourtyninehub/features/subcategories/presentation/pages/favourite_ads_view.dart';
+import 'package:fourtyninehub/features/subcategories/presentation/pages/my_ads_view.dart';
 import 'package:fourtyninehub/features/subcategories/presentation/widgets/subcategory_card.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
@@ -218,9 +221,9 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.search,
-                      color: AppColors.PRIMARY_COLOR,
+                      color: context.isDarkMode? Colors.white : AppColors.PRIMARY_COLOR,
                     ),
                     const SizedBox(
                       width: 8,
@@ -233,11 +236,10 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                           isOpened: context
                               .read<SubcategoriesCubit>()
                               .isFavouriteAdsOpen,
-                          onPressed: () {
-                            context
+                          onPressed: () async{
+                           await context
                                 .read<SubcategoriesCubit>()
-                                .getRequestsLog(widget.mainCategory.id);
-
+                                .loadMyFavouriteAds(id:widget.mainCategory.id);
                             context
                                 .read<SubcategoriesCubit>()
                                 .toggleMyAds('isFavouriteAdsOpen');
@@ -259,7 +261,7 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                           onPressed: () {
                             context
                                 .read<SubcategoriesCubit>()
-                                .getRequestsLog(widget.mainCategory.id);
+                                .loadRequestsLog(id:widget.mainCategory.id);
                             context
                                 .read<SubcategoriesCubit>()
                                 .toggleMyAds('isRequestLogOpen');
@@ -279,7 +281,7 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                             context.read<SubcategoriesCubit>().isMyAdsOpen,
                         onPressed: () {
                           // TODO: EDIT THIS
-                          context.read<SubcategoriesCubit>().getMarriageMyAds();
+                          context.read<SubcategoriesCubit>().loadMyAds(id:widget.mainCategory.id);
                           context
                               .read<SubcategoriesCubit>()
                               .toggleMyAds('isMyAdsOpen');
@@ -294,10 +296,10 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                 height: 8,
               ),
               if (context.read<SubcategoriesCubit>().isFavouriteAdsOpen)
-                Container(),
+                Expanded(child: FavouriteAdsView(id: widget.mainCategory.id,)),
               if (context.read<SubcategoriesCubit>().isRequestLogOpen)
-                Container(),
-              if (context.read<SubcategoriesCubit>().isMyAdsOpen) Container(),
+                Expanded(child: AdsRequestLogView(id: widget.mainCategory.id,)),
+              if (context.read<SubcategoriesCubit>().isMyAdsOpen) Expanded(child: MyAdsView(id: widget.mainCategory.id,)),
               if (!context.read<SubcategoriesCubit>().isMyAdsOpen &&
                   !context.read<SubcategoriesCubit>().isFavouriteAdsOpen &&
                   !context.read<SubcategoriesCubit>().isRequestLogOpen)

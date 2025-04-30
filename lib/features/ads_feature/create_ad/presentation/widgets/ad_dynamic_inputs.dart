@@ -4,6 +4,7 @@ import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/ad_properties_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/domain/entities/selection_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/create_ad/presentation/pages/create_ad_dropdown_menu.dart';
@@ -270,9 +271,18 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
         const SizedBox(
           height: 4,
         ),
-        Wrap(
-          spacing: 8,
-          children: List.generate(widget.property.values.length, (index)=>InkWell(
+        GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+              childAspectRatio: 3.4
+
+          ),
+          itemCount: widget.property.values.length,
+          itemBuilder: (context,index)=>ClickableWidget(
             onTap: () {
               widget.onChanged(widget.property.values[index]);
               value = widget.property.values[index];
@@ -280,7 +290,7 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
             },
             child: Container(
               height: 42,
-              width: 100,
+              width: MediaQuery.of(context).size.width * 0.52,
               margin: EdgeInsets.symmetric(vertical: 5.h),
               alignment: Alignment.center,
               padding: const EdgeInsets.all(5),
@@ -296,10 +306,10 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
               ),
               child: Label(
                 text: getLang() == 'ar' ? widget.property.values[index].nameAr : widget.property.values[index].nameEn,
-                style: Styles.mediumText(fontSize: 32,color: context.isDarkMode?AppColors.whiteColor:AppColors.black),
+                style: Styles.mediumText(fontSize: 28,color: context.isDarkMode?AppColors.whiteColor:AppColors.black),
               ),
             ),
-          )),
+          )
         ),
         // Row(
         //   spacing: 8,

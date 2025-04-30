@@ -389,7 +389,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
                               // TODO: EDIT THIS
                               context
                                   .read<SubcategoriesCubit>()
-                                  .getMarriageMyAds();
+                                  .getMarriageMyAds('62c8b5b09332225799fe335e');
                               context
                                   .read<SubcategoriesCubit>()
                                   .toggleMyAds('isMyAdsOpen');
@@ -829,7 +829,7 @@ class _MainCategoriesGridViewCustomPageState
                               // TODO: EDIT THIS
                               context
                                   .read<SubcategoriesCubit>()
-                                  .getMarriageMyAds();
+                                  .getMarriageMyAds('62c8b5b09332225799fe335e');
                               context
                                   .read<SubcategoriesCubit>()
                                   .toggleMyAds('isMyAdsOpen');

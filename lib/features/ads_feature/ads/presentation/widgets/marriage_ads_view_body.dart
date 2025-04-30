@@ -120,7 +120,7 @@ class MarriageAdsViewBody extends StatelessWidget {
                   isOpened: context.read<SubcategoriesCubit>().isMyAdsOpen,
                   onPressed: () {
                     // TODO: EDIT THIS
-                    context.read<SubcategoriesCubit>().getMarriageMyAds();
+                    context.read<SubcategoriesCubit>().getMarriageMyAds('62c8b5b09332225799fe335e');
                     context
                         .read<SubcategoriesCubit>()
                         .toggleMyAds('isMyAdsOpen');

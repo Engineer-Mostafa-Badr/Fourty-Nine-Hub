@@ -310,6 +310,7 @@ abstract class Assets {
   static String ideaIcon = 'assets/icons/idea_icon.svg';
   static String luckyWheelIcon = 'assets/icons/lucky_wheel_icon.svg';
   static String spcialAdsIcon = 'assets/icons/spcia_ads_icon.svg';
+  static String viewsIcon = 'assets/icons/views_icon.svg';
   static String friendsIcon = 'assets/icons/friends_icon.svg';
   static String ride2Icon = 'assets/icons/ride_icon.svg';
   static String moreIcon = 'assets/icons/more_icon.svg';

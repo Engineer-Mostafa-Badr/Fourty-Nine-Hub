@@ -38,6 +38,7 @@ class CallMessageButtons extends StatefulWidget {
       required this.phone, this.senderName, this.senderImage,
       required this.id,
       this.hasReport = false,
+      this.flex,
       this.clientId});
   final String otherUserId;
   final String? clientId;
@@ -47,6 +48,7 @@ class CallMessageButtons extends StatefulWidget {
   final String? senderName;
   final String? senderImage;
   final bool? hasReport;
+  final int? flex;
 
   @override
   State<CallMessageButtons> createState() => _CallMessageButtonsState();
@@ -66,7 +68,7 @@ class _CallMessageButtonsState extends State<CallMessageButtons> {
             // crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Expanded(
-                flex: 3,
+                flex: widget.flex??3,
                 child: IconButton(
                   color: (snap.data == true &&
                           context.read<UserCubit>().isLoggedIn)
