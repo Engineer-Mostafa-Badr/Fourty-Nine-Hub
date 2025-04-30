@@ -56,33 +56,33 @@ class _ChangePasswordSecondViewBodyState
       ),
       child: BlocConsumer<ForgotPasswordCubit, ForgotPasswordState>(
         listener: (context, state) {
-          // if (state is ChangePasswordSuccess) {
-          //   context.pop();
-          //   print('emit(ChangePasswordSuccess());');
-          //   serviceLocator<UserCubit>()
-          //     ..setLogin(true)
-          //     ..attachToken()
-          //     ..getUser().then((value) async {
-          //       String? accessToken = await CacheManager.getAccessToken();
-          //       String? refreshToken = await CacheManager.getRefreshToken();
-          //       debugPrint(
-          //           '/////////////////////////////////////////////////////////////////////////');
-          //       debugPrint('Refresh Token: $refreshToken');
-          //       debugPrint('Access Token: $accessToken');
-          //       debugPrint(
-          //           '/////////////////////////////////////////////////////////////////////////');
-          //       debugPrint(serviceLocator<UserCubit>().state.data.toString());
-          //       // Navigator.pop(context);
-          //       // Navigator.pop(context);
-          //       context.pushReplacement(Routes.HOME);
-          //     });
-          //   context
-          //       .read<NotificationSocketIoCubit>()
-          //       .notificationListener(languageCode: 'en');
-          //   context
-          //       .read<NotificationSocketIoCubit>()
-          //       .clearAllNotificationsAndRefeatchAfterLogin(languageCode: 'en');
-          // }
+          if (state is ChangePasswordSuccess) {
+            context.pop();
+            print('emit(ChangePasswordSuccess());');
+            serviceLocator<UserCubit>()
+              ..setLogin(true)
+              ..attachToken()
+              ..getUser().then((value) async {
+                String? accessToken = await CacheManager.getAccessToken();
+                String? refreshToken = await CacheManager.getRefreshToken();
+                debugPrint(
+                    '/////////////////////////////////////////////////////////////////////////');
+                debugPrint('Refresh Token: $refreshToken');
+                debugPrint('Access Token: $accessToken');
+                debugPrint(
+                    '/////////////////////////////////////////////////////////////////////////');
+                debugPrint(serviceLocator<UserCubit>().state.data.toString());
+                // Navigator.pop(context);
+                // Navigator.pop(context);
+                context.pushReplacement(Routes.HOME);
+              });
+            context
+                .read<NotificationSocketIoCubit>()
+                .notificationListener(languageCode: 'en');
+            context
+                .read<NotificationSocketIoCubit>()
+                .clearAllNotificationsAndRefeatchAfterLogin(languageCode: 'en');
+          }
         },
         builder: (context, state) {
           var forgotPasswordCubit = context.read<ForgotPasswordCubit>();

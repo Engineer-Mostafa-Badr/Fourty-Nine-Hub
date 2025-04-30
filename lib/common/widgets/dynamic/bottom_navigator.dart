@@ -92,12 +92,10 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
       onTap: (index) {
         if (index == 4) {
           Scaffold.of(context).openDrawer();
-        }
-        else if(index ==0){
+        } else if (index == 0) {
           soonDialog(context);
           // context.push(pages[index].route,extra: AdsViewParams(mainCategory: , subCategory: null));
-        }
-        else if(index == 3){
+        } else if (index == 3) {
           if (!context.read<UserCubit>().isLoggedIn) {
             return pleaseLoginDialog(context);
           }
@@ -106,8 +104,7 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
             selectedItem.action(context);
           }
           HandleCashback.setCount(pages[index].cacheKey ?? '', context);
-        }
-        else {
+        } else {
           final selectedItem = pages[index];
           if (selectedItem.route != ModalRoute.of(context)?.settings.name) {
             selectedItem.action(context);
@@ -190,7 +187,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 400),
+      duration: const Duration(milliseconds: 0),
       height: bottomNavBarHeight, // Use the dynamic height
       color: Colors.transparent,
       child: CustomPaint(
@@ -223,7 +220,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                     },
                     child: Padding(
                       padding: EdgeInsetsDirectional.zero,
-                      child: ClickableWidget(
+                      child: isScrollingDown ? Container():ClickableWidget(
                         child: index == 3
                             ? Builder(
                                 builder: (context) {
@@ -237,13 +234,16 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                                         icon: Image.asset(
                                           Assets.notification,
                                           height: widget.items[index].height,
-                                          width: widget.items[index].height-4,
+                                          width: widget.items[index].height - 4,
                                           color: context.isDarkMode
                                               ? Colors.white
                                               : AppColors.PRIMARY_COLOR,
                                         ),
-                                        unreadCount:
-                                            getUnreadNotificationsCountCubit
+                                        unreadCount: !context
+                                                .read<UserCubit>()
+                                                .isLoggedIn
+                                            ? 0
+                                            : getUnreadNotificationsCountCubit
                                                     .unreadNotificationsCountEntity
                                                     ?.total ??
                                                 0,
@@ -260,20 +260,22 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                                 ? Container(
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 16.0),
-                                    child: Column(children: [
-                                      SvgPicture.asset(
-                                        widget.items[index].image!,
-                                        height: widget.items[index].height,
-                                        width: widget.items[index].height,
-                                        color: context.isDarkMode
-                                            ? Colors.white
-                                            : AppColors.PRIMARY_COLOR,
-                                      ),
-                                      Label(
-                                        text: widget.items[index].label,
-                                        style: Styles.smallText(),
-                                      ),
-                                    ],),
+                                    child: Column(
+                                      children: [
+                                        SvgPicture.asset(
+                                          widget.items[index].image!,
+                                          height: widget.items[index].height,
+                                          width: widget.items[index].height,
+                                          color: context.isDarkMode
+                                              ? Colors.white
+                                              : AppColors.PRIMARY_COLOR,
+                                        ),
+                                        Label(
+                                          text: widget.items[index].label,
+                                          style: Styles.smallText(),
+                                        ),
+                                      ],
+                                    ),
                                   )
                                 : Container(),
                       ),

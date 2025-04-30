@@ -144,7 +144,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   image: Assets.settings_icon,
                                   label: LocaleKeys.settings.localize,
                                   onTap: () {
-
                                     context.pop();
                                     context.push(Routes.SETTINGS);
                                   }),
@@ -155,14 +154,13 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   onTap: () {
                                     if (!context.read<UserCubit>().isLoggedIn) {
                                       return pleaseLoginDialog(context);
-                                    }else{
+                                    } else {
                                       AdInterstitialTop.loadIntersitialAd();
                                       AdInterstitialTop.showInterstitialAd();
 
                                       context.pop();
                                       context.push(Routes.PRIVACY);
                                     }
-
                                   }),
                               drawerListTile(
                                   image: Assets.policy,
@@ -353,7 +351,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   isCircle: true,
                   backColor: Colors.red.withValues(alpha: 0.1),
                   icon: Icons.person,
-                  color: AppColors.PRIMARY_COLOR,
+                  color: context.isDarkMode
+                      ? Colors.white
+                      : AppColors.PRIMARY_COLOR,
                   onPressed: () {
                     context.pop();
                     context.push(Routes.LOGIN);
@@ -377,7 +377,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     isCircle: true,
                     icon: Icons.person_add,
                     backColor: Colors.red.withValues(alpha: 0.1),
-                    color: AppColors.PRIMARY_COLOR,
+                    color: context.isDarkMode
+                        ? Colors.white
+                        : AppColors.PRIMARY_COLOR,
                     onPressed: () {
                       context.pop();
                       context.push(Routes.REGISTER);
@@ -652,7 +654,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           Navigator.pop(context);
           context.go(Routes.LUCKYWHEEL);
         } else {
-            return pleaseLoginDialog(context);
+          return pleaseLoginDialog(context);
 
           // showDialog(
           //   context: context,

@@ -91,20 +91,20 @@ class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
     result.fold(
       (failure) => emit(ChangePasswordFailure(failure)),
       (userToken) async {
-        // log("Token logout ${await CacheManager.getAccessToken()}");
-        // log("Token userToken access ${userToken.accessToken}");
-        // log("Token userToken refresh ${userToken.refreshToken}");
-        // await CacheManager.saveAccessToken(userToken.accessToken);
-        // await CacheManager.saveRefreshToken(userToken.refreshToken);
-        // SharedWebSocket.connect(token: userToken.accessToken);
-        // print('ChangePasswordSuccess()');
-        // print('emit(ChangePasswordSuccess());');
-        // emit(ChangePasswordSuccess());
-        await context.read<UserCubit>().logout(context);
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setBool("ISLOGIN", false);
-        context.go(Routes.LOGIN);
+        log("Token logout ${await CacheManager.getAccessToken()}");
+        log("Token userToken access ${userToken.accessToken}");
+        log("Token userToken refresh ${userToken.refreshToken}");
+        await CacheManager.saveAccessToken(userToken.accessToken);
+        await CacheManager.saveRefreshToken(userToken.refreshToken);
+        SharedWebSocket.connect(token: userToken.accessToken);
+        print('ChangePasswordSuccess()');
+        print('emit(ChangePasswordSuccess());');
         emit(ChangePasswordSuccess());
+        // await context.read<UserCubit>().logout(context);
+        // final prefs = await SharedPreferences.getInstance();
+        // await prefs.setBool("ISLOGIN", false);
+        // context.go(Routes.LOGIN);
+        // emit(ChangePasswordSuccess());
         // context.go(Routes.SETTINGS);
       },
     );

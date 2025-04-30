@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/authentication/presentation/controllers/u
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/Social_home.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/utils/shared_pref.dart';
 import '../../../features/social_media/create_post/presentation/cubit/create_post_cubit.dart';
 import '../../../res/assets/assets.dart';
 import '../../../res/style/app_colors.dart';
@@ -37,11 +38,11 @@ class FloatingButton extends StatelessWidget {
         shape: const CircleBorder(),
         onPressed: onTap != null
             ? () => onTap!()
-            : () {
+            : () async {
                 HandleCashback.setCount('socialCount', context);
                 if (changeView == 1) {
                   context.read<CreatePostCubit>().loadData();
-                  context.push(
+                  context.go(
                     Routes.SOCIAL,
                     extra: SocialParams(
                       userId: UserCubit.to.state.data?.id ?? '',
@@ -49,7 +50,15 @@ class FloatingButton extends StatelessWidget {
                     ),
                   );
                 } else {
-                  context.push(Routes.HOME);
+                  bool isCustomPage =
+                      await CacheManager.getActivation() ?? false;
+                  if (isCustomPage) {
+                    context.go(
+                      Routes.PAGEPREVIEW,
+                    );
+                  } else {
+                    context.push(Routes.HOME);
+                  }
                 }
               },
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,

@@ -51,7 +51,8 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   // AuthType selectedAuth = AuthType.LOGIN;
   ScrollController scrollController = ScrollController();
-  final formKey = GlobalKey<FormState>();
+  final formKeyLogin = GlobalKey<FormState>();
+  final formKeyRegister = GlobalKey<FormState>();
 
   @override
   void dispose() {
@@ -261,7 +262,7 @@ class _LoginViewState extends State<LoginView> {
             child: Padding(
               padding: EdgeInsets.all(16.0.w),
               child: Form(
-                  key: formKey,
+                  key: formKeyLogin,
                   // autovalidateMode: AutovalidateMode.onUserInteraction,
                   child: Column(
                     children: [
@@ -321,7 +322,7 @@ class _LoginViewState extends State<LoginView> {
                           ? LoginWidget(
                               loginCubit: loginCubit,
                             )
-                          : const RegisterWidget(),
+                          :  RegisterWidget(formKeyRegister: formKeyRegister,),
                       // SizedBox(
                       //   height: widget.authType == AuthType.LOGIN
                       //       ? MediaQuery.of(context).viewInsets.bottom != 0.0
@@ -341,7 +342,9 @@ class _LoginViewState extends State<LoginView> {
                               width: double.infinity,
                               onPressed: () {
                                 if (registerCubit.accept) {
-                                  registerCubit.register();
+                                  if (formKeyRegister.currentState!.validate()) {
+                                    registerCubit.register();
+                                  }
                                 } else {
                                   showErrorMessage(
                                       context,
@@ -361,7 +364,7 @@ class _LoginViewState extends State<LoginView> {
                                   color: AppColors.AUTH_CONTAINER_COLOR),
                               onPressed: () {
                                 log("message");
-                                loginCubit.login(formKey, context);
+                                loginCubit.login(formKeyLogin);
                               },
                             ),
                     ],
@@ -560,15 +563,14 @@ class _LoginWidgetState extends State<LoginWidget> {
 // }
 
 class RegisterWidget extends StatefulWidget {
-  const RegisterWidget({super.key});
-
+  const RegisterWidget({super.key, required this.formKeyRegister});
+  final GlobalKey<FormState> formKeyRegister;
   @override
   State<RegisterWidget> createState() => _RegisterWidgetState();
 }
 
 class _RegisterWidgetState extends State<RegisterWidget> {
   bool obsecure = true;
-  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -578,7 +580,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
       child: Padding(
         padding: EdgeInsets.all(8.0.w),
         child: Form(
-          key: formKey,
+          key: widget.formKeyRegister,
           // autovalidateMode: AutovalidateMode.onUserInteraction,
           child: SingleChildScrollView(
             child: Column(
