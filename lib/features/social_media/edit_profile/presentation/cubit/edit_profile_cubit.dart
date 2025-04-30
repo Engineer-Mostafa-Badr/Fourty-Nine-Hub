@@ -57,15 +57,15 @@ class EditProfileCubit extends Cubit<EditProfileState> {
   }
 
   Future<void> fetchRideGovernorates() async {
-    emit(state.copyWith(status: EditProfileStates.loading));
+    emit(state.copyWith(getGovernmentStatus: EditProfileStates.loading));
 
     var result = await getGovernoratesUseCase(const NoParams());
 
     result.fold(
       (failure) => emit(
-          state.copyWith(status: EditProfileStates.error, failure: failure)),
+          state.copyWith(getGovernmentStatus: EditProfileStates.error, failure: failure)),
       (governorates) => emit(state.copyWith(
-          status: EditProfileStates.success, governorates: governorates)),
+          getGovernmentStatus: EditProfileStates.success, governorates: governorates)),
     );
   }
 

@@ -48,107 +48,116 @@ class _BottomCardRequestState extends State<BottomCardRequest> {
               return Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(16),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        height: 40,
-                        decoration: BoxDecoration(
-                          color: const Color(0xffF5F5F5),
-                          borderRadius: BorderRadius.circular(30),
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(25),
+                      topRight: Radius.circular(25),
+                    ),
+                    color: context.isDarkMode ?  AppColors.QUANTITY_COLOR : null,
+                  ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: isDark ? const Color(0xff2C2C2C) : const Color(0xffF5F5F5),
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              _buildStackedAvatars(),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      "${widget.driversCount} ",
+                                      style: TextStyle(
+                                        fontSize: FontSize.s14,
+                                        fontWeight: FontWeight.bold,
+                                        color: textColor,
+                                      ),
+                                    ),
+                                    Text(
+                                      LocaleKeys.driversDisplayYourRequest.localize,
+                                      style: TextStyle(
+                                        fontSize: FontSize.s14,
+                                        fontWeight: FontWeight.bold,
+                                        color: textColor,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 16),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                        const SizedBox(height: 12),
+                        OfferRow(rideCubit: widget.rideCubit,),
+                        Row(
                           children: [
-                            _buildStackedAvatars(),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Text(
-                                    "${widget.driversCount} ",
-                                    style: TextStyle(
-                                      fontSize: FontSize.s14,
-                                      fontWeight: FontWeight.bold,
-                                      color: textColor,
-                                    ),
-                                  ),
-                                  Text(
-                                    LocaleKeys.driversDisplayYourRequest.localize,
-                                    style: TextStyle(
-                                      fontSize: FontSize.s14,
-                                      fontWeight: FontWeight.bold,
-                                      color: textColor,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 16),
-                                ],
+                            ConstrainedBox(
+                              constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.7),
+                              child: Text(
+                                "${LocaleKeys.acceptTheNearestDriverFor.tr()} ${state.requestedTrip?.price?.toInt().toString() ?? "0"} ${context.isArabic ? "ج.م تلقائيا" : "EGP Automatically"}",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: textColor,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                            const Spacer(),
+                            Switch(
+                              value: state.requestedTrip?.autoAccept ?? false,
+                              onChanged: (isAutoAccept) async {
+                                await widget.rideCubit.updateTripAutoAcceptStatus(isAutoAccept: isAutoAccept);
+                              },
+                              activeColor: switchThumbColor,
+                              inactiveThumbColor: switchThumbColor,
+                              activeTrackColor: switchActiveTrack,
+                              inactiveTrackColor: switchInactiveTrack,
+                              trackOutlineColor: MaterialStateProperty.resolveWith<Color?>(
+                                    (Set<MaterialState> states) {
+                                  return states.contains(MaterialState.selected)
+                                      ? Colors.transparent
+                                      : Colors.black;
+                                },
                               ),
                             ),
                           ],
                         ),
-                      ),
-                      const SizedBox(height: 12),
-                      OfferRow(rideCubit: widget.rideCubit,),
-                      Row(
-                        children: [
-                          ConstrainedBox(
-                            constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.7),
+                        const SizedBox(height: 16),
+                        // Cancel Button
+                        SizedBox(
+                          width: double.infinity,
+                          child: TextButton(
+                            onPressed: widget.onCancel,
+                            style: TextButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                              backgroundColor: context.isDarkMode ? const Color(0xff2C2C2C) : const Color(0xFFF5F5F5), // Light gray background
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30), // More rounded corners
+                              ),
+                            ),
                             child: Text(
-                              "${LocaleKeys.acceptTheNearestDriverFor.tr()} ${state.requestedTrip?.price?.toInt().toString() ?? "0"} ${context.isArabic ? "ج.م تلقائيا" : "EGP Automatically"}",
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: textColor,
-                                fontWeight: FontWeight.w600,
+                              LocaleKeys.cancelOrder.tr(),
+                              style: const TextStyle(
+                                fontSize: 18,
+                                color: Colors.red, // Red text color
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
                           ),
-                          const Spacer(),
-                          Switch(
-                            value: state.requestedTrip?.autoAccept ?? false,
-                            onChanged: (isAutoAccept) async {
-                              await widget.rideCubit.updateTripAutoAcceptStatus(isAutoAccept: isAutoAccept);
-                            },
-                            activeColor: switchThumbColor,
-                            inactiveThumbColor: switchThumbColor,
-                            activeTrackColor: switchActiveTrack,
-                            inactiveTrackColor: switchInactiveTrack,
-                            trackOutlineColor: MaterialStateProperty.resolveWith<Color?>(
-                                  (Set<MaterialState> states) {
-                                return states.contains(MaterialState.selected)
-                                    ? Colors.transparent
-                                    : Colors.black;
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      // Cancel Button
-                      SizedBox(
-                        width: double.infinity,
-                        child: TextButton(
-                          onPressed: widget.onCancel,
-                          style: TextButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 14),
-                            backgroundColor: const Color(0xFFF5F5F5), // Light gray background
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30), // More rounded corners
-                            ),
-                          ),
-                          child: Text(
-                            LocaleKeys.cancelOrder.tr(),
-                            style: const TextStyle(
-                              fontSize: 18,
-                              color: Colors.red, // Red text color
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
                         ),
-                      ),
-
-                    ],
+                    
+                      ],
+                    ),
                   ),
                 );
             }

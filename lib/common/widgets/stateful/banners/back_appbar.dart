@@ -35,6 +35,7 @@ class BackAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: backColor ?? Colors.transparent,
+      surfaceTintColor: backColor ?? Colors.transparent,
       elevation: 0,
       centerTitle: false,
       titleSpacing: 0,

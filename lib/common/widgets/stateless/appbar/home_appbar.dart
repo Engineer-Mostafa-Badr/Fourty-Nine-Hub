@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/text_button.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/localization/locales.dart';
@@ -14,9 +15,11 @@ import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/utils/shared_pref.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
+import '../../dialogs/please_login_dialog.dart';
 import '../buttons/iconAppButton.dart';
 import '../labels/label.dart';
 
@@ -87,13 +90,20 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
           ),
           if (isShowLogo)
             InkWell(
-              onTap: () {
-                if (!isCurrentRoute(context, Routes.HOME)) {
-                  context.go(
-                    Routes.HOME,
-                  );
+              onTap: () async {
+                bool isCustomPage = await CacheManager.getActivation() ?? false;
+                if (isCustomPage) {
+                  if (!isCurrentRoute(context, Routes.PAGEPREVIEW)) {
+                    context.go(
+                      Routes.PAGEPREVIEW,
+                    );
+                  }
                 } else {
-                  print("object");
+                  if (!isCurrentRoute(context, Routes.HOME)) {
+                    context.go(
+                      Routes.HOME,
+                    );
+                  }
                 }
               },
               child: Image.asset(
@@ -157,10 +167,11 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
             onTap: () {
               context.push(Routes.SEARCH);
             },
-            child: const Icon(
+            child: Icon(
               Icons.search,
               size: 25,
-              color: AppColors.QUANTITY_COLOR,
+              color:
+                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
             ),
           ),
           const Sizer(),
@@ -175,31 +186,37 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
             ),
           // if (language)
           // if(inChat != null)
-          inChat??InkWell(
-            onTap: () async {
-              await context.read<UserCubit>().resetUnreadedChatsCounter();
-              if (isCurrentRoute(context, Routes.CHAT) == true) {
-                return;
-              }
-              HandleCashback.setCount('chatCount', context);
-              context.push(Routes.CHAT, extra: ChatsViewParams());
-            },
-            child: Container(
-              padding: const EdgeInsets.all(12),
-              child: Badge.count(
-                count: context.read<UserCubit>().unreadedChatsCounter,
-                backgroundColor: AppColors.PRIMARY_COLOR_DARK,
-                isLabelVisible:
-                    context.read<UserCubit>().unreadedChatsCounter > 0,
-                child: Image.asset(
-                  Assets.whatsApp,
-                  color: AppColors.PRIMARY_COLOR,
-                  height: 20,
-                  width: 20,
+          inChat ??
+              InkWell(
+                onTap: () async {
+                  if (!context.read<UserCubit>().isLoggedIn) {
+                    return pleaseLoginDialog(context);
+                  }
+                  await context.read<UserCubit>().resetUnreadedChatsCounter();
+                  if (isCurrentRoute(context, Routes.CHAT) == true) {
+                    return;
+                  }
+                  HandleCashback.setCount('chatCount', context);
+                  context.push(Routes.CHAT, extra: ChatsViewParams());
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(12),
+                  child: Badge.count(
+                    count: context.read<UserCubit>().unreadedChatsCounter,
+                    backgroundColor: AppColors.PRIMARY_COLOR_DARK,
+                    isLabelVisible:
+                        context.read<UserCubit>().unreadedChatsCounter > 0,
+                    child: Image.asset(
+                      Assets.whatsApp,
+                      color: context.isDarkMode
+                          ? Colors.white
+                          : AppColors.PRIMARY_COLOR,
+                      height: 20,
+                      width: 20,
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
           // if(inChat == null)
 
           const Sizer(),
@@ -236,6 +253,5 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize =>
-      Size.fromHeight(toolbarHeight ?? kTextTabBarHeight * 2.h);
+  Size get preferredSize => Size.fromHeight(toolbarHeight ?? 30);
 }

@@ -26,6 +26,8 @@ extension TransferMoneyStatesX on TransferMoneyState {
 
 class TransferMoneyState {
   final TransferMoneyStates status;
+  final bool searchUserLoading;
+  // final bool transferLoading;
   final Failure? failure;
   final List<UserTransferMoneyEntity>? users;
   final WalletEntity? wallet;
@@ -33,6 +35,8 @@ class TransferMoneyState {
 
   const TransferMoneyState({
     this.status = TransferMoneyStates.loading,
+    this.searchUserLoading = false,
+    // this.transferLoading = false,
     this.failure,
     this.users,
     this.wallet,
@@ -40,6 +44,8 @@ class TransferMoneyState {
   });
   TransferMoneyState copyWith({
     TransferMoneyStates? status,
+    bool? searchUserLoading,
+    // bool? transferLoading,
     Failure? failure,
     List<UserTransferMoneyEntity>? users,
     WalletEntity? wallet,
@@ -47,6 +53,8 @@ class TransferMoneyState {
   }) {
     return TransferMoneyState(
       status: status ?? this.status,
+      searchUserLoading: searchUserLoading ?? this.searchUserLoading,
+      // transferLoading: transferLoading ?? this.transferLoading,
       failure: failure ?? this.failure,
       users: users ?? this.users,
       wallet: wallet ?? this.wallet,

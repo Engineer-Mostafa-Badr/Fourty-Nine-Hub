@@ -219,7 +219,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         //   create: (BuildContext context) => serviceLocator<RideCubit>(),
         // ),
         BlocProvider(
-          create: (context) => ThemeCubit(),
+          create: (context) => ThemeCubit()..getMode(),
         ),
         BlocProvider<CustomPageCubit>(
           create: (context) => serviceLocator()..fetchActivate(),

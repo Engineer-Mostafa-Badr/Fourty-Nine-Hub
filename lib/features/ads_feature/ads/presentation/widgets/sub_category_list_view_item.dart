@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/subcategories/domain/entities/sub_category_entity.dart';
@@ -19,12 +20,12 @@ class SubCategoryListViewItem extends StatelessWidget {
       alignment: AlignmentDirectional.center,
       padding: const EdgeInsets.symmetric(horizontal: 8),
       height: 32,
-     constraints: const BoxConstraints(minWidth: 116),
+     constraints: BoxConstraints(minWidth: 220.w),
       // width: 116,
       decoration: BoxDecoration(
         color: subCategory?.isSelected == true
             ? AppColors.PRIMARY_COLOR
-            : const Color(0xffE0E0E0),
+            : const Color(0xFFD9D9D9),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Label(
@@ -33,7 +34,7 @@ class SubCategoryListViewItem extends StatelessWidget {
             : (subCategory?.nameEn ?? ''),
         style: Styles.mediumText(
           fontSize: 24,
-          color: subCategory?.isSelected == true ? Colors.white : null,
+          color: subCategory?.isSelected == true ? Colors.white : Colors.black,
         ),
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -8,6 +9,7 @@ class ViewContactStatusCart extends StatelessWidget {
     super.key,
     required this.bio,
   });
+
   final String bio;
 
   @override
@@ -23,8 +25,8 @@ class ViewContactStatusCart extends StatelessWidget {
                 constraints: BoxConstraints(
                   maxWidth: MediaQuery.of(context).size.width * 0.9,
                 ),
-                child: Text(
-                  bio == ''
+                child: Label(
+                  text: bio == ''
                       ? context.isArabic
                           ? 'مرحبا أنا استخدم تطبيق 49Hub'
                           : 'Hi I am using 49Hub App'

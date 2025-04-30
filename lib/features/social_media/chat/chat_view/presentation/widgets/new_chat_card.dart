@@ -83,35 +83,38 @@ class _NewChatCardState extends State<NewChatCard> {
               }
             });
           },
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            decoration: BoxDecoration(
-              color: widget.chat!.isSelected
-                  ? const Color(0xffFFD5CC)
-                  : context.isDarkMode
-                      ? AppColors.QUANTITY_COLOR
-                      : AppColors.BACKGROUND_COLOR,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _userImage(),
-                      const Sizer(width: 32),
-                      _nameAndLastMessage(),
-                      _unreadMessagesCount(),
-                      _lastMessageTime(),
-                    ],
+          child: Directionality(
+            textDirection: TextDirection.ltr,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              decoration: BoxDecoration(
+                color: widget.chat!.isSelected
+                    ? const Color(0xffFFD5CC)
+                    : context.isDarkMode
+                        ? AppColors.QUANTITY_COLOR
+                        : AppColors.BACKGROUND_COLOR,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _userImage(),
+                        const Sizer(width: 32),
+                        _nameAndLastMessage(),
+                        _unreadMessagesCount(),
+                        _lastMessageTime(),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         );
@@ -270,6 +273,7 @@ class _NewChatCardState extends State<NewChatCard> {
                             : '${widget.chat?.name}',
                 style: Styles.mediumText(
                   fontWeight: FontWeight.bold,
+                  color: context.isDarkMode ? Colors.white : Colors.black,
                 ),
                 maxLines: 1,
               ),
@@ -328,20 +332,20 @@ class _NewChatCardState extends State<NewChatCard> {
                 ),
               const Spacer(),
               if (widget.chat!.muted)
-                const Padding(
+                Padding(
                   padding: EdgeInsets.symmetric(horizontal: 2.0),
                   child: Icon(
                     Icons.volume_off,
-                    color: Colors.black45,
+                    color: context.isDarkMode ? Colors.white54 : Colors.black45,
                     size: 20,
                   ),
                 ),
               if (widget.chat!.isPinned)
-                const Padding(
+                Padding(
                   padding: EdgeInsets.symmetric(horizontal: 2.0),
                   child: Icon(
                     Icons.push_pin,
-                    color: Colors.black45,
+                    color: context.isDarkMode ? Colors.white54 : Colors.black45,
                     size: 20,
                   ),
                 ),
@@ -386,47 +390,59 @@ class _NewChatCardState extends State<NewChatCard> {
                           children: [
                             if (widget.chat!.lastMessage?.media.first.type ==
                                 FileTypeEnum.image)
-                              const Icon(
+                              Icon(
                                 Icons.image,
-                                color: Colors.black45,
+                                color: context.isDarkMode
+                                    ? Colors.white54
+                                    : Colors.black45,
                                 size: 20,
                               )
                             else if (widget
                                     .chat!.lastMessage?.media.first.type ==
                                 FileTypeEnum.video)
-                              const Icon(
+                              Icon(
                                 Icons.video_camera_back,
-                                color: Colors.black45,
+                                color: context.isDarkMode
+                                    ? Colors.white54
+                                    : Colors.black45,
                                 size: 20,
                               )
                             else if (widget
                                     .chat!.lastMessage?.media.first.type ==
                                 FileTypeEnum.audio)
-                              const Icon(
+                              Icon(
                                 Icons.mic,
-                                color: Colors.black45,
+                                color: context.isDarkMode
+                                    ? Colors.white54
+                                    : Colors.black45,
                                 size: 20,
                               )
                             else if (widget
                                     .chat!.lastMessage?.media.first.type ==
                                 FileTypeEnum.document)
-                              const Icon(
+                              Icon(
                                 Icons.description,
-                                color: Colors.black45,
+                                color: context.isDarkMode
+                                    ? Colors.white54
+                                    : Colors.black45,
                                 size: 20,
                               ),
                           ],
                         ),
-                      Label(
-                          text: widget.chat?.lastMessage?.text == null
-                              ? context.isArabic
-                                  ? "لا توجد رسائل حتي الان"
-                                  : "No messages until now"
-                              : '${widget.chat?.lastMessage?.text}',
-                          style: Styles.mediumText(
-                            fontSize: 28,
-                            color: AppColors.DARK_GRAY_COLOR,
-                          )),
+                      Expanded(
+                        child: Label(
+                            text: widget.chat?.lastMessage?.text == null
+                                ? context.isArabic
+                                    ? "لا توجد رسائل حتي الان"
+                                    : "No messages until now"
+                                : '${widget.chat?.lastMessage?.text}',
+                            style: Styles.mediumText(
+                              fontSize: 28,
+                              color: context.isDarkMode
+                                  ? Colors.white54
+                                  : AppColors.DARK_GRAY_COLOR,
+                            ),),
+                      ),
                     ],
                   ),
                 ),
@@ -463,7 +479,7 @@ class _NewChatCardState extends State<NewChatCard> {
     return Container(
       margin: const EdgeInsetsDirectional.only(end: 8),
       decoration: const BoxDecoration(
-        color: AppColors.PRIMARY_COLOR,
+        color: AppColors.SECONDARY_COLOR,
         shape: BoxShape.circle,
       ),
       height: 20,
@@ -472,7 +488,7 @@ class _NewChatCardState extends State<NewChatCard> {
         child: Label(
           text: '${widget.chat?.unreadCount}',
           style: Styles.smallText(
-            color: Colors.white,
+            color: context.isDarkMode ? Colors.white : Colors.black,
           ),
         ),
       ),
@@ -485,7 +501,10 @@ class _NewChatCardState extends State<NewChatCard> {
       children: [
         Label(
           text: '${widget.chat?.lastMessage?.time}',
-          style: Styles.mediumText(fontSize: 24),
+          style: Styles.mediumText(
+            fontSize: 24,
+            color: context.isDarkMode ? Colors.white : Colors.black,
+          ),
         ),
         if (widget.chat?.lastSeenCount != null)
           if (widget.chat!.isAdmin != "admin")
@@ -496,7 +515,8 @@ class _NewChatCardState extends State<NewChatCard> {
                   Label(
                     text: '${widget.chat?.lastSeenCount} ',
                     style: Styles.mediumText(
-                      color: Colors.black45,
+                      color:
+                          context.isDarkMode ? Colors.white54 : Colors.black45,
                     ),
                   ),
                   // const SizedBox(width: 10),
@@ -516,9 +536,11 @@ class _NewChatCardState extends State<NewChatCard> {
                             chatsCubit: widget.chatsCubit,
                             widgetChat: widget.chat);
                       },
-                      child: const Icon(
+                      child: Icon(
                         FontAwesomeIcons.eye,
-                        color: Colors.black45,
+                        color: context.isDarkMode
+                            ? Colors.white54
+                            : Colors.black45,
                         size: 17,
                       ),
                     ),
@@ -572,10 +594,13 @@ class _NewChatCardState extends State<NewChatCard> {
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
                             widget.chat!.name,
-                            style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: context.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
                           ),
                         ),
                         if (widget.chat!.isAdmin == "admin")
@@ -697,9 +722,11 @@ _bottomSheet(context,
                         context.isArabic
                             ? "سجل مشاهدات الدردشة"
                             : 'Chat Views History',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
+                          color:
+                              context.isDarkMode ? Colors.white : Colors.black,
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -710,7 +737,11 @@ _bottomSheet(context,
                             context.isArabic
                                 ? "لا يوجد بيانات"
                                 : 'No data available',
-                            style: const TextStyle(color: Colors.grey),
+                            style: TextStyle(
+                              color: context.isDarkMode
+                                  ? Colors.white54
+                                  : Colors.black45,
+                            ),
                           ),
                         )
                       else
@@ -762,8 +793,11 @@ _bottomSheet(context,
                                       children: [
                                         Text(
                                           chat.name,
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                             fontWeight: FontWeight.bold,
+                                            color: context.isDarkMode
+                                                ? Colors.white
+                                                : Colors.black,
                                           ),
                                         ),
                                         widgetChat.isAdmin == "admin"

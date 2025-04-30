@@ -34,14 +34,11 @@ class SubCategoriesView extends StatefulWidget {
 }
 
 class _SubCategoriesViewState extends State<SubCategoriesView> {
-  @override
   late ScrollController scrollController;
   bool isFloatingButtonVisible = true;
 
+  @override
   void initState() {
-    // context
-    //     .read<SubcategoriesCubit>()
-    //     .init(mainCategoryId: widget.mainCategory.id);
     context
         .read<SubcategoriesCubit>()
         .init(mainCategoryId: widget.mainCategory.id);
@@ -221,9 +218,10 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.search,
-                      color: AppColors.PRIMARY_COLOR,
+                      color:
+                      context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
                     ),
                     const SizedBox(
                       width: 8,

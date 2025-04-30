@@ -1,18 +1,19 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
-import 'package:fourtyninehub/core/localization/locales.dart';
+import 'package:fourtyninehub/core/utils/handle_cashback.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Gift_Cubit/gift_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/Gift_Cubit/gift_states.dart';
 import 'package:fourtyninehub/features/fourty_nine/presentation/controllers/main_categories_cubit/main_categories_cubit.dart';
+import 'package:fourtyninehub/routes/routes.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../common/widgets/dynamic/sizer.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
-
 import '../../../../../common/widgets/stateless/buttons/app_button.dart';
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/enums/wallet_types_enums.dart';
@@ -23,9 +24,6 @@ import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 import '../widgets/competition_card.dart';
 import '../widgets/wallet_card_widget.dart';
-import 'package:fourtyninehub/core/utils/handle_cashback.dart';
-import 'package:go_router/go_router.dart';
-import 'package:fourtyninehub/routes/routes.dart';
 
 class GiftWalletView extends StatelessWidget {
   const GiftWalletView({super.key});
@@ -134,7 +132,8 @@ class GiftWalletView extends StatelessWidget {
                             ? Theme.of(context).primaryColor
                             : state.gift?.giftWallet.fiveYearsTransfer == true
                                 ? AppColors.SECONDARY_COLOR
-                                : AppColors.SECONDARY_COLOR.withOpacity(.5),
+                                : AppColors.SECONDARY_COLOR
+                                    .withValues(alpha: .5),
                         transfer:
                             state.gift?.giftWallet.fiveYearsComplete == true
                                 ? LocaleKeys.complete.localize
@@ -161,7 +160,8 @@ class GiftWalletView extends StatelessWidget {
                             ? Theme.of(context).primaryColor
                             : state.gift?.giftWallet.tenYearsTransfer == true
                                 ? AppColors.SECONDARY_COLOR
-                                : AppColors.SECONDARY_COLOR.withOpacity(.5),
+                                : AppColors.SECONDARY_COLOR
+                                    .withValues(alpha: .5),
                         transfer:
                             state.gift?.giftWallet.tenYearsComplete == true
                                 ? LocaleKeys.complete.localize
@@ -201,9 +201,9 @@ class GiftWalletView extends StatelessWidget {
                                   MainCategoriesState>(
                                 builder: (BuildContext context, state) {
                                   return Label(
-                                    text: context.locale == Locales.english
-                                        ? state.currency?.currencyEn ?? ''
-                                        : state.currency?.currencyAr ?? '',
+                                    text: context.isArabic
+                                        ? state.currency?.currencyAr ?? ''
+                                        : state.currency?.currencyEn ?? '',
                                     // color: AppColors.SECONDARY_COLOR,
                                   );
                                 },
@@ -222,13 +222,14 @@ class GiftWalletView extends StatelessWidget {
                                 width: 10.w,
                               ),
                               Expanded(
-                                  child: Label(
-                                maxLines: 2,
-                                text: context.locale == Locales.english
-                                    ? state.gift?.wheel.descriptionEn ?? ''
-                                    : state.gift?.wheel.descriptionAr ?? '',
-                                style: Styles.mediumText(color: Colors.grey),
-                              )),
+                                child: Label(
+                                  maxLines: 2,
+                                  text: context.isArabic
+                                      ? state.gift?.wheel.descriptionAr ?? ''
+                                      : state.gift?.wheel.descriptionEn ?? '',
+                                  style: Styles.mediumText(color: Colors.grey),
+                                ),
+                              ),
                             ],
                           ),
                           const Sizer(),
@@ -239,7 +240,7 @@ class GiftWalletView extends StatelessWidget {
                                 (state.gift?.wheel.amount ?? 0) >= 10000 &&
                                         state.gift?.wheelWinner == true
                                     ? Colors.red
-                                    : Colors.red.withOpacity(.5),
+                                    : Colors.red.withValues(alpha: .5),
                             onPressed:
                                 (state.gift?.wheel.amount ?? 0) >= 10000 &&
                                         state.gift?.wheelWinner == true

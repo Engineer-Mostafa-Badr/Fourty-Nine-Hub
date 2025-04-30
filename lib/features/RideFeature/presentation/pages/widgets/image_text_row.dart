@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../res/style/app_colors.dart';
@@ -32,7 +33,7 @@ class ImageTextRow extends StatelessWidget {
             style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w400,
-                color: AppColors.black.withOpacity(0.7)),
+                color: context.isDarkMode ? AppColors.whiteColor : AppColors.black.withOpacity(0.7)),
           ),
         ),
       ],

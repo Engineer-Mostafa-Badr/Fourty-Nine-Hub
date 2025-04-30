@@ -1493,6 +1493,7 @@ abstract class  LocaleKeys {
   static const newPost = 'newPost';
   static const addExplanatoryNote = 'addExplanatoryNote';
   static const searchForAUser = 'searchForAUser';
+  static const taggedPeople = 'taggedPeople';
   static const status = 'status';
   static const otpCode = 'otpCode';
   static const weHaveSentACodeTo = 'weHaveSentACodeTo';
@@ -1503,7 +1504,6 @@ abstract class  LocaleKeys {
   static const bad = 'bad';
   static const rateTheRestaurant = 'rateTheRestaurant';
   static const restaurantRateYou = 'restaurantRateYou';
-  static const taggedPeople = 'taggedPeople';
   static const addACommentsFor = 'addACommentsFor';
   static const commentAdded = 'commentAdded';
   static const areYouSureYouWantToDeleteThisComment = 'areYouSureYouWantToDeleteThisComment';
@@ -1533,8 +1533,19 @@ abstract class  LocaleKeys {
   static const photoVideosAndDocuments = 'photoVideosAndDocuments';
   static const locationSharing = 'locationSharing';
   static const statusUpdates = 'statusUpdates';
+  static const oldPassword = 'oldPassword';
+  static const restartToApply = 'restartToApply';
+  static const restart = 'restart';
+  static const thereAreNoNotifications = 'thereAreNoNotifications';
   static const manage = 'manage';
   static const newReel = 'newReel';
   static const newStory = 'newStory';
+  static const youHaveNoVideosToDisplay = 'youHaveNoVideosToDisplay';
+  static const youHaveNoImagesToDisplay = 'youHaveNoImagesToDisplay';
+  static const emailRequired = 'emailRequired';
+  static const passwordRequired = 'passwordRequired';
+  static const userNameRequired = 'userNameRequired';
+  static const firstNameRequired = 'firstNameRequired';
+  static const lastNameRequired = 'lastNameRequired';
 
 }

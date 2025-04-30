@@ -6,13 +6,23 @@ import 'package:fourtyninehub/features/account_taps/transfer_money/domain/reposi
 import '../entities/user_transfer_money_entity.dart';
 
 class FetchUserUseCase
-    extends UseCase<List<UserTransferMoneyEntity>, NoParams> {
+    extends UseCase<List<UserTransferMoneyEntity>, FetchUserParams> {
   final TransferMoneyRepository _transferMoneyRepository;
 
   FetchUserUseCase(this._transferMoneyRepository);
   @override
   Future<Either<Failure, List<UserTransferMoneyEntity>>> call(
-      NoParams params) async {
-    return await _transferMoneyRepository.fetchUser();
+      FetchUserParams params) async {
+    return await _transferMoneyRepository.fetchUser(params);
   }
+}
+
+class FetchUserParams {
+  final String query;
+
+  FetchUserParams({required this.query});
+
+  Map<String, dynamic> toJson() => {
+        'query': query,
+      };
 }

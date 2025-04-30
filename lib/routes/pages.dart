@@ -547,9 +547,7 @@ class AppPages {
                 path: Paths.MY_TALENT,
                 name: Routes.MY_TALENT,
                 builder: (context, state) => BlocProvider(
-                  create: (context) => serviceLocator<StarCubit>()
-                    ..loadInitialData()
-                    ..getPaginatedMyStar(1),
+                  create: (context) => serviceLocator<StarCubit>(),
                   child: const MyTalentView(),
                 ),
               ),
@@ -694,10 +692,12 @@ class AppPages {
               GoRoute(
                 path: Paths.MAINCATEGORIESTREE,
                 name: Routes.MAINCATEGORIESTREE,
-                builder: (context, state) => BlocProvider(
+                builder: (context, state) => MultiBlocProvider(providers: [
+                  BlocProvider(
                     create: (context) =>
                         serviceLocator<MainCategoriesTapsCubit>(),
-                    child: const MainCategoriesGridView()),
+                  ),
+                ], child: const MainCategoriesGridView()),
               ),
               GoRoute(
                 path: Paths.SUBCATEGORIES,
@@ -756,7 +756,7 @@ class AppPages {
                               child: FilterAdsView(
                                 categorization:
                                     state.extra as CategorizationEntity,
-                              )),
+                              ),),
                         ),
                         GoRoute(
                           path: Paths.GOVERNORATEFILTERADS,
@@ -802,7 +802,7 @@ class AppPages {
                 name: Routes.MARRIAGESUBCATEGORIES,
                 builder: (context, state) => BlocProvider(
                   create: (context) => serviceLocator<SubcategoriesCubit>(),
-                  child: MarriageSubCategoriesView(
+                  child: const MarriageSubCategoriesView(
                       // mainCategory: state.extra as MainCategoryEntity,
                       ),
                 ),

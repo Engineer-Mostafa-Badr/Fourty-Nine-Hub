@@ -4,14 +4,39 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/pages/all_winner_view.dart';
+import 'package:fourtyninehub/features/star_feature/presentation/pages/widgets/get_my_talents.dart';
 
 import '../../../../core/localization/locale_keys.g.dart';
 import '../../../../service_locator/service_locator.dart';
 import '../controller/cubit/star_cubit.dart';
 import 'get_all_talents.dart';
 
-class MyTalentView extends StatelessWidget {
+class MyTalentView extends StatefulWidget {
   const MyTalentView({super.key});
+
+  @override
+  State<MyTalentView> createState() => _MyTalentViewState();
+}
+
+class _MyTalentViewState extends State<MyTalentView> {
+
+  late StarCubit _cubit;
+  late ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _cubit = context.read<StarCubit>();
+    _cubit.loadMyTalentsData();
+    _scrollController = ScrollController()..addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      _cubit.getMyTalents();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,8 +90,9 @@ class MyTalentView extends StatelessWidget {
           ),
         ),
       ),
-      body: const GetAllTalents(
+      body: GetMyTalents(
         isMyTalent: true,
+        scrollController: _scrollController,
       ),
     );
   }

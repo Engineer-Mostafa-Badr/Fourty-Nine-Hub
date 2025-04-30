@@ -26,7 +26,6 @@ class CustomHeaderForm extends StatelessWidget {
         Sizer(),
         Row(
           children: [
-
             SquareImage(
               // width: kToolbarHeight * .8,
               // height: kToolbarHeight * .8,
@@ -56,7 +55,7 @@ class CustomHeaderForm extends StatelessWidget {
                   style: Styles.mediumText(
                     fontWeight: FontWeight.w500,
                     fontSize: 32,
-                    color: Colors.black.withValues(alpha: 153),
+                    color: context.isDarkMode?Colors.white:Colors.black,
                   ),
                 ),
               ],

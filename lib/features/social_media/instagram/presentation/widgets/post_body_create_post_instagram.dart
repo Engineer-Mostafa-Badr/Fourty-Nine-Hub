@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
@@ -7,6 +6,7 @@ import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/cubit/create_post_instagram_cubit/create_post_instagram_cubit.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/post_body_create_post_instagram_grid_view.dart';
 import 'package:fourtyninehub/features/social_media/instagram/presentation/widgets/show_image_create_post_instagram_widget.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class PostBodyCreatePostInstagram extends StatelessWidget {
@@ -102,19 +102,25 @@ class PostBodyCreatePostInstagram extends StatelessWidget {
               const Spacer(),
               GestureDetector(
                 onTap: () {
-                  context.read<CreatePostInstagramCubit>().changeMultiSelect();
+                  context
+                      .read<CreatePostInstagramCubit>()
+                      .changeMultiSelectGalleryPost();
                 },
                 child: BlocBuilder<CreatePostInstagramCubit,
                     CreatePostInstagramState>(
                   buildWhen: (previous, current) {
-                    return previous.multiSelect != current.multiSelect;
+                    return previous.multiSelectGalleryPost !=
+                        current.multiSelectGalleryPost;
                   },
                   builder: (context, state) {
-                    return Container(
+                    return AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
                       padding: const EdgeInsets.symmetric(
                           horizontal: 12, vertical: 7),
                       decoration: ShapeDecoration(
-                        color: const Color(0xFFD9D9D9),
+                        color: state.multiSelectGalleryPost
+                            ? AppColors.c0B1035
+                            : const Color(0xFFD9D9D9),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -127,9 +133,12 @@ class PostBodyCreatePostInstagram extends StatelessWidget {
                       // ),
                       child: Row(
                         children: [
-                          const Icon(
+                          Icon(
                             Icons.my_library_add_outlined,
                             size: 11,
+                            color: state.multiSelectGalleryPost
+                                ? Colors.white
+                                : Colors.black,
                           ),
                           const SizedBox(
                             width: 4,
@@ -139,6 +148,9 @@ class PostBodyCreatePostInstagram extends StatelessWidget {
                             style: Styles.smallText(
                               fontSize: 24,
                               fontWeight: FontWeight.w600,
+                              color: state.multiSelectGalleryPost
+                                  ? Colors.white
+                                  : Colors.black,
                             ),
                           ),
                         ],
@@ -175,14 +187,14 @@ class PostBodyCreatePostInstagram extends StatelessWidget {
         ),
         Expanded(
           child: PostBodyCreatePostInstagramGridView(
-            images: context.read<CreatePostInstagramCubit>().state.images,
-            multiSelect:
-                context.read<CreatePostInstagramCubit>().state.multiSelect,
-            selectedMeda:
-                context.read<CreatePostInstagramCubit>().state.selectedMeda,
-            onTap: (index) {
-              context.read<CreatePostInstagramCubit>().onTapImage(index);
-            },
+            galleryPost:
+                context.read<CreatePostInstagramCubit>().state.galleryPost,
+            multiSelect: context
+                .read<CreatePostInstagramCubit>()
+                .state
+                .multiSelectGalleryPost,
+            // selectedMeda:
+            //     context.read<CreatePostInstagramCubit>().state.selectedMeda,
           ),
         ),
       ],

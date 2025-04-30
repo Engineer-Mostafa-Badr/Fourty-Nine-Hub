@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/numbers_helper.dart';
 import 'package:fourtyninehub/common/widgets/stateless/dynamic/are_you_sure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_cubit.dart';
@@ -26,7 +27,8 @@ class GetAllTalents extends StatelessWidget {
     return SafeArea(
       child: BlocBuilder<StarCubit, StarState>(
         builder: (context, state) {
-          if (state.status == StarStates.loading && state.star == null) {
+          var cubit = context.read<StarCubit>();
+          if (cubit.loadAllTalents) {
             return const Center(child: CircularProgressIndicator());
           }
 
@@ -37,14 +39,19 @@ class GetAllTalents extends StatelessWidget {
             );
           }
 
-          final stars = state.star ?? [];
+          if (cubit.allTalents.isEmpty) {
+            return Center(
+              // child: Text('Error: ${_getErrorMessage(state.failure)}'),
+              child: Text(context.isArabic?'لا يوجد نتائج': 'No results found'),
+            );
+          }
 
           return ListView.builder(
             controller: scrollController,
             itemCount:
-                stars.length + (state.status == StarStates.loading ? 1 : 0),
+                cubit.allTalents.length + (state.status == StarStates.loading ? 1 : 0),
             itemBuilder: (context, index) {
-              if (index == stars.length) {
+              if (index == cubit.allTalents.length) {
                 return const Center(
                   child: Padding(
                     padding: EdgeInsets.all(8.0),
@@ -53,7 +60,7 @@ class GetAllTalents extends StatelessWidget {
                 );
               }
 
-              final talent = stars[index];
+              final talent = cubit.allTalents[index];
               final user = talent.user;
               final mediaUrl = talent.mediaUrl.isNotEmpty
                   ? talent.mediaUrl.first.mediaKey

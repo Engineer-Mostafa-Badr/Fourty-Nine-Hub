@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/form/text_fields/default_text_form_field.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class LabelAndTextFormField extends StatelessWidget {
@@ -22,7 +24,10 @@ class LabelAndTextFormField extends StatelessWidget {
           padding: const EdgeInsetsDirectional.only(start: 11),
           child: Label(
             text: label,
-            style: Styles.mediumText(fontSize: 26),
+            style: Styles.mediumText(
+              fontSize: 26,
+              color: context.isDarkMode ? Colors.white : Colors.black,
+            ),
           ),
         ),
         const SizedBox(
@@ -31,6 +36,8 @@ class LabelAndTextFormField extends StatelessWidget {
         DefaultTextFormField(
           currentController: controller,
           hint: hint,
+          borderColor:
+              context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
         ),
       ],
     );

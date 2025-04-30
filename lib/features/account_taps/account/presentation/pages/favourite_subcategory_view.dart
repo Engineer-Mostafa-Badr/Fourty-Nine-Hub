@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/cubit/managers/favourite_subcategories_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/account/presentation/pages/widgets/favourite_sub_category_card.dart';
-import 'package:go_router/go_router.dart';
+
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/enums/base_status_enum.dart';
-import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/styles.dart';
-import '../../../../../routes/routes.dart';
 import '../../../../../service_locator/service_locator.dart';
 
 class FavSubCategoryView extends StatelessWidget {
@@ -23,11 +20,10 @@ class FavSubCategoryView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: BlocProvider<FavouriteSubCategoryCubit>(
         create: (BuildContext context) => serviceLocator()..load(),
-        child: BlocBuilder<FavouriteSubCategoryCubit,
-            FavouriteSubCategoryState>(
+        child:
+            BlocBuilder<FavouriteSubCategoryCubit, FavouriteSubCategoryState>(
           builder: (context, state) {
             final controller = context.read<FavouriteSubCategoryCubit>();
             return state.status == StateStatus.loading
@@ -50,8 +46,8 @@ class FavSubCategoryView extends StatelessWidget {
                             FavouriteSubCategoryCard(
                           item: state.data![index],
                           onFav: () async {
-                            var result = await controller
-                                .toggleSubCategoryToFavorites(
+                            var result =
+                                await controller.toggleSubCategoryToFavorites(
                                     state.data![index].id);
                             if (result == true) {
                               state.data!.removeWhere((element) =>
@@ -63,11 +59,17 @@ class FavSubCategoryView extends StatelessWidget {
                       )
                     : Center(
                         child: Label(
-                            style: Styles.mediumText(fontSize: 60.sp),
-                            maxLines: 3,
-                            textAlign: TextAlign.center,
-                            text: LocaleKeys
-                                .noFavouriteSubCategory.localize));
+                          style: Styles.mediumText(
+                            fontSize: 60.sp,
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : Colors.black,
+                          ),
+                          maxLines: 3,
+                          textAlign: TextAlign.center,
+                          text: LocaleKeys.noFavouriteSubCategory.localize,
+                        ),
+                      );
           },
         ),
       ),

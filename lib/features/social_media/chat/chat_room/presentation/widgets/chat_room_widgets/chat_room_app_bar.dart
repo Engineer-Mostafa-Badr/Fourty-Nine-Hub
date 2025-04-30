@@ -76,11 +76,15 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                 return BlocBuilder<UserCubit, BasicState<UserEntity>>(
                   builder: (context, userStateEntity) {
                     return AppBar(
-                      backgroundColor: Colors.white,
-                      surfaceTintColor: Colors.white,
+                      backgroundColor: context.isDarkMode
+                          ? AppColors.QUANTITY_COLOR
+                          : Colors.white,
+                      surfaceTintColor: context.isDarkMode
+                          ? AppColors.QUANTITY_COLOR
+                          : Colors.white,
                       // Background color
                       elevation: 0,
-                      leadingWidth: 26,
+                      leadingWidth: 20,
                       leading: IconButton(
                         onPressed: () {
                           if (context.read<ChatRoomCubit>().chat.isSearching) {
@@ -89,9 +93,10 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                             context.pop();
                           }
                         },
-                        icon: const Icon(
+                        icon: Icon(
                           Icons.arrow_back,
-                          color: Colors.black,
+                          color:
+                              context.isDarkMode ? Colors.white : Colors.black,
                         ),
                       ),
                       title: widget.chatRoomCubit.chat.isSearching
@@ -107,16 +112,22 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                 onChanged: (value) {
                                   // Handle search input here
                                 },
-                                cursorColor: Colors.black,
+                                cursorColor: context.isDarkMode
+                                    ? Colors.white
+                                    : Colors.black,
                                 style: Styles.mediumText(
-                                  color: Colors.black.withValues(
-                                      alpha: 0.5), // Same as hint text color
+                                  color: context.isDarkMode
+                                      ? Colors.white54
+                                      : Colors
+                                          .black54, // Same as hint text color
                                 ),
                                 decoration: InputDecoration(
                                   hintText:
                                       context.isArabic ? "بحث..." : "Search...",
                                   hintStyle: Styles.mediumText(
-                                    color: Colors.black.withValues(alpha: 0.5),
+                                    color: context.isDarkMode
+                                        ? Colors.white54
+                                        : Colors.black54,
                                   ),
                                   border: InputBorder.none,
                                   filled: false,
@@ -131,8 +142,10 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                               .isAdmin ==
                                           "admin"
                                       ? null
-                                      : () => context.push(Routes.VIEWCONTACT,
-                                          extra: chatsCubit),
+                                      : () => context.push(
+                                            Routes.VIEWCONTACT,
+                                            extra: chatsCubit,
+                                          ),
                                   child: Row(
                                     children: [
                                       context
@@ -161,8 +174,11 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                                             BorderRadius
                                                                 .circular(50),
                                                         border: Border.all(
-                                                          color: AppColors
-                                                              .PRIMARY_COLOR_DARK,
+                                                          color: context
+                                                                  .isDarkMode
+                                                              ? Colors.white
+                                                              : AppColors
+                                                                  .PRIMARY_COLOR_DARK,
                                                           width: 3,
                                                         ))
                                                     : null,
@@ -225,10 +241,14 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                                             BorderRadius
                                                                 .circular(50),
                                                         border: Border.all(
-                                                          color: AppColors
-                                                              .PRIMARY_COLOR_DARK,
+                                                          color: context
+                                                                  .isDarkMode
+                                                              ? Colors.white
+                                                              : AppColors
+                                                                  .PRIMARY_COLOR_DARK,
                                                           width: 3,
-                                                        ))
+                                                        ),
+                                                      )
                                                     : null,
                                                 child: const CircleAvatar(
                                                   backgroundColor: Colors.white,
@@ -259,19 +279,23 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                                                       context)
                                                                   .size
                                                                   .width *
-                                                              0.35),
-                                                  child:   Label(
-                                                     text: context
-                                                          .read<ChatsCubit>()
-                                                          .selectedChat
-                                                          .name,
-                                                      style:
-                                                          Styles.headerText(
-                                                        color: Colors.black,
-                                                        fontWeight:
-                                                            FontWeight.w400,
+                                                              0.30),
+                                                      child: Label(
+                                                        text: context
+                                                            .read<ChatsCubit>()
+                                                            .selectedChat
+                                                            .name,
+                                                        style:
+                                                            Styles.headerText(
+                                                          color: context
+                                                                  .isDarkMode
+                                                              ? Colors.white
+                                                              : Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                        ),
                                                       ),
-                                                    ),),
+                                                    ),
                                                     context
                                                                 .read<
                                                                     ChatsCubit>()
@@ -309,7 +333,8 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                                     : "Typing...",
                                                 style: Styles.mediumText(
                                                   fontSize: 24,
-                                                  color: Colors.black,
+                                                  color:
+                                                      AppColors.SECONDARY_COLOR,
                                                 ),
                                               ),
                                             if (context
@@ -322,7 +347,8 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                                     : "Recording...",
                                                 style: Styles.mediumText(
                                                   fontSize: 24,
-                                                  color: Colors.black,
+                                                  color:
+                                                      AppColors.SECONDARY_COLOR,
                                                 ),
                                               ),
                                             if (!context
@@ -344,7 +370,9 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                                       : "Official 49Hub",
                                                   style: Styles.mediumText(
                                                     fontSize: 24,
-                                                    color: Colors.black,
+                                                    color: context.isDarkMode
+                                                        ? Colors.white
+                                                        : Colors.black,
                                                   ),
                                                 )
                                               else if (context
@@ -357,7 +385,9 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                                       : "Online",
                                                   style: Styles.mediumText(
                                                     fontSize: 24,
-                                                    color: Colors.black,
+                                                    color: context.isDarkMode
+                                                        ? Colors.white
+                                                        : Colors.black,
                                                   ),
                                                 )
                                               else if (chatsCubit
@@ -369,7 +399,9 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                                       : "Last seen at ${chatsCubit.selectedChat.lastSeen}",
                                                   style: Styles.mediumText(
                                                     fontSize: 24,
-                                                    color: Colors.black,
+                                                    color: context.isDarkMode
+                                                        ? Colors.white
+                                                        : Colors.black,
                                                   ),
                                                 ),
                                           ],
@@ -384,7 +416,9 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                   // 'state.chatData?.chat?.contact?.name',
                                   overflow: TextOverflow.ellipsis,
                                   style: Styles.mediumText(
-                                    color: Colors.black,
+                                    color: context.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -399,10 +433,12 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                   ? []
                                   : [
                                       IconButton(
-                                        icon: const Icon(
+                                        icon: Icon(
                                           Icons.videocam,
                                           size: 24,
-                                          color: Colors.black,
+                                          color: context.isDarkMode
+                                              ? Colors.white
+                                              : Colors.black,
                                         ),
                                         onPressed: () async {
                                           if (await Permission.microphone
@@ -443,12 +479,13 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                           );
                                         },
                                       ),
-                                      // const Sizer(width: 32),
                                       IconButton(
-                                        icon: const Icon(
+                                        icon: Icon(
                                           Icons.call,
                                           size: 20,
-                                          color: Colors.black,
+                                          color: context.isDarkMode
+                                              ? Colors.white
+                                              : Colors.black,
                                         ),
                                         onPressed: () async {
                                           if (await Permission.microphone
@@ -500,14 +537,15 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                                       )));
                                         },
                                       ),
-                                      // const Sizer(width: 20),
                                       PopupMenuButton(
-                                        icon: const Icon(
+                                        icon: Icon(
                                           Icons.more_vert,
-                                          color: Colors.black,
+                                          color: context.isDarkMode
+                                              ? Colors.white
+                                              : Colors.black,
                                         ),
                                         color: context.isDarkMode
-                                            ? AppColors.PRIMARY_COLOR
+                                            ? AppColors.QUANTITY_COLOR
                                             : AppColors.BACKGROUND_COLOR,
                                         shape: const RoundedRectangleBorder(
                                           borderRadius: BorderRadius.all(
@@ -561,12 +599,10 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                         widget.chatRoomCubit
                                             .clearSelectedMessages();
                                       },
-                                      color: Colors.black,
+                                      color: context.isDarkMode
+                                          ? Colors.white
+                                          : Colors.black,
                                     ),
-                                  // if (widget.chatRoomCubit.selectedMessages
-                                  //         .length ==
-                                  //     1)
-                                  //   const Sizer(width: 16),
                                   if (widget.chatRoomCubit.selectedMessages
                                           .length ==
                                       1)
@@ -577,29 +613,28 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                               .selectedMessages.first,
                                         );
                                       },
-                                      icon: const Icon(
+                                      icon: Icon(
                                         Icons.push_pin,
                                         size: 24,
-                                        color: Colors.black,
+                                        color: context.isDarkMode
+                                            ? Colors.white
+                                            : Colors.black,
                                       ),
                                     ),
-                                  // if (widget.chatRoomCubit.selectedMessages
-                                  //         .length ==
-                                  //     1)
-                                  //   const Sizer(width: 16),
                                   IconButton(
                                     onPressed: () async {
                                       // await chatsCubit.deleteChat();
                                       await widget.chatRoomCubit
                                           .deleteMessages();
                                     },
-                                    icon: const Icon(
+                                    icon: Icon(
                                       Icons.delete_forever,
                                       size: 24,
-                                      color: Colors.black,
+                                      color: context.isDarkMode
+                                          ? Colors.white
+                                          : Colors.black,
                                     ),
                                   ),
-                                  // const Sizer(width: 16),
                                   IconButton(
                                     onPressed: () async {
                                       context.push(
@@ -610,10 +645,12 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                         ),
                                       );
                                     },
-                                    icon: const Icon(
+                                    icon: Icon(
                                       Icons.shortcut,
                                       size: 24,
-                                      color: Colors.black,
+                                      color: context.isDarkMode
+                                          ? Colors.white
+                                          : Colors.black,
                                     ),
                                   ),
                                 ],
@@ -635,7 +672,9 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                 child: Container(
                   width: double.infinity,
                   // height: 50,
-                  color: AppColors.PRIMARY_COLOR,
+                  color: context.isDarkMode
+                      ? AppColors.QUANTITY_COLOR
+                      : Colors.white,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
@@ -651,7 +690,11 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                 ? "إنه عيد ميلاد ${widget.chatRoomCubit.chat.name}، أرسل هدية! 🎂🎉"
                                 : 'It\'s ${widget.chatRoomCubit.chat.name} birthday, Send Gift!🎂🎉',
                             overflow: TextOverflow.ellipsis,
-                            style: Styles.mediumText(color: Colors.black),
+                            style: Styles.mediumText(
+                              color: context.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
                           ),
                         ),
                       ],
@@ -694,15 +737,20 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                       height: 4,
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Colors.grey,
+                        color: context.isDarkMode
+                            ? AppColors.QUANTITY_COLOR
+                            : Colors.white,
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
                     const SizedBox(height: 10),
                     Text(
                       context.isArabic ? "اضافة علامة للمحادثة" : "Label Chat",
-                      style: const TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: context.isDarkMode ? Colors.white : Colors.black,
+                      ),
                     ),
                     const SizedBox(height: 20),
                     Expanded(
@@ -713,7 +761,6 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                             itemBuilder: (context, index) {
                               log("lables length before index: ${chatRoomCubit.chat.lables.length}");
                               log("index : $index");
-
                               if (index == 0) {
                                 if (isEditingNewLabel) {
                                   return Padding(
@@ -735,9 +782,12 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                               shape: BoxShape.circle,
                                             ),
                                             padding: const EdgeInsets.all(8),
-                                            child: const Icon(
-                                                Icons.label_outlined,
-                                                color: Colors.black),
+                                            child: Icon(
+                                              Icons.label_outlined,
+                                              color: context.isDarkMode
+                                                  ? Colors.white
+                                                  : Colors.black,
+                                            ),
                                           ),
                                         ),
                                         const SizedBox(width: 10),
@@ -786,9 +836,13 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                         const SizedBox(width: 10),
                                         newLabelController.text.isNotEmpty
                                             ? IconButton(
-                                                icon: const Icon(Icons.check,
-                                                    color: AppColors
-                                                        .PRIMARY_COLOR_DARK),
+                                                icon: Icon(
+                                                  Icons.check,
+                                                  color: context.isDarkMode
+                                                      ? Colors.white
+                                                      : AppColors
+                                                          .PRIMARY_COLOR_DARK,
+                                                ),
                                                 onPressed: () async {
                                                   await chatRoomCubit
                                                       .createLable(
@@ -803,9 +857,13 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                                 },
                                               )
                                             : IconButton(
-                                                icon: const Icon(Icons.close,
-                                                    color: AppColors
-                                                        .PRIMARY_COLOR_DARK),
+                                                icon: Icon(
+                                                  Icons.close,
+                                                  color: context.isDarkMode
+                                                      ? Colors.white
+                                                      : AppColors
+                                                          .PRIMARY_COLOR_DARK,
+                                                ),
                                                 onPressed: () async {
                                                   setState(() {
                                                     isEditingNewLabel = false;
@@ -836,17 +894,23 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                                   BorderRadius.circular(50),
                                             ),
                                             padding: const EdgeInsets.all(10),
-                                            child: const Icon(Icons.add,
-                                                color: Colors.black),
+                                            child: Icon(Icons.add,
+                                                color: context.isDarkMode
+                                                    ? Colors.white
+                                                    : Colors.black),
                                           ),
                                           const SizedBox(width: 10),
                                           Text(
                                             context.isArabic
                                                 ? "علامة جديدة"
                                                 : "New Label",
-                                            style: const TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w600),
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w600,
+                                              color: context.isDarkMode
+                                                  ? Colors.white
+                                                  : Colors.black,
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -867,8 +931,12 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                                           shape: BoxShape.circle,
                                         ),
                                         padding: const EdgeInsets.all(8),
-                                        child: const Icon(Icons.label_outlined,
-                                            color: Colors.black),
+                                        child: Icon(
+                                          Icons.label_outlined,
+                                          color: context.isDarkMode
+                                              ? Colors.white
+                                              : Colors.black,
+                                        ),
                                       ),
                                       const SizedBox(width: 10),
                                       Text(
@@ -920,10 +988,12 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                         },
                         child: Text(
                           context.isArabic ? "حفظ" : "Save",
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            color: Colors.black,
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : Colors.black,
                           ),
                         ),
                       ),
@@ -946,7 +1016,9 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
             : Container(
                 width: double.infinity,
                 // height: 50,
-                color: AppColors.PRIMARY_COLOR,
+                color: context.isDarkMode
+                    ? AppColors.QUANTITY_COLOR
+                    : AppColors.PRIMARY_COLOR,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
@@ -955,7 +1027,9 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                       Icon(
                         Icons.push_pin,
                         size: 20,
-                        color: Colors.black.withValues(alpha: 0.5),
+                        color: context.isDarkMode
+                            ? Colors.white54
+                            : Colors.black54,
                       ),
                       const SizedBox(width: 8),
                       ConstrainedBox(
@@ -964,7 +1038,11 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                         child: Text(
                           widget.chatRoomCubit.chat.pinnedMessage!.text,
                           overflow: TextOverflow.ellipsis,
-                          style: Styles.mediumText(color: Colors.black),
+                          style: Styles.mediumText(
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : Colors.black,
+                          ),
                         ),
                       ),
                       const Spacer(),
@@ -975,7 +1053,9 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                         child: Icon(
                           Icons.close,
                           size: 20,
-                          color: Colors.black.withValues(alpha: 0.5),
+                          color: context.isDarkMode
+                              ? Colors.white54
+                              : Colors.black54,
                         ),
                       )
                     ],
@@ -993,8 +1073,8 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
         child: Text(
           LocaleKeys.viewContact.tr(),
           style: Styles.mediumText(
-              color:
-                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
+            color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+          ),
         ),
       ),
       PopupMenuItem<int>(
@@ -1002,8 +1082,8 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
         child: Text(
           LocaleKeys.mediaLinksAndDocs.tr(),
           style: Styles.mediumText(
-              color:
-                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
+            color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+          ),
         ),
       ),
       PopupMenuItem<int>(
@@ -1011,8 +1091,8 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
         child: Text(
           LocaleKeys.search.tr(),
           style: Styles.mediumText(
-              color:
-                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
+            color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+          ),
         ),
       ),
       PopupMenuItem<int>(
@@ -1020,8 +1100,8 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
         child: Text(
           LocaleKeys.muteNotifications.tr(),
           style: Styles.mediumText(
-              color:
-                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
+            color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+          ),
         ),
       ),
       // PopupMenuItem<int>(
@@ -1069,8 +1149,8 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
         child: Text(
           LocaleKeys.block.tr(),
           style: Styles.mediumText(
-              color:
-                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
+            color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+          ),
         ),
       ),
       PopupMenuItem<int>(
@@ -1082,8 +1162,8 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
         child: Text(
           LocaleKeys.clearChat.tr(),
           style: Styles.mediumText(
-              color:
-                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
+            color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+          ),
         ),
       ),
       PopupMenuItem<int>(
@@ -1091,102 +1171,102 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
         child: Text(
           context.isArabic ? "اضافة علامة للمحادثة" : "Label Chat",
           style: Styles.mediumText(
-              color:
-                  context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
+            color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
+          ),
         ),
       ),
     ];
   }
 
-  void _showMoreMenu(BuildContext context, ChatRoomCubit chatRoomCubit) {
-    showMenu<int>(
-      context: context,
-      position: RelativeRect.fromLTRB(LocaleKeys.more.tr() != "More" ? 0 : 250,
-          78, LocaleKeys.more.tr() == "More" ? 0 : 250, 0),
-      items: [
-        PopupMenuItem<int>(
-          value: 1,
-          child: Text(
-            LocaleKeys.edit.tr(),
-            style: Styles.mediumText(
-                color: context.isDarkMode
-                    ? Colors.white
-                    : AppColors.PRIMARY_COLOR),
-          ),
-        ),
-        PopupMenuItem<int>(
-          value: 2,
-          child: Text(
-            LocaleKeys.share.tr(),
-            style: Styles.mediumText(
-                color: context.isDarkMode
-                    ? Colors.white
-                    : AppColors.PRIMARY_COLOR),
-          ),
-        ),
-        PopupMenuItem<int>(
-          value: 3,
-          child: Text(
-            LocaleKeys.report.tr(),
-            style: Styles.mediumText(
-                color: context.isDarkMode
-                    ? Colors.white
-                    : AppColors.PRIMARY_COLOR),
-          ),
-        ),
-        PopupMenuItem<int>(
-          value: 4,
-          child: Text(
-            LocaleKeys.block.tr(),
-            style: Styles.mediumText(
-                color: context.isDarkMode
-                    ? Colors.white
-                    : AppColors.PRIMARY_COLOR),
-          ),
-        ),
-        PopupMenuItem<int>(
-          value: 5,
-          onTap: () {
-            // Show alert dialog when "Clear Chat" is selected
-            _showClearChatAlert(context, chatRoomCubit);
-          },
-          child: Text(
-            LocaleKeys.clearChat.tr(),
-            style: Styles.mediumText(
-                color: context.isDarkMode
-                    ? Colors.white
-                    : AppColors.PRIMARY_COLOR),
-          ),
-        ),
-        PopupMenuItem<int>(
-          value: 6,
-          child: Text(
-            LocaleKeys.exportChat.tr(),
-            style: Styles.mediumText(
-                color: context.isDarkMode
-                    ? Colors.white
-                    : AppColors.PRIMARY_COLOR),
-          ),
-        ),
-        PopupMenuItem<int>(
-          value: 7,
-          child: Text(
-            "${LocaleKeys.addShortcut.tr()}      ",
-            style: Styles.mediumText(
-                color: context.isDarkMode
-                    ? Colors.white
-                    : AppColors.PRIMARY_COLOR),
-          ),
-        ),
-      ],
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(16.0)),
-      ),
-      color: context.isDarkMode
-          ? AppColors.PRIMARY_COLOR
-          : AppColors.BACKGROUND_COLOR,
-    );
-  }
+  // void _showMoreMenu(BuildContext context, ChatRoomCubit chatRoomCubit) {
+  //   showMenu<int>(
+  //     context: context,
+  //     position: RelativeRect.fromLTRB(LocaleKeys.more.tr() != "More" ? 0 : 250,
+  //         78, LocaleKeys.more.tr() == "More" ? 0 : 250, 0),
+  //     items: [
+  //       PopupMenuItem<int>(
+  //         value: 1,
+  //         child: Text(
+  //           LocaleKeys.edit.tr(),
+  //           style: Styles.mediumText(
+  //               color: context.isDarkMode
+  //                   ? Colors.white
+  //                   : AppColors.PRIMARY_COLOR,),
+  //         ),
+  //       ),
+  //       PopupMenuItem<int>(
+  //         value: 2,
+  //         child: Text(
+  //           LocaleKeys.share.tr(),
+  //           style: Styles.mediumText(
+  //               color: context.isDarkMode
+  //                   ? Colors.white
+  //                   : AppColors.PRIMARY_COLOR,),
+  //         ),
+  //       ),
+  //       PopupMenuItem<int>(
+  //         value: 3,
+  //         child: Text(
+  //           LocaleKeys.report.tr(),
+  //           style: Styles.mediumText(
+  //               color: context.isDarkMode
+  //                   ? Colors.white
+  //                   : AppColors.PRIMARY_COLOR,),
+  //         ),
+  //       ),
+  //       PopupMenuItem<int>(
+  //         value: 4,
+  //         child: Text(
+  //           LocaleKeys.block.tr(),
+  //           style: Styles.mediumText(
+  //               color: context.isDarkMode
+  //                   ? Colors.white
+  //                   : AppColors.PRIMARY_COLOR,),
+  //         ),
+  //       ),
+  //       PopupMenuItem<int>(
+  //         value: 5,
+  //         onTap: () {
+  //           // Show alert dialog when "Clear Chat" is selected
+  //           _showClearChatAlert(context, chatRoomCubit);
+  //         },
+  //         child: Text(
+  //           LocaleKeys.clearChat.tr(),
+  //           style: Styles.mediumText(
+  //               color: context.isDarkMode
+  //                   ? Colors.white
+  //                   : AppColors.PRIMARY_COLOR,),
+  //         ),
+  //       ),
+  //       PopupMenuItem<int>(
+  //         value: 6,
+  //         child: Text(
+  //           LocaleKeys.exportChat.tr(),
+  //           style: Styles.mediumText(
+  //               color: context.isDarkMode
+  //                   ? Colors.white
+  //                   : AppColors.PRIMARY_COLOR,),
+  //         ),
+  //       ),
+  //       PopupMenuItem<int>(
+  //         value: 7,
+  //         child: Text(
+  //           "${LocaleKeys.addShortcut.tr()}      ",
+  //           style: Styles.mediumText(
+  //               color: context.isDarkMode
+  //                   ? Colors.white
+  //                   : AppColors.PRIMARY_COLOR,),
+  //         ),
+  //       ),
+  //     ],
+  //     shape: const RoundedRectangleBorder(
+  //       borderRadius: BorderRadius.all(Radius.circular(16.0)),
+  //     ),
+  //     color: context.isDarkMode
+  //         ? AppColors.PRIMARY_COLOR
+  //         : AppColors.BACKGROUND_COLOR,
+  //   );
+  // }
 
   void _showClearChatAlert(BuildContext context, ChatRoomCubit chatRoomCubit) {
     int selectedOption = 0; // To track the selected radio button
@@ -1205,9 +1285,10 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                     title: Text(
                       LocaleKeys.clearForMe.tr(),
                       style: Styles.mediumText(
-                          color: context.isDarkMode
-                              ? Colors.white
-                              : AppColors.PRIMARY_COLOR),
+                        color: context.isDarkMode
+                            ? Colors.white
+                            : AppColors.PRIMARY_COLOR,
+                      ),
                     ),
                     leading: Radio<int>(
                       value: 0,
@@ -1224,9 +1305,10 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
                     title: Text(
                       LocaleKeys.clearForEveryone.tr(),
                       style: Styles.mediumText(
-                          color: context.isDarkMode
-                              ? Colors.white
-                              : AppColors.PRIMARY_COLOR),
+                        color: context.isDarkMode
+                            ? Colors.white
+                            : AppColors.PRIMARY_COLOR,
+                      ),
                     ),
                     leading: Radio<int>(
                       value: 1,
@@ -1248,9 +1330,10 @@ class _ChatRoomAppBarState extends State<ChatRoomAppBar> {
               child: Text(
                 LocaleKeys.cancel.tr(),
                 style: Styles.mediumText(
-                    color: context.isDarkMode
-                        ? Colors.white
-                        : AppColors.PRIMARY_COLOR),
+                  color: context.isDarkMode
+                      ? Colors.white
+                      : AppColors.PRIMARY_COLOR,
+                ),
               ),
               onPressed: () {
                 Navigator.of(context).pop();

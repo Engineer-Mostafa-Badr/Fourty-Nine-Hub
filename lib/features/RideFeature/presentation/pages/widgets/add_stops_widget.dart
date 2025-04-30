@@ -130,7 +130,7 @@ class _AddStopsWidgetState extends State<AddStopsWidget> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
         decoration: BoxDecoration(
-          color: const Color(0xFFEEEEEE),
+          color: context.isDarkMode ? AppColors.GREY_DARK_COLOR :  const Color(0xFFEEEEEE),
           borderRadius: BorderRadius.circular(15),
         ),
         child: Row(
@@ -172,7 +172,7 @@ class _AddStopsWidgetState extends State<AddStopsWidget> {
           height: 40,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            color: const Color(0xFFEEEEEE),
+            color: context.isDarkMode ? AppColors.GREY_DARK_COLOR :  const Color(0xFFEEEEEE),
           ),
           child: Row(
             children: [

@@ -6,6 +6,7 @@ import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/account_taps/share_app/presentation/cubit/share_app_state.dart';
@@ -30,54 +31,67 @@ class ShareTheApp extends StatelessWidget {
           preferredSize: const Size.fromHeight(30),
           child: BackAppBar(
             label: LocaleKeys.shareApp.localize,
+            enableCustomAppBar: true,
           ),
         ),
+        enableCustomAppBar: true,
         body: BlocProvider<ShareAppCubit>(
           create: (BuildContext context) => serviceLocator()..shareApp(),
           child: BlocBuilder<ShareAppCubit, ShareAppState>(
             builder: (BuildContext context, state) {
               if (state.status == ShareAppStates.success) {
-                return Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 20.h, horizontal: 30.w),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildStatisticsWidget(
-                        context: context,
-                        user: state.shareApp?.userCount ?? 0,
-                        balance: state.shareApp?.shareBalance ?? 0,
-                        gift: state.shareApp?.referralGift ?? 0,
-                      ),
-                      const Sizer(
-                        height: 64,
-                      ),
-                      Image.asset(
-                        Assets.share,
-                        width: double.infinity,
-                        height: 300,
-                      ),
-                      const Sizer(
-                        height: 48,
-                      ),
-                      Center(
-                        child: Label(
-                          text: LocaleKeys.recommendUs.localize,
-                          style: Styles.headerText(),
-                        ),
-                      ),
-                      Label(
-                        text: LocaleKeys.shareFodeFriends.localize,
-                        style: Styles.mediumText(
-                            color: Colors.black.withValues(alpha: .7)),
-                        maxLines: 5,
-                      ),
-                      const Sizer(height: 32,),
-                      _buildLinkWidget(
+                return SingleChildScrollView(
+                  child: Padding(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 20.h, horizontal: 30.w),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildStatisticsWidget(
                           context: context,
-                          referralGift: state.shareApp?.referralGift ?? 0),
-                      const Sizer(),
-                    ],
+                          user: state.shareApp?.userCount ?? 0,
+                          balance: state.shareApp?.shareBalance ?? 0,
+                          gift: state.shareApp?.referralGift ?? 0,
+                        ),
+                        const Sizer(
+                          height: 64,
+                        ),
+                        Image.asset(
+                          Assets.share,
+                          width: double.infinity,
+                          height: 300,
+                        ),
+                        const Sizer(
+                          height: 48,
+                        ),
+                        Center(
+                          child: Label(
+                            text: LocaleKeys.recommendUs.localize,
+                            style: Styles.headerText(
+                              color: context.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
+                          ),
+                        ),
+                        Label(
+                          text: LocaleKeys.shareFodeFriends.localize,
+                          style: Styles.mediumText(
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : Colors.black,
+                          ),
+                          maxLines: 5,
+                        ),
+                        const Sizer(
+                          height: 32,
+                        ),
+                        _buildLinkWidget(
+                            context: context,
+                            referralGift: state.shareApp?.referralGift ?? 0),
+                        const Sizer(),
+                      ],
+                    ),
                   ),
                 );
               }
@@ -110,10 +124,13 @@ class ShareTheApp extends StatelessWidget {
               color: AppColors.PRIMARY_COLOR,
               radius: 15,
               style: Styles.mediumText(
-                  color: Theme.of(context).scaffoldBackgroundColor),
+                color: context.isDarkMode ? Colors.white : Colors.black,
+              ),
               label: '${LocaleKeys.yourReferralID.localize} $referralId'),
         ),
-        const Sizer(height: 32,),
+        const Sizer(
+          height: 32,
+        ),
         AppButton(
           color: AppColors.AUTH_CONTAINER_COLOR,
           label: LocaleKeys.shareTheApp.localize,
@@ -175,16 +192,18 @@ https://example.com/download
         children: [
           Expanded(
             child: _buildStatisticsItem(
-                color: AppColors.PRIMARY_COLOR,
-                title: LocaleKeys.userShare.localize,
-                subTitle: '$user'),
+              color: AppColors.PRIMARY_COLOR,
+              title: LocaleKeys.userShare.localize,
+              subTitle: '$user',
+            ),
           ),
           const Sizer(),
           Expanded(
             child: _buildStatisticsItem(
-                color: AppColors.PRIMARY_COLOR,
-                title: LocaleKeys.balance.localize,
-                subTitle: '$balance'),
+              color: AppColors.PRIMARY_COLOR,
+              title: LocaleKeys.balance.localize,
+              subTitle: '$balance',
+            ),
           ),
           const Sizer(),
           Expanded(
@@ -231,38 +250,4 @@ https://example.com/download
       ),
     );
   }
-
-// void initDynamicLinks() async {
-//   FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) {
-//     final Uri deepLink = dynamicLinkData.link;
-//     final referralId = deepLink.queryParameters['referralId'];
-//     if (referralId != null) {
-//       // Save the referral ID for later use
-//       await saveReferralId(referralId);
-//     }
-//   }).onError((error) {
-//     print('Error handling dynamic link: $error');
-//   });
-//
-//   // Handle deep link when app is launched from a terminated state
-//   final PendingDynamicLinkData? initialLink =
-//   await FirebaseDynamicLinks.instance.getInitialLink();
-//   if (initialLink != null) {
-//     final Uri deepLink = initialLink.link;
-//     final referralId = deepLink.queryParameters['referralId'];
-//     if (referralId != null) {
-//       await saveReferralId(referralId);
-//     }
-//   }
-// }
-//
-// Future<void> saveReferralId(String referralId) async {
-//   final prefs = await SharedPreferences.getInstance();
-//   await prefs.setString('referralId', referralId);
-// }
-//
-// Future<String?> getReferralId() async {
-//   final prefs = await SharedPreferences.getInstance();
-//   return prefs.getString('referralId');
-// }
 }

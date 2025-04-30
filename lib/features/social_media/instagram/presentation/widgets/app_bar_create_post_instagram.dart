@@ -57,7 +57,6 @@ class AppBarCreatePostInstagram extends StatelessWidget {
           child: Label(
             text: LocaleKeys.next.localize,
             style: Styles.headerText(
-              fontSize: 40,
               color: AppColors.c1B2781,
             ),
           ),

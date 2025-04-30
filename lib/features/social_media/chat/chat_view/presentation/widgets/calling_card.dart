@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/soon_dialog.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/style/const.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
@@ -8,6 +10,7 @@ import 'package:go_router/go_router.dart';
 
 class CallingCard extends StatelessWidget {
   final bool isVideo;
+
   const CallingCard({super.key, required this.isVideo});
 
   @override
@@ -15,7 +18,7 @@ class CallingCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: InkWell(
-        onTap: () => context.push(Routes.CHATROOM),
+        onTap: () => soonDialog(context),
         child: Row(
           children: [
             const CircleAvatar(
@@ -28,8 +31,12 @@ class CallingCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Label(
-                      text: 'Mohamed Gamal',
-                      style: Styles.mediumText(fontWeight: FontWeight.bold)),
+                    text: 'Mohamed Gamal',
+                    style: Styles.mediumText(
+                        fontWeight: FontWeight.bold,
+                        color:
+                            context.isDarkMode ? Colors.white : Colors.black),
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(right: 8.0),
                     child: Row(

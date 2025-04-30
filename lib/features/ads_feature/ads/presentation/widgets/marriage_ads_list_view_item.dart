@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/widget/clickable_widget.dart';
@@ -41,7 +42,7 @@ class MarriageAdsListViewItem extends StatelessWidget {
           color: Theme.of(context).scaffoldBackgroundColor,
           borderRadius: BorderRadius.circular(15),
           border: Border.all(
-            color: Colors.black.withValues(alpha: 178),
+            color: context.isDarkMode ? Colors.white : Colors.black,
           ),
         ),
         child: Column(
@@ -67,6 +68,8 @@ class MarriageAdsListViewItem extends StatelessWidget {
                       Label(
                         text: marriageAds.title,
                         style: Styles.headerText(
+                          color:
+                              context.isDarkMode ? Colors.white : Colors.black,
                           height: 1.60,
                         ),
                       ),
@@ -77,7 +80,11 @@ class MarriageAdsListViewItem extends StatelessWidget {
                   ),
                   Label(
                     text: marriageAds.description,
-                    style: Styles.mediumText(fontSize: 24, height: 1.40),
+                    style: Styles.mediumText(
+                      fontSize: 24,
+                      height: 1.40,
+                      color: context.isDarkMode ? Colors.white : Colors.black,
+                    ),
                     maxLines: 5,
                   ),
                   const SizedBox(
@@ -86,15 +93,22 @@ class MarriageAdsListViewItem extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      SvgPicture.asset(Assets.mapPinIcon),
+                      SvgPicture.asset(
+                        Assets.mapPinIcon,
+                        color: context.isDarkMode ? Colors.white : null,
+                      ),
                       const SizedBox(
                         width: 4,
                       ),
                       Label(
-                        text: 'Giza , Egypt',
+                        text: (context.isArabic
+                                ? marriageAds.address?.addressAr
+                                : marriageAds.address?.addressEn) ??
+                            '',
                         style: Styles.headerText(
                           fontSize: 24,
-                          color: Colors.black,
+                          color:
+                              context.isDarkMode ? Colors.white : Colors.black,
                         ),
                       ),
                     ],
@@ -103,7 +117,7 @@ class MarriageAdsListViewItem extends StatelessWidget {
               ),
             ),
             Divider(
-              color: Colors.black.withValues(alpha: 178),
+              color: context.isDarkMode ? Colors.white : Colors.black,
               height: 0,
             ),
             Padding(
