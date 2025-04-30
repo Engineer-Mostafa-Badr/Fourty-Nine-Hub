@@ -205,89 +205,154 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
             ),
           ),
         ),
-        bottom: TabBar(
-          tabAlignment: TabAlignment.start,
-          isScrollable: true,
-          controller: _tabController,
-          onTap: (i) async {
-            final prefs = await SharedPreferences.getInstance();
-            switch (i) {
-              case 0:
-                await prefs.setString('filter', 'totalUsers');
-                break;
-              case 1:
-                await prefs.setString('filter', 'reels');
-                break;
-              case 2:
-                await prefs.setString('filter', 'posts');
-                break;
-              case 3:
-                await prefs.setString('filter', 'mainCategories');
-                break;
-              case 4:
-                await prefs.setString('filter', 'subCategories');
-                break;
-              case 5:
-                await prefs.setString('filter', 'ads');
-                break;
-            }
+        // bottom: TabBar(
+        //   tabAlignment: TabAlignment.start,
+        //   isScrollable: true,
+        //   controller: _tabController,
+        //   onTap: (i) async {
+        //     final prefs = await SharedPreferences.getInstance();
+        //     switch (i) {
+        //       case 0:
+        //         await prefs.setString('filter', 'totalUsers');
+        //         break;
+        //       case 1:
+        //         await prefs.setString('filter', 'reels');
+        //         break;
+        //       case 2:
+        //         await prefs.setString('filter', 'posts');
+        //         break;
+        //       case 3:
+        //         await prefs.setString('filter', 'mainCategories');
+        //         break;
+        //       case 4:
+        //         await prefs.setString('filter', 'subCategories');
+        //         break;
+        //       case 5:
+        //         await prefs.setString('filter', 'ads');
+        //         break;
+        //     }
+        //
+        //     final searchText = _searchController.text.trim();
+        //     final cubit = context.read<SearchCubit>();
+        //     String? filter = prefs.getString('filter');
+        //
+        //     if (searchText.isEmpty) return;
+        //
+        //     final params = SearchParams(
+        //       search: searchText,
+        //       filter: filter ?? '',
+        //       params: PaginationParams(page: 1),
+        //     );
+        //
+        //     switch (filter) {
+        //       case 'totalUsers':
+        //         cubit.loadUsersSearchData(params: params);
+        //         break;
+        //       case 'reels':
+        //         cubit.loadReelsSearchData(params: params);
+        //         break;
+        //       case 'posts':
+        //         cubit.loadPostsSearchData(params: params);
+        //         break;
+        //       case 'mainCategories':
+        //         cubit.loadPaginatedSearchData(params: params);
+        //         break;
+        //       case 'subCategories':
+        //         cubit.loadSubCategoriesSearchData(params: params);
+        //         break;
+        //       case 'ads':
+        //         cubit.loadAdsData(params: params);
+        //         break;
+        //       case 'comeWithYouTrips':
+        //         cubit.loadTripComeSearchData(params: params);
+        //         break;
+        //     }
+        //   },
+        //   labelColor: Colors.white,
+        //   unselectedLabelColor: AppColors.GREY_NORMAL_COLOR,
+        //   indicator: BoxDecoration(
+        //     color: Theme.of(context).primaryColor,
+        //     borderRadius: BorderRadius.circular(15.r),
+        //   ),
+        //   indicatorSize: TabBarIndicatorSize.label,
+        //   indicatorPadding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 6.h),
+        //   padding: EdgeInsets.only(right: 40.w),
+        //   labelPadding: EdgeInsets.only(left: 20.w),
+        //   labelStyle: Styles.mediumText(fontSize: 32),
+        //   tabs: [
+        //     CustomTapWidget(text: LocaleKeys.profile.localize),
+        //     CustomTapWidget(text: LocaleKeys.reel.localize),
+        //     CustomTapWidget(text: LocaleKeys.post.localize),
+        //     CustomTapWidget(text: LocaleKeys.mainCategory.localize),
+        //     CustomTapWidget(text: LocaleKeys.subCategory.localize),
+        //     CustomTapWidget(text: LocaleKeys.ads.localize),
+        //   ],
+        // ),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(45.h),
+          child: StatefulBuilder(
+            builder: (context, setState) {
+              return TabBar(
+                tabAlignment: TabAlignment.start,
+                isScrollable: true,
+                controller: _tabController,
+                onTap: (i) async {
+                  setState(() {}); // Update selection visuals
 
-            final searchText = _searchController.text.trim();
-            final cubit = context.read<SearchCubit>();
-            String? filter = prefs.getString('filter');
+                  final prefs = await SharedPreferences.getInstance();
+                  final filters = [
+                    'totalUsers', 'reels', 'posts',
+                    'mainCategories', 'subCategories', 'ads'
+                  ];
+                  await prefs.setString('filter', filters[i]);
 
-            if (searchText.isEmpty) return;
+                  final searchText = _searchController.text.trim();
+                  final cubit = context.read<SearchCubit>();
+                  String? filter = prefs.getString('filter');
 
-            final params = SearchParams(
-              search: searchText,
-              filter: filter ?? '',
-              params: PaginationParams(page: 1),
-            );
+                  if (searchText.isEmpty) return;
 
-            switch (filter) {
-              case 'totalUsers':
-                cubit.loadUsersSearchData(params: params);
-                break;
-              case 'reels':
-                cubit.loadReelsSearchData(params: params);
-                break;
-              case 'posts':
-                cubit.loadPostsSearchData(params: params);
-                break;
-              case 'mainCategories':
-                cubit.loadPaginatedSearchData(params: params);
-                break;
-              case 'subCategories':
-                cubit.loadSubCategoriesSearchData(params: params);
-                break;
-              case 'ads':
-                cubit.loadAdsData(params: params);
-                break;
-              case 'comeWithYouTrips':
-                cubit.loadTripComeSearchData(params: params);
-                break;
-            }
-          },
-          labelColor: Colors.white,
-          unselectedLabelColor: AppColors.GREY_NORMAL_COLOR,
-          indicator: BoxDecoration(
-            color: Theme.of(context).primaryColor,
-            borderRadius: BorderRadius.circular(15.r),
+                  final params = SearchParams(
+                    search: searchText,
+                    filter: filter ?? '',
+                    params: PaginationParams(page: 1),
+                  );
+
+                  switch (filter) {
+                    case 'totalUsers': cubit.loadUsersSearchData(params: params); break;
+                    case 'reels': cubit.loadReelsSearchData(params: params); break;
+                    case 'posts': cubit.loadPostsSearchData(params: params); break;
+                    case 'mainCategories': cubit.loadPaginatedSearchData(params: params); break;
+                    case 'subCategories': cubit.loadSubCategoriesSearchData(params: params); break;
+                    case 'ads': cubit.loadAdsData(params: params); break;
+                    case 'comeWithYouTrips': cubit.loadTripComeSearchData(params: params); break;
+                  }
+                },
+                indicator: const BoxDecoration(
+                  color: Colors.transparent,
+                ),
+                indicatorPadding: EdgeInsets.zero,
+                labelPadding: EdgeInsets.only(left: 20.w),
+                padding: EdgeInsets.only(right: 40.w),
+                tabs: List.generate(6, (index) {
+                  final texts = [
+                    LocaleKeys.profile.localize,
+                    LocaleKeys.reel.localize,
+                    LocaleKeys.post.localize,
+                    LocaleKeys.mainCategory.localize,
+                    LocaleKeys.subCategory.localize,
+                    LocaleKeys.ads.localize,
+                  ];
+                  return CustomTapWidget(
+                    text: texts[index],
+                    isSelected: _tabController.index == index,
+                  );
+                }),
+              );
+            },
           ),
-          indicatorSize: TabBarIndicatorSize.label,
-          indicatorPadding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 6.h),
-          padding: EdgeInsets.only(right: 40.w),
-          labelPadding: EdgeInsets.only(left: 20.w),
-          labelStyle: Styles.mediumText(fontSize: 32),
-          tabs: [
-            CustomTapWidget(text: LocaleKeys.profile.localize),
-            CustomTapWidget(text: LocaleKeys.reel.localize),
-            CustomTapWidget(text: LocaleKeys.post.localize),
-            CustomTapWidget(text: LocaleKeys.mainCategory.localize),
-            CustomTapWidget(text: LocaleKeys.subCategory.localize),
-            CustomTapWidget(text: LocaleKeys.ads.localize),
-          ],
         ),
+
       ),
       body: TabBarView(
         controller: _tabController,
@@ -295,20 +360,20 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
         children: [
           const ProfileSearchView(),
           const ReelSearchView(),
-          PostsSearchView(
+          const PostsSearchView(
             // params: SearchParams(
             //   search: _searchController.text,
             //   params: PaginationParams(page: 1),
             // ),
           ),
-          MainCategorySearchView(
+          const MainCategorySearchView(
             // params: SearchParams(
             //   search: _searchController.text,
             //   params: PaginationParams(page: 1),
             // ),
           ),
           const SubCategorySearchView(),
-          AdsSearchView(
+          const AdsSearchView(
 
           ),
           // ComeWithMeSearchView(
@@ -329,17 +394,35 @@ class _SearchViewState extends State<SearchView> with SingleTickerProviderStateM
 
 
 class CustomTapWidget extends StatelessWidget {
+  final String text;
+  final bool isSelected;
+
   const CustomTapWidget({
     super.key,
     required this.text,
+    required this.isSelected,
   });
-  final String text;
+
   @override
   Widget build(BuildContext context) {
     return Tab(
-      child: SizedBox(
+      child: Container(
         width: 120,
-        child: Center(child: Text(text)),
+        height: 35,
+        // padding: EdgeInsets.symmetric(vertical: 8.h),
+        decoration: BoxDecoration(
+          color: isSelected ? Theme.of(context).primaryColor :AppColors.cE0E0E0,
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Center(
+          child: Text(
+            text,
+            style: Styles.mediumText(
+              // fontSize: 15,
+              color: isSelected ? Colors.white : AppColors.GREY_NORMAL_COLOR,
+            ),
+          ),
+        ),
       ),
     );
   }

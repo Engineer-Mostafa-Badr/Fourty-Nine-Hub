@@ -31,13 +31,16 @@ import '../../../../social_media/social_posts/domain/usecases/get_post_comments_
 import '../../../../subcategories/domain/entities/sub_category_entity.dart';
 import '../../data/models/expired_requests_model.dart';
 import '../../data/models/restaurant_2_model.dart';
+import '../../domain/entities/food_ads_entity.dart';
 import '../../domain/entities/log_count_entity.dart';
 import '../../domain/entities/logs_entity.dart';
 import '../../domain/entities/rate_response_entity.dart';
+import '../../domain/entities/restaurant.dart';
 import '../../domain/entities/restaurant_entity.dart';
 import '../../domain/entities/set_request_seen_entity.dart';
 import '../../domain/entities/user_order_entity.dart';
 import '../../domain/usecases/add_rate_restaurant_use_case.dart';
+import '../../domain/usecases/get_food_ads_use_case.dart';
 import '../../domain/usecases/get_req_logs_count_use_case.dart';
 import '../../domain/usecases/get_req_logs_use_case.dart';
 import '../../domain/usecases/get_user_order_use_case.dart';
@@ -70,6 +73,7 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
   final AddRateRestaurantUseCase addRateRestaurantUseCase;
   final GetReqLogsCountUseCase getReqLogsCountUseCase;
   final SetRequestLogSeenUseCase setRequestLogSeenUseCase;
+  final GetFoodAdsUseCase getFoodAdsUseCase;
   RestaurantsCubit(
     this._getMainCategoryDetailsUseCase,
     this._getAllRestaurantUseCase,
@@ -86,7 +90,7 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
     this._getExpiredOrdersUseCase,
     this._toggleRestaurantFavouriteUseCase,
     this._getUserOrderUseCase,
-    this.getReqLogsUseCase, this.addRateRestaurantUseCase, this.getReqLogsCountUseCase, this.setRequestLogSeenUseCase,
+    this.getReqLogsUseCase, this.addRateRestaurantUseCase, this.getReqLogsCountUseCase, this.setRequestLogSeenUseCase, this.getFoodAdsUseCase,
   ) : super(const RestaurantsListState());
 
   final service = MainServicesEnum.food;
@@ -233,8 +237,18 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
         (data) {
       result = data;
       emit(state.copyWith(status: RestaurantsListStates.success));
+      loadInitialFoodAds();
     });
     return result;
+  }
+  void removeFromFavorites(String id) {
+    restaurants.removeWhere((element) => element.id == id);
+    // Also update the foodAdData if needed
+    foodAdData.removeWhere((element) => element.id == id);
+    emit(state.copyWith(
+      allRestaurant: restaurants,
+      foodAdEntity: foodAdData,
+    ));
   }
 
   Future<void> isRestaurant() async {
@@ -395,6 +409,7 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
     if (subCategories.isNotEmpty) {
       selectedCategory =
           subCategories.firstWhere((element) => element.id == id);
+      print("Elmonx ${selectedCategory}");
     } else {
       selectedCategory = FoodCategoryEntity(
         id: '',
@@ -432,7 +447,7 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
   bool hasMoreRestaurantsData = true;
   int currentRestaurantsPage = 1;
   List<FoodCategoryEntity> subCategories = [];
-  List<Restaurant2Model> restaurants = [];
+  List<GetAllRestaurantEntity> restaurants = [];
   List<OrderData> expiredOrders = [];
   List<UserOrderEntity> userOrders = [];
 
@@ -531,24 +546,6 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
     // }
   }
 
-  // Future<void> _ensureTokenInitialized() async {
-  //   token ??= await CacheManager.getAccessToken();
-  // }
-
-  // Future<void> getExpiredOrders({int page = 1}) async {
-  //   emit(state.copyWith(status: RestaurantsListStates.loading));
-  //   final response = await _getExpiredOrdersUseCase(params:PaginationParams(page: page, limit: 5));
-  //   response.fold(
-  //           (failure) =>
-  //               emit(state.copyWith(
-  //                 status: RestaurantsListStates.error,
-  //                 failure: failure,
-  //               )),
-  //           (data) =>  emit(state.copyWith(
-  //             status: RestaurantsListStates.success,
-  //             expiredRequestsResponse: data,
-  //           )),);
-  // }
   Future<void> getExpiredOrders() async {
     if (!hasMoreExpiredOrders || isLoadingExpiredOrdersMore) return;
 
@@ -615,4 +612,50 @@ class RestaurantsCubit extends Cubit<RestaurantsListState> {
     );
   }
 
+  List<GetAllRestaurantEntity> foodAdData = [];
+  bool hasMoreFoodAds = true;
+  int currentPageFoodAds = 1;
+  bool isLoadingMoreFoodAds = false;
+
+  void loadInitialFoodAds() async {
+    // emit(state.copyWith(status: RestaurantsListStates.loading));
+    foodAdData.clear();
+    currentPageFoodAds = 1;
+    hasMoreFoodAds = true;
+    await getFoodAds();
+    emit(state.copyWith(status: RestaurantsListStates.success));
+  }
+
+  Future<void> getFoodAds() async {
+    if (!hasMoreFoodAds || isLoadingMoreFoodAds) return;
+
+    isLoadingMoreFoodAds = true;
+    emit(state.copyWith(isLoadingMoreLogs: true));
+
+    final response = await getFoodAdsUseCase(
+        params: PaginationParams(page: currentPageFoodAds, limit: 5));
+    response.fold(
+          (failure) {
+            isLoadingMoreFoodAds = false;
+        emit(state.copyWith(
+            failure: failure,
+            isLoadingMoreLogs: false,
+            status: RestaurantsListStates.error));
+      },
+          (data) {
+            foodAdData.addAll(data);
+
+        if ((data.length ?? 0) < 5) {
+          hasMoreFoodAds = false;
+          emit(state.copyWith(isLoadingMore: false));
+        } else {
+          currentPageFoodAds++;
+        }
+
+            isLoadingMoreFoodAds = false;
+        emit(state.copyWith(
+            foodAdEntity: data, isLoadingMoreLogs: false));
+      },
+    );
+  }
 }

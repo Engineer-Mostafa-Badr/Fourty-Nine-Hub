@@ -37,7 +37,7 @@ class LoginCubit extends Cubit<LoginState> {
 
   String? token;
 
-  Future<void> login(GlobalKey<FormState> formKey, BuildContext context) async {
+  Future<void> login(GlobalKey<FormState> formKey) async {
     String? token = await FirebaseMessaging.instance.getToken();
     log("all tokens before login : ${await CacheManager.getAccessToken()}");
 

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/badged_label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
@@ -87,7 +88,7 @@ class _BuildCartItemState extends State<BuildCartItem> {
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color: AppColors.cD9D9D9,
+                  color:context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.cD9D9D9,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Row(
@@ -227,6 +228,8 @@ class _BuildCartItemState extends State<BuildCartItem> {
                                     ),
                                     const SizedBox(width: 8),
                                     BadgedLabel(
+                                      color: context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR,
+                                      textColor:  context.isDarkMode ? AppColors.PRIMARY_COLOR :AppColors.whiteColor ,
                                       onTap: () {
                                         setState(() {
                                           localQuantity = widget.quantity;
@@ -247,7 +250,7 @@ class _BuildCartItemState extends State<BuildCartItem> {
               if (localQuantity != widget.quantity) ...[
                 const SizedBox(height: 8),
                 Text(
-                  'Press Confirm button to confirm the new quantity or we will take the old quantity (${widget.quantity}).',
+                  '${LocaleKeys.confirmQuantity.localize} (${widget.quantity}).',
                   style: Styles.mediumText(color: AppColors.SECONDARY_COLOR),
                 ),
               ],

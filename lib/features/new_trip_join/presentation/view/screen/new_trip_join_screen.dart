@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/appbar/home_appbar.dart';
+import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/features/new_trip_join/presentation/view/widget/new_trip_join_body.dart';
 
 import '../../../../../core/widget/custom_scaffold.dart';
@@ -14,22 +15,8 @@ class NewTripJoinScreen extends StatefulWidget {
 class _NewTripJoinScreenState extends State<NewTripJoinScreen> {
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(30),
-    child: HomeAppbar(
-        isWithBackArrow: false,
-        language: true,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(
-            Icons.arrow_back,
-          ),
-        ),
-      ),),
-      body: NewTripJoinBody(),
+    return SharedScaffold(
+      body: NewTripJoinBody(), mainCategoryId: 1,
     );
   }
 }

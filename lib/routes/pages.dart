@@ -2020,7 +2020,7 @@ class AppPages {
                               create: (context) =>
                                   serviceLocator<RestaurantDetailsCubit>(),
                               child: RestaurantDetailsView(
-                                restaurant: state.extra as Restaurant,
+                                restaurant: state.extra as GetAllRestaurantEntity,
                               ),
                             ),
                         routes: [
@@ -2952,7 +2952,7 @@ class AppPages {
                       create: (context) => serviceLocator<AdvertisementCubit>(),
                     ),
                   ],
-                  child: const TripJoinView(),
+                  child: const TripJoinView(initialIndex: 1,),
                 ),
               ),
               GoRoute(
@@ -3001,7 +3001,7 @@ class AppPages {
                       create: (context) => serviceLocator<AdvertisementCubit>(),
                     ),
                   ],
-                  child: const AllPickMeView(),
+                  child: const TripJoinView(initialIndex: 2,),
                 ),
               ),
 
@@ -3534,7 +3534,7 @@ class AppPages {
                           getLatLongFromAddressRemoteDataSource:
                               serviceLocator()),
                     ),
-                  ], child: const CaptainShareScreen());
+                  ], child: const TripJoinView(initialIndex: 0,));
                 },
               ),
               GoRoute(

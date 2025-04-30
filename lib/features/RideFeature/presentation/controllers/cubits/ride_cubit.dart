@@ -76,6 +76,7 @@ import 'package:path_provider/path_provider.dart';
 
 import '../../../../../core/data/datasources/remote/socket/socket_data_source.dart';
 import '../../../../../core/error/failure.dart';
+import '../../../../../service_locator/service_locator.dart';
 import '../../../../../shared_web_socket.dart';
 import '../../../../account_taps/my_adds/domain/entity/click_entity.dart';
 import '../../../domain/entities/ride_category_entity.dart';
@@ -633,17 +634,17 @@ class RideCubit extends Cubit<RideState> {
 
   double getTotalPrice(double price, {bool isScooter = false}) {
     double totalPrice = price;
-    if (!isScooter) {
-      if (isComfort) {
+    // if (!isScooter) {
+      if (serviceLocator<RideCubit>().isComfort) {
         totalPrice += state.rideExpectedPrice?.comfort ?? 0;
       }
-      if (isNonSmoker) {
+      if (serviceLocator<RideCubit>().isNonSmoker) {
         totalPrice += state.rideExpectedPrice?.nonSmoking ?? 0;
       }
-      if (isAutoAccept) {
+      if (serviceLocator<RideCubit>().isAutoAccept) {
         totalPrice += state.rideExpectedPrice?.autoAccept ?? 0;
       }
-    }
+    // }
     return totalPrice;
   }
 

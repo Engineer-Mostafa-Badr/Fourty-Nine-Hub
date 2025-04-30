@@ -71,121 +71,121 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: SharedScaffold(
-            mainCategoryId: 1,isWithBackArrow: false,
-            body: Padding(
-              padding: const EdgeInsets.symmetric(),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: WelcomeTextWidget(
-                        title: LocaleKeys.welcomeToTripjoin.localize,
-                        infoMessage:
-                            "Create Ad for a trip with your car, wait users to contact you. Share trip & gain money!",
-                      ),
-                    ),
-                    const Sizer(),
-                    _buildTopImage(),
-                    SizedBox(height: 10.h),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      child: _customLocationField(
-                        isTo: false,
-                        context: context,
-                        color: Colors.green,
-                        text: currentAddress,
-                        onPressed: () async {
-                          context.push(
-                            Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
-                            extra: RideOpenStreetMapSearchAndPickParams(
-                              onPicked: (pickedData) async {
-                                currentAddress = pickedData.addressName;
-                                currentLocation = [pickedData.latLong.latitude, pickedData.latLong.longitude];
-                                context.pop();
-                                setState(() {
-
-                                });
-                              },
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
-                      child: _customLocationField(
-                        isTo: true,
-                        context: context,
-                        color: Colors.blue,
-                        text:toAddress,
-                        onPressed: () async {
-                          context.push(Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
-                              extra: RideOpenStreetMapSearchAndPickParams(
-                                onPicked: (pickedData) async {
-                                  toAddress = pickedData.addressName;
-                                  toLocation = [pickedData.latLong.latitude, pickedData.latLong.longitude];
-                                  context.pop();
-                                  setState(() {});
-                                },
-                              ));
-                        },
-                      ),
-                    ),
-                    const Sizer(),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: FormTextField(
-                          type: TextInputType.phone,
-                          height: 76.h,
-                          style: Styles.mediumText(),
-                          constraints:
-                              const BoxConstraints(maxHeight: 52, minHeight: 52),
-                          fillColor: AppColors.colorGreyLight,
-                          borderRadius: BorderRadius.circular(30.h),
-                          controller: phoneController,
-                          hint: LocaleKeys.phoneNumber.localize,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return LocaleKeys
-                                  .please_enter_phone_number.localize;
-                            }
-                            return null;
-                          }),
-                    ),
-                    const Sizer(),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Row(
-                        children: [
-                          _buildMenuButton(
-                              title: LocaleKeys.vehicleBrand.localize,
-                              items: carBrands,
-                              selectedItem: selectedBrand),
-                          const Sizer(),
-                          _buildMenuButton(
-                              title: LocaleKeys.vehicleModel.localize,
-                              items: carModels,
-                              selectedItem: selectedModel),
-                        ],
-                      ),
-                    ),
-                    const Sizer(),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
-                      child: TripJoinBottomSection(),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 8.0.h, bottom: 20.h),
-                      child: const PremiumAndRequestWidget(),
-                    ),
-                  ],
+    return SharedScaffold(
+        mainCategoryId: 1,
+        isWithBackArrow: true,
+        body: Padding(
+          padding: const EdgeInsets.symmetric(),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: WelcomeTextWidget(
+                    title: LocaleKeys.welcomeToTripjoin.localize,
+                    infoMessage:
+                        context.isArabic?" انشئ إعلان لرحلة بسيارتك ، انتظر المستخدمين للاتصال بك. شارك الرحلة واكسب المال!":"Create Ad for a trip with your car, wait users to contact you. Share trip & gain money!",
+                  ),
                 ),
-              ),
-            )));
+                _buildTopImage(),
+                const Sizer(),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.h, vertical: 8.h),
+                  child: _customLocationField(
+                    isTo: false,
+                    context: context,
+                    color: Colors.green,
+                    text: currentAddress,
+                    onPressed: () async {
+                      context.push(
+                        Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
+                        extra: RideOpenStreetMapSearchAndPickParams(
+                          onPicked: (pickedData) async {
+                            currentAddress = pickedData.addressName;
+                            currentLocation = [pickedData.latLong.latitude, pickedData.latLong.longitude];
+                            context.pop();
+                            setState(() {
+
+                            });
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                const Sizer(),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.h,vertical: 8.h),
+                  child: _customLocationField(
+                    isTo: true,
+                    context: context,
+                    color: Colors.blue,
+                    text:toAddress,
+                    onPressed: () async {
+                      context.push(Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
+                          extra: RideOpenStreetMapSearchAndPickParams(
+                            onPicked: (pickedData) async {
+                              toAddress = pickedData.addressName;
+                              toLocation = [pickedData.latLong.latitude, pickedData.latLong.longitude];
+                              context.pop();
+                              setState(() {});
+                            },
+                          ));
+                    },
+                  ),
+                ),
+                const Sizer(),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.h),
+                  child: FormTextField(
+                      type: TextInputType.phone,
+                      height: 76.h,
+                      style: Styles.mediumText(),
+                      constraints:
+                          const BoxConstraints(maxHeight: 52, minHeight: 52),
+                      fillColor: AppColors.colorGreyLight,
+                      borderRadius: BorderRadius.circular(30.h),
+                      controller: phoneController,
+                      hint: LocaleKeys.phoneNumber.localize,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return LocaleKeys
+                              .please_enter_phone_number.localize;
+                        }
+                        return null;
+                      }),
+                ),
+                const Sizer(),
+                Padding(
+                  padding:  EdgeInsets.symmetric(horizontal: 16.h),
+                  child: Row(
+                    children: [
+                      _buildMenuButton(
+                          title: LocaleKeys.vehicleBrand.localize,
+                          items: carBrands,
+                          selectedItem: selectedBrand),
+                      const Sizer(),
+                      _buildMenuButton(
+                          title: LocaleKeys.vehicleModel.localize,
+                          items: carModels,
+                          selectedItem: selectedModel),
+                    ],
+                  ),
+                ),
+                const Sizer(),
+                 Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.h),
+                  child:const TripJoinBottomSection(),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 18.0.h, vertical: 8.h,),
+                  child: const PremiumAndRequestWidget(),
+                ),
+              ],
+            ),
+          ),
+        ));
   }
 
   void _showDropdownMenu({
@@ -208,7 +208,7 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
       items: items
           .map((brand) => PopupMenuItem<String>(
                 value: brand,
-                child: Text(brand),
+                child: Text(brand,style: Styles.mediumText(color: Colors.black),),
               ))
           .toList(),
     );
@@ -230,10 +230,10 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
           children: [
             Text(
               selectedItem ?? title,
-              style: Styles.mediumText(),
+              style: Styles.mediumText(color: Colors.black),
             ),
             GestureDetector(
-              child: const Icon(Icons.keyboard_arrow_down),
+              child: const Icon(Icons.keyboard_arrow_down,color: Colors.black,),
               onTapDown: (details) => _showDropdownMenu(
                 context: context,
                 position: details.globalPosition,
@@ -293,6 +293,7 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                     : text!,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
+                style: Styles.mediumText(color: Colors.black)
               ),
             ),
           ],

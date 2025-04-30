@@ -9,6 +9,7 @@ import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/presentation/pages/all_contacts.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/presentation/widgets/friends_tile.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class AddFriendsScreen extends StatefulWidget {
@@ -23,103 +24,155 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24.h),
-            child: Column(
-              children: [
-                const Sizer(),
-                Row(
-                  children: [
-                    const Icon(Icons.keyboard_arrow_down, color: Colors.black),
-                    Expanded(
-                      child: Column(
-                        children: [
-                          Text(
-                              context.isArabic ? 'اضافة اصدقاء' : 'Add Friends',
-                              style: Styles.headerText(color: Colors.black)),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              CircleAvatar(
-                                radius: 12.h,
-                                backgroundColor: const Color(0xFF13D209),
-                              ),
-                              Text(
-                                ' 76+ ${context.isArabic ? 'اقتراح كان نشط اليوم السابق' : 'suggestions were active in the last day!'}',
-                                style: const TextStyle(
-                                    fontSize: 14,
-                                    overflow: TextOverflow.ellipsis),
-                              ),
-                            ],
-                          )
-                        ],
+    return Hero(
+      tag: 'Add Friends',
+      child: Scaffold(
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24.h),
+              child: Column(
+                children: [
+                  const Sizer(),
+                  Row(
+                    children: [
+                      ClickableWidget(
+                          onTap: ()=>Navigator.of(context).pop(),
+                          child: Icon(Icons.keyboard_arrow_down, color:context.isDarkMode?Colors.white: Colors.black)),
+                      Expanded(
+                        child: Column(
+                          children: [
+                            Text(
+                                context.isArabic ? 'اضافة اصدقاء' : 'Add Friends',
+                                style: Styles.headerText(color:context.isDarkMode?Colors.white: Colors.black)),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                CircleAvatar(
+                                  radius: 12.h,
+                                  backgroundColor: const Color(0xFF13D209),
+                                ),
+                                Text(
+                                  ' 76+ ${context.isArabic ? 'اقتراح كان نشط اليوم السابق' : 'suggestions were active in the last day!'}',
+                                  style: const TextStyle(
+                                      fontSize: 14,
+                                      overflow: TextOverflow.ellipsis),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                    ClickableWidget(
-                        onTap: () => showFilterBottomSheet(context),
-                        child:
-                            const Icon(Icons.more_horiz, color: Colors.black)),
-                  ],
-                ),
-                const Sizer(),
+                      ClickableWidget(
+                          onTap: () => showFilterBottomSheet(context),
+                          child: Icon(Icons.more_horiz, color:context.isDarkMode?Colors.white: Colors.black)),
+                    ],
+                  ),
+                  const Sizer(),
 
-                FormTextField(
-                  prefix: const Icon(Icons.search),
-                  hint: context.isArabic ? 'بحث...' : 'Search...',
-                  fillColor: const Color(0xFFEDEDED),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                const Sizer(),
-                sectionTitle(context.isArabic ? 'اضف' : "Added Me"),
-                ...List.generate(3, (index) {
-                  if (blockedIndexes.contains(index)) {
-                    return blockedUserTile(index);
-                  }
-                  return FriendsTile(
-                    index: index,
-                    name: "Ahmed Mohamed",
-                    subtitle: "Say Hi!",
-                    hasCameraButtons: index == 1 ? false : true,
-                    isMyContact: index == 1 ? true : false,
-                    hasAcceptButton: index == 1 ? true : false,
-                    hasCloseButtons: index == 1 ? true : false,
-                    onClose: () => setState(() {
-                      blockedIndexes.add(index);
-                    }),
-                  );
-                }),
-                viewMoreButton(),
+                  FormTextField(
+                    prefix: Icon(Icons.search,color: Colors.black,),
+                    hint: context.isArabic ? 'بحث...' : 'Search...',
+                    fillColor: const Color(0xFFEDEDED),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  const Sizer(),
+                  sectionTitle(context.isArabic ? 'اضف' : "Added Me"),
+                  const Sizer(),
+                  ListView.separated(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: 3,
+                    itemBuilder: (context, index) {
+                      if (blockedIndexes.contains(index)) {
+                        return blockedUserTile(index);
+                      }
+                      return FriendsTile(
+                        index: index,
+                        name: "Ahmed Mohamed",
+                        subtitle: "Say Hi!",
+                        hasCameraButtons: index == 1 ? false : true,
+                        isMyContact: index == 1 ? true : false,
+                        hasAcceptButton: index == 1 ? true : false,
+                        hasCloseButtons: index == 1 ? true : false,
+                        onClose: () => setState(() {
+                          blockedIndexes.add(index);
+                        }),
+                      );
+                    },
+                    separatorBuilder: (context, index) => const SizedBox(height: 10),
+                  ),
+                  // ...List.generate(3, (index) {
+                  //   if (blockedIndexes.contains(index)) {
+                  //     return blockedUserTile(index);
+                  //   }
+                  //   return FriendsTile(
+                  //     index: index,
+                  //     name: "Ahmed Mohamed",
+                  //     subtitle: "Say Hi!",
+                  //     hasCameraButtons: index == 1 ? false : true,
+                  //     isMyContact: index == 1 ? true : false,
+                  //     hasAcceptButton: index == 1 ? true : false,
+                  //     hasCloseButtons: index == 1 ? true : false,
+                  //     onClose: () => setState(() {
+                  //       blockedIndexes.add(index);
+                  //     }),
+                  //   );
+                  // }),
+                  viewMoreButton(),
 
-                // قائمة "Find Friends"
-                sectionTitle(
-                    context.isArabic ? 'ابحث عن اصدقاء' : "Find Friends",
-                    trailing: context.isArabic ? 'جهات اتصالي' : "All Contacts",
-                    onTap: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const AllContactsView(),
-                          ),
-                        )),
-                ...List.generate(5, (index) {
-                  int totalIndex = index + 3;
-                  if (blockedIndexes.contains(totalIndex)) {
-                    return blockedUserTile(totalIndex);
-                  }
-                  return FriendsTile(
-                    index: totalIndex,
-                    name: "Ahmed Mohamed",
-                    subtitle: "Say Hi!",
-                    hasAddButton: true,
-                    isMyContact: true,
-                    hasCloseButtons: true,
-                    onClose: () => setState(() {
-                      blockedIndexes.add(totalIndex);
-                    }),
-                  );
-                }),
-              ],
+                  // قائمة "Find Friends"
+                  sectionTitle(
+                      context.isArabic ? 'ابحث عن اصدقاء' : "Find Friends",
+                      trailing: context.isArabic ? 'جهات اتصالي' : "All Contacts",
+                      onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => const AllContactsView(),
+                            ),
+                          )),
+                   ListView.separated(
+                    physics:const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: 5,
+                    itemBuilder: (context, index) {
+                      int totalIndex = index + 3;
+                      if (blockedIndexes.contains(totalIndex)) {
+                        return blockedUserTile(totalIndex);
+                      }
+                      return FriendsTile(
+                        index: totalIndex,
+                        name: "Ahmed Mohamed",
+                        subtitle: "Say Hi!",
+                        hasAddButton: true,
+                        isMyContact: true,
+                        hasCloseButtons: true,
+                        onClose: () => setState(() {
+                          blockedIndexes.add(totalIndex);
+                        }),
+                      );
+                    },
+                    separatorBuilder: (context, index) => const SizedBox(height: 10),
+                  ),
+
+                  // ...List.generate(5, (index) {
+                  //   int totalIndex = index + 3;
+                  //   if (blockedIndexes.contains(totalIndex)) {
+                  //     return blockedUserTile(totalIndex);
+                  //   }
+                  //   return FriendsTile(
+                  //     index: totalIndex,
+                  //     name: "Ahmed Mohamed",
+                  //     subtitle: "Say Hi!",
+                  //     hasAddButton: true,
+                  //     isMyContact: true,
+                  //     hasCloseButtons: true,
+                  //     onClose: () => setState(() {
+                  //       blockedIndexes.add(totalIndex);
+                  //     }),
+                  //   );
+                  // }),
+                ],
+              ),
             ),
           ),
         ),
@@ -133,16 +186,17 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(title,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+            style:const  TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
         if (trailing != null)
           ClickableWidget(
             onTap: onTap,
             child: Row(
               children: [
-                Text(trailing, style: Styles.mediumText()),
+                Text(trailing, style: Styles.mediumText(color: context.isDarkMode?Colors.white:Colors.black)),
                 Icon(
                   Icons.arrow_forward_ios,
                   size: 26.h,
+                  color:context.isDarkMode?Colors.white:Colors.black
                 )
               ],
             ),
@@ -154,7 +208,7 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
   Widget blockedUserTile(int index) {
     return Container(
       //margin: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      padding: EdgeInsets.symmetric(vertical: 10.h),
+      padding: EdgeInsets.symmetric(vertical: 6.h),
       decoration: BoxDecoration(
         color: Colors.grey.shade300,
         borderRadius: BorderRadius.circular(12),
@@ -218,7 +272,7 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
       child: TextButton.icon(
         onPressed: () {},
         icon: Container(
-          padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
           decoration: BoxDecoration(
               color: Colors.black, borderRadius: BorderRadius.circular(6)),
           child: Text(context.isArabic ? 'جديد' : "New",
@@ -226,7 +280,7 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
         ),
         label: Text(
           context.isArabic ? 'مشاهدة 2 اخرين' : "view 2 more",
-          style: Styles.mediumText(fontWeight: FontWeight.w500),
+          style: Styles.mediumText(fontWeight: FontWeight.w500,color: context.isDarkMode?Colors.white:Colors.black),
         ),
       ),
     );
@@ -246,7 +300,7 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
           children: [
             Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color:Theme.of(context).scaffoldBackgroundColor,
                 borderRadius: BorderRadius.circular(10),
               ),
               padding: EdgeInsets.symmetric(horizontal: 24.h, vertical: 10.h),
@@ -259,7 +313,7 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
                         context.isArabic
                             ? 'مخفي من البحث عن اصدقاء'
                             : "Hidden From Find Friends",
-                        style: Styles.mediumText(fontWeight: FontWeight.w500)),
+                        style: Styles.mediumText(fontWeight: FontWeight.w500,color:context.isDarkMode?Colors.white:Colors.black)),
                     onTap: () => Navigator.of(context).pop(),
                     dense: false,
                     visualDensity:
@@ -271,7 +325,7 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
                               ? 'طلبات الصداقة التي تم تجاهلها'
                               : "Friends Requests I've Ignored",
                           style:
-                              Styles.mediumText(fontWeight: FontWeight.w500)),
+                              Styles.mediumText(fontWeight: FontWeight.w500,color:context.isDarkMode?Colors.white:Colors.black)),
                       onTap: () => Navigator.of(context).pop(),
                       dense: false,
                       visualDensity:
@@ -282,7 +336,7 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
                               ? 'الاصدقاء المضافين حديثاً'
                               : "Friends I've Recently Added",
                           style:
-                              Styles.mediumText(fontWeight: FontWeight.w500)),
+                              Styles.mediumText(fontWeight: FontWeight.w500,color:context.isDarkMode?Colors.white:Colors.black)),
                       onTap: () => Navigator.of(context).pop(),
                       dense: false,
                       visualDensity:
@@ -298,7 +352,7 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
                 height: 48,
                 child: TextButton(
                   style: TextButton.styleFrom(
-                    backgroundColor: const Color(0xFFF0F0F0),
+                    backgroundColor:Theme.of(context).scaffoldBackgroundColor,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -306,9 +360,9 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
                   onPressed: () => Navigator.pop(context),
                   child: Text(
                     LocaleKeys.done.localize,
-                    style: const TextStyle(
+                    style:  TextStyle(
                       fontSize: 16,
-                      color: Colors.black,
+                      color:context.isDarkMode?Colors.white:Colors.black,
                       fontWeight: FontWeight.w500,
                     ),
                   ),

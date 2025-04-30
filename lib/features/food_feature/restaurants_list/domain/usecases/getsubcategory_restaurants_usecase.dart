@@ -3,15 +3,16 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_2_model.dart';
 
 import '../../../../../core/abstract/use_case.dart';
+import '../entities/restaurant.dart';
 import '../repositories/resturant_list_repo.dart';
 
 class GetSubCategoryRestaurantsUseCases
-    extends UseCase<List<Restaurant2Model>, GetSubCategoryRestaurants> {
+    extends UseCase<List<GetAllRestaurantEntity>, GetSubCategoryRestaurants> {
   final RestaurantListRepo _repo;
   GetSubCategoryRestaurantsUseCases(this._repo);
 
   @override
-  Future<Either<Failure, List<Restaurant2Model>>> call(
+  Future<Either<Failure, List<GetAllRestaurantEntity>>> call(
       GetSubCategoryRestaurants params) {
     return _repo.getSubCategoryRestaurants(params: params);
   }

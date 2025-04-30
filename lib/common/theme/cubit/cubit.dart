@@ -9,6 +9,10 @@ class ThemeCubit extends Cubit<ThemeStates> {
 
   bool isDarkTheme = false;
 
+  Future<void> getMode() async {
+    isDarkTheme = await CacheManager.getMode();
+    emit(isDarkTheme ? DarkThemeModeStates() : LightThemeModeStates());
+  }
   Future<void> lightThemeMode() async {
     isDarkTheme = false;
     await CacheManager.isDarkMode(isDarkTheme);

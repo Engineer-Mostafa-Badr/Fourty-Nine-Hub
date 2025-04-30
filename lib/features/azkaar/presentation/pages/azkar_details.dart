@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/azkaar/presentation/cubit/azkaar_cubit.dart';
 import 'package:fourtyninehub/features/azkaar/presentation/cubit/azkaar_state.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -50,6 +51,8 @@ class _AzkarDetailsState extends State<AzkarDetails> {
         label: widget.category,
         enableCustomAppBar: true,
       ),
+      enableCustomAppBar: true,
+
       body: BlocBuilder<AzkarCubit, AzkarState>(
         builder: (BuildContext context, state) {
           if (state.status == AzkarStates.loading) {
@@ -58,62 +61,66 @@ class _AzkarDetailsState extends State<AzkarDetails> {
           return ListView.separated(
             controller: _scrollController,
             physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.all(16),
             itemBuilder: (context, index) {
               if (index == _cubit.azkarDetails.length) {
                 return const Center(child: CircularProgressIndicator());
               }
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text.rich(
-                    textDirection: TextDirection.rtl,
-                    TextSpan(
-                      children: [
-                        TextSpan(
-                          text: state.azkarDetail![index].zekr, // Zekr text
-                          style: TextStyle(
-                            fontFamily: 'Amiri',
-                            fontSize: 40.sp,
-                            color:
-                                Theme.of(context).scaffoldBackgroundColor,
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text.rich(
+                      textDirection: TextDirection.rtl,
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: state.azkarDetail![index].zekr, // Zekr text
+                            style: TextStyle(
+                              fontFamily: 'Amiri',
+                              fontSize: 40.sp,
+                              color:
+                                  context.isDarkMode? Colors.white : AppColors.PRIMARY_COLOR,
+                            ),
                           ),
-                        ),
-                        TextSpan(
-                          text: state.azkarDetail?[index].count != null
-                              ? '(${state.azkarDetail![index].count})' // Show count with parentheses if not null
-                              : '', // Count text in red
-                          style: TextStyle(
-                            fontFamily: 'Amiri',
-                            fontSize: 40.sp,
-                            color: Colors.red, // Red color for the count
+                          TextSpan(
+                            text: state.azkarDetail?[index].count != null
+                                ? '(${state.azkarDetail![index].count})' // Show count with parentheses if not null
+                                : '', // Count text in red
+                            style: TextStyle(
+                              fontFamily: 'Amiri',
+                              fontSize: 40.sp,
+                              color: Colors.red, // Red color for the count
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
+                      textAlign: TextAlign.right,
                     ),
-                    textAlign: TextAlign.right,
-                  ),
-                  if (state.azkarDetail![index].description!.isNotEmpty)
-                    Text(state.azkarDetail![index].description!,
-                        textAlign: TextAlign.right,
-                        textDirection: TextDirection.rtl,
-                        style: TextStyle(
-                          fontFamily: 'Amiri',
-                          fontSize: 30.sp,
-                          color: AppColors.SECONDARY_COLOR,
-                        )),
-                  if (state.azkarDetail![index].reference!.isNotEmpty)
-                    Align(
-                      alignment: AlignmentDirectional.topStart,
-                      child: Text(state.azkarDetail![index].reference!,
-                          textAlign: TextAlign.left,
+                    if (state.azkarDetail![index].description!.isNotEmpty)
+                      Text(state.azkarDetail![index].description!,
+                          textAlign: TextAlign.right,
                           textDirection: TextDirection.rtl,
                           style: TextStyle(
                             fontFamily: 'Amiri',
                             fontSize: 30.sp,
                             color: AppColors.SECONDARY_COLOR,
                           )),
-                    ),
-                ],
+                    if (state.azkarDetail![index].reference!.isNotEmpty)
+                      Align(
+                        alignment: AlignmentDirectional.topStart,
+                        child: Text(state.azkarDetail![index].reference!,
+                            textAlign: TextAlign.left,
+                            textDirection: TextDirection.rtl,
+                            style: TextStyle(
+                              fontFamily: 'Amiri',
+                              fontSize: 30.sp,
+                              color: AppColors.SECONDARY_COLOR,
+                            )),
+                      ),
+                  ],
+                ),
               );
             },
             separatorBuilder: (context, index) => const Divider(

@@ -40,7 +40,7 @@ class _ReelSearchViewState extends State<ReelSearchView> {
     final current = _scrollController.position.pixels;
     final searchText = _cubit.searchController.text.trim();
 
-    if (searchText.isEmpty) return;
+    // if (searchText.isEmpty) return;
 
     if (current >= max - _scrollThreshold &&
         !_cubit.isLoadingReelsSearchMore &&
@@ -48,7 +48,7 @@ class _ReelSearchViewState extends State<ReelSearchView> {
       final prefs = await SharedPreferences.getInstance();
       final filter = prefs.getString('filter') ?? '';
       final params = SearchParams(
-        search: searchText,
+        search: _cubit.searchController.text.trim(),
         filter: filter,
         params: PaginationParams(page: _cubit.reelsSearchPage),
       );
@@ -71,8 +71,15 @@ class _ReelSearchViewState extends State<ReelSearchView> {
       child: BlocBuilder<SearchCubit, SearchState>(
         builder: (context, state) {
           final reels = _cubit.reelsSearch;
-
-          if (state.status == SearchStates.loading && reels.isEmpty) {
+          if (_cubit.searchController.text.trim().isEmpty) {
+            return Center(
+              child: Text(
+                LocaleKeys.noData.localize,
+                style: Styles.mediumText(),
+              ),
+            );
+          }
+          if (state.status == SearchStates.loading) {
             return const Center(child: CupertinoActivityIndicator());
           }
 

@@ -389,6 +389,7 @@ abstract class Assets {
   static String receiptIcon = 'assets/icons/receipt_icon.svg';
   static String star2 = 'assets/icons/star.svg';
   static String star1 = 'assets/icons/star1.svg';
+  static String halfStar = 'assets/icons/half_star.svg';
   static String starEmpty = 'assets/icons/StarEmpty.svg';
   static String emergencyIcon = 'assets/icons/emergency.png';
   static String automaticAcceptIcon = 'assets/icons/automatic_accept.png';
@@ -432,6 +433,7 @@ abstract class Assets {
   static String userShippingTripsIconDark =
       'assets/icons/user_shipping_trips_dark.svg';
   static String viewCountIcon = 'assets/icons/view_count_icon.svg';
+  static String eyeIcon = 'assets/icons/eye.svg';
   static String viewCountIconDark = 'assets/icons/view_count_icon_dark.svg';
 
   static String phoneRed = 'assets/icons/phone_red.svg';
@@ -562,4 +564,5 @@ abstract class Assets {
   static String find_inbox = "assets/icons/find_inbox.png";
   static String hotelFilter = "assets/icons/hotel.png";
   static String comingSoon = "assets/icons/comingSoon.png";
+  static String login = "assets/icons/login.png";
 }
