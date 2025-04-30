@@ -4,6 +4,7 @@ import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/cards/available_trips_card.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/cards/display_trip_join_card.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_bottom_sheet/show_bottom_sheet.dart';
 import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation/views/Modified_widgets/trip_join_bottom_sheet/submit_bottom_sheet.dart';
@@ -12,22 +13,17 @@ import 'package:fourtyninehub/features/trip_join/view_all_trip_join/presentation
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
-class AllPickMeView extends StatefulWidget {
-  const AllPickMeView({super.key});
+class TripJoinContent extends StatefulWidget {
+  const TripJoinContent({super.key});
 
   @override
-  State<AllPickMeView> createState() => _AllPickMeViewState();
+  State<TripJoinContent> createState() => _TripJoinContentState();
 }
 
-class _AllPickMeViewState extends State<AllPickMeView>
+class _TripJoinContentState extends State<TripJoinContent>
     with TickerProviderStateMixin {
-  // final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String _displayedCategory = LocaleKeys.availableTrips;
-
-  //
-  // late AnimationController _controller;
-  // late Animation<double> _scaleAnimation;
-  // late Animation<double> _positionAnimation;
+  int selectedIndex = 1;
   late TabController tabController;
 
   @override
@@ -38,7 +34,6 @@ class _AllPickMeViewState extends State<AllPickMeView>
       setState(() {});
     });
   }
-
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -48,48 +43,51 @@ class _AllPickMeViewState extends State<AllPickMeView>
           Sizer(
             height: 10.h,
           ),
+
           ListView.builder(
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: 3,
+              itemCount: 2,
               itemBuilder: (BuildContext context, int index) {
                 switch (_displayedCategory) {
                   case LocaleKeys.availableTrips:
-                    return TripJoinCard(
-                      subscribtionPlan: LocaleKeys.notSubscribed.localize,
+                    return AvailableTripsCard(
+                      subscribtionPlan: context.isArabic?'العروض المميزة':LocaleKeys.premium.localize,
                       title: context.isArabic
-                          ? index == 0
-                              ? 'Sara'
-                              : 'Ibrahim'
-                          : index == 0
-                              ? 'ساره'
-                              : 'ابراهيم',
+                          ? 'كيا، سيراتو'
+                          : 'Kia, Cerato',
                       buttonTitle: LocaleKeys.request.localize,
-                      isMale: index == 0 ? false : true,
-                      time: context.isArabic ? '8:00 مساء' : '8:00 Pm',
+                      isMale: true,
+                      time:
+                      context.isArabic ? '8:00 مساء' : '8:00 Pm',
                       seats: 2,
                       status: context.isArabic ? 'مكرر' : 'Repeat',
                       isRequestButton: true,
                       isContactInfo: true,
-                      iconCar: false,
+                      iconCar: true,
                       onTab: () => JoinTripBottomSheet(context,
                           topButtonColor: AppColors.SECONDARY_COLOR,
-                          topButtonTitle: LocaleKeys.premium_request.localize,
+                          topButtonTitle:
+                          LocaleKeys.premium_request.localize,
                           bottomButtonColor: AppColors.PRIMARY_COLOR,
-                          bottomButtonTitle: LocaleKeys.request.localize,
+                          bottomButtonTitle:
+                          LocaleKeys.request.localize,
                           onTap: () => SubmitBottomSheet(
-                                context,
-                                buttonColor: AppColors.PRIMARY_COLOR,
-                                buttonTitle: LocaleKeys.submit.localize,
-                              )),
+                            context,
+                            buttonColor: AppColors.PRIMARY_COLOR,
+                            buttonTitle:
+                            LocaleKeys.submit.localize,
+                          )),
                     );
+
                   case LocaleKeys.requestLog:
                     return TripJoinCard(
-                      subscribtionPlan: LocaleKeys.notSubscribed.localize,
+                      subscribtionPlan: LocaleKeys.premium.localize,
                       title: context.isArabic ? 'محمد' : 'Mohamed',
                       isMale: true,
                       buttonTitle: LocaleKeys.request.localize,
-                      time: context.isArabic ? '8:00 مساء' : '8:00 Pm',
+                      time:
+                      context.isArabic ? '8:00 مساء' : '8:00 Pm',
                       seats: 2,
                       status: context.isArabic ? 'انتهت' : 'Expired',
                       isRequestButton: false,
@@ -99,28 +97,29 @@ class _AllPickMeViewState extends State<AllPickMeView>
                     );
                   case LocaleKeys.myAds:
                     return TripJoinCard(
-                      subscribtionPlan: LocaleKeys.notSubscribed.localize,
+                      subscribtionPlan: LocaleKeys.premium.localize,
                       title: context.isArabic
-                          ? index == 0
-                              ? 'Sara'
-                              : 'Ibrahim'
-                          : index == 0
-                              ? 'ساره'
-                              : 'ابراهيم',
-                      isMale: index == 0 ? false : true,
+                          ? 'كيا، سيراتو'
+                          : 'Kia, Cerato',
+                      isMale: true,
                       buttonTitle: LocaleKeys.deleteAd.localize,
-                      time: context.isArabic ? '8:00 مساء' : '8:00 Pm',
+                      time:
+                      context.isArabic ? '8:00 مساء' : '8:00 Pm',
                       seats: 2,
-                      status: context.isArabic ? 'مرة واحدة' : 'One Time',
+                      status:
+                      context.isArabic ? 'مرة واحدة' : 'One Time',
                       isRequestButton: true,
                       isContactInfo: false,
-                      iconCar: false,
+                      iconCar: true,
                       onTab: () => showDialogTripJoin(
                           context,
                           DialogContent(
-                            subTitle: LocaleKeys.areDeleteThisAd.localize,
-                            leftButtonTitle: LocaleKeys.deleteAd.localize,
-                            rightButtonTitle: LocaleKeys.close.localize,
+                            subTitle:
+                            LocaleKeys.areDeleteThisAd.localize,
+                            leftButtonTitle:
+                            LocaleKeys.deleteAd.localize,
+                            rightButtonTitle:
+                            LocaleKeys.close.localize,
                           )),
                     );
                 }
@@ -155,7 +154,8 @@ class _AllPickMeViewState extends State<AllPickMeView>
         Expanded(
           child: _buildCategory(
             title: LocaleKeys.myAds,
-            index: 2,),
+            index: 2,
+          ),
         ),
       ],
     );

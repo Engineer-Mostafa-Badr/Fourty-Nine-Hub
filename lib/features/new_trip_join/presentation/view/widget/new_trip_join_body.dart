@@ -20,7 +20,7 @@ class NewTripJoinBody extends StatelessWidget {
             children: [
               TripOptionWidget(
                 imagePath: Assets.locationTripIcon,
-                title: context.isArabic ? 'مشاركة كابتن' : 'Captain\nShare',
+                title: context.isArabic ? 'مشاركة كابتن' : 'Captain Share',
                 onTap: () {
                   context.push(Routes.captainShareScreen);
                 },

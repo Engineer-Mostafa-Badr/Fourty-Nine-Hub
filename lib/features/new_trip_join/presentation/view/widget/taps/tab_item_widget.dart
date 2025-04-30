@@ -28,7 +28,7 @@ class TabItemWidget extends StatelessWidget {
         children: [
           Container(
             //   padding: EdgeInsets.symmetric(horizontal: 30.w),
-            width: 150.w,
+            width: 140.w,
             height: 80.h,
             decoration: BoxDecoration(
               color: isSelected ? Color(0XFFF88B92) : Colors.white,
