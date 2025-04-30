@@ -71,7 +71,7 @@ class _WinnersGridViewState extends State<WinnersGridView> {
               mainAxisSpacing: 8,
               childAspectRatio: 110 / 173,
               crossAxisCount: 3,
-              mainAxisExtent: 173,
+              mainAxisExtent: 180,
             ),
             itemBuilder: (context, index) {
               if (index < widget.winners.length) {
@@ -123,7 +123,9 @@ class WinnersGridViewItem extends StatelessWidget {
       // width: 110,
       // padding: EdgeInsets.symmetric(horizontal: 7),
       decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.7),
+        color: context.isDarkMode
+            ? const Color(0xB3FFFFFF)
+            : const Color(0xB3000000),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Stack(
@@ -163,7 +165,9 @@ class WinnersGridViewItem extends StatelessWidget {
                   text: winner.name,
                   style: Styles.headerText(
                     fontSize: 24,
-                    color: Colors.white,
+                    color: context.isDarkMode
+                        ? const Color(0xff0D0D0D)
+                        : Colors.white,
                   ),
                 ),
               ),
@@ -173,14 +177,18 @@ class WinnersGridViewItem extends StatelessWidget {
                   text: winner.title!,
                   style: Styles.mediumText(
                     fontSize: 20,
-                    color: Colors.white,
+                    color: context.isDarkMode
+                        ? const Color(0xff0D0D0D)
+                        : Colors.white,
                   ),
                 ),
               Label(
                 text: formatDateInWinners(winner.date, context),
                 style: Styles.mediumText(
                   fontSize: 20,
-                  color: Colors.white,
+                  color: context.isDarkMode
+                      ? const Color(0xff0D0D0D)
+                      : Colors.white,
                 ),
               ),
               Label(
@@ -188,15 +196,18 @@ class WinnersGridViewItem extends StatelessWidget {
                     '${FormatNumbers().formatNumberByComma(winner.price, isArabic: context.isArabic)} ${context.isArabic ? winner.currencyAr : winner.currencyEn}',
                 style: Styles.mediumText(
                   fontSize: 20,
-                  color: Colors.white,
+                  color: context.isDarkMode
+                      ? const Color(0xff0D0D0D)
+                      : Colors.white,
                 ),
               ),
             ],
           ),
           Positioned(
             top: -2,
-            right: 11,
-            child: SvgPicture.asset(Assets.crownIcon),
+            right: 14,
+            child: SvgPicture.asset(
+                context.isDarkMode ? Assets.crownIconDark : Assets.crownIcon),
           ),
         ],
       ),

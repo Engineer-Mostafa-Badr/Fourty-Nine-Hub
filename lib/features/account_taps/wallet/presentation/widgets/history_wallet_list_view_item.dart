@@ -31,7 +31,14 @@ class HistoryWalletListViewItem extends StatelessWidget {
       child: Row(
         children: [
           SvgPicture.asset(
-              isReceived ? Assets.historyClockGreen : Assets.historyClockRed),
+            isReceived
+                ? context.isDarkMode
+                    ? Assets.historyClockGreenDarkMode
+                    : Assets.historyClockGreen
+                : context.isDarkMode
+                    ? Assets.historyClockRedDarkMode
+                    : Assets.historyClockRed,
+          ),
           const SizedBox(
             width: 16,
           ),

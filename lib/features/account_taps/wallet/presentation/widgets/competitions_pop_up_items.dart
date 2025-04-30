@@ -30,7 +30,7 @@ class CompetitionsPopUpItems extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       // margin: const EdgeInsets.symmetric(vertical: 55, horizontal: 22),
       decoration: BoxDecoration(
-        color: context.isDarkMode ? Colors.grey[700] : Colors.white,
+        color: context.isDarkMode ? const Color(0xff0D0D0D) : Colors.white,
         borderRadius: BorderRadius.circular(25),
       ),
       child: Column(
@@ -52,7 +52,9 @@ class CompetitionsPopUpItems extends StatelessWidget {
                           useArabicNumerals: context.isArabic,
                         )
                         .toString(),
-                    svgPath: Assets.luckyWheelIcon,
+                    svgPath: context.isDarkMode
+                        ? Assets.luckyWheelIconDark
+                        : Assets.luckyWheelIcon,
                   );
                 }
                 final competitionIndex = index - 1;
@@ -67,8 +69,12 @@ class CompetitionsPopUpItems extends StatelessWidget {
                         useArabicNumerals: context.isArabic,
                       )
                       .toString(),
-                  svgPath:
-                      competitionIcons[competitions[competitionIndex].id] ?? '',
+                  svgPath: context.isDarkMode
+                      ? competitionIconsDark[
+                              competitions[competitionIndex].id] ??
+                          ''
+                      : competitionIcons[competitions[competitionIndex].id] ??
+                          '',
                 );
               },
             ),
@@ -83,8 +89,9 @@ class CompetitionsPopUpItems extends StatelessWidget {
             },
             status: true,
             textStyle: Styles.headerText(fontWeight: FontWeight.w500),
-            activeColor:
-                context.isDarkMode ? Colors.grey[900] : const Color(0xffD9D9D9),
+            activeColor: context.isDarkMode
+                ? const Color(0xff333333)
+                : const Color(0xffD9D9D9),
           ),
         ],
       ),

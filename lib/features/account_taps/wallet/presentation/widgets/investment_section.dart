@@ -146,7 +146,7 @@ class _InvestmentSectionState extends State<InvestmentSection> {
                   ),
                   decoration: ShapeDecoration(
                     color: context.isDarkMode
-                        ? Colors.grey[700]
+                        ? const Color(0xff333333)
                         : const Color(0xFFD9D9D9),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
@@ -159,7 +159,9 @@ class _InvestmentSectionState extends State<InvestmentSection> {
                         style: Styles.headerText(
                           fontSize: 32,
                           fontWeight: FontWeight.w700,
-                          color: const Color(0xFFF33D49),
+                          color: context.isDarkMode
+                              ? const Color(0xffF45560)
+                              : const Color(0xFFF33D49),
                         ),
                       ),
                       const SizedBox(

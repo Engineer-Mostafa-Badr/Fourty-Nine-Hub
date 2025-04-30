@@ -42,7 +42,7 @@ class CompetitionListViewItem extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             decoration: BoxDecoration(
               color: context.isDarkMode
-                  ? Colors.grey[700]
+                  ? const Color(0xff333333)
                   : const Color(0xffD9D9D9),
               borderRadius: BorderRadius.circular(20),
             ),
@@ -162,7 +162,7 @@ class CompetitionListViewItem extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             decoration: BoxDecoration(
               color: context.isDarkMode
-                  ? Colors.grey[700]
+                  ? const Color(0xff333333)
                   : const Color(0xffD9D9D9),
               borderRadius: BorderRadius.circular(20),
             ),

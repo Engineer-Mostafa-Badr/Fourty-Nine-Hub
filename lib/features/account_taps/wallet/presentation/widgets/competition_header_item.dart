@@ -22,9 +22,11 @@ class CompetitionHeaderItem extends StatelessWidget {
         Container(
           height: 40,
           width: 40,
-          decoration: const ShapeDecoration(
-            color: Color(0xFFD9D9D9),
-            shape: OvalBorder(),
+          decoration: ShapeDecoration(
+            color: context.isDarkMode
+                ? const Color(0xff333333)
+                : const Color(0xFFD9D9D9),
+            shape: const OvalBorder(),
           ),
           child: Center(
             child: svgPath.isEmpty

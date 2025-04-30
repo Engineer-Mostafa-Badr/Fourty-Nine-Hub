@@ -197,7 +197,9 @@ class WalletViewBody extends StatelessWidget {
                     width: double.infinity,
                     child: ButtonWalletAndBill(
                       icon: SvgPicture.asset(
-                        Assets.transferMoneyByMobileIcon,
+                        context.isDarkMode
+                            ? Assets.transferMoneyByMobileIconDark
+                            : Assets.transferMoneyByMobileIcon,
                       ),
                       label: LocaleKeys.transferMoney.localize,
                       onPressed: () {

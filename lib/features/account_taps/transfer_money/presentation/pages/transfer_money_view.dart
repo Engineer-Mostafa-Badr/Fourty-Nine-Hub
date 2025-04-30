@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/error/failure.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
@@ -13,6 +14,7 @@ import 'package:fourtyninehub/features/account_taps/transfer_money/domain/use_ca
 import 'package:fourtyninehub/features/account_taps/transfer_money/presentation/cubit/transfer_money_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/transfer_money/presentation/cubit/transfer_money_state.dart';
 import 'package:fourtyninehub/features/account_taps/transfer_money/presentation/pages/transfer_money_success.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import '../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
 import '../../../../../common/widgets/form/text_fields/search_text_form_field.dart';
 import '../../../../../common/widgets/stateless/dynamic/are_you_sure.dart';
@@ -31,9 +33,9 @@ class TransferMoneyView extends StatefulWidget {
 
 class _TransferMoneyViewState extends State<TransferMoneyView> {
   late final Debouncer _debounce;
-  var amountController = TextEditingController();
-  var searchController = TextEditingController();
-  var formKey = GlobalKey<FormState>();
+  late final TextEditingController amountController;
+  late final TextEditingController searchController;
+  late final GlobalKey<FormState> formKey;
   String? selectedUsername;
   bool showUserList = false;
 
@@ -46,6 +48,15 @@ class _TransferMoneyViewState extends State<TransferMoneyView> {
       String? email, List<UserTransferMoneyEntity>? filteredUsers) {
     if (email == null || filteredUsers == null) return false;
     return filteredUsers.any((user) => user.email == email);
+  }
+
+  @override
+  void initState() {
+    _debounce = Debouncer(duration: const Duration(milliseconds: 500));
+    amountController = TextEditingController();
+    searchController = TextEditingController();
+    formKey = GlobalKey<FormState>();
+    super.initState();
   }
 
   @override
@@ -117,19 +128,30 @@ class _TransferMoneyViewState extends State<TransferMoneyView> {
                             hintStyle: Styles.headerText(
                               fontSize: 32,
                             ),
+                            fillColor: Colors.transparent,
                             currentController: searchController,
                             style: Styles.headerText(
                               fontSize: 32,
-                              color: Colors.black,
+                              // color: Colors.black,
                             ),
                             currentFocusNode: null,
                             margin: EdgeInsets.zero,
-                            borderColor: Colors.black,
+                            borderColor: context.isDarkMode
+                                ? const Color(0xffCACFF4)
+                                : Colors.black,
                             hint: LocaleKeys.transferTo.localize,
+                            hintColor: context.isDarkMode
+                                ? const Color(0xffCACFF4)
+                                : AppColors.QUANTITY_COLOR,
                             onChanged: (value) {
                               setState(() {
                                 // Show the list when the search text is not empty
                                 showUserList = value.isNotEmpty;
+                                _debounce.run(() {
+                                  context
+                                      .read<TransferMoneyCubit>()
+                                      .searchUser(query: value);
+                                });
                               });
                             },
                           ),
@@ -170,11 +192,15 @@ class _TransferMoneyViewState extends State<TransferMoneyView> {
                             currentController: amountController,
                             hint: LocaleKeys.amount.localize,
                             hintStyle: Styles.headerText(
-                                fontSize: 32, color: Colors.black),
-                            fillColor: Colors.white,
+                              fontSize: 32,
+                            ),
+                            fillColor: Colors.transparent,
                             style: Styles.headerText(
-                                fontSize: 32, color: Colors.black),
-                            borderColor: Colors.black,
+                              fontSize: 32,
+                            ),
+                            borderColor: context.isDarkMode
+                                ? const Color(0xffCACFF4)
+                                : Colors.black,
                           ),
                         ),
                         // FormTextField(
@@ -206,9 +232,12 @@ class _TransferMoneyViewState extends State<TransferMoneyView> {
                         if (!state.isTransferLoading)
                           AppButton(
                             label: LocaleKeys.confirm.localize,
+                            backColor: const Color(0xffEF333C),
                             style: Styles.headerText(
                               fontSize: 32,
-                              color: Colors.white,
+                              color: context.isDarkMode
+                                  ? const Color(0xff0D0D0D)
+                                  : Colors.white,
                             ),
                             height: 44,
                             radius: 15,
@@ -279,9 +308,12 @@ class _TransferMoneyViewState extends State<TransferMoneyView> {
                       ],
                     ),
                   ),
-                  if (showUserList &&
-                      filteredUsers != null &&
-                      filteredUsers.isNotEmpty)
+                  // if (showUserList &&
+                  //     filteredUsers != null &&
+                  //     filteredUsers.isNotEmpty)
+                  if (state.users != null &&
+                      state.users!.isNotEmpty &&
+                      showUserList)
                     Positioned(
                       top: 47,
                       left: 0,
@@ -290,11 +322,16 @@ class _TransferMoneyViewState extends State<TransferMoneyView> {
                         width: double.infinity,
                         height: MediaQuery.sizeOf(context).height * 0.3,
                         decoration: ShapeDecoration(
-                          color: Colors.white,
+                          color: context.isDarkMode
+                              ? const Color(0xff0D0D0D)
+                              : Colors.white,
                           shape: RoundedRectangleBorder(
-                            side: const BorderSide(
+                            side: BorderSide(
                               width: 2,
                               strokeAlign: BorderSide.strokeAlignCenter,
+                              color: context.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black,
                             ),
                             borderRadius: BorderRadius.circular(15),
                           ),
@@ -304,9 +341,11 @@ class _TransferMoneyViewState extends State<TransferMoneyView> {
                         //   color: Theme.of(context).primaryColor,
                         // ),
                         child: ListView.builder(
-                          itemCount: filteredUsers.length,
+                          itemCount:
+                              state.users!.length, // filteredUsers.length,
                           itemBuilder: (context, index) {
-                            var user = filteredUsers[index];
+                            // var user = filteredUsers[index];
+                            var user = state.users![index];
                             // String fullName =
                             //     '${capitalize(user.firstName)} ${capitalize(user.lastName)}';
                             return ListTile(
