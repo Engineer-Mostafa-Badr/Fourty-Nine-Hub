@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/cubit/social_posts_cubit.dart';
@@ -19,7 +20,8 @@ class FacebookBody extends StatefulWidget {
   State<FacebookBody> createState() => _FacebookBodyState();
 }
 
-class _FacebookBodyState extends State<FacebookBody> with TickerProviderStateMixin{
+class _FacebookBodyState extends State<FacebookBody>
+    with TickerProviderStateMixin {
   late TabController tabController;
   @override
   void initState() {
@@ -27,7 +29,7 @@ class _FacebookBodyState extends State<FacebookBody> with TickerProviderStateMix
     super.initState();
   }
 
-    @override
+  @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
@@ -43,67 +45,75 @@ class _FacebookBodyState extends State<FacebookBody> with TickerProviderStateMix
       ],
       child: Column(
         children: [
-          TabBar(
-              controller: tabController,
-              tabs: [
-                Tab(
-                  height: 44,
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children:[
-                        SvgPicture.asset(Assets.home,width: 18,height: 18,),
-                        const SizedBox(width: 10),
-                        Text(LocaleKeys.home.localize,style:const TextStyle(
-                            color: Colors.black,
-                            fontSize: 12,
-                            fontWeight:FontWeight.w700
-                        ))
-                      ]
-                  ),
-                  // icon: SvgPicture.asset(Assets.home,width: 18,height: 18,),
-                  // text: LocaleKeys.home.localize,
+          TabBar(controller: tabController, tabs: [
+            Tab(
+              height: 44,
+              child:
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                SvgPicture.asset(
+                  Assets.home,
+                  width: 18,
+                  height: 18,
                 ),
-                Tab(
-                  height: 44,
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children:[
-                        SvgPicture.asset(Assets.people,width: 18,height: 18,),
-                        const SizedBox(width: 10),
-                        Text(LocaleKeys.people.localize,style:const TextStyle(
-                            color: Colors.black,
-                            fontSize: 12,
-                            fontWeight:FontWeight.w700
-                        ))
-                      ]
-                  ),
-                  // icon: SvgPicture.asset(Assets.people,width: 18,height: 18,),
-                  // text: LocaleKeys.people.localize,
-                ),
-                Tab(
-                  height: 44,
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children:[
-                        SvgPicture.asset(Assets.profile,width: 18,height: 18,),
-                        const SizedBox(width: 10),
-                        Text(LocaleKeys.profile.localize,style:const TextStyle(
-                            color: Colors.black,
-                            fontSize: 12,
-                            fontWeight:FontWeight.w700
-                        ),overflow: TextOverflow.ellipsis,)
-                      ]
-                  ),
-                  // text: LocaleKeys.profile.localize,
-                ),
+                const SizedBox(width: 10),
+                Text(LocaleKeys.home.localize,
+                    style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700))
               ]),
-          Expanded(child: TabBarView(
-              controller: tabController,
-              children: [
-                const FaceBookView(),
-                Container(),
-                Container(),
-              ]))
+              // icon: SvgPicture.asset(Assets.home,width: 18,height: 18,),
+              // text: LocaleKeys.home.localize,
+            ),
+            Tab(
+              height: 44,
+              child:
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                SvgPicture.asset(
+                  Assets.people,
+                  width: 18,
+                  height: 18,
+                ),
+                const SizedBox(width: 10),
+                Text(LocaleKeys.people.localize,
+                    style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700))
+              ]),
+              // icon: SvgPicture.asset(Assets.people,width: 18,height: 18,),
+              // text: LocaleKeys.people.localize,
+            ),
+            Tab(
+              height: 44,
+              child: Flexible(
+                child:
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  SvgPicture.asset(
+                    Assets.profile,
+                    width: 18,
+                    height: 18,
+                  ),
+                  const SizedBox(width: 10),
+                  Label(
+                    text: LocaleKeys.profile.localize,
+                    style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700),
+                    overflow: TextOverflow.ellipsis,
+                  )
+                ]),
+              ),
+              // text: LocaleKeys.profile.localize,
+            ),
+          ]),
+          Expanded(
+              child: TabBarView(controller: tabController, children: [
+            const FaceBookView(),
+            Container(),
+            Container(),
+          ]))
         ],
       ),
       // child: FaceBookView(),

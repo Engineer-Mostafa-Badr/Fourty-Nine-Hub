@@ -51,6 +51,8 @@ class ExpandableSubscription extends StatelessWidget {
                 style: Styles.mediumText(
                   fontSize: 24,
                   fontWeight: FontWeight.w600,
+                  color: context.isDarkMode ? Colors.white : Colors.black,
+                  height: 1.60,
                 ),
               ),
             ),
@@ -60,8 +62,12 @@ class ExpandableSubscription extends StatelessWidget {
                 fontSize: 24,
                 fontWeight: FontWeight.w600,
                 color: subscription.isActive!
-                    ? const Color(0xff72BA88)
-                    : const Color(0xffF33D49),
+                    ? context.isDarkMode
+                        ? const Color(0xFF83C296)
+                        : const Color(0xff72BA88)
+                    : context.isDarkMode
+                        ? const Color(0xFFF4555F)
+                        : const Color(0xffF33D49),
               ),
             ),
           ],

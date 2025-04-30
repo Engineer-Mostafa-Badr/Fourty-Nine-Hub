@@ -225,9 +225,9 @@ class _InstagramViewBodyState extends State<InstagramViewBody> {
   Widget _buildTabBar(BuildContext context) {
     // final user = context.read<UserCubit>().state.data;
     List<Map<String, String>> icons = [
-      {"Home": Assets.homeIcon},
-      {"Create": Assets.createIcon},
-      {"Profile": Assets.profile2Icon}
+      {LocaleKeys.home.localize: Assets.homeIcon},
+      {LocaleKeys.create.localize: Assets.createIcon},
+      {LocaleKeys.profile.localize: Assets.profile2Icon}
     ];
     int selectedIndex = 0;
     return Container(
@@ -286,14 +286,16 @@ class _InstagramViewBodyState extends State<InstagramViewBody> {
                             const SizedBox(
                               width: 8,
                             ),
-                            Label(
-                              text: icons[index].keys.first.toString(),
-                              style: Styles.headerText(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 32,
-                                color: selectedIndex == index
-                                    ? const Color(0xFF0B1035)
-                                    : const Color(0xffD9D9D9),
+                            Flexible(
+                              child: Label(
+                                text: icons[index].keys.first.toString(),
+                                style: Styles.headerText(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 32,
+                                  color: selectedIndex == index
+                                      ? const Color(0xFF0B1035)
+                                      : const Color(0xffD9D9D9),
+                                ),
                               ),
                             )
                           ],
