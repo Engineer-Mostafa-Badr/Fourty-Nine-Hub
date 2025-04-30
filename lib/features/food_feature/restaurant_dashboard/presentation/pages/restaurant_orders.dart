@@ -230,6 +230,7 @@ class _AvailableRequestFoodState extends State<AvailableRequestFood> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          if(data.createdAt != null)
                           Label(
                             text: DateFormat('yyyy MMM dd HH').format(DateTime.parse(data.createdAt ??"")) + 'h',
                             style: TextStyle(
@@ -754,7 +755,8 @@ class _PastRequestFoodState extends State<PastRequestFood> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Label(
+                          if(data.createdAt != null)
+                            Label(
                             text: DateFormat('yyyy MMM dd HH').format(DateTime.parse(data.createdAt ??"")) + 'h',
                             style: TextStyle(
                               fontWeight: FontWeight.w600,
