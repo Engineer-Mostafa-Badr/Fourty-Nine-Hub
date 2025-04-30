@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -224,25 +225,25 @@ class _AvailableRequestFoodState extends State<AvailableRequestFood> {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    const Padding(
+                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Label(
-                            text: "30 Mins",
+                            text: DateFormat('yyyy MMM dd HH').format(DateTime.parse(data.createdAt ??"")) + 'h',
                             style: TextStyle(
                               fontWeight: FontWeight.w600,
                               fontSize: 14,
                             ),
                           ),
-                          Label(
-                            text: "Today",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14,
-                            ),
-                          ),
+                          // Label(
+                          //   text: "Today",
+                          //   style: TextStyle(
+                          //     fontWeight: FontWeight.w600,
+                          //     fontSize: 14,
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),
@@ -748,25 +749,25 @@ class _PastRequestFoodState extends State<PastRequestFood> {
                       ),
                     ),
                     const SizedBox(height: 8),
-                    const Padding(
+                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Label(
-                            text: "30 Mins",
+                            text: DateFormat('yyyy MMM dd HH').format(DateTime.parse(data.createdAt ??"")) + 'h',
                             style: TextStyle(
                               fontWeight: FontWeight.w600,
                               fontSize: 14,
                             ),
                           ),
-                          Label(
-                            text: "Today",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14,
-                            ),
-                          ),
+                          // Label(
+                          //   text: "Today",
+                          //   style: TextStyle(
+                          //     fontWeight: FontWeight.w600,
+                          //     fontSize: 14,
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),
