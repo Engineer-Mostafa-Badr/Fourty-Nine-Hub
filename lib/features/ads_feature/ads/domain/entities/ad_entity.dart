@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 
 import '../../../../../core/utils/duration_helper.dart';
 import '../../../../authentication/domain/entities/user_entity.dart';
-import '../../../../requests_history/domain/entities/address_entity.dart';
+import 'ads_address_entity.dart';
 
 class AdEntity {
   final String id;
@@ -20,7 +20,7 @@ class AdEntity {
   final bool active;
   final bool approved;
   final AdStatisticsEntity? statistics;
-  final AddressEntity? address;
+  final AdsAddressEntity? address;
   final UserEntity? user;
   List<CreateAdEntity> details;
   DateTime createdAt;

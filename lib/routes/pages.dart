@@ -697,11 +697,6 @@ class AppPages {
                     create: (context) =>
                         serviceLocator<MainCategoriesTapsCubit>(),
                   ),
-                  // BlocProvider(
-                  //   create: (context) =>
-                  //       serviceLocator<SubcategoriesCubit>(),
-                  // ),
-
                 ], child: const MainCategoriesGridView()),
               ),
               GoRoute(
@@ -761,7 +756,7 @@ class AppPages {
                               child: FilterAdsView(
                                 categorization:
                                     state.extra as CategorizationEntity,
-                              )),
+                              ),),
                         ),
                         GoRoute(
                           path: Paths.GOVERNORATEFILTERADS,
@@ -807,7 +802,7 @@ class AppPages {
                 name: Routes.MARRIAGESUBCATEGORIES,
                 builder: (context, state) => BlocProvider(
                   create: (context) => serviceLocator<SubcategoriesCubit>(),
-                  child: MarriageSubCategoriesView(
+                  child: const MarriageSubCategoriesView(
                       // mainCategory: state.extra as MainCategoryEntity,
                       ),
                 ),

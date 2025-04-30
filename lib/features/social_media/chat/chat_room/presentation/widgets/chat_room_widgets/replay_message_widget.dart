@@ -56,9 +56,10 @@ class ReplayMessageWidget extends StatelessWidget {
               if (onCancelReplay != null)
                 GestureDetector(
                   onTap: onCancelReplay,
-                  child: const Icon(
+                  child: Icon(
                     Icons.close,
                     size: 16,
+                    color: context.isDarkMode ? Colors.black : Colors.white,
                   ),
                 ),
             ],
@@ -68,7 +69,7 @@ class ReplayMessageWidget extends StatelessWidget {
           ),
           Label(
             text: messageEntity?.text ?? replyMessage?.text ?? '',
-            color: context.isDarkMode ? Colors.white : Colors.black,
+            color: Colors.black,
           ),
         ],
       );

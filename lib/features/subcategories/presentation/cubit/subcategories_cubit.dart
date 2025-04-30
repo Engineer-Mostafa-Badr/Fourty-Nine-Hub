@@ -157,7 +157,7 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
     return data;
   }
 
-  Future<List<SubCategoryEntity>> getCustomPageSubcategories() async {
+  Future<List<SubCategoryEntity>> getCustomPageSubcategories({String? mainCategoryId}) async {
     print('getCustomPageSubcategories');
 
     List<SubCategoryEntity> data = [];
@@ -166,7 +166,7 @@ class SubcategoriesCubit extends Cubit<SubcategoriesState> {
     print('useeeerId===>$user in getCustomPageSubcategories $_mainCategoryId');
     final response = await _getCustomPageSubCategoriesUseCase(
       GetCustomPageSubCategoriesParams(
-        mainCategoryId: _mainCategoryId,
+        mainCategoryId: mainCategoryId?? _mainCategoryId,
       ),
     );
     response.fold(

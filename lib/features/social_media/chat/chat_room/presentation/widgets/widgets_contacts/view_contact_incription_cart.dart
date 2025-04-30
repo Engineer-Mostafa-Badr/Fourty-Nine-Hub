@@ -55,7 +55,7 @@ class ViewContactEncryptionCart extends StatelessWidget {
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(4),
-                    color: Colors.black38,
+                    color: context.isDarkMode ? Colors.white70 : Colors.black87,
                   ),
                   width: 64,
                   height: 4,
@@ -63,7 +63,9 @@ class ViewContactEncryptionCart extends StatelessWidget {
                 const Sizer(height: 24),
                 Label(
                   text: LocaleKeys.yourChatsAndCallArePrivate.localize,
-                  style: Styles.headerText(),
+                  style: Styles.headerText(
+                    color: context.isDarkMode ? Colors.white : Colors.black,
+                  ),
                 ),
                 const Sizer(height: 32),
                 Padding(
@@ -72,8 +74,11 @@ class ViewContactEncryptionCart extends StatelessWidget {
                     width: double.infinity,
                     child: Label(
                       text: LocaleKeys.endToEndDescription.localize,
-                      style: Styles.mediumText(),
+                      style: Styles.mediumText(
+                        color: context.isDarkMode ? Colors.white : Colors.black,
+                      ),
                       maxLines: 4,
+                      color: context.isDarkMode ? Colors.white : Colors.black,
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -81,7 +86,7 @@ class ViewContactEncryptionCart extends StatelessWidget {
                 const Sizer(height: 24),
                 ...List.generate(
                   5,
-                  (index) => Padding(
+                      (index) => Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -90,20 +95,27 @@ class ViewContactEncryptionCart extends StatelessWidget {
                         if (items[index]['icon'] != null)
                           Icon(
                             items[index]['icon'],
-                            color: Colors.black.withValues(alpha: 0.7),
+                            color: context.isDarkMode
+                                ? Colors.white70
+                                : Colors.black87,
                           )
                         else
                           Image.asset(
                             items[index]['image'],
                             width: 24,
                             height: 24,
+                            color: context.isDarkMode
+                                ? Colors.white70
+                                : Colors.black87,
                           ),
                         const Sizer(),
                         Label(
                           text: items[index]['title'],
                           style: Styles.mediumText(
                             fontWeight: FontWeight.bold,
-                            color: Colors.black.withValues(alpha: 0.7),
+                            color: context.isDarkMode
+                                ? Colors.white70
+                                : Colors.black87,
                           ),
                         ),
                       ],
@@ -125,31 +137,33 @@ class ViewContactEncryptionCart extends StatelessWidget {
             const SizedBox(
               width: 32.0,
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  LocaleKeys.encryption.tr(),
-                  style: Styles.mediumText(
-                    fontWeight: FontWeight.w600,
-                    color: context.isDarkMode
-                        ? AppColors.BACKGROUND_COLOR
-                        : AppColors.PRIMARY_COLOR,
-                  ),
-                ),
-                ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxWidth: MediaQuery.of(context).size.width * 0.75,
-                  ),
-                  child: Text(
-                    LocaleKeys.chatEncryptionMessage.tr(),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    LocaleKeys.encryption.tr(),
                     style: Styles.mediumText(
-                      fontWeight: FontWeight.w400,
-                      color: AppColors.DARK_GRAY_COLOR,
+                      fontWeight: FontWeight.w600,
+                      color: context.isDarkMode
+                          ? AppColors.BACKGROUND_COLOR
+                          : AppColors.PRIMARY_COLOR,
                     ),
                   ),
-                ),
-              ],
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width * 0.75,
+                    ),
+                    child: Text(
+                      LocaleKeys.chatEncryptionMessage.tr(),
+                      style: Styles.mediumText(
+                        fontWeight: FontWeight.w400,
+                        color: AppColors.DARK_GRAY_COLOR,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             )
           ],
         ),

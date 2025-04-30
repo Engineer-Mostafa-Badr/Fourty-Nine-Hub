@@ -2425,7 +2425,6 @@ static const Map<String,dynamic> _en = {
   "fillDrivingLicenseExpiryDate": "Fill your driving license expiry date!",
   "fillLicenseExpiryDate": "Fill your license expiry date!",
   "fillCarModel": "Fill your car model!",
-  "continue": "Continue",
   "enterRoute": "Enter Your route",
   "reportedTrip": "You have reported this trip.",
   "pickupLocation": "Pickup Location",
