@@ -26,7 +26,6 @@ class CustomHeaderForm extends StatelessWidget {
         Sizer(),
         Row(
           children: [
-
             SquareImage(
               // width: kToolbarHeight * .8,
               // height: kToolbarHeight * .8,

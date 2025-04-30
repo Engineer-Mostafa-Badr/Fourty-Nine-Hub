@@ -5,6 +5,7 @@ import 'package:fourtyninehub/features/subcategories/presentation/cubit/subcateg
 
 import '../../../../../common/widgets/stateless/labels/label.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
+import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
 
 class MarriageAdsListView extends StatelessWidget {
@@ -44,7 +45,7 @@ class MarriageAdsListView extends StatelessWidget {
                     text: LocaleKeys.pleaseSubscribeToContactTheClient.localize,
                     style: Styles.headerText(
                       fontSize: 28,
-                      color: const Color(0xFFFF3308),
+                      color: AppColors.SECONDARY_COLOR_DARK2,
                       height: 1.57,
                     ),
                   ),

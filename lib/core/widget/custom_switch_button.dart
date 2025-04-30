@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/utils/hex_color_helper.dart';
 
 import '../../res/style/app_colors.dart';
@@ -31,11 +32,11 @@ class CustomSwitchButton extends StatelessWidget {
         value: value,
         onChanged: onChanged,
         thumbColor:
-            thumbColor ?? const WidgetStatePropertyAll(AppColors.PRIMARY_COLOR),
+            thumbColor ?? WidgetStatePropertyAll(context.isDarkMode? Colors.white : AppColors.PRIMARY_COLOR),
         trackOutlineColor: value
             ? const WidgetStatePropertyAll(Colors.transparent)
             : trackOutlineColor ??
-                const WidgetStatePropertyAll(AppColors.PRIMARY_COLOR),
+            WidgetStatePropertyAll(context.isDarkMode? Colors.white : AppColors.PRIMARY_COLOR),
         inactiveTrackColor: Theme.of(context).scaffoldBackgroundColor,
         activeTrackColor: activeTrackColor ?? HexColor('4CDA64'),
       ),

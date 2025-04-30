@@ -47,7 +47,11 @@ class ChatProfileView extends StatelessWidget {
               children: [
                 Label(
                   text: title,
-                  style: Styles.headerText(color: AppColors.PRIMARY_COLOR),
+                  style: Styles.headerText(
+                    color: context.isDarkMode
+                        ? Colors.white
+                        : AppColors.PRIMARY_COLOR,
+                  ),
                 ),
                 const SizedBox(height: 16),
                 TextField(
@@ -62,13 +66,13 @@ class ChatProfileView extends StatelessWidget {
                         width: 2,
                       ),
                     ),
-                    focusedBorder:  const UnderlineInputBorder(
+                    focusedBorder: const UnderlineInputBorder(
                       borderSide: BorderSide(
                         color: AppColors.SECONDARY_COLOR,
                         width: 2,
                       ),
                     ),
-                    enabledBorder:  const UnderlineInputBorder(
+                    enabledBorder: const UnderlineInputBorder(
                       borderSide: BorderSide(
                         color: AppColors.SECONDARY_COLOR,
                         width: 2,
@@ -125,14 +129,16 @@ class ChatProfileView extends StatelessWidget {
               leadingWidth: 26,
               leading: IconButton(
                 onPressed: () => context.pop(),
-                icon: const Icon(
+                icon: Icon(
                   Icons.arrow_back,
-                  color: Colors.black,
+                  color: context.isDarkMode ? Colors.white : Colors.black,
                 ),
               ),
               title: Label(
                 text: LocaleKeys.profile.tr(),
-                style: Styles.headerText(color: Colors.black),
+                style: Styles.headerText(
+                  color: context.isDarkMode ? Colors.white : Colors.black,
+                ),
               ),
             ),
             body: SingleChildScrollView(
@@ -186,14 +192,16 @@ class ChatProfileView extends StatelessWidget {
                             padding: const EdgeInsets.all(2),
                             child: CircleAvatar(
                               backgroundColor: context.isDarkMode
-                                  ? AppColors.BACKGROUND_COLOR
+                                  ? AppColors.QUANTITY_COLOR
                                   : AppColors.PRIMARY_COLOR,
                               radius: 16,
                               child: InkWell(
                                 onTap: () async {
                                   showModalBottomSheet(
                                     context: context,
-                                    backgroundColor: Colors.white,
+                                    backgroundColor: context.isDarkMode
+                                        ? AppColors.QUANTITY_COLOR
+                                        : Colors.white,
                                     builder: (BuildContext context) {
                                       return Column(
                                         mainAxisSize: MainAxisSize.min,
@@ -218,15 +226,16 @@ class ChatProfileView extends StatelessWidget {
                                                       .spaceBetween,
                                               children: [
                                                 InkWell(
-                                                    onTap: () {
-                                                      context.pop();
-                                                    },
-                                                    child: Icon(
-                                                      Icons.close_outlined,
-                                                      color: Colors.black
-                                                          .withValues(
-                                                              alpha: 0.5),
-                                                    )),
+                                                  onTap: () {
+                                                    context.pop();
+                                                  },
+                                                  child: Icon(
+                                                    Icons.close_outlined,
+                                                    color: context.isDarkMode
+                                                        ? Colors.white
+                                                        : Colors.black,
+                                                  ),
+                                                ),
                                                 Label(
                                                   text: context.isArabic
                                                       ? "صورة الملف الشخصي"
@@ -235,8 +244,9 @@ class ChatProfileView extends StatelessWidget {
                                                 ),
                                                 Icon(
                                                   Icons.delete_outline,
-                                                  color: Colors.black
-                                                      .withValues(alpha: 0.5),
+                                                  color: context.isDarkMode
+                                                      ? Colors.white
+                                                      : Colors.black,
                                                 )
                                               ],
                                             ),
@@ -347,7 +357,11 @@ class ChatProfileView extends StatelessWidget {
                             Label(
                               text: LocaleKeys.name.tr(),
                               style: Styles.mediumText(
-                                  color: Colors.black, fontSize: 34),
+                                fontSize: 34,
+                                color: context.isDarkMode
+                                    ? Colors.white
+                                    : Colors.black,
+                              ),
                             ),
                             Label(
                               text: context
@@ -401,7 +415,11 @@ class ChatProfileView extends StatelessWidget {
                             Label(
                               text: LocaleKeys.about.tr(),
                               style: Styles.mediumText(
-                                  color: Colors.black, fontSize: 34),
+                                fontSize: 34,
+                                color: context.isDarkMode
+                                    ? Colors.white
+                                    : AppColors.black,
+                              ),
                             ),
                             Label(
                               text: context.read<UserCubit>().state.data!.bio ==
@@ -445,22 +463,6 @@ class ChatProfileView extends StatelessWidget {
                                   ),
                                 ),
                               );
-                              // _showBottomSheet(
-                              //   context: context,
-                              //   // title: LocaleKeys.updateBio.tr(),
-                              //   title: context.isArabic
-                              //       ? "تعدبل الوصف"
-                              //       : "Update bio",
-                              //   initialValue:
-                              //       context.read<UserCubit>().state.data!.bio ??
-                              //           '',
-                              //   onSave: (newValue) async {
-                              //     await context
-                              //         .read<UserCubit>()
-                              //         .updateUserBio(bio: newValue);
-                              //     await context.read<UserCubit>().getUser();
-                              //   },
-                              // );
                             }),
                       ],
                     ),
@@ -473,7 +475,9 @@ class ChatProfileView extends StatelessWidget {
                         showModalBottomSheet(
                           context: context,
                           isScrollControlled: true,
-                          backgroundColor: Colors.white,
+                          backgroundColor: context.isDarkMode
+                              ? AppColors.QUANTITY_COLOR
+                              : Colors.white,
                           constraints: BoxConstraints(
                             maxHeight: MediaQuery.of(context).size.height * 0.9,
                           ),
@@ -495,10 +499,12 @@ class ChatProfileView extends StatelessWidget {
                                         width: 42,
                                         height: 4,
                                         decoration: const BoxDecoration(
-                                            // shape: BoxShape.circle,
-                                            color: Color(0xffD9D9D9),
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(50))),
+                                          // shape: BoxShape.circle,
+                                          color: Color(0xffD9D9D9),
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(50),
+                                          ),
+                                        ),
                                       ),
                                       const SizedBox(
                                         height: 16,
@@ -507,7 +513,13 @@ class ChatProfileView extends StatelessWidget {
                                         text: context.isArabic
                                             ? "مشاهدات الملف الشخصي"
                                             : "Who viewed my profile",
-                                        style: Styles.headerText(),
+                                        style: Styles.headerText(
+                                          color: context.isDarkMode
+                                              ? Colors
+                                              .white
+                                              : Colors
+                                              .black,
+                                        ),
                                       ),
                                       const SizedBox(height: 16),
                                       // List of last seen chats
@@ -520,7 +532,13 @@ class ChatProfileView extends StatelessWidget {
                                             text: context.isArabic
                                                 ? "لا يوجد بيانات"
                                                 : 'No data available',
-                                            style: Styles.mediumText(),
+                                            style: Styles.mediumText(
+                                              color: context.isDarkMode
+                                                  ? Colors
+                                                  .white
+                                                  : Colors
+                                                  .black,
+                                            ),
                                           ),
                                         )
                                       else
@@ -547,7 +565,10 @@ class ChatProfileView extends StatelessWidget {
                                                     context: context,
                                                     isScrollControlled: true,
                                                     backgroundColor:
-                                                        Colors.white,
+                                                        context.isDarkMode
+                                                            ? AppColors
+                                                                .QUANTITY_COLOR
+                                                            : Colors.white,
                                                     constraints: BoxConstraints(
                                                       maxHeight:
                                                           MediaQuery.of(context)
@@ -600,7 +621,13 @@ class ChatProfileView extends StatelessWidget {
                                                                       ? " المشاهدات بواسطة ${context.read<UserCubit>().profileViews[index].name}"
                                                                       : "Views by ${context.read<UserCubit>().profileViews[index].name}",
                                                                   style: Styles
-                                                                      .mediumText(),
+                                                                      .mediumText(
+                                                                    color: context.isDarkMode
+                                                                        ? Colors
+                                                                            .white
+                                                                        : Colors
+                                                                            .black,
+                                                                  ),
                                                                 ),
                                                                 const SizedBox(
                                                                     height: 16),
@@ -618,7 +645,13 @@ class ChatProfileView extends StatelessWidget {
                                                                           ? "لا يوجد بيانات"
                                                                           : 'No data available',
                                                                       style: Styles
-                                                                          .smallText(),
+                                                                          .smallText(
+                                                                        color: context.isDarkMode
+                                                                            ? Colors
+                                                                            .white
+                                                                            : Colors
+                                                                            .black,
+                                                                      ),
                                                                     ),
                                                                   )
                                                                 else
@@ -662,14 +695,26 @@ class ChatProfileView extends StatelessWidget {
                                                                             text:
                                                                                 context.read<UserCubit>().profileViewsByUserId[index].name,
                                                                             style:
-                                                                                Styles.mediumText(),
+                                                                                Styles.mediumText(
+                                                                                  color: context.isDarkMode
+                                                                                      ? Colors
+                                                                                      .white
+                                                                                      : Colors
+                                                                                      .black,
+                                                                                ),
                                                                           ),
                                                                           subtitle:
                                                                               Label(
                                                                             text:
                                                                                 '${context.read<UserCubit>().profileViewsByUserId[index].date}  ${context.read<UserCubit>().profileViewsByUserId[index].time}',
                                                                             style:
-                                                                                Styles.smallText(),
+                                                                                Styles.smallText(
+                                                                                  color: context.isDarkMode
+                                                                                      ? Colors
+                                                                                      .white
+                                                                                      : Colors
+                                                                                      .black,
+                                                                                ),
                                                                           ),
                                                                         );
                                                                       },
@@ -691,7 +736,7 @@ class ChatProfileView extends StatelessWidget {
                                                     child: CircleAvatar(
                                                       radius: 25,
                                                       backgroundColor:
-                                                          Colors.white,
+                                                         context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
                                                       child: Image.network(
                                                         context
                                                             .read<UserCubit>()
@@ -716,12 +761,20 @@ class ChatProfileView extends StatelessWidget {
                                                         .read<UserCubit>()
                                                         .profileViews[index]
                                                         .name,
-                                                    style: Styles.mediumText(),
+                                                    style: Styles.mediumText(  color: context.isDarkMode
+                                                        ? Colors
+                                                        .white
+                                                        : Colors
+                                                        .black,),
                                                   ),
                                                   subtitle: Label(
                                                     text:
                                                         '${context.read<UserCubit>().profileViews[index].date}  ${context.read<UserCubit>().profileViews[index].time}',
-                                                    style: Styles.smallText(),
+                                                    style: Styles.smallText(  color: context.isDarkMode
+                                                        ? Colors
+                                                        .white
+                                                        : Colors
+                                                        .black,),
                                                   ),
                                                 ),
                                               );
@@ -744,7 +797,13 @@ class ChatProfileView extends StatelessWidget {
                                 text: context.isArabic
                                     ? "مشاهدات الملف الشخصي"
                                     : "Who viewed my profile",
-                                style: Styles.mediumText()),
+                                style: Styles.mediumText(
+                                  color: context.isDarkMode
+                                      ? Colors
+                                      .white
+                                      : Colors
+                                      .black,
+                                ),),
                             const Spacer(),
                             const Icon(
                               Icons.arrow_forward_ios,
@@ -768,7 +827,7 @@ class ChatProfileView extends StatelessWidget {
                         showModalBottomSheet(
                           context: context,
                           isScrollControlled: true,
-                          backgroundColor: Colors.white,
+                          backgroundColor:context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
                           constraints: BoxConstraints(
                             maxHeight: MediaQuery.of(context).size.height * 0.9,
                           ),
@@ -802,7 +861,11 @@ class ChatProfileView extends StatelessWidget {
                                           text: context.isArabic
                                               ? "مشاهدات صورة الملف الشخصي"
                                               : "Who viewed my profile picture",
-                                          style: Styles.headerText()),
+                                          style: Styles.headerText(  color: context.isDarkMode
+                                              ? Colors
+                                              .white
+                                              : Colors
+                                              .black,),),
                                       const SizedBox(height: 16),
                                       // List of last seen chats
                                       if (context
@@ -814,7 +877,11 @@ class ChatProfileView extends StatelessWidget {
                                             text: context.isArabic
                                                 ? "لا يوجد بيانات"
                                                 : 'No data available',
-                                            style: Styles.mediumText(),
+                                            style: Styles.mediumText(  color: context.isDarkMode
+                                                ? Colors
+                                                .white
+                                                : Colors
+                                                .black,),
                                           ),
                                         )
                                       else
@@ -840,7 +907,7 @@ class ChatProfileView extends StatelessWidget {
                                                   showModalBottomSheet(
                                                     context: context,
                                                     isScrollControlled: true,
-                                                    backgroundColor:
+                                                    backgroundColor:context.isDarkMode ? AppColors.QUANTITY_COLOR :
                                                         Colors.white,
                                                     constraints: BoxConstraints(
                                                       maxHeight:
@@ -855,7 +922,7 @@ class ChatProfileView extends StatelessWidget {
                                                           BorderRadius.vertical(
                                                               top: Radius
                                                                   .circular(
-                                                                      20)),
+                                                                      20),),
                                                     ),
                                                     builder: (context) {
                                                       // Ensure the context has access to ChatsCubit using BlocProvider
@@ -894,7 +961,13 @@ class ChatProfileView extends StatelessWidget {
                                                                       ? " المشاهدات بواسطة ${context.read<UserCubit>().profileViews[index].name}"
                                                                       : "Views by ${context.read<UserCubit>().profileViews[index].name}",
                                                                   style: Styles
-                                                                      .headerText(),
+                                                                      .headerText(
+                                                                    color: context.isDarkMode
+                                                                        ? Colors
+                                                                        .white
+                                                                        : Colors
+                                                                        .black,
+                                                                  ),
                                                                 ),
                                                                 const SizedBox(
                                                                     height: 16),
@@ -910,7 +983,11 @@ class ChatProfileView extends StatelessWidget {
                                                                             ? "لا يوجد بيانات"
                                                                             : 'No data available',
                                                                         style: Styles
-                                                                            .mediumText()),
+                                                                            .mediumText(  color: context.isDarkMode
+                                                                            ? Colors
+                                                                            .white
+                                                                            : Colors
+                                                                            .black,),),
                                                                   )
                                                                 else
                                                                   Flexible(
@@ -950,10 +1027,18 @@ class ChatProfileView extends StatelessWidget {
                                                                           ),
                                                                           title: Label(
                                                                               text: context.read<UserCubit>().profileViewsByUserId[index].name,
-                                                                              style: Styles.mediumText()),
+                                                                              style: Styles.mediumText(  color: context.isDarkMode
+                                                                                  ? Colors
+                                                                                  .white
+                                                                                  : Colors
+                                                                                  .black,),),
                                                                           subtitle: Label(
                                                                               text: '${context.read<UserCubit>().profileViewsByUserId[index].date}  ${context.read<UserCubit>().profileViewsByUserId[index].time}',
-                                                                              style: Styles.smallText()),
+                                                                              style: Styles.smallText(  color: context.isDarkMode
+                                                                                  ? Colors
+                                                                                  .white
+                                                                                  : Colors
+                                                                                  .black,),),
                                                                         );
                                                                       },
                                                                     ),
@@ -998,11 +1083,19 @@ class ChatProfileView extends StatelessWidget {
                                                           .profileViews[index]
                                                           .name,
                                                       style:
-                                                          Styles.mediumText()),
+                                                          Styles.mediumText(  color: context.isDarkMode
+                                                              ? Colors
+                                                              .white
+                                                              : Colors
+                                                              .black,),),
                                                   subtitle: Label(
                                                     text:
                                                         '${context.read<UserCubit>().profileViews[index].date}  ${context.read<UserCubit>().profileViews[index].time}',
-                                                    style: Styles.smallText(),
+                                                    style: Styles.smallText(  color: context.isDarkMode
+                                                        ? Colors
+                                                        .white
+                                                        : Colors
+                                                        .black,),
                                                   ),
                                                 ),
                                               );
@@ -1025,7 +1118,11 @@ class ChatProfileView extends StatelessWidget {
                                 text: context.isArabic
                                     ? "مشاهدات صورة الملف الشخصي"
                                     : "Who viewed my profile picture",
-                                style: Styles.mediumText()),
+                                style: Styles.mediumText(  color: context.isDarkMode
+                                    ? Colors
+                                    .white
+                                    : Colors
+                                    .black,),),
                             const Spacer(),
                             const Icon(
                               Icons.arrow_forward_ios,

@@ -358,7 +358,7 @@ abstract class Assets {
   static String blackCar = 'assets/icons/black_car.svg';
   static String cash = 'assets/icons/cash.svg';
   static String movingCar2 = 'assets/icons/moving_car.svg';
-  static String filter = 'assets/icons/filter.svg';
+  static String filter = 'assets/icons/filter.png';
   static String reBookIcon = 'assets/icons/rebook_icon.svg';
   static String receiptIcon = 'assets/icons/receipt_icon.svg';
   static String star2 = 'assets/icons/star.svg';
@@ -519,4 +519,7 @@ abstract class Assets {
 
   //Find
   static String find_inbox = "assets/icons/find_inbox.png";
+  static String hotelFilter = "assets/icons/hotel.png";
+  static String comingSoon = "assets/icons/comingSoon.png";
+  static String login = "assets/icons/login.png";
 }

@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/main_category_banner.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
-import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/core/widget/custom_notification_badge.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/custom_empty_widget.dart';
-import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/filter_button_item.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/header_button_widget.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/marriage_ads_list_view.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/presentation/widgets/marriage_my_ads_list_view.dart';
@@ -20,9 +21,10 @@ import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../../res/assets/assets.dart';
 import '../../../../../res/style/app_colors.dart';
 
-class MarriageAdsViewBody extends StatelessWidget {
+class MarriageAdsViewBody extends StatefulWidget {
   const MarriageAdsViewBody({
     super.key,
     required this.controller,
@@ -35,26 +37,72 @@ class MarriageAdsViewBody extends StatelessWidget {
   final ScrollController _scrollController;
 
   @override
+  State<MarriageAdsViewBody> createState() => _MarriageAdsViewBodyState();
+}
+
+class _MarriageAdsViewBodyState extends State<MarriageAdsViewBody>
+    with TickerProviderStateMixin {
+  late TabController _tabController;
+  late ScrollController _scrollController;
+
+  @override
+  void initState() {
+    print('state:: ${widget.state.subCategories?.length}');
+    _tabController = TabController(
+        length: widget.state.subCategories?.length ?? 0, vsync: this);
+    _scrollController = ScrollController();
+
+    _tabController.addListener(() {
+      if (_tabController.indexIsChanging) {
+        _scrollToSelectedTab(_tabController.index);
+      }
+    });
+    super.initState();
+  }
+
+  void animateTaps() {
+    _tabController = TabController(
+      length: widget.state.subCategories?.length ?? 0,
+      vsync: this,
+    );
+    _tabController.addListener(() {
+      if (_tabController.indexIsChanging) {
+        _scrollToSelectedTab(_tabController.index);
+      }
+    });
+  }
+
+  void _scrollToSelectedTab(int index) {
+    // Assuming each tab has a width of 140.w
+    double tabWidth = 235.w;
+    double targetScrollPosition = index * tabWidth;
+    _scrollController.animateTo(
+      targetScrollPosition,
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
+    animateTaps();
     return Column(
       children: [
-        state.mainCategory == null
-            ? Container()
-            : Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: MainCategoryBanner(
-                  fromHome: false,
-                  category:
-                      context.read<SubcategoriesCubit>().state.mainCategory!,
-                  onFavorite: () async {
-                    // var result =
-                    // await controller.toggleFavoriteMedicalService(
-                    //     state.data![index].id);
-                    // print("result$result");
-                    // return result;
-                  },
-                ),
-              ),
+        if (widget.state.mainCategory != null)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: MainCategoryBanner(
+              fromHome: false,
+              category: context.read<SubcategoriesCubit>().state.mainCategory!,
+              onFavorite: () async {
+                // var result =
+                // await controller.toggleFavoriteMedicalService(
+                //     state.data![index].id);
+                // print("result$result");
+                // return result;
+              },
+            ),
+          ),
         const SizedBox(
           height: 16,
         ),
@@ -62,9 +110,10 @@ class MarriageAdsViewBody extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Row(
             children: [
-              const Icon(
+              Icon(
                 Icons.search,
-                color: AppColors.PRIMARY_COLOR,
+                color:
+                    context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
               ),
               const SizedBox(
                 width: 8,
@@ -131,32 +180,137 @@ class MarriageAdsViewBody extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(
-          height: 8,
-        ),
+        const Sizer(),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Row(
             children: [
-              Expanded(
+              InkWell(
+                onTap: () async {
+                  dynamic data = await context.push(
+                    Routes.FILTERADS,
+                    extra: CategorizationEntity(
+                      mainCategory: widget.state.mainCategory!,
+                      fromMarriage: true,
+                      subCategory: widget.state.subCategories![
+                          widget.state.subCategories?.indexWhere(
+                                  (element) => element.isSelected == true) ??
+                              0],
+                    ),
+                  );
+                  if (data != null) {
+                    print("objectsdaa");
+                    widget.controller.changeFilterModel(data);
+                    widget.controller.loadFilterData(
+                      model: data,
+                      filter: 'user',
+                    );
+                  }
+                },
+                child: Container(
+                  height: 42,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  clipBehavior: Clip.antiAlias,
+                  decoration: ShapeDecoration(
+                    color: AppColors.PRIMARY_COLOR,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Image.asset(
+                        Assets.filter,
+                        width: 16,
+                        height: 16,
+                        color: Colors.white,
+                      ),
+                      const Sizer(),
+                      Label(
+                        text: LocaleKeys.filter.localize,
+                        style: Styles.mediumText(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const Sizer(),
+              InkWell(
+                onTap: () async {
+                  dynamic data = await context.push(Routes.GOVERNORATEFILTERADS,
+                      extra: CategorizationEntity(
+                          mainCategory: widget.state.mainCategory!,
+                          fromMarriage: true,
+                          subCategory: widget.state.subCategories![widget
+                                  .state.subCategories
+                                  ?.indexWhere((element) =>
+                                      element.isSelected == true) ??
+                              0]));
+                  if (data != null) {
+                    print("data.cityId${data.cityId}");
+                    print("data.governorateId${data.governorateId}");
+                    print("objectsdaa");
+                    widget.controller.state.city = data.cityId;
+                    widget.controller.state.governorate = data.governorateId;
+                    widget.controller.changeFilterModel(data);
+                    await widget.controller
+                        .loadFilterData(model: data, filter: 'user');
+                  }
+                },
+                child: Container(
+                  height: 42,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  clipBehavior: Clip.antiAlias,
+                  decoration: ShapeDecoration(
+                    color: AppColors.PRIMARY_COLOR,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Image.asset(
+                        Assets.hotelFilter,
+                        width: 16,
+                        height: 16,
+                        color: Colors.white,
+                      ),
+                      const Sizer(),
+                      Label(
+                        text: LocaleKeys.city.localize,
+                        style: Styles.mediumText(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              /* Expanded(
                 child: FilterButtonItem(
                   title: LocaleKeys.filter.localize,
                   onTap: () async {
                     dynamic data = await context.push(
                       Routes.FILTERADS,
                       extra: CategorizationEntity(
-                        mainCategory: state.mainCategory!,
+                        mainCategory: widget.state.mainCategory!,
                         fromMarriage: true,
-                        subCategory: state.subCategories![state.subCategories
-                                ?.indexWhere(
+                        subCategory: widget.state.subCategories![
+                            widget.state.subCategories?.indexWhere(
                                     (element) => element.isSelected == true) ??
-                            0],
+                                0],
                       ),
                     );
                     if (data != null) {
                       print("objectsdaa");
-                      controller.changeFilterModel(data);
-                      controller.loadFilterData(
+                      widget.controller.changeFilterModel(data);
+                      widget.controller.loadFilterData(
                         model: data,
                         filter: 'user',
                       );
@@ -174,59 +328,98 @@ class MarriageAdsViewBody extends StatelessWidget {
                     dynamic data = await context.push(
                         Routes.GOVERNORATEFILTERADS,
                         extra: CategorizationEntity(
-                            mainCategory: state.mainCategory!,
+                            mainCategory: widget.state.mainCategory!,
                             fromMarriage: true,
-                            subCategory: state
-                                .subCategories![state.subCategories?.indexWhere(
-                                    (element) => element.isSelected == true) ??
+                            subCategory: widget.state.subCategories![widget
+                                    .state.subCategories
+                                    ?.indexWhere((element) =>
+                                        element.isSelected == true) ??
                                 0]));
                     if (data != null) {
                       print("data.cityId${data.cityId}");
                       print("data.governorateId${data.governorateId}");
                       print("objectsdaa");
-                      controller.state.city = data.cityId;
-                      controller.state.governorate = data.governorateId;
-                      controller.changeFilterModel(data);
-                      await controller.loadFilterData(
-                          model: data, filter: 'user');
+                      widget.controller.state.city = data.cityId;
+                      widget.controller.state.governorate = data.governorateId;
+                      widget.controller.changeFilterModel(data);
+                      await widget.controller
+                          .loadFilterData(model: data, filter: 'user');
                     }
                   },
                 ),
-              ),
+              ),*/
             ],
           ),
         ),
-        const SizedBox(
-          height: 16,
-        ),
-        if (state.subCategories != null)
-        SizedBox(
-          height: 32,
-          child: ListView.separated(
-            itemCount: state.subCategories?.length ?? 0,
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: EdgeInsetsDirectional.only(
-                  start: index == 0 ? 16.0 : 0,
-                  end: index == state.subCategories!.length - 1 ? 16.0 : 0,
-                ),
-                child: ClickableWidget(
-                  onTap: () async {
-                    await controller.changeSubCatIndex(index);
+        const Sizer(),
+
+        // if (widget.state.subCategories != null)
+        //   SizedBox(
+        //     height: 32,
+        //     child: ListView.separated(
+        //       itemCount: widget.state.subCategories?.length ?? 0,
+        //       scrollDirection: Axis.horizontal,
+        //       itemBuilder: (context, index) {
+        //         return Padding(
+        //           padding: EdgeInsetsDirectional.only(
+        //             start: index == 0 ? 16.0 : 0,
+        //             end: index == widget.state.subCategories!.length - 1
+        //                 ? 16.0
+        //                 : 0,
+        //           ),
+        //           child: ClickableWidget(
+        //             onTap: () async {
+        //               await widget.controller.changeSubCatIndex(index);
+        //             },
+        //             child: SubCategoryListViewItem(
+        //               subCategory: widget.state.subCategories?[index],
+        //             ),
+        //           ),
+        //         );
+        //       },
+        //       separatorBuilder: (BuildContext context, int index) =>
+        //           const SizedBox(
+        //         width: 8,
+        //       ),
+        //     ),
+        //   ),
+        // SizedBox(height: 10.h),
+        if (widget.state.subCategories != null)
+          SizedBox(
+            height: 70.h,
+            child: SingleChildScrollView(
+              controller: _scrollController,
+              scrollDirection: Axis.horizontal,
+              child: TabBar(
+                isScrollable: true,
+                controller: _tabController,
+                onTap: (index) async {
+                  await widget.controller.changeSubCatIndex(index);
+                },
+                padding: EdgeInsets.zero,
+                labelPadding: const EdgeInsetsDirectional.only(end: 10),
+                indicatorColor: Colors.transparent,
+                dividerColor: Colors.transparent,
+                tabAlignment: TabAlignment.start,
+                tabs: List.generate(
+                  widget.state.subCategories?.length ?? 0,
+                  (index) {
+                    return Padding(
+                      padding: EdgeInsetsDirectional.only(
+                        start: index == 0 ? 16.0 : 0,
+                        end: index == widget.state.subCategories!.length - 1
+                            ? 16.0
+                            : 0,
+                      ),
+                      child: SubCategoryListViewItem(
+                        subCategory: widget.state.subCategories?[index],
+                      ),
+                    );
                   },
-                  child: SubCategoryListViewItem(
-                    subCategory: state.subCategories?[index],
-                  ),
                 ),
-              );
-            },
-            separatorBuilder: (BuildContext context, int index) =>
-                const SizedBox(
-              width: 8,
+              ),
             ),
           ),
-        ),
         const SizedBox(
           height: 8,
         ),
@@ -238,15 +431,15 @@ class MarriageAdsViewBody extends StatelessWidget {
   }
 
   Widget _selectWidget(BuildContext context) {
-    if (state.status == SubcategoriesStates.loadingAds) {
+    if (widget.state.status == SubcategoriesStates.loadingAds) {
       return const CustomLoading();
     }
-    if(state.status == SubcategoriesStates.loadingAds){
+    if (widget.state.status == SubcategoriesStates.loadingAds) {
       return const CircularProgressIndicator();
     }
     // My Ads
     if (context.read<SubcategoriesCubit>().isMyAdsOpen) {
-      if (state.myAds == null) {
+      if (widget.state.myAds == null) {
         return SizedBox(
           child: Label(
             text: 'My Ads is Null',
@@ -255,21 +448,21 @@ class MarriageAdsViewBody extends StatelessWidget {
         );
       }
 
-      if (state.myAds!.isEmpty) {
+      if (widget.state.myAds!.isEmpty) {
         return CustomEmptyWidget(label: LocaleKeys.noAds.localize);
       }
 
       return MarriageMyAds(
-        scrollController: _scrollController,
-        controller: controller,
-        state: state,
+        scrollController: widget._scrollController,
+        controller: widget.controller,
+        state: widget.state,
       );
     }
 
     // Requests Log
     if (context.read<SubcategoriesCubit>().isRequestLogOpen) {
-      print('state.adsRequestsLog ${state.adsRequestsLog?.length}');
-      if (state.adsRequestsLog == null) {
+      print('state.adsRequestsLog ${widget.state.adsRequestsLog?.length}');
+      if (widget.state.adsRequestsLog == null) {
         return SizedBox(
           child: Label(
             text: 'My Ads is Null',
@@ -278,21 +471,21 @@ class MarriageAdsViewBody extends StatelessWidget {
         );
       }
 
-      if (state.adsRequestsLog!.isEmpty) {
+      if (widget.state.adsRequestsLog!.isEmpty) {
         return CustomEmptyWidget(label: LocaleKeys.noRequests.localize);
       }
 
       return MarriageRequest(
-        scrollController: _scrollController,
-        controller: controller,
-        state: state,
+        scrollController: widget._scrollController,
+        controller: widget.controller,
+        state: widget.state,
       );
     }
 
     // Favourite Ads
     if (context.read<SubcategoriesCubit>().isFavouriteAdsOpen) {
-      print('state.adsRequestsLog ${state.adsRequestsLog?.length}');
-      if (state.adsRequestsLog == null) {
+      print('state.adsRequestsLog ${widget.state.adsRequestsLog?.length}');
+      if (widget.state.adsRequestsLog == null) {
         return SizedBox(
           child: Label(
             text: 'My Ads is Null',
@@ -301,32 +494,31 @@ class MarriageAdsViewBody extends StatelessWidget {
         );
       }
 
-      if (state.adsRequestsLog!.isEmpty) {
+      if (widget.state.adsRequestsLog!.isEmpty) {
         return CustomEmptyWidget(label: LocaleKeys.noRequests.localize);
       }
       return MarriageRequest(
-        scrollController: _scrollController,
-        controller: controller,
-        state: state,
+        scrollController: widget._scrollController,
+        controller: widget.controller,
+        state: widget.state,
       );
     }
 
     // Ads
-    print('state.adds ${state.ads}');
-    if (state.ads == null) {
+    print('state.adds ${widget.state.ads}');
+    if (widget.state.ads == null) {
       return const SizedBox();
     }
-    if (state.ads!.isEmpty) {
+    if (widget.state.ads!.isEmpty) {
       return CustomEmptyWidget(
         label: LocaleKeys.noAds.localize,
       );
     }
 
-
     return MarriageAdsListView(
-      scrollController: _scrollController,
-      controller: controller,
-      state: state,
+      scrollController: widget._scrollController,
+      controller: widget.controller,
+      state: widget.state,
     );
   }
 }
