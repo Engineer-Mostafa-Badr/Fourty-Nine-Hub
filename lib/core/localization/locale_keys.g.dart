@@ -1541,7 +1541,19 @@ abstract class  LocaleKeys {
   static const newReel = 'newReel';
   static const newStory = 'newStory';
   static const youHaveNoVideosToDisplay = 'youHaveNoVideosToDisplay';
-  static const youHaveNoImagesToDisplay = 'youHaveNoImagesToDisplay';
+  static const emailRequired = 'emailRequired';
+  static const passwordRequired = 'passwordRequired';
+  static const userNameRequired = 'userNameRequired';
+  static const firstNameRequired = 'firstNameRequired';
+  static const lastNameRequired = 'lastNameRequired';
+  static const confirmQuantity = 'confirmQuantity';
+  static const orderDetails = 'orderDetails';
+  static const submittingRating = 'submittingRating';
+  static const ratingSubmittedSuccessfully = 'ratingSubmittedSuccessfully';
+  static const pleaseProvideRate = 'pleaseProvideRate';
+  static const modifyLocation = 'modifyLocation';
+  static const availableRequest = 'availableRequest';
+  static const pastRequests = 'pastRequests';
   static const create = 'create';
 
 }
