@@ -241,14 +241,17 @@ class RestaurantDashboardCubit extends Cubit<RestaurantDashboardState> {
   //   );
   // }
 
-  void loadData() async {
+  Future<void> loadData() async {
+    print("Current ${orders}");
     emit(state.copyWith(status: RestaurantDashboardStates.loading));
     orders.clear();
     currentPage = 1;
     hasMoreData = true;
     await getOrders(false);
   }
-  void loadDataPast() async {
+  Future<void> loadDataPast() async {
+    print("past ${orders}");
+
     emit(state.copyWith(status: RestaurantDashboardStates.loading));
     ordersPast.clear();
     currentPagePast = 1;
@@ -290,7 +293,7 @@ class RestaurantDashboardCubit extends Cubit<RestaurantDashboardState> {
 
         isLoadingMorePast = false;
         emit(state.copyWith(
-            status: RestaurantDashboardStates.success, orders: data));
+            status: RestaurantDashboardStates.success, ordersPast: data));
       },
     );
   }
@@ -332,18 +335,19 @@ class RestaurantDashboardCubit extends Cubit<RestaurantDashboardState> {
     response.fold(
           (failure) async {
         emit(state.copyWith(failure: failure, status: RestaurantDashboardStates.error));
-        await getOrders(true);
+        // await loadData();
+        // await loadDataPast();
       },
           (blockHealthEntity) async {
-        // Successful deletion
         emit(state.copyWith(
           completeOrderEntity: blockHealthEntity,
           status: RestaurantDashboardStates.success,
         ));
-        await getOrders(true);
-        await getOrdersPast(false);
+        await loadData();      // refresh current orders
+        await loadDataPast();  // refresh past orders
       },
     );
+
   }
 
   Future<void> getRestaurantInfo() async {

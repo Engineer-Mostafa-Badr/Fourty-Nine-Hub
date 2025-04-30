@@ -69,12 +69,19 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView>
     if (!_tabController.indexIsChanging) {
       final cubit = context.read<RestaurantDashboardCubit>();
       switch (_tabController.index) {
-        case 0:  break;
-        case 1:  break;
-        case 2: break;
+        case 0:
+          cubit.loadData(); // التبويب الخاص بـ Available
+          break;
+        case 1:
+          cubit.loadDataPast(); // التبويب الخاص بـ Past
+          break;
+        case 2:
+        // إذا كان عندك تبويب ثالث (مثل الفلتر)، ضع ما يناسبك هنا
+          break;
       }
     }
   }
+
   @override
   void dispose() {
     _tabController.dispose();
@@ -201,78 +208,9 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView>
                       RestaurantSettingScreen(widget: widget),
                     ],
                   );
-                  // if (state.isLoading) {
-                  //   return const Center(
-                  //     child: CircularProgressIndicator(),
-                  //   );
-                  // } else if (state.isSuccess) {
-                  //   return TabBarView(
-                  //     // physics: const NeverScrollableScrollPhysics(),
-                  //     controller: _tabController,
-                  //     children: [
-                  //       AvailableRequestFood(),
-                  //       PastRequestFood(),
-                  //       RestaurantSettingScreen(widget: widget),
-                  //     ],
-                  //   );
-                  // } else {
-                  //   return const SizedBox.shrink();
-                  // }
                 }),
           )));
 
-    return CustomScaffold(
-      backgroundColor: scaffoldDarkColor(context),
-      appBar: AppBar(
-        title: Text(LocaleKeys.restaurantDashboard.localize),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(50.0),
-          child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 2.0, vertical: 8.0),
-            padding: const EdgeInsets.all(4.0),
-            decoration: BoxDecoration(
-              // color: Colors.white,
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            child: Row(
-              spacing: 8,
-              children: [
-                Expanded(
-                  child: _buildTab('Available Request', 0),
-                ),
-                Expanded(
-                  child: _buildTab('Past Request', 1),
-                ),
-                _buildTabIcon(Icons.tune, 2),
-              ],
-            ),
-          ),
-        ),
-      ),
-      body: BlocConsumer<RestaurantDashboardCubit, RestaurantDashboardState>(
-          listener: (context, state) {},
-          builder: (context, state) {
-            if (state.isLoading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (state.isSuccess) {
-              return TabBarView(
-                physics: const NeverScrollableScrollPhysics(),
-                controller: _tabController,
-                children: [
-                  const AvailableRequestFood(),
-                  const Center(
-                    child: Text('Tab 3 Content: Display your data here'),
-                  ),
-                  RestaurantSettingScreen(widget: widget),
-                ],
-              );
-            } else {
-              return const SizedBox.shrink();
-            }
-          }),
-    );
   }
 }
 

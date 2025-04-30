@@ -39,6 +39,7 @@ class RestaurantDashboardState {
   final IsRestaurantModel? isRestaurant;
   final bool connected;
   final GetFoodRequestEntity? orders;
+  final GetFoodRequestEntity? ordersPast;
   final GetFoodRequestEntity? availableOrders;
   final GetFoodRequestEntity? pastOrders;
   final List<SubCategoryEntity>? subCategories;
@@ -62,6 +63,7 @@ class RestaurantDashboardState {
     this.subCategories,
     this.governorates,
     this.orders,
+    this.ordersPast,
     this.cities,
     this.uploadImageError,
     this.files,
@@ -79,6 +81,7 @@ class RestaurantDashboardState {
     List<SubCategoryEntity>? subCategories,
     IsRestaurantModel? isRestaurant,
     GetFoodRequestEntity? orders,
+    GetFoodRequestEntity? ordersPast,
     GetFoodRequestEntity? availableOrders,
     GetFoodRequestEntity? pastOrders,
     GetAllRestaurantEntity? info,
@@ -114,6 +117,7 @@ class RestaurantDashboardState {
       availableOrders: availableOrders ?? this.availableOrders,
       pastOrders: pastOrders ?? this.pastOrders,
       completeOrderEntity: completeOrderEntity ?? this.completeOrderEntity,
+      ordersPast: ordersPast ?? this.ordersPast,
 
     );
   }

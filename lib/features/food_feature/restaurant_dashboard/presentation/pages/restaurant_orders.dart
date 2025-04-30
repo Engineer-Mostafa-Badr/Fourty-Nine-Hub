@@ -64,6 +64,10 @@ class _AvailableRequestFoodState extends State<AvailableRequestFood> {
         builder: (context, state) {
           final controller = context.read<RestaurantDashboardCubit>();
 
+          if (state.status == RestaurantDashboardStates.loading && controller.orders.isEmpty) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
           if (controller.orders.isEmpty) {
             return Center(child: Label(text: LocaleKeys.thereNoItems.localize));
           }
@@ -155,7 +159,7 @@ class _AvailableRequestFoodState extends State<AvailableRequestFood> {
                                     textAlign: TextAlign.center,
                                     overflow: TextOverflow.ellipsis,
                                     style: Styles.mediumText(
-                                      // fontSize: 12,
+                                      fontSize: 25,
                                       fontWeight: FontWeight.w500,
                                       color:  context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR,
 
@@ -179,7 +183,7 @@ class _AvailableRequestFoodState extends State<AvailableRequestFood> {
                                     // text: data.orders!
                                     //     .map((e) => (e.foodId?.foodName ?? "").toString())
                                     //     .join(', '),
-                                    text: data.orders?[index].foodId?.foodName ?? "N/A",
+                                    text: data.orders?[0].foodId?.foodName ?? "N/A",
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     // textAlign: TextAlign.end,
@@ -546,96 +550,6 @@ class CallMessageReportButtonsDashBoard extends StatelessWidget {
 
 }
 
-// class CallMessageReportButtonsDashBoard extends StatelessWidget {
-//   final OrderEntity item;
-//   final String subcategoryId;
-//
-//   const CallMessageReportButtonsDashBoard(
-//       {super.key, required this.item, required this.subcategoryId});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     // final isChatEnabled = item.enableOrDisableChat != 'disable';
-//     return Padding(
-//       padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 0),
-//       child: Row(
-//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//         children: [
-//           //if enabled color = blue
-//           _buildButtonWithIcon(
-//             // label: LocaleKeys.call.localize,
-//             icon:Assets.phoneIconRed,
-//             color: item.openCallAndChat != 'disable'
-//                 ? AppColors.PRIMARY_COLOR_DARK
-//                 : AppColors.GREY_DARK_COLOR,
-//             onPressed: item.openCallAndChat != 'disable'
-//                 ? () => launchUrlString("tel://${item.phone}")
-//                 : () {
-//               SubscriptionMethod().subscribe(
-//                   subscribeId: subcategoryId,
-//                   title: LocaleKeys.restaurantDashboard.localize);
-//             },
-//           ),
-//           const SizedBox(width: 4),
-//           _buildButtonWithIcon(
-//             // label: LocaleKeys.message.localize,
-//             icon: Assets.emailIcon,
-//             color: item.openCallAndChat != 'disable'
-//                 ? AppColors.PRIMARY_COLOR_DARK
-//                 : AppColors.GREY_DARK_COLOR,
-//             onPressed: item.openCallAndChat != 'disable'
-//                 ? () {
-//               // BlocProvider.of<RestaurantsCubit>(context)
-//               //     .getExpiredOrders();
-//               // Implement message functionality here
-//             }
-//                 : () {
-//               SubscriptionMethod().subscribe(
-//                   subscribeId: subcategoryId,
-//                   title: LocaleKeys.restaurantDashboard.localize);
-//             },
-//           ),
-//           const SizedBox(width: 4),
-//           _buildButtonWithIcon(
-//             // label: LocaleKeys.report.localize,
-//             icon:  Assets.reportRed,
-//             color: AppColors.PRIMARY_COLOR_DARK,
-//             onPressed: () async {
-//               await showModalBottomSheet(
-//                 context: context,
-//                 isScrollControlled: true,
-//                 backgroundColor: cardDarkColor(context),
-//                 builder: (context) {
-//                   return SizedBox(
-//                     height: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,
-//                     child: ReportView(
-//                       id: item.id!,
-//                       categoryId: item.restaurantId!,
-//                     ),
-//                   );
-//                 },
-//               );
-//
-//               // Implement report functionality here
-//             },
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-//
-//   Widget _buildButtonWithIcon({
-//     required String icon,
-//     required Color color,
-//     required VoidCallback onPressed,
-//   }) {
-//     return IconButton(
-//       icon: SvgPicture.asset(icon, color: color ,),
-//       onPressed: onPressed,
-//     );
-//   }
-//
-// }
 
 class PastRequestFood extends StatefulWidget {
   const PastRequestFood({super.key});
@@ -652,13 +566,13 @@ class _PastRequestFoodState extends State<PastRequestFood> {
   void initState() {
     super.initState();
     _scrollController = ScrollController()..addListener(_onScroll);
-    context.read<RestaurantDashboardCubit>().getOrdersPast(false);
+    context.read<RestaurantDashboardCubit>().getOrdersPast(true);
   }
 
   void _onScroll() {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
-      context.read<RestaurantDashboardCubit>().getOrdersPast(false);
+      context.read<RestaurantDashboardCubit>().getOrdersPast(true);
     }
   }
 
@@ -676,15 +590,19 @@ class _PastRequestFoodState extends State<PastRequestFood> {
         builder: (context, state) {
           final controller = context.read<RestaurantDashboardCubit>();
 
+          if (state.status == RestaurantDashboardStates.loading && controller.ordersPast.isEmpty) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
           if (controller.ordersPast.isEmpty) {
             return Center(child: Label(text: LocaleKeys.thereNoItems.localize));
           }
-
           return ListView.builder(
             controller: _scrollController,
             itemCount: controller.ordersPast.length,
             itemBuilder: (context, index) {
               final data = controller.ordersPast[index];
+              // return Text("${data.id}");
               return Container(
                 margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
                 padding: const EdgeInsets.all(8.0),
@@ -767,7 +685,7 @@ class _PastRequestFoodState extends State<PastRequestFood> {
                                     textAlign: TextAlign.center,
                                     overflow: TextOverflow.ellipsis,
                                     style: Styles.mediumText(
-                                      // fontSize: 12,
+                                      fontSize: 25,
                                       fontWeight: FontWeight.w500,
                                       color:  context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR,
 
