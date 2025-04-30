@@ -2020,7 +2020,7 @@ class AppPages {
                               create: (context) =>
                                   serviceLocator<RestaurantDetailsCubit>(),
                               child: RestaurantDetailsView(
-                                restaurant: state.extra as Restaurant,
+                                restaurant: state.extra as GetAllRestaurantEntity,
                               ),
                             ),
                         routes: [

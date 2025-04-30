@@ -17,6 +17,7 @@ import '../../../../../common/models/public/pagination_params.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/style/app_colors.dart';
 import '../../../../../res/style/styles.dart';
+import '../../../../social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 
 
 
@@ -100,51 +101,39 @@ class _ProfileSearchViewState extends State<ProfileSearchView> {
               }
               final user = _cubit.usersSearch[index];
               return InkWell(
-                onTap: () => Navigator.pushNamed(
-                  context,
-                  Routes.OTHERSACCOUNT,
-                  arguments: user.id,
-                ),
-                child: Padding(
+                onTap: () {
+                  context.push(Routes.OTHERSACCOUNT, extra: user.id);
+                },
+
+                  child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: Row(
+                    spacing: 8,
                     children: [
-                      ClipOval(
-                        child: Image.network(
-                          user.image?.isNotEmpty == true
-                              ? user.image!
-                              : 'https://via.placeholder.com/150',
-                          width: 12.w,
-                          height: 12.w,
-                          fit: BoxFit.cover,
-                        ),
+                      ImageFromInternet(image: user.image!,
+                        height: 65,
+                        width: 65,
+                        isCircle: true,
                       ),
-                      SizedBox(width: 4.w),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               '${user.firstName} ${user.lastName}',
-                              style: const TextStyle(
-                                fontSize: 18,
+                              style: Styles.mediumText(
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
                             SizedBox(height: 1.h),
                             Text(
                               '@${user.username}',
-                              style: const TextStyle(
-                                fontSize: 14,
+                              style:Styles.mediumText(
                                 fontWeight: FontWeight.w300,
                               ),
                             ),
                           ],
                         ),
-                      ),
-                      const Icon(
-                        Icons.arrow_forward,
-                        color: AppColors.GREY_NORMAL_COLOR,
                       ),
                     ],
                   ),
@@ -158,135 +147,6 @@ class _ProfileSearchViewState extends State<ProfileSearchView> {
   }
 }
 
-// class _ProfileSearchViewState extends State<ProfileSearchView> {
-//   late final ScrollController _scrollController;
-//   late final SearchCubit _cubit;
-//   static const _scrollThreshold = 200.0;
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     _cubit = context.read<SearchCubit>();
-//     _scrollController = ScrollController()..addListener(_onScroll);
-//   }
-//
-//   void _onScroll() async {
-//     final max = _scrollController.position.maxScrollExtent;
-//     final current = _scrollController.position.pixels;
-//     if (current >= max - _scrollThreshold &&
-//         !_cubit.isLoadingUsersSearchMore &&
-//         _cubit.hasMoreUsersSearchData) {
-//       final prefs = await SharedPreferences.getInstance();
-//       final filter = prefs.getString('filter') ?? '';
-//       final params = SearchParams(
-//         search: _cubit.searchController.text.trim(),
-//         filter: filter,
-//         params: PaginationParams(page: _cubit.usersSearchPage),
-//       );
-//       _cubit.getPaginatedUserSearch(params: params);
-//     }
-//   }
-//
-//   @override
-//   void dispose() {
-//     _scrollController
-//       ..removeListener(_onScroll)
-//       ..dispose();
-//     super.dispose();
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Padding(
-//       padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 4.w),
-//       child: BlocBuilder<SearchCubit, SearchState>(
-//         buildWhen: (prev, curr) =>
-//         prev.userSearch != curr.userSearch || prev.status != curr.status,
-//         builder: (context, state) {
-//           // Loading first page
-//           if (_cubit.usersSearch.isEmpty) {
-//             return Center(
-//               child: Text(
-//                 LocaleKeys.noData.localize,
-//                 style: Styles.mediumText(),
-//               ),
-//             );
-//           }
-//           if (state.status == SearchStates.loading && _cubit.usersSearch.isEmpty) {
-//             return const Center(child: CircularProgressIndicator());
-//           }
-//           // No results
-//
-//           // Display list + loader at bottom
-//           return ListView.builder(
-//             controller: _scrollController,
-//             physics: const AlwaysScrollableScrollPhysics(),
-//             itemCount: _cubit.usersSearch.length + (_cubit.isLoadingUsersSearchMore ? 1 : 0),
-//             itemBuilder: (context, index) {
-//               if (index >= _cubit.usersSearch.length) {
-//                 return const Padding(
-//                   padding: EdgeInsets.symmetric(vertical: 16),
-//                   child: Center(child: CircularProgressIndicator()),
-//                 );
-//               }
-//               final user = _cubit.usersSearch[index];
-//               return InkWell(
-//                 onTap: () => Navigator.pushNamed(
-//                   context,
-//                   Routes.OTHERSACCOUNT,
-//                   arguments: user.id,
-//                 ),
-//                 child: Padding(
-//                   padding: const EdgeInsets.symmetric(vertical: 8),
-//                   child: Row(
-//                     children: [
-//                       ClipOval(
-//                         child: Image.network(
-//                           user.image?.isNotEmpty == true
-//                               ? user.image!
-//                               : 'https://via.placeholder.com/150',
-//                           width: 12.w,
-//                           height: 12.w,
-//                           fit: BoxFit.cover,
-//                         ),
-//                       ),
-//                       SizedBox(width: 4.w),
-//                       Expanded(
-//                         child: Column(
-//                           crossAxisAlignment: CrossAxisAlignment.start,
-//                           children: [
-//                             Text(
-//                               '${user.firstName} ${user.lastName}',
-//                               style: const TextStyle(
-//                                 fontSize: 18,
-//                                 fontWeight: FontWeight.w600,
-//                               ),
-//                             ),
-//                             SizedBox(height: 1.h),
-//                             Text(
-//                               '@${user.username}',
-//                               style: const TextStyle(
-//                                 fontSize: 14,
-//                                 fontWeight: FontWeight.w300,
-//                               ),
-//                             ),
-//                           ],
-//                         ),
-//                       ),
-//                       const Icon(
-//                         Icons.arrow_forward,
-//                         color: AppColors.GREY_NORMAL_COLOR,
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//               );
-//             },
-//           );
-//         },
-//       ),
-//     );
-//   }
-// }
+
 
 

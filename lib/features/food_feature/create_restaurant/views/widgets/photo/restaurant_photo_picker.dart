@@ -61,7 +61,6 @@ class _CreateRestaurantProfilePhotoPickerState
                 (index) {
                   final bool isAddBox = (index == images.length);
 
-
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 16),
                     child: buildPhotoBox(
@@ -104,6 +103,11 @@ class _CreateRestaurantProfilePhotoPickerState
                   ),
                   8.verticalSpace,
                   Container(
+                    width: 210.w,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: AppColors.SECONDARY_COLOR_DARK2,
+                    ),
                     child: IconButton(
                       visualDensity: VisualDensity.compact,
                       onPressed: () async {
@@ -118,11 +122,6 @@ class _CreateRestaurantProfilePhotoPickerState
                       },
                       icon: Icon(Icons.add),
                       color: Colors.black,
-                    ),
-                    width: 210.w,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: AppColors.SECONDARY_COLOR_DARK2,
                     ),
                   ),
                 ],
@@ -160,7 +159,7 @@ Widget buildPhotoBox({
               File(image.path),
               width: double.infinity,
               height: double.infinity,
-              fit: BoxFit.cover,
+              fit: BoxFit.fill,
             ),
           ),
 

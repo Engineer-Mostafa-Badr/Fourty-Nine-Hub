@@ -171,11 +171,13 @@ class _HealthViewState extends State<HealthView> {
               // Favourite Ads view
               if (_showMost)
                 BlocProvider(
+                  key: ValueKey('MostBookingScreen'),
                   create: (context) => serviceLocator<HealthCubit>()..loadInitialMostBooking(),
                   child: MostBookingScreen(
-                    onClose: () => setState(() => _showHistory = false),
+                    onClose: () => setState(() => _showMost = false),
                   ),
                 ),
+
             ],
           );
         },

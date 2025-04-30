@@ -40,9 +40,9 @@ class SearchRestaurantState {
   final SearchRestaurantStates status;
   final Failure? failure;
   final MainCategoryEntity? mainCategory;
-  final List<Restaurant>? allRestaurant;
-  final List<Restaurant>? searchRestaurant;
-  final List<RestaurantEntity>? subCategories;
+  final List<GetAllRestaurantEntity >? allRestaurant;
+  final List<GetAllRestaurantEntity >? searchRestaurant;
+  final List<GetAllRestaurantEntity >? subCategories;
   final List<SubCategoryEntity>? categories;
   final List<FoodCategoryEntity>? mealCategories;
   final List<FoodCategoryEntity>? searchMealCategories;
@@ -76,9 +76,9 @@ class SearchRestaurantState {
     SearchRestaurantStates? status,
     Failure? failure,
     MainCategoryEntity? mainCategory,
-    List<Restaurant>? allRestaurant,
-    List<Restaurant>? searchResultRestaurants,
-    List<RestaurantEntity>? subCategories,
+    List<GetAllRestaurantEntity>? allRestaurant,
+    List<GetAllRestaurantEntity>? searchResultRestaurants,
+    List<GetAllRestaurantEntity>? subCategories,
     List<SubCategoryEntity>? categories,
     List<FoodCategoryEntity>? mealCategories,
     List<FoodCategoryEntity>? searchMealCategories,

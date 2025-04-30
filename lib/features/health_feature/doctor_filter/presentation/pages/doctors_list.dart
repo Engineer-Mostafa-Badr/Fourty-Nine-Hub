@@ -167,12 +167,13 @@ class _DoctorListCardState extends State<DoctorListCard> {
     return Padding(
       padding: EdgeInsets.symmetric(
         vertical: 10.h,
+        horizontal: 10.w,
       ),
       child: Container(
         // padding:const EdgeInsets.all(10) ,
         decoration: BoxDecoration(
             border: Border.all(
-                color: AppColors.black.withOpacity(0.7),
+                color: context.isDarkMode ?  AppColors.whiteColor : AppColors.black.withOpacity(0.7),
                 width: 1
             ),
             borderRadius: BorderRadius.circular(15)
@@ -189,18 +190,18 @@ class _DoctorListCardState extends State<DoctorListCard> {
                   Row(
                     spacing: 2,
                     children: [
-                      SvgPicture.asset(Assets.viewCountIcon,color: Colors.grey,),
+                      SvgPicture.asset(Assets.eyeIcon,color: context.isDarkMode ? AppColors.whiteColor : Colors.grey,),
                       Label(text: formatViews(widget.data.viewCount?.toInt() ?? 0),
                         style: Styles.mediumText(
                             fontWeight: FontWeight.w400,
-                            color: AppColors.c6C6C6C
+                            color: context.isDarkMode ? AppColors.whiteColor : AppColors.c6C6C6C
                         )
                       ),
                       Label(text: LocaleKeys.views.localize,
                         style:Styles.mediumText(
                             // fontSize: 12,
                             fontWeight: FontWeight.w400,
-                            color: AppColors.c6C6C6C
+                            color:context.isDarkMode ? AppColors.whiteColor : AppColors.c6C6C6C
                         ),
                       ),
                     ],
@@ -267,7 +268,7 @@ class _DoctorListCardState extends State<DoctorListCard> {
                           ),
                         ],
                       ),
-                      const SizedBox(width: 8), // spacing between image and text
+                      const SizedBox(width: 16), // spacing between image and text
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -276,6 +277,7 @@ class _DoctorListCardState extends State<DoctorListCard> {
                               "${widget.data.firstName ?? "N/A"} ${widget.data.lastName ?? ""}",
                               style: Styles.mediumText(
                                 fontWeight: FontWeight.w600,
+                                color:  context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR
                                 // fontSize: 16,
                               ),
                               overflow: TextOverflow.ellipsis,
@@ -288,6 +290,7 @@ class _DoctorListCardState extends State<DoctorListCard> {
                                   : widget.data.subCategory?.first.nameEn ?? "N/A",
                               style: Styles.mediumText(
                                 fontWeight: FontWeight.w400,
+                                  color:  context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR
                                 // fontSize: 14,
                               ),
                               overflow: TextOverflow.ellipsis,
@@ -304,7 +307,9 @@ class _DoctorListCardState extends State<DoctorListCard> {
                       Icon(Icons.location_on_rounded,color:context.isDarkMode
                           ? AppColors.PRIMARY_COLOR_DARK : AppColors.PRIMARY_COLOR,),
                       Expanded(child: Label(
-                        style: Styles.mediumText(),
+                        style: Styles.mediumText(
+                            color:  context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR
+                        ),
                         text: context.isArabic
                             ? "${widget.data.address?.governorate?.governorateNameAr ?? "N/A"} , ${widget.data.address?.city?.cityNameAr ?? "N/A"}"
                             : "${widget.data.address?.governorate?.governorateNameEn ?? "N/A"} , ${widget.data.address?.city?.cityNameEn ?? "N/A"}",
@@ -324,12 +329,16 @@ class _DoctorListCardState extends State<DoctorListCard> {
                       Expanded(
                         child: Label(
                           text: context.isArabic ? 'خدمة' : 'Fees',
-                          style: Styles.mediumText(fontWeight: FontWeight.w500),
+                          style: Styles.mediumText(
+                              color:  context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR,
+                              fontWeight: FontWeight.w500),
                         ),
                       ),
                       Label(
                         text: '${widget.data.price}',
-                        style: Styles.mediumText(fontWeight: FontWeight.w500),
+                        style: Styles.mediumText(
+                            color:  context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR
+                        ,fontWeight: FontWeight.w500),
                       )
                     ],
                   ),
@@ -340,12 +349,14 @@ class _DoctorListCardState extends State<DoctorListCard> {
                       Row(
                         children: [
                           Icon(Icons.watch_later_outlined,
-                              color: AppColors.black, size: 48.h),
+                              color:  context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR, size: 48.h),
                           const Sizer(),
                           Label(
                             text:
                             '${context.isArabic ? 'وقت الانتظار' : 'Waiting time'}: ${widget.data.waitingTime ?? "0"}',
-                            style: Styles.mediumText(fontWeight: FontWeight.w500),
+                            style: Styles.mediumText(
+                                color:  context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR
+                            ,fontWeight: FontWeight.w500),
                           )
                         ],
                       ),
