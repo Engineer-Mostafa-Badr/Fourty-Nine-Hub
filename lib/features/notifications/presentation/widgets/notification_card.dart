@@ -142,7 +142,11 @@ class _NotificationCardState extends State<NotificationCard> {
                           ],
                           Text(
                             widget.notificationEntity.body ?? '',
-                            style: Styles.mediumText(),
+                            style: Styles.mediumText(
+                              color: context.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
                           ),
                           Sizer(height: 5.h),
                           Label(
