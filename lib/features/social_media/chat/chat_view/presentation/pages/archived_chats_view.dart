@@ -63,9 +63,9 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                 onPressed: () {
                   context.pop(true);
                 },
-                icon: const Icon(
+                icon: Icon(
                   Icons.arrow_back,
-                  color: Colors.black,
+                  color: context.isDarkMode ? Colors.white : Colors.black,
                 ),
               ),
               actions: [
@@ -83,24 +83,30 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                                   .pinAndUnpinChat();
                             },
                             icon: const Icon(Icons.push_pin_outlined),
-                            color: Colors.black,
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : Colors.black,
                           ),
                           IconButton(
                             onPressed: () async {
                               await context.read<ChatsCubit>().deleteChat();
                             },
-                            icon: const Icon(
+                            icon: Icon(
                               Icons.delete_forever_outlined,
-                              color: Colors.black,
+                              color: context.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black,
                             ),
                           ),
                           IconButton(
                             onPressed: () async {
                               await context.read<ChatsCubit>().changeMuteChat();
                             },
-                            icon: const Icon(
+                            icon: Icon(
                               Icons.notifications_off_outlined,
-                              color: Colors.black,
+                              color: context.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black,
                             ),
                           ),
                           IconButton(
@@ -115,7 +121,9 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
 
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  backgroundColor: const Color(0xff1A1A1A),
+                                  backgroundColor: context.isDarkMode
+                                      ? Colors.white
+                                      : Colors.black,
                                   // Set background color to blue
                                   content: BlocProvider.value(
                                     value: context.read<ChatsCubit>(),
@@ -128,8 +136,10 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                                                 text: context.isArabic
                                                     ? "تم إلغاء أرشفة "
                                                     : "Unarchived ",
-                                                style: const TextStyle(
-                                                  color: Colors.white,
+                                                style: TextStyle(
+                                                  color: context.isDarkMode
+                                                      ? Colors.white
+                                                      : Colors.black,
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.bold,
                                                 ),
@@ -137,8 +147,10 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                                               TextSpan(
                                                 text: "$unarchivedChatsCount ",
                                                 // Count
-                                                style: const TextStyle(
-                                                  color: Colors.white,
+                                                style: TextStyle(
+                                                  color: context.isDarkMode
+                                                      ? Colors.white
+                                                      : Colors.black,
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 16,
                                                 ),
@@ -147,8 +159,10 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                                                 text: context.isArabic
                                                     ? "محادثة"
                                                     : "chats",
-                                                style: const TextStyle(
-                                                  color: Colors.white,
+                                                style: TextStyle(
+                                                  color: context.isDarkMode
+                                                      ? Colors.white
+                                                      : Colors.black,
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.bold,
                                                 ),
@@ -161,7 +175,9 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                                   ),
                                   action: SnackBarAction(
                                     label: context.isArabic ? "تراجع" : "UNDO",
-                                    textColor: AppColors.PRIMARY_COLOR_DARK,
+                                    textColor: context.isDarkMode
+                                        ? Colors.white
+                                        : AppColors.PRIMARY_COLOR_DARK,
                                     // Set "Undo" text color to gray
                                     onPressed: () async {
                                       await context
@@ -179,19 +195,23 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                                 context.read<ChatsCubit>().clearSelectedChats();
                               });
                             },
-                            icon: const Icon(
+                            icon: Icon(
                               Icons.unarchive_outlined,
-                              color: Colors.black,
+                              color: context.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black,
                             ),
                           ),
                           widget.params.category == "LockedChats"
                               ? PopupMenuButton(
-                                  icon: const Icon(
+                                  icon: Icon(
                                     Icons.more_vert_outlined,
-                                    color: Colors.black,
+                                    color: context.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black,
                                   ),
                                   color: context.isDarkMode
-                                      ? AppColors.PRIMARY_COLOR
+                                      ? AppColors.QUANTITY_COLOR
                                       : AppColors.BACKGROUND_COLOR,
                                   shape: const RoundedRectangleBorder(
                                     borderRadius:
@@ -215,8 +235,9 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
                                         SnackBar(
-                                          backgroundColor:
-                                              const Color(0xff1A1A1A),
+                                          backgroundColor: context.isDarkMode
+                                              ? Colors.white
+                                              : const Color(0xff1A1A1A),
                                           // Set background color
                                           content: BlocProvider.value(
                                             value: context.read<ChatsCubit>(),
@@ -229,8 +250,11 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                                                         text: context.isArabic
                                                             ? "تم إلغاء قفل "
                                                             : "Unlocked ",
-                                                        style: const TextStyle(
-                                                          color: Colors.white,
+                                                        style: TextStyle(
+                                                          color: context
+                                                                  .isDarkMode
+                                                              ? Colors.white
+                                                              : Colors.black,
                                                           fontSize: 16,
                                                           fontWeight:
                                                               FontWeight.bold,
@@ -240,8 +264,11 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                                                         text:
                                                             "$unlockedChatsCount ",
                                                         // Count
-                                                        style: const TextStyle(
-                                                          color: Colors.white,
+                                                        style: TextStyle(
+                                                          color: context
+                                                                  .isDarkMode
+                                                              ? Colors.white
+                                                              : Colors.black,
                                                           fontWeight:
                                                               FontWeight.bold,
                                                           fontSize: 16,
@@ -251,8 +278,11 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                                                         text: context.isArabic
                                                             ? "محادثة"
                                                             : "chats",
-                                                        style: const TextStyle(
-                                                          color: Colors.white,
+                                                        style: TextStyle(
+                                                          color: context
+                                                                  .isDarkMode
+                                                              ? Colors.white
+                                                              : Colors.black,
                                                           fontSize: 16,
                                                           fontWeight:
                                                               FontWeight.bold,
@@ -268,8 +298,9 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                                             label: context.isArabic
                                                 ? "تراجع"
                                                 : "UNDO",
-                                            textColor:
-                                                AppColors.PRIMARY_COLOR_DARK,
+                                            textColor: context.isDarkMode
+                                                ? Colors.white
+                                                : AppColors.PRIMARY_COLOR_DARK,
                                             // Set "Undo" text color to gray
                                             onPressed: () async {
                                               await context
@@ -299,9 +330,10 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                                               ? "الغاء قفل الدردشات"
                                               : "Unlock chats",
                                           style: Styles.mediumText(
-                                              color: context.isDarkMode
-                                                  ? Colors.white
-                                                  : AppColors.PRIMARY_COLOR),
+                                            color: context.isDarkMode
+                                                ? Colors.white
+                                                : AppColors.PRIMARY_COLOR,
+                                          ),
                                         ),
                                       ),
                                     ];
@@ -325,7 +357,7 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                                 ? "المؤرشفة"
                                 : "Archived",
                 style: Styles.headerText(
-                  color: Colors.black,
+                  color: context.isDarkMode ? Colors.white : Colors.black,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -361,9 +393,14 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                   } else if (state.chats!.isEmpty) {
                     return Center(
                       child: Label(
-                          text: LocaleKeys.noChatsUntilNow.tr(),
-                          style: Styles.mediumText(
-                              fontWeight: FontWeight.bold, fontSize: 34)),
+                        text: LocaleKeys.noChatsUntilNow.tr(),
+                        style: Styles.mediumText(
+                          color:
+                              context.isDarkMode ? Colors.white : Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 34,
+                        ),
+                      ),
                     );
                   } else {
                     return ListView.separated(
@@ -413,7 +450,8 @@ class _OptionsChatsViewState extends State<OptionsChatsView> {
                                 ],
                               ),
                               child: NewChatCard(
-                                isSecret: widget.params.category == ChatCategoriesIds.anonymous,
+                                isSecret: widget.params.category ==
+                                    ChatCategoriesIds.anonymous,
                                 chat: state.chats?[index],
                                 chatsCubit: widget.params.chatsCubit,
                               ),

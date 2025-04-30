@@ -118,6 +118,8 @@ class SettingsView extends StatelessWidget {
                           context: context)),
                 BlocBuilder<ThemeCubit, ThemeStates>(
                   builder: (BuildContext context, theme) {
+                    var themeCubit =
+                    context.read<ThemeCubit>();
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: CustomSwitchListTile(
@@ -134,7 +136,7 @@ class SettingsView extends StatelessWidget {
                             ),
                           ),
                         ),
-                        title: theme is DarkThemeModeStates
+                        title: themeCubit.isDarkTheme
                             ? Label(
                                 text: LocaleKeys.lightMode.localize,
                                 style: Styles.mediumText(
@@ -153,7 +155,7 @@ class SettingsView extends StatelessWidget {
                                         ? Colors.white
                                         : Colors.black,),
                               ),
-                        value: ThemeCubit.get(context).isDarkTheme,
+                        value: themeCubit.isDarkTheme,
                         onChanged: (value) {
                           if (theme is LightThemeModeStates) {
                             ThemeCubit.get(context).darkThemeMode();

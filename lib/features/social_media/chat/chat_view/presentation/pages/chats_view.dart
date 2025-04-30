@@ -1,280 +1,5 @@
-// import 'package:flutter/cupertino.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:flutter_slidable/flutter_slidable.dart';
-// import 'package:fourtyninehub/common/functions/global/loading_custom.dart';
-// import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
-// import 'package:fourtyninehub/common/widgets/form/text_fields/form_text_field.dart';
-// import 'package:fourtyninehub/common/widgets/stateless/appbar/nested_appbar.dart';
-// import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
-// import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
-// import 'package:fourtyninehub/core/states/basic_state.dart';
-// import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
-// import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
-// import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/chat_cubit/chats_cubit.dart';
-// import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
-// import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/more_icon_bottom_sheet_body.dart';
-// import 'package:fourtyninehub/res/style/app_colors.dart';
-// import 'package:fourtyninehub/res/style/styles.dart';
-// import 'package:fourtyninehub/routes/routes.dart';
-// import 'package:fourtyninehub/service_locator/service_locator.dart';
-// import 'package:go_router/go_router.dart';
-// import '../widgets/calling_card.dart';
-// import '../widgets/chat_card.dart';
-//
-// class ChatView extends StatefulWidget {
-//   const ChatView({super.key});
-//
-//   @override
-//   State<ChatView> createState() => _ChatViewState();
-// }
-//
-// class _ChatViewState extends State<ChatView> {
-//   late ChatsCubit chatCubit;
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     initSocketConnection();
-//   }
-//
-//   initSocketConnection() {
-//     chatCubit = context.read<ChatsCubit>()..initSocketConnection();
-//     chatCubit.getChats(index: 0);
-//   }
-//
-//   final List<String> groups = [
-//     'Social',
-//     'Services',
-//     'Call & Video(Social)',
-//     'Call & Video(Services)',
-//     'Greet',
-//     'Groups',
-//     'Anonymous',
-//     'Archive',
-//     'Lock Chat',
-//     'Unread',
-//   ];
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return DefaultTabController(
-//       length: groups.length,
-//       initialIndex: 0,
-//       child: SharedScaffold(
-//         mainCategoryId: 2,
-//         body: NestedAppbar(
-//           appBars: [
-//             const SliverAppBar(
-//               expandedHeight: kToolbarHeight * 1.5,
-//               automaticallyImplyLeading: false,
-//               floating: true,
-//               flexibleSpace: ChatStories(),
-//             ),
-//             SliverAppBar(
-//               automaticallyImplyLeading: false,
-//               floating: true,
-//               pinned: true,
-//               titleSpacing: 0,
-//               title: _buildCategoriesLabels(),
-//             )
-//           ],
-// body: BlocBuilder<UserCubit, BasicState<UserEntity>>(
-//   builder: (context, state) {
-//     return context.read<UserCubit>().isLoggedIn
-//         ? _buildCategoriesViews()
-//         : Center(
-//             child: Row(
-//             mainAxisAlignment: MainAxisAlignment.center,
-//             children: [
-//               GestureDetector(
-//                   onTap: () => context.push(Routes.LOGIN),
-//                   child: Label(
-//                       text: 'Login',
-//                       style: Styles.headerText(color: Colors.blue))),
-//               Label(
-//                   text: ', To continue in using chat services',
-//                   style: Styles.headerText()),
-//             ],
-//           ));
-//   },
-// ),
-//         ),
-//       ),
-//     );
-//   }
-//
-//   Widget _buildCategoriesLabels() {
-//     return TabBar(
-//         onTap: (index) {
-//           context.read<ChatsCubit>().getChats(index: index);
-//
-//           // if this locked chat we request password
-//           if (index == 8) {
-//             showDialogToConfirmChatLockPassword(context);
-//           }
-//         },
-//         tabAlignment: TabAlignment.start,
-//         isScrollable: true,
-//         tabs: groups.map((e) {
-//           return Tab(
-//             text: e,
-//           );
-//         }).toList());
-//   }
-//
-//   Widget _buildCategoriesViews() {
-//     return TabBarView(children: [
-//       _buildCategoryChats(),
-//       _buildCategoryChats(),
-//       _buildCallingHistory(isVideo: false),
-//       _buildCallingHistory(isVideo: true),
-//       _buildCallingHistory(isVideo: false),
-//       _buildCallingHistory(isVideo: true),
-//       _buildCategoryChats(isSecret: true),
-//       _buildCategoryChats(),
-//       _buildCategoryChats(),
-//       _buildCategoryChats(),
-//       // _buildCategoryChats(),
-//       // _buildCategoryChats(),
-//     ]);
-//   }
-//
-//   Widget _buildCategoryChats({bool isSecret = false}) {
-//     return BlocBuilder<ChatsCubit, ChatsState>(builder: (context, state) {
-//       return state.chats == null || state.isLoading
-//           ? LoadingCustom.customThreeBounce(context)
-//           : state.chats?.length == 0
-//               ? Center(
-//                   child: Label(
-//                       text: 'No Chats until now',
-//                       style: Styles.mediumText(
-//                           color: const Color.fromARGB(255, 87, 87, 87),
-//                           fontWeight: FontWeight.bold,
-//                           fontSize: 18)),
-//                 )
-//               : ListView.separated(
-//                   shrinkWrap: true,
-//                   physics: const NeverScrollableScrollPhysics(),
-//                   itemBuilder: (context, index) => Slidable(
-//                     key: ValueKey(index),
-//                     // All actions are defined in the children parameter.
-//
-//                     closeOnScroll: false,
-//                     endActionPane: ActionPane(
-//                       motion: const ScrollMotion(),
-//                       dismissible: DismissiblePane(onDismissed: () {}),
-//                       children: [
-//                         SlidableAction(
-//                           onPressed: (value) {
-//                             bottomSheet(
-//                                 context: context,
-//                                 isScrollControlled: true,
-//                                 widget: MoreIconBottomSheet(
-//                                   ChatCategoryEntity: state.chats![index],
-//                                   chatsCubit: chatCubit,
-//                                 ));
-//                           },
-//                           backgroundColor:
-//                               const Color.fromARGB(255, 191, 191, 191),
-//                           foregroundColor: Colors.white,
-//                           icon: Icons.more_horiz,
-//                           label: 'More',
-//                           padding: EdgeInsets.zero,
-//                         ),
-//                         SlidableAction(
-//                           onPressed: (value) async {
-//                             chatCubit.changeChatToArchiveOrNormalUseCase(
-//                                 state.chats![index].sId!);
-//                           },
-//                           backgroundColor: AppColors.PRIMARY_COLOR,
-//                           foregroundColor: Colors.white,
-//                           icon: Icons.delete_outlined,
-//                           label: state.chats![index].archived!
-//                               ? 'Unarchive'
-//                               : 'Archive',
-//                           padding: EdgeInsets.zero,
-//                         ),
-//                       ],
-//                     ),
-//
-//                     // onDismissed: ,
-//                     child: ChatCard(
-//                       isSecret: isSecret,
-//                       ChatCategoryEntity: state.chats?[index],
-//                       chatsCubit: chatCubit,
-//                     ),
-//                   ),
-//                   separatorBuilder: (context, index) => const SizedBox(),
-//                   itemCount: state.chats?.length ?? 0,
-//                 );
-//     });
-//   }
-//
-//   Widget _buildCallingHistory({required bool isVideo}) {
-//     return ListView.separated(
-//         shrinkWrap: true,
-//         physics: const NeverScrollableScrollPhysics(),
-//         itemBuilder: (context, index) => CallingCard(
-//               isVideo: isVideo,
-//             ),
-//         separatorBuilder: (context, index) => const SizedBox(),
-//         itemCount: 8);
-//   }
-//
-//   Future<bool?> showDialogToConfirmChatLockPassword(
-//       BuildContext context) async {
-//     TextEditingController passwordController = TextEditingController(text: '');
-//     return await showDialog(
-//       context: context,
-//       builder: ((context) => AlertDialog(
-//             shape: RoundedRectangleBorder(
-//               borderRadius: BorderRadius.circular(5.0),
-//             ),
-//             title: Label(
-//                 text: 'Lock chats password please',
-//                 style: Styles.headerText(
-//                     fontWeight: FontWeight.bold, color: Colors.black)),
-//             content: Material(
-//               child: ConstrainedBox(
-//                 constraints: const BoxConstraints(maxHeight: 100.0),
-//                 child: Column(
-//                   mainAxisSize: MainAxisSize.min,
-//                   children: [
-//                     FormTextField(
-//                         controller: passwordController,
-//                         hint: 'password',
-//                         type: TextInputType.number,
-//                         // initialValue: '',
-//                         style: const TextStyle(
-//                             fontSize: 20,
-//                             color: Colors.grey,
-//                             fontWeight: FontWeight.bold),
-//                         action: (v) => () {}),
-//                   ],
-//                 ),
-//               ),
-//             ),
-//             actions: [
-//               TextButton(
-//                   onPressed: () async {
-//                     chatCubit.getChats(
-//                         index: 8, password: passwordController.text.trim());
-//                     Navigator.of(context).pop(false);
-//                   },
-//                   child: const Text('Confirm password')),
-//             ],
-//           )),
-//     );
-//   }
-// }
-//after add index to navigate
-
-// ignore_for_file: use_build_context_synchronously
-
 import 'dart:developer';
 
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -284,6 +9,7 @@ import 'package:fourtyninehub/common/widgets/stateless/appbar/nested_appbar.dart
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/chat_categories.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/states/basic_state.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
@@ -414,7 +140,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                             : AppColors.PRIMARY_COLOR,
                       ),
                       color: context.isDarkMode
-                          ? AppColors.PRIMARY_COLOR
+                          ? AppColors.QUANTITY_COLOR
                           : AppColors.BACKGROUND_COLOR,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),
@@ -460,7 +186,10 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                       create: (context) => serviceLocator<StoryCubit>()
                         ..fetchStories()
                         ..getMutedStories(),
-                      child: const ChatStories(),
+                      child: const Directionality(
+                        textDirection: TextDirection.ltr,
+                        child: ChatStories(),
+                      ),
                     ),
                   ),
                   SliverAppBar(
@@ -487,7 +216,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                                 GestureDetector(
                                     onTap: () => context.push(Routes.LOGIN),
                                     child: Label(
-                                      text: LocaleKeys.login.tr(),
+                                      text: LocaleKeys.login.localize,
                                       style: const TextStyle(
                                         color: AppColors.PRIMARY_COLOR_DARK,
                                         fontWeight: FontWeight.bold,
@@ -498,10 +227,13 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                                       ),
                                     )),
                                 Label(
-                                  text:
-                                      LocaleKeys.continueUsingChatServices.tr(),
-                                  style: const TextStyle(
+                                  text: LocaleKeys
+                                      .continueUsingChatServices.localize,
+                                  style: TextStyle(
                                     fontWeight: FontWeight.bold,
+                                    color: context.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black,
                                     fontSize: 16,
                                   ),
                                 ),
@@ -523,7 +255,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
       // PopupMenuItem<int>(
       //   value: 0,
       //   child: Text(
-      //     LocaleKeys.newGroup.tr(),
+      //     LocaleKeys.newGroup.localize,
       //     style: Styles.mediumText(
       //         color:
       //             context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
@@ -532,7 +264,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
       // PopupMenuItem<int>(
       //   value: 1,
       //   child: Text(
-      //     LocaleKeys.newBroadcast.tr(),
+      //     LocaleKeys.newBroadcast.localize,
       //     style: Styles.mediumText(
       //         color:
       //             context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR),
@@ -551,7 +283,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
       PopupMenuItem<int>(
         value: 1,
         child: Label(
-          text: LocaleKeys.recoverDeletedChats.tr(),
+          text: LocaleKeys.recoverDeletedChats.localize,
           style: Styles.mediumText(
             fontSize: 32,
             color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
@@ -561,7 +293,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
       PopupMenuItem<int>(
         value: 2,
         child: Label(
-          text: LocaleKeys.profile.tr(),
+          text: LocaleKeys.profile.localize,
           style: Styles.mediumText(
             fontSize: 32,
             color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
@@ -580,7 +312,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
   //       tabAlignment: TabAlignment.start,
   //       isScrollable: true,
   //       tabs: ChatCategories.values.map((e) {
-  //         return Tab(text: e.name.tr());
+  //         return Tab(text: e.name.localize);
   //       }).toList());
   // }
 
@@ -603,7 +335,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
               child: Text(
-                e.name.tr(),
+                e.name.localize,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: e == ChatCategories.values[tabController.index]
@@ -643,7 +375,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                   expandedOptions
                       ? FontAwesomeIcons.anglesUp
                       : FontAwesomeIcons.anglesDown,
-                  color: Colors.black.withValues(alpha: 0.3),
+                  color: context.isDarkMode ? Colors.white38 : Colors.black38,
                   size: 18,
                 ),
               ),
@@ -718,7 +450,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                   ? ChatOptions(
                       key: const ValueKey(2),
                       icon: Icons.person_off_outlined,
-                      text: LocaleKeys.anonymous.tr(),
+                      text: LocaleKeys.anonymous.localize,
                       onTap: () async {
                         final result = await context.push(Routes.ARCHIVEDCHATS,
                             extra: OptionsChatsViewParams(
@@ -750,7 +482,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                   ? ChatOptions(
                       key: const ValueKey(3),
                       icon: Icons.emoji_people,
-                      text: LocaleKeys.greet.tr(),
+                      text: LocaleKeys.greet.localize,
                       onTap: () async {
                         final result = await context.push(Routes.ARCHIVEDCHATS,
                             extra: OptionsChatsViewParams(
@@ -772,14 +504,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
             ),
             // const Divider(),
             _buildCategoryChats(),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 4),
-              child: Divider(
-                thickness: 1,
-                color: Colors.black12,
-                height: 5,
-              ),
-            ),
+
             const MessagesAreEndToEndEncrypted(),
           ],
         );
@@ -798,7 +523,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                   expandedOptions
                       ? FontAwesomeIcons.anglesUp
                       : FontAwesomeIcons.anglesDown,
-                  color: Colors.black.withValues(alpha: 0.3),
+                  color: context.isDarkMode ? Colors.white38 : Colors.black38,
                   size: 18,
                 ),
               ),
@@ -948,16 +673,17 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
           : state.chats!.isEmpty
               ? Center(
                   child: Label(
-                      text: LocaleKeys.noChatsUntilNow.tr(),
+                      text: LocaleKeys.noChatsUntilNow.localize,
                       style: Styles.mediumText(
-                          fontWeight: FontWeight.bold, fontSize: 26)),
+                          fontWeight: FontWeight.bold, fontSize: 26,
+                      color: context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR
+                      ),),
                 )
               : Scrollbar(
                   // isAlwaysShown: true,  // Ensures the scrollbar is always visible
                   interactive: true,
                   thumbVisibility: true,
                   thickness: 3,
-
                   child: ListView.separated(
                     shrinkWrap: true,
                     physics: const AlwaysScrollableScrollPhysics(),
@@ -984,7 +710,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                                       ? AppColors.DARK_BLUE_COLOR
                                       : Colors.white,
                                   icon: Icons.more_horiz,
-                                  label: LocaleKeys.more.tr(),
+                                  label: LocaleKeys.more.localize,
                                   padding: EdgeInsets.zero,
                                 ),
                                 SlidableAction(
@@ -999,8 +725,8 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                                       : Colors.white,
                                   icon: Icons.delete_outlined,
                                   label: state.chats![index].archived
-                                      ? LocaleKeys.unarchive.tr()
-                                      : LocaleKeys.archive.tr(),
+                                      ? LocaleKeys.unarchive.localize
+                                      : LocaleKeys.archive.localize,
                                   padding: EdgeInsets.zero,
                                 ),
                               ],
@@ -1011,12 +737,12 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                               chatsCubit: chatsCubit,
                             ),
                           ),
-                    separatorBuilder: (context, index) => const Padding(
+                    separatorBuilder: (context, index) => Padding(
                       padding:
-                          EdgeInsets.symmetric(horizontal: 20.0, vertical: 4),
+                          const EdgeInsets.symmetric(horizontal: 20.0, vertical: 4),
                       child: Divider(
                         thickness: 1,
-                        color: Colors.black12,
+                        color:context.isDarkMode ? Colors.white12 : Colors.black12,
                         height: 5,
                       ),
                     ),
@@ -1058,13 +784,13 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                       padding: const EdgeInsets.symmetric(
                         horizontal: 8,
                       ),
-                      child: Tab(text: LocaleKeys.social.tr()),
+                      child: Tab(text: LocaleKeys.social.localize),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 8,
                       ),
-                      child: Tab(text: LocaleKeys.services.tr()),
+                      child: Tab(text: LocaleKeys.services.localize),
                     ),
                   ],
                 ),
@@ -1112,7 +838,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: Text(
-                  LocaleKeys.broadcasts.tr(),
+                  LocaleKeys.broadcasts.localize,
                   style: Styles.mediumText(fontWeight: FontWeight.w600),
                 ),
               ),
@@ -1122,7 +848,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
                   context.push(Routes.SEEALLBROADCASTS);
                 },
                 child: Text(
-                  LocaleKeys.seeAll.tr(),
+                  LocaleKeys.seeAll.localize,
                   style: Styles.smallText(
                     color: AppColors.PRIMARY_COLOR_DARK,
                     fontSize: 24,
@@ -1170,7 +896,7 @@ class _ChatViewState extends State<ChatView> with TickerProviderStateMixin {
           Padding(
             padding: const EdgeInsets.only(left: 16, top: 24, right: 16),
             child: Text(
-              LocaleKeys.myBroadcasts.tr(),
+              LocaleKeys.myBroadcasts.localize,
               style: Styles.mediumText(fontWeight: FontWeight.w600),
             ),
           ),
@@ -1435,7 +1161,7 @@ _selectedChatAppBar(ChatsCubit chatsCubit) {
                           //   value: 0,
                           //   child: Text(
                           //     LocaleKeys.addShortcut
-                          //         .tr(),
+                          //         .localize,
                           //     style: Styles.mediumText(
                           //         color: context
                           //                 .isDarkMode
@@ -1448,7 +1174,7 @@ _selectedChatAppBar(ChatsCubit chatsCubit) {
                           //   value: 1,
                           //   child: Text(
                           //     LocaleKeys.markAsUnread
-                          //         .tr(),
+                          //         .localize,
                           //     style: Styles.mediumText(
                           //         color: context
                           //                 .isDarkMode
@@ -1460,7 +1186,7 @@ _selectedChatAppBar(ChatsCubit chatsCubit) {
                           // PopupMenuItem<int>(
                           //   value: 2,
                           //   child: Text(
-                          //     LocaleKeys.selectAll.tr(),
+                          //     LocaleKeys.selectAll.localize,
                           //     style: Styles.mediumText(
                           //         color: context
                           //                 .isDarkMode
@@ -1524,6 +1250,8 @@ class ChatOptions extends StatelessWidget {
               style: Styles.mediumText(
                 fontWeight: FontWeight.w400,
                 fontSize: 32,
+                color:
+                    context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
               ),
             ),
           ],

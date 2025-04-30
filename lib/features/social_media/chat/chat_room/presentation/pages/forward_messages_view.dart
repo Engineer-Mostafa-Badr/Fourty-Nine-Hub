@@ -292,9 +292,14 @@ class _ForwardMessagesViewState extends State<ForwardMessagesView>
               : state.chats!.isEmpty
                   ? Center(
                       child: Label(
-                          text: LocaleKeys.noChatsUntilNow.tr(),
-                          style: Styles.mediumText(
-                              fontWeight: FontWeight.bold, fontSize: 26)),
+                        text: LocaleKeys.noChatsUntilNow.tr(),
+                        style: Styles.mediumText(
+                          color:
+                              context.isDarkMode ? Colors.white : Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 26,
+                        ),
+                      ),
                     )
                   : Scrollbar(
                       // isAlwaysShown: true,  // Ensures the scrollbar is always visible

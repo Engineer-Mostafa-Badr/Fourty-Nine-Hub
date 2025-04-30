@@ -225,6 +225,9 @@ class _MarriageCallMessageButtonsState
                               context.read<UserCubit>().isLoggedIn)
                           ? Assets.phoneIconRed
                           : Assets.phoneIcon,
+                      color:!(snap.data == true &&
+                          context.read<UserCubit>().isLoggedIn)?
+                      context.isDarkMode ? Colors.white : null: null,
                       // color: (snap.data == true &&
                       //         context.read<UserCubit>().isLoggedIn)
                       //     ? AppColors.PRIMARY_COLOR
@@ -270,6 +273,9 @@ class _MarriageCallMessageButtonsState
                     (snap.data == true && context.read<UserCubit>().isLoggedIn)
                         ? Assets.mailIconRed
                         : Assets.mailIcon,
+                    color:!(snap.data == true &&
+                        context.read<UserCubit>().isLoggedIn)?
+                    context.isDarkMode ? Colors.white : null: null,
                   ),
                 ),
                 if (widget.hasReport == true) ...[

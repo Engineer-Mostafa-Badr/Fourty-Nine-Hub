@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateful/banners/back_appbar.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
 
@@ -30,7 +32,64 @@ class _AddAboutScreenState extends State<AddAboutScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List<String> about = [
+    List<Map<String, String>> about = [
+      {
+        'key': currentController.text,
+        'ar': currentController.text,
+        'en': currentController.text,
+      },
+      {
+        'key': 'available',
+        'ar': 'متاح',
+        'en': 'Available',
+      },
+      {
+        'key': 'busy',
+        'ar': 'مشغول',
+        'en': 'Busy',
+      },
+      {
+        'key': 'atSchool',
+        'ar': 'في المدرسة',
+        'en': 'At school',
+      },
+      {
+        'key': 'atTheMovies',
+        'ar': 'في السينما',
+        'en': 'At the movies',
+      },
+      {
+        'key': 'atWork',
+        'ar': 'في العمل',
+        'en': 'At work',
+      },
+      {
+        'key': 'batteryAboutToDie',
+        'ar': 'البطارية على وشك النفاد',
+        'en': 'Battery about to die',
+      },
+      {
+        'key': 'inAMeeting',
+        'ar': 'في اجتماع',
+        'en': 'In a meeting',
+      },
+      {
+        'key': 'atTheGym',
+        'ar': 'في النادي الرياضي',
+        'en': 'At the gym',
+      },
+      {
+        'key': 'sleeping',
+        'ar': 'نائم',
+        'en': 'Sleeping',
+      },
+      {
+        'key': 'urgentCallsOnly',
+        'ar': 'للمكالمات العاجلة فقط',
+        'en': 'Urgent calls only',
+      },
+    ];
+    /* List<String> aboutAr = [
       currentController.text,
       'Available',
       'Busy',
@@ -43,38 +102,56 @@ class _AddAboutScreenState extends State<AddAboutScreen> {
       'Sleeping',
       'Urgent calls only',
     ];
+    List<String> aboutEn = [
+      currentController.text,
+      'متاح',
+      'مشغول',
+      'في المدرسة',
+      'في السينما',
+      'في العمل',
+      'البطارية على وشك النفاد',
+      'في اجتماع',
+      'في النادي الرياضي',
+      'نائم',
+      'للمكالمات العاجلة فقط',
+    ];
+*/
     return CustomScaffold(
       appBar: BackAppBar(label: LocaleKeys.about.localize),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Column(
-            spacing: 16,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(),
-              const Divider(
+              Divider(
                 thickness: 1,
-                color: Colors.black12,
+                color: context.isDarkMode ? Colors.white12 : Colors.black12,
                 height: 1,
               ),
+              const Sizer(),
               Label(
-                text: 'currently set to',
+                text: context.isArabic
+                    ? 'تم ضبطه حاليًا على'
+                    : 'currently set to',
                 style: Styles.mediumText(
-                  color: Colors.black45,
+                  color: context.isDarkMode ? Colors.white54 : Colors.black54,
                 ),
               ),
+              const Sizer(),
+
               TextField(
                 controller: currentController,
-                decoration: const InputDecoration(
-                  hintText: 'currently set to',
+                decoration: InputDecoration(
+                  hintText: context.isArabic ? 'الحاله' : 'About',
                   filled: false,
-                  border: OutlineInputBorder(borderSide: BorderSide.none),
+                  border: const OutlineInputBorder(borderSide: BorderSide.none),
                   enabledBorder:
-                      OutlineInputBorder(borderSide: BorderSide.none),
+                      const OutlineInputBorder(borderSide: BorderSide.none),
                   focusedBorder:
-                      OutlineInputBorder(borderSide: BorderSide.none),
-                  suffixIcon: Icon(
+                      const OutlineInputBorder(borderSide: BorderSide.none),
+                  suffixIcon: const Icon(
                     Icons.edit_outlined,
                     color: AppColors.SECONDARY_COLOR,
                   ),
@@ -85,53 +162,58 @@ class _AddAboutScreenState extends State<AddAboutScreen> {
                   setState(() {});
                 },
               ),
-              const Divider(
+              const Sizer(),
+
+              Divider(
                 thickness: 1,
-                color: Colors.black12,
+                color: context.isDarkMode ? Colors.white12 : Colors.black12,
                 height: 1,
               ),
+              const Sizer(),
+
               Label(
-                text: 'select about',
+                text: context.isArabic ? 'اختر حالتك' : 'select about',
                 style: Styles.mediumText(
-                  color: Colors.black45,
+                  color: context.isDarkMode ? Colors.white54 : Colors.black54,
                 ),
               ),
+              const Sizer(),
+
               ...List.generate(
                 about.length,
                 (index) {
-                  if ((index != 0 && currentController.text != about[index]) ||
-                      index == 0) {
-                    return InkWell(
-                      onTap: () async {
-                        currentController.text = about[index];
-                        await context
-                            .read<UserCubit>()
-                            .updateUserBio(bio: about[index]);
-                        await context.read<UserCubit>().getUser();
-                        setState(() {});
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Label(
-                              text: about[index],
-                              style: Styles.headerText(
-                                fontWeight: FontWeight.w400,
+                  bool isArabic = context.isArabic;
+                  final selectedText = isArabic ? about[index]['ar'] : about[index]['en'];
+                  final currentText = currentController.text;
+
+                  if ((index == 0 || selectedText != currentText)) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: InkWell(
+                        onTap: () async {
+                          currentController.text = selectedText!;
+                          await context.read<UserCubit>().updateUserBio(bio: selectedText);
+                          await context.read<UserCubit>().getUser();
+                          setState(() {});
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Label(
+                                text: selectedText!,
+                                style: Styles.headerText(fontWeight: FontWeight.w400),
                               ),
-                            ),
-                            if (currentController.text == about[index])
-                              const Icon(
-                                Icons.check,
-                                color: AppColors.SECONDARY_COLOR,
-                              ),
-                          ],
+                              if (selectedText == currentText)
+                                const Icon(Icons.check, color: AppColors.SECONDARY_COLOR),
+                            ],
+                          ),
                         ),
                       ),
                     );
                   } else {
-                    return const SizedBox();
+                    return const SizedBox.shrink();
                   }
                 },
               ),
