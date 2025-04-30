@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet/wallet_history_entity.dart';
 
 import '../cubit/wallet_two_cubit/wallet_two_cubit.dart';
@@ -14,7 +16,8 @@ class HistoryWalletSliverList extends StatefulWidget {
   final List<WalletHistoryEntity> walletHistories;
 
   @override
-  State<HistoryWalletSliverList> createState() => _HistoryWalletSliverListState();
+  State<HistoryWalletSliverList> createState() =>
+      _HistoryWalletSliverListState();
 }
 
 class _HistoryWalletSliverListState extends State<HistoryWalletSliverList> {
@@ -24,7 +27,7 @@ class _HistoryWalletSliverListState extends State<HistoryWalletSliverList> {
   void initState() {
     super.initState();
     _scrollController.addListener(
-          () {
+      () {
         if (_scrollController.position.pixels ==
             _scrollController.position.maxScrollExtent) {
           if (!context.read<WalletTwoCubit>().hasReachedMax) {
@@ -34,7 +37,6 @@ class _HistoryWalletSliverListState extends State<HistoryWalletSliverList> {
       },
     );
   }
-
 
   @override
   void dispose() {
@@ -51,7 +53,9 @@ class _HistoryWalletSliverListState extends State<HistoryWalletSliverList> {
         final history = widget.walletHistories[index];
         return HistoryWalletListViewItem(
           isReceived: history.received == true,
-          amount: history.transactionAmount.toString(),
+          amount: FormatNumbers().formatNumberByComma(
+              history.transactionAmount.toString(),
+              isArabic: context.isArabic),
           date: history.createdAt,
         );
       },

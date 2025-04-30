@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
@@ -25,7 +26,11 @@ class IconAndHintWidget extends StatelessWidget {
         Expanded(
           child: Label(
             text: text,
-            style: textStyle ?? Styles.mediumText(fontSize: 20),
+            style: textStyle ??
+                Styles.mediumText(
+                  fontSize: 20,
+                  color: context.isDarkMode ? Colors.white : Colors.black,
+                ),
           ),
         )
       ],

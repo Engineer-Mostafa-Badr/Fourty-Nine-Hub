@@ -55,7 +55,8 @@ class CompetitionsSection extends StatelessWidget {
             Expanded(
               child: CompetitionHeaderItem(
                 title: LocaleKeys.luckyWheel.localize,
-                value: FormatNumbers().formatNumber(luckyWheel.amount),
+                value: FormatNumbers().formatNumber(luckyWheel.amount,
+                    useArabicNumerals: context.isArabic),
                 svgPath: Assets.luckyWheelIcon,
               ),
             ),
@@ -64,7 +65,8 @@ class CompetitionsSection extends StatelessWidget {
                 return Expanded(
                   child: CompetitionHeaderItem(
                     title: context.isArabic ? c.nameAr! : c.nameEn!,
-                    value: FormatNumbers().formatNumber(c.amount ?? 0),
+                    value: FormatNumbers().formatNumber(c.amount ?? 0,
+                        useArabicNumerals: context.isArabic),
                     svgPath: competitionIcons[c.id] ?? '',
                   ),
                 );
@@ -83,13 +85,15 @@ class CompetitionsSection extends StatelessWidget {
                 },
                 child: CompetitionHeaderItem(
                   title: LocaleKeys.more.localize,
-                  value: FormatNumbers().formatNumber(competitions
-                          .map((c) {
-                            return c.amount ?? 0;
-                          })
-                          .toList()
-                          .reduce((value, element) => value + element) +
-                      luckyWheel.amount),
+                  value: FormatNumbers().formatNumber(
+                      competitions
+                              .map((c) {
+                                return c.amount ?? 0;
+                              })
+                              .toList()
+                              .reduce((value, element) => value + element) +
+                          luckyWheel.amount,
+                      useArabicNumerals: context.isArabic),
                   svgPath: Assets.moreIcon,
                 ),
               ),
@@ -127,7 +131,7 @@ class CompetitionsSection extends StatelessWidget {
                 showLoadingDialog(context);
                 await context.read<GiftTwoCubit>().requestTransferCompetition(
                       context,
-                      competitionId: competitions[competitionIndex].id??'',
+                      competitionId: competitions[competitionIndex].id ?? '',
                     );
                 Navigator.pop(context);
               },

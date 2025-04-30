@@ -81,8 +81,12 @@ class _InvestmentSectionState extends State<InvestmentSection> {
                   padding:
                       const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                   decoration: ShapeDecoration(
+                    // color: Colors.red,
                     shape: RoundedRectangleBorder(
-                      side: const BorderSide(width: 2),
+                      side: BorderSide(
+                        width: 2,
+                        color: context.isDarkMode ? Colors.white : Colors.black,
+                      ),
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
@@ -141,7 +145,9 @@ class _InvestmentSectionState extends State<InvestmentSection> {
                     bottom: 28,
                   ),
                   decoration: ShapeDecoration(
-                    color: const Color(0xFFD9D9D9),
+                    color: context.isDarkMode
+                        ? Colors.grey[700]
+                        : const Color(0xFFD9D9D9),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(20),
                     ),
@@ -164,6 +170,8 @@ class _InvestmentSectionState extends State<InvestmentSection> {
                         style: Styles.mediumText(
                           fontWeight: FontWeight.w500,
                           fontSize: 32,
+                          color:
+                              context.isDarkMode ? Colors.white : Colors.black,
                         ),
                       ),
                       Label(
@@ -171,6 +179,8 @@ class _InvestmentSectionState extends State<InvestmentSection> {
                         style: Styles.mediumText(
                           fontWeight: FontWeight.w500,
                           fontSize: 32,
+                          color:
+                              context.isDarkMode ? Colors.white : Colors.black,
                         ),
                       ),
                       Label(
@@ -178,6 +188,8 @@ class _InvestmentSectionState extends State<InvestmentSection> {
                         style: Styles.mediumText(
                           fontWeight: FontWeight.w500,
                           fontSize: 32,
+                          color:
+                              context.isDarkMode ? Colors.white : Colors.black,
                         ),
                       ),
                     ],

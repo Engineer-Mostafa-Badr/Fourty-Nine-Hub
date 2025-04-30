@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/utils/format_numbers.dart';
@@ -36,14 +37,19 @@ class InvestmentItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Label(
-              text: '$currentYears / $totalYears ${LocaleKeys.years.localize}',
-              style: Styles.mediumText(fontSize: 32),
+              text:
+                  '${FormatNumbers().formatNumberByComma(currentYears, isArabic: context.isArabic)} / ${FormatNumbers().formatNumberByComma(totalYears, isArabic: context.isArabic)} ${LocaleKeys.years.localize}',
+              style: Styles.mediumText(
+                fontSize: 32,
+                color: context.isDarkMode ? Colors.white : Colors.black,
+              ),
             ),
             const SizedBox(
               height: 4,
             ),
             Label(
-              text: '${FormatNumbers().formatNumber(price)} $currency',
+              text:
+                  '${FormatNumbers().formatNumber(price, useArabicNumerals: context.isArabic)} $currency',
               style: Styles.smallText(
                 fontSize: 24,
               ),

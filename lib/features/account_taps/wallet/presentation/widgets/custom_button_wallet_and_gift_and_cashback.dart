@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 
 class CustomButtonWalletAndGiftAndCashback extends StatelessWidget {
@@ -26,7 +27,11 @@ class CustomButtonWalletAndGiftAndCashback extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppButton(
       label: title,
-      style: textStyle?? Styles.headerText(color: Colors.white, fontSize: 32),
+      style: textStyle ??
+          Styles.headerText(
+            color: context.isDarkMode ? Colors.black : Colors.white,
+            fontSize: 32,
+          ),
       backColor: status
           ? (activeColor ?? const Color(0xffF33D49))
           : (disableColor ?? const Color(0xB3F33D49)),

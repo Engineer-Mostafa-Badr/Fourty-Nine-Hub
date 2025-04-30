@@ -286,7 +286,7 @@
   "withdraw": "سحب",
   "subscriptions": "الاشتراكات",
   "showMore": "إظهار المزيد",
-  "history": "التأريخ",
+  "history": "التاريخ",
   "competitions": "المسابقات",
   "requestWithdraw": "طلب سحب",
   "requestTransaction": "طلب للمعاملات الشخصية",
@@ -1546,10 +1546,10 @@
   "restartToApply": "اعادة تشغيل لتطبيق التغييرات",
   "restart": "اعادة التشغيل",
   "thereAreNoNotifications": "لا يوجد اشعارات",
-  "statusUpdates": "تحديثات الحالة",
   "manage": "إدارة",
   "newReel": "ريل جديد",
   "newStory": "قصة جديدة",
   "youHaveNoVideosToDisplay": "ليس لديك مقاطع فيديو لعرضها",
-  "youHaveNoImagesToDisplay": "ليس لديك صور لعرضها"
+  "youHaveNoImagesToDisplay": "ليس لديك صور لعرضها",
+  "create": "نشر"
 }

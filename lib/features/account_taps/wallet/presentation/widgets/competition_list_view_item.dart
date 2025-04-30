@@ -41,7 +41,9 @@ class CompetitionListViewItem extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(8.0),
             decoration: BoxDecoration(
-              color: const Color(0xffD9D9D9),
+              color: context.isDarkMode
+                  ? Colors.grey[700]
+                  : const Color(0xffD9D9D9),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Column(
@@ -159,7 +161,9 @@ class CompetitionListViewItem extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(8.0),
             decoration: BoxDecoration(
-              color: const Color(0xffD9D9D9),
+              color: context.isDarkMode
+                  ? Colors.grey[700]
+                  : const Color(0xffD9D9D9),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Column(

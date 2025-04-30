@@ -30,7 +30,7 @@ class CompetitionsPopUpItems extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       // margin: const EdgeInsets.symmetric(vertical: 55, horizontal: 22),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: context.isDarkMode ? Colors.grey[700] : Colors.white,
         borderRadius: BorderRadius.circular(25),
       ),
       child: Column(
@@ -43,11 +43,14 @@ class CompetitionsPopUpItems extends StatelessWidget {
                 crossAxisCount: 3,
               ),
               itemBuilder: (context, index) {
-                if(index == 0) {
+                if (index == 0) {
                   return CompetitionHeaderItem(
                     title: LocaleKeys.luckyWheel.localize,
                     value: FormatNumbers()
-                        .formatNumber(luckyWheel.amount)
+                        .formatNumber(
+                          luckyWheel.amount,
+                          useArabicNumerals: context.isArabic,
+                        )
                         .toString(),
                     svgPath: Assets.luckyWheelIcon,
                   );
@@ -58,10 +61,14 @@ class CompetitionsPopUpItems extends StatelessWidget {
                       ? competitions[competitionIndex].nameAr!
                       : competitions[competitionIndex].nameEn!,
                   value: FormatNumbers()
-                      .formatNumber(competitions[competitionIndex].countOfRequest! *
-                          competitions[competitionIndex].pricePerRequest!)
+                      .formatNumber(
+                        competitions[competitionIndex].countOfRequest! *
+                            competitions[competitionIndex].pricePerRequest!,
+                        useArabicNumerals: context.isArabic,
+                      )
                       .toString(),
-                  svgPath: competitionIcons[competitions[competitionIndex].id] ?? '',
+                  svgPath:
+                      competitionIcons[competitions[competitionIndex].id] ?? '',
                 );
               },
             ),
@@ -76,7 +83,8 @@ class CompetitionsPopUpItems extends StatelessWidget {
             },
             status: true,
             textStyle: Styles.headerText(fontWeight: FontWeight.w500),
-            activeColor: const Color(0xffD9D9D9),
+            activeColor:
+                context.isDarkMode ? Colors.grey[900] : const Color(0xffD9D9D9),
           ),
         ],
       ),
