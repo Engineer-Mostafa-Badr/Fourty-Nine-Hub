@@ -355,6 +355,7 @@ class RestaurantSettingScreen extends StatelessWidget {
                           Label(text: "${state.info?.totalRating ?? 0}",
                             style:  Styles.mediumText(
                               fontWeight: FontWeight.w700,
+                                color: context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR
                             ),
                           ),
                         ],
