@@ -25,7 +25,11 @@ class AvailableTripsCard extends StatefulWidget {
     required this.title,
     required this.isMale,
     required this.isContactInfo,
-    required this.isRequestButton, required this.iconCar, required this.buttonTitle, required this.onTab, required this.subscribtionPlan,
+    required this.isRequestButton,
+    required this.iconCar,
+    required this.buttonTitle,
+    required this.onTab,
+    required this.subscribtionPlan,
   });
 
   final String time;
@@ -39,6 +43,7 @@ class AvailableTripsCard extends StatefulWidget {
   final bool isRequestButton;
   final bool iconCar;
   final void Function() onTab;
+
   @override
   State<AvailableTripsCard> createState() => _AvailableTripsCardState();
 }
@@ -46,9 +51,10 @@ class AvailableTripsCard extends StatefulWidget {
 class _AvailableTripsCardState extends State<AvailableTripsCard> {
   @override
   Widget build(BuildContext context) {
-
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 10.h,),
+      padding: EdgeInsets.symmetric(
+        vertical: 10.h,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -57,7 +63,9 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
               CustomCard(
                 radius: 20,
                 children: [
-                  const Sizer(height: 8,),
+                  const Sizer(
+                    height: 8,
+                  ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 32.0.h),
                     child: Row(
@@ -70,13 +78,20 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
                                 color: AppColors.DARK_GRAY_COLOR,
                               ),
                               const Sizer(),
-                              Label(text: '437k ${LocaleKeys.views.localize}',style: Styles.mediumText(fontSize: 24,color: AppColors.DARK_GRAY_COLOR),)
+                              Label(
+                                text:
+                                    '437${context.isArabic ? 'الف' : 'k'} ${LocaleKeys.views.localize}',
+                                style: Styles.mediumText(
+                                    fontSize: 24,
+                                    color: AppColors.DARK_GRAY_COLOR),
+                              )
                             ],
                           ),
                         ),
                         Text(
                           widget.subscribtionPlan,
-                          style: Styles.headerText(color: AppColors.SECONDARY_COLOR,fontSize: 32),
+                          style: Styles.headerText(
+                              color: AppColors.SECONDARY_COLOR, fontSize: 32),
                         ),
                       ],
                     ),
@@ -85,7 +100,11 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
                   const Sizer(),
                   TripCardInfoWidget(
                     title: widget.title,
-                    icon:widget.iconCar?Assets.tripJoinCarIcon: widget.isMale ? Assets.maleUser : Assets.femaleUser,
+                    icon: widget.iconCar
+                        ? Assets.tripJoinCarIcon
+                        : widget.isMale
+                            ? Assets.maleUser
+                            : Assets.femaleUser,
                   ),
                   const Sizer(
                     height: 30,
@@ -132,9 +151,9 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
                     ),
                     child: TripJoinButtonsSection(
                       isContactInfo: widget.isContactInfo,
-                      isRequestButton:widget.isRequestButton,
+                      isRequestButton: widget.isRequestButton,
                       buttonTitle: widget.buttonTitle,
-                      onTap:widget.onTab,
+                      onTap: widget.onTab,
                     ),
                   ),
                   const Sizer(),
@@ -193,8 +212,11 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
             style: Styles.headerText(),
           ),
           Expanded(child: Container()),
-          RichText(
-              text: TextSpan(children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              RichText(
+                  text: TextSpan(children: [
                 TextSpan(
                     text: '${20} ',
                     style: Styles.headerText(
@@ -206,7 +228,15 @@ class _AvailableTripsCardState extends State<AvailableTripsCard> {
                       fontWeight: FontWeight.w500,
                       color: AppColors.SECONDARY_COLOR),
                 )
-              ]))
+              ])),
+              Label(
+                text: LocaleKeys.seat.localize,
+                style: Styles.mediumText(
+                    fontWeight: FontWeight.bold,
+                    color: context.isDarkMode ? Colors.white : Colors.black),
+              )
+            ],
+          )
         ],
       ),
     );

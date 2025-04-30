@@ -52,7 +52,7 @@ class _TripJoinContentState extends State<TripJoinContent>
                 switch (_displayedCategory) {
                   case LocaleKeys.availableTrips:
                     return AvailableTripsCard(
-                      subscribtionPlan: LocaleKeys.premium.localize,
+                      subscribtionPlan: context.isArabic?'العروض المميزة':LocaleKeys.premium.localize,
                       title: context.isArabic
                           ? 'كيا، سيراتو'
                           : 'Kia, Cerato',
@@ -79,9 +79,8 @@ class _TripJoinContentState extends State<TripJoinContent>
                             LocaleKeys.submit.localize,
                           )),
                     );
-                    break;
 
-                  case LocaleKeys.rideRequest:
+                  case LocaleKeys.requestLog:
                     return TripJoinCard(
                       subscribtionPlan: LocaleKeys.premium.localize,
                       title: context.isArabic ? 'محمد' : 'Mohamed',
@@ -96,7 +95,6 @@ class _TripJoinContentState extends State<TripJoinContent>
                       iconCar: false,
                       onTab: () {},
                     );
-                    break;
                   case LocaleKeys.myAds:
                     return TripJoinCard(
                       subscribtionPlan: LocaleKeys.premium.localize,
@@ -124,7 +122,6 @@ class _TripJoinContentState extends State<TripJoinContent>
                             LocaleKeys.close.localize,
                           )),
                     );
-                    break;
                 }
               }),
         ]),
@@ -140,9 +137,6 @@ class _TripJoinContentState extends State<TripJoinContent>
           child: _buildCategory(
             title: LocaleKeys.availableTrips,
             index: 0,
-            // selected: _displayedCategory == LocaleKeys.availableTrips
-            //     ? true
-            //     : false
           ),
         ),
         const Sizer(
@@ -150,11 +144,8 @@ class _TripJoinContentState extends State<TripJoinContent>
         ),
         Expanded(
           child: _buildCategory(
-            title: LocaleKeys.rideRequest,
+            title: LocaleKeys.requestLog,
             index: 1,
-            // selected: _displayedCategory == LocaleKeys.rideRequest
-            //     ? true
-            //     : false
           ),
         ),
         const Sizer(
@@ -164,8 +155,6 @@ class _TripJoinContentState extends State<TripJoinContent>
           child: _buildCategory(
             title: LocaleKeys.myAds,
             index: 2,
-            // selected:
-            //     _displayedCategory == LocaleKeys.myAds ? true : false
           ),
         ),
       ],
@@ -210,7 +199,7 @@ class _TripJoinContentState extends State<TripJoinContent>
             ),
           ),
           Visibility(
-            visible: title == LocaleKeys.rideRequest,
+            visible: title == LocaleKeys.requestLog,
             child: Positioned(
               top: -3.h,
               right: 4.h,

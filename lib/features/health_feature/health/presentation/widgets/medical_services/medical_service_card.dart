@@ -110,7 +110,7 @@ class _HealthMedicalServiceCardState extends State<HealthMedicalServiceCard> {
                     size: 30.h,
                     icon: Icons.add,
                     isCircle: true,
-                    color: Theme.of(context).scaffoldBackgroundColor,
+                    color: Colors.white,
                     backColor: AppColors.PRIMARY_COLOR,
                     onPressed: () {
                       if (context.read<HealthCubit>().state.mainCategory !=

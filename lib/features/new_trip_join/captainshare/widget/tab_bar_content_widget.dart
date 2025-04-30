@@ -39,11 +39,6 @@ class _TabBarContentWidgetState extends State<TabBarContentWidget> {
     [""], // Past Trips
   ];
   bool _hasTappedTab = false; // ✅ أضفنا دا
-  @override
-  void initState() {
-    super.initState();
-    print(widget._tabController.index);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +55,6 @@ class _TabBarContentWidgetState extends State<TabBarContentWidget> {
               setState(() {
                 _hasTappedTab = !_hasTappedTab; // ✅ يقلب الحالة
               });
-              print(widget._tabController.index);
             },
             tabController: widget._tabController,
           ),

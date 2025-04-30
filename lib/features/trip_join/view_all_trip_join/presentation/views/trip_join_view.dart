@@ -17,16 +17,15 @@ import 'package:go_router/go_router.dart';
 import '../../../../../routes/routes.dart';
 
 class TripJoinView extends StatefulWidget {
-  const TripJoinView({super.key});
-
+  const TripJoinView({super.key,required this.initialIndex,});
+  final int initialIndex;
   @override
   State<TripJoinView> createState() => _TripJoinViewState();
 }
 
 class _TripJoinViewState extends State<TripJoinView>
     with TickerProviderStateMixin {
-  int selectedIndex = 1;
-
+  late int selectedIndex ;
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
   late Animation<double> _positionAnimation;
@@ -36,6 +35,7 @@ class _TripJoinViewState extends State<TripJoinView>
   @override
   void initState() {
     super.initState();
+    selectedIndex=widget.initialIndex;
     tabController = TabController(length: 3, vsync: this);
     tabController.addListener(() {
       setState(() {});
@@ -105,9 +105,7 @@ class _TripJoinViewState extends State<TripJoinView>
             SingleChildScrollView(
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 32.h),
-                child: Column(
-
-                    children: [
+                child: Column(children: [
                   Align(
                     alignment: AlignmentDirectional.topStart,
                     child: IconButton(
@@ -130,13 +128,11 @@ class _TripJoinViewState extends State<TripJoinView>
                         onTap: () {
                           setState(() {
                             selectedIndex = index;
-                            _controller.forward(
-                                from: 0);
+                            _controller.forward(from: 0);
                           });
                         },
                         icon: getIconForIndex(index),
-                        borderColor:
-                            index == selectedIndex ? Colors.red : null,
+                        borderColor: index == selectedIndex ? Colors.red : null,
                         containerColor:
                             index == selectedIndex ? Colors.white : null,
                         iconColor: index == selectedIndex
@@ -165,7 +161,9 @@ class _TripJoinViewState extends State<TripJoinView>
                       }
                     }),
                   ),
-                  const Sizer(height: 20,),
+                  const Sizer(
+                    height: 20,
+                  ),
                   AnimatedSwitcher(
                     duration: const Duration(milliseconds: 300),
                     child: getSelectedContent(selectedIndex),
@@ -218,8 +216,7 @@ class _TripJoinViewState extends State<TripJoinView>
   Widget getSelectedContent(int? index) {
     switch (index) {
       case 0:
-        return
-          Container(
+        return Container(
           key: const ValueKey(0),
           child: const CaptainShareScreen(),
         );
