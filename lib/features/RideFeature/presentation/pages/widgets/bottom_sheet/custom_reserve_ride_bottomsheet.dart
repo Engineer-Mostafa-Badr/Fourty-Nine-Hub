@@ -158,7 +158,7 @@ class _CustomReserveRideBottomSheetState
                                         const SizedBox(width: 18),
                                         Expanded(
                                             child: _buildSelectableContainer(
-                                                1, "Visa", false)),
+                                                1, context.isArabic ? "فيزا" : "Visa", false)),
                                       ],
                                     ),
                                     const SizedBox(height: 6),

@@ -1456,7 +1456,7 @@ class CodegenLoader extends AssetLoader{
   "lady": "سيدة",
   "ladyDriver": "سائقة",
   "oneWayOneCaptain": "اتجاه واحد - كابتن واحد!",
-  "rideMode": "وضع الركوب",
+  "rideMode": "وضع السائق",
   "pastTrips": "الرحلات السابقة",
   "joinAvailableTripsNearYouNow": "انضم إلى الرحلات المتاحة بالقرب منك الآن.",
   "browseRecentlyCompletedTrips": "تصفح الرحلات المنجزة مؤخرًا.",
