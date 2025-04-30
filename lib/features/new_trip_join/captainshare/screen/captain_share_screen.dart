@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fourtyninehub/core/widget/custom_scaffold.dart';
-import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
-import '../../../../core/utils/handle_cashback.dart';
 import '../../presentation/view/widget/captain_share_body.dart';
-import '../../presentation/view/widget/route_button_widget.dart';
 
 class CaptainShareScreen extends StatefulWidget {
   const CaptainShareScreen({super.key});
@@ -25,28 +21,9 @@ class _CaptainShareScreenState extends State<CaptainShareScreen>
     });
   }
 
-  //final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: CustomScaffold(
-        //     key: _scaffoldKey,
-        floatingActionButton: const RouteButtonWidget(),
-        appBar: HomeAppbar(
-          isMenu: false,
-          language: true,
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(
-              Icons.arrow_back,
-            ),
-          ),
-        ),
-        body: CaptainShareBody(tabController: _tabController),
-      ),
-    );
+    return CaptainShareBody(tabController:_tabController ,);
   }
 }

@@ -27,6 +27,9 @@ class WinnersCashbackViewBody extends StatelessWidget {
                     name: '${w.firstName} ${w.lastName}',
                     date: w.winAt,
                     price: w.profitAmount.toString(),
+                    // TODO: add currency
+                    currencyAr: '****',
+                    currencyEn: '****',
                   ),
                 )
                 .toList(),

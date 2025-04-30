@@ -40,33 +40,37 @@ class _TripJoinBottomSectionState extends State<TripJoinBottomSection> {
               children: [
                 CustomRow(
                   children: [
-                    Center(child: const Icon(Icons.directions_car, size: 30,)),
+                    const Center(
+                        child: Icon(
+                      Icons.directions_car,
+                      size: 30,
+                      color: Colors.black,
+                    )),
                     Text('0.0 ${LocaleKeys.KM.localize}',
-                        style: Styles.headerText()),
+                        style: Styles.headerText(color: Colors.black)),
                     Center(
-                      child: Text(
-                          '${20} ',
+                      child: Text('${20} ',
                           style: Styles.headerText(
-                              color: Colors.black, fontWeight: FontWeight.bold)),
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold)),
                     ),
                     Text(
                       context.isArabic ? 'جنيه' : 'EGP',
                       style: Styles.mediumText(
                           fontSize:
-                          context.locale.languageCode == "ar" ? 35 : 28,
+                              context.locale.languageCode == "ar" ? 35 : 28,
                           fontWeight: FontWeight.w500,
                           color: AppColors.SECONDARY_COLOR),
                     )
                   ],
                 ),
-                Sizer(),
+                const Sizer(),
                 CustomRow(
                   children: [
                     Center(
-                      child:
-                      IconButton(
-                        visualDensity:const  VisualDensity(
-                            horizontal: -4, vertical: -4),
+                      child: IconButton(
+                        visualDensity:
+                            const VisualDensity(horizontal: -4, vertical: -4),
                         onPressed: () async {
                           time = await showTimePicker(
                             context: context,
@@ -74,13 +78,15 @@ class _TripJoinBottomSectionState extends State<TripJoinBottomSection> {
                           );
                           setState(() {});
                         },
-                        icon: const Icon(Icons.access_time, size: 30,),
+                        icon: const Icon(Icons.access_time,
+                            size: 30, color: Colors.black),
                       ),
                     ),
-                    Text(_getTime(), style: Styles.headerText()),
+                    Text(_getTime(),
+                        style: Styles.headerText(color: Colors.black)),
                     Checkbox(
-                      visualDensity:const VisualDensity(
-                          horizontal: -4, vertical: -4),
+                      visualDensity:
+                          const VisualDensity(horizontal: -4, vertical: -4),
                       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       value: isChecked,
                       onChanged: (value) {
@@ -89,56 +95,62 @@ class _TripJoinBottomSectionState extends State<TripJoinBottomSection> {
                       },
                       checkColor: Colors.white,
                       activeColor: AppColors.PRIMARY_COLOR,
+                      side:const BorderSide(
+                        color: Colors.black,
+                        width: 2
+                      ),
                     ),
-                    Text(
-                        LocaleKeys.repeat.localize, style: Styles.headerText()),
+                    Text(LocaleKeys.repeat.localize,
+                        style: Styles.headerText(color: Colors.black)),
                   ],
                 ),
                 const Sizer(),
                 CustomRow(
                   children: [
                     DropdownButton(
-                      dropdownColor:const Color.fromRGBO(225, 225, 225, 1),
+                      dropdownColor: const Color.fromRGBO(225, 225, 225, 1),
                       borderRadius: BorderRadius.circular(15),
                       menuWidth: 100.w,
                       enableFeedback: false,
                       padding: EdgeInsets.symmetric(horizontal: 10.w),
                       alignment: Alignment.center,
-                      underline:const SizedBox.shrink(),
+                      underline: const SizedBox.shrink(),
                       items: [1, 2, 3, 4, 5, 6]
                           .map((e) => DropdownMenuItem(
-                          alignment: AlignmentDirectional.center,
-                          value: e,
-                          child: Text(
-                            e.toString(),
-                            style:const TextStyle(
-                              color: Colors.black,
-                            ),
-                          )))
+                              alignment: AlignmentDirectional.center,
+                              value: e,
+                              child: Text(
+                                e.toString(),
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                ),
+                              )))
                           .toList(),
                       onChanged: (int? value) {
-                        selectedSeatNum
-                        = value ?? 1;
+                        selectedSeatNum = value ?? 1;
                         setState(() {});
                       },
-                      icon:const Icon(Icons.keyboard_arrow_down, size: 30,),
+                      icon: const Icon(
+                        Icons.keyboard_arrow_down,
+                        size: 30,
+                          color: Colors.black
+                      ),
                       isDense: true,
                     ),
-
-                    Text(LocaleKeys.seat.localize,
-                        style: Styles.headerText()),
-                    Image.asset(Assets.tripJoinBabySeatIcon,height: 40.h,),
+                    Text(LocaleKeys.seat.localize, style: Styles.headerText(color: Colors.black)),
+                    Image.asset(
+                      Assets.tripJoinBabySeatIcon,
+                      height: 40.h,
+                    ),
                     Text(
                       LocaleKeys.seat.localize,
-                      style: Styles.headerText(fontWeight: FontWeight.bold),
+                      style: Styles.headerText(fontWeight: FontWeight.bold,color: Colors.black),
                     ),
-
                   ],
                 ),
               ],
             ),
           ),
-
         ],
       ),
     );
@@ -153,32 +165,28 @@ class _TripJoinBottomSectionState extends State<TripJoinBottomSection> {
     return time!.format(context);
   }
 
-  void _showDropdownMenu({required BuildContext context,
-    required Offset position,
-    required List items,
-    required var selectedItem}) async {
+  void _showDropdownMenu(
+      {required BuildContext context,
+      required Offset position,
+      required List items,
+      required var selectedItem}) async {
     final RenderBox overlay =
-    Overlay
-        .of(context)
-        .context
-        .findRenderObject() as RenderBox;
+        Overlay.of(context).context.findRenderObject() as RenderBox;
 
     final selected = await showMenu<String>(
       color: AppColors.colorGreyLight,
       context: context,
-      position: RelativeRect.fromLTRB
-        (
+      position: RelativeRect.fromLTRB(
         position.dx,
-        position.dy-50,
+        position.dy - 50,
         overlay.size.width - position.dx,
         overlay.size.height - position.dy,
       ),
       items: items
-          .map((brand) =>
-          PopupMenuItem<String>(
-            value: brand,
-            child: Text(brand),
-          ))
+          .map((brand) => PopupMenuItem<String>(
+                value: brand,
+                child: Text(brand),
+              ))
           .toList(),
     );
 
@@ -188,7 +196,4 @@ class _TripJoinBottomSectionState extends State<TripJoinBottomSection> {
       });
     }
   }
-
-
 }
-

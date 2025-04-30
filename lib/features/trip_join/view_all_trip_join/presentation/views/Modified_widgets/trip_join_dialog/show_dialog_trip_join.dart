@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 
 void showDialogTripJoin(BuildContext context, Widget screen) {
   showDialog(
@@ -8,7 +9,7 @@ void showDialogTripJoin(BuildContext context, Widget screen) {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor:Theme.of(context).scaffoldBackgroundColor,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: screen,

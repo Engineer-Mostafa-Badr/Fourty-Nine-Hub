@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/wallet_two_cubit/wallet_two_cubit.dart';
@@ -35,7 +36,10 @@ class RequestWalletButton extends StatelessWidget {
       if (isWaitingApproval) {
         return AppButton(
           label: LocaleKeys.waitingApproval.localize,
-          style: Styles.headerText(color: Colors.white, fontSize: 32),
+          style: Styles.headerText(
+            color: context.isDarkMode ? Colors.black : Colors.white,
+            fontSize: 32,
+          ),
           onPressed: () {},
           backColor: const Color(0xB3F33D49),
         );
@@ -44,8 +48,12 @@ class RequestWalletButton extends StatelessWidget {
           label: LocaleKeys.requestWithdraw.localize,
           style: Styles.headerText(color: Colors.white, fontSize: 32),
           backColor: amount >= target
-              ? const Color(0xffF33D49)
-              : const Color(0xB3F33D49),
+              ? context.isDarkMode
+                  ? const Color(0xffF45560)
+                  : const Color(0xffF33D49)
+              : context.isDarkMode
+                  ? const Color(0xB3F45560)
+                  : const Color(0xB3F33D49),
           onPressed: () {
             if (amount >= target) {
               // اذا كان المبلغ الخاص بي اكبر من اقل سحب

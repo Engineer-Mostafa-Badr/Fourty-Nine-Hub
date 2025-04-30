@@ -66,165 +66,102 @@ class _AddNewPickMeViewState extends State<AddNewPickMeView> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: SharedScaffold(
-            mainCategoryId: 1,isWithBackArrow: false,
-            body: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 0),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: WelcomeTextWidget(
-                        title: LocaleKeys.welcome_pick_me.localize,
-                        infoMessage:
-                        "Create a ride &add your trip. wait for car owners to contact you. Share trip & save money!",
-                      ),
-                    ),
-                    const Sizer(),
-                    _buildTopImage(),
-                    SizedBox(height: 10.h),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      child: _customLocationField(
-                        isTo: false,
-                        context: context,
-                        color: Colors.green,
-                        text: currentAddress,
-                        onPressed: () async {
-                          context.push(
-                            Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
-                            extra: RideOpenStreetMapSearchAndPickParams(
-                              onPicked: (pickedData) async {
-                                currentAddress = pickedData.addressName;
-                                currentLocation = [pickedData.latLong.latitude, pickedData.latLong.longitude];
-                                context.pop();
-                                setState(() {
-
-                                });
-                              },
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8),
-                      child: _customLocationField(
-                        isTo: true,
-                        context: context,
-                        color: Colors.blue,
-                        text:toAddress,
-                        onPressed: () async {
-                          context.push(Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
-                              extra: RideOpenStreetMapSearchAndPickParams(
-                                onPicked: (pickedData) async {
-                                  toAddress = pickedData.addressName;
-                                  toLocation = [pickedData.latLong.latitude, pickedData.latLong.longitude];
-                                  context.pop();
-                                  setState(() {});
-                                },
-                              ));
-                        },
-                      ),
-                    ),
-                    const Sizer(),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: FormTextField(
-                          type: TextInputType.phone,
-                          height: 76.h,
-                          style: Styles.mediumText(),
-                          constraints:
-                          const BoxConstraints(maxHeight: 52, minHeight: 52),
-                          fillColor: AppColors.colorGreyLight,
-                          borderRadius: BorderRadius.circular(30.h),
-                          controller: phoneController,
-                          hint: LocaleKeys.phoneNumber.localize,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return LocaleKeys
-                                  .please_enter_phone_number.localize;
-                            }
-                            return null;
-                          }),
-                    ),
-                    const Sizer(),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8.0),
-                      child: TripJoinBottomSection(),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 8.0.h, bottom: 20.h),
-                      child: const PremiumAndRequestWidget(),
-                    ),
-                  ],
-
+    return SharedScaffold(
+        mainCategoryId: 1,isWithBackArrow: true,
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0.h,vertical:8.h ),
+                child: WelcomeTextWidget(
+                  title: LocaleKeys.welcome_pick_me.localize,
+                  infoMessage:
+                  context.isArabic?"انشئ رحلة واضف رحلتك. انتظر أصحاب السيارات للاتصال بك. شارك الرحلة و وفر المال!":"Create a ride & add your trip. wait for car owners to contact you. Share trip & save money!",
                 ),
               ),
-            )));
+              _buildTopImage(),
+              SizedBox(height: 10.h),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.h, vertical: 8.h),
+                child: _customLocationField(
+                  isTo: false,
+                  context: context,
+                  color: Colors.green,
+                  text: currentAddress,
+                  onPressed: () async {
+                    context.push(
+                      Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
+                      extra: RideOpenStreetMapSearchAndPickParams(
+                        onPicked: (pickedData) async {
+                          currentAddress = pickedData.addressName;
+                          currentLocation = [pickedData.latLong.latitude, pickedData.latLong.longitude];
+                          context.pop();
+                          setState(() {
+
+                          });
+                        },
+                      ),
+                    );
+                  },
+                ),
+              ),
+              const Sizer(),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.h,vertical: 8.h),
+                child: _customLocationField(
+                  isTo: true,
+                  context: context,
+                  color: Colors.blue,
+                  text:toAddress,
+                  onPressed: () async {
+                    context.push(Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
+                        extra: RideOpenStreetMapSearchAndPickParams(
+                          onPicked: (pickedData) async {
+                            toAddress = pickedData.addressName;
+                            toLocation = [pickedData.latLong.latitude, pickedData.latLong.longitude];
+                            context.pop();
+                            setState(() {});
+                          },
+                        ));
+                  },
+                ),
+              ),
+              const Sizer(),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: FormTextField(
+                    type: TextInputType.phone,
+                    height: 76.h,
+                    style: Styles.mediumText(),
+                    constraints:
+                    const BoxConstraints(maxHeight: 52, minHeight: 52),
+                    fillColor: AppColors.colorGreyLight,
+                    borderRadius: BorderRadius.circular(30.h),
+                    controller: phoneController,
+                    hint: LocaleKeys.phoneNumber.localize,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return LocaleKeys
+                            .please_enter_phone_number.localize;
+                      }
+                      return null;
+                    }),
+              ),
+              const Sizer(),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                child: TripJoinBottomSection(),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 18.0.h, vertical: 8.h,),
+                child: const PremiumAndRequestWidget(),
+              ),
+            ],
+
+          ),
+        ));
   }
-
-  void _showDropdownMenu({
-    required BuildContext context,
-    required Offset position,
-    required List items,
-  }) async {
-    final RenderBox overlay =
-    Overlay.of(context).context.findRenderObject() as RenderBox;
-
-    final selected = await showMenu<String>(
-      color: AppColors.colorGreyLight,
-      context: context,
-      position: RelativeRect.fromLTRB(
-        position.dx,
-        position.dy,
-        overlay.size.width - position.dx,
-        overlay.size.height - position.dy,
-      ),
-      items: items
-          .map((brand) => PopupMenuItem<String>(
-        value: brand,
-        child: Text(brand),
-      ))
-          .toList(),
-    );
-
-    if (selected != null) {}
-  }
-
-  // _buildMenuButton(
-  //     {required String title, required List items, required var selectedItem}) {
-  //   return Expanded(
-  //     child: Container(
-  //       padding: EdgeInsets.symmetric(horizontal: 32.h, vertical: 16.h),
-  //       decoration: BoxDecoration(
-  //         borderRadius: BorderRadius.circular(30.h),
-  //         color: AppColors.colorGreyLight,
-  //       ),
-  //       child: Row(
-  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //         children: [
-  //           Text(
-  //             selectedItem ?? title,
-  //             style: Styles.mediumText(),
-  //           ),
-  //           GestureDetector(
-  //             child: const Icon(Icons.keyboard_arrow_down),
-  //             onTapDown: (details) => _showDropdownMenu(
-  //               context: context,
-  //               position: details.globalPosition,
-  //               items: items,
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
-
   Widget _customLocationField({
     required Color color,
     required String? text,
@@ -272,6 +209,7 @@ class _AddNewPickMeViewState extends State<AddNewPickMeView> {
                     : text!,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
+                style: Styles.mediumText(color: Colors.black),
               ),
             ),
           ],

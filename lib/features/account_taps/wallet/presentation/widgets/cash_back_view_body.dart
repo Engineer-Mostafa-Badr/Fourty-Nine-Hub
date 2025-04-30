@@ -7,6 +7,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
+import 'package:fourtyninehub/core/utils/format_numbers.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/cashback_cubit/cashback_cubit.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/cashback_histories_list_view.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/widgets/header_total_account_widget.dart';
@@ -43,6 +44,9 @@ class CashbackViewBody extends StatelessWidget {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const SizedBox(
+                  height: 16,
+                ),
                 HeaderTotalAccountWidget(
                   balance: cashback.balance.toString(),
                   currency: context.isArabic
@@ -56,7 +60,7 @@ class CashbackViewBody extends StatelessWidget {
                 ),
                 IconAndHintWidget(
                   text:
-                      '${LocaleKeys.minimum.localize}1002 ${LocaleKeys.transaction.localize}',
+                      '${LocaleKeys.minimum.localize} ${FormatNumbers().formatNumberByComma('1002', isArabic: context.isArabic)} ${LocaleKeys.transaction.localize}',
                 ),
                 const SizedBox(
                   height: 8,

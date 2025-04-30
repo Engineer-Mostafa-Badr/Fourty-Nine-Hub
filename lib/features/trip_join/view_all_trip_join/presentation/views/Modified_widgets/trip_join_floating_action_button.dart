@@ -38,7 +38,7 @@ class TripJoinFloatingActionButton extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.add, color: Colors.white, size: 24),
+                  const Icon(Icons.add, color: Colors.white, size: 20),
                   const SizedBox(),
                   Text(title,
                     style: const TextStyle(

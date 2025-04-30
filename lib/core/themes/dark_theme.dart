@@ -8,68 +8,70 @@ ThemeData get darkTheme => ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
       primaryColor: AppColors.AUTH_CONTAINER_COLOR,
-      scaffoldBackgroundColor: AppColors.QUANTITY_COLOR,
+      scaffoldBackgroundColor:
+          const Color(0xff0E0E0E), // AppColors.QUANTITY_COLOR,
       // timePickerTheme: TimePickerThemeData(
       //   backgroundColor: AppColors.QUANTITY_COLOR,
       //   hourMinuteColor: AppColors.AUTH_CONTAINER_COLOR,
       // ),
-  radioTheme: RadioThemeData(
-    fillColor: WidgetStateProperty.resolveWith((states) {
-      if (states.contains(WidgetState.selected)) {
-        return AppColors.PRIMARY_COLOR;
-      }
-      return AppColors.BG_GRAY_COLOR;
-    }),
-  ),
-  timePickerTheme: TimePickerThemeData(
-    backgroundColor: AppColors.QUANTITY_COLOR,
-    dialHandColor: AppColors.AUTH_CONTAINER_COLOR,
-    dialBackgroundColor: AppColors.PRIMARY_COLOR.withValues(alpha: .5),
-    dayPeriodBorderSide: const BorderSide(color: AppColors.AUTH_CONTAINER_COLOR),
-    dayPeriodColor: AppColors.PRIMARY_COLOR.withValues(alpha: .5),
-    dayPeriodTextColor: AppColors.AUTH_CONTAINER_COLOR,
-    hourMinuteTextColor: AppColors.AUTH_CONTAINER_COLOR,
-    hourMinuteColor: AppColors.PRIMARY_COLOR.withValues(alpha: .5),
-    cancelButtonStyle: ButtonStyle(
-      foregroundColor: WidgetStateProperty.resolveWith(
-            (states) => AppColors.AUTH_CONTAINER_COLOR,
+      radioTheme: RadioThemeData(
+        fillColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return AppColors.PRIMARY_COLOR;
+          }
+          return AppColors.BG_GRAY_COLOR;
+        }),
       ),
-    ),
-    confirmButtonStyle: ButtonStyle(
-      foregroundColor: WidgetStateProperty.resolveWith(
+      timePickerTheme: TimePickerThemeData(
+        backgroundColor: AppColors.QUANTITY_COLOR,
+        dialHandColor: AppColors.AUTH_CONTAINER_COLOR,
+        dialBackgroundColor: AppColors.PRIMARY_COLOR.withValues(alpha: .5),
+        dayPeriodBorderSide:
+            const BorderSide(color: AppColors.AUTH_CONTAINER_COLOR),
+        dayPeriodColor: AppColors.PRIMARY_COLOR.withValues(alpha: .5),
+        dayPeriodTextColor: AppColors.AUTH_CONTAINER_COLOR,
+        hourMinuteTextColor: AppColors.AUTH_CONTAINER_COLOR,
+        hourMinuteColor: AppColors.PRIMARY_COLOR.withValues(alpha: .5),
+        cancelButtonStyle: ButtonStyle(
+          foregroundColor: WidgetStateProperty.resolveWith(
             (states) => AppColors.AUTH_CONTAINER_COLOR,
-      ),
-    ),
-  ),
-  datePickerTheme: DatePickerThemeData(
-    headerBackgroundColor: AppColors.PRIMARY_COLOR,
-    headerForegroundColor: AppColors.AUTH_CONTAINER_COLOR,
-    backgroundColor: AppColors.QUANTITY_COLOR,
-    dayForegroundColor: WidgetStateProperty.resolveWith((states) {
-      if (states.contains(WidgetState.selected)) {
-        return AppColors.AUTH_CONTAINER_COLOR; // Text color when selected
-      }
-      return AppColors.AUTH_CONTAINER_COLOR; // Default text color
-    }),
-    dayBackgroundColor: WidgetStateProperty.resolveWith((states) {
-      if (states.contains(WidgetState.selected)) {
-        return AppColors.PRIMARY_COLOR; // Background color when selected
-      }
-      return Colors.transparent; // Default background
-    }),
-    cancelButtonStyle: ButtonStyle(
-      foregroundColor: WidgetStateProperty.resolveWith(
+          ),
+        ),
+        confirmButtonStyle: ButtonStyle(
+          foregroundColor: WidgetStateProperty.resolveWith(
             (states) => AppColors.AUTH_CONTAINER_COLOR,
+          ),
+        ),
       ),
-    ),
-    confirmButtonStyle: ButtonStyle(
-      foregroundColor: WidgetStateProperty.resolveWith(
+      datePickerTheme: DatePickerThemeData(
+        headerBackgroundColor: AppColors.PRIMARY_COLOR,
+        headerForegroundColor: AppColors.AUTH_CONTAINER_COLOR,
+        backgroundColor: AppColors.QUANTITY_COLOR,
+        dayForegroundColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return AppColors.AUTH_CONTAINER_COLOR; // Text color when selected
+          }
+          return AppColors.AUTH_CONTAINER_COLOR; // Default text color
+        }),
+        dayBackgroundColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return AppColors.PRIMARY_COLOR; // Background color when selected
+          }
+          return Colors.transparent; // Default background
+        }),
+        cancelButtonStyle: ButtonStyle(
+          foregroundColor: WidgetStateProperty.resolveWith(
             (states) => AppColors.AUTH_CONTAINER_COLOR,
+          ),
+        ),
+        confirmButtonStyle: ButtonStyle(
+          foregroundColor: WidgetStateProperty.resolveWith(
+            (states) => AppColors.AUTH_CONTAINER_COLOR,
+          ),
+        ),
       ),
-    ),
-  ),
-  appBarTheme: const AppBarTheme(
-        color: AppColors.QUANTITY_COLOR,
+      appBarTheme: const AppBarTheme(
+        color: Color(0xff0E0E0E), // AppColors.QUANTITY_COLOR,
         iconTheme: IconThemeData(
           color: AppColors.AUTH_CONTAINER_COLOR,
         ),
