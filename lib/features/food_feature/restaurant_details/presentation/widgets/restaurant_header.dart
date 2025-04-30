@@ -49,7 +49,6 @@ class _RestaurantHeaderState extends State<RestaurantHeader> {
                 heightCarousel: imageHeight,
                 widthForImages: MediaQuery.of(context).size.width,
               ),
-
               // Overlay gradient
               Container(
                 decoration: BoxDecoration(
@@ -151,7 +150,7 @@ class _RestaurantHeaderState extends State<RestaurantHeader> {
                                 ),
                                 SizedBox(width: 10),
                                 Text(
-                                  '(${widget.restaurant.numberOfReviews ?? 0} ${LocaleKeys.reviews.localize})',
+                                  '(${widget.restaurant.numberOfReviews ?? 0} ${LocaleKeys.review.localize})',
                                   style: Styles.mediumText(
                                     color: Colors.white70,
                                   ),

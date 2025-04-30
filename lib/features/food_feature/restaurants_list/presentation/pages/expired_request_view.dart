@@ -235,7 +235,8 @@ class TripRequestCard extends StatelessWidget {
           orderData.user?.firstName ?? LocaleKeys.noName.tr()),
       style: Styles.mediumText(
         fontWeight: FontWeight.w600,
-        color: context.isDarkMode ? AppColors.whiteColor : AppColors.black,
+        color:context.isDarkMode ? AppColors.whiteColor : AppColors.black,
+
 
       ),
     );
@@ -252,6 +253,8 @@ class TripRequestCard extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           style: Styles.mediumText(
             fontWeight: FontWeight.w700,
+            color:context.isDarkMode ? AppColors.whiteColor : AppColors.black,
+
           ),),
         if (orderData.restaurant?.subcategory != null)
           Text(
@@ -265,13 +268,13 @@ class TripRequestCard extends StatelessWidget {
 
             ),
           ),
-        _buildFoodDetails(),
+        _buildFoodDetails(context),
         _buildTotalAndCurrency(context),
       ],
     );
   }
 
-  Widget _buildFoodDetails() {
+  Widget _buildFoodDetails(BuildContext context) {
     if (orderData.orders == null || orderData.orders!.isEmpty) {
       return Text(
         LocaleKeys.noOrders.tr(),
@@ -289,6 +292,7 @@ class TripRequestCard extends StatelessWidget {
       overflow: TextOverflow.ellipsis,
       style: Styles.mediumText(
         fontWeight: FontWeight.w700,
+        color:context.isDarkMode ? AppColors.whiteColor : AppColors.black,
       ),
     );
   }
@@ -304,6 +308,7 @@ class TripRequestCard extends StatelessWidget {
                 : orderData.currencyEn ?? ''}",
             style: Styles.mediumText(
               fontWeight: FontWeight.w700,
+              color:context.isDarkMode ? AppColors.whiteColor : AppColors.black,
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -324,6 +329,8 @@ class TripRequestCard extends StatelessWidget {
               : LocaleKeys.noDate.tr(),
           style: Styles.smallText(
             fontWeight: FontWeight.w600,
+            color:context.isDarkMode ? AppColors.whiteColor : AppColors.black,
+
           ),
         ),
         const Spacer(),
