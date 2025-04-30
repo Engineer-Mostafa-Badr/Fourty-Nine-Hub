@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/soon_dialog.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/utils/handle_cashback.dart';
@@ -13,11 +14,13 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/localization/locale_keys.g.dart';
 import '../../../features/ads_feature/ads/presentation/pages/ads_view.dart';
+import '../../../features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import '../../../features/notifications/presentation/cubits/get_unread_notifications_count/get_unread_notifications_count_cubit.dart';
 import '../../../features/notifications/presentation/widgets/icon_with_view_count.dart';
 import '../../../res/style/app_colors.dart';
 import '../../../res/style/styles.dart';
 import '../../../routes/routes.dart';
+import '../dialogs/please_login_dialog.dart';
 import '../stateless/labels/label.dart';
 import 'bottom_painter.dart';
 
@@ -89,11 +92,19 @@ class BottomNavigator extends StatelessWidget implements PreferredSizeWidget {
       onTap: (index) {
         if (index == 4) {
           Scaffold.of(context).openDrawer();
-        }
-        else if(index ==0){
+        } else if (index == 0) {
+          soonDialog(context);
           // context.push(pages[index].route,extra: AdsViewParams(mainCategory: , subCategory: null));
-        }
-        else {
+        } else if (index == 3) {
+          if (!context.read<UserCubit>().isLoggedIn) {
+            return pleaseLoginDialog(context);
+          }
+          final selectedItem = pages[index];
+          if (selectedItem.route != ModalRoute.of(context)?.settings.name) {
+            selectedItem.action(context);
+          }
+          HandleCashback.setCount(pages[index].cacheKey ?? '', context);
+        } else {
           final selectedItem = pages[index];
           if (selectedItem.route != ModalRoute.of(context)?.settings.name) {
             selectedItem.action(context);
@@ -176,7 +187,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 400),
+      duration: const Duration(milliseconds: 0),
       height: bottomNavBarHeight, // Use the dynamic height
       color: Colors.transparent,
       child: CustomPaint(
@@ -209,7 +220,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                     },
                     child: Padding(
                       padding: EdgeInsetsDirectional.zero,
-                      child: ClickableWidget(
+                      child: isScrollingDown ? Container():ClickableWidget(
                         child: index == 3
                             ? Builder(
                                 builder: (context) {
@@ -223,13 +234,16 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                                         icon: Image.asset(
                                           Assets.notification,
                                           height: widget.items[index].height,
-                                          width: widget.items[index].height-4,
+                                          width: widget.items[index].height - 4,
                                           color: context.isDarkMode
                                               ? Colors.white
                                               : AppColors.PRIMARY_COLOR,
                                         ),
-                                        unreadCount:
-                                            getUnreadNotificationsCountCubit
+                                        unreadCount: !context
+                                                .read<UserCubit>()
+                                                .isLoggedIn
+                                            ? 0
+                                            : getUnreadNotificationsCountCubit
                                                     .unreadNotificationsCountEntity
                                                     ?.total ??
                                                 0,
@@ -246,20 +260,22 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
                                 ? Container(
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 16.0),
-                                    child: Column(children: [
-                                      SvgPicture.asset(
-                                        widget.items[index].image!,
-                                        height: widget.items[index].height,
-                                        width: widget.items[index].height,
-                                        color: context.isDarkMode
-                                            ? Colors.white
-                                            : AppColors.PRIMARY_COLOR,
-                                      ),
-                                      Label(
-                                        text: widget.items[index].label,
-                                        style: Styles.smallText(),
-                                      ),
-                                    ],),
+                                    child: Column(
+                                      children: [
+                                        SvgPicture.asset(
+                                          widget.items[index].image!,
+                                          height: widget.items[index].height,
+                                          width: widget.items[index].height,
+                                          color: context.isDarkMode
+                                              ? Colors.white
+                                              : AppColors.PRIMARY_COLOR,
+                                        ),
+                                        Label(
+                                          text: widget.items[index].label,
+                                          style: Styles.smallText(),
+                                        ),
+                                      ],
+                                    ),
                                   )
                                 : Container(),
                       ),

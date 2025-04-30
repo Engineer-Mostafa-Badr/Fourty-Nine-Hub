@@ -1542,5 +1542,10 @@ abstract class  LocaleKeys {
   static const newStory = 'newStory';
   static const youHaveNoVideosToDisplay = 'youHaveNoVideosToDisplay';
   static const youHaveNoImagesToDisplay = 'youHaveNoImagesToDisplay';
+  static const emailRequired = 'emailRequired';
+  static const passwordRequired = 'passwordRequired';
+  static const userNameRequired = 'userNameRequired';
+  static const firstNameRequired = 'firstNameRequired';
+  static const lastNameRequired = 'lastNameRequired';
 
 }

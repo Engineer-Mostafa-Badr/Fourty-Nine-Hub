@@ -40,7 +40,7 @@ class AdsRemoteDataSourceImpl implements AdsRemoteDataSource {
     final response = await _apiConsumer.get(EndPoints.subCategoryAds(params));
     return response.fold(
         (failure) => Left(failure),
-        (response) => Right((response['data']['allAds'] as List)
+        (response) => Right((response['data']['ads'] as List)
             .map((e) => AdModel.fromJson(e))
             .toList()));
   }

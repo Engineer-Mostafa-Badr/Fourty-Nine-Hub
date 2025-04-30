@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
+import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
+import '../../../core/localization/locale_keys.g.dart';
 import '../../../core/utils/custom_show_dialog.dart';
 
 void soonDialog(BuildContext context) {
@@ -28,7 +30,7 @@ void soonDialog(BuildContext context) {
           ),
           const Sizer(height: 32,),
           AppButton(
-              label: context.isArabic ? 'اوافق' : 'Ok',
+              label: LocaleKeys.ok.localize,
               onPressed: () {
                 Navigator.pop(context);
               })

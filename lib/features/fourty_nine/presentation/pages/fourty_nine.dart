@@ -26,6 +26,7 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../../../common/widgets/dialogs/please_login_dialog.dart';
 import '../../../../common/widgets/dynamic/bottom_navigator.dart';
 import '../../../../common/widgets/dynamic/floating_button.dart';
 import '../../../../common/widgets/dynamic/sizer.dart';
@@ -202,6 +203,9 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   : const SizedBox.shrink(),
               ClickableWidget(
                 onTap: () {
+                  if (!context.read<UserCubit>().isLoggedIn) {
+                    return pleaseLoginDialog(context);
+                  }
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -216,7 +220,10 @@ class _FourtyNineViewState extends State<FourtyNineView>
                     velocity: const Velocity(pixelsPerSecond: Offset(30, 0)),
                     "${LocaleKeys.choosePreferredAppStyle.localize}..  ${LocaleKeys.clickHere.localize}!!                                         ",
                     style: Styles.headerText(
-                        fontSize: 30, color: context.isDarkMode ? Colors.white : AppColors.SECONDARY_COLOR),
+                        fontSize: 30,
+                        color: context.isDarkMode
+                            ? Colors.white
+                            : AppColors.SECONDARY_COLOR),
                     textDirection: context.isArabic
                         ? TextDirection.rtl
                         : TextDirection.ltr,
@@ -466,7 +473,9 @@ class _FourtyNineViewState extends State<FourtyNineView>
                   context,
                   MaterialPageRoute(
                       builder: (context) => const FavouriteScreensView()));
-            } else {}
+            } else {
+              return pleaseLoginDialog(context);
+            }
           },
           child: Container(
             height: 40,
@@ -685,7 +694,6 @@ class _FourtyNineViewState extends State<FourtyNineView>
       ),
     );
   }
-
 }
 
 /*  Row _auctionAndInstallmentWidget() {
