@@ -348,7 +348,7 @@ class CodegenLoader extends AssetLoader{
   "november": "نوفمبر",
   "december": "ديسمبر",
   "social": "إجتماعى",
-  "services": "الخدمات",
+  "services": "خدمات",
   "socialCalls": "الاتصال والفيديو (الاجتماعي)",
   "servicesCalls": "الاتصال والفيديو(الخدمات)",
   "greet": "تحية",
@@ -1565,7 +1565,12 @@ class CodegenLoader extends AssetLoader{
   "newReel": "ريل جديد",
   "newStory": "قصة جديدة",
   "youHaveNoVideosToDisplay": "ليس لديك مقاطع فيديو لعرضها",
-  "youHaveNoImagesToDisplay": "ليس لديك صور لعرضها"
+  "youHaveNoImagesToDisplay": "ليس لديك صور لعرضها",
+  "emailRequired": "البريد الألكتروني مطلوب",
+  "passwordRequired": "كلمة المرور مطلوبة",
+  "userNameRequired": "اسم المستخدم مطلوب",
+  "firstNameRequired": "الاسم الشخصي مطلوب",
+  "lastNameRequired": "اسم العائلة مطلوب"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -3134,7 +3139,12 @@ static const Map<String,dynamic> _en = {
   "newReel": "New Reel",
   "newStory": "New Story",
   "youHaveNoVideosToDisplay": "You have no videos to display.",
-  "youHaveNoImagesToDisplay": "You have no images to display."
+  "youHaveNoImagesToDisplay": "You have no images to display.",
+  "emailRequired": "Email is required",
+  "passwordRequired": "Password is required",
+  "userNameRequired": "User name is required",
+  "firstNameRequired": "First name is required",
+  "lastNameRequired": "Last name is required"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }
