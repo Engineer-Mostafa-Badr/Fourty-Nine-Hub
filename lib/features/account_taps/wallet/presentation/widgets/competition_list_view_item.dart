@@ -50,7 +50,7 @@ class CompetitionListViewItem extends StatelessWidget {
               children: [
                 PercentageCompetitionWidget(
                   currency: currency,
-                  currentPoints: luckyWheel!.point,
+                  currentPoints: luckyWheel!.amount,
                   totalPoints: luckyWheel!.limit.toInt(),
                   price: luckyWheel!.amount,
                   percentage: (luckyWheel!.amount / luckyWheel!.limit) * 100,

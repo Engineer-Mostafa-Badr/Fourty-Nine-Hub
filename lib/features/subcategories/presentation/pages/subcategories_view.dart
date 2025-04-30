@@ -218,9 +218,10 @@ class _SubCategoriesViewState extends State<SubCategoriesView> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.search,
-                      color: AppColors.PRIMARY_COLOR,
+                      color:
+                      context.isDarkMode ? Colors.white : AppColors.PRIMARY_COLOR,
                     ),
                     const SizedBox(
                       width: 8,

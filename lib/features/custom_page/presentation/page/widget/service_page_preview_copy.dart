@@ -318,7 +318,7 @@ class _ServicePagePreviewState extends State<ServicePagePreview>
                               AdInterstitialTop.showInterstitialAd();
                               context.push(Routes.MARRIAGESUBCATEGORIES);
                             },
-                            shadowColor: Color(0xffFFC0CB),
+                            shadowColor: const Color(0xffFFC0CB),
                             image: Assets.marriage,
                             title: LocaleKeys.marriage.localize,
                           ),

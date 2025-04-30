@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 
 import '../../../../../../common/widgets/dialogs/show_bottom_sheet.dart';
@@ -51,7 +52,7 @@ class MessagesAreEndToEndEncrypted extends StatelessWidget {
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(4),
-                  color: Colors.black38,
+                  color: context.isDarkMode ? Colors.white70 : Colors.black87,
                 ),
                 width: 64,
                 height: 4,
@@ -59,7 +60,9 @@ class MessagesAreEndToEndEncrypted extends StatelessWidget {
               const Sizer(height: 24),
               Label(
                 text: LocaleKeys.yourChatsAndCallArePrivate.localize,
-                style: Styles.headerText(),
+                style: Styles.headerText(
+                  color: context.isDarkMode ? Colors.white : Colors.black,
+                ),
               ),
               const Sizer(height: 32),
               Padding(
@@ -68,8 +71,11 @@ class MessagesAreEndToEndEncrypted extends StatelessWidget {
                   width: double.infinity,
                   child: Label(
                     text: LocaleKeys.endToEndDescription.localize,
-                    style: Styles.mediumText(),
+                    style: Styles.mediumText(
+                      color: context.isDarkMode ? Colors.white : Colors.black,
+                    ),
                     maxLines: 4,
+                    color: context.isDarkMode ? Colors.white : Colors.black,
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -86,20 +92,27 @@ class MessagesAreEndToEndEncrypted extends StatelessWidget {
                       if (items[index]['icon'] != null)
                         Icon(
                           items[index]['icon'],
-                          color: Colors.black.withValues(alpha: 0.7),
+                          color: context.isDarkMode
+                              ? Colors.white70
+                              : Colors.black87,
                         )
                       else
                         Image.asset(
                           items[index]['image'],
                           width: 24,
                           height: 24,
+                          color: context.isDarkMode
+                              ? Colors.white70
+                              : Colors.black87,
                         ),
                       const Sizer(),
                       Label(
                         text: items[index]['title'],
                         style: Styles.mediumText(
                           fontWeight: FontWeight.bold,
-                          color: Colors.black.withValues(alpha: 0.7),
+                          color: context.isDarkMode
+                              ? Colors.white70
+                              : Colors.black87,
                         ),
                       ),
                     ],
@@ -110,39 +123,56 @@ class MessagesAreEndToEndEncrypted extends StatelessWidget {
           ),
         );
       },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Icon(
-              Icons.lock_outline,
-              size: 24,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 4),
+            child: Divider(
+              thickness: 1,
+              color:context.isDarkMode?Colors.white12: Colors.black12,
+              height: 5,
             ),
-            Column(
+
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Label(
-                    text: "${LocaleKeys.yourPersonalMessages.localize} ",
-                    style: Styles.mediumText(
-                        fontWeight: FontWeight.bold, fontSize: 28)),
-                Label(
-                  text: LocaleKeys.endToEndEncryption.localize,
-                  style: Styles.mediumText(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 28,
-                    color: AppColors.PRIMARY_COLOR_DARK,
-                  ),
+                const Icon(
+                  Icons.lock_outline,
+                  size: 24,
+                ),
+                Column(
+                  children: [
+                    Label(
+                      text: "${LocaleKeys.yourPersonalMessages.localize} ",
+                      style: Styles.mediumText(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 28,
+                        color:context.isDarkMode?Colors.white: Colors.black,
+                      ),
+                    ),
+                    Label(
+                      text: LocaleKeys.endToEndEncryption.localize,
+                      style: Styles.mediumText(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 28,
+                        color: AppColors.PRIMARY_COLOR_DARK,
+                      ),
+                    ),
+                  ],
+                ),
+                const Icon(
+                  Icons.lock_outline,
+                  size: 24,
+                  color: Colors.transparent,
                 ),
               ],
             ),
-            const Icon(
-              Icons.lock_outline,
-              size: 24,
-              color: Colors.transparent,
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
