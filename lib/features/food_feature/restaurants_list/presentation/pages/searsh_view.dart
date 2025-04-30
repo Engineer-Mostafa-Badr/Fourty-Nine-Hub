@@ -361,7 +361,7 @@ class SearchRestaurantView extends StatelessWidget {
                         ),
                         itemCount: state.allRestaurant?.length,
                         itemBuilder: (context, index) {
-                          Restaurant? restaurant =
+                          GetAllRestaurantEntity? restaurant =
                           state.allRestaurant?[index];
                           return SearchRestaurantCard(restaurant: restaurant);
                         },
@@ -383,7 +383,7 @@ class SearchRestaurantView extends StatelessWidget {
                         ),
                         itemCount: state.searchRestaurant?.length,
                         itemBuilder: (context, index) {
-                          Restaurant? restaurant =
+                          GetAllRestaurantEntity? restaurant =
                           state.searchRestaurant?[index];
                           return SearchRestaurantCard(restaurant: restaurant);
                         },

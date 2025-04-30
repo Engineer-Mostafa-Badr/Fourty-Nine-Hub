@@ -1060,7 +1060,7 @@ class CodegenLoader extends AssetLoader{
   "totalOrder": "إجمالي الطلبات",
   "totalRevenue": "إجمالي الإيرادات",
   "avgRating": "متوسط التقييم",
-  "review": "مراجعة",
+  "review": "تقييمات",
   "subscriptionDeadline": "موعد انتهاء الاشتراك",
   "available": "متاح",
   "notAvailable": "غير متاح",
@@ -1077,7 +1077,7 @@ class CodegenLoader extends AssetLoader{
   "youHaveToUploadThe3PagesOfCommercialRegistration": "يجب عليك تحميل الصفحات الثلاث لتسجيل التجاري!",
   "youHaveToSelectYourGovernorate": "يجب عليك اختيار محافظتك!",
   "youHaveToSelectYourCity": "يجب عليك اختيار مدينتك!",
-  "reviews": "مراجعة",
+  "reviews": "المراجعات",
   "addToCart": "إضافة الي السلة",
   "showAllOrders": "عرض كل الطلبات",
   "rating": "تقييم",
@@ -1495,7 +1495,7 @@ class CodegenLoader extends AssetLoader{
   "noOfRequests": "عدد الطلبات",
   "modify": "تعديل",
   "restaurantPhoto": "صورة المطعم",
-  "areYouSureUpdate": "Are you sure you want to update",
+  "areYouSureUpdate": "هل أنت متأكد أنك تريد التحديث؟",
   "exploreTripsThatAreActiveAtTheMoment": "استكشف الرحلات النشطة في الوقت الحالي",
   "youWillFindFewerDriversIfYouSelectThisOption": "ستجد عددًا أقل من السائقين إذا قمت بتحديد هذا الخيار",
   "useThisSound": "استخدم هذا الصوت",
@@ -1570,7 +1570,15 @@ class CodegenLoader extends AssetLoader{
   "passwordRequired": "كلمة المرور مطلوبة",
   "userNameRequired": "اسم المستخدم مطلوب",
   "firstNameRequired": "الاسم الشخصي مطلوب",
-  "lastNameRequired": "اسم العائلة مطلوب"
+  "lastNameRequired": "اسم العائلة مطلوب",
+  "confirmQuantity": "اضغط على زر التأكيد لتأكيد الكمية الجديدة أو سنأخذ الكمية القديمة",
+  "orderDetails": "تفاصيل الطلب",
+  "submittingRating": "إرسال التقييم...",
+  "ratingSubmittedSuccessfully": "تم إرسال التقييم بنجاح",
+  "pleaseProvideRate": "يرجى تقديم تقييم",
+  "modifyLocation": "تعديل العنوان",
+  "availableRequest": "الطلبات المتاحة",
+  "pastRequests": "الطلبات السابقة"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -3129,7 +3137,6 @@ static const Map<String,dynamic> _en = {
   "audioAndVideoCalls": "Audio and video calls",
   "photoVideosAndDocuments": "Photo, videos and documents",
   "locationSharing": "Location sharing",
-  "statusUpdates": "Status updates",
   "oldPassword": "Old Password",
   "restartToApply": "Restart to apply",
   "restart": "Restart",
@@ -3144,7 +3151,15 @@ static const Map<String,dynamic> _en = {
   "passwordRequired": "Password is required",
   "userNameRequired": "User name is required",
   "firstNameRequired": "First name is required",
-  "lastNameRequired": "Last name is required"
+  "lastNameRequired": "Last name is required",
+  "confirmQuantity": "Press Confirm button to confirm the new quantity or we will take the old quantity",
+  "orderDetails": "Order Details",
+  "submittingRating": "Submitting rating...",
+  "ratingSubmittedSuccessfully": "Rating submitted successfully",
+  "pleaseProvideRate": "Please provide a rating",
+  "modifyLocation": "Modify Location",
+  "availableRequest": "Available Requests",
+  "pastRequests": "Past Requests"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

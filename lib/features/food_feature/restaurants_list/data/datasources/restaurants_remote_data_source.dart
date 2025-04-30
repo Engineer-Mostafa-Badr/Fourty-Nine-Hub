@@ -14,19 +14,21 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usec
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 
 import '../../../../../res/assets/jsons.dart';
+import '../../domain/entities/food_ads_entity.dart';
 import '../../domain/entities/log_count_entity.dart';
 import '../../domain/entities/logs_entity.dart';
 import '../../domain/entities/rate_response_entity.dart';
+import '../../domain/entities/restaurant.dart';
 import '../../domain/entities/set_request_seen_entity.dart';
 import '../../domain/entities/user_order_entity.dart';
 import '../../domain/usecases/add_rate_restaurant_use_case.dart';
 import '../../domain/usecases/get_user_order_use_case.dart';
 import '../../domain/usecases/set_request_log_seen_use_case.dart';
+import '../models/food_ads_model.dart';
 import '../models/food_category_model.dart';
 import '../models/log_count_model.dart';
 import '../models/logs_model.dart';
 import '../models/rate_response_model.dart';
-import '../models/restaurant_model.dart';
 import '../models/set_request_seen_model.dart';
 import '../models/user_order_model.dart';
 
@@ -39,25 +41,25 @@ abstract class RestaurantsRemoteDataSource {
   Future<Either<Failure, List<FoodCategoryModel>>>
       getMealCategoriesWithCountRestaurants(
           {required PostCommentsParams params});
-  Future<Either<Failure, List<Restaurant2Model>>> getAllRestaurantsWithMenu(
+  Future<Either<Failure, List<GetAllRestaurantEntity>>> getAllRestaurantsWithMenu(
       {required PostCommentsParams params});
-  Future<Either<Failure, List<Restaurant2Model>>> searchRestaurants(
+  Future<Either<Failure, List<GetAllRestaurantEntity>>> searchRestaurants(
       {required String city,
       required String subCategory,
       required String government,
       PostCommentsParams? params});
-  Future<Either<Failure, List<RestaurantModel>>> getNearByReasturants({
+  Future<Either<Failure, List<GetAllRestaurantEntity>>> getNearByReasturants({
     required double lat,
     required double lng,
   });
-  Future<Either<Failure, List<RestaurantModel>>> getTrendingRestaurants({
+  Future<Either<Failure, List<GetAllRestaurantEntity>>> getTrendingRestaurants({
     required double lat,
     required double lng,
   });
   Future<Either<Failure, int>> numOfRestaurants();
   Future<Either<Failure, bool>> toggleRestaurantFavourite(
       {required String params});
-  Future<Either<Failure, List<Restaurant2Model>>> getSubCategoryRestaurants(
+  Future<Either<Failure, List<GetAllRestaurantEntity>>> getSubCategoryRestaurants(
       {required GetSubCategoryRestaurants params});
   Future<Either<Failure, IsRestaurantModel>> isRestaurant();
 
@@ -70,6 +72,8 @@ abstract class RestaurantsRemoteDataSource {
   Future<Either<Failure, RequestLogCountEntity>> getReqCount();
 
   Future<Either<Failure, SetRequestSeenEntity >> setLogSeen({required SetRequestLogSeenParams params});
+  Future<Either<Failure, List<GetAllRestaurantEntity>>> getFoodAds(
+      PaginationParams params);
 
 }
 
@@ -87,36 +91,36 @@ class RestaurantsRemoteDataSourceImpl implements RestaurantsRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, List<RestaurantModel>>> getNearByReasturants(
+  Future<Either<Failure, List<GetAllRestaurantEntity>>> getNearByReasturants(
       {required double lat, required double lng}) async {
     final response = await _apiConsumer.get(Jsons.restaurantsList);
     return response.fold(
         (failure) => Left(failure),
         (data) => Right((data['data']['restaurants'] as List)
-            .map((e) => RestaurantModel.fromJson(e))
+            .map((e) => GetAllRestaurantModel.fromJson(e))
             .toList()));
   }
 
   @override
-  Future<Either<Failure, List<RestaurantModel>>> getTrendingRestaurants(
+  Future<Either<Failure, List<GetAllRestaurantEntity>>> getTrendingRestaurants(
       {required double lat, required double lng}) async {
     final response = await _apiConsumer.get(Jsons.restaurantsList);
     return response.fold(
         (failure) => Left(failure),
         (data) => Right((data['data']['restaurants'] as List)
-            .map((e) => RestaurantModel.fromJson(e))
+            .map((e) => GetAllRestaurantModel .fromJson(e))
             .toList()));
   }
 
   @override
-  Future<Either<Failure, List<Restaurant2Model>>> getSubCategoryRestaurants(
+  Future<Either<Failure, List<GetAllRestaurantEntity>>> getSubCategoryRestaurants(
       {required GetSubCategoryRestaurants params}) async {
     final response =
         await _apiConsumer.get(EndPoints.subCategoryRestaurants(params));
     return response.fold(
         (failure) => Left(failure),
         (data) => Right((data['data']['restaurant'] as List)
-            .map((e) => Restaurant2Model.fromJson(e))
+            .map((e) => GetAllRestaurantModel .fromJson(e))
             .toList()));
   }
 
@@ -148,7 +152,7 @@ class RestaurantsRemoteDataSourceImpl implements RestaurantsRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, List<Restaurant2Model>>> getAllRestaurantsWithMenu(
+  Future<Either<Failure, List<GetAllRestaurantEntity>>> getAllRestaurantsWithMenu(
       {required PostCommentsParams params}) async {
     final response = await _apiConsumer.get(
       EndPoints.getAllRestaurantWithMenu(params: params),
@@ -157,14 +161,14 @@ class RestaurantsRemoteDataSourceImpl implements RestaurantsRemoteDataSource {
       (failure) => Left(failure),
       (data) => Right(
         List.from(
-          data["data"].map((e) => Restaurant2Model.fromJson(e)).toList(),
+          data["data"].map((e) => GetAllRestaurantModel .fromJson(e)).toList(),
         ),
       ),
     );
   }
 
   @override
-  Future<Either<Failure, List<Restaurant2Model>>> searchRestaurants(
+  Future<Either<Failure, List<GetAllRestaurantEntity>>> searchRestaurants(
       {required String city,
       required String subCategory,
       required String government,
@@ -183,7 +187,7 @@ class RestaurantsRemoteDataSourceImpl implements RestaurantsRemoteDataSource {
       (failure) => Left(failure),
       (data) => Right(
         List.from(
-          data["data"].map((e) => Restaurant2Model.fromJson(e)).toList(),
+          data["data"].map((e) => GetAllRestaurantModel.fromJson(e)).toList(),
         ),
       ),
     );
@@ -330,6 +334,21 @@ class RestaurantsRemoteDataSourceImpl implements RestaurantsRemoteDataSource {
           (l) => Left(l),
           (data) {
         return Right(SetRequestSeenModel.fromJson(data));
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, List<GetAllRestaurantEntity>>> getFoodAds(PaginationParams params)async {
+    final response =
+        await _apiConsumer.get(EndPoints.foodAds(params));
+    return response.fold(
+          (failure) => Left(failure),
+          (data) {
+        final balanceData = (data['data']['favoriteRestaurants'] as List)
+            .map((e) => GetAllRestaurantModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+        return Right(balanceData);
       },
     );
   }

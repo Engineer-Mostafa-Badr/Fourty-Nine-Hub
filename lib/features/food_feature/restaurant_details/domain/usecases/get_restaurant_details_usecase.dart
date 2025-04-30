@@ -5,12 +5,12 @@ import '../../../../../../core/abstract/use_case.dart';
 
 import '../repositories/restaurant_details_repo.dart';
 
-class GetRestaurantDetailsUseCase extends UseCase<Restaurant, String> {
+class GetRestaurantDetailsUseCase extends UseCase<GetAllRestaurantEntity, String> {
   final RestaurantDetailsRepo _repo;
   GetRestaurantDetailsUseCase(this._repo);
 
   @override
-  Future<Either<Failure, Restaurant>> call(String params) {
+  Future<Either<Failure, GetAllRestaurantEntity>> call(String params) {
     return _repo.getRestaurantDetails(restaurantId: params);
   }
 }

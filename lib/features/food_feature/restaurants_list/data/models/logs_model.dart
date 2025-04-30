@@ -1,5 +1,7 @@
 import '../../domain/entities/logs_entity.dart';
 
+import '../../domain/entities/logs_entity.dart';
+
 class LogsRequestLogsModel extends LogsRequestLogsEntity {
   LogsRequestLogsModel({
     super.id,
@@ -20,24 +22,55 @@ class LogsRequestLogsModel extends LogsRequestLogsEntity {
 
   factory LogsRequestLogsModel.fromJson(Map<String, dynamic> json) {
     return LogsRequestLogsModel(
-      id: json['_id'],
+      id: json['_id'] ?? json['id'],
       userId: json['userId'] != null ? UserIdLogsModel.fromJson(json['userId']) : null,
-      restaurantId: json['restaurantId'] != null ? RestaurantIdLogsModel.fromJson(json['restaurantId']) : null,
+      restaurantId: json['restaurantId'] != null
+          ? RestaurantIdLogsModel.fromJson(json['restaurantId'])
+          : null,
       orders: json['orders'] != null
-          ? List<OrderLogsModel>.from(json['orders'].map((x) => OrderLogsModel.fromJson(x)))
+          ? List<OrderLogsModel>.from(
+          json['orders'].map((x) => OrderLogsModel.fromJson(x)))
           : null,
       total: json['total'],
       createdAt: json['createdAt'],
       seen: json['seen'],
-      subscriptionType: json['subscriptionType'],
+      subscriptionType: json['subscriptionType'] != null
+          ? SubscriptionTypeModel.fromJson(json['subscriptionType'])
+          : null,
       currencyEn: json['currencyEn'],
       currencyAr: json['currencyAr'],
       userRateRestaurant: json['userRateRestaurant'] != null
           ? UserRateRestaurantModel.fromJson(json['userRateRestaurant'])
           : null,
       restaurantRateUser: json['restaurantRateUser'],
-      userRateRestaurantName: json['userRateRestaurantName'],
-      restaurantRateUserName: json['restaurantRateUserName'],
+      userRateRestaurantName: json['userRateRestaurantName'] != null
+          ? RatingNameModel.fromJson(json['userRateRestaurantName'])
+          : null,
+      restaurantRateUserName: json['restaurantRateUserName'] != null
+          ? RatingNameModel.fromJson(json['restaurantRateUserName'])
+          : null,
+    );
+  }
+}
+
+class SubscriptionTypeModel extends SubscriptionTypeEntity {
+  SubscriptionTypeModel({super.ar, super.en});
+
+  factory SubscriptionTypeModel.fromJson(Map<String, dynamic> json) {
+    return SubscriptionTypeModel(
+      ar: json['ar'],
+      en: json['en'],
+    );
+  }
+}
+
+class RatingNameModel extends RatingNameEntity {
+  RatingNameModel({super.ar, super.en});
+
+  factory RatingNameModel.fromJson(Map<String, dynamic> json) {
+    return RatingNameModel(
+      ar: json['ar'],
+      en: json['en'],
     );
   }
 }
@@ -58,8 +91,10 @@ class UserIdLogsModel extends UserIdLogsEntity {
       lastName: json['lastName'],
       gender: json['gender'],
       restaurantRate: json['restaurantRate'],
-      userProfile: json['USER_PROFILE'] != null ? UserProfileLogsModel.fromJson(json['USER_PROFILE']) : null,
-      id: json['id'],
+      userProfile: json['USER_PROFILE'] != null
+          ? UserProfileLogsModel.fromJson(json['USER_PROFILE'])
+          : null,
+      id: json['id'] ?? json['_id'],
     );
   }
 }
@@ -137,7 +172,9 @@ class OrderLogsModel extends OrderLogsEntity {
 
   factory OrderLogsModel.fromJson(Map<String, dynamic> json) {
     return OrderLogsModel(
-      foodId: json['foodId'] != null ? FoodIdLogsModel.fromJson(json['foodId']) : null,
+      foodId: json['foodId'] != null
+          ? FoodIdLogsModel.fromJson(json['foodId'])
+          : null,
       quantity: json['quantity'],
       price: json['price'],
       totalPriceOfItem: json['totalPriceOfItem'],
@@ -156,8 +193,10 @@ class FoodIdLogsModel extends FoodIdLogsEntity {
   factory FoodIdLogsModel.fromJson(Map<String, dynamic> json) {
     return FoodIdLogsModel(
       foodName: json['foodName'],
-      picture: json['picture'] != null ? FoodPictureModel.fromJson(json['picture']) : null,
-      id: json['id'],
+      picture: json['picture'] != null
+          ? FoodPictureModel.fromJson(json['picture'])
+          : null,
+      id: json['id'] ?? json['_id'],
     );
   }
 }

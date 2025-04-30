@@ -60,7 +60,7 @@ class _HealthSubCategoryCardState extends State<HealthSubCategoryCard> {
             Stack(
               children: [
                 Container(
-                  height: 220.h,
+                  height: 200.h,
                   width: double.infinity,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),

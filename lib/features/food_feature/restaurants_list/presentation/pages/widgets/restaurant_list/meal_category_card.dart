@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/iconAppButton.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/food_cart/presentation/pages/cart_view.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/food_category_entity.dart';
@@ -46,7 +47,7 @@ class _MealCategoryCardState extends State<MealCategoryCard> {
                   decoration: BoxDecoration(
                     color:widget.subCategory?.isSelected == true
                         ? AppColors.SECONDARY_COLOR:
-                    AppColors.cD9D9D9,
+                   context.isDarkMode ? Colors.deepOrange : AppColors.grey,
                     borderRadius: BorderRadius.circular(15),
                     border: Border.all(width: 0.5, color: AppColors.black),
                   ),
