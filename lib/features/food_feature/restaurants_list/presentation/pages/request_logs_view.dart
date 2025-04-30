@@ -79,32 +79,20 @@ class _RestaurantRequestLogsScreenState
           }
 
           if (!state.isLoading) {
-            return SizedBox(
-              height:MediaQuery.sizeOf(context).height * .64 ,
-              child: Column(
-                children: [
-                  Expanded(
-                    child: ListView.separated(
-                      controller: _scrollController,
-                      itemCount: controller.reqLogs.length,
-                      itemBuilder: (context, index) {
-                        final request = controller.reqLogs[index];
-                        return Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: TripLogRequestCard(orderData: request,index: index,),
-                        );
-                      },
-                      separatorBuilder: (BuildContext context, int index) {
-                        return const Sizer();
-                      },
-                    ),
-                  ),
-                  if (controller.isLoadingMoreLogs)
-                    const Center(
-                      child: CircularProgressIndicator(),
-                    )
-                ],
-              ),
+            return ListView.separated(
+              shrinkWrap: true,
+              controller: _scrollController,
+              itemCount: controller.reqLogs.length,
+              itemBuilder: (context, index) {
+                final request = controller.reqLogs[index];
+                return Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: TripLogRequestCard(orderData: request,index: index,),
+                );
+              },
+              separatorBuilder: (BuildContext context, int index) {
+                return const Sizer();
+              },
             );
           } else {
             return const Center(
@@ -150,32 +138,12 @@ class TripLogRequestCard extends StatelessWidget {
               context.read<RestaurantsCubit>().loadInitialReqLogs();
             }
           },
-          // onTap: () async {
-          //   if(orderData.seen == false)
-          //   context.read<RestaurantsCubit>().setReqSeen(params: orderData.id ?? '');
-          //
-          //   final updatedLogsEntity = await Navigator.push(
-          //     context,
-          //     MaterialPageRoute(
-          //       builder: (_) => BlocProvider<RestaurantsCubit>(
-          //         create: (context) => serviceLocator<RestaurantsCubit>(),
-          //         child: LogDetailsScreen(logsEntity: orderData),
-          //       ),
-          //     ),
-          //   );
-          //
-          //   if (updatedLogsEntity != null) {
-          //     // Update your list with the new data here
-          //     context.read<RestaurantsCubit>().updateLogEntity(updatedLogsEntity);
-          //   }
-          // },
-
           child: Container(
                   // elevation: context.isDarkMode ? 0 : 2,
             decoration: BoxDecoration(
               color: context.isDarkMode
                   ? (orderData.seen == true ? AppColors.PRIMARY_COLOR : AppColors.SECONDARY_COLOR_DARK)
-                  : (orderData.seen == true ? AppColors.GRAY_LIGHT_COLOR3 : AppColors.cD9D9D9),
+                  : (orderData.seen == true ? AppColors.GRAY_LIGHT_COLOR3 : AppColors.grey),
               borderRadius: BorderRadius.circular(15),
             ),
                   child: Row(

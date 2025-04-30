@@ -199,6 +199,7 @@ class TripRequestCard extends StatelessWidget {
                   Text(
                     '4.5',
                     style: Styles.smallText(
+                      fontSize: 20,
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),

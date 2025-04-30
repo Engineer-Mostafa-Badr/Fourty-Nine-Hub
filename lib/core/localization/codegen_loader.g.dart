@@ -1495,7 +1495,7 @@ class CodegenLoader extends AssetLoader{
   "noOfRequests": "عدد الطلبات",
   "modify": "تعديل",
   "restaurantPhoto": "صورة المطعم",
-  "areYouSureUpdate": "Are you sure you want to update",
+  "areYouSureUpdate": "هل أنت متأكد أنك تريد التحديث؟",
   "exploreTripsThatAreActiveAtTheMoment": "استكشف الرحلات النشطة في الوقت الحالي",
   "youWillFindFewerDriversIfYouSelectThisOption": "ستجد عددًا أقل من السائقين إذا قمت بتحديد هذا الخيار",
   "useThisSound": "استخدم هذا الصوت",
@@ -3150,7 +3150,7 @@ static const Map<String,dynamic> _en = {
   "pleaseProvideRate": "Please provide a rating",
   "modifyLocation": "Modify Location",
   "availableRequest": "Available Requests",
-  "pastRequest": "Past Requests"
+  "pastRequests": "Past Requests"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }
