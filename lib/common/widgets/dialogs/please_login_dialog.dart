@@ -6,6 +6,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
+import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
@@ -37,9 +38,11 @@ void pleaseLoginDialog(BuildContext context) {
               Expanded(
                 child: AppButton(
                     label: LocaleKeys.login.localize,
-                    textColor: context.isDarkMode
-                        ? AppColors.PRIMARY_COLOR
-                        : Colors.white,
+                    style: Styles.mediumText(
+                       color:  context.isDarkMode
+                            ? AppColors.PRIMARY_COLOR
+                            : Colors.white
+                    ),
                     backColor: context.isDarkMode
                         ? Colors.white
                         : AppColors.PRIMARY_COLOR,
