@@ -102,12 +102,12 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                   ),
                   const Spacer(),
                   Container(
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.only(
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(25),
                         topRight: Radius.circular(25),
                       ),
-                      color: AppColors.whiteColor,
+                      color: context.isDarkMode ? AppColors.QUANTITY_COLOR : AppColors.whiteColor,
                     ),
                     // padding: const EdgeInsets.only(
                     //   // bottom: MediaQuery.of(context).viewInsets.bottom + 25,
@@ -417,9 +417,9 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
         ),
         children: [
           TileLayer(
-            urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-            // urlTemplate: context.isDarkMode ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" // Dark mode map
-            //     : "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", // Normal mode map
+            // urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+            urlTemplate: context.isDarkMode ? "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png" // Dark mode map
+                : "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", // Normal mode map
           ),
           MarkerLayer(
             markers: [
@@ -966,7 +966,7 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                     selectedCategoryId: state
                                                         .rideCategory
                                                         ?.subCategories[
-                                                    context.read<RideCubit>().selectedCategoryIndex!]
+                                                    serviceLocator<RideCubit>().selectedCategoryIndex!]
                                                         .subCategoryId ??
                                                         '',
                                                     isPremium: true,
@@ -982,6 +982,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                     ? "يرجى تحديد الموقع"
                                                     : "Please select location", // Ensure you define this key in your localization file
                                                 textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                    color: Colors.white),
                                               ),
                                               backgroundColor: Colors.red,
                                               duration:
@@ -1040,6 +1042,8 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                                         ? "يرجى تحديد الموقع"
                                                         : "Please select location", // Ensure you define this key in your localization file
                                                     textAlign: TextAlign.center,
+                                                    style: const TextStyle(
+                                                        color: Colors.white),
                                                   ),
                                                   backgroundColor: Colors.red,
                                                   duration:
@@ -1285,6 +1289,9 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                       ? "يرجي اختيار موقع اولا قبل تعديل سعر الرحله"
                       : "Please select a location first before editing the fare", // Ensure you define this key in your localization file
                   textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.white,
+                  ),
                 ),
                 backgroundColor: Colors.red,
                 duration:
@@ -1352,6 +1359,9 @@ class _RideHomeState extends State<RideHome> with TickerProviderStateMixin {
                                 ? "يرجي اختيار موقع اولا قبل تعديل سعر الرحله"
                                 : "Please select a location first before editing the fare", // Ensure you define this key in your localization file
                             textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              color: Colors.white,
+                            ),
                           ),
                           backgroundColor: Colors.red,
                           duration:
