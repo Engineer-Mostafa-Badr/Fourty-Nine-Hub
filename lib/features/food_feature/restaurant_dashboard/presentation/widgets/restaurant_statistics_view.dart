@@ -66,7 +66,6 @@ class _RestaurantStatisticsViewState extends State<RestaurantStatisticsView> {
               onTap: () => _showUpdateNumberBottomSheet(context, state.info?.phone),
               // Call bottom sheet method
               child: Container(
-
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color:context.isDarkMode ? AppColors.PRIMARY_COLOR_DARK : AppColors.cF3F3F3,
@@ -75,9 +74,10 @@ class _RestaurantStatisticsViewState extends State<RestaurantStatisticsView> {
                 padding: const EdgeInsets.all(10),
                 child:   Label(
                   text:LocaleKeys.modify.localize,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 14
+                  style: Styles.mediumText(
+                    fontWeight: FontWeight.w700,
+                      color: context.isDarkMode ?  AppColors.whiteColor : AppColors.PRIMARY_COLOR
+
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -91,25 +91,26 @@ class _RestaurantStatisticsViewState extends State<RestaurantStatisticsView> {
                   children: [
                     const Icon(Icons.location_on_rounded),
                     Label(text: LocaleKeys.location.localize,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500
-                    ),
+                      style: Styles.mediumText(
+                          fontWeight: FontWeight.w500,
+                          color: context.isDarkMode ?  AppColors.whiteColor : AppColors.PRIMARY_COLOR
+
+                      ),
                     )
                   ],
                 ),
                 Row(
                   children: [
-                    Label(text:"${state.info?.government?.governorateNameEn ?? ""} ,",
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16
-                    ),
+                    Label(text:"${state.info?.government?.governorateNameEn ?? ""} ",
+                      style: Styles.mediumText(
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                     Label(text:" ${state.info?.city?.cityNameEn ?? ""}",
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16
+                      style: Styles.mediumText(
+                        fontWeight: FontWeight.w500,
+                          color: context.isDarkMode ?  AppColors.whiteColor : AppColors.PRIMARY_COLOR
+
                       ),
                     ),
                   ],
@@ -128,24 +129,14 @@ class _RestaurantStatisticsViewState extends State<RestaurantStatisticsView> {
                 padding: const EdgeInsets.all(10),
                 child:   Label(
                   text:LocaleKeys.modify.localize,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 14
+                  style: Styles.mediumText(
+                    fontWeight: FontWeight.w700,
+                    color: context.isDarkMode ?  AppColors.whiteColor : AppColors.PRIMARY_COLOR
                   ),
                   textAlign: TextAlign.center,
                 ),
               ),
             ),
-
-            // GestureDetector(
-            //   onTap: () {
-            //     // print("Here ${context.read<CreateRestaurantCubit>().cr}");
-            //   },
-            //   child: _buildStatisticColumn(
-            //     LocaleKeys.subscriptionDeadline.localize,
-            //     state.statistics?.data.deadLineSubscription.toString() ?? "N/A",
-            //   ),
-            // ),
           ],
         );
       },
@@ -182,11 +173,10 @@ class _RestaurantStatisticsViewState extends State<RestaurantStatisticsView> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                   Text(
-                    "Update Phone Number",
-                    style: TextStyle(
-                      color:context.isDarkMode ? AppColors.PRIMARY_COLOR_DARK : AppColors.cF3F3F3,
-                      fontSize: 20,
+                  Text(
+                    LocaleKeys.phoneNumber.localize,
+                    style:  Styles.mediumText(
+                      color:context.isDarkMode ? AppColors.PRIMARY_COLOR_DARK : AppColors.PRIMARY_COLOR,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -289,8 +279,8 @@ class _RestaurantStatisticsViewState extends State<RestaurantStatisticsView> {
         Text(
           label,
           style: const TextStyle(
-            fontWeight: FontWeight.w500,
-            fontSize: 16
+              fontWeight: FontWeight.w500,
+              fontSize: 16
           ),
         ),
         const Spacer(),
@@ -352,8 +342,8 @@ class _ModifyBottomSheetState extends State<ModifyBottomSheet> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
-                  "Modify Location",
+                Text(
+                  LocaleKeys.modifyLocation.localize,
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 16),
@@ -384,8 +374,8 @@ class _ModifyBottomSheetState extends State<ModifyBottomSheet> {
                               Text(
                                 _selectedGovernorateId != null
                                     ? state.governorates!.firstWhere((gov) => gov.id == _selectedGovernorateId).nameEn
-                                    : "Select Governorate",
-                                style: const TextStyle(fontSize: 16),
+                                    : LocaleKeys.governorate.localize,
+                                style: Styles.mediumText(),
                               ),
                               Icon(_isGovernorateExpanded ? Icons.arrow_drop_up : Icons.arrow_drop_down),
                             ],
@@ -408,7 +398,7 @@ class _ModifyBottomSheetState extends State<ModifyBottomSheet> {
                               return ListTile(
                                 title: Label(text:gov.nameEn,
                                   style:  TextStyle(
-                                      color:context.isDarkMode ? AppColors.PRIMARY_COLOR_DARK : AppColors.cF3F3F3,
+                                      color:context.isDarkMode ? AppColors.PRIMARY_COLOR_DARK : AppColors.PRIMARY_COLOR,
 
                                       fontWeight: FontWeight.w600,
                                       fontSize: 14
@@ -481,10 +471,10 @@ class _ModifyBottomSheetState extends State<ModifyBottomSheet> {
                             children: state.cities!.map((city) {
                               return ListTile(
                                 title: Label(text:city.nameEn,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 14
-                                ),
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 14
+                                  ),
                                 ),
                                 onTap: () {
                                   setState(() {

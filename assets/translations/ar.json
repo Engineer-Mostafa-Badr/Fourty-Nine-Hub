@@ -1550,6 +1550,13 @@
   "newStory": "قصة جديدة",
   "youHaveNoVideosToDisplay": "ليس لديك مقاطع فيديو لعرضها",
   "youHaveNoImagesToDisplay": "ليس لديك صور لعرضها",
-  "confirmQuantity": "اضغط على زر التأكيد لتأكيد الكمية الجديدة أو سنأخذ الكمية القديمة"
+  "confirmQuantity": "اضغط على زر التأكيد لتأكيد الكمية الجديدة أو سنأخذ الكمية القديمة",
+  "orderDetails": "تفاصيل الطلب",
+  "submittingRating": "إرسال التقييم...",
+  "ratingSubmittedSuccessfully": "تم إرسال التقييم بنجاح",
+  "pleaseProvideRate": "يرجى تقديم تقييم",
+  "modifyLocation": "تعديل العنوان",
+  "availableRequest": "الطلبات المتاحة",
+  "pastRequests": "الطلبات السابقة"
 
 }

@@ -1567,6 +1567,13 @@
   "newStory": "New Story",
   "youHaveNoVideosToDisplay": "You have no videos to display.",
   "youHaveNoImagesToDisplay": "You have no images to display.",
-  "confirmQuantity": "Press Confirm button to confirm the new quantity or we will take the old quantity"
+  "confirmQuantity": "Press Confirm button to confirm the new quantity or we will take the old quantity",
+  "orderDetails": "Order Details",
+  "submittingRating": "Submitting rating...",
+  "ratingSubmittedSuccessfully": "Rating submitted successfully",
+  "pleaseProvideRate": "Please provide a rating",
+  "modifyLocation": "Modify Location",
+  "availableRequest": "Available Requests",
+  "pastRequest": "Past Requests"
 
 }

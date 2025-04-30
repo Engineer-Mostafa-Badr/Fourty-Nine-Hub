@@ -134,7 +134,7 @@ class _RestaurantHeaderState extends State<RestaurantHeader> {
                                         itemPadding: const EdgeInsets.symmetric(horizontal: 3),
                                         ratingWidget: RatingWidget(
                                           full: SvgPicture.asset(Assets.star1),
-                                          half: SvgPicture.asset(Assets.star1),  // <-- same as full!
+                                          half: SvgPicture.asset(Assets.halfStar),  // <-- same as full!
                                           empty: SvgPicture.asset(Assets.starEmpty),
                                         ),
                                         itemSize: 13,

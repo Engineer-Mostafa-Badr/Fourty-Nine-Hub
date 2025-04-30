@@ -106,8 +106,8 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView>
             alignment: Alignment.center,
             child: Label(
               text: text,
-              style: TextStyle(
-                fontSize: 12,
+              style: Styles.mediumText(
+                // fontSize: 12,
                 color: isSelected ? Colors.white : Colors.black,
                 fontWeight: FontWeight.w600,
               ),
@@ -163,7 +163,6 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView>
             // }
           },
           child:  CustomScaffold(
-            backgroundColor: scaffoldDarkColor(context),
             appBar: AppBar(
               title: Text(LocaleKeys.restaurantDashboard.localize),
               bottom: PreferredSize(
@@ -179,10 +178,10 @@ class _RestaurantDashboardViewState extends State<RestaurantDashboardView>
                     spacing: 8,
                     children: [
                       Expanded(
-                        child: _buildTab('Available Request', 0),
+                        child: _buildTab(LocaleKeys.availableRequest.localize, 0),
                       ),
                       Expanded(
-                        child: _buildTab('Past Request', 1),
+                        child: _buildTab(LocaleKeys.pastRequests.localize, 1),
                       ),
                       _buildTabIcon(Icons.tune, 2),
                     ],
@@ -293,252 +292,206 @@ class RestaurantSettingScreen extends StatelessWidget {
         // TODO: implement listener
       },
       builder: (context, state) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            // mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                      child: Label(
-                        text: state.isRestaurant?.isActive ?? false
-                            ? LocaleKeys.ready.localize
-                            : LocaleKeys.notAvailable.localize,
-                        style: Styles.headerText(),
-                      )),
-                  CustomSwitchButton(
-                    value: state.isRestaurant?.isActive ?? false,
-                    onChanged: (v) async {
-                      showDialog(
-                        context: context,
-                        builder: (dialogContext) => AlertDialog(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(
-                            vertical: 16,
-                            horizontal: 24,
-                          ),
-                          content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              // Title centered at top
-                              Text(
-                                LocaleKeys.alert.localize,
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                  color: AppColors.PRIMARY_COLOR_DARK,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(height: 16),
-
-                              // Confirmation message
-                              Text(
-                                LocaleKeys.areYouSureUpdate.localize,
-                                // 'Are you sure you want to ${v ? 'activate' : 'deactivate'} your restaurant?',
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                ),
-                              ),
-                              const SizedBox(height: 24),
-
-                              // Buttons row
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  // Close button
-                                  AppButton(
-
-                                    onPressed: () {
-                                      Navigator.pop(dialogContext); // Close dialog
-                                    },
-                                    label: 'Close',
-                                    // variant: AppButtonVariant.outlined,
-                                    width: 100,
-                                  ),
-
-                                  // Open button
-                                  AppButton(
-                                    backColor: AppColors.PRIMARY_COLOR,
-                                    onPressed: () async {
-                                      Navigator.pop(dialogContext); // Close dialog
-                                      await context
-                                          .read<RestaurantDashboardCubit>()
-                                          .changeConnectivityStatus(v);
-                                    },
-                                    label:  LocaleKeys.update.localize,
-                                    width: 100,
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  )
-
-                ],
-              ),
-              const SizedBox(height: 16,),
-              if (state.info != null)
+        return SizedBox(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              // mainAxisSize: MainAxisSize.min,
+              children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Label(text: LocaleKeys.myRating.localize,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        RatingBar(
-                          initialRating:state.info!.totalRating?.toDouble() ?? 0,
-                          ignoreGestures: true,
-                          itemPadding: const EdgeInsets.symmetric(horizontal: 3),
-                          ratingWidget: RatingWidget(
-                            full: SvgPicture.asset(Assets.star1),
-                            half: SvgPicture.asset(Assets.star1),
-                            empty: SvgPicture.asset(Assets.starEmpty),
-                          ),
-                          itemSize: 13,
-                          onRatingUpdate: (double value) {},
-                        ),
-                        Label(text: "${state.info?.totalRating ?? 0}",
-                          style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              // Text(
-              //   '${state.info!.totalRating?.toStringAsFixed(1) ?? '0.0'} (${state.info!.numberOfReviews ?? 0} reviews)',
-              //   style: TextStyle(fontSize: 12),
-              // ),
+                    Expanded(
+                        child: Label(
+                          text: state.isRestaurant?.isActive ?? false
+                              ? LocaleKeys.ready.localize
+                              : LocaleKeys.notAvailable.localize,
+                          style: Styles.headerText(),
+                        )),
+                    CustomSwitchButton(
+                      value: state.isRestaurant?.isActive ?? false,
+                      onChanged: (v) async {
+                        showDialog(
+                          context: context,
+                          builder: (dialogContext) => AlertDialog(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                              vertical: 16,
+                              horizontal: 24,
+                            ),
+                            content: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                // Title centered at top
+                                Text(
+                                  LocaleKeys.alert.localize,
+                                  textAlign: TextAlign.center,
+                                  style: Styles.mediumText(
+                                    color: AppColors.PRIMARY_COLOR_DARK,
+                                    // fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+                                // Confirmation message
+                                Text(
+                                  LocaleKeys.areYouSureUpdate.localize,
+                                  // 'Are you sure you want to ${v ? 'activate' : 'deactivate'} your restaurant?',
+                                  textAlign: TextAlign.center,
+                                  style: Styles.mediumText(
+                                    color: AppColors.PRIMARY_COLOR_DARK,
+                                  ),
+                                ),
+                                const SizedBox(height: 24),
 
-              // SizedBox(
-              //   height: 0.25.sh,
-              //   child: PropertyCard(
-              //     myRestaurant: true,
-              //     item: state.info!,
-              //     mealId: 'mealId',
-              //     favouriteRestaurant: (String id) {},
-              //   ),
-              // ),
-              const SizedBox(height: 16,),
-              // const Divider(),
-              const RestaurantStatisticsView(),
-              const Sizer(),
-              RestaurantPhotoPicker(
-                  subcategoryId: state.info
-                      ?.subcategoryId?.id ??
-                      ''
-              ),
-              const Sizer(height: 50,),
-              Row(
-                spacing: 20,
-                children: [
-                // Expanded(child:   ElevatedAppButton(
-                //   label: LocaleKeys.editFood.localize,
-                //   onPressed: () {
-                //     context.push(Routes.EditFoodView,
-                //         extra: EditFoodParams(
-                //             restaurantId: widget.restaurantId ?? '',
-                //             subCategoryId:
-                //             state.info
-                //                 ?.subcategoryId?.id ??
-                //                 ''));
-                //     // Navigator.push(
-                //     //     context,
-                //     //     MaterialPageRoute(
-                //     //       builder: (context) => BlocProvider.value(
-                //     //         value: serviceLocator<RestaurantDetailsCubit>(),
-                //     //         child:
-                //     //             EditFoodView(payload: widget.restaurantId!),
-                //     //       ),
-                //     //     ));
-                //     // setState(() {
-                //     //   editFood = true;
-                //     // });
-                //   },
-                //   textStyle: Styles.mediumText(
-                //       color: Colors.white,
-                //       fontWeight: FontWeight.bold),
-                // ),),
-                  Expanded(
-                    child: AppButton(
-                      label: LocaleKeys.editFood.localize,
-                      onPressed: () {
-                        context.push(Routes.EditFoodView,
-                            extra: EditFoodParams(
-                                restaurantId: widget.restaurantId ?? '',
-                                subCategoryId:
-                                state.info
-                                    ?.subcategoryId?.id ??
-                                    ''));
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //       builder: (context) => BlocProvider.value(
-                        //         value: serviceLocator<RestaurantDetailsCubit>(),
-                        //         child:
-                        //             EditFoodView(payload: widget.restaurantId!),
-                        //       ),
-                        //     ));
-                        // setState(() {
-                        //   editFood = true;
-                        // });
-                      },
-                      backColor: AppColors.PRIMARY_COLOR,
-                      style: Styles.headerText(color: Colors.white),
-                    ),
-                  ),
-                  Expanded(
-                    child: AppButton(
-                      label: LocaleKeys.deleteRegistration.localize,
-                      onPressed: () {
-                        showConfirmationDialog(
-                          context,
-                          title: LocaleKeys.deleteRegistration.localize,
-                          message:
-                          LocaleKeys.sureRemoveRestaurant.localize,
-                          onConfirm: () async {
-                            if (widget.restaurantId.isNotEmpty) {
-                              await context
-                                  .read<RestaurantDashboardCubit>()
-                                  .deleteRestaurantById(context,
-                                  id: widget.restaurantId,
-                                  subCategoryId: state.info
-                                      ?.subcategoryId?.id ??
-                                      '');
-                              context.pop(true);
-                            }
-                          },
+                                // Buttons row
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    // Close button
+                                    Expanded(
+                                      child: AppButton(
+                                        onPressed: () {
+                                          Navigator.pop(dialogContext); // Close dialog
+                                        },
+                                        label: LocaleKeys.cancel.localize,
+                                        // variant: AppButtonVariant.outlined,
+                                        // width: 100,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 5,),
+                                    // Open button
+                                    Expanded(
+                                      child: AppButton(
+                                        backColor: AppColors.PRIMARY_COLOR,
+                                        onPressed: () async {
+                                          Navigator.pop(dialogContext); // Close dialog
+                                          await context
+                                              .read<RestaurantDashboardCubit>()
+                                              .changeConnectivityStatus(v);
+                                        },
+                                        label:  LocaleKeys.update.localize,
+                                        // width: 100,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
                         );
                       },
-                      backColor: AppColors.PRIMARY_COLOR_DARK,
-                      style: Styles.headerText(color: Colors.white),
-                    ),
+                    )
+
+                  ],
+                ),
+                const SizedBox(height: 16,),
+                if (state.info != null)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Label(text: LocaleKeys.myRating.localize,
+                        style: Styles.mediumText(
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          RatingBar(
+                            initialRating:state.info!.totalRating?.toDouble() ?? 0,
+                            ignoreGestures: true,
+                            itemPadding: const EdgeInsets.symmetric(horizontal: 3),
+                            ratingWidget: RatingWidget(
+                              full: SvgPicture.asset(Assets.star1),
+                              half: SvgPicture.asset(Assets.star1),
+                              empty: SvgPicture.asset(Assets.starEmpty),
+                            ),
+                            itemSize: 13,
+                            onRatingUpdate: (double value) {},
+                          ),
+                          Label(text: "${state.info?.totalRating ?? 0}",
+                            style:  Styles.mediumText(
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                ],
-              )
-            ],
+                const SizedBox(height: 16,),
+                // const Divider(),
+                const RestaurantStatisticsView(),
+                const Sizer(),
+                RestaurantPhotoPicker(
+                    subcategoryId: state.info
+                        ?.subcategoryId?.id ??
+                        ''
+                ),
+                const Sizer(height: 50,),
+                AppButton(
+                  label: LocaleKeys.editFood.localize,
+                  onPressed: () {
+                    context.push(Routes.EditFoodView,
+                        extra: EditFoodParams(
+                            restaurantId: widget.restaurantId ?? '',
+                            subCategoryId:
+                            state.info
+                                ?.subcategoryId?.id ??
+                                ''));
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //       builder: (context) => BlocProvider.value(
+                    //         value: serviceLocator<RestaurantDetailsCubit>(),
+                    //         child:
+                    //             EditFoodView(payload: widget.restaurantId!),
+                    //       ),
+                    //     ));
+                    // setState(() {
+                    //   editFood = true;
+                    // });
+                  },
+                  backColor: AppColors.PRIMARY_COLOR,
+                  style: Styles.headerText(color: Colors.white),
+                ),
+                const SizedBox(height: 15,),
+                AppButton(
+                  label: LocaleKeys.deleteRegistration.localize,
+                  onPressed: () {
+                    showConfirmationDialog(
+                      context,
+                      title: LocaleKeys.deleteRegistration.localize,
+                      message:
+                      LocaleKeys.sureRemoveRestaurant.localize,
+                      onConfirm: () async {
+                        if (widget.restaurantId.isNotEmpty) {
+                          await context
+                              .read<RestaurantDashboardCubit>()
+                              .deleteRestaurantById(context,
+                              id: widget.restaurantId,
+                              subCategoryId: state.info
+                                  ?.subcategoryId?.id ??
+                                  '');
+                          context.pop(true);
+                        }
+                      },
+                    );
+                  },
+                  backColor: AppColors.PRIMARY_COLOR_DARK,
+                  style: Styles.headerText(color: Colors.white),
+                ),
+              ],
+            ),
           ),
         );
       },
     );
   }
 }
+
 
 
 // class RestaurantSetting2Screen extends StatelessWidget {
@@ -838,65 +791,40 @@ void showConfirmationDialog(
       AlertDialog(
         title: Text(
           title,
-          style: Styles.headerText(color: Colors.black),
+          style: Styles.headerText(
+              color:context.isDarkMode ?  AppColors.PRIMARY_COLOR : AppColors.whiteColor,
+          ),
         ),
         content: Text(
           message,
-          style: Styles.mediumText(color: Colors.black),
+          style: Styles.mediumText(
+              color:context.isDarkMode ?  AppColors.whiteColor : AppColors.PRIMARY_COLOR,
+          ),
         ),
         actions: <Widget>[
           TextButton(
             onPressed: onCancel ?? () => Navigator.of(context).pop(),
             child: Text(
               LocaleKeys.no.localize,
-              style: Styles.mediumText(color: Colors.black),
+              style: Styles.mediumText(color:context.isDarkMode ?  AppColors.PRIMARY_COLOR : AppColors.whiteColor,),
             ),
           ),
           ElevatedButton(
             onPressed: onConfirm,
             child: Text(
               LocaleKeys.yes.localize,
-              style: Styles.mediumText(color: Colors.white),
+              style: Styles.mediumText(color: context.isDarkMode ?  AppColors.PRIMARY_COLOR : AppColors.whiteColor,),
             ),
           ),
         ],
       ));
-  // showDialog(
-  //   context: context,
-  //   builder: (BuildContext context) {
-  //     return AlertDialog(
-  //       title: Text(
-  //         title,
-  //         style: Styles.headerText(color: Colors.black),
-  //       ),
-  //       content: Text(
-  //         message,
-  //         style: Styles.mediumText(color: Colors.black),
-  //       ),
-  //       actions: <Widget>[
-  //         TextButton(
-  //           onPressed: onCancel ?? () => Navigator.of(context).pop(),
-  //           child: Text(
-  //             LocaleKeys.no.localize,
-  //             style: Styles.mediumText(color: Colors.black),
-  //           ),
-  //         ),
-  //         ElevatedButton(
-  //           onPressed: onConfirm,
-  //           child: Text(
-  //             LocaleKeys.yes.localize,
-  //             style: Styles.mediumText(color: Colors.white),
-  //           ),
-  //         ),
-  //       ],
-  //     );
-  //   },
-  // );
 }
 
 void deleteItem(BuildContext context) {
   Navigator.of(context).pop();
   ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(content: Text(LocaleKeys.deleteSuccessfully.localize)),
+    SnackBar(content: Text(LocaleKeys.deleteSuccessfully.localize,style: Styles.mediumText(
+      color: context.isDarkMode ?  AppColors.PRIMARY_COLOR : AppColors.whiteColor,
+    ),)),
   );
 }

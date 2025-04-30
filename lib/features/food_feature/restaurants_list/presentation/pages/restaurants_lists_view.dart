@@ -408,6 +408,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5),
       child: Row(
+        spacing: 5,
         children: [
           Row(
             children: [
@@ -444,9 +445,7 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                   )),
             ],
           ),
-          SizedBox(
-            width: 5,
-          ),
+
           Expanded(
             child: GestureDetector(
               onTap: () {
@@ -567,9 +566,6 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
                 ),
               );
             },
-          ),
-          SizedBox(
-            width: 5,
           ),
           Expanded(
             child: GestureDetector(

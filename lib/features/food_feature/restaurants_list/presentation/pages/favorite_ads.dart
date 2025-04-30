@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fourtyninehub/common/widgets/dynamic/sizer.dart';
@@ -58,6 +59,15 @@ class _RestaurantFavAdsScreenState
     super.dispose();
   }
 
+  // String formatViews(int views) {
+  //   if (views >= 1000000) {
+  //     return "${(views / 1000000).toStringAsFixed(1)}M";
+  //   } else if (views >= 1000) {
+  //     return "${(views / 1000).toStringAsFixed(1)}K";
+  //   } else {
+  //     return views.toString();
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -66,125 +76,31 @@ class _RestaurantFavAdsScreenState
           final controller = context.read<RestaurantsCubit>();
           if (!state.isLoading) {
 
-            return SizedBox(
-              height: MediaQuery.sizeOf(context).height * .8,
-              child: ListView.builder(
-                itemCount:  context
-                  .read<RestaurantsCubit>()
-                  .foodAdData
-                  .length,
-                itemBuilder: (context,index){
-                  var data =  context.read<RestaurantsCubit>().foodAdData[index];
-                  return  Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                            color: context.isDarkMode ?  AppColors.whiteColor.withOpacity(0.7) : AppColors.black.withOpacity(0.7),
-                            width: 1
-                        ),
-                        borderRadius: BorderRadius.circular(15)
-                    ),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsetsDirectional.symmetric(
-                              vertical: 8, horizontal: 12),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  SvgPicture.asset(
-                                    Assets.eyeIcon,
-                                    color:context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR,
-                                  ),
-                                  Label(
-                                    text: "100k",
-                                    // text: formatViews(item.totalViews!.toInt()),
-                                    style:  Styles.mediumText(
-                                      // fontSize: 12,
-                                      fontWeight: FontWeight.w400,
-                                      // color: AppColors.c6C6C6C,
-                                      color:context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR,
-                                    ),
-                                  ),
-                                  Label(
-                                    text: LocaleKeys.views.localize,
-                                    style:  Styles.mediumText(
-                                      // fontSize: 12,
-                                      fontWeight: FontWeight.w400,
-                                      color:context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Label(
-                                text: ( "Premium"),
-                                textAlign: TextAlign.right,
-                                style: Styles.mediumText(
-                                  fontWeight: FontWeight.w700,
-                                  color:context.isDarkMode ? AppColors.whiteColor :  AppColors.PRIMARY_COLOR_DARK,
-                                  // fontSize: 16,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Stack(
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(15),
-                              child: ImagesProfileForRestaurant(
-                                heightCarousel: 150,
-                                autoPlay: true,
-                                restaurantMedia: data.restaurantMedia,
-                              ),
-                            ),
-                            if (context.read<UserCubit>().isLoggedIn)
-                              Positioned(
-                                top: 0,
-                                left: 0,
-                                child: FavoriteButtonAds(
-                                  index: index,
-                                  item: data,
-                                  mealId: '',
-                                  favouriteRestaurant: (String id) async {
-                                    var result = await context
-                                        .read<RestaurantsCubit>()
-                                        .toggleFavoriteRestaurant(id);
-                                    if (result == true) {
-                                      context.read<RestaurantsCubit>().restaurants[index].isFavorite
-                                      = !context.read<RestaurantsCubit>().restaurants[index].isFavorite!;
+            return context.read<RestaurantsCubit>().foodAdData.isNotEmpty ? Padding(
+              padding: EdgeInsets.symmetric(vertical:  16,horizontal: 10),
+              child: SizedBox(
+                height: MediaQuery.sizeOf(context).height * .8,
+                child: ListView.builder(
+                  itemCount:  context
+                    .read<RestaurantsCubit>()
+                    .foodAdData
+                    .length,
+                  itemBuilder: (context,index){
+                    var data =  context.read<RestaurantsCubit>().foodAdData[index];
+                    return  FavFoodCard(data: data,index: index);
+                  },
 
-                                    }
-                                  },
-                                ),
-                              ),
-                          ],
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              data.name ?? '',
-                              style:
-                              const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-                            ),
-                            const SizedBox(width: 5),
-                            Expanded(
-                              child: Text(
-                                "${context.isArabic ? data.subcategoryId?.nameAr : data.subcategoryId?.nameEn ?? ''}",
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w600, fontSize: 12),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  );
-                },
-
+                ),
+              ),
+            ): Center(
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height * .8, // Make sure it takes up full height
+                child: Center( // This will center it vertically and horizontally
+                  child: Text(
+                    LocaleKeys.noResultsFound.tr(),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
               ),
             );
 
@@ -197,18 +113,232 @@ class _RestaurantFavAdsScreenState
   }
 
 }
+class FavFoodCard extends StatelessWidget {
+  const FavFoodCard({super.key,required this.data, required this.index});
+  final GetAllRestaurantEntity data;
+  final int index;
+  String formatViews(int views) {
+    if (views >= 1000000) {
+      return "${(views / 1000000).toStringAsFixed(1)}M";
+    } else if (views >= 1000) {
+      return "${(views / 1000).toStringAsFixed(1)}K";
+    } else {
+      return views.toString();
+    }
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+          border: Border.all(
+              color: context.isDarkMode ?  AppColors.whiteColor.withOpacity(0.7) : AppColors.black.withOpacity(0.7),
+              width: 1
+          ),
+          borderRadius: BorderRadius.circular(15)
+      ),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsetsDirectional.symmetric(
+                vertical: 8, horizontal: 12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  spacing: 4,
+                  children: [
+                    SvgPicture.asset(
+                      Assets.eyeIcon,
+                      color:context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR,
+                    ),
+                    Label(
+                      // text: "100k",
+                      text: formatViews(data.totalViews!.toInt()),
+                      style:  Styles.mediumText(
+                        // fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        // color: AppColors.c6C6C6C,
+                        color:context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR,
+                      ),
+                    ),
+                    Label(
+                      text: LocaleKeys.views.localize,
+                      style:  Styles.mediumText(
+                        // fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        color:context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR,
+                      ),
+                    ),
+                  ],
+                ),
+                Label(
+                  text: (context.isArabic ? data.subscriptionType?.ar : data.subscriptionType?.en) ?? "N/A",
+                  textAlign: TextAlign.right,
+                  style: Styles.mediumText(
+                    fontWeight: FontWeight.w700,
+                    color:context.isDarkMode ? AppColors.whiteColor :  AppColors.PRIMARY_COLOR_DARK,
+                    // fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Stack(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: ImagesProfileForRestaurant(
+                  heightCarousel: 150,
+                  autoPlay: true,
+                  restaurantMedia: data.restaurantMedia,
+                ),
+              ),
+              if (context.read<UserCubit>().isLoggedIn)
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  child: FavoriteButtonAds(
+                    item: data,
+                    mealId: "",
+                    favouriteRestaurant: (String id) async {
+                      var result = await context
+                          .read<RestaurantsCubit>()
+                          .toggleFavoriteRestaurant(id);
+                      if (result == true) {
+                        context.read<RestaurantsCubit>().restaurants[index].isFavorite
+                        = !context.read<RestaurantsCubit>().restaurants[index].isFavorite!;
+
+                      }
+                    },
+                  ),
+                ),
+            ],
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Column(
+              spacing: 6,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const SizedBox(
+                  height: 8,
+                ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      data.name ?? '',
+                      style: Styles.headerText(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 32
+                      ),
+                    ),
+                    const SizedBox(width: 5),
+                    Expanded(
+                      child: Text(
+                        "${context.isArabic ? data.subcategoryId?.nameAr : data.subcategoryId?.nameEn ?? ''}",
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 12),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Row(
+                      children: [
+                        Label(text: (context.isArabic ? data.rateName?.ar :data.rateName?.en) ?? "N/A",
+                          style: Styles.smallText(
+                            fontWeight: FontWeight.w600,
+                            // fontSize: 16
+                          ),
+                        ),
+                        RatingBar(
+                          initialRating: data.totalRating?.toDouble() ?? 0,
+                          ignoreGestures: true,
+                          allowHalfRating: true,
+                          itemPadding: const EdgeInsets.symmetric(horizontal: 3),
+                          ratingWidget: RatingWidget(
+                            full: SvgPicture.asset(Assets.star1),
+                            half: SvgPicture.asset(Assets.halfStar),
+                            empty: SvgPicture.asset(Assets.starEmpty,
+                              color: context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR,
+                            ),
+                          ),
+                          itemSize: 13,
+                          onRatingUpdate: (double value) {},
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      (data.isActive ?? false)
+                          ? LocaleKeys.available.localize
+                          : LocaleKeys.notAvailable.localize,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 12,
+                        color: AppColors.SECONDARY_COLOR,
+                      ),
+                    ),
+                    Expanded( // <<< حل المشكلة هنا
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          const Icon(Icons.location_on_rounded),
+                          SizedBox(width: 4),
+                          Flexible(
+                            child: Text(
+                              '${context.isArabic ? data.government?.governorateNameAr ?? '' : data.government?.governorateNameEn ?? ''}, ${context.isArabic ? data.city?.cityNameAr ?? '' : data.city?.cityNameEn ?? ''}',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 12,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  // crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Flexible(
+                      child: PremiumAndRequestButtons(item: data),
+                    ),
+                    Flexible(
+                      child: CallMessageReportButtons(item: data),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
 
 class FavoriteButtonAds extends StatelessWidget {
   final GetAllRestaurantEntity item;
   final String mealId;
-  final int index;
   final Function(String id) favouriteRestaurant;
 
   const FavoriteButtonAds({
     super.key,
     required this.item,
     required this.mealId,
-    required this.index,
     required this.favouriteRestaurant,
   });
 
@@ -228,200 +358,3 @@ class FavoriteButtonAds extends StatelessWidget {
 }
 
 
-
-/*
-            return context.read<RestaurantsCubit>().foodAdData.isNotEmpty
-                ? ListView.separated(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: context
-                  .read<RestaurantsCubit>()
-                  .foodAdData
-                  .length,
-              separatorBuilder: (context, index) => const Sizer(),
-              itemBuilder: (context, i) {
-
-                return Column(
-                  children: [
-                    SubCategoriesRestaurantCard(
-                      item: context
-                          .read<RestaurantsCubit>()
-                          .foodAdData[i],
-                      mealId: '',
-                      favouriteRestaurant: (String id) async {
-                        var result = await context
-                            .read<RestaurantsCubit>()
-                            .toggleFavoriteRestaurant(id);
-                        if (result == true) {
-                          context.read<RestaurantsCubit>().foodAdData[i].isFavorite = !context.read<RestaurantsCubit>().foodAdData[i].isFavorite!;
-
-                        }
-                      },
-                    ),
-                  ],
-                );
-              },
-            )
-                : Center(
-              child: Padding(
-                padding: EdgeInsets.only(top: 40.h),
-                child: Text(
-                  context.isArabic
-                      ? "لا توجد مطاعم متوفرة."
-                      : "No Restaurants Found.",
-                  style: Styles.mediumText(),
-                ),
-              ),
-            );
- */
-// class TripRequestCard extends StatelessWidget {
-//   final GetAllRestaurantEntity orderData;
-//
-//   const TripRequestCard({super.key, required this.orderData});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Card();
-//   }
-//
-// }
-// class DetailsSection extends StatelessWidget {
-//   final FoodAdEntity item;
-//
-//   final bool myRestaurant;
-//
-//   const DetailsSection(
-//       {super.key, required this.item, required this.myRestaurant});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       width: double.infinity,
-//       // height: MediaQuery.sizeOf(context).height * 0.2,
-//       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.stretch,
-//         // mainAxisAlignment: MainAxisAlignment.spaceAround,
-//         spacing: 6,
-//         children: [
-//           const SizedBox(
-//             height: 8,
-//           ),
-//           Row(
-//             crossAxisAlignment: CrossAxisAlignment.center,
-//             children: [
-//               Text(
-//                 item.title ?? '',
-//                 style:
-//                 const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-//               ),
-//               const SizedBox(width: 5),
-//               Expanded(
-//                 child: Text(
-//                   "${context.isArabic ? item.subCategory?.nameAr : item.subCategory?.nameEn ?? ''}",
-//                   style: const TextStyle(
-//                       fontWeight: FontWeight.w600, fontSize: 12),
-//                   overflow: TextOverflow.ellipsis,
-//                 ),
-//               ),
-//             ],
-//           ),
-//           if (!myRestaurant)
-//             Row(
-//               mainAxisAlignment: MainAxisAlignment.end,
-//               children: [
-//                 Row(
-//                   children: [
-//                     Label(text: (context.isArabic ? item.rateName?.ar :item.rateName?.en) ?? "N/A",
-//                       style: Styles.smallText(
-//                         fontWeight: FontWeight.w600,
-//                         // fontSize: 16
-//                       ),
-//                     ),
-//                     RatingBar(
-//                       initialRating: item.totalRating?.toDouble() ?? 0,
-//                       ignoreGestures: true,
-//                       allowHalfRating: true,
-//                       itemPadding: const EdgeInsets.symmetric(horizontal: 3),
-//                       ratingWidget: RatingWidget(
-//                         full: SvgPicture.asset(Assets.star1),
-//                         half: SvgPicture.asset(Assets.halfStar),
-//                         empty: SvgPicture.asset(Assets.starEmpty,
-//                           color: context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR,
-//                         ),
-//                       ),
-//                       itemSize: 13,
-//                       onRatingUpdate: (double value) {},
-//                     ),
-//                   ],
-//                 ),
-//               ],
-//             ),
-//           if (myRestaurant)
-//             Row(
-//               // mainAxisAlignment: MainAxisAlignment.end,
-//               // crossAxisAlignment: CrossAxisAlignment.end,
-//               children: [
-//                 Text(
-//                     textAlign: TextAlign.end,
-//                     '${context.isArabic ? item.government?.governorateNameAr ?? '' : item.government?.governorateNameEn ?? ''}, ${context.isArabic ? item.city?.cityNameAr : item.city?.cityNameEn ?? ''}',
-//                     style: Styles.mediumText()),
-//                 const Spacer(),
-//                 const Icon(
-//                   Icons.star_rounded,
-//                   color: AppColors.ACCENT_COLOR,
-//                 ),
-//                 const Sizer(),
-//                 Label(
-//                   text: '${item.totalRating}',
-//                   style: Styles.mediumText(fontWeight: FontWeight.w500),
-//                 ),
-//                 Label(
-//                   text: '(${item.numberOfReviews}+)',
-//                   style: Styles.mediumText(),
-//                 ),
-//               ],
-//             )
-//           else
-//             Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//               children: [
-//                 if (!myRestaurant)
-//                   Text(
-//                     (item.isActive ?? false)
-//                         ? LocaleKeys.available.localize
-//                         : LocaleKeys.notAvailable.localize,
-//                     style: const TextStyle(
-//                       fontWeight: FontWeight.w700,
-//                       fontSize: 12,
-//                       color: AppColors.SECONDARY_COLOR,
-//                     ),
-//                   ),
-//                 Expanded( // <<< حل المشكلة هنا
-//                   child: Row(
-//                     mainAxisAlignment: MainAxisAlignment.end,
-//                     children: [
-//                       const Icon(Icons.location_on_rounded),
-//                       SizedBox(width: 4),
-//                       Flexible(
-//                         child: Text(
-//                           '${context.isArabic ? item.government?.governorateNameAr ?? '' : item.government?.governorateNameEn ?? ''}, ${context.isArabic ? item.city?.cityNameAr ?? '' : item.city?.cityNameEn ?? ''}',
-//                           style: const TextStyle(
-//                             fontWeight: FontWeight.w600,
-//                             fontSize: 12,
-//                           ),
-//                           overflow: TextOverflow.ellipsis,
-//                           maxLines: 1,
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//               ],
-//             )
-//
-//         ],
-//       ),
-//     );
-//   }
-// }

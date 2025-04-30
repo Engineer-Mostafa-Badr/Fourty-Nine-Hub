@@ -86,7 +86,9 @@ class PropertyCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
-        border: Border.all(width: 1, color: AppColors.PRIMARY_COLOR),
+        border: Border.all(width: 1,
+          color: context.isDarkMode ?  AppColors.whiteColor.withOpacity(0.7) : AppColors.black.withOpacity(0.7),
+        ),
       ),
       child: Column(
         // spacing: 10,
@@ -99,6 +101,8 @@ class PropertyCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
+                  spacing: 4,
+
                   children: [
                     SvgPicture.asset(
                       Assets.eyeIcon,

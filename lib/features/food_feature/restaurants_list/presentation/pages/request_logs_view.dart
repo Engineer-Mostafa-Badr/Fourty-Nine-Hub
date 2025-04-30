@@ -70,7 +70,7 @@ class _RestaurantRequestLogsScreenState
                 height: MediaQuery.of(context).size.height * .8, // Make sure it takes up full height
                 child: Center( // This will center it vertically and horizontally
                   child: Text(
-                    LocaleKeys.noData.tr(),
+                    LocaleKeys.noResultsFound.tr(),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -80,7 +80,7 @@ class _RestaurantRequestLogsScreenState
 
           if (!state.isLoading) {
             return SizedBox(
-              height:MediaQuery.sizeOf(context).height ,
+              height:MediaQuery.sizeOf(context).height * .64 ,
               child: Column(
                 children: [
                   Expanded(
@@ -174,7 +174,7 @@ class TripLogRequestCard extends StatelessWidget {
                   // elevation: context.isDarkMode ? 0 : 2,
             decoration: BoxDecoration(
               color: context.isDarkMode
-                  ? (orderData.seen == true ? AppColors.PRIMARY_COLOR : AppColors.PRIMARY_COLOR_LIGHT)
+                  ? (orderData.seen == true ? AppColors.PRIMARY_COLOR : AppColors.SECONDARY_COLOR_DARK)
                   : (orderData.seen == true ? AppColors.GRAY_LIGHT_COLOR3 : AppColors.cD9D9D9),
               borderRadius: BorderRadius.circular(15),
             ),
@@ -257,85 +257,3 @@ class TripLogRequestCard extends StatelessWidget {
 
 }
 
-/*
-  child: Container(
-            decoration: BoxDecoration(
-              color: orderData.seen == true ? Colors.white : AppColors.cD9D9D9,
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: Row(
-              children: [
-                // Image
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: orderData.userId?.userProfile?.profilePictureKey != null &&
-                      orderData.userId!.userProfile!.profilePictureKey!.mediaKey!.isNotEmpty
-                      ? Image.network(
-                    orderData.userId!.userProfile!.profilePictureKey!.mediaKey!,
-                    width: 100,
-                    height: 80,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        width: 100,
-                        height: 70,
-                        color: Colors.grey[200],
-                        child: const Icon(
-                          Icons.broken_image,
-                          size: 40,
-                          color: Colors.grey,
-                        ),
-                      );
-                    },
-                  )
-                      : Container(
-                    width: 100,
-                    height: 70,
-                    color: Colors.grey[200],
-                    child: const Icon(
-                      Icons.broken_image,
-                      size: 40,
-                      color: Colors.grey,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 12),
-
-                // 🛠️ MAIN CONTENT (Fixed)
-                Expanded(
-                  child: SizedBox(
-                    height: 80,
-                    child: Column(
-                      spacing: 5,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start, // 👈 force top alignment
-                      children: [
-                        const SizedBox(height: 5),
-                        Text(
-                          (orderData.orders != null && index < orderData.orders!.length)
-                              ? orderData.orders![index].foodId?.foodName ?? 'Unknown'
-                              : 'Unknown',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Text(
-                          (orderData.orders != null && index < orderData.orders!.length)
-                              ? (orderData.orders![index].price ?? 0.0).toStringAsFixed(2)
-                              : '0.00',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-   */

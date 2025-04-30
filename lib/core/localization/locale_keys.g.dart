@@ -1543,5 +1543,12 @@ abstract class  LocaleKeys {
   static const youHaveNoVideosToDisplay = 'youHaveNoVideosToDisplay';
   static const youHaveNoImagesToDisplay = 'youHaveNoImagesToDisplay';
   static const confirmQuantity = 'confirmQuantity';
+  static const orderDetails = 'orderDetails';
+  static const submittingRating = 'submittingRating';
+  static const ratingSubmittedSuccessfully = 'ratingSubmittedSuccessfully';
+  static const pleaseProvideRate = 'pleaseProvideRate';
+  static const modifyLocation = 'modifyLocation';
+  static const availableRequest = 'availableRequest';
+  static const pastRequests = 'pastRequests';
 
 }

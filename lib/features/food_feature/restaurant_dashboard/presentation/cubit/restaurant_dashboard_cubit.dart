@@ -341,6 +341,7 @@ class RestaurantDashboardCubit extends Cubit<RestaurantDashboardState> {
           status: RestaurantDashboardStates.success,
         ));
         await getOrders(true);
+        await getOrdersPast(false);
       },
     );
   }
@@ -441,17 +442,6 @@ class RestaurantDashboardCubit extends Cubit<RestaurantDashboardState> {
     // getRestaurantOrders();
   }
 
-  // Future<void> changeConnectivityStatus(isActive) async {
-  //   const url = 'https://49backend.com/api/v1/restaurants/modify-active';
-  //
-  //   final res =await apiConsumer.patch(url, data: {
-  //     'isActive': isActive,
-  //   });
-  //
-  //   emit(state.copyWith(
-  //     connected: !state.connected,
-  //   ));
-  // }
 
   Future<void> cancelBooking({required int id}) async {
     emit(state.copyWith(

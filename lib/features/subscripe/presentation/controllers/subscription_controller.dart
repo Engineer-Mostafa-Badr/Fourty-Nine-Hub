@@ -101,7 +101,7 @@ class SubscriptionController {
     }
   }
 
-  Future<void> showActiveSubscriptionAmounts(
+  Future<void> showActiveSubscriptionAmounts( 
       {required WalletTypes walletType, num? price}) async {
     final response =
         await _getActiveSubscriptionAmountsUseCase(const NoParams());
