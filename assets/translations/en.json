@@ -1561,11 +1561,15 @@
   "restartToApply": "Restart to apply",
   "restart": "Restart",
   "thereAreNoNotifications": "There are no notifications",
-  "statusUpdates": "Status updates",
   "mostBooking": "Most Booking",
   "manage": "Manage",
   "newReel": "New Reel",
   "newStory": "New Story",
   "youHaveNoVideosToDisplay": "You have no videos to display.",
-  "youHaveNoImagesToDisplay": "You have no images to display."
+  "youHaveNoImagesToDisplay": "You have no images to display.",
+  "emailRequired": "Email is required",
+  "passwordRequired": "Password is required",
+  "userNameRequired": "User name is required",
+  "firstNameRequired": "First name is required",
+  "lastNameRequired": "Last name is required"
 }

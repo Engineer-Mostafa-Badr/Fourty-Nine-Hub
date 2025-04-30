@@ -73,10 +73,6 @@ class _AzkarViewState extends State<AzkarView> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                 child: TextField(
-                  // currentController: _cubit.searchController,
-                  // fillColor: AppColors.GREYBG,
-                  // borderColor: Colors.transparent,
-                  // hint: LocaleKeys.search.localize,
                   textDirection: TextDirection.rtl,
                   decoration: InputDecoration(
                     filled: true,

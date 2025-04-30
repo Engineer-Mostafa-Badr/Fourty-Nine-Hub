@@ -1512,7 +1512,6 @@
   "bad": "سيء",
   "rateTheRestaurant": "قيم المطعم",
   "restaurantRateYou": "تقييم المطعم لك",
-  "taggedPeople": "الأشخاص المُشار إليهم",
   "addACommentsFor": "أضف تعليقًا لـ",
   "commentAdded": "تم إضافة التعليق",
   "areYouSureYouWantToDeleteThisComment": "هل أنت متأكد أنك تريد حذف هذا التعليق؟",
@@ -1546,10 +1545,14 @@
   "restartToApply": "اعادة تشغيل لتطبيق التغييرات",
   "restart": "اعادة التشغيل",
   "thereAreNoNotifications": "لا يوجد اشعارات",
-  "statusUpdates": "تحديثات الحالة",
   "manage": "إدارة",
   "newReel": "ريل جديد",
   "newStory": "قصة جديدة",
   "youHaveNoVideosToDisplay": "ليس لديك مقاطع فيديو لعرضها",
-  "youHaveNoImagesToDisplay": "ليس لديك صور لعرضها"
+  "youHaveNoImagesToDisplay": "ليس لديك صور لعرضها",
+  "emailRequired": "البريد الألكتروني مطلوب",
+  "passwordRequired": "كلمة المرور مطلوبة",
+  "userNameRequired": "اسم المستخدم مطلوب",
+  "firstNameRequired": "الاسم الشخصي مطلوب",
+  "lastNameRequired": "اسم العائلة مطلوب"
 }

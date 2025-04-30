@@ -218,7 +218,8 @@ class _LoginViewState extends State<LoginView> {
                 context,
               ),
             );
-          } else if (state is LoginSuccess) {
+          }
+          else if (state is LoginSuccess) {
             // await CacheManager.saveAccessToken(
             //     state.userTokensEntity.accessToken);
             // await CacheManager.saveRefreshToken(
@@ -229,9 +230,6 @@ class _LoginViewState extends State<LoginView> {
               ..setLogin(true)
               ..attachToken()
               ..getUser().then((value) async {
-                // serviceLocator<GetWalletCubit>().getWallet();
-                // serviceLocator<WalletCubit>().getWallet();
-                // serviceLocator<MainCategoriesCubit>().getWallet();
                 String? accessToken = await CacheManager.getAccessToken();
                 String? refreshToken = await CacheManager.getRefreshToken();
                 debugPrint(
@@ -433,6 +431,12 @@ class _LoginWidgetState extends State<LoginWidget> {
             color: AppColors.GREY_DARK_COLOR,
             size: 40.w,
           ),
+          validator: (v) {
+            if (v!.isEmpty) {
+              return LocaleKeys.emailRequired.localize;
+            }
+            return null;
+          },
           // action: (v) {},
         ),
         const Sizer(),
@@ -456,6 +460,12 @@ class _LoginWidgetState extends State<LoginWidget> {
             ),
           ),
           // action: (v) {},
+          validator: (v) {
+            if (v!.isEmpty) {
+              return LocaleKeys.passwordRequired.localize;
+            }
+            return null;
+          },
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -583,6 +593,12 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     color: AppColors.GREY_DARK_COLOR,
                     size: 40.w,
                   ),
+                  validator: (v) {
+                    if (v!.isEmpty) {
+                      return LocaleKeys.userNameRequired.localize;
+                    }
+                    return null;
+                  },
                   // action: (v) {},
                 ),
 
@@ -600,6 +616,12 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     size: 40.w,
                   ),
                   // action: (v) {},
+                  validator: (v) {
+                    if (v!.isEmpty) {
+                      return LocaleKeys.firstNameRequired.localize;
+                    }
+                    return null;
+                  },
                 ),
 
                 Sizer(
@@ -617,12 +639,19 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     color: AppColors.GREY_DARK_COLOR,
                     size: 40.w,
                   ),
+                  validator: (v) {
+                    if (v!.isEmpty) {
+                      return LocaleKeys.lastNameRequired.localize;
+                    }
+                    return null;
+                  },
                 ),
                 Sizer(
                   height: 30.h,
                 ),
                 BirthDatePicker(
                   controller: registerCubit.birthDateTextController,
+
                 ),
 
                 Sizer(
@@ -640,6 +669,12 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     size: 40.w,
                   ),
                   keyboardType: TextInputType.emailAddress,
+                  validator: (v) {
+                    if (v!.isEmpty) {
+                      return LocaleKeys.emailRequired.localize;
+                    }
+                    return null;
+                  },
                 ),
                 Sizer(
                   height: 30.h,
@@ -723,6 +758,12 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                       size: 40.w,
                     ),
                   ),
+                  validator: (v) {
+                    if (v!.isEmpty) {
+                      return LocaleKeys.passwordRequired.localize;
+                    }
+                    return null;
+                  },
                 ),
                 Sizer(
                   height: 30.h,
@@ -747,6 +788,12 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                       size: 40.w,
                     ),
                   ),
+                  validator: (v) {
+                    if (v!.isEmpty) {
+                      return LocaleKeys.passwordRequired.localize;
+                    }
+                    return null;
+                  },
                 ),
                 Sizer(
                   height: 30.h,

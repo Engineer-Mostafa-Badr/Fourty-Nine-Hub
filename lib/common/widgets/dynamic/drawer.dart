@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:fourtyninehub/ads/interstitial_ad_model.dart';
 import 'package:fourtyninehub/common/functions/helper/auth_helper.dart';
+import 'package:fourtyninehub/common/widgets/dialogs/please_login_dialog.dart';
 import 'package:fourtyninehub/common/widgets/dialogs/show_bottom_sheet.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/app_button.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -16,6 +17,7 @@ import 'package:fourtyninehub/core/utils/hex_color_helper.dart';
 import 'package:fourtyninehub/features/authentication/domain/entities/user_entity.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/custom_page/presentation/page/widget/edit_page.dart';
+import 'package:fourtyninehub/features/social_media/tinder/data/shared/shared.dart';
 import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:restart_app/restart_app.dart';
@@ -94,14 +96,16 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   image: Assets.customPage,
                                   label: LocaleKeys.customPage.localize,
                                   onTap: () {
+                                    if (!context.read<UserCubit>().isLoggedIn) {
+                                      return pleaseLoginDialog(context);
+                                    }
                                     AdInterstitialTop.loadIntersitialAd();
                                     AdInterstitialTop.showInterstitialAd();
                                     Navigator.pop(context);
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) =>
-                                            const EditPage(),
+                                        builder: (context) => const EditPage(),
                                       ),
                                     );
                                   }),
@@ -140,6 +144,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   image: Assets.settings_icon,
                                   label: LocaleKeys.settings.localize,
                                   onTap: () {
+
                                     context.pop();
                                     context.push(Routes.SETTINGS);
                                   }),
@@ -148,11 +153,16 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   image: Assets.privacy_icon,
                                   label: LocaleKeys.privacy.localize,
                                   onTap: () {
-                                    AdInterstitialTop.loadIntersitialAd();
-                                    AdInterstitialTop.showInterstitialAd();
+                                    if (!context.read<UserCubit>().isLoggedIn) {
+                                      return pleaseLoginDialog(context);
+                                    }else{
+                                      AdInterstitialTop.loadIntersitialAd();
+                                      AdInterstitialTop.showInterstitialAd();
 
-                                    context.pop();
-                                    return context.push(Routes.PRIVACY);
+                                      context.pop();
+                                      context.push(Routes.PRIVACY);
+                                    }
+
                                   }),
                               drawerListTile(
                                   image: Assets.policy,
@@ -169,6 +179,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   image: Assets.share_app_icon,
                                   label: LocaleKeys.shareApp.localize,
                                   onTap: () {
+                                    if (!context.read<UserCubit>().isLoggedIn) {
+                                      return pleaseLoginDialog(context);
+                                    }
                                     context.pop();
                                     context.push(Routes.SHAREAPP);
                                   }),
@@ -177,6 +190,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   image: Assets.contact_us_icon,
                                   label: LocaleKeys.contactUs.localize,
                                   onTap: () {
+                                    if (!context.read<UserCubit>().isLoggedIn) {
+                                      return pleaseLoginDialog(context);
+                                    }
                                     context.pop();
                                     context.push(Routes.CONTACTUS);
                                   }),
@@ -523,46 +539,48 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     }
     return Padding(
       padding: EdgeInsets.only(top: 10.h),
-      child: GestureDetector(
-          onTap: ()=>onTap(),
-          child: Padding(
-            padding: const EdgeInsetsDirectional.only(top: 12.0,bottom: 12.0,start: 16),
-            child: Row(
-              children: [
-                image != null && icon == null
-                    ? Image.asset(
-                  image,
-                  width: image == Assets.contact_us_icon ? 35.h : 40.h,
-                  height: image == Assets.contact_us_icon ? 35.h : 40.h,
-                  fit: BoxFit.cover,
-                )
-                    : Icon(
-                  icon,
-                  size: 45.w,
-                  color: AppColors.PRIMARY_COLOR,
-                ),
-                const Sizer(),
+      child: InkWell(
+        onTap: () => onTap(),
+        child: Padding(
+          padding: const EdgeInsetsDirectional.only(
+              top: 12.0, bottom: 12.0, start: 16),
+          child: Row(
+            children: [
+              image != null && icon == null
+                  ? Image.asset(
+                      image,
+                      width: image == Assets.contact_us_icon ? 35.h : 40.h,
+                      height: image == Assets.contact_us_icon ? 35.h : 40.h,
+                      fit: BoxFit.cover,
+                    )
+                  : Icon(
+                      icon,
+                      size: 45.w,
+                      color: AppColors.PRIMARY_COLOR,
+                    ),
+              const Sizer(),
+              Label(
+                  text: label,
+                  style: Styles.mediumText(
+                    fontWeight: FontWeight.w500,
+                    color: context.isDarkMode ? Colors.white : Colors.black,
+                  )),
+              if (description != null)
                 Label(
-                    text: label,
-                    style: Styles.mediumText(
-                      fontWeight: FontWeight.w500,
-                      color: context.isDarkMode ? Colors.white : Colors.black,
-                    )),
-                if(description != null)
-                     Label(
                     text: description,
                     style: Styles.mediumText(
                       fontWeight: FontWeight.w300,
                       color: context.isDarkMode ? Colors.white : Colors.black,
                     )),
-                const Spacer(),
-                Icon(
-                  Icons.arrow_forward_ios,
-                  size: 28.w,
-                ),
-              ],
-            ),
-          ),),
+              const Spacer(),
+              Icon(
+                Icons.arrow_forward_ios,
+                size: 28.w,
+              ),
+            ],
+          ),
+        ),
+      ),
       // ListTile(
       //   onTap: () => onTap(),
       //   leading: image != null && icon == null
@@ -634,34 +652,36 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           Navigator.pop(context);
           context.go(Routes.LUCKYWHEEL);
         } else {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return Dialog(
-                insetPadding: const EdgeInsets.all(20),
-                child: Container(
-                  width: 350,
-                  height: 400,
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    children: [
-                      const CustomNotLogged(),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      AppButton(
-                          color: AppColors.LIGHT_COLOR,
-                          backColor: AppColors.PRIMARY_COLOR_DARK,
-                          label: "Cancel",
-                          onPressed: () {
-                            Navigator.pop(context);
-                          }),
-                    ],
-                  ),
-                ),
-              );
-            },
-          );
+            return pleaseLoginDialog(context);
+
+          // showDialog(
+          //   context: context,
+          //   builder: (BuildContext context) {
+          //     return Dialog(
+          //       insetPadding: const EdgeInsets.all(20),
+          //       child: Container(
+          //         width: 350,
+          //         height: 400,
+          //         padding: const EdgeInsets.all(16),
+          //         child: Column(
+          //           children: [
+          //             const CustomNotLogged(),
+          //             const SizedBox(
+          //               height: 10,
+          //             ),
+          //             AppButton(
+          //                 color: AppColors.LIGHT_COLOR,
+          //                 backColor: AppColors.PRIMARY_COLOR_DARK,
+          //                 label: "Cancel",
+          //                 onPressed: () {
+          //                   Navigator.pop(context);
+          //                 }),
+          //           ],
+          //         ),
+          //       ),
+          //     );
+          //   },
+          // );
         }
       },
       child: Container(
@@ -805,6 +825,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     ),
                     GestureDetector(
                       onTap: () async {
+                        if (!context.read<UserCubit>().isLoggedIn) {
+                          return pleaseLoginDialog(context);
+                        }
                         bottomSheet(
                           context: context,
                           asAlertDialog: true,
@@ -812,7 +835,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           widget: Wrap(
                             spacing: 20,
                             runSpacing: 20,
-                            children:[
+                            children: [
                               Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20),
@@ -822,7 +845,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 ),
                                 child: ListTile(
                                   leading: const Icon(Icons.photo_library),
-                                  title:  Label(
+                                  title: Label(
                                     text: LocaleKeys.gallery.localize,
                                   ),
                                   onTap: () async {
@@ -842,7 +865,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 ),
                                 child: ListTile(
                                   leading: const Icon(Icons.camera_alt),
-                                  title: Label(text: LocaleKeys.camera.localize),
+                                  title:
+                                      Label(text: LocaleKeys.camera.localize),
                                   onTap: () async {
                                     // Navigator.pop(context);
                                     await context.read<UserCubit>().uploadPhoto(
@@ -912,65 +936,68 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               ),
               const Sizer(),
               Expanded(
-                  child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Label(
-                        text: _getFirstTwoWords(user?.fullName ?? ''),
-                        style: Styles.mediumText(
-                          fontWeight: FontWeight.bold,
-                          color:
-                              context.isDarkMode ? Colors.white : Colors.black,
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      if (user?.isDocument ?? false)
-                        Icon(
-                          Icons.verified,
-                          color: AppColors.PRIMARY_COLOR,
-                          size: 40.w,
-                        ),
-                    ],
-                  ),
-                  // Label(
-                  //   text: getUserType(user),
-                  //   style: Styles.mediumText(),
-                  // ),
-                  Sizer(
-                    height: 10.h,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      // context.push(
-                      //   Routes.WALLET,
-                      // );
-                    },
-                    child: Row(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
                       children: [
-                        Icon(
-                          Icons.wallet,
-                          size: 35.w,
-                        ),
-                        Sizer(
-                          width: 8.h,
-                          height: 8.h,
-                        ),
-                        Expanded(
-                          child: Label(
-                            text: '${user?.wallet ?? 0}',
-                            style: Styles.mediumText(
-                                decoration: TextDecoration.underline),
+                        Label(
+                          text: _getFirstTwoWords(user?.fullName ?? ''),
+                          style: Styles.mediumText(
+                            fontWeight: FontWeight.bold,
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : Colors.black,
                           ),
-                        )
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        if (user?.isDocument ?? false)
+                          Icon(
+                            Icons.verified,
+                            color: AppColors.PRIMARY_COLOR,
+                            size: 40.w,
+                          ),
                       ],
                     ),
-                  )
-                ],
-              )),
+                    // Label(
+                    //   text: getUserType(user),
+                    //   style: Styles.mediumText(),
+                    // ),
+                    Sizer(
+                      height: 10.h,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        // context.push(
+                        //   Routes.WALLET,
+                        // );
+                      },
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.wallet,
+                            size: 35.w,
+                          ),
+                          const Sizer(),
+                          Expanded(
+                            child: Label(
+                              text: '${user?.wallet ?? 0}',
+                              style: Styles.mediumText(
+                                decoration: TextDecoration.underline,
+                                color: context.isDarkMode
+                                    ? Colors.white
+                                    : Colors.black,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
           Row(
@@ -983,13 +1010,14 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   showAnimatedDialog(
                     context,
                     AlertDialog(
-                      content:Column(
+                      content: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Label(
                               text: LocaleKeys.restartToApply.localize,
-                              style: Styles.headerText(fontWeight: FontWeight.w400)),
+                              style: Styles.headerText(
+                                  fontWeight: FontWeight.w400)),
                           const Sizer(),
                           Row(
                             children: [
@@ -1001,12 +1029,16 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   label: LocaleKeys.cancel.localize,
                                 ),
                               ),
-                              const Sizer(width: 16,),
+                              const Sizer(
+                                width: 16,
+                              ),
                               Expanded(
                                 child: AppButton(
                                   backColor: AppColors.PRIMARY_COLOR,
                                   onPressed: () {
-                                    context.read<CustomPageCubit>().updateActivate(value);
+                                    context
+                                        .read<CustomPageCubit>()
+                                        .updateActivate(value);
                                     Restart.restartApp();
                                   },
                                   label: LocaleKeys.restart.localize,
@@ -1057,8 +1089,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     value: choiceRulerCubit.choiceRulerEnabled,
                     onChanged: (value) async {
                       Navigator.pop(context);
-                      choiceRulerCubit
-                          .changeChoiceRulerEnabled();
+                      choiceRulerCubit.changeChoiceRulerEnabled();
                     },
                   );
                 },

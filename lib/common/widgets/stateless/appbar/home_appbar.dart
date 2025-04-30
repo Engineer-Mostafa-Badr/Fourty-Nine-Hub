@@ -18,6 +18,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
+import '../../dialogs/please_login_dialog.dart';
 import '../buttons/iconAppButton.dart';
 import '../labels/label.dart';
 
@@ -180,6 +181,9 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
           inChat ??
               InkWell(
                 onTap: () async {
+                  if (!context.read<UserCubit>().isLoggedIn) {
+                    return pleaseLoginDialog(context);
+                  }
                   await context.read<UserCubit>().resetUnreadedChatsCounter();
                   if (isCurrentRoute(context, Routes.CHAT) == true) {
                     return;
