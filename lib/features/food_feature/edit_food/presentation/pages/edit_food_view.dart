@@ -146,7 +146,7 @@ class _EditFoodViewState extends State<EditFoodView>
             return Container(
               padding: const EdgeInsets.all(15),
               decoration: BoxDecoration(
-                color: context.isDarkMode ? AppColors.PRIMARY_COLOR : Colors.white,
+                color: context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.cD9D9D9,
                 borderRadius: BorderRadius.circular(15),
                 boxShadow: [
                   BoxShadow(
@@ -208,20 +208,28 @@ class _EditFoodViewState extends State<EditFoodView>
                           return AlertDialog(
                             title: Text(
                               context.isArabic ? 'حذف الوجبة' : 'Delete Item',
-                              style: Styles.headerText(),
+                              style: Styles.headerText(
+                                color: context.isDarkMode ?  AppColors.whiteColor : AppColors.PRIMARY_COLOR,
+                              ),
                             ),
                             content: Text(
                               context.isArabic
                                   ? 'هل أنت متأكد أنك تريد حذف هذا العنصر'
                                   : 'Are you sure you want to remove this item?',
-                              style: Styles.mediumText(),
+                              style: Styles.mediumText(
+                                color: context.isDarkMode ?  AppColors.whiteColor : AppColors.PRIMARY_COLOR,
+
+                              ),
                             ),
                             actions: [
                               TextButton(
                                 onPressed: () => Navigator.of(context).pop(),
                                 child: Text(
                                   LocaleKeys.no.localize,
-                                  style: Styles.mediumText(color: Colors.black),
+                                  style: Styles.mediumText(
+                                    color: context.isDarkMode ?  AppColors.whiteColor : AppColors.PRIMARY_COLOR,
+
+                                  ),
                                 ),
                               ),
                               ElevatedButton(
@@ -254,8 +262,8 @@ class _EditFoodViewState extends State<EditFoodView>
     return Container(
       padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
+          color: context.isDarkMode ?  AppColors.PRIMARY_COLOR : AppColors.whiteColor,
+          borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.2),
@@ -360,271 +368,6 @@ class _EditFoodViewState extends State<EditFoodView>
     );
   }
 
-  // Widget _buildMealsList(
-  //     List<RestaurantMenu> meals, Function(String id) onDelete) {
-  //   return BlocBuilder<EditFoodCubit, EditFoodState>(builder: (context, state) {
-  //     return ListView.separated(
-  //       controller: _scrollController,
-  //       shrinkWrap: true,
-  //       itemCount: meals.length,
-  //       separatorBuilder: (context, i) => const Sizer(),
-  //       // physics: const NeverScrollableScrollPhysics(),
-  //       itemBuilder: (context, index) {
-  //         final meal = meals[index];
-  //         if (meal.id == null) {
-  //           return const SizedBox();
-  //         }
-  //         return Slidable(
-  //           key: ValueKey(meal.id),
-  //           endActionPane: ActionPane(
-  //             motion: const ScrollMotion(),
-  //             children: [
-  //               SlidableAction(
-  //                 flex: 3,
-  //                 onPressed: (context) async {
-  //                   showAnimatedDialog(context, AlertDialog(
-  //                     title: Text(
-  //                       context.isArabic ? 'حذف الوجبة' : 'Delete Item',
-  //                       style: Styles.headerText(),
-  //                     ),
-  //                     content: Text(
-  //                       context.isArabic
-  //                           ? 'هل أنت متأكد أنك تريد حذف هذا العنصر'
-  //                           : 'Are you sure you want to remove this item?',
-  //                       style: Styles.mediumText(),
-  //                     ),
-  //                     actions: [
-  //                       TextButton(
-  //                         onPressed: () => Navigator.of(context).pop(),
-  //                         child: Text(
-  //                           LocaleKeys.no.localize,
-  //                           style: Styles.mediumText(color: Colors.black),
-  //                         ),
-  //                       ),
-  //                       ElevatedButton(
-  //                         onPressed: () async {
-  //                           onDelete(meal.id ?? '');
-  //                         },
-  //                         child: Text(
-  //                           LocaleKeys.yes.localize,
-  //                           style: Styles.mediumText(color: Colors.white),
-  //                         ),
-  //                       ),
-  //                     ],
-  //                   ));
-  //                   // showDialog(
-  //                   //     context: context,
-  //                   //     builder: (BuildContext context) {
-  //                   //       return AlertDialog(
-  //                   //         title: Text(
-  //                   //           context.isArabic ? 'حذف الوجبة' : 'Delete Item',
-  //                   //           style: Styles.headerText(),
-  //                   //         ),
-  //                   //         content: Text(
-  //                   //           context.isArabic
-  //                   //               ? 'هل أنت متأكد أنك تريد حذف هذا العنصر'
-  //                   //               : 'Are you sure you want to remove this item?',
-  //                   //           style: Styles.mediumText(),
-  //                   //         ),
-  //                   //         actions: [
-  //                   //           TextButton(
-  //                   //             onPressed: () => Navigator.of(context).pop(),
-  //                   //             child: Text(
-  //                   //               LocaleKeys.no.localize,
-  //                   //               style: Styles.mediumText(color: Colors.black),
-  //                   //             ),
-  //                   //           ),
-  //                   //           ElevatedButton(
-  //                   //             onPressed: () async {
-  //                   //               onDelete(meal.id ?? '');
-  //                   //             },
-  //                   //             child: Text(
-  //                   //               LocaleKeys.yes.localize,
-  //                   //               style: Styles.mediumText(color: Colors.white),
-  //                   //             ),
-  //                   //           ),
-  //                   //         ],
-  //                   //       );
-  //                   //     });
-  //
-  //                   // showConfirmationDialog(
-  //                   //   context,
-  //                   //   title: "Delete Item",
-  //                   //   message: "Are you sure you want to remove this item?",
-  //                   //   onConfirm: () async {
-  //                   //     bool result =await context.read<EditFoodCubit>().removeItem(foodId: meal?.id??'',context: context);
-  //                   //     if(result==true){
-  //                   //       context.pop();
-  //                   //
-  //                   //     }
-  //                   //   },
-  //                   // );
-  //                   // if(result==true){
-  //                   //   meals.removeWhere((element) => element.id==meals[index].id);
-  //                   // }
-  //                   setState(() {});
-  //                   // var result = await onDeletePressed(meal);
-  //                   // print("objectDeleted");
-  //                   // if(result==true){
-  //                   //   print("objectDeletedTrue");
-  //                   //   print("object");
-  //                   //   meals.removeWhere((element) => element.id==meals[index].id);
-  //                   // }
-  //                 },
-  //                 backgroundColor: Colors.red,
-  //                 borderRadius: BorderRadius.circular(12.0),
-  //                 foregroundColor: context.isDarkMode
-  //                     ? AppColors.PRIMARY_COLOR
-  //                     : Colors.white,
-  //                 icon: Icons.delete,
-  //                 label: LocaleKeys.delete.localize,
-  //               ),
-  //             ],
-  //           ),
-  //           child: Container(
-  //             height: 100.h,
-  //             padding: EdgeInsets.all(15.w),
-  //             decoration: BoxDecoration(
-  //                 color: context.isDarkMode
-  //                     ? AppColors.PRIMARY_COLOR
-  //                     : Colors.white,
-  //                 borderRadius: BorderRadius.circular(15),
-  //                 boxShadow: [
-  //                   BoxShadow(
-  //                     color: Colors.grey.withOpacity(0.5),
-  //                     spreadRadius: 0.2,
-  //                     blurRadius: 0.5,
-  //                     offset: const Offset(0, 3), // changes position of shadow
-  //                   ),
-  //                 ]),
-  //             child: Row(
-  //               children: [
-  //                 Image.network(
-  //                   meal.picture ?? "",
-  //                   fit: BoxFit.cover,
-  //                   errorBuilder: (context, error, stackTrace) {
-  //                     return Icon(
-  //                       Icons.broken_image, // You can replace this with any other icon
-  //                       size: 50,
-  //                       color: Colors.grey,
-  //                     );
-  //                   },
-  //                 ),
-  //
-  //                 Expanded(
-  //                   child: Text(
-  //                     meal.foodName ?? '',
-  //                     style: Styles.headerText(
-  //                         color: context.isDarkMode
-  //                             ? Colors.white
-  //                             : AppColors.PRIMARY_COLOR),
-  //                   ),
-  //                 ),
-  //                 Text(
-  //                   meal.price.toString() ?? '',
-  //                   style: Styles.headerText(color: AppColors.SECONDARY_COLOR),
-  //                 )
-  //               ],
-  //             ),
-  //           ),
-  //         );
-  //       },
-  //     );
-  //   });
-  // }
-
-  // Widget _buildMenuForm(String subcategoryId) {
-  //   return Container(
-  //     padding: const EdgeInsets.all(10),
-  //     decoration: BoxDecoration(
-  //       borderRadius: BorderRadius.circular(10),
-  //       border: Border.all(width: 1, color: Colors.grey),
-  //     ),
-  //     child: SingleChildScrollView(
-  //       child: Column(
-  //         mainAxisSize: MainAxisSize.min,
-  //         children: [
-  //           Row(
-  //             children: [
-  //               // Image Picker
-  //               Expanded(
-  //                 flex: 2,
-  //                 child: GestureDetector(
-  //                   onTap: () async {
-  //                     await context.read<EditFoodCubit>().uploadProfileImage(
-  //                           context: context,
-  //                           subcategoryId: '62c8babb8e28a58a3edf581d',
-  //                         );
-  //                   },
-  //                   child: BlocBuilder<EditFoodCubit, EditFoodState>(
-  //                     builder: (context, state) {
-  //                       if (state.files != null && state.files!.isNotEmpty) {
-  //                         // ✅ Prevents null error
-  //                         final imagePath = state.files!.last.path;
-  //                         print("Selected image path: $imagePath");
-  //
-  //                         return ImagePickerPlaceholder(
-  //                           image: Image.file(
-  //                             File(imagePath),
-  //                             fit: BoxFit.cover,
-  //                           ),
-  //                         );
-  //                       }
-  //                       return SizedBox(
-  //                         height: 195.h,
-  //                         child: ImagePickerPlaceholder(
-  //                           title: LocaleKeys.photoForMeal.tr(),
-  //                         ),
-  //                       );
-  //                     },
-  //                   ),
-  //                 ),
-  //               ),
-  //
-  //               const SizedBox(width: 10), // Spacing
-  //
-  //               // Title & Price Input Fields
-  //               Expanded(
-  //                 flex: 3,
-  //                 child: Column(
-  //                   children: [
-  //                     // Food Name Input
-  //                     _buildTextFormField(
-  //                       controller: foodNameController,
-  //                       hintText: LocaleKeys.itemName.localize,
-  //                       validatorMessage: LocaleKeys.emptyFieldNotValid.tr(),
-  //                       keyboardType: TextInputType.text,
-  //                     ),
-  //                     const SizedBox(height: 10), // Spacing
-  //
-  //                     // Price Input
-  //                     _buildTextFormField(
-  //                       controller: priceController,
-  //                       hintText: LocaleKeys.price.localize,
-  //                       validatorMessage: LocaleKeys.emptyFieldNotValid.tr(),
-  //                       keyboardType: const TextInputType.numberWithOptions(
-  //                           decimal: true),
-  //                       inputFormatters: [
-  //                         FilteringTextInputFormatter.allow(RegExp(r"[0-9.]")),
-  //                       ],
-  //                     ),
-  //                   ],
-  //                 ),
-  //               ),
-  //             ],
-  //           ),
-  //           const SizedBox(height: 10),
-  //           ElevatedAppButton(
-  //             onPressed: _onAddOrUpdatePressed,
-  //             label: '',
-  //             backColor: AppColors.SECONDARY_COLOR,
-  //             icon: Icons.add,
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
 
   Widget _buildTextFormField({
     required TextEditingController controller,
@@ -634,7 +377,9 @@ class _EditFoodViewState extends State<EditFoodView>
     List<TextInputFormatter>? inputFormatters,
   }) {
     return TextFormField(
-      style: TextStyle(color: AppColors.black),
+      style: TextStyle(
+          color: context.isDarkMode ?  AppColors.whiteColor : AppColors.PRIMARY_COLOR,
+      ),
       validator: (value) {
         if (value == null || value.isEmpty) {
           setState(() {
@@ -727,7 +472,9 @@ class _EditFoodViewState extends State<EditFoodView>
   Widget build(BuildContext context) {
     super.build(context);
     return CustomScaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text(LocaleKeys.editFood.localize),
+      ),
       body:
           BlocBuilder<EditFoodCubit, EditFoodState>(builder: (context, state) {
         var cubit = context.read<EditFoodCubit>();

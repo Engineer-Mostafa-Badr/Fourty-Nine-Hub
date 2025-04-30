@@ -1,352 +1,210 @@
-// // import 'package:equatable/equatable.dart';
-// // import 'package:json_annotation/json_annotation.dart';
-// //
-// // import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/city_model.dart';
-// // import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/food_category_model.dart';
-// // import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/government_model.dart';
-// // import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_media_model.dart';
-// // import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_mneu_model.dart';
-// // import 'package:fourtyninehub/features/subcategories/data/models/sub_category_model.dart';
-// //
-// // @JsonSerializable(explicitToJson: true)
-// // class Restaurant extends Equatable {
-// //   @JsonKey(name: "_id")
-// //   final String? id;
-// //
-// //   @JsonKey(name: "name")
-// //   final String? name;
-// //   @JsonKey(name: "phone")
-// //   final String? number;
-// //
-// //   @JsonKey(name: "restaurantMedia")
-// //   final List<RestaurantMediaModel>? restaurantMedia;
-// //
-// //   @JsonKey(name: "government")
-// //   final GovernmentModel? government;
-// //
-// //   @JsonKey(name: "city")
-// //   final CityModel? city;
-// //
-// //   @JsonKey(name: "isActive")
-// //   final bool? isActive;
-// //
-// //   @JsonKey(name: "subscriptionType")
-// //   final String? subscriptionType;
-// //
-// //   @JsonKey(name: "totalRating")
-// //   final double? totalRating;
-// //
-// //   @JsonKey(name: "numberOfReviews")
-// //   final int? numberOfReviews;
-// //
-// //   @JsonKey(name: "MENU")
-// //   final List<RestaurantMneuModel>? menu;
-// //
-// //   @JsonKey(name: "subcategoryId")
-// //   final SubCategoryModel? subcategoryId;
-// //
-// //   @JsonKey(name: "mainCategoryId")
-// //   final FoodCategoryModel? mainCategoryId;
-// //
-// //   @JsonKey(name: "isFavorite")
-// //   final bool? isFavorite;
-// //
-// //   @JsonKey(name: "enableOrDisableChat")
-// //   final String? enableOrDisableChat;
-// //
-// //   @JsonKey(name: "description")
-// //   final String? description;
-// //
-// //   const Restaurant({
-// //     this.id,
-// //     this.name,
-// //     this.number,
-// //     this.restaurantMedia,
-// //     this.government,
-// //     this.city,
-// //     this.isActive,
-// //     this.subscriptionType,
-// //     this.totalRating,
-// //     this.numberOfReviews,
-// //     this.menu,
-// //     this.subcategoryId,
-// //     this.mainCategoryId,
-// //     this.isFavorite,
-// //     this.enableOrDisableChat,
-// //     this.description,
-// //   });
-// //
-// //
-// //   @override
-// //   List<Object?> get props => [
-// //     id,
-// //     name,
-// //     number,
-// //     restaurantMedia,
-// //     government,
-// //     city,
-// //     isActive,
-// //     subscriptionType,
-// //     totalRating,
-// //     numberOfReviews,
-// //     menu,
-// //     subcategoryId,
-// //     mainCategoryId,
-// //     isFavorite,
-// //     enableOrDisableChat,
-// //     description,
-// //   ];
-// // }
-//
-// import 'package:equatable/equatable.dart';
-// import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_mneu_model.dart';
-// import 'package:json_annotation/json_annotation.dart';
-//
-// import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/city_model.dart';
-// import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/food_category_model.dart';
-// import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/government_model.dart';
-// import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_media_model.dart';
-// import 'package:fourtyninehub/features/subcategories/data/models/sub_category_model.dart';
-//
-// @JsonSerializable(explicitToJson: true)
-// class Restaurant extends Equatable {
-//   @JsonKey(name: "_id")
-//   final String? id;
-//
-//   @JsonKey(name: "name")
-//   final String? name;
-//
-//   @JsonKey(name: "phone")
-//   final String? number;
-//
-//   @JsonKey(name: "restaurantMedia")
-//   final List<RestaurantMediaModel>? restaurantMedia;
-//
-//   @JsonKey(name: "government")
-//   final GovernmentModel? government;
-//
-//   @JsonKey(name: "city")
-//   final CityModel? city;
-//
-//   @JsonKey(name: "isActive")
-//   final bool? isActive;
-//
-//   @JsonKey(name: "subscriptionType")
-//   final String? subscriptionType;
-//
-//   @JsonKey(name: "totalRating")
-//   final double? totalRating;
-//
-//   @JsonKey(name: "numberOfReviews")
-//   final int? numberOfReviews;
-//
-//   @JsonKey(name: "MENU")
-//   final List<RestaurantMneuModel>? menu;
-//
-//   @JsonKey(name: "subcategoryId")
-//   final SubCategoryModel? subcategoryId;
-//
-//   @JsonKey(name: "userId")
-//   final UserIdModel? userIdModel;
-//
-//   @JsonKey(name: "mainCategoryId")
-//   final FoodCategoryModel? mainCategoryId;
-//
-//   @JsonKey(name: "isFavorite")
-//   final bool? isFavorite;
-//
-//   @JsonKey(name: "enableOrDisableChat")
-//   final String?
-//       enableOrDisableChat; // Adjust based on the actual data type you want to support.
-//
-//   @JsonKey(name: "description")
-//   final String? description;
-//
-//   const Restaurant({
-//     this.userIdModel,
-//     this.id,
-//     this.name,
-//     this.number,
-//     this.restaurantMedia,
-//     this.government,
-//     this.city,
-//     this.isActive,
-//     this.subscriptionType,
-//     this.totalRating,
-//     this.numberOfReviews,
-//     this.menu,
-//     this.subcategoryId,
-//     this.mainCategoryId,
-//     this.isFavorite,
-//     this.enableOrDisableChat,
-//     this.description,
-//   });
-//
-//   @override
-//   List<Object?> get props => [
-//         id,
-//         name,
-//         number,
-//         userIdModel,
-//         restaurantMedia,
-//         government,
-//         city,
-//         isActive,
-//         subscriptionType,
-//         totalRating,
-//         numberOfReviews,
-//         menu,
-//         subcategoryId,
-//         mainCategoryId,
-//         isFavorite,
-//         enableOrDisableChat,
-//         description,
-//       ];
-// }
-//
-// @JsonSerializable()
-// class UserIdModel {
-//   @JsonKey(name: "id")
-//   final String? id;
-//
-//   @JsonKey(name: "twitter_documentation")
-//   final bool? twitterDocumentation;
-//
-//   const UserIdModel({
-//     this.id,
-//     this.twitterDocumentation,
-//   });
-// }
-import 'package:equatable/equatable.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_mneu_model.dart';
-import 'package:json_annotation/json_annotation.dart';
-
-import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/city_model.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/food_category_model.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/government_model.dart';
-import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_media_model.dart';
-import 'package:fourtyninehub/features/subcategories/data/models/sub_category_model.dart';
-//
-
-@JsonSerializable(explicitToJson: true)
-class Restaurant extends Equatable {
-  @JsonKey(name: "_id")
+class GetAllRestaurantEntity {
   final String? id;
-
-  @JsonKey(name: "name")
   final String? name;
-
-  @JsonKey(name: "phone")
-  final String? number;
-
-  @JsonKey(name: "restaurantMedia")
-  final List<RestaurantMediaModel>? restaurantMedia;
-
-  @JsonKey(name: "government")
-  final GovernmentModel? government;
-
-  @JsonKey(name: "city")
-  final CityModel? city;
-
-  @JsonKey(name: "isActive")
+  final SubcategoryIdEntity? subcategoryId;
+  final MainCategoryIdEntity? mainCategoryId;
+  final UserIdEntity? userId;
+  final List<RestaurantMediaEntity>? restaurantMedia;
+  final GetAllGovernmentEntity? government;
+  final GetAllCityEntity? city;
   final bool? isActive;
-  @JsonKey(name: "isPremium")
   final bool? isPremium;
-
-  @JsonKey(name: "rateName")
-  final String? rateName;
-
-  @JsonKey(name: "subscriptionType")
-  final String? subscriptionType;
-
-  @JsonKey(name: "totalRating")
-  final double? totalRating;
-
-  @JsonKey(name: "totalViews")
+  final num? totalRating;
+  final num? numberOfReviews;
+  final String? phone;
   final num? totalViews;
-
-  @JsonKey(name: "numberOfReviews")
-  final int? numberOfReviews;
-
-  @JsonKey(name: "MENU")
-  final List<RestaurantMneuModel>? menu;
-
-  @JsonKey(name: "subcategoryId")
-  final SubCategoryModel? subcategoryId;
-
-  @JsonKey(name: "userId")
-  final UserIdModel? userIdModel;
-
-  @JsonKey(name: "mainCategoryId")
-  final FoodCategoryModel? mainCategoryId;
-
-  @JsonKey(name: "isFavorite")
+  final SubscriptionTypeEntity? subscriptionType;
   bool? isFavorite;
+  final String? enableOrDisableChat;
+  final RateNameEntity? rateName;
+  final List<MenuEntity>? menu;
 
-  @JsonKey(name: "enableOrDisableChat")
-  final String?
-      enableOrDisableChat; // Adjust based on the actual data type you want to support.
-
-  @JsonKey(name: "description")
-  final String? description;
-
-  Restaurant({
-    this.userIdModel,
+  GetAllRestaurantEntity({
     this.id,
     this.name,
-    this.number,
+    this.subcategoryId,
+    this.mainCategoryId,
+    this.userId,
     this.restaurantMedia,
     this.government,
     this.city,
     this.isActive,
     this.isPremium,
-    this.rateName,
-    this.subscriptionType,
     this.totalRating,
     this.numberOfReviews,
-    this.menu,
-    this.subcategoryId,
-    this.mainCategoryId,
-    this.isFavorite = false,
-    this.enableOrDisableChat,
-    this.description,
+    this.phone,
     this.totalViews,
+    this.subscriptionType,
+    this.isFavorite,
+    this.enableOrDisableChat,
+    this.rateName,
+    this.menu,
   });
-
-  @override
-  List<Object?> get props => [
-        id,
-        name,
-        number,
-        userIdModel,
-        restaurantMedia,
-        government,
-        city,
-        isActive,
-        subscriptionType,
-        totalRating,
-    isPremium,
-    rateName,
-        numberOfReviews,
-        menu,
-        subcategoryId,
-        mainCategoryId,
-        isFavorite,
-        enableOrDisableChat,
-        description,
-    totalViews,
-      ];
+  GetAllRestaurantEntity copyWith({
+    String? id,
+    String? name,
+    SubcategoryIdEntity? subcategoryId,
+    MainCategoryIdEntity? mainCategoryId,
+    UserIdEntity? userId,
+    List<RestaurantMediaEntity>? restaurantMedia,
+    GetAllGovernmentEntity? government,
+    GetAllCityEntity? city,
+    bool? isActive,
+    bool? isPremium,
+    num? totalRating,
+    num? numberOfReviews,
+    String? phone,
+    num? totalViews,
+    SubscriptionTypeEntity? subscriptionType,
+    bool? isFavorite,
+    String? enableOrDisableChat,
+    RateNameEntity? rateName,
+    List<MenuEntity>? menu,
+  }) {
+    return GetAllRestaurantEntity(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      subcategoryId: subcategoryId ?? this.subcategoryId,
+      mainCategoryId: mainCategoryId ?? this.mainCategoryId,
+      userId: userId ?? this.userId,
+      restaurantMedia: restaurantMedia ?? this.restaurantMedia,
+      government: government ?? this.government,
+      city: city ?? this.city,
+      isActive: isActive ?? this.isActive,
+      isPremium: isPremium ?? this.isPremium,
+      totalRating: totalRating ?? this.totalRating,
+      numberOfReviews: numberOfReviews ?? this.numberOfReviews,
+      phone: phone ?? this.phone,
+      totalViews: totalViews ?? this.totalViews,
+      subscriptionType: subscriptionType ?? this.subscriptionType,
+      isFavorite: isFavorite ?? this.isFavorite,
+      enableOrDisableChat: enableOrDisableChat ?? this.enableOrDisableChat,
+      rateName: rateName ?? this.rateName,
+      menu: menu ?? this.menu,
+    );
+  }
 }
 
-class UserIdModel {
-  @JsonKey(name: "_id")
+// SubcategoryId Entity
+class SubcategoryIdEntity {
   final String? id;
+  final String? nameAr;
+  final String? nameEn;
 
-  @JsonKey(name: "twitter_documentation")
+  SubcategoryIdEntity({
+    this.id,
+    this.nameAr,
+    this.nameEn,
+  });
+}
+
+// MainCategoryId Entity
+class MainCategoryIdEntity {
+  final String? id;
+  final String? nameAr;
+  final String? nameEn;
+
+  MainCategoryIdEntity({
+    this.id,
+    this.nameAr,
+    this.nameEn,
+  });
+}
+
+// UserId Entity
+class UserIdEntity {
+  final String? id;
   final bool? twitterDocumentation;
 
-  const UserIdModel({
+  UserIdEntity({
     this.id,
     this.twitterDocumentation,
+  });
+}
+
+// RestaurantMedia Entity
+class RestaurantMediaEntity {
+  final String? id;
+  final String? mediaKey;
+
+  RestaurantMediaEntity({
+    this.id,
+    this.mediaKey,
+  });
+}
+
+// Government Entity
+class GetAllGovernmentEntity {
+  final String? governorateNameAr;
+  final String? governorateNameEn;
+
+  GetAllGovernmentEntity({
+    this.governorateNameAr,
+    this.governorateNameEn,
+  });
+}
+
+// City Entity
+class GetAllCityEntity {
+  final String? cityNameAr;
+  final String? cityNameEn;
+
+  GetAllCityEntity({
+    this.cityNameAr,
+    this.cityNameEn,
+  });
+}
+
+// SubscriptionType Entity
+class SubscriptionTypeEntity {
+  final String? ar;
+  final String? en;
+
+  SubscriptionTypeEntity({
+    this.ar,
+    this.en,
+  });
+}
+
+// RateName Entity
+class RateNameEntity {
+  final String? ar;
+  final String? en;
+
+  RateNameEntity({
+    this.ar,
+    this.en,
+  });
+}
+
+// Menu Entity
+class MenuEntity {
+  final String? id;
+  final String? restaurantId;
+  final String? foodName;
+  final num? price;
+  final PictureEntity? picture;
+  final String? currencyEn;
+  final String? currencyAr;
+
+  MenuEntity({
+    this.id,
+    this.restaurantId,
+    this.foodName,
+    this.price,
+    this.picture,
+    this.currencyEn,
+    this.currencyAr,
+  });
+}
+
+// Picture Entity
+class PictureEntity {
+  final String? id;
+  final String? mediaKey;
+
+  PictureEntity({
+    this.id,
+    this.mediaKey,
   });
 }

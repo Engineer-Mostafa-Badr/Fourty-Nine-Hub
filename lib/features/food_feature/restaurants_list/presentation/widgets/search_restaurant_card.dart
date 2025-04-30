@@ -11,7 +11,7 @@ class SearchRestaurantCard extends StatefulWidget {
     required this.restaurant,
   });
 
-  final Restaurant? restaurant;
+  final GetAllRestaurantEntity? restaurant;
 
   @override
   State<SearchRestaurantCard> createState() => _SearchRestaurantCardState();
@@ -20,9 +20,7 @@ class SearchRestaurantCard extends StatefulWidget {
 class _SearchRestaurantCardState extends State<SearchRestaurantCard> {
   @override
   Widget build(BuildContext context) {
-    final hasSubscription =
-        widget.restaurant?.subscriptionType?.split(' ').first.toLowerCase() !=
-            'no';
+    final hasSubscription = widget.restaurant?.isPremium;
     return GestureDetector(
       onTap: () {
         // context.pushNamed(Routes.RESTAURANTDETAILS,
@@ -34,7 +32,7 @@ class _SearchRestaurantCardState extends State<SearchRestaurantCard> {
         elevation: 2,
         child: Column(
           children: [
-            if (hasSubscription)
+            if (hasSubscription == true)
               Container(
                 width: double.infinity,
                 decoration: const BoxDecoration(
@@ -47,7 +45,7 @@ class _SearchRestaurantCardState extends State<SearchRestaurantCard> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4),
                 child: Text(
-                  widget.restaurant!.subscriptionType!.split(' ').first,
+                  widget.restaurant!.subscriptionType!.ar! ,
                   textAlign: TextAlign.start,
                   style: const TextStyle(
                     fontSize: 18,

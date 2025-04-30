@@ -8,7 +8,7 @@ class SearchRestaurantsUseCase {
   final RestaurantListRepo _repo;
   SearchRestaurantsUseCase(this._repo);
 
-  Future<Either<Failure, List<Restaurant>>> call(
+  Future<Either<Failure, List<GetAllRestaurantEntity>>> call(
       {required String city,
       required String subCategory,
       required String government,

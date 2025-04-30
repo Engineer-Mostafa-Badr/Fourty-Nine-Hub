@@ -4,12 +4,12 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/repo
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 
 import '../../data/models/restaurant_2_model.dart';
+import '../entities/restaurant.dart';
+import '../entities/restaurant_entity.dart';
 
-class GetAllRestaurantUseCase {
-  final RestaurantListRepo _repo;
-  GetAllRestaurantUseCase(this._repo);
+class GetAllRestaurantUseCase {final RestaurantListRepo _repo;GetAllRestaurantUseCase(this._repo);
 
-  Future<Either<Failure, List<Restaurant2Model>>> call(
+  Future<Either<Failure, List<GetAllRestaurantEntity>>> call(
       {required PostCommentsParams params}) {
     return _repo.getAllRestaurantsWithMenu(params: params);
   }

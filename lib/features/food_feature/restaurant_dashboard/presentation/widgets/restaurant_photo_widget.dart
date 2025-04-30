@@ -37,7 +37,6 @@ class _RestaurantPhotoPickerState
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
               const Sizer(),
               BlocBuilder<RestaurantDashboardCubit, RestaurantDashboardState>(
                 buildWhen: (previous, current) => previous.files != current.files,
