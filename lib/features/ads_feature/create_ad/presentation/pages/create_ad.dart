@@ -69,8 +69,8 @@ class _CreateAdViewState extends State<CreateAdView> {
     }, builder: (context, state) {
       final controller = context.read<CreateAdCubit>();
       return CustomScaffold(
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(30),
+        appBar: const PreferredSize(
+          preferredSize: Size.fromHeight(30),
           child:HomeAppbar(),
         ),
         body: BlocBuilder<CreateAdCubit, CreateAdState>(
@@ -584,7 +584,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                       const SizedBox(
                         height: 16,
                       ),
-                      AppButton(
+                      state.isLoadingCreateAd? const Center(child: CircularProgressIndicator()):AppButton(
                         label: LocaleKeys.publish.localize,
                         backColor: AppColors.c0B1035,
                         style: Styles.headerText(
