@@ -348,7 +348,7 @@ class CodegenLoader extends AssetLoader{
   "november": "نوفمبر",
   "december": "ديسمبر",
   "social": "إجتماعى",
-  "services": "الخدمات",
+  "services": "خدمات",
   "socialCalls": "الاتصال والفيديو (الاجتماعي)",
   "servicesCalls": "الاتصال والفيديو(الخدمات)",
   "greet": "تحية",
