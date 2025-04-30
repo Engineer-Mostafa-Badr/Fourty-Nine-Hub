@@ -248,6 +248,7 @@ class RestaurantSettingScreen extends StatelessWidget {
                           style: Styles.headerText(),
                         )),
                     CustomSwitchButton(
+
                       value: state.isRestaurant?.isActive ?? false,
                       onChanged: (v) async {
                         showDialog(
@@ -334,6 +335,7 @@ class RestaurantSettingScreen extends StatelessWidget {
                       Label(text: LocaleKeys.myRating.localize,
                         style: Styles.mediumText(
                           fontWeight: FontWeight.w500,
+                          color: context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR
                         ),
                       ),
                       Row(

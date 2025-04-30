@@ -142,6 +142,8 @@ class _AvailableRequestFoodState extends State<AvailableRequestFood> {
                                               data.userRate?.toStringAsFixed(1) ?? "0",
                                               style: Styles.smallText(
                                                 // fontSize: 12,
+                                                color: AppColors.PRIMARY_COLOR,
+
                                                 // color:  context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.whiteColor,
                                                 fontWeight: FontWeight.bold,
                                               ),
@@ -669,7 +671,7 @@ class _PastRequestFoodState extends State<PastRequestFood> {
                                               data.userRate?.toStringAsFixed(1) ?? "0",
                                               style: Styles.smallText(
                                                 // fontSize: 12,
-                                                // color:  context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.whiteColor,
+                                                color: AppColors.PRIMARY_COLOR,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),

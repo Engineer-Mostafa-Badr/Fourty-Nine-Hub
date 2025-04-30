@@ -135,12 +135,15 @@ class _RestaurantsListsViewState extends State<RestaurantsListsView>
           ),
         if (_showLog)
           BlocProvider(
+            key: ValueKey("log-${DateTime.now().millisecondsSinceEpoch}"),
             create: (context) =>
-                serviceLocator<RestaurantsCubit>()..loadInitialReqLogs(),
+            serviceLocator<RestaurantsCubit>()..loadInitialReqLogs(),
             child: RestaurantRequestLogsScreen(
+              key: ValueKey("log-screen-${DateTime.now().millisecondsSinceEpoch}"),
               onClose: () => setState(() => _showLog = false),
             ),
           ),
+
         if (_showFavAds)
           BlocProvider(
             create: (context) =>

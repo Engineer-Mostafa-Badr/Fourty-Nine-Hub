@@ -104,6 +104,7 @@ class _RestaurantStatisticsViewState extends State<RestaurantStatisticsView> {
                     Label(text:"${state.info?.government?.governorateNameEn ?? ""} ",
                       style: Styles.mediumText(
                         fontWeight: FontWeight.w500,
+                          color: context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR
                       ),
                     ),
                     Label(text:" ${state.info?.city?.cityNameEn ?? ""}",
