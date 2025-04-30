@@ -219,8 +219,7 @@ class _LoginViewState extends State<LoginView> {
                 context,
               ),
             );
-          }
-          else if (state is LoginSuccess) {
+          } else if (state is LoginSuccess) {
             // await CacheManager.saveAccessToken(
             //     state.userTokensEntity.accessToken);
             // await CacheManager.saveRefreshToken(
@@ -322,7 +321,9 @@ class _LoginViewState extends State<LoginView> {
                           ? LoginWidget(
                               loginCubit: loginCubit,
                             )
-                          :  RegisterWidget(formKeyRegister: formKeyRegister,),
+                          : RegisterWidget(
+                              formKeyRegister: formKeyRegister,
+                            ),
                       // SizedBox(
                       //   height: widget.authType == AuthType.LOGIN
                       //       ? MediaQuery.of(context).viewInsets.bottom != 0.0
@@ -342,7 +343,8 @@ class _LoginViewState extends State<LoginView> {
                               width: double.infinity,
                               onPressed: () {
                                 if (registerCubit.accept) {
-                                  if (formKeyRegister.currentState!.validate()) {
+                                  if (formKeyRegister.currentState!
+                                      .validate()) {
                                     registerCubit.register();
                                   }
                                 } else {
@@ -564,7 +566,9 @@ class _LoginWidgetState extends State<LoginWidget> {
 
 class RegisterWidget extends StatefulWidget {
   const RegisterWidget({super.key, required this.formKeyRegister});
+
   final GlobalKey<FormState> formKeyRegister;
+
   @override
   State<RegisterWidget> createState() => _RegisterWidgetState();
 }
@@ -653,7 +657,6 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 ),
                 BirthDatePicker(
                   controller: registerCubit.birthDateTextController,
-
                 ),
 
                 Sizer(
@@ -831,8 +834,10 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   children: [
                     Text(
                       '${LocaleKeys.iAcceptAll.localize} ',
-                      style: Styles.mediumText(fontWeight: FontWeight.w600,
-                      color: context.isDarkMode? Colors.white : Colors.black),
+                      style: Styles.mediumText(
+                        fontWeight: FontWeight.w600,
+                        color: context.isDarkMode ? Colors.white : Colors.black,
+                      ),
                     ),
                     ClickableWidget(
                       onTap: () {
