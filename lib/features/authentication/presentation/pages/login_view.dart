@@ -831,7 +831,8 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   children: [
                     Text(
                       '${LocaleKeys.iAcceptAll.localize} ',
-                      style: Styles.mediumText(fontWeight: FontWeight.w600),
+                      style: Styles.mediumText(fontWeight: FontWeight.w600,
+                      color: context.isDarkMode? Colors.white : Colors.black),
                     ),
                     ClickableWidget(
                       onTap: () {
