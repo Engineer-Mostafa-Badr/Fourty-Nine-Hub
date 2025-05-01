@@ -68,15 +68,19 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                     RichText(
                       text: TextSpan(
                         text: "50 ",
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
+                          color:
+                              context.isDarkMode ? Colors.white : Colors.black,
                         ),
                         children: [
                           TextSpan(
                             text: context.isArabic ? "  ج.م" : "EGP",
-                            style: const TextStyle(
-                              color: Colors.red,
+                            style: TextStyle(
+                              color: context.isDarkMode
+                                  ? Colors.white
+                                  : Colors.red,
                               fontSize: 12,
                             ),
                           ),
@@ -124,19 +128,25 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                       ),
                       Column(
                         children: [
-                          Text(
-                            LocaleKeys.free.localize,
-                            style: TextStyle(
-                              fontSize: 20.sp,
-                              fontWeight: FontWeight.bold,
+                          Padding(
+                            padding: const EdgeInsets.only(left: 13),
+                            child: Text(
+                              LocaleKeys.free.localize,
+                              style: TextStyle(
+                                fontSize: 20.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                           SizedBox(height: 8.h),
-                          SvgPicture.asset(
-                            Assets.freeIcon,
-                            color: context.isDarkMode
-                                ? Colors.white
-                                : Colors.black,
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: SvgPicture.asset(
+                              Assets.freeIcon,
+                              color: context.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
                           ),
                         ],
                       ),

@@ -68,7 +68,8 @@ class _AvailableRideModeWidgetState extends State<AvailableRideModeWidget> {
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 24.sp,
-                            color: Colors.red,
+                            color:
+                                context.isDarkMode ? Colors.white : Colors.red,
                           ),
                           children: [
                             TextSpan(
@@ -96,8 +97,12 @@ class _AvailableRideModeWidgetState extends State<AvailableRideModeWidget> {
                           children: [
                             TextSpan(
                               text: context.isArabic ? "  ج.م" : "EGP",
-                              style: const TextStyle(
-                                  color: Colors.red, fontSize: 12),
+                              style: TextStyle(
+                                color: context.isDarkMode
+                                    ? Colors.white
+                                    : Colors.red,
+                                fontSize: 12,
+                              ),
                             ),
                           ],
                         ),
