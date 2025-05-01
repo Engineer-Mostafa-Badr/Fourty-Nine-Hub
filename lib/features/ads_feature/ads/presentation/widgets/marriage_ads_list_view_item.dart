@@ -90,6 +90,7 @@ class MarriageAdsListViewItem extends StatelessWidget {
                   const SizedBox(
                     height: 4,
                   ),
+                  if( marriageAds.address?.cityEn!=null)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
