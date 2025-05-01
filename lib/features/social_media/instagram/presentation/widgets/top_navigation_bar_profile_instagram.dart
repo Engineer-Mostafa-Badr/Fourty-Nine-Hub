@@ -22,7 +22,7 @@ class TopNavigationBarProfileInstagarm extends StatelessWidget {
           dividerHeight: 0,
           indicatorColor: Colors.black,
           indicatorSize: TabBarIndicatorSize.tab,
-          indicatorPadding: EdgeInsets.symmetric(horizontal: 20),
+          indicatorPadding: const EdgeInsets.symmetric(horizontal: 20),
           indicatorWeight: 2,
           padding: const EdgeInsets.only(bottom: 4),
           tabs: [

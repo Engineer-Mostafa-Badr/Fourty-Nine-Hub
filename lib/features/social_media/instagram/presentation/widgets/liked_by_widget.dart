@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/utils/format_numbers.dart';
@@ -52,7 +53,7 @@ class LikedByWidget extends StatelessWidget {
               TextSpan(
                 text: others == 0
                     ? ''
-                    : " ${LocaleKeys.and.localize} ${FormatNumbers().formatNumberByComma(context, others.toString())} ${LocaleKeys.others.localize}",
+                    : " ${LocaleKeys.and.localize} ${FormatNumbers().formatNumberByComma(others.toString(), isArabic: context.isArabic)} ${LocaleKeys.others.localize}",
                 style: Styles.mediumText(
                   height: 1.29,
                 ),

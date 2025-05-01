@@ -26,7 +26,7 @@ abstract class Styles {
 
   static TextStyle mediumText(
       {double fontSize = 28,
-      Color? color = Colors.black,
+      Color? color,
       double decorationThickness = 0,
       TextDecoration? decoration,
       List<Shadow>? shadows,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/buttons/elevated_button.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/payment/presentation/pages/payment_view.dart';
@@ -43,7 +44,7 @@ class _SubscriptoinAmountsWidgetState extends State<SubscriptoinAmountsWidget> {
           Label(
             text: LocaleKeys.insufficientAmount.localize,
             style: Styles.headerText(
-              color: Colors.red,
+              color: const Color(0xffF45560),
               fontSize: 40,
               fontWeight: FontWeight.bold,
             ),
@@ -90,7 +91,9 @@ class _SubscriptoinAmountsWidgetState extends State<SubscriptoinAmountsWidget> {
                       // width: double.infinity,
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       decoration: ShapeDecoration(
-                        color: const Color(0xFF0B1035),
+                        color: context.isDarkMode
+                            ? const Color(0xFFCACFF4)
+                            : const Color(0xFF0B1035),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15),
                         ),
@@ -98,7 +101,11 @@ class _SubscriptoinAmountsWidgetState extends State<SubscriptoinAmountsWidget> {
                       child: Center(
                         child: Label(
                           text: widget.amounts[index].amount.toString(),
-                          style: Styles.mediumText(color: Colors.white),
+                          style: Styles.mediumText(
+                            color: context.isDarkMode
+                                ? const Color(0xff0D0D0D)
+                                : Colors.white,
+                          ),
                         ),
                       ),
                     ),
@@ -124,11 +131,16 @@ class _SubscriptoinAmountsWidgetState extends State<SubscriptoinAmountsWidget> {
               Expanded(
                 child: ElevatedAppButton(
                   label: LocaleKeys.chargeNow.localize,
+                  // backColor: context.isDarkMode
+                  //     ? const Color(0xffCACFF4)
+                  //     : Theme.of(context).primaryColor,
                   radius: 15,
                   textStyle: Styles.mediumText(
                     fontWeight: FontWeight.w500,
                     fontSize: 36,
-                    color: Colors.white,
+                    color: context.isDarkMode
+                        ? const Color(0xff0D0D0D)
+                        : Colors.white,
                   ),
                   onPressed: () {
                     if (groupValue != null) {
@@ -147,7 +159,9 @@ class _SubscriptoinAmountsWidgetState extends State<SubscriptoinAmountsWidget> {
               Expanded(
                 child: ElevatedAppButton(
                   label: LocaleKeys.cancel.localize,
-                  backColor: const Color(0xffD9D9D9),
+                  backColor: context.isDarkMode
+                      ? const Color(0xff333333)
+                      : const Color(0xffD9D9D9),
                   radius: 15,
                   textStyle: Styles.mediumText(
                     fontWeight: FontWeight.w500,

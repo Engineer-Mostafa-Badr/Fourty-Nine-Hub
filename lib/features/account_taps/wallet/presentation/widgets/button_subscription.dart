@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -16,7 +17,13 @@ class ButtonSubscription extends StatelessWidget {
       height: 24,
       padding: const EdgeInsets.symmetric(horizontal: 40),
       decoration: ShapeDecoration(
-        color: cancelColor ? const Color(0xFFF33D49) : const Color(0xFF0B1035),
+        color: cancelColor
+            ? context.isDarkMode
+                ? const Color(0xFFF45560)
+                : const Color(0xFFF33D49)
+            : context.isDarkMode
+                ? const Color(0xFFCACFF4)
+                : const Color(0xFF0B1035),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
       ),
       child: Center(
@@ -26,7 +33,7 @@ class ButtonSubscription extends StatelessWidget {
               : LocaleKeys.renewal.localize,
           style: Styles.headerText(
             fontSize: 24,
-            color: Colors.white,
+            color: context.isDarkMode ? const Color(0xff0D0D0D) : Colors.white,
           ),
         ),
       ),

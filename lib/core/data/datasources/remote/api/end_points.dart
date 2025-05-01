@@ -245,6 +245,8 @@ class EndPoints {
 
   static sendLiveGift(String id) => '/stream/fan/send-gift/$id';
   static const fetchUsers = '/users/all-usernames';
+  static searchUsersByUsernameOrEmail(String query) =>
+      '/users/user-searchByUsernameOrEmail/$query';
   static const getPrice = '/advertisementCompany/price';
   static const getSubscription = '/subscription';
   static const transferFiveBalance = '/main-wallet/transfer-five-years';
@@ -1479,5 +1481,4 @@ class EndPoints {
   static const getMostBooking = '/health/doctors';
 
   static const getDoctorList = '/health/doctors';
-
 }

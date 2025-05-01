@@ -5,6 +5,7 @@ import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/enums/wallet_types_enums.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
+import 'package:fourtyninehub/core/loading/custom_loading.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/core/messages/messages.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/presentation/cubit/charge_wallet_cubit/charge_wallet_cubit.dart';
@@ -81,6 +82,11 @@ class WalletViewBody extends StatelessWidget {
                   Expanded(
                     child: CustomScrollView(
                       slivers: [
+                        const SliverToBoxAdapter(
+                          child: SizedBox(
+                            height: 16,
+                          ),
+                        ),
                         SliverToBoxAdapter(
                           child: MultiBlocProvider(
                             providers: [
@@ -147,9 +153,7 @@ class WalletViewBody extends StatelessWidget {
                                   builder: (context, subscriptionState) {
                                     if (subscriptionState
                                         is SubscriptionWalletLoading) {
-                                      return const Center(
-                                        child: CircularProgressIndicator(),
-                                      );
+                                      return const CustomLoading();
                                     } else {
                                       return MySubscriptionSection(
                                         subscriptions: state.subscription ?? [],
@@ -193,7 +197,9 @@ class WalletViewBody extends StatelessWidget {
                     width: double.infinity,
                     child: ButtonWalletAndBill(
                       icon: SvgPicture.asset(
-                        Assets.transferMoneyByMobileIcon,
+                        context.isDarkMode
+                            ? Assets.transferMoneyByMobileIconDark
+                            : Assets.transferMoneyByMobileIcon,
                       ),
                       label: LocaleKeys.transferMoney.localize,
                       onPressed: () {

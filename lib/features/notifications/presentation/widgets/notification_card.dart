@@ -130,8 +130,10 @@ class _NotificationCardState extends State<NotificationCard> {
                           if (widget.notificationEntity.title?.isNotEmpty ??
                               false) ...[
                             Text(
-                              _capitalizeTitle(
-                                  widget.notificationEntity.title ?? ''),
+                              context.isArabic
+                                  ? widget.notificationEntity.title ?? ''
+                                  : _capitalizeTitle(
+                                      widget.notificationEntity.title ?? ''),
                               style: Styles.headerText(
                                 color: context.isDarkMode
                                     ? Colors.white
@@ -142,7 +144,11 @@ class _NotificationCardState extends State<NotificationCard> {
                           ],
                           Text(
                             widget.notificationEntity.body ?? '',
-                            style: Styles.mediumText(),
+                            style: Styles.mediumText(
+                              color: context.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
                           ),
                           Sizer(height: 5.h),
                           Label(
