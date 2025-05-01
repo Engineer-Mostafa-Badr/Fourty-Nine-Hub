@@ -31,14 +31,14 @@ class _AllContactsViewState extends State<AllContactsView> {
                       visualDensity:const VisualDensity(horizontal: -4,vertical: -2),
                       icon: Icon(
                         Icons.keyboard_arrow_down,
-                        color: Colors.black,
+                        color:context.isDarkMode?Colors.white:Colors.black ,
                         size: 50.h,
                       ),
-                      onPressed: () {},
+                      onPressed: () =>Navigator.of(context).pop(),
                     )),
                 const Sizer(),
                 FormTextField(
-                  prefix: const Icon(Icons.search),
+                  prefix: const Icon(Icons.search,color: Colors.black,),
                   hint: context.isArabic ? 'بحث...' : 'Search...',
                   fillColor: const Color(0xFFEDEDED),
                   borderRadius: BorderRadius.circular(20),

@@ -25,7 +25,11 @@ class TripJoinCard extends StatefulWidget {
     required this.title,
     required this.isMale,
     required this.isContactInfo,
-    required this.isRequestButton, required this.iconCar, required this.buttonTitle, required this.onTab, required this.subscribtionPlan,
+    required this.isRequestButton,
+    required this.iconCar,
+    required this.buttonTitle,
+    required this.onTab,
+    required this.subscribtionPlan,
   });
 
   final String time;
@@ -39,6 +43,7 @@ class TripJoinCard extends StatefulWidget {
   final bool isRequestButton;
   final bool iconCar;
   final void Function() onTab;
+
   @override
   State<TripJoinCard> createState() => _TripJoinCardState();
 }
@@ -46,9 +51,10 @@ class TripJoinCard extends StatefulWidget {
 class _TripJoinCardState extends State<TripJoinCard> {
   @override
   Widget build(BuildContext context) {
-
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 10.h,),
+      padding: EdgeInsets.symmetric(
+        vertical: 10.h,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -60,7 +66,11 @@ class _TripJoinCardState extends State<TripJoinCard> {
                   const Sizer(),
                   TripCardInfoWidget(
                     title: widget.title,
-                    icon:widget.iconCar?Assets.tripJoinCarIcon: widget.isMale ? Assets.maleUser : Assets.femaleUser,
+                    icon: widget.iconCar
+                        ? Assets.tripJoinCarIcon
+                        : widget.isMale
+                            ? Assets.maleUser
+                            : Assets.femaleUser,
                   ),
                   const Sizer(
                     height: 30,
@@ -107,9 +117,9 @@ class _TripJoinCardState extends State<TripJoinCard> {
                     ),
                     child: TripJoinButtonsSection(
                       isContactInfo: widget.isContactInfo,
-                      isRequestButton:widget.isRequestButton,
+                      isRequestButton: widget.isRequestButton,
                       buttonTitle: widget.buttonTitle,
-                      onTap:widget.onTab,
+                      onTap: widget.onTab,
                     ),
                   ),
                   const Sizer(),
@@ -168,20 +178,31 @@ class _TripJoinCardState extends State<TripJoinCard> {
             style: Styles.headerText(),
           ),
           Expanded(child: Container()),
-          RichText(
-              text: TextSpan(children: [
-            TextSpan(
-                text: '${20} ',
-                style: Styles.headerText(
-                    color: Colors.black, fontWeight: FontWeight.bold)),
-            TextSpan(
-              text: context.isArabic ? 'جنيه' : 'EGP',
-              style: Styles.mediumText(
-                  fontSize: context.locale.languageCode == "ar" ? 35 : 28,
-                  fontWeight: FontWeight.w500,
-                  color: AppColors.SECONDARY_COLOR),
-            )
-          ]))
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              RichText(
+                  text: TextSpan(children: [
+                TextSpan(
+                    text: '${20} ',
+                    style: Styles.headerText(
+                        color: Colors.black, fontWeight: FontWeight.bold)),
+                TextSpan(
+                  text: context.isArabic ? 'جنيه' : 'EGP',
+                  style: Styles.mediumText(
+                      fontSize: context.locale.languageCode == "ar" ? 35 : 28,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.SECONDARY_COLOR),
+                )
+              ])),
+              Label(
+                text: LocaleKeys.seat.localize,
+                style: Styles.mediumText(
+                    fontWeight: FontWeight.bold,
+                    color: context.isDarkMode ? Colors.white : Colors.black),
+              )
+            ],
+          )
         ],
       ),
     );

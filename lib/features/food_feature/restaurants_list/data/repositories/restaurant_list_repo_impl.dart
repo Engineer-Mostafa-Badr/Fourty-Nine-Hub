@@ -5,6 +5,7 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/food_category_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/is_restaurant_model.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_2_model.dart';
+import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/food_ads_entity.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/log_count_entity.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/logs_entity.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/entities/rate_response_entity.dart';
@@ -17,6 +18,7 @@ import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usec
 import 'package:fourtyninehub/features/food_feature/restaurants_list/domain/usecases/set_request_log_seen_use_case.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/domain/usecases/get_post_comments_usecase.dart';
 
+import '../../domain/entities/restaurant.dart';
 import '../../domain/repositories/resturant_list_repo.dart';
 import '../datasources/restaurants_remote_data_source.dart';
 import '../models/restaurant_model.dart';
@@ -26,19 +28,19 @@ class RestaurantListRepoImpl implements RestaurantListRepo {
   RestaurantListRepoImpl(this._remoteDataSource);
 
   @override
-  Future<Either<Failure, List<RestaurantModel>>> getNearByReasturants(
+  Future<Either<Failure, List<GetAllRestaurantEntity>>> getNearByReasturants(
       {required double lat, required double lng}) {
     return _remoteDataSource.getNearByReasturants(lat: lat, lng: lng);
   }
 
   @override
-  Future<Either<Failure, List<RestaurantModel>>> getTrendingRestaurants(
+  Future<Either<Failure, List<GetAllRestaurantEntity>>> getTrendingRestaurants(
       {required double lat, required double lng}) {
     return _remoteDataSource.getTrendingRestaurants(lat: lat, lng: lng);
   }
 
   @override
-  Future<Either<Failure, List<Restaurant2Model>>> getSubCategoryRestaurants(
+  Future<Either<Failure, List<GetAllRestaurantEntity>>> getSubCategoryRestaurants(
       {required GetSubCategoryRestaurants params}) {
     return _remoteDataSource.getSubCategoryRestaurants(params: params);
   }
@@ -62,13 +64,13 @@ class RestaurantListRepoImpl implements RestaurantListRepo {
   }
 
   @override
-  Future<Either<Failure, List<Restaurant2Model>>> getAllRestaurantsWithMenu(
+  Future<Either<Failure, List<GetAllRestaurantEntity>>> getAllRestaurantsWithMenu(
       {required PostCommentsParams params}) {
     return _remoteDataSource.getAllRestaurantsWithMenu(params: params);
   }
 
   @override
-  Future<Either<Failure, List<Restaurant2Model>>> searchRestaurants(
+  Future<Either<Failure, List<GetAllRestaurantEntity>>> searchRestaurants(
       {required String city,
       required String subCategory,
       required String government,
@@ -127,5 +129,10 @@ class RestaurantListRepoImpl implements RestaurantListRepo {
   @override
   Future<Either<Failure, SetRequestSeenEntity>> setLogSeen({required SetRequestLogSeenParams params}) {
     return _remoteDataSource.setLogSeen(params: params);
+  }
+
+  @override
+  Future<Either<Failure, List<GetAllRestaurantEntity>>> getFoodAds(PaginationParams params) {
+    return _remoteDataSource.getFoodAds(params);
   }
 }

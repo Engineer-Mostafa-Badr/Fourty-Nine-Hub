@@ -10,6 +10,7 @@ import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/domain/
 import 'package:fourtyninehub/features/food_feature/restaurant_dashboard/presentation/cubit/restaurant_statistics_cubit.dart';
 import 'package:fourtyninehub/features/food_feature/restaurants_list/data/models/restaurant_2_model.dart';
 
+import '../../../restaurants_list/domain/entities/restaurant.dart';
 import '../../domain/entity/order_food_entity.dart';
 import '../../domain/repositories/restaurant_dashboard_repo.dart';
 import '../../domain/usecases/get_restaurant_orders_usecase.dart';
@@ -40,7 +41,7 @@ class RestaurantDashboardRepoImpl implements RestaurantDashboardRepo {
   }
 
   @override
-  Future<Either<Failure, Restaurant2Model>> getRestaurantInfo() async {
+  Future<Either<Failure, GetAllRestaurantEntity>> getRestaurantInfo() async {
     return await _remoteDataSource.getRestaurantInfo();
   }
 

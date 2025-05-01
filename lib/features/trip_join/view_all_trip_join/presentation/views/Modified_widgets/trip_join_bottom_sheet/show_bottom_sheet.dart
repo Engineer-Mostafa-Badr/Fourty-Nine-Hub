@@ -9,19 +9,19 @@ import 'package:fourtyninehub/res/style/styles.dart';
 
 Future<dynamic> JoinTripBottomSheet(context,{required Color topButtonColor,required Color bottomButtonColor,required String topButtonTitle,required String bottomButtonTitle,required void Function() onTap}) {
   return showModalBottomSheet(
-    backgroundColor: AppColors.whiteColor,
+    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
     context: context,
     shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(15))),
     isScrollControlled: true,
     builder: (context)=>Container(
       width: double.infinity,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(25),
           topRight: Radius.circular(25),
         ),
-        color: AppColors.whiteColor,
+        color: Theme.of(context).scaffoldBackgroundColor,
       ),
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom + 25,

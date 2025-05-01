@@ -10,7 +10,7 @@ import '../../../../../routes/routes.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class RestaurantCard extends StatelessWidget {
-  final Restaurant? item;
+  final GetAllRestaurantEntity? item;
   final bool isVert;
   const RestaurantCard({super.key, this.isVert = true, this.item});
 

@@ -187,7 +187,7 @@ class _MealCategoriesState extends State<MealCategories> {
                         width: 0.55.sw,
                         height: double.infinity,
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          // color: Colors.white,
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                       );

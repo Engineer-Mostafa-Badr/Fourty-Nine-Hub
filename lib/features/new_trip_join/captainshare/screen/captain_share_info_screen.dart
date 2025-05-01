@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fourtyninehub/common/widgets/stateless/dynamic/shared_scaffold.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../../../common/widgets/stateless/appbar/home_appbar.dart';
-import '../../../../core/utils/handle_cashback.dart';
-import '../../../../core/widget/custom_scaffold.dart';
 import '../../../../res/assets/assets.dart';
 import '../../../../res/style/app_colors.dart';
 import '../../../../routes/routes.dart';
@@ -23,7 +20,7 @@ class _CaptainShareInfoScreenState extends State<CaptainShareInfoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
+    return SharedScaffold(
       floatingActionButton: GestureDetector(
         onTap: () {
           context.push(Routes.captainShareScreen);
@@ -47,21 +44,7 @@ class _CaptainShareInfoScreenState extends State<CaptainShareInfoScreen> {
           ),
         ),
       ),
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(30),
-        child: HomeAppbar(
-          isWithBackArrow: false,
-          language: true,
-          leading: IconButton(
-            icon: const Icon(Icons.menu), // The menu icon
-            onPressed: () {
-              HandleCashback.setCount('drawerCount', context);
-              _scaffoldKey.currentState?.openDrawer(); // Open the drawer
-            },
-          ),
-        ),
-      ),
-      body: const CaptainShareInfoBody(),
+      body: const CaptainShareInfoBody(), mainCategoryId: 1,
     );
   }
 }

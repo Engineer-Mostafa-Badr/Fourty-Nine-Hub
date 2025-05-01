@@ -964,6 +964,9 @@ class EndPoints {
       '/food/expired-orders?page=${params.page}&limit=${params.limit}';
   static String foodReqLogs(PaginationParams params) =>
       '/food/request-logs?page=${params.page}&limit=${params.limit}';
+
+  static String foodAds(PaginationParams params) =>
+      '/food/favorite-restaurant?page=${params.page}&limit=${params.limit}';
   static String isResturant = '/restaurants/check-user-have-restaurant';
   static String createRestaurant = '/restaurants/create-restaurant';
   static String changeConnectivity = '/restaurants/modify-active';

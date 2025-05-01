@@ -45,10 +45,10 @@ class RestaurantsListState {
   final MainCategoryEntity? mainCategory;
   final IsRestaurantModel? isResturant;
   final List<UserOrderEntity>? userOrderEntity;
-  final List<Restaurant2Model>?
+  final List<GetAllRestaurantEntity>?
       allRestaurant; // Using Restaurant2Model for consistency
   final List<RestaurantEntity>? trendingRestaurants;
-  final List<Restaurant2Model>? subCategories;
+  final List<GetAllRestaurantEntity>? subCategories;
   final List<FoodCategoryEntity>? mealCategories;
   final List<SubCategoryEntity>? categories;
   final List<LogsRequestLogsEntity>? logsEntity;
@@ -56,6 +56,7 @@ class RestaurantsListState {
   final RateResponseEntity? rateResponseEntity;
   final RequestLogCountEntity? reqCount;
   final SetRequestSeenEntity? setRequestLogSeenEntity;
+  final List<GetAllRestaurantEntity>? foodAdEntity;
 
   const RestaurantsListState({
     this.expiredRequestsResponse,
@@ -83,6 +84,7 @@ class RestaurantsListState {
     this.rateResponseEntity,
     this.reqCount,
     this.setRequestLogSeenEntity,
+    this.foodAdEntity,
   });
 
   RestaurantsListState copyWith({
@@ -95,10 +97,10 @@ class RestaurantsListState {
     bool? isLoadingUserOrdersMore,
     bool? isLoadingRestaurantsMore,
     List<RestaurantEntity>? nearByRestaurants,
-    List<Restaurant2Model>? subCategories,
+    List<GetAllRestaurantEntity>? subCategories,
     String? selectedSubCategoryId,
     FoodCategoryEntity? selectedCategory,
-    List<Restaurant2Model>?
+    List<GetAllRestaurantEntity>?
         allRestaurant, // Using Restaurant2Model for consistency
     int? numOfRestaurants,
     Banner? banner,
@@ -112,6 +114,7 @@ class RestaurantsListState {
     RateResponseEntity? rateResponseEntity,
     RequestLogCountEntity? reqCount,
     SetRequestSeenEntity? setRequestLogSeenEntity,
+    List<GetAllRestaurantEntity>? foodAdEntity,
   }) {
     return RestaurantsListState(
       status: status ?? this.status,
@@ -144,6 +147,7 @@ class RestaurantsListState {
       rateResponseEntity: rateResponseEntity ?? this.rateResponseEntity,
       reqCount: reqCount ?? this.reqCount,
       setRequestLogSeenEntity: setRequestLogSeenEntity ?? this.setRequestLogSeenEntity,
+      foodAdEntity: foodAdEntity ?? this.foodAdEntity,
     );
   }
 }
