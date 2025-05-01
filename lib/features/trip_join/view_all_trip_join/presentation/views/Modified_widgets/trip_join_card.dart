@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 
@@ -21,19 +20,11 @@ class CustomCard extends StatelessWidget {
       decoration: BoxDecoration(
         border: Border.all(
           color: context.isDarkMode
-              ? AppColors.PRIMARY_COLOR_DARK
+              ? AppColors.whiteColor
               : AppColors.PRIMARY_COLOR_LIGHT,
         ),
         borderRadius: BorderRadius.circular(radius),
         color: Theme.of(context).scaffoldBackgroundColor,
-        // boxShadow: [
-        //   BoxShadow(
-        //     color: context.isDarkMode
-        //         ? AppColors.PRIMARY_COLOR_DARK.withOpacity(0.5)
-        //         : AppColors.PRIMARY_COLOR_LIGHT.withOpacity(0.5),
-        //     offset: const Offset(1, 2),
-        //   ),
-        // ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
