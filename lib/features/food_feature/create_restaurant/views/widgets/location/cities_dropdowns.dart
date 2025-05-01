@@ -30,16 +30,16 @@ class CreateRestaurantCitiesDropdowns extends StatelessWidget {
               BlocBuilder<CreateRestaurantCubit, CreateRestaurantState>(
                   builder: (context, st) {
                 return DropdownButtonFormField<CityEntity>(
-                   dropdownColor: AppColors.BG_GRAY_COLOR,
-                  icon: const Icon(
+                   dropdownColor: context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.BG_GRAY_COLOR,
+                  icon:  Icon(
                     Icons.keyboard_arrow_down_outlined,
-                    color: AppColors.PRIMARY_COLOR,
+                    color: context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR,
                   ),
                   style: Styles.mediumText(),
 
                   decoration: InputDecoration(
 
-                    fillColor: AppColors.BG_GRAY_COLOR,
+                    fillColor:  context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.BG_GRAY_COLOR,
                     enabledBorder: OutlineInputBorder(
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
                       borderSide: BorderSide(
@@ -81,7 +81,8 @@ class CreateRestaurantCitiesDropdowns extends StatelessWidget {
                   ),
                   hint: Text(
                     LocaleKeys.selectCity.tr(),
-                    style: Styles.mediumText(),
+                    style: Styles.mediumText(
+                    ),
                   ),
                   menuMaxHeight: context.height/2,
                   items: state.cities.map((e) {

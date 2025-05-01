@@ -257,7 +257,9 @@ class ShowMneu extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 TextFormField(
-                                  style: Styles.mediumText(),
+                                  style: Styles.mediumText(
+                                    color:  context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR
+                                  ),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return LocaleKeys.emptyFieldNotValid.tr();
@@ -272,7 +274,7 @@ class ShowMneu extends StatelessWidget {
                                     contentPadding: const EdgeInsets.all(10),
                                     hintText: LocaleKeys.itemName.tr(),
                                     hintStyle: Styles.mediumText(),
-                                    fillColor: AppColors.BG_GRAY_COLOR,
+                                    fillColor: context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.BG_GRAY_COLOR,
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: const BorderRadius.all(
                                           Radius.circular(10)),
@@ -314,7 +316,10 @@ class ShowMneu extends StatelessWidget {
                                 ),
                                 const Sizer(),
                                 TextFormField(
-                                  style: Styles.mediumText(),
+                                  style: Styles.mediumText(
+                                      color:  context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR
+
+                                  ),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return LocaleKeys.emptyFieldNotValid.tr();
@@ -333,7 +338,7 @@ class ShowMneu extends StatelessWidget {
                                     contentPadding: const EdgeInsets.all(10),
                                     hintText: LocaleKeys.price.tr(),
                                     hintStyle: Styles.mediumText(),
-                                    fillColor: AppColors.BG_GRAY_COLOR,
+                                    fillColor:  context.isDarkMode ? AppColors.PRIMARY_COLOR :AppColors.BG_GRAY_COLOR,
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: const BorderRadius.all(
                                           Radius.circular(10)),

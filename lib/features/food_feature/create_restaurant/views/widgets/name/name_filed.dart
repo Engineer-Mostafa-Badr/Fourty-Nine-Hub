@@ -32,7 +32,7 @@ class CreateRestaurantNameField extends StatelessWidget {
             style: Styles.mediumText(),
             controller: restaurantLoginCubit.name,
             decoration: InputDecoration(
-              fillColor: AppColors.BG_GRAY_COLOR,
+              fillColor:  context.isDarkMode ? AppColors.PRIMARY_COLOR :AppColors.BG_GRAY_COLOR,
               enabledBorder: OutlineInputBorder(
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
                 borderSide: BorderSide(
@@ -116,7 +116,7 @@ class CreateRestaurantNumberField extends StatelessWidget {
             decoration: InputDecoration(
               
               // Border when the field is not focused
-              fillColor: AppColors.BG_GRAY_COLOR,
+              fillColor:  context.isDarkMode ? AppColors.PRIMARY_COLOR :AppColors.BG_GRAY_COLOR,
               enabledBorder: OutlineInputBorder(
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
                 borderSide: BorderSide(
