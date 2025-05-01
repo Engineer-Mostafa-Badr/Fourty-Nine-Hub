@@ -87,7 +87,7 @@ class _ExpiredTripsScreenState extends State<ExpiredTripsScreen> {
                 } else if (state.status == RideStates.error) {
                   return const SizedBox();
                 } else if (state.status == RideStates.success) {
-                  if(state.completedTrips!.isEmpty) {
+                  if(state.completedTrips?.isEmpty??true) {
                     return Center(child: Text(context.isArabic ? "لا يوجد رحلات مكتملة" : "No completed trips"));
                   }
                   return ListView.builder(

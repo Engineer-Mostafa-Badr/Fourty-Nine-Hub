@@ -1,3 +1,4 @@
+import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_my_favourite_ads_usecase.dart';
 import 'package:fourtyninehub/features/subcategories/data/datasources/subcategories_remote_datasource.dart';
 import 'package:fourtyninehub/features/subcategories/data/repositories/subcategories_repo_impl.dart';
 import 'package:fourtyninehub/features/subcategories/domain/repositories/subcategories_repo.dart';
@@ -20,8 +21,11 @@ class SubcategoriesServiceLocator {
         () => GetSubCategoriesUseCase(serviceLocator()));
     serviceLocator.registerLazySingleton<GetCustomPageSubCategoriesUseCase>(
         () => GetCustomPageSubCategoriesUseCase(serviceLocator()));
+    serviceLocator.registerLazySingleton<GetMyFavouriteAdsUsecase>(
+        () => GetMyFavouriteAdsUsecase(serviceLocator()));
     // --------------------Cubit ---------------------------
     serviceLocator.registerFactory<SubcategoriesCubit>(() => SubcategoriesCubit(
+          serviceLocator(),
           serviceLocator(),
           serviceLocator(),
           serviceLocator(),

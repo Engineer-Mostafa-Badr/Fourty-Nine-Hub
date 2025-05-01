@@ -6,6 +6,7 @@ import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/get_w
 import 'package:fourtyninehub/features/account_taps/wallet/domain/usecases/main_category_use_case.dart';
 import 'package:fourtyninehub/features/ads_feature/ad_details/domain/usecases/get_ad_details_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_ads_usecase.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_my_ad_by_id_usecase.dart';
 import 'package:fourtyninehub/features/ads_feature/filter_ads/data/models/filter_model.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/azkaar/domain/use_case/fetch_azkar_use_case.dart';
@@ -210,8 +211,8 @@ class EndPoints {
   static const myAdsInstallment = '/ads/allMyAds/installment';
   static const myAdsOther = '/ads/allMyAds/other';
 
-  static myAdsByCategoryId({required String id}) =>
-      '/ads/allMyAds?mainCategoryId=$id';
+  static myAdsByCategoryId({required GetMyAdByIdParams params}) =>
+      '/ads/allMyAds?mainCategoryId=${params.mainCategoryId}&page=${params.page}';
   static const myAdsTripJoin =
       '/ride/come-with-you/my?subCategory=62ea00e269ea29c91dfc390c';
   static const clickGlobal = '/global/click';
@@ -636,7 +637,7 @@ class EndPoints {
   }
 
   static String removeFavouriteAd(String id) {
-    return '/ads-favourites/reomveAdFromFavourites/$id';
+    return '/ads-favorites/removeAdFromFavorites/$id';
   }
 
   static String requestComeWithMe(String id) {
@@ -1011,10 +1012,11 @@ class EndPoints {
   static const makeRequest = '/ads-requests/makeAdRequest';
   static const makePremiumRequest = '/ads-requests/makeAdRequest-Premium';
   static const favouriteAds = '/ads-favorites/allFavoriteAds';
+  static  myFavouriteAds(GetMyAdByIdParams params) => '/ads-favorites?mainCategoryId=${params.mainCategoryId}&page=${params.page}';
   static const favouriteSubCategories = '/favorite-sub-category';
 
   static String deleteFavouriteAds(String id) {
-    return '/ads-favourites/reomveAdFromFavourites/$id';
+    return '/ads-favorites/removeAdFromFavorites/$id';
   }
 
   static String deleteAd(String id) {
