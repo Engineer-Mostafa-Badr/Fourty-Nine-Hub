@@ -38,7 +38,7 @@ class _TabBarContentWidgetState extends State<TabBarContentWidget> {
     [""], // Ongoing Trips
     [""], // Past Trips
   ];
-  bool _hasTappedTab = false; // ✅ أضفنا دا
+  bool _hasTappedTab = false;
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +91,7 @@ class _TabBarContentWidgetState extends State<TabBarContentWidget> {
   }
 
   _buildCategory({
-     required TabController controller,
+    required TabController controller,
   }) {
     switch (controller.index) {
       case 0:

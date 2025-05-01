@@ -49,7 +49,8 @@ class _PickMeInfoScreenState extends State<PickMeInfoScreen> {
           ),
         ),
       ),
-      body: const PickMeInfoInfoBody(), mainCategoryId: 1,
+      body: const PickMeInfoInfoBody(),
+      mainCategoryId: 1,
     );
   }
 }
@@ -77,32 +78,47 @@ class PickMeInfoInfoBody extends StatelessWidget {
           SizedBox(height: 20.h),
           SvgPicture.asset(Assets.pickMeInfoIcon),
           SizedBox(height: 30.h),
-          RowTextWidget(
-            text: context.isArabic ? "لا تملك سيارة؟!" : "Don't have a car?!",
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 60),
+            child: RowTextWidget(
+              text: context.isArabic ? "لا تملك سيارة؟!" : "Don't have a car?!",
+            ),
           ),
           SizedBox(height: 15.h),
-          RowTextWidget(
-            text: context.isArabic
-                ? " تعبت من السعر الباهظ."
-                : 'Tired from the expensive price.',
-          ),
-          SizedBox(height: 15.h),
-          RowTextWidget(
-            text: context.isArabic
-                ? "قم بالإعلان عن رحلتك المتكررة يوميًا."
-                : 'Advertise your daily repeat trip.',
-          ),
-          SizedBox(height: 15.h),
-          RowTextWidget(
-            text: context.isArabic
-                ? "انتظر حتى يتصل بك أصحاب السيارات."
-                : 'Wait for car owners to contact you.',
-          ),
-          SizedBox(height: 15.h),
-          RowTextWidget(
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 60),
+            child: RowTextWidget(
               text: context.isArabic
-                  ? "شارك رحلتك ووفر المال."
-                  : 'Share your trip & save money.'),
+                  ? " تعبت من السعر الباهظ."
+                  : 'Tired from the expensive price.',
+            ),
+          ),
+          SizedBox(height: 15.h),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 60),
+            child: RowTextWidget(
+              text: context.isArabic
+                  ? "قم بالإعلان عن رحلتك المتكررة يوميًا."
+                  : 'Advertise your daily repeat trip.',
+            ),
+          ),
+          SizedBox(height: 15.h),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 60),
+            child: RowTextWidget(
+              text: context.isArabic
+                  ? "انتظر حتى يتصل بك أصحاب السيارات."
+                  : 'Wait for car owners to contact .',
+            ),
+          ),
+          SizedBox(height: 15.h),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 60),
+            child: RowTextWidget(
+                text: context.isArabic
+                    ? "شارك رحلتك ووفر المال."
+                    : 'Share your trip & save money.'),
+          ),
         ],
       ),
     );

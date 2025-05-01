@@ -1,3 +1,4 @@
+import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -29,6 +30,13 @@ class AvailableRideModeWidget extends StatefulWidget {
 
 class _AvailableRideModeWidgetState extends State<AvailableRideModeWidget> {
   bool _showContainer = false; // متغير للتحكم في ظهور الـ Container
+  late ExpandableController _expandableController;
+
+  @override
+  void initState() {
+    super.initState();
+    _expandableController = ExpandableController(initialExpanded: false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +68,8 @@ class _AvailableRideModeWidgetState extends State<AvailableRideModeWidget> {
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 24.sp,
-                            color: Colors.red,
+                            color:
+                                context.isDarkMode ? Colors.white : Colors.red,
                           ),
                           children: [
                             TextSpan(
@@ -87,9 +96,13 @@ class _AvailableRideModeWidgetState extends State<AvailableRideModeWidget> {
                           ),
                           children: [
                             TextSpan(
-                              text: context.isArabic ? "جنيهًا مصريًا" : "EGP",
-                              style: const TextStyle(
-                                  color: Colors.red, fontSize: 12),
+                              text: context.isArabic ? "  ج.م" : "EGP",
+                              style: TextStyle(
+                                color: context.isDarkMode
+                                    ? Colors.white
+                                    : Colors.red,
+                                fontSize: 12,
+                              ),
                             ),
                           ],
                         ),
@@ -232,6 +245,30 @@ class _AvailableRideModeWidgetState extends State<AvailableRideModeWidget> {
                       ),
                     ],
                   ),
+                  Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _expandableController.toggle();
+                        });
+                      },
+                      child: SvgPicture.asset(
+                        Assets.redFrame,
+                        width: 50,
+                      ),
+                    ),
+                  ),
+                  ExpandablePanel(
+                    controller: _expandableController,
+                    theme: const ExpandableThemeData(
+                      hasIcon: false,
+                      tapBodyToCollapse: false,
+                      tapHeaderToExpand: false,
+                    ),
+                    header: const SizedBox(),
+                    collapsed: const SizedBox(),
+                    expanded: const AddressWidget(),
+                  ),
                   //      const SizedBox(height: 8),
                   Row(
                     children: [
@@ -284,30 +321,6 @@ class _AvailableRideModeWidgetState extends State<AvailableRideModeWidget> {
             ),
           ),
         ),
-        Positioned(
-          bottom: 9,
-          left: 170,
-          child: GestureDetector(
-            onTap: () {
-              setState(() {
-                _showContainer = !_showContainer; // تغيير حالة الـ Container
-              });
-            },
-            child: SvgPicture.asset(
-              Assets.frameIcon,
-              width: 50,
-            ),
-          ),
-        ),
-        // الـ Container اللي هيظهر أو يختفي حسب الضغط
-        if (_showContainer)
-          const Positioned(
-            top: 0,
-            bottom: 75, // تحديد المكان اللي هيظهر فيه الـ Container
-            left: 0,
-            right: 0,
-            child: AddressWidget(),
-          ),
       ],
     );
   }

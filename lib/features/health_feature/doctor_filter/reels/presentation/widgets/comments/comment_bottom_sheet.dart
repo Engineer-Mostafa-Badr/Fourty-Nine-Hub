@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
+import 'package:fourtyninehub/features/social_media/reels/data/models/new_reels_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments/comment_input_field.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments/no_scale_text.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 
 class CommentsBottomSheet extends StatefulWidget {
-  // final Reel reel;
+  final Reel reel;
 
-  const CommentsBottomSheet({
-    super.key,
-  });
+  const CommentsBottomSheet({super.key, required this.reel});
 
   @override
   _CommentsBottomSheetState createState() => _CommentsBottomSheetState();
@@ -31,17 +32,15 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
   void initState() {
     super.initState();
     scrollController.addListener(_onScroll);
-    focusNode.requestFocus()
-        // context.read<ReelsCubit>().loadInitialComments(
-        //       widget.reel.id,
-
-        ; // Fetch comments once when initialized
+    focusNode.requestFocus();
+    context.read<ReelsCubit>().loadInitialComments(
+        widget.reel.id); // Fetch comments once when initialized
   }
 
   void _onScroll() {
     if (scrollController.position.pixels >=
         scrollController.position.maxScrollExtent - 200) {
-      // context.read<ReelsCubit>().getComments(widget.reel.id);
+      context.read<ReelsCubit>().getComments(widget.reel.id);
     }
   }
 
@@ -55,41 +54,44 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    //  var reelsCubit = context.read<ReelsCubit>();
+    var reelsCubit = context.read<ReelsCubit>();
     bool isDark = context.isDarkMode;
 
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: () {
-        FocusScope.of(context).unfocus();
-      },
-      child: Container(
-        constraints: BoxConstraints(
-          maxHeight: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,
-          minHeight: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,
-        ),
-        decoration: BoxDecoration(
-          color: isDark ? Colors.grey[900] : Colors.white,
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
+    return BlocProvider.value(
+      value: reelsCubit,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Container(
+          constraints: BoxConstraints(
+            maxHeight: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,
+            minHeight: isKeyboardVisible(context) ? 0.8.sh : 0.6.sh,
           ),
-        ),
-        child: Column(
-          children: <Widget>[
-            _buildHandleIndicator(),
-            _buildCommentsHeader(),
-            _buildCommentsList(
-              scrollController,
+          decoration: BoxDecoration(
+            color: isDark ? Colors.grey[900] : Colors.white,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
             ),
-            CommentInputField(
-              focusNode: focusNode,
-              //     reel: widget.reel,
-              isReplying: isReplying,
-              commentController: _commentController,
-              scrollController: scrollController,
-            ),
-          ],
+          ),
+          child: Column(
+            children: <Widget>[
+              _buildHandleIndicator(),
+              _buildCommentsHeader(widget.reel),
+              _buildCommentsList(
+                scrollController,
+              ),
+              CommentInputField(
+                focusNode: focusNode,
+                //  reel: widget.reel,
+                isReplying: isReplying,
+                commentController: _commentController,
+                scrollController: scrollController,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -107,10 +109,10 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
     );
   }
 
-  Widget _buildCommentsHeader() {
+  Widget _buildCommentsHeader(Reel reel) {
     return Center(
       child: NoScaleText(
-        '${"5"} ${LocaleKeys.comments_header.localize}',
+        '${reel.commentCount} ${LocaleKeys.comments_header.localize}',
         style: TextStyle(
           color: context.isDarkMode ? Colors.white : Colors.black87,
           fontWeight: FontWeight.bold,
@@ -124,24 +126,24 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
     return Expanded(
       child: BlocBuilder<ReelsCubit, ReelsState>(
         builder: (context, state) {
-          // if (state.isFetchingComments &&
-          //     context.read<ReelsCubit>().comments.isEmpty) {
-          //   return const Center(
-          //     child: CircularProgressIndicator(
-          //       color: AppColors.SECONDARY_COLOR,
-          //     ),
-          //   );
-          // }
+          if (state.isFetchingComments &&
+              context.read<ReelsCubit>().comments.isEmpty) {
+            return const Center(
+              child: CircularProgressIndicator(
+                color: AppColors.SECONDARY_COLOR,
+              ),
+            );
+          }
           final comments = context.read<ReelsCubit>().comments;
           if (comments.isNotEmpty) {
             return ListView.builder(
-              //   controller: scrollController,
+              controller: scrollController,
               shrinkWrap: true,
               // keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-              itemCount: 5,
+              itemCount: comments.length,
               itemBuilder: (context, index) {
                 return CommentWidget(
-                  // commentData: comments[index],
+                  //      commentData: comments[index],
                   index: index,
                   commentController: _commentController,
                   //for reply
@@ -152,25 +154,10 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
             );
           }
           // if(state.)
-          return ListView.builder(
-            //   controller: scrollController,
-            shrinkWrap: true,
-            // keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-            itemCount: 5,
-            itemBuilder: (context, index) {
-              return CommentWidget(
-                // commentData: comments[index],
-                index: index,
-                commentController: _commentController,
-                //for reply
-                replyingTo: replyToUser,
-                focusNode: focusNode,
-              );
-            },
+
+          return Center(
+            child: Label(text: LocaleKeys.noComments.localize),
           );
-          // return Center(
-          //   child: Label(text: LocaleKeys.noComments.localize),
-          // );
         },
       ),
     );

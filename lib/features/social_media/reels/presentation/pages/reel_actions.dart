@@ -31,6 +31,7 @@ import '../../../twitter/presentation/widgets/report_view.dart';
 import '../../data/models/new_reels_model.dart';
 import '../controllers/explore_reels_cubit/reel_cubit.dart';
 import '../widgets/components/unified_widget_view.dart';
+import '../widgets/share_count_bottom_sheet.dart';
 import 'audio_screen.dart';
 
 class ReelActions extends StatefulWidget {
@@ -66,17 +67,25 @@ class _ReelActionsState extends State<ReelActions> {
             // textDirection: TextDirection.ltr,
 
             children: [
-              Expanded(
-                flex: 4,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _UserSection(reel: widget.reel),
-                    const SizedBox(height: 4),
-                    // _AudioAndButtons(reel: widget.reel, width: width),
-                  ],
-                ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  const FullScreenWidget(),
+                  _UserSection(reel: widget.reel),
+                  const SizedBox(height: 12),
+                  const CaptionWidget(),
+                  const SizedBox(height: 2),
+                  const TagWidget(),
+                  const SizedBox(height: 6),
+                  const SponsoredWidget(),
+                  const SizedBox(height: 6),
+                  const ShopNowButton(),
+                  const SizedBox(height: 6),
+                  const SongWidget(),
+                  const SizedBox(height: 8),
+//                  _AudioAndButtons(reel: widget.reel, width: width),
+                ],
               ),
               Expanded(
                 flex: 1,
@@ -94,6 +103,177 @@ class _ReelActionsState extends State<ReelActions> {
   }
 }
 
+class ShopNowButton extends StatelessWidget {
+  const ShopNowButton({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 15),
+      width: 280,
+      height: 34,
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+        color: Color(
+          0xffFF3308,
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            context.isArabic ? 'تسوق الان' : 'Shop now',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
+            ),
+          ),
+          SizedBox(width: 5),
+          Icon(
+            size: 12,
+            Icons.arrow_forward_ios,
+            color: Colors.white,
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class SponsoredWidget extends StatelessWidget {
+  const SponsoredWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        width: 80,
+        height: 25,
+        margin: const EdgeInsets.symmetric(horizontal: 15),
+        decoration: BoxDecoration(
+          color: Colors.black.withOpacity(.7),
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
+        ),
+        child: Center(
+          child: Text(
+            context.isArabic ? 'برعاية' : 'sponsored',
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SongWidget extends StatelessWidget {
+  const SongWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      child: Row(
+        children: [
+          SvgPicture.asset(
+            Assets.songIcon,
+          ),
+          const SizedBox(width: 5),
+          Text(
+            context.isArabic
+                ? 'اسم الأغنية - فنان الأغنية'
+                : "Song name - song artist",
+            style: TextStyle(
+              fontSize: 13,
+              color: Colors.white,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class TagWidget extends StatelessWidget {
+  const TagWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 15),
+      child: Text(
+        '#fyp #tag #tag #tag #tag #tag ',
+        style: TextStyle(
+          fontSize: 16,
+          color: Colors.white,
+        ),
+      ),
+    );
+  }
+}
+
+class CaptionWidget extends StatelessWidget {
+  const CaptionWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Text(
+        context.isArabic ? 'وصف الريل' : 'Caption of the post ',
+        style: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w400,
+          color: Colors.white,
+        ),
+      ),
+    );
+  }
+}
+
+class FullScreenWidget extends StatelessWidget {
+  const FullScreenWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(width: 35),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+          child: SvgPicture.asset(
+            Assets.fullScreenIcon,
+          ),
+        ),
+        //     SizedBox(width: 10),
+        Text(
+          context.isArabic ? "الشاشة الكاملة" : "full screen",
+          style: const TextStyle(
+            color: Colors.white,
+          ),
+        )
+      ],
+    );
+  }
+}
+
 /// Widget to display user avatar and information.
 class _UserSection extends StatelessWidget {
   final Reel reel;
@@ -102,88 +282,218 @@ class _UserSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(
-          width: 10,
-        ),
-        Flexible(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        const LocationReelsWidget(),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
             children: [
-              Row(
-                children: [
-                  const Sizer(),
-                  _UserAvatar(reel: reel),
-                  const Sizer(),
-                  _UserInfo(reel: reel),
-                ],
+              const SizedBox(
+                width: 10,
               ),
-              const Sizer(),
-              Container(
-                margin: const EdgeInsets.only(top: 5),
-                padding: const EdgeInsets.only(left: 10),
-                child: GestureDetector(
-                  onTap: () {
-                    // setState(() {
-                    //   _isCollapsed = !_isCollapsed;
-                    // });
-                  },
-                  child: SizedBox(
-                    width: 0.7.sw,
-                    child: ReadMoreText(
-                      "Simple DescriptionSimple DescriptionSimple DescriptionSimple DescriptionSimple DescriptionSimple DescriptionSimple DescriptionSimple DescriptionSimple DescriptionSimple DescriptionSimple DescriptionSimple Description",
-                      trimLines: 1,
-                      colorClickableText: AppColors.PRIMARY_COLOR_DARK,
-                      trimMode: TrimMode.Line,
-                      trimCollapsedText: ' See more',
-                      trimExpandedText: ' Hide',
-                      // isExpandable: ,
-                      // isCollapsed: ValueNotifier(_isCollapsed),
-                      textScaler: TextScaler.noScaling,
-                      lessStyle: Styles.headerText(
-                        color: AppColors.PRIMARY_COLOR_DARK,
+              const SizedBox(width: 10),
+              // الصورة + زر الإضافة
+              Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(2), // سمك الإطار الأبيض
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const CircleAvatar(
+                      radius: 18,
+                      backgroundImage: NetworkImage(
+                        'https://i.pravatar.cc/150?img=3',
                       ),
-                      moreStyle: Styles.headerText(
-                        fontSize: 30,
-                        color: AppColors.PRIMARY_COLOR_DARK,
-                      ),
-                      style: Styles.mediumText(color: Colors.white),
                     ),
                   ),
+                  const Positioned(
+                    bottom: -10,
+                    right: -9,
+                    child: CircleAvatar(
+                      radius: 13,
+                      backgroundColor: Color(0xffFF3308),
+                      child: Icon(
+                        Icons.add,
+                        size: 15,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              // Column(
+              //   crossAxisAlignment: CrossAxisAlignment.start,
+              //   children: [
+              //     const Sizer(),
+              //     Container(
+              //       margin: const EdgeInsets.only(top: 5),
+              //       padding: const EdgeInsets.only(left: 10),
+              //       child: GestureDetector(
+              //         onTap: () {
+              //           // setState(() {
+              //           //   _isCollapsed = !_isCollapsed;
+              //           // });
+              //         },
+              //         child: SizedBox(
+              //           width: 0.7.sw,
+              //           child: ReadMoreText(
+              //             "Simple DescriptionSimple DescriptionSimple DescriptionSimple DescriptionSimple DescriptionSimple DescriptionSimple DescriptionSimple DescriptionSimple DescriptionSimple DescriptionSimple DescriptionSimple Description",
+              //             trimLines: 1,
+              //             colorClickableText: AppColors.PRIMARY_COLOR_DARK,
+              //             trimMode: TrimMode.Line,
+              //             trimCollapsedText: ' See more',
+              //             trimExpandedText: ' Hide',
+              //             // isExpandable: ,
+              //             // isCollapsed: ValueNotifier(_isCollapsed),
+              //             textScaler: TextScaler.noScaling,
+              //             lessStyle: Styles.headerText(
+              //               color: AppColors.PRIMARY_COLOR_DARK,
+              //             ),
+              //             moreStyle: Styles.headerText(
+              //               fontSize: 30,
+              //               color: AppColors.PRIMARY_COLOR_DARK,
+              //             ),
+              //             style: Styles.mediumText(color: Colors.white),
+              //           ),
+              //         ),
+              //       ),
+              //     ),
+              //     const Sizer(),
+              //     Padding(
+              //       padding: const EdgeInsets.only(left: 8),
+              //       child: Row(
+              //         children: [
+              //           Container(
+              //             padding: const EdgeInsets.symmetric(
+              //                 horizontal: 8, vertical: 3),
+              //             decoration: BoxDecoration(
+              //                 color: Colors.white.withOpacity(0.3),
+              //                 borderRadius: BorderRadius.circular(30)),
+              //             child: const Row(
+              //               children: [
+              //                 Icon(
+              //                   FontAwesomeIcons.music,
+              //                   size: 13,
+              //                 ),
+              //                 Sizer(),
+              //                 Text(
+              //                   "taleen-nabil • Original audio",
+              //                 ),
+              //               ],
+              //             ),
+              //           ),
+              //         ],
+              //       ),
+              //     ),
+              //   ],
+              // ),
+              const SizedBox(width: 8),
+              Text(
+                context.isArabic ? 'محمد احمد' : 'Mohamed Ahmed',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
                 ),
               ),
-              const Sizer(),
-              Padding(
-                padding: const EdgeInsets.only(left: 8),
+              const SizedBox(width: 8),
+
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 1, vertical: 1),
+                // width: 78,
+                // height: 25,
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(6)),
+                  color: Color(
+                    0xff333333,
+                  ),
+                ),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 3),
-                      decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.3),
-                          borderRadius: BorderRadius.circular(30)),
-                      child: const Row(
-                        children: [
-                          Icon(
-                            FontAwesomeIcons.music,
-                            size: 13,
-                          ),
-                          Sizer(),
-                          Text(
-                            "taleen-nabil • Original audio",
-                          ),
-                        ],
+                    SvgPicture.asset(Assets.photoIcon),
+                    SizedBox(width: 8.w),
+                    Text(
+                      context.isArabic ? 'صور' : 'photo ',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 16,
                       ),
                     ),
                   ],
+                ),
+              ),
+              SizedBox(width: 8.w),
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 6.h),
+                width: 30.w,
+                height: 40.w,
+                decoration: const BoxDecoration(
+                  color: Color(0xff20D5EC),
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: SvgPicture.asset(Assets.checkIcon),
                 ),
               ),
             ],
           ),
         ),
       ],
+    );
+  }
+}
+
+class LocationReelsWidget extends StatelessWidget {
+  const LocationReelsWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+      margin: const EdgeInsets.all(12),
+      width: 220,
+      decoration: BoxDecoration(
+        color: Colors.black.withOpacity(0.2),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          SvgPicture.asset(
+            Assets.locationReel,
+          ),
+          const SizedBox(width: 12),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 2),
+              Text(
+                'badrshein . هرم سقارة المدرج',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.white,
+                ),
+              ),
+              Text(
+                context.isArabic ? "انظر العنوان" : "see address",
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
@@ -615,11 +925,24 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
           count: reel.shareCount.toString(),
           isReversed: true,
           onTap: () {
-            if (!serviceLocator<UserCubit>().isLoggedIn) {
-              context.push(Routes.LOGIN);
-            } else {
-              _handleShareAction(context, reel.videoMedia);
-            }
+            showModalBottomSheet(
+              context: context,
+              //     backgroundColor: Colors.white,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                side: BorderSide(
+                  color: Colors.transparent,
+                ),
+              ),
+              builder: (context) {
+                return ShareCountBottomSheet();
+              },
+            );
+            // if (!serviceLocator<UserCubit>().isLoggedIn) {
+            //   context.push(Routes.LOGIN);
+            // } else {
+            //   _handleShareAction(context, reel.videoMedia);
+            // }
           },
         ),
         IconButton(
@@ -680,12 +1003,15 @@ class AdvancedTikTokReactionsColumn extends StatelessWidget {
             );
           },
         ),
-        const SizedBox(height: 6),
-        if (itemType != ReelItemType.instagram)
-          RotatingCircularButton(
-            reel: reel,
-            rotationController: rotationController,
-          ),
+        RotatingCircularButton(
+          reel: reel,
+          rotationController: rotationController,
+        ),
+        SizedBox(height: 20),
+        SvgPicture.asset(
+          Assets.volumeIcon,
+        ),
+        SizedBox(height: 10),
       ],
     );
   }
@@ -938,7 +1264,7 @@ class RotatingCircularButton extends StatelessWidget {
             onTap: () {
               showModalBottomSheet(
                 context: context,
-                shape: RoundedRectangleBorder(
+                shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                 ),
                 builder: (context) {
@@ -968,7 +1294,7 @@ class RotatingCircularButton extends StatelessWidget {
                       ),
                       SoundOptionBottomSheet(
                         onTap: () {},
-                        icon: Assets.mixReelIcon,
+                        icon: Assets.mix,
                         title: context.isArabic ? 'بكرات مختلطة' : 'Mix Reel',
                       ),
                     ],
