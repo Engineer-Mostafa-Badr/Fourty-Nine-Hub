@@ -10,6 +10,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_cubit.dart';
 import 'package:fourtyninehub/features/star_feature/presentation/controller/cubit/star_state.dart';
+import 'package:fourtyninehub/features/star_feature/presentation/pages/widgets/talent_video.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import '../../../../core/localization/locale_keys.g.dart';
@@ -86,7 +87,7 @@ class GetAllTalents extends StatelessWidget {
                                 );
                               }
                             : null,
-                        child: Container(
+                        child: isVideo?TalentVideo(path: mediaUrl,):Container(
                           height: 300.h,
                           width: double.infinity,
                           decoration: BoxDecoration(
@@ -162,7 +163,7 @@ class GetAllTalents extends StatelessWidget {
                               talent.title,
                               style: TextStyle(
                                 fontSize: 28.sp,
-                                color: Colors.black,
+                                color: context.isDarkMode?Colors.white:Colors.black,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -171,7 +172,7 @@ class GetAllTalents extends StatelessWidget {
                               "${talent.totalViews.toShortScale} ${LocaleKeys.views.localize} • ${timeago.format(createdAt, locale: context.locale.languageCode)}",
                               style: TextStyle(
                                 fontSize: 26.sp,
-                                color: Colors.grey,
+                                color: context.isDarkMode?Colors.white:Colors.grey,
                               ),
                             ),
                           ],

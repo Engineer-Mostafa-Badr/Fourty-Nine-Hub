@@ -328,6 +328,9 @@ class _NewRouteBodyState extends State<NewRouteBody> {
                     : text!,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: Colors.black
+                ),
               ),
             ),
           ],

@@ -96,7 +96,7 @@ class _CreateStarState extends State<CreateStar> {
                       child: Text(
                         LocaleKeys.winners.localize,
                         style: TextStyle(
-                          color: Colors.black,
+                          color: context.isDarkMode?Colors.white:Colors.black,
                           fontWeight: FontWeight.bold,
                           fontSize: 32.sp,
                         ),

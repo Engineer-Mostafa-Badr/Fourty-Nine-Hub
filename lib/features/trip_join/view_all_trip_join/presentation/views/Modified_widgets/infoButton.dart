@@ -36,7 +36,7 @@ class _WelcomeTextWidgetState extends State<WelcomeTextWidget> {
             ),
           ),
           Positioned(
-            top: 120,
+            top: 110,
             left: position.dx + size.width / 2 - 125,
             right: 50,
             child: Material(
@@ -57,7 +57,7 @@ class _WelcomeTextWidgetState extends State<WelcomeTextWidget> {
                 child:  Text(
                   widget.infoMessage ,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold,color: Colors.black),
                 ),
               ),
             ),

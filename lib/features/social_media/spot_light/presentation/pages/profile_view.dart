@@ -8,6 +8,7 @@ import 'package:fourtyninehub/core/widget/clickable_widget.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/presentation/pages/add_friends_view.dart';
 import 'package:fourtyninehub/features/social_media/spot_light/presentation/widgets/posts_grid.dart';
 import 'package:fourtyninehub/res/assets/assets.dart';
+import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
 import 'package:path/path.dart';
 
@@ -27,7 +28,9 @@ class SpotLightProfileScreen extends StatelessWidget {
         ),
         child: CustomScrollView(
           slivers: [
-            SliverAppBar(
+            SliverAppBar(iconTheme: IconThemeData(
+              color: Colors.black
+            ),
               expandedHeight: MediaQuery.of(context).size.height * 0.42,
               pinned: false,
               backgroundColor: Colors.transparent,
@@ -45,46 +48,48 @@ class SpotLightProfileScreen extends StatelessWidget {
                   child: Stack(
                     fit: StackFit.expand,
                     children: [
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: SafeArea(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12.0, vertical: 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                // ClickableWidget(
-                                //   child: const Icon(Icons.camera_alt,
-                                //       color: Colors.black),
-                                //   onTap: () {},
-                                // ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
+                      // const Align(
+                      //   alignment: Alignment.topLeft,
+                      //   child: SafeArea(
+                      //     child: Padding(
+                      //       padding: const EdgeInsets.symmetric(
+                      //           horizontal: 12.0, vertical: 10),
+                      //       child: Row(
+                      //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //         children: [
+                      //           // ClickableWidget(
+                      //           //   child: const Icon(Icons.camera_alt,
+                      //           //       color: Colors.black),
+                      //           //   onTap: () {},
+                      //           // ),
+                      //         ],
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
                       Positioned(
                           bottom: 30.h,
-                          left: 32.h,
-                          child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Esraa Khlifah",
-                                  style: Styles.headerText(
-                                    color: Colors.white,
-                                    fontSize: 54,
-                                    fontWeight: FontWeight.bold,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16.0.h),
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Esraa Khlifah",
+                                    style: Styles.headerText(
+                                      color: Colors.white,
+                                      fontSize: 54,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
-                                ),
-                                Text(
-                                  "esraakhlifah",
-                                  style: Styles.headerText(
-                                    color: Color(0xFFA0B7B0),
+                                  Text(
+                                    "esraakhlifah",
+                                    style: Styles.headerText(
+                                      color: Color(0xFFA0B7B0),
+                                    ),
                                   ),
-                                ),
-                              ]))
+                                ]),
+                          ))
                     ],
                   ),
                 ),
@@ -93,9 +98,9 @@ class SpotLightProfileScreen extends StatelessWidget {
             SliverToBoxAdapter(
               child: Container(
                 // height: MediaQuery.of(context).size.height,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
+                decoration:  BoxDecoration(
+                  color:context.isDarkMode?AppColors.QUANTITY_COLOR:Colors.white,
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,11 +116,11 @@ class SpotLightProfileScreen extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              infoButton('🎈', "Apr 2", Colors.red),
+                              infoButton(context,'🎈', "Apr 2", Colors.red),
                               const Sizer(),
-                              infoButton(null, "3", Colors.grey.shade300),
+                              infoButton(context,null, "3", Colors.grey.shade300),
                               const Sizer(),
-                              infoButton('♈', "Aries", Colors.purple.shade200),
+                              infoButton(context,'♈', "Aries", Colors.purple.shade200),
                             ],
                           ),
                           const Sizer(),
@@ -123,7 +128,7 @@ class SpotLightProfileScreen extends StatelessWidget {
                               style: Styles.headerText(
                                   fontSize: 48, fontWeight: FontWeight.bold)),
                           const Sizer(),
-                          profileTile(Icons.person_add_alt_outlined,
+                          profileTile(context,Icons.person_add_alt_outlined,
                               context.isArabic ? 'اضف اصدقاء' : "Add Friends",
                               onTap: () => Navigator.of(context).push(
                                     MaterialPageRoute(
@@ -132,7 +137,7 @@ class SpotLightProfileScreen extends StatelessWidget {
                                     ),
                                   )),
                           const Sizer(),
-                          profileTile(Icons.groups_rounded,
+                          profileTile(context,Icons.groups_rounded,
                               context.isArabic ? 'اصدقائي' : "My Friends"),
                         ],
                       ),
@@ -140,7 +145,7 @@ class SpotLightProfileScreen extends StatelessWidget {
                     const Sizer(
                       height: 30,
                     ),
-                    PostsGrid(),
+                    const PostsGrid(),
                   ],
                 ),
               ),
@@ -151,12 +156,13 @@ class SpotLightProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget infoButton(String? icon, String text, Color color) {
+  Widget infoButton(BuildContext context,String? icon, String text, Color color) {
     return Container(
       width: 152.h,
       height: 80.h,
       //padding: const EdgeInsets.symmetric( vertical: 8),
       decoration: BoxDecoration(
+        color: context.isDarkMode?AppColors.SPLASH_BLACK_COLOR:Colors.transparent,
         border: Border.all(
           color: const Color(0xFF333231),
         ),
@@ -185,11 +191,11 @@ class SpotLightProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget profileTile(IconData icon, String text, {void Function()? onTap}) {
+  Widget profileTile(BuildContext context,IconData icon, String text, {void Function()? onTap}) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 24.h),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color:context.isDarkMode?AppColors.SPLASH_BLACK_COLOR:Colors.white,
         borderRadius: BorderRadius.circular(15),
         boxShadow: const [
           BoxShadow(

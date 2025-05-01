@@ -9,7 +9,6 @@ class TabBarRowWidget extends StatelessWidget {
   final TabController tabController;
   final void Function()? onTap;
   const TabBarRowWidget({super.key, required this.tabController, this.onTap});
-
   @override
   Widget build(BuildContext context) {
     return Row(

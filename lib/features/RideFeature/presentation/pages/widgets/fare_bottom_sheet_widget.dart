@@ -19,7 +19,7 @@ class FareBottomSheetWidget extends StatelessWidget {
     required this.selectedCategoryName,
   }) : _controller = TextEditingController(
           text:
-              selectedCategoryPrice > 0 ? selectedCategoryPrice.toString() : '',
+              selectedCategoryPrice > 0 ? selectedCategoryPrice.toInt().toString() : '',
         );
 
   final RideCubit rideCubit;

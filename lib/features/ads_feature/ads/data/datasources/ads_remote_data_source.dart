@@ -5,6 +5,7 @@ import 'package:fourtyninehub/core/error/failure.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_ads_usecase.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_my_ad_by_id_usecase.dart';
 import 'package:fourtyninehub/features/requests_history/data/models/trip_model.dart';
 import 'package:fourtyninehub/features/requests_history/domain/entities/trip_entity.dart';
 
@@ -26,7 +27,8 @@ abstract class AdsRemoteDataSource {
   Future<Either<Failure, bool>> requestComeWithMe(
       {required RequestParams params});
 
-  Future<Either<Failure, List<AdModel>>> getMyAdById(String params);
+  Future<Either<Failure, List<AdModel>>> getMyAdById(GetMyAdByIdParams params);
+  Future<Either<Failure, List<AdModel>>> getMyAdFavouriteAds(GetMyAdByIdParams params);
 }
 
 class AdsRemoteDataSourceImpl implements AdsRemoteDataSource {
@@ -99,9 +101,20 @@ class AdsRemoteDataSourceImpl implements AdsRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, List<AdModel>>> getMyAdById(String params) async {
+  Future<Either<Failure, List<AdModel>>> getMyAdById(GetMyAdByIdParams params) async {
     final response =
-        await _apiConsumer.get(EndPoints.myAdsByCategoryId(id: params));
+        await _apiConsumer.get(EndPoints.myAdsByCategoryId(params: params));
+    return response.fold(
+        (failure) => Left(failure),
+        (data) => Right((data['data']['ads'] as List)
+            .map((e) => AdModel.fromJson(e))
+            .toList()));
+  }
+
+  @override
+  Future<Either<Failure, List<AdModel>>> getMyAdFavouriteAds(GetMyAdByIdParams params) async {
+    final response =
+        await _apiConsumer.get(EndPoints.myFavouriteAds(params));
     return response.fold(
         (failure) => Left(failure),
         (data) => Right((data['data']['ads'] as List)

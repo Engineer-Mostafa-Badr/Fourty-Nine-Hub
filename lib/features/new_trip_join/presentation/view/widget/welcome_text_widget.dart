@@ -38,7 +38,7 @@ class _WelcomeTextWidgetState extends State<WelcomeTextWidget> {
             ),
           ),
           Positioned(
-            top: 145,
+            top: 120,
             left: position.dx + size.width / 2 - 125,
             right: 50,
             child: Material(
@@ -46,9 +46,7 @@ class _WelcomeTextWidgetState extends State<WelcomeTextWidget> {
               child: Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: context.isDarkMode
-                      ? Colors.transparent
-                      : Color(0xffFFFFFF),
+                  color:const Color(0xffFFFFFF),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
@@ -59,6 +57,7 @@ class _WelcomeTextWidgetState extends State<WelcomeTextWidget> {
                   style: TextStyle(
                     fontSize: 28.sp,
                     fontWeight: FontWeight.bold,
+                    color: Colors.black
                   ),
                 ),
               ),

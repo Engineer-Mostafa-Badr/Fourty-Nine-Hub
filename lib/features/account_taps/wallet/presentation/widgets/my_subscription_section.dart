@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fourtyninehub/common/widgets/stateless/labels/label.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/account_taps/wallet/domain/entities/wallet/wallet_subscription_entity.dart';
@@ -22,7 +23,9 @@ class _MySubscriptionSectionState extends State<MySubscriptionSection> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xffD9D9D9),
+        color: context.isDarkMode
+            ? const Color(0xff333333)
+            : const Color(0xffD9D9D9),
         borderRadius: BorderRadius.circular(20),
       ),
       padding: const EdgeInsets.all(8.0),
@@ -32,7 +35,7 @@ class _MySubscriptionSectionState extends State<MySubscriptionSection> {
           Center(
             child: Label(
               text: LocaleKeys.subscriptions.localize,
-              style: Styles.headerText(),
+              style: Styles.headerText(height: 1.60),
             ),
           ),
           if (_isExpanded)
@@ -42,6 +45,8 @@ class _MySubscriptionSectionState extends State<MySubscriptionSection> {
                 text: LocaleKeys.active.localize,
                 style: Styles.mediumText(
                   fontWeight: FontWeight.w600,
+                  color: context.isDarkMode ? Colors.white : Colors.black,
+                  height: 1.60,
                 ),
               ),
             ),
@@ -59,6 +64,8 @@ class _MySubscriptionSectionState extends State<MySubscriptionSection> {
                   text: LocaleKeys.active.localize,
                   style: Styles.mediumText(
                     fontWeight: FontWeight.w600,
+                    color: context.isDarkMode ? Colors.white : Colors.black,
+                    height: 1.60,
                   ),
                 ),
               const Spacer(),
@@ -77,6 +84,8 @@ class _MySubscriptionSectionState extends State<MySubscriptionSection> {
                       style: Styles.smallText(
                         fontWeight: FontWeight.w300,
                         fontSize: 24,
+                        color: context.isDarkMode ? Colors.white : Colors.black,
+                        height: 1.60,
                       ),
                     ),
                     const SizedBox(

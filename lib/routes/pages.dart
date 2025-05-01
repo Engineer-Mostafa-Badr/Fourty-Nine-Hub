@@ -702,8 +702,8 @@ class AppPages {
               GoRoute(
                 path: Paths.SUBCATEGORIES,
                 name: Routes.SUBCATEGORIES,
-                builder: (context, state) => BlocProvider.value(
-                  value: serviceLocator<SubcategoriesCubit>(),
+                builder: (context, state) => BlocProvider(
+                  create: (context)=>serviceLocator<SubcategoriesCubit>(),
                   child: SubCategoriesView(
                     mainCategory: state.extra as MainCategoryEntity,
                   ),
@@ -741,8 +741,8 @@ class AppPages {
                         GoRoute(
                           path: Paths.CREATEAD,
                           name: Routes.CREATEAD,
-                          builder: (context, state) => BlocProvider.value(
-                              value: serviceLocator<CreateAdCubit>(),
+                          builder: (context, state) => BlocProvider(
+                              create: (context)=>serviceLocator<CreateAdCubit>(),
                               child: CreateAdView(
                                 categorization:
                                     state.extra as CategorizationEntity,
@@ -2952,7 +2952,7 @@ class AppPages {
                       create: (context) => serviceLocator<AdvertisementCubit>(),
                     ),
                   ],
-                  child: const TripJoinView(),
+                  child: const TripJoinView(initialIndex: 1,),
                 ),
               ),
               GoRoute(
@@ -3001,7 +3001,7 @@ class AppPages {
                       create: (context) => serviceLocator<AdvertisementCubit>(),
                     ),
                   ],
-                  child: const AllPickMeView(),
+                  child: const TripJoinView(initialIndex: 2,),
                 ),
               ),
 
@@ -3534,7 +3534,7 @@ class AppPages {
                           getLatLongFromAddressRemoteDataSource:
                               serviceLocator()),
                     ),
-                  ], child: const CaptainShareScreen());
+                  ], child: const TripJoinView(initialIndex: 0,));
                 },
               ),
               GoRoute(
