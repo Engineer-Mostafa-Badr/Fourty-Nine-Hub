@@ -161,7 +161,6 @@ class _CreateRestaurantFormState extends State<CreateRestaurantForm> {
                     Sizer(height: 20.h),
                     const CreateRestaurantCitiesDropdowns(),
                     Sizer(height: 20.h),
-
                     /// mneu
                     if (widget.from != 'update')
                       BlocProvider(
