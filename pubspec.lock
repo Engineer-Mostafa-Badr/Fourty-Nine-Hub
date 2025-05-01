@@ -478,6 +478,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.7.11"
+  deepar_flutter:
+    dependency: "direct main"
+    description:
+      name: deepar_flutter
+      sha256: "4d136ba26f6a09c56fc6a2a18ce53a883f4f912cf43de34326c822f7f6692b33"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.5"
   device_frame:
     dependency: transitive
     description:

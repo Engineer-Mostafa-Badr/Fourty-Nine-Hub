@@ -89,12 +89,12 @@ class _ReplyWidgetState extends State<ReplyWidget> {
                 Expanded(
                   child: FormTextField(
                     controller: _controller,
-                    focusNode: _focusNode,
-                    hintStyle: TextStyle(
-                      color: context.isDarkMode
-                          ? Colors.white
-                          : Colors.grey.shade600,
-                    ),
+                    // focusNode: _focusNode,
+                    // // hintStyle: TextStyle(
+                    // //   color: context.isDarkMode
+                    // //       ? Colors.white
+                    // //       : Colors.grey.shade600,
+                    // // ),
                     hint: context.isArabic
                         ? "الرد على أحمد محم"
                         : "replying to ahmed mohamed",
