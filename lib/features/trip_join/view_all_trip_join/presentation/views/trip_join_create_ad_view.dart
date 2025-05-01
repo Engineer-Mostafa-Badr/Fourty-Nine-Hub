@@ -30,7 +30,6 @@ class TripJoinCreateAdView extends StatefulWidget {
 }
 
 class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String? selectedBrand;
   String? selectedModel;
   int? selectedSeatNum;
@@ -84,14 +83,16 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                   padding: const EdgeInsets.all(8.0),
                   child: WelcomeTextWidget(
                     title: LocaleKeys.welcomeToTripjoin.localize,
-                    infoMessage:
-                        context.isArabic?" انشئ إعلان لرحلة بسيارتك ، انتظر المستخدمين للاتصال بك. شارك الرحلة واكسب المال!":"Create Ad for a trip with your car, wait users to contact you. Share trip & gain money!",
+                    infoMessage: context.isArabic
+                        ? " انشئ إعلان لرحلة بسيارتك ، انتظر المستخدمين للاتصال بك. شارك الرحلة واكسب المال!"
+                        : "Create Ad for a trip with your car, wait users to contact you. Share trip & gain money!",
                   ),
                 ),
                 _buildTopImage(),
                 const Sizer(),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.h, vertical: 8.h),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 16.h, vertical: 8.h),
                   child: _customLocationField(
                     isTo: false,
                     context: context,
@@ -103,11 +104,12 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                         extra: RideOpenStreetMapSearchAndPickParams(
                           onPicked: (pickedData) async {
                             currentAddress = pickedData.addressName;
-                            currentLocation = [pickedData.latLong.latitude, pickedData.latLong.longitude];
+                            currentLocation = [
+                              pickedData.latLong.latitude,
+                              pickedData.latLong.longitude
+                            ];
                             context.pop();
-                            setState(() {
-
-                            });
+                            setState(() {});
                           },
                         ),
                       );
@@ -116,22 +118,26 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                 ),
                 const Sizer(),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.h,vertical: 8.h),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 16.h, vertical: 8.h),
                   child: _customLocationField(
                     isTo: true,
                     context: context,
                     color: Colors.blue,
-                    text:toAddress,
+                    text: toAddress,
                     onPressed: () async {
                       context.push(Routes.RIDEOPENSTREETMAPSEARCHANDPICK,
                           extra: RideOpenStreetMapSearchAndPickParams(
-                            onPicked: (pickedData) async {
-                              toAddress = pickedData.addressName;
-                              toLocation = [pickedData.latLong.latitude, pickedData.latLong.longitude];
-                              context.pop();
-                              setState(() {});
-                            },
-                          ));
+                        onPicked: (pickedData) async {
+                          toAddress = pickedData.addressName;
+                          toLocation = [
+                            pickedData.latLong.latitude,
+                            pickedData.latLong.longitude
+                          ];
+                          context.pop();
+                          setState(() {});
+                        },
+                      ));
                     },
                   ),
                 ),
@@ -139,9 +145,10 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.h),
                   child: FormTextField(
+                      textStyle: Styles.mediumText(color: Colors.black),
                       type: TextInputType.phone,
                       height: 76.h,
-                      style: Styles.mediumText(),
+                      style: Styles.mediumText(color: Colors.black),
                       constraints:
                           const BoxConstraints(maxHeight: 52, minHeight: 52),
                       fillColor: AppColors.colorGreyLight,
@@ -150,36 +157,50 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                       hint: LocaleKeys.phoneNumber.localize,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return LocaleKeys
-                              .please_enter_phone_number.localize;
+                          return LocaleKeys.please_enter_phone_number.localize;
                         }
                         return null;
                       }),
                 ),
                 const Sizer(),
                 Padding(
-                  padding:  EdgeInsets.symmetric(horizontal: 16.h),
+                  padding: EdgeInsets.symmetric(horizontal: 16.h),
                   child: Row(
                     children: [
                       _buildMenuButton(
                           title: LocaleKeys.vehicleBrand.localize,
                           items: carBrands,
-                          selectedItem: selectedBrand),
+                          selectedItem: selectedBrand,
+                        onSelected: (value){
+                            setState(() {
+                              selectedBrand=value;
+                            });
+                        }
+                      ),
                       const Sizer(),
                       _buildMenuButton(
                           title: LocaleKeys.vehicleModel.localize,
                           items: carModels,
-                          selectedItem: selectedModel),
+                          selectedItem: selectedModel,
+                          onSelected: (value){
+                           setState(() {
+                             selectedModel=value;
+                           });
+                          }
+                      ),
                     ],
                   ),
                 ),
                 const Sizer(),
-                 Padding(
+                Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16.h),
-                  child:const TripJoinBottomSection(),
+                  child: const TripJoinBottomSection(),
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 18.0.h, vertical: 8.h,),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 18.0.h,
+                    vertical: 8.h,
+                  ),
                   child: const PremiumAndRequestWidget(),
                 ),
               ],
@@ -192,6 +213,7 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
     required BuildContext context,
     required Offset position,
     required List items,
+    required void Function(String) onSelected,
   }) async {
     final RenderBox overlay =
         Overlay.of(context).context.findRenderObject() as RenderBox;
@@ -208,16 +230,25 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
       items: items
           .map((brand) => PopupMenuItem<String>(
                 value: brand,
-                child: Text(brand,style: Styles.mediumText(color: Colors.black),),
+                child: Text(
+                  brand,
+                  style: Styles.mediumText(color: Colors.black),
+                ),
               ))
           .toList(),
     );
 
-    if (selected != null) {}
+    if (selected != null) {
+      onSelected(selected);
+    }
   }
 
-  _buildMenuButton(
-      {required String title, required List items, required var selectedItem}) {
+  _buildMenuButton({
+    required String title,
+    required List items,
+    required String? selectedItem,
+    required void Function(String) onSelected,
+  }) {
     return Expanded(
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 32.h, vertical: 16.h),
@@ -233,8 +264,12 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
               style: Styles.mediumText(color: Colors.black),
             ),
             GestureDetector(
-              child: const Icon(Icons.keyboard_arrow_down,color: Colors.black,),
+              child: const Icon(
+                Icons.keyboard_arrow_down,
+                color: Colors.black,
+              ),
               onTapDown: (details) => _showDropdownMenu(
+                onSelected: onSelected,
                 context: context,
                 position: details.globalPosition,
                 items: items,
@@ -282,19 +317,18 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
             ),
             Expanded(
               child: Text(
-                text == 'From'
-                    ? context.isArabic
-                    ? "من"
-                    : "From"
-                    : text == 'To'
-                    ? context.isArabic
-                    ? "إلى"
-                    : "To"
-                    : text!,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: Styles.mediumText(color: Colors.black)
-              ),
+                  text == 'From'
+                      ? context.isArabic
+                          ? "من"
+                          : "From"
+                      : text == 'To'
+                          ? context.isArabic
+                              ? "إلى"
+                              : "To"
+                          : text!,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Styles.mediumText(color: Colors.black)),
             ),
           ],
         ),
@@ -315,7 +349,6 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
   }
 
   Widget _buildTopMap(BuildContext context) {
-
     if (currentLocation != null && currentLocation!.isNotEmpty) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _mapController.move(
@@ -327,12 +360,12 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
 
     return SizedBox(
       width: double.infinity,
-      height:MediaQuery.of(context).size.height * 0.5,
+      height: MediaQuery.of(context).size.height * 0.5,
       child: FlutterMap(
         mapController: _mapController,
         options: MapOptions(
           initialCenter: LatLng(
-            currentLocation?[0]?? 30.0596113,
+            currentLocation?[0] ?? 30.0596113,
             currentLocation?[1] ?? 31.1760625,
           ),
           initialZoom: 12.0,
@@ -346,8 +379,9 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
               if (currentLocation != null && currentLocation!.isNotEmpty)
                 Marker(
                   point: LatLng(
-                    currentLocation?[0]?? 0.0,
-                    currentLocation?[1] ?? 0.0,),
+                    currentLocation?[0] ?? 0.0,
+                    currentLocation?[1] ?? 0.0,
+                  ),
                   width: 40,
                   height: 40,
                   child: const Icon(Icons.location_pin,
@@ -361,7 +395,6 @@ class _TripJoinCreateAdViewState extends State<TripJoinCreateAdView> {
                   child: const Icon(Icons.location_pin,
                       color: Colors.red, size: 40),
                 ),
-
             ],
           ),
           // if (routePoints.isNotEmpty)

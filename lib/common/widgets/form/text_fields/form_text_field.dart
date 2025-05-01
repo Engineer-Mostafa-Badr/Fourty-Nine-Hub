@@ -82,8 +82,8 @@ class FormTextField extends StatelessWidget {
         height: height ?? 40,
         child: TextFormField(
           readOnly: readOnly ?? false,
-          // style:
-          //     textStyle ?? Styles.mediumText(color: AppColors.QUANTITY_COLOR),
+          style:
+              textStyle ?? Styles.mediumText(color: AppColors.QUANTITY_COLOR),
           textAlignVertical: textAlignVertical,
           maxLines: maxLines ?? 1,
           maxLength: maxLength,
@@ -168,6 +168,7 @@ class FormTextField extends StatelessWidget {
               borderRadius: borderRadius ?? BorderRadius.circular(5),
             ),
           ),
+          cursorColor: Colors.grey,
         ),
       ),
       if (info != null)

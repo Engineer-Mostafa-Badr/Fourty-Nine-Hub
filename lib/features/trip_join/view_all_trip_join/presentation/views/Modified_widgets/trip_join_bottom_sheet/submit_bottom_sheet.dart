@@ -84,6 +84,7 @@ Future<dynamic> SubmitBottomSheet(context,
                           fillColor:AppColors.BG_GRAY_COLOR ,
                           hint: LocaleKeys.phoneNumber.localize,
                           borderRadius: BorderRadius.circular(10),
+                          type: TextInputType.phone,
                         ),
                         const Sizer(),
                         ElevatedButton(
