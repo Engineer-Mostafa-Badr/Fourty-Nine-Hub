@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fourtyninehub/common/functions/helper/lang_helper.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
@@ -234,6 +235,7 @@ class _AdDynamicInputWidgetState extends State<AdDynamicInputWidget> {
               ? widget.property.nameAr
               : widget.property.nameEn,
           keyboardType: TextInputType.number,
+          inputFormatters:[FilteringTextInputFormatter.digitsOnly],
           validator: (value) {
             if ((value == null || value.isEmpty)) {
               return LocaleKeys.required.localize;

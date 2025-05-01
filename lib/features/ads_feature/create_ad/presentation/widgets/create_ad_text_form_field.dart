@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/styles.dart';
@@ -10,12 +11,14 @@ class CreateAdTextFormField extends StatelessWidget {
     required this.hintText,
     required this.keyboardType,
     this.validator,
+    this.inputFormatters,
   });
 
   final Function(String)? onChanged;
   final String hintText;
   final TextInputType? keyboardType;
   final String? Function(String?)? validator;
+  final List<TextInputFormatter>? inputFormatters;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +31,7 @@ class CreateAdTextFormField extends StatelessWidget {
         maxLines: 1,
         keyboardType: keyboardType,
         onChanged: onChanged,
+        inputFormatters: inputFormatters,
         style: Styles.mediumText(fontSize: 32, color: context.isDarkMode?AppColors.whiteColor:Colors.black),
         decoration: InputDecoration(
           fillColor: context.isDarkMode?AppColors.GREY_DARK_COLOR:const Color(0xffF5F5F5),

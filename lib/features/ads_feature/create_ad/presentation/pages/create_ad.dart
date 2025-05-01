@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -52,6 +53,14 @@ class _CreateAdViewState extends State<CreateAdView> {
         fromMarriage: widget.categorization.fromMarriage ?? false);
     super.initState();
   }
+
+  final RegExp _phonePattern = RegExp(
+      r'(\+\d{1,3}[\s-]?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}|'  // Common formats: +1 (123) 456-7890, 123-456-7890
+      r'\d{10}|'                                                  // 10 consecutive digits
+      r'\d{3}[\s.-]\d{3}[\s.-]\d{4}|'                            // 123 456 7890, 123.456.7890
+      r'\+\d{10,}'                                               // International format: +1234567890
+  );
+
 
   @override
   Widget build(BuildContext context) {
@@ -228,9 +237,13 @@ class _CreateAdViewState extends State<CreateAdView> {
                         validator: (value) {
                           if ((value == null || value.isEmpty)) {
                             return LocaleKeys.required.localize;
-                          } else {
-                            return null;
                           }
+                          if (_phonePattern.hasMatch(value)) {
+                            return 'Phone numbers are not allowed. Please remove any phone number pattern.';
+                          }
+
+                          return null;
+
                         },
                       ),
                       // TextFormField(
@@ -282,9 +295,13 @@ class _CreateAdViewState extends State<CreateAdView> {
                         validator: (value) {
                           if ((value == null || value.isEmpty)) {
                             return LocaleKeys.required.localize;
-                          } else {
-                            return null;
                           }
+                          if (_phonePattern.hasMatch(value)) {
+                            return 'Phone numbers are not allowed. Please remove any phone number pattern.';
+                          }
+
+                            return null;
+
                         },
                       ),
                       const Sizer(
@@ -301,6 +318,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                         hintText: LocaleKeys.phone.localize,
                         onChanged: (v) => controller.phone = v,
                         keyboardType: TextInputType.phone,
+                        inputFormatters:[FilteringTextInputFormatter.digitsOnly],
                         validator: (value) {
                           if ((value == null || value.isEmpty)) {
                             return LocaleKeys.required.localize;
@@ -530,6 +548,7 @@ class _CreateAdViewState extends State<CreateAdView> {
                               ? LocaleKeys.price.localize
                               : LocaleKeys.salary.localize,
                           keyboardType: TextInputType.number,
+            inputFormatters:[FilteringTextInputFormatter.digitsOnly],
                           validator: (value) {
                             if ((value == null || value.isEmpty)) {
                               return LocaleKeys.required.localize;
