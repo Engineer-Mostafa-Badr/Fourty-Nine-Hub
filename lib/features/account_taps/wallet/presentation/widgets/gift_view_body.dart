@@ -35,6 +35,9 @@ class GiftViewBody extends StatelessWidget {
             return SingleChildScrollView(
               child: Column(
                 children: [
+                  const SizedBox(
+                    height: 16,
+                  ),
                   HeaderTotalAccountWidget(
                     balance: gift.giftWallet.amount
                         .toString(), //wheelWalletEntity.amount.toString(),

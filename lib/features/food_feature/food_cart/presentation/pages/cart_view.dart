@@ -146,7 +146,7 @@ class _FoodCartViewState extends State<FoodCartView> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      backgroundColor: scaffoldDarkColor(context),
+      // backgroundColor: scaffoldDarkColor(context),
       appBar: _buildAppBar(),
       body: BlocBuilder<RestaurantDetailsCubit, RestaurantDetailsState>(
         builder: (context, state) {

@@ -37,46 +37,46 @@ class _PercentageCompetitionWidgetState
     return Stack(
       children: [
         // Positioned(
-          // top: 50-24,
-          // left: 70,
-          // right: 70,
-          // child:
-          SizedBox(
-            height: 180.w,
-            child: Align(
-              alignment: Alignment.center,
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 300),
-                width: 298.w,
-                height: 32,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: const Alignment(1.00, 0.00),
-                    end: const Alignment(-1, 0),
-                    stops: widget.percentage > 100 ? [1] : null,
-                    colors: widget.percentage > 100
-                        ? [const Color(0xFFF33D49)]
-                        : [
-                            AppColors.PRIMARY_COLOR,
-                            const Color(0xFF151F68),
-                            const Color(0xFF202E9B),
-                            AppColors.PRIMARY_COLOR
-                          ],
-                  ),
+        // top: 50-24,
+        // left: 70,
+        // right: 70,
+        // child:
+        SizedBox(
+          height: 180.w,
+          child: Align(
+            alignment: Alignment.center,
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              width: 350.w,
+              height: 32,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: const Alignment(1.00, 0.00),
+                  end: const Alignment(-1, 0),
+                  stops: widget.percentage > 100 ? [1] : null,
+                  colors: widget.percentage > 100
+                      ? [const Color(0xFFF33D49)]
+                      : [
+                          AppColors.PRIMARY_COLOR,
+                          const Color(0xFF151F68),
+                          const Color(0xFF202E9B),
+                          AppColors.PRIMARY_COLOR
+                        ],
                 ),
-                child: Center(
-                  child: Label(
-                    text:
-                        '${FormatNumbers().formatNumber(widget.currentPoints)} / ${FormatNumbers().formatNumber(widget.totalPoints)}',
-                    style: Styles.headerText(
-                      color: Colors.white,
-                      fontSize: 32,
-                    ),
+              ),
+              child: Center(
+                child: Label(
+                  text:
+                      '${FormatNumbers().formatNumber(widget.currentPoints, useArabicNumerals: true)} / ${FormatNumbers().formatNumber(widget.totalPoints, useArabicNumerals: true)}',
+                  style: Styles.headerText(
+                    color: Colors.white,
+                    fontSize: 32,
                   ),
                 ),
               ),
             ),
           ),
+        ),
         // ),
         Align(
           alignment: AlignmentDirectional.centerStart,
@@ -104,7 +104,7 @@ class _PercentageCompetitionWidgetState
                 child: Center(
                   child: Label(
                     text:
-                        '${FormatNumbers().formatNumber(widget.price)} ${widget.currency}',
+                        '${FormatNumbers().formatNumber(widget.price, useArabicNumerals: true)} ${widget.currency}',
                     style: Styles.headerText(
                       color: Colors.white,
                       fontSize: 32,

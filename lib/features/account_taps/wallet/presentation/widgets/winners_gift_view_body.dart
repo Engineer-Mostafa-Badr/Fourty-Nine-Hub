@@ -30,6 +30,9 @@ class WinnersGiftViewBody extends StatelessWidget {
                         : w.competitionNameEn,
                     date: w.winAt,
                     price: w.profitAmount.toString(),
+                    // TODO: add currency
+                    currencyAr: '****',
+                    currencyEn: '****',
                   ),
                 )
                 .toList(),

@@ -1541,7 +1541,6 @@ abstract class  LocaleKeys {
   static const newReel = 'newReel';
   static const newStory = 'newStory';
   static const youHaveNoVideosToDisplay = 'youHaveNoVideosToDisplay';
-  static const youHaveNoImagesToDisplay = 'youHaveNoImagesToDisplay';
   static const emailRequired = 'emailRequired';
   static const passwordRequired = 'passwordRequired';
   static const userNameRequired = 'userNameRequired';
@@ -1555,5 +1554,6 @@ abstract class  LocaleKeys {
   static const modifyLocation = 'modifyLocation';
   static const availableRequest = 'availableRequest';
   static const pastRequests = 'pastRequests';
+  static const create = 'create';
 
 }

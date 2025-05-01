@@ -55,8 +55,11 @@ class CompetitionsSection extends StatelessWidget {
             Expanded(
               child: CompetitionHeaderItem(
                 title: LocaleKeys.luckyWheel.localize,
-                value: FormatNumbers().formatNumber(luckyWheel.amount),
-                svgPath: Assets.luckyWheelIcon,
+                value: FormatNumbers().formatNumber(luckyWheel.amount,
+                    useArabicNumerals: context.isArabic),
+                svgPath: context.isDarkMode
+                    ? Assets.luckyWheelIconDark
+                    : Assets.luckyWheelIcon,
               ),
             ),
             ...firstThreeCompetitions.map(
@@ -64,8 +67,11 @@ class CompetitionsSection extends StatelessWidget {
                 return Expanded(
                   child: CompetitionHeaderItem(
                     title: context.isArabic ? c.nameAr! : c.nameEn!,
-                    value: FormatNumbers().formatNumber(c.amount ?? 0),
-                    svgPath: competitionIcons[c.id] ?? '',
+                    value: FormatNumbers().formatNumber(c.amount ?? 0,
+                        useArabicNumerals: context.isArabic),
+                    svgPath: context.isDarkMode
+                        ? competitionIconsDark[c.id] ?? ''
+                        : competitionIcons[c.id] ?? '',
                   ),
                 );
               },
@@ -83,14 +89,18 @@ class CompetitionsSection extends StatelessWidget {
                 },
                 child: CompetitionHeaderItem(
                   title: LocaleKeys.more.localize,
-                  value: FormatNumbers().formatNumber(competitions
-                          .map((c) {
-                            return c.amount ?? 0;
-                          })
-                          .toList()
-                          .reduce((value, element) => value + element) +
-                      luckyWheel.amount),
-                  svgPath: Assets.moreIcon,
+                  value: FormatNumbers().formatNumber(
+                      competitions
+                              .map((c) {
+                                return c.amount ?? 0;
+                              })
+                              .toList()
+                              .reduce((value, element) => value + element) +
+                          luckyWheel.amount,
+                      useArabicNumerals: context.isArabic),
+                  svgPath: context.isDarkMode
+                      ? Assets.moreIconDark
+                      : Assets.moreIcon,
                 ),
               ),
             ),
@@ -127,7 +137,7 @@ class CompetitionsSection extends StatelessWidget {
                 showLoadingDialog(context);
                 await context.read<GiftTwoCubit>().requestTransferCompetition(
                       context,
-                      competitionId: competitions[competitionIndex].id??'',
+                      competitionId: competitions[competitionIndex].id ?? '',
                     );
                 Navigator.pop(context);
               },
@@ -173,4 +183,40 @@ final Map<String, String> competitionIcons = {
       Assets.doctorBookingsIcon, // 'حجوزات دكتور - Doctor Bookings',
   '67ac3a3b1b196340209a8918':
       Assets.clicksOnLiveIcon, // 'النقرات البث المباشرة - Clicks on live',
+};
+
+final Map<String, String> competitionIconsDark = {
+  '66bca1717a9c14dbbb053cea': Assets.rideUsageIconDark,
+  '663e265a9c4c5ed6b7621bc8': Assets.userShippingTripsIconDark,
+  '66bc9d237a9c14dbbb053cdd': Assets.foodRequestIconDark,
+  '66bca0847a9c14dbbb053ce1': Assets.patientAppointmentIconDark,
+  '66bca1cf7a9c14dbbb053cec': Assets.premiumAdvertiseIconDark,
+  '663e260c9c4c5ed6b7621bc4': Assets.friendsIconDark,
+  '677d5ff2404736470bb04b46':
+      Assets.followRequestIconDark, // 'طلب متابعه - Follow Request',
+  '677d634a404736470bb04e67': Assets.viewCountIconDark,
+  '677d566ce7cb468172395aac': Assets.likeClickedIconDark,
+  '663e25de9c4c5ed6b7621bc0':
+      Assets.friendRequestsIconDark, //'طلبات صداقه - Friend Requests',
+  '677d5efc60a4075f2f61de1e': Assets.followersIconDark,
+  '677d5c1d60a4075f2f61db00': Assets.profileViewIconDark,
+  '67a88f44f77f8cccf2fa609b':
+      Assets.storyViewsIconDark, // 'مشاهدات قصة - Story Views',
+  '677d5979a500582a081522b8': Assets.reel_view_icon_dark,
+  '677d3ecd12853350f9a1acaf': Assets.postLikesIconDark,
+  '67aacf8df8842fddb6516ea4':
+      Assets.storyLikesIconDark, // 'اعجابات القصة - Story Likes',
+  '677d1f23f1066ffc57bab771': Assets.reelLikesIconDark,
+  '66bcaabf7a9c14dbbb053cf7':
+      Assets.liveLickesIconDark, // 'اعجابات بث مباشر - Live Lickes',
+  '66bca14c7a9c14dbbb053ce8':
+      Assets.captainTripsIcon, // 'رحلات كابتن - Captain Trips',
+  '663e26789c4c5ed6b7621bcc': Assets
+      .shippingDriverTripsIconDark, // 'رحلات سائق شحن - Shipping Driver Trips',
+  '66bca0f87a9c14dbbb053ce6':
+      Assets.restauranOrdersIconDark, // 'طلبات مطعم - Restaurant Orders',
+  '66bca05d7a9c14dbbb053cdf':
+      Assets.doctorBookingsIconDark, // 'حجوزات دكتور - Doctor Bookings',
+  '67ac3a3b1b196340209a8918':
+      Assets.clicksOnLiveIconDark, // 'النقرات البث المباشرة - Clicks on live',
 };

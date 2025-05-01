@@ -51,16 +51,33 @@ abstract class Assets {
   static String refreshIcon = 'assets/icons/refresh_icon.svg';
   static String searchIcon = 'assets/icons/search_icon.svg';
   static String captainTripsIcon = 'assets/icons/captain_trips_icon.svg';
+  static String captainTripsIconDark =
+      'assets/icons/captain_trips_icon_dark.svg';
   static String doctorBookingsIcon = 'assets/icons/doctor_bookings_icon.svg';
+  static String doctorBookingsIconDark =
+      'assets/icons/doctor_bookings_icon_dark.svg';
   static String followRequestIcon = 'assets/icons/follow_request_icon.svg';
+  static String followRequestIconDark =
+      'assets/icons/follow_request_icon_dark.svg';
   static String clicksOnLiveIcon = 'assets/icons/clicks_on_live_icon.svg';
+  static String clicksOnLiveIconDark =
+      'assets/icons/clicks_on_live_icon_dark.svg';
   static String friendRequestsIcon = 'assets/icons/friend_requests_icon.svg';
+  static String friendRequestsIconDark =
+      'assets/icons/friend_requests_icon_dark.svg';
   static String liveLickesIcon = 'assets/icons/live_lickes_icon.svg';
+  static String liveLickesIconDark = 'assets/icons/live_lickes_icon_dark.svg';
   static String restauranOrdersIcon = 'assets/icons/restauran_orders_icon.svg';
+  static String restauranOrdersIconDark =
+      'assets/icons/restauran_orders_icon_dark.svg';
   static String shippingDriverTripsIcon =
       'assets/icons/shipping_driver_trips_icon.svg';
+  static String shippingDriverTripsIconDark =
+      'assets/icons/shipping_driver_trips_icon_dark.svg';
   static String storyLikesIcon = 'assets/icons/story_likes_icon.svg';
+  static String storyLikesIconDark = 'assets/icons/story_likes_icon_dark.svg';
   static String storyViewsIcon = 'assets/icons/story_views_icon.svg';
+  static String storyViewsIconDark = 'assets/icons/story_views_icon_dark.svg';
   static String image2Icon = 'assets/icons/image_2_icon.svg';
   static String calendarIcon = 'assets/icons/calendar_icon.svg';
   static String facebookIcon = 'assets/icons/facebook_icon.svg';
@@ -157,6 +174,7 @@ abstract class Assets {
       'assets/icons/profile_social_app_bar_icon.svg';
   static String cupIcon = 'assets/icons/cup_icon.svg';
   static String crownIcon = 'assets/icons/crown_icon.svg';
+  static String crownIconDark = 'assets/icons/crown_icon_dark.svg';
 
   static String cupImage = 'assets/icons/cup_image.png';
   static String twitterLogo = 'assets/icons/twitterLogo.png';
@@ -301,18 +319,28 @@ abstract class Assets {
 
   static String transferMoneyByMobileIcon =
       'assets/icons/transfer_money_by_mobile_icon.svg';
+  static String transferMoneyByMobileIconDark =
+      'assets/icons/transfer_money_by_mobile_icon_dark.svg';
   // static String uploadIcon = 'assets/icons/upload_icon.svg';
   static String historyClockGreen = 'assets/icons/history_clock_green.svg';
+  static String historyClockGreenDarkMode =
+      'assets/icons/history_clock_green_dark_mode.svg';
   static String historyClockRed = 'assets/icons/history_clock_red.svg';
+  static String historyClockRedDarkMode =
+      'assets/icons/history_clock_red_dark_mode.svg';
   static String historyGraphGreen = 'assets/icons/history_graph_green.svg';
   static String historyGraphRed = 'assets/icons/history_graph_red.svg';
   static String alertIcon = 'assets/icons/alert_icon.svg';
   static String ideaIcon = 'assets/icons/idea_icon.svg';
   static String luckyWheelIcon = 'assets/icons/lucky_wheel_icon.svg';
+  static String luckyWheelIconDark = 'assets/icons/lucky_wheel_icon_dark.svg';
   static String spcialAdsIcon = 'assets/icons/spcia_ads_icon.svg';
+  static String viewsIcon = 'assets/icons/views_icon.svg';
   static String friendsIcon = 'assets/icons/friends_icon.svg';
+  static String friendsIconDark = 'assets/icons/friends_icon_dark.svg';
   static String ride2Icon = 'assets/icons/ride_icon.svg';
   static String moreIcon = 'assets/icons/more_icon.svg';
+  static String moreIconDark = 'assets/icons/more_icon_dark.svg';
 
   // static String notification = 'assets/49-New-icons/Group 1.png';
   static String bell = 'assets/49-New-icons/bell.png';
@@ -377,22 +405,37 @@ abstract class Assets {
   static String driverTripsInRideIcon =
       'assets/icons/driver_trips_in_ride_icon.svg';
   static String followersIcon = 'assets/icons/followers_icon.svg';
+  static String followersIconDark = 'assets/icons/followers_icon_dark.svg';
   static String foodRequestIcon = 'assets/icons/food_request_icon.svg';
+  static String foodRequestIconDark = 'assets/icons/food_request_icon_dark.svg';
   static String likeClickedIcon = 'assets/icons/like_clicked_icon.svg';
+  static String likeClickedIconDark = 'assets/icons/like_clicked_icon_dark.svg';
   static String liveHostIcon = 'assets/icons/live_host_icon.svg';
   static String patientAppointmentIcon =
       'assets/icons/patient_appointment_icon.svg';
+  static String patientAppointmentIconDark =
+      'assets/icons/patient_appointment_icon_dark.svg';
   static String postLikesIcon = 'assets/icons/post_likes_icon.svg';
+  static String postLikesIconDark = 'assets/icons/post_likes_icon_dark.svg';
   static String premiumAdvertiseIcon =
       'assets/icons/premium_advertise_icon.svg';
+  static String premiumAdvertiseIconDark =
+      'assets/icons/premium_advertise_icon_dark.svg';
   static String profileViewIcon = 'assets/icons/profile_view_icon.svg';
+  static String profileViewIconDark = 'assets/icons/profile_view_icon_dark.svg';
   static String reel_view_icon = 'assets/icons/real_view_icon.svg';
+  static String reel_view_icon_dark = 'assets/icons/real_view_icon_dark.svg';
   static String reelLikesIcon = 'assets/icons/reel_likes_icon.svg';
+  static String reelLikesIconDark = 'assets/icons/reel_likes_icon_dark.svg';
   static String reelViewIcon = 'assets/icons/reel_view_icon.svg';
   static String rideUsageIcon = 'assets/icons/ride_usage_icon.svg';
+  static String rideUsageIconDark = 'assets/icons/ride_usage_icon_dark.svg';
   static String userShippingTripsIcon = 'assets/icons/user_shipping_trips.svg';
+  static String userShippingTripsIconDark =
+      'assets/icons/user_shipping_trips_dark.svg';
   static String viewCountIcon = 'assets/icons/view_count_icon.svg';
   static String eyeIcon = 'assets/icons/eye.svg';
+  static String viewCountIconDark = 'assets/icons/view_count_icon_dark.svg';
 
   static String phoneRed = 'assets/icons/phone_red.svg';
   static String mailRed = 'assets/icons/mail_red.svg';

@@ -46,7 +46,8 @@ class TransferMoneyRemoteDataSourceImpl extends TransferMoneyRemoteDataSource {
   @override
   Future<Either<Failure, List<UserTransferMoneyEntity>>> fetchUser(
       FetchUserParams params) async {
-    var response = await _apiConsumer.get(EndPoints.fetchUsers);
+    var response = await _apiConsumer
+        .get(EndPoints.searchUsersByUsernameOrEmail(params.query));
 
     return response.fold(
       (failure) => Left(failure),

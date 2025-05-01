@@ -4,6 +4,7 @@ import 'package:fourtyninehub/features/ads_feature/ads/data/models/Ad_model.dart
 import 'package:fourtyninehub/features/ads_feature/ads/domain/entities/ad_entity.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/repositories/ads_repo.dart';
 import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_ads_usecase.dart';
+import 'package:fourtyninehub/features/ads_feature/ads/domain/usecases/get_my_ad_by_id_usecase.dart';
 import 'package:fourtyninehub/features/requests_history/domain/entities/trip_entity.dart';
 
 import '../../domain/usecases/request_come_with_me_usecase.dart';
@@ -51,8 +52,14 @@ class AdsRepoImpl implements AdsRepo {
   }
 
   @override
-  Future<Either<Failure, List<AdModel>>> getMyAdById(String params) {
+  Future<Either<Failure, List<AdModel>>> getMyAdById(GetMyAdByIdParams params) {
     return _remoteDataSource.getMyAdById(params);
+
+  }
+
+  @override
+  Future<Either<Failure, List<AdModel>>> getMyAdFavouriteAds(GetMyAdByIdParams params) {
+    return _remoteDataSource.getMyAdFavouriteAds(params);
 
   }
 }

@@ -25,7 +25,7 @@ class CodegenLoader extends AssetLoader{
   "startDateBeginValidation": "يجب أن تكون تاريخ البدء قبل تاريخ الانتهاء",
   "startDateTimeValidation": "يجب أن يكون تاريخ البدء في المستقبل",
   "pleaseFillAllFields": "اكمل البيانات من فضلك",
-  "availableTrips": "الرحلات المتاحه",
+  "availableTrips": "رحلات متاحه",
   "done": "تم",
   "date": "التاريخ",
   "selectADate": "اختر تاريخًا",
@@ -302,7 +302,7 @@ class CodegenLoader extends AssetLoader{
   "withdraw": "سحب",
   "subscriptions": "الاشتراكات",
   "showMore": "إظهار المزيد",
-  "history": "التأريخ",
+  "history": "التاريخ",
   "competitions": "المسابقات",
   "requestWithdraw": "طلب سحب",
   "requestTransaction": "طلب للمعاملات الشخصية",
@@ -1565,7 +1565,6 @@ class CodegenLoader extends AssetLoader{
   "newReel": "ريل جديد",
   "newStory": "قصة جديدة",
   "youHaveNoVideosToDisplay": "ليس لديك مقاطع فيديو لعرضها",
-  "youHaveNoImagesToDisplay": "ليس لديك صور لعرضها",
   "emailRequired": "البريد الألكتروني مطلوب",
   "passwordRequired": "كلمة المرور مطلوبة",
   "userNameRequired": "اسم المستخدم مطلوب",
@@ -1578,7 +1577,8 @@ class CodegenLoader extends AssetLoader{
   "pleaseProvideRate": "يرجى تقديم تقييم",
   "modifyLocation": "تعديل العنوان",
   "availableRequest": "الطلبات المتاحة",
-  "pastRequests": "الطلبات السابقة"
+  "pastRequests": "الطلبات السابقة",
+  "create": "نشر"
 };
 static const Map<String,dynamic> _en = {
   "nnew": "New",
@@ -3159,7 +3159,8 @@ static const Map<String,dynamic> _en = {
   "pleaseProvideRate": "Please provide a rating",
   "modifyLocation": "Modify Location",
   "availableRequest": "Available Requests",
-  "pastRequests": "Past Requests"
+  "pastRequests": "Past Requests",
+  "create": "Create"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

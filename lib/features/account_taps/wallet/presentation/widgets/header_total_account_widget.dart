@@ -71,7 +71,10 @@ class HeaderTotalAccountWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Label(
-                      text: FormatNumbers().formatNumberByComma(context, balance),
+                      text: FormatNumbers().formatNumberByComma(
+                        balance,
+                        isArabic: context.isArabic,
+                      ),
                       style: Styles.headerText(
                         color: Colors.white,
                         fontSize: 40,

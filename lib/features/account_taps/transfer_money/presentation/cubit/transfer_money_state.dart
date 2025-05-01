@@ -30,6 +30,7 @@ class TransferMoneyState {
   // final bool transferLoading;
   final Failure? failure;
   final List<UserTransferMoneyEntity>? users;
+  final UserTransferMoneyEntity? userSelected;
   final WalletEntity? wallet;
   final TransferMoneyEntity? dataTransfer;
 
@@ -41,6 +42,7 @@ class TransferMoneyState {
     this.users,
     this.wallet,
     this.dataTransfer,
+    this.userSelected,
   });
   TransferMoneyState copyWith({
     TransferMoneyStates? status,
@@ -50,6 +52,7 @@ class TransferMoneyState {
     List<UserTransferMoneyEntity>? users,
     WalletEntity? wallet,
     TransferMoneyEntity? dataTransfer,
+    UserTransferMoneyEntity? userSelected,
   }) {
     return TransferMoneyState(
       status: status ?? this.status,
@@ -59,6 +62,7 @@ class TransferMoneyState {
       users: users ?? this.users,
       wallet: wallet ?? this.wallet,
       dataTransfer: dataTransfer ?? this.dataTransfer,
+      userSelected: userSelected ?? this.userSelected,
     );
   }
 }

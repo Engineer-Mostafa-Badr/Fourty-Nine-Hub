@@ -49,6 +49,7 @@ class FormatNumbers {
       '8': '٨',
       '9': '٩',
       '.': '.',
+      ',': ',',
       'K': 'ألف ',
       'M': 'مليون ',
       'B': 'مليار ',
@@ -57,25 +58,54 @@ class FormatNumbers {
     return input.split('').map((char) => numeralsMap[char] ?? char).join('');
   }
 
-  String formatNumberByComma(BuildContext context, String? balance) {
+  String formatNumberByComma(
+    String? balance, {
+    bool isArabic = false,
+  }) {
     if (balance == null || balance.isEmpty) {
-      return "0"; // Fallback value if balance is null or empty
+      return "0";
     }
 
     try {
-      // return double.parse(balance).floor().toString();
-      final NumberFormat formatter;
-      if (context.isArabic) {
-        formatter = NumberFormat('#,###');
-      } else {
-        formatter = NumberFormat('#,###', 'en');
+      final number = num.parse(balance);
+      // final isArabic = context.isArabic; // تأكد أن هذه القيمة صحيحة
+
+      // تنسيق الرقم مع فواصل الآلاف
+      String formattedNumber = _formatWithCommas(number.floor());
+
+      // إذا كانت اللغة عربية، تحويل الأرقام إلى العربية
+      if (isArabic) {
+        formattedNumber = _convertToArabicNumerals(formattedNumber);
       }
 
-      return formatter.format(num.parse(balance));
+      return formattedNumber;
     } catch (e) {
-      // If parsing fails, return a fallback value or handle the error as needed
       return "0";
     }
+  }
+
+  /// دالة لإضافة فواصل الآلاف يدويًا (مثل 1,000,000)
+  String _formatWithCommas(num number) {
+    String numberStr = number.toString();
+    final length = numberStr.length;
+
+    if (length <= 3) {
+      return numberStr;
+    }
+
+    String result = '';
+    int count = 0;
+
+    for (int i = length - 1; i >= 0; i--) {
+      result = numberStr[i] + result;
+      count++;
+
+      if (count % 3 == 0 && i != 0) {
+        result = ',$result'; // إضافة فاصلة كل 3 أرقام
+      }
+    }
+
+    return result;
   }
 }
 

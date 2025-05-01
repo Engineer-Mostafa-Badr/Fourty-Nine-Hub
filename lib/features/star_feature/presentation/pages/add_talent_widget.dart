@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locale_keys.g.dart';
 import 'package:fourtyninehub/features/star_feature/domain/use_case/upload_my_star_use_case.dart';
@@ -87,7 +88,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
             ),
             ListTile(
               leading: const Icon(Icons.camera_alt),
-              title: Text(LocaleKeys.camera.localize),
+              title: Text(LocaleKeys.camera.localize,style: Styles.mediumText(color: context.isDarkMode?AppColors.whiteColor:AppColors.black),),
               onTap: () async {
                 Navigator.pop(context);
                 final XFile? file = isImage
@@ -151,7 +152,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
               height: 330.h,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: Colors.grey[300],
+                color: context.isDarkMode?AppColors.GREY_DARK_COLOR:Colors.grey[300],
               ),
               child: _selectedVideo != null
                   ? _videoController?.value.isInitialized ?? false
@@ -175,7 +176,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
                         )
                       : const Center(child: CircularProgressIndicator())
                   : _selectedImages == null
-                      ? Image.asset(Assets.cameraAddTalent)
+                      ? Image.asset(Assets.cameraAddTalent,color: context.isDarkMode?AppColors.whiteColor:null,)
                       : Image.file(_selectedImages!, fit: BoxFit.cover),
             ),
             const SizedBox(height: 16),
@@ -236,7 +237,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
               decoration: InputDecoration(
                 hintText: LocaleKeys.title.localize,
                 filled: true,
-                fillColor: Colors.grey[200],
+                fillColor: context.isDarkMode?AppColors.GREY_DARK_COLOR:Colors.grey[200],
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                   borderSide: BorderSide.none,
@@ -262,7 +263,7 @@ class _AddTalentWidgetState extends State<AddTalentWidget> {
               decoration: InputDecoration(
                 hintText: LocaleKeys.desc.localize,
                 filled: true,
-                fillColor: Colors.grey[200],
+                fillColor: context.isDarkMode?AppColors.GREY_DARK_COLOR:Colors.grey[200],
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                   borderSide: BorderSide.none,

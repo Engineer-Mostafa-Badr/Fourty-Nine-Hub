@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourtyninehub/core/extensions/context_extension.dart';
 
 import '../../../../res/style/app_colors.dart';
 import '../../../../res/style/styles.dart';
@@ -10,9 +11,8 @@ class ElevatedAppButton extends StatelessWidget {
   final IconData? icon;
   final double? radius;
   final Color? backColor;
-    final Color? iconColor;
+  final Color? iconColor;
   final TextStyle? textStyle;
-
 
   const ElevatedAppButton(
       {super.key,
@@ -21,7 +21,7 @@ class ElevatedAppButton extends StatelessWidget {
       required this.label,
       required this.onPressed,
       this.icon,
-      this.backColor = AppColors.PRIMARY_COLOR,
+      this.backColor, // = AppColors.PRIMARY_COLOR,
       this.textStyle});
 
   @override
@@ -29,8 +29,10 @@ class ElevatedAppButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: () => onPressed(),
       style: ElevatedButton.styleFrom(
-        
-        backgroundColor: backColor ?? Theme.of(context).primaryColor,
+        backgroundColor: backColor ??
+            (context.isDarkMode
+                ? const Color(0xffCACFF4)
+                : Theme.of(context).primaryColor),
       ),
       child: icon != null
           ? RichText(
@@ -38,7 +40,7 @@ class ElevatedAppButton extends StatelessWidget {
                 WidgetSpan(
                     child: Icon(
                   icon,
-                  color:iconColor?? Colors.white,
+                  color: iconColor ?? Colors.white,
                 )),
                 TextSpan(
                     text: label,

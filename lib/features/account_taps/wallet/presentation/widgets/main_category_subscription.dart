@@ -38,11 +38,29 @@ class _MainCategorySubscriptionState extends State<MainCategorySubscription> {
         ),
       ),
       dropdownDecoration: BoxDecoration(
-        color: Colors.white,
+        color: context.isDarkMode ? const Color(0xff0D0D0D) : Colors.white,
         borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: Colors.black, width: 2),
+        border: Border.all(
+          color: context.isDarkMode ? Colors.white : Colors.black,
+          width: 2,
+        ),
       ),
       hint: LocaleKeys.selectCategory.localize,
+      itemTextStyle: Styles.headerText(height: 1.60),
+      buttonTextStyle: Styles.headerText(
+        fontSize: 32,
+        height: 1.60,
+        color: context.isDarkMode ? const Color(0xFF0D0D0D) : Colors.black,
+      ),
+      buttonDecoration: BoxDecoration(
+        color: context.isDarkMode
+            ? const Color(0xffCACFF4)
+            : const Color(0xFF0B1035),
+        borderRadius: BorderRadius.circular(15),
+      ),
+      closedIcon: Icons.keyboard_arrow_down_outlined,
+      openedIcon: Icons.keyboard_arrow_up_outlined,
+      iconColor: context.isDarkMode ? const Color(0xff0D0D0D) : Colors.black,
     );
   }
 }
