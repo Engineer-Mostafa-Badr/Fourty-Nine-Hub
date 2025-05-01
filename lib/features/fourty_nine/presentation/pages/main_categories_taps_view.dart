@@ -72,11 +72,12 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
     });
     // controller.state.subCategories
     _fetchSubcategories(
-        stateSubCategories: context
-            .read<MainCategoriesTapsCubit>().state.subCategories,);
-            // .mainCategories
-            // .first
-            // .subcategories);
+      stateSubCategories:
+          context.read<MainCategoriesTapsCubit>().state.subCategories,
+    );
+    // .mainCategories
+    // .first
+    // .subcategories);
   }
 
   @override
@@ -144,7 +145,7 @@ class _MainCategoriesGridViewState extends State<MainCategoriesGridView>
     );
 
     final String? selected = await showMenu<String>(
-      color: Colors.white,
+      color: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
       menuPadding: EdgeInsets.zero,
       shadowColor: Colors.grey.shade300,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -584,7 +585,7 @@ class _MainCategoriesGridViewCustomPageState
     );
 
     final String? selected = await showMenu<String>(
-        color: Colors.white,
+        color: context.isDarkMode ? AppColors.QUANTITY_COLOR : Colors.white,
         menuPadding: EdgeInsets.zero,
         shadowColor: Colors.grey.shade300,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -684,7 +685,7 @@ class _MainCategoriesGridViewCustomPageState
                             isScrollable: true,
                             controller: _tabController,
                             onTap: (i) async {
-                               // controller.state.subCategories;
+                              // controller.state.subCategories;
                               await controller.selectMainCategory(i);
                               _fetchSubcategories(
                                   mainCategoryId:
@@ -849,8 +850,7 @@ class _MainCategoriesGridViewCustomPageState
                   if (!subCategoriesCubit.isMyAdsOpen &&
                       !subCategoriesCubit.isFavouriteAdsOpen &&
                       !subCategoriesCubit.isRequestLogOpen)
-                    BlocBuilder<SubcategoriesCubit,
-                        SubcategoriesState>(
+                    BlocBuilder<SubcategoriesCubit, SubcategoriesState>(
                       builder: (context, state) {
                         // final controller =
                         //     context.read<MainCategoriesTapsCubit>();
@@ -889,7 +889,7 @@ class _MainCategoriesGridViewCustomPageState
                                     print("object");
                                     return controller
                                         .toggleSubCategoryToFavorites(
-                                        subCategories[index].id);
+                                            subCategories[index].id);
                                   },
                                 );
                               },
