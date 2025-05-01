@@ -38,42 +38,45 @@ class FormTextField extends StatelessWidget {
   final TextStyle? textStyle;
   final Color? borderColor;
   final Color? borderSide;
+  final FocusNode? focusNode;
 
-  FormTextField(
-      {super.key,
-      this.initialValue,
-      this.hintStyle,
-      this.action,
-      this.maxLength,
-      this.obsecure,
-      this.borderRadius,
-      this.prefix,
-      this.noBorder = false,
-      this.readOnly = false,
-      this.constraints,
-      this.fillColor,
-      this.hint,
-      this.label,
-      this.info,
-      this.autofill,
-      this.suffix,
-      this.type,
-      this.isEmail,
-      this.enabled,
-      this.onConfirm,
-      this.textAlignVertical,
-      this.extraValidationMessage,
-      this.extraValidation,
-      this.onTap,
-      this.height,
-      this.maxLines,
-      this.style,
-      this.validator,
-      this.required,
-      this.controller,
-      this.textStyle,
-      this.borderColor,
-      this.borderSide});
+  FormTextField({
+    super.key,
+    this.initialValue,
+    this.hintStyle,
+    this.action,
+    this.maxLength,
+    this.obsecure,
+    this.borderRadius,
+    this.prefix,
+    this.noBorder = false,
+    this.readOnly = false,
+    this.constraints,
+    this.fillColor,
+    this.hint,
+    this.label,
+    this.info,
+    this.autofill,
+    this.suffix,
+    this.type,
+    this.isEmail,
+    this.enabled,
+    this.onConfirm,
+    this.textAlignVertical,
+    this.extraValidationMessage,
+    this.extraValidation,
+    this.onTap,
+    this.height,
+    this.maxLines,
+    this.style,
+    this.validator,
+    this.required,
+    this.controller,
+    this.textStyle,
+    this.borderColor,
+    this.borderSide,
+    this.focusNode,
+  });
 
   bool validate = false;
 
@@ -83,6 +86,7 @@ class FormTextField extends StatelessWidget {
       SizedBox(
         height: height ?? 40,
         child: TextFormField(
+          focusNode: focusNode,
           readOnly: readOnly ?? false,
           // style:
           //     textStyle ?? Styles.mediumText(color: AppColors.QUANTITY_COLOR),
