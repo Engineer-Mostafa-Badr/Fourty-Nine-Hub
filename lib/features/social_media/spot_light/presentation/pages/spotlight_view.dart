@@ -10,7 +10,6 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/core/localization/locales.dart';
 import 'package:fourtyninehub/features/authentication/presentation/controllers/user_cubit/user_cubit.dart';
 import 'package:fourtyninehub/features/social_media/chat/chat_view/presentation/widgets/chat_stories.dart';
-import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/components/unified_widget_view.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/pages/search_app_users.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
@@ -360,12 +359,13 @@ class _FollowingSectionState extends State<FollowingSection> {
                       // )
                     ],
                   ),
-                  body: UnifiedReelItem(
-                    reel: reel,
-                    isVisible: true,
-                    index: index,
-                    itemType: ReelItemType.spotlight,
-                  ),
+                  body: Container(),
+                  // body: UnifiedReelItem(
+                  //   reel: reel,
+                  //   isVisible: true,
+                  //   index: index,
+                  //   itemType: ReelItemType.spotlight,
+                  // ),
                   // MainReelItem(
                   //   key: ValueKey(reel.id),
                   //   reel: reel,
@@ -604,12 +604,13 @@ class DiscoverSectionState extends State<DiscoverSection> {
                     // )
                   ],
                 ),
-                body: UnifiedReelItem(
-                  reel: reel,
-                  index: index,
-                  isVisible: true,
-                  itemType: ReelItemType.spotlight,
-                ),
+                body: Container(),
+                // body: UnifiedReelItem(
+                //   reel: reel,
+                //   index: index,
+                //   isVisible: true,
+                //   itemType: ReelItemType.spotlight,
+                // ),
                 // SpotlightReelItem(
                 //   key: ValueKey(reel.id),
                 //   reel: reel,

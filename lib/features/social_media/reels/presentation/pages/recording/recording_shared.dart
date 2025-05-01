@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -192,19 +191,19 @@ class VideoPlaybackScreenState extends State<VideoPlaybackScreen> {
       ..setLooping(true);
   }
 
-  Future<String> applyFilterAndSaveVideo(
-      String originalPath, String filterCommand) async {
-    final tempDir = Directory.systemTemp;
-    final filteredVideoPath = '${tempDir.path}/filtered_video.mp4';
+  // Future<String> applyFilterAndSaveVideo(
+  //     String originalPath, String filterCommand) async {
+  //   final tempDir = Directory.systemTemp;
+  //   final filteredVideoPath = '${tempDir.path}/filtered_video.mp4';
 
-    final command = '-i $originalPath -vf "$filterCommand" $filteredVideoPath';
+  //   final command = '-i $originalPath -vf "$filterCommand" $filteredVideoPath';
 
-    await FFmpegKit.execute(command).then((session) {
-      session.getReturnCode();
-    });
+  //   await FFmpegKit.execute(command).then((session) {
+  //     session.getReturnCode();
+  //   });
 
-    return filteredVideoPath;
-  }
+  //   return filteredVideoPath;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -229,35 +228,36 @@ class VideoPlaybackScreenState extends State<VideoPlaybackScreen> {
                     child: BlocBuilder<ReelsCubit, ReelsState>(
                       builder: (context, state) {
                         return ElevatedButton(
-                            onPressed: () async {
-                              print('wwwwwwwwwwwwwwwww${widget.videoPath}');
-                              print('wwwwwwwwwwwwwwwww${widget.audioMediaId}');
-                              print('wwwwwwwwwwwwwwwww${widget.thumbPath}');
-                              final filteredPath =
-                                  await applyFilterAndSaveVideo(
-                                      widget.videoPath, 'hue=s=0');
-                              final file = File(filteredPath);
-                              final fileType = _determineFileType(file.path);
-                              final fileSize = await file.length();
+                            // onPressed: () async {
+                            //   print('wwwwwwwwwwwwwwwww${widget.videoPath}');
+                            //   print('wwwwwwwwwwwwwwwww${widget.audioMediaId}');
+                            //   print('wwwwwwwwwwwwwwwww${widget.thumbPath}');
+                            //   final filteredPath =
+                            //       await applyFilterAndSaveVideo(
+                            //           widget.videoPath, 'hue=s=0');
+                            //   final file = File(filteredPath);
+                            //   final fileType = _determineFileType(file.path);
+                            //   final fileSize = await file.length();
 
-                              await serviceLocator<StoryCubit>()
-                                  .uploadStoryVideoOrImageOrVoice(
-                                file,
-                                fileType,
-                                fileSize,
-                                description: '',
-                              )
-                                  .then((value) {
-                                showSuccessMessage(
-                                    context, LocaleKeys.storyUploaded.localize);
-                              });
-                            },
+                            //   await serviceLocator<StoryCubit>()
+                            //       .uploadStoryVideoOrImageOrVoice(
+                            //     file,
+                            //     fileType,
+                            //     fileSize,
+                            //     description: '',
+                            //   )
+                            //       .then((value) {
+                            //     showSuccessMessage(
+                            //         context, LocaleKeys.storyUploaded.localize);
+                            //   });
+                            // },
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.PRIMARY_COLOR,
                                 textStyle:
                                     Styles.mediumText(color: Colors.white),
                                 minimumSize: Size(double.infinity, 60.h),
                                 padding: EdgeInsets.symmetric(vertical: 30.h)),
+                            onPressed: () {},
                             child: Text(
                               'Share',
                               style: Styles.mediumText(color: Colors.white),

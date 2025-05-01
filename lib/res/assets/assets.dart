@@ -435,7 +435,6 @@ abstract class Assets {
   static String giftCommentIcon = 'assets/icons/giftCommentIcon.svg';
   static String emojiIcon = 'assets/icons/emojiIcon.svg';
   static String mixReelIcon = 'assets/icons/mixReelIcon.svg';
-  static String layoutIcon = 'assets/icons/layoutIcon.svg';
   static String dividerIcon = 'assets/icons/dividerIcon.svg';
   static String collabIcon = 'assets/icons/collabIcon.svg';
   static String useSoundIcon = 'assets/icons/useSoundIcon.svg';
@@ -457,6 +456,8 @@ abstract class Assets {
   static String copyComIcon = 'assets/icons/copyComIcon.svg';
   static String replyIcon = 'assets/icons/replyIcon.svg';
   static String reportComIcon = 'assets/icons/reportComIcon.svg';
+  static String inviteIcon = 'assets/images/inviteIcon.svg';
+  static String repostIcon = 'assets/images/repostIcon.svg';
   static String shareWithIcon = 'assets/icons/shareWithIcon.svg';
   static String onlineUserIcon = 'assets/icons/onlineUserIcon.svg';
   static String whatsIcon = 'assets/icons/whatsIcon.svg';
@@ -466,10 +467,22 @@ abstract class Assets {
   static String smsIcon = 'assets/icons/smsIcon.svg';
   static String telegramIcon = 'assets/icons/telegramIcon.svg';
   static String emailIcon = 'assets/icons/emailIcon.svg';
+  static String messengerIcon = 'assets/images/messengerIcon.svg';
+  static String instagram = 'assets/images/instagramIcon.svg';
+  static String castIcon = 'assets/images/castIcon.svg';
+  static String reportSheet = 'assets/images/reportSheet.svg';
+  static String photoIcon = 'assets/images/photoIcon.svg';
+  static String locationReel = 'assets/images/locationReel.svg';
+  static String fullScreenIcon = 'assets/images/fullScreenIcon.svg';
+  static String songIcon = 'assets/images/songIcon.svg';
+  static String layoutIcon = 'assets/images/layoutIcon.svg';
+  static String mix = 'assets/images/mixReel.svg';
+  static String volumeIcon = 'assets/images/voloumIcon.svg';
+  static String art = 'assets/images/art.png';
   static String facebookMessenger = 'assets/icons/facebook Messenger.png';
   static String coppyLinkIcon = 'assets/icons/coppyLinkIcon.svg';
   static String comReelIcon = 'assets/icons/comReelIcon.svg';
-  static String shareReelIcon = 'assets\icons\shareReelIcon.svg';
+  static String shareReelIcon = 'assets/icons/shareReelIcon.svg';
   static String notIcon = 'assets/icons/notIcon.svg';
   static String addStoryIcon = 'assets/icons/addStoryIcon.svg';
   static String promoteIcon = 'assets/icons/promoteIcon.svg';
@@ -481,5 +494,5 @@ abstract class Assets {
   static String reelBar = "assets/icons/reelBar.svg";
   static String grid = "assets/icons/grid.png";
   // simple loadings
-  static String circleLoader= 'assets/lottie/loader.json';
+  static String circleLoader = 'assets/lottie/loader.json';
 }

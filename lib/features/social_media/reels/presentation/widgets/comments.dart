@@ -7,6 +7,7 @@ import 'package:fourtyninehub/core/extensions/string_extension.dart';
 import 'package:fourtyninehub/features/social_media/reels/data/models/get_comments_model.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
 import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/comments/no_scale_text.dart';
+import 'package:fourtyninehub/features/social_media/reels/presentation/widgets/reply_widget.dart';
 import 'package:fourtyninehub/features/social_media/social_posts/presentation/widgets/facebook_widgets/image_from_internet.dart';
 import 'package:fourtyninehub/res/style/app_colors.dart';
 import 'package:fourtyninehub/res/style/const.dart';
@@ -14,6 +15,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/localization/locale_keys.g.dart';
 import '../../../../../res/assets/assets.dart';
 import '../../../tinder/data/shared/shared.dart';
+import 'Icon_and_text_widget.dart';
+import 'components/social_widget.dart';
 
 class CommentWidget extends StatefulWidget {
   // final CommentData commentData;
@@ -114,7 +117,20 @@ class _CommentWidgetState extends State<CommentWidget> {
               child: _isRepliesVisible
                   ? InkWell(
                       onTap: () {
-                        showTikTokStyleReplySheet(context, 'Ahmed', 50);
+                        showModalBottomSheet(
+                          context: context,
+                          backgroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.vertical(top: Radius.circular(16)),
+                            side: BorderSide(
+                              color: Colors.transparent,
+                            ), // حدود زي اللي في الصورة
+                          ),
+                          builder: (BuildContext context) {
+                            return ReplyWidget();
+                          },
+                        );
                       },
                       child: _buildRepliesList(),
                     )
@@ -680,167 +696,8 @@ class _SendBottomSheetState extends State<SendBottomSheet> {
   }
 }
 
-class SocialWidget extends StatelessWidget {
-  final String icon;
-  final int backGroundColor;
-  final Color? color;
-  final void Function()? onTap;
-  const SocialWidget({
-    super.key,
-    required this.icon,
-    required this.backGroundColor,
-    this.color,
-    this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: CircleAvatar(
-        backgroundColor: Color(backGroundColor),
-        child: SvgPicture.asset(
-          color: color,
-          icon,
-        ),
-      ),
-    );
-  }
-}
-
-class IconAndTextWidget extends StatelessWidget {
-  final String name;
-  final String icon;
-  const IconAndTextWidget({
-    super.key,
-    required this.name,
-    required this.icon,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-      child: Row(
-        children: [
-          SvgPicture.asset(icon),
-          SizedBox(width: 10.w),
-          Text(
-            name,
-            style: TextStyle(
-              fontSize: 32.sp,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 bool isKeyboardVisible(BuildContext context) {
   return MediaQuery.of(context).viewInsets.bottom != 0;
-}
-
-void showTikTokStyleReplySheet(
-    BuildContext context, String replyingToUser, int totalComments) {
-  showModalBottomSheet(
-    context: context,
-    isScrollControlled: true,
-    backgroundColor: Colors.white,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-    ),
-    builder: (context) {
-      return Padding(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-          top: 16,
-          left: 16,
-          right: 16,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Top bar (50 comments)
-
-            // Emojis Row
-            SizedBox(
-              height: 40,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: const [
-                  Text("😊", style: TextStyle(fontSize: 24)),
-                  SizedBox(width: 8),
-                  Text("🥰", style: TextStyle(fontSize: 24)),
-                  SizedBox(width: 8),
-                  Text("😂", style: TextStyle(fontSize: 24)),
-                  SizedBox(width: 8),
-                  Text("😳", style: TextStyle(fontSize: 24)),
-                  SizedBox(width: 8),
-                  Text("😊", style: TextStyle(fontSize: 24)),
-                  SizedBox(width: 8),
-                  Text("😅", style: TextStyle(fontSize: 24)),
-                  SizedBox(width: 8),
-                  Text("🥺", style: TextStyle(fontSize: 24)),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Container(
-                  padding: EdgeInsets.all(8),
-                  width: 35,
-                  height: 35,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColors.PRIMARY_COLOR_DARK,
-                  ),
-                  child: Center(
-                    child: SvgPicture.asset(Assets.addSoundIcon),
-                  ),
-                ),
-                SizedBox(width: 20.w),
-                Expanded(
-                  child: FormTextField(
-                    hintStyle: TextStyle(
-                      color: context.isDarkMode
-                          ? Colors.white
-                          : Colors.grey.shade600,
-                    ),
-                    hint: context.isArabic
-                        ? "الرد على أحمد محم"
-                        : "replying to ahmed mohamed",
-                    fillColor: context.isDarkMode
-                        ? Colors.white
-                        : const Color(0xffF5F5F5),
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                const Icon(Icons.tag_faces_outlined, color: Colors.grey),
-                const SizedBox(width: 8),
-                const Icon(Icons.emoji_emotions_outlined, color: Colors.grey),
-                const SizedBox(width: 8),
-                IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(Icons.send, color: Colors.orange),
-                )
-              ],
-            ),
-            const SizedBox(height: 12),
-          ],
-        ),
-      );
-    },
-  );
 }
 
 Widget DeleteComment(String Icon, String title) {

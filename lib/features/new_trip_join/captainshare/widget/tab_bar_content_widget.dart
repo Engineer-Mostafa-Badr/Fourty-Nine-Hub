@@ -114,11 +114,6 @@ class AvailableTripsWidget extends StatelessWidget {
                     statusDriver: LocaleKeys.expired.localize,
                   ),
                 ),
-
-                // OneWayWidget(
-                //   requestType: LocaleKeys.comfort.localize,
-                //   statusDriver: LocaleKeys.expired.localize,
-                // ),
                 SizedBox(height: 100.h),
               ],
             ),

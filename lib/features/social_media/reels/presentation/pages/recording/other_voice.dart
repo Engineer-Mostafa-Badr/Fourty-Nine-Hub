@@ -3,7 +3,6 @@ import 'dart:developer';
 
 import 'package:camera/camera.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -269,36 +268,36 @@ class OtherVoiceVideoRecordingScreenState
 
     log("Executing FFmpeg command: ${commandArgs.join(' ')}");
 
-    final session = await FFmpegKit.executeWithArguments(commandArgs);
-    var returned = await session.getReturnCode();
-    var logs = await session.getAllLogs();
-    var stats = await session.getAllStatistics();
-    log('stats length ${stats.length.toString()}');
-    log('logs ${logs.toString()}');
-    log('returned ${returned?.getValue().toString()}');
-    // final savedSuccessfully = await GallerySaver.saveVideo(mergedVideoPath!);
-    await _generateThumbnail(mergedVideoPath!);
-    // if (savedSuccessfully ?? false) {
-    //   print('saved');
-    //   setState(() {
-    //     showGalleryBtn = true; // Show the gallery button if save is successful
-    //   });
-    //   showSuccessMessage(
-    //       context, "Video saved successfully and ready to be shared");
-    //   Navigator.push(
-    //     context,
-    //     MaterialPageRoute(
-    //       builder: (context) =>
-    //           VideoPlaybackScreen(mergedVideoPath!, _thumbnailPath!, false),
-    //     ),
-    //   );
-    // }
-    // final output = await session.getOutput();
-    // log("alibaba output: $output");
-    // log('final merged file path ${mergedVideoPath.toString()}');
-    // final file = File(mergedVideoPath!);
-    // log("Merged video file size: ${file.lengthSync()} bytes");
-    return false;
+    // final session = await FFmpegKit.executeWithArguments(commandArgs);
+    // var returned = await session.getReturnCode();
+    // var logs = await session.getAllLogs();
+    // var stats = await session.getAllStatistics();
+    // log('stats length ${stats.length.toString()}');
+    // log('logs ${logs.toString()}');
+    // log('returned ${returned?.getValue().toString()}');
+    // // final savedSuccessfully = await GallerySaver.saveVideo(mergedVideoPath!);
+    // await _generateThumbnail(mergedVideoPath!);
+    // // if (savedSuccessfully ?? false) {
+    // //   print('saved');
+    // //   setState(() {
+    // //     showGalleryBtn = true; // Show the gallery button if save is successful
+    // //   });
+    // //   showSuccessMessage(
+    // //       context, "Video saved successfully and ready to be shared");
+    // //   Navigator.push(
+    // //     context,
+    // //     MaterialPageRoute(
+    // //       builder: (context) =>
+    // //           VideoPlaybackScreen(mergedVideoPath!, _thumbnailPath!, false),
+    // //     ),
+    // //   );
+    // // }
+    // // final output = await session.getOutput();
+    // // log("alibaba output: $output");
+    // // log('final merged file path ${mergedVideoPath.toString()}');
+    // // final file = File(mergedVideoPath!);
+    // // log("Merged video file size: ${file.lengthSync()} bytes");
+    // return false;
   }
 
   void _switchCamera() {
@@ -309,7 +308,9 @@ class OtherVoiceVideoRecordingScreenState
   }
 
   void _showErrorDialog(String message) {
-    showAnimatedDialog(context,AlertDialog(
+    showAnimatedDialog(
+      context,
+      AlertDialog(
         title: const Padding(
           padding: EdgeInsets.all(16.0),
           child: Text(

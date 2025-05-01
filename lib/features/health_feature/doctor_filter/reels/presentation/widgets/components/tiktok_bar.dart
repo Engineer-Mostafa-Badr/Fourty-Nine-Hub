@@ -17,8 +17,8 @@ import 'package:fourtyninehub/res/assets/assets.dart';
 import 'package:fourtyninehub/routes/routes.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../../../../common/widgets/dynamic/sizer.dart';
-import '../../pages/recording/recording_shared.dart';
+import '../../../../../../../common/widgets/dynamic/sizer.dart';
+import '../../../../../../social_media/reels/presentation/pages/recording/recording_shared.dart';
 
 class AdvancedTikTokTabBar extends StatefulWidget {
   const AdvancedTikTokTabBar({super.key});
@@ -107,8 +107,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                 if (context
                     .read<ReelsCubit>()
                     .state
-                    .controllers[
-                        context.read<ReelsCubit>().state.focusedIndex]!
+                    .controllers[context.read<ReelsCubit>().state.focusedIndex]!
                     .value
                     .isPlaying) {
                   context
@@ -147,8 +146,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                 if (context
                     .read<ReelsCubit>()
                     .state
-                    .controllers[
-                        context.read<ReelsCubit>().state.focusedIndex]!
+                    .controllers[context.read<ReelsCubit>().state.focusedIndex]!
                     .value
                     .isPlaying) {
                   context
@@ -170,8 +168,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                 if (context
                     .read<ReelsCubit>()
                     .state
-                    .controllers[
-                        context.read<ReelsCubit>().state.focusedIndex]!
+                    .controllers[context.read<ReelsCubit>().state.focusedIndex]!
                     .value
                     .isPlaying) {
                   context
@@ -234,8 +231,7 @@ class _AdvancedTikTokTabBarState extends State<AdvancedTikTokTabBar>
                 if (context
                     .read<ReelsCubit>()
                     .state
-                    .controllers[
-                        context.read<ReelsCubit>().state.focusedIndex]!
+                    .controllers[context.read<ReelsCubit>().state.focusedIndex]!
                     .value
                     .isPlaying) {
                   context

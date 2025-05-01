@@ -15,16 +15,16 @@ import 'package:fourtyninehub/service_locator/service_locator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:video_player/video_player.dart';
 
-import '../../controllers/explore_reels_cubit/reel_cubit.dart';
-import '../../pages/profile_buttom_sheet.dart';
-import '../../pages/reel_actions.dart';
+import '../../../../../../social_media/reels/presentation/controllers/explore_reels_cubit/reel_cubit.dart';
+import '../../../../../../social_media/reels/presentation/pages/reel_actions.dart';
 
 class ReelsWidget extends StatefulWidget {
   const ReelsWidget({
     super.key,
     required this.isLoading,
     required this.controller,
-    required this.index, required this.receiverId,
+    required this.index,
+    required this.receiverId,
   });
 
   final bool isLoading;
@@ -123,7 +123,7 @@ class _ReelsWidgetState extends State<ReelsWidget>
   void _handleVerticalDrag(DragEndDetails details, Reel reel) async {
     if (details.primaryVelocity != null && details.primaryVelocity! < 0) {
       _pauseVideo();
-      await ProfileBottomSheet.show(context, reel);
+      //  await ProfileBottomSheet.show(context, reel);
       _playVideo();
     }
   }
@@ -178,12 +178,12 @@ class _ReelsWidgetState extends State<ReelsWidget>
             });
           },
           child: Stack(
+            clipBehavior: Clip.none,
             children: [
-              
               VideoPlayer(widget.controller),
               buildPlayPauseIcon(),
               Positioned.fill(
-                bottom: MediaQuery.of(context).size.height*0.0,
+                bottom: MediaQuery.of(context).size.height * 0.0,
                 child: Padding(
                   padding: const EdgeInsets.only(right: 20),
                   child: Row(
@@ -192,25 +192,32 @@ class _ReelsWidgetState extends State<ReelsWidget>
                       const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.keyboard_double_arrow_left_sharp, color: Colors.white,),
+                          Icon(
+                            Icons.keyboard_double_arrow_left_sharp,
+                            color: Colors.white,
+                          ),
                         ],
                       ),
                       GestureDetector(
-                        onTap: () {
-                          if (!serviceLocator<UserCubit>().isLoggedIn) {
-              context.push(Routes.LOGIN);
-            } else {
-              _showGiftBottomSheet(context);
-            }
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(color: Colors.black.withOpacity(0.9), blurRadius: 30)
-          ]
-        ),
-                          child: Image.asset(Assets.giftBoxIcon, width: 30, height: 30, color: Colors.white,))),
-                      
+                          onTap: () {
+                            if (!serviceLocator<UserCubit>().isLoggedIn) {
+                              context.push(Routes.LOGIN);
+                            } else {
+                              _showGiftBottomSheet(context);
+                            }
+                          },
+                          child: Container(
+                              decoration: BoxDecoration(boxShadow: [
+                                BoxShadow(
+                                    color: Colors.black.withOpacity(0.9),
+                                    blurRadius: 30)
+                              ]),
+                              child: Image.asset(
+                                Assets.giftBoxIcon,
+                                width: 30,
+                                height: 30,
+                                color: Colors.white,
+                              ))),
                     ],
                   ),
                 ),
@@ -252,7 +259,8 @@ class _ReelsWidgetState extends State<ReelsWidget>
       ),
     );
   }
-   Future<void> _showGiftBottomSheet(BuildContext context) async {
+
+  Future<void> _showGiftBottomSheet(BuildContext context) async {
     await showGiftBottomSheet(context, receiverId: "widget.receiverId");
   }
 }

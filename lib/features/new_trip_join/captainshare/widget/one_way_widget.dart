@@ -9,10 +9,13 @@ import 'package:fourtyninehub/res/style/app_colors.dart';
 
 import '../../../../core/localization/locale_keys.g.dart';
 
+import 'package:expandable/expandable.dart';
+
 class OneWayWidget extends StatefulWidget {
   final String? statusDriver;
   final bool? cancelButton;
   final String? requestType;
+
   const OneWayWidget({
     super.key,
     this.statusDriver,
@@ -25,7 +28,13 @@ class OneWayWidget extends StatefulWidget {
 }
 
 class _OneWayWidgetState extends State<OneWayWidget> {
-  bool _showContainer = false; // متغير للتحكم في ظهور الـ Container
+  late ExpandableController _expandableController;
+
+  @override
+  void initState() {
+    super.initState();
+    _expandableController = ExpandableController(initialExpanded: false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +55,6 @@ class _OneWayWidgetState extends State<OneWayWidget> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // محتوى الكونتينر الأساسي
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -144,7 +152,6 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                                   : AppColors.PRIMARY_COLOR,
                             ),
                           ),
-                          // const SizedBox(height: 4),
                           Padding(
                             padding: EdgeInsets.only(top: 15.h, left: 8.h),
                             child: Text(
@@ -198,7 +205,6 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                     ],
                   ),
                 ),
-
                 const SizedBox(height: 8),
                 Row(
                   children: [
@@ -232,6 +238,30 @@ class _OneWayWidgetState extends State<OneWayWidget> {
                       ),
                     ),
                   ],
+                ),
+                Center(
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _expandableController.toggle();
+                      });
+                    },
+                    child: SvgPicture.asset(
+                      Assets.redFrame,
+                      width: 50,
+                    ),
+                  ),
+                ),
+                ExpandablePanel(
+                  controller: _expandableController,
+                  theme: const ExpandableThemeData(
+                    hasIcon: false,
+                    tapBodyToCollapse: false,
+                    tapHeaderToExpand: false,
+                  ),
+                  header: const SizedBox(),
+                  collapsed: const SizedBox(),
+                  expanded: const AddressWidget(),
                 ),
                 Row(
                   children: [
@@ -288,29 +318,6 @@ class _OneWayWidgetState extends State<OneWayWidget> {
             ),
           ),
         ),
-        Positioned(
-          bottom: 9,
-          left: 270.h,
-          child: GestureDetector(
-            onTap: () {
-              setState(() {
-                _showContainer = !_showContainer;
-              });
-            },
-            child: SvgPicture.asset(
-              Assets.frameIcon,
-              width: 50,
-            ),
-          ),
-        ),
-        if (_showContainer)
-          const Positioned(
-            top: 0,
-            bottom: 80, // تحديد المكان اللي هيظهر فيه الـ Container
-            left: 0,
-            right: 0,
-            child: AddressWidget(),
-          ),
       ],
     );
   }
@@ -325,51 +332,38 @@ class AddressWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Color(0xffE8E8E8),
+        color: context.isDarkMode ? AppColors.PRIMARY_COLOR : Color(0xffE8E8E8),
         borderRadius: BorderRadius.circular(20),
       ),
-      margin: const EdgeInsets.all(10),
+      // margin: const EdgeInsets.all(10),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 17),
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TextAddressWidget(
-                    icon: Assets.circleGreen,
-                    address: context.isArabic ? "الجيزة، مصر" : "Giza , Egypt",
-                  ),
-                  SizedBox(height: 12.h),
-                  TextAddressWidget(
-                    icon: Assets.circleBlack,
-                    address: context.isArabic ? "الجيزة، مصر" : "Giza , Egypt",
-                  ),
-                  SizedBox(height: 12.h),
-                  TextAddressWidget(
-                    icon: Assets.circleBlack,
-                    address: context.isArabic ? "الجيزة، مصر" : "Giza , Egypt",
-                  ),
-                  SizedBox(height: 12.h),
-                  TextAddressWidget(
-                    icon: Assets.circleBlue,
-                    address: context.isArabic ? "الجيزة، مصر" : "Giza , Egypt",
-                  ),
-                ],
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextAddressWidget(
+                icon: Assets.circleGreen,
+                address: context.isArabic ? "الجيزة، مصر" : "Giza , Egypt",
               ),
-            ),
-            Positioned(
-              bottom: -1,
-              right: 5,
-              left: 2,
-              child: SvgPicture.asset(
-                Assets.redFrame,
+              SizedBox(height: 12.h),
+              TextAddressWidget(
+                icon: Assets.circleBlack,
+                address: context.isArabic ? "الجيزة، مصر" : "Giza , Egypt",
               ),
-            ),
-          ],
+              SizedBox(height: 12.h),
+              TextAddressWidget(
+                icon: Assets.circleBlack,
+                address: context.isArabic ? "الجيزة، مصر" : "Giza , Egypt",
+              ),
+              SizedBox(height: 12.h),
+              TextAddressWidget(
+                icon: Assets.circleBlue,
+                address: context.isArabic ? "الجيزة، مصر" : "Giza , Egypt",
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -379,23 +373,29 @@ class AddressWidget extends StatelessWidget {
 class TextAddressWidget extends StatelessWidget {
   final String? address;
   final String? icon;
+  final Color? color;
   const TextAddressWidget({
     super.key,
     this.address,
     this.icon,
+    this.color,
   });
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        SvgPicture.asset(icon ?? ""),
+        SvgPicture.asset(
+          icon ?? "",
+          // ignore: deprecated_member_use
+          color: color,
+        ),
         SizedBox(width: 9.w),
         Text(
           context.isArabic ? address ?? "" : address ?? "",
           style: TextStyle(
             fontSize: 22.sp,
-            color: AppColors.black,
+            color: context.isDarkMode ? Colors.white : Colors.black,
             fontWeight: FontWeight.bold,
           ),
         )
