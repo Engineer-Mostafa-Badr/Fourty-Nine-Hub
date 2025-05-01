@@ -37,7 +37,9 @@ class CreateRestaurantGovernorateDropdown extends StatelessWidget {
                         Icons.keyboard_arrow_down_outlined,
                         color: context.isDarkMode ? AppColors.whiteColor :AppColors.PRIMARY_COLOR,
                       ),
-                      style: Styles.mediumText(),
+                      style: Styles.mediumText(
+                        color:context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR
+                      ),
                       dropdownColor:  context.isDarkMode ? AppColors.PRIMARY_COLOR :AppColors.BG_GRAY_COLOR,
                       decoration: InputDecoration(
                         fillColor: context.isDarkMode ? AppColors.PRIMARY_COLOR : AppColors.BG_GRAY_COLOR,

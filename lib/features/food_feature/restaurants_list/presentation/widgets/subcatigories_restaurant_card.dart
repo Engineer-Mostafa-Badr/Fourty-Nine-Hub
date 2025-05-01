@@ -118,7 +118,7 @@ class PropertyCard extends StatelessWidget {
                       ),
                     ),
                     Label(
-                      text: LocaleKeys.views.localize,
+                      text: LocaleKeys.view.localize,
                       style:  Styles.mediumText(
                         // fontSize: 12,
                         fontWeight: FontWeight.w400,
@@ -569,53 +569,123 @@ class CallMessageReportButtons extends StatelessWidget {
             color: isChatEnabled
                 ? AppColors.PRIMARY_COLOR
                 : AppColors.GREY_DARK_COLOR,
-            onPressed: isChatEnabled
+            onPressed: context.read<UserCubit>().isLoggedIn
+                ? (isChatEnabled
                 ? () {
-                    showModalBottomSheet(
-                      context: context,
-                      backgroundColor: cardDarkColor(context),
-                      shape: const RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(16)),
-                      ),
-                      builder: (_) {
-                        return Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            spacing: 16,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              AppButton(
-                                backColor: AppColors.PRIMARY_COLOR,
-                                color: AppColors.whiteColor,
-                                onPressed: () {
-                                  Navigator.pop(context); // Close first sheet
-                                  // _showFreeCallBottomSheet(context, item);
-                                },
-                                label: LocaleKeys.freeCall.localize,
-                              ),
-                              AppButton(
-                                backColor: AppColors.cD9D9D9,
-                                color: AppColors.black,
-                                onPressed: () {
-                                  Navigator.pop(context); // Close first sheet
-                                  _showRegularCallBottomSheet(
-                                      context, item); // Open second
-                                },
-                                label: LocaleKeys.regularCall.localize,
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    );
-                  }
+              showModalBottomSheet(
+                context: context,
+                backgroundColor: cardDarkColor(context),
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                ),
+                builder: (_) {
+                  return Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        AppButton(
+                          backColor: AppColors.PRIMARY_COLOR,
+                          color: AppColors.whiteColor,
+                          onPressed: () {
+                            Navigator.pop(context);
+                            // _showFreeCallBottomSheet(context, item);
+                          },
+                          label: LocaleKeys.freeCall.localize,
+                        ),
+                        AppButton(
+                          backColor: AppColors.cD9D9D9,
+                          color: AppColors.black,
+                          onPressed: () {
+                            Navigator.pop(context);
+                            _showRegularCallBottomSheet(context, item);
+                          },
+                          label: LocaleKeys.regularCall.localize,
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              );
+            }
                 : () {
-                    SubscriptionMethod().subscribe(
-                      subscribeId: item.subcategoryId?.id ?? '',
-                      title: item.name ?? '',
-                    );
-                  },
+              SubscriptionMethod().subscribe(
+                subscribeId: item.subcategoryId?.id ?? '',
+                title: item.name ?? '',
+              );
+            })
+                : () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    LocaleKeys.pleaseLoginRegisterToEnjoyTheApp.localize,
+                    style: Styles
+                        .mediumText()
+                        .copyWith(decoration: TextDecoration.none,
+                    color: AppColors.whiteColor
+                    ), // ✅ Safe
+                  ),
+                  backgroundColor: Colors.red,
+                  duration: Duration(seconds: 3),
+                  action: SnackBarAction(
+                    label: LocaleKeys.login.localize,
+                    textColor: Colors.white,
+                    onPressed: () {
+                      context.push(Routes.LOGIN);
+                    },
+                  ),
+                ),
+              );
+            },
+
+
+            // onPressed: isChatEnabled
+            //     ? () {
+            //         showModalBottomSheet(
+            //           context: context,
+            //           backgroundColor: cardDarkColor(context),
+            //           shape: const RoundedRectangleBorder(
+            //             borderRadius:
+            //                 BorderRadius.vertical(top: Radius.circular(16)),
+            //           ),
+            //           builder: (_) {
+            //             return Padding(
+            //               padding: const EdgeInsets.all(16.0),
+            //               child: Column(
+            //                 spacing: 16,
+            //                 mainAxisSize: MainAxisSize.min,
+            //                 children: [
+            //                   AppButton(
+            //                     backColor: AppColors.PRIMARY_COLOR,
+            //                     color: AppColors.whiteColor,
+            //                     onPressed: () {
+            //                       Navigator.pop(context); // Close first sheet
+            //                       // _showFreeCallBottomSheet(context, item);
+            //                     },
+            //                     label: LocaleKeys.freeCall.localize,
+            //                   ),
+            //                   AppButton(
+            //                     backColor: AppColors.cD9D9D9,
+            //                     color: AppColors.black,
+            //                     onPressed: () {
+            //                       Navigator.pop(context); // Close first sheet
+            //                       _showRegularCallBottomSheet(
+            //                           context, item); // Open second
+            //                     },
+            //                     label: LocaleKeys.regularCall.localize,
+            //                   ),
+            //                 ],
+            //               ),
+            //             );
+            //           },
+            //         );
+            //       }
+            //     : () {
+            //         SubscriptionMethod().subscribe(
+            //           subscribeId: item.subcategoryId?.id ?? '',
+            //           title: item.name ?? '',
+            //         );
+            //       },
           ),
         ),
         Expanded(
@@ -631,17 +701,43 @@ class CallMessageReportButtons extends StatelessWidget {
             color: isChatEnabled
                 ? AppColors.PRIMARY_COLOR
                 : AppColors.GREY_DARK_COLOR,
-            onPressed: isChatEnabled
+            onPressed: context.read<UserCubit>().isLoggedIn
+                ? (isChatEnabled
                 ? () {
-              BlocProvider.of<RestaurantsCubit>(context)
-                  .getExpiredOrders();
+              BlocProvider.of<RestaurantsCubit>(context).getExpiredOrders();
               // Implement message functionality here
             }
                 : () {
               SubscriptionMethod().subscribe(
-                  subscribeId: item.subcategoryId?.id ?? '',
-                  title: item.name ?? '');
+                subscribeId: item.subcategoryId?.id ?? '',
+                title: item.name ?? '',
+              );
+            })
+                : () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    LocaleKeys.pleaseLoginRegisterToEnjoyTheApp.localize,
+                    style: Styles
+                        .mediumText()
+                        .copyWith(decoration: TextDecoration.none,
+                        color: AppColors.whiteColor
+                    ), // ✅ Safe
+                  ),
+                  backgroundColor: Colors.red,
+                  duration: Duration(seconds: 3),
+                  action: SnackBarAction(
+                    label: LocaleKeys.login.localize,
+                    textColor: Colors.white,
+                    onPressed: () {
+                      context.push(Routes.LOGIN);
+                    },
+                  ),
+                ),
+              );
             },
+
+
           ),
         ),
         Expanded(

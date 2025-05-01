@@ -82,7 +82,7 @@ class CreateResturantSubcategoryDropdown extends StatelessWidget {
                           child: Text(
                             (context.isArabic ? e.nameAr : e.nameEn) ?? "",
                             style: Styles.mediumText(
-                              color:context.isDarkMode ? AppColors.PRIMARY_COLOR_DARK :  AppColors.PRIMARY_COLOR,
+                              color:context.isDarkMode ? AppColors.whiteColor :  AppColors.PRIMARY_COLOR,
                                 // color: Theme.of(context)
                                 //     .textTheme
                                 //     .bodyMedium

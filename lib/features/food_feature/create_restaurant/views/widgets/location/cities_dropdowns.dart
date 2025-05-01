@@ -35,7 +35,10 @@ class CreateRestaurantCitiesDropdowns extends StatelessWidget {
                     Icons.keyboard_arrow_down_outlined,
                     color: context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR,
                   ),
-                  style: Styles.mediumText(),
+                  style: Styles.mediumText(
+                      color:context.isDarkMode ? AppColors.whiteColor : AppColors.PRIMARY_COLOR
+
+                  ),
 
                   decoration: InputDecoration(
 
