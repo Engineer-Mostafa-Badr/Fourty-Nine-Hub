@@ -31,7 +31,6 @@ class AddNewPickMeView extends StatefulWidget {
 }
 
 class _AddNewPickMeViewState extends State<AddNewPickMeView> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String? selectedBrand;
   String? selectedModel;
   int? selectedSeatNum;

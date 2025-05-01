@@ -37,14 +37,22 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
                   Row(
                     children: [
                       ClickableWidget(
-                          onTap: ()=>Navigator.of(context).pop(),
-                          child: Icon(Icons.keyboard_arrow_down, color:context.isDarkMode?Colors.white: Colors.black)),
+                          onTap: () => Navigator.of(context).pop(),
+                          child: Icon(Icons.arrow_back_rounded,
+                              color: context.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black)),
                       Expanded(
                         child: Column(
                           children: [
                             Text(
-                                context.isArabic ? 'اضافة اصدقاء' : 'Add Friends',
-                                style: Styles.headerText(color:context.isDarkMode?Colors.white: Colors.black)),
+                                context.isArabic
+                                    ? 'اضافة اصدقاء'
+                                    : 'Add Friends',
+                                style: Styles.headerText(
+                                    color: context.isDarkMode
+                                        ? Colors.white
+                                        : Colors.black)),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -65,13 +73,19 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
                       ),
                       ClickableWidget(
                           onTap: () => showFilterBottomSheet(context),
-                          child: Icon(Icons.more_horiz, color:context.isDarkMode?Colors.white: Colors.black)),
+                          child: Icon(Icons.more_horiz,
+                              color: context.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black)),
                     ],
                   ),
                   const Sizer(),
 
                   FormTextField(
-                    prefix: Icon(Icons.search,color: Colors.black,),
+                    prefix: Icon(
+                      Icons.search,
+                      color: Colors.black,
+                    ),
                     hint: context.isArabic ? 'بحث...' : 'Search...',
                     fillColor: const Color(0xFFEDEDED),
                     borderRadius: BorderRadius.circular(20),
@@ -90,7 +104,7 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
                       return FriendsTile(
                         index: index,
                         name: "Ahmed Mohamed",
-                        subtitle: "Say Hi!",
+                        subtitle: context.isArabic?'مرحباً!':"Say Hi!",
                         hasCameraButtons: index == 1 ? false : true,
                         isMyContact: index == 1 ? true : false,
                         hasAcceptButton: index == 1 ? true : false,
@@ -100,7 +114,8 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
                         }),
                       );
                     },
-                    separatorBuilder: (context, index) => const SizedBox(height: 10),
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: 10),
                   ),
                   // ...List.generate(3, (index) {
                   //   if (blockedIndexes.contains(index)) {
@@ -124,14 +139,15 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
                   // قائمة "Find Friends"
                   sectionTitle(
                       context.isArabic ? 'ابحث عن اصدقاء' : "Find Friends",
-                      trailing: context.isArabic ? 'جهات اتصالي' : "All Contacts",
+                      trailing:
+                          context.isArabic ? 'جهات اتصالي' : "All Contacts",
                       onTap: () => Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (context) => const AllContactsView(),
                             ),
                           )),
-                   ListView.separated(
-                    physics:const NeverScrollableScrollPhysics(),
+                  ListView.separated(
+                    physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemCount: 5,
                     itemBuilder: (context, index) {
@@ -151,7 +167,8 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
                         }),
                       );
                     },
-                    separatorBuilder: (context, index) => const SizedBox(height: 10),
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: 10),
                   ),
 
                   // ...List.generate(5, (index) {
@@ -186,18 +203,19 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(title,
-            style:const  TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
         if (trailing != null)
           ClickableWidget(
             onTap: onTap,
             child: Row(
               children: [
-                Text(trailing, style: Styles.mediumText(color: context.isDarkMode?Colors.white:Colors.black)),
-                Icon(
-                  Icons.arrow_forward_ios,
-                  size: 26.h,
-                  color:context.isDarkMode?Colors.white:Colors.black
-                )
+                Text(trailing,
+                    style: Styles.mediumText(
+                        color:
+                            context.isDarkMode ? Colors.white : Colors.black)),
+                Icon(Icons.arrow_forward_ios,
+                    size: 26.h,
+                    color: context.isDarkMode ? Colors.white : Colors.black)
               ],
             ),
           ),
@@ -280,7 +298,9 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
         ),
         label: Text(
           context.isArabic ? 'مشاهدة 2 اخرين' : "view 2 more",
-          style: Styles.mediumText(fontWeight: FontWeight.w500,color: context.isDarkMode?Colors.white:Colors.black),
+          style: Styles.mediumText(
+              fontWeight: FontWeight.w500,
+              color: context.isDarkMode ? Colors.white : Colors.black),
         ),
       ),
     );
@@ -300,7 +320,7 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
           children: [
             Container(
               decoration: BoxDecoration(
-                color:Theme.of(context).scaffoldBackgroundColor,
+                color: Theme.of(context).scaffoldBackgroundColor,
                 borderRadius: BorderRadius.circular(10),
               ),
               padding: EdgeInsets.symmetric(horizontal: 24.h, vertical: 10.h),
@@ -313,7 +333,11 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
                         context.isArabic
                             ? 'مخفي من البحث عن اصدقاء'
                             : "Hidden From Find Friends",
-                        style: Styles.mediumText(fontWeight: FontWeight.w500,color:context.isDarkMode?Colors.white:Colors.black)),
+                        style: Styles.mediumText(
+                            fontWeight: FontWeight.w500,
+                            color: context.isDarkMode
+                                ? Colors.white
+                                : Colors.black)),
                     onTap: () => Navigator.of(context).pop(),
                     dense: false,
                     visualDensity:
@@ -324,8 +348,11 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
                           context.isArabic
                               ? 'طلبات الصداقة التي تم تجاهلها'
                               : "Friends Requests I've Ignored",
-                          style:
-                              Styles.mediumText(fontWeight: FontWeight.w500,color:context.isDarkMode?Colors.white:Colors.black)),
+                          style: Styles.mediumText(
+                              fontWeight: FontWeight.w500,
+                              color: context.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black)),
                       onTap: () => Navigator.of(context).pop(),
                       dense: false,
                       visualDensity:
@@ -335,8 +362,11 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
                           context.isArabic
                               ? 'الاصدقاء المضافين حديثاً'
                               : "Friends I've Recently Added",
-                          style:
-                              Styles.mediumText(fontWeight: FontWeight.w500,color:context.isDarkMode?Colors.white:Colors.black)),
+                          style: Styles.mediumText(
+                              fontWeight: FontWeight.w500,
+                              color: context.isDarkMode
+                                  ? Colors.white
+                                  : Colors.black)),
                       onTap: () => Navigator.of(context).pop(),
                       dense: false,
                       visualDensity:
@@ -352,7 +382,7 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
                 height: 48,
                 child: TextButton(
                   style: TextButton.styleFrom(
-                    backgroundColor:Theme.of(context).scaffoldBackgroundColor,
+                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -360,9 +390,9 @@ class _AddFriendsScreenState extends State<AddFriendsScreen> {
                   onPressed: () => Navigator.pop(context),
                   child: Text(
                     LocaleKeys.done.localize,
-                    style:  TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
-                      color:context.isDarkMode?Colors.white:Colors.black,
+                      color: context.isDarkMode ? Colors.white : Colors.black,
                       fontWeight: FontWeight.w500,
                     ),
                   ),

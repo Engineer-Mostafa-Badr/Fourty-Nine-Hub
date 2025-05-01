@@ -30,7 +30,7 @@ class _AllContactsViewState extends State<AllContactsView> {
                     child: IconButton(
                       visualDensity:const VisualDensity(horizontal: -4,vertical: -2),
                       icon: Icon(
-                        Icons.keyboard_arrow_down,
+                        Icons.arrow_back_rounded,
                         color:context.isDarkMode?Colors.white:Colors.black ,
                         size: 50.h,
                       ),

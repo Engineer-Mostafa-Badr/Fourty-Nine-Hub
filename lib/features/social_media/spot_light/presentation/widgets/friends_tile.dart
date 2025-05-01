@@ -69,7 +69,7 @@ class FriendsTile extends StatelessWidget {
         children: [
           Text(subtitle),
           if (isMyContact)
-            Text(context.isArabic ? 'من حهات اتصالي' : 'In My Contact'),
+            Text(context.isArabic ? 'من جهات اتصالي' : 'In My Contact'),
         ],
       ),
       trailing: Row(
